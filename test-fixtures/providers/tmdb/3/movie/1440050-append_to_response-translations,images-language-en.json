@@ -1,0 +1,693 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21304",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9072f2bce7f7cc4e4b2d0dfe99e7cd3f\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dgqBcgTzaUiSLvKJPDF9AbdFEMO.jpg",
+    "belongs_to_collection": null,
+    "budget": 25000000,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://example.test/films/dad-on-the-clock",
+    "id": 1440050,
+    "imdb_id": "tt34459219",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Dad on the Clock",
+    "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+    "popularity": 10.997,
+    "poster_path": "/4apG9Xk6HQvV48JKEjSUeiebju7.jpg",
+    "production_companies": [
+      {
+        "id": 218666,
+        "logo_path": "/1FyQYjUUIijNZEJBUPqrpDxCZz3.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 559,
+        "logo_path": "/eC0bWHVjnjUducyA6YFoEFqnPMC.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 211824,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 243125,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 22213,
+        "logo_path": "/qx9K6bFWJupwde0xQDwOvXkOaL8.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-05-29",
+    "revenue": 20247080,
+    "runtime": 100,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "His biggest job starts at home.",
+    "title": "Dad on the Clock",
+    "video": false,
+    "vote_average": 7.313,
+    "vote_count": 96,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 100,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 95,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 99,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 99,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 100,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 99,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 99,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "CH",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 99,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 99,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 95,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/dad-on-the-clock",
+            "overview": "A surprise business triumph sends Katie away, leaving lifelong provider Nate to master school runs, meals, and bedtime.",
+            "runtime": 0,
+            "tagline": "His biggest job starts at home.",
+            "title": "Dad on the Clock"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yeuPqYJil1UEKZ51SIKBsDweraq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d7TJG685KAzvS7CPQ2mqxyab2LE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/om3rWbQw69XBatU1oVf4e1LDTwP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/snbzTmuRSvcLvoHFn0jGvG2Myvt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.502,
+          "height": 201,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dXt1zMzx521gTj6ioOiXcIcOlMv.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1106
+        },
+        {
+          "aspect_ratio": 3.851,
+          "height": 1095,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6uYD1ZZkKsbXWBciBVAz452tjIG.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4217
+        },
+        {
+          "aspect_ratio": 3.801,
+          "height": 1114,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oOdl5Zqpg7LdUVnsOKSw29ZlhbC.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4234
+        },
+        {
+          "aspect_ratio": 5.449,
+          "height": 777,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/agQC8tTkS3HQ3zYJ2E4R3xNuNB3.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4234
+        },
+        {
+          "aspect_ratio": 5.563,
+          "height": 758,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kEKFShiRzYA1sD69JASwwMpnMWQ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4217
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4apG9Xk6HQvV48JKEjSUeiebju7.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iuirzrdQjnrmLhxFMqpSzYNMspc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lXLnK1khCeS25qWKGbpElz7Pryb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pgbUVOSJNWMLTaY7qtnPfMX1or9.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uBsr6wz5ewuar1QSA3YBLpLBh7K.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yCtKumEDobgZ67L7YUgi9b6KJ2K.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/84RfVBxqptVadzYVZu6XT7IoJcb.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aSoLTSYd4Pj0TdyF9N9KWJ91S5D.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2965,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4HhUq2VWeFhATSZXf3KNR3RtiYI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pdPTbhuJIVRK6ntkbXfnVcdRVgq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 691
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 2197,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6laQwlxfID2vo3XlguMSUjUJwGX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1476
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3bNHp6UIZ3ElfJJ9Hdt7wHrAMk4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

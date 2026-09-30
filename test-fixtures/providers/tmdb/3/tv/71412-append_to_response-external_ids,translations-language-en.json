@@ -1,0 +1,502 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11537",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"136300c6586e9793da834c2d3f0e500a\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/iHfyFYYFtceiJ5Zq7S6qMpmRggm.jpg",
+    "created_by": [
+      {
+        "id": 71538,
+        "credit_id": "594f2450c3a3683265048695",
+        "name": "Emery Finch",
+        "original_name": "Emery Finch",
+        "gender": 2,
+        "profile_path": "/iMpXDe7D3eimy3Y8esJcF9czVbm.jpg"
+      },
+      {
+        "id": 1478606,
+        "credit_id": "5c3a4ad4c3a36808664719b6",
+        "name": "Devon Reed",
+        "original_name": "Devon Reed",
+        "gender": 1,
+        "profile_path": null
+      },
+      {
+        "id": 116319,
+        "credit_id": "5c3a4abec3a3680858470f78",
+        "name": "Quinn Ives",
+        "original_name": "Quinn Ives",
+        "gender": 1,
+        "profile_path": "/h9TqWpq523FJEuSFBwtyAl04a95.jpg"
+      }
+    ],
+    "episode_run_time": [
+      4
+    ],
+    "first_air_date": "2017-07-03",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://example.test/series/distant-valley-westmere",
+    "id": 71412,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2018-05-25",
+    "last_episode_to_air": {
+      "id": 1548374,
+      "name": "Hidden Orchard",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 6,
+      "vote_count": 7,
+      "air_date": "2018-05-25",
+      "episode_number": 16,
+      "episode_type": "finale",
+      "production_code": "216",
+      "runtime": 2,
+      "season_number": 2,
+      "show_id": 71412,
+      "still_path": "/f4mZCa6XX1TiY5MWCB5B6M5EKsn.jpg"
+    },
+    "name": "Distant Valley: Westmere",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 54,
+        "logo_path": "/9AxUB1RdRnm0r5ki8Thb69Jo9Ma.png",
+        "name": "Silent Harbor Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 32,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Distant Valley: Westmere",
+    "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 13.7054,
+    "poster_path": "/7xe9Hx4sVxuRa3uPGXYvPclTcnq.jpg",
+    "production_companies": [
+      {
+        "id": 108270,
+        "logo_path": "/eDWGeg5tdVNcI8aBaaJ21bEBtFa.png",
+        "name": "Amber Orchard Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 113435,
+        "logo_path": null,
+        "name": "Midnight Meridian Studios",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2017-10-01",
+        "episode_count": 4,
+        "id": 180035,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/r4uHuTD9ddFat5d1rkksOIzkEA8.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2017-07-03",
+        "episode_count": 16,
+        "id": 87719,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/czjyGjFnBMVd6vBh2YjH7OGnwiM.jpg",
+        "season_number": 1,
+        "vote_average": 5.7
+      },
+      {
+        "air_date": "2018-03-19",
+        "episode_count": 16,
+        "id": 102226,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/a9E4cdxli78Mnl3s6ex5b4aZRIp.jpg",
+        "season_number": 2,
+        "vote_average": 5.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 5.2,
+    "vote_count": 75,
+    "external_ids": {
+      "imdb_id": "tt6779076",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 330710,
+      "tvrage_id": null,
+      "wikidata_id": "Q30140895",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Distant Valley: Westmere",
+            "overview": "Distant Valley: Westmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/distant-valley-westmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,333 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"364a4ec97424b7c0531bb2ff08698b9e\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/nItaRm9Kaz7xVkcIaFmxjlnfrME.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-passenger-from-the-north",
+    "id": 1285959,
+    "imdb_id": "tt32298956",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Passenger from the North",
+    "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+    "popularity": 13.6034,
+    "poster_path": "/i9XqCdF0jrgqveYUaLjOSiRepIq.jpg",
+    "production_companies": [
+      {
+        "id": 228236,
+        "logo_path": null,
+        "name": "Midway Thriller Co.",
+        "origin_country": ""
+      },
+      {
+        "id": 1786,
+        "logo_path": "/dVSnNBwhb0WW5zGis3HjI6Q66Gp.png",
+        "name": "Midway Thriller Co.",
+        "origin_country": "US"
+      },
+      {
+        "id": 15465,
+        "logo_path": "/391VF4wQ568eSBChoPbgWBVByfl.png",
+        "name": "Midway Thriller Co.",
+        "origin_country": "US"
+      },
+      {
+        "id": 300445,
+        "logo_path": null,
+        "name": "Midway Thriller Co.",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "release_date": "2026-06-05",
+    "revenue": 0,
+    "runtime": 93,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The fare is more than he bargained for.",
+    "title": "The Passenger from the North",
+    "video": false,
+    "vote_average": 5.528,
+    "vote_count": 54,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 93,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 93,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-passenger-from-the-north",
+            "overview": "A a northern city shuttle driver agrees to take a stranded traveler across state lines for welcome cash. The man's story soon unravels, and the driver realizes the ride could place many lives in danger unless he finds a way to stop it.",
+            "runtime": 0,
+            "tagline": "The fare is more than he bargained for.",
+            "title": "The Passenger from the North"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mp7VwsqUcgJxMmFjhUMgIsZrAix.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hNVxzD0kIy3tjzRQxIiI9wzC6Fw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.792,
+          "height": 72,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iVAT3j2lnzoWqZlYT5Z4WyeorZE.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 345
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i9XqCdF0jrgqveYUaLjOSiRepIq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/heFjHLMVmYZWC4uhvPNI0idckwU.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 2197,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eiVvE3ax5BRoTOihqc591e2IJT9.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1476
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aJc7HPAHzCgfTi6zAIPWr0SLEBF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/15gtQjfJ2WbZtVKOkGferGyZB73.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ApuXQXkTAgkilpXTm5owbGnTfuo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

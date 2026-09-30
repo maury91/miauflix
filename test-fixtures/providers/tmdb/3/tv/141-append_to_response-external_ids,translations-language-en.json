@@ -1,0 +1,538 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19956",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e034118d09a17afb8dd773333489d8d7\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5U7NIuRK836GutAlo7TLPfmVtGW.jpg",
+    "created_by": [
+      {
+        "id": 73038,
+        "credit_id": "52533eac19c2957940087d83",
+        "name": "Quinn Stone",
+        "original_name": "Quinn Stone",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 157437,
+        "credit_id": "52533ead19c2957940087d8f",
+        "name": "Quinn March",
+        "original_name": "Quinn March",
+        "gender": 2,
+        "profile_path": "/b2hSq8OclJZdglNFM1Txaz5uBgs.jpg"
+      },
+      {
+        "id": 73037,
+        "credit_id": "52533eac19c2957940087d89",
+        "name": "Cameron Bell",
+        "original_name": "Cameron Bell",
+        "gender": 2,
+        "profile_path": "/fYYywdTnaxzz7dIQxEtGL54aWIh.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "1982-09-30",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/series/the-rabbit-at-midnight",
+    "id": 141,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "1993-05-20",
+    "last_episode_to_air": {
+      "id": 7861,
+      "name": "Copper Compass",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.9,
+      "vote_count": 7,
+      "air_date": "1993-05-20",
+      "episode_number": 25,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 98,
+      "season_number": 11,
+      "show_id": 141,
+      "still_path": "/zebs4SIKTeXsRH6MUeD2OyFcjcm.jpg"
+    },
+    "name": "The Rabbit at Midnight",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6,
+        "logo_path": "/cm111bsDVlYaC1foL0itvEI4yLG.png",
+        "name": "Bright Archive Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 269,
+    "number_of_seasons": 11,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "The Rabbit at Midnight",
+    "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 100.8052,
+    "poster_path": "/nD1ZQBKbgKSmKcrAkWTofohsScj.jpg",
+    "production_companies": [
+      {
+        "id": 9223,
+        "logo_path": "/40qzTBM38vokoWhLKurficZ5syV.png",
+        "name": "Falling Sky Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 55751,
+        "logo_path": null,
+        "name": "Blue Crown Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1990-11-08",
+        "episode_count": 26,
+        "id": 428,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/dWPrf94i1QvnezGbWGo0cweiNIT.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1982-09-30",
+        "episode_count": 22,
+        "id": 419,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/ngfSm75OhIQhmSoOMUQhCBaho9O.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "1983-09-29",
+        "episode_count": 22,
+        "id": 420,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/1OWeoseFleLwSvs124FRUIcs7Ii.jpg",
+        "season_number": 2,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "1984-09-27",
+        "episode_count": 25,
+        "id": 418,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/A3CAuUAYzXRzZSTgS0yp1rp6fpU.jpg",
+        "season_number": 3,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "1985-09-26",
+        "episode_count": 26,
+        "id": 417,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/uNpcfarvcv1tC2L1G73tTwWcI8g.jpg",
+        "season_number": 4,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "1986-09-25",
+        "episode_count": 26,
+        "id": 422,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/ngpaQyonflqSImdwGcyG0SSkbaR.jpg",
+        "season_number": 5,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "1987-09-24",
+        "episode_count": 25,
+        "id": 425,
+        "name": "Season 6",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/3mCClKaXhQ1h1fLmhWsvfBVDERT.jpg",
+        "season_number": 6,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "1988-10-27",
+        "episode_count": 22,
+        "id": 424,
+        "name": "Season 7",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/yxY03wUNHKzxjAnUX0jqp8X2s6C.jpg",
+        "season_number": 7,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "1989-09-21",
+        "episode_count": 26,
+        "id": 423,
+        "name": "Season 8",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/uooHlkxyDjsq4WF3oR3uWmqK6Wd.jpg",
+        "season_number": 8,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "1990-09-20",
+        "episode_count": 25,
+        "id": 426,
+        "name": "Season 9",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/8z1oL46csWscDHwtfLLYU9tZ5H2.jpg",
+        "season_number": 9,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "1991-09-19",
+        "episode_count": 25,
+        "id": 421,
+        "name": "Season 10",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/zLuDMWR3gj7QcVMDFM5KoEoDkve.jpg",
+        "season_number": 10,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "1992-09-24",
+        "episode_count": 25,
+        "id": 427,
+        "name": "Season 11",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/2LeF1dlRdO4d6LUO6f9FeO7pcgt.jpg",
+        "season_number": 11,
+        "vote_average": 7.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 7.6,
+    "vote_count": 715,
+    "external_ids": {
+      "imdb_id": "tt0083399",
+      "freebase_mid": "/m/01s81",
+      "freebase_id": "/en/cheers",
+      "tvdb_id": 77623,
+      "tvrage_id": null,
+      "wikidata_id": "Q732063",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "The Rabbit at Midnight",
+            "overview": "The Rabbit at Midnight follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/the-rabbit-at-midnight",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

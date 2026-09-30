@@ -1,0 +1,722 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "787",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,popular,movie",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 15:15:01 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "492",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "10",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt12042730",
+        "plex": {
+          "guid": "5e91843e9bec79003fe50ffb",
+          "slug": "astra-the-last-question"
+        },
+        "slug": "astra-the-last-question-2026",
+        "tmdb": 687163,
+        "trakt": 531178
+      },
+      "year": 2026,
+      "title": "Astra: The Last Question"
+    },
+    {
+      "ids": {
+        "imdb": "tt37287335",
+        "plex": {
+          "guid": "6856893830a4aaafd5c4291d",
+          "slug": "wishwood"
+        },
+        "slug": "wishwood-2026",
+        "tmdb": 1339713,
+        "trakt": 1095879
+      },
+      "year": 2026,
+      "title": "Wishwood"
+    },
+    {
+      "ids": {
+        "imdb": "tt27543632",
+        "plex": {
+          "guid": "6444698339b14cd38176a513",
+          "slug": "the-live-in"
+        },
+        "slug": "the-live-in-2025",
+        "tmdb": 1368166,
+        "trakt": 1117195
+      },
+      "year": 2025,
+      "title": "The Live-In"
+    },
+    {
+      "ids": {
+        "imdb": "tt26443597",
+        "plex": {
+          "guid": "63d15b0b38992be08a0efa6f",
+          "slug": "the-serpent-in-bellweather"
+        },
+        "slug": "the-serpent-in-bellweather-2025",
+        "tmdb": 1084242,
+        "trakt": 871499
+      },
+      "year": 2025,
+      "title": "The Serpent in Bellweather"
+    },
+    {
+      "ids": {
+        "imdb": "tt1757678",
+        "plex": {
+          "guid": "5d7768cc9ab54400214eba10",
+          "slug": "embers-of-the-distant-world"
+        },
+        "slug": "embers-of-the-distant-world-2025",
+        "tmdb": 83533,
+        "trakt": 62544
+      },
+      "year": 2025,
+      "title": "Embers of the Distant World"
+    },
+    {
+      "ids": {
+        "imdb": "tt15047880",
+        "plex": {
+          "guid": "6652e893d51f897868580ae9",
+          "slug": "signal-in-the-storm"
+        },
+        "slug": "signal-in-the-storm-2026",
+        "tmdb": 1275779,
+        "trakt": 1036433
+      },
+      "year": 2026,
+      "title": "Signal in the Storm"
+    },
+    {
+      "ids": {
+        "imdb": "tt11378946",
+        "plex": {
+          "guid": "5e165a6310faa5004010238c",
+          "slug": "beyond-the-spotlight"
+        },
+        "slug": "beyond-the-spotlight-2026",
+        "tmdb": 936075,
+        "trakt": 751145
+      },
+      "year": 2026,
+      "title": "Beyond the Spotlight"
+    },
+    {
+      "ids": {
+        "imdb": "tt22084616",
+        "plex": {
+          "guid": "5ed8a6246e2d7200411126cf",
+          "slug": "the-unseen-threat"
+        },
+        "slug": "the-unseen-threat-2026",
+        "tmdb": 969681,
+        "trakt": 905132
+      },
+      "year": 2026,
+      "title": "The Unseen Threat"
+    },
+    {
+      "ids": {
+        "imdb": "tt28650488",
+        "plex": {
+          "guid": "64dd290c84713e6f8ba2874b",
+          "slug": "the-royal-rescue"
+        },
+        "slug": "the-royal-rescue-2026",
+        "tmdb": 1226863,
+        "trakt": 991429
+      },
+      "year": 2026,
+      "title": "The Royal Rescue"
+    },
+    {
+      "ids": {
+        "imdb": "tt31227572",
+        "plex": {
+          "guid": "65ca74670a8f3c2de645d488",
+          "slug": "outcast-predator"
+        },
+        "slug": "outcast-predator-2025",
+        "tmdb": 1242898,
+        "trakt": 1006226
+      },
+      "year": 2025,
+      "title": "Outcast Predator"
+    },
+    {
+      "ids": {
+        "imdb": "tt26657236",
+        "plex": {
+          "guid": "63e28b6d774d2d504b6ff241",
+          "slug": "the-door-below"
+        },
+        "slug": "the-door-below-2026",
+        "tmdb": 1083381,
+        "trakt": 870815
+      },
+      "year": 2026,
+      "title": "The Door Below"
+    },
+    {
+      "ids": {
+        "imdb": "tt33764258",
+        "plex": {
+          "guid": "670cb74204e43056959bd4b3",
+          "slug": "the-long-return"
+        },
+        "slug": "the-long-return-2026",
+        "tmdb": 1368337,
+        "trakt": 1117351
+      },
+      "year": 2026,
+      "title": "The Long Return"
+    },
+    {
+      "ids": {
+        "imdb": "tt30144839",
+        "plex": {
+          "guid": "6562d1dbf8acedbdfebce1d1",
+          "slug": "the-long-way-back"
+        },
+        "slug": "the-long-way-back-2025",
+        "tmdb": 1054867,
+        "trakt": 848797
+      },
+      "year": 2025,
+      "title": "The Long Way Back"
+    },
+    {
+      "ids": {
+        "imdb": "tt14364480",
+        "plex": {
+          "guid": "6066880ce3e5b1002c9aee03",
+          "slug": "wake-up-dead-man-the-parish-mystery"
+        },
+        "slug": "wake-up-dead-man-the-parish-mystery-2025",
+        "tmdb": 812583,
+        "trakt": 646497
+      },
+      "year": 2025,
+      "title": "Wake Up Dead Man: The Parish Mystery"
+    },
+    {
+      "ids": {
+        "imdb": "tt33612209",
+        "plex": {
+          "guid": "668da3cd701c9385b944d19e",
+          "slug": "runway-the-next-issue"
+        },
+        "slug": "runway-the-next-issue-2026",
+        "tmdb": 1314481,
+        "trakt": 1074519
+      },
+      "year": 2026,
+      "title": "Runway: The Next Issue"
+    },
+    {
+      "ids": {
+        "imdb": "tt8036976",
+        "plex": {
+          "guid": "5f40d5d81ae7100041216ea5",
+          "slug": "stranded-together"
+        },
+        "slug": "stranded-together-2026",
+        "tmdb": 1198994,
+        "trakt": 967810
+      },
+      "year": 2026,
+      "title": "Stranded Together"
+    },
+    {
+      "ids": {
+        "imdb": "tt17490712",
+        "plex": {
+          "guid": "61f330850ecd2260deb80a5e",
+          "slug": "the-last-tournament"
+        },
+        "slug": "the-last-tournament-2026",
+        "tmdb": 931285,
+        "trakt": 746852
+      },
+      "year": 2026,
+      "title": "The Last Tournament"
+    },
+    {
+      "ids": {
+        "imdb": "tt0427340",
+        "plex": {
+          "guid": "5d776d1bad5437001f7cd684",
+          "slug": "the-sword-remembers"
+        },
+        "slug": "the-sword-remembers-2026",
+        "tmdb": 454639,
+        "trakt": 306815
+      },
+      "year": 2026,
+      "title": "The Sword Remembers"
+    },
+    {
+      "ids": {
+        "imdb": "tt8814476",
+        "plex": {
+          "guid": "5d77707231d95e001f1a1b39",
+          "slug": "starborn-exile"
+        },
+        "slug": "starborn-exile-2026",
+        "tmdb": 1081003,
+        "trakt": 868842
+      },
+      "year": 2026,
+      "title": "Starborn Exile"
+    },
+    {
+      "ids": {
+        "imdb": "tt4712810",
+        "plex": {
+          "guid": "5d776c8a23d5a3001f51c944",
+          "slug": "now-you-see-me-the-diamond-job"
+        },
+        "slug": "now-you-see-me-the-diamond-job-2025",
+        "tmdb": 425274,
+        "trakt": 292275
+      },
+      "year": 2025,
+      "title": "Now You See Me: The Diamond Job"
+    },
+    {
+      "ids": {
+        "imdb": "tt36042156",
+        "plex": {
+          "guid": "67f12e697648884062e634c7",
+          "slug": "the-empty-road"
+        },
+        "slug": "the-empty-road-2026",
+        "tmdb": 1439930,
+        "trakt": 1178309
+      },
+      "year": 2026,
+      "title": "The Empty Road"
+    },
+    {
+      "ids": {
+        "imdb": "tt26443616",
+        "plex": {
+          "guid": "63d15b0b3ad5857a621ccaf5",
+          "slug": "hoppers-wild-frequency"
+        },
+        "slug": "hoppers-wild-frequency-2026",
+        "tmdb": 1327819,
+        "trakt": 1085761
+      },
+      "year": 2026,
+      "title": "Hoppers: Wild Frequency"
+    },
+    {
+      "ids": {
+        "imdb": "tt15940132",
+        "plex": {
+          "guid": "618e27b6646c288531cde0e1",
+          "slug": "ranger-trial"
+        },
+        "slug": "ranger-trial-2026",
+        "tmdb": 1265609,
+        "trakt": 1026879
+      },
+      "year": 2026,
+      "title": "Ranger Trial"
+    },
+    {
+      "ids": {
+        "imdb": "tt30825738",
+        "plex": {
+          "guid": "659eea0148cee3ee85e48609",
+          "slug": "the-wayward-stars"
+        },
+        "slug": "the-wayward-stars-2026",
+        "tmdb": 1228710,
+        "trakt": 993003
+      },
+      "year": 2026,
+      "title": "The Wayward Stars"
+    },
+    {
+      "ids": {
+        "imdb": "tt14107334",
+        "plex": {
+          "guid": "60326c74e0048c002d5de784",
+          "slug": "prime-time"
+        },
+        "slug": "prime-time-2025",
+        "tmdb": 798645,
+        "trakt": 633799
+      },
+      "year": 2025,
+      "title": "Prime Time"
+    },
+    {
+      "ids": {
+        "imdb": "tt29355505",
+        "plex": {
+          "guid": "63e52aa555e2324b6e9f5f6e",
+          "slug": "playtime-protocol"
+        },
+        "slug": "playtime-protocol-2026",
+        "tmdb": 1084244,
+        "trakt": 871500
+      },
+      "year": 2026,
+      "title": "Playtime Protocol"
+    },
+    {
+      "ids": {
+        "imdb": "tt31050594",
+        "plex": {
+          "guid": "65b41a7eb5cab988940e14b1",
+          "slug": "the-last-verdict"
+        },
+        "slug": "the-last-verdict-2026",
+        "tmdb": 1236153,
+        "trakt": 1000015
+      },
+      "year": 2026,
+      "title": "The Last Verdict"
+    },
+    {
+      "ids": {
+        "imdb": "tt1312221",
+        "plex": {
+          "guid": "5d776e1651dd69001fe48a6e",
+          "slug": "the-maker-s-shadow"
+        },
+        "slug": "the-maker-s-shadow-2025",
+        "tmdb": 1062722,
+        "trakt": 854887
+      },
+      "year": 2025,
+      "title": "The Maker's Shadow"
+    },
+    {
+      "ids": {
+        "imdb": "tt16431404",
+        "plex": {
+          "guid": "61bd9c2d6fe1ffe4778a6fe0",
+          "slug": "prey-on-the-ridge"
+        },
+        "slug": "prey-on-the-ridge-2026",
+        "tmdb": 1318447,
+        "trakt": 1077748
+      },
+      "year": 2026,
+      "title": "Prey on the Ridge"
+    },
+    {
+      "ids": {
+        "imdb": "tt32642706",
+        "plex": {
+          "guid": "66732f3c27d25d0ddafce7a8",
+          "slug": "the-stash-house"
+        },
+        "slug": "the-stash-house-2026",
+        "tmdb": 1306368,
+        "trakt": 1065701
+      },
+      "year": 2026,
+      "title": "The Stash House"
+    },
+    {
+      "ids": {
+        "imdb": "tt32430579",
+        "plex": {
+          "guid": "64f07ca3dfea43c83f75e6cf",
+          "slug": "the-final-claim"
+        },
+        "slug": "the-final-claim-2026",
+        "tmdb": 1171145,
+        "trakt": 944042
+      },
+      "year": 2026,
+      "title": "The Final Claim"
+    },
+    {
+      "ids": {
+        "imdb": "tt32357218",
+        "plex": {
+          "guid": "6646bd6262ca77e1d6a100df",
+          "slug": "the-island-refuge"
+        },
+        "slug": "the-island-refuge-2026",
+        "tmdb": 1290821,
+        "trakt": 1050424
+      },
+      "year": 2026,
+      "title": "The Island Refuge"
+    },
+    {
+      "ids": {
+        "imdb": "tt12300742",
+        "plex": {
+          "guid": "5eb8f2a980cbc90042184b29",
+          "slug": "bugonia-the-ceo-from-venus"
+        },
+        "slug": "bugonia-the-ceo-from-venus-2025",
+        "tmdb": 701387,
+        "trakt": 545111
+      },
+      "year": 2025,
+      "title": "Bugonia: The CEO from Venus"
+    },
+    {
+      "ids": {
+        "imdb": "tt32916440",
+        "plex": {
+          "guid": "669748dc85be974cd2ab194c",
+          "slug": "the-spin-champion"
+        },
+        "slug": "the-spin-champion-2025",
+        "tmdb": 1317288,
+        "trakt": 1076665
+      },
+      "year": 2025,
+      "title": "The Spin Champion"
+    },
+    {
+      "ids": {
+        "imdb": "tt32565993",
+        "plex": {
+          "guid": "6667c13ae5537afffd69767f",
+          "slug": "the-woolly-sleuths"
+        },
+        "slug": "the-woolly-sleuths-2026",
+        "tmdb": 1301421,
+        "trakt": 1060883
+      },
+      "year": 2026,
+      "title": "The Woolly Sleuths"
+    },
+    {
+      "ids": {
+        "imdb": "tt14850054",
+        "plex": {
+          "guid": "60c87b68eb8e79002cbd3b9f",
+          "slug": "greenland-across-the-wasteland"
+        },
+        "slug": "greenland-across-the-wasteland-2026",
+        "tmdb": 840464,
+        "trakt": 671151
+      },
+      "year": 2026,
+      "title": "Greenland: Across the Wasteland"
+    },
+    {
+      "ids": {
+        "imdb": "tt33071426",
+        "plex": {
+          "guid": "66b2b37ea96123f25e363a1f",
+          "slug": "the-wedding-week"
+        },
+        "slug": "the-wedding-week-2026",
+        "tmdb": 1325734,
+        "trakt": 1083999
+      },
+      "year": 2026,
+      "title": "The Wedding Week"
+    },
+    {
+      "ids": {
+        "imdb": "tt33244668",
+        "plex": {
+          "guid": "66cab8bc55469f6cd8d0624d",
+          "slug": "green-river-rewind"
+        },
+        "slug": "green-river-rewind-2025",
+        "tmdb": 1234731,
+        "trakt": 998723
+      },
+      "year": 2025,
+      "title": "Green River Rewind"
+    },
+    {
+      "ids": {
+        "imdb": "tt33046197",
+        "plex": {
+          "guid": "66a94c0bd0813ef00a44e555",
+          "slug": "brothers-in-the-rubble"
+        },
+        "slug": "brothers-in-the-rubble-2026",
+        "tmdb": 1168190,
+        "trakt": 941438
+      },
+      "year": 2026,
+      "title": "Brothers in the Rubble"
+    },
+    {
+      "ids": {
+        "imdb": "tt1341338",
+        "plex": {
+          "guid": "5e1632d61493cd003f0d906d",
+          "slug": "tomorrow-at-the-diner"
+        },
+        "slug": "tomorrow-at-the-diner-2026",
+        "tmdb": 1119449,
+        "trakt": 900786
+      },
+      "year": 2026,
+      "title": "Tomorrow at the Diner"
+    },
+    {
+      "ids": {
+        "imdb": "tt32141377",
+        "plex": {
+          "guid": "66233b1bb07ed996b70874e5",
+          "slug": "the-bone-temple"
+        },
+        "slug": "the-bone-temple-2026",
+        "tmdb": 1272837,
+        "trakt": 1033738
+      },
+      "year": 2026,
+      "title": "The Bone Temple"
+    },
+    {
+      "ids": {
+        "imdb": "tt33978029",
+        "plex": {
+          "guid": "67154cdbfb5cda66a93ce8c1",
+          "slug": "bride-of-the-high-seat"
+        },
+        "slug": "bride-of-the-high-seat-2026",
+        "tmdb": 1266127,
+        "trakt": 1027747
+      },
+      "year": 2026,
+      "title": "Bride of the High Seat"
+    },
+    {
+      "ids": {
+        "imdb": "tt27165187",
+        "plex": {
+          "guid": "641767e7638dfece82b97835",
+          "slug": "the-block-beyond"
+        },
+        "slug": "the-block-beyond-2026",
+        "tmdb": 1101383,
+        "trakt": 885985
+      },
+      "year": 2026,
+      "title": "The Block Beyond"
+    },
+    {
+      "ids": {
+        "imdb": "tt27681354",
+        "plex": {
+          "guid": "6456bd77fc0430a14eb16a44",
+          "slug": "the-grey-ledger"
+        },
+        "slug": "the-grey-ledger-2026",
+        "tmdb": 1122573,
+        "trakt": 903398
+      },
+      "year": 2026,
+      "title": "The Grey Ledger"
+    },
+    {
+      "ids": {
+        "imdb": "tt32612507",
+        "plex": {
+          "guid": "666e8f86b54e01613b35bccf",
+          "slug": "the-desert-child"
+        },
+        "slug": "the-desert-child-2026",
+        "tmdb": 1304313,
+        "trakt": 1063866
+      },
+      "year": 2026,
+      "title": "The Desert Child"
+    },
+    {
+      "ids": {
+        "imdb": "tt32093575",
+        "plex": {
+          "guid": "661ad2e15f2c9043629e7514",
+          "slug": "mask-off"
+        },
+        "slug": "mask-off-2026",
+        "tmdb": 1273221,
+        "trakt": 1034092
+      },
+      "year": 2026,
+      "title": "Mask Off!"
+    },
+    {
+      "ids": {
+        "imdb": "tt15574124",
+        "plex": {
+          "guid": "6163f6a27fa9b99d6f3b1f77",
+          "slug": "the-exile-s-return"
+        },
+        "slug": "the-exile-s-return-2026",
+        "tmdb": 875828,
+        "trakt": 701249
+      },
+      "year": 2026,
+      "title": "The Exile’s Return"
+    },
+    {
+      "ids": {
+        "imdb": "tt6604188",
+        "plex": {
+          "guid": "5d7770637a53e9001e7a190f",
+          "slug": "the-ares-protocol"
+        },
+        "slug": "the-ares-protocol-2025",
+        "tmdb": 533533,
+        "trakt": 385396
+      },
+      "year": 2025,
+      "title": "The Ares Protocol"
+    },
+    {
+      "ids": {
+        "imdb": "tt29567915",
+        "plex": {
+          "guid": "6535c7c85e7b825c593535f4",
+          "slug": "the-examiner-s-dilemma"
+        },
+        "slug": "the-examiner-s-dilemma-2025",
+        "tmdb": 1214931,
+        "trakt": 979297
+      },
+      "year": 2025,
+      "title": "The Examiner’s Dilemma"
+    },
+    {
+      "ids": {
+        "imdb": "tt34378301",
+        "plex": {
+          "guid": "672a6e52c25ec7f136678ce0",
+          "slug": "the-meridian-cipher"
+        },
+        "slug": "the-meridian-cipher-2026",
+        "tmdb": 1380291,
+        "trakt": 1127320
+      },
+      "year": 2026,
+      "title": "The Meridian Cipher"
+    }
+  ]
+}

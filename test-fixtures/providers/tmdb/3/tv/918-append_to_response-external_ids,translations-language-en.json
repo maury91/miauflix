@@ -1,0 +1,550 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8438",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0027696a6a94964761428f5baa6fc7db\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8nkOWsMtWZvp7IGuYdVbJeoWzQx.jpg",
+    "created_by": [
+      {
+        "id": 18267,
+        "credit_id": "52540db419c2957940312d81",
+        "name": "Robin Hart",
+        "original_name": "Robin Hart",
+        "gender": 2,
+        "profile_path": "/cR7GQsZkm9Ju4q4VMFQaftLNacF.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "1972-09-17",
+    "genres": [
+      {
+        "id": 10768,
+        "name": "War & Politics"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/series/quiet-station-highwater",
+    "id": 918,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "1983-02-28",
+    "last_episode_to_air": {
+      "id": 50093,
+      "name": "Silver Archive",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 9,
+      "vote_count": 14,
+      "air_date": "1983-02-28",
+      "episode_number": 16,
+      "episode_type": "finale",
+      "production_code": "9-B04",
+      "runtime": 119,
+      "season_number": 11,
+      "show_id": 918,
+      "still_path": "/cLJt35GXe537NmRxZ9a5AjrzjQ6.jpg"
+    },
+    "name": "Quiet Station: Highwater",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "Falling River Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 251,
+    "number_of_seasons": 11,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Quiet Station: Highwater",
+    "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 77.3038,
+    "poster_path": "/6rhuM3oMoEWKxAdrm7IyM8oq8cC.jpg",
+    "production_companies": [
+      {
+        "id": 1556,
+        "logo_path": "/31h94rG9hzjprXoYNy3L1ErUya2.png",
+        "name": "Midnight Voyage Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1972-09-17",
+        "episode_count": 24,
+        "id": 2656,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/duH17foDC2MdYoTVbjafH1feUgt.jpg",
+        "season_number": 1,
+        "vote_average": 7
+      },
+      {
+        "air_date": "1973-09-15",
+        "episode_count": 24,
+        "id": 2658,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/cChJbCwph81D0O4X7LaJzPvvmeo.jpg",
+        "season_number": 2,
+        "vote_average": 6.7
+      },
+      {
+        "air_date": "1974-09-10",
+        "episode_count": 24,
+        "id": 2657,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/r1zv4bZcSUhf3rnjfOiVn9naURx.jpg",
+        "season_number": 3,
+        "vote_average": 6.5
+      },
+      {
+        "air_date": "1975-09-12",
+        "episode_count": 24,
+        "id": 2655,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/u7pH8CUdLg2zoXT0oUFvYLL0isO.jpg",
+        "season_number": 4,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "1976-09-21",
+        "episode_count": 24,
+        "id": 2654,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/6FLXh5NqBzzJP63ZcTJKNGSZOSw.jpg",
+        "season_number": 5,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "1977-09-20",
+        "episode_count": 24,
+        "id": 2660,
+        "name": "Season 6",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/uOxLDty7RVaERrItYYwpbihHk4r.jpg",
+        "season_number": 6,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "1978-09-18",
+        "episode_count": 25,
+        "id": 2659,
+        "name": "Season 7",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/3dJOqhJymEHrtTqgZjbNUTRRaxN.jpg",
+        "season_number": 7,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "1979-09-17",
+        "episode_count": 25,
+        "id": 2661,
+        "name": "Season 8",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/sWSWsy3ISTTury8m7HsjfzdbHxO.jpg",
+        "season_number": 8,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "1980-11-17",
+        "episode_count": 20,
+        "id": 2663,
+        "name": "Season 9",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/tW1WkZ6fw3VQibtX2ftXDhzjlud.jpg",
+        "season_number": 9,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "1981-10-26",
+        "episode_count": 21,
+        "id": 2662,
+        "name": "Season 10",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/zcmIJYinMFWDvcmxp0sWp1UOda6.jpg",
+        "season_number": 10,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "1982-10-25",
+        "episode_count": 16,
+        "id": 2664,
+        "name": "Season 11",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/yFbouHWg8rINh0pjopiHfyFl5vM.jpg",
+        "season_number": 11,
+        "vote_average": 7.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 7.9,
+    "vote_count": 773,
+    "external_ids": {
+      "imdb_id": "tt0068098",
+      "freebase_mid": "/m/014gjp",
+      "freebase_id": "/en/m_a_s_h",
+      "tvdb_id": 70994,
+      "tvrage_id": 4315,
+      "wikidata_id": "Q494244",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Quiet Station: Highwater",
+            "overview": "Quiet Station: Highwater follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/quiet-station-highwater",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

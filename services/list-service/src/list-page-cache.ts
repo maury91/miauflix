@@ -1,6 +1,12 @@
 import type { Database } from 'bun:sqlite';
 
-import { mapItems, normalizeListItems, type TraktItem } from './list-normalization';
+import {
+  mapItems,
+  mapMixedItems,
+  normalizeListItems,
+  normalizeMixedListItems,
+  type TraktItem,
+} from './list-normalization';
 
 const PUBLIC_PAGE_TTL_MS = 15 * 60 * 1000;
 const PERSONAL_PAGE_TTL_MS = 2 * 60 * 1000;
@@ -19,6 +25,13 @@ const personalPaths: Record<string, string> = {
   'trakt-history-shows': '/sync/history/shows?limit=50',
 };
 const flights = new Map<string, Promise<unknown>>();
+
+const communityListPath = (listId: string): string | undefined => {
+  const match = /^trakt-community-(.+)-(\d+)$/.exec(listId);
+  return match
+    ? `/users/${encodeURIComponent(match[1])}/lists/${match[2]}/items?limit=50`
+    : undefined;
+};
 
 type Association = { connection_id: string };
 type Page = {
@@ -40,7 +53,7 @@ export const listPage = async (args: {
 }) => {
   const { database, listId, subjectId, page, association, accessToken, fetchPage, seal, open } =
     args;
-  const publicPath = publicPaths[listId];
+  const publicPath = publicPaths[listId] ?? communityListPath(listId);
   const personalPath = personalPaths[listId];
   if (!publicPath && !personalPath) throw new Error('List not found');
 
@@ -71,20 +84,25 @@ export const listPage = async (args: {
 
   const refresh = (async () => {
     try {
+      const isCommunity = !publicPaths[listId] && Boolean(publicPath);
       const mediaType: 'movie' | 'tv' = listId.includes('shows') ? 'tv' : 'movie';
       const token = personalPath ? await accessToken(subjectId!, connectionId!) : undefined;
       const path = (publicPath ?? personalPath!).replace('limit=50', `page=${page}&limit=50`);
       const result = await fetchPage<TraktItem>(path, token);
-      const bare = listId.endsWith('-popular');
-      const items = mapItems(
-        normalizeListItems(result.items as TraktItem[], mediaType, bare),
-        mediaType
-      );
+      const items = isCommunity
+        ? mapMixedItems(normalizeMixedListItems(result.items))
+        : mapItems(
+            normalizeListItems(result.items as TraktItem[], mediaType, listId.endsWith('-popular')),
+            mediaType
+          );
       const parsed = {
         listId,
         page,
         totalPages: result.totalPages,
-        totalItems: result.totalItems,
+        // A single-page list has enough information to publish an exact
+        // deduplicated total. For paginated lists retain the provider total;
+        // later pages may contain identities not visible in this request.
+        totalItems: result.totalPages === 1 ? items.length : result.totalItems,
         items,
       };
       if (!connectionStillCurrent()) throw new Error('Trakt account connection changed');

@@ -6,5 +6,9 @@ export function getMediaTitle(media: MediaDto): string {
 
 export function getImageUrl(path: string | null | undefined, size = 'w500'): string {
   if (!path) return '';
-  return path.startsWith('/') ? `https://image.tmdb.org/t/p/${size}${path}` : path;
+  const isBundledAsset =
+    path.startsWith('/src/') || path.startsWith('/assets/') || path.startsWith('/@fs/');
+  return path.startsWith('/') && !isBundledAsset
+    ? `https://image.tmdb.org/t/p/${size}${path}`
+    : path;
 }

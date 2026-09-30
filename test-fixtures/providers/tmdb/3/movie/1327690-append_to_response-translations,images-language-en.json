@@ -1,0 +1,565 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6022",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"69b02e771dc606f61fa1a01a0435a6e2\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/jxQIjkJBTyZSxN3yyilpR0ns6HA.jpg",
+    "belongs_to_collection": {
+      "id": 1327693,
+      "name": "One Mile Back Collection",
+      "poster_path": "/5JIkxh0G6c9V3HaXxkMadcY4uNO.jpg",
+      "backdrop_path": "/lIrd8r7tgGg9v43oh0QPDMZpCm2.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/films/one-mile-back",
+    "id": 1327690,
+    "imdb_id": "tt24326462",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "One Mile Back",
+    "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+    "popularity": 6.4682,
+    "poster_path": "/3sjc9qXXmQoUWKQ3qIjS1nZaUJy.jpg",
+    "production_companies": [
+      {
+        "id": 33432,
+        "logo_path": "/spGFdO7ucwRq75zM2eXPJPzW1qW.png",
+        "name": "Hard Turn Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 12467,
+        "logo_path": "/qxkYfDP05Rrwu8Msgieq6XbCX4K.png",
+        "name": "Hard Turn Films",
+        "origin_country": "CA"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "release_date": "2026-02-27",
+    "revenue": 0,
+    "runtime": 84,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The way back is through them.",
+    "title": "One Mile Back",
+    "video": false,
+    "vote_average": 6.707,
+    "vote_count": 133,
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/41yIkR37yUgX2bLLWBYKEoyT4L2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.102,
+          "height": 225,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/P1PrWgEarWXvb3KsiDplpqcnUX.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 923
+        },
+        {
+          "aspect_ratio": 3.917,
+          "height": 984,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lpUx9SMUljQePz0CLY3Id955yRH.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3854
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3sjc9qXXmQoUWKQ3qIjS1nZaUJy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gmZL9vJikVlTnaG9wWvTD69qsjo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hC585RiTcdNZVmM34b7Gd60jdhr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gsRsIF2Z068ICGp40Ihalpf2Of3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8to4VsHzwSO7aWR70XTYfpG9MlB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9hkyU6sJSLUMyJenfI6wvolXlll.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 667
+        }
+      ]
+    },
+    "translations": {
+      "id": 1327690,
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 84,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 83,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 80,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 80,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 80,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 80,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 84,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 84,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/one-mile-back",
+            "overview": "When his daughter is abducted by the secluded community he once escaped, a former operative returns to the island where he hoped never to set foot again. The search becomes a race through hostile ground against people who know his every weakness.",
+            "runtime": 0,
+            "tagline": "The way back is through them.",
+            "title": "One Mile Back"
+          }
+        }
+      ]
+    }
+  }
+}

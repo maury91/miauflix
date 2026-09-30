@@ -1,0 +1,786 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20899",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"da6c464c5daff51b6eff3b8bdf5c0259\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/x5ufEAM7bS7DVXaovApamQh5BNE.jpg",
+    "belongs_to_collection": null,
+    "budget": 22000000,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      }
+    ],
+    "homepage": "https://example.test/films/the-wizard-of-saltmere",
+    "id": 37933,
+    "imdb_id": "tt0495596",
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_title": "The Wizard of Saltmere",
+    "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+    "popularity": 6.4906,
+    "poster_path": "/y0VnJt4eRPMjA1hpJ8f1EFoVaSf.jpg",
+    "production_companies": [
+      {
+        "id": 10342,
+        "logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
+        "name": "Cloud Orchard Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11846,
+        "logo_path": "/es3LvDA6wLWVDvZnAYYuAT6x8lJ.png",
+        "name": "Cloud Orchard Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Cloud Orchard Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 882,
+        "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+        "name": "Cloud Orchard Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12518,
+        "logo_path": "/qJZAVb8vx6qFLQJ6cunRkVUJVdB.png",
+        "name": "Cloud Orchard Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "Cloud Orchard Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11847,
+        "logo_path": "/gW5RN3ylzsAwQ1uGHBpezUZ0vXF.png",
+        "name": "Cloud Orchard Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 282816,
+        "logo_path": null,
+        "name": "Cloud Orchard Pictures",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "2006-07-29",
+    "revenue": 68625104,
+    "runtime": 116,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "When dragons return, the world must choose.",
+    "title": "The Wizard of Saltmere",
+    "video": false,
+    "vote_average": 6.5,
+    "vote_count": 1540,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 115,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 116,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-wizard-of-saltmere",
+            "overview": "Famine spreads and dragons return to a realm already close to collapse. An aging archmage and a troubled young prince travel across the islands to uncover the force upsetting the balance between people, land, and magic.",
+            "runtime": 0,
+            "tagline": "When dragons return, the world must choose.",
+            "title": "The Wizard of Saltmere"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l0gULXDXa7lu8d9353GUW7WNQzy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bLtv2fWfKJAEYfzQE40sObA5WtS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.736,
+          "height": 193,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Ui5we398ldlqCWZyLs5UOMphXa.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 7.2,
+          "height": 595,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gXgkfwU3v6PijZE43PEhlal2MyU.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4284
+        },
+        {
+          "aspect_ratio": 7.082,
+          "height": 608,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hPq3CeG4Wa9yenH4M5EnGCDdDQ2.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4306
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y0VnJt4eRPMjA1hpJ8f1EFoVaSf.jpg",
+          "vote_average": 5.25,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/67yYwCPq7NbxSF6BIIXCMD34sY0.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h0yWBbmiybxmzD2zLsfURDOViSV.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 675
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/btNv4XZE9SaUckOHCBuWzuIYoVX.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i9Q8i1L3yroFIUZCJ5dDlovQzng.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1425,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xlK8XLqypMnn1YeAkksUpXEdf8W.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 950
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3Fp0Tr9ceF4iR9I4h6PNuc0SX1K.jpg",
+          "vote_average": 0.166,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 825,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pyJ8HkipUuBoIAaqu67kpEU87wI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 550
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c9vQJgPYJhJFBYKtFWN5ZVmlq45.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vTL6DNMKTFbTYa7inMoW9OAonEw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4TYPdeudKiCEZ1LibiTL6J8TNsG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qJRJiZ1xrrk3bQd5CsOKi5vLwt7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cHiC7V80uPXfi8Mp6M8fJ8X21tf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1480,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5JOf6GzHPLXrZdFPAStlJL8Duqo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

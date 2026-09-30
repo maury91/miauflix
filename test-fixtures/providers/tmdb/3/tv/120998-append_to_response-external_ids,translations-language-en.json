@@ -1,0 +1,570 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6634",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"26cbc44d22c4ffb23dbdf8a8c4336468\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ccOzCmrglAjRGtqv5ClTaBEsWt8.jpg",
+    "created_by": [
+      {
+        "id": 67367,
+        "credit_id": "60512a401d820f003dcd701b",
+        "name": "Jordan Page",
+        "original_name": "Jordan Page",
+        "gender": 2,
+        "profile_path": "/ggwlJvCn0laNGjcvwGchuwC00hQ.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2023-01-26",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://example.test/series/northern-orchard-larkspur",
+    "id": 120998,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2025-07-10",
+    "last_episode_to_air": {
+      "id": 6041749,
+      "name": "Bright Signal",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 5.81,
+      "vote_count": 29,
+      "air_date": "2025-07-10",
+      "episode_number": 12,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 43,
+      "season_number": 2,
+      "show_id": 120998,
+      "still_path": "/w54KyV2YXrRP8yKO0YW8EzJhWsO.jpg"
+    },
+    "name": "Northern Orchard: Larkspur",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 3353,
+        "logo_path": "/gIAcGTjKKr0KOHL5s4O36roJ8p7.png",
+        "name": "Golden Horizon Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 22,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Northern Orchard: Larkspur",
+    "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 29.428,
+    "poster_path": "/8Xm5dyMQC9whMJKnGdFugUAW73C.jpg",
+    "production_companies": [
+      {
+        "id": 150969,
+        "logo_path": "/7oS9vcqTqm4m7x1GP0zBZaRkiPw.png",
+        "name": "Scarlet Window Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 2531,
+        "logo_path": "/9MfCJ2G6Nrf9yyRj4tAgPmMiDcn.png",
+        "name": "Silver Meridian Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 37871,
+        "logo_path": "/aUOo1S2AabqQnRrXK6XuObWPDyK.png",
+        "name": "Brass Sky Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 225256,
+        "logo_path": null,
+        "name": "Copper Compass Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-01-26",
+        "episode_count": 10,
+        "id": 186440,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/8Xm5dyMQC9whMJKnGdFugUAW73C.jpg",
+        "season_number": 1,
+        "vote_average": 6.9
+      },
+      {
+        "air_date": "2025-05-08",
+        "episode_count": 12,
+        "id": 445980,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/fkgZo3vKcD3pZ7cbNltLtu7c0Oo.jpg",
+        "season_number": 2,
+        "vote_average": 6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Canceled",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 7.4,
+    "vote_count": 554,
+    "external_ids": {
+      "imdb_id": "tt14269590",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 398822,
+      "tvrage_id": null,
+      "wikidata_id": "Q111944613",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Northern Orchard: Larkspur",
+            "overview": "Northern Orchard: Larkspur follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-orchard-larkspur",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

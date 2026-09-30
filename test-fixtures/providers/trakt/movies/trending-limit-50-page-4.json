@@ -1,0 +1,193 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "2259",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "discover,trending,movie",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Fri, 25 Sep 2026 14:50:51 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "160",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "4",
+    "x-pagination-page-count": "4",
+    "x-permitted-cross-domain-policies": "none",
+    "x-trending-user-count": "507"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "watchers": 51,
+      "movie": {
+        "ids": {
+          "imdb": "tt0167261",
+          "plex": {
+            "guid": "5d776824f59e580021897860",
+            "slug": "the-two-citadels"
+          },
+          "slug": "the-two-citadels-2002",
+          "tmdb": 121,
+          "trakt": 89
+        },
+        "year": 2002,
+        "title": "The Two Citadels"
+      }
+    },
+    {
+      "watchers": 51,
+      "movie": {
+        "ids": {
+          "imdb": "tt0114369",
+          "plex": {
+            "guid": "5d7768274de0ee001fcc8cc8",
+            "slug": "the-parable-killer"
+          },
+          "slug": "the-parable-killer-1995",
+          "tmdb": 807,
+          "trakt": 650
+        },
+        "year": 1995,
+        "title": "The Parable Killer"
+      }
+    },
+    {
+      "watchers": 51,
+      "movie": {
+        "ids": {
+          "imdb": "tt0266543",
+          "plex": {
+            "guid": "5d776824961905001eb908dd",
+            "slug": "the-reef-run"
+          },
+          "slug": "the-reef-run-2003",
+          "tmdb": 12,
+          "trakt": 8
+        },
+        "year": 2003,
+        "title": "The Reef Run"
+      }
+    },
+    {
+      "watchers": 51,
+      "movie": {
+        "ids": {
+          "imdb": "tt1979376",
+          "plex": {
+            "guid": "5d9f3c7f6fc551001ef89219",
+            "slug": "a-place-to-belong"
+          },
+          "slug": "a-place-to-belong-2019",
+          "tmdb": 301528,
+          "trakt": 193972
+        },
+        "year": 2019,
+        "title": "A Place to Belong"
+      }
+    },
+    {
+      "watchers": 51,
+      "movie": {
+        "ids": {
+          "imdb": "tt31227572",
+          "plex": {
+            "guid": "65ca74670a8f3c2de645d488",
+            "slug": "outcast-predator"
+          },
+          "slug": "outcast-predator-2025",
+          "tmdb": 1242898,
+          "trakt": 1006226
+        },
+        "year": 2025,
+        "title": "Outcast Predator"
+      }
+    },
+    {
+      "watchers": 51,
+      "movie": {
+        "ids": {
+          "imdb": "tt32273171",
+          "plex": {
+            "guid": "66362377cafd6d1e64c0841d",
+            "slug": "the-outlaw-s-last-road"
+          },
+          "slug": "the-outlaw-s-last-road-2026",
+          "tmdb": 1284465,
+          "trakt": 1044784
+        },
+        "year": 2026,
+        "title": "The Outlaw's Last Road"
+      }
+    },
+    {
+      "watchers": 51,
+      "movie": {
+        "ids": {
+          "imdb": "tt38891101",
+          "plex": {
+            "guid": "69188e5962e842eb39a10c60",
+            "slug": "five-days-before-the-invasion"
+          },
+          "slug": "five-days-before-the-invasion-2026",
+          "tmdb": 1509381,
+          "trakt": 1397126
+        },
+        "year": 2026,
+        "title": "Five Days Before the Invasion"
+      }
+    },
+    {
+      "watchers": 50,
+      "movie": {
+        "ids": {
+          "imdb": "tt1843866",
+          "plex": {
+            "guid": "5d77690896b655001fdc8aca",
+            "slug": "the-silent-protocol"
+          },
+          "slug": "the-silent-protocol-2014",
+          "tmdb": 100402,
+          "trakt": 72297
+        },
+        "year": 2014,
+        "title": "The Silent Protocol"
+      }
+    },
+    {
+      "watchers": 50,
+      "movie": {
+        "ids": {
+          "imdb": "tt2380307",
+          "plex": {
+            "guid": "5d776bcd7a53e9001e73069f",
+            "slug": "a-song-for-the-ancestors"
+          },
+          "slug": "a-song-for-the-ancestors-2017",
+          "tmdb": 354912,
+          "trakt": 222605
+        },
+        "year": 2017,
+        "title": "A Song for the Ancestors"
+      }
+    },
+    {
+      "watchers": 50,
+      "movie": {
+        "ids": {
+          "imdb": "tt40231163",
+          "plex": {
+            "guid": "69c44ea97cfecf363d58739f",
+            "slug": "run-hide-resist"
+          },
+          "slug": "run-hide-resist-2026",
+          "tmdb": 1643135,
+          "trakt": 1362938
+        },
+        "year": 2026,
+        "title": "Run, Hide, Resist"
+      }
+    }
+  ]
+}

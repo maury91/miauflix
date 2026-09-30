@@ -1,0 +1,488 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"99868252e3990919f216df67efeb0536\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/7NUx7bQAD4lo9yMDbprvIblhWo2.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      }
+    ],
+    "homepage": "https://example.test/films/ashes-to-ashes",
+    "id": 1363387,
+    "imdb_id": "tt35050712",
+    "origin_country": [
+      "AU"
+    ],
+    "original_language": "en",
+    "original_title": "Ashes to Ashes",
+    "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+    "popularity": 15.8565,
+    "poster_path": "/bCHPB5WZy4T0Rerh1GTuQLzU0rF.jpg",
+    "production_companies": [
+      {
+        "id": 71767,
+        "logo_path": null,
+        "name": "Pale Spoon Pictures",
+        "origin_country": "AU"
+      },
+      {
+        "id": 12142,
+        "logo_path": "/rPnEeMwxjI6rYMGqkWqIWwIJXxi.png",
+        "name": "Pale Spoon Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 74346,
+        "logo_path": "/1akCJMjyZsiS4v3NTJD5Y0LFZ4R.png",
+        "name": "Pale Spoon Pictures",
+        "origin_country": "AU"
+      },
+      {
+        "id": 247616,
+        "logo_path": null,
+        "name": "Pale Spoon Pictures",
+        "origin_country": "AU"
+      },
+      {
+        "id": 7584,
+        "logo_path": "/eGkfvvyf4fJTvBUR1xt1669IPA3.png",
+        "name": "Pale Spoon Pictures",
+        "origin_country": "AU"
+      },
+      {
+        "id": 142269,
+        "logo_path": "/ggrWFqk5mPMks0vE3aCy3l9e0dv.png",
+        "name": "Pale Spoon Pictures",
+        "origin_country": "FI"
+      },
+      {
+        "id": 204763,
+        "logo_path": "/aqWMgtLOf2ClBDnK0f4DvYNTZf6.png",
+        "name": "Pale Spoon Pictures",
+        "origin_country": "AU"
+      },
+      {
+        "id": 247617,
+        "logo_path": "/mW6DoAEQuYPtvlbxEylniCstnA5.png",
+        "name": "Pale Spoon Pictures",
+        "origin_country": "AU"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "AU",
+        "name": "Australia"
+      },
+      {
+        "iso_3166_1": "FI",
+        "name": "Finland"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-05-22",
+    "revenue": 456091,
+    "runtime": 113,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The diet stays with you.",
+    "title": "Ashes to Ashes",
+    "video": false,
+    "vote_average": 6.903,
+    "vote_count": 181,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 113,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 113,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 112,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 112,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 112,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 112,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 113,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/ashes-to-ashes",
+            "overview": "A lonely medical student tries an obscure diet trend involving cremated remains, hoping for a new body and a fresh start. Soon she begins seeing the dead person whose ashes she consumed, and every attempt to stop becomes another invitation.",
+            "runtime": 0,
+            "tagline": "The diet stays with you.",
+            "title": "Ashes to Ashes"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.779,
+          "height": 770,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m9y5Rut1k7UEudN0JLtqc5xgwrN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1370
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 11.757,
+          "height": 107,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g13aQig3pJKjmC9Kc2dScrv0isl.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1258
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bCHPB5WZy4T0Rerh1GTuQLzU0rF.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wTlqMc4Jt8ZBtHh8CREblU3ajAB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 853
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r4OYbktuUWYGROL7sMKfMvzGZcV.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1382
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fxj8ObLEhEMkVyItVpbw0uRmUCs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1013
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5u5XHpBRS0EtrtjbPenaTpnMyzB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1013
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/57AsNDJtzcY8nW3lEkZliF2hxKu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 853
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 2268,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4AsZQD8gjU7wo1suYry5ksINSXB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1521
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/90gFbHSEwjNAEF3fdcNfsPFXtJg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 687
+        }
+      ]
+    }
+  }
+}

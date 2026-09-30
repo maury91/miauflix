@@ -1,0 +1,775 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9839",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"47b5346605f5c68d2d344813733588e9\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rqbCbjB19amtOtFQbb3K2lgm2zv.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2013-04-07",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://example.test/series/emerald-signal-queensport",
+    "id": 1429,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2022-04-04",
+    "last_episode_to_air": {
+      "id": 3508327,
+      "name": "Last River",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.94,
+      "vote_count": 50,
+      "air_date": "2022-04-04",
+      "episode_number": 28,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 4,
+      "show_id": 1429,
+      "still_path": "/9IT29LxBTDd610r2XzzGZXeca0b.jpg"
+    },
+    "name": "Emerald Signal: Queensport",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 94,
+        "logo_path": "/7RNXnyiMbjgqtPAjja13wchcrGI.png",
+        "name": "Silent Harbor Network",
+        "origin_country": "JP"
+      },
+      {
+        "id": 469,
+        "logo_path": "/3E5bxm9VfOU9LkAX545jtpKAe6Z.png",
+        "name": "Scarlet Harbor Network",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Silent River Network",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 87,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "Emerald Signal: Queensport",
+    "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 55.5936,
+    "poster_path": "/hTP1DtLGFamjfu8WqjnuQdP1n4i.jpg",
+    "production_companies": [
+      {
+        "id": 529,
+        "logo_path": "/rwB6w2aPENQbx756pBWSw44Ouk.png",
+        "name": "Brass Orchard Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 21444,
+        "logo_path": "/wSejGn3lAZdQ5muByxvzigwyDY6.png",
+        "name": "Quiet Signal Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 31058,
+        "logo_path": "/1vwZPG0zMVRvThCY8Lljh0ppxQo.png",
+        "name": "Silver Passage Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Northern River Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Copper Lantern Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "Emerald Passage Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3363,
+        "logo_path": "/sj3vD7n63bTCih7bcf6GnWvRf1Q.png",
+        "name": "Blue Bridge Studios",
+        "origin_country": "JP"
+      },
+      {
+        "id": 170262,
+        "logo_path": null,
+        "name": "Distant River Studios",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2013-07-07",
+        "episode_count": 37,
+        "id": 3789,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/no3dkH44ywREi0la8tw4TnA1GxN.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2013-04-07",
+        "episode_count": 25,
+        "id": 3788,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/gC78bsXhdU2PwT3FkLcn8R5YcHb.jpg",
+        "season_number": 1,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2017-04-01",
+        "episode_count": 12,
+        "id": 84756,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/2fhK0wbFixskgRyuq6YvaMn75et.jpg",
+        "season_number": 2,
+        "vote_average": 8.6
+      },
+      {
+        "air_date": "2018-07-23",
+        "episode_count": 22,
+        "id": 98013,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/ynow2o9v0G341PLv1chCRDufCgc.jpg",
+        "season_number": 3,
+        "vote_average": 8.8
+      },
+      {
+        "air_date": "2020-12-07",
+        "episode_count": 28,
+        "id": 126952,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/sfbSjGlLHsvFQrMUSNR9RrwZgV1.jpg",
+        "season_number": 4,
+        "vote_average": 8.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8.686,
+    "vote_count": 7722,
+    "external_ids": {
+      "imdb_id": "tt2560140",
+      "freebase_mid": "/m/0vsphz0",
+      "freebase_id": null,
+      "tvdb_id": 267440,
+      "tvrage_id": null,
+      "wikidata_id": "Q22126305",
+      "facebook_id": "AttackOnTitan",
+      "instagram_id": "anime_shingeki_official",
+      "twitter_id": "anime_shingeki"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "gl",
+          "name": "Galego",
+          "english_name": "Galician",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AM",
+          "iso_639_1": "hy",
+          "name": "",
+          "english_name": "Armenian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "Emerald Signal: Queensport",
+            "overview": "Emerald Signal: Queensport follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/emerald-signal-queensport",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

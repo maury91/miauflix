@@ -1,0 +1,466 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16936",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"4a56ef3618a774ff3c5a89cb84c3dc8b\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fAsjhpFEx0We8vrOnbgJI5bKuLU.jpg",
+    "created_by": [
+      {
+        "id": 2118689,
+        "credit_id": "5ff2d09421118f003e269650",
+        "name": "Elliot Stone",
+        "original_name": "Elliot Stone",
+        "gender": 0,
+        "profile_path": null
+      },
+      {
+        "id": 2009251,
+        "credit_id": "5ff2d0904142910040527591",
+        "name": "Casey Page",
+        "original_name": "Casey Page",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [
+      30
+    ],
+    "first_air_date": "2022-04-24",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://example.test/series/blue-horizon-kingswell",
+    "id": 115915,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2022-06-12",
+    "last_episode_to_air": {
+      "id": 3721251,
+      "name": "Quiet Voyage",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 5.8,
+      "vote_count": 5,
+      "air_date": "2022-06-12",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 25,
+      "season_number": 1,
+      "show_id": 115915,
+      "still_path": "/9qtDApVh8xKMWryU4yk1zAwcTwU.jpg"
+    },
+    "name": "Blue Horizon: Kingswell",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Amber Valley Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Blue Horizon: Kingswell",
+    "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 4.6144,
+    "poster_path": "/pFpZNexdMLM1nLALKHVDhPbuMtM.jpg",
+    "production_companies": [
+      {
+        "id": 146778,
+        "logo_path": null,
+        "name": "Midnight Voyage Studios",
+        "origin_country": ""
+      },
+      {
+        "id": 112447,
+        "logo_path": "/kL6jD0jB836NqSfBusvjmYX1wAB.png",
+        "name": "Midnight Bridge Studios",
+        "origin_country": "GB"
+      },
+      {
+        "id": 135346,
+        "logo_path": "/hIwjhVdOOQ1fpdebwOuDQD7bnw0.png",
+        "name": "Brass Beacon Studios",
+        "origin_country": "GB"
+      },
+      {
+        "id": 3268,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Velvet Passage Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-04-24",
+        "episode_count": 8,
+        "id": 174941,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/iWx8pNRriZHE03BFGwYSPoZ6gnV.jpg",
+        "season_number": 1,
+        "vote_average": 6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Miniseries",
+    "vote_average": 6.1,
+    "vote_count": 95,
+    "external_ids": {
+      "imdb_id": "tt12879632",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 393566,
+      "tvrage_id": null,
+      "wikidata_id": "Q109701414",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Blue Horizon: Kingswell",
+            "overview": "Blue Horizon: Kingswell follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/blue-horizon-kingswell",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

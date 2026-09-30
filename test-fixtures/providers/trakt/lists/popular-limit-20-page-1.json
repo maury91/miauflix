@@ -1,0 +1,1342 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "age": "3289",
+    "cache-control": "public, max-age=86400, s-maxage=3600",
+    "cache-tag": "user_list,popular",
+    "content-type": "application/json; charset=utf-8",
+    "last-modified": "Mon, 28 Sep 2026 13:02:09 GMT",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "20368",
+    "x-pagination-limit": "20",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "1019",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "like_count": 5966,
+      "comment_count": 37,
+      "list": {
+        "name": "Amber Orchard Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2015-07-16T14:59:57.000Z",
+        "updated_at": "2026-09-28T12:35:41.000Z",
+        "item_count": 215,
+        "comment_count": 37,
+        "likes": 5966,
+        "ids": {
+          "slug": "marvel-cinematic-universe",
+          "trakt": 1248149
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/001/170/posters/medium/04fa05d153.jpg.webp",
+            "media.trakt.tv/images/seasons/000/083/598/posters/medium/df0f98646d.jpg.webp",
+            "media.trakt.tv/images/seasons/000/110/761/posters/medium/1d8236d65d.jpg.webp",
+            "media.trakt.tv/images/movies/000/130/811/posters/medium/e0a8198730.jpg.webp",
+            "media.trakt.tv/images/seasons/000/372/372/posters/medium/197a453932.jpg.webp",
+            "media.trakt.tv/images/movies/000/193/963/posters/medium/686e39e597.jpg.webp",
+            "media.trakt.tv/images/movies/000/001/157/posters/medium/b0158ecb11.jpg.webp",
+            "media.trakt.tv/images/seasons/000/372/372/posters/medium/197a453932.jpg.webp",
+            "media.trakt.tv/images/seasons/000/372/372/posters/medium/197a453932.jpg.webp",
+            "media.trakt.tv/images/seasons/000/372/372/posters/medium/197a453932.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "donxy",
+            "trakt": 879337
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/879/337/avatars/medium/467a0229e9.jpg"
+            }
+          },
+          "username": "casey-west-iui1",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2015-02-11T08:50:52.000Z",
+          "location": "Kingswell",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Casey West",
+          "gender": "male",
+          "age": 30,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 5982,
+      "comment_count": 6,
+      "list": {
+        "name": "Golden Signal Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2016-04-11T20:13:18.000Z",
+        "updated_at": "2026-09-28T12:28:24.000Z",
+        "item_count": 250,
+        "comment_count": 6,
+        "likes": 5982,
+        "ids": {
+          "slug": "imdb-top-rated-movies",
+          "trakt": 2142753
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/000/234/posters/medium/a97015926b.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/196/posters/medium/4436e95fee.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/120/posters/medium/8369bf0d4a.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/198/posters/medium/f7cd5ab346.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/090/posters/medium/308c97714c.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/309/posters/medium/0f0ddf5ef5.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/336/posters/medium/ea3fe02622.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/088/posters/medium/73a273048f.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/554/posters/medium/354f1c9483.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/089/posters/medium/20019dee8d.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "justin",
+            "trakt": 1
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/admins/000/000/001/avatars/medium/2e6df69058.jpg"
+            }
+          },
+          "username": "rowan-ellis-1",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2010-09-25T17:49:25.000Z",
+          "location": "Stonehaven",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Rowan Ellis",
+          "gender": "male",
+          "age": 30,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": true
+        }
+      }
+    },
+    {
+      "like_count": 4521,
+      "comment_count": 0,
+      "list": {
+        "name": "Ivory Crown Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2016-04-11T23:10:50.000Z",
+        "updated_at": "2026-09-28T12:28:31.000Z",
+        "item_count": 245,
+        "comment_count": 0,
+        "likes": 4521,
+        "ids": {
+          "slug": "imdb-top-rated-tv-shows",
+          "trakt": 2143363
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/shows/000/001/388/posters/medium/fa39b59954.jpg.webp",
+            "media.trakt.tv/images/shows/000/112/332/posters/medium/705982b951.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/039/posters/medium/08d148a6b6.jpg.webp",
+            "media.trakt.tv/images/shows/000/004/589/posters/medium/af60910b63.jpg.webp",
+            "media.trakt.tv/images/shows/000/145/186/posters/medium/8aefeb9e42.jpg.webp",
+            "media.trakt.tv/images/shows/000/000/245/posters/medium/bf32affca0.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/429/posters/medium/bc28def267.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/389/posters/medium/4d97f66ec7.jpg.webp",
+            "media.trakt.tv/images/shows/000/121/463/posters/medium/b74385ede3.jpg.webp",
+            "media.trakt.tv/images/shows/000/071/041/posters/medium/6a4e6534d0.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "justin",
+            "trakt": 1
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/admins/000/000/001/avatars/medium/2e6df69058.jpg"
+            }
+          },
+          "username": "rowan-ellis-1",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2010-09-25T17:49:25.000Z",
+          "location": "Stonehaven",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Rowan Ellis",
+          "gender": "male",
+          "age": 30,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": true
+        }
+      }
+    },
+    {
+      "like_count": 4348,
+      "comment_count": 69,
+      "list": {
+        "name": "Brass Compass Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2012-06-30T23:29:30.000Z",
+        "updated_at": "2026-09-28T12:33:43.000Z",
+        "item_count": 116,
+        "comment_count": 69,
+        "likes": 4348,
+        "ids": {
+          "slug": "best-mindfucks",
+          "trakt": 800238
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/016/662/posters/medium/1fb1d284b7.jpg.webp",
+            "media.trakt.tv/images/shows/000/004/583/posters/medium/197c82a123.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/432/posters/medium/7eb46b87e2.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/590/posters/medium/a1996f1c30.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/047/posters/medium/45d6e27ad3.jpg.webp",
+            "media.trakt.tv/images/movies/000/008/537/posters/medium/b2609428dc.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/358/posters/medium/7e3c70b4c6.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/851/posters/medium/552a055be5.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/985/posters/medium/86c47ddf85.jpg.webp",
+            "media.trakt.tv/images/movies/000/006/422/posters/medium/25438cb7fa.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "benfranklin",
+            "trakt": 16751
+          },
+          "images": {
+            "avatar": {
+              "full": "https://secure.gravatar.com/avatar/9420df13eb61e539642c410a8c4f6855?s=256&r=pg&d=https://i2.wp.com/media.trakt.tv/hotlink-ok/placeholders/medium/fry.png"
+            }
+          },
+          "username": "morgan-bell-cxb",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2011-08-25T16:22:34.000Z",
+          "location": "Juniper Vale",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Morgan Bell",
+          "gender": "female",
+          "age": null,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 3298,
+      "comment_count": 5,
+      "list": {
+        "name": "Last Compass Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2015-07-28T22:49:33.000Z",
+        "updated_at": "2026-09-28T06:41:52.000Z",
+        "item_count": 1001,
+        "comment_count": 5,
+        "likes": 3298,
+        "ids": {
+          "slug": "1001-greatest-movies-of-all-time",
+          "trakt": 1282987
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/000/196/posters/medium/4436e95fee.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/293/posters/medium/fabf0d90bc.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/198/posters/medium/f7cd5ab346.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/554/posters/medium/354f1c9483.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/309/posters/medium/0f0ddf5ef5.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/787/posters/medium/1492e1c960.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/336/posters/medium/ea3fe02622.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/477/posters/medium/8b5664e582.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/675/posters/medium/d316db9cb2.jpg.webp",
+            "media.trakt.tv/images/movies/000/002/058/posters/medium/ef0599058d.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "captainnapalm",
+            "trakt": 785
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/000/785/avatars/medium/e9ee365f8f.jpg"
+            }
+          },
+          "username": "remy-north-lt",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2010-12-15T21:15:27.000Z",
+          "location": "Rosefield",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Remy North",
+          "gender": "female",
+          "age": 21,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": "2012-11-16T05:22:54.000Z",
+          "vip_veteran_years": 13,
+          "vip_veteran_tier": 10,
+          "vip_veteran_title": "legend",
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 2395,
+      "comment_count": 8,
+      "list": {
+        "name": "Crimson Passage Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2013-01-06T20:11:36.000Z",
+        "updated_at": "2026-09-28T06:43:04.000Z",
+        "item_count": 1001,
+        "comment_count": 8,
+        "likes": 2395,
+        "ids": {
+          "slug": "1001-movies-you-must-see-before-you-die",
+          "trakt": 805405
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/000/618/posters/medium/c7a5fe3621.jpg.webp",
+            "media.trakt.tv/images/movies/000/003/220/posters/medium/b7bd0b2d74.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/494/posters/medium/3a480cf686.jpg.webp",
+            "media.trakt.tv/images/movies/000/018/234/posters/medium/0360567df9.jpg.webp",
+            "media.trakt.tv/images/movies/000/002/035/posters/medium/313e8e8411.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/192/posters/medium/37bcc48570.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/742/posters/medium/95214ed88a.jpg.webp",
+            "media.trakt.tv/images/movies/000/020/178/posters/medium/eb0b147c40.jpg.webp",
+            "media.trakt.tv/images/movies/000/057/401/posters/medium/94e26f969d.jpg.webp",
+            "media.trakt.tv/images/movies/000/041/575/posters/medium/a7ea703779.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "sp1ti",
+            "trakt": 17500
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/017/500/avatars/medium/5fca448417.jpg"
+            }
+          },
+          "username": "avery-march-di4",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2011-09-08T20:48:11.000Z",
+          "location": "Oak Harbor",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Avery March",
+          "gender": "male",
+          "age": null,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 2122,
+      "comment_count": 6,
+      "list": {
+        "name": "Silver Archive Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2020-04-22T16:53:27.000Z",
+        "updated_at": "2026-09-28T10:25:45.000Z",
+        "item_count": 497,
+        "comment_count": 6,
+        "likes": 2122,
+        "ids": {
+          "slug": "true-crime-documentary-series-film",
+          "trakt": 11416887
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/shows/000/327/292/posters/medium/a4f6da2504.jpg.webp",
+            "media.trakt.tv/images/movies/000/009/489/posters/medium/1c1cd0b459.jpg.webp",
+            "media.trakt.tv/images/movies/000/794/001/posters/medium/f426f86022.jpg.webp",
+            "media.trakt.tv/images/movies/000/063/169/posters/medium/4f0b9b54a6.jpg.webp",
+            "media.trakt.tv/images/movies/001/372/949/posters/medium/a6c10a4dc8.jpg.webp",
+            "media.trakt.tv/images/shows/000/314/507/posters/medium/b3bf921783.jpg.webp",
+            "media.trakt.tv/images/movies/001/379/395/posters/medium/6313c078a1.jpg.webp",
+            "media.trakt.tv/images/shows/000/094/066/posters/medium/5cb0ec9764.jpg.webp",
+            "media.trakt.tv/images/movies/000/415/884/posters/medium/e6cbd6349b.jpg.webp",
+            "media.trakt.tv/images/movies/001/145/888/posters/medium/4a6a6e8ff9.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "lish408",
+            "trakt": 609065
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/609/065/avatars/medium/710c9ad583.jpg"
+            }
+          },
+          "username": "devon-dale-d1yh",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2014-08-25T22:24:56.000Z",
+          "location": "Eastmere",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Devon Dale",
+          "gender": "female",
+          "age": 49,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": "2015-09-17T16:04:27.000Z",
+          "vip_veteran_years": 11,
+          "vip_veteran_tier": 10,
+          "vip_veteran_title": "legend",
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1990,
+      "comment_count": 7,
+      "list": {
+        "name": "Amber Compass Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "popularity",
+        "sort_how": "desc",
+        "created_at": "2018-05-04T18:02:13.000Z",
+        "updated_at": "2026-09-28T11:36:05.000Z",
+        "item_count": 316,
+        "comment_count": 7,
+        "likes": 1990,
+        "ids": {
+          "slug": "mindfuck",
+          "trakt": 4778265
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/000/430/posters/medium/6d8e32fbaa.jpg.webp",
+            "media.trakt.tv/images/movies/000/113/759/posters/medium/b05741a22d.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/338/posters/medium/409641b0ea.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/422/posters/medium/bfef95c79d.jpg.webp",
+            "media.trakt.tv/images/movies/000/002/411/posters/medium/578266f103.jpg.webp",
+            "media.trakt.tv/images/movies/000/037/572/posters/medium/e1f67fab8d.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/334/posters/medium/94da9dded5.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/835/posters/medium/28d3763b64.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/640/posters/medium/928a211e3b.jpg.webp",
+            "media.trakt.tv/images/movies/000/004/042/posters/medium/76b03e229f.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "lish408",
+            "trakt": 609065
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/609/065/avatars/medium/710c9ad583.jpg"
+            }
+          },
+          "username": "devon-dale-d1yh",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2014-08-25T22:24:56.000Z",
+          "location": "Eastmere",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Devon Dale",
+          "gender": "female",
+          "age": 49,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": "2015-09-17T16:04:27.000Z",
+          "vip_veteran_years": 11,
+          "vip_veteran_tier": 10,
+          "vip_veteran_title": "legend",
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1760,
+      "comment_count": 4,
+      "list": {
+        "name": "Scarlet Window Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2015-07-21T06:56:44.000Z",
+        "updated_at": "2026-09-28T12:37:14.000Z",
+        "item_count": 15,
+        "comment_count": 4,
+        "likes": 1760,
+        "ids": {
+          "slug": "dc-universe",
+          "trakt": 1257909
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/034/507/posters/medium/a17797e710.jpg.webp",
+            "media.trakt.tv/images/movies/000/129/583/posters/medium/b66699936d.jpg.webp",
+            "media.trakt.tv/images/movies/000/193/079/posters/medium/506a6329c6.jpg.webp",
+            "media.trakt.tv/images/movies/000/192/487/posters/medium/deef7a5830.jpg.webp",
+            "media.trakt.tv/images/movies/000/094/232/posters/medium/0ea9157c32.jpg.webp",
+            "media.trakt.tv/images/movies/000/193/968/posters/medium/5aa0cc8211.jpg.webp",
+            "media.trakt.tv/images/movies/000/184/992/posters/medium/52b5f3e1f5.jpg.webp",
+            "media.trakt.tv/images/movies/000/342/639/posters/medium/9b4cbd6627.jpg.webp",
+            "media.trakt.tv/images/movies/000/311/212/posters/medium/33c6ce7c91.jpg.webp",
+            "media.trakt.tv/images/movies/000/283/364/posters/medium/988df30b60.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "tetharion",
+            "trakt": 223032
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/223/032/avatars/medium/eb729cbc20.jpg"
+            }
+          },
+          "username": "parker-dale-4s3c",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2013-04-30T23:06:47.000Z",
+          "location": "Juniper Vale",
+          "about": null,
+          "name": null,
+          "gender": "female",
+          "age": 29,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1686,
+      "comment_count": 31,
+      "list": {
+        "name": "Silent Harbor Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2013-03-14T15:52:29.000Z",
+        "updated_at": "2026-09-28T11:52:22.000Z",
+        "item_count": 443,
+        "comment_count": 31,
+        "likes": 1686,
+        "ids": {
+          "slug": "great-movies-you-may-have-never-heard-of",
+          "trakt": 808094
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/082/183/posters/medium/2d687fdf3f.jpg.webp",
+            "media.trakt.tv/images/movies/000/070/741/posters/medium/d889913137.jpg.webp",
+            "media.trakt.tv/images/movies/000/072/653/posters/medium/53f0c56a40.jpg.webp",
+            "media.trakt.tv/images/movies/000/018/925/posters/medium/5a40878729.jpg.webp",
+            "media.trakt.tv/images/movies/000/054/396/posters/medium/8c6ffacd31.jpg.webp",
+            "media.trakt.tv/images/movies/000/058/687/posters/medium/77c26ca242.jpg.webp",
+            "media.trakt.tv/images/movies/000/077/846/posters/medium/112dae52a3.jpg.webp",
+            "media.trakt.tv/images/movies/000/051/768/posters/medium/1e05d5815f.jpg.webp",
+            "media.trakt.tv/images/movies/000/070/372/posters/medium/8c4db0c1a8.jpg.webp",
+            "media.trakt.tv/images/movies/000/054/066/posters/medium/2809527fe4.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "_aenema",
+            "trakt": 31649
+          },
+          "images": {
+            "avatar": {
+              "full": "https://secure.gravatar.com/avatar/0b9798f5f8f15af61820efe9fab58c59?s=256&r=pg&d=https://i2.wp.com/media.trakt.tv/hotlink-ok/placeholders/medium/fry.png"
+            }
+          },
+          "username": "casey-page-of5",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2012-02-18T13:31:36.000Z",
+          "location": "Dunmere",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Casey Page",
+          "gender": "male",
+          "age": 28,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1650,
+      "comment_count": 11,
+      "list": {
+        "name": "Copper Sky Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2016-05-05T08:45:55.000Z",
+        "updated_at": "2026-09-28T12:37:26.000Z",
+        "item_count": 330,
+        "comment_count": 11,
+        "likes": 1650,
+        "ids": {
+          "slug": "star-wars-canon-timeline",
+          "trakt": 2233867
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/shows/000/170/568/posters/medium/57f1289b85.jpg.webp",
+            "media.trakt.tv/images/seasons/000/295/674/posters/medium/c7401bd504.jpg.webp",
+            "media.trakt.tv/images/seasons/000/295/674/posters/medium/c7401bd504.jpg.webp",
+            "media.trakt.tv/images/seasons/000/295/674/posters/medium/c7401bd504.jpg.webp",
+            "media.trakt.tv/images/movies/000/001/268/posters/medium/cf1b45b8f8.jpg.webp",
+            "media.trakt.tv/images/seasons/000/176/960/posters/medium/3539644e24.jpg.webp",
+            "media.trakt.tv/images/seasons/000/213/280/posters/medium/653ef96aa8.jpg.webp",
+            "media.trakt.tv/images/seasons/000/295/674/posters/medium/c7401bd504.jpg.webp",
+            "media.trakt.tv/images/seasons/000/161/171/posters/medium/6a0f9a798f.jpg.webp",
+            "media.trakt.tv/images/movies/000/001/269/posters/medium/f4c00be15b.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "sonicwarrior",
+            "trakt": 1895924
+          },
+          "images": {
+            "avatar": {
+              "full": "https://secure.gravatar.com/avatar/6d4d9f01bc7fef38466b14c09a8a90c8?s=256&r=pg&d=https://i2.wp.com/media.trakt.tv/hotlink-ok/placeholders/medium/fry.png"
+            }
+          },
+          "username": "robin-young-14mwk",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2016-04-28T18:06:33.000Z",
+          "location": "Glassford",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Robin Young",
+          "gender": "female",
+          "age": 51,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1607,
+      "comment_count": 4,
+      "list": {
+        "name": "Amber River Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "added",
+        "sort_how": "desc",
+        "created_at": "2020-03-03T02:46:56.000Z",
+        "updated_at": "2026-09-28T06:42:18.000Z",
+        "item_count": 132,
+        "comment_count": 4,
+        "likes": 1607,
+        "ids": {
+          "slug": "shut-up-and-watch",
+          "trakt": 11032042
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/shows/000/001/427/posters/medium/73a4a05248.jpg.webp",
+            "media.trakt.tv/images/shows/000/119/913/posters/medium/f0795ac50b.jpg.webp",
+            "media.trakt.tv/images/shows/000/144/119/posters/medium/601f1fb467.jpg.webp",
+            "media.trakt.tv/images/shows/000/041/793/posters/medium/02167b5075.jpg.webp",
+            "media.trakt.tv/images/shows/000/140/008/posters/medium/b10471c0e0.jpg.webp",
+            "media.trakt.tv/images/shows/000/137/198/posters/medium/4ebc6d892e.jpg.webp",
+            "media.trakt.tv/images/shows/000/139/960/posters/medium/c5b8a81eba.jpg.webp",
+            "media.trakt.tv/images/shows/000/104/439/posters/medium/84177ad9b8.jpg.webp",
+            "media.trakt.tv/images/shows/000/113/656/posters/medium/34f4a201fd.jpg.webp",
+            "media.trakt.tv/images/shows/000/113/938/posters/medium/034ef300b2.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "canconfirm",
+            "trakt": 1019041
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/001/019/041/avatars/medium/73ea4f4169.jpg"
+            }
+          },
+          "username": "cameron-vale-luap",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2015-05-03T03:19:08.000Z",
+          "location": "Rosefield",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Cameron Vale",
+          "gender": "female",
+          "age": null,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": "2019-03-21T23:30:16.000Z",
+          "vip_veteran_years": 7,
+          "vip_veteran_tier": 7,
+          "vip_veteran_title": "veteran",
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1589,
+      "comment_count": 9,
+      "list": {
+        "name": "Amber River Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2012-03-18T19:44:18.000Z",
+        "updated_at": "2026-09-28T00:27:26.000Z",
+        "item_count": 264,
+        "comment_count": 9,
+        "likes": 1589,
+        "ids": {
+          "slug": "based-on-a-true-story",
+          "trakt": 798830
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/003/373/posters/medium/94a60e8985.jpg.webp",
+            "media.trakt.tv/images/movies/000/054/823/posters/medium/1861c23219.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/933/posters/medium/7fadb5e31a.jpg.webp",
+            "media.trakt.tv/images/movies/000/031/149/posters/medium/a5ac72e9bb.jpg.webp",
+            "media.trakt.tv/images/movies/000/061/858/posters/medium/7b32803fea.jpg.webp",
+            "media.trakt.tv/images/movies/000/029/704/posters/medium/f07e24422e.jpg.webp",
+            "media.trakt.tv/images/movies/000/029/851/posters/medium/e374ce74bc.jpg.webp",
+            "media.trakt.tv/images/movies/000/001/034/posters/medium/04769f92cd.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/612/posters/medium/544a46a1c0.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/409/posters/medium/9eabb6aa5f.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "benfranklin",
+            "trakt": 16751
+          },
+          "images": {
+            "avatar": {
+              "full": "https://secure.gravatar.com/avatar/9420df13eb61e539642c410a8c4f6855?s=256&r=pg&d=https://i2.wp.com/media.trakt.tv/hotlink-ok/placeholders/medium/fry.png"
+            }
+          },
+          "username": "morgan-bell-cxb",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2011-08-25T16:22:34.000Z",
+          "location": "Juniper Vale",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Morgan Bell",
+          "gender": "female",
+          "age": null,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1575,
+      "comment_count": 5,
+      "list": {
+        "name": "Amber Echo Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "released",
+        "sort_how": "asc",
+        "created_at": "2012-08-25T08:40:44.000Z",
+        "updated_at": "2026-09-28T06:42:07.000Z",
+        "item_count": 25,
+        "comment_count": 5,
+        "likes": 1575,
+        "ids": {
+          "slug": "studio-ghibli-feature-films",
+          "trakt": 801239
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/000/051/posters/medium/f08a7004ca.jpg.webp",
+            "media.trakt.tv/images/movies/000/005/695/posters/medium/5982372923.jpg.webp",
+            "media.trakt.tv/images/movies/000/007/251/posters/medium/242597f61b.jpg.webp",
+            "media.trakt.tv/images/movies/000/004/169/posters/medium/e087929aae.jpg.webp",
+            "media.trakt.tv/images/movies/000/010/314/posters/medium/07d569f0be.jpg.webp",
+            "media.trakt.tv/images/movies/000/009/145/posters/medium/11c9f531e3.jpg.webp",
+            "media.trakt.tv/images/movies/000/006/697/posters/medium/a9676493a2.jpg.webp",
+            "media.trakt.tv/images/movies/000/012/925/posters/medium/3b0604933e.jpg.webp",
+            "media.trakt.tv/images/movies/000/009/277/posters/medium/0e6364d0a0.jpg.webp",
+            "media.trakt.tv/images/movies/000/024/277/posters/medium/cd21254626.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "draackje",
+            "trakt": 2387
+          },
+          "images": {
+            "avatar": {
+              "full": "https://secure.gravatar.com/avatar/8e928ef81d6ad80b0a3dda012b80c806?s=256&r=pg&d=https://i2.wp.com/media.trakt.tv/hotlink-ok/placeholders/medium/fry.png"
+            }
+          },
+          "username": "lane-lake-1ub",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2011-02-10T23:22:49.000Z",
+          "location": "Northbridge",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Lane Lake",
+          "gender": "female",
+          "age": null,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1465,
+      "comment_count": 4,
+      "list": {
+        "name": "Velvet Horizon Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": true,
+        "sort_by": "released",
+        "sort_how": "desc",
+        "created_at": "2018-07-10T21:43:34.000Z",
+        "updated_at": "2026-09-28T06:42:47.000Z",
+        "item_count": 216,
+        "comment_count": 4,
+        "likes": 1465,
+        "ids": {
+          "slug": "a24",
+          "trakt": 5171116
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/269/600/posters/medium/d57319a320.jpg.webp",
+            "media.trakt.tv/images/movies/000/239/360/posters/medium/fb3909fd02.jpg.webp",
+            "media.trakt.tv/images/movies/000/315/158/posters/medium/1476960a47.jpg.webp",
+            "media.trakt.tv/images/movies/000/298/546/posters/medium/d186558a78.jpg.webp",
+            "media.trakt.tv/images/movies/000/257/501/posters/medium/e454bc7028.jpg.webp",
+            "media.trakt.tv/images/movies/000/336/953/posters/medium/ec6e8ed6e4.jpg.webp",
+            "media.trakt.tv/images/movies/000/239/252/posters/medium/fa5a7145e5.jpg.webp",
+            "media.trakt.tv/images/movies/000/340/974/posters/medium/536b9878a2.jpg.webp",
+            "media.trakt.tv/images/movies/000/226/019/posters/medium/022863cbf1.jpg.webp",
+            "media.trakt.tv/images/movies/000/305/857/posters/medium/962bb98086.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "fidel-cb",
+            "trakt": 770577
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/770/577/avatars/medium/d7249adea2.jpg"
+            }
+          },
+          "username": "riley-gray-gikx",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2014-12-18T03:03:41.000Z",
+          "location": "Fox Hollow",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Riley Gray",
+          "gender": "male",
+          "age": 26,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1317,
+      "comment_count": 0,
+      "list": {
+        "name": "Falling River Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "released",
+        "sort_how": "asc",
+        "created_at": "2012-08-25T09:03:58.000Z",
+        "updated_at": "2026-09-28T09:04:52.000Z",
+        "item_count": 31,
+        "comment_count": 0,
+        "likes": 1317,
+        "ids": {
+          "slug": "pixar-feature-films",
+          "trakt": 801240
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/000/705/posters/medium/a91e865e00.jpg.webp",
+            "media.trakt.tv/images/movies/000/004/771/posters/medium/4fd8d28e16.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/706/posters/medium/7483964153.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/464/posters/medium/ff36df49f2.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/008/posters/medium/da25391579.jpg.webp",
+            "media.trakt.tv/images/movies/000/005/065/posters/medium/17b5d88aba.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/762/posters/medium/53f8a5b44e.jpg.webp",
+            "media.trakt.tv/images/movies/000/001/416/posters/medium/6cf5155137.jpg.webp",
+            "media.trakt.tv/images/movies/000/005/853/posters/medium/e5a3035514.jpg.webp",
+            "media.trakt.tv/images/movies/000/008/476/posters/medium/d3277c8f58.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "draackje",
+            "trakt": 2387
+          },
+          "images": {
+            "avatar": {
+              "full": "https://secure.gravatar.com/avatar/8e928ef81d6ad80b0a3dda012b80c806?s=256&r=pg&d=https://i2.wp.com/media.trakt.tv/hotlink-ok/placeholders/medium/fry.png"
+            }
+          },
+          "username": "lane-lake-1ub",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2011-02-10T23:22:49.000Z",
+          "location": "Northbridge",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Lane Lake",
+          "gender": "female",
+          "age": null,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1266,
+      "comment_count": 0,
+      "list": {
+        "name": "Brass Echo Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": false,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2018-07-16T15:28:58.000Z",
+        "updated_at": "2026-09-28T02:55:41.000Z",
+        "item_count": 1398,
+        "comment_count": 0,
+        "likes": 1266,
+        "ids": {
+          "slug": "all-of-these-films-are-worth-seeing-1400-titles",
+          "trakt": 5218744
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/000/230/posters/medium/496f1a8bf5.jpg.webp",
+            "media.trakt.tv/images/movies/000/006/328/posters/medium/f7ee0a538a.jpg.webp",
+            "media.trakt.tv/images/movies/000/050/131/posters/medium/b9a27639c5.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/234/posters/medium/a97015926b.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/554/posters/medium/354f1c9483.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/088/posters/medium/73a273048f.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/196/posters/medium/4436e95fee.jpg.webp",
+            "media.trakt.tv/images/movies/000/007/935/posters/medium/365403842a.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/481/posters/medium/373310d2ee.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/009/posters/medium/736833136c.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "xilfneps",
+            "trakt": 1352228
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/001/352/228/avatars/medium/9710078a77.png"
+            }
+          },
+          "username": "casey-page-szdw",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2015-10-22T04:36:44.000Z",
+          "location": null,
+          "about": null,
+          "name": null,
+          "gender": "male",
+          "age": null,
+          "vip": true,
+          "vip_ep": false,
+          "vip_veteran_since": "2019-10-17T16:33:10.000Z",
+          "vip_veteran_years": 6,
+          "vip_veteran_tier": 5,
+          "vip_veteran_title": "veteran",
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1246,
+      "comment_count": 0,
+      "list": {
+        "name": "Amber Compass Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": false,
+        "sort_by": "rank",
+        "sort_how": "asc",
+        "created_at": "2016-10-04T11:01:30.000Z",
+        "updated_at": "2026-09-26T21:13:55.000Z",
+        "item_count": 100,
+        "comment_count": 0,
+        "likes": 1246,
+        "ids": {
+          "slug": "rolling-stone-s-100-greatest-tv-shows-of-all-time",
+          "trakt": 2748259
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/shows/000/001/389/posters/medium/4d97f66ec7.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/429/posters/medium/bc28def267.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/388/posters/medium/fa39b59954.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/099/posters/medium/9eca0a497c.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/391/posters/medium/97139ed872.jpg.webp",
+            "media.trakt.tv/images/shows/000/000/455/posters/medium/8b737766ea.jpg.webp",
+            "media.trakt.tv/images/shows/000/006/318/posters/medium/cfb9349748.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/656/posters/medium/f72a5f2d08.jpg.webp",
+            "media.trakt.tv/images/shows/000/001/909/posters/medium/f4eac22f19.jpg.webp",
+            "media.trakt.tv/images/shows/000/002/211/posters/medium/d3c4d17695.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "redouaaane",
+            "trakt": 235462
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/235/462/avatars/medium/b412ab7303.png"
+            }
+          },
+          "username": "robin-lake-51om",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2013-05-20T23:52:21.000Z",
+          "location": "Northbridge",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Robin Lake",
+          "gender": "female",
+          "age": null,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1228,
+      "comment_count": 4,
+      "list": {
+        "name": "Hidden Window Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": true,
+        "allow_comments": true,
+        "sort_by": "random",
+        "sort_how": "desc",
+        "created_at": "2020-11-09T16:02:29.000Z",
+        "updated_at": "2026-09-23T22:30:56.000Z",
+        "item_count": 534,
+        "comment_count": 4,
+        "likes": 1228,
+        "ids": {
+          "slug": "great-popular-shows",
+          "trakt": 20124699
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/shows/000/162/712/posters/medium/37cc9bab97.jpg.webp",
+            "media.trakt.tv/images/shows/000/174/314/posters/medium/69d0e3bb7c.jpg.webp",
+            "media.trakt.tv/images/shows/000/202/335/posters/medium/cf6ff8e89a.jpg.webp",
+            "media.trakt.tv/images/shows/000/232/779/posters/medium/d9378863a8.jpg.webp",
+            "media.trakt.tv/images/shows/000/202/341/posters/medium/2d2cec4a22.jpg.webp",
+            "media.trakt.tv/images/shows/000/195/711/posters/medium/db71e1c250.jpg.webp",
+            "media.trakt.tv/images/shows/000/223/229/posters/medium/e0db9341ac.jpg.webp",
+            "media.trakt.tv/images/shows/000/177/887/posters/medium/0e558c2d87.jpg.webp",
+            "media.trakt.tv/images/shows/000/202/370/posters/medium/ef99895eb2.jpg.webp",
+            "media.trakt.tv/images/shows/000/152/957/posters/medium/fecc4eb4c4.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "spell3ound",
+            "trakt": 5450673
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/005/450/673/avatars/medium/694589df46.jpg"
+            }
+          },
+          "username": "robin-lake-38trl",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2019-04-25T01:37:15.000Z",
+          "location": "Westmere",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Robin Lake",
+          "gender": "female",
+          "age": 31,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    },
+    {
+      "like_count": 1174,
+      "comment_count": 1,
+      "list": {
+        "name": "Hidden Echo Watchlist",
+        "description": "A hand-picked collection of memorable films and series, organized for an easy viewing journey.",
+        "privacy": "public",
+        "share_link": "",
+        "type": "personal",
+        "display_numbers": false,
+        "allow_comments": false,
+        "sort_by": "added",
+        "sort_how": "desc",
+        "created_at": "2019-02-18T16:37:54.000Z",
+        "updated_at": "2026-09-22T20:48:22.000Z",
+        "item_count": 179,
+        "comment_count": 1,
+        "likes": 1174,
+        "ids": {
+          "slug": "subreddit-selections",
+          "trakt": 6319578
+        },
+        "images": {
+          "posters": [
+            "media.trakt.tv/images/movies/000/181/313/posters/medium/a37c06d644.jpg.webp",
+            "media.trakt.tv/images/movies/000/270/740/posters/medium/6972353233.jpg.webp",
+            "media.trakt.tv/images/movies/000/299/863/posters/medium/98b9b59eaa.jpg.webp",
+            "media.trakt.tv/images/movies/000/301/041/posters/medium/a0fdb5088d.jpg.webp",
+            "media.trakt.tv/images/movies/000/010/322/posters/medium/df88007e18.jpg.webp",
+            "media.trakt.tv/images/movies/000/014/787/posters/medium/311586449c.jpg.webp",
+            "media.trakt.tv/images/movies/000/283/899/posters/medium/0588ab9c3e.jpg.webp",
+            "media.trakt.tv/images/movies/000/000/478/posters/medium/a3fe927c61.jpg.webp",
+            "media.trakt.tv/images/movies/000/001/394/posters/medium/9d41961618.jpg.webp",
+            "media.trakt.tv/images/movies/000/019/892/posters/medium/5ac638427c.jpg.webp"
+          ]
+        },
+        "user": {
+          "ids": {
+            "slug": "giladg",
+            "trakt": 325584
+          },
+          "images": {
+            "avatar": {
+              "full": "https://media.trakt.tv/images/users/000/325/584/avatars/medium/e5131bdbee.jpeg"
+            }
+          },
+          "username": "jordan-cross-6z80",
+          "private": false,
+          "deleted": false,
+          "joined_at": "2013-10-11T22:03:34.000Z",
+          "location": "Bellhaven",
+          "about": "Film and television enthusiast building thoughtful watchlists for every mood.",
+          "name": "Jordan Cross",
+          "gender": "male",
+          "age": null,
+          "vip": false,
+          "vip_ep": false,
+          "vip_veteran_since": null,
+          "vip_veteran_years": null,
+          "vip_veteran_tier": null,
+          "vip_veteran_title": null,
+          "vip_cover_image": null,
+          "director": false
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,385 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5914",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"67443e7143c75f6bef9556774fa66181\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/7Whk4F7xQYF5eUwJp50Oa8GvpVd.jpg",
+    "belongs_to_collection": null,
+    "budget": 28100000,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      },
+      {
+        "id": 12,
+        "name": "Adventure"
+      }
+    ],
+    "homepage": "https://example.test/films/a-father-finds-his-way",
+    "id": 1472638,
+    "imdb_id": "tt38350059",
+    "origin_country": [
+      "IT"
+    ],
+    "original_language": "it",
+    "original_title": "A Father Finds His Way",
+    "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+    "popularity": 3.5445,
+    "poster_path": "/gYvlK73gKsJAaGjndyyiaZerEFb.jpg",
+    "production_companies": [
+      {
+        "id": 18156,
+        "logo_path": "/3nAuYcaWdpW0ULMvMz6V5HIJmCO.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "IT"
+      },
+      {
+        "id": 6246,
+        "logo_path": "/7X6pfxldTiOD7MLo2EQqUQlmOUw.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "IT"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "IT",
+        "name": "Italy"
+      }
+    ],
+    "release_date": "2025-12-25",
+    "revenue": 73797878,
+    "runtime": 90,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Italian",
+        "iso_639_1": "it",
+        "name": "Italiano"
+      },
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The road home starts with listening.",
+    "title": "A Father Finds His Way",
+    "video": false,
+    "vote_average": 6.288,
+    "vote_count": 624,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 90,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 90,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 90,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 90,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 90,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 91,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 0,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 90,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 91,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/a-father-finds-his-way",
+            "overview": "A pampered heir heads to the capital when his daughter disappears, discovering that fatherhood requires more than paying the bills.",
+            "runtime": 91,
+            "tagline": "The road home starts with listening.",
+            "title": "A Father Finds His Way"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": []
+    }
+  }
+}

@@ -1,0 +1,611 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23514",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"be47385998f5db51d7acb972569e525f\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/pAyImoslSnpMgjRwhaS5ZEdl8UI.jpg",
+    "belongs_to_collection": null,
+    "budget": 50000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-last-extraction",
+    "id": 1448560,
+    "imdb_id": "tt36153493",
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_title": "The Last Extraction",
+    "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+    "popularity": 12.8435,
+    "poster_path": "/h893ImjM6Fsv5DFhKJdlZFZIJno.jpg",
+    "production_companies": [
+      {
+        "id": 154063,
+        "logo_path": "/r4anaxYa8OL5KaUbU35VkrIe88L.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 155758,
+        "logo_path": "/iZi0zd9ijrcWR9zlEUUthG8d600.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "GB"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2025-11-19",
+    "revenue": 0,
+    "runtime": 99,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "One crew. One chance. One child.",
+    "title": "The Last Extraction",
+    "video": false,
+    "vote_average": 6.074,
+    "vote_count": 229,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 99,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 99,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 89,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 99,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 99,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 99,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 99,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 99,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 96,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 100,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-last-extraction",
+            "overview": "An old covert unit stages one impossible robbery to pay a ransom and save their commander's young daughter.",
+            "runtime": 0,
+            "tagline": "One crew. One chance. One child.",
+            "title": "The Last Extraction"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nv6VRUyrLavYhMhDJ8RWy6Ds2my.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nBYSf7or6UP9GF9avYcdXkR3xec.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8kPNbNKXXiRDOyVJ8kROPikLoHJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.706,
+          "height": 640,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oEltd9fOpDRdjYsHJZ6P1wTFpcP.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3012
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h893ImjM6Fsv5DFhKJdlZFZIJno.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ujPYxfpnUiA9cF5iwameF5k1wfC.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1384
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tZst3WyMhbpfwC9kjuuKojAY7iJ.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v1U2eh7AXeWdxrYLGxXS1M4nqmV.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dRzTOpYifusB9kEETsRx4T1lYJE.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2FY7Ee0zjtOIFYoF6Xyl3YTAuKU.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1384
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3oYW8P5zGMJi0Uw04yQkTHwF2uw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 2197,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9HDrGMjA73CF0ymUPAFiMGc9zGK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1476
+        }
+      ]
+    }
+  }
+}

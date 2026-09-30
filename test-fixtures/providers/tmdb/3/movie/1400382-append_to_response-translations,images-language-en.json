@@ -1,0 +1,260 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17458",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"989bb73e3be6298efdfe4a880bdebb12\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ygy06SVakmwvtYMljQRA74S9P8T.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/films/the-hidden-camera-line",
+    "id": 1400382,
+    "imdb_id": "tt34963732",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Hidden Camera Line",
+    "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+    "popularity": 3.2565,
+    "poster_path": "/jq9BGaBpGmlrJJsFEMAVlfpLkYh.jpg",
+    "production_companies": [
+      {
+        "id": 240585,
+        "logo_path": null,
+        "name": "Nightglass Documentary Works",
+        "origin_country": "US"
+      },
+      {
+        "id": 154646,
+        "logo_path": null,
+        "name": "Nightglass Documentary Works",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-09-19",
+    "revenue": 61248,
+    "runtime": 97,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The spectacle kept the cameras rolling.",
+    "title": "The Hidden Camera Line",
+    "video": false,
+    "vote_average": 6.5,
+    "vote_count": 49,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 97,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 96,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 0,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 97,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 0,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 0,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 0,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 0,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 0,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 0,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-hidden-camera-line",
+            "overview": "In the mid-2000s, a popular television sting show drew millions to watch men arrive expecting secret meetings with minors, only to face a polished host and waiting police. Years later, the filmmakers examine the program's methods, audience, and legacy.",
+            "runtime": 0,
+            "tagline": "The spectacle kept the cameras rolling.",
+            "title": "The Hidden Camera Line"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [
+        {
+          "aspect_ratio": 8.531,
+          "height": 128,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vAMoN7B1qq05bqDbvk4vXu9KAhU.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1092
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jq9BGaBpGmlrJJsFEMAVlfpLkYh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1442,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fRI1C9EJe66Z9nqTJF2NgDBAraI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 961
+        }
+      ]
+    }
+  }
+}

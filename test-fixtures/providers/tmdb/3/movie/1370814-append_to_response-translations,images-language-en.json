@@ -1,0 +1,643 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6623",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"aebbb2984d12f9661a2311e61612b03e\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/kHyN3PejjlYWYz1Eah3jS64oV0g.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/deep-end-of-summer",
+    "id": 1370814,
+    "imdb_id": "tt32792934",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Deep End of Summer",
+    "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+    "popularity": 6.2871,
+    "poster_path": "/b0RWuqzgvyfiIYU4QfgJHhmxZF4.jpg",
+    "production_companies": [
+      {
+        "id": 169906,
+        "logo_path": "/zcjActhEXaYww1JSvx2OtCd8jTG.png",
+        "name": "Stillwater Drama",
+        "origin_country": "US"
+      },
+      {
+        "id": 103292,
+        "logo_path": "/snusHoE7JVuo2yat7iX49eT11Jb.png",
+        "name": "Stillwater Drama",
+        "origin_country": "US"
+      },
+      {
+        "id": 6736,
+        "logo_path": "/cdCAYeb3K3Ajhn1tfXHPSfT1KzB.png",
+        "name": "Stillwater Drama",
+        "origin_country": "AE"
+      },
+      {
+        "id": 262513,
+        "logo_path": null,
+        "name": "Stillwater Drama",
+        "origin_country": "US"
+      },
+      {
+        "id": 275856,
+        "logo_path": null,
+        "name": "Stillwater Drama",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "AE",
+        "name": "United Arab Emirates"
+      }
+    ],
+    "release_date": "2025-12-24",
+    "revenue": 695518,
+    "runtime": 98,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The hardest part is staying afloat.",
+    "title": "Deep End of Summer",
+    "video": false,
+    "vote_average": 6.4,
+    "vote_count": 141,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 98,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 95,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 95,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 98,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 98,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 95,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/deep-end-of-summer",
+            "overview": "An awkward tween arrives at an elite water polo camp hoping to fit in, only to encounter a merciless social order. As the summer wears on, his anxiety magnifies every slight until camp life begins to feel like a psychological trap.",
+            "runtime": 0,
+            "tagline": "The hardest part is staying afloat.",
+            "title": "Deep End of Summer"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tyYVVvgCaiYob27crG2VVuzsR4E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 7.025,
+          "height": 79,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gVgSc9M6CMnypGcI7TBXKCANfYd.png",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 555
+        },
+        {
+          "aspect_ratio": 7.227,
+          "height": 586,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v9hg6mkuRXgEwoEzBLGyuobe5dx.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 4235
+        },
+        {
+          "aspect_ratio": 7.227,
+          "height": 586,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5jzITcgDrLDZ4TaZz0ddeiJR95U.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 4235
+        },
+        {
+          "aspect_ratio": 2.308,
+          "height": 1253,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oXXwTbiuegqWWCzl66Wfpptr3UD.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2892
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b0RWuqzgvyfiIYU4QfgJHhmxZF4.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a5puszSsxC8GtGs2p2GhoTZDhHE.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ywfLX24VuOsxIXAAZ46Ecj6zi77.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e4aBtGkDgAbwcbT4TxW8kj7yCeq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2046,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ljKDpaPgkjyGMsTPAOmu5dZAWo4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1364
+        },
+        {
+          "aspect_ratio": 0.681,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s5oNGHGZLE1pIhspvOoTD8IQjAp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1022
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sdnWRfQUtphZACtMxwCqxhMxeIS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lYOm64Q50N6fJPu16Ji6V2SRA0O.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.742,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oysb4pRb8D7PhWeCwJ2So3RGkE5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1002
+        },
+        {
+          "aspect_ratio": 0.681,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hj335UsYePUZccHlqqXqqE8bdYZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1022
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AvmSlX8hwNYuSiDZWB94Uqkq7rX.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/opIx5RERGcPJZDri59poN80EsW8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5azFcXvR9Ya96Fb7FjYh6zwoYx7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 2268,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6iniGGgb7pdHtrIZMj7yWnVBe8S.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1521
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 2268,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rNVuvuYgWLIgovOY4mAhXqYuOm3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1521
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 2268,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zwUBs8snpScXEiE8S5Xi4kOXSO7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1521
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 2268,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/28gM3GFQJLXdGIuTC6uwMTgVMov.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1521
+        },
+        {
+          "aspect_ratio": 0.671,
+          "height": 2268,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ueyVhzOClUta1oAEbMpRv4UwW6n.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1521
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iXYDPIwzP6UFzqsmfuoLjOHrLLD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/awBdM0G6DVhGJBIQOsPq1YuAVu1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hcZeIaSyT6j305gBn8fYhwCQ7QZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -86,15 +86,15 @@ headersBlacklist: [
 Fixtures are organized in a hierarchical structure:
 
 ```
-backend/test-fixtures/
+test-fixtures/providers/
 ├── tmdb/
-│   ├── movie/
-│   └── search/
+└── trakt/
+
+backend/test-fixtures/
 ├── yts/
-│   ├── api/v2/
-│   └── list_movies.json
+├── therarbg/
 ├── torrage/
-└── other/
+└── itorrents/
 ```
 
 #### Fixture Format
@@ -398,10 +398,10 @@ console.log('[HTTP VCR] Using cached response from:', filepath);
 
 ```bash
 # Check fixture content
-cat backend/test-fixtures/tmdb/movie/123.json
+cat test-fixtures/providers/tmdb/3/movie/123.json
 
 # Verify file structure
-find backend/test-fixtures -name "*.json" | head -10
+find test-fixtures/providers -name "*.json" | head -10
 ```
 
 #### Test Transformers

@@ -11,12 +11,14 @@ export const useMediaBoxSizes = () => {
     const mediaPerPage = Math.floor((width - gap - leftMargin * 2) / (mediaWidth + gap));
     const totalMediaWidth = mediaWidth * mediaPerPage + gap * (mediaPerPage - 1);
     const margin = (width - totalMediaWidth) / 2;
+    const peekWidth = Math.min(mediaWidth * 0.5, Math.max(0, margin));
 
     return {
       mediaWidth,
       mediaPerPage,
       gap,
       margin,
+      peekWidth,
       width: totalMediaWidth,
       windowWidth: width,
       windowHeight: height,

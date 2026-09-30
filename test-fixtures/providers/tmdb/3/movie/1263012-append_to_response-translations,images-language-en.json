@@ -1,0 +1,897 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19681",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8f1c23a9b8ec4c237a1465da1be52351\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ulw8SrKbDeDrsSVNKPb5211AseI.jpg",
+    "belongs_to_collection": null,
+    "budget": 13000000,
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/dead-man-s-switchboard",
+    "id": 1263012,
+    "imdb_id": "tt15181326",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Dead Man's Switchboard",
+    "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+    "popularity": 8.0918,
+    "poster_path": "/dgSoeebklY0IGKWbp36r9FwRXlv.jpg",
+    "production_companies": [
+      {
+        "id": 63369,
+        "logo_path": "/sCgcuxsM4wvkfwL56tkHX4j9bds.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 193159,
+        "logo_path": "/9qDnUCKcn6WOJmD44EmHg0sxdUB.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 241870,
+        "logo_path": null,
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 20312,
+        "logo_path": "/iYmytRQt5jqlBIEaMQ0Cb6iAHh8.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 13923,
+        "logo_path": "/wobbHfqb8lIBcsUxMOQEgMdVqsQ.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 248180,
+        "logo_path": "/4sQzdpkmvxftvxLq8DuT38Rl1rk.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 249368,
+        "logo_path": "/sS9dPPsIgR5TygrRq1qqV6N0lM3.png",
+        "name": "Archive Street Films",
+        "origin_country": "CY"
+      },
+      {
+        "id": 286332,
+        "logo_path": null,
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 259252,
+        "logo_path": null,
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 188458,
+        "logo_path": "/limNPrYGEOyKb4kjcZKdIk6K0Sh.png",
+        "name": "Archive Street Films",
+        "origin_country": "IL"
+      },
+      {
+        "id": 44225,
+        "logo_path": "/faD1loVvInTAOnwWpqNPRXe3Itj.png",
+        "name": "Archive Street Films",
+        "origin_country": "DE"
+      },
+      {
+        "id": 117761,
+        "logo_path": "/4Aa24Ase2LR6wesRolVQ0vinI8T.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 6455,
+        "logo_path": "/mc3rMk0tW5ajjbfqkB8xlp85Cdy.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 149926,
+        "logo_path": "/4GHZjvBzUMXSEFVpngOz40ZfSQe.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 239194,
+        "logo_path": "/qfSRBQK9Kmnt8JqAKaFKqIK4dJk.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 235427,
+        "logo_path": null,
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 79081,
+        "logo_path": "/lTKnNzjKtGXV8m8rrFL00bEMxE5.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 96310,
+        "logo_path": "/tBxSNuzARadiaBpIJ3qmdPG5BCz.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 140678,
+        "logo_path": "/loFI63TvrgURkMiCu9XuMlCKaud.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 187501,
+        "logo_path": "/nMZTbGubzHwxL7VFvAomCuTn4L9.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 245123,
+        "logo_path": "/6k6YK6MFE64FWRvf3jpD70mxbHq.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 249834,
+        "logo_path": null,
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 267457,
+        "logo_path": "/10LAyOHEUEtQcLFuUOhgSfgpoO0.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 286333,
+        "logo_path": null,
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 287768,
+        "logo_path": "/ngW3ymUooC3j5rYnQtGJppiiTTV.png",
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 290381,
+        "logo_path": null,
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 300510,
+        "logo_path": null,
+        "name": "Archive Street Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      },
+      {
+        "iso_3166_1": "IL",
+        "name": "Israel"
+      },
+      {
+        "iso_3166_1": "CY",
+        "name": "Cyprus"
+      },
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      }
+    ],
+    "release_date": "2026-01-09",
+    "revenue": 2248569,
+    "runtime": 106,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "One demand. Two lives on the line.",
+    "title": "Dead Man's Switchboard",
+    "video": false,
+    "vote_average": 6.525,
+    "vote_count": 224,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 106,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 105,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 105,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 104,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 104,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 104,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 104,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 105,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 105,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 100,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 0,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 105,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/dead-man-s-switchboard",
+            "overview": "In 1977, a furious borrower straps a deadly trigger to himself and the banker he blames for his ruin. His demand for money and an apology transforms a private grievance into a citywide media spectacle with no safe way to end it.",
+            "runtime": 106,
+            "tagline": "One demand. Two lives on the line.",
+            "title": "Dead Man's Switchboard"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c7hyozOJmeMu1ZDSwheW4deovXA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A51WUcB5hd371n0GFqcQhmy3Qwn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6kB5KeNmY5LqB4844LCfxynBFGJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.056,
+          "height": 414,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3MJ24TlK3ctzWa5KpzU80kATNlP.png",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2507
+        },
+        {
+          "aspect_ratio": 6.056,
+          "height": 414,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jb5mQIlRdrinSsnd1rrPKr5ZLWB.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2507
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 1296,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iTFk07BgEzpP7datiWBZy8cQ25P.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 878
+        },
+        {
+          "aspect_ratio": 6.154,
+          "height": 195,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iNLI3A1PUrOAQs2a8JuzaKhjYuU.png",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 6.018,
+          "height": 57,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aKADkqSNl6dFuVpG7KqYBsZYTev.png",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 343
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dgSoeebklY0IGKWbp36r9FwRXlv.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hjre9SuECdBsuZ6KtKdFsnK2iRm.jpg",
+          "vote_average": 6.722,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8nwiRUHjFfEwGUTFWBZIoqGrlMu.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9oeT2j2mAUaRdQZLKjXIoafafQL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/71FPde8V7DbnAHgUZfwrpxPOFG6.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1248,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7K2HIBYBNW4kvHNJ7FImNJg40q0.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 832
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hdXOX705yHkM4TFAhrbpQFIw6gR.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1778,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vjeJIXzT7iGSlCnHcDfIzYfXl0v.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1185
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xnaGn4g0kN9hp0g9G5YGD8rNxnD.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2GPpKsWDsClFODDK4HH4oIpXQPG.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1350
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AfsxCAz0hy865sXKgPKfcCZmafN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kHIZgGFP6eJ2H1SFiwZ2brW6Snn.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1999
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xts8bGBC6ZXqTUunMgcUFY8dDTL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2245,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hhfHqwTWD7FqLF8m8mBUyq8iFwn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1587
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zDli13OkaILcK4SC1Xn4sYj9Iil.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vXVLdYCVZx6otqHwd6nD3zIUyhv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

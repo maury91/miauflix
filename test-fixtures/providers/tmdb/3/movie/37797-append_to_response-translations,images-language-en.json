@@ -1,0 +1,984 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12118",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c959921aa7aefb71f2df559b9dfcb336\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rphor0XQcYO4CQoQ6auaQm3UPap.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10751,
+        "name": "Family"
+      }
+    ],
+    "homepage": "https://example.test/films/the-library-of-small-dreams",
+    "id": 37797,
+    "imdb_id": "tt0113824",
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_title": "The Library of Small Dreams",
+    "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+    "popularity": 12.433,
+    "poster_path": "/5FROLD8zpWFs9ja7aYho1uOMJHg.jpg",
+    "production_companies": [
+      {
+        "id": 10342,
+        "logo_path": "/uFuxPEZRUcBTEiYIxjHJq62Vr77.png",
+        "name": "Paper Moon Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Paper Moon Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1779,
+        "logo_path": "/41nGzTdCnORYZIZzaGZtfsBwQCl.png",
+        "name": "Paper Moon Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 13411,
+        "logo_path": "/5pzxTy7lWRCiruCNzwqtIYB3N43.png",
+        "name": "Paper Moon Animation",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "1995-07-15",
+    "revenue": 0,
+    "runtime": 111,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Some stories find their readers.",
+    "title": "The Library of Small Dreams",
+    "video": false,
+    "vote_average": 7.943,
+    "vote_count": 2360,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 110,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 110,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 115,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 111,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 106,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-library-of-small-dreams",
+            "overview": "A schoolgirl devoted to novels discovers that every book she borrows was first checked out by the same boy. As she follows this quiet mystery, she finds a kindred spirit and begins to imagine a future as a writer.",
+            "runtime": 0,
+            "tagline": "Some stories find their readers.",
+            "title": "The Library of Small Dreams"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rPXC27aU3XYf9gTFcK3xxuk51hq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8ZMo7vDdmi4KPXDJ07duOo22NSm.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rvHT1o9Km0fHE1YRLMSvWkVCLVM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.891,
+          "height": 616,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/61ddxAzsiUGEZpty0YvVRM6bU1c.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1165
+        },
+        {
+          "aspect_ratio": 6.25,
+          "height": 144,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ezomxijUO1fjwuXdQwojShuhFSo.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 6.25,
+          "height": 144,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hFAHc4k9C7gva9vVLWvfTXpeNRK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 1.77,
+          "height": 700,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AtOmLlSTAaU0KLgUMqnSlJDrsSD.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1239
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5FROLD8zpWFs9ja7aYho1uOMJHg.jpg",
+          "vote_average": 0.972,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1480,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z0mG3wx5hEela19ZTwp49b2pCxh.jpg",
+          "vote_average": 10,
+          "vote_count": 9,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1nxY80aarOLJaCaS4xTqlGOINGg.jpg",
+          "vote_average": 8.77,
+          "vote_count": 8,
+          "width": 1999
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kuyyhkamrGWhcATFt3rIeRCNA1m.jpg",
+          "vote_average": 5.726,
+          "vote_count": 20,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7oQgBscjpNLgOCaU1nBVSjWdIrC.jpg",
+          "vote_average": 5.476,
+          "vote_count": 21,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5E3Hvbu0bg38ouYf6chGftVGqZ7.jpg",
+          "vote_average": 5.25,
+          "vote_count": 22,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.763,
+          "height": 1702,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aaXYshP1cd38MXkIS0rmDiUZQ8H.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1299
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b0FgwtK65c7ANFPEe3YXJnGIJ0R.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aQQhK1y56bOokzflfEx1BFbapwu.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2VVLcEdTECRQj28iqRHFdpyr6Eg.jpg",
+          "vote_average": 1.444,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1530,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lhu0XNEBb8Al82uvJmSuOYEIFOH.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1020
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4xk23fOe8tR2l2z6yKuIvE5cEde.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i8yVwu4CLKBw75ILR3uC4nnRYLN.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8cbhkRBZnpWbjqU6uIVid5ZwXBn.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1075,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uwnL8l9692rYmuzmrIdTUiu8tOc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 716
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2vdH57dxw8uS55n6Y2uUUMQECEN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 846,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i0KkweRTfSnrudPQ37FaR1OEx3R.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 564
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zVOWMDhAbmehq8yzleGnqJOwATc.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kP8RkNa4DDKM6RniJQFgJabKGvm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1213,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7TYALnuj3tKnKxc9crczg82tyn2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 820
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1480,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fl6WEgAZVLpQCos4yOL4iGOKrEg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4xxpsPlLTBI3k88vW0gXvy4T31T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eB85rpB2iuV1dB5p6CWTPO0xDIb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lR2cwXi8rVnyZ1am7oUStyrl7z1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2963,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2FjSchrBJdxdWT9fyYDjEGDMfkt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5yRAR9qGuFCV1kDt1QiyLAU9Wio.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.683,
+          "height": 2930,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1dUin50ND9oht1uVmsUGDVhAZQO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6m6U1Gm2YFBY3yH2cOVvPPNCeht.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 971,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3NVD1q3bKl8mxishj1bTy8R2MH6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 647
+        }
+      ]
+    }
+  }
+}

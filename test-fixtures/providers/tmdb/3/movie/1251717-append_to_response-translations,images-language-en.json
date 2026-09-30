@@ -1,0 +1,601 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f9ef58d347defa1ddbeef80d5503a9b3\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/da1mXvCrQrFcw6BxovCavBFbIvz.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-wanting-box",
+    "id": 1251717,
+    "imdb_id": "tt31511689",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Wanting Box",
+    "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+    "popularity": 5.4916,
+    "poster_path": "/shKGDGrwqmc9x2aTJcQszoXinq0.jpg",
+    "production_companies": [
+      {
+        "id": 18239,
+        "logo_path": null,
+        "name": "Night Orchard",
+        "origin_country": "US"
+      },
+      {
+        "id": 4,
+        "logo_path": "/jay6WcMgagAklUt7i9Euwj1pzTF.png",
+        "name": "Night Orchard",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-08-06",
+    "revenue": 0,
+    "runtime": 98,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Give it what it asks—or lose what you love.",
+    "title": "The Wanting Box",
+    "video": false,
+    "vote_average": 6.033,
+    "vote_count": 302,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 98,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 98,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 98,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 103,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 103,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 102,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 98,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 98,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "eu",
+          "name": "euskera",
+          "english_name": "Basque",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 98,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 0,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-wanting-box",
+            "overview": "A strange parcel arrives with a ritual: surrender something needed, something despised, and something cherished. When its recipient hesitates, the box begins taking pieces of her life on its own terms, turning an odd puzzle into a fight for everyone she loves.",
+            "runtime": 98,
+            "tagline": "Give it what it asks—or lose what you love.",
+            "title": "The Wanting Box"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uGI0a6vprgC6pAkrCywXgDibtXQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.34,
+          "height": 391,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gMzhL49tu3yUVtr0ZrJog2yIJH.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1697
+        },
+        {
+          "aspect_ratio": 4.36,
+          "height": 200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nz9128F8t5Nw9cT6RbetReC7oSx.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 872
+        },
+        {
+          "aspect_ratio": 4.475,
+          "height": 118,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vMX3IQgk0FznzSWmNXuRt4ZShiN.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 528
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/shKGDGrwqmc9x2aTJcQszoXinq0.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dYxrsyUEdFOOq7xzIuvEb1858Sg.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gU8YVL4i7A74SgsnnK4YOZQ9rOe.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mlnQEgGFjIllBmweGV4leWFYJdz.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iBD0WlCEWxYO0MmW0XSicD1g2Nx.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vlRmukgKbeb5cu3rMeNR0zGmLiO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b8hDC0vXqicCohEeKExw7gWFYqh.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

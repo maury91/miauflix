@@ -1,0 +1,754 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13986",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"024f67e6b37489934903a3a65274b5c2\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yUOFocKDW7MCC5isx4FK8A68QFp.jpg",
+    "created_by": [
+      {
+        "id": 15344,
+        "credit_id": "525775af760ee36aaa51895a",
+        "name": "Riley West",
+        "original_name": "Riley West",
+        "gender": 2,
+        "profile_path": "/k4IWd2RV5kY1kAL2VgKQwFvnCLP.jpg"
+      },
+      {
+        "id": 28974,
+        "credit_id": "525775af760ee36aaa518960",
+        "name": "Devon Lake",
+        "original_name": "Devon Lake",
+        "gender": 2,
+        "profile_path": "/9V75oRAKiI0chdg1wGh1wPqaXsG.jpg"
+      },
+      {
+        "id": 1237491,
+        "credit_id": "525775af760ee36aaa518954",
+        "name": "Mara Ives",
+        "original_name": "Mara Ives",
+        "gender": 2,
+        "profile_path": "/rxu3tvB8h4T4H8kvpPJQ5ECDlp4.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2004-09-22",
+    "genres": [
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+    "id": 4607,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2010-05-23",
+    "last_episode_to_air": {
+      "id": 334042,
+      "name": "Silent Beacon",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 8.224,
+      "vote_count": 76,
+      "air_date": "2010-05-23",
+      "episode_number": 17,
+      "episode_type": "finale",
+      "production_code": "617",
+      "runtime": 105,
+      "season_number": 6,
+      "show_id": 4607,
+      "still_path": "/eNuO8GqCuRb0fAeQDAh2w5AaXTo.jpg"
+    },
+    "name": "Scarlet Beacon: Eastmere",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2,
+        "logo_path": "/2uy2ZWcplrSObIyt4x0Y9rkG6qO.png",
+        "name": "Emerald Station Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 118,
+    "number_of_seasons": 6,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Scarlet Beacon: Eastmere",
+    "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 133.4371,
+    "poster_path": "/og6S0aTZU6YUJAbqxeKjCa3kY1E.jpg",
+    "production_companies": [
+      {
+        "id": 19366,
+        "logo_path": "/vOH8dyQhLK01pg5fYkgiS31jlFm.png",
+        "name": "Emerald Garden Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 11461,
+        "logo_path": "/p9FoEt5shEKRWRKVIlvFaEmRnun.png",
+        "name": "Ivory Voyage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1558,
+        "logo_path": "/wwaKUcOENHix2jxLfFBfNkCtOEQ.png",
+        "name": "Bright Horizon Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2005-04-27",
+        "episode_count": 162,
+        "id": 14047,
+        "name": "Specials",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/u1hvfXTqebq6Na5zhzHiJYZT0YK.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2004-09-22",
+        "episode_count": 24,
+        "id": 14041,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/zOuH5TQTHk3Keqdm1ltMEBul6qv.jpg",
+        "season_number": 1,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2005-09-21",
+        "episode_count": 24,
+        "id": 14042,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/vGLddXoXJhKPsAWeDYbAsE4wW1z.jpg",
+        "season_number": 2,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "2006-10-04",
+        "episode_count": 23,
+        "id": 14043,
+        "name": "Season 3",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/zLnuh6DVyrz5iaNVO6KNKubtffo.jpg",
+        "season_number": 3,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "2008-01-31",
+        "episode_count": 13,
+        "id": 14044,
+        "name": "Season 4",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/TOfSxtW76sWrPn3YSm5GooaR3Y.jpg",
+        "season_number": 4,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "2009-01-21",
+        "episode_count": 17,
+        "id": 14045,
+        "name": "Season 5",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/2OYKA6UIC56loPxgL4IMshg4mVr.jpg",
+        "season_number": 5,
+        "vote_average": 8.5
+      },
+      {
+        "air_date": "2010-02-02",
+        "episode_count": 17,
+        "id": 14046,
+        "name": "Season 6",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/29tcXCeFa3CWmavGw4D7UlERjF2.jpg",
+        "season_number": 6,
+        "vote_average": 8.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 7.962,
+    "vote_count": 5360,
+    "external_ids": {
+      "imdb_id": "tt0411008",
+      "freebase_mid": "/m/0828jw",
+      "freebase_id": "/en/lost",
+      "tvdb_id": 73739,
+      "tvrage_id": 4284,
+      "wikidata_id": "Q23567",
+      "facebook_id": "LOST",
+      "instagram_id": null,
+      "twitter_id": "Lost_on_ABC"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Scarlet Beacon: Eastmere",
+            "overview": "Scarlet Beacon: Eastmere follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/scarlet-beacon-eastmere",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

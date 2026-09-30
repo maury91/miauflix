@@ -1,10 +1,15 @@
 node_modules
+test-fixtures
 dist
 build
 coverage
 .cache
 public
 **/*.min.js
+*.sh
+*.jpg
+*.png
 *.lock
 *.sqlite
 nginx
+.prettierignore

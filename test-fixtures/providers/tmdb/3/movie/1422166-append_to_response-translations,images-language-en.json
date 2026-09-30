@@ -1,0 +1,402 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8365",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"9dbc3e7d7402f91c1afb8a0fd5702bb1\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6CdrnONBaZsmoEMTn0A4S2Nj4t5.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/films/the-disclosure-files",
+    "id": 1422166,
+    "imdb_id": "tt35520315",
+    "origin_country": [
+      "AU",
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Disclosure Files",
+    "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+    "popularity": 4.2354,
+    "poster_path": "/rVTGlKuJUeqgmznxhlpKDKClili.jpg",
+    "production_companies": [
+      {
+        "id": 65368,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 145055,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2025-11-21",
+    "revenue": 0,
+    "runtime": 109,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The witnesses have come forward.",
+    "title": "The Disclosure Files",
+    "video": false,
+    "vote_average": 7.562,
+    "vote_count": 73,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 109,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 109,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 109,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-disclosure-files",
+            "overview": "Former officials describe decades of hidden aerospace programs, disputed encounters, and the uneasy politics of disclosure.",
+            "runtime": 0,
+            "tagline": "The witnesses have come forward.",
+            "title": "The Disclosure Files"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/icsnxFFSzv8cN0FnqeKRqoaOoPK.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2880
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.457,
+          "height": 742,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7iCSqO8BwApSFQLgrTyv8luHLD0.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1823
+        },
+        {
+          "aspect_ratio": 23.357,
+          "height": 70,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5OOlFXgTGv1MHKG7jJFwaRNuRTY.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1635
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rVTGlKuJUeqgmznxhlpKDKClili.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qsV4QTjO1jLLezzPA8yRm207ymb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x8jfdPkOFfBHigbuvLrn0GxHRND.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 2197,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jZ7bVDXFTeiZA6qhCdWt4VgnhIZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1476
+        }
+      ]
+    }
+  }
+}

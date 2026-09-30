@@ -1,0 +1,298 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14426",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ec4ac52d95df6617d3bd9b3a1ba6df70\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/4DzZLy8mbTGXjKVec5VspVBGlhz.jpg",
+    "created_by": [
+      {
+        "id": 3430500,
+        "credit_id": "620e500b41eee1001e96b65e",
+        "name": "Noel Cross",
+        "original_name": "Noel Cross",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [
+      44
+    ],
+    "first_air_date": "2020-02-22",
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://example.test/series/silver-bridge-stonehaven",
+    "id": 99954,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2020-02-29",
+    "last_episode_to_air": {
+      "id": 2178237,
+      "name": "Scarlet Echo",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 7,
+      "vote_count": 4,
+      "air_date": "2020-02-29",
+      "episode_number": 4,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 42,
+      "season_number": 1,
+      "show_id": 99954,
+      "still_path": "/ecM8IFwVUsb8ZwRzTGaPb45iB5q.jpg"
+    },
+    "name": "Silver Bridge: Stonehaven",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Bright Crown Network",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 4,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Silver Bridge: Stonehaven",
+    "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 2.4883,
+    "poster_path": "/AlXu4dUBvzV59e9sI72EJVmMkgS.jpg",
+    "production_companies": [
+      {
+        "id": 22304,
+        "logo_path": null,
+        "name": "Midnight Horizon Studios",
+        "origin_country": "CA"
+      },
+      {
+        "id": 129888,
+        "logo_path": "/9J7Qfxl7YKXtvv0T2SrVn4metAM.png",
+        "name": "Silent Beacon Studios",
+        "origin_country": "CA"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2020-02-22",
+        "episode_count": 4,
+        "id": 144332,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/AlXu4dUBvzV59e9sI72EJVmMkgS.jpg",
+        "season_number": 1,
+        "vote_average": 6.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Miniseries",
+    "vote_average": 7.2,
+    "vote_count": 51,
+    "external_ids": {
+      "imdb_id": "tt11833494",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 377519,
+      "tvrage_id": null,
+      "wikidata_id": "Q86523693",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Silver Bridge: Stonehaven",
+            "overview": "Silver Bridge: Stonehaven follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/silver-bridge-stonehaven",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

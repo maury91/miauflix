@@ -1,0 +1,397 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=2648",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"57525789ebf1328d22f27b403cec447d\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/e0iMTtSD9DvZ4NbN9dUFfpZQFNk.jpg",
+    "belongs_to_collection": null,
+    "budget": 508578,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+    "id": 843352,
+    "imdb_id": "tt12446086",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "White Dragon: The Exile's Name",
+    "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+    "popularity": 29.7832,
+    "poster_path": "/5JJRTM1mMuqnK4BJojMljm5Xpgj.jpg",
+    "production_companies": [
+      {
+        "id": 146996,
+        "logo_path": "/4cg9hnuwuDiKFTX2XoyD5E57Uv9.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 139207,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-08-28",
+    "revenue": 0,
+    "runtime": 97,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A legend cannot hide forever.",
+    "title": "White Dragon: The Exile's Name",
+    "video": false,
+    "vote_average": 7.4,
+    "vote_count": 7,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 97,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 84,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 84,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 97,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/white-dragon-the-exile-s-name",
+            "overview": "A hunted hero must expose the conspiracy that framed him before a masked enemy erases the White Dragon from memory.",
+            "runtime": 0,
+            "tagline": "A legend cannot hide forever.",
+            "title": "White Dragon: The Exile's Name"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dWmn2AS5MIeu8QoLB5donbXzHw4.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 873,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8k2pEyYJ8JJ3gT0cI7ljNcpjxQ7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1552
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/npajA9OoZ8Dr5gp3vcn84JOMEI6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5PhTYTpVD3dGawZXokDUDL0Y5Va.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.493,
+          "height": 205,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lpz2s32fiYwe9OVv5BmdjSC8BTF.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 716
+        },
+        {
+          "aspect_ratio": 3.569,
+          "height": 1210,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9wzZu4pkOGsAkXrm5ThGSyvmTqu.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5JJRTM1mMuqnK4BJojMljm5Xpgj.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yygzww0GACtCMmwhtPG1P01qSx5.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k0L5ZQP4PjdNziVGvcOeaihXyCc.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nYYZZ4eej8xBEH2UcY7jK7E4dDq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kaMEYF6bMuOO3z504EIm7P1zprT.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sEHryTWU9GEfbSTEsQN1orkaJ89.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zBdQBQSuEXStm7ICeMGpXo3ECth.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rNQhm1TAWszaKXaoGOJhVnXTfiZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 800
+        }
+      ]
+    }
+  }
+}

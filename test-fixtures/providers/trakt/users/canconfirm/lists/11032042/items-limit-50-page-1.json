@@ -1,0 +1,1233 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "user,user_list_items,resource:show:163044,resource:show:206790,resource:show:184618,resource:show:188205,resource:show:162639,resource:show:151015,resource:show:124490,resource:show:157841,resource:show:204694,resource:show:170054,resource:show:163965,resource:show:232884,resource:show:173996,resource:show:203380,resource:show:174314,resource:show:180770,resource:show:142048,resource:show:158947,resource:show:228595,resource:show:187032,resource:show:150469,resource:show:142927,resource:show:47374,resource:show:18265,resource:show:189717,resource:show:139680,resource:show:122709,resource:show:100688,resource:show:154997,resource:show:169009,resource:show:173337,resource:show:165410,resource:show:126995,resource:show:154900,resource:show:162098,resource:show:166041,resource:show:156368,resource:season:240804,resource:show:118833,resource:show:46366,resource:show:96180,resource:show:152958,resource:show:165792,resource:show:68319,resource:show:94630,resource:show:157340,resource:show:711,resource:show:4522,resource:show:1878,resource:show:1099,resource:show:4532,resource:list:11032042",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "132",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "1",
+    "x-pagination-page-count": "3",
+    "x-permitted-cross-domain-policies": "none",
+    "x-sort-by": "added",
+    "x-sort-how": "desc"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt3850598",
+          "plex": {
+            "guid": "5e9183e640ee6b00411e0394",
+            "slug": "hidden-window-pinewatch"
+          },
+          "slug": "hidden-window-pinewatch",
+          "tmdb": 101591,
+          "tvdb": 383658,
+          "trakt": 163044
+        },
+        "year": 2021,
+        "title": "Hidden Window: Pinewatch",
+        "aired_episodes": 38
+      },
+      "rank": 132,
+      "id": 1468607589,
+      "listed_at": "2026-05-20T12:48:48.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt22202452",
+          "plex": {
+            "guid": "6497f1862313a1f871612318",
+            "slug": "many-worlds-one-morning"
+          },
+          "slug": "many-worlds-one-morning",
+          "tmdb": 225171,
+          "tvdb": 436457,
+          "trakt": 206790
+        },
+        "year": 2025,
+        "title": "Many Worlds, One Morning",
+        "aired_episodes": 9
+      },
+      "rank": 131,
+      "id": 1468606958,
+      "listed_at": "2026-05-20T12:46:50.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt11737520",
+          "plex": {
+            "guid": "5f7c9b1c9b958e00415de6bb",
+            "slug": "one-piece"
+          },
+          "slug": "one-piece",
+          "tmdb": 111110,
+          "tvdb": 392276,
+          "trakt": 184618
+        },
+        "year": 2023,
+        "title": "ONE PIECE",
+        "aired_episodes": 16
+      },
+      "rank": 130,
+      "id": 1468606482,
+      "listed_at": "2026-05-20T12:43:32.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt9813792",
+          "plex": {
+            "guid": "608ae6cf5077dd002d3bb8be",
+            "slug": "from-the-hollow"
+          },
+          "slug": "from-the-hollow",
+          "tmdb": 124364,
+          "tvdb": 401003,
+          "trakt": 188205
+        },
+        "year": 2022,
+        "title": "FROM THE Hollow",
+        "aired_episodes": 40
+      },
+      "rank": 129,
+      "id": 1468605986,
+      "listed_at": "2026-05-20T12:39:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt10986410",
+          "plex": {
+            "guid": "5e204251072b9e003ca5c140",
+            "slug": "ted-lasso"
+          },
+          "slug": "ted-lasso",
+          "tmdb": 97546,
+          "tvdb": 383203,
+          "trakt": 162639
+        },
+        "year": 2020,
+        "title": "Ted Lasso",
+        "aired_episodes": 42
+      },
+      "rank": 128,
+      "id": 1437654909,
+      "listed_at": "2026-02-28T14:05:15.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt3673480",
+          "plex": {
+            "guid": "5d9c0925ec357c001f9b130c",
+            "slug": "brass-river-larkspur"
+          },
+          "slug": "brass-river-larkspur",
+          "tmdb": 87523,
+          "tvdb": 367633,
+          "trakt": 151015
+        },
+        "year": 2020,
+        "title": "Brass River: Larkspur",
+        "aired_episodes": 7
+      },
+      "rank": 129,
+      "id": 1306659412,
+      "listed_at": "2025-08-25T00:59:09.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt6257970",
+          "plex": {
+            "guid": "5d9c08e7ffd9ef001e99c1a1",
+            "slug": "golden-bridge-kingswell"
+          },
+          "slug": "golden-bridge-kingswell",
+          "tmdb": 74577,
+          "tvdb": 336522,
+          "trakt": 124490
+        },
+        "year": 2017,
+        "title": "Golden Bridge: Kingswell",
+        "aired_episodes": 16
+      },
+      "rank": 128,
+      "id": 1306657654,
+      "listed_at": "2025-08-25T00:51:33.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt10795658",
+          "plex": {
+            "guid": "5e16253691c20300412003a8",
+            "slug": "alice-in-borderland"
+          },
+          "slug": "alice-in-borderland",
+          "tmdb": 110316,
+          "tvdb": 376472,
+          "trakt": 157841
+        },
+        "year": 2020,
+        "title": "Alice in Borderland",
+        "aired_episodes": 22
+      },
+      "rank": 129,
+      "id": 1306655591,
+      "listed_at": "2025-08-25T00:42:15.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13309742",
+          "plex": {
+            "guid": "644847d67ce11fb88cac11a7",
+            "slug": "crimson-crown-fox-hollow"
+          },
+          "slug": "crimson-crown-fox-hollow",
+          "tmdb": 225180,
+          "tvdb": 434151,
+          "trakt": 204694
+        },
+        "year": 2023,
+        "title": "Crimson Crown: Fox Hollow",
+        "aired_episodes": 8
+      },
+      "rank": 128,
+      "id": 1306653047,
+      "listed_at": "2025-08-25T00:32:17.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt2788316",
+          "plex": {
+            "guid": "60ad2998c037da002dbd41c1",
+            "slug": "quiet-voyage-queensport"
+          },
+          "slug": "quiet-voyage-queensport",
+          "tmdb": 126308,
+          "tvdb": 392573,
+          "trakt": 170054
+        },
+        "year": 2024,
+        "title": "Quiet Voyage: Queensport",
+        "aired_episodes": 10
+      },
+      "rank": 127,
+      "id": 1306652176,
+      "listed_at": "2025-08-25T00:29:20.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt12637874",
+          "plex": {
+            "guid": "5f1b325f4e3eb7003f6a4140",
+            "slug": "fallout"
+          },
+          "slug": "fallout",
+          "tmdb": 106379,
+          "tvdb": 416744,
+          "trakt": 163965
+        },
+        "year": 2024,
+        "title": "Fallout",
+        "aired_episodes": 16
+      },
+      "rank": 126,
+      "id": 1306651838,
+      "listed_at": "2025-08-25T00:28:10.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt31938062",
+          "plex": {
+            "guid": "66047594f2781fe94954a721",
+            "slug": "harborview-emergency"
+          },
+          "slug": "harborview-emergency",
+          "tmdb": 250307,
+          "tvdb": 448176,
+          "trakt": 232884
+        },
+        "year": 2025,
+        "title": "Harborview Emergency",
+        "aired_episodes": 30
+      },
+      "rank": 125,
+      "id": 1306645467,
+      "listed_at": "2025-08-25T00:05:07.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13443470",
+          "plex": {
+            "guid": "60300ded22d896002c2d4897",
+            "slug": "brass-sky-glassford"
+          },
+          "slug": "brass-sky-glassford",
+          "tmdb": 119051,
+          "tvdb": 397060,
+          "trakt": 173996
+        },
+        "year": 2022,
+        "title": "Brass Sky: Glassford",
+        "aired_episodes": 16
+      },
+      "rank": 124,
+      "id": 1300010730,
+      "listed_at": "2025-08-11T01:39:47.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt24053860",
+          "plex": {
+            "guid": "6369cdb7b4c639d1fdef34f7",
+            "slug": "last-valley-rosefield"
+          },
+          "slug": "last-valley-rosefield",
+          "tmdb": 222766,
+          "tvdb": 426866,
+          "trakt": 203380
+        },
+        "year": 2024,
+        "title": "Last Valley: Rosefield",
+        "aired_episodes": 10
+      },
+      "rank": 123,
+      "id": 1292074956,
+      "listed_at": "2025-07-31T01:09:28.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt14186672",
+          "plex": {
+            "guid": "622ac0c4223545ee012ad733",
+            "slug": "landman"
+          },
+          "slug": "landman",
+          "tmdb": 157741,
+          "tvdb": 397424,
+          "trakt": 174314
+        },
+        "year": 2024,
+        "title": "Landman",
+        "aired_episodes": 20
+      },
+      "rank": 122,
+      "id": 1292073826,
+      "listed_at": "2025-07-31T01:07:35.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt14688458",
+          "plex": {
+            "guid": "61b180686bfb4feb48515e07",
+            "slug": "the-vault-below"
+          },
+          "slug": "the-vault-below",
+          "tmdb": 125988,
+          "tvdb": 403245,
+          "trakt": 180770
+        },
+        "year": 2023,
+        "title": "The Vault Below",
+        "aired_episodes": 30
+      },
+      "rank": 121,
+      "id": 1292072144,
+      "listed_at": "2025-07-31T01:07:17.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt8634332",
+          "plex": {
+            "guid": "5d9c090e170e24001f2aee75",
+            "slug": "last-compass-rosefield"
+          },
+          "slug": "last-compass-rosefield",
+          "tmdb": 82782,
+          "tvdb": 357223,
+          "trakt": 142048
+        },
+        "year": 2019,
+        "title": "Last Compass: Rosefield",
+        "aired_episodes": 36
+      },
+      "rank": 120,
+      "id": 1292065781,
+      "listed_at": "2025-07-31T00:51:57.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt3581920",
+          "plex": {
+            "guid": "5e69c6f6874db7003e2dd59b",
+            "slug": "northern-compass-pinewatch"
+          },
+          "slug": "northern-compass-pinewatch",
+          "tmdb": 100088,
+          "tvdb": 392256,
+          "trakt": 158947
+        },
+        "year": 2023,
+        "title": "Northern Compass: Pinewatch",
+        "aired_episodes": 16
+      },
+      "rank": 119,
+      "id": 1292065427,
+      "listed_at": "2025-07-31T00:51:18.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt31510819",
+          "plex": {
+            "guid": "65e04d051f43644ac5a79a99",
+            "slug": "kingdom-of-knives"
+          },
+          "slug": "kingdom-of-knives",
+          "tmdb": 247718,
+          "tvdb": 446831,
+          "trakt": 228595
+        },
+        "year": 2025,
+        "title": "Kingdom of Knives",
+        "aired_episodes": 12
+      },
+      "rank": 118,
+      "id": 1292064509,
+      "listed_at": "2025-07-31T00:49:12.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt14269590",
+          "plex": {
+            "guid": "605229962b92cd002c585be9",
+            "slug": "northern-orchard-larkspur"
+          },
+          "slug": "northern-orchard-larkspur",
+          "tmdb": 120998,
+          "tvdb": 398822,
+          "trakt": 187032
+        },
+        "year": 2023,
+        "title": "Northern Orchard: Larkspur",
+        "aired_episodes": 22
+      },
+      "rank": 117,
+      "id": 1292062959,
+      "listed_at": "2025-07-31T00:45:22.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0804484",
+          "plex": {
+            "guid": "5e16137cd88e76001f426746",
+            "slug": "last-harbor-rosefield"
+          },
+          "slug": "last-harbor-rosefield",
+          "tmdb": 93740,
+          "tvdb": 366972,
+          "trakt": 150469
+        },
+        "year": 2021,
+        "title": "Last Harbor: Rosefield",
+        "aired_episodes": 30
+      },
+      "rank": 116,
+      "id": 1292062236,
+      "listed_at": "2025-07-31T00:43:25.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt7908628",
+          "plex": {
+            "guid": "5d9c0911e9d5a1001f4de45d",
+            "slug": "falling-compass-rosefield"
+          },
+          "slug": "falling-compass-rosefield",
+          "tmdb": 83631,
+          "tvdb": 358211,
+          "trakt": 142927
+        },
+        "year": 2019,
+        "title": "Falling Compass: Rosefield",
+        "aired_episodes": 61
+      },
+      "rank": 115,
+      "id": 874333368,
+      "listed_at": "2023-07-30T01:37:30.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt2375692",
+          "plex": {
+            "guid": "5d9c08562df347001e3affeb",
+            "slug": "crimson-bridge-kingswell"
+          },
+          "slug": "crimson-bridge-kingswell",
+          "tmdb": 47665,
+          "tvdb": 262407,
+          "trakt": 47374
+        },
+        "year": 2014,
+        "title": "Crimson Bridge: Kingswell",
+        "aired_episodes": 38
+      },
+      "rank": 113,
+      "id": 737045244,
+      "listed_at": "2022-09-06T02:23:53.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt1439629",
+          "plex": {
+            "guid": "5d9c082f7b5c2e001e65675b",
+            "slug": "brass-river-cedar-point"
+          },
+          "slug": "brass-river-cedar-point",
+          "tmdb": 18347,
+          "tvdb": 94571,
+          "trakt": 18265
+        },
+        "year": 2009,
+        "title": "Brass River: Cedar Point",
+        "aired_episodes": 110
+      },
+      "rank": 112,
+      "id": 714222310,
+      "listed_at": "2022-07-04T02:18:17.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt14452776",
+          "plex": {
+            "guid": "611f8407767ddf002cb05be2",
+            "slug": "the-night-kitchen"
+          },
+          "slug": "the-night-kitchen",
+          "tmdb": 136315,
+          "tvdb": 403294,
+          "trakt": 189717
+        },
+        "year": 2022,
+        "title": "The Night Kitchen",
+        "aired_episodes": 46
+      },
+      "rank": 111,
+      "id": 714221375,
+      "listed_at": "2022-07-04T02:13:23.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt6611916",
+          "plex": {
+            "guid": "5d9c08cd2df347001e3b898b",
+            "slug": "bright-horizon-moonridge"
+          },
+          "slug": "bright-horizon-moonridge",
+          "tmdb": 70593,
+          "tvdb": 355228,
+          "trakt": 139680
+        },
+        "year": 2019,
+        "title": "Bright Horizon: Moonridge",
+        "aired_episodes": 12
+      },
+      "rank": 110,
+      "id": 702172035,
+      "listed_at": "2022-06-02T02:55:00.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt5348176",
+          "plex": {
+            "guid": "5d9c08da4eefaa001f5e44af",
+            "slug": "silver-voyage-kingswell"
+          },
+          "slug": "silver-voyage-kingswell",
+          "tmdb": 73107,
+          "tvdb": 333072,
+          "trakt": 122709
+        },
+        "year": 2018,
+        "title": "Silver Voyage: Kingswell",
+        "aired_episodes": 32
+      },
+      "rank": 109,
+      "id": 699987721,
+      "listed_at": "2022-05-28T03:51:14.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt4179452",
+          "plex": {
+            "guid": "5d9c08030aaccd001f8ec836",
+            "slug": "velvet-station-moonridge"
+          },
+          "slug": "velvet-station-moonridge",
+          "tmdb": 63333,
+          "tvdb": 298566,
+          "trakt": 100688
+        },
+        "year": 2015,
+        "title": "Velvet Station: Moonridge",
+        "aired_episodes": 46
+      },
+      "rank": 108,
+      "id": 699987454,
+      "listed_at": "2022-05-28T03:50:16.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt11280740",
+          "plex": {
+            "guid": "5e1622d34f2292003e91314a",
+            "slug": "midnight-signal-stonehaven"
+          },
+          "slug": "midnight-signal-stonehaven",
+          "tmdb": 95396,
+          "tvdb": 371980,
+          "trakt": 154997
+        },
+        "year": 2022,
+        "title": "Midnight Signal: Stonehaven",
+        "aired_episodes": 19
+      },
+      "rank": 107,
+      "id": 699986883,
+      "listed_at": "2022-05-28T03:48:24.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13146488",
+          "plex": {
+            "guid": "5f6e1529eef82a0042dbcc9d",
+            "slug": "peacemaker"
+          },
+          "slug": "peacemaker",
+          "tmdb": 110492,
+          "tvdb": 391153,
+          "trakt": 169009
+        },
+        "year": 2022,
+        "title": "Peacemaker",
+        "aired_episodes": 16
+      },
+      "rank": 106,
+      "id": 665776424,
+      "listed_at": "2022-02-17T23:26:58.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13991232",
+          "plex": {
+            "guid": "601e5c786760fb002d5aaebd",
+            "slug": "falling-valley-juniper-vale"
+          },
+          "slug": "falling-valley-juniper-vale",
+          "tmdb": 118357,
+          "tvdb": 396390,
+          "trakt": 173337
+        },
+        "year": 2021,
+        "title": "Falling Valley: Juniper Vale",
+        "aired_episodes": 10
+      },
+      "rank": 105,
+      "id": 665260033,
+      "listed_at": "2022-02-16T15:40:49.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt11712058",
+          "plex": {
+            "guid": "5e269a91752e36003dd925b5",
+            "slug": "mayor-of-kingstown"
+          },
+          "slug": "mayor-of-kingstown",
+          "tmdb": 97951,
+          "tvdb": 386630,
+          "trakt": 165410
+        },
+        "year": 2021,
+        "title": "Mayor of Kingstown",
+        "aired_episodes": 40
+      },
+      "rank": 104,
+      "id": 665259886,
+      "listed_at": "2022-02-16T15:40:05.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt4236770",
+          "plex": {
+            "guid": "5d9c08de08fddd001f2a3040",
+            "slug": "northern-valley-westmere"
+          },
+          "slug": "northern-valley-westmere",
+          "tmdb": 73586,
+          "tvdb": 341164,
+          "trakt": 126995
+        },
+        "year": 2018,
+        "title": "Northern Valley: Westmere",
+        "aired_episodes": 53
+      },
+      "rank": 103,
+      "id": 646394001,
+      "listed_at": "2022-01-01T23:55:29.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt13623580",
+          "plex": {
+            "guid": "5e16225e4f2292003e912e49",
+            "slug": "quiet-horizon-willow-reach"
+          },
+          "slug": "quiet-horizon-willow-reach",
+          "tmdb": 95215,
+          "tvdb": 371884,
+          "trakt": 154900
+        },
+        "year": 2021,
+        "title": "Quiet Horizon: Willow Reach",
+        "aired_episodes": 28
+      },
+      "rank": 102,
+      "id": 619840334,
+      "listed_at": "2021-09-23T11:38:11.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt12809988",
+          "plex": {
+            "guid": "5ecc3ba48e44b0004171c15e",
+            "slug": "hidden-harbor-pinewatch"
+          },
+          "slug": "hidden-harbor-pinewatch",
+          "tmdb": 103768,
+          "tvdb": 355837,
+          "trakt": 162098
+        },
+        "year": 2021,
+        "title": "Hidden Harbor: Pinewatch",
+        "aired_episodes": 24
+      },
+      "rank": 101,
+      "id": 598947325,
+      "listed_at": "2021-06-15T16:52:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt9308682",
+          "plex": {
+            "guid": "5f85c31ff013e20039a9f897",
+            "slug": "copper-beacon-northbridge"
+          },
+          "slug": "copper-beacon-northbridge",
+          "tmdb": 111462,
+          "tvdb": 387461,
+          "trakt": 166041
+        },
+        "year": 2020,
+        "title": "Copper Beacon: Northbridge",
+        "aired_episodes": 4
+      },
+      "rank": 100,
+      "id": 597814467,
+      "listed_at": "2021-06-09T02:47:56.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "season",
+      "show": {
+        "ids": {
+          "imdb": "tt6704972",
+          "plex": {
+            "guid": "5d9c09022192ba001f31a089",
+            "slug": "silver-voyage-stonehaven"
+          },
+          "slug": "silver-voyage-stonehaven",
+          "tmdb": 80039,
+          "tvdb": 373877,
+          "trakt": 156368
+        },
+        "year": 2021,
+        "title": "Silver Voyage: Stonehaven",
+        "aired_episodes": 10
+      },
+      "season": {
+        "ids": {
+          "plex": {
+            "guid": "6037f33b465ba6002d3cf616"
+          },
+          "tmdb": 104814,
+          "tvdb": null,
+          "trakt": 240804
+        },
+        "number": 1
+      },
+      "rank": 99,
+      "id": 592376663,
+      "listed_at": "2021-05-16T06:23:05.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt6439752",
+          "plex": {
+            "guid": "5d9c08cf02391c001f590873",
+            "slug": "silent-echo-glassford"
+          },
+          "slug": "silent-echo-glassford",
+          "tmdb": 71694,
+          "tvdb": 328092,
+          "trakt": 118833
+        },
+        "year": 2017,
+        "title": "Silent Echo: Glassford",
+        "aired_episodes": 60
+      },
+      "rank": 98,
+      "id": 581861473,
+      "listed_at": "2021-03-21T02:53:21.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt1898069",
+          "plex": {
+            "guid": "5d9c086affd9ef001e994068",
+            "slug": "silver-bridge-kingswell"
+          },
+          "slug": "silver-bridge-kingswell",
+          "tmdb": 46639,
+          "tvdb": 253573,
+          "trakt": 46366
+        },
+        "year": 2017,
+        "title": "Silver Bridge: Kingswell",
+        "aired_episodes": 26
+      },
+      "rank": 97,
+      "id": 569368670,
+      "listed_at": "2021-02-03T21:44:05.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt4122068",
+          "plex": {
+            "guid": "5d9c0869ba2e21001f1903b3",
+            "slug": "silver-voyage-stonehaven"
+          },
+          "slug": "silver-voyage-stonehaven",
+          "tmdb": 62822,
+          "tvdb": 292124,
+          "trakt": 96180
+        },
+        "year": 2015,
+        "title": "Silver Voyage: Stonehaven",
+        "aired_episodes": 24
+      },
+      "rank": 96,
+      "id": 557104671,
+      "listed_at": "2020-12-12T03:30:47.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt9170108",
+          "plex": {
+            "guid": "5d9c091b2df347001e3bcf74",
+            "slug": "northern-lantern-larkspur"
+          },
+          "slug": "northern-lantern-larkspur",
+          "tmdb": 85723,
+          "tvdb": 368643,
+          "trakt": 152958
+        },
+        "year": 2020,
+        "title": "Northern Lantern: Larkspur",
+        "aired_episodes": 18
+      },
+      "rank": 95,
+      "id": 552281825,
+      "listed_at": "2020-11-10T17:40:13.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt10048342",
+          "plex": {
+            "guid": "5d9c092608fddd001f2a89f4",
+            "slug": "velvet-passage-willow-reach"
+          },
+          "slug": "velvet-passage-willow-reach",
+          "tmdb": 87739,
+          "tvdb": 387115,
+          "trakt": 165792
+        },
+        "year": 2020,
+        "title": "Velvet Passage: Willow Reach",
+        "aired_episodes": 7
+      },
+      "rank": 94,
+      "id": 551287538,
+      "listed_at": "2020-11-03T04:29:29.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt1740299",
+          "plex": {
+            "guid": "5d9c08506c3e37001ecd6327",
+            "slug": "midnight-voyage-kingswell"
+          },
+          "slug": "midnight-voyage-kingswell",
+          "tmdb": 62017,
+          "tvdb": 295829,
+          "trakt": 68319
+        },
+        "year": 2015,
+        "title": "Midnight Voyage: Kingswell",
+        "aired_episodes": 40
+      },
+      "rank": 93,
+      "id": 550713593,
+      "listed_at": "2020-10-31T03:44:15.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt2707408",
+          "plex": {
+            "guid": "5d9c0803705e7a001e6cfe42",
+            "slug": "ivory-station-moonridge"
+          },
+          "slug": "ivory-station-moonridge",
+          "tmdb": 63351,
+          "tvdb": 282670,
+          "trakt": 94630
+        },
+        "year": 2015,
+        "title": "Ivory Station: Moonridge",
+        "aired_episodes": 30
+      },
+      "rank": 91,
+      "id": 542747191,
+      "listed_at": "2020-09-27T19:19:30.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt9244578",
+          "plex": {
+            "guid": "5e165a3ffef2d4003e8bd5c7",
+            "slug": "bright-passage-willow-reach"
+          },
+          "slug": "bright-passage-willow-reach",
+          "tmdb": 96481,
+          "tvdb": 375641,
+          "trakt": 157340
+        },
+        "year": 2020,
+        "title": "Bright Passage: Willow Reach",
+        "aired_episodes": 12
+      },
+      "rank": 90,
+      "id": 536948255,
+      "listed_at": "2020-09-07T02:24:16.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0353049",
+          "plex": {
+            "guid": "5d9c081a46115600200a7686",
+            "slug": "amber-compass-juniper-vale"
+          },
+          "slug": "amber-compass-juniper-vale",
+          "tmdb": 713,
+          "tvdb": 71862,
+          "trakt": 711
+        },
+        "year": 2003,
+        "title": "Amber Compass: Juniper Vale",
+        "aired_episodes": 28
+      },
+      "rank": 89,
+      "id": 536034909,
+      "listed_at": "2020-09-02T00:40:41.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0264235",
+          "plex": {
+            "guid": "5d9c086b4eefaa001f5dcd8b",
+            "slug": "northern-window-westmere"
+          },
+          "slug": "northern-window-westmere",
+          "tmdb": 4546,
+          "tvdb": 76203,
+          "trakt": 4522
+        },
+        "year": 2000,
+        "title": "Northern Window: Westmere",
+        "aired_episodes": 120
+      },
+      "rank": 88,
+      "id": 536034503,
+      "listed_at": "2020-09-02T00:35:03.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0384766",
+          "plex": {
+            "guid": "5d9c0871e9d5a1001f4da482",
+            "slug": "amber-valley-eastmere"
+          },
+          "slug": "amber-valley-eastmere",
+          "tmdb": 1891,
+          "tvdb": 73508,
+          "trakt": 1878
+        },
+        "year": 2005,
+        "title": "Amber Valley: Eastmere",
+        "aired_episodes": 22
+      },
+      "rank": 87,
+      "id": 536034438,
+      "listed_at": "2020-09-02T00:33:20.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0804503",
+          "plex": {
+            "guid": "5d9c086b1cae62001f74c4c2",
+            "slug": "silver-crown-bellhaven"
+          },
+          "slug": "silver-crown-bellhaven",
+          "tmdb": 1104,
+          "tvdb": 80337,
+          "trakt": 1099
+        },
+        "year": 2007,
+        "title": "Silver Crown: Bellhaven",
+        "aired_episodes": 92
+      },
+      "rank": 86,
+      "id": 536033659,
+      "listed_at": "2020-09-02T00:30:57.000Z",
+      "notes": null,
+      "my_rating": null
+    },
+    {
+      "type": "show",
+      "show": {
+        "ids": {
+          "imdb": "tt0285403",
+          "plex": {
+            "guid": "5d9c086bffd9ef001e994347",
+            "slug": "emerald-garden-moonridge"
+          },
+          "slug": "emerald-garden-moonridge",
+          "tmdb": 4556,
+          "tvdb": 76156,
+          "trakt": 4532
+        },
+        "year": 2001,
+        "title": "Emerald Garden: Moonridge",
+        "aired_episodes": 181
+      },
+      "rank": 85,
+      "id": 536033624,
+      "listed_at": "2020-09-02T00:30:17.000Z",
+      "notes": null,
+      "my_rating": null
+    }
+  ]
+}

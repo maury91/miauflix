@@ -1,0 +1,427 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4227",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"36aea9ad2e33caabc17132b30097f4b7\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/9Sl9oyD2rrFKbCWvWiHQifwOoTn.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 99,
+        "name": "Documentary"
+      }
+    ],
+    "homepage": "https://example.test/films/stone-for-tomorrow",
+    "id": 1234597,
+    "imdb_id": "tt18346498",
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_title": "Stone for Tomorrow",
+    "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+    "popularity": 2.078,
+    "poster_path": "/ko5fY3Y05u3rRFQUXNGyRybnxqT.jpg",
+    "production_companies": [
+      {
+        "id": 12340,
+        "logo_path": "/2tgY95Di4hQhR4JUkejJWx2sN2z.png",
+        "name": "Strata Line Documentary Studio",
+        "origin_country": "DE"
+      },
+      {
+        "id": 86197,
+        "logo_path": "/gUTZ1JDzJOytALYfXtPJKI1MqGp.png",
+        "name": "Strata Line Documentary Studio",
+        "origin_country": "FR"
+      },
+      {
+        "id": 20618,
+        "logo_path": "/yGDXyW0kQUMpraYo3f1egJSkxh4.png",
+        "name": "Strata Line Documentary Studio",
+        "origin_country": "FR"
+      },
+      {
+        "id": 41077,
+        "logo_path": "/1ZXsGaFPgrgS6ZZGS37AqD5uU12.png",
+        "name": "Strata Line Documentary Studio",
+        "origin_country": "US"
+      },
+      {
+        "id": 154207,
+        "logo_path": "/4WNhIRsOM6YGIzYMPAVKjgv76ab.png",
+        "name": "Strata Line Documentary Studio",
+        "origin_country": "GB"
+      },
+      {
+        "id": 4606,
+        "logo_path": "/otZHbf1HmzLRQsZFSqJXkf8EHz7.png",
+        "name": "Strata Line Documentary Studio",
+        "origin_country": "DE"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "FR",
+        "name": "France"
+      },
+      {
+        "iso_3166_1": "DE",
+        "name": "Germany"
+      },
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2024-10-03",
+    "revenue": 66823,
+    "runtime": 98,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Italian",
+        "iso_639_1": "it",
+        "name": "Italiano"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "What we build outlives us.",
+    "title": "Stone for Tomorrow",
+    "video": false,
+    "vote_average": 5.8,
+    "vote_count": 26,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 98,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 98,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 94,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 98,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/stone-for-tomorrow",
+            "overview": "A filmmaker travels across landscapes shaped by concrete and the ancient stone beneath it, tracing how people build their homes and monuments. The journey becomes a question about what materials and values will shape the world to come.",
+            "runtime": 0,
+            "tagline": "What we build outlives us.",
+            "title": "Stone for Tomorrow"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d9BkunxMOmcPzXgMvX4RbzjAqNr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 7.214,
+          "height": 500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a5aaDvMrx3URUiM1BacAX9Owk41.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3607
+        },
+        {
+          "aspect_ratio": 12.329,
+          "height": 143,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A3iyH6eBwsE2ta9BSlzgCbLxWPa.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1763
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ko5fY3Y05u3rRFQUXNGyRybnxqT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1772,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dlNf1y5qMMUpKUrIJQdgL6TVsaG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1181
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4WzJUHyAEVqL5tP8WCT2nExrc9v.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aKE9eMRzkQv5oGHuM89FaWPOriK.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1884,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dPFUKGDjWRxzSj3430nIlUiAAm6.jpg",
+          "vote_average": 1.75,
+          "vote_count": 5,
+          "width": 1256
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dbgC0IvU2jGcXaIbTKusrRRE4MJ.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.698,
+          "height": 1833,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/11VHE7rEDfAK6yOhXhZ2PzXHeOg.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hT5oD13y4V6Sbdb93Jl2s9BetQq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n4h5Buhf8hqFFQG0dOUzhZOCQrj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

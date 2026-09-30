@@ -1,0 +1,991 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17260",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d71ad1844cadb8eb756c1003c013f6e1\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/uXgWbwxmCW6XZ3ylRThk9Sqhwwq.jpg",
+    "belongs_to_collection": null,
+    "budget": 80000000,
+    "genres": [
+      {
+        "id": 878,
+        "name": "Science Fiction"
+      },
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      }
+    ],
+    "homepage": "https://example.test/films/the-second-creation",
+    "id": 1159831,
+    "imdb_id": "tt30851137",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "The Second Creation",
+    "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+    "popularity": 23.3501,
+    "poster_path": "/lV8YHwGkYZsm6EfIqnhaSz2avKt.jpg",
+    "production_companies": [
+      {
+        "id": 206484,
+        "logo_path": null,
+        "name": "Black Lantern Cinema",
+        "origin_country": "US"
+      },
+      {
+        "id": 174,
+        "logo_path": "/zhD3hhtKB5qyv7ZeL4uLpNxgMVU.png",
+        "name": "Black Lantern Cinema",
+        "origin_country": "US"
+      },
+      {
+        "id": 275188,
+        "logo_path": null,
+        "name": "Black Lantern Cinema",
+        "origin_country": "US"
+      },
+      {
+        "id": 216687,
+        "logo_path": "/kKVYqekveOvLK1IgqdJojLjQvtu.png",
+        "name": "Black Lantern Cinema",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-03-04",
+    "revenue": 23944025,
+    "runtime": 127,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "A life is not a promise.",
+    "title": "The Second Creation",
+    "video": false,
+    "vote_average": 6.111,
+    "vote_count": 662,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 127,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 127,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 145,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 0,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "homepage": "https://example.test/films/the-second-creation",
+            "overview": "A solitary being made in a forbidden experiment travels to an industrial city and persuades an ambitious surgeon to build him a companion. Their attempt to revive a woman lost to violence awakens a fierce new life with desires of her own.",
+            "runtime": 126,
+            "tagline": "A life is not a promise.",
+            "title": "The Second Creation"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xpkHzHjUeaV4C9KnmBnOr3v7Fqu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lsp5gkz20Alw9Jsx0MJW4gIlsBE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nwogzcGikersOp9w8RAXCCccjH3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.327,
+          "height": 1298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6kxnmU1SaB8EG31veibwgVQWQSi.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 2.195,
+          "height": 523,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/exsDacnfxCqnuOYy64yRMaVTOlv.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1148
+        },
+        {
+          "aspect_ratio": 3.327,
+          "height": 1298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bYqphIYjCHZ0EH6B0ciF3S0waQd.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 4319
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lV8YHwGkYZsm6EfIqnhaSz2avKt.jpg",
+          "vote_average": 7.076,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vu1cbpWza1F0OSUTqVMlJYcNgC2.jpg",
+          "vote_average": 5.726,
+          "vote_count": 20,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2457,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v9f1dKAaiJ1jVmYqYbwatLXMGE.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 1638
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1248,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gFEO3Ot9DAjlUFWmqt5S5lufkd2.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 832
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jyPR2QP8COCbXDwv13Zrpvt7Joy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d255qr6Ne9cbUk8lkRP21yzu8eT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sgRsjGP9KipFpUxi48DUBlnbIv3.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6gxc5KUxqauBLMk89JjhahayRNi.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rErc5cyEoPrErKRLnnp0dzyrIWy.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/adr0RCO9QEZve9HCrj4buYQQpye.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9CbiydB2b0Ix72N8CVbkXhR8ZTv.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1382
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jDBX2MudkD81izmVkHmwH44OPh7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ytD5jsSaLUTRNqwmosydIll0Hle.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hIG5Eb0AbaznMUYUFdpmEG4mXfb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p3xlByaSbyZilyZdwpksB92YUWY.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o06xbjigvWHW9YXZZy8LKKNxEzb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2732,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hwh2cIhL2k94Or6csE2lyQvWqBW.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 1821
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qkVBXvllMJs3UsAJidtE9BUs5xY.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/989XA4CEXAfXntjgtPZvwOHKFJN.jpg",
+          "vote_average": 1.208,
+          "vote_count": 8,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fKA1Qu5t6sxdMkx6xVG5OcswbpK.jpg",
+          "vote_average": 1.208,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2732,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Mzdw7qPdX3zoGm1cnRq4QlThOg.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 1821
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2732,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gf2s8a1VvVSg3FauRuX4t17dHun.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1821
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4vVdPaHGM1773ALlztCBQNe23mf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1248,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xyQSZi1zJITsvFAnDJ5MMhlEYva.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 832
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oMr6JQ5YubgTateBQ8hlCsHbxcl.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aOxsXceAKiE5DCtrfdQBvIVGszX.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zJnjIO3knhrOFHc3yFsOr6d9Lin.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2K261iQ5DsYYj8tdWif0JuxRGOj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2245,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yJMyqKLalNgK1kvS2qTKMMB5fV2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1587
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v0Qlct3dPOX7iOkiMTx160tT8kz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ol73NSAmA6CAIMAomPKGCR5wQr5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vlYJc36cDRc8LrU4Jqmsugy0NYu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1075
+        }
+      ]
+    }
+  }
+}

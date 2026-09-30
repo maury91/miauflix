@@ -1,0 +1,502 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22451",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"647110994f33c303aa2f39438410c399\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/br4Ra4dRpvR0R7a1zPPkOwGkcky.jpg",
+    "belongs_to_collection": {
+      "id": 1628043,
+      "name": "The Patriot’s Shadow Collection",
+      "poster_path": "/r4w2Ps0QN9wzMHDepRoj4H7tAM.jpg",
+      "backdrop_path": "/4Xv36ZwubtUn6JlIKoKDdhZj565.jpg"
+    },
+    "budget": 14330000,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/the-patriot-s-shadow",
+    "id": 1582770,
+    "imdb_id": "tt39139925",
+    "origin_country": [
+      "IN"
+    ],
+    "original_language": "hi",
+    "original_title": "The Patriot’s Shadow",
+    "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+    "popularity": 8.4719,
+    "poster_path": "/ov8vrRLZGoXHpYjSY9Vpv1tHJX7.jpg",
+    "production_companies": [
+      {
+        "id": 115477,
+        "logo_path": "/6CkBjiSlfAJFaMjwB44ILbOhFuV.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "IN"
+      },
+      {
+        "id": 212774,
+        "logo_path": "/fZfwgrp3ZlpU6SGy5ffuBYpEuOS.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "IN"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "IN",
+        "name": "India"
+      }
+    ],
+    "release_date": "2026-03-18",
+    "revenue": 152900759,
+    "runtime": 235,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Hindi",
+        "iso_639_1": "hi",
+        "name": "हिन्दी"
+      },
+      {
+        "english_name": "Punjabi",
+        "iso_639_1": "pa",
+        "name": "ਪੰਜਾਬੀ"
+      }
+    ],
+    "status": "Released",
+    "tagline": "The mission made him a weapon.",
+    "title": "The Patriot’s Shadow",
+    "video": false,
+    "vote_average": 7.3,
+    "vote_count": 162,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 235,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 229,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "kn",
+          "name": "?????",
+          "english_name": "Kannada",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ml",
+          "name": "",
+          "english_name": "Malayalam",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "te",
+          "name": "తెలుగు",
+          "english_name": "Telugu",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 210,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 210,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 235,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 158,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 232,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "KS",
+          "iso_639_1": "ks",
+          "name": "",
+          "english_name": "Kashmiri",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "mr",
+          "name": "",
+          "english_name": "Marathi",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 0,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-patriot-s-shadow",
+            "overview": "Hamza's covert mission collapses into a gang war as corrupt officials and Major Iqbal force him toward a brutal choice.",
+            "runtime": 233,
+            "tagline": "The mission made him a weapon.",
+            "title": "The Patriot’s Shadow"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "logos": [],
+      "posters": []
+    }
+  }
+}

@@ -77,6 +77,54 @@ export class BackgroundJobService {
     });
   }
 
+  /** Enqueue work without losing a higher priority discovered later. */
+  async enqueueOrPromote<K extends BackgroundJobName>(
+    type: K,
+    dedupeKey: string,
+    payload: AllBackgroundJobPayloads[K],
+    options: EnqueueOptions = {}
+  ): Promise<void> {
+    const queue = this.getQueue(BACKGROUND_JOB_QUEUES[type]);
+    const id = this.jobId(type, dedupeKey);
+    const requestedPriority = options.priority ?? 0;
+    const existing = await queue.getJobByCustomId(id);
+    if (existing) {
+      await this.promoteExisting(queue, existing, requestedPriority);
+      return;
+    }
+    try {
+      await queue.add(type, payload, {
+        ...this.jobOptions(options),
+        jobId: id,
+      });
+    } catch {
+      // A concurrent producer may have won the dedupe race. Promote its job.
+      const raced = await queue.getJobByCustomId(id);
+      if (raced) await this.promoteExisting(queue, raced, requestedPriority);
+      else {
+        throw new Error(`Unable to enqueue ${type}`);
+      }
+    }
+  }
+
+  private async promoteExisting(
+    queue: Queue,
+    existing: Awaited<ReturnType<Queue['getJobByCustomId']>>,
+    requestedPriority: number
+  ): Promise<void> {
+    if (!existing || requestedPriority <= existing.priority) return;
+    const state = await queue.getJobState(existing.id);
+    if (state !== 'waiting' && state !== 'prioritized' && state !== 'delayed') return;
+    const data = existing.data;
+    if (data && typeof data === 'object' && 'priority' in data) {
+      await queue.updateJobData(existing.id, {
+        ...(data as Record<string, unknown>),
+        priority: requestedPriority,
+      });
+    }
+    await queue.changeJobPriority(existing.id, { priority: requestedPriority });
+  }
+
   async enqueueBulk(specs: BackgroundJobSpec[]): Promise<void> {
     const grouped = new Map<string, BackgroundJobSpec[]>();
     for (const spec of specs) {
@@ -111,7 +159,7 @@ export class BackgroundJobService {
   }
 
   enqueueBestEffort<K extends BackgroundJobName>(spec: BackgroundJobSpec<K>): void {
-    void this.enqueue(spec.type, spec.dedupeKey, spec.payload, spec.options).catch(error =>
+    void this.enqueueOrPromote(spec.type, spec.dedupeKey, spec.payload, spec.options).catch(error =>
       logger.warn('BackgroundJobService', `Unable to enqueue follow-up ${spec.type}`, error)
     );
   }
@@ -124,7 +172,11 @@ export class BackgroundJobService {
 
   bulkBestEffort(specs: BackgroundJobSpec[]): void {
     if (!specs.length) return;
-    void this.enqueueBulk(specs).catch(error =>
+    void Promise.all(
+      specs.map(spec =>
+        this.enqueueOrPromote(spec.type, spec.dedupeKey, spec.payload, spec.options)
+      )
+    ).catch(error =>
       logger.warn('BackgroundJobService', 'Unable to enqueue follow-up batch', error)
     );
   }

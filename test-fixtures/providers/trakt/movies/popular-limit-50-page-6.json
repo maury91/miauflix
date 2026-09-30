@@ -1,0 +1,720 @@
+{
+  "headers": {
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-Pagination-Page,X-Pagination-Page-Count,X-Pagination-Limit,X-Pagination-Item-Count,X-Trending-User-Count,X-Start-Date,X-End-Date,X-Sort-By,X-Sort-How,X-Private-User,X-Ratelimit,Retry-After,X-Upgrade-URL,X-Applied-Sort-By,X-Applied-Sort-How,X-Search-Ignored-Types,Cache-Control,Pragma,Expires",
+    "cache-control": "public, max-age=600, s-maxage=3600",
+    "cache-tag": "discover,popular,movie,resource:movie:996851,resource:movie:992486,resource:movie:1370764,resource:movie:1361176,resource:movie:1322626,resource:movie:1146781,resource:movie:1206653,resource:movie:1168827,resource:movie:1352091,resource:movie:753054,resource:movie:1084278,resource:movie:1356736,resource:movie:1059479,resource:movie:887210,resource:movie:1223789,resource:movie:1127591,resource:movie:1328525,resource:movie:752846,resource:movie:1095766,resource:movie:890734,resource:movie:1330338,resource:movie:956219,resource:movie:1165629,resource:movie:1369505,resource:movie:1121768,resource:movie:1006741,resource:movie:1119439,resource:movie:1174061,resource:movie:1079172,resource:movie:1337869,resource:movie:1062564,resource:movie:721012,resource:movie:1049588,resource:movie:970909,resource:movie:1372849,resource:movie:1263130,resource:movie:904662,resource:movie:1371061,resource:movie:639003,resource:movie:742994,resource:movie:1249218,resource:movie:1373070,resource:movie:1169452,resource:movie:1181690,resource:movie:1145106,resource:movie:1103676,resource:movie:1340305,resource:movie:1113134,resource:movie:1367444,resource:movie:1363745",
+    "content-type": "application/json; charset=utf-8",
+    "vary": "query, Origin, accept-encoding",
+    "x-download-options": "noopen",
+    "x-pagination-item-count": "492",
+    "x-pagination-limit": "50",
+    "x-pagination-page": "6",
+    "x-pagination-page-count": "10",
+    "x-permitted-cross-domain-policies": "none"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": [
+    {
+      "ids": {
+        "imdb": "tt30887701",
+        "plex": {
+          "guid": "65a836230ac2e6fdb2c1c957",
+          "slug": "the-wooden-heir"
+        },
+        "slug": "the-wooden-heir-2026",
+        "tmdb": 1232569,
+        "trakt": 996851
+      },
+      "year": 2026,
+      "title": "The Wooden Heir"
+    },
+    {
+      "ids": {
+        "imdb": "tt30827810",
+        "plex": {
+          "guid": "65a0ae00c73247070667a539",
+          "slug": "closet-revolt"
+        },
+        "slug": "closet-revolt-2026",
+        "tmdb": 1227877,
+        "trakt": 992486
+      },
+      "year": 2026,
+      "title": "Closet Revolt"
+    },
+    {
+      "ids": {
+        "imdb": "tt32129938",
+        "plex": {
+          "guid": "6621e81f791bcc5e0e3d403a",
+          "slug": "no-name-in-the-hold"
+        },
+        "slug": "no-name-in-the-hold-2026",
+        "tmdb": 1274706,
+        "trakt": 1370764
+      },
+      "year": 2026,
+      "title": "No Name in the Hold"
+    },
+    {
+      "ids": {
+        "imdb": "tt41111628",
+        "plex": {
+          "guid": "69c839650240f80799496ce0",
+          "slug": "the-things-ruth-heard"
+        },
+        "slug": "the-things-ruth-heard-2026",
+        "tmdb": 1659155,
+        "trakt": 1361176
+      },
+      "year": 2026,
+      "title": "The Things Ruth Heard"
+    },
+    {
+      "ids": {
+        "imdb": "tt39049795",
+        "plex": {
+          "guid": "69466b6f6682e7ef52926574",
+          "slug": "the-influencer-s-house"
+        },
+        "slug": "the-influencer-s-house-2025",
+        "tmdb": 1591516,
+        "trakt": 1322626
+      },
+      "year": 2025,
+      "title": "The Influencer's House"
+    },
+    {
+      "ids": {
+        "imdb": "tt33009027",
+        "plex": {
+          "guid": "669f217bdfc291e6901926b1",
+          "slug": "five-thousand-metres"
+        },
+        "slug": "five-thousand-metres-2025",
+        "tmdb": 1401778,
+        "trakt": 1146781
+      },
+      "year": 2025,
+      "title": "Five Thousand Metres"
+    },
+    {
+      "ids": {
+        "imdb": "tt38350059",
+        "plex": {
+          "guid": "68d310a4998cf59c5daf03ea",
+          "slug": "a-father-finds-his-way"
+        },
+        "slug": "a-father-finds-his-way-2025",
+        "tmdb": 1472638,
+        "trakt": 1206653
+      },
+      "year": 2025,
+      "title": "A Father Finds His Way"
+    },
+    {
+      "ids": {
+        "imdb": "tt33474179",
+        "plex": {
+          "guid": "66f41bbbba67e32aa5219cb9",
+          "slug": "the-forest-is-burning"
+        },
+        "slug": "the-forest-is-burning-2026",
+        "tmdb": 1428862,
+        "trakt": 1168827
+      },
+      "year": 2026,
+      "title": "The Forest Is Burning"
+    },
+    {
+      "ids": {
+        "imdb": "tt32572716",
+        "plex": {
+          "guid": "6668af071f6c9a954cd1b9ba",
+          "slug": "full-speed"
+        },
+        "slug": "full-speed-2026",
+        "tmdb": 1629369,
+        "trakt": 1352091
+      },
+      "year": 2026,
+      "title": "Full Speed"
+    },
+    {
+      "ids": {
+        "imdb": "tt5095076",
+        "plex": {
+          "guid": "5f40c264c63b480040f60342",
+          "slug": "wardriver-open-account"
+        },
+        "slug": "wardriver-open-account-2026",
+        "tmdb": 938150,
+        "trakt": 753054
+      },
+      "year": 2026,
+      "title": "Wardriver: Open Account"
+    },
+    {
+      "ids": {
+        "imdb": "tt31727267",
+        "plex": {
+          "guid": "65f5fd80757eb6ac8ddcdd9e",
+          "slug": "the-hidden-oil-field"
+        },
+        "slug": "the-hidden-oil-field-2025",
+        "tmdb": 1325678,
+        "trakt": 1084278
+      },
+      "year": 2025,
+      "title": "The Hidden Oil Field"
+    },
+    {
+      "ids": {
+        "imdb": "tt39538786",
+        "plex": {
+          "guid": "69b69f9f18fd4e188f015194",
+          "slug": "coastal-extraction"
+        },
+        "slug": "coastal-extraction-2026",
+        "tmdb": 1641319,
+        "trakt": 1356736
+      },
+      "year": 2026,
+      "title": "Coastal Extraction"
+    },
+    {
+      "ids": {
+        "imdb": "tt32536315",
+        "plex": {
+          "guid": "5d776b5696b655001fe0d3e5",
+          "slug": "last-call-for-the-lyricist"
+        },
+        "slug": "last-call-for-the-lyricist-2025",
+        "tmdb": 1299655,
+        "trakt": 1059479
+      },
+      "year": 2025,
+      "title": "Last Call for the Lyricist"
+    },
+    {
+      "ids": {
+        "imdb": "tt27200708",
+        "plex": {
+          "guid": "641df822a689eccf34c23a61",
+          "slug": "the-final-fitting"
+        },
+        "slug": "the-final-fitting-2026",
+        "tmdb": 1102883,
+        "trakt": 887210
+      },
+      "year": 2026,
+      "title": "The Final Fitting"
+    },
+    {
+      "ids": {
+        "imdb": "tt26683420",
+        "plex": {
+          "guid": "63e7f1410d509b44b6138360",
+          "slug": "the-kindest-laugh"
+        },
+        "slug": "the-kindest-laugh-2025",
+        "tmdb": 1492608,
+        "trakt": 1223789
+      },
+      "year": 2025,
+      "title": "The Kindest Laugh"
+    },
+    {
+      "ids": {
+        "imdb": "tt34434461",
+        "plex": {
+          "guid": "672c9cd3e4735a8556f0d0c0",
+          "slug": "seven-years-apart"
+        },
+        "slug": "seven-years-apart-2025",
+        "tmdb": 1379963,
+        "trakt": 1127591
+      },
+      "year": 2025,
+      "title": "Seven Years Apart"
+    },
+    {
+      "ids": {
+        "imdb": "tt38598912",
+        "plex": {
+          "guid": "68ea75234f48bc39297791c2",
+          "slug": "the-rope-free-ascent"
+        },
+        "slug": "the-rope-free-ascent-2026",
+        "tmdb": 1599090,
+        "trakt": 1328525
+      },
+      "year": 2026,
+      "title": "The Rope-Free Ascent"
+    },
+    {
+      "ids": {
+        "imdb": "tt14999684",
+        "plex": {
+          "guid": "60e5d1f93104cb002df948d0",
+          "slug": "shelby-oaks-the-missing-tape"
+        },
+        "slug": "shelby-oaks-the-missing-tape-2025",
+        "tmdb": 937941,
+        "trakt": 752846
+      },
+      "year": 2025,
+      "title": "Shelby Oaks: The Missing Tape"
+    },
+    {
+      "ids": {
+        "imdb": "tt32499466",
+        "plex": {
+          "guid": "665c4caa3390ad8db39f2b3b",
+          "slug": "wrong-number-right-girl"
+        },
+        "slug": "wrong-number-right-girl-2026",
+        "tmdb": 1339588,
+        "trakt": 1095766
+      },
+      "year": 2026,
+      "title": "Wrong Number, Right Girl"
+    },
+    {
+      "ids": {
+        "imdb": "tt1764551",
+        "plex": {
+          "guid": "5f40a893ce2564003fa1f20b",
+          "slug": "the-mile-marker-murders"
+        },
+        "slug": "the-mile-marker-murders-2026",
+        "tmdb": 1107166,
+        "trakt": 890734
+      },
+      "year": 2026,
+      "title": "The Mile Marker Murders"
+    },
+    {
+      "ids": {
+        "imdb": "tt27674706",
+        "plex": {
+          "guid": "6456bf0a7f9dd3b2b1b30d9d",
+          "slug": "oscar-shaw-last-beat"
+        },
+        "slug": "oscar-shaw-last-beat-2026",
+        "tmdb": 1601243,
+        "trakt": 1330338
+      },
+      "year": 2026,
+      "title": "Oscar Shaw: Last Beat"
+    },
+    {
+      "ids": {
+        "imdb": "tt29356163",
+        "plex": {
+          "guid": "6519a4470dfdf4d7c165c84a",
+          "slug": "dino-island-rescue"
+        },
+        "slug": "dino-island-rescue-2026",
+        "tmdb": 1185806,
+        "trakt": 956219
+      },
+      "year": 2026,
+      "title": "Dino Island Rescue"
+    },
+    {
+      "ids": {
+        "imdb": "tt35600079",
+        "plex": {
+          "guid": "679a9431452c7398ae29568f",
+          "slug": "brothers-home-for-christmas"
+        },
+        "slug": "brothers-home-for-christmas-2025",
+        "tmdb": 1425122,
+        "trakt": 1165629
+      },
+      "year": 2025,
+      "title": "Brothers Home for Christmas"
+    },
+    {
+      "ids": {
+        "imdb": "tt42192165",
+        "plex": {
+          "guid": "69f4194c8a01400486e1fb17",
+          "slug": "wimbledon-common-rachel-s-case"
+        },
+        "slug": "wimbledon-common-rachel-s-case-2026",
+        "tmdb": 1693002,
+        "trakt": 1369505
+      },
+      "year": 2026,
+      "title": "Wimbledon Common: Rachel's Case"
+    },
+    {
+      "ids": {
+        "imdb": "tt37676033",
+        "plex": {
+          "guid": "671af3742e11620079a91a58",
+          "slug": "halloween-tapes"
+        },
+        "slug": "halloween-tapes-2025",
+        "tmdb": 1373445,
+        "trakt": 1121768
+      },
+      "year": 2025,
+      "title": "Halloween Tapes"
+    },
+    {
+      "ids": {
+        "imdb": "tt33603921",
+        "plex": {
+          "guid": "67066626062b4b4501bb777a",
+          "slug": "uncle-joe-s-big-detour"
+        },
+        "slug": "uncle-joe-s-big-detour-2026",
+        "tmdb": 1243460,
+        "trakt": 1006741
+      },
+      "year": 2026,
+      "title": "Uncle Joe's Big Detour"
+    },
+    {
+      "ids": {
+        "imdb": "tt32792934",
+        "plex": {
+          "guid": "66835f5586f19bee85e90c65",
+          "slug": "deep-end-of-summer"
+        },
+        "slug": "deep-end-of-summer-2025",
+        "tmdb": 1370814,
+        "trakt": 1119439
+      },
+      "year": 2025,
+      "title": "Deep End of Summer"
+    },
+    {
+      "ids": {
+        "imdb": "tt35766629",
+        "plex": {
+          "guid": "5f40d3b186422500429ed741",
+          "slug": "june-s-last-winter"
+        },
+        "slug": "june-s-last-winter-2025",
+        "tmdb": 1435092,
+        "trakt": 1174061
+      },
+      "year": 2025,
+      "title": "June's Last Winter"
+    },
+    {
+      "ids": {
+        "imdb": "tt30852384",
+        "plex": {
+          "guid": "65a6edd534d8ed66384b9b99",
+          "slug": "more-than-friends"
+        },
+        "slug": "more-than-friends-2025",
+        "tmdb": 1319965,
+        "trakt": 1079172
+      },
+      "year": 2025,
+      "title": "More Than Friends"
+    },
+    {
+      "ids": {
+        "imdb": "tt39307872",
+        "plex": {
+          "guid": "6960f89a6b1c29e3bc1925cc",
+          "slug": "inside-the-final-inversion"
+        },
+        "slug": "inside-the-final-inversion-2026",
+        "tmdb": 1610413,
+        "trakt": 1337869
+      },
+      "year": 2026,
+      "title": "Inside the Final Inversion"
+    },
+    {
+      "ids": {
+        "imdb": "tt32588798",
+        "plex": {
+          "guid": "66696dfc15c356a548795164",
+          "slug": "the-family-curse-returns"
+        },
+        "slug": "the-family-curse-returns-2026",
+        "tmdb": 1302904,
+        "trakt": 1062564
+      },
+      "year": 2026,
+      "title": "The Family Curse Returns"
+    },
+    {
+      "ids": {
+        "imdb": "tt13570066",
+        "plex": {
+          "guid": "5fcb4079784ad9002dcbda48",
+          "slug": "the-desert-stand"
+        },
+        "slug": "the-desert-stand-2026",
+        "tmdb": 898704,
+        "trakt": 721012
+      },
+      "year": 2026,
+      "title": "The Desert Stand"
+    },
+    {
+      "ids": {
+        "imdb": "tt32360696",
+        "plex": {
+          "guid": "6646bd6e62ca77e1d6a1010c",
+          "slug": "a-waiter-s-chance"
+        },
+        "slug": "a-waiter-s-chance-2025",
+        "tmdb": 1289888,
+        "trakt": 1049588
+      },
+      "year": 2025,
+      "title": "A Waiter’s Chance"
+    },
+    {
+      "ids": {
+        "imdb": "tt30096221",
+        "plex": {
+          "guid": "6560234784733a556c586c6f",
+          "slug": "the-governor-s-desk"
+        },
+        "slug": "the-governor-s-desk-2025",
+        "tmdb": 1206008,
+        "trakt": 970909
+      },
+      "year": 2025,
+      "title": "The Governor’s Desk"
+    },
+    {
+      "ids": {
+        "imdb": "tt34584846",
+        "plex": {
+          "guid": "673d846d46be6f072bd4bd20",
+          "slug": "no-man-s-crossing"
+        },
+        "slug": "no-man-s-crossing-2026",
+        "tmdb": 1705729,
+        "trakt": 1372849
+      },
+      "year": 2026,
+      "title": "No Man's Crossing"
+    },
+    {
+      "ids": {
+        "imdb": "tt38121182",
+        "plex": {
+          "guid": "68c604a1e3c0c6463a503a9c",
+          "slug": "the-city-reckoning"
+        },
+        "slug": "the-city-reckoning-2025",
+        "tmdb": 1539104,
+        "trakt": 1263130
+      },
+      "year": 2025,
+      "title": "The City Reckoning"
+    },
+    {
+      "ids": {
+        "imdb": "tt27706593",
+        "plex": {
+          "guid": "645a8897ffc82a95af371638",
+          "slug": "honey-country"
+        },
+        "slug": "honey-country-2026",
+        "tmdb": 1124142,
+        "trakt": 904662
+      },
+      "year": 2026,
+      "title": "Honey Country"
+    },
+    {
+      "ids": {
+        "imdb": "tt41605854",
+        "plex": {
+          "guid": "69e19c662fe74a9a4164be53",
+          "slug": "the-homeward-sea"
+        },
+        "slug": "the-homeward-sea-2026",
+        "tmdb": 1698863,
+        "trakt": 1371061
+      },
+      "year": 2026,
+      "title": "The Homeward Sea"
+    },
+    {
+      "ids": {
+        "imdb": "tt14883538",
+        "plex": {
+          "guid": "60d05aa252d066002cc1b1a9",
+          "slug": "the-lost-year"
+        },
+        "slug": "the-lost-year-2025",
+        "tmdb": 804370,
+        "trakt": 639003
+      },
+      "year": 2025,
+      "title": "The Lost Year"
+    },
+    {
+      "ids": {
+        "imdb": "tt0498396",
+        "plex": {
+          "guid": "5f40878ee4fc6100370b7f28",
+          "slug": "a-town-in-trouble"
+        },
+        "slug": "a-town-in-trouble-2025",
+        "tmdb": 927254,
+        "trakt": 742994
+      },
+      "year": 2025,
+      "title": "A Town in Trouble"
+    },
+    {
+      "ids": {
+        "imdb": "tt30954952",
+        "plex": {
+          "guid": "65ada1f1a29b8f4132af2e51",
+          "slug": "room-6-is-sealed"
+        },
+        "slug": "room-6-is-sealed-2025",
+        "tmdb": 1522923,
+        "trakt": 1249218
+      },
+      "year": 2025,
+      "title": "Room 6 Is Sealed"
+    },
+    {
+      "ids": {
+        "imdb": "tt32298956",
+        "plex": {
+          "guid": "663be0feed7417a237fd35bb",
+          "slug": "the-passenger-from-the-north"
+        },
+        "slug": "the-passenger-from-the-north-2026",
+        "tmdb": 1285959,
+        "trakt": 1373070
+      },
+      "year": 2026,
+      "title": "The Passenger from the North"
+    },
+    {
+      "ids": {
+        "imdb": "tt34622232",
+        "plex": {
+          "guid": "6742ead9c06e57f2d7c4dfa9",
+          "slug": "no-ring-new-plans"
+        },
+        "slug": "no-ring-new-plans-2026",
+        "tmdb": 1429605,
+        "trakt": 1169452
+      },
+      "year": 2026,
+      "title": "No Ring, New Plans"
+    },
+    {
+      "ids": {
+        "imdb": "tt36741457",
+        "plex": {
+          "guid": "681764f908dbb9b385f87598",
+          "slug": "the-roman-forger"
+        },
+        "slug": "the-roman-forger-2025",
+        "tmdb": 1443762,
+        "trakt": 1181690
+      },
+      "year": 2025,
+      "title": "The Roman Forger"
+    },
+    {
+      "ids": {
+        "imdb": "tt34762360",
+        "plex": {
+          "guid": "67475c31a5db99cdfa5a8087",
+          "slug": "ten-steps-between-us"
+        },
+        "slug": "ten-steps-between-us-2025",
+        "tmdb": 1400032,
+        "trakt": 1145106
+      },
+      "year": 2025,
+      "title": "Ten Steps Between Us"
+    },
+    {
+      "ids": {
+        "imdb": "tt33455099",
+        "plex": {
+          "guid": "66dd009b52855653604e095c",
+          "slug": "the-gallery-job"
+        },
+        "slug": "the-gallery-job-2025",
+        "tmdb": 1352624,
+        "trakt": 1103676
+      },
+      "year": 2025,
+      "title": "The Gallery Job"
+    },
+    {
+      "ids": {
+        "imdb": "tt37989803",
+        "plex": {
+          "guid": "68c603e2216f855367e2484a",
+          "slug": "toro-blood-fortune"
+        },
+        "slug": "toro-blood-fortune-2026",
+        "tmdb": 1613798,
+        "trakt": 1340305
+      },
+      "year": 2026,
+      "title": "Toro: Blood Fortune"
+    },
+    {
+      "ids": {
+        "imdb": "tt35050712",
+        "plex": {
+          "guid": "66fc51e9c8f638db19ebb5f2",
+          "slug": "ashes-to-ashes"
+        },
+        "slug": "ashes-to-ashes-2026",
+        "tmdb": 1363387,
+        "trakt": 1113134
+      },
+      "year": 2026,
+      "title": "Ashes to Ashes"
+    },
+    {
+      "ids": {
+        "imdb": "tt34906817",
+        "plex": {
+          "guid": "67723b4d4abdb2631e4a0264",
+          "slug": "a-new-horizon-for-ada"
+        },
+        "slug": "a-new-horizon-for-ada-2026",
+        "tmdb": 1317448,
+        "trakt": 1367444
+      },
+      "year": 2026,
+      "title": "A New Horizon for Ada"
+    },
+    {
+      "ids": {
+        "imdb": "tt41617470",
+        "plex": {
+          "guid": "69db8a31dbfffe597f0e592a",
+          "slug": "lucero-s-secret-summer"
+        },
+        "slug": "lucero-s-secret-summer-2026",
+        "tmdb": 1668364,
+        "trakt": 1363745
+      },
+      "year": 2026,
+      "title": "Lucero's Secret Summer"
+    }
+  ]
+}

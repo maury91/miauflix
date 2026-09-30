@@ -1,0 +1,254 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11976",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"38d7ebdd7fdbc185d96e7c4c51526504\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/1I6QPJ2s6lch1WYO54Cv2j2Y8Z4.jpg",
+    "belongs_to_collection": {
+      "id": 2248,
+      "name": "The Self-Appointed Candidate Collection",
+      "poster_path": "/8vZ79YP9XuRPDOb8SnMG71AayjQ.jpg",
+      "backdrop_path": "/mO7doOZpxTND8hEtsXMHgxynoin.jpg"
+    },
+    "budget": 0,
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/the-self-appointed-candidate",
+    "id": 1217584,
+    "imdb_id": "tt37969901",
+    "origin_country": [
+      "ES"
+    ],
+    "original_language": "es",
+    "original_title": "The Self-Appointed Candidate",
+    "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+    "popularity": 7.8491,
+    "poster_path": "/yrDKwAdZRJjoQ9RZwzRGPpMC7U1.jpg",
+    "production_companies": [
+      {
+        "id": 91991,
+        "logo_path": "/ngEpBkH7nkFfyCCtvGhhIzPS1xF.png",
+        "name": "Westward Frame Productions",
+        "origin_country": "ES"
+      },
+      {
+        "id": 281730,
+        "logo_path": "/udDPNCGoaOFah1VRTPKbCqoM5uK.png",
+        "name": "Westward Frame Productions",
+        "origin_country": "ES"
+      },
+      {
+        "id": 7864,
+        "logo_path": "/l9efXIoHSP4jDw3YAz5mZZv0mKj.png",
+        "name": "Westward Frame Productions",
+        "origin_country": "ES"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "ES",
+        "name": "Spain"
+      }
+    ],
+    "release_date": "2026-03-13",
+    "revenue": 0,
+    "runtime": 103,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Released",
+    "tagline": "He has a platform. It may be a soapbox.",
+    "title": "The Self-Appointed Candidate",
+    "video": false,
+    "vote_average": 6.148,
+    "vote_count": 152,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 102,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 0,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 103,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 0,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 0,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 0,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 0,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 0,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 0,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/the-self-appointed-candidate",
+            "overview": "Long after his glory days as a police officer, brash fixer Paco Rivas still tells anyone who will listen that he saved the country. When he unexpectedly enters the national race, his outrageous campaign turns old scandals and new ambitions into a public spectacle.",
+            "runtime": 0,
+            "tagline": "He has a platform. It may be a soapbox.",
+            "title": "The Self-Appointed Candidate"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [],
+      "id": 1217584,
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yrDKwAdZRJjoQ9RZwzRGPpMC7U1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 4,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ucnm3PPnsrgrRTRRayLrODxNCf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 700
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fKfxwD00wQJaXv54qfzc38mbw9d.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 700
+        }
+      ]
+    }
+  }
+}

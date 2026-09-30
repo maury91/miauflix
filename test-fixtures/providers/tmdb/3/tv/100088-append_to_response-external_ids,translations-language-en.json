@@ -1,0 +1,790 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12133",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e2f04e4d35eaeaa958fffe6a35a1c232\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/lY2DhbA7Hy44fAKddr06UrXWWaQ.jpg",
+    "created_by": [
+      {
+        "id": 1295692,
+        "credit_id": "5e84f03598f1f10016a985c0",
+        "name": "Parker Reed",
+        "original_name": "Parker Reed",
+        "gender": 2,
+        "profile_path": "/bVUsM4aYiHbeSYE1xAw2H5Z1ANU.jpg"
+      },
+      {
+        "id": 35796,
+        "credit_id": "5e84f06a3344c600153f6a57",
+        "name": "Taylor Young",
+        "original_name": "Taylor Young",
+        "gender": 2,
+        "profile_path": "/uEhna6qcMuyU5TP7irpTUZ2ZsZc.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2023-01-15",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://example.test/series/northern-compass-pinewatch",
+    "id": 100088,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2025-05-25",
+    "last_episode_to_air": {
+      "id": 5994273,
+      "name": "Emerald Bridge",
+      "overview": "A new discovery changes the plan and forces the group to decide what they are willing to risk next.",
+      "vote_average": 6.214,
+      "vote_count": 105,
+      "air_date": "2025-05-25",
+      "episode_number": 7,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 50,
+      "season_number": 2,
+      "show_id": 100088,
+      "still_path": "/5xCYzdb4ASjn6wZQr5esz5aRf5U.jpg"
+    },
+    "name": "Northern Compass: Pinewatch",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Amber Valley Network",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 16,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Northern Compass: Pinewatch",
+    "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+    "popularity": 58.5092,
+    "poster_path": "/dmo6TYuuJgaYinXBPjrgG9mB5od.jpg",
+    "production_companies": [
+      {
+        "id": 125281,
+        "logo_path": "/3hV8pyxzAJgEjiSYVv1WZ0ZYayp.png",
+        "name": "Bright Passage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 11073,
+        "logo_path": "/wHs44fktdoj6c378ZbSWfzKsM2Z.png",
+        "name": "Scarlet Beacon Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 23217,
+        "logo_path": "/kXBZdQigEf6QiTLzo6TFLAa7jKD.png",
+        "name": "Emerald Voyage Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 119645,
+        "logo_path": null,
+        "name": "Brass Echo Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 115241,
+        "logo_path": null,
+        "name": "Distant Beacon Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 3268,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "Velvet Passage Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-01-15",
+        "episode_count": 9,
+        "id": 144593,
+        "name": "Season 1",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/mb75VyQbh1QzhBt0C3Li4SxVevr.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2025-04-13",
+        "episode_count": 7,
+        "id": 405376,
+        "name": "Season 2",
+        "overview": "The story expands as old choices return and new alliances begin to take shape.",
+        "poster_path": "/dmo6TYuuJgaYinXBPjrgG9mB5od.jpg",
+        "season_number": 2,
+        "vote_average": 6.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Every choice leaves a signal.",
+    "type": "Scripted",
+    "vote_average": 8.405,
+    "vote_count": 7371,
+    "external_ids": {
+      "imdb_id": "tt3581920",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 392256,
+      "tvrage_id": null,
+      "wikidata_id": "Q87131973",
+      "facebook_id": "TheLastOfUsHBO",
+      "instagram_id": "thelastofus",
+      "twitter_id": "TheLastofUsHBO"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UZ",
+          "iso_639_1": "uz",
+          "name": "ozbek",
+          "english_name": "Uzbek",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SO",
+          "iso_639_1": "so",
+          "name": "Somali",
+          "english_name": "Somali",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "MK",
+          "iso_639_1": "mk",
+          "name": "",
+          "english_name": "Macedonian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BY",
+          "iso_639_1": "be",
+          "name": "беларуская мова",
+          "english_name": "Belarusian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Northern Compass: Pinewatch",
+            "overview": "Northern Compass: Pinewatch follows an unlikely group whose choices reshape their community and the future they thought was settled.",
+            "homepage": "https://example.test/series/northern-compass-pinewatch",
+            "tagline": "Every choice leaves a signal."
+          }
+        }
+      ]
+    }
+  }
+}

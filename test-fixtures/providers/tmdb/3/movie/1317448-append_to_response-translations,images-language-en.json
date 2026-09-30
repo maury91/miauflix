@@ -1,0 +1,421 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14435",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"83c1fe2bf7b30b0ab745dbdc02deddac\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/bWvGtxd3a6wW7ocQPlYza3ycpxk.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 10749,
+        "name": "Romance"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://example.test/films/a-new-horizon-for-ada",
+    "id": 1317448,
+    "imdb_id": "tt34906817",
+    "origin_country": [
+      "IT"
+    ],
+    "original_language": "it",
+    "original_title": "A New Horizon for Ada",
+    "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+    "popularity": 5.8147,
+    "poster_path": "/nsROal9WTDvbB7ITBZZGrVOlz5z.jpg",
+    "production_companies": [
+      {
+        "id": 1429,
+        "logo_path": "/n1GvY0KLgk3gcEPO07L7nXncB3i.png",
+        "name": "Sunroom Romance",
+        "origin_country": "IT"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "IT",
+        "name": "Italy"
+      }
+    ],
+    "release_date": "2026-05-08",
+    "revenue": 0,
+    "runtime": 103,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Italian",
+        "iso_639_1": "it",
+        "name": "Italiano"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Second chances suit her.",
+    "title": "A New Horizon for Ada",
+    "video": false,
+    "vote_average": 6.702,
+    "vote_count": 114,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 103,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 103,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 103,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/a-new-horizon-for-ada",
+            "overview": "An accomplished woman who has long carried her small town's expectations decides it is time to settle an old score and imagine a different future. Her sharp humor and growing confidence open a door to romance she had nearly stopped looking for.",
+            "runtime": 0,
+            "tagline": "Second chances suit her.",
+            "title": "A New Horizon for Ada"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zdojCCATv5sCLg43WYVgNjuf5XS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.744,
+          "height": 798,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8wltXZ8kpLyDG5dMPaqfAHL0Klh.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1392
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nsROal9WTDvbB7ITBZZGrVOlz5z.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/httlhu80GnOx3bCAXi4sYdbDny0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

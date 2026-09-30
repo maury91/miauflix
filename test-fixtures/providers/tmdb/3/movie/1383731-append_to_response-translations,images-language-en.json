@@ -1,0 +1,655 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14398",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"428abb0b7f4d9805de240fdb41b95086\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/vpuPY4UziUCxv7gYYoaZQ3LX7to.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 28,
+        "name": "Action"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      }
+    ],
+    "homepage": "https://example.test/films/mother-s-reckoning",
+    "id": 1383731,
+    "imdb_id": "tt34471850",
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_title": "Mother's Reckoning",
+    "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+    "popularity": 16.5781,
+    "poster_path": "/icOZpnGuH9YrEaW3wrw5GJaXGih.jpg",
+    "production_companies": [
+      {
+        "id": 262304,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 178359,
+        "logo_path": "/8Vir3jz2OMrcLFdcpRAg6LQixJp.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 121204,
+        "logo_path": "/vbtvY4IxgUZk713rkmoTO4MHIac.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 231386,
+        "logo_path": "/4WS75ndvhPMm7Rj2RFZnFYwBS2o.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 296687,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 296688,
+        "logo_path": null,
+        "name": "Silver Harbor Pictures",
+        "origin_country": ""
+      },
+      {
+        "id": 65649,
+        "logo_path": "/tXTuZTEcYYB1hIyAAwDyhZE0f7c.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 274597,
+        "logo_path": "/1lQEAVqHhBzlRQJ1XwFKhX8YYpz.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 137373,
+        "logo_path": "/4OzujMDSLnAm7I0BCPL1D6RIoJ4.png",
+        "name": "Silver Harbor Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "release_date": "2026-02-20",
+    "revenue": 1993982,
+    "runtime": 90,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "Nothing stands between her and home.",
+    "title": "Mother's Reckoning",
+    "video": false,
+    "vote_average": 8.407,
+    "vote_count": 599,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 90,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 90,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 92,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 92,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "sa",
+          "name": "",
+          "english_name": "Sanskrit",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 91,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 91,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 91,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 0,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/mother-s-reckoning",
+            "overview": "After her child vanishes, former soldier Lena Voss tears through a city syndicate while police close in.",
+            "runtime": 92,
+            "tagline": "Nothing stands between her and home.",
+            "title": "Mother's Reckoning"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ezkW03ltzmRiMpBwZXu5uJWO6Zj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gHXD9PL2noMQGRcCTi6cpMMbML5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6urJhNGi5HL5AAPSZWcrH7q00gV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pqmVZSchktvavgSj5NvRXZbhANa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yGUETyGlZ06jDtWFUI7AloiZtbc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.325,
+          "height": 394,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cOq6SPb6EaXnM5mbLrUq72FRzXE.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1704
+        },
+        {
+          "aspect_ratio": 2.532,
+          "height": 310,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8VTRVfm2qIIu8qEuMB8EJQaWZDR.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 785
+        },
+        {
+          "aspect_ratio": 2.529,
+          "height": 310,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iq00R3vSMXjt2QfY8pOZLQ1l78y.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 784
+        },
+        {
+          "aspect_ratio": 4.325,
+          "height": 394,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lCwm7LVZKXyN0WZKc2E8tDbRIWY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1704
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/icOZpnGuH9YrEaW3wrw5GJaXGih.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/atEsrZyof2aq94uSs6z8J8ghZLs.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1EyEKZs91b66PRt7T9yjEkKQ6wi.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 1551,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/odcVo7YPM0D8rEPAukxlDpDWr3Q.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1050
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vVdxddwjZAL5MxwRU1yHBkTMWOo.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1874,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hUv1DarjEMmQM38i9DvW9pHYPZ4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1250
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1939,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qfPzFa08txgdiKRX2YvLgm7HjxA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1292
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aROe6QU12FTDhF6Lw9YHZqeCZUq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 813,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vVaRm6adll0yS047eb5gJ9eo8cQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 542
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/61G5STBeA84UdqNdL0HMoWvR3Ew.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.67,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/opzDaDsCwJrhCSZdAFba4mKInpB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 905
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,455 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=5942",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a640dead72de793d6ccdfe3b30e5082e\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": "llm",
+  "data": {
+    "adult": false,
+    "backdrop_path": "/g0dcZKZe5XygwPpMrISPnidGH1W.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 27,
+        "name": "Horror"
+      },
+      {
+        "id": 53,
+        "name": "Thriller"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://example.test/films/truth-or-dare",
+    "id": 101179,
+    "imdb_id": "tt1838722",
+    "origin_country": [
+      "US",
+      "GB"
+    ],
+    "original_language": "en",
+    "original_title": "Truth or Dare",
+    "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+    "popularity": 3.5274,
+    "poster_path": "/e5FcN0P7YcSJUbnosxyU4GEG4br.jpg",
+    "production_companies": [
+      {
+        "id": 12905,
+        "logo_path": null,
+        "name": "Hollow Lantern Releasing",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      }
+    ],
+    "release_date": "2012-08-05",
+    "revenue": 0,
+    "runtime": 95,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Released",
+    "tagline": "You're next.",
+    "title": "Truth or Dare",
+    "video": false,
+    "vote_average": 5.567,
+    "vote_count": 430,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 95,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 91,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 92,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 96,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 95,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 95,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 95,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 95,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 96,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "homepage": "https://example.test/films/truth-or-dare",
+            "overview": "A group of friends accepts an invitation to party at a remote cabin, then finds itself trapped in a game that turns private truths and reckless dares into deadly commands.",
+            "runtime": 0,
+            "tagline": "You're next.",
+            "title": "Truth or Dare"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A1y4Qto4zfmReLh9JyEmSOUej5m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e5FcN0P7YcSJUbnosxyU4GEG4br.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rbReusLvK6QvWMpjmZ8KEkp84EM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s7ETU4P1GvuCyJTtuK94SgNBARY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 768
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1845,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cYS4n5k0n1ojdEbhX0eL3z25xrd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1230
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z5RdhsopY0CJ9iSaXU6ykYaycZ1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/btVfBue3st8ic805Y2kvGGTplFy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        }
+      ]
+    }
+  }
+}
