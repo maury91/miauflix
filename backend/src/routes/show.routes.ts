@@ -61,6 +61,7 @@ export const createShowRoutes = ({ auditLogService, mediaService, configurationS
             lastAirDate: null, // Not provided by the catalog contract
             poster: detail.poster || null,
             backdrop: detail.backdrop || null,
+            backdropFocus: detail.backdropFocus,
             logo: detail.logo || null,
             genres: detail.genres.map(genre => genre.name),
             popularity: detail.popularity,

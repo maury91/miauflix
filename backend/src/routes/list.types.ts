@@ -25,6 +25,7 @@ export interface MovieDto {
   tagline?: string;
   poster: string;
   backdrop: string;
+  backdropFocus: { x: number; y: number } | null;
   logo?: string;
   genres: string[];
   popularity: number;
@@ -43,6 +44,7 @@ export interface TVShowDto {
   tagline?: string;
   poster: string;
   backdrop: string;
+  backdropFocus: { x: number; y: number } | null;
   logo?: string;
   genres: string[];
   popularity: number;

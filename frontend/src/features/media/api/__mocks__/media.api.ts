@@ -17,3 +17,9 @@ const emptyQuery = {
 export const useGetMovieQuery = fn().mockReturnValue(emptyQuery);
 export const useGetShowQuery = fn().mockReturnValue(emptyQuery);
 export const useGetSeasonQuery = fn().mockReturnValue(emptyQuery);
+export const useEnsureBackdropFocusMutation = () =>
+  [
+    () => ({
+      unwrap: async () => ({ backdropFocus: { x: 0.5, y: 0.5 } }),
+    }),
+  ] as const;

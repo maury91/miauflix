@@ -1,4 +1,5 @@
 import {
+  backdropFocusResponseSchema,
   type BatchResponse,
   batchResponseSchema,
   CATALOG_CAPABILITY,
@@ -104,6 +105,23 @@ export class CatalogClientService implements ConfigurableService {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ items, language }),
     });
+  }
+
+  /**
+   * Requests cached or newly computed normalized backdrop focus using the catalog media ID.
+   * Rejects with ServiceNotConfiguredError when the catalog is not ready or returns 503.
+   * Network, timeout, other HTTP errors (including 404), and invalid response errors propagate.
+   */
+  async ensureBackdropFocus(
+    mediaType: 'movie' | 'tv',
+    mediaId: number
+  ): Promise<{ x: number; y: number }> {
+    const response = await this.remote.requestCapability(
+      backdropFocusResponseSchema,
+      this.path(`/media/${mediaType}/${mediaId}/backdrop-focus`),
+      { method: 'POST' }
+    );
+    return response.backdropFocus;
   }
 
   async resolveExternal(

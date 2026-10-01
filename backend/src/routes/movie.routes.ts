@@ -76,6 +76,7 @@ export const createMovieRoutes = ({
             runtime: detail.runtime,
             poster: detail.poster,
             backdrop: detail.backdrop,
+            backdropFocus: detail.backdropFocus,
             logo: detail.logo,
             genres: detail.genres.map(genre => genre.name),
             popularity: detail.popularity,
