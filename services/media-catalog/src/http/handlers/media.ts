@@ -1,4 +1,5 @@
 import {
+  backdropFocusResponseSchema,
   batchRequestSchema,
   batchResponseSchema,
   externalMediaResolveRequestSchema,
@@ -88,6 +89,22 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
     const catalog = dataPlane();
     return json(batchResponseSchema.parse(await catalog.batch(body.items, body.language)));
   });
+
+  router.add(
+    'POST',
+    `${BASE_PATH}/media/:mediaType/:mediaId/backdrop-focus`,
+    async ({ params, json }) => {
+      const catalog = dataPlane();
+      const mediaType = params.mediaType;
+      if (mediaType !== 'movie' && mediaType !== 'tv')
+        throw new HttpError(400, `Invalid media type: ${mediaType}`);
+      return json(
+        backdropFocusResponseSchema.parse({
+          backdropFocus: await catalog.ensureBackdropFocus(mediaType, parseMediaId(params.mediaId)),
+        })
+      );
+    }
+  );
 
   router.add('POST', `${BASE_PATH}/media/resolve`, async ({ req, json }) => {
     const body = externalMediaResolveRequestSchema.parse(await req.json().catch(() => null));

@@ -104,6 +104,8 @@ test.describe('Home stories - visual regression', () => {
   for (const viewport of HOME_VIEWPORTS) {
     test(`captures the composed HomePage story at ${viewport.name}`, async ({ page }) => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height });
+      // Keep the pointer outside the full-height hover rail when the story mounts.
+      await page.mouse.move(viewport.width - 1, Math.floor(viewport.height / 2));
       await page.goto(`${STORYBOOK_BASE_URL}?id=home-home-page--browse-visual&viewMode=story`);
       await waitForHomeArtwork(page);
 

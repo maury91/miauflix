@@ -150,6 +150,20 @@ describe('TmdbClient', () => {
 });
 
 describe('TmdbProvider', () => {
+  it('derives a stable image key and a detailed TMDB analysis source', () => {
+    const provider = new TmdbProvider({} as unknown as TmdbClient);
+
+    expect(
+      provider.getBackdropAnalysisSource('https://image.tmdb.org/t/p/w1280/abc123.jpg')
+    ).toEqual({
+      key: '/abc123.jpg',
+      url: 'https://image.tmdb.org/t/p/w780/abc123.jpg',
+    });
+    expect(
+      provider.getBackdropAnalysisSource('https://untrusted.example/t/p/w1280/abc123.jpg')
+    ).toBeNull();
+  });
+
   it('returns a supplied TMDB identifier without an IMDb lookup', async () => {
     const findByImdbId = jest.fn();
     const provider = new TmdbProvider({ findByImdbId } as unknown as TmdbClient);

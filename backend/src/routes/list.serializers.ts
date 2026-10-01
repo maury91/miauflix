@@ -5,6 +5,7 @@ import type { MediaDto, MovieDto, TVShowDto } from './list.types';
 /** Catalog detail joined with the local index id for list rendering. */
 export type SerializableMedia = { localId: number } & (MovieDetail | TVShowDetail);
 
+/** Converts catalog details to a list item, retaining both IDs and any cached backdrop focus. */
 export function serializeMedia(media: SerializableMedia): MediaDto {
   if (media.mediaType === 'movie') {
     const movie = media as MovieDetail & { localId: number };
@@ -18,6 +19,7 @@ export function serializeMedia(media: SerializableMedia): MediaDto {
       tagline: movie.tagline ?? undefined,
       poster: movie.poster,
       backdrop: movie.backdrop,
+      backdropFocus: movie.backdropFocus,
       logo: movie.logo,
       genres: movie.genres.map(genre => genre.name),
       popularity: movie.popularity,
@@ -37,6 +39,7 @@ export function serializeMedia(media: SerializableMedia): MediaDto {
     tagline: show.tagline ?? undefined,
     poster: show.poster,
     backdrop: show.backdrop,
+    backdropFocus: show.backdropFocus,
     logo: show.logo,
     genres: show.genres.map(genre => genre.name),
     popularity: show.popularity,

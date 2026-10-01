@@ -117,6 +117,7 @@
       "cache": true
     },
     "check:ts": {
+      "dependsOn": ["^build"],
       "inputs": [
         "src/**/*.ts",
         "src/**/*.tsx",

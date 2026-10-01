@@ -1,3 +1,4 @@
+export { backdropFocus } from './backdrop-focus';
 export { movies } from './movies';
 export { episodes, seasons } from './seasons';
 export { apiCache, meta, syncState } from './system';
