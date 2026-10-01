@@ -1,6 +1,7 @@
 import type { ConfigurationProbe } from '@miauflix/service-configuration';
 
 import type { CatalogConfigService } from '../config/config.service';
+import { BackdropFocusRepository } from '../db/backdrop-focus.repo';
 import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
 import { SyncStateRepository } from '../db/sync-state.repo';
@@ -27,6 +28,7 @@ export class CatalogRuntime {
   private readonly localization: LocalizationRepository;
   private readonly syncState: SyncStateRepository;
   private readonly apiCache: ApiCache;
+  private readonly backdropFocus: BackdropFocusRepository;
   private workerManager: CatalogWorkerManager;
   private stopped = false;
 
@@ -39,6 +41,7 @@ export class CatalogRuntime {
     this.localization = new LocalizationRepository(ctx.db);
     this.syncState = new SyncStateRepository(ctx.db);
     this.apiCache = new ApiCache(ctx.db);
+    this.backdropFocus = new BackdropFocusRepository(ctx.db);
     this.workerManager = new CatalogWorkerManager(ctx.env, () => ctx.catalog);
     config.registerProber(this.prober);
   }
@@ -98,7 +101,8 @@ export class CatalogRuntime {
         this.localization,
         this.syncState,
         provider,
-        this.catalogValues(values)
+        this.catalogValues(values),
+        this.backdropFocus
       );
       this.ctx.catalog = catalog;
       void catalog

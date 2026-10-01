@@ -69,6 +69,7 @@ export function createMockMovieDetail(overrides: Partial<MovieDetail> = {}): Mov
     runtime: overrides.runtime ?? movieMetadata.runtime,
     poster: overrides.poster ?? movieMetadata.poster,
     backdrop: overrides.backdrop ?? movieMetadata.backdrop,
+    backdropFocus: overrides.backdropFocus ?? null,
     logo: overrides.logo ?? movieMetadata.logo,
     genres: overrides.genres ?? [
       { id: 16, name: 'Animation' },
@@ -132,6 +133,7 @@ export function createMockTVShowDetail(overrides: Partial<TVShowDetail> = {}): T
     episodeRunTime: overrides.episodeRunTime ?? [faker.number.int({ min: 30, max: 60 })],
     poster: overrides.poster ?? show.poster,
     backdrop: overrides.backdrop ?? show.backdrop,
+    backdropFocus: overrides.backdropFocus ?? null,
     logo: overrides.logo ?? `/logos/${faker.string.alphanumeric(8)}.png`,
     genres: overrides.genres ?? [{ id: 18, name: 'Drama' }],
     popularity: overrides.popularity ?? show.popularity,

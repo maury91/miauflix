@@ -15,6 +15,7 @@ const movie = {
   runtime: 136,
   poster: '',
   backdrop: '',
+  backdropFocus: null,
   logo: '',
   genres: [],
   popularity: 10,

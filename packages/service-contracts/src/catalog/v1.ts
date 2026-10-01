@@ -10,6 +10,13 @@ export const mediaRefSchema = z.object({
   mediaId: z.number().int().positive(),
 });
 export const localizedGenreSchema = z.object({ id: z.number().int(), name: z.string() });
+export const backdropFocusSchema = z.object({
+  x: z.number().min(0).max(1),
+  y: z.number().min(0).max(1),
+});
+export const backdropFocusResponseSchema = z.object({
+  backdropFocus: backdropFocusSchema,
+});
 
 export const movieDetailSchema = mediaRefSchema.extend({
   mediaType: z.literal('movie'),
@@ -22,6 +29,7 @@ export const movieDetailSchema = mediaRefSchema.extend({
   poster: z.string(),
   backdrop: z.string(),
   logo: z.string(),
+  backdropFocus: backdropFocusSchema.nullable().default(null),
   genres: z.array(localizedGenreSchema),
   popularity: z.number(),
   rating: z.number(),
@@ -53,6 +61,7 @@ export const tvShowDetailSchema = mediaRefSchema.extend({
   poster: z.string(),
   backdrop: z.string(),
   logo: z.string(),
+  backdropFocus: backdropFocusSchema.nullable().default(null),
   genres: z.array(localizedGenreSchema),
   popularity: z.number(),
   rating: z.number(),
@@ -144,6 +153,7 @@ export const catalogStatusDetailsSchema = z.object({
 export type MediaType = z.infer<typeof mediaTypeSchema>;
 export type MediaRef = z.infer<typeof mediaRefSchema>;
 export type LocalizedGenre = z.infer<typeof localizedGenreSchema>;
+export type BackdropFocus = z.infer<typeof backdropFocusSchema>;
 export type MovieDetail = z.infer<typeof movieDetailSchema>;
 export type SeasonSummary = z.infer<typeof seasonSummarySchema>;
 export type TVShowDetail = z.infer<typeof tvShowDetailSchema>;

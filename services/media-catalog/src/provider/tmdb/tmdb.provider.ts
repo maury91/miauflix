@@ -2,6 +2,7 @@ import { logger } from '../../logger';
 import type { ApiCache } from '../../utils/api-cache';
 import type {
   CatalogProvider,
+  ProviderBackdropSource,
   ProviderChangesPage,
   ProviderEpisode,
   ProviderGenre,
@@ -146,6 +147,24 @@ export class TmdbProvider implements CatalogProvider {
       page++;
     }
     return [...seasonNumbers];
+  }
+
+  /**
+   * Derives a size-independent image key and w780 analysis URL from an HTTPS image.tmdb.org URL.
+   * Returns null for invalid URLs, other hosts or protocols, or unrecognized image paths.
+   */
+  getBackdropAnalysisSource(backdrop: string): ProviderBackdropSource | null {
+    try {
+      const url = new URL(backdrop);
+      if (url.protocol !== 'https:' || url.hostname !== 'image.tmdb.org') return null;
+      const match = url.pathname.match(/^(.*\/t\/p\/)[^/]+(\/.*)$/u);
+      if (!match) return null;
+      const imagePath = match[2];
+      url.pathname = `${match[1]}w780${imagePath}`;
+      return { key: imagePath, url: url.toString() };
+    } catch {
+      return null;
+    }
   }
 
   private async *changedPages(

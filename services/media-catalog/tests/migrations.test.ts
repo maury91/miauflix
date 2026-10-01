@@ -35,14 +35,14 @@ describe('catalog Drizzle migrations', () => {
       first.db.get<{ name: string }>(sql`SELECT name FROM sqlite_master WHERE name = 'episodes'`)
     ).toBeDefined();
     expect(first.db.all<{ hash: string }>(sql`SELECT hash FROM __drizzle_migrations`)).toHaveLength(
-      2
+      3
     );
     first.close();
 
     const second = new CatalogDatabase(path);
     expect(
       second.db.all<{ hash: string }>(sql`SELECT hash FROM __drizzle_migrations`)
-    ).toHaveLength(2);
+    ).toHaveLength(3);
     second.close();
   });
 
@@ -54,9 +54,11 @@ describe('catalog Drizzle migrations', () => {
     );
     original.db.run(sql`DROP INDEX api_cache_stale`);
     original.db.run(sql`ALTER TABLE api_cache DROP COLUMN stale_until`);
-    original.db.run(
-      sql`DELETE FROM __drizzle_migrations WHERE created_at = (SELECT MAX(created_at) FROM __drizzle_migrations)`
-    );
+    original.db.run(sql`DROP TABLE backdrop_focus`);
+    original.db.run(sql`
+      DELETE FROM __drizzle_migrations
+      WHERE created_at > (SELECT MIN(created_at) FROM __drizzle_migrations)
+    `);
     original.close();
 
     const upgraded = new CatalogDatabase(path);
@@ -66,7 +68,7 @@ describe('catalog Drizzle migrations', () => {
     expect(cache?.[0]).toBe(42);
     expect(
       upgraded.db.all<{ hash: string }>(sql`SELECT hash FROM __drizzle_migrations`)
-    ).toHaveLength(2);
+    ).toHaveLength(3);
     upgraded.close();
   });
 });

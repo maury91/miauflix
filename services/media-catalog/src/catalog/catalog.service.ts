@@ -1,3 +1,4 @@
+import { BackdropFocusRepository } from '../db/backdrop-focus.repo';
 import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
 import { SyncStateRepository } from '../db/sync-state.repo';
@@ -5,7 +6,9 @@ import { TVShowRepository } from '../db/tv-show.repo';
 import { HttpError } from '../errors';
 import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
+import { BackdropFocusService } from '../services/backdrop-focus.service';
 import type { BatchResponse, MediaRef, MovieDetail, SeasonDetail, TVShowDetail } from '../types';
+import type { BackdropFocus, MediaType } from '../types';
 import { CatalogHydrator } from './catalog.hydrator';
 import { CatalogLocalizer } from './catalog.localizer';
 import { CatalogSynchronizer } from './catalog.syncer';
@@ -30,6 +33,7 @@ export class CatalogService {
   private readonly hydrator: CatalogHydrator;
   private readonly localizer: CatalogLocalizer;
   private readonly synchronizer: CatalogSynchronizer;
+  private readonly backdropFocusService: BackdropFocusService;
 
   constructor(
     private readonly movies: MovieRepository,
@@ -37,7 +41,8 @@ export class CatalogService {
     private readonly localization: LocalizationRepository,
     private readonly syncState: SyncStateRepository,
     private readonly provider: CatalogProvider,
-    private readonly values: CatalogValues
+    private readonly values: CatalogValues,
+    backdropFocusRepository: BackdropFocusRepository
   ) {
     this.hydrator = new CatalogHydrator(
       this.movies,
@@ -45,7 +50,13 @@ export class CatalogService {
       this.provider,
       this.values.hydrationTtlMs
     );
-    this.localizer = new CatalogLocalizer(this.localization, this.tvShows, this.provider);
+    this.localizer = new CatalogLocalizer(
+      this.localization,
+      this.tvShows,
+      this.provider,
+      backdropFocusRepository
+    );
+    this.backdropFocusService = new BackdropFocusService(backdropFocusRepository);
     this.synchronizer = new CatalogSynchronizer(
       this.movies,
       this.tvShows,
@@ -130,6 +141,20 @@ export class CatalogService {
     const genres = await this.provider.getGenres(language);
     this.localization.upsertGenres(genres, language);
     return genres;
+  }
+
+  /**
+   * Returns cached or newly computed normalized backdrop focus for an already stored media ID.
+   * Does not hydrate missing media. Throws HttpError 404 for a missing row or 422 for an
+   * unsupported backdrop; database, retry-delay, download, and analysis errors propagate.
+   */
+  async ensureBackdropFocus(mediaType: MediaType, mediaId: number): Promise<BackdropFocus> {
+    const row =
+      mediaType === 'movie' ? this.movies.getMovie(mediaId) : this.tvShows.getTVShow(mediaId);
+    if (!row) throw new HttpError(404, `${mediaType} ${mediaId} not found`);
+    const source = this.provider.getBackdropAnalysisSource(row.backdrop);
+    if (!source) throw new HttpError(422, 'backdrop_not_available');
+    return this.backdropFocusService.ensure(source, this.provider.name);
   }
 
   /* -------------------------------------------------------------- change syncs */

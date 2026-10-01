@@ -1,3 +1,4 @@
+import type { BackdropFocus } from '@miauflix/service-contracts';
 import type { Source } from '@miauflix/source-metadata-extractor';
 
 export interface ShowResponse {
@@ -12,6 +13,7 @@ export interface ShowResponse {
   lastAirDate: string | null;
   poster: string | null;
   backdrop: string | null;
+  backdropFocus: BackdropFocus | null;
   logo: string | null;
   genres: string[];
   popularity: number | null;

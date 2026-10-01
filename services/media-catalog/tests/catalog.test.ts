@@ -8,6 +8,7 @@ import { eq } from 'drizzle-orm';
 import { CatalogHydrator } from '../src/catalog/catalog.hydrator';
 import { CatalogService, type CatalogValues } from '../src/catalog/catalog.service';
 import { CatalogSynchronizer } from '../src/catalog/catalog.syncer';
+import { BackdropFocusRepository } from '../src/db/backdrop-focus.repo';
 import { SYNC_STATE_MOVIES, SYNC_STATE_TV_SHOWS } from '../src/db/catalog-db.types';
 import { CatalogDatabase } from '../src/db/database';
 import { LocalizationRepository } from '../src/db/localization.repo';
@@ -98,6 +99,10 @@ class FakeProvider implements CatalogProvider {
     return true;
   }
 
+  getBackdropAnalysisSource(): null {
+    return null;
+  }
+
   async resolveExternal(): Promise<number | null> {
     return null;
   }
@@ -145,6 +150,7 @@ const setup = () => {
     tvShows: new TVShowRepository(db),
     localization: new LocalizationRepository(db),
     syncState: new SyncStateRepository(db),
+    backdropFocus: new BackdropFocusRepository(db),
   };
   const provider = new FakeProvider();
   const service = new CatalogService(
@@ -153,7 +159,8 @@ const setup = () => {
     repo.localization,
     repo.syncState,
     provider,
-    VALUES
+    VALUES,
+    repo.backdropFocus
   );
   return {
     db,
@@ -631,7 +638,8 @@ describe('CatalogService', () => {
       {
         ...VALUES,
         episodeSyncMode: 'ON_DEMAND',
-      }
+      },
+      repo.backdropFocus
     );
     await onDemand.syncIncompleteSeasons();
     expect(repo.tvShows.getSeasonWithEpisodes(100, 1)?.episodes).toHaveLength(0);
@@ -655,7 +663,8 @@ describe('CatalogService', () => {
       repo.localization,
       repo.syncState,
       provider,
-      VALUES
+      VALUES,
+      repo.backdropFocus
     );
     repo.tvShows.markSeasonUnsynced(100, 1);
     db.setWatching([]);

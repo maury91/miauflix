@@ -13,6 +13,7 @@ import type { Deps } from './common.types';
 import { createConfigRoutes } from './config.routes';
 import { createIntegrationRoutes } from './integrations.routes';
 import { createListRoutes } from './list.routes';
+import { createMediaRoutes } from './media.routes';
 import { createMovieRoutes } from './movie.routes';
 import { createPlaybackRoutes } from './playback.routes';
 import { createPreloadRoutes } from './preload.routes';
@@ -53,6 +54,7 @@ function createApiRoutes(deps: Deps) {
     .route('/integrations', createIntegrationRoutes(deps))
     .route('/movies', createMovieRoutes(deps))
     .route('/shows', createShowRoutes(deps))
+    .route('/media', createMediaRoutes(deps))
     .route('/stream', createStreamRoutes(deps))
     .route('/progress', createProgressRoutes(deps))
     .route('/preload', createPreloadRoutes(deps))
