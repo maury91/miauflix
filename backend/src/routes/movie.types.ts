@@ -1,3 +1,4 @@
+import type { BackdropFocus } from '@miauflix/service-contracts';
 import type { Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 import type { Quality } from '@miauflix/source-metadata-extractor';
 
@@ -24,6 +25,7 @@ export interface MovieResponse {
   runtime: number;
   poster: string;
   backdrop: string;
+  backdropFocus: BackdropFocus | null;
   logo: string;
   genres: string[];
   popularity: number;

@@ -38,8 +38,21 @@ WORKDIR /app
 COPY --from=builder /tmp/media-catalog.js ./index.js
 # CatalogDatabase resolves Drizzle migrations relative to the bundled entrypoint.
 COPY --from=builder /workspace/services/media-catalog/src/db/migrations ./migrations
+# Keep the face detector self-contained in the runtime image. Only the model
+# used by backdrop focus and the WASM binaries are needed.
+COPY --from=builder /workspace/node_modules/@vladmandic/human/models/blazeface.json ./models/blazeface.json
+COPY --from=builder /workspace/node_modules/@vladmandic/human/models/blazeface.bin ./models/blazeface.bin
+# CenterNet provides a scene-level person signal that lets stylized animal faces
+# use BlazeFace's lower-confidence candidates without accepting statue/background false positives.
+COPY --from=builder /workspace/node_modules/@vladmandic/human/models/centernet.json ./models/centernet.json
+COPY --from=builder /workspace/node_modules/@vladmandic/human/models/centernet.bin ./models/centernet.bin
+COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm.wasm ./wasm/tfjs-backend-wasm.wasm
+COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-simd.wasm ./wasm/tfjs-backend-wasm-simd.wasm
+COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-threaded-simd.wasm ./wasm/tfjs-backend-wasm-threaded-simd.wasm
 
 ENV DATA_DIR=/app/data
+ENV BACKDROP_FOCUS_MODEL_DIR=/app/models
+ENV BACKDROP_FOCUS_WASM_DIR=/app/wasm
 RUN groupadd --gid 911 linuxserver && \
     useradd --uid 911 --gid 911 --create-home --shell /usr/sbin/nologin linuxserver && \
     mkdir -p /app/data && \

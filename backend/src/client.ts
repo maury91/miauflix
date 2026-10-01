@@ -24,6 +24,7 @@ export type {
 export type * from './routes/auth.types';
 export type * from './routes/config.types';
 export type * from './routes/list.types';
+export type * from './routes/media.types';
 export type * from './routes/movie.types';
 export type * from './routes/playable.types';
 export type * from './routes/playback.types';
