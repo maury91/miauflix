@@ -7,16 +7,15 @@ import styled from 'styled-components';
 import {
   type BackdropFocus,
   type BackdropPositionContext,
-  getBackdropPosition,
+  getBackdropPlacement,
 } from '../backdrop-focus';
+import {
+  getHeroBackdropLayout,
+  HERO_BACKDROP_LEFT_CSS,
+  HERO_DETAILS_LEFT_CSS,
+  HERO_DETAILS_WIDTH_CSS,
+} from '../hero-backdrop-layout';
 import { getImageUrl, getMediaTitle } from '../media.utils';
-
-const BACKDROP_LAYER_LEFT_RATIO = 0.32;
-const BACKDROP_LAYER_WIDTH_RATIO = 1 - BACKDROP_LAYER_LEFT_RATIO;
-const SAFE_BACKDROP_SCREEN_X = 0.76;
-const SAFE_BACKDROP_TARGET_X =
-  (SAFE_BACKDROP_SCREEN_X - BACKDROP_LAYER_LEFT_RATIO) / BACKDROP_LAYER_WIDTH_RATIO;
-const SAFE_BACKDROP_TARGET_Y = 0.5;
 
 interface BackdropLayerState {
   key: string;
@@ -27,11 +26,14 @@ interface BackdropLayerState {
 }
 
 const Hero = styled.header`
+  --hero-details-width: ${HERO_DETAILS_WIDTH_CSS};
+  --hero-text-right: calc(${HERO_DETAILS_LEFT_CSS} + var(--hero-details-width));
+  --hero-free-width: calc(100vw - var(--hero-text-right));
   position: absolute;
   inset: 0 0 auto;
   z-index: 1;
   height: 55vh;
-  padding: 10vh 5vw 9vh 7vw;
+  padding: 10vh 5vw 9vh ${HERO_DETAILS_LEFT_CSS};
   display: flex;
   align-items: flex-end;
   overflow: hidden;
@@ -45,7 +47,7 @@ const Hero = styled.header`
     pointer-events: none;
     background:
       radial-gradient(
-        ellipse 72% 115% at 88% 0%,
+        ellipse 72% 115% at calc(var(--hero-text-right) + var(--hero-free-width) * 0.7) 0%,
         transparent 35%,
         rgba(0, 0, 0, 0.16) 51%,
         rgba(0, 0, 0, 0.78) 75%,
@@ -54,9 +56,9 @@ const Hero = styled.header`
       linear-gradient(
         90deg,
         #03050d 0%,
-        rgba(3, 5, 13, 0.96) 28%,
-        rgba(3, 5, 13, 0.35) 58%,
-        transparent 78%
+        rgba(3, 5, 13, 0.96) calc(${HERO_DETAILS_LEFT_CSS} + var(--hero-details-width) * 0.48),
+        rgba(3, 5, 13, 0.35) calc(var(--hero-text-right) + var(--hero-free-width) * 0.14),
+        transparent calc(var(--hero-text-right) + var(--hero-free-width) * 0.55)
       ),
       linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.62) 17%, transparent 48%);
   }
@@ -65,7 +67,7 @@ const Hero = styled.header`
     content: '';
     position: absolute;
     top: 39.5vh;
-    left: 65vw;
+    left: calc(var(--hero-text-right) + var(--hero-free-width) * 0.285);
     right: 0;
     height: 15.5vh;
     z-index: 3;
@@ -76,21 +78,19 @@ const Hero = styled.header`
 
 const BackdropLayer = styled.div<{
   $url: string;
-  $position: string;
   $visible: boolean;
   $top: boolean;
 }>`
   position: absolute;
   top: 0;
-  left: 32vw;
+  left: ${HERO_BACKDROP_LEFT_CSS};
   right: 0;
   height: 55vh;
   z-index: ${({ $top }) => ($top ? 1 : 0)};
   pointer-events: none;
-  background:
-    ${({ $url, $position }) =>
-      $url ? `url(${JSON.stringify($url)}) ${$position} / cover no-repeat` : 'none'},
-    #000;
+  background-color: #000;
+  background-image: ${({ $url }) => ($url ? `url(${JSON.stringify($url)})` : 'none')};
+  background-repeat: no-repeat;
   opacity: ${({ $visible }) => ($visible ? 1 : 0)};
   transition: opacity 350ms ease;
 
@@ -100,7 +100,7 @@ const BackdropLayer = styled.div<{
 `;
 
 const Details = styled.div`
-  width: min(44vw, 720px);
+  width: var(--hero-details-width);
   position: relative;
   z-index: 4;
 `;
@@ -161,7 +161,7 @@ export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
 
     const updateSize = () =>
       setHeroSize({
-        width: hero.clientWidth * BACKDROP_LAYER_WIDTH_RATIO,
+        width: hero.clientWidth,
         height: hero.clientHeight,
       });
     updateSize();
@@ -269,16 +269,19 @@ export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
     return () => window.clearTimeout(timer);
   }, [incomingBackdrop, incomingVisible, promoteIncoming]);
 
-  const positionFor = (layer: BackdropLayerState): string => {
+  const layout = getHeroBackdropLayout(heroSize.width);
+  const placementFor = (layer: BackdropLayerState) => {
     const context: BackdropPositionContext = {
       imageWidth: layer.imageWidth,
       imageHeight: layer.imageHeight,
-      containerWidth: heroSize.width,
+      containerWidth: layout?.width ?? 0,
       containerHeight: heroSize.height,
-      targetX: SAFE_BACKDROP_TARGET_X,
-      targetY: SAFE_BACKDROP_TARGET_Y,
+      targetX: layout?.targetX,
+      targetY: layout?.targetY,
+      maxZoom: 1.5,
     };
-    return getBackdropPosition(layer.focus, context);
+    const placement = getBackdropPlacement(layer.focus, context);
+    return { backgroundPosition: placement.position, backgroundSize: placement.size };
   };
 
   if (!media) return <Hero ref={heroRef} aria-hidden="true" />;
@@ -295,7 +298,7 @@ export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
       {activeBackdrop && (
         <BackdropLayer
           $url={activeBackdrop.url}
-          $position={positionFor(activeBackdrop)}
+          style={placementFor(activeBackdrop)}
           $visible
           $top={!incomingBackdrop}
           aria-hidden="true"
@@ -304,7 +307,7 @@ export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
       {incomingBackdrop && (
         <BackdropLayer
           $url={incomingBackdrop.url}
-          $position={positionFor(incomingBackdrop)}
+          style={placementFor(incomingBackdrop)}
           $visible={incomingVisible}
           $top
           onTransitionEnd={promoteIncoming}

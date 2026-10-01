@@ -42,6 +42,10 @@ COPY --from=builder /workspace/services/media-catalog/src/db/migrations ./migrat
 # used by backdrop focus and the WASM binaries are needed.
 COPY --from=builder /workspace/node_modules/@vladmandic/human/models/blazeface.json ./models/blazeface.json
 COPY --from=builder /workspace/node_modules/@vladmandic/human/models/blazeface.bin ./models/blazeface.bin
+# CenterNet provides a scene-level person signal that lets stylized animal faces
+# use BlazeFace's lower-confidence candidates without accepting statue/background false positives.
+COPY --from=builder /workspace/node_modules/@vladmandic/human/models/centernet.json ./models/centernet.json
+COPY --from=builder /workspace/node_modules/@vladmandic/human/models/centernet.bin ./models/centernet.bin
 COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm.wasm ./wasm/tfjs-backend-wasm.wasm
 COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-simd.wasm ./wasm/tfjs-backend-wasm-simd.wasm
 COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-threaded-simd.wasm ./wasm/tfjs-backend-wasm-threaded-simd.wasm

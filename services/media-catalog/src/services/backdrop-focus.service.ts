@@ -8,7 +8,7 @@ import {
   BackdropFocusRepository,
 } from '../db/backdrop-focus.repo';
 import type { ProviderBackdropSource } from '../provider/provider';
-import { type BackdropFaceFocusDetector, detectBackdropFaceFocus } from './backdrop-face-focus';
+import { type BackdropFaceFocusDetector, detectBackdropSubjectFocus } from './backdrop-face-focus';
 
 const DOWNLOAD_TIMEOUT_MS = 15_000;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
@@ -34,13 +34,13 @@ export class BackdropFocusService {
 
   constructor(
     private readonly repository: BackdropFocusRepository,
-    private readonly detectFaceFocus: BackdropFaceFocusDetector = detectBackdropFaceFocus
+    private readonly detectFaceFocus: BackdropFaceFocusDetector = detectBackdropSubjectFocus
   ) {}
 
   /**
    * Returns cached focus or analyzes and persists it, sharing concurrent work for the same
    * provider, image key, and algorithm version. Coordinates are normalized to [0, 1].
-   * Face detection failures or no faces fall back to a square smartcrop analysis.
+   * Detector failures or no accepted subjects fall back to a square smartcrop analysis.
    * Rejects with backdrop_focus_temporarily_unavailable during the failure retry delay;
    * download, image analysis, and database errors otherwise propagate.
    */

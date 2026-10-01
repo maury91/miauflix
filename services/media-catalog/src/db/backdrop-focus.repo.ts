@@ -4,7 +4,7 @@ import { and, eq } from 'drizzle-orm';
 import type { CatalogDatabase } from './database';
 import { backdropFocus } from './schema';
 
-export const BACKDROP_FOCUS_ALGORITHM_VERSION = 'face-union-square-v3';
+export const BACKDROP_FOCUS_ALGORITHM_VERSION = 'subject-prominence-v5';
 const FAILURE_RETRY_MS = 60 * 60 * 1000;
 
 export interface BackdropFocusKey {
