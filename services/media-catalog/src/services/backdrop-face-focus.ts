@@ -277,11 +277,16 @@ async function loadHuman(mode: HumanMode): Promise<HumanRuntime | null> {
   }
 }
 
-/** Shares each detector initialization, caching null on failure without retrying. */
+/** Shares in-flight detector initialization and retains only successful runtimes for reuse. */
 async function getHuman(mode: HumanMode): Promise<HumanRuntime | null> {
   const existing = humanPromises.get(mode);
   if (existing) return existing;
-  const promise = loadHuman(mode).catch(() => null);
+  const promise = loadHuman(mode)
+    .catch(() => null)
+    .then(human => {
+      if (!human) humanPromises.delete(mode);
+      return human;
+    });
   humanPromises.set(mode, promise);
   return promise;
 }
