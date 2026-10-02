@@ -133,6 +133,10 @@ docker compose exec miauflix npm run start:frontend
 
 ### Trusted Local HTTPS
 
+The development startup creates private, host-owned data directories without sudo. Development images do not require the production service UID/GID ownership. If existing data directories are inaccessible, restore access for your host user before starting; the script reports the affected path and preserves existing data and permissions.
+
+Run `bash scripts/test-development-data-dir.sh` to check fresh and repeat directory preparation without Docker or sudo.
+
 On macOS, create and trust the local development certificate before starting the Docker development stack:
 
 ```bash

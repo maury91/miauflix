@@ -61,6 +61,7 @@ export class DownloadService {
   private readonly allocationReconcileAt = new Map<number, number>();
   private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
   private readonly bitfieldTrackedTorrents = new WeakMap<Torrent, Set<number>>();
+  private readonly torrentStartPromises = new Map<string, Promise<Torrent>>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -336,18 +337,19 @@ export class DownloadService {
       });
 
       // Add torrent with priority-specific configuration
-      const torrent = await this.addTorrent(source, storage);
+      const torrent = await this.addTorrentWithLock(source, storage);
+      const totalPieces = this.getTorrentPieceCount(torrent);
 
       // Patch storage with correct totalPieces and size after torrent is ready
       await this.storageService.updateDownloadProgress({
         movieSourceId: source.id,
         downloadedPieces: torrent.bitfield?.buffer || new Uint8Array(0),
-        totalPieces: torrent.numPieces,
+        totalPieces,
         size: torrent.length,
       });
       await this.storageService.updateTorrentLayout(
         source.id,
-        torrent.numPieces,
+        totalPieces,
         torrent.pieceLength,
         torrent.length
       );
@@ -410,7 +412,7 @@ export class DownloadService {
     const fileOffset = Number(file.offset ?? 0);
     const firstPiece = Math.max(0, Math.floor(fileOffset / pieceLength));
     const lastPiece = Math.min(
-      download.torrent.numPieces - 1,
+      this.getTorrentPieceCount(download.torrent) - 1,
       Math.max(
         firstPiece,
         Math.ceil((fileOffset + Math.min(target, file.length)) / pieceLength) - 1
@@ -429,6 +431,25 @@ export class DownloadService {
 
   async pauseSource(sourceId: number): Promise<boolean> {
     return this.pauseDownload(sourceId);
+  }
+
+  async isRangeVerified(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean> {
+    if (
+      !Number.isInteger(firstPiece) ||
+      !Number.isInteger(lastPiece) ||
+      firstPiece < 0 ||
+      lastPiece < firstPiece
+    ) {
+      return false;
+    }
+    const storage = await this.storageService.getStorageByMovieSource(sourceId);
+    if (!storage) return false;
+    const torrent = this.client.torrents.find(item => item.path === storage.location);
+    if (!torrent?.bitfield) return false;
+    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+      if (!torrent.bitfield.get(piece)) return false;
+    }
+    return true;
   }
 
   /** Promote the already-added source; no source ranking or replacement occurs. */
@@ -465,7 +486,7 @@ export class DownloadService {
    */
   private async addTorrent(
     { magnetLink, hash, file }: Pick<MovieSource, 'file' | 'hash' | 'magnetLink'>,
-    { location, downloadedPieces }: Storage,
+    { location, downloadedPieces }: Pick<Storage, 'downloadedPieces' | 'location'>,
     timeout: number = 30000
   ): Promise<Torrent> {
     return new Promise((resolve, reject) => {
@@ -485,9 +506,11 @@ export class DownloadService {
           torrentOptions.bitfield = downloadedPieces;
         }
 
-        const existingTorrent = this.client.torrents.find(t => t.infoHash === hash);
+        const existingTorrent = this.client.torrents.find(
+          t => t.infoHash?.toLowerCase() === hash.toLowerCase()
+        );
         if (existingTorrent) {
-          resolve(existingTorrent);
+          void this.waitForTorrentReady(existingTorrent, timeout).then(resolve, reject);
           return;
         }
 
@@ -509,11 +532,17 @@ export class DownloadService {
           const onError = (error: Error) => {
             // Torrent always gets destroyed on error, no need to listen further
             temporaryTorrent.off('error', onError);
-            if ('message' in error && error.message === `Cannot add duplicate torrent ${hash}`) {
+            clearTimeout(timeoutId);
+            if (
+              'message' in error &&
+              error.message.toLowerCase() === `cannot add duplicate torrent ${hash}`.toLowerCase()
+            ) {
               // Search again, maybe some race condition happened
-              const existingTorrent = this.client.torrents.find(t => t.infoHash === hash);
+              const existingTorrent = this.client.torrents.find(
+                t => t.infoHash?.toLowerCase() === hash.toLowerCase()
+              );
               if (existingTorrent) {
-                resolve(existingTorrent);
+                void this.waitForTorrentReady(existingTorrent, timeout).then(resolve, reject);
                 return;
               }
             }
@@ -531,6 +560,74 @@ export class DownloadService {
         reject(error);
       }
     });
+  }
+
+  private async addTorrentWithLock(
+    source: Pick<MovieSource, 'file' | 'hash' | 'magnetLink'>,
+    storage: Pick<Storage, 'downloadedPieces' | 'location'>
+  ): Promise<Torrent> {
+    const key = source.hash.toLowerCase();
+    const inFlight = this.torrentStartPromises.get(key);
+    if (inFlight) return inFlight;
+
+    const start = this.addTorrent(source, storage).finally(() => {
+      if (this.torrentStartPromises.get(key) === start) {
+        this.torrentStartPromises.delete(key);
+      }
+    });
+    this.torrentStartPromises.set(key, start);
+    return start;
+  }
+
+  private waitForTorrentReady(torrent: Torrent, timeout: number): Promise<Torrent> {
+    if (torrent.ready) return Promise.resolve(torrent);
+
+    return new Promise((resolve, reject) => {
+      let settled = false;
+      const cleanup = () => {
+        if (timeoutId) clearTimeout(timeoutId);
+        torrent.removeListener('ready', onReady);
+        torrent.removeListener('error', onError);
+        torrent.removeListener('close', onClose);
+      };
+      const finish = (callback: () => void) => {
+        if (settled) return;
+        settled = true;
+        cleanup();
+        callback();
+      };
+      const onReady = () => {
+        finish(() => resolve(torrent));
+      };
+      const onError = (error: Error) => {
+        finish(() => reject(error));
+      };
+      const onClose = () => {
+        finish(() =>
+          reject(new ErrorWithStatus('Torrent closed before metadata was ready', 'torrent_closed'))
+        );
+      };
+      const timeoutId = setTimeout(() => {
+        finish(() =>
+          reject(new ErrorWithStatus('Timeout waiting for torrent metadata', 'torrent_not_ready'))
+        );
+      }, timeout);
+      torrent.once('ready', onReady);
+      torrent.once('error', onError);
+      torrent.once('close', onClose);
+    });
+  }
+
+  private getTorrentPieceCount(torrent: Torrent): number {
+    const pieces = (torrent as Torrent & { pieces?: unknown[] }).pieces;
+    const totalPieces = pieces?.length;
+    if (typeof totalPieces !== 'number' || !Number.isInteger(totalPieces) || totalPieces <= 0) {
+      throw new ErrorWithStatus(
+        'Torrent metadata did not include a valid piece count',
+        'invalid_torrent_metadata'
+      );
+    }
+    return totalPieces;
   }
 
   /**
@@ -697,7 +794,7 @@ export class DownloadService {
         await this.storageService.updateDownloadProgress({
           movieSourceId,
           downloadedPieces: new Uint8Array(bitfieldBuffer),
-          totalPieces: torrent.numPieces,
+          totalPieces: this.getTorrentPieceCount(torrent),
           size: torrent.length,
         });
         await this.reconcileAllocationIfDue(movieSourceId);

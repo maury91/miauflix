@@ -157,6 +157,18 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       return;
     }
 
+    if (
+      !Number.isInteger(totalPieces) ||
+      totalPieces <= 0 ||
+      (size !== undefined && (!Number.isFinite(size) || size < 0))
+    ) {
+      logger.warn(
+        'StorageService',
+        `Ignoring download progress with invalid torrent metadata for movie source ${movieSourceId}`
+      );
+      return;
+    }
+
     // Calculate downloaded progress from bitfield
     const downloaded = await this.calculateProgressFromBitfield(downloadedPieces, totalPieces);
 
@@ -189,6 +201,20 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   ): Promise<void> {
     const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
     if (!storage) return;
+    if (
+      !Number.isInteger(totalPieces) ||
+      totalPieces <= 0 ||
+      !Number.isInteger(pieceLength) ||
+      pieceLength <= 0 ||
+      !Number.isFinite(logicalBytes) ||
+      logicalBytes < 0
+    ) {
+      logger.warn(
+        'StorageService',
+        `Ignoring invalid torrent layout for movie source ${movieSourceId}`
+      );
+      return;
+    }
     await this.storageRepository.update(storage.id, {
       totalPieces,
       pieceLength,
@@ -459,7 +485,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    */
   @traced('StorageService')
   async calculateProgressFromBitfield(bitfield: Uint8Array, totalPieces: number): Promise<number> {
-    if (totalPieces === 0) return 0;
+    if (!Number.isInteger(totalPieces) || totalPieces <= 0) return 0;
 
     let downloadedPieces = 0;
 

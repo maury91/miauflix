@@ -71,6 +71,14 @@ export function AppShell() {
     }
   }, [appState, isAdmin, isAuthenticated]);
 
+  useEffect(() => {
+    const openSettings = () => {
+      if (isAuthenticated && isAdmin) setConfigurationWizardActive(true);
+    };
+    window.addEventListener('miauflix:settings:open', openSettings);
+    return () => window.removeEventListener('miauflix:settings:open', openSettings);
+  }, [isAdmin, isAuthenticated]);
+
   const renderPage = () => {
     if (typeof window !== 'undefined' && window.location.pathname.startsWith('/auth/qr/')) {
       return <QrApprovalPage key="qr-approval" />;

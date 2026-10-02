@@ -1,40 +1,125 @@
 import {
   useEnsureBackdropFocusMutation,
   useGetMovieQuery,
-  useGetSeasonQuery,
   useGetShowQuery,
+  useLazyGetSeasonQuery,
 } from '@features/media/api/media.api';
-import type { MediaDto, SeasonResponse } from '@miauflix/backend';
+import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
+import type {
+  MediaDto,
+  PlayableRef,
+  PreloadPreparationSnapshot,
+  SeasonResponse,
+} from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
-import { forwardRef } from 'react';
+import { forwardRef, type UIEvent } from 'react';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 
-import { getBackdropPosition } from '../backdrop-focus';
+import type { BackdropPositionContext } from '../backdrop-focus';
+import { getBackdropPlacement } from '../backdrop-focus';
 import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
 import { getImageUrl, getMediaTitle } from '../media.utils';
+import { SourcePreparationStatus } from './SourcePreparationStatus';
 
-const Page = styled.main<{ $backdrop: string; $position: string }>`
+const Page = styled.main<{ $backdrop: string; $position: string; $size: string }>`
   position: absolute;
   inset: 0;
   z-index: 3;
-  overflow: hidden auto;
-  padding: 16vh 5vw 8vh;
-  background:
-    linear-gradient(
-      90deg,
-      #000 0%,
-      rgba(0, 0, 0, 0.92) 34%,
-      rgba(0, 0, 0, 0.35) 66%,
-      rgba(0, 0, 0, 0.14)
-    ),
-    linear-gradient(0deg, #000 0%, transparent 42%),
-    ${({ $backdrop, $position }) =>
-      `url(${JSON.stringify($backdrop)}) ${$position} / cover no-repeat`},
-    #000;
+  overflow: hidden;
+  padding: 15vh 5vw 5vh;
+  background: #000;
   outline: none;
+
+  &::before {
+    position: absolute;
+    inset: 0;
+    z-index: -3;
+    content: '';
+    background: url(${({ $backdrop }) => JSON.stringify($backdrop)})
+      ${({ $position }) => $position} / ${({ $size }) => $size} no-repeat;
+  }
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    z-index: -2;
+    pointer-events: none;
+    content: '';
+    background:
+      linear-gradient(
+        90deg,
+        #000 0%,
+        rgba(0, 0, 0, 0.94) 29%,
+        rgba(0, 0, 0, 0.22) 57%,
+        rgba(0, 0, 0, 0.92) 100%
+      ),
+      linear-gradient(0deg, #000 0%, transparent 30%),
+      linear-gradient(180deg, rgba(0, 0, 0, 0.55), transparent 18%);
+  }
+
+  @media (max-width: 860px) {
+    overflow: hidden auto;
+    padding: 13vh 6vw 7vh;
+
+    &::after {
+      background:
+        linear-gradient(90deg, rgba(0, 0, 0, 0.96), rgba(0, 0, 0, 0.56) 80%, rgba(0, 0, 0, 0.92)),
+        linear-gradient(0deg, #000 0%, transparent 35%);
+    }
+  }
+`;
+
+const Header = styled.header`
+  position: fixed;
+  top: 3vh;
+  left: 2vw;
+  z-index: 4;
+
+  @media (max-width: 860px) {
+    top: 3vh;
+    left: 6vw;
+  }
+`;
+
+const BackButton = styled.button`
+  min-height: 4.5vh;
+  padding: 0.8vh 1.2vw;
+  border: 0.2vh solid ${PALETTE.background.border};
+  border-radius: 0.6vh;
+  background: rgba(17, 23, 25, 0.92);
+  color: ${PALETTE.text.primary};
+  font:
+    600 clamp(0.8rem, 1.8vh, 1rem) 'Poppins',
+    sans-serif;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    border-color: ${PALETTE.color.interactive};
+    background: ${PALETTE.color.interactiveSubtle};
+    outline: none;
+  }
+`;
+
+const Layout = styled.div`
+  display: grid;
+  grid-template-columns: minmax(280px, 34vw) minmax(360px, 1fr);
+  gap: clamp(2rem, 5vw, 6rem);
+  height: 100%;
+  min-height: 0;
+
+  @media (max-width: 860px) {
+    display: block;
+    height: auto;
+  }
+`;
+
+const Content = styled.div`
+  min-width: 0;
+  overflow: hidden auto;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
@@ -42,18 +127,13 @@ const Page = styled.main<{ $backdrop: string; $position: string }>`
   }
 `;
 
-const Content = styled.div`
-  width: min(48vw, 760px);
-  min-width: min(620px, 80vw);
-`;
-
 const Logo = styled.img`
   display: block;
   width: min(25vw, 380px);
   max-height: 13vh;
+  margin-bottom: 2vh;
   object-fit: contain;
   object-position: left bottom;
-  margin-bottom: 2vh;
 `;
 
 const Title = styled.h1`
@@ -61,13 +141,30 @@ const Title = styled.h1`
   font-size: clamp(2.4rem, 5vh, 4.8rem);
   line-height: 1;
   font-weight: 600;
-  text-transform: none;
 `;
 
 const Metadata = styled.p`
   margin: 0 0 1.2vh;
   color: ${PALETTE.text.secondary};
   font-size: clamp(0.9rem, 2.3vh, 1.25rem);
+`;
+
+const MetadataRow = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+
+  @media (max-width: 860px) {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+`;
+
+const MetadataBlock = styled.div`
+  flex: 1 1 20rem;
+  min-width: 0;
 `;
 
 const Overview = styled.p`
@@ -79,69 +176,128 @@ const Overview = styled.p`
 `;
 
 const SectionLabel = styled.h2`
-  margin: 4vh 0 1vh;
+  margin: 3vh 0 1vh;
   font-size: clamp(1rem, 2.5vh, 1.45rem);
   font-weight: 500;
-  text-transform: none;
 `;
 
-const SeasonButton = styled.button<{ $selected: boolean }>`
-  min-width: 13vw;
-  min-height: 5vh;
-  padding: 1vh 1.4vw;
-  border: 0.25vh solid
-    ${({ $selected }) => ($selected ? PALETTE.color.interactive : PALETTE.background.border)};
-  border-radius: 0.7vh;
+const SeasonMenu = styled.nav`
+  display: grid;
+  gap: 0.65vh;
+  max-height: 30vh;
+  overflow: auto;
+  padding-right: 0.4vw;
+  scrollbar-width: thin;
+
+  @media (max-width: 860px) {
+    display: flex;
+    max-height: none;
+    overflow-x: auto;
+    padding-bottom: 0.8vh;
+  }
+`;
+
+const SeasonButton = styled.button<{ $selected: boolean; $focused: boolean }>`
+  min-height: 4.8vh;
+  padding: 0.9vh 1vw;
+  border: 0.2vh solid
+    ${({ $focused, $selected }) =>
+      $focused || $selected ? PALETTE.color.interactive : PALETTE.background.border};
+  border-left-width: 0.55vh;
+  border-radius: 0.55vh;
   background: ${({ $selected }) =>
-    $selected ? PALETTE.color.interactive : PALETTE.background.surface2};
+    $selected ? PALETTE.color.interactiveSubtle : 'rgba(17, 23, 25, 0.76)'};
   color: ${PALETTE.text.primary};
   font:
     600 clamp(0.85rem, 2vh, 1.2rem) 'Poppins',
     sans-serif;
+  text-align: left;
   cursor: pointer;
-`;
 
-const SeasonMenu = styled.div`
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.8vw;
-`;
-
-const EpisodeRow = styled.div`
-  display: flex;
-  gap: 1vw;
-  overflow-x: auto;
-  padding: 0.8vh 0.3vw 1.5vh;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
+  @media (max-width: 860px) {
+    flex: 0 0 auto;
+    min-width: 9rem;
   }
 `;
 
-const Episode = styled.button<{ $selected: boolean; $image: string }>`
-  position: relative;
-  flex: 0 0 15vw;
-  aspect-ratio: 16 / 9;
+const EpisodePane = styled.section`
+  min-width: 0;
+  height: 100%;
   overflow: hidden;
+
+  @media (max-width: 860px) {
+    height: 60vh;
+    margin-top: 4vh;
+  }
+`;
+
+const EpisodeList = styled.div`
+  height: calc(100% - 3.5rem);
+  overflow: auto;
+  padding: 0.5rem 0.4rem 8vh 0;
+  scrollbar-width: thin;
+  scrollbar-color: ${PALETTE.background.border} transparent;
+`;
+
+const SeasonSection = styled.section`
+  scroll-margin-top: 1rem;
+  margin-bottom: 2.5vh;
+`;
+
+const EpisodeHeading = styled.h3`
+  margin: 0 0 0.8vh;
+  color: ${PALETTE.text.primary};
+  font-size: clamp(1rem, 2.5vh, 1.4rem);
+`;
+
+const EpisodeRow = styled.button<{ $selected: boolean; $image: string }>`
+  display: grid;
+  grid-template-columns: minmax(150px, 18vw) 1fr;
+  width: 100%;
+  min-height: 10vh;
+  margin-bottom: 0.8vh;
   padding: 0;
-  border: 0.35vh solid ${({ $selected }) => ($selected ? PALETTE.color.interactive : 'transparent')};
-  border-radius: 0.7vh;
-  background:
-    url(${({ $image }) => $image}) center / cover no-repeat,
-    ${PALETTE.background.surface2};
+  overflow: hidden;
+  border: 0.25vh solid
+    ${({ $selected }) => ($selected ? PALETTE.color.interactive : 'rgba(255, 255, 255, 0.14)')};
+  border-radius: 0.6vh;
+  background: rgba(17, 23, 25, 0.8);
   color: ${PALETTE.text.primary};
   text-align: left;
   cursor: pointer;
+
+  &::before {
+    display: block;
+    min-height: 10vh;
+    content: '';
+    background:
+      url(${({ $image }) => $image}) center / cover no-repeat,
+      ${PALETTE.background.surface2};
+  }
+
+  &:focus-visible {
+    outline: 0.3vh solid ${PALETTE.color.interactive};
+    outline-offset: 0.2vh;
+  }
+
+  @media (max-width: 860px) {
+    grid-template-columns: 38vw 1fr;
+  }
 `;
 
 const EpisodeCaption = styled.span`
-  position: absolute;
-  inset: auto 0 0;
-  padding: 2.2vh 0.7vw 0.7vh;
-  background: linear-gradient(transparent, rgba(0, 0, 0, 0.92));
-  font-size: clamp(0.75rem, 1.8vh, 1rem);
+  align-self: center;
+  padding: 1rem;
+  font-size: clamp(0.85rem, 2vh, 1.1rem);
   font-weight: 600;
+`;
+
+const ProgressMark = styled.span`
+  display: block;
+  margin-top: 0.5rem;
+  color: ${PALETTE.text.secondary};
+  font-size: 0.78em;
+  font-weight: 400;
 `;
 
 const ErrorState = styled.div`
@@ -149,44 +305,94 @@ const ErrorState = styled.div`
   color: ${PALETTE.text.secondary};
 `;
 
+const PrimaryAction = styled.button<{ $selected: boolean }>`
+  min-height: 5vh;
+  padding: 1vh 1.6vw;
+  border: 0.25vh solid
+    ${({ $selected }) => ($selected ? PALETTE.color.interactive : PALETTE.background.border)};
+  border-radius: 0.7vh;
+  background: ${({ $selected }) =>
+    $selected ? PALETTE.color.interactive : PALETTE.background.surface2};
+  color: ${PALETTE.text.primary};
+  font:
+    600 clamp(0.9rem, 2.1vh, 1.2rem) 'Poppins',
+    sans-serif;
+  cursor: pointer;
+`;
+
+interface MediaDetailsProps {
+  media: MediaDto;
+  onWatch: (playable: PlayableRef) => void;
+  onBack: () => void;
+  preparation?: PreloadPreparationSnapshot | null;
+}
+
 export interface MediaDetailsHandle {
   handleAction: (action: HomeAction) => NavigationOutcome;
 }
 
-interface MediaDetailsProps {
-  media: MediaDto;
-}
-
 const formatYear = (value: string | null | undefined) => value?.slice(0, 4) ?? '';
+const episodeKey = (seasonNumber: number, episodeNumber: number) =>
+  `${seasonNumber}:${episodeNumber}`;
 
-/**
- * Loads movie or show details and exposes season/episode navigation through the forwarded ref.
- * Requests missing backdrop focus, falling back to right-center positioning on analysis failure.
- */
 export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(function MediaDetails(
-  { media },
+  { media, onBack, onWatch, preparation = null },
   forwardedRef
 ) {
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
+  const [loadSeason] = useLazyGetSeasonQuery();
+  const progress = useGetProgressQuery(undefined);
   const pageRef = useRef<HTMLElement>(null);
-  const [resolvedBackdropFocus, setResolvedBackdropFocus] = useState<
-    MediaDetailsProps['media']['backdropFocus']
-  >(media.backdropFocus);
-  const [focusArea, setFocusArea] = useState<'season' | 'episodes'>('season');
-  const [seasonOpen, setSeasonOpen] = useState(false);
-  const [selectedSeasonIndex, setSelectedSeasonIndex] = useState(0);
-  const [temporarySeasonIndex, setTemporarySeasonIndex] = useState(0);
-  const [selectedEpisodeIndex, setSelectedEpisodeIndex] = useState(0);
+  const episodeListRef = useRef<HTMLDivElement>(null);
+  const sectionRefs = useRef(new Map<number, HTMLElement>());
+  const inflight = useRef(new Map<number, Promise<SeasonResponse | undefined>>());
+  const jumpToSeason = useRef<number | null>(null);
+  const [resolvedBackdropFocus, setResolvedBackdropFocus] = useState(media.backdropFocus);
+  const [backdropContext, setBackdropContext] = useState<BackdropPositionContext>();
+  const [focusedArea, setFocusedArea] = useState<'action' | 'season' | 'episodes'>(
+    media._type === 'movie' ? 'action' : 'season'
+  );
+  const [focusedSeasonIndex, setFocusedSeasonIndex] = useState(0);
+  const [activeSeasonNumber, setActiveSeasonNumber] = useState<number | null>(null);
+  const [selectedEpisode, setSelectedEpisode] = useState<{
+    seasonNumber: number;
+    episodeNumber: number;
+  } | null>(null);
+  const [loadedSeasons, setLoadedSeasons] = useState<Record<number, SeasonResponse>>({});
+  const [seasonErrors, setSeasonErrors] = useState<Record<number, boolean>>({});
+  const [loadingSeasons, setLoadingSeasons] = useState<Record<number, boolean>>({});
 
   const movie = useGetMovieQuery(media._type === 'movie' ? media.mediaId : skipToken);
   const show = useGetShowQuery(media._type === 'tvshow' ? media.mediaId : skipToken);
   const showDetails = show.data;
-  const seasons = showDetails?.seasons ?? [];
-  const selectedSeason = seasons[selectedSeasonIndex];
-  const season = useGetSeasonQuery(
-    media._type === 'tvshow' && selectedSeason
-      ? { showId: media.mediaId, season: selectedSeason.seasonNumber }
-      : skipToken
+  const seasons = useMemo(() => showDetails?.seasons ?? [], [showDetails?.seasons]);
+
+  const loadSeasonData = useCallback(
+    (seasonNumber: number) => {
+      const cached = loadedSeasons[seasonNumber];
+      if (cached) return Promise.resolve(cached);
+      const pending = inflight.current.get(seasonNumber);
+      if (pending) return pending;
+      setLoadingSeasons(previous => ({ ...previous, [seasonNumber]: true }));
+      const request = loadSeason({ showId: media.mediaId, season: seasonNumber })
+        .unwrap()
+        .then(data => {
+          setLoadedSeasons(previous => ({ ...previous, [seasonNumber]: data }));
+          setSeasonErrors(previous => ({ ...previous, [seasonNumber]: false }));
+          return data;
+        })
+        .catch(() => {
+          setSeasonErrors(previous => ({ ...previous, [seasonNumber]: true }));
+          return undefined;
+        })
+        .finally(() => {
+          inflight.current.delete(seasonNumber);
+          setLoadingSeasons(previous => ({ ...previous, [seasonNumber]: false }));
+        });
+      inflight.current.set(seasonNumber, request);
+      return request;
+    },
+    [loadedSeasons, loadSeason, media.mediaId]
   );
 
   useEffect(() => {
@@ -194,18 +400,28 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, [media]);
 
   useEffect(() => {
-    setFocusArea('season');
-    setSeasonOpen(false);
-    setSelectedSeasonIndex(0);
-    setTemporarySeasonIndex(0);
-    setSelectedEpisodeIndex(0);
+    document.body.dataset['miauflixDetails'] = 'true';
+    return () => {
+      delete document.body.dataset['miauflixDetails'];
+    };
+  }, []);
+
+  useEffect(() => {
+    setFocusedArea(media._type === 'movie' ? 'action' : 'season');
+    setFocusedSeasonIndex(0);
+    setActiveSeasonNumber(null);
+    setSelectedEpisode(null);
+    setLoadedSeasons({});
+    setSeasonErrors({});
+    setLoadingSeasons({});
+    inflight.current.clear();
+    jumpToSeason.current = null;
   }, [media]);
 
   useEffect(() => {
     let cancelled = false;
     setResolvedBackdropFocus(media.backdropFocus);
     if (media.backdropFocus || !media.backdrop) return;
-
     void ensureBackdropFocus({
       mediaType: media._type === 'movie' ? 'movie' : 'tv',
       mediaId: media.mediaId,
@@ -217,105 +433,65 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       .catch(() => {
         if (!cancelled) setResolvedBackdropFocus(null);
       });
-
     return () => {
       cancelled = true;
     };
   }, [ensureBackdropFocus, media]);
 
   useEffect(() => {
-    setSelectedEpisodeIndex(0);
-  }, [selectedSeasonIndex]);
+    if (media._type === 'tvshow' && seasons[0]) {
+      setActiveSeasonNumber(previous => previous ?? seasons[0].seasonNumber);
+      if (!selectedEpisode) jumpToSeason.current = seasons[0].seasonNumber;
+      void loadSeasonData(seasons[0].seasonNumber);
+    }
+  }, [loadSeasonData, media._type, seasons, selectedEpisode]);
 
-  const commitSeason = useCallback((index: number) => {
-    setSelectedSeasonIndex(index);
-    setTemporarySeasonIndex(index);
-    setSeasonOpen(false);
-    setFocusArea('episodes');
-  }, []);
-
-  const handleAction = useCallback(
-    (action: HomeAction): NavigationOutcome => {
-      if (media._type !== 'tvshow')
-        return action === 'back' ? { type: 'escape', direction: 'left' } : { type: 'handled' };
-      if (!seasons.length)
-        return action === 'back' ? { type: 'escape', direction: 'left' } : { type: 'handled' };
-
-      if (seasonOpen) {
-        if (action === 'up') {
-          setTemporarySeasonIndex(index => Math.max(0, index - 1));
-          return { type: 'handled' };
-        }
-        if (action === 'down') {
-          setTemporarySeasonIndex(index => Math.min(seasons.length - 1, index + 1));
-          return { type: 'handled' };
-        }
-        if (action === 'confirm') {
-          commitSeason(temporarySeasonIndex);
-          return { type: 'handled' };
-        }
-        if (action === 'back') {
-          setSeasonOpen(false);
-          return { type: 'handled' };
-        }
-        return { type: 'handled' };
-      }
-
-      if (focusArea === 'season') {
-        if (action === 'up') {
-          setSelectedSeasonIndex(index => Math.max(0, index - 1));
-          return { type: 'handled' };
-        }
-        if (action === 'down' || action === 'right') {
-          setFocusArea('episodes');
-          return { type: 'handled' };
-        }
-        if (action === 'confirm') {
-          setTemporarySeasonIndex(selectedSeasonIndex);
-          setSeasonOpen(true);
-          return { type: 'handled' };
-        }
-      } else {
-        const episodeCount = season.data?.episodes.length ?? 0;
-        if (action === 'left') {
-          setSelectedEpisodeIndex(index => Math.max(0, index - 1));
-          return { type: 'handled' };
-        }
-        if (action === 'right') {
-          setSelectedEpisodeIndex(index => Math.min(Math.max(0, episodeCount - 1), index + 1));
-          return { type: 'handled' };
-        }
-        if (action === 'up') {
-          setFocusArea('season');
-          return { type: 'handled' };
-        }
-        if (action === 'down' || action === 'confirm') return { type: 'handled' };
-      }
-
-      if (action === 'back') return { type: 'escape', direction: 'left' };
-      return { type: 'ignored' };
-    },
-    [
-      commitSeason,
-      focusArea,
-      media._type,
-      season.data?.episodes.length,
-      seasonOpen,
-      seasons.length,
-      selectedSeasonIndex,
-      temporarySeasonIndex,
-    ]
-  );
-
-  useImperativeHandle(forwardedRef, () => ({ handleAction }), [handleAction]);
+  useEffect(() => {
+    const season = seasons[focusedSeasonIndex];
+    if (!season || focusedArea !== 'season') return;
+    document
+      .getElementById(`season-${media.mediaId}-${season.seasonNumber}`)
+      ?.scrollIntoView({ block: 'nearest' });
+  }, [focusedArea, focusedSeasonIndex, media.mediaId, seasons]);
 
   const current = media._type === 'movie' ? movie.data : showDetails;
-  const isLoading = media._type === 'movie' ? movie.isLoading : show.isLoading;
-  const isError = media._type === 'movie' ? movie.isError : show.isError;
   const title = current?.title ?? getMediaTitle(media);
-  const backdrop = getImageUrl(current?.backdrop ?? media.backdrop, 'original');
+  const backdrop = getImageUrl(current?.backdrop ?? media.backdrop, 'w1280');
   const backdropFocus = current?.backdropFocus ?? media.backdropFocus ?? resolvedBackdropFocus;
-  const backdropPosition = getBackdropPosition(backdropFocus);
+  const backdropPlacement = getBackdropPlacement(backdropFocus, backdropContext);
+
+  useEffect(() => {
+    setBackdropContext(undefined);
+    const element = pageRef.current;
+    if (!element || !backdrop || typeof window === 'undefined') return;
+    let cancelled = false;
+    const image = new window.Image();
+    const update = () => {
+      if (cancelled || image.naturalWidth <= 0 || image.naturalHeight <= 0) return;
+      const bounds = element.getBoundingClientRect();
+      setBackdropContext({
+        imageWidth: image.naturalWidth,
+        imageHeight: image.naturalHeight,
+        containerWidth: bounds.width,
+        containerHeight: bounds.height,
+        targetX: 0.51,
+        targetY: 0.482,
+        maxZoom: 1.25,
+      });
+    };
+    image.onload = update;
+    image.src = backdrop;
+    if (image.complete) update();
+    const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
+    observer?.observe(element);
+    window.addEventListener('resize', update);
+    return () => {
+      cancelled = true;
+      observer?.disconnect();
+      window.removeEventListener('resize', update);
+    };
+  }, [backdrop]);
+
   const metadata = useMemo(() => {
     if (!current) return '';
     if (current.type === 'movie') {
@@ -336,80 +512,326 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       .join(' · ');
   }, [current]);
 
+  const loadedSections = useMemo(
+    () => seasons.map(item => loadedSeasons[item.seasonNumber]).filter(Boolean) as SeasonResponse[],
+    [loadedSeasons, seasons]
+  );
+  const flatEpisodes = useMemo(
+    () =>
+      loadedSections.flatMap(section => section.episodes.map(episode => ({ section, episode }))),
+    [loadedSections]
+  );
+
+  const targetEpisodeForSeason = useCallback(
+    (season: SeasonResponse) => {
+      const watched = (progress.data?.progress ?? [])
+        .filter(
+          entry =>
+            entry.playable.kind === 'episode' &&
+            entry.playable.showMediaId === media.mediaId &&
+            entry.playable.seasonNumber === season.seasonNumber
+        )
+        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0];
+      if (watched?.playable.kind === 'episode') {
+        const matching = season.episodes.find(
+          episode => episode.episodeNumber === watched.playable.episodeNumber
+        );
+        if (matching) return matching;
+      }
+      return season.episodes[0];
+    },
+    [media.mediaId, progress.data?.progress]
+  );
+
+  useEffect(() => {
+    const requested = jumpToSeason.current;
+    if (requested === null) return;
+    const section = loadedSeasons[requested];
+    if (!section || progress.isLoading) return;
+    jumpToSeason.current = null;
+    const target = targetEpisodeForSeason(section);
+    if (!target) return;
+    setSelectedEpisode({ seasonNumber: requested, episodeNumber: target.episodeNumber });
+    requestAnimationFrame(() =>
+      document
+        .getElementById(`episode-${media.mediaId}-${episodeKey(requested, target.episodeNumber)}`)
+        ?.scrollIntoView({ block: 'nearest' })
+    );
+  }, [loadedSeasons, media.mediaId, progress.isLoading, targetEpisodeForSeason]);
+
+  const selectSeason = useCallback(
+    (index: number) => {
+      const item = seasons[index];
+      if (!item) return;
+      setFocusedSeasonIndex(index);
+      setActiveSeasonNumber(item.seasonNumber);
+      setFocusedArea('episodes');
+      jumpToSeason.current = item.seasonNumber;
+      void loadSeasonData(item.seasonNumber);
+    },
+    [loadSeasonData, seasons]
+  );
+
+  const selectEpisode = useCallback(
+    (seasonNumber: number, episodeNumber: number, play = false) => {
+      setActiveSeasonNumber(seasonNumber);
+      setSelectedEpisode({ seasonNumber, episodeNumber });
+      setFocusedArea('episodes');
+      requestAnimationFrame(() =>
+        document
+          .getElementById(`episode-${media.mediaId}-${episodeKey(seasonNumber, episodeNumber)}`)
+          ?.scrollIntoView({ block: 'nearest' })
+      );
+      if (play)
+        onWatch({ kind: 'episode', showMediaId: media.mediaId, seasonNumber, episodeNumber });
+    },
+    [media.mediaId, onWatch]
+  );
+
+  const handleEpisodeScroll = useCallback(
+    (event: UIEvent<HTMLDivElement>) => {
+      const top = event.currentTarget.getBoundingClientRect().top + 24;
+      let currentSeason: number | null = null;
+      sectionRefs.current.forEach((node, seasonNumber) => {
+        if (node.getBoundingClientRect().top <= top) currentSeason = seasonNumber;
+      });
+      if (currentSeason !== null) setActiveSeasonNumber(currentSeason);
+      const element = event.currentTarget;
+      if (
+        element.scrollTop + element.clientHeight >=
+        element.scrollHeight - element.clientHeight * 1.5
+      ) {
+        const lastLoaded = loadedSections[loadedSections.length - 1]?.seasonNumber;
+        const next = seasons.findIndex(item => item.seasonNumber === lastLoaded) + 1;
+        if (next > 0 && seasons[next]) void loadSeasonData(seasons[next].seasonNumber);
+      }
+    },
+    [loadSeasonData, loadedSections, seasons]
+  );
+
+  const handleAction = useCallback(
+    (action: HomeAction): NavigationOutcome => {
+      if (media._type === 'movie') {
+        if (action === 'confirm') {
+          onWatch({ kind: 'movie', mediaId: media.mediaId });
+          return { type: 'handled' };
+        }
+        return action === 'back' ? { type: 'escape', direction: 'left' } : { type: 'handled' };
+      }
+      if (media._type !== 'tvshow' || seasons.length === 0)
+        return action === 'back' ? { type: 'escape', direction: 'left' } : { type: 'handled' };
+      if (focusedArea === 'season') {
+        if (action === 'up') setFocusedSeasonIndex(index => Math.max(0, index - 1));
+        else if (action === 'down')
+          setFocusedSeasonIndex(index => Math.min(seasons.length - 1, index + 1));
+        else if (action === 'right') setFocusedArea('episodes');
+        else if (action === 'confirm') selectSeason(focusedSeasonIndex);
+        else if (action === 'back') return { type: 'escape', direction: 'left' };
+        return { type: 'handled' };
+      }
+      const currentIndex = selectedEpisode
+        ? flatEpisodes.findIndex(
+            item =>
+              episodeKey(item.section.seasonNumber, item.episode.episodeNumber) ===
+              episodeKey(selectedEpisode.seasonNumber, selectedEpisode.episodeNumber)
+          )
+        : 0;
+      if (action === 'left') {
+        setFocusedArea('season');
+        return { type: 'handled' };
+      }
+      if (action === 'up' || action === 'down') {
+        const nextIndex = Math.max(
+          0,
+          Math.min(flatEpisodes.length - 1, currentIndex + (action === 'up' ? -1 : 1))
+        );
+        const next = flatEpisodes[nextIndex];
+        if (next) selectEpisode(next.section.seasonNumber, next.episode.episodeNumber);
+        else if (action === 'down') {
+          const last = loadedSections[loadedSections.length - 1]?.seasonNumber;
+          const nextSeason = seasons.findIndex(item => item.seasonNumber === last) + 1;
+          if (nextSeason > 0 && seasons[nextSeason]) {
+            jumpToSeason.current = seasons[nextSeason].seasonNumber;
+            void loadSeasonData(seasons[nextSeason].seasonNumber);
+          }
+        }
+        return { type: 'handled' };
+      }
+      if (action === 'confirm') {
+        const current = flatEpisodes[currentIndex];
+        if (current)
+          selectEpisode(current.section.seasonNumber, current.episode.episodeNumber, true);
+        return { type: 'handled' };
+      }
+      if (action === 'back') return { type: 'escape', direction: 'left' };
+      return { type: 'ignored' };
+    },
+    [
+      flatEpisodes,
+      focusedArea,
+      focusedSeasonIndex,
+      loadSeasonData,
+      loadedSections,
+      media,
+      onWatch,
+      seasons,
+      selectEpisode,
+      selectSeason,
+      selectedEpisode,
+    ]
+  );
+
+  useImperativeHandle(forwardedRef, () => ({ handleAction }), [handleAction]);
+
   return (
-    <Page
-      ref={pageRef}
-      tabIndex={-1}
-      $backdrop={backdrop}
-      $position={backdropPosition}
-      aria-label={`${title} details`}
-    >
-      <Content>
-        {current?.logo ? (
-          <Logo src={getImageUrl(current.logo)} alt={title} />
-        ) : (
-          <Title>{title}</Title>
-        )}
-        <Metadata>{metadata}</Metadata>
-        {current?.genres?.length ? <Metadata>{current.genres.join(' · ')}</Metadata> : null}
-        {isLoading && <Spinner text="Loading details..." />}
-        {isError && <ErrorState>Failed to load details.</ErrorState>}
-        {current && <Overview>{current.overview || 'No overview available.'}</Overview>}
-        {media._type === 'tvshow' && showDetails && (
-          <>
-            <SectionLabel>Season</SectionLabel>
-            <SeasonMenu aria-label="Seasons">
-              <SeasonButton
-                type="button"
-                $selected={focusArea === 'season'}
-                onMouseEnter={() => setFocusArea('season')}
-                onClick={() => {
-                  setTemporarySeasonIndex(selectedSeasonIndex);
-                  setSeasonOpen(open => !open);
-                }}
-              >
-                {seasons[selectedSeasonIndex]?.name ?? 'Season'}
-              </SeasonButton>
-              {seasonOpen &&
-                seasons.map((item: SeasonResponse, index) => (
-                  <SeasonButton
-                    key={item.id}
-                    type="button"
-                    $selected={temporarySeasonIndex === index}
-                    onMouseEnter={() => setTemporarySeasonIndex(index)}
-                    onClick={() => commitSeason(index)}
-                  >
-                    {item.name}
-                  </SeasonButton>
-                ))}
-            </SeasonMenu>
-            <SectionLabel>Episodes</SectionLabel>
-            {season.isLoading && <Spinner text="Loading episodes..." />}
-            {season.isError && <ErrorState>Failed to load episodes.</ErrorState>}
-            {season.data && (
-              <EpisodeRow aria-label="Episodes">
-                {season.data.episodes.map((episode, index) => (
-                  <Episode
-                    key={episode.id}
-                    type="button"
-                    $selected={focusArea === 'episodes' && selectedEpisodeIndex === index}
-                    $image={getImageUrl(episode.still ?? current?.backdrop)}
-                    onMouseEnter={() => {
-                      setFocusArea('episodes');
-                      setSelectedEpisodeIndex(index);
-                    }}
-                    onClick={() => setSelectedEpisodeIndex(index)}
-                  >
-                    <EpisodeCaption>
-                      E{episode.episodeNumber} · {episode.title}
-                    </EpisodeCaption>
-                  </Episode>
-                ))}
-              </EpisodeRow>
+    <>
+      <Header>
+        <BackButton type="button" onClick={onBack} aria-label="Back to browse">
+          Back
+        </BackButton>
+      </Header>
+      <Page
+        ref={pageRef}
+        tabIndex={-1}
+        $backdrop={backdrop}
+        $position={backdropPlacement.position}
+        $size={backdropPlacement.size}
+        aria-label={`${title} details`}
+      >
+        <Layout>
+          <Content>
+            {current?.logo ? (
+              <Logo src={getImageUrl(current.logo)} alt={title} />
+            ) : (
+              <Title>{title}</Title>
             )}
-          </>
-        )}
-      </Content>
-    </Page>
+            <MetadataRow>
+              <MetadataBlock>
+                <Metadata>{metadata}</Metadata>
+                {current?.genres?.length ? <Metadata>{current.genres.join(' · ')}</Metadata> : null}
+              </MetadataBlock>
+              <SourcePreparationStatus
+                mediaKind={media._type}
+                mode="details"
+                preparation={preparation}
+              />
+            </MetadataRow>
+            {(media._type === 'movie' ? movie.isLoading : show.isLoading) && (
+              <Spinner text="Loading details..." />
+            )}
+            {(media._type === 'movie' ? movie.isError : show.isError) && (
+              <ErrorState>Failed to load details.</ErrorState>
+            )}
+            {current && <Overview>{current.overview || 'No overview available.'}</Overview>}
+            {media._type === 'movie' && (
+              <>
+                <PrimaryAction
+                  type="button"
+                  $selected={focusedArea === 'action'}
+                  onMouseEnter={() => setFocusedArea('action')}
+                  onClick={() => onWatch({ kind: 'movie', mediaId: media.mediaId })}
+                >
+                  Watch now
+                </PrimaryAction>
+              </>
+            )}
+            {media._type === 'tvshow' && showDetails && (
+              <>
+                <SectionLabel>Seasons</SectionLabel>
+                <SeasonMenu aria-label="Seasons">
+                  {seasons.map((item, index) => (
+                    <SeasonButton
+                      id={`season-${media.mediaId}-${item.seasonNumber}`}
+                      key={item.id}
+                      type="button"
+                      $selected={activeSeasonNumber === item.seasonNumber}
+                      $focused={focusedArea === 'season' && focusedSeasonIndex === index}
+                      onMouseEnter={() => {
+                        setFocusedArea('season');
+                        setFocusedSeasonIndex(index);
+                      }}
+                      onClick={() => selectSeason(index)}
+                    >
+                      {item.name}
+                    </SeasonButton>
+                  ))}
+                </SeasonMenu>
+              </>
+            )}
+          </Content>
+          {media._type === 'tvshow' && showDetails && (
+            <EpisodePane>
+              <SectionLabel>Episodes</SectionLabel>
+              <EpisodeList
+                ref={episodeListRef}
+                aria-label="Episodes"
+                onScroll={handleEpisodeScroll}
+              >
+                {loadedSections.map(section => (
+                  <SeasonSection
+                    key={section.seasonNumber}
+                    ref={node => {
+                      if (node) sectionRefs.current.set(section.seasonNumber, node);
+                      else sectionRefs.current.delete(section.seasonNumber);
+                    }}
+                  >
+                    <EpisodeHeading>{section.name}</EpisodeHeading>
+                    {section.episodes.map(episode => {
+                      const key = episodeKey(section.seasonNumber, episode.episodeNumber);
+                      const selected =
+                        selectedEpisode?.seasonNumber === section.seasonNumber &&
+                        selectedEpisode.episodeNumber === episode.episodeNumber;
+                      const watched = progressForPlayable(progress.data?.progress ?? [], {
+                        kind: 'episode',
+                        showMediaId: media.mediaId,
+                        seasonNumber: section.seasonNumber,
+                        episodeNumber: episode.episodeNumber,
+                      });
+                      return (
+                        <EpisodeRow
+                          id={`episode-${media.mediaId}-${key}`}
+                          key={episode.id}
+                          type="button"
+                          $selected={selected}
+                          $image={getImageUrl(episode.still ?? current?.backdrop)}
+                          onMouseEnter={() =>
+                            selectEpisode(section.seasonNumber, episode.episodeNumber)
+                          }
+                          onClick={() =>
+                            selectEpisode(section.seasonNumber, episode.episodeNumber, true)
+                          }
+                        >
+                          <EpisodeCaption>
+                            E{episode.episodeNumber} · {episode.title}
+                            {watched ? <ProgressMark>Watched</ProgressMark> : null}
+                          </EpisodeCaption>
+                        </EpisodeRow>
+                      );
+                    })}
+                  </SeasonSection>
+                ))}
+                {Object.values(loadingSeasons).some(Boolean) && (
+                  <Spinner text="Loading more episodes..." />
+                )}
+                {seasons.map((item, index) =>
+                  seasonErrors[item.seasonNumber] && !loadedSeasons[item.seasonNumber] ? (
+                    <ErrorState key={`error-${item.seasonNumber}`}>
+                      Failed to load {item.name}.
+                      <PrimaryAction
+                        type="button"
+                        $selected={false}
+                        onClick={() => selectSeason(index)}
+                      >
+                        Retry
+                      </PrimaryAction>
+                    </ErrorState>
+                  ) : null
+                )}
+              </EpisodeList>
+            </EpisodePane>
+          )}
+        </Layout>
+      </Page>
+    </>
   );
 });

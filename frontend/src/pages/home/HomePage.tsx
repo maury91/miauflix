@@ -1,6 +1,16 @@
 import { useGetListsQuery, useGetPopularListsInfiniteQuery } from '@features/media/api/lists.api';
 import { mediaApi } from '@features/media/api/media.api';
-import type { MediaDto } from '@miauflix/backend';
+import {
+  useRemoveIntentMutation,
+  useUpdateIntentMutation,
+} from '@features/preload/api/preload.api';
+import { nextPreloadSequence, PRELOAD_CLIENT_ID } from '@features/preload/lib/intent-client';
+import type {
+  MediaDto,
+  PlayableRef,
+  PreloadPreparationSnapshot,
+  PreloadPreparationSource,
+} from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { selectCurrentSessionId } from '@store/slices/auth';
@@ -13,8 +23,10 @@ import { CategoryRow, type CategoryRowHandle } from './components/CategoryRow';
 import { HomeSidebar } from './components/HomeSidebar';
 import { MediaDetails, type MediaDetailsHandle } from './components/MediaDetails';
 import { MediaHero } from './components/MediaHero';
+import { PlayerView } from './components/PlayerView';
 import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
 import { getHomeAction, type HomeAction, type NavigationOutcome } from './homeNavigation';
+import { getMediaTitle } from './media.utils';
 
 const PageContainer = styled.main`
   position: fixed;
@@ -48,12 +60,14 @@ const FullPageState = styled.div`
   color: ${PALETTE.text.muted};
 `;
 
-type HomeView = 'browse' | 'details';
-type HomeRegion = 'sidebar' | 'carousel' | 'details';
+type HomeView = 'browse' | 'details' | 'player';
+type HomeRegion = 'sidebar' | 'carousel' | 'details' | 'player';
 
 const HomePage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
+  const [updateIntent, intentState] = useUpdateIntentMutation();
+  const [removeIntent] = useRemoveIntentMutation();
   const { data: fixedCategories, isLoading, isError } = useGetListsQuery();
   const {
     data: popularPages,
@@ -76,6 +90,9 @@ const HomePage: FC = () => {
   const activeCategoryRef = useRef(0);
   const [selectedByCategory, setSelectedByCategory] = useState<Record<string, number>>({});
   const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
+  const [playable, setPlayable] = useState<PlayableRef | null>(null);
+  const lastIntentSequence = useRef(0);
+  const sourceCache = useRef(new Map<number, PreloadPreparationSource>());
   const rowRefs = useRef(new Map<number, CategoryRowHandle>());
   const detailsRef = useRef<MediaDetailsHandle>(null);
   const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
@@ -132,6 +149,44 @@ const HomePage: FC = () => {
       dispatch(mediaApi.util.prefetch('getShow', selectedMedia.mediaId, { ifOlderThan: 30 }));
     }
   }, [dispatch, selectedMedia, sessionId]);
+
+  useEffect(() => {
+    if (!sessionId || !selectedMedia) return;
+    const focused =
+      selectedMedia._type === 'movie'
+        ? ({ kind: 'movie', mediaId: selectedMedia.mediaId } as const)
+        : ({ kind: 'show', mediaId: selectedMedia.mediaId } as const);
+    const publish = () => {
+      if (document.visibilityState === 'hidden') return;
+      const sequence = nextPreloadSequence();
+      lastIntentSequence.current = sequence;
+      void updateIntent({
+        clientId: PRELOAD_CLIENT_ID,
+        intent: {
+          sequence,
+          view: view === 'player' ? 'player' : view === 'details' ? 'details' : 'browse',
+          focused: view === 'player' ? null : focused,
+          reachable: [],
+        },
+      });
+    };
+    publish();
+    const heartbeat = window.setInterval(publish, 5_000);
+    return () => window.clearInterval(heartbeat);
+  }, [selectedMedia, sessionId, updateIntent, view]);
+
+  // Keep the same lease when browsing transitions to details, so discovered
+  // source metadata survives the escalation to torrent warmup.
+  useEffect(() => {
+    if (!sessionId) return;
+    return () => {
+      void removeIntent({
+        clientId: PRELOAD_CLIENT_ID,
+        sequence: lastIntentSequence.current,
+        session: sessionId,
+      });
+    };
+  }, [removeIntent, sessionId]);
 
   const handleActive = useCallback(
     (categoryIndex: number, mediaIndex: number, media: MediaDto) => {
@@ -192,6 +247,67 @@ const HomePage: FC = () => {
     setActiveRegion('carousel');
   }, [categories, selectedByCategory]);
 
+  const returnToDetails = useCallback(() => {
+    setView('details');
+    setActiveRegion('details');
+  }, []);
+
+  const openPlayer = useCallback((nextPlayable: PlayableRef) => {
+    setPlayable(nextPlayable);
+    setView('player');
+    setActiveRegion('player');
+  }, []);
+
+  const openSettings = useCallback(() => {
+    window.dispatchEvent(new Event('miauflix:settings:open'));
+  }, []);
+
+  const responsePreparation = intentState.data?.preparation;
+  useEffect(() => {
+    if (responsePreparation?.playable.kind !== 'movie') return;
+    const mediaId = responsePreparation.playable.mediaId;
+    if (responsePreparation.source) {
+      sourceCache.current.delete(mediaId);
+      sourceCache.current.set(mediaId, responsePreparation.source);
+      if (sourceCache.current.size > 256) {
+        sourceCache.current.delete(sourceCache.current.keys().next().value!);
+      }
+    } else if (responsePreparation.state === 'no_source') {
+      sourceCache.current.delete(mediaId);
+    }
+  }, [responsePreparation]);
+
+  const matchedPreparation =
+    selectedMedia?._type === 'movie' &&
+    responsePreparation?.playable.kind === 'movie' &&
+    responsePreparation.playable.mediaId === selectedMedia.mediaId
+      ? responsePreparation
+      : null;
+  const cachedSource =
+    selectedMedia?._type === 'movie' ? sourceCache.current.get(selectedMedia.mediaId) : undefined;
+  const preparation: PreloadPreparationSnapshot | null =
+    cachedSource && (!matchedPreparation || matchedPreparation.state === 'checking')
+      ? {
+          playable: { kind: 'movie', mediaId: selectedMedia!.mediaId },
+          state: 'source_found',
+          source: cachedSource,
+          // A prior visit's buffer may have been paused or evicted. Only current
+          // backend responses can report live warmup progress.
+          warmup: matchedPreparation?.warmup ?? { state: 'not_requested' },
+        }
+      : (matchedPreparation ??
+        (selectedMedia?._type === 'movie' &&
+        intentState.originalArgs?.intent.focused?.kind === 'movie' &&
+        intentState.originalArgs.intent.focused.mediaId === selectedMedia.mediaId &&
+        intentState.error
+          ? {
+              playable: { kind: 'movie', mediaId: selectedMedia.mediaId },
+              state: 'error',
+              source: null,
+              warmup: { state: 'not_requested' },
+            }
+          : null));
+
   useEffect(() => {
     if (view !== 'browse') return;
     const pending = pendingBrowseFocus.current;
@@ -219,6 +335,9 @@ const HomePage: FC = () => {
 
   const handleHomeAction = useCallback(
     (action: HomeAction): NavigationOutcome => {
+      if (view === 'player') {
+        return action === 'back' ? (returnToDetails(), { type: 'handled' }) : { type: 'ignored' };
+      }
       if (view === 'details') {
         const outcome = detailsRef.current?.handleAction(action) ?? { type: 'ignored' as const };
         if (action === 'back' && outcome.type === 'escape') {
@@ -240,7 +359,15 @@ const HomePage: FC = () => {
       }
       return outcome;
     },
-    [activeCategory, activeRegion, handleMoveCategory, handleSidebarAction, returnToBrowse, view]
+    [
+      activeCategory,
+      activeRegion,
+      handleMoveCategory,
+      handleSidebarAction,
+      returnToBrowse,
+      returnToDetails,
+      view,
+    ]
   );
 
   const handleKeyDown = useCallback(
@@ -274,7 +401,7 @@ const HomePage: FC = () => {
     <PageContainer ref={pageRef} tabIndex={-1} onKeyDown={handleKeyDown}>
       {view === 'browse' ? (
         <>
-          <MediaHero media={selectedMedia} />
+          <MediaHero media={selectedMedia} preparation={preparation} />
           <Content $margin={margin} onScroll={handleContentScroll}>
             {categories.map((category, index) => (
               <CategoryRow
@@ -308,10 +435,23 @@ const HomePage: FC = () => {
             active={activeRegion === 'sidebar'}
             onAction={handleSidebarAction}
             onHover={() => setActiveRegion('sidebar')}
+            onSettings={openSettings}
           />
         </>
-      ) : selectedMedia ? (
-        <MediaDetails ref={detailsRef} media={selectedMedia} />
+      ) : view === 'details' && selectedMedia ? (
+        <MediaDetails
+          ref={detailsRef}
+          media={selectedMedia}
+          onBack={returnToBrowse}
+          onWatch={openPlayer}
+          preparation={preparation}
+        />
+      ) : view === 'player' && playable ? (
+        <PlayerView
+          playable={playable}
+          title={selectedMedia ? getMediaTitle(selectedMedia) : 'Selected title'}
+          onBack={returnToDetails}
+        />
       ) : null}
     </PageContainer>
   );

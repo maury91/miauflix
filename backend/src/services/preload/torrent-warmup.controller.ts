@@ -33,6 +33,7 @@ export interface TorrentWarmupDriver {
   promoteSource(source: MovieSource): Promise<boolean>;
   hasActivePlayback(): boolean;
   isPlaybackActive(sourceId: number): boolean;
+  isRangeVerified?(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean>;
 }
 
 const DEFAULT_TARGET_BYTES = 64 * 1024 * 1024;
@@ -45,6 +46,7 @@ export class TorrentWarmupController {
   private slot: WarmSlot | null = null;
   private generation = 0;
   private transition: Promise<void> = Promise.resolve();
+  private readinessTimer: ReturnType<typeof setTimeout> | null = null;
 
   constructor(private readonly driver: TorrentWarmupDriver) {}
 
@@ -66,6 +68,7 @@ export class TorrentWarmupController {
             !this.driver.isPlaybackActive(this.slot.sourceId) &&
             (await this.driver.pauseSource(this.slot.sourceId))
           ) {
+            this.cancelReadinessCheck();
             this.slot = { ...this.slot, state: 'paused' };
           }
           return this.getState()!;
@@ -91,6 +94,7 @@ export class TorrentWarmupController {
 
       const previous = this.slot;
       if (previous && previous.state !== 'paused' && previous.state !== 'evicted') {
+        this.cancelReadinessCheck();
         if (!this.driver.isPlaybackActive(previous.sourceId)) {
           await this.driver.pauseSource(previous.sourceId);
         }
@@ -123,21 +127,41 @@ export class TorrentWarmupController {
           return this.getState()!;
         }
         this.slot = { ...this.slot, state: 'warming', range: result };
+        if (this.driver.isRangeVerified) {
+          if (
+            (await this.driver.isRangeVerified(source.id, result.firstPiece, result.lastPiece)) &&
+            this.slot?.generation === generation &&
+            this.slot.state === 'warming'
+          ) {
+            this.slot = { ...this.slot, state: 'ready' };
+          } else {
+            this.scheduleReadinessCheck(generation, source.id, result);
+          }
+        }
         return this.getState()!;
       } catch (error) {
-        if (this.slot?.generation === generation) this.slot = { ...this.slot, state: 'failed' };
+        if (this.slot?.generation === generation) {
+          this.cancelReadinessCheck();
+          this.slot = { ...this.slot, state: 'failed' };
+        }
         throw error;
       }
     });
   }
 
-  async pause(leaseKey: string): Promise<boolean> {
+  async pause(leaseKey: string, expectedGeneration?: number): Promise<boolean> {
     return this.withTransition(async () => {
       if (!this.slot || this.slot.leaseKey !== leaseKey) return false;
+      if (expectedGeneration !== undefined && this.slot.generation !== expectedGeneration) {
+        return false;
+      }
       const paused = this.driver.isPlaybackActive(this.slot.sourceId)
         ? false
         : await this.driver.pauseSource(this.slot.sourceId);
-      if (paused) this.slot = { ...this.slot, state: 'paused' };
+      if (paused) {
+        this.cancelReadinessCheck();
+        this.slot = { ...this.slot, state: 'paused' };
+      }
       return paused;
     });
   }
@@ -149,12 +173,16 @@ export class TorrentWarmupController {
         return false;
       }
       const promoted = await this.driver.promoteSource(source);
-      if (promoted && this.slot?.sourceId === source.id) this.slot = null;
+      if (promoted && this.slot?.sourceId === source.id) {
+        this.cancelReadinessCheck();
+        this.slot = null;
+      }
       return promoted;
     });
   }
 
   close(): void {
+    this.cancelReadinessCheck();
     const slot = this.slot;
     this.slot = null;
     if (slot) void this.driver.pauseSource(slot.sourceId);
@@ -172,6 +200,44 @@ export class TorrentWarmupController {
     } finally {
       release();
     }
+  }
+
+  private scheduleReadinessCheck(
+    generation: number,
+    sourceId: number,
+    range: Pick<WarmupResult, 'firstPiece' | 'lastPiece'>
+  ): void {
+    this.cancelReadinessCheck();
+    const check = async (): Promise<void> => {
+      if (
+        !this.slot ||
+        this.slot.generation !== generation ||
+        this.slot.state !== 'warming' ||
+        !this.driver.isRangeVerified
+      ) {
+        return;
+      }
+      try {
+        if (
+          (await this.driver.isRangeVerified(sourceId, range.firstPiece, range.lastPiece)) &&
+          this.slot?.generation === generation &&
+          this.slot.state === 'warming'
+        ) {
+          this.slot = { ...this.slot, state: 'ready' };
+          this.readinessTimer = null;
+          return;
+        }
+      } catch {
+        // A transient progress read should leave the slot warming and retry.
+      }
+      this.readinessTimer = setTimeout(() => void check(), 250);
+    };
+    void check();
+  }
+
+  private cancelReadinessCheck(): void {
+    if (this.readinessTimer) clearTimeout(this.readinessTimer);
+    this.readinessTimer = null;
   }
 }
 

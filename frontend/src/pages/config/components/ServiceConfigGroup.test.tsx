@@ -183,6 +183,30 @@ describe('ServiceConfigGroup', () => {
     expect(screen.getByText('Warning: Keep this unchanged.')).toBeInTheDocument();
   });
 
+  it('explains when a suggested required redirect value still needs saving', () => {
+    const redirect = {
+      ...entry('TRAKT_REDIRECT_URI', true),
+      defaultValueSource: 'browser-origin' as const,
+    };
+
+    render(
+      <ServiceConfigGroup
+        groupName="Trakt"
+        entries={[redirect]}
+        values={{ TRAKT_REDIRECT_URI: 'https://miauflix.example' }}
+        onChange={vi.fn()}
+        onTest={vi.fn()}
+        onSave={vi.fn()}
+        hasChanges
+      />
+    );
+
+    expect(screen.getByText('save required')).toBeInTheDocument();
+    expect(
+      screen.getByText(/Saved credentials are present.*redirect URI is suggested/i)
+    ).toBeInTheDocument();
+  });
+
   it('provides per-service Test and Save actions', () => {
     const onTest = vi.fn();
     const onSave = vi.fn();

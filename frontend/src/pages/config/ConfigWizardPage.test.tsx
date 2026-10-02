@@ -136,4 +136,44 @@ describe('ConfigWizardPage', () => {
       ],
     });
   });
+
+  it('summarizes optional integrations and keeps runtime infrastructure under advanced settings', () => {
+    const optionalEntry = (key: string, serviceGroup: string, hasValue = false) => ({
+      key,
+      value: hasValue ? 'configured' : '',
+      isSecret: false,
+      serviceGroup,
+      serviceDescription: `${serviceGroup} settings`,
+      description: `${key} description`,
+      required: false,
+      hasValue,
+      inputType: 'text' as const,
+    });
+
+    mocks.useGetConfigQuery.mockReturnValue({
+      data: [
+        optionalEntry('TMDB_API_URL', 'CATALOG', true),
+        optionalEntry('EPISODE_SYNC_MODE', 'CATALOG_RUNTIME'),
+        optionalEntry('TRAKT_API_URL', 'LIST'),
+        optionalEntry('JWT_TTL', 'JWT'),
+        optionalEntry('QUEUE_URL', 'QUEUE'),
+        optionalEntry('PORT', 'SERVER'),
+      ],
+      isLoading: false,
+    });
+
+    render(<ConfigurationWizardPage onDismiss={vi.fn()} />);
+
+    expect(screen.getByRole('heading', { name: 'Optional settings' })).toBeInTheDocument();
+    expect(screen.getByText('Movie and show metadata from The Movie Database.')).toBeVisible();
+    expect(screen.getByText('Trakt lists')).toBeVisible();
+    expect(screen.getByText('Settings saved')).toBeVisible();
+
+    const advanced = screen.getByText('Advanced settings (4 groups)');
+    expect(advanced).toBeVisible();
+    fireEvent.click(advanced);
+    expect(screen.getByText('Catalog runtime')).toBeVisible();
+    expect(screen.getByText('JWT')).toBeVisible();
+    expect(screen.getByText('Background job queue connection.')).toBeVisible();
+  });
 });
