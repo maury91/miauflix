@@ -75,6 +75,18 @@ describe('PreloadIntentService', () => {
     }
   });
 
+  it('does not remove an active intent when cleanup omits its sequence', () => {
+    const { service } = setupTest();
+    try {
+      service.update('user', 'session', 'client', intent(1), 1_000);
+
+      expect(service.remove('user', 'session', 'client', undefined, 1_200)).toBe(false);
+      expect(service.getActive(1_200)[0].sequence).toBe(1);
+    } finally {
+      service.close();
+    }
+  });
+
   it('keeps a completed preparation while its playable remains wanted', async () => {
     jest.useFakeTimers();
     const prepare = jest.fn().mockResolvedValue({ source: { id: 9 } });

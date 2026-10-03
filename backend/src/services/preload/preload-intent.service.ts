@@ -151,7 +151,7 @@ export class PreloadIntentService {
     this.expire(now);
     const key = this.key(userId, sessionId, clientId);
     const lease = this.leases.get(key);
-    if (sequence !== undefined && lease && lease.sequence !== sequence) return false;
+    if (lease && (sequence === undefined || lease.sequence !== sequence)) return false;
     const removed = this.leases.delete(key);
     this.reconcile(now);
     return removed;

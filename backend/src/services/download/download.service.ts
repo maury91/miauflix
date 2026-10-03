@@ -619,7 +619,7 @@ export class DownloadService {
   }
 
   private getTorrentPieceCount(torrent: Torrent): number {
-    const pieces = (torrent as Torrent & { pieces?: unknown[] }).pieces;
+    const pieces = torrent.pieces;
     const totalPieces = pieces?.length;
     if (typeof totalPieces !== 'number' || !Number.isInteger(totalPieces) || totalPieces <= 0) {
       throw new ErrorWithStatus(
