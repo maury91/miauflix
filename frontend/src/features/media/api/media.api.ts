@@ -111,5 +111,6 @@ export const {
   useGetMovieQuery,
   useGetShowQuery,
   useGetSeasonQuery,
+  useLazyGetSeasonQuery,
   useEnsureBackdropFocusMutation,
 } = mediaApi;

@@ -3,7 +3,7 @@ import {
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
 } from '@features/config/api/config.api';
-import type { ConfigServiceActionResult } from '@miauflix/backend';
+import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -150,6 +150,21 @@ const ServiceStep = styled.div`
   }
 `;
 
+const NextStepArea = styled.div`
+  display: grid;
+  justify-items: center;
+`;
+
+const NextStepHint = styled.span`
+  display: block;
+  max-width: 520px;
+  margin: 12px auto 0;
+  color: ${SETTINGS_PALETTE.color.warning};
+  font-size: 11px;
+  line-height: 1.35;
+  text-align: center;
+`;
+
 const Button = styled.button<{ $primary?: boolean }>`
   padding: 10px 20px;
   border: 1px solid
@@ -198,6 +213,8 @@ const OptionalList = styled.div`
 
 const OptionalService = styled.button`
   display: flex;
+  align-items: flex-start;
+  gap: 16px;
   justify-content: space-between;
   width: 100%;
   padding: 16px;
@@ -213,18 +230,112 @@ const OptionalService = styled.button`
   }
 `;
 
+const OptionalServiceContent = styled.span`
+  display: grid;
+  gap: 5px;
+  min-width: 0;
+`;
+
+const OptionalServiceTitle = styled.span`
+  font-weight: 600;
+`;
+
+const OptionalServiceSummary = styled.span`
+  color: ${SETTINGS_PALETTE.text.secondary};
+  font-size: 12px;
+  line-height: 1.4;
+`;
+
+const OptionalServiceMeta = styled.span`
+  display: grid;
+  flex: 0 0 auto;
+  justify-items: end;
+  gap: 6px;
+  color: ${SETTINGS_PALETTE.text.secondary};
+  font-size: 11px;
+  white-space: nowrap;
+`;
+
+const ReadinessBadge = styled.span`
+  padding: 2px 8px;
+  border: 1px solid rgba(66, 184, 131, 0.42);
+  border-radius: 20px;
+  color: ${SETTINGS_PALETTE.color.success};
+`;
+
+const OptionalIntro = styled.p`
+  margin: -12px 0 20px;
+  padding: 12px 14px;
+  border: 1px solid ${SETTINGS_PALETTE.background.border};
+  border-radius: 8px;
+  color: ${SETTINGS_PALETTE.text.secondary};
+  font-size: 13px;
+  line-height: 1.5;
+`;
+
+const AdvancedOptionalSettings = styled.details`
+  margin-top: 24px;
+  border-top: 1px solid ${SETTINGS_PALETTE.background.border};
+  padding-top: 18px;
+
+  & > summary {
+    color: ${SETTINGS_PALETTE.text.primary};
+    cursor: pointer;
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  & > ${OptionalList} {
+    margin-top: 14px;
+  }
+`;
+
 interface Props {
   onDismiss: () => void;
 }
 
 const formatServiceName = (name: string) =>
-  name === name.toUpperCase() && name.length > 4
-    ? name
-        .toLowerCase()
-        .split('_')
-        .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-        .join(' ')
-    : name;
+  name === 'LIST'
+    ? 'Trakt lists'
+    : name === 'CATALOG'
+      ? 'Media catalog'
+      : name === 'CATALOG_RUNTIME'
+        ? 'Catalog runtime'
+        : name === name.toUpperCase() && name.length > 4
+          ? name
+              .toLowerCase()
+              .split('_')
+              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+              .join(' ')
+          : name;
+
+const SERVICE_SUMMARIES: Record<string, string> = {
+  CATALOG: 'Movie and show metadata from The Movie Database.',
+  CATALOG_RUNTIME: 'Episode syncing and catalog freshness behavior.',
+  LIST: 'Trakt lists and watchlist integration.',
+  DOWNLOAD: 'Torrent downloads used to prepare movie playback.',
+  SOURCE: 'Source discovery and ranking for available movies.',
+  STORAGE: 'Download and cache storage used by playback.',
+  THE_RARBG: 'The RARBG torrent source.',
+  TMDB: 'The Movie Database provider settings.',
+  VPN: 'Network routing and VPN detection.',
+  YTS: 'The YTS torrent source.',
+  JWT: 'API sessions and access token settings.',
+  QUEUE: 'Background job queue connection.',
+  SERVER: 'HTTP server and runtime settings.',
+};
+
+const ADVANCED_OPTIONAL_GROUPS = new Set(['CATALOG_RUNTIME', 'JWT', 'QUEUE', 'SERVER']);
+
+function getServiceSummary(name: string, entries: ConfigEntryView[]): string {
+  return SERVICE_SUMMARIES[name] ?? entries[0]?.serviceDescription ?? 'Optional service settings.';
+}
+
+function getReadiness(entries: ConfigEntryView[]): string {
+  const missingRequired = entries.some(entry => entry.required && !entry.hasValue);
+  if (missingRequired) return 'Needs setup';
+  return 'Ready';
+}
 
 const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, duration));
 
@@ -291,6 +402,24 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const currentOptional = optionalService ? groups[optionalService] : undefined;
   const current = currentOptional ?? currentRequired?.[1];
   const currentName = optionalService ?? currentRequired?.[0];
+  const primaryOptionalGroups = optionalGroups.filter(
+    ([name]) => !ADVANCED_OPTIONAL_GROUPS.has(name)
+  );
+  const advancedOptionalGroups = optionalGroups.filter(([name]) =>
+    ADVANCED_OPTIONAL_GROUPS.has(name)
+  );
+  const renderOptionalService = ([name, group]: [string, ConfigEntryView[]]) => (
+    <OptionalService key={name} type="button" onClick={() => setOptionalService(name)}>
+      <OptionalServiceContent>
+        <OptionalServiceTitle>{formatServiceName(name)}</OptionalServiceTitle>
+        <OptionalServiceSummary>{getServiceSummary(name, group)}</OptionalServiceSummary>
+      </OptionalServiceContent>
+      <OptionalServiceMeta>
+        <ReadinessBadge>{getReadiness(group)}</ReadinessBadge>
+        <span>{group.length} settings</span>
+      </OptionalServiceMeta>
+    </OptionalService>
+  );
 
   const handleFieldChange = useCallback(
     (key: string, value: string) => {
@@ -380,16 +509,20 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
         <Content>
           <Title>Optional settings</Title>
           <Subtitle>
-            Everything required is configured. Add any optional integrations now, or finish setup.
+            Everything required is configured. Review integrations for watching, or finish setup
+            with the defaults already in place.
           </Subtitle>
-          <OptionalList>
-            {optionalGroups.map(([name, group]) => (
-              <OptionalService key={name} type="button" onClick={() => setOptionalService(name)}>
-                <span>{formatServiceName(name)}</span>
-                <span>{group.filter(entry => !entry.required).length} settings</span>
-              </OptionalService>
-            ))}
-          </OptionalList>
+          <OptionalIntro role="note">
+            <strong>Required settings are complete:</strong> you can finish setup now. Optional
+            integrations are ready to review; open one to review or change it.
+          </OptionalIntro>
+          <OptionalList>{primaryOptionalGroups.map(renderOptionalService)}</OptionalList>
+          {advancedOptionalGroups.length > 0 && (
+            <AdvancedOptionalSettings>
+              <summary>Advanced settings ({advancedOptionalGroups.length} groups)</summary>
+              <OptionalList>{advancedOptionalGroups.map(renderOptionalService)}</OptionalList>
+            </AdvancedOptionalSettings>
+          )}
           <Navigation>
             <ChevronButton
               type="button"
@@ -407,13 +540,20 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     );
   }
 
-  const hasCompleteRequiredValues = current.every(entry => !entry.required || entry.hasValue);
+  const hasCompleteRequiredValues = current.every(
+    entry => !entry.required || entry.hasValue || Boolean(values[entry.key]?.trim())
+  );
   const canContinue =
     isOptionalStep ||
     savedServices.has(currentName) ||
     (!dirtyServices.has(currentName) && hasCompleteRequiredValues);
   const hasPreviousStep = isOptionalStep || step > 0;
   const currentResult = results[currentName];
+  const nextStepHint = !canContinue
+    ? hasCompleteRequiredValues && dirtyServices.has(currentName)
+      ? 'Save these settings to continue.'
+      : 'Complete the required settings to continue.'
+    : undefined;
   return (
     <Page>
       <Content>
@@ -466,18 +606,24 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
             result={currentResult}
           />
           {!isOptionalStep && (
-            <div>
+            <NextStepArea>
               <ChevronButton
                 type="button"
                 aria-label="Next step"
+                aria-describedby={nextStepHint ? 'next-step-hint' : undefined}
                 onClick={() => setStep(step + 1)}
                 disabled={!canContinue}
               >
                 <ChevronRightIcon aria-hidden="true" />
               </ChevronButton>
-            </div>
+            </NextStepArea>
           )}
         </ServiceStep>
+        {nextStepHint && (
+          <NextStepHint id="next-step-hint" role="note">
+            {nextStepHint}
+          </NextStepHint>
+        )}
       </Content>
     </Page>
   );

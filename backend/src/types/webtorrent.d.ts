@@ -408,6 +408,8 @@ declare module 'webtorrent' {
     readonly lastPieceLength: number;
     /** Number of connected peers */
     readonly numPeers: number;
+    /** Torrent pieces, populated after the ready event */
+    readonly pieces: unknown[];
     /** Download path */
     readonly path: string;
     /** Whether torrent has metadata and is ready */
@@ -430,8 +432,6 @@ declare module 'webtorrent' {
     readonly progress: number;
     /** Share ratio (uploaded/received) */
     readonly ratio: number;
-    /** Total number of pieces */
-    readonly numPieces: number;
     /** Estimated time remaining in ms */
     readonly timeRemaining: number;
     /** Maximum web seed connections */

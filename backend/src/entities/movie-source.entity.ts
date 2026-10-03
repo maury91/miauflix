@@ -49,6 +49,7 @@ const SOURCE_TYPES: Source[] = [
   Source.DVD,
   Source.TS,
   Source.CAM,
+  Source.DCP,
 ];
 
 /**
