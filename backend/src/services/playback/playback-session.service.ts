@@ -62,8 +62,10 @@ export class PlaybackSessionService {
       workClass: 'interactive',
       ownerKey: this.playableKey(playable),
     });
-    if (!prepared.source?.file) return null;
-    await this.warmup?.promote(prepared.source, this.playableKey(playable));
+    if (!prepared.source) return null;
+    if (prepared.state !== 'cold') {
+      await this.warmup?.promote(prepared.source, this.playableKey(playable));
+    }
     const storage = await this.storageService?.getStorageByMovieSource(prepared.source.id);
 
     const streamingKey = randomBytes(32).toString('base64url');

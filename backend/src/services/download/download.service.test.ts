@@ -387,7 +387,8 @@ describe('DownloadService', () => {
       };
       const torrent = {
         bitfield: undefined,
-        numPieces: 1,
+        pieces: new Array(1),
+        ready: true,
         pieceLength: 10,
         length: 10,
         files: [file],
@@ -460,8 +461,8 @@ describe('DownloadService', () => {
         };
         const torrent = {
           files: [file],
+          pieces: new Array(5),
           pieceLength: 2,
-          numPieces: 5,
           select: jest.fn(),
         };
         jest.spyOn(service, 'startDownload').mockResolvedValue({
@@ -486,11 +487,81 @@ describe('DownloadService', () => {
   });
 
   describe('download tracking and allocation reconciliation', () => {
+    it('uses the runtime WebTorrent piece list for persisted layout', async () => {
+      const { service, mockStorageService } = setupTest();
+      const torrent = {
+        pieces: new Array(5),
+        bitfield: undefined,
+        pieceLength: 10,
+        length: 50,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockResolvedValue(torrent);
+
+      await service.startDownload({
+        id: 1,
+        size: 50,
+        hash: 'a'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+      } as never);
+
+      expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
+        expect.objectContaining({ totalPieces: 5 })
+      );
+      expect(mockStorageService.updateTorrentLayout).toHaveBeenCalledWith(1, 5, 10, 50);
+    });
+
+    it('shares an in-flight torrent start for concurrent requests of the same hash', async () => {
+      const { service, mockStorageService } = setupTest();
+      const torrent = {
+        pieces: new Array(1),
+        bitfield: undefined,
+        pieceLength: 10,
+        length: 10,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      let resolveStart!: (value: Torrent) => void;
+      const addTorrent = jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockImplementation(() => new Promise(resolve => (resolveStart = resolve)));
+      const source = {
+        id: 1,
+        size: 10,
+        hash: 'a'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+      } as never;
+
+      const first = service.startDownload(source);
+      const second = service.startDownload(source);
+      await Promise.resolve();
+      expect(addTorrent).toHaveBeenCalledTimes(1);
+
+      resolveStart(torrent);
+      await Promise.all([first, second]);
+      expect(addTorrent).toHaveBeenCalledTimes(1);
+    });
+
     it('sets up bitfield tracking once when a torrent is reused', async () => {
       const { service, mockStorageService } = setupTest();
       const torrent = {
         bitfield: undefined,
-        numPieces: 1,
+        pieces: new Array(1),
         pieceLength: 10,
         length: 10,
         on: jest.fn(),
@@ -524,7 +595,7 @@ describe('DownloadService', () => {
       const { service, mockStorageService } = setupTest();
       const torrent = {
         bitfield: undefined,
-        numPieces: 1,
+        pieces: new Array(1),
         pieceLength: 10,
         length: 10,
         on: jest.fn(),

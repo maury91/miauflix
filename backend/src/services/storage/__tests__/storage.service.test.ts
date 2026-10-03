@@ -280,6 +280,36 @@ describe('StorageService', () => {
       expect(storage?.downloadedPieces).toEqual(updatedBitfield);
     });
 
+    it('ignores progress updates with an invalid piece count', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const movieSource = await testDataFactory.createTestMovieSource(movie.id);
+      const initialBitfield = testDataFactory.createEmptyBitfield(8);
+      await storageService.createStorage({
+        movieSourceId: movieSource.id,
+        location: '/tmp/test/invalid-progress.mkv',
+        size: 1000,
+        downloadedPieces: initialBitfield,
+        totalPieces: 8,
+      });
+
+      await storageService.updateDownloadProgress({
+        movieSourceId: movieSource.id,
+        downloadedPieces: initialBitfield,
+        totalPieces: Number.NaN,
+      });
+      await storageService.updateDownloadProgress({
+        movieSourceId: movieSource.id,
+        downloadedPieces: initialBitfield,
+        totalPieces: 8,
+        size: Number.NaN,
+      });
+
+      const storage = await storageService.getStorageByMovieSource(movieSource.id);
+      expect(storage?.downloaded).toBe(0);
+      expect(storage?.downloadedPieces).toEqual(initialBitfield);
+    });
+
     it('should handle complete download status', async () => {
       // Arrange
       const { storageService } = setupTest();

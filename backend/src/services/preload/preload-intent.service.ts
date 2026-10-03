@@ -1,20 +1,41 @@
+import type { MovieSource } from '@entities/movie-source.entity';
 import type { IntentLeaseKey, MediaIntentRef, PreloadIntentRequest } from '@routes/playable.types';
 import { playableKey } from '@routes/playable.types';
+import type {
+  PreloadPreparationSnapshot,
+  PreloadPreparationSource,
+  PreloadPreparationState,
+  PreloadWarmupState,
+} from '@routes/preload.types';
 
 import type { PlayablePreparationService } from './playable-preparation.service';
 import type { TorrentWarmupController } from './torrent-warmup.controller';
 
 const LEASE_TTL_MS = 15_000;
-type PreparationLevel = 'metadata' | 'warm';
+const SOURCE_METADATA_CACHE_LIMIT = 256;
+type PreparationLevel = 'sources' | 'warm';
+
+interface PreparationDetails {
+  source: PreloadPreparationSource | null;
+  warmup: PreloadWarmupState;
+}
 
 type PreparationEntry =
+  | {
+      state: 'complete';
+      level: PreparationLevel;
+      playable: Exclude<MediaIntentRef, { kind: 'show' }>;
+      outcome: Exclude<PreloadPreparationState, 'checking' | 'unknown'>;
+      details: PreparationDetails;
+    }
   | {
       state: 'pending';
       level: PreparationLevel;
       controller: AbortController;
       timer: ReturnType<typeof setTimeout>;
-    }
-  | { state: 'complete'; level: PreparationLevel };
+      playable: Exclude<MediaIntentRef, { kind: 'show' }>;
+      details: PreparationDetails;
+    };
 
 export interface PreloadLease {
   key: IntentLeaseKey;
@@ -33,6 +54,7 @@ export interface PreloadIntentResult {
   accepted: boolean;
   acceptedSequence: number;
   expiresAt: Date;
+  preparation: PreloadPreparationSnapshot | null;
 }
 
 /**
@@ -43,6 +65,7 @@ export interface PreloadIntentResult {
 export class PreloadIntentService {
   private readonly leases = new Map<IntentLeaseKey, PreloadLease>();
   private readonly preparations = new Map<string, PreparationEntry>();
+  private readonly sourceMetadataCache = new Map<string, PreloadPreparationSource>();
   private readonly cleanupTimer: ReturnType<typeof setInterval>;
 
   constructor(
@@ -72,6 +95,7 @@ export class PreloadIntentService {
         accepted: false,
         acceptedSequence: previous.sequence,
         expiresAt: new Date(previous.expiresAt),
+        preparation: this.snapshotForLease(previous),
       };
     }
 
@@ -87,14 +111,48 @@ export class PreloadIntentService {
       expiresAt: expiresAt.getTime(),
       createdAt: previous?.createdAt ?? now,
     });
+    const requestedLevel = this.levelForView(intent.view);
+    const previousPreparation =
+      previous?.focused && previous.focused.kind !== 'show'
+        ? this.preparations.get(playableKey(previous.focused))
+        : undefined;
     this.reconcile(now);
+    const previousFocused = previous?.focused;
+    const currentFocused = intent.focused;
+    const samePlayable =
+      previousFocused &&
+      previousFocused.kind !== 'show' &&
+      currentFocused &&
+      currentFocused.kind !== 'show' &&
+      playableKey(previousFocused) === playableKey(currentFocused);
+    const previousOutcome =
+      previousPreparation?.state === 'complete' &&
+      samePlayable &&
+      this.levelRank(previousPreparation.level) >= this.levelRank(requestedLevel) &&
+      (previousPreparation.outcome === 'no_source' || previousPreparation.outcome === 'error')
+        ? this.snapshotForEntry(previousPreparation)
+        : null;
 
-    return { accepted: true, acceptedSequence: intent.sequence, expiresAt };
+    return {
+      accepted: true,
+      acceptedSequence: intent.sequence,
+      expiresAt,
+      preparation: previousOutcome ?? this.snapshotForLease(this.leases.get(key)),
+    };
   }
 
-  remove(userId: string, sessionId: string, clientId: string, now = Date.now()): boolean {
+  remove(
+    userId: string,
+    sessionId: string,
+    clientId: string,
+    sequence?: number,
+    now = Date.now()
+  ): boolean {
     this.expire(now);
-    const removed = this.leases.delete(this.key(userId, sessionId, clientId));
+    const key = this.key(userId, sessionId, clientId);
+    const lease = this.leases.get(key);
+    if (lease && (sequence === undefined || lease.sequence !== sequence)) return false;
+    const removed = this.leases.delete(key);
     this.reconcile(now);
     return removed;
   }
@@ -117,6 +175,7 @@ export class PreloadIntentService {
     }
     this.warmup?.close();
     this.preparations.clear();
+    this.sourceMetadataCache.clear();
     this.leases.clear();
   }
 
@@ -143,7 +202,14 @@ export class PreloadIntentService {
     for (const lease of this.leases.values()) {
       if (!lease.focused || lease.focused.kind === 'show') continue;
       const key = playableKey(lease.focused);
-      if (!wanted.has(key)) wanted.set(key, { playable: lease.focused, view: lease.view });
+      const existing = wanted.get(key);
+      if (
+        !existing ||
+        this.levelRank(this.levelForView(lease.view)) >
+          this.levelRank(this.levelForView(existing.view))
+      ) {
+        wanted.set(key, { playable: lease.focused, view: lease.view });
+      }
     }
 
     for (const [key, preparation] of this.preparations) {
@@ -158,14 +224,55 @@ export class PreloadIntentService {
     }
 
     const slot = this.warmup?.getState();
-    if (slot && !wanted.has(slot.playableKey)) void this.warmup?.pause(slot.leaseKey);
+    if (slot) {
+      const target = wanted.get(slot.playableKey);
+      if (!target || this.levelForView(target.view) !== 'warm') {
+        void this.warmup?.pause(slot.leaseKey);
+      }
+    }
 
     if (!this.preparation) return;
     for (const [key, target] of wanted) {
       const level = this.levelForView(target.view);
       const existing = this.preparations.get(key);
+      const isDowngrade = existing && this.levelRank(existing.level) > this.levelRank(level);
+      const details: PreparationDetails = existing
+        ? {
+            source: existing.details.source,
+            warmup: isDowngrade ? 'not_requested' : existing.details.warmup,
+          }
+        : {
+            source: this.sourceMetadataCache.get(key) ?? null,
+            warmup: 'not_requested',
+          };
+      // A completed warm preparation remains the selected source when a lease
+      // downgrades to browse, but its speculative payload is no longer wanted.
       if (existing) {
-        if (this.levelRank(existing.level) >= this.levelRank(level)) continue;
+        if (
+          existing.state === 'complete' &&
+          existing.outcome === 'source_found' &&
+          this.levelRank(existing.level) === this.levelRank(level)
+        ) {
+          continue;
+        }
+        if (
+          existing.state === 'complete' &&
+          existing.outcome === 'source_found' &&
+          this.levelRank(existing.level) > this.levelRank(level)
+        ) {
+          this.preparations.set(key, {
+            ...existing,
+            level,
+            details: { ...details, warmup: 'not_requested' },
+          });
+          continue;
+        }
+        if (
+          existing.state === 'pending' &&
+          this.levelRank(existing.level) === this.levelRank(level)
+        ) {
+          continue;
+        }
         if (existing.state === 'pending') {
           clearTimeout(existing.timer);
           existing.controller.abort();
@@ -178,37 +285,139 @@ export class PreloadIntentService {
           void this.preparation
             ?.prepare(target.playable, {
               through: level,
-              preferences: { quality: 'auto', allowHevc: true },
-              workClass: level === 'warm' ? 'interactive' : 'background',
+              // Keep speculative preparation compatible with the default player
+              // policy so Watch can promote the same selected source.
+              preferences: { quality: 'auto', allowHevc: false },
+              // Details preparation is speculative. Keep the explicit Watch
+              // request in the interactive lane so it can overtake this work.
+              workClass: 'background',
               ownerKey: key,
               signal: controller.signal,
+              onSourceSelected: source => {
+                const current = this.preparations.get(key);
+                if (current?.state === 'pending' && current.controller === controller) {
+                  const sourceSnapshot = this.sourceSnapshot(source);
+                  this.rememberSource(key, sourceSnapshot);
+                  this.preparations.set(key, {
+                    ...current,
+                    details: {
+                      source: sourceSnapshot,
+                      warmup: level === 'warm' ? 'warming' : 'not_requested',
+                    },
+                  });
+                }
+              },
             })
-            .then(() => {
+            .then(result => {
               const current = this.preparations.get(key);
               if (current?.state === 'pending' && current.controller === controller) {
-                this.preparations.set(key, { state: 'complete', level });
+                const source = result?.source ? this.sourceSnapshot(result.source) : null;
+                if (source) this.rememberSource(key, source);
+                else this.sourceMetadataCache.delete(key);
+                this.preparations.set(key, {
+                  state: 'complete',
+                  level,
+                  playable: target.playable,
+                  outcome: result?.source ? 'source_found' : 'no_source',
+                  details: {
+                    source,
+                    warmup: result?.warmup?.state ?? 'not_requested',
+                  },
+                });
               }
             })
             .catch(() => {
               const current = this.preparations.get(key);
               if (current?.state === 'pending' && current.controller === controller) {
-                this.preparations.delete(key);
+                this.preparations.set(key, {
+                  state: 'complete',
+                  level,
+                  playable: target.playable,
+                  outcome: 'error',
+                  details: {
+                    source: current.details.source,
+                    warmup: 'not_requested',
+                  },
+                });
               }
             });
         },
         target.view === 'player' ? 0 : 350
       );
-      this.preparations.set(key, { state: 'pending', level, controller, timer });
+      this.preparations.set(key, {
+        state: 'pending',
+        level,
+        controller,
+        timer,
+        playable: target.playable,
+        details,
+      });
     }
     void now;
   }
 
+  private snapshotForLease(lease?: PreloadLease): PreloadPreparationSnapshot | null {
+    if (!lease?.focused || lease.focused.kind === 'show') return null;
+    if (!this.preparation) {
+      return {
+        playable: lease.focused,
+        state: 'unknown',
+        source: this.sourceMetadataCache.get(playableKey(lease.focused)) ?? null,
+        warmup: { state: 'not_requested' },
+      };
+    }
+    return (
+      this.snapshotForEntry(this.preparations.get(playableKey(lease.focused))) ?? {
+        playable: lease.focused,
+        state: 'checking',
+        source: this.sourceMetadataCache.get(playableKey(lease.focused)) ?? null,
+        warmup: { state: 'not_requested' },
+      }
+    );
+  }
+
+  private snapshotForEntry(entry?: PreparationEntry): PreloadPreparationSnapshot | null {
+    if (!entry) return null;
+    if (entry.state === 'pending') {
+      return {
+        playable: entry.playable,
+        state: entry.details.source ? 'source_found' : 'checking',
+        source: entry.details.source,
+        warmup: { state: entry.details.warmup },
+      };
+    }
+    return {
+      playable: entry.playable,
+      state: entry.outcome,
+      source: entry.details.source,
+      warmup: { state: entry.details.warmup },
+    };
+  }
+
   private levelForView(view: PreloadIntentRequest['view']): PreparationLevel {
-    return view === 'details' || view === 'player' ? 'warm' : 'metadata';
+    return view === 'details' || view === 'player' ? 'warm' : 'sources';
   }
 
   private levelRank(level: PreparationLevel): number {
     return level === 'warm' ? 2 : 1;
+  }
+
+  private sourceSnapshot(source: MovieSource): PreloadPreparationSource {
+    return {
+      id: source.id,
+      quality: source.quality ?? null,
+      sourceType: source.sourceType ?? null,
+    };
+  }
+
+  private rememberSource(key: string, source: PreloadPreparationSource): void {
+    this.sourceMetadataCache.delete(key);
+    this.sourceMetadataCache.set(key, source);
+    while (this.sourceMetadataCache.size > SOURCE_METADATA_CACHE_LIMIT) {
+      const oldest = this.sourceMetadataCache.keys().next().value;
+      if (oldest === undefined) return;
+      this.sourceMetadataCache.delete(oldest);
+    }
   }
 
   private dedupeReachable(reachable: PreloadIntentRequest['reachable']) {
