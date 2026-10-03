@@ -1,4 +1,4 @@
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
@@ -8,6 +8,9 @@ const {
   rowProps,
   mediaIndexes,
   detailsHandleAction,
+  useUpdateIntentMutation,
+  removeIntent,
+  selectSession,
 } = vi.hoisted(() => ({
   useGetListsQuery: vi.fn(),
   useGetPopularListsInfiniteQuery: vi.fn(),
@@ -15,6 +18,9 @@ const {
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
   mediaIndexes: new Map<number, number>(),
   detailsHandleAction: vi.fn(),
+  useUpdateIntentMutation: vi.fn(),
+  removeIntent: vi.fn(),
+  selectSession: vi.fn(),
 }));
 
 vi.mock('@features/media/api/lists.api', () => ({
@@ -24,12 +30,16 @@ vi.mock('@features/media/api/lists.api', () => ({
 vi.mock('@features/media/api/media.api', () => ({
   mediaApi: { util: { prefetch: vi.fn() } },
 }));
+vi.mock('@features/preload/api/preload.api', () => ({
+  useUpdateIntentMutation,
+  useRemoveIntentMutation: () => [removeIntent],
+}));
 vi.mock('@shared/components', () => ({ Spinner: () => null }));
 vi.mock('@store/slices/auth', () => ({ selectCurrentSessionId: () => null }));
 vi.mock('@store/store', () => ({}));
 vi.mock('react-redux', () => ({
   useDispatch: () => vi.fn(),
-  useSelector: () => null,
+  useSelector: () => selectSession(),
 }));
 vi.mock('./hooks/useMediaBoxSizes', () => ({
   useMediaBoxSizes: () => ({ mediaWidth: 180, mediaPerPage: 1, gap: 12, margin: 24 }),
@@ -55,7 +65,11 @@ vi.mock('./components/CategoryRow', async () => {
         });
         const handle = rowHandles.get(props.categoryIndex);
         React.useImperativeHandle(ref, () => handle, [handle]);
-        const media = { _type: 'movie', id: props.categoryIndex + 1, mediaId: 100 };
+        const media = {
+          _type: 'movie',
+          id: props.categoryIndex + 1,
+          mediaId: 100 + props.categoryIndex,
+        };
         const mediaIndex = mediaIndexes.get(props.categoryIndex) ?? 0;
         return React.createElement(
           'button',
@@ -63,6 +77,7 @@ vi.mock('./components/CategoryRow', async () => {
             type: 'button',
             'data-testid': `card-${props.categoryIndex}`,
             'data-active': props.active,
+            onMouseEnter: () => props.onActive(props.categoryIndex, mediaIndex, media),
             onClick: () => {
               props.onActive(props.categoryIndex, mediaIndex, media);
               props.onSelect(media);
@@ -74,15 +89,47 @@ vi.mock('./components/CategoryRow', async () => {
     ),
   };
 });
-vi.mock('./components/HomeSidebar', () => ({ HomeSidebar: () => null }));
-vi.mock('./components/MediaHero', () => ({ MediaHero: () => null }));
+vi.mock('./components/MediaHero', async () => {
+  const React = await import('react');
+  return {
+    MediaHero: (props: {
+      preparation?: {
+        state: string;
+        source?: { quality: string };
+        warmup?: { state: string };
+      } | null;
+    }) =>
+      React.createElement('div', {
+        'data-testid': 'hero',
+        'data-source-status': props.preparation?.state ?? 'checking',
+        'data-quality': props.preparation?.source?.quality,
+        'data-warmup': props.preparation?.warmup?.state,
+      }),
+  };
+});
 vi.mock('./components/MediaDetails', async () => {
   const React = await import('react');
   return {
-    MediaDetails: React.forwardRef((_props, ref) => {
-      React.useImperativeHandle(ref, () => ({ handleAction: detailsHandleAction }), []);
-      return React.createElement('div', { 'data-testid': 'details' });
-    }),
+    MediaDetails: React.forwardRef(
+      (
+        props: {
+          preparation?: {
+            state: string;
+            source?: { quality: string };
+            warmup?: { state: string };
+          } | null;
+        },
+        ref
+      ) => {
+        React.useImperativeHandle(ref, () => ({ handleAction: detailsHandleAction }), []);
+        return React.createElement('div', {
+          'data-testid': 'details',
+          'data-source-status': props.preparation?.state ?? 'checking',
+          'data-quality': props.preparation?.source?.quality,
+          'data-warmup': props.preparation?.warmup?.state,
+        });
+      }
+    ),
   };
 });
 
@@ -107,6 +154,9 @@ const makeHandle = (focusResult: boolean, empty: boolean) => ({
 
 describe('HomePage focus transitions', () => {
   beforeEach(() => {
+    selectSession.mockReturnValue(null);
+    removeIntent.mockReset();
+    useUpdateIntentMutation.mockReturnValue([vi.fn(), {}]);
     rowHandles.clear();
     rowProps.clear();
     mediaIndexes.clear();
@@ -122,6 +172,181 @@ describe('HomePage focus transitions', () => {
       isFetchingNextPage: false,
     });
     detailsHandleAction.mockReset().mockReturnValue({ type: 'escape', direction: 'left' });
+  });
+
+  it('collapses the sidebar on mouse leave and restores the selected carousel item', () => {
+    const row = makeHandle(true, false);
+    rowHandles.set(0, row);
+    mediaIndexes.set(0, 4);
+    render(<HomePage />);
+    fireEvent.mouseEnter(screen.getByTestId('card-0'));
+
+    const sidebar = screen.getByRole('complementary', { name: 'Home navigation' });
+    for (let visit = 0; visit < 2; visit += 1) {
+      fireEvent.mouseEnter(sidebar);
+      expect(screen.getByText('Home', { selector: 'span' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Home' })).toHaveFocus();
+      expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'false');
+
+      fireEvent.mouseLeave(sidebar);
+      expect(screen.queryByText('Home', { selector: 'span' })).not.toBeInTheDocument();
+      expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'true');
+      expect(row.focusIndex).toHaveBeenLastCalledWith(4);
+    }
+  });
+
+  it('keeps keyboard entry and return from the sidebar working', () => {
+    const row = makeHandle(true, false);
+    row.handleAction.mockReturnValue({ type: 'escape', direction: 'left' });
+    rowHandles.set(0, row);
+    render(<HomePage />);
+
+    fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowLeft' });
+    const home = screen.getByRole('button', { name: 'Home' });
+    expect(home).toHaveFocus();
+    expect(screen.getByText('Home', { selector: 'span' })).toBeInTheDocument();
+    fireEvent.keyDown(home, { key: 'Escape' });
+    expect(screen.queryByText('Home', { selector: 'span' })).not.toBeInTheDocument();
+    expect(row.focusIndex).toHaveBeenCalledWith(0);
+  });
+
+  it('shows the preparation result for the selected movie', () => {
+    useUpdateIntentMutation.mockReturnValue([
+      vi.fn(),
+      {
+        data: { preparation: { playable: { kind: 'movie', mediaId: 100 }, state: 'source_found' } },
+      },
+    ]);
+    render(<HomePage />);
+    fireEvent.click(screen.getByTestId('card-0'));
+    expect(screen.getByTestId('details')).toHaveAttribute('data-source-status', 'source_found');
+  });
+
+  it('does not treat an accepted intent as a discovered source', () => {
+    useUpdateIntentMutation.mockReturnValue([
+      vi.fn(),
+      {
+        data: { acceptedSequence: 1, expiresAt: new Date().toISOString(), preparation: null },
+      },
+    ]);
+    render(<HomePage />);
+    fireEvent.click(screen.getByTestId('card-0'));
+    expect(screen.getByTestId('details')).toHaveAttribute('data-source-status', 'checking');
+  });
+
+  it('does not show another movie’s preparation result', () => {
+    useUpdateIntentMutation.mockReturnValue([
+      vi.fn(),
+      {
+        data: { preparation: { playable: { kind: 'movie', mediaId: 999 }, state: 'source_found' } },
+      },
+    ]);
+    render(<HomePage />);
+    fireEvent.click(screen.getByTestId('card-0'));
+    expect(screen.getByTestId('details')).toHaveAttribute('data-source-status', 'checking');
+  });
+
+  it('shows discovered source metadata in the homepage hero', () => {
+    useUpdateIntentMutation.mockReturnValue([
+      vi.fn(),
+      {
+        data: {
+          preparation: {
+            playable: { kind: 'movie', mediaId: 100 },
+            state: 'source_found',
+            source: { quality: 'FHD' },
+          },
+        },
+      },
+    ]);
+    render(<HomePage />);
+    fireEvent.mouseEnter(screen.getByTestId('card-0'));
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-source-status', 'source_found');
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-quality', 'FHD');
+  });
+
+  it('shows cached source metadata immediately when returning to a movie and replaces it after refresh', () => {
+    const updateIntent = vi.fn();
+    const initial = {
+      playable: { kind: 'movie', mediaId: 100 },
+      state: 'source_found',
+      source: { id: 9, quality: 'HD', sourceType: 'WEB' },
+      warmup: { state: 'ready' },
+    };
+    useUpdateIntentMutation.mockReturnValue([updateIntent, { data: { preparation: initial } }]);
+    const view = render(<HomePage />);
+    fireEvent.mouseEnter(screen.getByTestId('card-0'));
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-quality', 'HD');
+    fireEvent.mouseEnter(screen.getByTestId('card-1'));
+    useUpdateIntentMutation.mockReturnValue([
+      updateIntent,
+      {
+        data: {
+          preparation: {
+            playable: { kind: 'movie', mediaId: 101 },
+            state: 'checking',
+            source: null,
+            warmup: { state: 'not_requested' },
+          },
+        },
+      },
+    ]);
+    view.rerender(<HomePage />);
+    fireEvent.mouseEnter(screen.getByTestId('card-0'));
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-source-status', 'source_found');
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-quality', 'HD');
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-warmup', 'not_requested');
+    useUpdateIntentMutation.mockReturnValue([
+      updateIntent,
+      {
+        data: {
+          preparation: {
+            ...initial,
+            source: { ...initial.source, quality: 'FHD' },
+            warmup: { state: 'not_requested' },
+          },
+        },
+      },
+    ]);
+    view.rerender(<HomePage />);
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-quality', 'FHD');
+    useUpdateIntentMutation.mockReturnValue([
+      updateIntent,
+      { data: { preparation: { ...initial, state: 'no_source', source: null } } },
+    ]);
+    view.rerender(<HomePage />);
+    expect(screen.getByTestId('hero')).not.toHaveAttribute('data-quality');
+    fireEvent.mouseEnter(screen.getByTestId('card-1'));
+    useUpdateIntentMutation.mockReturnValue([updateIntent, {}]);
+    view.rerender(<HomePage />);
+    fireEvent.mouseEnter(screen.getByTestId('card-0'));
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-source-status', 'checking');
+    expect(screen.getByTestId('hero')).not.toHaveAttribute('data-quality');
+  });
+
+  it('polls discovery and escalates to details without removing its lease', () => {
+    vi.useFakeTimers();
+    selectSession.mockReturnValue('session');
+    const updateIntent = vi.fn();
+    useUpdateIntentMutation.mockReturnValue([updateIntent, {}]);
+    const view = render(<HomePage />);
+    try {
+      fireEvent.mouseEnter(screen.getByTestId('card-0'));
+      expect(updateIntent).toHaveBeenLastCalledWith(
+        expect.objectContaining({ intent: expect.objectContaining({ view: 'browse' }) })
+      );
+      act(() => vi.advanceTimersByTime(5000));
+      expect(updateIntent).toHaveBeenCalledTimes(2);
+      fireEvent.click(screen.getByTestId('card-0'));
+      expect(updateIntent).toHaveBeenLastCalledWith(
+        expect.objectContaining({ intent: expect.objectContaining({ view: 'details' }) })
+      );
+      expect(removeIntent).not.toHaveBeenCalled();
+    } finally {
+      view.unmount();
+      vi.useRealTimers();
+    }
+    expect(removeIntent).toHaveBeenCalledTimes(1);
   });
 
   it('activates a pending adjacent row instead of skipping it', () => {
@@ -207,7 +432,7 @@ describe('HomePage focus transitions', () => {
 
     render(<HomePage />);
 
-    expect(screen.getAllByRole('button').map(button => button.textContent)).toEqual([
+    expect(screen.getAllByTestId(/^card-/).map(button => button.textContent)).toEqual([
       'Category 0',
       'Category 1',
       'Category 2',

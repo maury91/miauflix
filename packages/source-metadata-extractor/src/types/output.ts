@@ -79,6 +79,7 @@ export enum Source {
   DVD = 'DVD',
   TS = 'TS',
   CAM = 'CAM',
+  DCP = 'DCP',
 }
 
 export enum Language {

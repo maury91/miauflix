@@ -79,6 +79,41 @@ const Input = styled.input`
   }
 `;
 
+const PasswordInputRow = styled.div`
+  display: flex;
+  gap: 8px;
+`;
+
+const PasswordInput = styled(Input)`
+  min-width: 0;
+  flex: 1;
+`;
+
+const PasswordVisibilityButton = styled.button`
+  flex: 0 0 auto;
+  min-width: 58px;
+  padding: 0 10px;
+  border: 1px solid ${SETTINGS_PALETTE.background.border};
+  border-radius: 4px;
+  background: ${SETTINGS_PALETTE.background.input};
+  color: ${SETTINGS_PALETTE.text.secondary};
+  font:
+    500 12px 'Poppins',
+    sans-serif;
+  cursor: pointer;
+
+  &:hover {
+    color: ${SETTINGS_PALETTE.text.primary};
+    border-color: ${SETTINGS_PALETTE.color.interactive};
+  }
+
+  &:focus-visible {
+    outline: none;
+    border-color: ${SETTINGS_PALETTE.color.interactive};
+    box-shadow: 0 0 0 3px ${SETTINGS_PALETTE.color.interactiveSubtle};
+  }
+`;
+
 const PasswordStrengthBar = styled.div`
   height: 3px;
   background-color: #333;
@@ -150,6 +185,8 @@ const SetupPage: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [validationError, setValidationError] = useState('');
 
   const [createAdmin, { isLoading, error }] = useCreateAdminMutation();
@@ -209,15 +246,25 @@ const SetupPage: FC = () => {
 
           <InputGroup>
             <Label htmlFor="setup-password">Password</Label>
-            <Input
-              type="password"
-              id="setup-password"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              placeholder="Minimum 8 characters"
-              required
-              autoComplete="new-password"
-            />
+            <PasswordInputRow>
+              <PasswordInput
+                type={showPassword ? 'text' : 'password'}
+                id="setup-password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                placeholder="Minimum 8 characters"
+                required
+                autoComplete="new-password"
+              />
+              <PasswordVisibilityButton
+                type="button"
+                aria-label="Show password"
+                aria-pressed={showPassword}
+                onClick={() => setShowPassword(current => !current)}
+              >
+                {showPassword ? 'Hide' : 'Show'}
+              </PasswordVisibilityButton>
+            </PasswordInputRow>
             <PasswordStrengthBar>
               <PasswordStrengthFill $strength={passwordStrength} />
             </PasswordStrengthBar>
@@ -225,15 +272,25 @@ const SetupPage: FC = () => {
 
           <InputGroup>
             <Label htmlFor="setup-confirm-password">Confirm Password</Label>
-            <Input
-              type="password"
-              id="setup-confirm-password"
-              value={confirmPassword}
-              onChange={e => setConfirmPassword(e.target.value)}
-              placeholder="Repeat your password"
-              required
-              autoComplete="new-password"
-            />
+            <PasswordInputRow>
+              <PasswordInput
+                type={showConfirmPassword ? 'text' : 'password'}
+                id="setup-confirm-password"
+                value={confirmPassword}
+                onChange={e => setConfirmPassword(e.target.value)}
+                placeholder="Repeat your password"
+                required
+                autoComplete="new-password"
+              />
+              <PasswordVisibilityButton
+                type="button"
+                aria-label="Show confirmation password"
+                aria-pressed={showConfirmPassword}
+                onClick={() => setShowConfirmPassword(current => !current)}
+              >
+                {showConfirmPassword ? 'Hide' : 'Show'}
+              </PasswordVisibilityButton>
+            </PasswordInputRow>
           </InputGroup>
 
           <SubmitButton
