@@ -258,7 +258,7 @@ const SetupPage: FC = () => {
               />
               <PasswordVisibilityButton
                 type="button"
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label="Show password"
                 aria-pressed={showPassword}
                 onClick={() => setShowPassword(current => !current)}
               >
@@ -284,9 +284,7 @@ const SetupPage: FC = () => {
               />
               <PasswordVisibilityButton
                 type="button"
-                aria-label={
-                  showConfirmPassword ? 'Hide confirmation password' : 'Show confirmation password'
-                }
+                aria-label="Show confirmation password"
                 aria-pressed={showConfirmPassword}
                 onClick={() => setShowConfirmPassword(current => !current)}
               >

@@ -99,19 +99,33 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
   const requestId = useRef(0);
   const videoRef = useRef<HTMLVideoElement>(null);
   const resumeApplied = useRef(false);
+  const latestProgress = useRef<{
+    positionSeconds: number;
+    durationSeconds: number;
+  } | null>(null);
+
+  const readProgressSnapshot = useCallback(() => {
+    const video = videoRef.current;
+    if (video && Number.isFinite(video.duration) && video.duration > 0) {
+      latestProgress.current = {
+        positionSeconds: Math.min(Math.max(video.currentTime, 0), video.duration),
+        durationSeconds: video.duration,
+      };
+    }
+    return latestProgress.current;
+  }, []);
 
   const saveProgress = useCallback(
     (state: 'playing' | 'paused' | 'completed') => {
-      const video = videoRef.current;
-      if (!video || !Number.isFinite(video.duration) || video.duration <= 0) return;
+      const snapshot = readProgressSnapshot();
+      if (!snapshot) return;
       void updateProgress({
         playable,
-        positionSeconds: Math.min(video.currentTime, video.duration),
-        durationSeconds: video.duration,
+        ...snapshot,
         state,
       });
     },
-    [playable, updateProgress]
+    [playable, readProgressSnapshot, updateProgress]
   );
 
   useEffect(() => {
@@ -120,6 +134,7 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
     setError(null);
     setStatus('preparing');
     resumeApplied.current = false;
+    latestProgress.current = null;
 
     void createSession({
       playable,
@@ -182,15 +197,18 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
             autoPlay
             playsInline
             onLoadedMetadata={event => {
-              if (resumeApplied.current) return;
-              resumeApplied.current = true;
-              if (resume && resume.state !== 'completed' && resume.positionSeconds > 5) {
-                event.currentTarget.currentTime = Math.min(
-                  resume.positionSeconds,
-                  Math.max(0, event.currentTarget.duration - 1)
-                );
+              if (!resumeApplied.current) {
+                resumeApplied.current = true;
+                if (resume && resume.state !== 'completed' && resume.positionSeconds > 5) {
+                  event.currentTarget.currentTime = Math.min(
+                    resume.positionSeconds,
+                    Math.max(0, event.currentTarget.duration - 1)
+                  );
+                }
               }
+              readProgressSnapshot();
             }}
+            onTimeUpdate={readProgressSnapshot}
             onCanPlay={() => setStatus('ready')}
             onPlaying={() => setStatus('ready')}
             onPause={() => saveProgress('paused')}

@@ -93,6 +93,7 @@ const HomePage: FC = () => {
   const [playable, setPlayable] = useState<PlayableRef | null>(null);
   const lastIntentSequence = useRef(0);
   const sourceCache = useRef(new Map<number, PreloadPreparationSource>());
+  const lastPreparation = useRef<PreloadPreparationSnapshot | null>(null);
   const rowRefs = useRef(new Map<number, CategoryRowHandle>());
   const detailsRef = useRef<MediaDetailsHandle>(null);
   const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
@@ -262,7 +263,14 @@ const HomePage: FC = () => {
     window.dispatchEvent(new Event('miauflix:settings:open'));
   }, []);
 
-  const responsePreparation = intentState.data?.preparation;
+  if (intentState.data) {
+    lastPreparation.current = intentState.data.preparation ?? null;
+  }
+  const responsePreparation = intentState.data
+    ? intentState.data.preparation
+    : intentState.isLoading
+      ? lastPreparation.current
+      : undefined;
   useEffect(() => {
     if (responsePreparation?.playable.kind !== 'movie') return;
     const mediaId = responsePreparation.playable.mediaId;

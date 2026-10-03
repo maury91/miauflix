@@ -408,7 +408,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
       {hasChanges && !hasMissingRequiredValues && (
         <ConfigurationNote role="note">
           {hasSuggestedRequiredValue
-            ? 'Saved credentials are present. The redirect URI is suggested from this browser, but it is required and still unsaved. Save these settings to continue.'
+            ? 'The redirect URI is suggested from this browser, but it is required and still unsaved. Save these settings to continue.'
             : hasUnsavedRequiredValues
               ? 'Required settings are filled in but not saved yet. Save these settings to continue.'
               : 'Save these settings to continue.'}

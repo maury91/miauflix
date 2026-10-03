@@ -346,6 +346,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const episodeListRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef(new Map<number, HTMLElement>());
   const inflight = useRef(new Map<number, Promise<SeasonResponse | undefined>>());
+  const currentMediaId = useRef(media.mediaId);
+  currentMediaId.current = media.mediaId;
   const jumpToSeason = useRef<number | null>(null);
   const [resolvedBackdropFocus, setResolvedBackdropFocus] = useState(media.backdropFocus);
   const [backdropContext, setBackdropContext] = useState<BackdropPositionContext>();
@@ -373,20 +375,35 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       if (cached) return Promise.resolve(cached);
       const pending = inflight.current.get(seasonNumber);
       if (pending) return pending;
+      const requestMediaId = media.mediaId;
       setLoadingSeasons(previous => ({ ...previous, [seasonNumber]: true }));
-      const request = loadSeason({ showId: media.mediaId, season: seasonNumber })
+      const request = loadSeason({ showId: requestMediaId, season: seasonNumber })
         .unwrap()
         .then(data => {
+          if (
+            currentMediaId.current !== requestMediaId ||
+            inflight.current.get(seasonNumber) !== request
+          ) {
+            return undefined;
+          }
           setLoadedSeasons(previous => ({ ...previous, [seasonNumber]: data }));
           setSeasonErrors(previous => ({ ...previous, [seasonNumber]: false }));
           return data;
         })
         .catch(() => {
+          if (
+            currentMediaId.current !== requestMediaId ||
+            inflight.current.get(seasonNumber) !== request
+          ) {
+            return undefined;
+          }
           setSeasonErrors(previous => ({ ...previous, [seasonNumber]: true }));
           return undefined;
         })
         .finally(() => {
+          if (inflight.current.get(seasonNumber) !== request) return;
           inflight.current.delete(seasonNumber);
+          if (currentMediaId.current !== requestMediaId) return;
           setLoadingSeasons(previous => ({ ...previous, [seasonNumber]: false }));
         });
       inflight.current.set(seasonNumber, request);

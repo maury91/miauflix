@@ -334,8 +334,7 @@ function getServiceSummary(name: string, entries: ConfigEntryView[]): string {
 function getReadiness(entries: ConfigEntryView[]): string {
   const missingRequired = entries.some(entry => entry.required && !entry.hasValue);
   if (missingRequired) return 'Needs setup';
-  if (entries.some(entry => entry.hasValue)) return 'Settings saved';
-  return 'Uses defaults';
+  return 'Ready';
 }
 
 const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, duration));
@@ -514,9 +513,8 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
             with the defaults already in place.
           </Subtitle>
           <OptionalIntro role="note">
-            <strong>Required settings are saved:</strong> you can finish setup now. Optional
-            integrations show whether they have saved settings or use defaults; open one to review
-            or change it.
+            <strong>Required settings are complete:</strong> you can finish setup now. Optional
+            integrations are ready to review; open one to review or change it.
           </OptionalIntro>
           <OptionalList>{primaryOptionalGroups.map(renderOptionalService)}</OptionalList>
           {advancedOptionalGroups.length > 0 && (
@@ -542,7 +540,9 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
     );
   }
 
-  const hasCompleteRequiredValues = current.every(entry => !entry.required || entry.hasValue);
+  const hasCompleteRequiredValues = current.every(
+    entry => !entry.required || entry.hasValue || Boolean(values[entry.key]?.trim())
+  );
   const canContinue =
     isOptionalStep ||
     savedServices.has(currentName) ||

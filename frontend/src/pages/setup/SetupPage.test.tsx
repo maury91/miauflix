@@ -34,7 +34,7 @@ describe('SetupPage', () => {
 
     fireEvent.click(showPassword);
     expect(password).toHaveAttribute('type', 'text');
-    expect(screen.getByRole('button', { name: 'Hide password' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Show password' })).toHaveAttribute(
       'aria-pressed',
       'true'
     );
@@ -42,7 +42,7 @@ describe('SetupPage', () => {
 
     fireEvent.click(showConfirmation);
     expect(confirmation).toHaveAttribute('type', 'text');
-    expect(screen.getByRole('button', { name: 'Hide confirmation password' })).toHaveAttribute(
+    expect(screen.getByRole('button', { name: 'Show confirmation password' })).toHaveAttribute(
       'aria-pressed',
       'true'
     );

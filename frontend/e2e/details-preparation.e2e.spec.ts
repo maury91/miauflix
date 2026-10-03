@@ -263,9 +263,11 @@ test.describe('details page preparation contract', () => {
 
     await page.getByRole('button', { name: 'Back to browse' }).click();
     await expect(page.getByRole('button', { name: fixtureMovie.title, exact: true })).toBeVisible();
-    await page.close();
+    await page.getByRole('button', { name: 'Settings', exact: true }).click();
+    await expect(page.getByRole('heading', { name: 'Optional settings' })).toBeVisible();
     await expect.poll(() => harness.cleanupSequences.length, { timeout: 5_000 }).toBeGreaterThan(0);
     await expect.poll(() => harness.torrentEvents.includes('warmup:paused')).toBe(true);
     expect(harness.preloadRequests.some(request => request.view === 'details')).toBe(true);
+    await page.close();
   });
 });

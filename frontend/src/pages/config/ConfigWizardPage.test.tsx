@@ -167,7 +167,7 @@ describe('ConfigWizardPage', () => {
     expect(screen.getByRole('heading', { name: 'Optional settings' })).toBeInTheDocument();
     expect(screen.getByText('Movie and show metadata from The Movie Database.')).toBeVisible();
     expect(screen.getByText('Trakt lists')).toBeVisible();
-    expect(screen.getByText('Settings saved')).toBeVisible();
+    expect(screen.getAllByText('Ready').length).toBeGreaterThan(0);
 
     const advanced = screen.getByText('Advanced settings (4 groups)');
     expect(advanced).toBeVisible();

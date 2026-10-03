@@ -203,7 +203,7 @@ describe('ServiceConfigGroup', () => {
 
     expect(screen.getByText('save required')).toBeInTheDocument();
     expect(
-      screen.getByText(/Saved credentials are present.*redirect URI is suggested/i)
+      screen.getByText(/redirect URI is suggested from this browser.*still unsaved/i)
     ).toBeInTheDocument();
   });
 

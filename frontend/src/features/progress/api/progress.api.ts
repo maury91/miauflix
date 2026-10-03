@@ -9,8 +9,10 @@ import type { RootState } from '@store/store';
 export const progressApi = createApi({
   reducerPath: 'progressApi',
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
+  tagTypes: ['Progress'],
   endpoints: builder => ({
     getProgress: builder.query<ProgressListResponse, void>({
+      providesTags: ['Progress'],
       async queryFn(_arg, api) {
         const session = selectCurrentSessionId(api.getState() as RootState);
         const headers: Record<string, string> = session ? { 'X-Session-Id': session } : {};
@@ -28,6 +30,7 @@ export const progressApi = createApi({
       },
     }),
     updateProgress: builder.mutation<void, ProgressRequest>({
+      invalidatesTags: ['Progress'],
       async queryFn(progress, api) {
         const session = selectCurrentSessionId(api.getState() as RootState);
         const headers: Record<string, string> = session ? { 'X-Session-Id': session } : {};
