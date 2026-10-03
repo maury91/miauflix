@@ -17,6 +17,14 @@ const LogoImage = styled.img<{ $setup: boolean; $configuration: boolean; $home: 
   transform: ${({ $home }) => ($home ? 'none' : 'translate(-50%, 0%)')};
   left: ${({ $home }) => ($home ? '5vw' : '50%')};
 
+  body[data-miauflix-details='true'] & {
+    left: 8vw;
+  }
+
+  body[data-miauflix-player='true'] & {
+    display: none;
+  }
+
   /* Desktop */
   top: ${({ $home, $configuration }) =>
     $home ? '3vh' : $configuration ? '24px' : 'calc(50% - 380px)'};
@@ -35,6 +43,10 @@ const LogoImage = styled.img<{ $setup: boolean; $configuration: boolean; $home: 
     top: ${({ $home, $configuration }) => ($home ? '3vh' : $configuration ? '16px' : '50px')};
     height: ${({ $home, $setup, $configuration }) =>
       $home ? '4vh' : $configuration ? '48px' : $setup ? `${70 * setupScale}px` : '70px'};
+
+    body[data-miauflix-details='true'] & {
+      left: 30vw;
+    }
   }
 `;
 

@@ -16,6 +16,7 @@ async function parseResponse<T>(
   errorContext: string
 ): Promise<ApiRequestResult<T>> {
   if (response.ok) {
+    if (response.status === 204) return { data: undefined as T };
     return { data: (await response.json()) as T };
   }
 

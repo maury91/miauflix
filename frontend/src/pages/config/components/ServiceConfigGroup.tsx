@@ -59,6 +59,11 @@ const ConfiguredBadge = styled(MissingBadge)`
   border-color: rgba(66, 184, 131, 0.42);
 `;
 
+const PendingBadge = styled(MissingBadge)`
+  color: ${SETTINGS_PALETTE.color.warning};
+  border-color: rgba(255, 193, 7, 0.42);
+`;
+
 const OptionalSettingsButton = styled.button`
   width: 100%;
   display: flex;
@@ -89,6 +94,13 @@ const Actions = styled.div`
   margin-top: 18px;
   padding-top: 16px;
   border-top: 1px solid ${SETTINGS_PALETTE.background.border};
+`;
+
+const ConfigurationNote = styled.p`
+  margin: 12px 0 0;
+  color: ${SETTINGS_PALETTE.color.warning};
+  font-size: 12px;
+  line-height: 1.45;
 `;
 
 const ActionButton = styled.button<{ $primary?: boolean }>`
@@ -222,6 +234,16 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
   const serviceDescription = entries[0]?.serviceDescription;
   const hasMissingRequiredValues = missingCount > 0;
   const hasFailedTest = Boolean(result && !result.success && !hasMissingRequiredValues);
+  const hasUnsavedRequiredValues = entries.some(
+    entry => entry.required && !entry.hasValue && Boolean(values[entry.key]?.trim())
+  );
+  const hasSuggestedRequiredValue = entries.some(
+    entry =>
+      entry.required &&
+      !entry.hasValue &&
+      entry.defaultValueSource === 'browser-origin' &&
+      Boolean(values[entry.key]?.trim())
+  );
   const failedTestEntries = hasFailedTest ? entries.filter(entry => entry.testRelevant) : [];
   const hasTestFailure = (entry: ConfigEntryView) => Boolean(hasFailedTest && entry.testRelevant);
   const hasOptionalTestFailure = optionalEntries.some(entry => hasTestFailure(entry));
@@ -251,6 +273,12 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
           <MissingBadge>{missingCount} missing</MissingBadge>
         ) : hasFailedTest ? (
           <MissingBadge>test failed</MissingBadge>
+        ) : hasChanges ? (
+          <PendingBadge>save required</PendingBadge>
+        ) : result?.success && result.testMode === 'live' ? (
+          <ConfiguredBadge>connection checked</ConfiguredBadge>
+        ) : result?.success ? (
+          <ConfiguredBadge>validated</ConfiguredBadge>
         ) : (
           <ConfiguredBadge>configured</ConfiguredBadge>
         )}
@@ -376,6 +404,16 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
           )}
         </ActionButton>
       </Actions>
+
+      {hasChanges && !hasMissingRequiredValues && (
+        <ConfigurationNote role="note">
+          {hasSuggestedRequiredValue
+            ? 'The redirect URI is suggested from this browser, but it is required and still unsaved. Save these settings to continue.'
+            : hasUnsavedRequiredValues
+              ? 'Required settings are filled in but not saved yet. Save these settings to continue.'
+              : 'Save these settings to continue.'}
+        </ConfigurationNote>
+      )}
 
       {result && !hasMissingRequiredValues && (
         <ResultMessage

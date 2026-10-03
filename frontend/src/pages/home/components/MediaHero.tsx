@@ -1,7 +1,7 @@
 import { useEnsureBackdropFocusMutation } from '@features/media/api/media.api';
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
-import { type FC, useCallback, useEffect, useRef, useState } from 'react';
+import { type FC, Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import {
@@ -16,6 +16,7 @@ import {
   HERO_DETAILS_WIDTH_CSS,
 } from '../hero-backdrop-layout';
 import { getImageUrl, getMediaTitle } from '../media.utils';
+import { SourcePreparationStatus } from './SourcePreparationStatus';
 
 interface BackdropLayerState {
   key: string;
@@ -126,6 +127,34 @@ const Metadata = styled.p`
   color: ${PALETTE.text.primary};
   font-size: clamp(0.85rem, 2.1vh, 1.2rem);
   font-weight: 500;
+  display: flex;
+  min-width: 25vw;
+  justify-content: space-between;
+  align-items: center;
+  span {
+    display: flex;
+  }
+`;
+
+const MetadataRow = styled.div`
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+
+  @media (max-width: 860px) {
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+`;
+
+const MetadataBlock = styled.div`
+  min-width: 0;
+`;
+
+const MetadataSeparator = styled.span`
+  border-right: 1px solid ${PALETTE.text.primary};
+  height: 1.2em;
 `;
 
 const Overview = styled.p`
@@ -144,7 +173,12 @@ const Overview = styled.p`
  * Analysis failure uses right-center positioning; image load failure clears the active backdrop.
  * Null media renders an empty hero, and reduced-motion preferences disable the fade.
  */
-export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
+interface MediaHeroProps {
+  media: MediaDto | null;
+  preparation?: PreloadPreparationSnapshot | null;
+}
+
+export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => {
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const heroRef = useRef<HTMLElement>(null);
   const [heroSize, setHeroSize] = useState({ width: 0, height: 0 });
@@ -290,9 +324,7 @@ export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
     media._type === 'movie' && media.runtime ? `${media.runtime} min` : '',
     date?.slice(0, 4),
     media.rating ? `★ ${media.rating.toFixed(1)}` : '',
-  ]
-    .filter(Boolean)
-    .join(' · ');
+  ].filter(Boolean);
   return (
     <Hero ref={heroRef} aria-live="polite">
       {activeBackdrop && (
@@ -320,8 +352,24 @@ export const MediaHero: FC<{ media: MediaDto | null }> = ({ media }) => {
         ) : (
           <Title>{getMediaTitle(media)}</Title>
         )}
-        <Metadata>{metadata}</Metadata>
-        {media.genres.length > 0 && <Metadata>{media.genres.join(' · ')}</Metadata>}
+        <MetadataRow>
+          <MetadataBlock>
+            <Metadata>
+              {metadata.map((text, index) => (
+                <Fragment key={index}>
+                  <span>{text}</span>
+                  <MetadataSeparator />
+                </Fragment>
+              ))}
+              <SourcePreparationStatus
+                mediaKind={media._type}
+                mode="browse"
+                preparation={preparation}
+              />
+            </Metadata>
+            {media.genres.length > 0 && <Metadata>{media.genres.join(' · ')}</Metadata>}
+          </MetadataBlock>
+        </MetadataRow>
         <Overview>{media.overview}</Overview>
       </Details>
     </Hero>

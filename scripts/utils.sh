@@ -92,7 +92,27 @@ ensure_docker_desktop_access() {
   return 1
 }
 
-# Prepare the host-visible data directories used by the Docker services.
+# Development images run as root inside the container, so they do not need
+# production UID/GID ownership on their bind mounts. Keep new directories
+# private to the host user and preserve permissions on existing data.
+ensure_development_data_dir() {
+  local project_dir="${1:-$(pwd)}"
+  local target_dir
+
+  for target_dir in "$project_dir/data" "$project_dir/data/media-catalog" "$project_dir/data/list-service"; do
+    if ! (umask 077; mkdir -p "$target_dir"); then
+      print_error "Cannot create ${target_dir}. Restore access for $(id -un), then retry."
+      return 1
+    fi
+
+    if [ ! -r "$target_dir" ] || [ ! -w "$target_dir" ] || [ ! -x "$target_dir" ]; then
+      print_error "Development data directory ${target_dir} must be readable, writable, and searchable by $(id -un). Restore host-user access, then retry."
+      return 1
+    fi
+  done
+}
+
+# Prepare the host-visible data directories used by production Docker services.
 # The catalog image runs as linuxserver (UID/GID 911) in production, while the
 # development compose stack shares the parent directory with the backend. Do
 # not chown the whole tree to the catalog user; make the directory boundaries

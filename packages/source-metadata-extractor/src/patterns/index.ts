@@ -129,6 +129,7 @@ export const SOURCE_PATTERNS: PatternConfig<Source>[] = [
   { regex: /(\bdvdrip\b|\bdvdr\b|\bdvdscr\b|\bdvd\b)/gi, value: Source.DVD, specificity: 80 },
   { regex: /(\btsrip\b|\btelesync\b|\bhdts\b|\bTS\b)/gi, value: Source.TS, specificity: 95 },
   { regex: /(\bcamrip\b|\bcam\b|\bhdcam\b)/gi, value: Source.CAM, specificity: 95 },
+  { regex: /(\bdcp(?:[ -]?rip)?\b)/gi, value: Source.DCP, specificity: 95 },
   // Remove technical source terms
   { regex: /(\bremux\b)/gi, value: null, specificity: 85 },
 ];

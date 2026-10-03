@@ -81,8 +81,9 @@ const devCertificateRoot = devCertificateRootOverride
 const devCertificateDir = path.join(devCertificateRoot, 'server');
 const devCertificateKeyPath = path.join(devCertificateDir, 'localhost-key.pem');
 const devCertificatePath = path.join(devCertificateDir, 'localhost.pem');
+const testHttp = process.env['MIAUFLIX_TEST_HTTP'] === 'true';
 const trustedDevHttps =
-  existsSync(devCertificateKeyPath) && existsSync(devCertificatePath)
+  !testHttp && existsSync(devCertificateKeyPath) && existsSync(devCertificatePath)
     ? {
         key: readFileSync(devCertificateKeyPath),
         cert: readFileSync(devCertificatePath),
@@ -209,7 +210,7 @@ export default defineConfig({
     // nxViteTsPaths(),
     // nxCopyAssetsPlugin(assets),
     // ...(tizenBuild ? tizenPlugins : []),
-    ...(trustedDevHttps
+    ...(trustedDevHttps || testHttp
       ? []
       : [
           basicSsl({

@@ -10,6 +10,13 @@ import {
 } from '@/types';
 
 describe('extractSourceMetadata', () => {
+  test.each(['Zootopia 2 2025 DCPRip 1080p SOFCJ', 'Zootopia 2 2025 DCP ProRes 2K SOFCJ'])(
+    'recognizes digital cinema releases: %s',
+    name => {
+      expect(extractSourceMetadata({ name, size: 21796959027 }).source).toBe(Source.DCP);
+    }
+  );
+
   describe('Movie Sources', () => {
     test.each<{
       name: string;

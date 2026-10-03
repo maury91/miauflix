@@ -36,6 +36,14 @@ describe('authenticatedRequest', () => {
     expect(refreshPost).not.toHaveBeenCalled();
   });
 
+  it('accepts successful empty responses', async () => {
+    const requestFn = vi.fn().mockResolvedValue(new Response(null, { status: 204 }));
+
+    await expect(
+      authenticatedRequest<void>({ requestFn, session: 'one', errorContext: 'Request failed' })
+    ).resolves.toEqual({ data: undefined });
+  });
+
   it('refreshes after a 401 and retries the request once', async () => {
     const requestFn = vi
       .fn()

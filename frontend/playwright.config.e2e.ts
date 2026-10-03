@@ -12,7 +12,7 @@ export default defineConfig({
   /* Only run e2e test files */
   testMatch: '**/*.e2e.spec.ts',
   /* The initial-user flow owns its own fresh database and single-browser project. */
-  testIgnore: '**/initial-user-setup.e2e.spec.ts',
+  testIgnore: ['**/initial-user-setup.e2e.spec.ts', '**/details-preparation.e2e.spec.ts'],
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */

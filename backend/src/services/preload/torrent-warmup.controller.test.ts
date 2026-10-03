@@ -144,4 +144,37 @@ describe('TorrentWarmupController', () => {
     expect(retried.state).toBe('warming');
     expect(retried.generation).toBeGreaterThan(1);
   });
+
+  it('reports ready only after the requested range is verified', async () => {
+    jest.useFakeTimers();
+    const { controller, driver } = setupTest();
+    let verified = false;
+    driver.isRangeVerified = jest.fn(async () => verified);
+    try {
+      const warming = await controller.warm(source(1), 'm:1', 'm:1');
+      expect(warming.state).toBe('warming');
+
+      verified = true;
+      await jest.advanceTimersByTimeAsync(250);
+
+      expect(controller.getState()).toMatchObject({ state: 'ready' });
+    } finally {
+      controller.close();
+      jest.useRealTimers();
+    }
+  });
+
+  it('does not let an aborted generation pause a newer slot', async () => {
+    const { controller, driver } = setupTest();
+    try {
+      const first = await controller.warm(source(1), 'm:1', 'm:1');
+      await controller.warm(source(2), 'm:1', 'm:1');
+
+      await expect(controller.pause('m:1', first.generation)).resolves.toBe(false);
+      expect(controller.getState()).toMatchObject({ sourceId: 2, state: 'warming' });
+      expect(driver.pauseSource).toHaveBeenCalledWith(1);
+    } finally {
+      controller.close();
+    }
+  });
 });
