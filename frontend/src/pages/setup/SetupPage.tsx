@@ -144,7 +144,7 @@ const SubmitButton = styled(Button)`
   min-height: 0;
   width: 100%;
   padding: 10px 12px;
-  background-color: ${SETTINGS_PALETTE.color.primaryButton};
+  background: ${SETTINGS_PALETTE.color.primaryButton};
   color: #0a0d0f;
   border: none;
   border-radius: 4px;
@@ -156,15 +156,15 @@ const SubmitButton = styled(Button)`
   margin-top: 24px;
 
   &:hover {
-    background-color: ${SETTINGS_PALETTE.color.primaryButtonHover};
+    background: ${SETTINGS_PALETTE.color.primaryButtonHover};
   }
 
   &:active:not(:disabled) {
-    background-color: ${SETTINGS_PALETTE.color.primaryButtonPressed};
+    background: ${SETTINGS_PALETTE.color.primaryButtonPressed};
   }
 
   &:disabled {
-    background-color: #50585b;
+    background: #50585b;
     cursor: not-allowed;
   }
 `;

@@ -1,7 +1,10 @@
+const MAX_RETRY_AFTER_MS = 5 * 60_000;
+
 export function retryAfterMs(value: string | null, now = Date.now()): number {
   if (value && /^\d+$/.test(value) && Number.isSafeInteger(Number(value)))
-    return Number(value) * 1000;
-  if (value && Number.isFinite(Date.parse(value))) return Math.max(0, Date.parse(value) - now);
+    return Math.min(Number(value) * 1000, MAX_RETRY_AFTER_MS);
+  const at = value ? Date.parse(value) : NaN;
+  if (Number.isFinite(at) && at > now) return Math.min(at - now, MAX_RETRY_AFTER_MS);
   return 5_000;
 }
 

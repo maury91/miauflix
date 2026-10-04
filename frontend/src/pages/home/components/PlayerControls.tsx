@@ -102,6 +102,11 @@ const CenterPlay = styled(Button)`
   transform: translate(-50%, -50%);
   font-size: clamp(3rem, 10vh, 7rem);
   padding: 1rem;
+
+  > svg {
+    width: 1em;
+    height: 1em;
+  }
 `;
 const Seek = styled.div`
   position: relative;

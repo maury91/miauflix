@@ -33,7 +33,10 @@ type Preparation = {
   playable: { kind: 'movie'; mediaId: number };
   state: 'checking' | 'source_found' | 'error' | 'no_source';
   source: typeof source | null;
-  warmup: { state: 'not_requested' | 'warming' | 'ready' | 'paused' | 'failed' };
+  warmup: {
+    state: 'not_requested' | 'warming' | 'ready' | 'paused' | 'failed';
+    progress?: number;
+  };
 };
 
 type Harness = {
@@ -178,7 +181,10 @@ async function installOfflineHarness(page: Page): Promise<Harness> {
         source,
         warmup:
           intent.view === 'details'
-            ? { state: harness.detailsHeartbeats > 1 ? 'ready' : 'warming' }
+            ? {
+                state: harness.detailsHeartbeats > 1 ? 'ready' : 'warming',
+                progress: harness.detailsHeartbeats > 1 ? 100 : 50,
+              }
             : { state: 'not_requested' },
       };
       return json(route, {

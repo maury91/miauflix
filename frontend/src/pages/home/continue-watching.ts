@@ -22,5 +22,7 @@ export function unfinishedProgress(entries: ProgressEntry[]): ProgressEntry[] {
     )
       latest.set(key, entry);
   }
-  return [...latest.values()].sort((left, right) => right.updatedAt.localeCompare(left.updatedAt));
+  return [...latest.values()].sort(
+    (left, right) => Date.parse(right.updatedAt) - Date.parse(left.updatedAt)
+  );
 }

@@ -40,4 +40,21 @@ describe('Continue watching from Trakt', () => {
       ])
     ).toEqual([]);
   });
+
+  it('sorts entries by chronology across timestamp formats', () => {
+    const later = {
+      ...next,
+      playable: { kind: 'movie' as const, mediaId: 100 },
+      updatedAt: '2026-10-04T09:00:00Z',
+      positionSeconds: 100,
+    };
+    const earlierLexically = {
+      ...next,
+      playable: { kind: 'movie' as const, mediaId: 101 },
+      updatedAt: '2026-10-04T10:00:00+02:00',
+      positionSeconds: 100,
+    };
+
+    expect(unfinishedProgress([earlierLexically, later])).toEqual([later, earlierLexically]);
+  });
 });

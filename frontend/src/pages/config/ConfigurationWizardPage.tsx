@@ -404,9 +404,10 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
             );
             return hasCompleteRequiredValues && !initialRequiredServiceNames?.includes(name);
           })
-        )
+        ),
+        serviceStatuses
       ),
-    [groups, initialRequiredServiceNames]
+    [groups, initialRequiredServiceNames, serviceStatuses]
   );
   const currentRequired = requiredGroups[step];
   const currentOptional = optionalService ? groups[optionalService] : undefined;

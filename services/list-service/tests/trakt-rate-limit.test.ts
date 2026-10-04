@@ -8,4 +8,10 @@ describe('Trakt Retry-After', () => {
     expect(retryAfterMs('Sun, 04 Oct 2026 10:02:00 GMT', now)).toBe(120_000);
     expect(retryAfterMs(null, now)).toBe(5_000);
   });
+
+  it('caps excessive provider delays and uses the default for past dates', () => {
+    const now = Date.parse('2026-10-04T10:00:00Z');
+    expect(retryAfterMs('86400', now)).toBe(5 * 60_000);
+    expect(retryAfterMs('Sun, 04 Oct 2026 09:59:00 GMT', now)).toBe(5_000);
+  });
 });
