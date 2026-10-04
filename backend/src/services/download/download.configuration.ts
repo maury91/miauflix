@@ -120,13 +120,13 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       example: 'your-32-character-random-salt-string',
       transform: transforms.string({ minLength: 32 }),
     }),
-    PRELOAD_WARM_TARGET_MIB: variable({
+    PRELOAD_WARM_TARGET: variable({
       description: 'Amount of the beginning of a video to download before torrent warmup is ready',
       label: 'Torrent warmup buffer',
-      example: '64',
-      defaultValue: '64',
+      example: '64MB',
+      defaultValue: '64MB',
       required: true,
-      transform: transforms.number({ min: 1, max: 4096, integer: true }),
+      transform: transforms.size(),
     }),
   },
 });

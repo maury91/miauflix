@@ -24,6 +24,7 @@ import { PlaybackSessionService } from '@services/playback/playback-session.serv
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
+import { ProgressService } from '@services/progress/progress.service';
 import { RequestService } from '@services/request/request.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
@@ -78,6 +79,7 @@ try {
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db);
+  const progressService = new ProgressService(db, listClient);
   const mediaService = new MediaService(db, catalogClient);
   const backgroundJobs = new BackgroundJobService(configurationService);
   const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
@@ -228,7 +230,7 @@ try {
     statsService,
     preloadIntentService,
     playbackSessionService,
-    progressRepository: db.getProgressRepository(),
+    progressService,
   });
 
   // Error handling middleware - must be added first

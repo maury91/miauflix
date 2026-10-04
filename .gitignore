@@ -25,6 +25,7 @@ frontend/test-results-e2e
 frontend/test-results-initial-setup
 frontend/playwright-report
 frontend/playwright-report-initial-setup
+frontend/playwright-report-details
 
 # Environment files
 .env

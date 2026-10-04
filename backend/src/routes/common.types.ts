@@ -1,4 +1,3 @@
-import type { ProgressRepository } from '@repositories/progress.repository';
 import type { AuthService } from '@services/auth/auth.service';
 import type { QrLoginService } from '@services/auth/qr-login.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
@@ -9,6 +8,7 @@ import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
+import type { ProgressService } from '@services/progress/progress.service';
 import type { RequestService } from '@services/request/request.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
@@ -39,7 +39,7 @@ export interface Deps {
   vpnDetectionService: VpnDetectionService;
   preloadIntentService: PreloadIntentService;
   playbackSessionService: PlaybackSessionService;
-  progressRepository: ProgressRepository;
+  progressService: ProgressService;
 }
 
 export interface ErrorResponse {

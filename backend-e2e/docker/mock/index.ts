@@ -14,7 +14,7 @@ const API_KEY = process.env.API_KEY || '';
 const API_SECRET = process.env.API_SECRET || '';
 const API_BASE_URL = process.env.API_BASE_URL;
 const API_HEADERS = process.env.API_HEADERS ? JSON.parse(process.env.API_HEADERS) : {};
-const API_AUTH_HEADER = process.env.API_AUTH_HEADER || 'TraktAuthorization';
+const API_AUTH_HEADER = process.env.API_AUTH_HEADER || 'Authorization';
 const API_AUTH_HEADER_IS_BEARER = process.env.API_AUTH_HEADER_IS_BEARER === 'true';
 const RECORD_PROVIDER_FIXTURES = process.env.RECORD_PROVIDER_FIXTURES === 'true';
 const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL;

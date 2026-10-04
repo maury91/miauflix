@@ -1,5 +1,5 @@
-import { playableKey } from './playable.types';
-import type { ProgressEntry } from './progress.types';
+import { playableKey } from '@routes/playable.types';
+import type { ProgressEntry } from '@routes/progress.types';
 
 /** Local wins ties. Never write imported progress back to Trakt. */
 export function mergeProgress(local: ProgressEntry[], remote: ProgressEntry[]): ProgressEntry[] {

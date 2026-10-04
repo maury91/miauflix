@@ -491,7 +491,7 @@ export class DownloadService {
   }
 
   getWarmupTargetBytes(): number {
-    return this.config.getOrThrow('PRELOAD_WARM_TARGET_MIB') * 1024 * 1024;
+    return Number(this.config.getOrThrow('PRELOAD_WARM_TARGET'));
   }
 
   private getPieceByteLength(torrent: Torrent, piece: number): number {

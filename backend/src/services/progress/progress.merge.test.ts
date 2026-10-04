@@ -1,5 +1,6 @@
+import type { ProgressEntry } from '@routes/progress.types';
+
 import { mergeProgress } from './progress.merge';
-import type { ProgressEntry } from './progress.types';
 
 const entry = (updatedAt: string, state: ProgressEntry['state'] = 'paused'): ProgressEntry => ({
   playable: { kind: 'movie', mediaId: 123 },
