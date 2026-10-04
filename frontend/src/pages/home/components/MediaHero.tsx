@@ -122,7 +122,7 @@ const Title = styled.h1`
   text-transform: none;
 `;
 
-const Metadata = styled.p`
+const Metadata = styled.div`
   margin: 0 0 1vh;
   color: ${PALETTE.text.primary};
   font-size: clamp(0.85rem, 2.1vh, 1.2rem);
@@ -287,7 +287,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
     return () => {
       cancelled = true;
     };
-  }, [ensureBackdropFocus, media]);
+  }, [ensureBackdropFocus, media?.backdrop, media?.backdropFocus, media?._type, media?.mediaId]);
 
   const promoteIncoming = useCallback(() => {
     if (!incomingBackdrop) return;

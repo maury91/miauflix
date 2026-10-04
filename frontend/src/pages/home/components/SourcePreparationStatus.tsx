@@ -98,10 +98,6 @@ const Discovery = styled.span`
   gap: 0.4rem;
 `;
 
-const Warmup = styled(Discovery)`
-  color: ${PALETTE.text.primary};
-`;
-
 const Loading = styled(LoadingIcon)`
   flex: 0 0 auto;
   animation: status-spin 1s linear infinite;
@@ -136,7 +132,6 @@ function matchesMedia(snapshot: PreloadPreparationSnapshot | null, mediaKind: Me
 type SourceMetadata = NonNullable<PreloadPreparationSnapshot['source']>;
 type Quality = SourceMetadata['quality'];
 type SourceType = SourceMetadata['sourceType'];
-type WarmupState = PreloadPreparationSnapshot['warmup']['state'];
 
 function qualityLabel(quality: Quality): string | null {
   switch (quality) {
@@ -202,26 +197,9 @@ function discoveryText(state: PreloadPreparationSnapshot['state']): string | nul
   }
 }
 
-function warmupText(state: WarmupState): { text: string; loading: boolean } | null {
-  switch (state) {
-    case 'warming':
-      return { text: 'Warming up torrent…', loading: true };
-    case 'ready':
-      return { text: 'Initial buffer ready', loading: false };
-    case 'paused':
-      return { text: 'Paused', loading: false };
-    case 'failed':
-      return { text: 'Torrent warmup failed', loading: false };
-    case 'not_requested':
-    default:
-      return null;
-  }
-}
-
 /** Shows discovery state and the source metadata already known by preload. */
 export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
   mediaKind,
-  mode,
   preparation,
 }) => {
   if (mediaKind !== 'movie') return null;
@@ -231,8 +209,6 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
   const quality = qualityLabel(source?.quality ?? null);
   const release = sourceLabel(source?.sourceType ?? null);
   const qualityState = sourceQualityState(source?.sourceType ?? null);
-  const warmup =
-    mode === 'details' ? warmupText(preparation?.warmup?.state ?? 'not_requested') : null;
   const discovery = discoveryText(preparation?.state ?? 'checking');
   const loading = !preparation || preparation.state === 'checking';
   const showDiscovery =
@@ -277,12 +253,6 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
             </Warning>
           )}
         </Badges>
-      )}
-      {warmup && (
-        <Warmup>
-          {warmup.loading && <Loading width="1.1em" height="1.1em" aria-hidden="true" />}
-          <span>{warmup.text}</span>
-        </Warmup>
       )}
     </Status>
   );

@@ -10,6 +10,8 @@ import {
   listServiceDefinitionsPageSchema,
   listServicePageSchema,
   MANAGEMENT_PROTOCOL_VERSION,
+  playbackSnapshotSchema,
+  playbackSyncSchema,
   providerAssociationSchema,
   providerAuthorizationSchema,
   SERVICE_MANIFEST_PATH,
@@ -27,6 +29,7 @@ import { z } from 'zod';
 import { ListConfigService } from './config/config.service';
 import { disconnectAssociation, replaceAssociation } from './association-store';
 import { listPage } from './list-page-cache';
+import { PlaybackSync } from './playback-sync';
 import { parsePositivePage } from './request-validation';
 import { TraktClient } from './trakt-client';
 
@@ -203,7 +206,7 @@ const association = (subjectId: string) =>
     connection_id: string;
   } | null;
 
-const accessToken = async (subjectId: string, connectionId: string): Promise<string> => {
+const refreshAccessToken = async (subjectId: string, connectionId: string): Promise<string> => {
   const record = association(subjectId);
   if (!record || record.connection_id !== connectionId)
     throw new Error('Trakt account connection changed');
@@ -224,6 +227,21 @@ const accessToken = async (subjectId: string, connectionId: string): Promise<str
     throw new Error('Trakt account connection changed');
   return refreshed.access_token;
 };
+
+// Refresh tokens are single-use: share one refresh across list reads and the worker.
+const tokenFlights = new Map<string, Promise<string>>();
+const accessToken = (subjectId: string, connectionId: string): Promise<string> => {
+  const key = `${subjectId}:${connectionId}`;
+  const existing = tokenFlights.get(key);
+  if (existing) return existing;
+  const flight = refreshAccessToken(subjectId, connectionId).finally(() =>
+    tokenFlights.delete(key)
+  );
+  tokenFlights.set(key, flight);
+  return flight;
+};
+
+const playbackSync = new PlaybackSync(database, client, association, accessToken, seal, open);
 
 const json = (body: unknown, status = 200) => Response.json(body, { status });
 const serviceReady = () => {
@@ -379,6 +397,14 @@ const handler = async (request: Request): Promise<Response> => {
         }).then(value => listServicePageSchema.parse(value))
       );
     }
+    if (request.method === 'GET' && path === '/v1/progress') {
+      const subjectId = z.string().min(1).parse(url.searchParams.get('subjectId'));
+      return json(playbackSnapshotSchema.parse({ progress: await playbackSync.read(subjectId) }));
+    }
+    if (request.method === 'POST' && path === '/v1/progress') {
+      const body = playbackSyncSchema.parse(await request.json());
+      return json({ synced: await playbackSync.write(body.subjectId, body) });
+    }
     if (request.method === 'POST' && path === '/v1/connections/trakt/device') {
       const { subjectId } = z.object({ subjectId: z.string().min(1) }).parse(await request.json());
       const code = await client().deviceCode();
@@ -479,10 +505,16 @@ const handler = async (request: Request): Promise<Response> => {
 const server = Bun.serve({ hostname: HOST, port: PORT, fetch: handler });
 console.info(`List Service listening on http://${HOST}:${server.port}`);
 
+const playbackTimer = setInterval(() => {
+  if (config.ready)
+    void playbackSync.tick().catch(() => console.warn('Trakt background playback sync failed'));
+}, 5_000);
+
 let stopping = false;
 const shutdown = async (signal: string) => {
   if (stopping) return;
   stopping = true;
+  clearInterval(playbackTimer);
   console.info(`List Service received ${signal}, shutting down`);
   await server.stop();
   database.close();

@@ -7,7 +7,7 @@ import { defineConfig, devices } from '@playwright/test';
  */
 export default defineConfig({
   testDir: './e2e',
-  testMatch: '**/details-preparation.e2e.spec.ts',
+  testMatch: '**/details-*.e2e.spec.ts',
   fullyParallel: false,
   forbidOnly: !!process.env['CI'],
   retries: process.env['CI'] ? 2 : 0,
@@ -50,7 +50,7 @@ export default defineConfig({
     timeout: 120000,
   },
   outputDir: './test-results-details',
-  snapshotPathTemplate: '{snapshotDir}/details-preparation.e2e.spec.ts-snapshots/{arg}{ext}',
+  snapshotPathTemplate: '{snapshotDir}/{testFilePath}-snapshots/{arg}{ext}',
   expect: {
     toHaveScreenshot: {
       threshold: 0.2,

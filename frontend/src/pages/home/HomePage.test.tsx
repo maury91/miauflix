@@ -11,6 +11,10 @@ const {
   useUpdateIntentMutation,
   removeIntent,
   selectSession,
+  selectMovie,
+  getAssociation,
+  currentSession,
+  currentUser,
 } = vi.hoisted(() => ({
   useGetListsQuery: vi.fn(),
   useGetPopularListsInfiniteQuery: vi.fn(),
@@ -21,6 +25,16 @@ const {
   useUpdateIntentMutation: vi.fn(),
   removeIntent: vi.fn(),
   selectSession: vi.fn(),
+  selectMovie: vi.fn(),
+  getAssociation: vi.fn(),
+  currentSession: vi.fn(),
+  currentUser: vi.fn(),
+}));
+
+vi.mock('@features/integrations/api/trakt.api', () => ({
+  getTraktAssociation: getAssociation,
+  beginTraktAssociation: vi.fn(),
+  pollTraktAssociation: vi.fn(),
 }));
 
 vi.mock('@features/media/api/lists.api', () => ({
@@ -28,18 +42,21 @@ vi.mock('@features/media/api/lists.api', () => ({
   useGetPopularListsInfiniteQuery,
 }));
 vi.mock('@features/media/api/media.api', () => ({
-  mediaApi: { util: { prefetch: vi.fn() } },
+  mediaApi: { util: { prefetch: vi.fn() }, endpoints: { getMovie: { select: selectMovie } } },
 }));
 vi.mock('@features/preload/api/preload.api', () => ({
   useUpdateIntentMutation,
   useRemoveIntentMutation: () => [removeIntent],
 }));
 vi.mock('@shared/components', () => ({ Spinner: () => null }));
-vi.mock('@store/slices/auth', () => ({ selectCurrentSessionId: () => null }));
+vi.mock('@store/slices/auth', () => ({
+  selectCurrentSessionId: currentSession,
+  selectCurrentUser: currentUser,
+}));
 vi.mock('@store/store', () => ({}));
 vi.mock('react-redux', () => ({
   useDispatch: () => vi.fn(),
-  useSelector: () => selectSession(),
+  useSelector: (selector: unknown) => selectSession(selector),
 }));
 vi.mock('./hooks/useMediaBoxSizes', () => ({
   useMediaBoxSizes: () => ({ mediaWidth: 180, mediaPerPage: 1, gap: 12, margin: 24 }),
@@ -52,6 +69,7 @@ vi.mock('./components/CategoryRow', async () => {
         props: {
           categoryIndex: number;
           active: boolean;
+          mediaOverride?: unknown[];
           loadIntent?: string;
           visible?: boolean;
           onActive: (categoryIndex: number, mediaIndex: number, media: unknown) => void;
@@ -63,6 +81,12 @@ vi.mock('./components/CategoryRow', async () => {
           loadIntent: props.loadIntent,
           visible: props.visible,
         });
+        const { active, mediaOverride, onActive, categoryIndex } = props;
+        React.useEffect(() => {
+          if (active && mediaOverride?.[0]) {
+            onActive(categoryIndex, 0, mediaOverride[0]);
+          }
+        }, [active, categoryIndex, mediaOverride, onActive]);
         const handle = rowHandles.get(props.categoryIndex);
         React.useImperativeHandle(ref, () => handle, [handle]);
         const media = {
@@ -89,6 +113,9 @@ vi.mock('./components/CategoryRow', async () => {
     ),
   };
 });
+vi.mock('./components/PlayerView', () => ({
+  PlayerView: () => <div data-testid="player" />,
+}));
 vi.mock('./components/MediaHero', async () => {
   const React = await import('react');
   return {
@@ -133,6 +160,8 @@ vi.mock('./components/MediaDetails', async () => {
   };
 });
 
+import { progressApi } from '@features/progress/api/progress.api';
+
 import HomePage from './HomePage';
 
 const categories = [
@@ -154,7 +183,12 @@ const makeHandle = (focusResult: boolean, empty: boolean) => ({
 
 describe('HomePage focus transitions', () => {
   beforeEach(() => {
-    selectSession.mockReturnValue(null);
+    selectSession.mockReset().mockReturnValue(null);
+    currentSession.mockReset().mockReturnValue(null);
+    currentUser.mockReset().mockReturnValue(null);
+    getAssociation.mockReset().mockResolvedValue({ data: { connected: true } });
+    window.localStorage.clear();
+    window.sessionStorage.clear();
     removeIntent.mockReset();
     useUpdateIntentMutation.mockReturnValue([vi.fn(), {}]);
     rowHandles.clear();
@@ -172,6 +206,134 @@ describe('HomePage focus transitions', () => {
       isFetchingNextPage: false,
     });
     detailsHandleAction.mockReset().mockReturnValue({ type: 'escape', direction: 'left' });
+  });
+
+  it.each([
+    ['Close Trakt dialog', false],
+    ['Don’t ask again', true],
+  ] as const)(
+    'keeps the dismissal scope for %s across page reloads and logins',
+    async (label, permanent) => {
+      const state = { mediaApi: {} };
+      currentSession.mockReturnValue('test-session');
+      currentUser.mockReturnValue({ id: 'test-user' });
+      selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
+      getAssociation.mockResolvedValue({ data: { connected: false } });
+      const progressSelector = vi
+        .spyOn(progressApi.endpoints.getProgress, 'select')
+        .mockReturnValue((() => ({ data: { progress: [] } })) as never);
+      try {
+        let view = render(<HomePage />);
+        expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+        expect(getAssociation).toHaveBeenCalledWith('test-session');
+        fireEvent.click(screen.getByRole('button', { name: label }));
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        expect(window.sessionStorage.getItem('miauflix:trakt:not-now:test-session')).toBe(null);
+        expect(window.localStorage.getItem('miauflix:trakt:dont-ask:test-user')).toBe(
+          permanent ? '1' : null
+        );
+        // Reloading the page keeps the same authenticated session.
+        view.unmount();
+        await act(async () => {
+          view = render(<HomePage />);
+        });
+        if (permanent) {
+          expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        } else {
+          expect(screen.getByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+          fireEvent.click(screen.getByRole('button', { name: label }));
+        }
+        currentSession.mockReturnValue(null);
+        view.rerender(<HomePage />);
+        currentSession.mockReturnValue('new-session');
+        await act(async () => view.rerender(<HomePage />));
+        expect(getAssociation).toHaveBeenLastCalledWith('new-session');
+        if (permanent) {
+          expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        } else {
+          expect(screen.getByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+        }
+      } finally {
+        progressSelector.mockRestore();
+      }
+    }
+  );
+
+  it('keeps keyboard input and focus in the Trakt modal until dismissal', async () => {
+    const state = { mediaApi: {} };
+    currentSession.mockReturnValue('test-session');
+    currentUser.mockReturnValue({ id: 'test-user' });
+    selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
+    getAssociation.mockResolvedValue({ data: { connected: false } });
+    const row = makeHandle(true, false);
+    rowHandles.set(0, row);
+    const progressSelector = vi
+      .spyOn(progressApi.endpoints.getProgress, 'select')
+      .mockReturnValue((() => ({ data: { progress: [] } })) as never);
+    try {
+      render(<HomePage />);
+      const background = screen.getByTestId('card-0');
+      background.focus();
+      await screen.findByRole('dialog', { name: 'Connect Trakt' });
+      const first = screen.getByRole('button', { name: "Let's go" });
+      const close = screen.getByRole('button', { name: 'Close Trakt dialog' });
+      const never = screen.getByRole('button', { name: 'Don’t ask again' });
+      expect(first).toHaveFocus();
+      // A late-loading carousel must not be able to reclaim keyboard focus.
+      background.focus();
+      expect(first).toHaveFocus();
+      fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
+      expect(row.handleAction).not.toHaveBeenCalled();
+      fireEvent.keyDown(first, { key: 'ArrowRight' });
+      expect(never).toHaveFocus();
+      fireEvent.keyDown(never, { key: 'Tab' });
+      expect(close).toHaveFocus();
+      fireEvent.keyDown(close, { key: 'Tab' });
+      expect(first).toHaveFocus();
+      fireEvent.keyDown(first, { key: 'Tab', shiftKey: true });
+      expect(close).toHaveFocus();
+      fireEvent.keyDown(close, { key: 'Escape' });
+      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+      await waitFor(() => expect(background).toHaveFocus());
+      fireEvent.keyDown(background, { key: 'ArrowRight' });
+      expect(row.handleAction).toHaveBeenCalledTimes(1);
+    } finally {
+      progressSelector.mockRestore();
+    }
+  });
+
+  it('keeps Continue Watching stable and opens details when selected', () => {
+    const state = { mediaApi: {} };
+    const progress = [
+      {
+        playable: { kind: 'movie', mediaId: 100 },
+        state: 'watching',
+        positionSeconds: 60,
+        durationSeconds: 600,
+        updatedAt: '2026-10-03T00:00:00Z',
+      },
+    ];
+    const progressSelector = vi
+      .spyOn(progressApi.endpoints.getProgress, 'select')
+      .mockReturnValue((() => ({ data: { progress } })) as never);
+    selectMovie.mockReturnValue(() => ({ data: { id: 1, mediaId: 100, title: 'Saved movie' } }));
+    let selections = 0;
+    selectSession.mockImplementation((selector: (state: unknown) => unknown) => {
+      if (++selections > 100) throw new Error('HomePage entered a render loop');
+      return selector(state);
+    });
+    try {
+      const view = render(<HomePage />);
+      expect(screen.getAllByTestId(/^card-/)).toHaveLength(categories.length + 1);
+      const beforeRerender = selections;
+      view.rerender(<HomePage />);
+      expect(selections - beforeRerender).toBeLessThan(20);
+      fireEvent.click(screen.getByTestId('card-0'));
+      expect(screen.getByTestId('details')).toBeInTheDocument();
+      expect(screen.queryByTestId('player')).not.toBeInTheDocument();
+    } finally {
+      progressSelector.mockRestore();
+    }
   });
 
   it('collapses the sidebar on mouse leave and restores the selected carousel item', () => {

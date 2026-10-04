@@ -148,7 +148,7 @@ sequenceDiagram
     A->>C: JWT + HttpOnly cookie (refresh token)
 
     Note over C,A: API Request Flow
-    C->>A: Request with JWT in Authorization header
+    C->>A: Request with JWT in TraktAuthorization header
     A->>A: Verify JWT access token
     A->>C: Protected resource
 
@@ -161,7 +161,7 @@ sequenceDiagram
     A->>C: New JWT + HttpOnly cookie (new refresh token)
 
     Note over C,A: Streaming Authentication Flow
-    C->>A: Request stream key with JWT in Authorization header
+    C->>A: Request stream key with JWT in TraktAuthorization header
     A->>A: Verify JWT and generate non-JWT streaming token
     A->>C: Short-lived streaming token (valid only for specific stream)
     C->>+S: GET /api/stream/:token (uses streaming token, not JWT)

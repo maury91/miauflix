@@ -1,6 +1,7 @@
 import { LoginWithEmail } from '@features/auth/ui/login/LoginWithEmail';
 import { request } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
+import { Button } from '@shared/ui/button/Button';
 import { useAppSelector } from '@store';
 import { selectIsAuthenticated } from '@store/slices/auth';
 import { useEffect, useMemo, useState } from 'react';
@@ -84,9 +85,9 @@ export default function QrApprovalPage() {
       {approval.state === 'approved' ? (
         <p>Approved. You can return to the requesting device.</p>
       ) : (
-        <button type="button" disabled={busy} onClick={approve}>
+        <Button type="button" disabled={busy} onClick={approve}>
           {busy ? 'Approving…' : 'Approve device'}
-        </button>
+        </Button>
       )}
     </main>
   );

@@ -1,5 +1,5 @@
 import type { MovieSource } from '@entities/movie-source.entity';
-import type { WarmupResult } from '@services/download/download.service';
+import type { WarmupRangeProgress, WarmupResult } from '@services/download/download.service';
 
 export type WarmState =
   | 'adding_torrent'
@@ -19,8 +19,10 @@ export interface WarmSlot {
   state: WarmState;
   targetVerifiedBytes: number;
   verifiedBytesAtStart: number;
+  verifiedBytes: number;
+  progress: number;
   startedAt: number;
-  range?: Pick<WarmupResult, 'firstPiece' | 'lastPiece'>;
+  range?: Pick<WarmupResult, 'firstPiece' | 'lastPiece' | 'targetBytes'>;
 }
 
 export interface TorrentWarmupDriver {
@@ -34,6 +36,12 @@ export interface TorrentWarmupDriver {
   hasActivePlayback(): boolean;
   isPlaybackActive(sourceId: number): boolean;
   isRangeVerified?(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean>;
+  getRangeProgress?(
+    sourceId: number,
+    firstPiece: number,
+    lastPiece: number
+  ): Promise<WarmupRangeProgress>;
+  getWarmupTargetBytes?(): number;
 }
 
 const DEFAULT_TARGET_BYTES = 64 * 1024 * 1024;
@@ -79,8 +87,11 @@ export class TorrentWarmupController {
           playableKey,
           sourceId: source.id,
           state: 'paused',
-          targetVerifiedBytes: options.targetBytes ?? DEFAULT_TARGET_BYTES,
+          targetVerifiedBytes:
+            options.targetBytes ?? this.driver.getWarmupTargetBytes?.() ?? DEFAULT_TARGET_BYTES,
           verifiedBytesAtStart: 0,
+          verifiedBytes: 0,
+          progress: 0,
           startedAt: Date.now(),
         };
       }
@@ -110,8 +121,11 @@ export class TorrentWarmupController {
         playableKey,
         sourceId: source.id,
         state: 'resolving_store',
-        targetVerifiedBytes: options.targetBytes ?? DEFAULT_TARGET_BYTES,
+        targetVerifiedBytes:
+          options.targetBytes ?? this.driver.getWarmupTargetBytes?.() ?? DEFAULT_TARGET_BYTES,
         verifiedBytesAtStart: 0,
+        verifiedBytes: 0,
+        progress: 0,
         startedAt: Date.now(),
       };
 
@@ -126,17 +140,21 @@ export class TorrentWarmupController {
           await this.driver.pauseSource(source.id);
           return this.getState()!;
         }
-        this.slot = { ...this.slot, state: 'warming', range: result };
-        if (this.driver.isRangeVerified) {
-          if (
-            (await this.driver.isRangeVerified(source.id, result.firstPiece, result.lastPiece)) &&
-            this.slot?.generation === generation &&
-            this.slot.state === 'warming'
-          ) {
-            this.slot = { ...this.slot, state: 'ready' };
-          } else {
-            this.scheduleReadinessCheck(generation, source.id, result);
-          }
+        this.slot = {
+          ...this.slot,
+          state: 'warming',
+          range: result,
+          targetVerifiedBytes: result.targetBytes,
+        };
+        const progress = await this.readRangeProgress(source.id, result);
+        if (this.slot?.generation !== generation || this.slot.state !== 'warming') {
+          return this.getState()!;
+        }
+        this.applyProgress(progress);
+        if (progress?.isComplete) {
+          this.slot = { ...this.slot, state: 'ready', progress: 100 };
+        } else if (this.driver.isRangeVerified || this.driver.getRangeProgress) {
+          this.scheduleReadinessCheck(generation, source.id, result);
         }
         return this.getState()!;
       } catch (error) {
@@ -205,7 +223,7 @@ export class TorrentWarmupController {
   private scheduleReadinessCheck(
     generation: number,
     sourceId: number,
-    range: Pick<WarmupResult, 'firstPiece' | 'lastPiece'>
+    range: Pick<WarmupResult, 'firstPiece' | 'lastPiece' | 'targetBytes'>
   ): void {
     this.cancelReadinessCheck();
     const check = async (): Promise<void> => {
@@ -213,17 +231,16 @@ export class TorrentWarmupController {
         !this.slot ||
         this.slot.generation !== generation ||
         this.slot.state !== 'warming' ||
-        !this.driver.isRangeVerified
+        (!this.driver.isRangeVerified && !this.driver.getRangeProgress)
       ) {
         return;
       }
       try {
-        if (
-          (await this.driver.isRangeVerified(sourceId, range.firstPiece, range.lastPiece)) &&
-          this.slot?.generation === generation &&
-          this.slot.state === 'warming'
-        ) {
-          this.slot = { ...this.slot, state: 'ready' };
+        const progress = await this.readRangeProgress(sourceId, range);
+        if (this.slot?.generation !== generation || this.slot.state !== 'warming') return;
+        this.applyProgress(progress);
+        if (progress?.isComplete) {
+          this.slot = { ...this.slot, state: 'ready', progress: 100 };
           this.readinessTimer = null;
           return;
         }
@@ -233,6 +250,39 @@ export class TorrentWarmupController {
       this.readinessTimer = setTimeout(() => void check(), 250);
     };
     void check();
+  }
+
+  private async readRangeProgress(
+    sourceId: number,
+    range: Pick<WarmupResult, 'firstPiece' | 'lastPiece' | 'targetBytes'>
+  ): Promise<WarmupRangeProgress | null> {
+    if (this.driver.getRangeProgress) {
+      return this.driver.getRangeProgress(sourceId, range.firstPiece, range.lastPiece);
+    }
+    if (this.driver.isRangeVerified) {
+      const complete = await this.driver.isRangeVerified(
+        sourceId,
+        range.firstPiece,
+        range.lastPiece
+      );
+      return {
+        verifiedBytes: complete ? range.targetBytes : 0,
+        targetBytes: range.targetBytes,
+        progress: complete ? 100 : 0,
+        isComplete: complete,
+      };
+    }
+    return null;
+  }
+
+  private applyProgress(progress: WarmupRangeProgress | null): void {
+    if (!progress || !this.slot) return;
+    this.slot = {
+      ...this.slot,
+      targetVerifiedBytes: progress.targetBytes || this.slot.targetVerifiedBytes,
+      verifiedBytes: progress.verifiedBytes,
+      progress: Math.min(100, Math.max(0, progress.progress)),
+    };
   }
 
   private cancelReadinessCheck(): void {

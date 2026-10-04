@@ -1,5 +1,7 @@
 import { PALETTE } from '@shared/config/constants';
-import { type FC, type KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { Button as BaseButton } from '@shared/ui/button/Button';
+import { type FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import type { HomeAction, NavigationOutcome } from '../homeNavigation';
@@ -33,12 +35,13 @@ const Navigation = styled.nav`
   align-content: space-between;
 `;
 
-const Item = styled.button<{ $active: boolean; $selected: boolean }>`
+const Item = styled(BaseButton)<{ $active: boolean; $selected: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
   gap: 0.8vw;
   width: 100%;
+  min-height: 0;
   min-width: 44px;
   height: clamp(42px, 3.7vw, 62px);
   padding: 0 0.8vw;
@@ -52,6 +55,7 @@ const Item = styled.button<{ $active: boolean; $selected: boolean }>`
   text-align: left;
   cursor: pointer;
   outline: none;
+  box-shadow: none;
 
   &:focus-visible {
     box-shadow: 0 0 0 2px ${PALETTE.text.primary};
@@ -105,22 +109,43 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
     onHover();
   };
 
-  const handleItemKeyDown = (event: KeyboardEvent, item: 'home' | 'settings') => {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-      event.preventDefault();
-      const next = item === 'home' ? settingsRef.current : homeRef.current;
-      move(item === 'home' ? 'settings' : 'home');
-      next?.focus({ preventScroll: true });
-    } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-      event.preventDefault();
-      const next = item === 'settings' ? homeRef.current : settingsRef.current;
-      move(item === 'settings' ? 'home' : 'settings');
-      next?.focus({ preventScroll: true });
-    }
-  };
+  const navigationRef = useKeyboardNavigation({
+    enabled: active,
+    onDown: () => {
+      const next = selected === 'home' ? 'settings' : 'home';
+      move(next);
+      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      return true;
+    },
+    onUp: () => {
+      const next = selected === 'settings' ? 'home' : 'settings';
+      move(next);
+      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      return true;
+    },
+    onLeft: () => {
+      const next = selected === 'settings' ? 'home' : 'settings';
+      move(next);
+      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      return true;
+    },
+    onRight: () => {
+      onAction('right');
+      return true;
+    },
+    onConfirm: () => {
+      onAction('confirm');
+      return true;
+    },
+    onBack: () => {
+      onAction('back');
+      return true;
+    },
+  });
 
   return (
     <Rail
+      ref={navigationRef}
       $active={active}
       aria-label="Home navigation"
       onMouseEnter={onHover}
@@ -136,7 +161,6 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
           $selected={selected === 'home'}
           aria-label="Home"
           aria-current="page"
-          onKeyDown={event => handleItemKeyDown(event, 'home')}
           onFocus={() => move('home')}
           onMouseEnter={() => move('home')}
           onClick={() => onAction('confirm')}
@@ -150,7 +174,6 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
           $active={active && selected === 'settings'}
           $selected={selected === 'settings'}
           aria-label="Settings"
-          onKeyDown={event => handleItemKeyDown(event, 'settings')}
           onFocus={() => move('settings')}
           onMouseEnter={() => move('settings')}
           onClick={onSettings}

@@ -5,6 +5,7 @@ import type {
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
   PreloadPreparationState,
+  PreloadWarmupSnapshot,
   PreloadWarmupState,
 } from '@routes/preload.types';
 
@@ -17,7 +18,7 @@ type PreparationLevel = 'sources' | 'warm';
 
 interface PreparationDetails {
   source: PreloadPreparationSource | null;
-  warmup: PreloadWarmupState;
+  warmup: PreloadWarmupSnapshot;
 }
 
 type PreparationEntry =
@@ -239,11 +240,11 @@ export class PreloadIntentService {
       const details: PreparationDetails = existing
         ? {
             source: existing.details.source,
-            warmup: isDowngrade ? 'not_requested' : existing.details.warmup,
+            warmup: isDowngrade ? emptyWarmup() : existing.details.warmup,
           }
         : {
             source: this.sourceMetadataCache.get(key) ?? null,
-            warmup: 'not_requested',
+            warmup: emptyWarmup(),
           };
       // A completed warm preparation remains the selected source when a lease
       // downgrades to browse, but its speculative payload is no longer wanted.
@@ -263,7 +264,7 @@ export class PreloadIntentService {
           this.preparations.set(key, {
             ...existing,
             level,
-            details: { ...details, warmup: 'not_requested' },
+            details: { ...details, warmup: emptyWarmup() },
           });
           continue;
         }
@@ -302,7 +303,7 @@ export class PreloadIntentService {
                     ...current,
                     details: {
                       source: sourceSnapshot,
-                      warmup: level === 'warm' ? 'warming' : 'not_requested',
+                      warmup: level === 'warm' ? emptyWarmup('warming') : emptyWarmup(),
                     },
                   });
                 }
@@ -321,7 +322,7 @@ export class PreloadIntentService {
                   outcome: result?.source ? 'source_found' : 'no_source',
                   details: {
                     source,
-                    warmup: result?.warmup?.state ?? 'not_requested',
+                    warmup: result?.warmup ?? emptyWarmup(),
                   },
                 });
               }
@@ -336,7 +337,7 @@ export class PreloadIntentService {
                   outcome: 'error',
                   details: {
                     source: current.details.source,
-                    warmup: 'not_requested',
+                    warmup: emptyWarmup(),
                   },
                 });
               }
@@ -363,7 +364,7 @@ export class PreloadIntentService {
         playable: lease.focused,
         state: 'unknown',
         source: this.sourceMetadataCache.get(playableKey(lease.focused)) ?? null,
-        warmup: { state: 'not_requested' },
+        warmup: emptyWarmup(),
       };
     }
     return (
@@ -371,7 +372,7 @@ export class PreloadIntentService {
         playable: lease.focused,
         state: 'checking',
         source: this.sourceMetadataCache.get(playableKey(lease.focused)) ?? null,
-        warmup: { state: 'not_requested' },
+        warmup: emptyWarmup(),
       }
     );
   }
@@ -383,15 +384,49 @@ export class PreloadIntentService {
         playable: entry.playable,
         state: entry.details.source ? 'source_found' : 'checking',
         source: entry.details.source,
-        warmup: { state: entry.details.warmup },
+        warmup: this.snapshotWarmup(entry),
       };
     }
     return {
       playable: entry.playable,
       state: entry.outcome,
       source: entry.details.source,
-      warmup: { state: entry.details.warmup },
+      warmup: this.snapshotWarmup(entry),
     };
+  }
+
+  private snapshotWarmup(entry: PreparationEntry): PreloadWarmupSnapshot {
+    const slot = this.warmup?.getState();
+    const source = entry.details.source;
+    if (
+      entry.level === 'warm' &&
+      slot &&
+      slot.playableKey === playableKey(entry.playable) &&
+      (!source || slot.sourceId === source.id)
+    ) {
+      const state: PreloadWarmupState =
+        slot.state === 'ready'
+          ? 'ready'
+          : slot.state === 'paused'
+            ? 'paused'
+            : slot.state === 'failed'
+              ? 'failed'
+              : slot.state === 'warming' ||
+                  slot.state === 'adding_torrent' ||
+                  slot.state === 'resolving_store'
+                ? 'warming'
+                : 'not_requested';
+      return {
+        state,
+        progress: slot.progress,
+        verifiedBytes: slot.verifiedBytes,
+        targetBytes: slot.targetVerifiedBytes,
+      };
+    }
+    if (entry.state === 'complete' && entry.details.warmup.state === 'ready') {
+      return emptyWarmup();
+    }
+    return entry.details.warmup;
   }
 
   private levelForView(view: PreloadIntentRequest['view']): PreparationLevel {
@@ -434,3 +469,7 @@ export class PreloadIntentService {
 }
 
 export const PRELOAD_LEASE_TTL_MS = LEASE_TTL_MS;
+
+function emptyWarmup(state: PreloadWarmupState = 'not_requested'): PreloadWarmupSnapshot {
+  return { state };
+}

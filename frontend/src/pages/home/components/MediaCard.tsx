@@ -1,11 +1,12 @@
-import type { MediaDto } from '@miauflix/backend';
+import type { MediaDto, ProgressEntry } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
+import { Button as BaseButton } from '@shared/ui/button/Button';
 import { forwardRef } from 'react';
 import styled from 'styled-components';
 
 import { getImageUrl, getMediaTitle } from '../media.utils';
 
-const Card = styled.button<{
+const Card = styled(BaseButton)<{
   $backdrop: string;
   $logo?: string;
   $width: number;
@@ -13,6 +14,8 @@ const Card = styled.button<{
 }>`
   flex: 0 0 ${({ $width }) => $width}px;
   width: ${({ $width }) => $width}px;
+  min-width: 0;
+  min-height: 0;
   position: relative;
   aspect-ratio: 16 / 9;
   padding: 0;
@@ -27,6 +30,7 @@ const Card = styled.button<{
   color: ${PALETTE.text.primary};
   cursor: pointer;
   outline: none;
+  box-shadow: none;
 
   &:focus-visible {
     box-shadow: 0 0 0 0.35vh ${PALETTE.color.interactive};
@@ -52,6 +56,23 @@ const TitleOverlay = styled.span<{ $hasLogo: boolean }>`
   opacity: ${({ $hasLogo }) => ($hasLogo ? 0 : 1)};
 `;
 
+const ProgressTrack = styled.span`
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 0.55vh;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.72);
+`;
+
+const ProgressFill = styled.span<{ $percent: number }>`
+  display: block;
+  width: ${({ $percent }) => `${$percent}%`};
+  height: 100%;
+  background: #e50914;
+`;
+
 interface MediaCardProps {
   media: MediaDto;
   width: number;
@@ -60,13 +81,43 @@ interface MediaCardProps {
   onFocus: () => void;
   onHover: () => void;
   onSelect: () => void;
+  progress?: ProgressEntry[];
+}
+
+function progressForMedia(progress: ProgressEntry[] | undefined, media: MediaDto) {
+  if (!progress?.length) return undefined;
+  const matching = progress.filter(entry => {
+    if (media._type === 'movie') {
+      return entry.playable.kind === 'movie' && entry.playable.mediaId === media.mediaId;
+    }
+    return entry.playable.kind === 'episode' && entry.playable.showMediaId === media.mediaId;
+  });
+  return matching.sort((left, right) => {
+    const completionOrder =
+      Number(left.state === 'completed') - Number(right.state === 'completed');
+    return (
+      completionOrder ||
+      Number(Boolean(left.nextEpisode)) - Number(Boolean(right.nextEpisode)) ||
+      Date.parse(right.updatedAt) - Date.parse(left.updatedAt)
+    );
+  })[0];
 }
 
 export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function MediaCard(
-  { media, onFocus, onHover, onSelect, selected, tabIndex, width },
+  { media, onFocus, onHover, onSelect, progress, selected, tabIndex, width },
   ref
 ) {
   const title = getMediaTitle(media);
+  const playback = progressForMedia(progress, media);
+  const percent = playback
+    ? playback.state === 'completed'
+      ? 100
+      : Math.max(0, Math.min(100, (playback.positionSeconds / playback.durationSeconds) * 100))
+    : 0;
+  const cardTitle =
+    media._type === 'tvshow' && playback?.playable.kind === 'episode'
+      ? `${title} · S${playback.playable.seasonNumber} E${playback.playable.episodeNumber}`
+      : title;
   return (
     <Card
       ref={ref}
@@ -75,14 +126,21 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
       $logo={media.logo ? getImageUrl(media.logo) : undefined}
       $selected={selected}
       $width={width}
-      aria-label={title}
+      aria-label={cardTitle}
       aria-current={selected ? 'true' : undefined}
       tabIndex={tabIndex}
       onFocus={onFocus}
       onMouseEnter={onHover}
       onClick={onSelect}
     >
-      <TitleOverlay $hasLogo={Boolean(media.logo)}>{title}</TitleOverlay>
+      <TitleOverlay $hasLogo={Boolean(media.logo)}>{cardTitle}</TitleOverlay>
+      {playback && (
+        <ProgressTrack
+          aria-label={playback.nextEpisode ? 'Next episode' : `${Math.round(percent)}% watched`}
+        >
+          <ProgressFill $percent={percent} />
+        </ProgressTrack>
+      )}
     </Card>
   );
 });

@@ -1,8 +1,9 @@
 import { useGetListQuery, usePromoteListMediaMutation } from '@features/media/api/lists.api';
-import type { ListDto, MediaDto } from '@miauflix/backend';
+import type { ListDto, MediaDto, ProgressEntry } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { IS_TV, PALETTE } from '@shared/config/constants';
+import { Button as BaseButton } from '@shared/ui/button/Button';
 import {
   forwardRef,
   useCallback,
@@ -76,7 +77,7 @@ const EdgeFade = styled.div<{ $side: 'left' | 'right'; $peekWidth: number }>`
       : 'linear-gradient(270deg, #000 0%, rgba(0, 0, 0, 0.82) 20%, transparent 100%)'};
 `;
 
-const ArrowButton = styled.button<{ $side: 'left' | 'right' }>`
+const ArrowButton = styled(BaseButton)<{ $side: 'left' | 'right' }>`
   position: absolute;
   z-index: 3;
   top: 50%;
@@ -84,6 +85,8 @@ const ArrowButton = styled.button<{ $side: 'left' | 'right' }>`
   display: grid;
   width: 4.8vh;
   height: 4.8vh;
+  min-width: 0;
+  min-height: 0;
   padding: 0;
   place-items: center;
   transform: translateY(-50%);
@@ -93,6 +96,7 @@ const ArrowButton = styled.button<{ $side: 'left' | 'right' }>`
   color: ${PALETTE.text.primary};
   cursor: pointer;
   opacity: 0;
+  box-shadow: none;
   transition:
     opacity 140ms ease,
     background 140ms ease,
@@ -152,6 +156,8 @@ interface CategoryRowProps {
   active: boolean;
   onActive: (categoryIndex: number, mediaIndex: number, media: MediaDto) => void;
   onSelect: (media: MediaDto) => void;
+  progress?: ProgressEntry[];
+  mediaOverride?: MediaDto[];
 }
 
 export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(function CategoryRow(
@@ -170,6 +176,8 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     contentWidth = mediaWidth * mediaPerPage + gap * (mediaPerPage - 1),
     onActive,
     onSelect,
+    progress,
+    mediaOverride,
   },
   forwardedRef
 ) {
@@ -179,18 +187,18 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   const [alignmentRequest, setAlignmentRequest] = useState(0);
   const effectiveLoadIntent = loadIntent ?? (nearby ? 'visible' : 'dormant');
   const current = useGetListQuery(
-    effectiveLoadIntent !== 'dormant'
+    !mediaOverride && effectiveLoadIntent !== 'dormant'
       ? { category: category.slug, page, limit: PAGE_SIZE, priority: effectiveLoadIntent }
       : skipToken
   );
   const [promoteListMedia] = usePromoteListMediaMutation();
-  const total = current.currentData?.total ?? current.data?.total ?? 0;
+  const total = mediaOverride?.length ?? current.currentData?.total ?? current.data?.total ?? 0;
   const step = mediaWidth + gap;
   const radius = mediaPerPage + 4;
   const first = Math.max(0, selectedIndex - radius);
   const last = Math.min(total - 1, selectedIndex + radius);
   const previousPage = useGetListQuery(
-    effectiveLoadIntent !== 'dormant' && page > 0 && first < page * PAGE_SIZE
+    !mediaOverride && effectiveLoadIntent !== 'dormant' && page > 0 && first < page * PAGE_SIZE
       ? {
           category: category.slug,
           page: page - 1,
@@ -200,7 +208,8 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       : skipToken
   );
   const nextPage = useGetListQuery(
-    effectiveLoadIntent !== 'dormant' &&
+    !mediaOverride &&
+      effectiveLoadIntent !== 'dormant' &&
       (page + 1) * PAGE_SIZE < total &&
       last >= (page + 1) * PAGE_SIZE
       ? {
@@ -219,6 +228,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   const pendingIndex = useRef<number | null>(categoryIndex === 0 ? initialIndex : null);
 
   const mediaByIndex = useMemo(() => {
+    if (mediaOverride) return new Map(mediaOverride.map((media, index) => [index, media]));
     const result = new Map<number, MediaDto>();
     for (const response of [previousPage.currentData, nextPage.currentData, current.currentData]) {
       if (response?.page === undefined || response.pageSize === undefined) continue;
@@ -227,7 +237,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       );
     }
     return result;
-  }, [current.currentData, nextPage.currentData, previousPage.currentData]);
+  }, [current.currentData, mediaOverride, nextPage.currentData, previousPage.currentData]);
 
   const selectIndex = useCallback(
     (requested: number, focus = true) => {
@@ -370,17 +380,17 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   ]);
 
   useEffect(() => {
-    if (!visible || !current.currentData?.results.length) return;
+    if (mediaOverride || !visible || !current.currentData?.results.length) return;
     const visibleItems = current.currentData.results.map(media => ({
       mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
       mediaId: media.mediaId,
       tier: 'visible' as const,
     }));
     void promoteListMedia({ items: visibleItems });
-  }, [current.currentData, page, promoteListMedia, visible]);
+  }, [current.currentData, mediaOverride, page, promoteListMedia, visible]);
 
   useEffect(() => {
-    if (!visible || !current.currentData?.results.length) return;
+    if (mediaOverride || !visible || !current.currentData?.results.length) return;
     const timeout = window.setTimeout(() => {
       const viewportItems = current
         .currentData!.results.map((media, index) => ({ media, index: page * PAGE_SIZE + index }))
@@ -393,7 +403,15 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       if (viewportItems.length) void promoteListMedia({ items: viewportItems });
     }, VIEWPORT_PROMOTION_DEBOUNCE_MS);
     return () => window.clearTimeout(timeout);
-  }, [current.currentData, mediaPerPage, page, promoteListMedia, selectedIndex, visible]);
+  }, [
+    current.currentData,
+    mediaOverride,
+    mediaPerPage,
+    page,
+    promoteListMedia,
+    selectedIndex,
+    visible,
+  ]);
 
   useEffect(() => {
     if (current.currentData && selectedIndex >= current.currentData.total) {
@@ -401,7 +419,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     }
   }, [current.currentData, selectIndex, selectedIndex]);
 
-  if (effectiveLoadIntent === 'dormant') {
+  if (!mediaOverride && effectiveLoadIntent === 'dormant') {
     return (
       <RowContainer>
         <CategoryTitle>{category.name}</CategoryTitle>
@@ -409,7 +427,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       </RowContainer>
     );
   }
-  if ((current.isLoading || current.isFetching) && !current.currentData) {
+  if (!mediaOverride && (current.isLoading || current.isFetching) && !current.currentData) {
     return (
       <RowContainer>
         <CategoryTitle>{category.name}</CategoryTitle>
@@ -419,7 +437,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       </RowContainer>
     );
   }
-  if (current.isError && !current.currentData) {
+  if (!mediaOverride && current.isError && !current.currentData) {
     return (
       <RowContainer>
         <CategoryTitle>{category.name}</CategoryTitle>
@@ -494,6 +512,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
                   onActive(categoryIndex, index, media);
                   cardRefs.current.get(index)?.focus({ preventScroll: true });
                 }}
+                progress={progress}
                 onSelect={() => {
                   // Clicking a card must update the logical selection before opening details;
                   // otherwise Back returns to the row's previous keyboard selection.

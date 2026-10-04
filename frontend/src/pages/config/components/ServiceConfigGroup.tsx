@@ -1,5 +1,8 @@
 import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { ActionRow } from '@shared/ui/action-row/ActionRow';
+import { Button } from '@shared/ui/button/Button';
+import { LoadingIndicator } from '@shared/ui/loading-indicator/LoadingIndicator';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -8,7 +11,6 @@ import { ConfigField } from './ConfigField';
 
 import ChevronDownIcon from '~icons/line-md/chevron-down';
 import ChevronRightIcon from '~icons/line-md/chevron-right';
-import LoadingIcon from '~icons/line-md/loading-twotone-loop';
 
 const GroupContainer = styled.div`
   background-color: ${SETTINGS_PALETTE.background.surface};
@@ -64,7 +66,14 @@ const PendingBadge = styled(MissingBadge)`
   border-color: rgba(255, 193, 7, 0.42);
 `;
 
-const OptionalSettingsButton = styled.button`
+const DegradedBadge = styled(MissingBadge)`
+  color: ${SETTINGS_PALETTE.color.warning};
+  border-color: rgba(255, 193, 7, 0.42);
+`;
+
+const OptionalSettingsButton = styled(Button)`
+  min-width: 0;
+  min-height: 0;
   width: 100%;
   display: flex;
   align-items: center;
@@ -74,6 +83,7 @@ const OptionalSettingsButton = styled.button`
   border: 0;
   background: transparent;
   color: #aaa;
+  box-shadow: none;
   font:
     500 13px 'Poppins',
     sans-serif;
@@ -88,8 +98,7 @@ const OptionalFields = styled.div`
   padding-top: 18px;
 `;
 
-const Actions = styled.div`
-  display: flex;
+const Actions = styled(ActionRow)`
   gap: 10px;
   margin-top: 18px;
   padding-top: 16px;
@@ -103,7 +112,9 @@ const ConfigurationNote = styled.p`
   line-height: 1.45;
 `;
 
-const ActionButton = styled.button<{ $primary?: boolean }>`
+const ActionButton = styled(Button)<{ $primary?: boolean }>`
+  min-width: 0;
+  min-height: 0;
   padding: 8px 18px;
   border: 1px solid
     ${props =>
@@ -111,6 +122,7 @@ const ActionButton = styled.button<{ $primary?: boolean }>`
   border-radius: 4px;
   background: ${props => (props.$primary ? SETTINGS_PALETTE.color.primaryButton : 'transparent')};
   color: ${props => (props.$primary ? '#0a0d0f' : SETTINGS_PALETTE.text.primary)};
+  box-shadow: none;
   font:
     500 13px 'Poppins',
     sans-serif;
@@ -146,7 +158,7 @@ const ActionLabel = styled.span`
   gap: 6px;
 `;
 
-const ButtonSpinner = styled(LoadingIcon)`
+const ButtonSpinner = styled(LoadingIndicator)`
   width: 16px;
   height: 16px;
 `;
@@ -207,6 +219,12 @@ interface ServiceConfigGroupProps {
   restarted?: boolean;
   needsProcessRestart?: boolean;
   showAllOptionalFields?: boolean;
+  serviceStatus?: {
+    status: string;
+    reason?: string;
+    errorMessage?: string;
+    details?: string;
+  };
 }
 
 export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
@@ -223,6 +241,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
   restarted = false,
   needsProcessRestart = false,
   showAllOptionalFields = false,
+  serviceStatus,
 }) => {
   const missingCount = entries.filter(
     entry => entry.required && !entry.hasValue && !values[entry.key]?.trim()
@@ -253,6 +272,9 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
   );
   const [showAdvancedSettings, setShowAdvancedSettings] = useState(hasMissingAdvancedRequiredValue);
   const showOptionalFields = showAllOptionalFields || showOptionalSettings;
+  const serviceIssue = ['degraded', 'error'].includes(serviceStatus?.status ?? '');
+  const serviceIssueText =
+    serviceStatus?.reason ?? serviceStatus?.errorMessage ?? serviceStatus?.details;
 
   useEffect(() => {
     if (hasOptionalTestFailure) setShowOptionalSettings(true);
@@ -271,6 +293,12 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
         </GroupTitle>
         {hasMissingRequiredValues ? (
           <MissingBadge>{missingCount} missing</MissingBadge>
+        ) : serviceIssue ? (
+          serviceStatus?.status === 'error' ? (
+            <MissingBadge>error</MissingBadge>
+          ) : (
+            <DegradedBadge>degraded</DegradedBadge>
+          )
         ) : hasFailedTest ? (
           <MissingBadge>test failed</MissingBadge>
         ) : hasChanges ? (
@@ -283,6 +311,13 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
           <ConfiguredBadge>configured</ConfiguredBadge>
         )}
       </GroupHeader>
+
+      {serviceIssue && serviceIssueText && (
+        <ConfigurationNote role="status">
+          {serviceStatus?.status === 'error' ? 'Service error: ' : 'Service degraded: '}
+          {serviceIssueText}
+        </ConfigurationNote>
+      )}
 
       {requiredEntries.map(entry => (
         <ConfigField

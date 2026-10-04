@@ -390,7 +390,7 @@ curl -X POST http://localhost:3001/api/auth/login \
 
 **Three-Tier Authentication System:**
 
-- **Primary API Auth**: JWT tokens in Authorization headers (15min expiration)
+- **Primary API Auth**: JWT tokens in TraktAuthorization headers (15min expiration)
 - **Token Refresh Only**: HttpOnly cookies exclusively for `/api/auth/refresh/:session`
 - **Streaming Access**: Non-JWT streaming keys for `/api/stream/:token`
 

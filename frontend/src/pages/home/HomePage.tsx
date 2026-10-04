@@ -1,3 +1,4 @@
+import { getTraktAssociation } from '@features/integrations/api/trakt.api';
 import { useGetListsQuery, useGetPopularListsInfiniteQuery } from '@features/media/api/lists.api';
 import { mediaApi } from '@features/media/api/media.api';
 import {
@@ -5,15 +6,18 @@ import {
   useUpdateIntentMutation,
 } from '@features/preload/api/preload.api';
 import { nextPreloadSequence, PRELOAD_CLIENT_ID } from '@features/preload/lib/intent-client';
+import { progressApi } from '@features/progress/api/progress.api';
 import type {
   MediaDto,
   PlayableRef,
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
+  ProgressEntry,
 } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
-import { selectCurrentSessionId } from '@store/slices/auth';
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
 import type { AppDispatch, RootState } from '@store/store';
 import { type FC, type UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -24,8 +28,10 @@ import { HomeSidebar } from './components/HomeSidebar';
 import { MediaDetails, type MediaDetailsHandle } from './components/MediaDetails';
 import { MediaHero } from './components/MediaHero';
 import { PlayerView } from './components/PlayerView';
+import { TraktModal } from './components/TraktModal';
 import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
-import { getHomeAction, type HomeAction, type NavigationOutcome } from './homeNavigation';
+import { unfinishedProgress } from './continue-watching';
+import { type HomeAction, type NavigationOutcome } from './homeNavigation';
 import { getMediaTitle } from './media.utils';
 
 const PageContainer = styled.main`
@@ -63,9 +69,69 @@ const FullPageState = styled.div`
 type HomeView = 'browse' | 'details' | 'player';
 type HomeRegion = 'sidebar' | 'carousel' | 'details' | 'player';
 
+const CONTINUE_CATEGORY = {
+  name: 'Continue watching',
+  slug: 'continue-watching',
+  description: 'Pick up where you left off',
+  url: '/continue-watching',
+};
+
+function mediaFromProgress(
+  state: Pick<RootState, 'mediaApi'>,
+  entry: ProgressEntry
+): MediaDto | null {
+  if (entry.playable.kind === 'movie') {
+    const response = mediaApi.endpoints.getMovie.select(entry.playable.mediaId)(state).data;
+    if (!response) return null;
+    return {
+      _type: 'movie',
+      id: response.id,
+      mediaId: response.mediaId,
+      imdbId: response.imdbId,
+      title: response.title,
+      overview: response.overview,
+      poster: response.poster,
+      backdrop: response.backdrop,
+      backdropFocus: response.backdropFocus,
+      logo: response.logo,
+      genres: response.genres,
+      popularity: response.popularity,
+      rating: response.rating,
+      releaseDate: response.releaseDate,
+      runtime: response.runtime,
+    };
+  }
+  const response = mediaApi.endpoints.getShow.select(entry.playable.showMediaId)(state).data;
+  if (!response) return null;
+  return {
+    _type: 'tvshow',
+    id: response.id,
+    mediaId: response.mediaId,
+    imdbId: response.imdbId,
+    name: response.title,
+    overview: response.overview ?? '',
+    poster: response.poster ?? '',
+    backdrop: response.backdrop ?? '',
+    backdropFocus: response.backdropFocus,
+    logo: response.logo ?? undefined,
+    genres: response.genres,
+    popularity: response.popularity ?? 0,
+    rating: response.rating ?? 0,
+    firstAirDate: response.firstAirDate ?? '',
+  };
+}
+
 const HomePage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
+  const currentUser = useSelector((state: RootState) => selectCurrentUser(state));
+  const progressFromStore = useSelector(
+    (state: RootState) => progressApi.endpoints.getProgress.select(undefined)(state).data?.progress
+  );
+  const progressEntries = useMemo(
+    () => (Array.isArray(progressFromStore) ? progressFromStore : []),
+    [progressFromStore]
+  );
   const [updateIntent, intentState] = useUpdateIntentMutation();
   const [removeIntent] = useRemoveIntentMutation();
   const { data: fixedCategories, isLoading, isError } = useGetListsQuery();
@@ -82,6 +148,19 @@ const HomePage: FC = () => {
     ],
     [fixedCategories, popularPages]
   );
+  const continueRefs = useMemo(() => unfinishedProgress(progressEntries), [progressEntries]);
+  const mediaCache = useSelector((state: RootState) => state.mediaApi);
+  const continueMedia = useMemo(
+    () =>
+      continueRefs
+        .map(entry => mediaFromProgress({ mediaApi: mediaCache }, entry))
+        .filter((media): media is MediaDto => Boolean(media)),
+    [continueRefs, mediaCache]
+  );
+  const displayCategories = useMemo(
+    () => (continueMedia.length ? [CONTINUE_CATEGORY, ...categories] : categories),
+    [categories, continueMedia.length]
+  );
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth } = useMediaBoxSizes();
   const pageRef = useRef<HTMLElement>(null);
   const [view, setView] = useState<HomeView>('browse');
@@ -91,6 +170,9 @@ const HomePage: FC = () => {
   const [selectedByCategory, setSelectedByCategory] = useState<Record<string, number>>({});
   const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
   const [playable, setPlayable] = useState<PlayableRef | null>(null);
+  const [showTraktPrompt, setShowTraktPrompt] = useState(false);
+  const traktPromptFocus = useRef<HTMLElement | null>(null);
+  const traktDismissedSession = useRef<string | null>(null);
   const lastIntentSequence = useRef(0);
   const sourceCache = useRef(new Map<number, PreloadPreparationSource>());
   const lastPreparation = useRef<PreloadPreparationSnapshot | null>(null);
@@ -98,7 +180,52 @@ const HomePage: FC = () => {
   const detailsRef = useRef<MediaDetailsHandle>(null);
   const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
   const pendingCategoryAdvance = useRef(false);
-  const categoryCount = categories.length;
+  const categoryCount = displayCategories.length;
+
+  useEffect(() => {
+    if (!sessionId || !currentUser) {
+      setShowTraktPrompt(false);
+      return;
+    }
+    let cancelled = false;
+    void getTraktAssociation(sessionId).then(result => {
+      if (cancelled || !('data' in result) || result.data.connected) return;
+      const permanentKey = `miauflix:trakt:dont-ask:${currentUser.id}`;
+      const permanentlyDismissed = window.localStorage.getItem(permanentKey) === '1';
+      const dismissedForSession = traktDismissedSession.current === sessionId;
+      if (!permanentlyDismissed && !dismissedForSession) {
+        traktPromptFocus.current = document.activeElement as HTMLElement | null;
+        setShowTraktPrompt(true);
+      }
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [currentUser, sessionId]);
+
+  useEffect(() => {
+    dispatch(progressApi.util.resetApiState());
+    if (!sessionId) return;
+    const subscription = dispatch(
+      progressApi.endpoints.getProgress.initiate(undefined, {
+        forceRefetch: true,
+        subscriptionOptions: { pollingInterval: 60_000, skipPollingIfUnfocused: true },
+      })
+    );
+    return () => subscription?.unsubscribe?.();
+  }, [dispatch, sessionId]);
+
+  useEffect(() => {
+    for (const entry of continueRefs) {
+      if (entry.playable.kind === 'movie') {
+        dispatch(mediaApi.util.prefetch('getMovie', entry.playable.mediaId, { ifOlderThan: 300 }));
+      } else {
+        dispatch(
+          mediaApi.util.prefetch('getShow', entry.playable.showMediaId, { ifOlderThan: 300 })
+        );
+      }
+    }
+  }, [continueRefs, dispatch]);
 
   const rowLoadState = useMemo(() => {
     const visible = new Set(
@@ -121,12 +248,15 @@ const HomePage: FC = () => {
   }, [activeCategory, categories.length, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
-    if (!pendingCategoryAdvance.current || activeCategoryRef.current + 1 >= categories.length)
+    if (
+      !pendingCategoryAdvance.current ||
+      activeCategoryRef.current + 1 >= displayCategories.length
+    )
       return;
     pendingCategoryAdvance.current = false;
     activeCategoryRef.current += 1;
     setActiveCategory(activeCategoryRef.current);
-  }, [categories.length]);
+  }, [displayCategories.length]);
 
   const handleContentScroll = useCallback(
     (event: UIEvent<HTMLDivElement>) => {
@@ -195,11 +325,11 @@ const HomePage: FC = () => {
       setActiveCategory(categoryIndex);
       setSelectedMedia(media);
       setSelectedByCategory(previous => {
-        const slug = categories?.[categoryIndex]?.slug;
+        const slug = displayCategories?.[categoryIndex]?.slug;
         return slug ? { ...previous, [slug]: mediaIndex } : previous;
       });
     },
-    [categories]
+    [displayCategories]
   );
 
   const openDetails = useCallback((media: MediaDto) => {
@@ -210,23 +340,23 @@ const HomePage: FC = () => {
 
   const handleMoveCategory = useCallback(
     (delta: -1 | 1) => {
-      if (!categories?.length) return;
+      if (!displayCategories?.length) return;
       let nextCategory = activeCategoryRef.current + delta;
-      if (nextCategory >= categories.length && delta === 1 && hasNextPage) {
+      if (nextCategory >= displayCategories.length && delta === 1 && hasNextPage) {
         pendingCategoryAdvance.current = true;
         if (!isFetchingNextPage) void fetchNextPage();
         return;
       }
       let destinationPending = false;
-      while (nextCategory >= 0 && nextCategory < categories.length) {
+      while (nextCategory >= 0 && nextCategory < displayCategories.length) {
         const row = rowRefs.current.get(nextCategory);
-        const selectedIndex = selectedByCategory[categories[nextCategory].slug] ?? 0;
+        const selectedIndex = selectedByCategory[displayCategories[nextCategory].slug] ?? 0;
         if (row?.focusIndex(selectedIndex)) break;
         destinationPending = true;
         if (!row || !row.isEmpty()) break;
         nextCategory += delta;
       }
-      if (nextCategory < 0 || nextCategory >= categories.length) return;
+      if (nextCategory < 0 || nextCategory >= displayCategories.length) return;
       if (nextCategory === activeCategoryRef.current) return;
       activeCategoryRef.current = nextCategory;
       setActiveCategory(nextCategory);
@@ -234,19 +364,19 @@ const HomePage: FC = () => {
         pageRef.current?.focus({ preventScroll: true });
       }
     },
-    [categories, fetchNextPage, hasNextPage, isFetchingNextPage, selectedByCategory]
+    [displayCategories, fetchNextPage, hasNextPage, isFetchingNextPage, selectedByCategory]
   );
 
   const returnToBrowse = useCallback(() => {
     const categoryIndex = activeCategoryRef.current;
-    const category = categories?.[categoryIndex];
+    const category = displayCategories?.[categoryIndex];
     pendingBrowseFocus.current = {
       categoryIndex,
       mediaIndex: category ? (selectedByCategory[category.slug] ?? 0) : 0,
     };
     setView('browse');
     setActiveRegion('carousel');
-  }, [categories, selectedByCategory]);
+  }, [displayCategories, selectedByCategory]);
 
   const returnToDetails = useCallback(() => {
     setView('details');
@@ -262,6 +392,27 @@ const HomePage: FC = () => {
   const openSettings = useCallback(() => {
     window.dispatchEvent(new Event('miauflix:settings:open'));
   }, []);
+
+  const dismissTraktPrompt = useCallback(
+    (permanent: boolean) => {
+      if (currentUser && sessionId) {
+        if (permanent) {
+          window.localStorage.setItem(`miauflix:trakt:dont-ask:${currentUser.id}`, '1');
+        } else {
+          traktDismissedSession.current = sessionId;
+        }
+      }
+      setShowTraktPrompt(false);
+      requestAnimationFrame(() => traktPromptFocus.current?.focus({ preventScroll: true }));
+    },
+    [currentUser, sessionId]
+  );
+
+  const handleTraktConnected = useCallback(() => {
+    dispatch(progressApi.util.invalidateTags(['Progress']));
+    setShowTraktPrompt(false);
+    requestAnimationFrame(() => traktPromptFocus.current?.focus({ preventScroll: true }));
+  }, [dispatch]);
 
   if (intentState.data) {
     lastPreparation.current = intentState.data.preparation ?? null;
@@ -330,7 +481,7 @@ const HomePage: FC = () => {
     (action: HomeAction): NavigationOutcome => {
       if (action === 'right' || action === 'confirm' || action === 'back') {
         setActiveRegion('carousel');
-        const category = categories?.[activeCategory];
+        const category = displayCategories?.[activeCategory];
         rowRefs.current
           .get(activeCategory)
           ?.focusIndex(category ? (selectedByCategory[category.slug] ?? 0) : 0);
@@ -338,11 +489,12 @@ const HomePage: FC = () => {
       }
       return { type: 'handled' };
     },
-    [activeCategory, categories, selectedByCategory]
+    [activeCategory, displayCategories, selectedByCategory]
   );
 
   const handleHomeAction = useCallback(
     (action: HomeAction): NavigationOutcome => {
+      if (showTraktPrompt) return { type: 'ignored' };
       if (view === 'player') {
         return action === 'back' ? (returnToDetails(), { type: 'handled' }) : { type: 'ignored' };
       }
@@ -374,19 +526,20 @@ const HomePage: FC = () => {
       handleSidebarAction,
       returnToBrowse,
       returnToDetails,
+      showTraktPrompt,
       view,
     ]
   );
 
-  const handleKeyDown = useCallback(
-    (event: React.KeyboardEvent<HTMLElement>) => {
-      const action = getHomeAction(event.key);
-      if (!action) return;
-      const outcome = handleHomeAction(action);
-      if (outcome.type !== 'ignored') event.preventDefault();
-    },
-    [handleHomeAction]
-  );
+  const navigationRef = useKeyboardNavigation({
+    enabled: !showTraktPrompt,
+    onLeft: () => handleHomeAction('left').type !== 'ignored',
+    onRight: () => handleHomeAction('right').type !== 'ignored',
+    onUp: () => handleHomeAction('up').type !== 'ignored',
+    onDown: () => handleHomeAction('down').type !== 'ignored',
+    onConfirm: () => handleHomeAction('confirm').type !== 'ignored',
+    onBack: () => handleHomeAction('back').type !== 'ignored',
+  });
 
   if (isLoading) {
     return (
@@ -406,61 +559,82 @@ const HomePage: FC = () => {
   }
 
   return (
-    <PageContainer ref={pageRef} tabIndex={-1} onKeyDown={handleKeyDown}>
-      {view === 'browse' ? (
-        <>
-          <MediaHero media={selectedMedia} preparation={preparation} />
-          <Content $margin={margin} onScroll={handleContentScroll}>
-            {categories.map((category, index) => (
-              <CategoryRow
-                key={category.slug}
-                ref={handle => {
-                  if (handle) rowRefs.current.set(index, handle);
-                  else rowRefs.current.delete(index);
-                }}
-                category={category}
-                categoryIndex={index}
-                initialIndex={selectedByCategory[category.slug] ?? 0}
-                loadIntent={
-                  rowLoadState.visible.has(index)
-                    ? 'visible'
-                    : rowLoadState.prefetch.has(index)
-                      ? 'prefetch'
-                      : 'dormant'
-                }
-                visible={rowLoadState.visible.has(index)}
-                mediaWidth={mediaWidth}
-                mediaPerPage={mediaPerPage}
-                gap={gap}
-                peekWidth={peekWidth}
-                active={activeRegion === 'carousel' && activeCategory === index}
-                onActive={handleActive}
-                onSelect={openDetails}
-              />
-            ))}
-          </Content>
-          <HomeSidebar
-            active={activeRegion === 'sidebar'}
-            onAction={handleSidebarAction}
-            onHover={() => setActiveRegion('sidebar')}
-            onSettings={openSettings}
+    <PageContainer
+      ref={node => {
+        pageRef.current = node;
+        navigationRef(node);
+      }}
+      tabIndex={-1}
+    >
+      <div inert={showTraktPrompt} style={{ display: 'contents' }}>
+        {view === 'browse' ? (
+          <>
+            <MediaHero media={selectedMedia} preparation={preparation} />
+            <Content $margin={margin} onScroll={handleContentScroll}>
+              {displayCategories.map((category, index) => (
+                <CategoryRow
+                  key={category.slug}
+                  ref={handle => {
+                    if (handle) rowRefs.current.set(index, handle);
+                    else rowRefs.current.delete(index);
+                  }}
+                  category={category}
+                  categoryIndex={index}
+                  initialIndex={selectedByCategory[category.slug] ?? 0}
+                  loadIntent={
+                    rowLoadState.visible.has(index)
+                      ? 'visible'
+                      : rowLoadState.prefetch.has(index)
+                        ? 'prefetch'
+                        : 'dormant'
+                  }
+                  visible={rowLoadState.visible.has(index)}
+                  mediaWidth={mediaWidth}
+                  mediaPerPage={mediaPerPage}
+                  gap={gap}
+                  peekWidth={peekWidth}
+                  active={
+                    !showTraktPrompt && activeRegion === 'carousel' && activeCategory === index
+                  }
+                  onActive={handleActive}
+                  progress={progressEntries}
+                  mediaOverride={
+                    category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
+                  }
+                  onSelect={openDetails}
+                />
+              ))}
+            </Content>
+            <HomeSidebar
+              active={!showTraktPrompt && activeRegion === 'sidebar'}
+              onAction={handleSidebarAction}
+              onHover={() => setActiveRegion('sidebar')}
+              onSettings={openSettings}
+            />
+          </>
+        ) : view === 'details' && selectedMedia ? (
+          <MediaDetails
+            ref={detailsRef}
+            media={selectedMedia}
+            onBack={returnToBrowse}
+            onWatch={openPlayer}
+            preparation={preparation}
           />
-        </>
-      ) : view === 'details' && selectedMedia ? (
-        <MediaDetails
-          ref={detailsRef}
-          media={selectedMedia}
-          onBack={returnToBrowse}
-          onWatch={openPlayer}
-          preparation={preparation}
+        ) : view === 'player' && playable ? (
+          <PlayerView
+            playable={playable}
+            title={selectedMedia ? getMediaTitle(selectedMedia) : 'Selected title'}
+            onBack={returnToDetails}
+          />
+        ) : null}
+      </div>
+      {showTraktPrompt && sessionId && (
+        <TraktModal
+          sessionId={sessionId}
+          onConnected={handleTraktConnected}
+          onDismiss={dismissTraktPrompt}
         />
-      ) : view === 'player' && playable ? (
-        <PlayerView
-          playable={playable}
-          title={selectedMedia ? getMediaTitle(selectedMedia) : 'Selected title'}
-          onBack={returnToDetails}
-        />
-      ) : null}
+      )}
     </PageContainer>
   );
 };

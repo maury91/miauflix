@@ -54,6 +54,13 @@ export interface WarmupResult {
   lastPiece: number;
 }
 
+export interface WarmupRangeProgress {
+  verifiedBytes: number;
+  targetBytes: number;
+  progress: number;
+  isComplete: boolean;
+}
+
 export class DownloadService {
   public readonly client: WebTorrent;
   private activeStreams = 0;
@@ -418,6 +425,7 @@ export class DownloadService {
         Math.ceil((fileOffset + Math.min(target, file.length)) / pieceLength) - 1
       )
     );
+    const selectedTargetBytes = this.getRangeByteLength(download.torrent, firstPiece, lastPiece);
 
     if (download.storage.retentionClass === 'watched') {
       // A watched row may survive a torrent restart, so restore its full selection.
@@ -426,7 +434,7 @@ export class DownloadService {
       file.deselect();
       download.torrent.select(firstPiece, lastPiece, 1);
     }
-    return { sourceId: source.id, targetBytes: target, firstPiece, lastPiece };
+    return { sourceId: source.id, targetBytes: selectedTargetBytes, firstPiece, lastPiece };
   }
 
   async pauseSource(sourceId: number): Promise<boolean> {
@@ -434,22 +442,74 @@ export class DownloadService {
   }
 
   async isRangeVerified(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean> {
+    const progress = await this.getRangeProgress(sourceId, firstPiece, lastPiece);
+    return progress.isComplete;
+  }
+
+  async getRangeProgress(
+    sourceId: number,
+    firstPiece: number,
+    lastPiece: number
+  ): Promise<WarmupRangeProgress> {
     if (
       !Number.isInteger(firstPiece) ||
       !Number.isInteger(lastPiece) ||
       firstPiece < 0 ||
       lastPiece < firstPiece
     ) {
-      return false;
+      return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     }
     const storage = await this.storageService.getStorageByMovieSource(sourceId);
-    if (!storage) return false;
+    if (!storage) return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     const torrent = this.client.torrents.find(item => item.path === storage.location);
-    if (!torrent?.bitfield) return false;
-    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
-      if (!torrent.bitfield.get(piece)) return false;
+    if (!torrent?.bitfield)
+      return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
+    const totalPieces = torrent.pieces?.length;
+    if (
+      !Number.isInteger(totalPieces) ||
+      totalPieces <= 0 ||
+      firstPiece >= totalPieces ||
+      lastPiece >= totalPieces
+    ) {
+      return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     }
-    return true;
+    const targetBytes = this.getRangeByteLength(torrent, firstPiece, lastPiece);
+    if (targetBytes <= 0) {
+      return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
+    }
+    let verifiedBytes = 0;
+    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+      if (torrent.bitfield.get(piece)) verifiedBytes += this.getPieceByteLength(torrent, piece);
+    }
+    const progress = Math.min(100, Math.max(0, (verifiedBytes / targetBytes) * 100));
+    return {
+      verifiedBytes,
+      targetBytes,
+      progress,
+      isComplete: verifiedBytes === targetBytes,
+    };
+  }
+
+  getWarmupTargetBytes(): number {
+    return this.config.getOrThrow('PRELOAD_WARM_TARGET_MIB') * 1024 * 1024;
+  }
+
+  private getPieceByteLength(torrent: Torrent, piece: number): number {
+    const pieceLength = Number(torrent.pieceLength);
+    const torrentLength = Number(torrent.length);
+    if (!Number.isFinite(pieceLength) || pieceLength <= 0 || !Number.isFinite(torrentLength)) {
+      return 0;
+    }
+    const start = piece * pieceLength;
+    return Math.max(0, Math.min(pieceLength, torrentLength - start));
+  }
+
+  private getRangeByteLength(torrent: Torrent, firstPiece: number, lastPiece: number): number {
+    let total = 0;
+    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+      total += this.getPieceByteLength(torrent, piece);
+    }
+    return total;
   }
 
   /** Promote the already-added source; no source ranking or replacement occurs. */

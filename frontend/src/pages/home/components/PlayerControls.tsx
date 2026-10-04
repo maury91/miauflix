@@ -1,4 +1,6 @@
 import { PALETTE } from '@shared/config/constants';
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { Button as BaseButton } from '@shared/ui/button/Button';
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -42,14 +44,18 @@ const Header = styled.header<{ $visible: boolean }>`
     width: 14.5vh;
     height: 4vh;
   }
-  button {
-    padding: 0.7rem 1.2rem;
-    border: 1px solid ${PALETTE.background.border};
-    border-radius: 0.35rem;
-    background: ${PALETTE.background.surface2};
-    color: ${PALETTE.text.primary};
-    cursor: pointer;
-  }
+`;
+
+const HeaderButton = styled(BaseButton)`
+  min-width: auto;
+  min-height: 0;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid ${PALETTE.background.border};
+  border-radius: 0.35rem;
+  background: ${PALETTE.background.surface2};
+  color: ${PALETTE.text.primary};
+  font-size: 1rem;
+  box-shadow: none;
 `;
 
 export function PlayerHeader({
@@ -61,15 +67,15 @@ export function PlayerHeader({
 }) {
   return (
     <Header $visible={visible}>
-      <button type="button" onClick={onBack}>
+      <HeaderButton type="button" onClick={onBack}>
         ← Back to details
-      </button>
+      </HeaderButton>
       <img src="/assets/images/logo.svg" alt="Miauflix logo" />
     </Header>
   );
 }
 
-const Button = styled.button`
+const Button = styled(BaseButton)`
   display: inline-grid;
   place-items: center;
   min-width: 44px;
@@ -79,6 +85,7 @@ const Button = styled.button`
   background: transparent;
   color: inherit;
   font-size: 1.8rem;
+  box-shadow: none;
   cursor: pointer;
   &:hover {
     background: rgba(255, 255, 255, 0.12);
@@ -224,12 +231,32 @@ export function PlayerControls({
     if (video && duration > 0) video.currentTime = Math.min(duration, Math.max(0, value));
     reveal();
   };
+  const navigationRef = useKeyboardNavigation({
+    onConfirm: event => {
+      if (event.target !== overlay.current) return false;
+      toggle();
+      return true;
+    },
+    onLeft: event => {
+      if (event.target !== overlay.current) return false;
+      seek(position - 10);
+      return true;
+    },
+    onRight: event => {
+      if (event.target !== overlay.current) return false;
+      seek(position + 10);
+      return true;
+    },
+  });
   const shown = visible || paused;
   const percent = duration > 0 ? Math.min(100, Math.max(0, (position / duration) * 100)) : 0;
 
   return (
     <Overlay
-      ref={overlay}
+      ref={node => {
+        overlay.current = node;
+        navigationRef(node);
+      }}
       $visible={shown}
       $paused={paused}
       onPointerMove={reveal}
@@ -237,17 +264,6 @@ export function PlayerControls({
         if (event.target === event.currentTarget) toggle();
       }}
       onFocus={reveal}
-      onKeyDown={event => {
-        if (event.target !== event.currentTarget) return;
-        if (event.key === ' ' || event.key === 'Enter') {
-          event.preventDefault();
-          toggle();
-        }
-        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-          event.preventDefault();
-          seek(position + (event.key === 'ArrowLeft' ? -10 : 10));
-        }
-      }}
       tabIndex={0}
       aria-label="Playback controls"
     >

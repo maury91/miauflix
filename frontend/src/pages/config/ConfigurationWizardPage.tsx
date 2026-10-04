@@ -1,10 +1,12 @@
 import {
   useGetConfigQuery,
+  useGetServiceStatusesQuery,
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
 } from '@features/config/api/config.api';
 import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { Button as BaseButton } from '@shared/ui/button/Button';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -165,7 +167,9 @@ const NextStepHint = styled.span`
   text-align: center;
 `;
 
-const Button = styled.button<{ $primary?: boolean }>`
+const Button = styled(BaseButton)<{ $primary?: boolean }>`
+  min-width: 0;
+  min-height: 0;
   padding: 10px 20px;
   border: 1px solid
     ${props =>
@@ -184,8 +188,10 @@ const Button = styled.button<{ $primary?: boolean }>`
   }
 `;
 
-const ChevronButton = styled.button`
+const ChevronButton = styled(BaseButton)`
   display: inline-grid;
+  min-width: 0;
+  min-height: 0;
   width: 42px;
   height: 42px;
   place-items: center;
@@ -193,6 +199,7 @@ const ChevronButton = styled.button`
   border-radius: 50%;
   background: ${SETTINGS_PALETTE.background.surface};
   color: ${SETTINGS_PALETTE.text.primary};
+  box-shadow: none;
   cursor: pointer;
 
   &:hover:not(:disabled) {
@@ -211,7 +218,7 @@ const OptionalList = styled.div`
   gap: 12px;
 `;
 
-const OptionalService = styled.button`
+const OptionalService = styled(BaseButton)`
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -222,6 +229,7 @@ const OptionalService = styled.button`
   border-radius: 8px;
   background: ${SETTINGS_PALETTE.background.surface};
   color: ${SETTINGS_PALETTE.text.primary};
+  box-shadow: none;
   cursor: pointer;
   text-align: left;
 
@@ -341,6 +349,7 @@ const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, du
 
 export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const { data: entries = [], isLoading } = useGetConfigQuery(undefined);
+  const { data: serviceStatuses = {} } = useGetServiceStatusesQuery(undefined);
   const [testServiceConfig] = useTestServiceConfigMutation();
   const [saveServiceConfig] = useSaveServiceConfigMutation();
   const { values, dirtyServices, handleChange, getServiceEntries, markServiceSaved } =
@@ -366,9 +375,10 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
           Object.entries(groups).filter(([, group]) => {
             return group.some(entry => entry.required && !entry.hasValue);
           })
-        )
+        ),
+        serviceStatuses
       ),
-    [groups]
+    [groups, serviceStatuses]
   );
   useEffect(() => {
     if (!isLoading && !initialRequiredServiceNames) {
@@ -604,6 +614,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
             hasChanges={dirtyServices.has(currentName)}
             activeAction={actions[currentName]}
             result={currentResult}
+            serviceStatus={serviceStatuses[currentName]}
           />
           {!isOptionalStep && (
             <NextStepArea>

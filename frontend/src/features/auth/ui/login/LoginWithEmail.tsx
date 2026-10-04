@@ -1,5 +1,6 @@
 import { useLoginMutation } from '@features/auth/api/auth.api';
 import { PALETTE } from '@shared/config/constants';
+import { Button } from '@shared/ui/button/Button';
 import type { FC } from 'react';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
@@ -41,29 +42,10 @@ const Input = styled.input`
   }
 `;
 
-const ContinueButton = styled.button`
+const ContinueButton = styled(Button)`
   width: 100%;
   max-width: 260px;
-  padding: 10px 12px;
-  background-color: ${PALETTE.color.brand};
-  color: white;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: background-color 0.2s;
   margin-top: 8px;
-
-  &:hover {
-    background-color: ${PALETTE.color.brandHover};
-  }
-
-  &:disabled {
-    background-color: #666;
-    cursor: not-allowed;
-  }
 `;
 
 export const LoginWithEmail: FC<{ showTitle: boolean }> = ({ showTitle }) => {

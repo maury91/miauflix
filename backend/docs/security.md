@@ -4,7 +4,7 @@ The backend implements a comprehensive security system with multiple layers of p
 
 ## Security Features
 
-### Authentication & Authorization
+### Authentication & TraktAuthorization
 
 - **Whitelist Approach**: All routes are protected by default unless explicitly whitelisted
 - **JWT-based Authentication**: Secure token-based authentication using industry-standard implementation
@@ -103,7 +103,7 @@ The system includes VPN detection capabilities:
 Comprehensive audit logging system tracks:
 
 - **Authentication Events**: Login attempts, token refresh, logout events
-- **Authorization Failures**: Failed access attempts to protected resources
+- **TraktAuthorization Failures**: Failed access attempts to protected resources
 - **User Management**: User creation, role changes, account modifications
 - **Security Events**: VPN detection, suspicious activity, rate limit violations
 - **System Events**: Configuration changes, service starts/stops

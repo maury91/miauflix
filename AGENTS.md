@@ -203,7 +203,7 @@ afterEach(() => {
 
 **Three-Tier Authentication System:**
 
-1. **Primary API Auth**: JWT tokens in Authorization headers (15min expiration)
+1. **Primary API Auth**: JWT tokens in TraktAuthorization headers (15min expiration)
 2. **Token Refresh Only**: HttpOnly cookies exclusively for `/api/auth/refresh/:session`
 3. **Streaming Access**: Non-JWT streaming keys for `/api/stream/:token`
 

@@ -1,11 +1,14 @@
 import {
   useGetConfigQuery,
+  useGetServiceStatusesQuery,
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
   useUpdateConfigMutation,
 } from '@features/config/api/config.api';
 import type { ConfigServiceActionResult } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { ActionRow } from '@shared/ui/action-row/ActionRow';
+import { Button } from '@shared/ui/button/Button';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -78,8 +81,7 @@ const MissingConfigIcon = styled(AlertIcon)`
   color: ${SETTINGS_PALETTE.color.danger};
 `;
 
-const Footer = styled.div`
-  display: flex;
+const Footer = styled(ActionRow)`
   gap: 12px;
   align-items: center;
   margin-top: 24px;
@@ -87,7 +89,9 @@ const Footer = styled.div`
   border-top: 1px solid ${SETTINGS_PALETTE.background.border};
 `;
 
-const SaveButton = styled.button`
+const SaveButton = styled(Button)`
+  min-width: 0;
+  min-height: 0;
   padding: 10px 24px;
   background-color: ${SETTINGS_PALETTE.color.primaryButton};
   color: #0a0d0f;
@@ -113,7 +117,9 @@ const SaveButton = styled.button`
   }
 `;
 
-const SkipButton = styled.button`
+const SkipButton = styled(Button)`
+  min-width: 0;
+  min-height: 0;
   padding: 10px 24px;
   background-color: transparent;
   color: ${SETTINGS_PALETTE.text.secondary};
@@ -149,6 +155,8 @@ interface ConfigWizardPageProps {
 
 const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
   const { data: configEntries = [], isLoading: isConfigLoading } = useGetConfigQuery(undefined);
+  const { data: serviceStatuses = {}, isLoading: isServiceStatusesLoading } =
+    useGetServiceStatusesQuery(undefined);
   const [updateConfig, { isLoading: isSaving }] = useUpdateConfigMutation();
   const [testServiceConfig] = useTestServiceConfigMutation();
   const [saveServiceConfig] = useSaveServiceConfigMutation();
@@ -194,13 +202,21 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
       .map(([group]) => group);
   }, [groupedEntries]);
 
-  const initiallySortedGroups = useMemo(() => sortServiceGroups(groupedEntries), [groupedEntries]);
+  const initiallySortedGroups = useMemo(
+    () => sortServiceGroups(groupedEntries, serviceStatuses),
+    [groupedEntries, serviceStatuses]
+  );
 
   useEffect(() => {
-    if (initialGroupOrder === null && initiallySortedGroups.length > 0) {
+    if (
+      initialGroupOrder === null &&
+      !isConfigLoading &&
+      !isServiceStatusesLoading &&
+      initiallySortedGroups.length > 0
+    ) {
       setInitialGroupOrder(initiallySortedGroups.map(([serviceName]) => serviceName));
     }
-  }, [initialGroupOrder, initiallySortedGroups]);
+  }, [initialGroupOrder, initiallySortedGroups, isConfigLoading, isServiceStatusesLoading]);
 
   const sortedGroups = useMemo(
     () => preserveInitialServiceOrder(initiallySortedGroups, initialGroupOrder),
@@ -444,6 +460,7 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             result={serviceResults[groupName]}
             restarted={serviceNotices[groupName]?.restarted}
             needsProcessRestart={serviceNotices[groupName]?.needsProcessRestart}
+            serviceStatus={serviceStatuses[groupName]}
           />
         ))}
 

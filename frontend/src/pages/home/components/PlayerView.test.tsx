@@ -1,17 +1,18 @@
-import type { CreatePlaybackSessionResponse } from '@miauflix/backend';
+import type { CreatePlaybackSessionResponse, ProgressEntry } from '@miauflix/backend';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { createSession, updateProgress } = vi.hoisted(() => ({
+const { createSession, updateProgress, resumeEntry } = vi.hoisted(() => ({
   createSession: vi.fn(),
   updateProgress: vi.fn(),
+  resumeEntry: { current: undefined as ProgressEntry | undefined },
 }));
 
 vi.mock('@features/player/api/playback.api', () => ({
   useCreateSessionMutation: () => [createSession],
 }));
 vi.mock('@features/progress/api/progress.api', () => ({
-  progressForPlayable: () => undefined,
+  progressForPlayable: () => resumeEntry.current,
   useGetProgressQuery: () => ({ data: { progress: [] } }),
   useUpdateProgressMutation: () => [updateProgress],
 }));
@@ -44,6 +45,7 @@ describe('PlayerView', () => {
   beforeEach(() => {
     createSession.mockReset();
     updateProgress.mockReset();
+    resumeEntry.current = undefined;
   });
 
   it('explains an unavailable source with the title and a recovery action', async () => {
@@ -125,6 +127,64 @@ describe('PlayerView', () => {
       expect(screen.getByRole('slider', { name: 'Seek' })).toBeInTheDocument();
     } finally {
       view.unmount();
+      vi.useRealTimers();
+    }
+  });
+
+  it('resumes imported percentage progress against the actual video duration', async () => {
+    resumeEntry.current = {
+      playable,
+      state: 'paused',
+      positionSeconds: 50,
+      durationSeconds: 100,
+      updatedAt: '2026-10-04T10:00:00Z',
+    };
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 200 });
+    fireEvent.loadedMetadata(video);
+    expect(video.currentTime).toBe(100);
+    fireEvent.playing(video);
+    expect(updateProgress).toHaveBeenLastCalledWith({
+      playable,
+      state: 'playing',
+      positionSeconds: 100,
+      durationSeconds: 200,
+    });
+  });
+
+  it('does not report playing heartbeats while paused and reports completion once', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    const view = render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 200 });
+    video.currentTime = 50;
+    Object.defineProperty(video, 'paused', { configurable: true, value: true });
+    fireEvent.loadedMetadata(video);
+    fireEvent.pause(video);
+    vi.useFakeTimers();
+    try {
+      act(() => vi.advanceTimersByTime(20_000));
+      expect(updateProgress).toHaveBeenCalledTimes(1);
+      expect(updateProgress).toHaveBeenLastCalledWith({
+        playable,
+        state: 'paused',
+        positionSeconds: 50,
+        durationSeconds: 200,
+      });
+      video.currentTime = 200;
+      fireEvent.ended(video);
+      act(() => vi.advanceTimersByTime(20_000));
+      view.unmount();
+      expect(updateProgress).toHaveBeenCalledTimes(2);
+      expect(updateProgress).toHaveBeenLastCalledWith({
+        playable,
+        state: 'completed',
+        positionSeconds: 200,
+        durationSeconds: 200,
+      });
+    } finally {
       vi.useRealTimers();
     }
   });

@@ -6,6 +6,8 @@ import {
 } from '@features/progress/api/progress.api';
 import type { CreatePlaybackSessionResponse, PlayableRef } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { Button as BaseButton } from '@shared/ui/button/Button';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -68,13 +70,16 @@ const VideoStatus = styled.p<{ $ready: boolean }>`
   `}
 `;
 
-const BackButton = styled.button`
+const BackButton = styled(BaseButton)`
+  min-width: 0;
+  min-height: 0;
   justify-self: center;
   padding: 0.7rem 1.2rem;
   border: 1px solid ${PALETTE.background.border};
   border-radius: 0.35rem;
   background: ${PALETTE.background.surface2};
   color: ${PALETTE.text.primary};
+  box-shadow: none;
   cursor: pointer;
 `;
 
@@ -103,6 +108,7 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
     positionSeconds: number;
     durationSeconds: number;
   } | null>(null);
+  const completedRef = useRef(false);
 
   const readProgressSnapshot = useCallback(() => {
     const video = videoRef.current;
@@ -127,6 +133,7 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
     },
     [playable, readProgressSnapshot, updateProgress]
   );
+  const resume = progress.data ? progressForPlayable(progress.data.progress, playable) : undefined;
 
   useEffect(() => {
     const currentRequest = ++requestId.current;
@@ -134,6 +141,7 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
     setError(null);
     setStatus('preparing');
     resumeApplied.current = false;
+    completedRef.current = false;
     latestProgress.current = null;
 
     void createSession({
@@ -155,14 +163,30 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
 
     return () => {
       requestId.current += 1;
-      saveProgress('paused');
+      if (!completedRef.current) saveProgress('paused');
     };
   }, [attempt, createSession, playable, saveProgress, title]);
 
   useEffect(() => {
-    const timer = window.setInterval(() => saveProgress('playing'), 10_000);
+    const timer = window.setInterval(() => {
+      if (!completedRef.current && videoRef.current && !videoRef.current.paused)
+        saveProgress('playing');
+    }, 10_000);
     return () => window.clearInterval(timer);
   }, [saveProgress]);
+
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video || resumeApplied.current || !resume || resume.state === 'completed') return;
+    if (!Number.isFinite(video.duration) || video.duration <= 0 || resume.positionSeconds <= 5) {
+      return;
+    }
+    resumeApplied.current = true;
+    video.currentTime = Math.min(
+      (resume.positionSeconds / resume.durationSeconds) * video.duration,
+      Math.max(0, video.duration - 1)
+    );
+  }, [resume]);
 
   useEffect(() => {
     document.body.dataset['miauflixPlayer'] = 'true';
@@ -171,22 +195,15 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
     };
   }, []);
 
-  const resume = progress.data ? progressForPlayable(progress.data.progress, playable) : undefined;
+  const navigationRef = useKeyboardNavigation({
+    onBack: () => {
+      onBack();
+      return true;
+    },
+  });
 
   return (
-    <Page
-      tabIndex={-1}
-      aria-label="Player"
-      onKeyDown={event => {
-        if (event.key === 'Escape' || event.key === 'Backspace') {
-          event.preventDefault();
-          event.stopPropagation();
-          onBack();
-        } else {
-          event.stopPropagation();
-        }
-      }}
-    >
+    <Page ref={navigationRef} tabIndex={-1} aria-label="Player">
       {!session && <PlayerHeader onBack={onBack} />}
       {session ? (
         <>
@@ -197,11 +214,12 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
             autoPlay
             playsInline
             onLoadedMetadata={event => {
-              if (!resumeApplied.current) {
+              if (!resumeApplied.current && progress.data) {
                 resumeApplied.current = true;
                 if (resume && resume.state !== 'completed' && resume.positionSeconds > 5) {
                   event.currentTarget.currentTime = Math.min(
-                    resume.positionSeconds,
+                    (resume.positionSeconds / resume.durationSeconds) *
+                      event.currentTarget.duration,
                     Math.max(0, event.currentTarget.duration - 1)
                   );
                 }
@@ -210,9 +228,17 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
             }}
             onTimeUpdate={readProgressSnapshot}
             onCanPlay={() => setStatus('ready')}
-            onPlaying={() => setStatus('ready')}
-            onPause={() => saveProgress('paused')}
-            onEnded={() => saveProgress('completed')}
+            onPlaying={() => {
+              setStatus('ready');
+              saveProgress('playing');
+            }}
+            onPause={() => {
+              if (!completedRef.current) saveProgress('paused');
+            }}
+            onEnded={() => {
+              completedRef.current = true;
+              saveProgress('completed');
+            }}
             onError={() => {
               setSession(null);
               setStatus('error');

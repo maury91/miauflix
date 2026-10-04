@@ -10,12 +10,15 @@ import {
   listServiceDefinitionsPageSchema,
   type ListServicePage,
   listServicePageSchema,
+  type PlaybackEntry,
+  type PlaybackProgress,
+  playbackSnapshotSchema,
   type ProviderAssociation,
   providerAssociationSchema,
   type ProviderAuthorization,
   providerAuthorizationSchema,
 } from '@miauflix/service-contracts';
-import type { ZodType } from 'zod';
+import { z, type ZodType } from 'zod';
 
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
@@ -129,6 +132,19 @@ export class ListClientService {
       this.path(`/connections/trakt/${encodeURIComponent(subjectId)}`),
       { method: 'DELETE' }
     );
+  }
+
+  async syncPlayback(subjectId: string, update: PlaybackProgress): Promise<void> {
+    await this.remote.requestCapability(z.object({ synced: z.boolean() }), this.path('/progress'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subjectId, ...update }),
+    });
+  }
+
+  async getPlayback(subjectId: string): Promise<PlaybackEntry[]> {
+    const result = await this.get(playbackSnapshotSchema, '/progress', { subjectId });
+    return result.progress;
   }
 
   private get<T>(schema: ZodType<T>, path: string, query: Record<string, string>): Promise<T> {

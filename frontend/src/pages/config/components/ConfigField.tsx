@@ -1,5 +1,6 @@
 import type { ConfigEntryView } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { Button } from '@shared/ui/button/Button';
 import type { FC, SVGProps } from 'react';
 import styled from 'styled-components';
 
@@ -183,8 +184,10 @@ const InputRow = styled.div`
   gap: 8px;
 `;
 
-const Toggle = styled.button<{ $enabled: boolean; $missing?: boolean }>`
+const Toggle = styled(Button)<{ $enabled: boolean; $missing?: boolean }>`
   position: relative;
+  min-width: 0;
+  min-height: 0;
   width: 46px;
   height: 26px;
   padding: 0;
@@ -198,6 +201,7 @@ const Toggle = styled.button<{ $enabled: boolean; $missing?: boolean }>`
   border-radius: 999px;
   background: ${props =>
     props.$enabled ? SETTINGS_PALETTE.color.interactive : SETTINGS_PALETTE.background.input};
+  box-shadow: none;
   cursor: pointer;
   transition: all 0.2s;
 

@@ -123,6 +123,14 @@ async function installOfflineHarness(page: Page): Promise<Harness> {
     }
     if (path === '/api/config' && request.method() === 'GET') return json(route, []);
     if (path === '/api/status' && request.method() === 'GET') return json(route, { services: {} });
+    if (path === '/api/integrations/trakt/association' && request.method() === 'GET') {
+      return json(route, {
+        connected: true,
+        provider: 'trakt',
+        accountId: 'fixture-account',
+        username: 'fixture-user',
+      });
+    }
     if (path === '/api/lists' && request.method() === 'GET') {
       return json(route, [
         {
@@ -243,12 +251,17 @@ test.describe('details page preparation contract', () => {
     await expect(page.getByRole('button', { name: 'Watch now' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Back to browse' })).toBeVisible();
     await expect(page.getByLabel(/1080p, WEB source/)).toBeVisible();
-    await expect(page.getByText(/Warming up torrent/)).toBeVisible();
+    const warmupBorder = page.locator('[data-warmup-state]');
+    await expect(warmupBorder).toHaveAttribute('data-warmup-state', 'warming');
+    await expect(warmupBorder).toHaveAttribute('data-warmup-progress', '50');
+    await expect(page.getByText('Initial buffer ready')).not.toBeVisible();
 
     await expect
       .poll(() => harness.torrentEvents.includes('warmup:ready'), { timeout: 12_000 })
       .toBe(true);
-    await expect(page.getByText('Initial buffer ready')).toBeVisible();
+    await expect(warmupBorder).toHaveAttribute('data-warmup-state', 'ready');
+    await expect(warmupBorder).toHaveAttribute('data-warmup-progress', '100');
+    await expect(page.getByText('Initial buffer ready')).not.toBeVisible();
     await expect(page.getByLabel(/1080p, WEB source/)).toBeVisible();
 
     const screenshot = await page.screenshot({ animations: 'disabled', fullPage: true });

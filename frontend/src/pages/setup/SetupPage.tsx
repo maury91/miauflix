@@ -1,5 +1,6 @@
 import { useCreateAdminMutation } from '@features/setup/api/setup.api';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { Button } from '@shared/ui/button/Button';
 import { useAppDispatch } from '@store';
 import { authSlice } from '@store/slices/auth';
 import { motion } from 'framer-motion';
@@ -89,7 +90,9 @@ const PasswordInput = styled(Input)`
   flex: 1;
 `;
 
-const PasswordVisibilityButton = styled.button`
+const PasswordVisibilityButton = styled(Button)`
+  min-width: 0;
+  min-height: 0;
   flex: 0 0 auto;
   min-width: 58px;
   padding: 0 10px;
@@ -136,7 +139,9 @@ const PasswordStrengthFill = styled.div<{ $strength: number }>`
     background-color 0.3s ease;
 `;
 
-const SubmitButton = styled.button`
+const SubmitButton = styled(Button)`
+  min-width: 0;
+  min-height: 0;
   width: 100%;
   padding: 10px 12px;
   background-color: ${SETTINGS_PALETTE.color.primaryButton};
@@ -258,6 +263,7 @@ const SetupPage: FC = () => {
               />
               <PasswordVisibilityButton
                 type="button"
+                color="secondary"
                 aria-label="Show password"
                 aria-pressed={showPassword}
                 onClick={() => setShowPassword(current => !current)}
@@ -284,6 +290,7 @@ const SetupPage: FC = () => {
               />
               <PasswordVisibilityButton
                 type="button"
+                color="secondary"
                 aria-label="Show confirmation password"
                 aria-pressed={showConfirmPassword}
                 onClick={() => setShowConfirmPassword(current => !current)}

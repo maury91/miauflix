@@ -1,13 +1,30 @@
 import type { ConfigEntryView } from '@miauflix/backend';
 
+export type ServiceStatusInfo = {
+  status: string;
+  reason?: string;
+  errorMessage?: string;
+  details?: string;
+};
+
+export type ServiceStatuses = Record<string, ServiceStatusInfo>;
+
 export function sortServiceGroups(
-  groupedEntries: Record<string, ConfigEntryView[]>
+  groupedEntries: Record<string, ConfigEntryView[]>,
+  serviceStatuses: ServiceStatuses = {}
 ): [string, ConfigEntryView[]][] {
   return Object.entries(groupedEntries).sort(
     ([leftName, leftEntries], [rightName, rightEntries]) => {
-      const priority = (entries: ConfigEntryView[]) =>
-        entries.some(entry => entry.required && !entry.hasValue) ? 0 : 1;
-      const difference = priority(leftEntries) - priority(rightEntries);
+      const priority = (name: string, entries: ConfigEntryView[]) => {
+        if (
+          entries.some(entry => entry.required && !entry.hasValue) ||
+          serviceStatuses[name]?.status === 'needs_configuration'
+        )
+          return 0;
+        if (['degraded', 'error'].includes(serviceStatuses[name]?.status ?? '')) return 1;
+        return 2;
+      };
+      const difference = priority(leftName, leftEntries) - priority(rightName, rightEntries);
       if (difference !== 0) return difference;
       return leftName.localeCompare(rightName);
     }
