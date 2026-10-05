@@ -325,25 +325,34 @@ export class ListService {
       payload: { subjectId, mediaType, mediaId },
       options: { priority: 80 },
     } as const;
-    void this.backgroundJobs
-      ?.enqueue(spec.type, spec.dedupeKey, spec.payload, spec.options)
-      .catch(async error => {
-        logger.warn(
-          'ListService',
-          'Watchlist sync queue unavailable; attempting immediate sync',
-          error
-        );
-        try {
-          const inWatchlist = await this.getWatchlistMembership(subjectId, mediaType, mediaId);
-          await this.listClient.syncWatchlist(subjectId, {
-            mediaType,
-            mediaId,
-            operation: inWatchlist ? 'add' : 'remove',
-          });
-        } catch (fallbackError) {
-          logger.warn('ListService', 'Immediate watchlist sync also failed', fallbackError);
-        }
-      });
+    const fallback = async (error: unknown) => {
+      logger.warn(
+        'ListService',
+        'Watchlist sync queue unavailable; attempting immediate sync',
+        error
+      );
+      try {
+        const inWatchlist = await this.getWatchlistMembership(subjectId, mediaType, mediaId);
+        await this.listClient.syncWatchlist(subjectId, {
+          mediaType,
+          mediaId,
+          operation: inWatchlist ? 'add' : 'remove',
+        });
+      } catch (fallbackError) {
+        logger.warn('ListService', 'Immediate watchlist sync also failed', fallbackError);
+      }
+    };
+    try {
+      const enqueueResult = this.backgroundJobs?.enqueue(
+        spec.type,
+        spec.dedupeKey,
+        spec.payload,
+        spec.options
+      );
+      void Promise.resolve(enqueueResult).catch(fallback);
+    } catch (error) {
+      void fallback(error);
+    }
   }
 
   private async getLocalWatchlist(subjectId: string) {

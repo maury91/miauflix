@@ -70,6 +70,7 @@ export class DownloadService {
   private readonly bitfieldTrackedTorrents = new WeakMap<Torrent, Set<number>>();
   private readonly torrentStartPromises = new Map<string, Promise<Torrent>>();
   private readonly pausedForPlayback = new Set<number>();
+  private readonly warmupSelections = new Map<number, { firstPiece: number; lastPiece: number }>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -436,10 +437,12 @@ export class DownloadService {
 
     if (download.storage.retentionClass === 'watched') {
       // A watched row may survive a torrent restart, so restore its full selection.
+      this.warmupSelections.delete(source.id);
       file.select();
     } else {
       file.deselect();
       download.torrent.select(firstPiece, lastPiece, 1);
+      this.warmupSelections.set(source.id, { firstPiece, lastPiece });
     }
     return { sourceId: source.id, targetBytes: selectedTargetBytes, firstPiece, lastPiece };
   }
@@ -541,6 +544,7 @@ export class DownloadService {
       reservedBytes: source.size,
     });
     const file = getVideoFile(download.torrent);
+    this.warmupSelections.delete(source.id);
     file.select();
     await this.storageService.markAsAccessed(source.id);
     return true;
@@ -552,7 +556,11 @@ export class DownloadService {
       retentionClass: 'speculative',
       reservedBytes: source.size,
     });
-    getVideoFile(download.torrent).select();
+    await this.storageService.withSourceLock(source.id, async () => {
+      getVideoFile(download.torrent).select();
+      if (this.activeStreams <= 0) return;
+      if (await this.pauseDownload(source.id)) this.pausedForPlayback.add(source.id);
+    });
     return true;
   }
 
@@ -785,6 +793,9 @@ export class DownloadService {
       // Pause by deselecting all files
       if (torrent.files && torrent.files.length > 0) {
         torrent.files.forEach(file => file.deselect());
+        // File selection and explicit piece selection are independent in WebTorrent.
+        // Clear both so a paused warmup cannot continue downloading its range.
+        torrent.deselect(0, Math.max(0, this.getTorrentPieceCount(torrent) - 1));
         logger.info('DownloadService', `Paused download for movie source ${movieSourceId}`);
         return true;
       }
@@ -816,6 +827,14 @@ export class DownloadService {
       if (!torrent) {
         logger.warn('DownloadService', `No active torrent found for movie source ${movieSourceId}`);
         return false;
+      }
+
+      const warmup = this.warmupSelections.get(movieSourceId);
+      if (warmup) {
+        torrent.files?.forEach(file => file.deselect());
+        torrent.select(warmup.firstPiece, warmup.lastPiece, 1);
+        logger.info('DownloadService', `Resumed warmup for movie source ${movieSourceId}`);
+        return true;
       }
 
       // Resume by selecting files
@@ -856,6 +875,8 @@ export class DownloadService {
 
       // Remove storage record
       await this.storageService.removeStorage(movieSourceId);
+      this.warmupSelections.delete(movieSourceId);
+      this.pausedForPlayback.delete(movieSourceId);
       logger.info(
         'DownloadService',
         `Cancelled download and cleaned up storage for movie source ${movieSourceId}`
@@ -960,7 +981,21 @@ export class DownloadService {
             movieSource.id,
             (this.activeSourceCounts.get(movieSource.id) ?? 0) + 1
           );
-          if (this.activeStreams === 1) await this.pauseSpeculativeDownloads(movieSource.id);
+          if (this.activeStreams === 1) {
+            try {
+              await this.pauseSpeculativeDownloads(movieSource.id);
+            } catch (error) {
+              // Undo admission before propagating startup failure. The stream has
+              // no release callback yet, so leaving these counts set would wedge
+              // future playback and prevent another pause sweep.
+              this.activeStreams = Math.max(0, this.activeStreams - 1);
+              const remaining = (this.activeSourceCounts.get(movieSource.id) ?? 1) - 1;
+              if (remaining > 0) this.activeSourceCounts.set(movieSource.id, remaining);
+              else this.activeSourceCounts.delete(movieSource.id);
+              await this.storageService.setPlaybackActive(movieSource.id, false);
+              throw error;
+            }
+          }
         });
 
         const headers: Record<string, string> = {

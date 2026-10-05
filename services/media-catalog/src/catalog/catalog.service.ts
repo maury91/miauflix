@@ -202,6 +202,7 @@ export class CatalogService {
   }
 
   private enqueueNextDatabaseBackdropFocus(): void {
+    if (this.backdropFocusService.hasPendingBackground('database')) return;
     const candidates = [
       ...this.movies.getBackdropCandidates().map(row => ({ mediaType: 'movie' as const, ...row })),
       ...this.tvShows.getBackdropCandidates().map(row => ({ mediaType: 'tv' as const, ...row })),

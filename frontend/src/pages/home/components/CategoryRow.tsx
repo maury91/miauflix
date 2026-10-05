@@ -234,6 +234,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   const shouldFocus = useRef(categoryIndex === 0);
   const pendingIndex = useRef<number | null>(categoryIndex === 0 ? initialIndex : null);
   const preparedMedia = useRef(new Set<string>());
+  const queuedBackdropMedia = useRef(new Set<string>());
 
   const mediaByIndex = useMemo(() => {
     if (mediaOverride) return new Map(mediaOverride.map((media, index) => [index, media]));
@@ -445,15 +446,21 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     if (!visible || !mediaByIndex.size) return;
     const backgroundItems = [...mediaByIndex.values()]
       .filter(media => !media.backdropFocus && Boolean(media.backdrop))
+      .filter(media => !queuedBackdropMedia.current.has(`${media._type}:${media.mediaId}`))
       .map(media => ({
         mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
         mediaId: media.mediaId,
       }))
       .slice(0, 50);
-    if (backgroundItems.length) {
+    if (!backgroundItems.length) return;
+    const keys = backgroundItems.map(item => `${item.mediaType}:${item.mediaId}`);
+    keys.forEach(key => queuedBackdropMedia.current.add(key));
+    try {
       void queueBackdropFocus({ items: backgroundItems })
         .unwrap()
-        .catch(() => undefined);
+        .catch(() => keys.forEach(key => queuedBackdropMedia.current.delete(key)));
+    } catch {
+      keys.forEach(key => queuedBackdropMedia.current.delete(key));
     }
   }, [mediaByIndex, queueBackdropFocus, visible]);
 

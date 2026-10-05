@@ -20,11 +20,12 @@ export class MovieRepository {
     return row && movieRow(row);
   }
 
-  getBackdropCandidates(): Array<{ mediaId: number; backdrop: string }> {
+  getBackdropCandidates(limit = 32): Array<{ mediaId: number; backdrop: string }> {
     return this.db
       .select({ mediaId: movies.mediaId, backdrop: movies.backdrop })
       .from(movies)
       .where(and(isNotNull(movies.detailsSyncedAt), ne(movies.backdrop, '')))
+      .limit(limit)
       .all();
   }
 

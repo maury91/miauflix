@@ -314,11 +314,16 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     if [[ "$MODE" == "test" ]]; then
         compose_args+=(--wait --wait-timeout 120)
     fi
-    compose "${compose_args[@]}"
-
-    compose logs --since 1m --follow >> "$log_file" 2>&1 &
+    # Start following before startup so failures during `up --wait` are retained.
+    # Some Compose versions exit when no container exists yet; the fallback below
+    # starts a follower after startup without a time window in that case.
+    compose logs --follow >> "$log_file" 2>&1 &
     logged_pid=$!
-    cleanupArtifacts
+    compose "${compose_args[@]}"
+    if ! kill -0 "$logged_pid" 2>/dev/null; then
+        compose logs --follow >> "$log_file" 2>&1 &
+        logged_pid=$!
+    fi
 
     # Wait for services to start
     echo "⏳ Waiting for services to start..."
@@ -340,7 +345,7 @@ else
     echo "🔄 Using existing containers - skipping Docker startup"
     # Still need to set up logging for existing containers, but from the right directory
     cd "$backend_e2e_dir"
-    compose logs --since 1m --follow >> "$log_file" 2>&1 &
+    compose logs --follow >> "$log_file" 2>&1 &
     logged_pid=$!
 fi
 

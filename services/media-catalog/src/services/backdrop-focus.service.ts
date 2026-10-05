@@ -63,6 +63,12 @@ class BackdropFocusScheduler {
     return true;
   }
 
+  hasPending(priority: BackgroundPriority): boolean {
+    return (
+      (priority === 'displayed' ? this.backgroundDisplayed : this.backgroundDatabase).length > 0
+    );
+  }
+
   private add<T>(queue: QueuedTask[], key: string, run: () => Promise<T>): Promise<T> {
     return new Promise<T>((resolve, reject) => {
       queue.push({
@@ -162,6 +168,11 @@ export class BackdropFocusService {
     const promise = this.schedule(inflightKey, key, source, priority);
     void promise.catch(() => undefined);
     return true;
+  }
+
+  /** Returns whether work is already waiting in the selected background queue. */
+  hasPendingBackground(priority: 'displayed' | 'database'): boolean {
+    return this.computationQueue.hasPending(priority);
   }
 
   private schedule(

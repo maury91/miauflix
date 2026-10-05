@@ -435,7 +435,7 @@ export class TraktClient {
       if (!parsed.success)
         throw new TraktProviderError('Trakt API returned invalid watched shows', 502);
       shows.push(...parsed.data);
-      if (page >= result.totalPages || result.items.length === 0) break;
+      if (page >= result.totalPages) break;
     }
     const entries: PlaybackEntry[] = [];
     const schema = z.object({

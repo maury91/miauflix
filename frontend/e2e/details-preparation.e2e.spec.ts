@@ -170,6 +170,13 @@ async function installOfflineHarness(page: Page): Promise<Harness> {
     if (path === '/api/media/movie/83533/backdrop-focus' && request.method() === 'POST') {
       return json(route, { backdropFocus: null });
     }
+    if (path === '/api/media/backdrop-focus/background' && request.method() === 'POST') {
+      const body = request.postDataJSON() as {
+        items?: Array<{ mediaType: string; mediaId: number }>;
+      };
+      if (!Array.isArray(body.items)) throw new Error('Invalid backdrop-focus request');
+      return json(route, { accepted: body.items.length });
+    }
     if (path === '/api/movies/83533' && request.method() === 'GET')
       return json(route, detailsResponse());
 
