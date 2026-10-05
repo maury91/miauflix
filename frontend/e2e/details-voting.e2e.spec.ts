@@ -85,6 +85,12 @@ async function installVotingHarness(page: Page): Promise<void> {
       ]);
     if (path === '/api/lists/popular' && request.method() === 'GET')
       return json(route, { results: [], page: 0, pageSize: 20, total: 0, totalPages: 0 });
+    if (path === '/api/watchlist' && request.method() === 'GET')
+      return json(route, {
+        mediaType: 'movie',
+        mediaId: movie.mediaId,
+        inWatchlist: false,
+      });
     if (path === '/api/list/fixture-movies' && request.method() === 'GET')
       return json(route, { results: [movie], total: 1, page: 0, pageSize: 20, totalPages: 1 });
     if (path === '/api/list/priorities' && request.method() === 'POST')
