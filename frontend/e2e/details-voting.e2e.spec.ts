@@ -99,6 +99,8 @@ async function installVotingHarness(page: Page): Promise<void> {
       return json(route, { progress: [] });
     if (path === '/api/media/movie/83533/backdrop-focus' && request.method() === 'POST')
       return json(route, { backdropFocus: null });
+    if (path === '/api/media/backdrop-focus/background' && request.method() === 'POST')
+      return json(route, { accepted: request.postDataJSON()?.items?.length ?? 0 });
     if (path === '/api/movies/83533' && request.method() === 'GET')
       return json(route, {
         type: 'movie',
