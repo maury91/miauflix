@@ -227,6 +227,7 @@ interface ServiceConfigGroupProps {
   };
 }
 
+/** Render a service’s configuration fields, test/save actions, and configuration or runtime status. */
 export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
   groupName,
   entries,

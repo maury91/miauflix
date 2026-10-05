@@ -58,6 +58,7 @@ export class TraktClient {
     private readonly requestTimeoutMs = DEFAULT_REQUEST_TIMEOUT_MS
   ) {}
 
+  /** Queue a Trakt request in the shared provider lane, returning parsed JSON and headers or propagating request errors. */
   private requestWithHeaders(
     path: string,
     init: RequestInit = {},
@@ -68,6 +69,12 @@ export class TraktClient {
     );
   }
 
+  /**
+   * Wait for the shared cooldown, then request JSON with Trakt headers and an optional bearer token.
+   * Use the supplied abort signal or the configured timeout. HTTP 429 extends the shared cooldown
+   * without retrying this request. Throw TraktProviderError for HTTP errors, invalid JSON (502),
+   * and abort/timeout (504); other transport failures propagate.
+   */
   private async performRequest(
     path: string,
     init: RequestInit = {},
@@ -192,6 +199,11 @@ export class TraktClient {
     });
   }
 
+  /**
+   * Import all paused movie/episode playback entries, converting runtime minutes and percentages to seconds.
+   * Skip entries without a TMDB identity or usable runtime; absent pagination headers mean a single response.
+   * Provider/transport errors propagate; invalid payloads or pagination throw TraktProviderError (502).
+   */
   async playback(accessToken: string): Promise<PlaybackEntry[]> {
     const media = z.object({
       ids: z.object({ tmdb: z.number().int().positive().nullish() }),
@@ -262,6 +274,11 @@ export class TraktClient {
     });
   }
 
+  /**
+   * Export playback as start, pause, or stop; completion and pauses above 80 percent use stop.
+   * Completed entries send 100 percent. A stop conflict (409) is treated as already recorded;
+   * other provider and transport errors propagate.
+   */
   async scrobble(update: PlaybackProgress, accessToken: string): Promise<void> {
     const percent =
       update.state === 'completed' ? 100 : (update.positionSeconds / update.durationSeconds) * 100;
@@ -299,6 +316,12 @@ export class TraktClient {
     }
   }
 
+  /**
+   * Import paginated completions, skipping entries without a usable movie or episode identity.
+   * since is forwarded as Trakt’s start_at timestamp. Returned position and duration are both
+   * one second as completion markers, not measured runtimes. Provider/transport errors propagate;
+   * invalid history or pagination throws TraktProviderError (502).
+   */
   async watchedHistory(accessToken: string, since?: string): Promise<PlaybackEntry[]> {
     const itemSchema = z.object({
       type: z.enum(['movie', 'episode']),
@@ -345,6 +368,12 @@ export class TraktClient {
     }
   }
 
+  /**
+   * Return Trakt’s next unwatched episodes for watched shows, excluding hidden shows and missing TMDB IDs.
+   * Entries have zero position, the last-watched timestamp, and runtime in seconds (60 if absent).
+   * Shows without a next episode or last-watched timestamp are skipped. Provider/transport errors
+   * propagate; invalid payloads or pagination throw TraktProviderError (502).
+   */
   async nextEpisodes(accessToken: string): Promise<PlaybackEntry[]> {
     const hidden = new Set<number>();
     for (let page = 1; ; page++) {
@@ -414,6 +443,11 @@ export class TraktClient {
     return entries;
   }
 
+  /**
+   * Fetch one array response and its nonnegative pagination totals; item shapes are not validated.
+   * Provider/transport errors propagate. Non-array data, missing/invalid pagination headers, or
+   * inconsistent zero-page results throw TraktProviderError (502).
+   */
   async page<T>(
     path: string,
     accessToken?: string

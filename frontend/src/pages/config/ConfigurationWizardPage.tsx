@@ -347,6 +347,7 @@ function getReadiness(entries: ConfigEntryView[]): string {
 
 const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, duration));
 
+/** Guide required service configuration step by step, then offer optional settings before dismissal. */
 export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const { data: entries = [], isLoading } = useGetConfigQuery(undefined);
   const { data: serviceStatuses = {} } = useGetServiceStatusesQuery(undefined);

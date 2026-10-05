@@ -85,6 +85,10 @@ interface MediaCardProps {
   progress?: ProgressEntry[];
 }
 
+/**
+ * Select progress for a movie or any episode of a show, or undefined when none matches.
+ * Prefer unfinished entries, then actual playback over next-episode suggestions, then recency.
+ */
 function progressForMedia(progress: ProgressEntry[] | undefined, media: MediaDto) {
   if (!progress?.length) return undefined;
   const matching = progress.filter(entry => {
@@ -104,6 +108,7 @@ function progressForMedia(progress: ProgressEntry[] | undefined, media: MediaDto
   })[0];
 }
 
+/** Render a focusable media card with playback progress and the selected episode’s label when available. */
 export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function MediaCard(
   { media, onFocus, onHover, onSelect, progress, selected, tabIndex, width },
   ref

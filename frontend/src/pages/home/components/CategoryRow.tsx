@@ -160,6 +160,10 @@ interface CategoryRowProps {
   mediaOverride?: MediaDto[];
 }
 
+/**
+ * Render a navigable media row with a window of cards around the selection.
+ * Supplying mediaOverride bypasses list fetching and promotion, including for an empty array.
+ */
 export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(function CategoryRow(
   {
     active,

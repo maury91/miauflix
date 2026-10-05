@@ -186,6 +186,7 @@ function getPasswordStrength(password: string): number {
   return Math.min(4, score);
 }
 
+/** Create the initial admin account after password confirmation and store the returned login session. */
 const SetupPage: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');

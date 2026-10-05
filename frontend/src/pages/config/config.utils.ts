@@ -9,6 +9,10 @@ export type ServiceStatusInfo = {
 
 export type ServiceStatuses = Record<string, ServiceStatusInfo>;
 
+/**
+ * Order groups needing configuration first, then degraded/error services, then the rest.
+ * Break ties by service name without reordering the entries within a group.
+ */
 export function sortServiceGroups(
   groupedEntries: Record<string, ConfigEntryView[]>,
   serviceStatuses: ServiceStatuses = {}

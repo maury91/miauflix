@@ -30,6 +30,11 @@ export class PlaybackSync {
     )`);
   }
 
+  /**
+   * Read the current connection’s cached playback, excluding playables with pending local exports.
+   * Return an empty list without a connection or snapshot. Database, decryption, JSON, and schema
+   * validation errors propagate; this method does not contact Trakt.
+   */
   read(subjectId: string): PlaybackEntry[] {
     const connectionId = this.association(subjectId)?.connection_id;
     if (!connectionId) return [];
@@ -52,6 +57,11 @@ export class PlaybackSync {
       : [];
   }
 
+  /**
+   * Queue encrypted progress for the current connection without contacting Trakt.
+   * Replace pending positions for the same playable, but keep completions as separate events.
+   * Return false when disconnected, otherwise true after queuing; database and encryption errors propagate.
+   */
   write(subjectId: string, update: PlaybackProgress): boolean {
     const connectionId = this.association(subjectId)?.connection_id;
     if (!connectionId) return false;
@@ -75,6 +85,14 @@ export class PlaybackSync {
     return true;
   }
 
+  /**
+   * Export queued progress and refresh connected accounts’ encrypted playback snapshots.
+   * Overlapping calls return immediately. Consecutive playing exports for the same playable wait
+   * a minute; successful exports invalidate the one-minute snapshot read cache. Account failures
+   * retain pending data and delay retries a minute.
+   * Discard work for replaced connections. Failures outside per-account handling, including reading
+   * or decoding the outbox, propagate; the running guard is released even on failure.
+   */
   async tick(): Promise<void> {
     if (this.running) return;
     this.running = true;

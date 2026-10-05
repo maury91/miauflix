@@ -99,6 +99,7 @@ interface HomeSidebarProps {
   onSettings: () => void;
 }
 
+/** Render Home and Settings actions, restoring the selected button’s focus when the sidebar becomes active. */
 export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, onSettings }) => {
   const homeRef = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);

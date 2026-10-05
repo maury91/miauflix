@@ -58,6 +58,7 @@ const HeaderButton = styled(BaseButton)`
   box-shadow: none;
 `;
 
+/** Render the playback header with an action returning to details. */
 export function PlayerHeader({
   onBack,
   visible = true,
@@ -168,6 +169,11 @@ function formatTime(seconds: number) {
   return parts.map(part => String(part).padStart(2, '0')).join(':');
 }
 
+/**
+ * Control the referenced video’s playback, seeking, volume, and fullscreen state.
+ * Keyboard confirm and ten-second seeks apply when the overlay itself has focus.
+ * Controls stay visible while paused; play/fullscreen failures appear as notices.
+ */
 export function PlayerControls({
   videoRef,
   onBack,

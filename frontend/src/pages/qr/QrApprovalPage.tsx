@@ -12,6 +12,7 @@ type ApprovalState = {
   device?: { userAgent: string | null };
 };
 
+/** Inspect the QR login token from the URL and offer approval after the user signs in. */
 export default function QrApprovalPage() {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const token = useMemo(() => window.location.pathname.split('/').pop() ?? '', []);

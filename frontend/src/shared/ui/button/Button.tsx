@@ -93,6 +93,7 @@ const StyledButton = styled.button<{ $color: ButtonColor }>`
   }
 `;
 
+/** Render a native button with a forwarded ref, defaulting to type="button" and hiding its icon from assistive technology. */
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button(
   { color = 'primary', icon, children, type = 'button', ...props },
   ref

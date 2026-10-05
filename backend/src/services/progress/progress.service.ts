@@ -17,6 +17,10 @@ export class ProgressService {
     this.progressRepository = database.getProgressRepository();
   }
 
+  /**
+   * Save local progress before attempting export through a ready list service.
+   * Export failures are ignored after the save succeeds; repository failures propagate.
+   */
   async update(userId: string, update: ProgressUpdateRequest): Promise<void> {
     await this.progressRepository.upsert(userId, update);
     if (this.listClient?.isReady()) {
@@ -27,6 +31,11 @@ export class ProgressService {
     }
   }
 
+  /**
+   * Return local and imported progress, newest first, with local entries winning timestamp ties.
+   * An unavailable or failing list service contributes no entries. Repository failures propagate;
+   * imported entries are neither persisted locally nor exported again.
+   */
   async findByUser(userId: string): Promise<ProgressEntry[]> {
     const remote = this.listClient?.isReady()
       ? await this.listClient.getPlayback(userId).catch(() => {
@@ -51,6 +60,7 @@ export class ProgressService {
   }
 }
 
+/** Decode a stored e:showMediaId:seasonNumber:episodeNumber key without validating its parts. */
 function parseEpisodeKey(key: string) {
   const [, showMediaId, seasonNumber, episodeNumber] = key.split(':').map(Number);
   return { kind: 'episode' as const, showMediaId, seasonNumber, episodeNumber };

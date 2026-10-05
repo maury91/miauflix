@@ -62,6 +62,13 @@ export class TorrentWarmupController {
     return this.slot ? { ...this.slot, range: this.slot.range && { ...this.slot.range } } : null;
   }
 
+  /**
+   * Start or reuse the single speculative warmup slot, pausing the previous source as needed.
+   * Active playback suppresses new warmup and returns the existing slot or a paused snapshot.
+   * The byte target defaults to the driver’s setting, then 64 MiB; readiness is monitored after
+   * selection rather than awaited. Driver errors propagate, with setup/progress failures marking
+   * the newly created slot failed.
+   */
   async warm(
     source: MovieSource,
     leaseKey: string,
@@ -220,6 +227,10 @@ export class TorrentWarmupController {
     }
   }
 
+  /**
+   * Check range readiness now and retry every 250 ms while this generation is warming.
+   * Publish measured progress and mark completion ready; transient read failures are retried.
+   */
   private scheduleReadinessCheck(
     generation: number,
     sourceId: number,
@@ -252,6 +263,10 @@ export class TorrentWarmupController {
     void check();
   }
 
+  /**
+   * Read measured range progress, or synthesize 0/100 percent from a verification-only driver.
+   * Return null if neither capability exists; driver failures propagate.
+   */
   private async readRangeProgress(
     sourceId: number,
     range: Pick<WarmupResult, 'firstPiece' | 'lastPiece' | 'targetBytes'>
@@ -275,6 +290,7 @@ export class TorrentWarmupController {
     return null;
   }
 
+  /** Update the current slot’s byte counts and bounded percentage, retaining its target if the read reports zero. */
   private applyProgress(progress: WarmupRangeProgress | null): void {
     if (!progress || !this.slot) return;
     this.slot = {

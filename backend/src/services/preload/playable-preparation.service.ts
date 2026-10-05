@@ -38,6 +38,14 @@ export class PlayablePreparationService {
     private readonly warmup?: TorrentWarmupController
   ) {}
 
+  /**
+   * Prepare a movie through catalog lookup, source discovery, metadata resolution, or payload warmup.
+   * Episodes, missing movies, and empty source lists return a cold result with no source.
+   * Quality and HEVC preferences guide selection; workClass sets the source discovery wait budget.
+   * Metadata-resolution failures permit fallback selection, and warmup failures retain the source.
+   * Lookup and source-selection callback errors propagate; observed cancellation rejects with
+   * AbortError, or with an in-flight error if cancellation coincides with a failure.
+   */
   async prepare(playable: PlayableRef, options: PreparationOptions): Promise<PreparedPlayable> {
     if (playable.kind !== 'movie') {
       return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
@@ -116,6 +124,11 @@ export class PlayablePreparationService {
     };
   }
 
+  /**
+   * Notify the caller of the selected source and optionally request payload warmup.
+   * Return warmup byte counts and percentage when available. Warmup failures become a cold result
+   * unless aborted; callback errors, cancellation, and failures while pausing on abort propagate.
+   */
   private async finish(
     playable: PlayableRef,
     source: MovieSource,
@@ -235,6 +248,7 @@ export class PlayablePreparationService {
   }
 }
 
+/** Create a warmup snapshot with zero measured progress and byte counts. */
 function emptyWarmup(state: PreloadWarmupState = 'not_requested'): PreloadWarmupSnapshot {
   return { state, progress: 0, verifiedBytes: 0, targetBytes: 0 };
 }

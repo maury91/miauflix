@@ -195,6 +195,12 @@ export class PreloadIntentService {
     if (expired) this.reconcile(now);
   }
 
+  /**
+   * Match preparation work to the highest level requested by each focused playable’s leases.
+   * Cancel obsolete work, pause unwanted payloads, and retain selected source metadata on downgrade.
+   * Schedule new preparation immediately for the player or after 350 ms otherwise; preparation
+   * rejections become error snapshots while preserving any selected source.
+   */
   private reconcile(now: number): void {
     const wanted = new Map<
       string,
@@ -357,6 +363,10 @@ export class PreloadIntentService {
     void now;
   }
 
+  /**
+   * Return the focused playable’s preparation, or null for a show or absent focus.
+   * Use cached source metadata while checking, or report unknown when preparation is unavailable.
+   */
   private snapshotForLease(lease?: PreloadLease): PreloadPreparationSnapshot | null {
     if (!lease?.focused || lease.focused.kind === 'show') return null;
     if (!this.preparation) {
@@ -377,6 +387,7 @@ export class PreloadIntentService {
     );
   }
 
+  /** Return a preparation snapshot with live warmup data, or null when no entry exists. */
   private snapshotForEntry(entry?: PreparationEntry): PreloadPreparationSnapshot | null {
     if (!entry) return null;
     if (entry.state === 'pending') {
@@ -395,6 +406,11 @@ export class PreloadIntentService {
     };
   }
 
+  /**
+   * Use the current slot’s progress when its playable and selected source match a warm request.
+   * Otherwise retain the saved warmup state, except that a completed ready snapshot is reset
+   * when no matching live slot remains.
+   */
   private snapshotWarmup(entry: PreparationEntry): PreloadWarmupSnapshot {
     const slot = this.warmup?.getState();
     const source = entry.details.source;
@@ -470,6 +486,7 @@ export class PreloadIntentService {
 
 export const PRELOAD_LEASE_TTL_MS = LEASE_TTL_MS;
 
+/** Create a warmup state without claiming measured progress or byte counts. */
 function emptyWarmup(state: PreloadWarmupState = 'not_requested'): PreloadWarmupSnapshot {
   return { state };
 }

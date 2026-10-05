@@ -101,6 +101,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     };
   }
 
+  /** Store the caught React error and component details, then notify the optional onError callback. */
   override componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     this.setState({
       error,

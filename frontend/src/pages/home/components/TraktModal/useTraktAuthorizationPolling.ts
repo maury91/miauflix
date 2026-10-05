@@ -9,6 +9,12 @@ interface TraktAuthorizationPollingOptions {
   onError: (message: string | null) => void;
 }
 
+/**
+ * Poll after the provider interval (in seconds), with a minimum delay of five seconds.
+ * Pending results and request errors retry; HTTP 429 doubles the delay up to the greater of
+ * 60 seconds and the base interval. Success resets the delay. Connected or non-pending
+ * states stop polling. Cleanup cancels scheduled polls and ignores in-flight responses.
+ */
 export function useTraktAuthorizationPolling({
   authorization,
   sessionId,

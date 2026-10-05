@@ -206,6 +206,10 @@ const association = (subjectId: string) =>
     connection_id: string;
   } | null;
 
+/**
+ * Return the connection’s token, refreshing and persisting encrypted credentials if expiry is within five minutes.
+ * Reject if the user’s connection changed; provider, database, and encryption errors propagate.
+ */
 const refreshAccessToken = async (subjectId: string, connectionId: string): Promise<string> => {
   const record = association(subjectId);
   if (!record || record.connection_id !== connectionId)
@@ -230,6 +234,7 @@ const refreshAccessToken = async (subjectId: string, connectionId: string): Prom
 
 // Refresh tokens are single-use: share one refresh across list reads and the worker.
 const tokenFlights = new Map<string, Promise<string>>();
+/** Share an in-flight token lookup/refresh per user and connection; return its token or propagate its failure. */
 const accessToken = (subjectId: string, connectionId: string): Promise<string> => {
   const key = `${subjectId}:${connectionId}`;
   const existing = tokenFlights.get(key);
@@ -248,6 +253,11 @@ const serviceReady = () => {
   if (!config.ready) throw new Error('list_service_not_configured');
 };
 
+/**
+ * Serve management, list, account connection, and cached playback APIs.
+ * Progress writes enqueue export. Unconfigured capability requests return 503; errors caught
+ * while handling routes become 500 responses, and unmatched ready-service routes return 404.
+ */
 const handler = async (request: Request): Promise<Response> => {
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/+$/, '') || '/';
@@ -511,6 +521,7 @@ const playbackTimer = setInterval(() => {
 }, 5_000);
 
 let stopping = false;
+/** Stop scheduling playback sync, await server shutdown, then close the database; repeated calls do nothing. */
 const shutdown = async (signal: string) => {
   if (stopping) return;
   stopping = true;

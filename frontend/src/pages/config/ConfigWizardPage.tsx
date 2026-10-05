@@ -153,6 +153,7 @@ interface ConfigWizardPageProps {
   onDismiss: () => void;
 }
 
+/** Edit and test service configuration while keeping the initial service-card order after saves. */
 const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
   const { data: configEntries = [], isLoading: isConfigLoading } = useGetConfigQuery(undefined);
   const { data: serviceStatuses = {}, isLoading: isServiceStatusesLoading } =

@@ -12,6 +12,10 @@ import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 
 export type AppState = 'loading' | 'initial_setup' | 'login' | 'config' | 'config_wizard' | 'home';
 
+/**
+ * Report missing required values or a service explicitly needing configuration.
+ * Degraded/error status alone and absent data do not require configuration.
+ */
 export function hasConfigurationIssue(
   configEntries: ConfigEntryView[] | undefined,
   serviceStatuses: ServiceStatuses | undefined

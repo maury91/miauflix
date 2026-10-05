@@ -1,5 +1,9 @@
 const MAX_RETRY_AFTER_MS = 5 * 60_000;
 
+/**
+ * Convert Retry-After seconds or a future date into a delay in milliseconds, capped at five minutes.
+ * Use five seconds for absent, unparseable, or past date values; now is epoch milliseconds.
+ */
 export function retryAfterMs(value: string | null, now = Date.now()): number {
   if (value && /^\d+$/.test(value) && Number.isSafeInteger(Number(value)))
     return Math.min(Number(value) * 1000, MAX_RETRY_AFTER_MS);

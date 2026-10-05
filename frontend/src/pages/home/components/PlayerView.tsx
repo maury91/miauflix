@@ -93,6 +93,11 @@ interface PlayerViewProps {
   onBack: () => void;
 }
 
+/**
+ * Create a playback session and report progress during playback, on pause, completion, and cleanup.
+ * Resume unfinished progress beyond five seconds by its fraction of the saved duration,
+ * capped one second before the current video’s end. Preparation failures offer a retry.
+ */
 export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
   const [createSession] = useCreateSessionMutation();
   const [updateProgress] = useUpdateProgressMutation();

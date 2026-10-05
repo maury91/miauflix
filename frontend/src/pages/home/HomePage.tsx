@@ -76,6 +76,7 @@ const CONTINUE_CATEGORY = {
   url: '/continue-watching',
 };
 
+/** Build a movie or show card from cached catalog data, returning null when that data is absent. */
 function mediaFromProgress(
   state: Pick<RootState, 'mediaApi'>,
   entry: ProgressEntry
@@ -121,6 +122,7 @@ function mediaFromProgress(
   };
 }
 
+/** Coordinate browsing, details, and playback with progress refresh, preload interest, and Trakt prompts. */
 const HomePage: FC = () => {
   const dispatch = useDispatch<AppDispatch>();
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));

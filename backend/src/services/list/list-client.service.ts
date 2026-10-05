@@ -134,6 +134,11 @@ export class ListClientService {
     );
   }
 
+  /**
+   * Submit progress for a backend user ID to the list service’s export queue.
+   * A successful response does not guarantee a connected account or delivery to Trakt.
+   * Service availability, request, and response validation failures propagate.
+   */
   async syncPlayback(subjectId: string, update: PlaybackProgress): Promise<void> {
     await this.remote.requestCapability(z.object({ synced: z.boolean() }), this.path('/progress'), {
       method: 'POST',
@@ -142,6 +147,10 @@ export class ListClientService {
     });
   }
 
+  /**
+   * Read the list service’s cached playback snapshot for a backend user ID.
+   * Service availability, request, and response validation failures propagate.
+   */
   async getPlayback(subjectId: string): Promise<PlaybackEntry[]> {
     const result = await this.get(playbackSnapshotSchema, '/progress', { subjectId });
     return result.progress;

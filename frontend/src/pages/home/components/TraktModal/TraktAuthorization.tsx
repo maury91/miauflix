@@ -160,6 +160,7 @@ interface AuthorizationProps {
   onCopyCode: () => void;
 }
 
+/** Display device authorization links, QR/code controls, and a countdown clamped to zero at expiry. */
 export function TraktAuthorization({
   authorization,
   activationUrl,

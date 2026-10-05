@@ -178,6 +178,7 @@ interface MediaHeroProps {
   preparation?: PreloadPreparationSnapshot | null;
 }
 
+/** Show the selected title, source status, and a backdrop that transitions after loading. */
 export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => {
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const heroRef = useRef<HTMLElement>(null);

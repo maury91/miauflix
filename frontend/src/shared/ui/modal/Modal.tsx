@@ -62,7 +62,11 @@ interface ModalProps {
   closeLabel?: string;
 }
 
-/** Mark content buttons with data-modal-action="0" or "1" for TV navigation. */
+/**
+ * Show a modal that contains focus and restores the previous focus on unmount.
+ * Mark content buttons with data-modal-action="0" or "1" for TV navigation.
+ * Back, the close button, and overlay clicks call onClose; the caller controls dismissal.
+ */
 export function Modal({
   children,
   onClose,

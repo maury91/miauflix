@@ -1,5 +1,11 @@
 import type { ProgressEntry } from '@miauflix/backend';
 
+/**
+ * Return one unfinished entry per movie or show, newest first.
+ * Exclude completed entries and playback at or before five seconds or within one second of
+ * the end. Next-episode suggestions bypass position limits, but actual playback takes
+ * priority over suggestions for the same title; otherwise the newest timestamp wins.
+ */
 export function unfinishedProgress(entries: ProgressEntry[]): ProgressEntry[] {
   const latest = new Map<string, ProgressEntry>();
   for (const entry of entries) {

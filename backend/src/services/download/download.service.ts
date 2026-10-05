@@ -399,9 +399,13 @@ export class DownloadService {
   }
 
   /**
-   * Add a torrent without selecting the complete file. WebTorrent selection is
-   * piece-based, so the selected range is the smallest piece-aligned prefix
-   * that covers the initial playback target.
+   * Start or reuse a speculative download and select the smallest piece-aligned
+   * prefix of the largest video file that covers the byte target, capped at the file end.
+   * A source already retained as watched keeps the full video selected.
+   *
+   * @param speculativeExpiresAt Expiry for speculative retention, or null for no supplied expiry.
+   * @returns Inclusive piece indices and their actual byte length, which can exceed the target.
+   * @throws Propagates download failures; rejects with TypeError if no video file is found.
    */
   async warmSource(
     source: MovieSource,
@@ -441,11 +445,20 @@ export class DownloadService {
     return this.pauseDownload(sourceId);
   }
 
+  /**
+   * Return whether every byte in an inclusive, zero-based piece range is verified.
+   * Invalid or unavailable ranges return false; storage lookup failures propagate.
+   */
   async isRangeVerified(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean> {
     const progress = await this.getRangeProgress(sourceId, firstPiece, lastPiece);
     return progress.isComplete;
   }
 
+  /**
+   * Measure verified bytes and completion percentage (0–100) for an inclusive, zero-based piece range.
+   * Invalid ranges or unavailable torrent data return zero counts and an incomplete result.
+   * Storage lookup failures propagate.
+   */
   async getRangeProgress(
     sourceId: number,
     firstPiece: number,
@@ -490,10 +503,15 @@ export class DownloadService {
     };
   }
 
+  /**
+   * Return the configured speculative buffer target in bytes.
+   * @throws ConfigurationServiceError if PRELOAD_WARM_TARGET has no computed value.
+   */
   getWarmupTargetBytes(): number {
     return Number(this.config.getOrThrow('PRELOAD_WARM_TARGET'));
   }
 
+  /** Return a piece’s byte length, capped at the torrent end, or zero for unusable layout data. */
   private getPieceByteLength(torrent: Torrent, piece: number): number {
     const pieceLength = Number(torrent.pieceLength);
     const torrentLength = Number(torrent.length);
@@ -504,6 +522,7 @@ export class DownloadService {
     return Math.max(0, Math.min(pieceLength, torrentLength - start));
   }
 
+  /** Sum byte lengths across an inclusive, zero-based piece range, including a short final piece. */
   private getRangeByteLength(torrent: Torrent, firstPiece: number, lastPiece: number): number {
     let total = 0;
     for (let piece = firstPiece; piece <= lastPiece; piece += 1) {

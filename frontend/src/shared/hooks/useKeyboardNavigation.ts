@@ -25,6 +25,7 @@ type Scope = {
 const scopes = new Set<Scope>();
 let listening = false;
 
+/** Map keyboard and remote-control key names to navigation actions, or null for an unrecognized key. */
 function getAction(key: string): KeyboardNavigationAction | null {
   switch (key) {
     case 'ArrowLeft':
@@ -49,6 +50,7 @@ function getAction(key: string): KeyboardNavigationAction | null {
   }
 }
 
+/** Identify text-editable elements and native inputs, textareas, or selects whose keys need native handling. */
 function isNativeEditingTarget(target: EventTarget | null): boolean {
   if (!(target instanceof HTMLElement)) return false;
   return (
@@ -59,6 +61,11 @@ function isNativeEditingTarget(target: EventTarget | null): boolean {
   );
 }
 
+/**
+ * Route navigation keys through enabled scopes, prioritizing exclusive scopes and nested elements.
+ * Skip prevented/composing events and Alt/Ctrl/Meta combinations. Editing targets keep native keys
+ * except back actions other than Backspace. The first true result consumes the event.
+ */
 function dispatch(event: KeyboardEvent): void {
   if (event.defaultPrevented || event.isComposing || event.altKey || event.ctrlKey || event.metaKey)
     return;
@@ -103,6 +110,7 @@ function dispatch(event: KeyboardEvent): void {
   }
 }
 
+/** Register a scope with the shared key listener and return cleanup that removes the listener when unused. */
 function register(scope: Scope): () => void {
   scopes.add(scope);
   if (!listening) {
@@ -118,6 +126,12 @@ function register(scope: Scope): () => void {
   };
 }
 
+/**
+ * Return a callback ref that registers keyboard navigation for its attached element.
+ * Handlers return true to consume an action or false to let another matching scope handle it.
+ * Exclusive scopes receive keys even outside their element; enabled=false suspends handling.
+ * Detaching the ref unregisters the scope, and updated options take effect without reattachment.
+ */
 export function useKeyboardNavigation(
   options: KeyboardNavigationOptions = {}
 ): RefCallback<HTMLElement> {

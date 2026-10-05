@@ -459,6 +459,7 @@ const formatYear = (value: string | null | undefined) => value?.slice(0, 4) ?? '
 const episodeKey = (seasonNumber: number, episodeNumber: number) =>
   `${seasonNumber}:${episodeNumber}`;
 
+/** Describe torrent warmup for assistive text; progress is an already formatted percentage. */
 function warmupDescription(state: WarmupState, progress: number): string {
   switch (state) {
     case 'warming':
@@ -475,6 +476,7 @@ function warmupDescription(state: WarmupState, progress: number): string {
   }
 }
 
+/** Show movie preparation or selectable show episodes, exposing directional navigation through the ref. */
 export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(function MediaDetails(
   { media, onBack, onWatch, preparation = null },
   forwardedRef

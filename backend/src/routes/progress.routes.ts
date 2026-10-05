@@ -21,6 +21,7 @@ const progressSchema = z
     path: ['positionSeconds'],
   });
 
+/** Create authenticated routes to save validated playback progress and list the current user’s progress. */
 export const createProgressRoutes = ({ progressService }: Pick<Deps, 'progressService'>) => {
   return new Hono()
     .post('/', authGuard(), zValidator('json', progressSchema), async c => {

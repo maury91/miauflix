@@ -6,6 +6,10 @@ import type {
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 
+/**
+ * Start Trakt device authorization for the current user and return its code and polling details.
+ * The session ID is used for authentication refresh; request failures are returned as error results.
+ */
 export const beginTraktAssociation = (
   session: string
 ): Promise<{ data: ProviderAuthorization } | { error: { status: number; data: string } }> =>
@@ -19,6 +23,10 @@ export const beginTraktAssociation = (
     errorContext: 'Unable to start Trakt association',
   });
 
+/**
+ * Check one device authorization for the current user; this call does not schedule further polls.
+ * The session ID is used for authentication refresh; request failures are returned as error results.
+ */
 export const pollTraktAssociation = (
   authorizationId: string,
   session: string
@@ -33,6 +41,10 @@ export const pollTraktAssociation = (
     errorContext: 'Unable to check Trakt association',
   });
 
+/**
+ * Read the current user’s Trakt connection status.
+ * The session ID is used for authentication refresh; request failures are returned as error results.
+ */
 export const getTraktAssociation = (
   session: string
 ): Promise<{ data: ProviderAssociation } | { error: { status: number; data: string } }> =>
@@ -46,6 +58,10 @@ export const getTraktAssociation = (
     errorContext: 'Unable to load Trakt association',
   });
 
+/**
+ * Disconnect the current user’s Trakt account and return its resulting association status.
+ * The session ID is used for authentication refresh; request failures are returned as error results.
+ */
 export const disconnectTrakt = (
   session: string
 ): Promise<{ data: ProviderAssociation } | { error: { status: number; data: string } }> =>

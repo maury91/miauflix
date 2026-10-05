@@ -58,6 +58,10 @@ interface TraktConnectModalProps {
   onDismiss: (permanent: boolean) => void;
 }
 
+/**
+ * Run the Trakt device authorization flow and report connection success to the caller.
+ * onDismiss receives true for “Don’t ask again” and false when the dialog is closed.
+ */
 export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectModalProps) {
   const [authorization, setAuthorization] = useState<ProviderAuthorization | null>(null);
   const [copied, setCopied] = useState(false);

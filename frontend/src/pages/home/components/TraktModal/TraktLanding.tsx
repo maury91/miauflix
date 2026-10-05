@@ -76,6 +76,7 @@ interface LandingProps {
   onDismiss: () => void;
 }
 
+/** Offer Trakt connection or permanent dismissal, disabling the connection action while busy. */
 export function TraktLanding({ busy, error, onBegin, onDismiss }: LandingProps) {
   return (
     <>
