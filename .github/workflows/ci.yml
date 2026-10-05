@@ -67,7 +67,8 @@ jobs:
         run: npm run test:e2e
         env:
           NODE_ENV: test
-        timeout-minutes: 10
+        # Includes cold Docker builds, service startup, and both test suites.
+        timeout-minutes: 15
 
       - name: Run initial-user setup E2E test
         run: npm run test:frontend:e2e:initial-setup
