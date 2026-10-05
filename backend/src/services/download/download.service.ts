@@ -69,6 +69,7 @@ export class DownloadService {
   private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
   private readonly bitfieldTrackedTorrents = new WeakMap<Torrent, Set<number>>();
   private readonly torrentStartPromises = new Map<string, Promise<Torrent>>();
+  private readonly pausedForPlayback = new Set<number>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -959,6 +960,7 @@ export class DownloadService {
             movieSource.id,
             (this.activeSourceCounts.get(movieSource.id) ?? 0) + 1
           );
+          if (this.activeStreams === 1) await this.pauseSpeculativeDownloads(movieSource.id);
         });
 
         const headers: Record<string, string> = {
@@ -1006,6 +1008,7 @@ export class DownloadService {
           else this.activeSourceCounts.delete(movieSource.id);
           releasePromise = this.storageService.withSourceLock(movieSource.id, async () => {
             await this.storageService.setPlaybackActive(movieSource.id, false);
+            if (this.activeStreams === 0) await this.resumeSpeculativeDownloads();
           });
           return releasePromise;
         };
@@ -1074,5 +1077,25 @@ export class DownloadService {
         this.client.once('ready', () => handleRequest().catch(reject));
       }
     });
+  }
+
+  /** Pause only speculative torrents while the first active stream is consuming bandwidth. */
+  private async pauseSpeculativeDownloads(excludeSourceId: number): Promise<void> {
+    const records = (await this.storageService.getSpeculativeStorage()) ?? [];
+    await Promise.all(
+      records
+        .filter(record => record.movieSourceId !== excludeSourceId && record.activeStreams === 0)
+        .map(async record => {
+          if (await this.pauseDownload(record.movieSourceId))
+            this.pausedForPlayback.add(record.movieSourceId);
+        })
+    );
+  }
+
+  /** Resume only torrents paused by playback admission; unrelated pauses remain untouched. */
+  private async resumeSpeculativeDownloads(): Promise<void> {
+    const sourceIds = [...this.pausedForPlayback];
+    this.pausedForPlayback.clear();
+    await Promise.all(sourceIds.map(sourceId => this.resumeDownload(sourceId)));
   }
 }

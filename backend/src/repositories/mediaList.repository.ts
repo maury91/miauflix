@@ -179,4 +179,16 @@ export class MediaListRepository {
       .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
       .getExists();
   }
+
+  /** Count local watchlist owners for a movie so shared interest can influence planning priority. */
+  async countLocalMovieInterests(mediaId: number): Promise<number> {
+    return this.itemRepository
+      .createQueryBuilder('item')
+      .innerJoin(MediaList, 'list', 'list.id = item.listId')
+      .where('item.generation = :generation', { generation: 'local' })
+      .andWhere('item.mediaType = :mediaType', { mediaType: 'movie' })
+      .andWhere('item.mediaId = :mediaId', { mediaId })
+      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .getCount();
+  }
 }

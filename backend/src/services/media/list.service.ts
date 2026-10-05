@@ -26,6 +26,7 @@ const LIST_BASE_PRIORITY = 90;
 const LIST_MIN_PRIORITY = 20;
 const LIST_PREFETCH_PRIORITY_OFFSET = 20;
 const VIEWPORT_PRIORITY = 100;
+const WATCHLIST_SETTLE_MS = 5_000;
 
 export type ListLoadPriority = 'prefetch' | 'visible';
 export type MediaPriorityRequest = {
@@ -273,6 +274,46 @@ export class ListService {
     return this.mediaListRepository.hasAnyLocalMovie(mediaId);
   }
 
+  /**
+   * Union the connected provider watchlists into the durable local watchlist.
+   * This is intentionally additive: a pairing must not erase local intent when a
+   * provider page is stale or temporarily incomplete.
+   */
+  async reconcileRemoteWatchlist(subjectId: string): Promise<void> {
+    if (!this.listClient.isReady()) return;
+    try {
+      const definitions = await this.listClient.getDefinitions(subjectId);
+      const remoteWatchlists = definitions.filter(list =>
+        /watchlist-(movies|shows)$/.test(list.slug)
+      );
+      const local = await this.getOrCreateLocalWatchlist(subjectId);
+      for (const definition of remoteWatchlists) {
+        const first = await this.listClient.getPage(subjectId, definition.slug, 1);
+        const pageCount = Math.min(first.totalPages, DEFAULT_LIST_REFRESH_PAGES);
+        for (let page = 1; page <= pageCount; page += 1) {
+          const result =
+            page === 1 ? first : await this.listClient.getPage(subjectId, definition.slug, page);
+          const refs = await this.resolveExternalRefs(result.items.map(item => item.media));
+          for (const { ref } of refs) {
+            await this.mediaListRepository.addItem(local.id, 'local', ref);
+          }
+        }
+      }
+    } catch (error) {
+      // Pairing remains successful when provider pages are temporarily unavailable;
+      // the next explicit reconciliation can complete the additive import.
+      logger.warn('ListService', 'Unable to import Trakt watchlist after pairing', error);
+    }
+  }
+
+  /** Shared interest is a deterministic signal for the background download planner. */
+  async movieWatchlistPriority(mediaId: number): Promise<number> {
+    const countInterests = this.mediaListRepository.countLocalMovieInterests;
+    if (typeof countInterests !== 'function') return 50;
+    const interestCount = await countInterests.call(this.mediaListRepository, mediaId);
+    return Math.min(90, 50 + interestCount * 10);
+  }
+
   private enqueueWatchlistSync(
     subjectId: string,
     mediaType: MediaListItemType,
@@ -352,7 +393,10 @@ export class ListService {
           type: 'watchlist.movie.download',
           dedupeKey: `watchlist:movie:${mediaId}`,
           payload: { movieMediaId: mediaId },
-          options: { priority: 50 },
+          options: {
+            priority: await this.movieWatchlistPriority(mediaId),
+            runAfter: new Date(Date.now() + WATCHLIST_SETTLE_MS),
+          },
         });
         return;
       }

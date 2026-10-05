@@ -150,6 +150,8 @@ export function registerBackgroundJobHandlers({
           throw new Error('Watchlist source discovery is still pending');
         return;
       }
+      // Re-check after source discovery and after the settling delay. A removal
+      // during discovery must never turn into a new background download.
       if (!(await listService.hasAnyMovieWatchlistInterest(movieMediaId))) return;
       await downloadService.predownloadSource(source);
     },

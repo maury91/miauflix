@@ -1,5 +1,6 @@
 import { authApi } from '@features/auth/api/auth.api';
 import type {
+  BackdropFocusBackgroundResponse,
   BackdropFocusResponse,
   MovieResponse,
   SeasonResponse,
@@ -104,6 +105,26 @@ export const mediaApi = createApi({
         };
       },
     }),
+    queueBackdropFocus: builder.mutation<
+      BackdropFocusBackgroundResponse,
+      { items: Array<{ mediaType: 'movie' | 'tv'; mediaId: number }> }
+    >({
+      /** Enqueues displayed-list backdrop work without waiting for model analysis. */
+      async queryFn({ items }, api) {
+        return {
+          ...(await sessionRequest<BackdropFocusBackgroundResponse>(
+            headers =>
+              backendClient.api.media['backdrop-focus'].background.$post(
+                { json: { items } },
+                { headers }
+              ),
+            api.getState,
+            api.dispatch,
+            'Failed to queue backdrop focus preparation'
+          )),
+        };
+      },
+    }),
   }),
 });
 
@@ -113,4 +134,5 @@ export const {
   useGetSeasonQuery,
   useLazyGetSeasonQuery,
   useEnsureBackdropFocusMutation,
+  useQueueBackdropFocusMutation,
 } = mediaApi;

@@ -28,7 +28,12 @@ import type {
 } from '../src/provider/provider';
 import { ProviderError } from '../src/provider/provider';
 
-const VALUES: CatalogValues = { hydrationTtlMs: 24 * 60 * 60 * 1000, episodeSyncMode: 'GREEDY' };
+const VALUES: CatalogValues = {
+  hydrationTtlMs: 24 * 60 * 60 * 1000,
+  episodeSyncMode: 'GREEDY',
+  backdropFocusConcurrency: 2,
+  backdropFocusBackgroundIntervalMs: 20_000,
+};
 
 const makeMovie = (mediaId: number, title = `Movie ${mediaId}`): ProviderMovie => ({
   mediaId,

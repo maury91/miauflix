@@ -26,6 +26,14 @@ export class TVShowRepository {
     return row && showRow(row);
   }
 
+  getBackdropCandidates(): Array<{ mediaId: number; backdrop: string }> {
+    return this.db
+      .select({ mediaId: tvShows.mediaId, backdrop: tvShows.backdrop })
+      .from(tvShows)
+      .where(and(isNotNull(tvShows.detailsSyncedAt), ne(tvShows.backdrop, '')))
+      .all();
+  }
+
   hasKnownTVShows(): boolean {
     return (
       this.db

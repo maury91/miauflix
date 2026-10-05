@@ -123,7 +123,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       const delta = nextCharge - currentCharge;
 
       if (delta > 0 && retentionClass === 'watched') {
-        await this.cleanupWithinAdmission(true, delta, movieSourceId);
+        await this.cleanupWithinAdmission(true, delta, movieSourceId, false, true);
       }
       if (delta > 0) await this.assertCapacity(delta, retentionClass !== 'watched');
 
@@ -259,6 +259,10 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   @traced('StorageService')
   async getStorageById(id: number): Promise<Storage | null> {
     return this.storageRepository.findById(id);
+  }
+
+  async getSpeculativeStorage(): Promise<Storage[]> {
+    return this.storageRepository.findSpeculativeStorage();
   }
 
   /**
@@ -546,7 +550,8 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     canCleanEverything: boolean,
     additionalBytes: number,
     excludeMovieSourceId?: number,
-    preservePlaybackReserve = false
+    preservePlaybackReserve = false,
+    evictUnexpiredSpeculative = false
   ): Promise<void> {
     let currentUsage = await this.storageRepository.getChargedStorageUsage();
     const requested = BigInt(additionalBytes);
@@ -569,8 +574,10 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       currentUsage + requested + reserve > this.maxStorageBytes &&
       cleanupAttempts < maxCleanupAttempts
     ) {
-      const removalCandidate =
-        await this.storageRepository.findMostStaleStorage(excludeMovieSourceId);
+      const removalCandidate = await this.storageRepository.findMostStaleStorage(
+        excludeMovieSourceId,
+        evictUnexpiredSpeculative
+      );
       if (!removalCandidate) {
         logger.warn('StorageService', 'No storage records found');
         break;

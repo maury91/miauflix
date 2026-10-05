@@ -1,4 +1,5 @@
 import { useGetListQuery, usePromoteListMediaMutation } from '@features/media/api/lists.api';
+import { useQueueBackdropFocusMutation } from '@features/media/api/media.api';
 import type { ListDto, MediaDto, ProgressEntry } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
@@ -16,6 +17,7 @@ import {
 import styled from 'styled-components';
 
 import { type HomeAction, moveIndex, type NavigationOutcome } from '../homeNavigation';
+import { getImageUrl } from '../media.utils';
 import { MediaCard } from './MediaCard';
 
 import ChevronLeftIcon from '~icons/line-md/chevron-left';
@@ -196,6 +198,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       : skipToken
   );
   const [promoteListMedia] = usePromoteListMediaMutation();
+  const [queueBackdropFocus] = useQueueBackdropFocusMutation();
   const total = mediaOverride?.length ?? current.currentData?.total ?? current.data?.total ?? 0;
   const step = mediaWidth + gap;
   const radius = mediaPerPage + 4;
@@ -230,6 +233,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   const pendingAlignedIndex = useRef<number | null>(null);
   const shouldFocus = useRef(categoryIndex === 0);
   const pendingIndex = useRef<number | null>(categoryIndex === 0 ? initialIndex : null);
+  const preparedMedia = useRef(new Set<string>());
 
   const mediaByIndex = useMemo(() => {
     if (mediaOverride) return new Map(mediaOverride.map((media, index) => [index, media]));
@@ -416,6 +420,42 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     selectedIndex,
     visible,
   ]);
+
+  useEffect(() => {
+    if (!visible || !mediaByIndex.size) return;
+    const start = Math.max(0, selectedIndex - 2);
+    const end = Math.min(total - 1, selectedIndex + mediaPerPage + 2);
+    for (let index = start; index <= end; index += 1) {
+      const media = mediaByIndex.get(index);
+      if (!media) continue;
+      const key = `${media._type}:${media.mediaId}`;
+      if (preparedMedia.current.has(key)) continue;
+      preparedMedia.current.add(key);
+      if (preparedMedia.current.size > 128) {
+        preparedMedia.current.delete(preparedMedia.current.values().next().value!);
+      }
+      const image = new Image();
+      image.decoding = 'async';
+      image.src = getImageUrl(media.backdrop, 'original');
+      if (typeof image.decode === 'function') void image.decode().catch(() => undefined);
+    }
+  }, [mediaByIndex, mediaPerPage, selectedIndex, total, visible]);
+
+  useEffect(() => {
+    if (!visible || !mediaByIndex.size) return;
+    const backgroundItems = [...mediaByIndex.values()]
+      .filter(media => !media.backdropFocus && Boolean(media.backdrop))
+      .map(media => ({
+        mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
+        mediaId: media.mediaId,
+      }))
+      .slice(0, 50);
+    if (backgroundItems.length) {
+      void queueBackdropFocus({ items: backgroundItems })
+        .unwrap()
+        .catch(() => undefined);
+    }
+  }, [mediaByIndex, queueBackdropFocus, visible]);
 
   useEffect(() => {
     if (current.currentData && selectedIndex >= current.currentData.total) {
