@@ -172,6 +172,32 @@ export class TraktClient {
     return this.request('/users/me', profileSchema, {}, accessToken);
   }
 
+  addToWatchlist(item: { mediaType: 'movie' | 'tv'; tmdbId: number }, accessToken: string) {
+    const key = item.mediaType === 'movie' ? 'movies' : 'shows';
+    return this.request(
+      '/sync/watchlist',
+      z.unknown(),
+      {
+        method: 'POST',
+        body: JSON.stringify({ [key]: [{ ids: { tmdb: item.tmdbId } }] }),
+      },
+      accessToken
+    );
+  }
+
+  removeFromWatchlist(item: { mediaType: 'movie' | 'tv'; tmdbId: number }, accessToken: string) {
+    const key = item.mediaType === 'movie' ? 'movies' : 'shows';
+    return this.request(
+      '/sync/watchlist/remove',
+      z.unknown(),
+      {
+        method: 'POST',
+        body: JSON.stringify({ [key]: [{ ids: { tmdb: item.tmdbId } }] }),
+      },
+      accessToken
+    );
+  }
+
   popularLists(
     page: number,
     limit: number

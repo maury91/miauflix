@@ -23,6 +23,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   }
   private readonly storageRepository: StorageRepository;
   private maxStorageBytes: bigint;
+  private playbackReserveBytes: bigint;
   private readonly config: ConfigService;
   private admissionTail: Promise<void> = Promise.resolve();
   private allocationMode: AllocationMode = 'unknown';
@@ -34,6 +35,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     this.config = config;
     this.storageRepository = db.getStorageRepository();
     this.maxStorageBytes = config.getOrThrow('STORAGE_THRESHOLD');
+    this.playbackReserveBytes = config.get('STORAGE_PLAYBACK_RESERVE') ?? 0n;
     config.registerService('STORAGE', this);
     void this.probeAllocationMode();
   }
@@ -41,6 +43,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   testable = false;
   async reload(): Promise<void> {
     this.maxStorageBytes = this.config.getOrThrow('STORAGE_THRESHOLD');
+    this.playbackReserveBytes = this.config.get('STORAGE_PLAYBACK_RESERVE') ?? 0n;
     await this.probeAllocationMode();
   }
 
@@ -122,7 +125,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       if (delta > 0 && retentionClass === 'watched') {
         await this.cleanupWithinAdmission(true, delta, movieSourceId);
       }
-      if (delta > 0) await this.assertCapacity(delta);
+      if (delta > 0) await this.assertCapacity(delta, retentionClass !== 'watched');
 
       if (current) {
         const keepWatched = current.retentionClass === 'watched';
@@ -375,6 +378,27 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     });
   }
 
+  /** Increase a speculative reservation without promoting it to watched retention. */
+  async reserveSpeculativeStorage(movieSourceId: number, bytes: number): Promise<void> {
+    await this.withAdmission(async () => {
+      const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+      if (!storage) throw new Error(`Storage not found for movie source ${movieSourceId}`);
+      const requested = Math.max(0, Math.floor(bytes));
+      const nextReservation = Math.max(storage.reservedBytes ?? 0, requested);
+      const currentCharge = Math.max(storage.allocatedBytes ?? 0, storage.reservedBytes ?? 0);
+      const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
+      const delta = nextCharge - currentCharge;
+      if (delta > 0) {
+        await this.cleanupWithinAdmission(true, delta, movieSourceId);
+        await this.assertCapacity(delta, true);
+      }
+      await this.storageRepository.update(storage.id, {
+        reservedBytes: nextReservation,
+        lastInterestAt: new Date(),
+      });
+    });
+  }
+
   private async withAdmission<T>(operation: () => Promise<T>): Promise<T> {
     const run = this.admissionTail.then(operation);
     this.admissionTail = run.then(
@@ -384,17 +408,21 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     return run;
   }
 
-  private async assertCapacity(bytes: number): Promise<void> {
+  private async assertCapacity(bytes: number, preservePlaybackReserve = false): Promise<void> {
     const charged = await this.storageRepository.getChargedStorageUsage();
-    if (charged + BigInt(bytes) > this.maxStorageBytes) {
+    const reserve = preservePlaybackReserve ? this.playbackReserveBytes : 0n;
+    if (charged + BigInt(bytes) + reserve > this.maxStorageBytes) {
       throw new Error('Insufficient storage capacity');
     }
 
     try {
       const downloadPath = this.config.getOrThrow('DOWNLOAD_PATH');
       const filesystem = await statfs(downloadPath);
-      const reserve = 256n * 1024n * 1024n;
-      if (BigInt(filesystem.bavail) * BigInt(filesystem.bsize) < BigInt(bytes) + reserve) {
+      const filesystemReserve = 256n * 1024n * 1024n + reserve;
+      if (
+        BigInt(filesystem.bavail) * BigInt(filesystem.bsize) <
+        BigInt(bytes) + filesystemReserve
+      ) {
         throw new Error('Insufficient filesystem capacity');
       }
     } catch (error) {

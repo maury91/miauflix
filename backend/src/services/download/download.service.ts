@@ -360,7 +360,9 @@ export class DownloadService {
         torrent.pieceLength,
         torrent.length
       );
-      if (options.retentionClass !== 'speculative') {
+      if (options.retentionClass === 'speculative') {
+        await this.storageService.reserveSpeculativeStorage(source.id, torrent.length);
+      } else {
         await this.storageService.reserveStorage(source.id, torrent.length);
       }
       await this.storageService.reconcileAllocation(source.id);
@@ -540,6 +542,16 @@ export class DownloadService {
     const file = getVideoFile(download.torrent);
     file.select();
     await this.storageService.markAsAccessed(source.id);
+    return true;
+  }
+
+  /** Download a watchlisted movie in the background while preserving the playback reserve. */
+  async predownloadSource(source: MovieSource): Promise<boolean> {
+    const download = await this.startDownload(source, {
+      retentionClass: 'speculative',
+      reservedBytes: source.size,
+    });
+    getVideoFile(download.torrent).select();
     return true;
   }
 

@@ -415,6 +415,28 @@ const handler = async (request: Request): Promise<Response> => {
       const body = playbackSyncSchema.parse(await request.json());
       return json({ synced: await playbackSync.write(body.subjectId, body) });
     }
+    if (request.method === 'POST' && path === '/v1/watchlist') {
+      const body = z
+        .object({
+          subjectId: z.string().min(1),
+          mediaType: z.enum(['movie', 'tv']),
+          mediaId: z.number().int().positive(),
+          operation: z.enum(['add', 'remove']),
+        })
+        .parse(await request.json());
+      const record = association(body.subjectId);
+      if (!record) return json({ synced: false, reason: 'not_connected' }, 409);
+      const token = await accessToken(body.subjectId, record.connection_id);
+      if (body.operation === 'add') {
+        await client().addToWatchlist({ mediaType: body.mediaType, tmdbId: body.mediaId }, token);
+      } else {
+        await client().removeFromWatchlist(
+          { mediaType: body.mediaType, tmdbId: body.mediaId },
+          token
+        );
+      }
+      return json({ synced: true });
+    }
     if (request.method === 'POST' && path === '/v1/connections/trakt/device') {
       const { subjectId } = z.object({ subjectId: z.string().min(1) }).parse(await request.json());
       const code = await client().deviceCode();

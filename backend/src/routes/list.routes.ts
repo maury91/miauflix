@@ -4,13 +4,18 @@ import z from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import type { ListLoadPriority } from '@services/media/list.service';
+import { type ListLoadPriority,LOCAL_WATCHLIST_SLUG } from '@services/media/list.service';
 
 import type { Deps } from './common.types';
 import { serializeMedia } from './list.serializers';
 import type { ListDto, ListResponse, ListsPageResponse, ListsResponse } from './list.types';
 
-export const createListRoutes = ({ auditLogService, configurationService, listService }: Deps) => {
+export const createListRoutes = ({
+  auditLogService,
+  configurationService,
+  listService,
+  listClient,
+}: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
   return new Hono()
     .get('/lists', rateLimitGuard(5), authGuard(), async c => {
@@ -27,6 +32,87 @@ export const createListRoutes = ({ auditLogService, configurationService, listSe
         ) satisfies ListsResponse
       );
     })
+    .get(
+      '/watchlist',
+      rateLimitGuard(10),
+      authGuard(),
+      zValidator(
+        'query',
+        z.object({
+          mediaType: z.enum(['movie', 'tv']).optional(),
+          mediaId: z.coerce.number().int().positive().optional(),
+          page: z.coerce.number().int().min(0).optional(),
+          limit: z.coerce.number().int().min(1).max(50).optional(),
+        })
+      ),
+      async c => {
+        const { user } = c.get('sessionInfo');
+        const { mediaType, mediaId, page = 0, limit = 20 } = c.req.valid('query');
+        if (mediaType && mediaId) {
+          return c.json({
+            mediaType,
+            mediaId,
+            inWatchlist: await listService.getWatchlistMembership(user.id, mediaType, mediaId),
+          });
+        }
+        const { medias, total } = await listService.getListPage(
+          LOCAL_WATCHLIST_SLUG,
+          'en',
+          page,
+          limit,
+          user.id
+        );
+        return c.json({
+          results: medias.map(serializeMedia),
+          total,
+          page,
+          pageSize: limit,
+          totalPages: Math.ceil(total / limit),
+        } satisfies ListResponse);
+      }
+    )
+    .post(
+      '/watchlist',
+      rateLimitGuard(30),
+      authGuard(),
+      zValidator(
+        'json',
+        z.object({
+          mediaType: z.enum(['movie', 'tv']),
+          mediaId: z.number().int().positive(),
+        })
+      ),
+      async c => {
+        const { user } = c.get('sessionInfo');
+        const item = c.req.valid('json');
+        await listService.addToWatchlist(user.id, item.mediaType, item.mediaId);
+        void listClient
+          .syncWatchlist(user.id, { ...item, operation: 'add' })
+          .catch(() => undefined);
+        return c.json({ ...item, inWatchlist: true }, 201);
+      }
+    )
+    .delete(
+      '/watchlist',
+      rateLimitGuard(30),
+      authGuard(),
+      zValidator(
+        'json',
+        z.object({
+          mediaType: z.enum(['movie', 'tv']),
+          mediaId: z.number().int().positive(),
+        })
+      ),
+      async c => {
+        const { user } = c.get('sessionInfo');
+        const item = c.req.valid('json');
+        await listService.removeFromWatchlist(user.id, item.mediaType, item.mediaId);
+        void listClient
+          .syncWatchlist(user.id, { ...item, operation: 'remove' })
+          .catch(() => undefined);
+        return c.json({ ...item, inWatchlist: false });
+      }
+    )
     .get(
       '/lists/popular',
       rateLimitGuard(5),

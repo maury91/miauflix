@@ -1,4 +1,5 @@
 import type { CacheService } from '@services/cache/cache.service';
+import type { DownloadService } from '@services/download/download.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
 import type { SourceMetadataFileService } from '@services/source';
@@ -20,6 +21,7 @@ export function registerBackgroundJobHandlers({
   magnetService,
   mediaService,
   sourceService,
+  downloadService,
   worker,
 }: {
   backgroundJobs: BackgroundJobService;
@@ -28,6 +30,7 @@ export function registerBackgroundJobHandlers({
   magnetService: SourceMetadataFileService;
   mediaService: MediaService;
   sourceService: SourceService;
+  downloadService: DownloadService;
   worker: BackgroundJobWorker;
 }): void {
   worker.register('list.refresh.plan', {
@@ -112,6 +115,34 @@ export function registerBackgroundJobHandlers({
       if (!(await sourceService.canRunSourceJobs())) return;
       if (sourceId) await sourceService.processSourceStats(sourceId);
       else await sourceService.seedSourceStatsJobs();
+    },
+  });
+  worker.register('watchlist.movie.download', {
+    concurrency: 1,
+    leaseMs: 10 * 60 * 1000,
+    run: async ({ movieMediaId }) => {
+      const media = await mediaService.getMovieByMediaId(movieMediaId);
+      if (!media) return;
+      const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
+        {
+          id: media.local.id,
+          imdbId: media.local.imdbId,
+          title: media.local.title,
+          contentDirectoriesSearched: media.local.contentDirectoriesSearched,
+        },
+        3000
+      );
+      let source = sources
+        .filter(candidate => candidate.file)
+        .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
+      if (!source && sources[0]) {
+        await sourceService.processSourceMetadata(sources[0].id);
+        source = (await sourceService.getSourcesForMovie(media.local.id))
+          .filter(candidate => candidate.file)
+          .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
+      }
+      if (!source) return;
+      await downloadService.predownloadSource(source);
     },
   });
   worker.register('cache.cleanup', {

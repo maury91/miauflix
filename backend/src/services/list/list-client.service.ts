@@ -156,6 +156,21 @@ export class ListClientService {
     return result.progress;
   }
 
+  async syncWatchlist(
+    subjectId: string,
+    update: { mediaType: 'movie' | 'tv'; mediaId: number; operation: 'add' | 'remove' }
+  ): Promise<void> {
+    await this.remote.requestCapability(
+      z.object({ synced: z.boolean() }),
+      this.path('/watchlist'),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subjectId, ...update }),
+      }
+    );
+  }
+
   private get<T>(schema: ZodType<T>, path: string, query: Record<string, string>): Promise<T> {
     const params = new URLSearchParams(query);
     return this.remote.requestCapability(schema, `${this.path(path)}?${params.toString()}`);

@@ -21,6 +21,7 @@ import type { ListClientService } from '@services/list/list-client.service';
 import { traced } from '@utils/tracing.util';
 
 export const DEFAULT_LIST_REFRESH_PAGES = 6;
+export const LOCAL_WATCHLIST_SLUG = 'my-watchlist';
 const LIST_BASE_PRIORITY = 90;
 const LIST_MIN_PRIORITY = 20;
 const LIST_PREFETCH_PRIORITY_OFFSET = 20;
@@ -69,7 +70,26 @@ export class ListService {
   }
 
   async getLists(subjectId = 'public'): Promise<ListServiceDefinition[]> {
-    const lists = await this.listClient.getDefinitions(subjectId);
+    let lists: ListServiceDefinition[] = [];
+    try {
+      lists = await this.listClient.getDefinitions(subjectId);
+    } catch (error) {
+      logger.warn('ListService', 'Unable to load remote list definitions', error);
+    }
+    if (subjectId !== 'public') {
+      const watchlist = await this.getLocalWatchlist(subjectId);
+      if (watchlist.total > 0) {
+        lists.unshift({
+          id: LOCAL_WATCHLIST_SLUG,
+          slug: LOCAL_WATCHLIST_SLUG,
+          name: 'My watchlist',
+          description: 'Titles you added to your watchlist',
+          provider: 'local',
+          scope: 'personal',
+          requiresConnection: false,
+        });
+      }
+    }
     lists.forEach((list, index) => {
       this.listRanks.set(list.slug, list.rank ?? index);
       this.listDefinitions.set(list.slug, list);
@@ -194,6 +214,9 @@ export class ListService {
     subjectId = 'public',
     loadPriority: ListLoadPriority = 'visible'
   ) {
+    if (slug === LOCAL_WATCHLIST_SLUG) {
+      return this.getLocalWatchlistPage(language, page, limit, subjectId, loadPriority);
+    }
     const list = await this.getOrCreateList(slug, subjectId);
     if (!list.activeGeneration) {
       return this.getOnDemandListPage(slug, language, page, limit, subjectId, loadPriority);
@@ -214,6 +237,104 @@ export class ListService {
       loadPriority
     );
     return { medias, total };
+  }
+
+  async getWatchlistMembership(
+    subjectId: string,
+    mediaType: MediaListItemType,
+    mediaId: number
+  ): Promise<boolean> {
+    const list = await this.getOrCreateLocalWatchlist(subjectId);
+    const items = await this.mediaListRepository.getActiveItems(list.id, 'local');
+    return items.some(item => item.mediaType === mediaType && item.mediaId === mediaId);
+  }
+
+  async addToWatchlist(
+    subjectId: string,
+    mediaType: MediaListItemType,
+    mediaId: number
+  ): Promise<void> {
+    const list = await this.getOrCreateLocalWatchlist(subjectId);
+    await this.mediaListRepository.addItem(list.id, 'local', { mediaType, mediaId });
+    void this.prepareWatchlistItem(mediaType, mediaId);
+  }
+
+  async removeFromWatchlist(
+    subjectId: string,
+    mediaType: MediaListItemType,
+    mediaId: number
+  ): Promise<void> {
+    const list = await this.getOrCreateLocalWatchlist(subjectId);
+    await this.mediaListRepository.removeItem(list.id, 'local', { mediaType, mediaId });
+  }
+
+  private async getLocalWatchlist(subjectId: string) {
+    const list = await this.getOrCreateLocalWatchlist(subjectId);
+    const total = await this.mediaListRepository.countItems(list.id, 'local');
+    return { list, total };
+  }
+
+  private async getOrCreateLocalWatchlist(subjectId: string): Promise<MediaList> {
+    let list = await this.mediaListRepository.findBySlug(LOCAL_WATCHLIST_SLUG, false, subjectId);
+    if (!list) {
+      list = await this.mediaListRepository.createMediaList(
+        'My watchlist',
+        'Titles you added to your watchlist',
+        LOCAL_WATCHLIST_SLUG,
+        subjectId,
+        null
+      );
+      await this.mediaListRepository.activateGeneration(list.id, 'local');
+    }
+    return list;
+  }
+
+  private async getLocalWatchlistPage(
+    language: string,
+    page: number,
+    limit: number,
+    subjectId: string,
+    loadPriority: ListLoadPriority
+  ) {
+    const { list, total } = await this.getLocalWatchlist(subjectId);
+    const items = await this.mediaListRepository.getPage(list.id, 'local', page * limit, limit);
+    // Retry preparation on reads so temporary catalog or queue outages do not strand local items.
+    void Promise.all(items.map(item => this.prepareWatchlistItem(item.mediaType, item.mediaId)));
+    const batch = await this.catalogClient.batch(
+      items.map(item => ({ mediaType: item.mediaType, mediaId: item.mediaId })),
+      language
+    );
+    const medias = await this.hydrateMediaDetails(batch.items, 0, page * limit, loadPriority);
+    return { medias, total };
+  }
+
+  private async prepareWatchlistItem(mediaType: MediaListItemType, mediaId: number): Promise<void> {
+    try {
+      if (mediaType === 'movie') {
+        await this.catalogClient.getMovie(mediaId, 'en');
+        await this.catalogClient.ensureBackdropFocus('movie', mediaId);
+        await this.backgroundJobs?.enqueueBestEffort({
+          type: 'watchlist.movie.download',
+          dedupeKey: `watchlist:movie:${mediaId}`,
+          payload: { movieMediaId: mediaId },
+          options: { priority: 50 },
+        });
+        return;
+      }
+      await this.catalogClient.getTVShow(mediaId, 'en');
+      await this.catalogClient.ensureBackdropFocus('tv', mediaId);
+      await this.backgroundJobs?.enqueueBestEffort({
+        type: 'catalog.season-sync.seed',
+        dedupeKey: `watchlist:show:${mediaId}`,
+        payload: { tvMediaId: mediaId, priority: 50 },
+        options: { priority: 50 },
+      });
+      // TODO: When episode sources/playback are supported, predownload the next episode
+      // from playback progress using the same storage reserve. Keep this separate from
+      // watchlist membership and Continue watching; Trakt may auto-remove watched shows.
+    } catch (error) {
+      logger.warn('ListService', `Watchlist preparation failed for ${mediaType} ${mediaId}`, error);
+    }
   }
 
   /**
@@ -388,6 +509,9 @@ export class ListService {
   }
 
   private async getOrCreateList(slug: string, ownerKey = 'public'): Promise<MediaList> {
+    if (slug === LOCAL_WATCHLIST_SLUG && ownerKey !== 'public') {
+      return this.getOrCreateLocalWatchlist(ownerKey);
+    }
     const definition =
       this.listDefinitions.get(slug) ??
       (await this.listClient.getDefinitions(ownerKey)).find(item => item.slug === slug);

@@ -94,4 +94,45 @@ export class MediaListRepository {
   countItems(listId: number, generation: string): Promise<number> {
     return this.itemRepository.countBy({ listId, generation });
   }
+
+  async addItem(
+    listId: number,
+    generation: string,
+    item: { mediaType: MediaListItemType; mediaId: number }
+  ): Promise<void> {
+    await this.database.write(async () => {
+      const result = await this.itemRepository
+        .createQueryBuilder('item')
+        .select('MAX(item.position)', 'maxPosition')
+        .where('item.listId = :listId AND item.generation = :generation', { listId, generation })
+        .getRawOne<{ maxPosition: number | null }>();
+      await this.itemRepository
+        .createQueryBuilder()
+        .insert()
+        .into(MediaListItem)
+        .values({
+          listId,
+          generation,
+          position: (result?.maxPosition ?? -1) + 1,
+          ...item,
+        })
+        .orIgnore()
+        .execute();
+    });
+  }
+
+  async removeItem(
+    listId: number,
+    generation: string,
+    item: { mediaType: MediaListItemType; mediaId: number }
+  ): Promise<void> {
+    await this.itemRepository.delete({ listId, generation, ...item });
+  }
+
+  getActiveItems(listId: number, generation: string): Promise<MediaListItem[]> {
+    return this.itemRepository.find({
+      where: { listId, generation },
+      order: { position: 'ASC' },
+    });
+  }
 }

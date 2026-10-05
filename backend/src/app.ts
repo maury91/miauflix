@@ -183,6 +183,7 @@ try {
       magnetService,
       mediaService,
       sourceService,
+      downloadService,
       worker: backgroundWorker,
     });
 

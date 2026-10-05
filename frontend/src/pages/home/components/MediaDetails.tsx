@@ -1,4 +1,9 @@
 import {
+  useAddToWatchlistMutation,
+  useGetWatchlistMembershipQuery,
+  useRemoveFromWatchlistMutation,
+} from '@features/media/api/lists.api';
+import {
   useEnsureBackdropFocusMutation,
   useGetMovieQuery,
   useGetShowQuery,
@@ -482,6 +487,19 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   forwardedRef
 ) {
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
+  const watchlistType = media._type === 'movie' ? 'movie' : 'tv';
+  const watchlist = useGetWatchlistMembershipQuery({
+    mediaType: watchlistType,
+    mediaId: media.mediaId,
+  });
+  const [addToWatchlist, addState] = useAddToWatchlistMutation();
+  const [removeFromWatchlist, removeState] = useRemoveFromWatchlistMutation();
+  const watchlistPending = addState.isLoading || removeState.isLoading;
+  const inWatchlist =
+    addState.data?.inWatchlist ??
+    removeState.data?.inWatchlist ??
+    watchlist.data?.inWatchlist ??
+    false;
   const [loadSeason] = useLazyGetSeasonQuery();
   const progress = useGetProgressQuery(undefined);
   const pageRef = useRef<HTMLElement>(null);
@@ -908,6 +926,23 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
             )}
             {current && <Overview>{current.overview || 'No overview available.'}</Overview>}
             <RatingActions aria-label="Rate this title">
+              <RatingAction
+                type="button"
+                $selected={inWatchlist}
+                aria-pressed={inWatchlist}
+                disabled={watchlistPending}
+                onClick={() => {
+                  const item = { mediaType: watchlistType, mediaId: media.mediaId } as const;
+                  void (inWatchlist ? removeFromWatchlist(item) : addToWatchlist(item));
+                }}
+              >
+                <CardsHeartIcon aria-hidden="true" />
+                {watchlistPending
+                  ? 'Updating…'
+                  : inWatchlist
+                    ? 'Remove from watchlist'
+                    : 'Add to watchlist'}
+              </RatingAction>
               <RatingAction
                 type="button"
                 $selected={selectedRating === 'dislike'}
