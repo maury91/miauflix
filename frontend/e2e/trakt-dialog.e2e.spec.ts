@@ -4,6 +4,18 @@ import { navigateToLogin } from './utils/login';
 import { expect, test } from './fixtures';
 
 async function login(page: Page): Promise<string> {
+  await page.route('**/api/integrations/trakt/association', route =>
+    route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify({
+        connected: false,
+        provider: 'trakt',
+        accountId: null,
+        username: null,
+      }),
+    })
+  );
   await navigateToLogin(page);
   await page.getByLabel('Email').fill(process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com');
   await page.getByLabel('Password').fill(process.env['E2E_ADMIN_PASSWORD'] ?? 'testpassword123');

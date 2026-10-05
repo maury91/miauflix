@@ -10,12 +10,7 @@ import type { Deps } from './common.types';
 import { serializeMedia } from './list.serializers';
 import type { ListDto, ListResponse, ListsPageResponse, ListsResponse } from './list.types';
 
-export const createListRoutes = ({
-  auditLogService,
-  configurationService,
-  listService,
-  listClient,
-}: Deps) => {
+export const createListRoutes = ({ auditLogService, configurationService, listService }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
   return new Hono()
     .get('/lists', rateLimitGuard(5), authGuard(), async c => {
@@ -86,9 +81,6 @@ export const createListRoutes = ({
         const { user } = c.get('sessionInfo');
         const item = c.req.valid('json');
         await listService.addToWatchlist(user.id, item.mediaType, item.mediaId);
-        void listClient
-          .syncWatchlist(user.id, { ...item, operation: 'add' })
-          .catch(() => undefined);
         return c.json({ ...item, inWatchlist: true }, 201);
       }
     )
@@ -107,9 +99,6 @@ export const createListRoutes = ({
         const { user } = c.get('sessionInfo');
         const item = c.req.valid('json');
         await listService.removeFromWatchlist(user.id, item.mediaType, item.mediaId);
-        void listClient
-          .syncWatchlist(user.id, { ...item, operation: 'remove' })
-          .catch(() => undefined);
         return c.json({ ...item, inWatchlist: false });
       }
     )

@@ -31,7 +31,17 @@ export function useTraktAuthorizationPolling({
     let cancelled = false;
     let timer: number | undefined;
     const poll = async () => {
-      const result = await pollTraktAssociation(authorization.authorizationId, sessionId);
+      let result: Awaited<ReturnType<typeof pollTraktAssociation>>;
+      try {
+        result = await pollTraktAssociation(authorization.authorizationId, sessionId);
+      } catch (error) {
+        if (cancelled) return;
+        callbacks.current.onError(
+          error instanceof Error ? error.message : 'Unable to check Trakt association'
+        );
+        timer = window.setTimeout(poll, delay);
+        return;
+      }
       if (cancelled) return;
       if ('error' in result) {
         callbacks.current.onError(result.error.data);

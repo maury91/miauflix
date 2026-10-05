@@ -495,11 +495,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const [addToWatchlist, addState] = useAddToWatchlistMutation();
   const [removeFromWatchlist, removeState] = useRemoveFromWatchlistMutation();
   const watchlistPending = addState.isLoading || removeState.isLoading;
-  const inWatchlist =
-    addState.data?.inWatchlist ??
-    removeState.data?.inWatchlist ??
-    watchlist.data?.inWatchlist ??
-    false;
+  const inWatchlist = watchlist.data?.inWatchlist ?? false;
   const [loadSeason] = useLazyGetSeasonQuery();
   const progress = useGetProgressQuery(undefined);
   const pageRef = useRef<HTMLElement>(null);
@@ -1078,7 +1074,13 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                                 {watched.state === 'completed'
                                   ? 'Watched'
                                   : `Resume ${Math.round(
-                                      (watched.positionSeconds / watched.durationSeconds) * 100
+                                      watched.durationSeconds > 0
+                                        ? Math.min(
+                                            100,
+                                            (watched.positionSeconds / watched.durationSeconds) *
+                                              100
+                                          )
+                                        : 0
                                     )}%`}
                               </ProgressMark>
                             ) : null}

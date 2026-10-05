@@ -389,7 +389,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
       const delta = nextCharge - currentCharge;
       if (delta > 0) {
-        await this.cleanupWithinAdmission(true, delta, movieSourceId);
+        await this.cleanupWithinAdmission(true, delta, movieSourceId, true);
         await this.assertCapacity(delta, true);
       }
       await this.storageRepository.update(storage.id, {
@@ -545,12 +545,14 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   private async cleanupWithinAdmission(
     canCleanEverything: boolean,
     additionalBytes: number,
-    excludeMovieSourceId?: number
+    excludeMovieSourceId?: number,
+    preservePlaybackReserve = false
   ): Promise<void> {
     let currentUsage = await this.storageRepository.getChargedStorageUsage();
     const requested = BigInt(additionalBytes);
+    const reserve = preservePlaybackReserve ? this.playbackReserveBytes : 0n;
     if (requested > this.maxStorageBytes) throw new Error('Insufficient storage capacity');
-    if (currentUsage + requested <= this.maxStorageBytes) {
+    if (currentUsage + requested + reserve <= this.maxStorageBytes) {
       return; // No cleanup needed
     }
 
@@ -564,7 +566,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     let totalCleanedUp = 0n;
 
     while (
-      currentUsage + requested > this.maxStorageBytes &&
+      currentUsage + requested + reserve > this.maxStorageBytes &&
       cleanupAttempts < maxCleanupAttempts
     ) {
       const removalCandidate =
@@ -615,7 +617,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         'StorageService',
         `Storage cleanup stopped after ${maxCleanupAttempts} attempts. Current usage: ${humanReadableBytes(currentUsage)}`
       );
-    } else if (currentUsage + requested <= this.maxStorageBytes) {
+    } else if (currentUsage + requested + reserve <= this.maxStorageBytes) {
       logger.info(
         'StorageService',
         `Storage cleanup completed successfully. Cleaned up ${humanReadableBytes(totalCleanedUp)}, current usage: ${humanReadableBytes(currentUsage)}`

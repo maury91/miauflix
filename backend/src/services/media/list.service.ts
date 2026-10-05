@@ -245,8 +245,7 @@ export class ListService {
     mediaId: number
   ): Promise<boolean> {
     const list = await this.getOrCreateLocalWatchlist(subjectId);
-    const items = await this.mediaListRepository.getActiveItems(list.id, 'local');
-    return items.some(item => item.mediaType === mediaType && item.mediaId === mediaId);
+    return this.mediaListRepository.hasActiveItem(list.id, 'local', { mediaType, mediaId });
   }
 
   async addToWatchlist(
@@ -256,6 +255,7 @@ export class ListService {
   ): Promise<void> {
     const list = await this.getOrCreateLocalWatchlist(subjectId);
     await this.mediaListRepository.addItem(list.id, 'local', { mediaType, mediaId });
+    this.enqueueWatchlistSync(subjectId, mediaType, mediaId);
     void this.prepareWatchlistItem(mediaType, mediaId);
   }
 
@@ -266,6 +266,43 @@ export class ListService {
   ): Promise<void> {
     const list = await this.getOrCreateLocalWatchlist(subjectId);
     await this.mediaListRepository.removeItem(list.id, 'local', { mediaType, mediaId });
+    this.enqueueWatchlistSync(subjectId, mediaType, mediaId);
+  }
+
+  async hasAnyMovieWatchlistInterest(mediaId: number): Promise<boolean> {
+    return this.mediaListRepository.hasAnyLocalMovie(mediaId);
+  }
+
+  private enqueueWatchlistSync(
+    subjectId: string,
+    mediaType: MediaListItemType,
+    mediaId: number
+  ): void {
+    const spec = {
+      type: 'watchlist.sync',
+      dedupeKey: `watchlist-sync:${subjectId}:${mediaType}:${mediaId}`,
+      payload: { subjectId, mediaType, mediaId },
+      options: { priority: 80 },
+    } as const;
+    void this.backgroundJobs
+      ?.enqueue(spec.type, spec.dedupeKey, spec.payload, spec.options)
+      .catch(async error => {
+        logger.warn(
+          'ListService',
+          'Watchlist sync queue unavailable; attempting immediate sync',
+          error
+        );
+        try {
+          const inWatchlist = await this.getWatchlistMembership(subjectId, mediaType, mediaId);
+          await this.listClient.syncWatchlist(subjectId, {
+            mediaType,
+            mediaId,
+            operation: inWatchlist ? 'add' : 'remove',
+          });
+        } catch (fallbackError) {
+          logger.warn('ListService', 'Immediate watchlist sync also failed', fallbackError);
+        }
+      });
   }
 
   private async getLocalWatchlist(subjectId: string) {

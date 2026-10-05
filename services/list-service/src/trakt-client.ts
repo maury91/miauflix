@@ -417,21 +417,26 @@ export class TraktClient {
       rows.data.forEach(row => hidden.add(row.show.ids.trakt));
       if (page >= result.totalPages) break;
     }
-    const shows = await this.request(
-      '/sync/watched/shows',
-      z.array(
-        z.object({
-          show: z.object({
-            ids: z.object({
-              trakt: z.number().int().positive(),
-              tmdb: z.number().int().positive().nullish(),
-            }),
-          }),
-        })
-      ),
-      {},
-      accessToken
-    );
+    const watchedShowSchema = z.object({
+      show: z.object({
+        ids: z.object({
+          trakt: z.number().int().positive(),
+          tmdb: z.number().int().positive().nullish(),
+        }),
+      }),
+    });
+    const shows: Array<z.infer<typeof watchedShowSchema>> = [];
+    for (let page = 1; ; page++) {
+      const result = await this.page<unknown>(
+        `/sync/watched/shows?page=${page}&limit=250`,
+        accessToken
+      );
+      const parsed = z.array(watchedShowSchema).safeParse(result.items);
+      if (!parsed.success)
+        throw new TraktProviderError('Trakt API returned invalid watched shows', 502);
+      shows.push(...parsed.data);
+      if (page >= result.totalPages || result.items.length === 0) break;
+    }
     const entries: PlaybackEntry[] = [];
     const schema = z.object({
       last_watched_at: z.string().datetime({ offset: true }).nullable(),

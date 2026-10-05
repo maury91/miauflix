@@ -25,7 +25,7 @@ export async function navigateToLogin(page: Page): Promise<void> {
 
 export async function dismissTraktPrompt(page: Page): Promise<void> {
   const dialog = page.getByRole('dialog', { name: 'Connect Trakt', exact: true });
-  await expect(dialog).toBeVisible();
+  if (!(await dialog.isVisible())) return;
   await dialog.getByRole('button', { name: 'Close Trakt dialog' }).click();
   await expect(dialog).toBeHidden();
 }

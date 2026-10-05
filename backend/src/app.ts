@@ -180,6 +180,7 @@ try {
       backgroundJobs,
       cacheService,
       listService,
+      listClient,
       magnetService,
       mediaService,
       sourceService,

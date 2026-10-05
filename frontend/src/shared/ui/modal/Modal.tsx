@@ -80,7 +80,11 @@ export function Modal({
   useEffect(() => {
     const previous = document.activeElement;
     return () => {
-      if (previous instanceof HTMLElement && previous.isConnected) previous.focus();
+      if (previous instanceof HTMLElement && previous.isConnected) {
+        requestAnimationFrame(() => {
+          if (previous.isConnected) previous.focus();
+        });
+      }
     };
   }, []);
 

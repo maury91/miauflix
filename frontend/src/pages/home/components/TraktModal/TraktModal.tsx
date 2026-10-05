@@ -87,13 +87,18 @@ export function TraktModal({ sessionId, onConnected, onDismiss }: TraktConnectMo
   const begin = async () => {
     setBusy(true);
     setError(null);
-    const result = await beginTraktAssociation(sessionId);
-    setBusy(false);
-    if ('error' in result) {
-      setError(result.error.data);
-      return;
+    try {
+      const result = await beginTraktAssociation(sessionId);
+      if ('error' in result) {
+        setError(result.error.data);
+        return;
+      }
+      setAuthorization(result.data);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : 'Unable to start Trakt association');
+    } finally {
+      setBusy(false);
     }
-    setAuthorization(result.data);
   };
 
   return (

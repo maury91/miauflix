@@ -1,5 +1,6 @@
 import type { CacheService } from '@services/cache/cache.service';
 import type { DownloadService } from '@services/download/download.service';
+import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
 import type { SourceMetadataFileService } from '@services/source';
@@ -18,6 +19,7 @@ export function registerBackgroundJobHandlers({
   backgroundJobs,
   cacheService,
   listService,
+  listClient,
   magnetService,
   mediaService,
   sourceService,
@@ -27,6 +29,7 @@ export function registerBackgroundJobHandlers({
   backgroundJobs: BackgroundJobService;
   cacheService: CacheService;
   listService: ListService;
+  listClient: ListClientService;
   magnetService: SourceMetadataFileService;
   mediaService: MediaService;
   sourceService: SourceService;
@@ -121,6 +124,7 @@ export function registerBackgroundJobHandlers({
     concurrency: 1,
     leaseMs: 10 * 60 * 1000,
     run: async ({ movieMediaId }) => {
+      if (!(await listService.hasAnyMovieWatchlistInterest(movieMediaId))) return;
       const media = await mediaService.getMovieByMediaId(movieMediaId);
       if (!media) return;
       const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
@@ -141,8 +145,26 @@ export function registerBackgroundJobHandlers({
           .filter(candidate => candidate.file)
           .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
       }
-      if (!source) return;
+      if (!source) {
+        if (sourceService.isOnDemandSearchPending(media.local.id))
+          throw new Error('Watchlist source discovery is still pending');
+        return;
+      }
+      if (!(await listService.hasAnyMovieWatchlistInterest(movieMediaId))) return;
       await downloadService.predownloadSource(source);
+    },
+  });
+  worker.register('watchlist.sync', {
+    concurrency: 2,
+    leaseMs: 2 * 60 * 1000,
+    run: async ({ subjectId, mediaType, mediaId }) => {
+      if (!listClient.isReady()) throw new Error('List service is not ready');
+      const inWatchlist = await listService.getWatchlistMembership(subjectId, mediaType, mediaId);
+      await listClient.syncWatchlist(subjectId, {
+        mediaType,
+        mediaId,
+        operation: inWatchlist ? 'add' : 'remove',
+      });
     },
   });
   worker.register('cache.cleanup', {

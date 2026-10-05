@@ -455,11 +455,16 @@ describe('TraktClient', () => {
           headers: { 'X-Pagination-Page-Count': '1', 'X-Pagination-Item-Count': '1' },
         });
       if (path === '/sync/watched/shows')
-        return Response.json([
-          { show: { ids: { trakt: 1, tmdb: 42 } } },
-          { show: { ids: { trakt: 2, tmdb: 43 } } },
-          { show: { ids: { trakt: 3, tmdb: 44 } } },
-        ]);
+        return Response.json(
+          [
+            { show: { ids: { trakt: 1, tmdb: 42 } } },
+            { show: { ids: { trakt: 2, tmdb: 43 } } },
+            { show: { ids: { trakt: 3, tmdb: 44 } } },
+          ],
+          {
+            headers: { 'X-Pagination-Page-Count': '1', 'X-Pagination-Item-Count': '3' },
+          }
+        );
       return Response.json({
         last_watched_at: '2026-10-04T10:00:00Z',
         next_episode: path.includes('/1/') ? { season: 2, number: 3, runtime: 40 } : null,

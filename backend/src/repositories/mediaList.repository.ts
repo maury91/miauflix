@@ -160,4 +160,23 @@ export class MediaListRepository {
       order: { position: 'ASC' },
     });
   }
+
+  hasActiveItem(
+    listId: number,
+    generation: string,
+    item: { mediaType: MediaListItemType; mediaId: number }
+  ): Promise<boolean> {
+    return this.itemRepository.exist({ where: { listId, generation, ...item } });
+  }
+
+  async hasAnyLocalMovie(mediaId: number): Promise<boolean> {
+    return this.itemRepository
+      .createQueryBuilder('item')
+      .innerJoin(MediaList, 'list', 'list.id = item.listId')
+      .where('item.generation = :generation', { generation: 'local' })
+      .andWhere('item.mediaType = :mediaType', { mediaType: 'movie' })
+      .andWhere('item.mediaId = :mediaId', { mediaId })
+      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .getExists();
+  }
 }
