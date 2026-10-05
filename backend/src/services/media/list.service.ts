@@ -275,17 +275,15 @@ export class ListService {
   }
 
   private async getOrCreateLocalWatchlist(subjectId: string): Promise<MediaList> {
-    let list = await this.mediaListRepository.findBySlug(LOCAL_WATCHLIST_SLUG, false, subjectId);
-    if (!list) {
-      list = await this.mediaListRepository.createMediaList(
-        'My watchlist',
-        'Titles you added to your watchlist',
-        LOCAL_WATCHLIST_SLUG,
-        subjectId,
-        null
-      );
+    const list = await this.mediaListRepository.findOrCreateMediaList(
+      'My watchlist',
+      'Titles you added to your watchlist',
+      LOCAL_WATCHLIST_SLUG,
+      subjectId,
+      null
+    );
+    if (list.activeGeneration !== 'local')
       await this.mediaListRepository.activateGeneration(list.id, 'local');
-    }
     return list;
   }
 

@@ -38,6 +38,31 @@ export class MediaListRepository {
     );
   }
 
+  async findOrCreateMediaList(
+    name: string,
+    description: string,
+    slug: string,
+    ownerKey = 'public',
+    remoteListId: string | null = slug
+  ): Promise<MediaList> {
+    return this.database.write(async () => {
+      const existing = await this.repository.findOne({ where: { slug, ownerKey } });
+      if (existing) return existing;
+
+      await this.repository
+        .createQueryBuilder()
+        .insert()
+        .into(MediaList)
+        .values({ name, description, slug, ownerKey, remoteListId, provider: 'trakt' })
+        .orIgnore()
+        .execute();
+
+      const created = await this.repository.findOne({ where: { slug, ownerKey } });
+      if (!created) throw new Error(`Unable to create media list ${ownerKey}/${slug}`);
+      return created;
+    });
+  }
+
   async stagePage(
     listId: number,
     generation: string,
