@@ -4,7 +4,7 @@ import z from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
-import { type ListLoadPriority,LOCAL_WATCHLIST_SLUG } from '@services/media/list.service';
+import { type ListLoadPriority, LOCAL_WATCHLIST_SLUG } from '@services/media/list.service';
 
 import type { Deps } from './common.types';
 import { serializeMedia } from './list.serializers';
