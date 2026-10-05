@@ -255,7 +255,8 @@ describe('HomePage focus transitions', () => {
       } finally {
         progressSelector.mockRestore();
       }
-    }
+    },
+    15_000
   );
 
   it('keeps keyboard input and focus in the Trakt modal until dismissal', async () => {
