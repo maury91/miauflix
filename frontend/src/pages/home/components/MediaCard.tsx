@@ -33,6 +33,7 @@ const Card = styled(BaseButton)<{
   box-shadow: none;
 
   &:focus-visible {
+    outline: none;
     box-shadow: 0 0 0 0.35vh ${PALETTE.color.interactive};
   }
 

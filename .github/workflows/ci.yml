@@ -101,6 +101,7 @@ jobs:
           path: |
             frontend/playwright-report/
             frontend/test-results/
+            frontend/test-results-e2e/
             frontend/playwright-report-initial-setup/
             frontend/test-results-initial-setup/
             frontend/playwright-report-details/

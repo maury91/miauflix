@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 
-import { navigateToLogin } from './utils/login';
+import { dismissTraktPrompt, navigateToLogin } from './utils/login';
 import { expect, test } from './fixtures';
 
 const adminEmail = process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com';
@@ -59,6 +59,7 @@ async function login(page: Page): Promise<void> {
     page.locator('button[type="submit"]').click(),
   ]);
   await expect(page.getByRole('main')).toBeVisible();
+  await dismissTraktPrompt(page);
 }
 
 async function waitForListBody(

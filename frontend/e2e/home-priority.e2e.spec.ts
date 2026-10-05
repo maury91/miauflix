@@ -1,4 +1,4 @@
-import { navigateToLogin } from './utils/login';
+import { dismissTraktPrompt, navigateToLogin } from './utils/login';
 import { expect, test } from './fixtures';
 
 const adminEmail = process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com';
@@ -45,6 +45,7 @@ test.describe('Home row loading priority', () => {
     ]);
 
     await expect(page.getByRole('main')).toBeVisible();
+    await dismissTraktPrompt(page);
     await expect
       .poll(() => listRequests.filter(request => request.method === 'GET').length, {
         timeout: 30000,

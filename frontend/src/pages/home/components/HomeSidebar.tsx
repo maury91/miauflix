@@ -40,6 +40,7 @@ const Item = styled(BaseButton)<{ $active: boolean; $selected: boolean }>`
   display: flex;
   align-items: center;
   gap: 0.8vw;
+  justify-content: flex-start;
   width: 100%;
   min-height: 0;
   min-width: 44px;
@@ -58,7 +59,13 @@ const Item = styled(BaseButton)<{ $active: boolean; $selected: boolean }>`
   box-shadow: none;
 
   &:focus-visible {
+    outline: none;
     box-shadow: 0 0 0 2px ${PALETTE.text.primary};
+  }
+
+  > span[aria-hidden='true'] {
+    width: 1.35em;
+    height: 1.35em;
   }
 
   &::before {
