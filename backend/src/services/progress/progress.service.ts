@@ -10,6 +10,7 @@ import { mergeProgress } from './progress.merge';
 export class ProgressService {
   private readonly progressRepository: ProgressRepository;
 
+  /** Use local progress storage, optionally importing and exporting through the supplied list client. */
   constructor(
     database: Database,
     private readonly listClient?: ListClientService
