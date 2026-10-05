@@ -278,6 +278,8 @@ test.describe('details page preparation contract', () => {
     await expect(page).toHaveScreenshot('details-page-source-ready.png', {
       animations: 'disabled',
       fullPage: true,
+      // Allow the Linux fallback-star glyph to shift the adjacent quality badge.
+      maxDiffPixels: 700,
     });
 
     await page.getByRole('button', { name: 'Back to browse' }).click();
