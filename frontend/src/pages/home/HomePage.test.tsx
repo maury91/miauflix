@@ -214,7 +214,7 @@ describe('HomePage focus transitions', () => {
   ] as const)(
     'keeps the dismissal scope for %s across page reloads and logins',
     async (label, permanent) => {
-      const state = { mediaApi: {} };
+      const state = { mediaApi: {}, progressApi: {} };
       currentSession.mockReturnValue('test-session');
       currentUser.mockReturnValue({ id: 'test-user' });
       selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
@@ -259,7 +259,7 @@ describe('HomePage focus transitions', () => {
   );
 
   it('keeps keyboard input and focus in the Trakt modal until dismissal', async () => {
-    const state = { mediaApi: {} };
+    const state = { mediaApi: {}, progressApi: {} };
     currentSession.mockReturnValue('test-session');
     currentUser.mockReturnValue({ id: 'test-user' });
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
@@ -302,7 +302,7 @@ describe('HomePage focus transitions', () => {
   });
 
   it('keeps Continue Watching stable and opens details when selected', () => {
-    const state = { mediaApi: {} };
+    const state = { mediaApi: {}, progressApi: {} };
     const progress = [
       {
         playable: { kind: 'movie', mediaId: 100 },
