@@ -234,24 +234,23 @@ describe('HomePage focus transitions', () => {
         );
         // Reloading the page keeps the same authenticated session.
         view.unmount();
-        await act(async () => {
-          view = render(<HomePage />);
-        });
+        view = render(<HomePage />);
+        await waitFor(() => expect(getAssociation).toHaveBeenCalledTimes(2));
         if (permanent) {
           expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         } else {
-          expect(screen.getByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+          expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
           fireEvent.click(screen.getByRole('button', { name: label }));
         }
         currentSession.mockReturnValue(null);
         view.rerender(<HomePage />);
         currentSession.mockReturnValue('new-session');
-        await act(async () => view.rerender(<HomePage />));
-        expect(getAssociation).toHaveBeenLastCalledWith('new-session');
+        view.rerender(<HomePage />);
+        await waitFor(() => expect(getAssociation).toHaveBeenLastCalledWith('new-session'));
         if (permanent) {
           expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         } else {
-          expect(screen.getByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+          expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
         }
       } finally {
         progressSelector.mockRestore();
