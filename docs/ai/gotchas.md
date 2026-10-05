@@ -37,6 +37,8 @@ npm install --workspace frontend package-name
 npm test --workspace backend -- yts.api.test.ts
 ```
 
+For browser and screenshot work, follow the repository's [E2E and CI Playbook](./e2e-ci-playbook.md). It covers the ordered CI lanes, offline API harnesses, and Linux versus macOS snapshot baselines.
+
 ### 🚨 **Critical Testing Gotchas**
 
 #### ❌ **DON'T use shared state between tests**
