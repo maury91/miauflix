@@ -8,6 +8,8 @@ import baseConfig from './playwright.config.e2e';
  */
 export default defineConfig({
   ...baseConfig,
+  // Application APIs are intercepted; the Docker backend is not part of this lane.
+  globalSetup: undefined,
   testMatch: '**/details-voting.e2e.spec.ts',
   testIgnore: [],
   fullyParallel: false,

@@ -74,17 +74,23 @@ jobs:
           bash backend-e2e/scripts/prepare-docker-build-context.sh
           date -u '+[E2E_PHASE] host-prerequisites-end %Y-%m-%dT%H:%M:%SZ'
 
+      - name: Start E2E image build timing
+        run: date -u '+[E2E_PHASE] image-cache-build-start %Y-%m-%dT%H:%M:%SZ'
+
       - name: Build E2E images with persistent layer cache
+        uses: docker/bake-action@v6
         env:
           E2E_IMAGE_TAG: ${{ github.sha }}
-        run: |
-          export DOCKER_BUILDKIT=1
-          date -u '+[E2E_PHASE] image-cache-build-start %Y-%m-%dT%H:%M:%SZ'
-          docker compose \
-            -f backend-e2e/docker/docker-compose.test.yml \
-            -f backend-e2e/docker/docker-compose.test.ci.yml \
-            build --parallel
-          date -u '+[E2E_PHASE] image-cache-build-end %Y-%m-%dT%H:%M:%SZ'
+        with:
+          source: .
+          workdir: backend-e2e/docker
+          files: |
+            docker-compose.test.yml
+            docker-compose.test.ci.yml
+          load: true
+
+      - name: Finish E2E image build timing
+        run: date -u '+[E2E_PHASE] image-cache-build-end %Y-%m-%dT%H:%M:%SZ'
 
       - name: Run E2E tests
         run: |
