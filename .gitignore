@@ -23,6 +23,7 @@ coverage
 frontend/test-results
 frontend/test-results-e2e
 frontend/test-results-initial-setup
+frontend/test-results-details
 frontend/playwright-report
 frontend/playwright-report-initial-setup
 frontend/playwright-report-details
