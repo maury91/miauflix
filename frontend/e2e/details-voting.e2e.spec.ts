@@ -165,7 +165,12 @@ test.describe('details page voting controls', () => {
 
     await love.click();
     await expect(love).toHaveAttribute('aria-pressed', 'false');
-    await expect(details).toHaveScreenshot('details-vote-cleared.png', { animations: 'disabled' });
+    await expect(details).toHaveScreenshot('details-vote-cleared.png', {
+      animations: 'disabled',
+      // Ubuntu runners and the Jammy image use different fallback fonts for ★,
+      // slightly shifting the adjacent rating and source-status text.
+      maxDiffPixels: 700,
+    });
   });
 
   test('keeps voting separate from playback activation', async ({ page }) => {
