@@ -620,17 +620,13 @@ export class ListService {
     if (!resolvedDefinition)
       throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
     const actualOwner = resolvedDefinition.scope === 'public' ? 'public' : ownerKey;
-    let list = await this.mediaListRepository.findBySlug(slug, false, actualOwner);
-    if (!list) {
-      list = await this.mediaListRepository.createMediaList(
-        resolvedDefinition.name,
-        resolvedDefinition.description,
-        slug,
-        actualOwner,
-        resolvedDefinition.id
-      );
-    }
-    return list;
+    return this.mediaListRepository.findOrCreateMediaList(
+      resolvedDefinition.name,
+      resolvedDefinition.description,
+      slug,
+      actualOwner,
+      resolvedDefinition.id
+    );
   }
 
   private listRank(slug: string): number {

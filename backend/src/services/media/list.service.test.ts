@@ -37,6 +37,25 @@ const setupTest = () => {
     batch: jest.fn().mockResolvedValue({ items: [] }),
   } as unknown as jest.Mocked<CatalogClientService>;
   mediaListRepository.discardGeneration = jest.fn().mockResolvedValue(undefined);
+  mediaListRepository.findOrCreateMediaList = jest
+    .fn()
+    .mockImplementation(
+      async (
+        name: string,
+        description: string,
+        slug: string,
+        ownerKey = 'public',
+        remoteListId = slug
+      ) => ({
+        id: 1,
+        name,
+        description,
+        slug,
+        ownerKey,
+        remoteListId,
+        activeGeneration: null,
+      })
+    );
   mediaListRepository.stagePage = jest.fn().mockResolvedValue(undefined);
   mediaListRepository.activateGeneration = jest.fn().mockResolvedValue(undefined);
   database.getMovieRepository().findListItemsByMediaIds = jest.fn().mockResolvedValue([]);
