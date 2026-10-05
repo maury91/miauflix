@@ -160,6 +160,13 @@ async function installOfflineHarness(page: Page): Promise<Harness> {
       return json(route, { accepted: 1 });
     if (path === '/api/progress' && request.method() === 'GET')
       return json(route, { progress: [] });
+    if (path === '/api/watchlist' && request.method() === 'GET') {
+      return json(route, {
+        mediaType: 'movie',
+        mediaId: fixtureMovie.mediaId,
+        inWatchlist: false,
+      });
+    }
     if (path === '/api/media/movie/83533/backdrop-focus' && request.method() === 'POST') {
       return json(route, { backdropFocus: null });
     }
