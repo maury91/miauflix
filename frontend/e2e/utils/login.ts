@@ -11,10 +11,14 @@ function isAnimationComplete(): boolean {
 }
 
 export async function navigateToLogin(page: Page): Promise<void> {
+  // Install before navigation so the real intro timeline's timers are
+  // controlled. Run enough time to cover the audio fallback and 2.5s GSAP
+  // animation, then leave the clock running for the rest of the test.
+  await page.clock.install();
   await page.addInitScript(setAnimationCompleteFlag, false);
 
   await page.goto('/');
-  await page.waitForLoadState('networkidle');
+  await page.clock.runFor(4000);
 
   await page.waitForFunction(isAnimationComplete, undefined, {
     timeout: 15000,

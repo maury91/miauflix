@@ -10,6 +10,7 @@ services:
 
   # Backend service
   backend:
+    image: miauflix-e2e-backend:${E2E_IMAGE_TAG:-local}
     build:
       context: ../../
       dockerfile: Dockerfile
@@ -75,6 +76,7 @@ services:
 
   # Media catalog service (fronts the TMDB mock)
   list-service:
+    image: miauflix-e2e-list-service:${E2E_IMAGE_TAG:-local}
     build:
       context: ../../
       dockerfile: services/list-service/Dockerfile
@@ -103,6 +105,7 @@ services:
         condition: service_healthy
 
   media-catalog:
+    image: miauflix-e2e-media-catalog:${E2E_IMAGE_TAG:-local}
     build:
       context: ../../
       dockerfile: services/media-catalog/Dockerfile
@@ -124,6 +127,7 @@ services:
 
   # TMDB Image Mock Service
   tmdb-images:
+    image: miauflix-e2e-tmdb-images:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: tmdb-images.Dockerfile
@@ -146,6 +150,7 @@ services:
 
   # TMDB API Mock Service
   tmdb-mock:
+    image: miauflix-e2e-tmdb-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: tmdb.Dockerfile
@@ -173,6 +178,7 @@ services:
 
   # Trakt Mock Service
   trakt-mock:
+    image: miauflix-e2e-trakt-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: mock
       dockerfile: mock.Dockerfile
@@ -200,6 +206,7 @@ services:
 
   # YTS Mock Service
   yts-mock:
+    image: miauflix-e2e-yts-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: .
       dockerfile: mock/yts.Dockerfile
@@ -223,6 +230,7 @@ services:
 
   # TheRARBG Mock Service
   therarbg-mock:
+    image: miauflix-e2e-therarbg-mock:${E2E_IMAGE_TAG:-local}
     build:
       context: .
       dockerfile: mock/therarbg.Dockerfile
