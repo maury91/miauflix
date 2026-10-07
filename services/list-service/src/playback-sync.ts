@@ -13,6 +13,15 @@ export class PlaybackSync {
   private readonly lastReads = new Map<string, number>();
   private readonly retries = new Map<string, number>();
 
+  /**
+   * Create missing outbox and snapshot tables while preserving existing data; database errors propagate.
+   * The caller must schedule tick() to synchronize playback.
+   *
+   * @param association Resolve a backend user ID to its current connection, or null if disconnected.
+   * @param token Retrieve an access token for the specified user and connection.
+   * @param seal Encrypt serialized progress before storage.
+   * @param open Decrypt stored progress for reading or export.
+   */
   constructor(
     private readonly database: Database,
     private readonly client: () => TraktClient,
