@@ -39,6 +39,9 @@ const createMockMovieRepository = (): jest.Mocked<MovieRepository> => {
       (detail: MovieDetail): Promise<Movie> =>
         Promise.resolve({ id: 1, mediaId: detail.mediaId } as unknown as Movie)
     ),
+    upsertMovieDetails: jest.fn((details: MovieDetail[]) =>
+      Promise.resolve(details.map((detail, index) => ({ id: index + 1, mediaId: detail.mediaId })))
+    ),
     updateFromSummary: jest.fn((): Promise<void> => Promise.resolve()),
     createFromSummary: jest.fn(
       (movie: Partial<Movie>): Promise<Movie> =>
@@ -67,6 +70,9 @@ const createMockTVShowRepository = (): jest.Mocked<TVShowRepository> => {
     upsertTVShowDetail: jest.fn(
       (detail: { mediaId: number }): Promise<TVShow> =>
         Promise.resolve({ id: 1, mediaId: detail.mediaId } as unknown as TVShow)
+    ),
+    upsertTVShowDetails: jest.fn((details: Array<{ mediaId: number }>) =>
+      Promise.resolve(details.map((detail, index) => ({ id: index + 1, mediaId: detail.mediaId })))
     ),
     upsertSeasonDetail: jest.fn((): Promise<Season> => Promise.resolve({ id: 1 } as Season)),
     updateFromSummary: jest.fn((): Promise<void> => Promise.resolve()),

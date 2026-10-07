@@ -89,6 +89,129 @@ export class TVShowRepository {
     });
   }
 
+  /** Mirrors one list page of shows and season summaries in a single transaction. */
+  async upsertTVShowDetails(
+    details: TVShowDetail[]
+  ): Promise<Array<Pick<TVShow, 'id' | 'mediaId'>>> {
+    const uniqueDetails = [...new Map(details.map(detail => [detail.mediaId, detail])).values()];
+    if (uniqueDetails.length === 0) return [];
+
+    return this.database.transaction(async manager => {
+      const showRepository = manager.getRepository(TVShow);
+      for (let offset = 0; offset < uniqueDetails.length; offset += 50) {
+        const batch = uniqueDetails.slice(offset, offset + 50);
+        await showRepository
+          .createQueryBuilder()
+          .insert()
+          .into(TVShow)
+          .values(
+            batch.map(detail => ({
+              mediaId: detail.mediaId,
+              name: detail.name,
+              overview: detail.overview,
+              firstAirDate: detail.firstAirDate,
+              poster: detail.poster,
+              backdrop: detail.backdrop,
+              imdbId: detail.imdbId ?? '',
+              status: detail.status,
+              popularity: detail.popularity,
+              rating: detail.rating,
+            }))
+          )
+          .orUpdate(
+            [
+              'name',
+              'overview',
+              'firstAirDate',
+              'poster',
+              'backdrop',
+              'imdbId',
+              'status',
+              'popularity',
+              'rating',
+            ],
+            ['tmdbId']
+          )
+          .updateEntity(false)
+          .execute();
+      }
+
+      const mediaIds = uniqueDetails.map(detail => detail.mediaId);
+      const references = await showRepository.find({
+        where: { mediaId: In(mediaIds) },
+        select: { id: true, mediaId: true },
+      });
+      if (references.length !== mediaIds.length) {
+        throw new RepositoryError('Failed to persist TV show index entries', 'retrieve_failed');
+      }
+      const showIdByMediaId = new Map(references.map(show => [show.mediaId, show.id]));
+
+      // Preserve the single-item behavior for absent optional season metadata:
+      // undefined air dates and posters leave an existing value untouched.
+      const seasonsByIdentity = new Map<string, { group: string; value: Partial<Season> }>();
+      for (const detail of uniqueDetails) {
+        const showId = showIdByMediaId.get(detail.mediaId);
+        if (showId === undefined) {
+          throw new RepositoryError(
+            `Failed to resolve local TV show ${detail.mediaId}`,
+            'retrieve_failed'
+          );
+        }
+        for (const season of detail.seasons) {
+          const hasAirDate = season.airDate !== undefined && season.airDate !== null;
+          const hasPoster = season.poster !== undefined && season.poster !== null;
+          const value: Partial<Season> = {
+            tvShowId: showId,
+            seasonNumber: season.seasonNumber,
+            mediaId: season.mediaId,
+            name: season.name,
+            overview: season.overview,
+          };
+          if (season.airDate !== undefined && season.airDate !== null) {
+            value.airDate = season.airDate;
+          }
+          if (season.poster !== undefined && season.poster !== null) {
+            value.posterPath = season.poster;
+          }
+          seasonsByIdentity.set(`${showId}:${season.seasonNumber}`, {
+            group: `${Number(hasAirDate)}:${Number(hasPoster)}`,
+            value,
+          });
+        }
+      }
+
+      const seasonGroups = new Map<string, Array<Partial<Season>>>();
+      for (const { group, value } of seasonsByIdentity.values()) {
+        seasonGroups.set(group, [...(seasonGroups.get(group) ?? []), value]);
+      }
+      const seasonRepository = manager.getRepository(Season);
+      for (const [group, values] of seasonGroups) {
+        const [airDateFlag, posterFlag] = group.split(':');
+        const hasAirDate = airDateFlag === '1';
+        const hasPoster = posterFlag === '1';
+        const updateColumns = [
+          'tmdbId',
+          'name',
+          'overview',
+          ...(hasAirDate ? ['airDate'] : []),
+          ...(hasPoster ? ['posterPath'] : []),
+        ];
+        for (let offset = 0; offset < values.length; offset += 50) {
+          await seasonRepository
+            .createQueryBuilder()
+            .insert()
+            .into(Season)
+            .values(values.slice(offset, offset + 50))
+            .orUpdate(updateColumns, ['tvShowId', 'seasonNumber'])
+            .updateEntity(false)
+            .execute();
+        }
+      }
+
+      return references.map(show => ({ id: show.id, mediaId: show.mediaId }));
+    });
+  }
+
   /** Upserts season metadata without touching synced state or stored episodes. */
   private async upsertSeasonSummary(
     manager: EntityManager,

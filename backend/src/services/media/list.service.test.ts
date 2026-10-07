@@ -165,8 +165,14 @@ describe('ListService refresh safety', () => {
         { mediaType: 'tv', mediaId: 404 },
       ],
     } as never);
-    movieRepository.upsertMovieDetail = jest.fn().mockResolvedValue({ id: 11 } as never);
-    tvShowRepository.upsertTVShowDetail = jest.fn().mockResolvedValue({ id: 22 } as never);
+    movieRepository.upsertMovieDetails = jest.fn().mockResolvedValue([
+      { id: 11, mediaId: 101 },
+      { id: 33, mediaId: 303 },
+    ]);
+    tvShowRepository.upsertTVShowDetails = jest.fn().mockResolvedValue([
+      { id: 22, mediaId: 202 },
+      { id: 44, mediaId: 404 },
+    ]);
     const service = new ListService(database, catalogClient, listClient, backgroundJobs);
 
     const result = await service.getListPage('trakt-movies-popular', 'en', 0, 20);
@@ -196,5 +202,75 @@ describe('ListService refresh safety', () => {
       payload: { tvMediaId: 404, priority: 33 },
       options: { priority: 33 },
     });
+  });
+
+  it('retries individual entries when a bulk projection fails', async () => {
+    const { database, listClient, catalogClient, mediaListRepository } = setupTest();
+    mediaListRepository.findBySlug = jest
+      .fn()
+      .mockResolvedValue({ id: 1, activeGeneration: null } as never);
+    listClient.getPage.mockResolvedValue({
+      listId: publicDefinition.id,
+      page: 1,
+      totalPages: 1,
+      totalItems: 2,
+      items: [
+        { media: { mediaType: 'movie', ids: { tmdb: 101 } } },
+        { media: { mediaType: 'movie', ids: { tmdb: 202 } } },
+      ],
+    } as never);
+    catalogClient.batch.mockResolvedValue({
+      items: [
+        { mediaType: 'movie', mediaId: 101 },
+        { mediaType: 'movie', mediaId: 202 },
+      ],
+    } as never);
+    const movieRepository = database.getMovieRepository();
+    (movieRepository.upsertMovieDetails as jest.Mock).mockRejectedValueOnce(
+      new Error('bulk write failed')
+    );
+    movieRepository.upsertMovieDetail = jest
+      .fn()
+      .mockResolvedValueOnce({ id: 11, mediaId: 101 } as never)
+      .mockRejectedValueOnce(new Error('one record failed'));
+    const service = new ListService(database, catalogClient, listClient);
+
+    const result = await service.getListPage('trakt-movies-popular', 'en', 0, 20);
+
+    expect(result.medias.map(media => media.mediaId)).toEqual([101]);
+    expect(movieRepository.upsertMovieDetail).toHaveBeenCalledTimes(2);
+  });
+
+  it('maps viewport and visible requests to queue promotion priorities', async () => {
+    const { database, listClient } = setupTest();
+    const backgroundJobs = {
+      enqueueOrPromote: jest.fn().mockResolvedValue(undefined),
+    } as unknown as jest.Mocked<BackgroundJobService>;
+    const service = new ListService(
+      database,
+      {} as jest.Mocked<CatalogClientService>,
+      listClient,
+      backgroundJobs
+    );
+
+    await service.promoteMediaPriorities([
+      { mediaType: 'movie', mediaId: 101, tier: 'viewport' },
+      { mediaType: 'tv', mediaId: 202, tier: 'visible' },
+    ]);
+
+    expect(backgroundJobs.enqueueOrPromote).toHaveBeenNthCalledWith(
+      1,
+      'source.discover',
+      'media:101',
+      { movieMediaId: 101, priority: 100 },
+      { priority: 100 }
+    );
+    expect(backgroundJobs.enqueueOrPromote).toHaveBeenNthCalledWith(
+      2,
+      'catalog.season-sync.seed',
+      'show:202',
+      { tvMediaId: 202, priority: 90 },
+      { priority: 90 }
+    );
   });
 });

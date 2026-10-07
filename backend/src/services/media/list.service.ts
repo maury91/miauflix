@@ -494,53 +494,75 @@ export class ListService {
     loadPriority: ListLoadPriority = 'visible'
   ): Promise<Array<{ localId: number } & (MovieDetail | TVShowDetail)>> {
     const resolved: Array<{ localId: number } & (MovieDetail | TVShowDetail)> = [];
-    for (const detail of details) {
-      try {
-        if (detail.mediaType === 'movie') {
+    const localIds = new Map<string, number>();
+    const movieDetails = details.filter(
+      (detail): detail is MovieDetail => detail.mediaType === 'movie'
+    );
+    const tvDetails = details.filter((detail): detail is TVShowDetail => detail.mediaType === 'tv');
+
+    try {
+      const references = await this.movieRepository.upsertMovieDetails(movieDetails);
+      references.forEach(reference => localIds.set(`movie:${reference.mediaId}`, reference.id));
+    } catch (bulkError) {
+      logger.warn(
+        'ListService',
+        'Bulk movie projection failed; retrying entries individually',
+        bulkError
+      );
+      for (const detail of movieDetails) {
+        try {
           const local = await this.movieRepository.upsertMovieDetail(detail);
+          localIds.set(`movie:${detail.mediaId}`, local.id);
+        } catch (error) {
+          logger.warn('ListService', `Skipping movie ${detail.mediaId} while projecting`, error);
+        }
+      }
+    }
+
+    try {
+      const references = await this.tvShowRepository.upsertTVShowDetails(tvDetails);
+      references.forEach(reference => localIds.set(`tv:${reference.mediaId}`, reference.id));
+    } catch (bulkError) {
+      logger.warn(
+        'ListService',
+        'Bulk TV projection failed; retrying entries individually',
+        bulkError
+      );
+      for (const detail of tvDetails) {
+        try {
+          const local = await this.tvShowRepository.upsertTVShowDetail(detail);
+          localIds.set(`tv:${detail.mediaId}`, local.id);
+        } catch (error) {
+          logger.warn('ListService', `Skipping tv ${detail.mediaId} while projecting`, error);
+        }
+      }
+    }
+
+    for (const detail of details) {
+      const localId = localIds.get(`${detail.mediaType}:${detail.mediaId}`);
+      if (localId === undefined) continue;
+      try {
+        const priority = listDownstreamPriority(
+          listRank,
+          itemOffset + resolved.length,
+          loadPriority
+        );
+        if (detail.mediaType === 'movie') {
           this.backgroundJobs?.enqueueBestEffort({
             type: 'source.discover',
             dedupeKey: `media:${detail.mediaId}`,
-            payload: {
-              movieMediaId: detail.mediaId,
-              priority: listDownstreamPriority(
-                listRank,
-                itemOffset + resolved.length,
-                loadPriority
-              ),
-            },
-            options: {
-              priority: listDownstreamPriority(
-                listRank,
-                itemOffset + resolved.length,
-                loadPriority
-              ),
-            },
+            payload: { movieMediaId: detail.mediaId, priority },
+            options: { priority },
           });
-          resolved.push({ ...detail, localId: local.id });
         } else {
-          const local = await this.tvShowRepository.upsertTVShowDetail(detail);
           this.backgroundJobs?.enqueueBestEffort({
             type: 'catalog.season-sync.seed',
             dedupeKey: `show:${detail.mediaId}`,
-            payload: {
-              tvMediaId: detail.mediaId,
-              priority: listDownstreamPriority(
-                listRank,
-                itemOffset + resolved.length,
-                loadPriority
-              ),
-            },
-            options: {
-              priority: listDownstreamPriority(
-                listRank,
-                itemOffset + resolved.length,
-                loadPriority
-              ),
-            },
+            payload: { tvMediaId: detail.mediaId, priority },
+            options: { priority },
           });
-          resolved.push({ ...detail, localId: local.id });
         }
+        resolved.push({ ...detail, localId });
       } catch (error) {
         logger.warn(
           'ListService',

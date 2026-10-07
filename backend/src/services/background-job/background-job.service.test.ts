@@ -109,6 +109,45 @@ describe('BackgroundJobService', () => {
     expect(queueAdd).not.toHaveBeenCalled();
   });
 
+  it('does not lower an existing queued job priority', async () => {
+    const service = setupTest();
+    queueGetJobByCustomId.mockResolvedValue({
+      id: 'internal-42',
+      priority: 100,
+      data: { movieMediaId: 42, priority: 100 },
+    });
+
+    await service.enqueueOrPromote(
+      'source.discover',
+      'movie:42',
+      { movieMediaId: 42, priority: 70 },
+      { priority: 70 }
+    );
+
+    expect(queueUpdateJobData).not.toHaveBeenCalled();
+    expect(queueChangePriority).not.toHaveBeenCalled();
+  });
+
+  it('does not change the priority of an active job', async () => {
+    const service = setupTest();
+    queueGetJobByCustomId.mockResolvedValue({
+      id: 'internal-42',
+      priority: 20,
+      data: { movieMediaId: 42, priority: 20 },
+    });
+    queueGetJobState.mockResolvedValue('active');
+
+    await service.enqueueOrPromote(
+      'source.discover',
+      'movie:42',
+      { movieMediaId: 42, priority: 90 },
+      { priority: 90 }
+    );
+
+    expect(queueUpdateJobData).not.toHaveBeenCalled();
+    expect(queueChangePriority).not.toHaveBeenCalled();
+  });
+
   it('creates ordered and fan-in flows on their typed queues', async () => {
     const service = setupTest();
     const stage = {

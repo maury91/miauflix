@@ -25,6 +25,7 @@ if [[ -n "${E2E_HOME_CROSS_LOAD+x}" ]]; then
     home_cross_load_was_set=true
     home_cross_load_requested="$E2E_HOME_CROSS_LOAD"
 fi
+background_tasks_requested="${BACKGROUND_TASKS_ENABLED:-false}"
 
 script_dir=$(dirname $(realpath "$0"))
 backend_e2e_dir=$(dirname "$script_dir")
@@ -190,7 +191,8 @@ fi
 
 # The background-priority E2E lane must be deterministic even when a developer's
 # local .env contains the normal disabled-worker setting.
-if [[ "${BACKGROUND_TASKS_ENABLED:-false}" == "true" ]]; then
+if [[ "$background_tasks_requested" == "true" || "${BACKGROUND_TASKS_ENABLED:-false}" == "true" ]]; then
+    export BACKGROUND_TASKS_ENABLED=true
     export DISABLE_BACKGROUND_TASKS=false
     export CATALOG_DISABLE_BACKGROUND_TASKS=false
 fi

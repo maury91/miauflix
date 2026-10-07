@@ -1,9 +1,9 @@
-import type { Page } from '@playwright/test';
+import type { Page, Response } from '@playwright/test';
 
 import { navigateToLogin } from './utils/login';
 import { expect, test } from './fixtures';
 
-async function login(page: Page): Promise<string> {
+async function login(page: Page, beforeSubmit?: () => void): Promise<string> {
   await page.route('**/api/integrations/trakt/association', route =>
     route.fulfill({
       status: 200,
@@ -19,6 +19,7 @@ async function login(page: Page): Promise<string> {
   await navigateToLogin(page);
   await page.getByLabel('Email').fill(process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com');
   await page.getByLabel('Password').fill(process.env['E2E_ADMIN_PASSWORD'] ?? 'testpassword123');
+  beforeSubmit?.();
   const response = page.waitForResponse(response => response.url().endsWith('/api/auth/login'));
   await page.getByRole('button', { name: 'Continue' }).click();
   const result = await (await response).json();
@@ -27,7 +28,18 @@ async function login(page: Page): Promise<string> {
 }
 
 test('contains keyboard navigation and returns control to Home after closing', async ({ page }) => {
-  await login(page);
+  let firstListPageResponse!: Promise<Response>;
+  await login(page, () => {
+    firstListPageResponse = page.waitForResponse(response => {
+      const url = new URL(response.url());
+      return (
+        response.request().method() === 'GET' &&
+        response.status() === 200 &&
+        /^\/api\/list\/[^/]+$/.test(url.pathname)
+      );
+    });
+  });
+  expect((await firstListPageResponse).ok()).toBe(true);
   const dialog = page.getByRole('dialog', { name: 'Connect Trakt', exact: true });
   const begin = dialog.getByRole('button', { name: "Let's go" });
   const dismiss = dialog.getByRole('button', { name: 'Don’t ask again' });

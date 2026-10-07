@@ -45,9 +45,14 @@ export class MediaListRepository {
     ownerKey = 'public',
     remoteListId: string | null = slug
   ): Promise<MediaList> {
+    const existing = await this.repository.findOne({ where: { slug, ownerKey } });
+    if (existing) return existing;
+
     return this.database.write(async () => {
-      const existing = await this.repository.findOne({ where: { slug, ownerKey } });
-      if (existing) return existing;
+      // A second caller may have created the row after the read above. Keep this
+      // check inside the serialized write lane before attempting the insert.
+      const raced = await this.repository.findOne({ where: { slug, ownerKey } });
+      if (raced) return raced;
 
       await this.repository
         .createQueryBuilder()

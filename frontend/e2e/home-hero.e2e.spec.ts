@@ -1,6 +1,6 @@
 import type { Page } from '@playwright/test';
 
-import { dismissTraktPrompt, navigateToLogin } from './utils/login';
+import { dismissTraktPrompt, navigateToLogin, waitForTraktAssociation } from './utils/login';
 import { expect, test } from './fixtures';
 
 const adminEmail = process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com';
@@ -54,12 +54,13 @@ async function login(page: Page): Promise<void> {
   await navigateToLogin(page);
   await page.locator('#email').fill(adminEmail);
   await page.locator('#password').fill(adminPassword);
+  const associationResponse = waitForTraktAssociation(page);
   await Promise.all([
     page.waitForResponse(response => response.url().includes('/api/auth/login')),
     page.locator('button[type="submit"]').click(),
   ]);
   await expect(page.getByRole('main')).toBeVisible();
-  await dismissTraktPrompt(page);
+  await dismissTraktPrompt(page, associationResponse);
 }
 
 async function waitForListBody(
