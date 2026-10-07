@@ -1,3 +1,5 @@
+import { logger } from '@logger';
+
 import type { MovieSource } from '@entities/movie-source.entity';
 import type { WarmupRangeProgress, WarmupResult } from '@services/download/download.service';
 
@@ -320,7 +322,13 @@ export class TorrentWarmupController {
   private setSlot(slot: WarmSlot | null): void {
     this.slot = slot;
     const snapshot = this.getState();
-    for (const listener of this.changeListeners) listener(snapshot);
+    for (const listener of this.changeListeners) {
+      try {
+        listener(snapshot);
+      } catch (error) {
+        logger.warn('TorrentWarmupController', 'A change listener failed', error);
+      }
+    }
   }
 }
 

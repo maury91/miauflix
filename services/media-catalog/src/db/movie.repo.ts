@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNotNull, ne } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull, ne } from 'drizzle-orm';
 
 import { replaceGenres, replaceTranslations } from './catalog-db.helpers';
 import { movieRow } from './catalog-db.mappers';
@@ -20,12 +20,14 @@ export class MovieRepository {
     return row && movieRow(row);
   }
 
-  getBackdropCandidates(limit = 32): Array<{ mediaId: number; backdrop: string }> {
+  getBackdropCandidates(limit = 32, offset = 0): Array<{ mediaId: number; backdrop: string }> {
     return this.db
       .select({ mediaId: movies.mediaId, backdrop: movies.backdrop })
       .from(movies)
       .where(and(isNotNull(movies.detailsSyncedAt), ne(movies.backdrop, '')))
+      .orderBy(asc(movies.mediaId))
       .limit(limit)
+      .offset(offset)
       .all();
   }
 

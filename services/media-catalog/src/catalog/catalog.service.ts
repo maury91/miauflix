@@ -17,6 +17,7 @@ import { CatalogLocalizer } from './catalog.localizer';
 import { CatalogSynchronizer } from './catalog.syncer';
 
 const SCOPE = 'CatalogService';
+const BACKDROP_FOCUS_SCAN_PAGE_SIZE = 32;
 
 export interface CatalogValues {
   /** Refresh details older than this (ms). */
@@ -42,6 +43,7 @@ export class CatalogService {
   private readonly synchronizer: CatalogSynchronizer;
   private readonly backdropFocusService: BackdropFocusService;
   private backdropFocusBackgroundTimer: ReturnType<typeof setInterval> | undefined;
+  private backdropFocusScanOffset = 0;
 
   constructor(
     private readonly movies: MovieRepository,
@@ -203,10 +205,21 @@ export class CatalogService {
 
   private enqueueNextDatabaseBackdropFocus(): void {
     if (this.backdropFocusService.hasPendingBackground('database')) return;
+    // Advance bounded pages so cached rows in the first page cannot starve later media.
+    const offset = this.backdropFocusScanOffset;
     const candidates = [
-      ...this.movies.getBackdropCandidates().map(row => ({ mediaType: 'movie' as const, ...row })),
-      ...this.tvShows.getBackdropCandidates().map(row => ({ mediaType: 'tv' as const, ...row })),
+      ...this.movies
+        .getBackdropCandidates(BACKDROP_FOCUS_SCAN_PAGE_SIZE, offset)
+        .map(row => ({ mediaType: 'movie' as const, ...row })),
+      ...this.tvShows
+        .getBackdropCandidates(BACKDROP_FOCUS_SCAN_PAGE_SIZE, offset)
+        .map(row => ({ mediaType: 'tv' as const, ...row })),
     ];
+    if (candidates.length === 0) {
+      this.backdropFocusScanOffset = 0;
+      return;
+    }
+    this.backdropFocusScanOffset += BACKDROP_FOCUS_SCAN_PAGE_SIZE;
     for (const candidate of candidates) {
       const source = this.provider.getBackdropAnalysisSource(candidate.backdrop);
       if (

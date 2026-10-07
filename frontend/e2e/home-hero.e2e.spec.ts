@@ -138,6 +138,10 @@ async function focusHeroCase(
   await hero.locator('div[aria-live="polite"]').evaluate(element => {
     element.style.visibility = 'hidden';
   });
+  // Logos load independently from the preloaded backdrop; wait for their decoded pixels too.
+  await hero
+    .locator('img')
+    .evaluateAll(images => Promise.all(images.map(image => (image as HTMLImageElement).decode())));
   await expect(hero).toHaveScreenshot(`home-hero-${heroCase.mediaId}.png`, {
     animations: 'disabled',
     // The scrolling category rows overlap the bottom of the hero. Hide them only during

@@ -557,6 +557,7 @@ export class DownloadService {
       reservedBytes: source.size,
     });
     await this.storageService.withSourceLock(source.id, async () => {
+      this.warmupSelections.delete(source.id);
       getVideoFile(download.torrent).select();
       if (this.activeStreams <= 0) return;
       if (await this.pauseDownload(source.id)) this.pausedForPlayback.add(source.id);
