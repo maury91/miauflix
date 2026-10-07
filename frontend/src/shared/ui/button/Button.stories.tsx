@@ -2,19 +2,20 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { Button } from './Button';
 
-const ExternalLinkIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-    <path d="M14 5h5v5" />
-    <path d="m13 11 6-6" />
-    <path d="M19 13v5a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V6a1 1 0 0 1 1-1h5" />
-  </svg>
-);
+import ExternalLinkIcon from '~icons/mdi/open-in-new';
 
 const meta = {
-  title: 'UI Elements/Button',
+  title: 'Miauflix UI/Components/Button',
+  tags: ['autodocs'],
   component: Button,
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Use Button for an action, not a destination link. Use one primary action per group and secondary for alternatives. Brand/large is the existing TV-friendly default; settings/small or medium is for account and configuration forms. Icons are decorative: iconOnly requires an aria-label. Use size, appearance and fullWidth instead of styling Button. Native disabled, type and ref behavior is preserved.',
+      },
+    },
   },
   argTypes: {
     color: {
@@ -78,6 +79,27 @@ export const IconOnly: Story = {
     icon: <ExternalLinkIcon />,
     'aria-label': 'Open externally',
     children: null,
-    style: { minWidth: 56, padding: 12 },
+    iconOnly: true,
   },
+};
+
+export const Settings: Story = {
+  args: { appearance: 'settings', size: 'medium', children: 'Save configuration' },
+};
+export const CompactSecondary: Story = {
+  args: { appearance: 'settings', size: 'small', color: 'secondary', children: 'Test' },
+};
+export const FullWidth: Story = {
+  args: { appearance: 'settings', size: 'medium', fullWidth: true, children: 'Create account' },
+  decorators: [
+    Story => (
+      <div style={{ width: 320 }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+export const TextAction: Story = {
+  args: { appearance: 'settings', variant: 'text', size: 'small', children: 'Optional settings' },
 };

@@ -1,14 +1,22 @@
 import { useCreateSessionMutation } from '@features/player/api/playback.api';
 import {
+  applyProgressUpdate,
   progressForPlayable,
   useGetProgressQuery,
   useUpdateProgressMutation,
 } from '@features/progress/api/progress.api';
-import type { CreatePlaybackSessionResponse, PlayableRef } from '@miauflix/backend';
+import { RealtimeClient } from '@features/realtime/realtime.client';
+import type {
+  CreatePlaybackSessionResponse,
+  PlayableRef,
+  ProgressRequest,
+} from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import type { AppDispatch } from '@store/store';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 
 import {
@@ -70,6 +78,7 @@ const VideoStatus = styled.p<{ $ready: boolean }>`
   `}
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const BackButton = styled(BaseButton)`
   min-width: 0;
   min-height: 0;
@@ -91,6 +100,7 @@ interface PlayerViewProps {
   playable: PlayableRef;
   title: string;
   onBack: () => void;
+  realtimeClient?: RealtimeClient | null;
 }
 
 /**
@@ -98,7 +108,8 @@ interface PlayerViewProps {
  * Resume unfinished progress beyond five seconds by its fraction of the saved duration,
  * capped one second before the current video’s end. Preparation failures offer a retry.
  */
-export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
+export function PlayerView({ playable, title, onBack, realtimeClient = null }: PlayerViewProps) {
+  const dispatch = useDispatch<AppDispatch>();
   const [createSession] = useCreateSessionMutation();
   const [updateProgress] = useUpdateProgressMutation();
   const progress = useGetProgressQuery(undefined);
@@ -114,6 +125,8 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
     durationSeconds: number;
   } | null>(null);
   const completedRef = useRef(false);
+  const realtimeClientRef = useRef<RealtimeClient | null>(realtimeClient);
+  realtimeClientRef.current = realtimeClient;
 
   const readProgressSnapshot = useCallback(() => {
     const video = videoRef.current;
@@ -130,13 +143,18 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
     (state: 'playing' | 'paused' | 'completed') => {
       const snapshot = readProgressSnapshot();
       if (!snapshot) return;
-      void updateProgress({
+      const update: ProgressRequest = {
         playable,
         ...snapshot,
         state,
-      });
+      };
+      if (realtimeClientRef.current?.publishProgress(update)) {
+        applyProgressUpdate(dispatch, update);
+        return;
+      }
+      void updateProgress(update);
     },
-    [playable, readProgressSnapshot, updateProgress]
+    [dispatch, playable, readProgressSnapshot, updateProgress]
   );
   const resume = progress.data ? progressForPlayable(progress.data.progress, playable) : undefined;
 

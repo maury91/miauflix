@@ -1,0 +1,32 @@
+import { Canvas, Meta } from '@storybook/addon-docs/blocks';
+import * as Examples from './Composition.stories';
+
+<Meta of={Examples} />
+
+# Composition
+
+Components share a visual contract; features own values, validation, network calls and navigation.
+
+## Settings form
+
+A label names each field. Help and validation text are linked to it. A Switch toggles a stable setting. The action row keeps a primary submit and a secondary alternative in DOM order. Submit with the browser’s native form behavior, including Enter. While saving, disable actions that could submit twice, keep visible loading text, and show the result in an Alert.
+
+<Canvas of={Examples.SettingsForm} />
+
+## Action groups
+
+Use ActionRow density="compact" for settings, and its default comfortable spacing for larger choices. Rows wrap on narrow viewports; use direction="column" when a vertical layout is deliberate. Do not use margin or font overrides on each button to force alignment.
+
+<Canvas of={Examples.ResponsiveActions} />
+
+## Dialog choices
+
+Use the Modal story for the supported two-button pattern. Match heading and description ids. The caller mounts and unmounts the dialog; it must keep the opener available for focus restoration. Mark actions in keyboard order. Do not nest modals or put editable forms inside this button-focused modal.
+
+## Loading and feedback
+
+LoadingIndicator belongs inside a labelled button or status; it has no accessible name of its own. Spinner is a standalone status and defaults to the accessible name “Loading” when no text is given. Alerts describe results, not ongoing work. Use info for format-only validation, success for an actual completed operation, and error with an actionable recovery message.
+
+## Layout and ownership
+
+Use ordinary layout containers for page width, placement and margins. Do not restyle a primitive’s padding, borders, colors, type or focus ring. If a repeated style is missing, implement and document it in the primitive. MediaCard, EpisodeRow, navigation items and playback controls still own domain-specific interaction and selection state; they are not general-purpose Button variants.

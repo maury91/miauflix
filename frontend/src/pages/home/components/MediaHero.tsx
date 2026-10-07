@@ -18,6 +18,8 @@ import {
 import { getImageUrl, getMediaTitle } from '../media.utils';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
+import StarIcon from '~icons/mdi/star';
+
 interface BackdropLayerState {
   key: string;
   url: string;
@@ -128,11 +130,17 @@ const Metadata = styled.div`
   font-size: clamp(0.85rem, 2.1vh, 1.2rem);
   font-weight: 500;
   display: flex;
-  min-width: 25vw;
+  column-gap: 12px;
   justify-content: space-between;
   align-items: center;
   span {
     display: flex;
+    align-items: center;
+    gap: 0.25em;
+    svg {
+      width: 1em;
+      height: 1em;
+    }
   }
 `;
 
@@ -324,8 +332,8 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
   const metadata = [
     media._type === 'movie' && media.runtime ? `${media.runtime} min` : '',
     date?.slice(0, 4),
-    media.rating ? `★ ${media.rating.toFixed(1)}` : '',
   ].filter(Boolean);
+  const rating = media.rating ? media.rating.toFixed(1) : null;
   return (
     <Hero ref={heroRef} aria-live="polite">
       {activeBackdrop && (
@@ -362,6 +370,15 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
                   <MetadataSeparator />
                 </Fragment>
               ))}
+              {rating && (
+                <Fragment>
+                  <span>
+                    <StarIcon aria-hidden="true" />
+                    {rating}
+                  </span>
+                  <MetadataSeparator />
+                </Fragment>
+              )}
               <SourcePreparationStatus
                 mediaKind={media._type}
                 mode="browse"

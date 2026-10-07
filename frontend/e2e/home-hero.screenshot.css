@@ -1,0 +1,3 @@
+header[aria-live='polite'] + div {
+  visibility: hidden !important;
+}

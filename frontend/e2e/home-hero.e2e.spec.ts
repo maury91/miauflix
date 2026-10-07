@@ -1,3 +1,5 @@
+import { fileURLToPath } from 'node:url';
+
 import type { Page } from '@playwright/test';
 
 import { dismissTraktPrompt, navigateToLogin, waitForTraktAssociation } from './utils/login';
@@ -138,6 +140,9 @@ async function focusHeroCase(
   });
   await expect(hero).toHaveScreenshot(`home-hero-${heroCase.mediaId}.png`, {
     animations: 'disabled',
+    // The scrolling category rows overlap the bottom of the hero. Hide them only during
+    // capture so the complete backdrop gradient remains visible in this hero-only contract.
+    stylePath: fileURLToPath(new URL('./home-hero.screenshot.css', import.meta.url)),
     // The hero/sidebar redesign intentionally changed the surrounding copy and navigation
     // chrome while the artwork remains the contract under test. Keep a bounded allowance for
     // those pixels so this suite continues to catch backdrop positioning regressions.

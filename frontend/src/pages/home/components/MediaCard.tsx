@@ -6,6 +6,7 @@ import styled from 'styled-components';
 
 import { getImageUrl, getMediaTitle } from '../media.utils';
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const Card = styled(BaseButton)<{
   $backdrop: string;
   $logo?: string;

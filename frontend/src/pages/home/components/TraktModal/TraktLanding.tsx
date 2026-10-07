@@ -48,13 +48,17 @@ const IconTile = styled.span`
 `;
 
 const Actions = styled(ActionRow)`
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: stretch;
   gap: 1.5rem;
   margin-top: 2.5rem;
   padding-top: 1.875rem;
   border-top: 0;
 
   @media (max-width: 600px) {
-    flex-direction: column;
+    grid-template-columns: 1fr;
+    grid-auto-rows: 1fr;
     gap: 0.75rem;
     margin-top: 1.5rem;
     padding-top: 1.5rem;
@@ -117,6 +121,7 @@ export function TraktLanding({ busy, error, onBegin, onDismiss }: LandingProps) 
       <Actions>
         <Action
           color="primary"
+          fullWidth
           type="button"
           disabled={busy}
           onClick={onBegin}
@@ -125,7 +130,7 @@ export function TraktLanding({ busy, error, onBegin, onDismiss }: LandingProps) 
           <ExternalIcon aria-hidden="true" />
           {busy ? 'Connecting…' : "Let's go"}
         </Action>
-        <Action color="secondary" type="button" data-modal-action="1" onClick={onDismiss}>
+        <Action color="secondary" fullWidth type="button" data-modal-action="1" onClick={onDismiss}>
           Don’t ask again
         </Action>
       </Actions>

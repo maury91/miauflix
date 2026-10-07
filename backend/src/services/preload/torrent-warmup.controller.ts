@@ -55,11 +55,20 @@ export class TorrentWarmupController {
   private generation = 0;
   private transition: Promise<void> = Promise.resolve();
   private readinessTimer: ReturnType<typeof setTimeout> | null = null;
+  private readonly changeListeners = new Set<(slot: WarmSlot | null) => void>();
 
   constructor(private readonly driver: TorrentWarmupDriver) {}
 
   getState(): WarmSlot | null {
     return this.slot ? { ...this.slot, range: this.slot.range && { ...this.slot.range } } : null;
+  }
+
+  onChange(listener: (slot: WarmSlot | null) => void): void {
+    this.changeListeners.add(listener);
+  }
+
+  offChange(listener: (slot: WarmSlot | null) => void): void {
+    this.changeListeners.delete(listener);
   }
 
   /**
@@ -84,7 +93,7 @@ export class TorrentWarmupController {
             (await this.driver.pauseSource(this.slot.sourceId))
           ) {
             this.cancelReadinessCheck();
-            this.slot = { ...this.slot, state: 'paused' };
+            this.setSlot({ ...this.slot, state: 'paused' });
           }
           return this.getState()!;
         }
@@ -117,12 +126,12 @@ export class TorrentWarmupController {
           await this.driver.pauseSource(previous.sourceId);
         }
         if (this.slot?.generation === previous.generation) {
-          this.slot = { ...previous, state: 'paused' };
+          this.setSlot({ ...previous, state: 'paused' });
         }
       }
 
       const generation = ++this.generation;
-      this.slot = {
+      this.setSlot({
         generation,
         leaseKey,
         playableKey,
@@ -134,32 +143,34 @@ export class TorrentWarmupController {
         verifiedBytes: 0,
         progress: 0,
         startedAt: Date.now(),
-      };
+      });
 
       try {
-        this.slot.state = 'adding_torrent';
+        const slot = this.slot;
+        if (!slot) throw new Error('Warmup slot was lost before torrent setup');
+        this.setSlot({ ...slot, state: 'adding_torrent' });
         const result = await this.driver.warmSource(
           source,
-          this.slot.targetVerifiedBytes,
+          slot.targetVerifiedBytes,
           options.speculativeExpiresAt
         );
         if (this.slot?.generation !== generation) {
           await this.driver.pauseSource(source.id);
           return this.getState()!;
         }
-        this.slot = {
+        this.setSlot({
           ...this.slot,
           state: 'warming',
           range: result,
           targetVerifiedBytes: result.targetBytes,
-        };
+        });
         const progress = await this.readRangeProgress(source.id, result);
         if (this.slot?.generation !== generation || this.slot.state !== 'warming') {
           return this.getState()!;
         }
         this.applyProgress(progress);
         if (progress?.isComplete) {
-          this.slot = { ...this.slot, state: 'ready', progress: 100 };
+          this.setSlot({ ...this.slot, state: 'ready', progress: 100 });
         } else if (this.driver.isRangeVerified || this.driver.getRangeProgress) {
           this.scheduleReadinessCheck(generation, source.id, result);
         }
@@ -167,7 +178,7 @@ export class TorrentWarmupController {
       } catch (error) {
         if (this.slot?.generation === generation) {
           this.cancelReadinessCheck();
-          this.slot = { ...this.slot, state: 'failed' };
+          this.setSlot({ ...this.slot, state: 'failed' });
         }
         throw error;
       }
@@ -185,7 +196,7 @@ export class TorrentWarmupController {
         : await this.driver.pauseSource(this.slot.sourceId);
       if (paused) {
         this.cancelReadinessCheck();
-        this.slot = { ...this.slot, state: 'paused' };
+        this.setSlot({ ...this.slot, state: 'paused' });
       }
       return paused;
     });
@@ -200,7 +211,7 @@ export class TorrentWarmupController {
       const promoted = await this.driver.promoteSource(source);
       if (promoted && this.slot?.sourceId === source.id) {
         this.cancelReadinessCheck();
-        this.slot = null;
+        this.setSlot(null);
       }
       return promoted;
     });
@@ -209,7 +220,7 @@ export class TorrentWarmupController {
   close(): void {
     this.cancelReadinessCheck();
     const slot = this.slot;
-    this.slot = null;
+    this.setSlot(null);
     if (slot) void this.driver.pauseSource(slot.sourceId);
   }
 
@@ -251,7 +262,7 @@ export class TorrentWarmupController {
         if (this.slot?.generation !== generation || this.slot.state !== 'warming') return;
         this.applyProgress(progress);
         if (progress?.isComplete) {
-          this.slot = { ...this.slot, state: 'ready', progress: 100 };
+          this.setSlot({ ...this.slot, state: 'ready', progress: 100 });
           this.readinessTimer = null;
           return;
         }
@@ -293,17 +304,23 @@ export class TorrentWarmupController {
   /** Update the current slot’s byte counts and bounded percentage, retaining its target if the read reports zero. */
   private applyProgress(progress: WarmupRangeProgress | null): void {
     if (!progress || !this.slot) return;
-    this.slot = {
+    this.setSlot({
       ...this.slot,
       targetVerifiedBytes: progress.targetBytes || this.slot.targetVerifiedBytes,
       verifiedBytes: progress.verifiedBytes,
       progress: Math.min(100, Math.max(0, progress.progress)),
-    };
+    });
   }
 
   private cancelReadinessCheck(): void {
     if (this.readinessTimer) clearTimeout(this.readinessTimer);
     this.readinessTimer = null;
+  }
+
+  private setSlot(slot: WarmSlot | null): void {
+    this.slot = slot;
+    const snapshot = this.getState();
+    for (const listener of this.changeListeners) listener(snapshot);
   }
 }
 

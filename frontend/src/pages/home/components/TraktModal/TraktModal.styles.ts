@@ -1,4 +1,3 @@
-import { Button } from '@shared/ui/button/Button';
 import styled from 'styled-components';
 
 export const Copy = styled.p`
@@ -9,17 +8,4 @@ export const Copy = styled.p`
   font-weight: 400;
 `;
 
-export const Action = styled(Button)`
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1.25rem;
-  min-height: 4.5rem;
-  padding: 0.75rem 1rem;
-
-  svg {
-    width: 1.75rem;
-    height: 1.75rem;
-  }
-`;
+export { Button as Action } from '@shared/ui/button/Button';

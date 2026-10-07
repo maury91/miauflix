@@ -4,6 +4,8 @@ import { Button } from '@shared/ui/button/Button';
 import { type ReactNode, useCallback, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
+import CloseIcon from '~icons/mdi/close';
+
 const Overlay = styled.div`
   position: fixed;
   inset: 0;
@@ -40,21 +42,13 @@ const Dialog = styled.div`
   }
 `;
 
-const CloseButton = styled(Button)`
+const CloseArea = styled.div`
   position: absolute;
   top: 1.25rem;
   right: 1.25rem;
-  width: 3.25rem;
-  min-width: 3.25rem;
-  min-height: 3.25rem;
-  padding: 0;
-  border-radius: 0.625rem;
-  color: #fff;
-  font-size: 2rem;
-  line-height: 1;
 `;
 
-interface ModalProps {
+export interface ModalProps {
   children: ReactNode;
   onClose: () => void;
   labelledBy: string;
@@ -186,9 +180,16 @@ export function Modal({
         aria-describedby={describedBy}
         onKeyDown={handleKeyDown}
       >
-        <CloseButton data-modal-close color="secondary" aria-label={closeLabel} onClick={onClose}>
-          <span aria-hidden="true">×</span>
-        </CloseButton>
+        <CloseArea>
+          <Button
+            iconOnly
+            data-modal-close
+            color="secondary"
+            aria-label={closeLabel}
+            icon={<CloseIcon aria-hidden="true" />}
+            onClick={onClose}
+          />
+        </CloseArea>
         {children}
       </Dialog>
     </Overlay>

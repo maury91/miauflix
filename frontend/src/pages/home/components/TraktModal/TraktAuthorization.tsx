@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';
 import styled from 'styled-components';
 
-import { Action, Copy } from './TraktModal.styles';
+import { Copy } from './TraktModal.styles';
 
 import CopyIcon from '~icons/mdi/content-copy';
 import ExternalIcon from '~icons/mdi/open-in-new';
@@ -119,19 +119,8 @@ const Code = styled.code`
   overflow-wrap: anywhere;
 `;
 
-const CopyButton = styled(Button)`
-  flex: 0 0 3.25rem;
-  min-width: 3.25rem;
-  min-height: 3.25rem;
-  padding: 0;
-  border-radius: 0.625rem;
-`;
-
-const OpenButton = styled(Action)`
-  width: 100%;
-  min-width: 0;
+const OpenArea = styled.div`
   margin-top: 1.75rem;
-  font-size: 1.5rem;
 `;
 
 const Expiry = styled.p`
@@ -208,28 +197,32 @@ export function TraktAuthorization({
           </Step>
           <CodePanel>
             <Code>{authorization.userCode}</Code>
-            <CopyButton
+            <Button
+              iconOnly
               color="secondary"
               data-modal-action="1"
               aria-label="Copy Trakt code"
               onClick={onCopyCode}
             >
               <CopyIcon aria-hidden="true" />
-            </CopyButton>
+            </Button>
           </CodePanel>
           <Expiry role="timer" aria-live="off">
             {secondsRemaining > 0
               ? `Code expires in ${formatTimeRemaining(secondsRemaining)}`
               : 'Code expired'}
           </Expiry>
-          <OpenButton
-            color="primary"
-            data-modal-action="0"
-            onClick={() => window.open(activationUrl, '_blank', 'noopener,noreferrer')}
-          >
-            <ExternalIcon aria-hidden="true" />
-            Open Trakt
-          </OpenButton>
+          <OpenArea>
+            <Button
+              fullWidth
+              color="primary"
+              data-modal-action="0"
+              onClick={() => window.open(activationUrl, '_blank', 'noopener,noreferrer')}
+            >
+              <ExternalIcon aria-hidden="true" />
+              Open Trakt
+            </Button>
+          </OpenArea>
         </Option>
       </ActivationInstructions>
       {error && <Copy role="alert">{error}</Copy>}

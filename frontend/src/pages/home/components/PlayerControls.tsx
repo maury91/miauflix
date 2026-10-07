@@ -4,6 +4,7 @@ import { Button as BaseButton } from '@shared/ui/button/Button';
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import ArrowLeftIcon from '~icons/mdi/arrow-left';
 import FullscreenIcon from '~icons/mdi/fullscreen';
 import PauseIcon from '~icons/mdi/pause';
 import PawIcon from '~icons/mdi/paw';
@@ -46,6 +47,7 @@ const Header = styled.header<{ $visible: boolean }>`
   }
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const HeaderButton = styled(BaseButton)`
   min-width: auto;
   min-height: 0;
@@ -68,14 +70,15 @@ export function PlayerHeader({
 }) {
   return (
     <Header $visible={visible}>
-      <HeaderButton type="button" onClick={onBack}>
-        ← Back to details
+      <HeaderButton type="button" icon={<ArrowLeftIcon aria-hidden="true" />} onClick={onBack}>
+        Back to details
       </HeaderButton>
       <img src="/assets/images/logo.svg" alt="Miauflix logo" />
     </Header>
   );
 }
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const Button = styled(BaseButton)`
   display: inline-grid;
   place-items: center;
@@ -96,6 +99,7 @@ const Button = styled(BaseButton)`
     outline-offset: 3px;
   }
 `;
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const CenterPlay = styled(Button)`
   position: absolute;
   top: 50%;

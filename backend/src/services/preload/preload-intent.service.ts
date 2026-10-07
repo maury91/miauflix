@@ -64,10 +64,31 @@ export interface PreloadIntentResult {
  * warming is required to stop when the lease expires.
  */
 export class PreloadIntentService {
+  private readonly changeListeners = new Set<
+    (event: {
+      userId: string;
+      sessionId: string;
+      clientId: string;
+      preparation: PreloadPreparationSnapshot | null;
+    }) => void
+  >();
   private readonly leases = new Map<IntentLeaseKey, PreloadLease>();
   private readonly preparations = new Map<string, PreparationEntry>();
   private readonly sourceMetadataCache = new Map<string, PreloadPreparationSource>();
   private readonly cleanupTimer: ReturnType<typeof setInterval>;
+  private readonly onWarmupChange = (slot: { playableKey: string } | null): void => {
+    if (slot) {
+      this.emitPreparationChangeForKey(slot.playableKey);
+      return;
+    }
+    // Promotion or shutdown can remove the slot entirely. Re-evaluate every
+    // focused lease so clients see readiness disappear with the source.
+    for (const lease of this.leases.values()) {
+      if (lease.focused && lease.focused.kind !== 'show') {
+        this.emitChange(lease, this.snapshotForLease(lease));
+      }
+    }
+  };
 
   constructor(
     private readonly preparation?: PlayablePreparationService,
@@ -77,6 +98,29 @@ export class PreloadIntentService {
     if (typeof this.cleanupTimer === 'object' && 'unref' in this.cleanupTimer) {
       this.cleanupTimer.unref();
     }
+    this.warmup?.onChange?.(this.onWarmupChange);
+  }
+
+  onChange(
+    listener: (event: {
+      userId: string;
+      sessionId: string;
+      clientId: string;
+      preparation: PreloadPreparationSnapshot | null;
+    }) => void
+  ): void {
+    this.changeListeners.add(listener);
+  }
+
+  offChange(
+    listener: (event: {
+      userId: string;
+      sessionId: string;
+      clientId: string;
+      preparation: PreloadPreparationSnapshot | null;
+    }) => void
+  ): void {
+    this.changeListeners.delete(listener);
   }
 
   update(
@@ -155,6 +199,7 @@ export class PreloadIntentService {
     if (lease && (sequence === undefined || lease.sequence !== sequence)) return false;
     const removed = this.leases.delete(key);
     this.reconcile(now);
+    if (removed) this.emitChange(lease, null);
     return removed;
   }
 
@@ -174,6 +219,7 @@ export class PreloadIntentService {
         preparation.controller.abort();
       }
     }
+    this.warmup?.offChange?.(this.onWarmupChange);
     this.warmup?.close();
     this.preparations.clear();
     this.sourceMetadataCache.clear();
@@ -189,6 +235,7 @@ export class PreloadIntentService {
     for (const [key, lease] of this.leases) {
       if (lease.expiresAt <= now) {
         this.leases.delete(key);
+        this.emitChange(lease, null);
         expired = true;
       }
     }
@@ -312,6 +359,7 @@ export class PreloadIntentService {
                       warmup: level === 'warm' ? emptyWarmup('warming') : emptyWarmup(),
                     },
                   });
+                  this.emitPreparationChangeForKey(key);
                 }
               },
             })
@@ -331,6 +379,7 @@ export class PreloadIntentService {
                     warmup: result?.warmup ?? emptyWarmup(),
                   },
                 });
+                this.emitPreparationChangeForKey(key);
               }
             })
             .catch(() => {
@@ -346,6 +395,7 @@ export class PreloadIntentService {
                     warmup: emptyWarmup(),
                   },
                 });
+                this.emitPreparationChangeForKey(key);
               }
             });
         },
@@ -468,6 +518,28 @@ export class PreloadIntentService {
       const oldest = this.sourceMetadataCache.keys().next().value;
       if (oldest === undefined) return;
       this.sourceMetadataCache.delete(oldest);
+    }
+  }
+
+  private emitChange(
+    lease: PreloadLease | undefined,
+    preparation: PreloadPreparationSnapshot | null
+  ): void {
+    if (!lease) return;
+    const event = {
+      userId: lease.userId,
+      sessionId: lease.sessionId,
+      clientId: lease.clientId,
+      preparation,
+    };
+    for (const listener of this.changeListeners) listener(event);
+  }
+
+  private emitPreparationChangeForKey(key: string): void {
+    for (const lease of this.leases.values()) {
+      if (lease.focused && lease.focused.kind !== 'show' && playableKey(lease.focused) === key) {
+        this.emitChange(lease, this.snapshotForLease(lease));
+      }
     }
   }
 

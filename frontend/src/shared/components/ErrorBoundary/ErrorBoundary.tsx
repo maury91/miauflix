@@ -64,7 +64,7 @@ const ErrorStack = styled.pre`
   color: #ff6666;
 `;
 
-const RetryButton = styled(Button)`
+const RetryArea = styled.div`
   margin-top: 1rem;
 `;
 
@@ -84,7 +84,9 @@ const DefaultErrorFallback: ComponentType<{ error?: Error; resetError: () => voi
         <ErrorStack>{error.stack}</ErrorStack>
       </ErrorDetails>
     )}
-    <RetryButton onClick={resetError}>Try Again</RetryButton>
+    <RetryArea>
+      <Button onClick={resetError}>Try Again</Button>
+    </RetryArea>
   </ErrorContainer>
 );
 

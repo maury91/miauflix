@@ -31,6 +31,7 @@ import { getImageUrl, getMediaTitle } from '../media.utils';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
 import CardsHeartIcon from '~icons/mdi/cards-heart-outline';
+import StarIcon from '~icons/mdi/star';
 import ThumbDownIcon from '~icons/mdi/thumb-down-outline';
 import ThumbUpIcon from '~icons/mdi/thumb-up-outline';
 
@@ -94,6 +95,7 @@ const Header = styled.header`
   }
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const BackButton = styled(BaseButton)`
   min-width: 0;
   min-height: 0;
@@ -178,6 +180,17 @@ const MetadataSeparator = styled.span`
   color: ${PALETTE.text.secondary};
 `;
 
+const MetadataRating = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25em;
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+`;
+
 const MetadataRow = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -226,6 +239,7 @@ const SeasonMenu = styled.nav`
   }
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const SeasonButton = styled(BaseButton)<{ $selected: boolean; $focused: boolean }>`
   min-width: 0;
   min-height: 4.8vh;
@@ -281,6 +295,7 @@ const EpisodeHeading = styled.h3`
   font-size: clamp(1rem, 2.5vh, 1.4rem);
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const EpisodeRow = styled(BaseButton)<{ $selected: boolean; $image: string }>`
   display: grid;
   grid-template-columns: minmax(150px, 18vw) 1fr;
@@ -337,6 +352,7 @@ const ErrorState = styled.div`
   color: ${PALETTE.text.secondary};
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const PrimaryAction = styled(BaseButton)<{ $selected: boolean }>`
   min-width: 0;
   min-height: 5vh;
@@ -420,6 +436,7 @@ const RatingActions = styled.div`
   margin: 2vh 0;
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const RatingAction = styled(BaseButton)<{ $selected: boolean }>`
   gap: 0.5rem;
   min-width: 0;
@@ -686,15 +703,14 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       return [
         formatYear(current.releaseDate),
         current.runtime ? `${current.runtime} min` : '',
-        current.rating ? `★ ${current.rating.toFixed(1)}` : '',
       ].filter(Boolean);
     }
     return [
       formatYear(current.firstAirDate),
       current.seasons.length ? `${current.seasons.length} seasons` : '',
-      current.rating ? `★ ${current.rating.toFixed(1)}` : '',
     ].filter(Boolean);
   }, [current]);
+  const rating = current?.rating ? current.rating.toFixed(1) : null;
 
   const loadedSections = useMemo(
     () => seasons.map(item => loadedSeasons[item.seasonNumber]).filter(Boolean) as SeasonResponse[],
@@ -899,6 +915,15 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                         {item}
                       </span>
                     ))}
+                    {rating && (
+                      <MetadataRating>
+                        {metadata.length > 0 && (
+                          <MetadataSeparator aria-hidden="true">·</MetadataSeparator>
+                        )}
+                        <StarIcon aria-hidden="true" />
+                        {rating}
+                      </MetadataRating>
+                    )}
                   </Metadata>
                   {media._type === 'movie' && (
                     <>

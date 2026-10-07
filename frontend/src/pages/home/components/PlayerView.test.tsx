@@ -1,5 +1,8 @@
 import type { CreatePlaybackSessionResponse, ProgressEntry } from '@miauflix/backend';
-import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { configureStore } from '@reduxjs/toolkit';
+import { act, fireEvent, render as rtlRender, screen, waitFor } from '@testing-library/react';
+import type { PropsWithChildren, ReactElement } from 'react';
+import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const { createSession, updateProgress, resumeEntry } = vi.hoisted(() => ({
@@ -19,6 +22,15 @@ vi.mock('@features/progress/api/progress.api', () => ({
 
 import { describePlaybackFailure, getPlaybackStatusMessage } from './playback-copy';
 import { PlayerView } from './PlayerView';
+
+function render(ui: ReactElement) {
+  const store = configureStore({ reducer: () => ({}) });
+  function Wrapper({ children }: PropsWithChildren) {
+    return <Provider store={store}>{children}</Provider>;
+  }
+
+  return rtlRender(ui, { wrapper: Wrapper });
+}
 
 const playable = { kind: 'movie' as const, mediaId: 123 };
 const session: CreatePlaybackSessionResponse = {
@@ -118,7 +130,7 @@ describe('PlayerView', () => {
       Object.defineProperty(video, 'paused', { configurable: true, value: false });
       fireEvent.play(video);
       act(() => vi.advanceTimersByTime(3000));
-      expect(screen.getByText('← Back to details')).not.toBeVisible();
+      expect(screen.getByRole('banner', { hidden: true })).not.toBeVisible();
       expect(screen.getByAltText('Miauflix logo')).not.toBeVisible();
       expect(screen.queryByRole('slider', { name: 'Seek' })).not.toBeInTheDocument();
       fireEvent.pointerMove(screen.getByLabelText('Playback controls'));

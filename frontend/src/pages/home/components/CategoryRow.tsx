@@ -79,6 +79,7 @@ const EdgeFade = styled.div<{ $side: 'left' | 'right'; $peekWidth: number }>`
       : 'linear-gradient(270deg, #000 0%, rgba(0, 0, 0, 0.82) 20%, transparent 100%)'};
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const ArrowButton = styled(BaseButton)<{ $side: 'left' | 'right' }>`
   position: absolute;
   z-index: 3;
@@ -141,6 +142,10 @@ export interface CategoryRowHandle {
     left: MediaDto | null;
     right: MediaDto | null;
   };
+  getInterestWindow: () => {
+    media: Array<MediaDto | null>;
+    center: number | null;
+  };
 }
 
 interface CategoryRowProps {
@@ -157,6 +162,7 @@ interface CategoryRowProps {
   contentWidth?: number;
   active: boolean;
   onActive: (categoryIndex: number, mediaIndex: number, media: MediaDto) => void;
+  onInterest?: () => void;
   onSelect: (media: MediaDto) => void;
   progress?: ProgressEntry[];
   mediaOverride?: MediaDto[];
@@ -181,6 +187,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     peekWidth,
     contentWidth = mediaWidth * mediaPerPage + gap * (mediaPerPage - 1),
     onActive,
+    onInterest,
     onSelect,
     progress,
     mediaOverride,
@@ -337,8 +344,25 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       isEmpty: () => current.currentData?.total === 0,
       handleAction,
       getNavigationContext,
+      getInterestWindow: () => {
+        if (!total) return { media: [], center: null };
+        const start = Math.max(0, Math.min(selectedIndex - 5, total - 11));
+        const length = Math.min(11, total - start);
+        return {
+          media: Array.from({ length }, (_, offset) => mediaByIndex.get(start + offset) ?? null),
+          center: selectedIndex - start,
+        };
+      },
     }),
-    [current.currentData?.total, getNavigationContext, handleAction, selectIndex, total]
+    [
+      current.currentData?.total,
+      getNavigationContext,
+      handleAction,
+      mediaByIndex,
+      selectIndex,
+      selectedIndex,
+      total,
+    ]
   );
 
   useEffect(() => {
@@ -534,7 +558,10 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
           $gap={gap}
           $peekWidth={peekWidth}
           data-testid="category-row-scroll-container"
-          onScroll={event => setScrollLeft(event.currentTarget.scrollLeft)}
+          onScroll={event => {
+            setScrollLeft(event.currentTarget.scrollLeft);
+            onInterest?.();
+          }}
         >
           {first > 0 && <Spacer $width={first * step - gap} />}
           {indices.map(index => {

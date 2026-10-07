@@ -1,6 +1,5 @@
 import { useLoginMutation } from '@features/auth/api/auth.api';
-import { PALETTE } from '@shared/config/constants';
-import { Button } from '@shared/ui/button/Button';
+import { Button, FieldLabel as Label, Input } from '@shared/ui';
 import type { FC } from 'react';
 import React, { useCallback, useState } from 'react';
 import styled from 'styled-components';
@@ -12,40 +11,6 @@ const InputGroup = styled.div`
   margin-bottom: 24px;
   width: 100%;
   max-width: 260px;
-`;
-
-const Label = styled.label`
-  display: block;
-  margin-bottom: 6px;
-  font-size: 13px;
-  color: #cccccc;
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid #555;
-  border-radius: 4px;
-  background-color: #2a2a2a;
-  color: white;
-  font-size: 14px;
-  font-family: 'Poppins', sans-serif;
-
-  &:focus {
-    outline: none;
-    border-color: ${PALETTE.color.interactive};
-    box-shadow: 0 0 0 3px ${PALETTE.color.interactiveSubtle};
-  }
-
-  &::placeholder {
-    color: #888;
-  }
-`;
-
-const ContinueButton = styled(Button)`
-  width: 100%;
-  max-width: 260px;
-  margin-top: 8px;
 `;
 
 export const LoginWithEmail: FC<{ showTitle: boolean }> = ({ showTitle }) => {
@@ -70,6 +35,7 @@ export const LoginWithEmail: FC<{ showTitle: boolean }> = ({ showTitle }) => {
         onSubmit={handleEmailSubmit}
         style={{
           width: '100%',
+          maxWidth: 260,
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -84,6 +50,7 @@ export const LoginWithEmail: FC<{ showTitle: boolean }> = ({ showTitle }) => {
             onChange={e => setEmail(e.target.value)}
             placeholder="Enter your email"
             required
+            autoComplete="email"
           />
         </InputGroup>
         <InputGroup>
@@ -95,14 +62,16 @@ export const LoginWithEmail: FC<{ showTitle: boolean }> = ({ showTitle }) => {
             onChange={e => setPassword(e.target.value)}
             placeholder="Enter your password"
             required
+            autoComplete="current-password"
           />
         </InputGroup>
-        <ContinueButton
+        <Button
+          fullWidth
           type="submit"
           disabled={isEmailLoading || !email.trim() || !password.trim()}
         >
           {isEmailLoading ? 'Signing in...' : 'Continue'}
-        </ContinueButton>
+        </Button>
         {emailError && (
           <ErrorMessage>
             Error:{' '}

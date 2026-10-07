@@ -1,30 +1,11 @@
 import type { ConfigEntryView } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { Button } from '@shared/ui/button/Button';
-import type { FC, SVGProps } from 'react';
+import { Input as FieldInput, Select as FieldSelect, Switch } from '@shared/ui';
+import type { FC } from 'react';
 import styled from 'styled-components';
 
 import LinkIcon from '~icons/line-md/link';
-
-const QuestionIcon = (props: SVGProps<SVGSVGElement>) => (
-  <svg
-    width="1em"
-    height="1em"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    strokeWidth="2"
-    {...props}
-  >
-    <circle cx="12" cy="12" r="9" />
-    <path
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      d="M9 10a3 3 0 1 1 4.8 2.4c-.73.55-1.3.6-1.8 1.6"
-    />
-    <path strokeLinecap="round" d="M12 17v.01" />
-  </svg>
-);
+import HelpIcon from '~icons/mdi/help-circle-outline';
 
 const FieldWrapper = styled.div<{ $hasError?: boolean }>`
   margin-bottom: 20px;
@@ -133,94 +114,9 @@ const FieldLink = styled.a`
   }
 `;
 
-const FieldInput = styled.input<{ $missing?: boolean }>`
-  width: 100%;
-  padding: 8px 10px;
-  border: 1px solid
-    ${props =>
-      props.$missing ? SETTINGS_PALETTE.color.danger : SETTINGS_PALETTE.background.border};
-  border-radius: 4px;
-  background-color: ${SETTINGS_PALETTE.background.input};
-  color: white;
-  font-size: 13px;
-  font-family: 'Poppins', sans-serif;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: ${props =>
-      props.$missing ? SETTINGS_PALETTE.color.danger : SETTINGS_PALETTE.color.interactive};
-    box-shadow: 0 0 0 3px
-      ${props =>
-        props.$missing
-          ? SETTINGS_PALETTE.color.dangerSubtle
-          : SETTINGS_PALETTE.color.interactiveSubtle};
-  }
-
-  &::placeholder {
-    color: #70777a;
-  }
-`;
-
-const FieldSelect = styled.select`
-  padding: 8px 10px;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 4px;
-  background-color: ${SETTINGS_PALETTE.background.input};
-  color: white;
-  font:
-    13px 'Poppins',
-    sans-serif;
-
-  &:focus {
-    outline: none;
-    border-color: ${SETTINGS_PALETTE.color.interactive};
-    box-shadow: 0 0 0 3px ${SETTINGS_PALETTE.color.interactiveSubtle};
-  }
-`;
-
 const InputRow = styled.div`
   display: flex;
   gap: 8px;
-`;
-
-const Toggle = styled(Button)<{ $enabled: boolean; $missing?: boolean }>`
-  position: relative;
-  min-width: 0;
-  min-height: 0;
-  width: 46px;
-  height: 26px;
-  padding: 0;
-  border: 1px solid
-    ${props =>
-      props.$missing
-        ? SETTINGS_PALETTE.color.danger
-        : props.$enabled
-          ? SETTINGS_PALETTE.color.interactive
-          : SETTINGS_PALETTE.background.border};
-  border-radius: 999px;
-  background: ${props =>
-    props.$enabled ? SETTINGS_PALETTE.color.interactive : SETTINGS_PALETTE.background.input};
-  box-shadow: none;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:focus-visible {
-    outline: none;
-    box-shadow: 0 0 0 3px ${SETTINGS_PALETTE.color.interactiveSubtle};
-  }
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 3px;
-    left: ${props => (props.$enabled ? '23px' : '3px')};
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: ${props => (props.$enabled ? SETTINGS_PALETTE.background.input : 'white')};
-    transition: left 0.2s;
-  }
 `;
 
 const ToggleValue = styled.span`
@@ -232,10 +128,6 @@ const ToggleRow = styled.div`
   display: flex;
   align-items: center;
   gap: 10px;
-`;
-
-const UnitNumberInput = styled(FieldInput)`
-  flex: 1;
 `;
 
 interface ConfigFieldProps {
@@ -334,15 +226,12 @@ export const ConfigField: FC<ConfigFieldProps> = ({
     if (isBoolean) {
       return (
         <ToggleRow>
-          <Toggle
+          <Switch
             id={entry.key}
-            type="button"
-            role="switch"
-            aria-checked={isEnabled}
             aria-label={fieldLabel}
-            $enabled={isEnabled}
-            $missing={isMissingRequired}
-            onClick={() => onChange(entry.key, isEnabled ? 'false' : 'true')}
+            checked={isEnabled}
+            invalid={isMissingRequired}
+            onCheckedChange={checked => onChange(entry.key, checked ? 'true' : 'false')}
           />
           <ToggleValue>
             {booleanStateLabel(entry.key, isEnabled, entry.booleanStateDescriptions)}
@@ -354,6 +243,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({
     if (isSelect) {
       return (
         <FieldSelect
+          invalid={isMissingRequired}
           id={entry.key}
           value={value}
           onChange={event => onChange(entry.key, event.target.value)}
@@ -370,7 +260,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({
     if (isUnitValue) {
       return (
         <InputRow>
-          <UnitNumberInput
+          <FieldInput
             id={entry.key}
             type="number"
             min="0"
@@ -381,7 +271,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({
               onChange(entry.key, event.target.value ? `${event.target.value}${unit}` : '')
             }
             placeholder="0"
-            $missing={isMissingRequired}
+            invalid={isMissingRequired}
           />
           <FieldSelect
             aria-label={`${fieldLabel} unit`}
@@ -417,7 +307,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({
               ? `e.g. ${entry.example}`
               : ''
         }
-        $missing={isMissingRequired}
+        invalid={isMissingRequired}
         autoComplete={entry.isSecret ? 'new-password' : 'off'}
       />
     );
@@ -436,7 +326,7 @@ export const ConfigField: FC<ConfigFieldProps> = ({
             aria-label={entry.description}
             data-tooltip={entry.description}
           >
-            <QuestionIcon aria-hidden="true" />
+            <HelpIcon aria-hidden="true" />
           </FieldHelp>
         )}
         {entry.required && !entry.hasValue && <RequiredBadge>required</RequiredBadge>}

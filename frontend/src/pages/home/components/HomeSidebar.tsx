@@ -6,6 +6,9 @@ import styled from 'styled-components';
 
 import type { HomeAction, NavigationOutcome } from '../homeNavigation';
 
+import SettingsIcon from '~icons/mdi/cog-outline';
+import HomeIcon from '~icons/mdi/home-outline';
+
 const Rail = styled.aside<{ $active: boolean }>`
   position: fixed;
   inset: 0 auto 0 0;
@@ -35,6 +38,7 @@ const Navigation = styled.nav`
   align-content: space-between;
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const Item = styled(BaseButton)<{ $active: boolean; $selected: boolean }>`
   position: relative;
   display: flex;
@@ -173,7 +177,9 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
           onMouseEnter={() => move('home')}
           onClick={() => onAction('confirm')}
         >
-          <Icon aria-hidden="true">⌂</Icon>
+          <Icon aria-hidden="true">
+            <HomeIcon />
+          </Icon>
           {active && <span>Home</span>}
         </Item>
         <Item
@@ -186,7 +192,9 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
           onMouseEnter={() => move('settings')}
           onClick={onSettings}
         >
-          <Icon aria-hidden="true">⚙</Icon>
+          <Icon aria-hidden="true">
+            <SettingsIcon />
+          </Icon>
           {active && <span>Settings</span>}
         </Item>
       </Navigation>

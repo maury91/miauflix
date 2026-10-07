@@ -4,9 +4,18 @@ import { Button } from '../button/Button';
 import { LoadingIndicator } from './LoadingIndicator';
 
 const meta = {
-  title: 'UI Elements/Loading Indicator',
+  title: 'Miauflix UI/Components/Loading Indicator',
+  tags: ['autodocs'],
   component: LoadingIndicator,
-  parameters: { layout: 'centered' },
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component:
+          'Decorative loading indicator. Pair it with visible text in a status region or disabled button; never use a spinner as the only accessible label. It inherits currentColor and respects reduced motion.',
+      },
+    },
+  },
   decorators: [
     Story => (
       <div style={{ color: '#ff2547', fontSize: 40 }}>

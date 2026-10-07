@@ -12,6 +12,9 @@ const {
   removeIntent,
   selectSession,
   selectMovie,
+  initiateMovie,
+  initiateShow,
+  dispatch,
   getAssociation,
   currentSession,
   currentUser,
@@ -26,6 +29,9 @@ const {
   removeIntent: vi.fn(),
   selectSession: vi.fn(),
   selectMovie: vi.fn(),
+  initiateMovie: vi.fn(),
+  initiateShow: vi.fn(),
+  dispatch: vi.fn(),
   getAssociation: vi.fn(),
   currentSession: vi.fn(),
   currentUser: vi.fn(),
@@ -42,7 +48,13 @@ vi.mock('@features/media/api/lists.api', () => ({
   useGetPopularListsInfiniteQuery,
 }));
 vi.mock('@features/media/api/media.api', () => ({
-  mediaApi: { util: { prefetch: vi.fn() }, endpoints: { getMovie: { select: selectMovie } } },
+  mediaApi: {
+    util: { prefetch: vi.fn() },
+    endpoints: {
+      getMovie: { select: selectMovie, initiate: initiateMovie },
+      getShow: { select: vi.fn(() => () => ({})), initiate: initiateShow },
+    },
+  },
 }));
 vi.mock('@features/preload/api/preload.api', () => ({
   useUpdateIntentMutation,
@@ -55,7 +67,7 @@ vi.mock('@store/slices/auth', () => ({
 }));
 vi.mock('@store/store', () => ({}));
 vi.mock('react-redux', () => ({
-  useDispatch: () => vi.fn(),
+  useDispatch: () => dispatch,
   useSelector: (selector: unknown) => selectSession(selector),
 }));
 vi.mock('./hooks/useMediaBoxSizes', () => ({
@@ -183,6 +195,9 @@ const makeHandle = (focusResult: boolean, empty: boolean) => ({
 
 describe('HomePage focus transitions', () => {
   beforeEach(() => {
+    dispatch.mockReset();
+    initiateMovie.mockReset();
+    initiateShow.mockReset();
     selectSession.mockReset().mockReturnValue(null);
     currentSession.mockReset().mockReturnValue(null);
     currentUser.mockReset().mockReturnValue(null);
@@ -304,6 +319,9 @@ describe('HomePage focus transitions', () => {
 
   it('keeps Continue Watching stable and opens details when selected', () => {
     const state = { mediaApi: {}, progressApi: {} };
+    const updateIntent = vi.fn();
+    currentSession.mockReturnValue('test-session');
+    useUpdateIntentMutation.mockReturnValue([updateIntent, {}]);
     const progress = [
       {
         playable: { kind: 'movie', mediaId: 100 },
@@ -328,9 +346,72 @@ describe('HomePage focus transitions', () => {
       const beforeRerender = selections;
       view.rerender(<HomePage />);
       expect(selections - beforeRerender).toBeLessThan(20);
+      expect(updateIntent).toHaveBeenCalledTimes(1);
+      // Unrelated catalog cache updates recreate card DTOs without changing focus.
+      for (let update = 0; update < 3; update += 1) {
+        state.mediaApi = {};
+        view.rerender(<HomePage />);
+      }
+      expect(updateIntent).toHaveBeenCalledTimes(1);
       fireEvent.click(screen.getByTestId('card-0'));
       expect(screen.getByTestId('details')).toBeInTheDocument();
       expect(screen.queryByTestId('player')).not.toBeInTheDocument();
+    } finally {
+      progressSelector.mockRestore();
+    }
+  });
+
+  it('subscribes to Continue Watching titles and releases them when progress changes or the page unmounts', () => {
+    const state = { mediaApi: {}, progressApi: {} };
+    let progress = [
+      {
+        playable: { kind: 'movie', mediaId: 100 },
+        state: 'watching',
+        positionSeconds: 60,
+        durationSeconds: 600,
+        updatedAt: '2026-10-03T00:00:00Z',
+      },
+      {
+        playable: { kind: 'episode', showMediaId: 200, season: 1, episode: 2 },
+        state: 'watching',
+        positionSeconds: 60,
+        durationSeconds: 600,
+        updatedAt: '2026-10-02T00:00:00Z',
+      },
+    ];
+    const progressSelector = vi
+      .spyOn(progressApi.endpoints.getProgress, 'select')
+      .mockReturnValue((() => ({ data: { progress } })) as never);
+    const movieSubscription = { unsubscribe: vi.fn() };
+    const showSubscription = { unsubscribe: vi.fn() };
+    initiateMovie.mockReturnValue(movieSubscription);
+    initiateShow.mockReturnValue(showSubscription);
+    dispatch.mockImplementation(action => action);
+    selectMovie.mockReturnValue(() => ({}));
+    selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
+    try {
+      const view = render(<HomePage />);
+      expect(initiateMovie).toHaveBeenCalledWith(100);
+      expect(initiateShow).toHaveBeenCalledWith(200);
+      expect(movieSubscription.unsubscribe).not.toHaveBeenCalled();
+      expect(showSubscription.unsubscribe).not.toHaveBeenCalled();
+      state.mediaApi = {};
+      view.rerender(<HomePage />);
+      expect(initiateMovie).toHaveBeenCalledTimes(1);
+      // A fresh progress response with the same watched titles must retain the subscriptions.
+      progress = [...progress];
+      view.rerender(<HomePage />);
+      expect(initiateMovie).toHaveBeenCalledTimes(1);
+      const savedProgress = progress;
+      progress = [];
+      view.rerender(<HomePage />);
+      expect(movieSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+      expect(showSubscription.unsubscribe).toHaveBeenCalledTimes(1);
+      progress = savedProgress;
+      view.rerender(<HomePage />);
+      view.unmount();
+      expect(movieSubscription.unsubscribe).toHaveBeenCalledTimes(2);
+      expect(showSubscription.unsubscribe).toHaveBeenCalledTimes(2);
     } finally {
       progressSelector.mockRestore();
     }

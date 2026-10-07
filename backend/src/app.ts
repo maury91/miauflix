@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+import type { Server as HttpServer } from 'node:http';
+
 import { serve } from '@hono/node-server';
 import { logger } from '@logger';
 
@@ -25,6 +27,7 @@ import { PlayablePreparationService } from '@services/preload/playable-preparati
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
 import { ProgressService } from '@services/progress/progress.service';
+import { RealtimeGateway } from '@services/realtime/realtime.gateway';
 import { RequestService } from '@services/request/request.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
@@ -119,6 +122,12 @@ try {
     playablePreparationService,
     torrentWarmupController
   );
+  const realtimeGateway = new RealtimeGateway(
+    authService,
+    configurationService,
+    preloadIntentService,
+    progressService
+  );
   const playbackSessionService = new PlaybackSessionService(
     db,
     playablePreparationService,
@@ -200,6 +209,8 @@ try {
     catalogClient.stop();
     listClient.stop();
     await backgroundWorker.stop();
+    realtimeGateway.close();
+    preloadIntentService.close();
     backgroundJobs.close();
 
     await db.close();
@@ -277,6 +288,9 @@ try {
 
   const port = configurationService.getOrThrow('PORT');
   const server = serve({ fetch: app.fetch, port });
+  // The default Hono adapter above creates an HTTP/1 server, which is the
+  // upgrade-capable variant used by the realtime gateway.
+  realtimeGateway.attach(server as HttpServer);
   server.on('error', err => {
     logger.error('App', `Server error: ${err}`);
     serverService._status = { status: 'error', errorMessage: err.message, error: err };

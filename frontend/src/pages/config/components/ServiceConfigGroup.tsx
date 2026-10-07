@@ -1,8 +1,6 @@
 import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
-import { ActionRow } from '@shared/ui/action-row/ActionRow';
-import { Button } from '@shared/ui/button/Button';
-import { LoadingIndicator } from '@shared/ui/loading-indicator/LoadingIndicator';
+import { ActionRow, Alert, Button, LoadingIndicator } from '@shared/ui';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -71,38 +69,8 @@ const DegradedBadge = styled(MissingBadge)`
   border-color: rgba(255, 193, 7, 0.42);
 `;
 
-const OptionalSettingsButton = styled(Button)`
-  min-width: 0;
-  min-height: 0;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
-  gap: 8px;
-  padding: 11px 0 0;
-  border: 0;
-  background: transparent;
-  color: #aaa;
-  box-shadow: none;
-  font:
-    500 13px 'Poppins',
-    sans-serif;
-  cursor: pointer;
-
-  &:hover {
-    color: #fff;
-  }
-`;
-
 const OptionalFields = styled.div`
   padding-top: 18px;
-`;
-
-const Actions = styled(ActionRow)`
-  gap: 10px;
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px solid ${SETTINGS_PALETTE.background.border};
 `;
 
 const ConfigurationNote = styled.p`
@@ -112,81 +80,14 @@ const ConfigurationNote = styled.p`
   line-height: 1.45;
 `;
 
-const ActionButton = styled(Button)<{ $primary?: boolean }>`
-  min-width: 0;
-  min-height: 0;
-  padding: 8px 18px;
-  border: 1px solid
-    ${props =>
-      props.$primary ? SETTINGS_PALETTE.color.primaryButton : SETTINGS_PALETTE.background.border};
-  border-radius: 4px;
-  background: ${props => (props.$primary ? SETTINGS_PALETTE.color.primaryButton : 'transparent')};
-  color: ${props => (props.$primary ? '#0a0d0f' : SETTINGS_PALETTE.text.primary)};
-  box-shadow: none;
-  font:
-    500 13px 'Poppins',
-    sans-serif;
-  cursor: pointer;
-
-  &:hover:not(:disabled) {
-    border-color: ${props =>
-      props.$primary
-        ? SETTINGS_PALETTE.color.primaryButtonHover
-        : SETTINGS_PALETTE.color.interactive};
-    background: ${props =>
-      props.$primary
-        ? SETTINGS_PALETTE.color.primaryButtonHover
-        : SETTINGS_PALETTE.color.interactiveSubtle};
-  }
-
-  &:active:not(:disabled) {
-    background: ${props =>
-      props.$primary
-        ? SETTINGS_PALETTE.color.primaryButtonPressed
-        : SETTINGS_PALETTE.color.interactive};
-  }
-
-  &:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-`;
-
 const ActionLabel = styled.span`
   display: inline-flex;
   align-items: center;
   gap: 6px;
 `;
 
-const ButtonSpinner = styled(LoadingIndicator)`
-  width: 16px;
-  height: 16px;
-`;
-
-const ResultMessage = styled.div<{ $success: boolean; $validationOnly: boolean }>`
+const ResultArea = styled.div`
   margin-top: 12px;
-  padding: 10px 12px;
-  border-radius: 6px;
-  border: 1px solid
-    ${props =>
-      props.$success
-        ? props.$validationOnly
-          ? '#666'
-          : 'rgba(66, 184, 131, 0.45)'
-        : SETTINGS_PALETTE.color.dangerBorder};
-  background: ${props =>
-    props.$success
-      ? props.$validationOnly
-        ? 'rgba(233, 236, 238, 0.08)'
-        : 'rgba(66, 184, 131, 0.1)'
-      : SETTINGS_PALETTE.color.dangerSubtle};
-  color: ${props =>
-    props.$success
-      ? props.$validationOnly
-        ? SETTINGS_PALETTE.text.primary
-        : SETTINGS_PALETTE.color.success
-      : SETTINGS_PALETTE.color.danger};
-  font-size: 12px;
 `;
 
 const FailureTitle = styled.strong`
@@ -357,7 +258,11 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
 
       {optionalEntries.length > 1 && !showAllOptionalFields && (
         <>
-          <OptionalSettingsButton
+          <Button
+            appearance="settings"
+            size="small"
+            color="secondary"
+            variant="text"
             type="button"
             onClick={() => setShowOptionalSettings(isOpen => !isOpen)}
             aria-expanded={showOptionalSettings}
@@ -368,7 +273,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
               <ChevronRightIcon aria-hidden="true" />
             )}
             Optional settings ({optionalEntries.length})
-          </OptionalSettingsButton>
+          </Button>
           {showOptionalFields && (
             <OptionalFields>
               {optionalEntries.map(entry => (
@@ -387,7 +292,11 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
 
       {advancedEntries.length > 0 && (
         <>
-          <OptionalSettingsButton
+          <Button
+            appearance="settings"
+            size="small"
+            color="secondary"
+            variant="text"
             type="button"
             onClick={() => setShowAdvancedSettings(isOpen => !isOpen)}
             aria-expanded={showAdvancedSettings}
@@ -398,7 +307,7 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
               <ChevronRightIcon aria-hidden="true" />
             )}
             Advanced settings ({advancedEntries.length})
-          </OptionalSettingsButton>
+          </Button>
           {showAdvancedSettings && (
             <OptionalFields>
               {advancedEntries.map(entry => (
@@ -415,31 +324,40 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
         </>
       )}
 
-      <Actions>
-        <ActionButton type="button" onClick={onTest} disabled={disabled || Boolean(activeAction)}>
-          {activeAction === 'testing' ? 'Testing...' : 'Test'}
-        </ActionButton>
-        <ActionButton
+      <ActionRow density="compact">
+        <Button
+          appearance="settings"
+          size="small"
+          color="secondary"
           type="button"
-          $primary
+          onClick={onTest}
+          disabled={disabled || Boolean(activeAction)}
+        >
+          {activeAction === 'testing' ? 'Testing...' : 'Test'}
+        </Button>
+        <Button
+          appearance="settings"
+          size="small"
+          type="button"
+          color="primary"
           onClick={onSave}
           disabled={disabled || Boolean(activeAction) || !hasChanges}
         >
           {activeAction === 'saving' ? (
             <ActionLabel>
-              <ButtonSpinner aria-hidden="true" /> Saving
+              <LoadingIndicator aria-hidden="true" /> Saving
             </ActionLabel>
           ) : activeAction === 'testing' ? (
             <ActionLabel>
-              <ButtonSpinner aria-hidden="true" /> Testing
+              <LoadingIndicator aria-hidden="true" /> Testing
             </ActionLabel>
           ) : activeAction === 'saved' ? (
             'Saved'
           ) : (
             'Save'
           )}
-        </ActionButton>
-      </Actions>
+        </Button>
+      </ActionRow>
 
       {hasChanges && !hasMissingRequiredValues && (
         <ConfigurationNote role="note">
@@ -452,28 +370,31 @@ export const ServiceConfigGroup: FC<ServiceConfigGroupProps> = ({
       )}
 
       {result && !hasMissingRequiredValues && (
-        <ResultMessage
-          $success={result.success}
-          $validationOnly={result.success && result.testMode === 'validation'}
-        >
-          {result.success ? (
-            result.message
-          ) : (
-            <>
-              <FailureTitle>Failed to test {groupName}</FailureTitle>
-              {result.message}
-              {failedTestEntries.length > 0 && (
-                <FailureCauses>
-                  {failedTestEntries.map(entry => (
-                    <li key={entry.key}>
-                      {entry.testFailureHelp ?? `Check ${entry.key}: ${entry.description}`}
-                    </li>
-                  ))}
-                </FailureCauses>
-              )}
-            </>
-          )}
-        </ResultMessage>
+        <ResultArea>
+          <Alert
+            severity={
+              !result.success ? 'error' : result.testMode === 'validation' ? 'info' : 'success'
+            }
+          >
+            {result.success ? (
+              result.message
+            ) : (
+              <>
+                <FailureTitle>Failed to test {groupName}</FailureTitle>
+                {result.message}
+                {failedTestEntries.length > 0 && (
+                  <FailureCauses>
+                    {failedTestEntries.map(entry => (
+                      <li key={entry.key}>
+                        {entry.testFailureHelp ?? `Check ${entry.key}: ${entry.description}`}
+                      </li>
+                    ))}
+                  </FailureCauses>
+                )}
+              </>
+            )}
+          </Alert>
+        </ResultArea>
       )}
       {restarted && <RestartMessage>Service reloaded with the saved configuration.</RestartMessage>}
       {needsProcessRestart && (
