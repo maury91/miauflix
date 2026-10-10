@@ -47,6 +47,7 @@ export class CatalogService {
   private backdropFocusBackgroundTimer: ReturnType<typeof setInterval> | undefined;
   private artworkBackgroundTimer: ReturnType<typeof setInterval> | undefined;
   private backdropFocusScanOffset = 0;
+  private artworkScanRunning = false;
   private movieArtworkScanOffset = 0;
   private tvArtworkScanOffset = 0;
   private readonly artworkMetadataRetry = new Map<string, number>();
@@ -286,41 +287,49 @@ export class CatalogService {
   }
 
   private async enqueueNextDatabaseArtwork(): Promise<void> {
-    const pageSize = 32;
-    const movies = this.movies.getArtworkCandidates(pageSize, this.movieArtworkScanOffset);
-    const shows = this.tvShows.getArtworkCandidates(pageSize, this.tvArtworkScanOffset);
-    if (!movies.length && !shows.length) {
-      this.movieArtworkScanOffset = 0;
-      this.tvArtworkScanOffset = 0;
-      return;
-    }
-    this.movieArtworkScanOffset += pageSize;
-    this.tvArtworkScanOffset += pageSize;
-    for (const movie of movies) {
-      if (movie.logoCandidates === null) {
-        await this.refreshArtworkMetadata('movie', movie.mediaId);
-        continue;
+    if (this.artworkScanRunning) return;
+    this.artworkScanRunning = true;
+    try {
+      const pageSize = 32;
+      const movies = this.movies.getArtworkCandidates(pageSize, this.movieArtworkScanOffset);
+      const shows = this.tvShows.getArtworkCandidates(pageSize, this.tvArtworkScanOffset);
+      if (!movies.length && !shows.length) {
+        this.movieArtworkScanOffset = 0;
+        this.tvArtworkScanOffset = 0;
+        return;
       }
-      const row = this.movies.getMovie(movie.mediaId);
-      if (row)
-        this.artworkService?.enqueue({
-          ref: { mediaType: 'movie', mediaId: movie.mediaId },
-          row,
-          priority: 0,
-        });
-    }
-    for (const show of shows) {
-      if (show.logoCandidates === null) {
-        await this.refreshArtworkMetadata('tv', show.mediaId);
-        continue;
+      this.movieArtworkScanOffset += pageSize;
+      this.tvArtworkScanOffset += pageSize;
+      for (const movie of movies) {
+        if (movie.logoCandidates === null) {
+          await this.refreshArtworkMetadata('movie', movie.mediaId);
+          continue;
+        }
+        const row = this.movies.getMovie(movie.mediaId);
+        if (row)
+          this.artworkService?.enqueue({
+            ref: { mediaType: 'movie', mediaId: movie.mediaId },
+            row,
+            priority: 0,
+          });
       }
-      const row = this.tvShows.getTVShow(show.mediaId);
-      if (row)
-        this.artworkService?.enqueue({
-          ref: { mediaType: 'tv', mediaId: show.mediaId },
-          row,
-          priority: show.watching ? 20_000 : 0,
-        });
+      for (const show of shows) {
+        if (show.logoCandidates === null) {
+          await this.refreshArtworkMetadata('tv', show.mediaId);
+          continue;
+        }
+        const row = this.tvShows.getTVShow(show.mediaId);
+        if (row)
+          this.artworkService?.enqueue({
+            ref: { mediaType: 'tv', mediaId: show.mediaId },
+            row,
+            priority: show.watching ? 20_000 : 0,
+          });
+      }
+    } catch (error) {
+      logger.warn(SCOPE, 'Artwork database scan failed', error);
+    } finally {
+      this.artworkScanRunning = false;
     }
   }
 

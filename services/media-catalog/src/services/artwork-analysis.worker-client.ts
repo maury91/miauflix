@@ -47,12 +47,33 @@ export class ArtworkAnalysisWorkerClient {
     const worker = this.ensureWorker();
     const id = ++this.nextId;
     return new Promise<T>((resolve, reject) => {
+      const timer = setTimeout(() => {
+        this.failWorker(worker, new Error('artwork_worker_timeout'));
+      }, 60_000);
       this.pending.set(id, {
-        resolve: resolve as (value: never) => void,
-        reject,
+        resolve: (value: never) => {
+          clearTimeout(timer);
+          resolve(value);
+        },
+        reject: error => {
+          clearTimeout(timer);
+          reject(error);
+        },
       });
-      worker.postMessage({ ...request, id });
+      try {
+        worker.postMessage({ ...request, id });
+      } catch (error) {
+        this.failWorker(worker, error instanceof Error ? error : new Error(String(error)));
+      }
     });
+  }
+
+  private failWorker(worker: Worker, error: Error): void {
+    if (this.worker !== worker) return;
+    this.worker = null;
+    worker.terminate();
+    for (const pending of this.pending.values()) pending.reject(error);
+    this.pending.clear();
   }
 
   private ensureWorker(): Worker {
@@ -67,18 +88,10 @@ export class ArtworkAnalysisWorkerClient {
       else pending.reject(new Error(reply.error ?? 'artwork_analysis_failed'));
     });
     worker.addEventListener('error', event => {
-      const error = new Error(event.message || 'artwork_worker_failed');
-      for (const pending of this.pending.values()) pending.reject(error);
-      this.pending.clear();
-      this.worker = null;
-      worker.terminate();
+      this.failWorker(worker, new Error(event.message || 'artwork_worker_failed'));
     });
     worker.addEventListener('messageerror', () => {
-      const error = new Error('artwork_worker_message_invalid');
-      for (const pending of this.pending.values()) pending.reject(error);
-      this.pending.clear();
-      this.worker = null;
-      worker.terminate();
+      this.failWorker(worker, new Error('artwork_worker_message_invalid'));
     });
     this.worker = worker;
     return worker;

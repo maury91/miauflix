@@ -48,15 +48,17 @@ function targetResult(
   )[0];
 }
 
-function parseCandidates(value: string): ArtworkCandidate[] {
-  const parsed = JSON.parse(value) as ArtworkCandidate[];
-  return Array.isArray(parsed) ? parsed : [];
+function parseArray<T>(value: string): T[] {
+  try {
+    const parsed: unknown = JSON.parse(value);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
 }
 
-function parseMeasurements(value: string): ArtworkMeasurement[] {
-  const parsed = JSON.parse(value) as ArtworkMeasurement[];
-  return Array.isArray(parsed) ? parsed : [];
-}
+const parseCandidates = (value: string) => parseArray<ArtworkCandidate>(value);
+const parseMeasurements = (value: string) => parseArray<ArtworkMeasurement>(value);
 
 export class ArtworkSelectionService {
   private readonly worker: Pick<ArtworkAnalysisWorkerClient, 'prepare' | 'measure' | 'close'>;

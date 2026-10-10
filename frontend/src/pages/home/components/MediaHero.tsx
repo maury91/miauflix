@@ -194,6 +194,9 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
   const artwork = useSelector((state: RootState) =>
     media ? state.artwork.byMedia[`${mediaType}:${media.mediaId}`] : undefined
   );
+  const selectedArtwork =
+    artwork && artwork.artworkRevision >= (media?.artworkRevision ?? 0) ? artwork : media;
+  const selectedBackdrop = selectedArtwork?.backdrop;
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const heroRef = useRef<HTMLElement>(null);
   const [heroSize, setHeroSize] = useState({ width: 0, height: 0 });
@@ -224,13 +227,13 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
     const currentRequest = ++requestId.current;
     setIncomingBackdrop(null);
     setIncomingVisible(false);
-    if (!media?.backdrop) {
+    if (media?.mediaId === undefined || !selectedBackdrop) {
       setActiveBackdrop(null);
       activeBackdropRef.current = null;
       return;
     }
 
-    const url = getImageUrl(media.backdrop, 'original');
+    const url = getImageUrl(selectedBackdrop, 'original');
     const key = `${media._type}:${media.mediaId}:${url}`;
     let cancelled = false;
 
@@ -302,7 +305,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
     return () => {
       cancelled = true;
     };
-  }, [ensureBackdropFocus, media?.backdrop, media?.backdropFocus, media?._type, media?.mediaId]);
+  }, [ensureBackdropFocus, selectedBackdrop, media?.backdropFocus, media?._type, media?.mediaId]);
 
   const promoteIncoming = useCallback(() => {
     if (!incomingBackdrop) return;

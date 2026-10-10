@@ -22,6 +22,7 @@ import {
   type TVShowDetail,
   tvShowDetailSchema,
 } from '@miauflix/service-contracts';
+import WebSocket from 'ws';
 import type { ZodType } from 'zod';
 
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
@@ -35,7 +36,7 @@ export class CatalogClientService implements ConfigurableService {
   private readonly remote: RemoteServiceManager;
   private readonly artworkListeners = new Set<(update: ArtworkUpdate) => void>();
   private readonly artworkStreamReadyListeners = new Set<() => void>();
-  private artworkAbort: AbortController | null = null;
+  private artworkSocket: WebSocket | null = null;
   private artworkRetryTimer: ReturnType<typeof setTimeout> | null = null;
   private artworkRetryMs = 500;
   private removeArtworkStatusListener: (() => void) | null = null;
@@ -246,75 +247,61 @@ export class CatalogClientService implements ConfigurableService {
   }
 
   private connectArtworkEvents(): void {
-    if (!this.artworkListeners.size || !this.remote.isReady() || this.artworkAbort) return;
+    if (!this.artworkListeners.size || !this.remote.isReady() || this.artworkSocket) return;
     const baseUrl = String(
       this.configurationService.getDynamic('CATALOG_SERVICE_URL') ?? ''
     ).replace(/\/+$/, '');
     if (!baseUrl) return;
-    const controller = new AbortController();
-    this.artworkAbort = controller;
-    void this.readArtworkEvents(controller, baseUrl);
+    const path = `${this.remote.capabilityBasePath.replace(/\/+$/, '')}/media/artwork/events`;
+    const url = new URL(path, `${baseUrl}/`);
+    url.protocol = url.protocol === 'https:' ? 'wss:' : 'ws:';
+    const socket = new WebSocket(url, { handshakeTimeout: 15_000, maxPayload: 1024 * 1024 });
+    this.artworkSocket = socket;
+    let heartbeatTimer: ReturnType<typeof setTimeout> | undefined;
+    const heartbeat = () => {
+      clearTimeout(heartbeatTimer);
+      heartbeatTimer = setTimeout(() => socket.terminate(), 90_000);
+    };
+    socket.on('ping', heartbeat);
+    socket.on('open', () => {
+      if (this.artworkSocket !== socket) return;
+      heartbeat();
+      this.artworkRetryMs = 500;
+      for (const listener of this.artworkStreamReadyListeners) listener();
+    });
+    socket.on('message', (data, isBinary) => {
+      if (this.artworkSocket !== socket || isBinary) return;
+      let payload: unknown;
+      try {
+        payload = JSON.parse(data.toString());
+      } catch {
+        return;
+      }
+      const parsed = artworkUpdateSchema.safeParse(payload);
+      if (parsed.success) {
+        for (const listener of this.artworkListeners) listener(parsed.data);
+      }
+    });
+    socket.on('error', () => socket.terminate());
+    socket.on('close', () => {
+      clearTimeout(heartbeatTimer);
+      if (this.artworkSocket !== socket) return;
+      this.artworkSocket = null;
+      if (!this.artworkListeners.size || !this.remote.isReady()) return;
+      const delay = this.artworkRetryMs + Math.floor(Math.random() * 250);
+      this.artworkRetryMs = Math.min(8_000, this.artworkRetryMs * 2);
+      this.artworkRetryTimer = setTimeout(() => {
+        this.artworkRetryTimer = null;
+        this.connectArtworkEvents();
+      }, delay);
+    });
   }
 
   private disconnectArtworkEvents(): void {
     if (this.artworkRetryTimer) clearTimeout(this.artworkRetryTimer);
     this.artworkRetryTimer = null;
-    this.artworkAbort?.abort();
-    this.artworkAbort = null;
-  }
-
-  private async readArtworkEvents(controller: AbortController, baseUrl: string): Promise<void> {
-    try {
-      const path = `${this.remote.capabilityBasePath.replace(/\/+$/, '')}/media/artwork/events`;
-      const response = await fetch(new URL(path, `${baseUrl}/`), {
-        headers: { Accept: 'text/event-stream' },
-        signal: controller.signal,
-      });
-      if (!response.ok || !response.body)
-        throw new Error(`Artwork feed returned ${response.status}`);
-      this.artworkRetryMs = 500;
-      for (const listener of this.artworkStreamReadyListeners) listener();
-      const reader = response.body.getReader();
-      const decoder = new TextDecoder();
-      let buffer = '';
-      while (!controller.signal.aborted) {
-        const { done, value } = await reader.read();
-        if (done) break;
-        buffer += decoder.decode(value, { stream: true });
-        let boundary = buffer.indexOf('\n\n');
-        while (boundary >= 0) {
-          const frame = buffer.slice(0, boundary);
-          buffer = buffer.slice(boundary + 2);
-          for (const line of frame.split(/\r?\n/)) {
-            if (!line.startsWith('data:')) continue;
-            let payload: unknown;
-            try {
-              payload = JSON.parse(line.slice(5).trim());
-            } catch {
-              continue;
-            }
-            const parsed = artworkUpdateSchema.safeParse(payload);
-            if (parsed.success) {
-              for (const listener of this.artworkListeners) listener(parsed.data);
-            }
-          }
-          boundary = buffer.indexOf('\n\n');
-        }
-      }
-      await reader.cancel().catch(() => undefined);
-    } catch {
-      // Reconnect below. Aborts are intentional during configuration changes and shutdown.
-    } finally {
-      if (this.artworkAbort !== controller) return;
-      this.artworkAbort = null;
-      if (!controller.signal.aborted && this.artworkListeners.size && this.remote.isReady()) {
-        const delay = this.artworkRetryMs + Math.floor(Math.random() * 250);
-        this.artworkRetryMs = Math.min(8_000, this.artworkRetryMs * 2);
-        this.artworkRetryTimer = setTimeout(() => {
-          this.artworkRetryTimer = null;
-          this.connectArtworkEvents();
-        }, delay);
-      }
-    }
+    const socket = this.artworkSocket;
+    this.artworkSocket = null;
+    socket?.terminate();
   }
 }

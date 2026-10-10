@@ -51,8 +51,8 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
     (state: RootState) => state.artwork.byMedia[`${mediaType}:${media.mediaId}`]
   );
   const currentRevision = media.artworkRevision ?? 0;
-  const cardLogo =
-    artwork && artwork.artworkRevision >= currentRevision ? artwork.logo : media.logo;
+  const selectedArtwork = artwork && artwork.artworkRevision >= currentRevision ? artwork : media;
+  const cardLogo = selectedArtwork.logo;
   const playback = progressForMedia(progress, media);
   const percent = playback
     ? playback.state === 'completed'
@@ -66,7 +66,7 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
   return (
     <ArtworkCard
       ref={ref}
-      backdrop={getImageUrl(media.backdrop)}
+      backdrop={getImageUrl(selectedArtwork.backdrop)}
       logo={cardLogo ? getImageUrl(cardLogo) : undefined}
       title={title}
       subtitle={subtitle}

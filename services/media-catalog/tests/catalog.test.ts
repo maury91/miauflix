@@ -187,6 +187,43 @@ const setup = () => {
 };
 
 describe('CatalogService', () => {
+  it('serializes artwork scans and releases the guard after failure', async () => {
+    const { service, repo, provider, cleanup } = setup();
+    let release!: () => void;
+    const gate = new Promise<void>(resolve => {
+      release = resolve;
+    });
+    const candidates = spyOn(repo.movies, 'getArtworkCandidates').mockReturnValue([
+      { mediaId: 42, logoCandidates: null },
+    ] as never);
+    const fetch = spyOn(provider, 'getMovie').mockImplementation(async () => {
+      await gate;
+      return null;
+    });
+    const scan = () =>
+      (
+        service as unknown as { enqueueNextDatabaseArtwork(): Promise<void> }
+      ).enqueueNextDatabaseArtwork();
+    try {
+      const first = scan();
+      await scan();
+      expect(candidates).toHaveBeenCalledTimes(1);
+      release();
+      await first;
+      candidates.mockImplementationOnce(() => {
+        throw new Error('database unavailable');
+      });
+      await scan();
+      await scan();
+      expect(candidates).toHaveBeenCalledTimes(3);
+      expect(fetch).toHaveBeenCalledTimes(2);
+    } finally {
+      candidates.mockRestore();
+      fetch.mockRestore();
+      cleanup();
+    }
+  });
+
   it('invalidates stale artwork before projecting a detail response', async () => {
     const { repo, provider, service, cleanup } = setup();
     try {

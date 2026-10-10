@@ -690,7 +690,11 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       ? artwork.heroLogo
       : (current?.heroLogo ?? current?.logo ?? media.heroLogo ?? media.logo);
   const title = current?.title ?? getMediaTitle(media);
-  const backdrop = getImageUrl(current?.backdrop ?? media.backdrop, 'w1280');
+  const selectedBackdrop =
+    artwork && artwork.artworkRevision >= currentRevision
+      ? artwork.backdrop
+      : (current?.backdrop ?? media.backdrop);
+  const backdrop = getImageUrl(selectedBackdrop, 'w1280');
   const backdropFocus = current?.backdropFocus ?? media.backdropFocus ?? resolvedBackdropFocus;
   const backdropPlacement = getBackdropPlacement(backdropFocus, backdropContext);
   const warmupState: WarmupState = preparation?.warmup?.state ?? 'not_requested';
