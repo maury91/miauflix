@@ -6,6 +6,9 @@ import { afterEach, describe, expect, it } from 'bun:test';
 import { sql } from 'drizzle-orm';
 
 import { CatalogDatabase } from '../src/db/database';
+import migrationJournal from '../src/db/migrations/meta/_journal.json';
+
+const migrationCount = migrationJournal.entries.length;
 
 const directories: string[] = [];
 const directory = () => {
@@ -34,15 +37,20 @@ describe('catalog Drizzle migrations', () => {
     expect(
       first.db.get<{ name: string }>(sql`SELECT name FROM sqlite_master WHERE name = 'episodes'`)
     ).toBeDefined();
+    expect(
+      first.db.get<{ name: string }>(
+        sql`SELECT name FROM sqlite_master WHERE name = 'artwork_logo_assets'`
+      )
+    ).toBeDefined();
     expect(first.db.all<{ hash: string }>(sql`SELECT hash FROM __drizzle_migrations`)).toHaveLength(
-      3
+      migrationCount
     );
     first.close();
 
     const second = new CatalogDatabase(path);
     expect(
       second.db.all<{ hash: string }>(sql`SELECT hash FROM __drizzle_migrations`)
-    ).toHaveLength(3);
+    ).toHaveLength(migrationCount);
     second.close();
   });
 
@@ -55,6 +63,13 @@ describe('catalog Drizzle migrations', () => {
     original.db.run(sql`DROP INDEX api_cache_stale`);
     original.db.run(sql`ALTER TABLE api_cache DROP COLUMN stale_until`);
     original.db.run(sql`DROP TABLE backdrop_focus`);
+    original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN logo`);
+    original.db.run(sql`DROP TABLE artwork_logo_cache`);
+    original.db.run(sql`DROP TABLE artwork_logo_assets`);
+    original.db.run(sql`DROP TABLE artwork_backdrop_cache`);
+    original.db.run(sql`DROP TABLE media_artwork`);
+    original.db.run(sql`ALTER TABLE movies DROP COLUMN logo_candidates`);
+    original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN logo_candidates`);
     original.db.run(sql`
       DELETE FROM __drizzle_migrations
       WHERE created_at > (SELECT MIN(created_at) FROM __drizzle_migrations)
@@ -68,7 +83,47 @@ describe('catalog Drizzle migrations', () => {
     expect(cache?.[0]).toBe(42);
     expect(
       upgraded.db.all<{ hash: string }>(sql`SELECT hash FROM __drizzle_migrations`)
-    ).toHaveLength(3);
+    ).toHaveLength(migrationCount);
     upgraded.close();
+  });
+
+  it('adds TV logos without losing shows, watching state or episodes, and can reopen safely', () => {
+    const path = directory();
+    const original = new CatalogDatabase(path);
+    original.db.run(
+      sql`INSERT INTO tv_shows (media_id, name, watching, details_synced_at, created_at, updated_at) VALUES (100, 'Arcane', 1, 42, 1, 1)`
+    );
+    original.db.run(
+      sql`INSERT INTO seasons (media_id, tv_media_id, season_number, created_at, updated_at) VALUES (1000, 100, 2, 1, 1)`
+    );
+    original.db.run(
+      sql`INSERT INTO episodes (media_id, season_media_id, episode_number, name, created_at, updated_at) VALUES (10000, 1000, 6, 'Episode 6', 1, 1)`
+    );
+    original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN logo`);
+    original.db.run(sql`DROP TABLE artwork_logo_cache`);
+    original.db.run(sql`DROP TABLE artwork_logo_assets`);
+    original.db.run(sql`DROP TABLE artwork_backdrop_cache`);
+    original.db.run(sql`DROP TABLE media_artwork`);
+    original.db.run(sql`ALTER TABLE movies DROP COLUMN logo_candidates`);
+    original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN logo_candidates`);
+    original.db.run(sql`DELETE FROM __drizzle_migrations WHERE created_at >= 1791481200000`);
+    original.close();
+
+    const upgraded = new CatalogDatabase(path);
+    expect(
+      upgraded.db.get<[string, number, number, string | null]>(
+        sql`SELECT name, watching, details_synced_at, logo FROM tv_shows WHERE media_id = 100`
+      )
+    ).toEqual(['Arcane', 1, 42, null]);
+    expect(
+      upgraded.db.get<[string]>(sql`SELECT name FROM episodes WHERE media_id = 10000`)
+    ).toEqual(['Episode 6']);
+    upgraded.close();
+
+    const reopened = new CatalogDatabase(path);
+    expect(reopened.db.all(sql`SELECT hash FROM __drizzle_migrations`)).toHaveLength(
+      migrationCount
+    );
+    reopened.close();
   });
 });

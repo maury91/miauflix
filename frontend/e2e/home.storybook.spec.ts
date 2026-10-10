@@ -13,29 +13,8 @@ async function waitForHomeArtwork(page: Page) {
   await page.waitForLoadState('networkidle');
   await page.evaluate(() => document.fonts.ready);
   await page.waitForFunction(() => {
-    const urls = [...document.querySelectorAll<HTMLElement>('button')].flatMap(element => {
-      const background = getComputedStyle(element).backgroundImage;
-      return [...background.matchAll(/url\((?:"|')?([^"')]+)(?:"|')?\)/g)].map(match => match[1]);
-    });
-    return urls.length > 0;
-  });
-  await page.waitForFunction(async () => {
-    const urls = [...document.querySelectorAll<HTMLElement>('button')].flatMap(element => {
-      const background = getComputedStyle(element).backgroundImage;
-      return [...background.matchAll(/url\((?:"|')?([^"')]+)(?:"|')?\)/g)].map(match => match[1]);
-    });
-    const uniqueUrls = [...new Set(urls)];
-    return Promise.all(
-      uniqueUrls.map(
-        url =>
-          new Promise<boolean>(resolve => {
-            const image = new Image();
-            image.onload = () => resolve(true);
-            image.onerror = () => resolve(false);
-            image.src = url;
-          })
-      )
-    ).then(results => results.every(Boolean));
+    const images = [...document.querySelectorAll<HTMLImageElement>('button img')];
+    return images.length > 0 && images.every(image => image.complete && image.naturalWidth > 0);
   });
 }
 

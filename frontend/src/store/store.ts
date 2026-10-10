@@ -8,6 +8,7 @@ import { progressApi } from '@features/progress/api/progress.api';
 import { setupApi } from '@features/setup/api/setup.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { appStateSlice } from '@store/slices/appState';
+import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
 
 export const store = configureStore({
@@ -21,6 +22,7 @@ export const store = configureStore({
     [configApi.reducerPath]: configApi.reducer,
     [setupApi.reducerPath]: setupApi.reducer,
     [authSlice.name]: authSlice.reducer,
+    [artworkSlice.name]: artworkSlice.reducer,
     [appStateSlice.name]: appStateSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
