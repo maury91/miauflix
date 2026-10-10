@@ -72,6 +72,21 @@ the pixel allowance.
 - Return the response shape the frontend expects. For request bodies, validate the important fields rather than returning an unrelated empty object.
 - Keep the route handler before the final throwing branch so new unmocked requests remain visible.
 
+## Artwork test coverage
+
+Home stories need the `artwork` reducer in their Redux provider, including standalone
+CategoryRow stories. Card artwork uses image elements; wait for those images to decode/load
+rather than looking for CSS background URLs on buttons. Intentional card layout changes
+require Linux Home Storybook baselines to be regenerated and verified without updates.
+
+The TMDB mock can replay older detail recordings for `include_image_language` requests by
+filtering their recorded images locally. Other query parameters still participate in fixture
+matching, and missing recordings remain errors. Verify this replay helper with
+`bun test backend-e2e/docker/mock/tmdb-fixture.test.ts`; never enable recording to repair CI.
+
+Run the details and details-voting lanes sequentially: both use port 4174, and sharing a
+server between concurrent runs can cause connection failures when one run tears it down.
+
 ## Pre-push gate
 
 For a browser or snapshot change, use this order:

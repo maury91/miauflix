@@ -82,6 +82,7 @@ export class RealtimeClient {
   private heartbeatTimer: number | null = null;
   private mapTimer: number | null = null;
   private artworkRefs = new Map<string, MediaRef>();
+  private sentArtworkRefs = new Map<string, MediaRef>();
 
   constructor(
     private readonly session: string,
@@ -123,7 +124,7 @@ export class RealtimeClient {
         this.latestMap = { ...this.latestMap, clientSequence: nextPreloadSequence() };
       }
       this.sendLatest();
-      this.sendArtworkRefs('artwork-subscribe', [...this.artworkRefs.values()]);
+      this.syncArtworkRefs();
       this.heartbeat();
     } else {
       this.heartbeat();
@@ -159,11 +160,8 @@ export class RealtimeClient {
     for (const ref of refs.slice(0, MAX_ARTWORK_SUBSCRIPTIONS)) {
       next.set(`${ref.mediaType}:${ref.mediaId}`, ref);
     }
-    const added = [...next].filter(([key]) => !this.artworkRefs.has(key)).map(([, ref]) => ref);
-    const removed = [...this.artworkRefs].filter(([key]) => !next.has(key)).map(([, ref]) => ref);
     this.artworkRefs = next;
-    this.sendArtworkRefs('artwork-unsubscribe', removed);
-    this.sendArtworkRefs('artwork-subscribe', added);
+    this.syncArtworkRefs();
   }
 
   /** Send durable playback progress through the authenticated socket when it is available. */
@@ -190,6 +188,7 @@ export class RealtimeClient {
     if (typeof WebSocket === 'undefined') return;
     const socket = new WebSocket(socketUrl());
     this.socket = socket;
+    this.sentArtworkRefs.clear();
     socket.onopen = () => {
       this.retryMs = 500;
       socket.send(
@@ -214,7 +213,7 @@ export class RealtimeClient {
         this.onConnectionChange?.(true);
         this.refreshLatestSequences();
         this.sendLatest();
-        this.sendArtworkRefs('artwork-subscribe', [...this.artworkRefs.values()]);
+        this.syncArtworkRefs();
       }
     };
     socket.onclose = () => {
@@ -259,15 +258,30 @@ export class RealtimeClient {
     this.socket.send(JSON.stringify(this.latestMap));
   }
 
+  private syncArtworkRefs(): void {
+    const removed = [...this.sentArtworkRefs]
+      .filter(([key]) => !this.artworkRefs.has(key))
+      .map(([, ref]) => ref);
+    const added = [...this.artworkRefs]
+      .filter(([key]) => !this.sentArtworkRefs.has(key))
+      .map(([, ref]) => ref);
+    this.sendArtworkRefs('artwork-unsubscribe', removed);
+    this.sendArtworkRefs('artwork-subscribe', added);
+  }
+
   private sendArtworkRefs(
     type: 'artwork-subscribe' | 'artwork-unsubscribe',
     refs: MediaRef[]
   ): void {
     if (!this.ready || !this.socket || !this.visible) return;
     for (let offset = 0; offset < refs.length; offset += ARTWORK_BATCH_SIZE) {
-      this.socket.send(
-        JSON.stringify({ type, items: refs.slice(offset, offset + ARTWORK_BATCH_SIZE) })
-      );
+      const items = refs.slice(offset, offset + ARTWORK_BATCH_SIZE);
+      this.socket.send(JSON.stringify({ type, items }));
+      for (const ref of items) {
+        const key = `${ref.mediaType}:${ref.mediaId}`;
+        if (type === 'artwork-subscribe') this.sentArtworkRefs.set(key, ref);
+        else this.sentArtworkRefs.delete(key);
+      }
     }
   }
 

@@ -267,15 +267,7 @@ const HomePage: FC = () => {
         rowIndex >= activeCategory &&
         rowIndex <= activeCategory + 1
       ) {
-        const firstVisible = Math.max(
-          0,
-          Math.min(media.length - mediaPerPage, window.center - Math.floor(mediaPerPage / 2))
-        );
-        for (
-          let column = firstVisible;
-          column < Math.min(media.length, firstVisible + mediaPerPage);
-          column += 1
-        ) {
+        for (const column of window.visible) {
           if (media[column]) visible.push([rowIndex - rowStart, column]);
         }
       }
@@ -297,14 +289,7 @@ const HomePage: FC = () => {
       mediaIds: view === 'browse' ? rows : [],
       visible: view === 'browse' ? visible : [],
     });
-  }, [
-    activeCategory,
-    displayCategories.length,
-    mediaPerPage,
-    selectedMedia,
-    toRealtimeMedia,
-    view,
-  ]);
+  }, [activeCategory, displayCategories.length, selectedMedia, toRealtimeMedia, view]);
 
   const handleRealtimeStatus = useCallback((message: RealtimeStatusMessage) => {
     const selected = selectedMediaRef.current;

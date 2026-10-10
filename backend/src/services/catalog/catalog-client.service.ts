@@ -305,15 +305,16 @@ export class CatalogClientService implements ConfigurableService {
     } catch {
       // Reconnect below. Aborts are intentional during configuration changes and shutdown.
     } finally {
-      if (this.artworkAbort !== controller) return;
-      this.artworkAbort = null;
-      if (!controller.signal.aborted && this.artworkListeners.size && this.remote.isReady()) {
-        const delay = this.artworkRetryMs + Math.floor(Math.random() * 250);
-        this.artworkRetryMs = Math.min(8_000, this.artworkRetryMs * 2);
-        this.artworkRetryTimer = setTimeout(() => {
-          this.artworkRetryTimer = null;
-          this.connectArtworkEvents();
-        }, delay);
+      if (this.artworkAbort === controller) {
+        this.artworkAbort = null;
+        if (!controller.signal.aborted && this.artworkListeners.size && this.remote.isReady()) {
+          const delay = this.artworkRetryMs + Math.floor(Math.random() * 250);
+          this.artworkRetryMs = Math.min(8_000, this.artworkRetryMs * 2);
+          this.artworkRetryTimer = setTimeout(() => {
+            this.artworkRetryTimer = null;
+            this.connectArtworkEvents();
+          }, delay);
+        }
       }
     }
   }

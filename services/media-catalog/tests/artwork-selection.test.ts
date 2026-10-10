@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it, spyOn } from 'bun:test';
 import { ArtworkRepository } from '../src/db/artwork.repo';
 import { CatalogDatabase } from '../src/db/database';
 import { MovieRepository } from '../src/db/movie.repo';
+import { mediaArtwork } from '../src/db/schema/artwork';
 import type { CatalogProvider } from '../src/provider/provider';
 import type { ArtworkAnalysisWorkerClient } from '../src/services/artwork-analysis.worker-client';
 import { ArtworkSelectionService } from '../src/services/artwork-selection.service';
@@ -23,6 +24,56 @@ afterEach(() =>
 );
 
 describe('artwork selection', () => {
+  it('advances past corrupt candidate and measurement JSON', async () => {
+    const database = new CatalogDatabase(makeDatabasePath());
+    const repository = new ArtworkRepository(database);
+    for (const mediaId of [1, 2]) {
+      repository.enqueue({
+        mediaType: 'movie',
+        mediaId,
+        signature: String(mediaId),
+        imageKey: 'cached',
+        backdropUrl: 'unused',
+        displayBackdrop: 'unused',
+        fallbackLogo: '',
+        candidates: [],
+        popularity: 0,
+        priority: 0,
+      });
+    }
+    database.db
+      .update(mediaArtwork)
+      .set({ candidates: '{invalid', measurements: '{invalid' })
+      .run();
+    repository.saveBackdrop('cached', 'png', 'luminance', 1);
+    const worker = {
+      prepare: async () => {
+        throw new Error('cached backdrop should be reused');
+      },
+      measure: async () => {
+        throw new Error('no candidates');
+      },
+      close: async () => undefined,
+    };
+    const service = new ArtworkSelectionService(repository, {} as CatalogProvider, worker);
+    service.start();
+    try {
+      for (
+        let attempt = 0;
+        attempt < 100 && repository.get('movie', 2)?.status === 'pending';
+        attempt++
+      ) {
+        await new Promise(resolve => setTimeout(resolve, 5));
+      }
+      expect(repository.get('movie', 1)?.status).toBe('ready');
+      expect(repository.get('movie', 2)?.status).toBe('ready');
+      expect(repository.nextPending()).toBeUndefined();
+    } finally {
+      await service.stop();
+      database.close();
+    }
+  });
+
   it('persists independent first-passing card and hero logos and stops once both pass', async () => {
     const database = new CatalogDatabase(makeDatabasePath());
     const movies = new MovieRepository(database);

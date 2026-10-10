@@ -70,6 +70,91 @@ const media = {
 afterEach(() => vi.unstubAllGlobals());
 
 describe('live media artwork', () => {
+  it('selects the backdrop and logo together and ignores older artwork', () => {
+    const store = configureStore({ reducer: { artwork: artworkSlice.reducer } });
+    const update = {
+      mediaType: 'movie' as const,
+      mediaId: 1,
+      backdrop: 'https://image.test/new.jpg',
+      logo: 'https://image.test/new.png',
+      heroLogo: '',
+      artworkRevision: 2,
+      cardLogoStatus: 'ready' as const,
+      heroLogoStatus: 'ready' as const,
+    };
+    store.dispatch(artworkActions.received(update));
+    const props = {
+      media: {
+        ...media,
+        backdrop: 'https://image.test/old.jpg',
+        logo: 'https://image.test/old.png',
+        artworkRevision: 1,
+      },
+      width: 320,
+      selected: false,
+      tabIndex: 0,
+      onFocus: vi.fn(),
+      onHover: vi.fn(),
+      onSelect: vi.fn(),
+    };
+    const view = render(
+      <Provider store={store}>
+        <MediaCard {...props} />
+      </Provider>
+    );
+    expect([...view.container.querySelectorAll('img')].map(image => image.src)).toEqual([
+      update.backdrop,
+      update.logo,
+    ]);
+    view.rerender(
+      <Provider store={store}>
+        <MediaCard {...props} media={{ ...props.media, artworkRevision: 3 }} />
+      </Provider>
+    );
+    expect([...view.container.querySelectorAll('img')].map(image => image.src)).toEqual([
+      props.media.backdrop,
+      props.media.logo,
+    ]);
+  });
+
+  it('loads the hero backdrop from the same revision as its logo', () => {
+    const requested: string[] = [];
+    class PendingImage {
+      onload: (() => void) | null = null;
+      onerror: (() => void) | null = null;
+      set src(value: string) {
+        requested.push(value);
+      }
+    }
+    vi.stubGlobal('Image', PendingImage);
+    vi.stubGlobal('ResizeObserver', FakeResizeObserver);
+    const store = configureStore({ reducer: { artwork: artworkSlice.reducer } });
+    store.dispatch(
+      artworkActions.received({
+        mediaType: 'movie',
+        mediaId: 1,
+        backdrop: 'https://image.test/new.jpg',
+        logo: '',
+        heroLogo: 'https://image.test/new.png',
+        artworkRevision: 2,
+        cardLogoStatus: 'ready',
+        heroLogoStatus: 'ready',
+      })
+    );
+    render(
+      <Provider store={store}>
+        <MediaHero
+          media={{ ...media, backdrop: 'https://image.test/old.jpg', artworkRevision: 1 }}
+        />
+      </Provider>
+    );
+    expect([...new Set(requested)]).toEqual(['https://image.test/new.jpg']);
+    expect(screen.getByRole('img', { name: 'Orbital' })).toHaveAttribute(
+      'src',
+      'https://image.test/new.png'
+    );
+  });
+
   it('updates card and hero logos in place without moving keyboard focus', () => {
     FakeWebSocket.instances = [];
     vi.stubGlobal('WebSocket', FakeWebSocket);
