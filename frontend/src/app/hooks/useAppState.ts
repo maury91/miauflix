@@ -22,10 +22,26 @@ export function hasConfigurationIssue(
 ): boolean {
   const hasMissingRequiredValue = configEntries?.some(entry => entry.required && !entry.hasValue);
   const hasMisconfiguredService = Object.values(serviceStatuses ?? {}).some(
-    ({ status }) => status === 'needs_configuration'
+    ({ status, missingVars }) => status === 'needs_configuration' || (missingVars?.length ?? 0) > 0
   );
 
   return hasMissingRequiredValue === true || hasMisconfiguredService;
+}
+
+export function getConfigurationPageState(
+  configEntries: ConfigEntryView[] | undefined,
+  serviceStatuses: ServiceStatuses | undefined,
+  configDismissed: boolean
+): 'config' | 'config_wizard' | null {
+  const hasMissingRequiredConfig =
+    configEntries?.some(entry => entry.required && !entry.hasValue) === true ||
+    Object.values(serviceStatuses ?? {}).some(({ missingVars }) => (missingVars?.length ?? 0) > 0);
+
+  // Required configuration must be completed before catalog routes can work; dismissing the
+  // prompt only applies to optional runtime service issues.
+  if (hasMissingRequiredConfig) return 'config_wizard';
+  if (!configDismissed && hasConfigurationIssue(configEntries, serviceStatuses)) return 'config';
+  return null;
 }
 
 export function useAppState(): AppState {
@@ -74,16 +90,10 @@ export function useAppState(): AppState {
     return 'loading';
   }
 
-  // 6. The setup flag only governs first-admin registration. The wizard is
-  // exclusively driven by missing configuration or a degraded/error service.
-  const hasMissingRequiredValue = configData?.some(entry => entry.required && !entry.hasValue);
-  if (hasMissingRequiredValue && !configDismissed) {
-    return 'config_wizard';
-  }
-
-  if (hasConfigurationIssue(configData, serviceStatuses) && !configDismissed) {
-    return 'config';
-  }
+  // 6. The setup flag only governs first-admin registration. Missing required
+  // configuration always opens the wizard; dismiss only applies to runtime issues.
+  const configurationPage = getConfigurationPageState(configData, serviceStatuses, configDismissed);
+  if (configurationPage) return configurationPage;
 
   // 7. Default: home
   return 'home';

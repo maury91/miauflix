@@ -5,11 +5,12 @@ import type { ScrapeData } from 'bittorrent-tracker';
 import { Client as BTClient } from 'bittorrent-tracker';
 import { access, constants, mkdir, rm } from 'fs/promises';
 import MemoryChunkStore from 'memory-chunk-store';
+import parseTorrent from 'parse-torrent';
 import type { Torrent, TorrentOptions, WebTorrentOptions } from 'webtorrent';
 import WebTorrent from 'webtorrent';
 
 import type { MovieSource } from '@entities/movie-source.entity';
-import type { Storage } from '@entities/storage.entity';
+import type { EncryptedStorageLayout, Storage } from '@entities/storage.entity';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { RequestService } from '@services/request/request.service';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
@@ -24,16 +25,20 @@ import {
   getIpSet,
   getTrackers,
   getVideoFile,
+  isVideoFile,
   parseRangeHeader,
 } from './download.utils';
+import { EncryptedFileReader } from './encrypted-file-reader';
+import { TorrentDiagnostics } from './torrent-diagnostics';
 
 // Types for greedy streaming
 // export type DownloadPriority = 'full' | 'partial';
 
 export interface GreedyDownload {
   movieSourceId: number;
-  torrent: Torrent;
+  torrent: Torrent | null;
   storage: Storage;
+  layout?: EncryptedStorageLayout;
   // priority: DownloadPriority;
   startTime: Date;
 }
@@ -54,6 +59,15 @@ export interface WarmupResult {
   lastPiece: number;
 }
 
+export type StorageActivity = 'active' | 'available_offline' | 'inactive' | 'local_only';
+
+export interface StorageActivitySnapshot {
+  activity: StorageActivity;
+  seedEndsAt: Date | null;
+  videoComplete: boolean;
+  torrentLoaded: boolean;
+}
+
 export interface WarmupRangeProgress {
   verifiedBytes: number;
   targetBytes: number;
@@ -64,12 +78,16 @@ export interface WarmupRangeProgress {
 export class DownloadService {
   public readonly client: WebTorrent;
   private activeStreams = 0;
+  private activeScrapes = 0;
+  private completedScrapes = 0;
+  private failedScrapes = 0;
   private readonly activeSourceCounts = new Map<number, number>();
   private readonly allocationReconcileAt = new Map<number, number>();
   private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
   private readonly bitfieldTrackedTorrents = new WeakMap<Torrent, Set<number>>();
   private readonly torrentStartPromises = new Map<string, Promise<Torrent>>();
   private readonly pausedForPlayback = new Set<number>();
+  private readonly seedTimers = new Map<number, NodeJS.Timeout>();
   private readonly warmupSelections = new Map<number, { firstPiece: number; lastPiece: number }>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
@@ -102,6 +120,14 @@ export class DownloadService {
       options.dht = false;
     }
     this.client = new WebTorrent(options);
+    new TorrentDiagnostics(this.client, () => ({
+      activeStreams: this.activeStreams,
+      activeSources: this.activeSourceCounts.size,
+      pendingTorrentStarts: this.torrentStartPromises.size,
+      activeScrapes: this.activeScrapes,
+      completedScrapes: this.completedScrapes,
+      failedScrapes: this.failedScrapes,
+    }));
     this.client.on('error', (error: Error) => {
       logger.error('DownloadService', 'Error:', error.message, error);
     });
@@ -109,6 +135,9 @@ export class DownloadService {
     void this.init();
 
     const cleanupStorage = async (storage: Storage, strict: boolean): Promise<void> => {
+      const seedTimer = this.seedTimers.get(storage.movieSourceId);
+      if (seedTimer) clearTimeout(seedTimer);
+      this.seedTimers.delete(storage.movieSourceId);
       const marker = storage as Storage & { physicalCleanupDone?: boolean };
       if (marker.physicalCleanupDone) return;
       // Get the hash from the associated MovieSource
@@ -129,6 +158,8 @@ export class DownloadService {
       }
       await rm(storage.location, { recursive: true, force: true });
       marker.physicalCleanupDone = true;
+      this.warmupSelections.delete(storage.movieSourceId);
+      this.pausedForPlayback.delete(storage.movieSourceId);
     };
 
     // StorageService invokes the strict handler before deleting its database
@@ -144,6 +175,47 @@ export class DownloadService {
 
   isPlaybackActive(sourceId: number): boolean {
     return (this.activeSourceCounts.get(sourceId) ?? 0) > 0;
+  }
+
+  getStorageActivity(
+    storage: Pick<Storage, 'encryptedLayout' | 'localOnly' | 'location' | 'videoCompletedAt'> & {
+      movieSource?: { hash: string } | null;
+    }
+  ): StorageActivitySnapshot {
+    const sourceHash = storage.movieSource?.hash;
+    const torrent = this.client.torrents.find(item =>
+      sourceHash
+        ? item.infoHash?.toLowerCase() === sourceHash.toLowerCase()
+        : item.path === storage.location
+    );
+    const videoComplete =
+      Boolean(storage.videoCompletedAt) ||
+      storage.localOnly ||
+      Boolean(
+        torrent &&
+          (torrent.done ||
+            this.isVideoComplete(
+              torrent,
+              storage.encryptedLayout ?? this.createEncryptedLayout(torrent)
+            ))
+      );
+    const activity: StorageActivity = videoComplete
+      ? storage.localOnly
+        ? 'local_only'
+        : 'available_offline'
+      : torrent
+        ? 'active'
+        : 'inactive';
+    const seedEndsAt =
+      videoComplete && !storage.localOnly && storage.videoCompletedAt
+        ? new Date(storage.videoCompletedAt.getTime() + this.getSeedDurationMs())
+        : null;
+    return {
+      activity,
+      seedEndsAt,
+      videoComplete,
+      torrentLoaded: Boolean(torrent),
+    };
   }
   getStatus(): ServiceInstanceStatus {
     return this._initStatus;
@@ -172,6 +244,7 @@ export class DownloadService {
         await mkdir(downloadPath, { recursive: true });
         await access(downloadPath, constants.W_OK);
         this._initStatus = { status: 'ready' };
+        await this.restoreCompletedDownloads();
       } catch (err) {
         this._initStatus = {
           status: 'error',
@@ -184,6 +257,16 @@ export class DownloadService {
 
   public async reload(): Promise<void> {
     await this.init();
+    const completed = (await this.storageService.getStoragesWithCompletion()) ?? [];
+    for (const storage of completed) this.scheduleSeedExpiry(storage);
+  }
+
+  async close(): Promise<void> {
+    for (const timer of this.seedTimers.values()) clearTimeout(timer);
+    this.seedTimers.clear();
+    await new Promise<void>((resolve, reject) => {
+      this.client.destroy(error => (error ? reject(error) : resolve()));
+    });
   }
 
   private async loadTrackers() {
@@ -200,6 +283,243 @@ export class DownloadService {
     if (blacklistedTrackers) {
       this.client.blocked = blacklistedTrackers;
     }
+  }
+
+  private createEncryptedLayout(
+    torrent: Torrent,
+    sourceHash = torrent.infoHash,
+    video = getVideoFile(torrent)
+  ): EncryptedStorageLayout {
+    return {
+      storeName: `${torrent.name} - ${torrent.infoHash.slice(0, 8)}`,
+      // EncryptedChunkStore was opened with the provider's source hash. Keep
+      // that exact value because filename derivation is case-sensitive.
+      filenameSalt: `download-${sourceHash}`,
+      pieceLength: torrent.pieceLength,
+      files: torrent.files.map(file => ({
+        path: file.path,
+        length: file.length,
+        offset: Number(file.offset ?? 0),
+      })),
+      video: {
+        name: video.name,
+        path: video.path,
+        offset: Number(video.offset ?? 0),
+        length: video.length,
+      },
+    };
+  }
+
+  private async maybeMarkVideoComplete(
+    torrent: Torrent,
+    movieSourceId: number,
+    layout: EncryptedStorageLayout
+  ): Promise<void> {
+    if (!this.isVideoComplete(torrent, layout)) return;
+    const storage = await this.storageService.markVideoComplete(movieSourceId, layout);
+    if (storage) this.scheduleSeedExpiry(storage);
+  }
+
+  private withSourceFilenameSalt(
+    layout: EncryptedStorageLayout,
+    sourceHash: string
+  ): EncryptedStorageLayout {
+    const filenameSalt = `download-${sourceHash}`;
+    return layout.filenameSalt === filenameSalt ? layout : { ...layout, filenameSalt };
+  }
+
+  private isVideoComplete(torrent: Torrent, layout = this.createEncryptedLayout(torrent)): boolean {
+    const firstPiece = Math.floor(layout.video.offset / layout.pieceLength);
+    const lastPiece = Math.floor(
+      (layout.video.offset + layout.video.length - 1) / layout.pieceLength
+    );
+    if (layout.video.length <= 0 || !torrent.bitfield) return false;
+    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+      if (!torrent.bitfield.get(piece)) return false;
+    }
+    return true;
+  }
+
+  private async restoreCompletedDownloads(): Promise<void> {
+    const completed = (await this.storageService.getStoragesWithCompletion()) ?? [];
+    for (const storage of completed) {
+      if (storage.localOnly) continue;
+      if (!storage.movieSource) continue;
+      const deadline = storage.videoCompletedAt!.getTime() + this.getSeedDurationMs();
+      if (deadline <= Date.now()) {
+        try {
+          await this.detachCompletedTorrent(storage.movieSourceId);
+        } catch (error) {
+          logger.warn(
+            'DownloadService',
+            `Could not detach expired source ${storage.movieSourceId}`,
+            error
+          );
+          this.scheduleDetachRetry(storage.movieSourceId);
+        }
+        continue;
+      }
+      try {
+        await this.storageService.withSourceLock(storage.movieSourceId, async () => {
+          const current = await this.storageService.getStorageByMovieSource(storage.movieSourceId);
+          if (
+            !current ||
+            current.localOnly ||
+            !current.videoCompletedAt ||
+            !current.movieSource ||
+            current.videoCompletedAt.getTime() + this.getSeedDurationMs() <= Date.now()
+          ) {
+            return;
+          }
+          const torrent = await this.addTorrentWithLock(current.movieSource, current);
+          const savedLayout =
+            current.encryptedLayout ??
+            this.createEncryptedLayout(torrent, current.movieSource.hash);
+          const layout = this.withSourceFilenameSalt(savedLayout, current.movieSource.hash);
+          await this.storageService.updateEncryptedLayout(current.movieSourceId, layout);
+          const video = torrent.files.find(file => file.path === layout.video.path);
+          video?.select();
+          this.trackTorrent(torrent, current.movieSourceId, layout);
+          this.scheduleSeedExpiry(current);
+        });
+      } catch (error) {
+        logger.warn(
+          'DownloadService',
+          `Could not restore seeding for completed source ${storage.movieSourceId}`,
+          error
+        );
+      }
+    }
+  }
+
+  private getSeedDurationMs(): number {
+    return Number(this.config.getOrThrow('CONTENT_SEED_DURATION_SECONDS')) * 1_000;
+  }
+
+  private scheduleSeedExpiry(storage: Storage): void {
+    const previous = this.seedTimers.get(storage.movieSourceId);
+    if (previous) clearTimeout(previous);
+    this.seedTimers.delete(storage.movieSourceId);
+    if (!storage.videoCompletedAt || storage.localOnly) return;
+    const deadline = storage.videoCompletedAt.getTime() + this.getSeedDurationMs();
+    const timer = setTimeout(
+      () => {
+        this.seedTimers.delete(storage.movieSourceId);
+        void this.expireCompletedTorrent(storage.movieSourceId);
+      },
+      Math.max(0, Math.min(deadline - Date.now(), 2_147_000_000))
+    );
+    timer.unref?.();
+    this.seedTimers.set(storage.movieSourceId, timer);
+  }
+
+  private async expireCompletedTorrent(movieSourceId: number): Promise<void> {
+    try {
+      const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
+      if (!storage?.videoCompletedAt || storage.localOnly) return;
+      if (Date.now() < storage.videoCompletedAt.getTime() + this.getSeedDurationMs()) {
+        this.scheduleSeedExpiry(storage);
+        return;
+      }
+      await this.detachCompletedTorrent(movieSourceId);
+    } catch (error) {
+      logger.warn(
+        'DownloadService',
+        `Failed to stop seeding source ${movieSourceId}; retrying`,
+        error
+      );
+      this.scheduleDetachRetry(movieSourceId);
+    }
+  }
+
+  private scheduleDetachRetry(movieSourceId: number): void {
+    const timer = setTimeout(() => {
+      this.seedTimers.delete(movieSourceId);
+      void this.detachCompletedTorrent(movieSourceId).catch(error => {
+        logger.warn(
+          'DownloadService',
+          `Retry failed to stop seeding source ${movieSourceId}`,
+          error
+        );
+        this.scheduleDetachRetry(movieSourceId);
+      });
+    }, 15_000);
+    timer.unref?.();
+    this.seedTimers.set(movieSourceId, timer);
+  }
+
+  private async detachCompletedTorrent(movieSourceId: number): Promise<void> {
+    await this.storageService.detachCompletedStorage(movieSourceId, async () => {
+      const storage = await this.storageService.getStorageByMovieSource(movieSourceId);
+      const torrent = this.client.torrents.find(item => item.path === storage?.location);
+      if (torrent) await this.client.remove(torrent, { destroyStore: false });
+    });
+    const timer = this.seedTimers.get(movieSourceId);
+    if (timer) clearTimeout(timer);
+    this.seedTimers.delete(movieSourceId);
+    logger.info(
+      'DownloadService',
+      `Stopped seeding source ${movieSourceId}; encrypted files retained`
+    );
+  }
+
+  private trackTorrent(
+    torrent: Torrent,
+    movieSourceId: number,
+    layout: EncryptedStorageLayout
+  ): void {
+    const trackedSourceIds = this.bitfieldTrackedTorrents.get(torrent) ?? new Set<number>();
+    if (trackedSourceIds.has(movieSourceId)) return;
+    trackedSourceIds.add(movieSourceId);
+    this.bitfieldTrackedTorrents.set(torrent, trackedSourceIds);
+    this.setupBitfieldTracking(torrent, movieSourceId, layout);
+  }
+
+  private async readVerifiedPiece(
+    reader: EncryptedFileReader,
+    torrent: Torrent | null,
+    storage: Storage,
+    pieceIndex: number,
+    signal: AbortSignal
+  ): Promise<Buffer> {
+    while (!signal.aborted) {
+      if (torrent?.bitfield?.get(pieceIndex) || storage.videoCompletedAt || storage.localOnly) {
+        return reader.readPiece(pieceIndex);
+      }
+      if (!torrent || torrent.destroyed) {
+        throw new ErrorWithStatus(
+          'Media piece is unavailable after torrent removal',
+          'local_media_incomplete'
+        );
+      }
+      await new Promise<void>((resolve, reject) => {
+        const cleanup = () => {
+          torrent.removeListener('verified', onVerified);
+          torrent.removeListener('close', onClose);
+          signal.removeEventListener('abort', onAbort);
+        };
+        const onVerified = () => {
+          if (torrent.bitfield?.get(pieceIndex)) {
+            cleanup();
+            resolve();
+          }
+        };
+        const onClose = () => {
+          cleanup();
+          reject(
+            new ErrorWithStatus('Torrent closed before media was downloaded', 'torrent_closed')
+          );
+        };
+        const onAbort = () => {
+          cleanup();
+          resolve();
+        };
+        torrent.on('verified', onVerified);
+        torrent.once('close', onClose);
+        signal.addEventListener('abort', onAbort, { once: true });
+      });
+    }
+    throw new Error('Playback cancelled');
   }
 
   generateLink(hash: string, trackers: string[], name = ''): string {
@@ -278,7 +598,8 @@ export class DownloadService {
   }
 
   private async scrape(infoHash: string): Promise<ScrapeData> {
-    return new Promise((resolve, reject) => {
+    this.activeScrapes += 1;
+    return new Promise<ScrapeData>((resolve, reject) => {
       const client = new BTClient({
         infoHash: infoHash.toLowerCase(),
         announce: this.scrapeTrackers,
@@ -302,7 +623,18 @@ export class DownloadService {
         reject(new ErrorWithStatus(`Scrape request timed out for ${infoHash}`, 'scrape_timeout'));
         client.destroy();
       }, 5000); // 5 seconds timeout
-    });
+    }).then(
+      result => {
+        this.activeScrapes -= 1;
+        this.completedScrapes += 1;
+        return result;
+      },
+      error => {
+        this.activeScrapes -= 1;
+        this.failedScrapes += 1;
+        throw error;
+      }
+    );
   }
 
   @traced('DownloadService')
@@ -333,7 +665,7 @@ export class DownloadService {
       // FixMe: Create or get storage
       // If storage already exists use the bitfield for the torrent
       // Create storage record first
-      const storage = await this.storageService.createStorage({
+      await this.storageService.createStorage({
         movieSourceId: source.id,
         location: this.generateStoragePath(source.hash),
         size: source.size || 0,
@@ -345,8 +677,73 @@ export class DownloadService {
         speculativeExpiresAt: options.speculativeExpiresAt,
       });
 
-      // Add torrent with priority-specific configuration
-      const torrent = await this.addTorrentWithLock(source, storage);
+      const start = await this.storageService.withSourceLock(source.id, async () => {
+        const current = await this.storageService.getStorageByMovieSource(source.id);
+        if (!current) {
+          throw new ErrorWithStatus('Storage record is unavailable', 'local_media_unavailable');
+        }
+        if (current.localOnly || current.videoCompletedAt) {
+          const expired = Boolean(
+            current.videoCompletedAt &&
+              Date.now() >= current.videoCompletedAt.getTime() + this.getSeedDurationMs()
+          );
+          if (current.localOnly || expired) {
+            const savedLayout =
+              current.encryptedLayout ?? (await this.recoverEncryptedLayout(source));
+            const layout = savedLayout
+              ? this.withSourceFilenameSalt(savedLayout, source.hash)
+              : null;
+            if (layout && layout.filenameSalt !== current.encryptedLayout?.filenameSalt) {
+              await this.storageService.updateEncryptedLayout(source.id, layout);
+            }
+            return {
+              movieSourceId: source.id,
+              torrent: null,
+              storage: current,
+              layout: layout ?? undefined,
+              shouldDetach: expired && !current.localOnly,
+              startTime: new Date(),
+            };
+          }
+        }
+
+        // Serialize torrent startup against expiry detachment and storage deletion.
+        const torrent = await this.addTorrentWithLock(source, current);
+        const layout = this.createEncryptedLayout(torrent, source.hash);
+        await this.storageService.updateEncryptedLayout(source.id, layout);
+        return {
+          movieSourceId: source.id,
+          torrent,
+          storage: current,
+          layout,
+          shouldDetach: false,
+          startTime: new Date(),
+        };
+      });
+
+      if (!start.torrent) {
+        if (start.shouldDetach) {
+          try {
+            await this.detachCompletedTorrent(source.id);
+          } catch (error) {
+            logger.warn(
+              'DownloadService',
+              `Seeding stop is pending for source ${source.id}`,
+              error
+            );
+            this.scheduleDetachRetry(source.id);
+          }
+        }
+        if (!start.layout) {
+          throw new ErrorWithStatus(
+            'Completed encrypted media layout is unavailable',
+            'local_media_unavailable'
+          );
+        }
+        return start;
+      }
+
+      const { torrent, layout } = start;
       const totalPieces = this.getTorrentPieceCount(torrent);
 
       // Patch storage with correct totalPieces and size after torrent is ready
@@ -370,25 +767,14 @@ export class DownloadService {
       await this.storageService.reconcileAllocation(source.id);
 
       // Set up bitfield tracking
-      const trackedSourceIds = this.bitfieldTrackedTorrents.get(torrent) ?? new Set<number>();
-      if (!trackedSourceIds.has(source.id)) {
-        trackedSourceIds.add(source.id);
-        this.bitfieldTrackedTorrents.set(torrent, trackedSourceIds);
-        this.setupBitfieldTracking(torrent, source.id);
-      }
-
-      const greedyDownload: GreedyDownload = {
-        movieSourceId: source.id,
-        torrent,
-        storage,
-        startTime: new Date(),
-      };
+      this.trackTorrent(torrent, source.id, layout);
+      await this.maybeMarkVideoComplete(torrent, source.id, layout);
 
       logger.info(
         'DownloadService',
         `Successfully started greedy download for source ${source.id}`
       );
-      return greedyDownload;
+      return start;
     } catch (error) {
       logger.error(
         'DownloadService',
@@ -400,6 +786,33 @@ export class DownloadService {
         'greedy_download_failed'
       );
     }
+  }
+
+  private async recoverEncryptedLayout(
+    source: MovieSource
+  ): Promise<EncryptedStorageLayout | null> {
+    if (!source.file) return null;
+    const parsed = await parseTorrent(source.file);
+    const files = parsed.files ?? [];
+    const video = files
+      .filter(file => isVideoFile(file.path))
+      .sort((a, b) => b.length - a.length)[0];
+    if (!video || !parsed.pieceLength || !parsed.name) return null;
+    const recoveredFiles = files.map((file, index) => ({
+      path: file.path,
+      length: file.length,
+      offset:
+        file.offset ??
+        files.slice(0, index).reduce((offset, previous) => offset + previous.length, 0),
+    }));
+    const videoOffset = recoveredFiles.find(file => file.path === video.path)?.offset ?? 0;
+    return {
+      storeName: `${parsed.name} - ${source.hash.slice(0, 8)}`,
+      filenameSalt: `download-${source.hash}`,
+      pieceLength: parsed.pieceLength,
+      files: recoveredFiles,
+      video: { name: video.name, path: video.path, offset: videoOffset, length: video.length },
+    };
   }
 
   /**
@@ -422,6 +835,14 @@ export class DownloadService {
       reservedBytes: target,
       speculativeExpiresAt,
     });
+    if (!download.torrent) {
+      const layout = download.layout!;
+      const firstPiece = Math.floor(layout.video.offset / layout.pieceLength);
+      const lastPiece = Math.floor(
+        (layout.video.offset + Math.min(target, layout.video.length) - 1) / layout.pieceLength
+      );
+      return { sourceId: source.id, targetBytes: target, firstPiece, lastPiece };
+    }
     const file = getVideoFile(download.torrent);
     const pieceLength = download.torrent.pieceLength;
     const fileOffset = Number(file.offset ?? 0);
@@ -543,6 +964,10 @@ export class DownloadService {
       retentionClass: 'watched',
       reservedBytes: source.size,
     });
+    if (!download.torrent) {
+      await this.storageService.markAsAccessed(source.id);
+      return true;
+    }
     const file = getVideoFile(download.torrent);
     this.warmupSelections.delete(source.id);
     file.select();
@@ -556,9 +981,11 @@ export class DownloadService {
       retentionClass: 'speculative',
       reservedBytes: source.size,
     });
+    if (!download.torrent) return true;
+    const torrent = download.torrent;
     await this.storageService.withSourceLock(source.id, async () => {
       this.warmupSelections.delete(source.id);
-      getVideoFile(download.torrent).select();
+      getVideoFile(torrent).select();
       if (this.activeStreams <= 0) return;
       if (await this.pauseDownload(source.id)) this.pausedForPlayback.add(source.id);
     });
@@ -742,16 +1169,30 @@ export class DownloadService {
         return null;
       }
 
+      if (storage.videoCompletedAt) {
+        const bytes = storage.encryptedLayout?.video.length ?? storage.size;
+        return {
+          movieSourceId,
+          progress: 100,
+          downloadedBytes: bytes,
+          totalBytes: bytes,
+          downloadSpeed: 0,
+          isComplete: true,
+        };
+      }
+
       // Find the associated torrent
       const torrent = this.client.torrents.find(t => t.path === storage.location);
       if (!torrent) {
         return {
           movieSourceId,
-          progress: storage.downloaded / 100, // Convert from basis points
-          downloadedBytes: 0,
-          totalBytes: storage.size,
+          progress: storage.videoCompletedAt ? 100 : storage.downloaded / 100, // Convert from basis points
+          downloadedBytes: storage.videoCompletedAt
+            ? (storage.encryptedLayout?.video.length ?? storage.size)
+            : 0,
+          totalBytes: storage.encryptedLayout?.video.length ?? storage.size,
           downloadSpeed: 0,
-          isComplete: storage.downloaded >= 10000,
+          isComplete: Boolean(storage.videoCompletedAt) || storage.downloaded >= 10000,
         };
       }
 
@@ -761,7 +1202,7 @@ export class DownloadService {
         downloadedBytes: torrent.downloaded,
         totalBytes: torrent.length,
         downloadSpeed: torrent.downloadSpeed,
-        isComplete: torrent.done,
+        isComplete: Boolean(storage.videoCompletedAt) || this.isVideoComplete(torrent),
       };
     } catch (error) {
       logger.warn(
@@ -868,13 +1309,8 @@ export class DownloadService {
         return false;
       }
 
-      const torrent = this.client.torrents.find(t => t.path === storage.location);
-      if (torrent) {
-        this.client.remove(torrent);
-        logger.info('DownloadService', `Removed torrent for movie source ${movieSourceId}`);
-      }
-
-      // Remove storage record
+      // StorageService serializes deletion with lifecycle detachment and removes both the
+      // torrent and encrypted files through the registered cleanup handler.
       await this.storageService.removeStorage(movieSourceId);
       this.warmupSelections.delete(movieSourceId);
       this.pausedForPlayback.delete(movieSourceId);
@@ -897,7 +1333,11 @@ export class DownloadService {
   /**
    * Set up bitfield tracking for storage service integration
    */
-  private setupBitfieldTracking(torrent: Torrent, movieSourceId: number): void {
+  private setupBitfieldTracking(
+    torrent: Torrent,
+    movieSourceId: number,
+    layout: EncryptedStorageLayout
+  ): void {
     torrent.on('verified', async () => {
       try {
         // Convert BitField to Uint8Array for storage service
@@ -912,6 +1352,7 @@ export class DownloadService {
           size: torrent.length,
         });
         await this.reconcileAllocationIfDue(movieSourceId);
+        await this.maybeMarkVideoComplete(torrent, movieSourceId, layout);
       } catch (error) {
         logger.warn(
           'DownloadService',
@@ -933,6 +1374,14 @@ export class DownloadService {
           error
         );
       }
+    });
+
+    void this.maybeMarkVideoComplete(torrent, movieSourceId, layout).catch(error => {
+      logger.warn(
+        'DownloadService',
+        `Failed to record video completion for source ${movieSourceId}`,
+        error
+      );
     });
   }
 
@@ -967,16 +1416,28 @@ export class DownloadService {
   async streamFile(movieSource: MovieSource, rangeHeader?: string): Promise<Response> {
     return new Promise((resolve, reject) => {
       const handleRequest = async () => {
-        const { torrent } = await this.startDownload(movieSource, {
+        const download = await this.startDownload(movieSource, {
           retentionClass: 'watched',
           reservedBytes: movieSource.size,
         });
-        const file = getVideoFile(torrent);
+        const { torrent, storage } = download;
+        const layout = download.layout ?? storage.encryptedLayout;
+        if (!layout)
+          throw new ErrorWithStatus(
+            'Encrypted media layout is unavailable',
+            'local_media_unavailable'
+          );
+        const file = layout.video;
+        const reader = new EncryptedFileReader(
+          storage.location,
+          layout,
+          this.config.getOrThrow('SOURCE_SECURITY_KEY')
+        );
         await this.storageService.withSourceLock(movieSource.id, async () => {
           if (!(await this.storageService.setPlaybackActive(movieSource.id, true))) {
             throw new Error(`Storage not found for movie source ${movieSource.id}`);
           }
-          file.select();
+          torrent?.files.find(item => item.path === file.path)?.select();
           this.activeStreams += 1;
           this.activeSourceCounts.set(
             movieSource.id,
@@ -1015,6 +1476,8 @@ export class DownloadService {
         };
         let status = 200;
         const range = parseRangeHeader(file.length, rangeHeader || '');
+        const firstByte = range?.start ?? 0;
+        const lastByte = range?.end ?? file.length - 1;
         if (range) {
           status = 206;
           headers['Content-Range'] = `bytes ${range.start}-${range.end}/${file.length}`;
@@ -1023,18 +1486,8 @@ export class DownloadService {
           headers['Content-Length'] = String(file.length);
         }
 
-        let iterator: AsyncIterator<Uint8Array> | undefined;
-        let iteratorReturned = false;
         let cancelled = false;
-        let resolveCancellation!: () => void;
-        const cancellation = new Promise<void>(
-          resolveCancel => (resolveCancellation = resolveCancel)
-        );
-        const returnIterator = () => {
-          if (iteratorReturned) return;
-          iteratorReturned = true;
-          void iterator?.return?.().catch(() => undefined);
-        };
+        const abortController = new AbortController();
         let releasePromise: Promise<void> | undefined;
         const release = (): Promise<void> => {
           if (releasePromise) return releasePromise;
@@ -1052,47 +1505,62 @@ export class DownloadService {
         const webReadableStream = new ReadableStream<Uint8Array>({
           start: async controller => {
             try {
-              iterator = file[Symbol.asyncIterator](range || {});
-
-              while (!cancelled) {
-                const next = await Promise.race([
-                  iterator.next().then(result => ({ type: 'read' as const, result })),
-                  cancellation.then(() => ({ type: 'cancel' as const })),
-                ]);
-                if (next.type === 'cancel' || cancelled) break;
-                const { result } = next;
-
-                if (result.done) {
-                  controller.close();
-                  break;
-                }
-
-                // Wait for backpressure to clear if needed
+              let cursor = firstByte;
+              while (!cancelled && cursor <= lastByte) {
+                const torrentOffset = file.offset + cursor;
+                const pieceIndex = Math.floor(torrentOffset / layout.pieceLength);
+                const pieceOffset = torrentOffset % layout.pieceLength;
+                const piece = await this.readVerifiedPiece(
+                  reader,
+                  torrent,
+                  storage,
+                  pieceIndex,
+                  abortController.signal
+                );
+                const bytes = piece.subarray(
+                  pieceOffset,
+                  Math.min(piece.length, layout.pieceLength, pieceOffset + 256 * 1024)
+                );
+                if (!bytes.length)
+                  throw new ErrorWithStatus(
+                    'Encrypted media ended before the requested range',
+                    'local_media_incomplete'
+                  );
                 while (
                   !cancelled &&
                   controller.desiredSize !== null &&
                   controller.desiredSize <= 0
                 ) {
-                  await Promise.race([
-                    new Promise<void>(resolveWait => setTimeout(resolveWait, 10)),
-                    cancellation,
-                  ]);
+                  await new Promise<void>(resolveWait => {
+                    const finish = () => {
+                      clearTimeout(timer);
+                      abortController.signal.removeEventListener('abort', finish);
+                      resolveWait();
+                    };
+                    const timer = setTimeout(finish, 10);
+                    abortController.signal.addEventListener('abort', finish, { once: true });
+                  });
                 }
                 if (cancelled) break;
-                controller.enqueue(result.value);
+                controller.enqueue(bytes);
+                cursor += bytes.length;
               }
+              if (!cancelled) controller.close();
             } catch (error) {
               if (!cancelled) controller.error(error);
             } finally {
-              if (cancelled) returnIterator();
+              await reader
+                .close()
+                .catch(error =>
+                  logger.warn('DownloadService', 'Failed to close encrypted file reader', error)
+                );
               if (!releasePromise) await release();
             }
           },
 
           async cancel() {
             cancelled = true;
-            resolveCancellation();
-            returnIterator();
+            abortController.abort();
             logger.debug('DownloadService', 'Stream cancelled by client');
             await release();
           },

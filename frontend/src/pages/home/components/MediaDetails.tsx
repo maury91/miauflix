@@ -9,6 +9,7 @@ import {
   useGetShowQuery,
   useLazyGetSeasonQuery,
 } from '@features/media/api/media.api';
+import { useGetMediaRatingQuery, useSetMediaRatingMutation } from '@features/media/api/ratings.api';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
 import type {
   MediaDto,
@@ -20,16 +21,20 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import type { RootState } from '@store/store';
 import { forwardRef, type UIEvent } from 'react';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import type { BackdropPositionContext } from '../backdrop-focus';
 import { getBackdropPlacement } from '../backdrop-focus';
 import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
 import { getImageUrl, getMediaTitle } from '../media.utils';
+import { navigateDetails } from './detailsNavigation';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
+import BookmarkIcon from '~icons/mdi/bookmark-outline';
 import CardsHeartIcon from '~icons/mdi/cards-heart-outline';
 import StarIcon from '~icons/mdi/star';
 import ThumbDownIcon from '~icons/mdi/thumb-down-outline';
@@ -437,7 +442,9 @@ const RatingActions = styled.div`
 `;
 
 // eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const RatingAction = styled(BaseButton)<{ $selected: boolean }>`
+const RatingAction = styled(BaseButton).attrs({ collapseWhenNotFocused: true })<{
+  $selected: boolean;
+}>`
   gap: 0.5rem;
   min-width: 0;
   min-height: 4.5vh;
@@ -460,7 +467,8 @@ const RatingAction = styled(BaseButton)<{ $selected: boolean }>`
     outline: none;
   }
 
-  svg {
+  && > span[aria-hidden='true'],
+  && > span[aria-hidden='true'] > svg {
     width: 1.25em;
     height: 1.25em;
   }
@@ -504,7 +512,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   forwardedRef
 ) {
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
-  const watchlistType = media._type === 'movie' ? 'movie' : 'tv';
+  const watchlistType: 'movie' | 'tv' = media._type === 'movie' ? 'movie' : 'tv';
   const watchlist = useGetWatchlistMembershipQuery({
     mediaType: watchlistType,
     mediaId: media.mediaId,
@@ -516,12 +524,14 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const [loadSeason] = useLazyGetSeasonQuery();
   const progress = useGetProgressQuery(undefined);
   const pageRef = useRef<HTMLElement>(null);
+  const backRef = useRef<HTMLButtonElement>(null);
   const episodeListRef = useRef<HTMLDivElement>(null);
   const sectionRefs = useRef(new Map<number, HTMLElement>());
   const inflight = useRef(new Map<number, Promise<SeasonResponse | undefined>>());
   const currentMediaId = useRef(media.mediaId);
   currentMediaId.current = media.mediaId;
   const jumpToSeason = useRef<number | null>(null);
+  const seasonFocusOrigin = useRef<Element | null>(null);
   const [resolvedBackdropFocus, setResolvedBackdropFocus] = useState(media.backdropFocus);
   const [backdropContext, setBackdropContext] = useState<BackdropPositionContext>();
   const [focusedArea, setFocusedArea] = useState<'action' | 'season' | 'episodes'>(
@@ -533,7 +543,20 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     seasonNumber: number;
     episodeNumber: number;
   } | null>(null);
-  const [selectedRating, setSelectedRating] = useState<'dislike' | 'like' | 'love' | null>(null);
+  const userId = useSelector((state: RootState) => state.auth.currentUser?.id);
+  const ratingItem = { mediaType: watchlistType, mediaId: media.mediaId, userId: userId ?? '' };
+  const savedRating = useGetMediaRatingQuery(userId ? ratingItem : skipToken, {
+    refetchOnMountOrArgChange: true,
+  });
+  const [setMediaRating, ratingUpdate] = useSetMediaRatingMutation();
+  const { reset: resetRatingUpdate } = ratingUpdate;
+  const selectedRating = savedRating.currentData?.rating ?? null;
+  const ratingPending =
+    !savedRating.currentData || savedRating.isFetching || ratingUpdate.isLoading;
+  const changeRating = (rating: 'dislike' | 'like' | 'love') => {
+    if (!userId || ratingPending) return;
+    void setMediaRating({ ...ratingItem, rating: selectedRating === rating ? null : rating });
+  };
   const [loadedSeasons, setLoadedSeasons] = useState<Record<number, SeasonResponse>>({});
   const [seasonErrors, setSeasonErrors] = useState<Record<number, boolean>>({});
   const [loadingSeasons, setLoadingSeasons] = useState<Record<number, boolean>>({});
@@ -551,8 +574,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const seasons = useMemo(() => showDetails?.seasons ?? [], [showDetails?.seasons]);
 
   useEffect(() => {
-    setSelectedRating(null);
-  }, [media._type, media.mediaId]);
+    resetRatingUpdate();
+  }, [media._type, media.mediaId, userId, resetRatingUpdate]);
 
   const loadSeasonData = useCallback(
     (seasonNumber: number) => {
@@ -657,6 +680,15 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, [focusedArea, focusedSeasonIndex, media.mediaId, seasons]);
 
   const current = media._type === 'movie' ? movie.data : showDetails;
+  const artworkType = media._type === 'movie' ? 'movie' : 'tv';
+  const artwork = useSelector(
+    (state: RootState) => state.artwork.byMedia[`${artworkType}:${media.mediaId}`]
+  );
+  const currentRevision = current?.artworkRevision ?? media.artworkRevision ?? 0;
+  const detailLogo =
+    artwork && artwork.artworkRevision >= currentRevision
+      ? artwork.heroLogo
+      : (current?.heroLogo ?? current?.logo ?? media.heroLogo ?? media.logo);
   const title = current?.title ?? getMediaTitle(media);
   const backdrop = getImageUrl(current?.backdrop ?? media.backdrop, 'w1280');
   const backdropFocus = current?.backdropFocus ?? media.backdropFocus ?? resolvedBackdropFocus;
@@ -716,12 +748,6 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     () => seasons.map(item => loadedSeasons[item.seasonNumber]).filter(Boolean) as SeasonResponse[],
     [loadedSeasons, seasons]
   );
-  const flatEpisodes = useMemo(
-    () =>
-      loadedSections.flatMap(section => section.episodes.map(episode => ({ section, episode }))),
-    [loadedSections]
-  );
-
   const targetEpisodeForSeason = useCallback(
     (season: SeasonResponse) => {
       const watched = (progress.data?.progress ?? [])
@@ -752,12 +778,23 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     const target = targetEpisodeForSeason(section);
     if (!target) return;
     setSelectedEpisode({ seasonNumber: requested, episodeNumber: target.episodeNumber });
-    requestAnimationFrame(() =>
-      document
-        .getElementById(`episode-${media.mediaId}-${episodeKey(requested, target.episodeNumber)}`)
-        ?.scrollIntoView({ block: 'nearest' })
-    );
-  }, [loadedSeasons, media.mediaId, progress.isLoading, targetEpisodeForSeason]);
+    const origin = seasonFocusOrigin.current;
+    seasonFocusOrigin.current = null;
+    requestAnimationFrame(() => {
+      if (origin && document.activeElement === origin) {
+        document
+          .getElementById(`episode-${media.mediaId}-${episodeKey(requested, target.episodeNumber)}`)
+          ?.focus();
+      }
+    });
+  }, [
+    focusedArea,
+    focusedSeasonIndex,
+    loadedSeasons,
+    media.mediaId,
+    progress.isLoading,
+    targetEpisodeForSeason,
+  ]);
 
   const selectSeason = useCallback(
     (index: number) => {
@@ -767,6 +804,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       setActiveSeasonNumber(item.seasonNumber);
       setFocusedArea('episodes');
       jumpToSeason.current = item.seasonNumber;
+      seasonFocusOrigin.current = document.activeElement;
       void loadSeasonData(item.seasonNumber);
     },
     [loadSeasonData, seasons]
@@ -809,84 +847,35 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     [loadSeasonData, loadedSections, seasons]
   );
 
-  const handleAction = useCallback(
-    (action: HomeAction): NavigationOutcome => {
-      if (media._type === 'movie') {
-        if (action === 'confirm') {
-          onWatch({ kind: 'movie', mediaId: media.mediaId });
-          return { type: 'handled' };
-        }
-        return action === 'back' ? { type: 'escape', direction: 'left' } : { type: 'handled' };
-      }
-      if (media._type !== 'tvshow' || seasons.length === 0)
-        return action === 'back' ? { type: 'escape', direction: 'left' } : { type: 'handled' };
-      if (focusedArea === 'season') {
-        if (action === 'up') setFocusedSeasonIndex(index => Math.max(0, index - 1));
-        else if (action === 'down')
-          setFocusedSeasonIndex(index => Math.min(seasons.length - 1, index + 1));
-        else if (action === 'right') setFocusedArea('episodes');
-        else if (action === 'confirm') selectSeason(focusedSeasonIndex);
-        else if (action === 'back') return { type: 'escape', direction: 'left' };
-        return { type: 'handled' };
-      }
-      const currentIndex = selectedEpisode
-        ? flatEpisodes.findIndex(
-            item =>
-              episodeKey(item.section.seasonNumber, item.episode.episodeNumber) ===
-              episodeKey(selectedEpisode.seasonNumber, selectedEpisode.episodeNumber)
-          )
-        : 0;
-      if (action === 'left') {
-        setFocusedArea('season');
-        return { type: 'handled' };
-      }
-      if (action === 'up' || action === 'down') {
-        const nextIndex = Math.max(
-          0,
-          Math.min(flatEpisodes.length - 1, currentIndex + (action === 'up' ? -1 : 1))
-        );
-        const next = flatEpisodes[nextIndex];
-        if (next) selectEpisode(next.section.seasonNumber, next.episode.episodeNumber);
-        else if (action === 'down') {
-          const last = loadedSections[loadedSections.length - 1]?.seasonNumber;
-          const nextSeason = seasons.findIndex(item => item.seasonNumber === last) + 1;
-          if (nextSeason > 0 && seasons[nextSeason]) {
-            jumpToSeason.current = seasons[nextSeason].seasonNumber;
-            void loadSeasonData(seasons[nextSeason].seasonNumber);
-          }
-        }
-        return { type: 'handled' };
-      }
-      if (action === 'confirm') {
-        const current = flatEpisodes[currentIndex];
-        if (current)
-          selectEpisode(current.section.seasonNumber, current.episode.episodeNumber, true);
-        return { type: 'handled' };
-      }
-      if (action === 'back') return { type: 'escape', direction: 'left' };
-      return { type: 'ignored' };
-    },
-    [
-      flatEpisodes,
-      focusedArea,
-      focusedSeasonIndex,
-      loadSeasonData,
-      loadedSections,
-      media,
-      onWatch,
-      seasons,
-      selectEpisode,
-      selectSeason,
-      selectedEpisode,
-    ]
-  );
+  const handleAction = useCallback((action: HomeAction): NavigationOutcome => {
+    if (action === 'back') return { type: 'escape', direction: 'left' };
+    const page = pageRef.current;
+    if (!page) return { type: 'ignored' };
+    const buttons = (selector: string) =>
+      Array.from(page.querySelectorAll<HTMLButtonElement>(selector)).filter(
+        button => !button.disabled
+      );
+    return navigateDetails(action, {
+      back: backRef.current,
+      ratings: buttons('[aria-label="Rate this title"] button'),
+      primary: buttons('[data-details-primary]'),
+      episodes: buttons('[aria-label="Episodes"] button'),
+    });
+  }, []);
+
+  useEffect(() => {
+    const page = pageRef.current;
+    if (document.activeElement === page) {
+      page?.querySelector<HTMLButtonElement>('[data-details-primary]')?.focus();
+    }
+  }, [current]);
 
   useImperativeHandle(forwardedRef, () => ({ handleAction }), [handleAction]);
 
   return (
     <>
       <Header>
-        <BackButton type="button" onClick={onBack} aria-label="Back to browse">
+        <BackButton ref={backRef} type="button" onClick={onBack} aria-label="Back to browse">
           Back
         </BackButton>
       </Header>
@@ -900,8 +889,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       >
         <Layout>
           <Content>
-            {current?.logo ? (
-              <Logo src={getImageUrl(current.logo)} alt={title} />
+            {detailLogo ? (
+              <Logo src={getImageUrl(detailLogo)} alt={title} />
             ) : (
               <Title>{title}</Title>
             )}
@@ -949,6 +938,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
             <RatingActions aria-label="Rate this title">
               <RatingAction
                 type="button"
+                icon={<BookmarkIcon />}
                 $selected={inWatchlist}
                 aria-pressed={inWatchlist}
                 disabled={watchlistPending}
@@ -957,7 +947,6 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                   void (inWatchlist ? removeFromWatchlist(item) : addToWatchlist(item));
                 }}
               >
-                <CardsHeartIcon aria-hidden="true" />
                 {watchlistPending
                   ? 'Updating…'
                   : inWatchlist
@@ -966,43 +955,57 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
               </RatingAction>
               <RatingAction
                 type="button"
+                icon={<ThumbDownIcon />}
                 $selected={selectedRating === 'dislike'}
                 aria-pressed={selectedRating === 'dislike'}
                 aria-label="Don't like it"
-                onClick={() =>
-                  setSelectedRating(currentRating =>
-                    currentRating === 'dislike' ? null : 'dislike'
-                  )
-                }
+                disabled={!savedRating.currentData}
+                aria-disabled={ratingPending}
+                onClick={() => changeRating('dislike')}
               >
-                <ThumbDownIcon aria-hidden="true" />
                 Don&apos;t like it
               </RatingAction>
               <RatingAction
                 type="button"
+                icon={<ThumbUpIcon />}
                 $selected={selectedRating === 'like'}
                 aria-pressed={selectedRating === 'like'}
                 aria-label="Like it"
-                onClick={() =>
-                  setSelectedRating(currentRating => (currentRating === 'like' ? null : 'like'))
-                }
+                disabled={!savedRating.currentData}
+                aria-disabled={ratingPending}
+                onClick={() => changeRating('like')}
               >
-                <ThumbUpIcon aria-hidden="true" />
                 Like it
               </RatingAction>
               <RatingAction
                 type="button"
+                icon={<CardsHeartIcon />}
                 $selected={selectedRating === 'love'}
                 aria-pressed={selectedRating === 'love'}
                 aria-label="Love it"
-                onClick={() =>
-                  setSelectedRating(currentRating => (currentRating === 'love' ? null : 'love'))
-                }
+                disabled={!savedRating.currentData}
+                aria-disabled={ratingPending}
+                onClick={() => changeRating('love')}
               >
-                <CardsHeartIcon aria-hidden="true" />
                 Love it
               </RatingAction>
             </RatingActions>
+            {savedRating.isError && (
+              <ErrorState role="alert">
+                Could not load your rating.
+                <PrimaryAction
+                  data-details-primary
+                  type="button"
+                  $selected={false}
+                  onClick={() => void savedRating.refetch()}
+                >
+                  Retry
+                </PrimaryAction>
+              </ErrorState>
+            )}
+            {ratingUpdate.isError && (
+              <ErrorState role="alert">Could not save your rating. Please try again.</ErrorState>
+            )}
             {media._type === 'movie' && (
               <WarmupBorder
                 $progress={warmupPercent}
@@ -1011,6 +1014,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                 data-warmup-progress={warmupPercent}
               >
                 <WatchAction
+                  data-details-primary
                   type="button"
                   $selected={focusedArea === 'action'}
                   aria-describedby={`warmup-status-${media.mediaId}`}
@@ -1032,6 +1036,11 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                 <SeasonMenu aria-label="Seasons">
                   {seasons.map((item, index) => (
                     <SeasonButton
+                      data-details-primary
+                      onFocus={() => {
+                        setFocusedArea('season');
+                        setFocusedSeasonIndex(index);
+                      }}
                       id={`season-${media.mediaId}-${item.seasonNumber}`}
                       key={item.id}
                       type="button"
@@ -1080,6 +1089,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                       });
                       return (
                         <EpisodeRow
+                          onFocus={() => selectEpisode(section.seasonNumber, episode.episodeNumber)}
                           id={`episode-${media.mediaId}-${key}`}
                           key={episode.id}
                           type="button"

@@ -15,7 +15,7 @@ See [Introduction.mdx](./Introduction.mdx) for selection, accessibility and cont
 | Shared Spinner                                            | Moved here with old export retained; added loading semantics and reduced-motion behavior                          |
 | Modal                                                     | Added documented stories for its existing two-button focus/TV contract                                            |
 | Logo/LogoGlyphs                                           | Retained as app branding: Logo knows app states and fixed page placement; excluded from general primitive exports |
-| MediaCard, EpisodeRow, SeasonButton, HomeSidebar          | Retained in home: selection, media DTOs, progress and remote navigation are domain behavior                       |
+| EpisodeRow, SeasonButton, HomeSidebar                     | Retained in home: selection, media DTOs, progress and remote navigation are domain behavior                       |
 | PlayerControls, PlayerView, detail/back controls          | Retained in home: player state and viewport-scaled chrome require a dedicated visual contract                     |
 | Optional-service cards, settings disclosure, Trakt layout | Feature composition; remaining extensions listed below                                                            |
 | ErrorBoundary                                             | Kept error recovery in shared/components; spacing-only Button extension removed                                   |
@@ -27,6 +27,8 @@ The migration consolidates forms and settings actions first. Existing media/play
 ESLint rejects new `styled(Button)` / `styled(BaseButton)` and the standard form/feedback primitive names; existing domain exceptions are annotated inline. Do not bypass this rule by aliasing a primitive.
 
 Layout-only wrappers may position components. Primitive visual changes must be implemented here with a documented prop and story. Keep component modules importing sibling modules directly to avoid barrel cycles. Keep backend DTOs, Redux, API hooks and authentication out of new primitives.
+
+Use Button's `collapseWhenNotFocused` with `icon` and a text label for actions that expand on focus. The label stays accessible while visually collapsed, and reduced-motion preferences disable the expansion animation. Details uses this for watchlist and rating actions. See the CollapsibleIcon story.
 
 ## Verification
 
@@ -40,3 +42,7 @@ npm exec --workspace frontend -- vitest run --project=storybook src/shared/ui
 ```
 
 Storybook's documentation addon matches the existing Storybook 10.0.8 version. Interactive stories are deterministic and do not call external APIs.
+
+## Media artwork cards
+
+`MediaCard` owns its artwork, hover and focus styles independently of Button. It accepts backdrop/logo URLs, a title fallback, subtitle, percentage progress and interaction states. Its native button preserves activation, refs and roving tab indices. The home adapter selects media progress and episode information; backend DTOs stay out of the shared component. See **UI Elements/MediaCard** in Storybook for the styleguide, states and keyboard activation checks.

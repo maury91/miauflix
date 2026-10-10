@@ -181,22 +181,6 @@ function sourceQualityState(sourceType: SourceType): 'clean' | 'warning' | 'unkn
   return 'unknown';
 }
 
-function discoveryText(state: PreloadPreparationSnapshot['state']): string | null {
-  switch (state) {
-    case 'source_found':
-      return 'Source found';
-    case 'no_source':
-      return 'No compatible source found yet';
-    case 'error':
-      return 'Source discovery failed';
-    case 'unknown':
-      return null;
-    case 'checking':
-    default:
-      return 'Checking sources';
-  }
-}
-
 /** Shows discovery state and the source metadata already known by preload. */
 export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
   mediaKind,
@@ -209,20 +193,22 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
   const quality = qualityLabel(source?.quality ?? null);
   const release = sourceLabel(source?.sourceType ?? null);
   const qualityState = sourceQualityState(source?.sourceType ?? null);
-  const discovery = discoveryText(preparation?.state ?? 'checking');
   const loading = !preparation || preparation.state === 'checking';
   const showDiscovery =
     loading ||
-    (preparation?.state !== 'source_found' && Boolean(discovery)) ||
+    (preparation?.state !== 'source_found' && preparation?.state !== 'unknown') ||
     (preparation?.state === 'source_found' && !quality && !release);
   const warning = release === 'CAM' || release === 'TS';
 
   return (
     <Status aria-live="polite">
-      {showDiscovery && discovery && (
+      {showDiscovery && (
         <Discovery>
           {loading && <Loading width="1.1em" height="1.1em" aria-hidden="true" />}
-          <span>{discovery}</span>
+          {loading && <VisuallyHidden>Checking sources</VisuallyHidden>}
+          {preparation?.state === 'no_source' && (
+            <VisuallyHidden>No compatible source found yet</VisuallyHidden>
+          )}
         </Discovery>
       )}
       {(quality || release) && (

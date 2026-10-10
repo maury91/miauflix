@@ -208,6 +208,97 @@ describe('StorageService', () => {
       expect(foundStorage).toBeNull();
     });
 
+    it('reports a successful zero-byte deletion distinctly from failure', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      await storageService.createStorage({
+        movieSourceId: source.id,
+        location: '/tmp/test/zero-byte-delete',
+        size: 0,
+        reservedBytes: 0,
+      });
+
+      await expect(storageService.removeStorageWithResult(source.id)).resolves.toEqual({
+        status: 'removed',
+        bytes: 0,
+      });
+    });
+
+    it('reports active playback and physical cleanup failure without deleting the record', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      const storage = await storageService.createStorage({
+        movieSourceId: source.id,
+        location: '/tmp/test/result-protection',
+        size: 100,
+      });
+
+      await storageService.setPlaybackActive(source.id, true);
+      await expect(storageService.removeStorageWithResult(source.id)).resolves.toEqual({
+        status: 'active_playback',
+      });
+      await storageService.setPlaybackActive(source.id, false);
+      storageService.registerDeleteHandler(() => {
+        throw new Error('filesystem unavailable');
+      });
+      await expect(storageService.removeStorageWithResult(source.id)).resolves.toEqual({
+        status: 'cleanup_failed',
+      });
+      expect(await storageService.getStorageById(storage.id)).not.toBeNull();
+    });
+
+    it('serializes concurrent deletion requests for the same source', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      await storageService.createStorage({
+        movieSourceId: source.id,
+        location: '/tmp/test/concurrent-delete',
+        size: 100,
+      });
+
+      let markEntered!: () => void;
+      let finishCleanup!: () => void;
+      const entered = new Promise<void>(resolve => (markEntered = resolve));
+      const holdCleanup = new Promise<void>(resolve => (finishCleanup = resolve));
+      const cleanup = jest.fn(async () => {
+        markEntered();
+        await holdCleanup;
+      });
+      storageService.registerDeleteHandler(cleanup);
+
+      const first = storageService.removeStorageWithResult(source.id);
+      await entered;
+      const second = storageService.removeStorageWithResult(source.id);
+      finishCleanup();
+
+      await expect(first).resolves.toEqual({ status: 'removed', bytes: 100 });
+      await expect(second).resolves.toEqual({ status: 'not_found' });
+      expect(cleanup).toHaveBeenCalledTimes(1);
+    });
+
+    it('shows persisted physical allocation, reservations, and unavailable filesystem capacity', async () => {
+      const { storageService, database } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      const storage = await storageService.createStorage({
+        movieSourceId: source.id,
+        location: '/tmp/test/inventory',
+        size: 1000,
+        reservedBytes: 1500,
+      });
+      await database.getStorageRepository().reconcileAllocation(storage.id, 800);
+
+      const inventory = await storageService.getInventory();
+      expect(inventory.items[0].movieSource?.movie?.title).toBe(movie.title);
+      expect(inventory.items[0].allocatedBytes).toBe(800);
+      expect(inventory.physicalBytes).toBe(800);
+      expect(inventory.reservedBytes).toBe(1500);
+      expect(inventory.filesystem).toBeNull();
+    });
+
     it('should throw error when creating storage for non-existent movie source', async () => {
       // Arrange
       const { storageService } = setupTest();
@@ -221,6 +312,34 @@ describe('StorageService', () => {
           size: 1000000,
         })
       ).rejects.toThrow();
+    });
+
+    it('records completion once and preserves the first encrypted layout', async () => {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestMovieSource(movie.id);
+      await storageService.createStorage({
+        movieSourceId: source.id,
+        location: '/tmp/test/completed-media',
+        size: 8,
+      });
+      const layout = {
+        storeName: 'movie - abcdef12',
+        filenameSalt: 'download-abcdef12',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', length: 8, offset: 0 }],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+      };
+
+      const first = await storageService.markVideoComplete(source.id, layout);
+      const duplicate = await storageService.markVideoComplete(source.id, {
+        ...layout,
+        storeName: 'replacement-layout',
+      });
+
+      expect(first?.videoCompletedAt).toBeInstanceOf(Date);
+      expect(duplicate?.videoCompletedAt).toEqual(first?.videoCompletedAt);
+      expect(duplicate?.encryptedLayout).toEqual(layout);
     });
   });
 

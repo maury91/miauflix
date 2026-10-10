@@ -14,6 +14,8 @@ import type {
 import type { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
 import type { StorageService } from '@services/storage/storage.service';
 
+import type { AudioPlaybackService, PlaybackDelivery } from './audio-playback.service';
+
 export interface PlaybackSessionSource {
   id: number;
   quality: Quality | '3D' | null;
@@ -27,6 +29,7 @@ export interface PlaybackSession {
   playbackId: string;
   streamingKey: string;
   streamUrl: string;
+  delivery?: PlaybackDelivery;
   source: PlaybackSessionSource;
   preparation: {
     state: 'cold' | 'warm' | 'warming';
@@ -45,7 +48,8 @@ export class PlaybackSessionService {
     private readonly preparation: PlayablePreparationService,
     config: ConfigService,
     private readonly warmup?: TorrentWarmupController,
-    private readonly storageService?: StorageService
+    private readonly storageService?: StorageService,
+    private readonly audioPlaybackService?: AudioPlaybackService
   ) {
     this.grants = db.getPlaybackGrantRepository();
     this.ttlMs = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
@@ -67,6 +71,7 @@ export class PlaybackSessionService {
       await this.warmup?.promote(prepared.source, this.playableKey(playable));
     }
     const storage = await this.storageService?.getStorageByMovieSource(prepared.source.id);
+    const delivery = await this.audioPlaybackService?.inspect(prepared.source);
 
     const streamingKey = randomBytes(32).toString('base64url');
     const expiresAt = new Date(Date.now() + this.ttlMs);
@@ -82,7 +87,8 @@ export class PlaybackSessionService {
     return {
       playbackId: randomBytes(16).toString('hex'),
       streamingKey,
-      streamUrl: `/api/stream/${streamingKey}`,
+      streamUrl: `/api/stream/${streamingKey}${delivery?.mode === 'audio-transcode' ? '/audio' : ''}`,
+      delivery,
       source: {
         id: prepared.source.id,
         quality: prepared.source.quality,

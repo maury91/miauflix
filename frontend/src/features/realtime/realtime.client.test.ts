@@ -130,4 +130,49 @@ describe('RealtimeClient', () => {
     expect(frame).toMatchObject({ type: 'progress', ...progress });
     expect(frame.clientSequence).toEqual(expect.any(Number));
   });
+
+  it('batches artwork subscriptions, replays them after reconnect, and delivers artwork updates', () => {
+    const onArtwork = vi.fn();
+    const client = new RealtimeClient('session-1', 'tab-1', vi.fn(), undefined, onArtwork);
+    client.setArtworkSubscriptions(
+      Array.from({ length: 60 }, (_, index) => ({
+        mediaType: 'movie' as const,
+        mediaId: index + 1,
+      }))
+    );
+    client.start();
+    const firstSocket = FakeWebSocket.instances[0]!;
+    firstSocket.open();
+    firstSocket.message({ type: 'ready', v: 1 });
+    const firstBatches = firstSocket.sent
+      .map(frame => JSON.parse(frame))
+      .filter(frame => frame.type === 'artwork-subscribe');
+    expect(firstBatches.map(frame => frame.items.length)).toEqual([50, 10]);
+
+    firstSocket.message({
+      type: 'artwork-update',
+      mediaType: 'movie',
+      mediaId: 1,
+      backdrop: 'backdrop.jpg',
+      logo: 'card.png',
+      heroLogo: 'hero.png',
+      artworkRevision: 2,
+      cardLogoStatus: 'ready',
+      heroLogoStatus: 'ready',
+    });
+    expect(onArtwork).toHaveBeenCalledWith(
+      expect.objectContaining({ mediaId: 1, artworkRevision: 2, heroLogo: 'hero.png' })
+    );
+
+    firstSocket.close();
+    vi.advanceTimersByTime(1_000);
+    const secondSocket = FakeWebSocket.instances[1]!;
+    secondSocket.open();
+    secondSocket.message({ type: 'ready', v: 1 });
+    const replayed = secondSocket.sent
+      .map(frame => JSON.parse(frame))
+      .filter(frame => frame.type === 'artwork-subscribe');
+    expect(replayed.map(frame => frame.items.length)).toEqual([50, 10]);
+    client.stop();
+  });
 });

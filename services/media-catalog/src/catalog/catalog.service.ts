@@ -1,3 +1,4 @@
+import { ArtworkRepository } from '../db/artwork.repo';
 import { BackdropFocusRepository } from '../db/backdrop-focus.repo';
 import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
@@ -6,6 +7,7 @@ import { TVShowRepository } from '../db/tv-show.repo';
 import { HttpError } from '../errors';
 import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
+import { ArtworkSelectionService, type ArtworkUpdate } from '../services/artwork-selection.service';
 import {
   BackdropFocusService,
   DEFAULT_BACKDROP_FOCUS_CONCURRENCY,
@@ -43,7 +45,12 @@ export class CatalogService {
   private readonly synchronizer: CatalogSynchronizer;
   private readonly backdropFocusService: BackdropFocusService;
   private backdropFocusBackgroundTimer: ReturnType<typeof setInterval> | undefined;
+  private artworkBackgroundTimer: ReturnType<typeof setInterval> | undefined;
   private backdropFocusScanOffset = 0;
+  private movieArtworkScanOffset = 0;
+  private tvArtworkScanOffset = 0;
+  private readonly artworkMetadataRetry = new Map<string, number>();
+  private readonly artworkService?: ArtworkSelectionService;
 
   constructor(
     private readonly movies: MovieRepository,
@@ -52,7 +59,8 @@ export class CatalogService {
     private readonly syncState: SyncStateRepository,
     private readonly provider: CatalogProvider,
     private readonly values: CatalogValues,
-    backdropFocusRepository: BackdropFocusRepository
+    backdropFocusRepository: BackdropFocusRepository,
+    artworkRepository?: ArtworkRepository
   ) {
     this.hydrator = new CatalogHydrator(
       this.movies,
@@ -64,13 +72,17 @@ export class CatalogService {
       this.localization,
       this.tvShows,
       this.provider,
-      backdropFocusRepository
+      backdropFocusRepository,
+      artworkRepository
     );
     this.backdropFocusService = new BackdropFocusService(
       backdropFocusRepository,
       undefined,
       this.values.backdropFocusConcurrency ?? DEFAULT_BACKDROP_FOCUS_CONCURRENCY
     );
+    if (artworkRepository) {
+      this.artworkService = new ArtworkSelectionService(artworkRepository, this.provider);
+    }
     this.synchronizer = new CatalogSynchronizer(
       this.movies,
       this.tvShows,
@@ -82,20 +94,38 @@ export class CatalogService {
 
   /* -------------------------------------------------------------------- movies */
 
-  async getMovie(mediaId: number, language: string): Promise<MovieDetail> {
+  async getMovie(
+    mediaId: number,
+    language: string,
+    artworkPriority = 60_000
+  ): Promise<MovieDetail> {
     await this.hydrator.ensureMovieFresh(mediaId);
     const row = this.movies.getMovie(mediaId);
     if (!row) throw new HttpError(404, `Movie ${mediaId} not found`);
-    return await this.localizer.localizeMovie(row, language);
+    this.artworkService?.enqueue({
+      ref: { mediaType: 'movie', mediaId },
+      row,
+      priority: artworkPriority,
+    });
+    return this.localizer.localizeMovie(row, language);
   }
 
   /* ------------------------------------------------------------------ tv shows */
 
-  async getTVShow(mediaId: number, language: string): Promise<TVShowDetail> {
+  async getTVShow(
+    mediaId: number,
+    language: string,
+    artworkPriority = 60_000
+  ): Promise<TVShowDetail> {
     await this.hydrator.ensureTVShowFresh(mediaId);
     const row = this.tvShows.getTVShow(mediaId);
     if (!row) throw new HttpError(404, `TV show ${mediaId} not found`);
-    return await this.localizer.localizeTVShow(row, language);
+    this.artworkService?.enqueue({
+      ref: { mediaType: 'tv', mediaId },
+      row,
+      priority: artworkPriority,
+    });
+    return this.localizer.localizeTVShow(row, language);
   }
 
   /* ------------------------------------------------------------------- seasons */
@@ -112,14 +142,20 @@ export class CatalogService {
 
   /* --------------------------------------------------------------------- batch */
 
-  async batch(items: MediaRef[], language: string): Promise<BatchResponse> {
+  async batch(
+    items: MediaRef[],
+    language: string,
+    artworkPriority: 'returned' | 'background' | 'prefetch' = 'returned'
+  ): Promise<BatchResponse> {
+    const priority =
+      artworkPriority === 'returned' ? 60_000 : artworkPriority === 'prefetch' ? 40_000 : 0;
     const resolved = await Promise.all(
-      items.map(async ref => {
+      items.map(async (ref, index) => {
         try {
           const detail =
             ref.mediaType === 'movie'
-              ? await this.getMovie(ref.mediaId, language)
-              : await this.getTVShow(ref.mediaId, language);
+              ? await this.getMovie(ref.mediaId, language, priority + items.length - index)
+              : await this.getTVShow(ref.mediaId, language, priority + items.length - index);
           return { detail };
         } catch (error) {
           if (error instanceof HttpError && error.status === 404) return { ref };
@@ -137,6 +173,40 @@ export class CatalogService {
         entry.error ? [{ ref: entry.error.ref, error: entry.error.message }] : []
       ),
     };
+  }
+
+  queueArtwork(
+    items: MediaRef[],
+    priority: 'focused' | 'visible' | 'returned' | 'prefetch'
+  ): number {
+    if (!this.artworkService) return 0;
+    const value =
+      priority === 'focused'
+        ? 100_000
+        : priority === 'visible'
+          ? 80_000
+          : priority === 'returned'
+            ? 60_000
+            : 40_000;
+    let accepted = 0;
+    for (const item of items) {
+      const row =
+        item.mediaType === 'movie'
+          ? this.movies.getMovie(item.mediaId)
+          : this.tvShows.getTVShow(item.mediaId);
+      if (!row) continue;
+      this.artworkService.enqueue({ ref: item, row, priority: value });
+      accepted++;
+    }
+    return accepted;
+  }
+
+  artworkSnapshot(items: MediaRef[]): ArtworkUpdate[] {
+    return this.artworkService?.snapshot(items) ?? [];
+  }
+
+  onArtworkUpdate(listener: (update: ArtworkUpdate) => void): () => void {
+    return this.artworkService?.subscribe(listener) ?? (() => undefined);
   }
 
   async resolveExternal(ref: {
@@ -192,15 +262,87 @@ export class CatalogService {
 
   startBackdropFocusBackground(): void {
     if (this.backdropFocusBackgroundTimer) return;
+    this.artworkService?.start();
     this.backdropFocusBackgroundTimer = setInterval(() => {
       this.enqueueNextDatabaseBackdropFocus();
     }, this.values.backdropFocusBackgroundIntervalMs);
+    this.artworkBackgroundTimer = setInterval(() => {
+      void this.enqueueNextDatabaseArtwork();
+    }, this.values.backdropFocusBackgroundIntervalMs);
+    void this.enqueueNextDatabaseArtwork();
   }
 
   stopBackdropFocusBackground(): void {
     if (!this.backdropFocusBackgroundTimer) return;
     clearInterval(this.backdropFocusBackgroundTimer);
     this.backdropFocusBackgroundTimer = undefined;
+    if (this.artworkBackgroundTimer) clearInterval(this.artworkBackgroundTimer);
+    this.artworkBackgroundTimer = undefined;
+  }
+
+  async stopArtworkBackground(): Promise<void> {
+    this.stopBackdropFocusBackground();
+    await this.artworkService?.stop();
+  }
+
+  private async enqueueNextDatabaseArtwork(): Promise<void> {
+    const pageSize = 32;
+    const movies = this.movies.getArtworkCandidates(pageSize, this.movieArtworkScanOffset);
+    const shows = this.tvShows.getArtworkCandidates(pageSize, this.tvArtworkScanOffset);
+    if (!movies.length && !shows.length) {
+      this.movieArtworkScanOffset = 0;
+      this.tvArtworkScanOffset = 0;
+      return;
+    }
+    this.movieArtworkScanOffset += pageSize;
+    this.tvArtworkScanOffset += pageSize;
+    for (const movie of movies) {
+      if (movie.logoCandidates === null) {
+        await this.refreshArtworkMetadata('movie', movie.mediaId);
+        continue;
+      }
+      const row = this.movies.getMovie(movie.mediaId);
+      if (row)
+        this.artworkService?.enqueue({
+          ref: { mediaType: 'movie', mediaId: movie.mediaId },
+          row,
+          priority: 0,
+        });
+    }
+    for (const show of shows) {
+      if (show.logoCandidates === null) {
+        await this.refreshArtworkMetadata('tv', show.mediaId);
+        continue;
+      }
+      const row = this.tvShows.getTVShow(show.mediaId);
+      if (row)
+        this.artworkService?.enqueue({
+          ref: { mediaType: 'tv', mediaId: show.mediaId },
+          row,
+          priority: show.watching ? 20_000 : 0,
+        });
+    }
+  }
+
+  private async refreshArtworkMetadata(
+    mediaType: MediaRef['mediaType'],
+    mediaId: number
+  ): Promise<void> {
+    const key = `${mediaType}:${mediaId}`;
+    if ((this.artworkMetadataRetry.get(key) ?? 0) > Date.now()) return;
+    try {
+      if (mediaType === 'movie') {
+        const movie = await this.provider.getMovie(mediaId);
+        if (movie) this.movies.upsertMovie(movie);
+      } else {
+        const show = await this.provider.getTVShow(mediaId);
+        if (show) this.tvShows.upsertTVShow(show);
+      }
+      this.artworkMetadataRetry.delete(key);
+    } catch (error) {
+      this.artworkMetadataRetry.set(key, Date.now() + 60 * 60_000);
+      logger.warn(SCOPE, `Artwork metadata refresh failed for ${mediaType} ${mediaId}`, error);
+    }
   }
 
   private enqueueNextDatabaseBackdropFocus(): void {

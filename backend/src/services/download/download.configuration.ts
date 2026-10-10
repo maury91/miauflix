@@ -58,6 +58,15 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       required: true,
       transform: transforms.size(['KB', 'MB', 'GB', 'TB']),
     }),
+    CONTENT_SEED_DURATION_SECONDS: variable({
+      label: 'Seeding duration after video download',
+      description:
+        'How many seconds to seed after the main video is fully downloaded. Set to 0 to stop seeding immediately.',
+      example: '3600',
+      defaultValue: '3600',
+      required: true,
+      transform: transforms.number({ min: 0, integer: true }),
+    }),
     DISABLE_DISCOVERY: variable({
       description: 'Disable DHT for peer-to-peer client',
       booleanStateDescriptions: {
