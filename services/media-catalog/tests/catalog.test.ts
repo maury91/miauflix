@@ -8,6 +8,7 @@ import { eq } from 'drizzle-orm';
 import { CatalogHydrator } from '../src/catalog/catalog.hydrator';
 import { CatalogService, type CatalogValues } from '../src/catalog/catalog.service';
 import { CatalogSynchronizer } from '../src/catalog/catalog.syncer';
+import { ArtworkRepository } from '../src/db/artwork.repo';
 import { BackdropFocusRepository } from '../src/db/backdrop-focus.repo';
 import { SYNC_STATE_MOVIES, SYNC_STATE_TV_SHOWS } from '../src/db/catalog-db.types';
 import { CatalogDatabase } from '../src/db/database';
@@ -20,6 +21,7 @@ import { HttpError } from '../src/errors';
 import { logger } from '../src/logger';
 import type {
   CatalogProvider,
+  ProviderBackdropSource,
   ProviderChangesPage,
   ProviderGenre,
   ProviderMovie,
@@ -99,13 +101,16 @@ class FakeProvider implements CatalogProvider {
   changedTVShowCalls = 0;
   seasons = new Map<string, ProviderSeason>();
   changedIds: number[] = [];
+  artworkAnalysis = false;
 
   async test(): Promise<boolean> {
     return true;
   }
 
-  getBackdropAnalysisSource(): null {
-    return null;
+  getBackdropAnalysisSource(backdrop: string): ProviderBackdropSource | null {
+    return this.artworkAnalysis
+      ? { key: `analysis:${backdrop}`, url: 'https://image.tmdb.org/t/p/w780/backdrop.jpg' }
+      : null;
   }
 
   async resolveExternal(): Promise<number | null> {
@@ -156,6 +161,7 @@ const setup = () => {
     localization: new LocalizationRepository(db),
     syncState: new SyncStateRepository(db),
     backdropFocus: new BackdropFocusRepository(db),
+    artwork: new ArtworkRepository(db),
   };
   const provider = new FakeProvider();
   const service = new CatalogService(
@@ -165,7 +171,8 @@ const setup = () => {
     repo.syncState,
     provider,
     VALUES,
-    repo.backdropFocus
+    repo.backdropFocus,
+    repo.artwork
   );
   return {
     db,
@@ -180,6 +187,66 @@ const setup = () => {
 };
 
 describe('CatalogService', () => {
+  it('invalidates stale artwork before projecting a detail response', async () => {
+    const { repo, provider, service, cleanup } = setup();
+    try {
+      provider.artworkAnalysis = true;
+      const movie = makeMovie(604);
+      provider.movies.set(movie.mediaId, movie);
+      repo.movies.upsertMovie(movie);
+      const stale = repo.artwork.enqueue({
+        mediaType: 'movie',
+        mediaId: movie.mediaId,
+        signature: 'old-artwork-signature',
+        imageKey: 'fake:old-backdrop',
+        backdropUrl: 'https://image.tmdb.org/t/p/w300/old.jpg',
+        displayBackdrop: movie.backdrop,
+        fallbackLogo: 'https://image.tmdb.org/t/p/original/old-logo.png',
+        candidates: [
+          {
+            url: 'https://image.tmdb.org/t/p/w300/old-logo.png',
+            language: null,
+            width: 0,
+            height: 0,
+            voteAverage: 0,
+            voteCount: 0,
+          },
+        ],
+        popularity: movie.popularity,
+        priority: 0,
+      });
+
+      const response = await service.getMovie(movie.mediaId, 'en');
+
+      expect(response.logo).toBe('');
+      expect(response.heroLogo).toBe('');
+      expect(response.artworkRevision).toBe(stale.revision + 1);
+      expect(response.cardLogoStatus).toBe('ready');
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('hydrates pre-logo TV rows once and preserves available logos through storage and localization', async () => {
+    const { db, repo, provider, service, cleanup } = setup();
+    const show = { ...makeTVShow([]), logo: 'https://img/arcane-logo.png' };
+    const getShow = spyOn(provider, 'getTVShow').mockResolvedValue(show);
+    try {
+      repo.tvShows.upsertTVShow(show);
+      db.db.update(tvShows).set({ logo: null }).where(eq(tvShows.mediaId, 100)).run();
+      expect((await service.getTVShow(100, 'en')).logo).toBe(show.logo);
+      expect(repo.tvShows.getTVShow(100)?.logo).toBe(show.logo);
+      await service.getTVShow(100, 'en');
+      expect(getShow).toHaveBeenCalledTimes(1);
+      repo.tvShows.upsertTVShow({ ...show, logo: '' });
+      expect((await service.getTVShow(100, 'en')).logo).toBe('');
+      expect(getShow).toHaveBeenCalledTimes(1);
+    } finally {
+      getShow.mockRestore();
+      cleanup();
+    }
+  });
+
   it('hydrates movies through the focused hydration component', async () => {
     const { repo, provider, cleanup } = setup();
     provider.movies.set(603, makeMovie(603));
@@ -611,6 +678,7 @@ describe('CatalogService', () => {
       inProduction: false,
       poster: '',
       backdrop: '',
+      logo: '',
       genreIds: [],
       episodeRunTime: [],
       popularity: 0,

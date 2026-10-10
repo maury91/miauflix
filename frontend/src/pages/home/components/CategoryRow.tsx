@@ -166,6 +166,7 @@ interface CategoryRowProps {
   onSelect: (media: MediaDto) => void;
   progress?: ProgressEntry[];
   mediaOverride?: MediaDto[];
+  onMediaLoaded?: (slug: string, media: MediaDto[]) => void;
 }
 
 /**
@@ -191,6 +192,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     onSelect,
     progress,
     mediaOverride,
+    onMediaLoaded,
   },
   forwardedRef
 ) {
@@ -254,6 +256,20 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     }
     return result;
   }, [current.currentData, mediaOverride, nextPage.currentData, previousPage.currentData]);
+
+  useEffect(() => {
+    const loaded = [previousPage.currentData, current.currentData, nextPage.currentData].flatMap(
+      response => response?.results ?? []
+    );
+    onMediaLoaded?.(category.slug, mediaOverride ?? loaded);
+  }, [
+    category.slug,
+    current.currentData,
+    mediaOverride,
+    nextPage.currentData,
+    onMediaLoaded,
+    previousPage.currentData,
+  ]);
 
   const selectIndex = useCallback(
     (requested: number, focus = true) => {

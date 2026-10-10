@@ -1,7 +1,9 @@
 import { useEnsureBackdropFocusMutation } from '@features/media/api/media.api';
 import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
+import type { RootState } from '@store/store';
 import { type FC, Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import {
@@ -188,6 +190,10 @@ interface MediaHeroProps {
 
 /** Show the selected title, source status, and a backdrop that transitions after loading. */
 export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => {
+  const mediaType = media?._type === 'movie' ? 'movie' : 'tv';
+  const artwork = useSelector((state: RootState) =>
+    media ? state.artwork.byMedia[`${mediaType}:${media.mediaId}`] : undefined
+  );
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const heroRef = useRef<HTMLElement>(null);
   const [heroSize, setHeroSize] = useState({ width: 0, height: 0 });
@@ -334,6 +340,11 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
     date?.slice(0, 4),
   ].filter(Boolean);
   const rating = media.rating ? media.rating.toFixed(1) : null;
+  const currentRevision = media.artworkRevision ?? 0;
+  const heroLogo =
+    artwork && artwork.artworkRevision >= currentRevision
+      ? artwork.heroLogo
+      : (media.heroLogo ?? media.logo);
   return (
     <Hero ref={heroRef} aria-live="polite">
       {activeBackdrop && (
@@ -356,8 +367,8 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
         />
       )}
       <Details>
-        {media.logo ? (
-          <Logo src={getImageUrl(media.logo)} alt={getMediaTitle(media)} />
+        {heroLogo ? (
+          <Logo src={getImageUrl(heroLogo)} alt={getMediaTitle(media)} />
         ) : (
           <Title>{getMediaTitle(media)}</Title>
         )}

@@ -20,8 +20,10 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import type { RootState } from '@store/store';
 import { forwardRef, type UIEvent } from 'react';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import type { BackdropPositionContext } from '../backdrop-focus';
@@ -657,6 +659,15 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, [focusedArea, focusedSeasonIndex, media.mediaId, seasons]);
 
   const current = media._type === 'movie' ? movie.data : showDetails;
+  const artworkType = media._type === 'movie' ? 'movie' : 'tv';
+  const artwork = useSelector(
+    (state: RootState) => state.artwork.byMedia[`${artworkType}:${media.mediaId}`]
+  );
+  const currentRevision = current?.artworkRevision ?? media.artworkRevision ?? 0;
+  const detailLogo =
+    artwork && artwork.artworkRevision >= currentRevision
+      ? artwork.heroLogo
+      : (current?.heroLogo ?? current?.logo ?? media.heroLogo ?? media.logo);
   const title = current?.title ?? getMediaTitle(media);
   const backdrop = getImageUrl(current?.backdrop ?? media.backdrop, 'w1280');
   const backdropFocus = current?.backdropFocus ?? media.backdropFocus ?? resolvedBackdropFocus;
@@ -900,8 +911,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       >
         <Layout>
           <Content>
-            {current?.logo ? (
-              <Logo src={getImageUrl(current.logo)} alt={title} />
+            {detailLogo ? (
+              <Logo src={getImageUrl(detailLogo)} alt={title} />
             ) : (
               <Title>{title}</Title>
             )}
