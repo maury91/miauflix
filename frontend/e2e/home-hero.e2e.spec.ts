@@ -133,24 +133,14 @@ async function focusHeroCase(
     )
     .toBe(true);
 
-  // Source preparation is intentionally asynchronous and is covered by the details contract;
-  // keep this backdrop-centering screenshot focused on the hero artwork and stable layout.
-  await hero.locator('div[aria-live="polite"]').evaluate(element => {
-    element.style.visibility = 'hidden';
-  });
   // Logos load independently from the preloaded backdrop; wait for their decoded pixels too.
   await hero
     .locator('img')
     .evaluateAll(images => Promise.all(images.map(image => (image as HTMLImageElement).decode())));
   await expect(hero).toHaveScreenshot(`home-hero-${heroCase.mediaId}.png`, {
     animations: 'disabled',
-    // The scrolling category rows overlap the bottom of the hero. Hide them only during
-    // capture so the complete backdrop gradient remains visible in this hero-only contract.
+    // Hide overlapping rows and normalize asynchronous source status only during capture.
     stylePath: fileURLToPath(new URL('./home-hero.screenshot.css', import.meta.url)),
-    // The hero/sidebar redesign intentionally changed the surrounding copy and navigation
-    // chrome while the artwork remains the contract under test. Keep a bounded allowance for
-    // those pixels so this suite continues to catch backdrop positioning regressions.
-    maxDiffPixels: 5000,
   });
 }
 

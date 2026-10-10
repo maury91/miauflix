@@ -50,6 +50,13 @@ These commands require the E2E Docker environment. They are the closest local pr
 
 ## Snapshot update rules
 
+The home-hero artwork lane hides source preparation through `home-hero.screenshot.css` and
+fixes its height during capture. Hiding an asynchronous badge with `visibility` alone leaves
+its changing height in the layout, shifting the logo and metadata even when the backdrop is
+unchanged. Keep this normalization in the capture stylesheet and use the shared screenshot
+tolerance; regenerate Linux baselines after intentional layout changes instead of increasing
+the pixel allowance.
+
 1. Run the lane without `--update-snapshots` and save the failure output.
 2. Inspect the actual and expected images. A pixel diff caused by a platform baseline is not evidence of a UI regression.
 3. If the UI change is intended, update only the affected lane and project.
