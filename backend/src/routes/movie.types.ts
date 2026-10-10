@@ -27,6 +27,10 @@ export interface MovieResponse {
   backdrop: string;
   backdropFocus: BackdropFocus | null;
   logo: string;
+  heroLogo?: string;
+  artworkRevision?: number;
+  cardLogoStatus?: 'failed' | 'pending' | 'ready';
+  heroLogoStatus?: 'failed' | 'pending' | 'ready';
   genres: string[];
   popularity: number;
   rating: number;

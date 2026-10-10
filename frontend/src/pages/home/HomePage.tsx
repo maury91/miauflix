@@ -19,9 +19,11 @@ import type {
   PreloadPreparationSource,
   ProgressEntry,
 } from '@miauflix/backend';
+import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { artworkActions } from '@store/slices/artwork';
 import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
 import type { AppDispatch, RootState } from '@store/store';
 import { type FC, type UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -100,6 +102,10 @@ function mediaFromProgress(
       backdrop: response.backdrop,
       backdropFocus: response.backdropFocus,
       logo: response.logo,
+      heroLogo: response.heroLogo,
+      artworkRevision: response.artworkRevision,
+      cardLogoStatus: response.cardLogoStatus,
+      heroLogoStatus: response.heroLogoStatus,
       genres: response.genres,
       popularity: response.popularity,
       rating: response.rating,
@@ -120,6 +126,10 @@ function mediaFromProgress(
     backdrop: response.backdrop ?? '',
     backdropFocus: response.backdropFocus,
     logo: response.logo ?? undefined,
+    heroLogo: response.heroLogo ?? undefined,
+    artworkRevision: response.artworkRevision,
+    cardLogoStatus: response.cardLogoStatus,
+    heroLogoStatus: response.heroLogoStatus,
     genres: response.genres,
     popularity: response.popularity ?? 0,
     rating: response.rating ?? 0,
@@ -190,6 +200,9 @@ const HomePage: FC = () => {
   const activeCategoryRef = useRef(0);
   const [selectedByCategory, setSelectedByCategory] = useState<Record<string, number>>({});
   const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
+  const [loadedMediaByCategory, setLoadedMediaByCategory] = useState<Record<string, MediaDto[]>>(
+    {}
+  );
   const [playable, setPlayable] = useState<PlayableRef | null>(null);
   const [realtimePreparation, setRealtimePreparation] = useState<PreloadPreparationSnapshot | null>(
     null
@@ -209,6 +222,7 @@ const HomePage: FC = () => {
   const realtimeRef = useRef<RealtimeClient | null>(null);
   const navigationRevision = useRef(0);
   const selectedMediaRef = useRef<MediaDto | null>(null);
+  const artworkRefsRef = useRef<MediaRef[]>([]);
   selectedMediaRef.current = selectedMedia;
 
   const toRealtimeMedia = useCallback((media: MediaDto | null): RealtimeMediaRef | null => {
@@ -218,17 +232,53 @@ const HomePage: FC = () => {
       : { kind: 'show', mediaId: media.mediaId };
   }, []);
 
+  const onMediaLoaded = useCallback((slug: string, media: MediaDto[]) => {
+    setLoadedMediaByCategory(previous => {
+      if (previous[slug] === media) return previous;
+      return { ...previous, [slug]: media };
+    });
+  }, []);
+
+  useEffect(() => {
+    const activeSlugs = new Set(displayCategories.map(category => category.slug));
+    setLoadedMediaByCategory(previous => {
+      const next = Object.fromEntries(
+        Object.entries(previous).filter(([slug]) => activeSlugs.has(slug))
+      );
+      return Object.keys(next).length === Object.keys(previous).length ? previous : next;
+    });
+  }, [displayCategories]);
+
   /** Publish the bounded navigation window owned by the visible rows. */
   const publishRealtimeInterest = useCallback(() => {
     const rowCount = displayCategories.length;
     if (!rowCount) return;
     const rowStart = Math.max(0, Math.min(activeCategory - 5, rowCount - 11));
     const rows: Array<Array<RealtimeMediaRef | null>> = [];
+    const visible: Array<[number, number]> = [];
     let center: [number, number] | null = null;
     for (let rowIndex = rowStart; rowIndex < Math.min(rowCount, rowStart + 11); rowIndex += 1) {
       const window = rowRefs.current.get(rowIndex)?.getInterestWindow?.();
       const media = (window?.media ?? []).map(toRealtimeMedia);
       rows.push(media);
+      if (
+        window?.center !== null &&
+        window?.center !== undefined &&
+        rowIndex >= activeCategory &&
+        rowIndex <= activeCategory + 1
+      ) {
+        const firstVisible = Math.max(
+          0,
+          Math.min(media.length - mediaPerPage, window.center - Math.floor(mediaPerPage / 2))
+        );
+        for (
+          let column = firstVisible;
+          column < Math.min(media.length, firstVisible + mediaPerPage);
+          column += 1
+        ) {
+          if (media[column]) visible.push([rowIndex - rowStart, column]);
+        }
+      }
       if (rowIndex === activeCategory && window?.center !== null && window?.center !== undefined) {
         center = [rowIndex - rowStart, window.center];
       }
@@ -245,8 +295,16 @@ const HomePage: FC = () => {
       navigationRevision: navigation,
       center: view === 'browse' ? center : null,
       mediaIds: view === 'browse' ? rows : [],
+      visible: view === 'browse' ? visible : [],
     });
-  }, [activeCategory, displayCategories.length, selectedMedia, toRealtimeMedia, view]);
+  }, [
+    activeCategory,
+    displayCategories.length,
+    mediaPerPage,
+    selectedMedia,
+    toRealtimeMedia,
+    view,
+  ]);
 
   const handleRealtimeStatus = useCallback((message: RealtimeStatusMessage) => {
     const selected = selectedMediaRef.current;
@@ -335,20 +393,70 @@ const HomePage: FC = () => {
       ready => {
         setRealtimeReady(ready);
         if (!ready) setRealtimePreparation(null);
-      }
+      },
+      update => dispatch(artworkActions.received(update))
     );
     realtimeRef.current = client;
     client.start();
+    client.setArtworkSubscriptions(artworkRefsRef.current);
     const visibility = () => client.setVisible(document.visibilityState !== 'hidden');
     client.setVisible(document.visibilityState !== 'hidden');
     document.addEventListener('visibilitychange', visibility);
     return () => {
       document.removeEventListener('visibilitychange', visibility);
       client.stop();
+      if (artworkRefsRef.current.length) {
+        dispatch(artworkActions.removed(artworkRefsRef.current));
+      }
       setRealtimeReady(false);
       if (realtimeRef.current === client) realtimeRef.current = null;
     };
-  }, [handleRealtimeStatus, sessionId]);
+  }, [dispatch, handleRealtimeStatus, sessionId]);
+
+  const artworkRefs = useMemo(() => {
+    const byKey = new Map<string, MediaRef>();
+    const add = (media: MediaDto | null | undefined) => {
+      if (!media) return;
+      const mediaType = media._type === 'movie' ? 'movie' : 'tv';
+      byKey.set(`${mediaType}:${media.mediaId}`, { mediaType, mediaId: media.mediaId });
+    };
+    add(selectedMedia);
+    for (const media of continueMedia) add(media);
+    for (const media of Object.values(loadedMediaByCategory).flat()) add(media);
+    return [...byKey.values()].slice(0, 5_000);
+  }, [continueMedia, loadedMediaByCategory, selectedMedia]);
+
+  useEffect(() => {
+    const previous = new Map(
+      artworkRefsRef.current.map(ref => [`${ref.mediaType}:${ref.mediaId}`, ref])
+    );
+    const next = new Map(artworkRefs.map(ref => [`${ref.mediaType}:${ref.mediaId}`, ref]));
+    const removed = [...previous].filter(([key]) => !next.has(key)).map(([, ref]) => ref);
+    realtimeRef.current?.setArtworkSubscriptions(artworkRefs);
+    if (removed.length) dispatch(artworkActions.removed(removed));
+    artworkRefsRef.current = artworkRefs;
+  }, [artworkRefs, dispatch]);
+
+  useEffect(() => {
+    const retained = [
+      ...continueMedia,
+      ...Object.values(loadedMediaByCategory).flat(),
+      ...(selectedMedia ? [selectedMedia] : []),
+    ];
+    for (const media of retained) {
+      const update: ArtworkUpdate = {
+        mediaType: media._type === 'movie' ? 'movie' : 'tv',
+        mediaId: media.mediaId,
+        backdrop: media.backdrop ?? '',
+        logo: media.logo ?? '',
+        heroLogo: media.heroLogo ?? media.logo ?? '',
+        artworkRevision: media.artworkRevision ?? 0,
+        cardLogoStatus: media.cardLogoStatus ?? 'pending',
+        heroLogoStatus: media.heroLogoStatus ?? 'pending',
+      };
+      dispatch(artworkActions.received(update));
+    }
+  }, [continueMedia, dispatch, loadedMediaByCategory, selectedMedia]);
 
   useEffect(() => {
     // These queries supply rendered cards, so retain their data while the row needs it.
@@ -765,6 +873,7 @@ const HomePage: FC = () => {
                   }
                   onActive={handleActive}
                   onInterest={publishRealtimeInterest}
+                  onMediaLoaded={onMediaLoaded}
                   progress={progressEntries}
                   mediaOverride={
                     category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined

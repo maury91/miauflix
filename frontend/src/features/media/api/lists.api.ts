@@ -14,7 +14,7 @@ type WatchlistMembership = {
 
 export const listsApi = createApi({
   reducerPath: 'listsApi',
-  tagTypes: ['Watchlist'],
+  tagTypes: ['Watchlist', 'Rating'],
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
   endpoints: builder => ({
     getLists: builder.query<ListsResponse, void>({

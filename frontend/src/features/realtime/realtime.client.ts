@@ -1,8 +1,15 @@
 import { nextPreloadSequence } from '@features/preload/lib/intent-client';
 import type { ProgressRequest } from '@miauflix/backend';
+import {
+  type ArtworkUpdate,
+  artworkUpdateSchema,
+  type MediaRef,
+} from '@miauflix/service-contracts/catalog/v1';
 import { API_URL } from '@shared/config/constants';
 
 const MAP_COALESCE_MS = 50;
+const ARTWORK_BATCH_SIZE = 50;
+const MAX_ARTWORK_SUBSCRIPTIONS = 5_000;
 
 export type RealtimeMediaRef =
   | { kind: 'movie'; mediaId: number }
@@ -74,12 +81,14 @@ export class RealtimeClient {
   private latestMap: RealtimeMap | null = null;
   private heartbeatTimer: number | null = null;
   private mapTimer: number | null = null;
+  private artworkRefs = new Map<string, MediaRef>();
 
   constructor(
     private readonly session: string,
     private readonly clientId: string,
     private readonly onStatus: (message: RealtimeStatusMessage) => void,
-    private readonly onConnectionChange?: (ready: boolean) => void
+    private readonly onConnectionChange?: (ready: boolean) => void,
+    private readonly onArtworkUpdate?: (update: ArtworkUpdate) => void
   ) {}
 
   start(): void {
@@ -114,6 +123,7 @@ export class RealtimeClient {
         this.latestMap = { ...this.latestMap, clientSequence: nextPreloadSequence() };
       }
       this.sendLatest();
+      this.sendArtworkRefs('artwork-subscribe', [...this.artworkRefs.values()]);
       this.heartbeat();
     } else {
       this.heartbeat();
@@ -141,6 +151,19 @@ export class RealtimeClient {
         this.sendMap();
       }, MAP_COALESCE_MS);
     }
+  }
+
+  /** Replace the media identities retained by loaded list and detail caches. */
+  setArtworkSubscriptions(refs: MediaRef[]): void {
+    const next = new Map<string, MediaRef>();
+    for (const ref of refs.slice(0, MAX_ARTWORK_SUBSCRIPTIONS)) {
+      next.set(`${ref.mediaType}:${ref.mediaId}`, ref);
+    }
+    const added = [...next].filter(([key]) => !this.artworkRefs.has(key)).map(([, ref]) => ref);
+    const removed = [...this.artworkRefs].filter(([key]) => !next.has(key)).map(([, ref]) => ref);
+    this.artworkRefs = next;
+    this.sendArtworkRefs('artwork-unsubscribe', removed);
+    this.sendArtworkRefs('artwork-subscribe', added);
   }
 
   /** Send durable playback progress through the authenticated socket when it is available. */
@@ -185,11 +208,13 @@ export class RealtimeClient {
         (!this.latestFocus || message.focusSequence >= this.latestFocus.clientSequence)
       )
         this.onStatus(message);
+      if (isArtworkUpdate(message)) this.onArtworkUpdate?.(message);
       if (isReady(message)) {
         this.ready = true;
         this.onConnectionChange?.(true);
         this.refreshLatestSequences();
         this.sendLatest();
+        this.sendArtworkRefs('artwork-subscribe', [...this.artworkRefs.values()]);
       }
     };
     socket.onclose = () => {
@@ -234,6 +259,18 @@ export class RealtimeClient {
     this.socket.send(JSON.stringify(this.latestMap));
   }
 
+  private sendArtworkRefs(
+    type: 'artwork-subscribe' | 'artwork-unsubscribe',
+    refs: MediaRef[]
+  ): void {
+    if (!this.ready || !this.socket || !this.visible) return;
+    for (let offset = 0; offset < refs.length; offset += ARTWORK_BATCH_SIZE) {
+      this.socket.send(
+        JSON.stringify({ type, items: refs.slice(offset, offset + ARTWORK_BATCH_SIZE) })
+      );
+    }
+  }
+
   private refreshLatestSequences(): void {
     if (this.latestFocus) {
       this.latestFocus = { ...this.latestFocus, clientSequence: nextPreloadSequence() };
@@ -265,4 +302,11 @@ function isStatusMessage(value: unknown): value is RealtimeStatusMessage {
   if (typeof value !== 'object' || value === null) return false;
   const type = (value as { type?: unknown }).type;
   return type === 'source-status' || type === 'warmup';
+}
+
+function isArtworkUpdate(value: unknown): value is ArtworkUpdate {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Record<string, unknown>;
+  if (candidate['type'] !== 'artwork-update') return false;
+  return artworkUpdateSchema.safeParse(candidate).success;
 }
