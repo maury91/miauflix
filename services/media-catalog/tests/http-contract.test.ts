@@ -10,6 +10,7 @@ import {
 import { afterEach, describe, expect, it } from 'bun:test';
 
 import { CatalogConfigService } from '../src/config/config.service';
+import { createArtworkEventsTransport } from '../src/http/artwork-events';
 import { registerConfigurationRoutes } from '../src/http/handlers/configuration';
 import { registerMediaRoutes } from '../src/http/handlers/media';
 import { registerSystemRoutes } from '../src/http/handlers/system';
@@ -85,12 +86,13 @@ const setupReadyMediaRouter = () => {
     },
   } as unknown as ServiceContext;
   registerMediaRoutes(router, context);
-  Object.assign(router, {
+  return Object.assign(router, {
+    context,
+    artworkListeners,
     publishArtwork: (update: Record<string, unknown>) => {
       for (const listener of artworkListeners) listener(update);
     },
   });
-  return router;
 };
 
 afterEach(() => {
@@ -159,29 +161,64 @@ describe('media-catalog management contract', () => {
     expect(await queued.json()).toEqual({ accepted: 1 });
   });
 
-  it('streams committed artwork updates and releases its subscription on cancellation', async () => {
+  it('sends artwork over WebSocket and releases the subscription on disconnect', async () => {
     const router = setupReadyMediaRouter();
-    const context = router as unknown as {
-      publishArtwork: (update: Record<string, unknown>) => void;
-    };
-    const response = await router.handle(
-      new Request('http://catalog/v1/catalog/media/artwork/events')
-    );
-    expect(response.headers.get('content-type')).toContain('text/event-stream');
-    const reader = response.body!.getReader();
-    const read = reader.read();
-    context.publishArtwork({
-      mediaType: 'tv',
-      mediaId: 7,
-      backdrop: 'backdrop.jpg',
-      logo: 'card.png',
-      heroLogo: 'hero.png',
-      artworkRevision: 1,
-      cardLogoStatus: 'ready',
-      heroLogoStatus: 'ready',
+    const server = Bun.serve({
+      hostname: '127.0.0.1',
+      port: 0,
+      ...createArtworkEventsTransport(router.context, router),
     });
-    const frame = await read;
-    expect(new TextDecoder().decode(frame.value)).toContain('"mediaId":7');
-    await reader.cancel();
+    const socket = new WebSocket(`ws://127.0.0.1:${server.port}/v1/catalog/media/artwork/events`);
+    try {
+      await new Promise<void>((resolve, reject) => {
+        socket.onopen = () => resolve();
+        socket.onerror = reject;
+      });
+      const message = new Promise<unknown>(resolve => {
+        socket.onmessage = event => resolve(JSON.parse(String(event.data)));
+      });
+      const update = {
+        mediaType: 'tv',
+        mediaId: 7,
+        backdrop: 'backdrop.jpg',
+        logo: 'card.png',
+        heroLogo: 'hero.png',
+        artworkRevision: 1,
+        cardLogoStatus: 'ready',
+        heroLogoStatus: 'ready',
+      };
+      router.publishArtwork(update);
+      expect(await message).toEqual(update);
+      const closed = new Promise<void>(resolve => {
+        socket.onclose = () => resolve();
+      });
+      socket.close();
+      await closed;
+      for (let attempt = 0; router.artworkListeners.size && attempt < 100; attempt++) {
+        await Bun.sleep(10);
+      }
+      expect(router.artworkListeners.size).toBe(0);
+    } finally {
+      socket.close();
+      await server.stop(true);
+    }
+  });
+
+  it('requires a WebSocket upgrade and rejects feeds while unconfigured', async () => {
+    const router = setupReadyMediaRouter();
+    const server = Bun.serve({
+      hostname: '127.0.0.1',
+      port: 0,
+      ...createArtworkEventsTransport(router.context, router),
+    });
+    try {
+      const url = `http://127.0.0.1:${server.port}/v1/catalog/media/artwork/events`;
+      expect((await fetch(url)).status).toBe(426);
+      router.context.catalog = null;
+      expect((await fetch(url)).status).toBe(503);
+      expect((await fetch(`http://127.0.0.1:${server.port}/unknown`)).status).toBe(404);
+    } finally {
+      await server.stop(true);
+    }
   });
 });

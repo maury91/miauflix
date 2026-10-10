@@ -1,13 +1,4 @@
 services:
-  # Real broker keeps the Queue service ready so the initial-setup flow can
-  # exercise the Catalog configuration step deterministically.
-  bunqueue:
-    image: ghcr.io/egeominotti/bunqueue:2.8.61
-    volumes:
-      - test_bunqueue_data:/app/data
-    networks:
-      - test-network
-
   # Backend service
   backend:
     image: miauflix-e2e-backend:${E2E_IMAGE_TAG:-local}
@@ -21,10 +12,10 @@ services:
       - NODE_ENV=test
       - RATE_LIMIT_TEST_MODE=true
       - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
-      - BUNQUEUE_HOST=bunqueue
+      - BUNQUEUE_HOST=miauflix-services
       - BUNQUEUE_PORT=6789
-      - CATALOG_SERVICE_URL=http://media-catalog:3001
-      - LIST_SERVICE_URL=http://list-service:3002
+      - CATALOG_SERVICE_URL=http://miauflix-services:3001
+      - LIST_SERVICE_URL=http://miauflix-services:3002
       - TMDB_API_URL=http://tmdb-mock/3
       # The initial-setup lane overrides E2E_CATALOG_TMDB_TOKEN with an empty
       # value so the browser must complete Catalog configuration through the UI.
@@ -60,9 +51,7 @@ services:
       retries: 30
       start_period: 10s
     depends_on:
-      bunqueue:
-        condition: service_started
-      media-catalog:
+      miauflix-services:
         condition: service_healthy
       tmdb-mock:
         condition: service_healthy
@@ -70,25 +59,40 @@ services:
         condition: service_healthy
       trakt-mock:
         condition: service_healthy
-      list-service:
-        condition: service_healthy
       therarbg-mock:
         condition: service_healthy
       tracker-mock:
         condition: service_healthy
 
-  # Media catalog service (fronts the TMDB mock)
-  list-service:
-    image: miauflix-e2e-list-service:${E2E_IMAGE_TAG:-local}
+  # Bunqueue, media catalog, and list service share one runtime image while
+  # retaining their own ports and data directories.
+  miauflix-services:
+    image: miauflix-e2e-miauflix-services:${E2E_IMAGE_TAG:-local}
     build:
       context: ../../
-      dockerfile: services/list-service/Dockerfile
-      target: development
+      dockerfile: backend-e2e/docker/miauflix-services.Dockerfile
+    init: true
     environment:
+      - TCP_PORT=6789
+      - HTTP_PORT=6790
+      - DATA_PATH=/app/data/bunqueue/bunqueue.db
+      - BUNQUEUE_HOST=127.0.0.1
+      - BUNQUEUE_PORT=6789
+      - CATALOG_DATA_DIR=/app/data/catalog
+      - CATALOG_DISABLE_BACKGROUND_TASKS=true
       - LIST_SERVICE_PORT=3002
-      - LIST_SERVICE_DATA_DIR=/app/data
+      - LIST_SERVICE_DATA_DIR=/app/data/list-service
+      - BACKDROP_FOCUS_MODEL_DIR=/app/models
+      - BACKDROP_FOCUS_WASM_DIR=/app/wasm
+      - DEBUG=*
     volumes:
-      - list_service_data:/app/data
+      - test_bunqueue_data:/app/data/bunqueue
+      - list_service_data:/app/data/list-service
+    expose:
+      - '3001'
+      - '3002'
+      - '6789'
+      - '6790'
     networks:
       - test-network
     healthcheck:
@@ -97,35 +101,16 @@ services:
           'CMD',
           'bun',
           '-e',
-          "fetch('http://localhost:3002/health').then(r => { if (!r.ok) process.exit(1) })",
+          "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))",
         ]
       interval: 2s
       timeout: 5s
       retries: 30
       start_period: 5s
     depends_on:
-      trakt-mock:
-        condition: service_healthy
-
-  media-catalog:
-    image: miauflix-e2e-media-catalog:${E2E_IMAGE_TAG:-local}
-    build:
-      context: ../../
-      dockerfile: services/media-catalog/Dockerfile
-    environment:
-      - CATALOG_DATA_DIR=/app/data
-      - CATALOG_DISABLE_BACKGROUND_TASKS=true
-      - DEBUG=*
-    networks:
-      - test-network
-    healthcheck:
-      test: ['CMD', 'wget', '-qO-', 'http://localhost:3001/health']
-      interval: 2s
-      timeout: 5s
-      retries: 30
-      start_period: 5s
-    depends_on:
       tmdb-mock:
+        condition: service_healthy
+      trakt-mock:
         condition: service_healthy
 
   # TMDB Image Mock Service

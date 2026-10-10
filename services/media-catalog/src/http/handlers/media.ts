@@ -123,47 +123,6 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
     );
   });
 
-  router.add('GET', `${BASE_PATH}/media/artwork/events`, ({ req }) => {
-    const catalog = dataPlane();
-    const encoder = new TextEncoder();
-    let unsubscribe: () => void = () => undefined;
-    let heartbeat: ReturnType<typeof setInterval> | undefined;
-    let closed = false;
-    const close = () => {
-      if (closed) return;
-      closed = true;
-      unsubscribe();
-      if (heartbeat) clearInterval(heartbeat);
-    };
-    const stream = new ReadableStream<Uint8Array>({
-      start(controller) {
-        unsubscribe = catalog.onArtworkUpdate(update => {
-          try {
-            controller.enqueue(encoder.encode(`data: ${JSON.stringify(update)}\n\n`));
-          } catch {
-            close();
-          }
-        });
-        heartbeat = setInterval(() => {
-          try {
-            controller.enqueue(encoder.encode(': keep-alive\n\n'));
-          } catch {
-            close();
-          }
-        }, 20_000);
-        req.signal.addEventListener('abort', close, { once: true });
-      },
-      cancel: close,
-    });
-    return new Response(stream, {
-      headers: {
-        'content-type': 'text/event-stream; charset=utf-8',
-        'cache-control': 'no-cache, no-transform',
-        connection: 'keep-alive',
-      },
-    });
-  });
-
   router.add('POST', `${BASE_PATH}/media/backdrop-focus/background`, async ({ req, json }) => {
     const body = backdropFocusBackgroundRequestSchema.parse(await req.json().catch(() => null));
     const catalog = dataPlane();
