@@ -21,6 +21,10 @@ export interface PreloadPreparationSource {
 
 export interface PreloadWarmupSnapshot {
   state: PreloadWarmupState;
+  /** Percentage of the selected initial torrent range that is verified. */
+  progress?: number;
+  verifiedBytes?: number;
+  targetBytes?: number;
 }
 
 export interface PreloadPreparationSnapshot {

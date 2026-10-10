@@ -71,4 +71,17 @@ describe('MediaListRepository snapshots', () => {
       ['tv', 10],
     ]);
   });
+
+  it('returns one list when concurrent callers create the same owner and slug', async () => {
+    const database = await dbHelper.setupTestDatabase();
+    const repository = database.getMediaListRepository();
+
+    const lists = await Promise.all([
+      repository.findOrCreateMediaList('Popular', 'Popular media', 'popular'),
+      repository.findOrCreateMediaList('Popular', 'Popular media', 'popular'),
+    ]);
+
+    expect(lists[0].id).toBe(lists[1].id);
+    expect(await repository.findBySlug('popular')).toMatchObject({ slug: 'popular' });
+  });
 });

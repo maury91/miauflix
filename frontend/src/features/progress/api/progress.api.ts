@@ -4,7 +4,7 @@ import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 import { selectCurrentSessionId } from '@store/slices/auth';
-import type { RootState } from '@store/store';
+import type { AppDispatch, RootState } from '@store/store';
 
 export const progressApi = createApi({
   reducerPath: 'progressApi',
@@ -51,6 +51,35 @@ export const progressApi = createApi({
 });
 
 export const { useGetProgressQuery, useUpdateProgressMutation } = progressApi;
+
+/** Reflect a successfully sent realtime update without refetching the whole progress list. */
+export function applyProgressUpdate(dispatch: AppDispatch, update: ProgressRequest): void {
+  dispatch(
+    progressApi.util.updateQueryData('getProgress', undefined, draft => {
+      const existing = draft.progress.find(entry => samePlayable(entry.playable, update.playable));
+      const next = { ...update, updatedAt: new Date().toISOString() };
+      if (existing) {
+        Object.assign(existing, next);
+        delete existing.nextEpisode;
+      } else {
+        draft.progress.push(next);
+      }
+    })
+  );
+}
+
+function samePlayable(left: PlayableRef, right: PlayableRef): boolean {
+  if (left.kind !== right.kind) return false;
+  if (left.kind === 'movie' && right.kind === 'movie') return left.mediaId === right.mediaId;
+  if (left.kind === 'episode' && right.kind === 'episode') {
+    return (
+      left.showMediaId === right.showMediaId &&
+      left.seasonNumber === right.seasonNumber &&
+      left.episodeNumber === right.episodeNumber
+    );
+  }
+  return false;
+}
 
 export function progressForPlayable(
   entries: ProgressListResponse['progress'],

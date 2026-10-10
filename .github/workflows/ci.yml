@@ -45,10 +45,11 @@ jobs:
           TMDB_API_KEY: mock-api-key
 
       - name: Save Turbo cache
+        if: steps.setup.outputs.turbo-cache-hit != 'true'
         uses: actions/cache/save@v4
         with:
           path: .turbo
-          key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'package-lock.json') }}
+          key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'package-lock.json') }}-${{ github.sha }}
 
   e2e-tests:
     runs-on: ubuntu-latest
@@ -63,20 +64,83 @@ jobs:
         with:
           install-playwright: 'true'
 
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Prepare E2E host build context
+        run: |
+          date -u '+[E2E_PHASE] host-prerequisites-start %Y-%m-%dT%H:%M:%SZ'
+          npm run build:backend
+          bash backend-e2e/scripts/prepare-docker-build-context.sh
+          date -u '+[E2E_PHASE] host-prerequisites-end %Y-%m-%dT%H:%M:%SZ'
+
+      - name: Start E2E image build timing
+        run: date -u '+[E2E_PHASE] image-cache-build-start %Y-%m-%dT%H:%M:%SZ'
+
+      - name: Build E2E images with persistent layer cache
+        uses: docker/bake-action@v6
+        env:
+          E2E_IMAGE_TAG: ${{ github.sha }}
+        with:
+          source: .
+          workdir: backend-e2e/docker
+          files: |
+            docker-compose.test.yml
+            docker-compose.test.ci.yml
+          load: true
+
+      - name: Finish E2E image build timing
+        run: date -u '+[E2E_PHASE] image-cache-build-end %Y-%m-%dT%H:%M:%SZ'
+
       - name: Run E2E tests
-        run: npm run test:e2e
+        run: |
+          date -u '+[E2E_PHASE] e2e-lanes-start %Y-%m-%dT%H:%M:%SZ'
+          npm run test:e2e
+          date -u '+[E2E_PHASE] e2e-lanes-end %Y-%m-%dT%H:%M:%SZ'
         env:
           NODE_ENV: test
+          E2E_IMAGE_TAG: ${{ github.sha }}
+          E2E_USE_PREBUILT_IMAGES: 'true'
+          E2E_HOST_BUILD_PREPARED: 'true'
+        # Includes service startup and all ordinary/Lighthouse browser lanes;
+        # image build/import/export is measured in the preceding step.
+        timeout-minutes: 15
+
+      - name: Run list priority E2E with background workers
+        run: npm run test:backend:e2e:background
+        env:
+          NODE_ENV: test
+          E2E_IMAGE_TAG: ${{ github.sha }}
+          E2E_USE_PREBUILT_IMAGES: 'true'
+          E2E_HOST_BUILD_PREPARED: 'true'
         timeout-minutes: 10
 
       - name: Run initial-user setup E2E test
-        run: npm run test:frontend:e2e:initial-setup
+        run: |
+          date -u '+[E2E_PHASE] initial-setup-start %Y-%m-%dT%H:%M:%SZ'
+          npm run test:frontend:e2e:initial-setup
+          date -u '+[E2E_PHASE] initial-setup-end %Y-%m-%dT%H:%M:%SZ'
+        env:
+          NODE_ENV: test
+          E2E_IMAGE_TAG: ${{ github.sha }}
+          E2E_USE_PREBUILT_IMAGES: 'true'
+          E2E_HOST_BUILD_PREPARED: 'true'
+        timeout-minutes: 10
+
+      - name: Run details page preparation E2E test
+        run: |
+          date -u '+[E2E_PHASE] details-lane-start %Y-%m-%dT%H:%M:%SZ'
+          npm run test:e2e:details --workspace frontend
+          date -u '+[E2E_PHASE] details-lane-end %Y-%m-%dT%H:%M:%SZ'
         env:
           NODE_ENV: test
         timeout-minutes: 10
 
-      - name: Run details page preparation E2E test
-        run: npm run test:e2e:details --workspace frontend
+      - name: Run offline details voting E2E tests
+        run: |
+          date -u '+[E2E_PHASE] details-voting-lane-start %Y-%m-%dT%H:%M:%SZ'
+          npm run test:e2e:details-voting --workspace frontend
+          date -u '+[E2E_PHASE] details-voting-lane-end %Y-%m-%dT%H:%M:%SZ'
         env:
           NODE_ENV: test
         timeout-minutes: 10
@@ -101,10 +165,15 @@ jobs:
           path: |
             frontend/playwright-report/
             frontend/test-results/
+            frontend/test-results-e2e/
             frontend/playwright-report-initial-setup/
             frontend/test-results-initial-setup/
             frontend/playwright-report-details/
             frontend/test-results-details/
+            frontend/playwright-report-details-voting/
+            frontend/test-results-details-voting/
+            frontend/playwright-report-lighthouse/
+            frontend/test-results-lighthouse/
             frontend/e2e/initial-user-setup.e2e.spec.ts-snapshots/
           if-no-files-found: ignore
           retention-days: 7

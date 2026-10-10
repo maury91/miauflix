@@ -1,0 +1,110 @@
+import { Meta } from '@storybook/addon-docs/blocks';
+
+<Meta title="Miauflix UI/Introduction" />
+
+# Miauflix UI
+
+Shared components for Miauflix’s dark interface. Start with an existing primitive and its documented states before creating a new visual treatment. This library lives in `frontend/src/shared/ui` and uses the app’s existing React and styled-components stack. No theme provider is required.
+
+```tsx
+import { ActionRow, Button, FieldLabel, Input } from '@shared/ui';
+
+<FieldLabel htmlFor="email">Email</FieldLabel>
+<Input id="email" type="email" autoComplete="email" required />
+<ActionRow density="compact">
+  <Button appearance="settings" size="medium" type="submit">Save</Button>
+  <Button appearance="settings" size="medium" color="secondary">Cancel</Button>
+</ActionRow>
+```
+
+## Choose a component
+
+<table>
+  <thead>
+    <tr>
+      <th>Need</th>
+      <th>Component</th>
+      <th>Responsibility</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Trigger an action</td>
+      <td>Button</td>
+      <td>Native button, focus, disabled state, icon and visual variants</td>
+    </tr>
+    <tr>
+      <td>Group related actions</td>
+      <td>ActionRow</td>
+      <td>Spacing, wrapping and direction</td>
+    </tr>
+    <tr>
+      <td>Enter text/password/number</td>
+      <td>Input + FieldLabel</td>
+      <td>Native input and consistent focus/error styling</td>
+    </tr>
+    <tr>
+      <td>Choose one available value</td>
+      <td>Select + FieldLabel</td>
+      <td>Native options and keyboard behavior</td>
+    </tr>
+    <tr>
+      <td>Enable or disable a setting</td>
+      <td>Switch</td>
+      <td>Controlled boolean, role and keyboard activation</td>
+    </tr>
+    <tr>
+      <td>Explain an action result</td>
+      <td>Alert</td>
+      <td>Severity and live-region feedback</td>
+    </tr>
+    <tr>
+      <td>Show a loading region</td>
+      <td>Spinner</td>
+      <td>Accessible status with optional visible text</td>
+    </tr>
+    <tr>
+      <td>Indicate loading inside a labelled action</td>
+      <td>LoadingIndicator</td>
+      <td>Decorative indicator, inherits currentColor</td>
+    </tr>
+    <tr>
+      <td>Interrupt with a two-action choice</td>
+      <td>Modal</td>
+      <td>Button focus containment, dismissal and focus restoration</td>
+    </tr>
+  </tbody>
+</table>
+
+## Visual foundations
+
+`PALETTE` is the brand/media palette. `SETTINGS_PALETTE` is the neutral account/settings palette with a blue interaction accent. Both live in `tokens.ts`; the old configuration exports remain compatible. Share these existing semantic palettes rather than adding feature-local colors.
+
+Button defaults remain `appearance="brand"`, `size="large"`, `color="primary"` for the existing TV-oriented interface. Account/settings forms use `appearance="settings"` with small or medium size. Use one primary action per group. Color, size and fullWidth are decisions made through the component API, not through CSS overrides.
+
+## Accessibility
+
+Every control needs a name. Link FieldLabel.htmlFor to a stable input id; use aria-describedby for explanatory and error text. Icon-only buttons need aria-label. Native disabled and required behavior remains available. Keyboard focus must stay visible. Maintain DOM order when composing controls; avoid CSS reordering. LoadingIndicator is decorative; Spinner provides a status. Use reduced-motion settings when checking animated components.
+
+The Modal currently supports marked buttons, not arbitrary focusable forms. For TV navigation mark the two choices with data-modal-action="0" and "1". Keep nested dialogs and form dialogs out of this component until its focus contract is extended and tested.
+
+## Contributing
+
+1. Check this catalog and existing app usages.
+2. Add a shared variant when a recurring visual need belongs to a primitive; keep layout on a parent.
+3. Keep authentication, fetching, configuration parsing and playback state in features/pages.
+4. Add stories for meaningful states, usage guidance and keyboard interaction.
+5. Run the frontend unit tests, type check, app build and Storybook build from the repository root.
+
+ESLint flags new primitive extensions; existing domain exceptions are annotated at their declarations. Avoid `styled(Button)`, `styled(Input)` and inline visual overrides. A feature-specific media tile or player control can remain local when it owns a distinct interaction; document that boundary rather than adding many feature-specific props to Button. Existing deep imports remain supported, but new code should use `@shared/ui`.
+
+## Running the catalog
+
+```sh
+npm run storybook --workspace frontend
+npm run build-storybook --workspace frontend
+npm run check:ts --workspace frontend
+npm test --workspace frontend
+```
+
+Inspired by [MUI’s component documentation](https://mui.com/material-ui/): public props, clear choices and live examples. Miauflix retains its own components and visual language.

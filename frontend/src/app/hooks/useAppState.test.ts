@@ -24,11 +24,19 @@ describe('hasConfigurationIssue', () => {
     expect(hasConfigurationIssue([entry()], { CATALOG: { status: 'ready' } })).toBe(true);
   });
 
-  it.each(['needs_configuration', 'degraded', 'error'])(
-    'requires the configuration wizard for a %s service',
+  it('requires the configuration wizard for a needs_configuration service', () => {
+    expect(
+      hasConfigurationIssue([entry({ hasValue: true })], {
+        CATALOG: { status: 'needs_configuration' },
+      })
+    ).toBe(true);
+  });
+
+  it.each(['degraded', 'error'])(
+    'does not require the configuration wizard for a runtime %s service',
     status => {
       expect(hasConfigurationIssue([entry({ hasValue: true })], { CATALOG: { status } })).toBe(
-        true
+        false
       );
     }
   );

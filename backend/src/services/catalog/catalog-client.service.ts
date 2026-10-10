@@ -1,4 +1,5 @@
 import {
+  backdropFocusBackgroundResponseSchema,
   backdropFocusResponseSchema,
   type BatchResponse,
   batchResponseSchema,
@@ -122,6 +123,19 @@ export class CatalogClientService implements ConfigurableService {
       { method: 'POST' }
     );
     return response.backdropFocus;
+  }
+
+  async queueBackdropFocus(items: MediaRef[]): Promise<number> {
+    const response = await this.remote.requestCapability(
+      backdropFocusBackgroundResponseSchema,
+      this.path('/media/backdrop-focus/background'),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ items }),
+      }
+    );
+    return response.accepted;
   }
 
   async resolveExternal(

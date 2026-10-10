@@ -10,6 +10,7 @@ import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
 import { TmdbProvider } from '../provider/tmdb/tmdb.provider';
 import type { ServiceContext } from '../service-context';
+import { DEFAULT_BACKDROP_FOCUS_CONCURRENCY } from '../services/backdrop-focus.service';
 import { ApiCache } from '../utils/api-cache';
 import { CatalogWorkerManager } from '../workers/worker';
 import type { CatalogValues } from './catalog.service';
@@ -48,11 +49,13 @@ export class CatalogRuntime {
 
   async stop(): Promise<void> {
     this.stopped = true;
+    this.ctx.catalog?.stopBackdropFocusBackground();
     await this.workerManager.stop();
     this.ctx.catalog = null;
   }
 
   private async deactivate(): Promise<void> {
+    this.ctx.catalog?.stopBackdropFocusBackground();
     this.ctx.catalog = null;
     await this.workerManager.pause();
   }
@@ -65,9 +68,17 @@ export class CatalogRuntime {
   }
 
   private catalogValues(values: Record<string, string>): CatalogValues {
+    const backdropFocusBackgroundIntervalMs = Number(values.BACKDROP_FOCUS_BACKGROUND_INTERVAL_MS);
+    const backdropFocusConcurrency = Number(values.BACKDROP_FOCUS_CONCURRENCY);
     return {
       hydrationTtlMs: Number(values.CATALOG_HYDRATION_TTL_MS) || 24 * 60 * 60 * 1000,
       episodeSyncMode: values.EPISODE_SYNC_MODE === 'GREEDY' ? 'GREEDY' : 'ON_DEMAND',
+      backdropFocusConcurrency: Number.isFinite(backdropFocusConcurrency)
+        ? Math.min(8, Math.max(1, Math.floor(backdropFocusConcurrency)))
+        : DEFAULT_BACKDROP_FOCUS_CONCURRENCY,
+      backdropFocusBackgroundIntervalMs: Number.isFinite(backdropFocusBackgroundIntervalMs)
+        ? Math.max(1000, Math.floor(backdropFocusBackgroundIntervalMs))
+        : 20_000,
     };
   }
 
@@ -105,6 +116,7 @@ export class CatalogRuntime {
         this.backdropFocus
       );
       this.ctx.catalog = catalog;
+      if (!this.ctx.env.disableBackgroundTasks) catalog.startBackdropFocusBackground();
       void catalog
         .getGenres('en')
         .catch(error => logger.warn('CatalogRuntime', 'Unable to preload English genres', error));

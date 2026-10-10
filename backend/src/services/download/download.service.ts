@@ -54,6 +54,13 @@ export interface WarmupResult {
   lastPiece: number;
 }
 
+export interface WarmupRangeProgress {
+  verifiedBytes: number;
+  targetBytes: number;
+  progress: number;
+  isComplete: boolean;
+}
+
 export class DownloadService {
   public readonly client: WebTorrent;
   private activeStreams = 0;
@@ -62,6 +69,8 @@ export class DownloadService {
   private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
   private readonly bitfieldTrackedTorrents = new WeakMap<Torrent, Set<number>>();
   private readonly torrentStartPromises = new Map<string, Promise<Torrent>>();
+  private readonly pausedForPlayback = new Set<number>();
+  private readonly warmupSelections = new Map<number, { firstPiece: number; lastPiece: number }>();
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -353,7 +362,9 @@ export class DownloadService {
         torrent.pieceLength,
         torrent.length
       );
-      if (options.retentionClass !== 'speculative') {
+      if (options.retentionClass === 'speculative') {
+        await this.storageService.reserveSpeculativeStorage(source.id, torrent.length);
+      } else {
         await this.storageService.reserveStorage(source.id, torrent.length);
       }
       await this.storageService.reconcileAllocation(source.id);
@@ -392,9 +403,13 @@ export class DownloadService {
   }
 
   /**
-   * Add a torrent without selecting the complete file. WebTorrent selection is
-   * piece-based, so the selected range is the smallest piece-aligned prefix
-   * that covers the initial playback target.
+   * Start or reuse a speculative download and select the smallest piece-aligned
+   * prefix of the largest video file that covers the byte target, capped at the file end.
+   * A source already retained as watched keeps the full video selected.
+   *
+   * @param speculativeExpiresAt Expiry for speculative retention, or null for no supplied expiry.
+   * @returns Inclusive piece indices and their actual byte length, which can exceed the target.
+   * @throws Propagates download failures; rejects with TypeError if no video file is found.
    */
   async warmSource(
     source: MovieSource,
@@ -418,38 +433,108 @@ export class DownloadService {
         Math.ceil((fileOffset + Math.min(target, file.length)) / pieceLength) - 1
       )
     );
+    const selectedTargetBytes = this.getRangeByteLength(download.torrent, firstPiece, lastPiece);
 
     if (download.storage.retentionClass === 'watched') {
       // A watched row may survive a torrent restart, so restore its full selection.
+      this.warmupSelections.delete(source.id);
       file.select();
     } else {
       file.deselect();
       download.torrent.select(firstPiece, lastPiece, 1);
+      this.warmupSelections.set(source.id, { firstPiece, lastPiece });
     }
-    return { sourceId: source.id, targetBytes: target, firstPiece, lastPiece };
+    return { sourceId: source.id, targetBytes: selectedTargetBytes, firstPiece, lastPiece };
   }
 
   async pauseSource(sourceId: number): Promise<boolean> {
     return this.pauseDownload(sourceId);
   }
 
+  /**
+   * Return whether every byte in an inclusive, zero-based piece range is verified.
+   * Invalid or unavailable ranges return false; storage lookup failures propagate.
+   */
   async isRangeVerified(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean> {
+    const progress = await this.getRangeProgress(sourceId, firstPiece, lastPiece);
+    return progress.isComplete;
+  }
+
+  /**
+   * Measure verified bytes and completion percentage (0–100) for an inclusive, zero-based piece range.
+   * Invalid ranges or unavailable torrent data return zero counts and an incomplete result.
+   * Storage lookup failures propagate.
+   */
+  async getRangeProgress(
+    sourceId: number,
+    firstPiece: number,
+    lastPiece: number
+  ): Promise<WarmupRangeProgress> {
     if (
       !Number.isInteger(firstPiece) ||
       !Number.isInteger(lastPiece) ||
       firstPiece < 0 ||
       lastPiece < firstPiece
     ) {
-      return false;
+      return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     }
     const storage = await this.storageService.getStorageByMovieSource(sourceId);
-    if (!storage) return false;
+    if (!storage) return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     const torrent = this.client.torrents.find(item => item.path === storage.location);
-    if (!torrent?.bitfield) return false;
-    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
-      if (!torrent.bitfield.get(piece)) return false;
+    if (!torrent?.bitfield)
+      return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
+    const totalPieces = torrent.pieces?.length;
+    if (
+      !Number.isInteger(totalPieces) ||
+      totalPieces <= 0 ||
+      firstPiece >= totalPieces ||
+      lastPiece >= totalPieces
+    ) {
+      return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     }
-    return true;
+    const targetBytes = this.getRangeByteLength(torrent, firstPiece, lastPiece);
+    if (targetBytes <= 0) {
+      return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
+    }
+    let verifiedBytes = 0;
+    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+      if (torrent.bitfield.get(piece)) verifiedBytes += this.getPieceByteLength(torrent, piece);
+    }
+    const progress = Math.min(100, Math.max(0, (verifiedBytes / targetBytes) * 100));
+    return {
+      verifiedBytes,
+      targetBytes,
+      progress,
+      isComplete: verifiedBytes === targetBytes,
+    };
+  }
+
+  /**
+   * Return the configured speculative buffer target in bytes.
+   * @throws ConfigurationServiceError if PRELOAD_WARM_TARGET has no computed value.
+   */
+  getWarmupTargetBytes(): number {
+    return Number(this.config.getOrThrow('PRELOAD_WARM_TARGET'));
+  }
+
+  /** Return a piece’s byte length, capped at the torrent end, or zero for unusable layout data. */
+  private getPieceByteLength(torrent: Torrent, piece: number): number {
+    const pieceLength = Number(torrent.pieceLength);
+    const torrentLength = Number(torrent.length);
+    if (!Number.isFinite(pieceLength) || pieceLength <= 0 || !Number.isFinite(torrentLength)) {
+      return 0;
+    }
+    const start = piece * pieceLength;
+    return Math.max(0, Math.min(pieceLength, torrentLength - start));
+  }
+
+  /** Sum byte lengths across an inclusive, zero-based piece range, including a short final piece. */
+  private getRangeByteLength(torrent: Torrent, firstPiece: number, lastPiece: number): number {
+    let total = 0;
+    for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
+      total += this.getPieceByteLength(torrent, piece);
+    }
+    return total;
   }
 
   /** Promote the already-added source; no source ranking or replacement occurs. */
@@ -459,8 +544,24 @@ export class DownloadService {
       reservedBytes: source.size,
     });
     const file = getVideoFile(download.torrent);
+    this.warmupSelections.delete(source.id);
     file.select();
     await this.storageService.markAsAccessed(source.id);
+    return true;
+  }
+
+  /** Download a watchlisted movie in the background while preserving the playback reserve. */
+  async predownloadSource(source: MovieSource): Promise<boolean> {
+    const download = await this.startDownload(source, {
+      retentionClass: 'speculative',
+      reservedBytes: source.size,
+    });
+    await this.storageService.withSourceLock(source.id, async () => {
+      this.warmupSelections.delete(source.id);
+      getVideoFile(download.torrent).select();
+      if (this.activeStreams <= 0) return;
+      if (await this.pauseDownload(source.id)) this.pausedForPlayback.add(source.id);
+    });
     return true;
   }
 
@@ -693,6 +794,9 @@ export class DownloadService {
       // Pause by deselecting all files
       if (torrent.files && torrent.files.length > 0) {
         torrent.files.forEach(file => file.deselect());
+        // File selection and explicit piece selection are independent in WebTorrent.
+        // Clear both so a paused warmup cannot continue downloading its range.
+        torrent.deselect(0, Math.max(0, this.getTorrentPieceCount(torrent) - 1));
         logger.info('DownloadService', `Paused download for movie source ${movieSourceId}`);
         return true;
       }
@@ -724,6 +828,14 @@ export class DownloadService {
       if (!torrent) {
         logger.warn('DownloadService', `No active torrent found for movie source ${movieSourceId}`);
         return false;
+      }
+
+      const warmup = this.warmupSelections.get(movieSourceId);
+      if (warmup) {
+        torrent.files?.forEach(file => file.deselect());
+        torrent.select(warmup.firstPiece, warmup.lastPiece, 1);
+        logger.info('DownloadService', `Resumed warmup for movie source ${movieSourceId}`);
+        return true;
       }
 
       // Resume by selecting files
@@ -764,6 +876,8 @@ export class DownloadService {
 
       // Remove storage record
       await this.storageService.removeStorage(movieSourceId);
+      this.warmupSelections.delete(movieSourceId);
+      this.pausedForPlayback.delete(movieSourceId);
       logger.info(
         'DownloadService',
         `Cancelled download and cleaned up storage for movie source ${movieSourceId}`
@@ -868,6 +982,21 @@ export class DownloadService {
             movieSource.id,
             (this.activeSourceCounts.get(movieSource.id) ?? 0) + 1
           );
+          if (this.activeStreams === 1) {
+            try {
+              await this.pauseSpeculativeDownloads(movieSource.id);
+            } catch (error) {
+              // Undo admission before propagating startup failure. The stream has
+              // no release callback yet, so leaving these counts set would wedge
+              // future playback and prevent another pause sweep.
+              this.activeStreams = Math.max(0, this.activeStreams - 1);
+              const remaining = (this.activeSourceCounts.get(movieSource.id) ?? 1) - 1;
+              if (remaining > 0) this.activeSourceCounts.set(movieSource.id, remaining);
+              else this.activeSourceCounts.delete(movieSource.id);
+              await this.storageService.setPlaybackActive(movieSource.id, false);
+              throw error;
+            }
+          }
         });
 
         const headers: Record<string, string> = {
@@ -915,6 +1044,7 @@ export class DownloadService {
           else this.activeSourceCounts.delete(movieSource.id);
           releasePromise = this.storageService.withSourceLock(movieSource.id, async () => {
             await this.storageService.setPlaybackActive(movieSource.id, false);
+            if (this.activeStreams === 0) await this.resumeSpeculativeDownloads();
           });
           return releasePromise;
         };
@@ -983,5 +1113,25 @@ export class DownloadService {
         this.client.once('ready', () => handleRequest().catch(reject));
       }
     });
+  }
+
+  /** Pause only speculative torrents while the first active stream is consuming bandwidth. */
+  private async pauseSpeculativeDownloads(excludeSourceId: number): Promise<void> {
+    const records = (await this.storageService.getSpeculativeStorage()) ?? [];
+    await Promise.all(
+      records
+        .filter(record => record.movieSourceId !== excludeSourceId && record.activeStreams === 0)
+        .map(async record => {
+          if (await this.pauseDownload(record.movieSourceId))
+            this.pausedForPlayback.add(record.movieSourceId);
+        })
+    );
+  }
+
+  /** Resume only torrents paused by playback admission; unrelated pauses remain untouched. */
+  private async resumeSpeculativeDownloads(): Promise<void> {
+    const sourceIds = [...this.pausedForPlayback];
+    this.pausedForPlayback.clear();
+    await Promise.all(sourceIds.map(sourceId => this.resumeDownload(sourceId)));
   }
 }
