@@ -287,7 +287,7 @@ Bun.serve({
         console.log(`Loading cached response from ${filePath}`);
         const fileContent = await Bun.file(filePath).json();
         const fixtureData = filterImageLanguages
-          ? filterTmdbImages(fileContent.data, filterImageLanguages)
+          ? filterTmdbImages(fileContent.data, filterImageLanguages, queryParams.language)
           : fileContent.data;
         const responseData = path.endsWith('/configuration')
           ? withImageBaseUrl(fixtureData)

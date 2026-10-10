@@ -13,11 +13,13 @@ export function tmdbFixtureQuery(
   return recorded;
 }
 
-export function filterTmdbImages(data: unknown, languages: string): unknown {
+export function filterTmdbImages(data: unknown, languages: string, language = 'en'): unknown {
   if (!data || typeof data !== 'object') return data;
   const detail = data as { images?: Record<string, unknown> };
   if (!detail.images) return data;
-  const allowed = new Set(languages.split(','));
+  const allowed = new Set(
+    [language, ...languages.split(',')].map(value => value.trim().toLowerCase().split('-')[0])
+  );
   return {
     ...detail,
     images: Object.fromEntries(

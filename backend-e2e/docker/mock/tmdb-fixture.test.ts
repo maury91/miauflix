@@ -27,4 +27,20 @@ describe('TMDB recorded image language replay', () => {
     });
     expect(data.images.logos).toHaveLength(3);
   });
+  it.each([
+    ['null', 'en-US', ['en', null]],
+    ['en-US,null', 'en-US', ['en', null]],
+    ['fr-CA,null', 'en-US', ['en', null, 'fr']],
+    ['en-US', 'fr-CA', ['en', 'fr']],
+  ])('combines base and additional image languages: %s + %s', (additional, base, expected) => {
+    const data = {
+      images: {
+        logos: [{ iso_639_1: 'en' }, { iso_639_1: null }, { iso_639_1: 'fr' }, { iso_639_1: 'de' }],
+      },
+    };
+    expect(filterTmdbImages(data, additional, base)).toEqual({
+      images: { logos: expected.map(iso_639_1 => ({ iso_639_1 })) },
+    });
+    expect(data.images.logos).toHaveLength(4);
+  });
 });
