@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray, isNotNull, ne, sql } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNotNull, ne, sql } from 'drizzle-orm';
 
 import { type CatalogTx, replaceGenres, replaceTranslations } from './catalog-db.helpers';
 import { episodeRow, seasonRow, showRow } from './catalog-db.mappers';
@@ -32,6 +32,24 @@ export class TVShowRepository {
       .from(tvShows)
       .where(and(isNotNull(tvShows.detailsSyncedAt), ne(tvShows.backdrop, '')))
       .orderBy(asc(tvShows.mediaId))
+      .limit(limit)
+      .offset(offset)
+      .all();
+  }
+
+  getArtworkCandidates(limit = 32, offset = 0) {
+    return this.db
+      .select({
+        mediaId: tvShows.mediaId,
+        backdrop: tvShows.backdrop,
+        logo: tvShows.logo,
+        logoCandidates: tvShows.logoCandidates,
+        popularity: tvShows.popularity,
+        watching: tvShows.watching,
+      })
+      .from(tvShows)
+      .where(and(isNotNull(tvShows.detailsSyncedAt), ne(tvShows.backdrop, '')))
+      .orderBy(desc(tvShows.watching), desc(tvShows.popularity), asc(tvShows.mediaId))
       .limit(limit)
       .offset(offset)
       .all();
@@ -80,6 +98,8 @@ export class TVShowRepository {
           firstAirDate: show.firstAirDate,
           poster: show.poster,
           backdrop: show.backdrop,
+          logo: show.logo,
+          logoCandidates: JSON.stringify(show.logoCandidates ?? []),
           status: show.status,
           type: show.type,
           inProduction: show.inProduction ? 1 : 0,
@@ -100,6 +120,8 @@ export class TVShowRepository {
             firstAirDate: show.firstAirDate,
             poster: show.poster,
             backdrop: show.backdrop,
+            logo: show.logo,
+            logoCandidates: JSON.stringify(show.logoCandidates ?? []),
             status: show.status,
             type: show.type,
             inProduction: show.inProduction ? 1 : 0,

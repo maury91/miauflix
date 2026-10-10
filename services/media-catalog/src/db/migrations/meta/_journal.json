@@ -22,6 +22,27 @@
       "when": 1790176313863,
       "tag": "0002_backdrop_focus",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1791481200000,
+      "tag": "0003_tv_show_logos",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1791481200001,
+      "tag": "0004_precomputed_artwork",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1791481200002,
+      "tag": "0005_artwork_analysis_inputs",
+      "breakpoints": true
     }
   ]
 }

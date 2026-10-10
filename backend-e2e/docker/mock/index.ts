@@ -1,4 +1,5 @@
 import { sanitize } from './sanitize';
+import { filterTmdbImages, tmdbFixtureQuery } from './tmdb-fixture';
 import { handleRequest } from './handleRequest';
 import type {
   AnonymizedBy,
@@ -267,16 +268,30 @@ Bun.serve({
       return new Response('OK', { status: 200 });
     }
 
-    const filePath = getFilePath(path, queryParams, method);
+    let filePath = getFilePath(path, queryParams, method);
+    let filterImageLanguages: string | undefined;
 
     try {
+      // Older recordings contain the full image response without this filter.
+      // Replay them only for TMDB details and apply the same filter locally.
+      const recordedQuery = method === 'GET' ? tmdbFixtureQuery(path, queryParams) : null;
+      if (recordedQuery && !(await Bun.file(filePath).exists())) {
+        const recordedPath = getFilePath(path, recordedQuery, method);
+        if (await Bun.file(recordedPath).exists()) {
+          filePath = recordedPath;
+          filterImageLanguages = queryParams.include_image_language;
+        }
+      }
       // Check if the response is cached
       if (await Bun.file(filePath).exists()) {
         console.log(`Loading cached response from ${filePath}`);
         const fileContent = await Bun.file(filePath).json();
-        const responseData = path.endsWith('/configuration')
-          ? withImageBaseUrl(fileContent.data)
+        const fixtureData = filterImageLanguages
+          ? filterTmdbImages(fileContent.data, filterImageLanguages, queryParams.language)
           : fileContent.data;
+        const responseData = path.endsWith('/configuration')
+          ? withImageBaseUrl(fixtureData)
+          : fixtureData;
         const data = fileContent.headers?.['content-type']?.includes('application/json')
           ? JSON.stringify(responseData)
           : responseData;

@@ -1,4 +1,9 @@
 import {
+  artworkQueueRequestSchema,
+  artworkQueueResponseSchema,
+  artworkSnapshotRequestSchema,
+  artworkSnapshotResponseSchema,
+  artworkUpdateSchema,
   backdropFocusBackgroundRequestSchema,
   backdropFocusBackgroundResponseSchema,
   backdropFocusResponseSchema,
@@ -89,7 +94,33 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
   router.add('POST', `${BASE_PATH}/media/batch`, async ({ req, json }) => {
     const body = batchRequestSchema.parse(await req.json().catch(() => null));
     const catalog = dataPlane();
-    return json(batchResponseSchema.parse(await catalog.batch(body.items, body.language)));
+    return json(
+      batchResponseSchema.parse(
+        await catalog.batch(body.items, body.language, body.artworkPriority)
+      )
+    );
+  });
+
+  router.add('POST', `${BASE_PATH}/media/artwork/snapshot`, async ({ req, json }) => {
+    const body = artworkSnapshotRequestSchema.parse(await req.json().catch(() => null));
+    const catalog = dataPlane();
+    return json(
+      artworkSnapshotResponseSchema.parse({
+        updates: catalog
+          .artworkSnapshot(body.items)
+          .map(update => artworkUpdateSchema.parse(update)),
+      })
+    );
+  });
+
+  router.add('POST', `${BASE_PATH}/media/artwork/queue`, async ({ req, json }) => {
+    const body = artworkQueueRequestSchema.parse(await req.json().catch(() => null));
+    const catalog = dataPlane();
+    return json(
+      artworkQueueResponseSchema.parse({
+        accepted: catalog.queueArtwork(body.items, body.priority),
+      })
+    );
   });
 
   router.add('POST', `${BASE_PATH}/media/backdrop-focus/background`, async ({ req, json }) => {

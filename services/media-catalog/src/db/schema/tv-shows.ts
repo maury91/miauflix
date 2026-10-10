@@ -11,6 +11,9 @@ export const tvShows = sqliteTable('tv_shows', {
   firstAirDate: text('first_air_date').notNull().default(''),
   poster: text().notNull().default(''),
   backdrop: text().notNull().default(''),
+  // Null marks pre-logo rows for one-time hydration; empty means no logo is available.
+  logo: text(),
+  logoCandidates: text('logo_candidates'),
   status: text().notNull().default(''),
   type: text().notNull().default(''),
   inProduction: integer('in_production').notNull().default(0),

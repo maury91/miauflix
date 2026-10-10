@@ -127,6 +127,111 @@ describe('TmdbClient', () => {
     expect(cacheKeys).toEqual(['tmdb:v1:configuration', 'tmdb:v1:configuration']);
   });
 
+  it.each([true, false])('loads TV logo artwork when available: %s', async hasLogo => {
+    const urls: string[] = [];
+    const cacheKeys: string[] = [];
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
+      const url = String(input);
+      urls.push(url);
+      if (url.endsWith('/configuration'))
+        return Response.json({ images: { secure_base_url: 'https://image.test/' } });
+      return Response.json({
+        id: 100,
+        external_ids: { imdb_id: null },
+        name: 'Arcane',
+        overview: '',
+        tagline: '',
+        first_air_date: '2021-01-01',
+        poster_path: '/poster.jpg',
+        backdrop_path: '/backdrop.jpg',
+        status: 'Ended',
+        type: 'Scripted',
+        in_production: false,
+        episode_run_time: [],
+        genres: [],
+        popularity: 1,
+        vote_average: 8,
+        seasons: [],
+        translations: { translations: [] },
+        images: {
+          logos: hasLogo
+            ? [
+                { file_path: '/neutral.png', iso_639_1: null },
+                { file_path: '/arcane.png', iso_639_1: 'en' },
+                { file_path: '/neutral.png', iso_639_1: null },
+              ]
+            : [],
+        },
+      });
+    }) as unknown as typeof fetch;
+    const client = new TmdbClient(makeCache(cacheKeys), {
+      apiUrl: 'https://tmdb.example/3',
+      accessToken: 'token',
+    });
+    const show = await client.getTVShowDetails(100);
+    expect(show.logo).toBe(hasLogo ? 'https://image.test/original/arcane.png' : '');
+    expect(show.logoCandidates?.map(candidate => candidate.url)).toEqual(
+      hasLogo
+        ? ['https://image.test/original/arcane.png', 'https://image.test/original/neutral.png']
+        : []
+    );
+    expect(urls[0]).toContain('append_to_response=external_ids,translations,images');
+    expect(urls[0]).toContain('include_image_language=en,null');
+    expect(cacheKeys).toContain('tmdb:v1:tv:100:v3');
+  });
+
+  it('orders eligible movie logos by configured language then neutral and removes duplicate assets', async () => {
+    const urls: string[] = [];
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
+      const url = String(input);
+      urls.push(url);
+      if (url.endsWith('/configuration'))
+        return Response.json({ images: { secure_base_url: 'https://image.test/' } });
+      return Response.json({
+        id: 50,
+        imdb_id: null,
+        title: 'Film',
+        overview: '',
+        tagline: null,
+        release_date: '2025-01-01',
+        poster_path: null,
+        backdrop_path: null,
+        runtime: 100,
+        genres: [],
+        popularity: 1,
+        vote_average: 7,
+        images: {
+          logos: [
+            { file_path: '/neutral.png', iso_639_1: null },
+            { file_path: '/french.png', iso_639_1: 'fr' },
+            { file_path: '/french.png', iso_639_1: null },
+            { file_path: '/spanish.png', iso_639_1: 'es' },
+          ],
+        },
+        translations: { translations: [] },
+      });
+    }) as unknown as typeof fetch;
+    const client = new TmdbClient(
+      makeCache([]),
+      {
+        apiUrl: 'https://tmdb.example/3',
+        accessToken: 'token',
+      },
+      'fr'
+    );
+
+    const movie = await client.getMovieDetails(50);
+
+    expect(movie.logo).toBe('https://image.test/original/french.png');
+    expect(movie.logoCandidates.map(candidate => candidate.url)).toEqual([
+      'https://image.test/original/french.png',
+      'https://image.test/original/neutral.png',
+    ]);
+    expect(urls.find(url => url.includes('/movie/50?'))).toContain(
+      'include_image_language=fr,null'
+    );
+  });
+
   it('shares concurrent movie and TV genre requests', async () => {
     let requests = 0;
     globalThis.fetch = (async () => {

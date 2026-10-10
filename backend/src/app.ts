@@ -126,7 +126,8 @@ try {
     authService,
     configurationService,
     preloadIntentService,
-    progressService
+    progressService,
+    catalogClient
   );
   const playbackSessionService = new PlaybackSessionService(
     db,

@@ -1,4 +1,4 @@
-import { and, asc, eq, inArray, isNotNull, ne } from 'drizzle-orm';
+import { and, asc, desc, eq, inArray, isNotNull, ne } from 'drizzle-orm';
 
 import { replaceGenres, replaceTranslations } from './catalog-db.helpers';
 import { movieRow } from './catalog-db.mappers';
@@ -31,6 +31,23 @@ export class MovieRepository {
       .all();
   }
 
+  getArtworkCandidates(limit = 32, offset = 0) {
+    return this.db
+      .select({
+        mediaId: movies.mediaId,
+        backdrop: movies.backdrop,
+        logo: movies.logo,
+        logoCandidates: movies.logoCandidates,
+        popularity: movies.popularity,
+      })
+      .from(movies)
+      .where(and(isNotNull(movies.detailsSyncedAt), ne(movies.backdrop, '')))
+      .orderBy(desc(movies.popularity), asc(movies.mediaId))
+      .limit(limit)
+      .offset(offset)
+      .all();
+  }
+
   hasKnownMovies(): boolean {
     return (
       this.db
@@ -56,6 +73,7 @@ export class MovieRepository {
           poster: movie.poster,
           backdrop: movie.backdrop,
           logo: movie.logo,
+          logoCandidates: JSON.stringify(movie.logoCandidates ?? []),
           popularity: movie.popularity,
           rating: movie.rating,
           detailsSyncedAt: now,
@@ -74,6 +92,7 @@ export class MovieRepository {
             poster: movie.poster,
             backdrop: movie.backdrop,
             logo: movie.logo,
+            logoCandidates: JSON.stringify(movie.logoCandidates ?? []),
             popularity: movie.popularity,
             rating: movie.rating,
             detailsSyncedAt: now,

@@ -5,6 +5,7 @@ import {
   usePromoteListMediaMutation,
 } from '@features/media/api/lists.api';
 import { configureStore } from '@reduxjs/toolkit';
+import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
@@ -24,7 +25,9 @@ const meta = {
   parameters: { layout: 'fullscreen' },
   decorators: [
     Story => {
-      const store = configureStore({ reducer: { auth: authSlice.reducer } });
+      const store = configureStore({
+        reducer: { auth: authSlice.reducer, artwork: artworkSlice.reducer },
+      });
       return (
         <Provider store={store}>
           <Story />

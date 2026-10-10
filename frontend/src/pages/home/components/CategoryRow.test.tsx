@@ -46,7 +46,7 @@ vi.mock('./MediaCard', async () => {
   };
 });
 
-import { CategoryRow } from './CategoryRow';
+import { CategoryRow, type CategoryRowHandle } from './CategoryRow';
 
 const response = (page: number, total = 40): ListResponse =>
   ({
@@ -115,6 +115,17 @@ describe('CategoryRow page window', () => {
         isLoading: false,
         isError: false,
       };
+    });
+  });
+
+  it('reports the actual left-aligned viewport within the interest window', () => {
+    const ref = createRef<CategoryRowHandle>();
+    render(<CategoryRow {...makeProps(5, true, { mediaPerPage: 6 })} ref={ref} />);
+    const scroll = screen.getByTestId('category-row-scroll-container');
+    fireEvent.scroll(scroll, { target: { scrollLeft: 5 * 192 } });
+    expect(ref.current?.getInterestWindow()).toMatchObject({
+      center: 5,
+      visible: [5, 6, 7, 8, 9, 10],
     });
   });
 

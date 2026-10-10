@@ -47,6 +47,38 @@ describe('RealtimeClient', () => {
     vi.unstubAllGlobals();
   });
 
+  it('reconciles hidden-tab removals before new subscriptions and resets on reconnect', () => {
+    const client = new RealtimeClient('session-1', 'tab-1', vi.fn());
+    client.start();
+    const socket = FakeWebSocket.instances[0]!;
+    socket.open();
+    socket.message({ type: 'ready' });
+    client.setArtworkSubscriptions([{ mediaType: 'movie', mediaId: 1 }]);
+    client.setVisible(false);
+    client.setArtworkSubscriptions([{ mediaType: 'movie', mediaId: 2 }]);
+    client.setArtworkSubscriptions([{ mediaType: 'movie', mediaId: 3 }]);
+    socket.sent = [];
+    client.setVisible(true);
+    expect(
+      socket.sent.map(frame => JSON.parse(frame)).filter(frame => frame.type.startsWith('artwork-'))
+    ).toEqual([
+      { type: 'artwork-unsubscribe', items: [{ mediaType: 'movie', mediaId: 1 }] },
+      { type: 'artwork-subscribe', items: [{ mediaType: 'movie', mediaId: 3 }] },
+    ]);
+    socket.close();
+    client.setArtworkSubscriptions([{ mediaType: 'tv', mediaId: 4 }]);
+    vi.advanceTimersByTime(1000);
+    const replacement = FakeWebSocket.instances[1]!;
+    replacement.open();
+    replacement.message({ type: 'ready' });
+    expect(
+      replacement.sent
+        .map(frame => JSON.parse(frame))
+        .filter(frame => frame.type.startsWith('artwork-'))
+    ).toEqual([{ type: 'artwork-subscribe', items: [{ mediaType: 'tv', mediaId: 4 }] }]);
+    client.stop();
+  });
+
   it('authenticates and coalesces rapid map updates to the latest frame', () => {
     const client = new RealtimeClient('session-1', 'tab-1', vi.fn());
     client.start();
@@ -129,5 +161,50 @@ describe('RealtimeClient', () => {
     const frame = JSON.parse(socket.sent.at(-1)!);
     expect(frame).toMatchObject({ type: 'progress', ...progress });
     expect(frame.clientSequence).toEqual(expect.any(Number));
+  });
+
+  it('batches artwork subscriptions, replays them after reconnect, and delivers artwork updates', () => {
+    const onArtwork = vi.fn();
+    const client = new RealtimeClient('session-1', 'tab-1', vi.fn(), undefined, onArtwork);
+    client.setArtworkSubscriptions(
+      Array.from({ length: 60 }, (_, index) => ({
+        mediaType: 'movie' as const,
+        mediaId: index + 1,
+      }))
+    );
+    client.start();
+    const firstSocket = FakeWebSocket.instances[0]!;
+    firstSocket.open();
+    firstSocket.message({ type: 'ready', v: 1 });
+    const firstBatches = firstSocket.sent
+      .map(frame => JSON.parse(frame))
+      .filter(frame => frame.type === 'artwork-subscribe');
+    expect(firstBatches.map(frame => frame.items.length)).toEqual([50, 10]);
+
+    firstSocket.message({
+      type: 'artwork-update',
+      mediaType: 'movie',
+      mediaId: 1,
+      backdrop: 'backdrop.jpg',
+      logo: 'card.png',
+      heroLogo: 'hero.png',
+      artworkRevision: 2,
+      cardLogoStatus: 'ready',
+      heroLogoStatus: 'ready',
+    });
+    expect(onArtwork).toHaveBeenCalledWith(
+      expect.objectContaining({ mediaId: 1, artworkRevision: 2, heroLogo: 'hero.png' })
+    );
+
+    firstSocket.close();
+    vi.advanceTimersByTime(1_000);
+    const secondSocket = FakeWebSocket.instances[1]!;
+    secondSocket.open();
+    secondSocket.message({ type: 'ready', v: 1 });
+    const replayed = secondSocket.sent
+      .map(frame => JSON.parse(frame))
+      .filter(frame => frame.type === 'artwork-subscribe');
+    expect(replayed.map(frame => frame.items.length)).toEqual([50, 10]);
+    client.stop();
   });
 });
