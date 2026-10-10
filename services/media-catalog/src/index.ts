@@ -1,6 +1,7 @@
 import { CatalogRuntime } from './catalog/bootstrap';
 import { CatalogConfigService } from './config/config.service';
 import { CatalogDatabase } from './db/database';
+import { createArtworkEventsTransport } from './http/artwork-events';
 import { registerConfigurationRoutes } from './http/handlers/configuration';
 import { registerMediaRoutes } from './http/handlers/media';
 import { registerSystemRoutes } from './http/handlers/system';
@@ -41,7 +42,7 @@ registerMediaRoutes(router, context);
 const server = Bun.serve({
   hostname: env.host,
   port: env.port,
-  fetch: req => router.handle(req),
+  ...createArtworkEventsTransport(context, router),
 });
 
 logger.info(SCOPE, `Media catalog service listening on http://${env.host}:${env.port}`);
@@ -53,7 +54,7 @@ const shutdown = (signal: string, code = 0): Promise<void> => {
   shutdownPromise ??= (async () => {
     logger.info(SCOPE, `Received ${signal}, shutting down...`);
     try {
-      await server.stop();
+      await server.stop(true);
       await runtime.stop();
       db.close();
     } catch (error) {

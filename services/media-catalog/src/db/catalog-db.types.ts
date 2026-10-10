@@ -9,6 +9,7 @@ export interface MovieRow {
   poster: string;
   backdrop: string;
   logo: string;
+  logo_candidates: string | null;
   popularity: number;
   rating: number;
   details_synced_at: number | null;
@@ -22,6 +23,8 @@ export interface TVShowRow {
   first_air_date: string;
   poster: string;
   backdrop: string;
+  logo: string | null;
+  logo_candidates: string | null;
   status: string;
   type: string;
   in_production: number;
@@ -67,6 +70,14 @@ export interface UpsertableMovie {
   poster: string;
   backdrop: string;
   logo: string;
+  logoCandidates?: Array<{
+    url: string;
+    language: string | null;
+    width: number;
+    height: number;
+    voteAverage: number;
+    voteCount: number;
+  }>;
   genreIds: number[];
   popularity: number;
   rating: number;
@@ -84,6 +95,15 @@ export interface UpsertableTVShow {
   inProduction: boolean;
   poster: string;
   backdrop: string;
+  logo: string;
+  logoCandidates?: Array<{
+    url: string;
+    language: string | null;
+    width: number;
+    height: number;
+    voteAverage: number;
+    voteCount: number;
+  }>;
   genreIds: number[];
   episodeRunTime: number[];
   popularity: number;

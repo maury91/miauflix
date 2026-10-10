@@ -145,6 +145,7 @@ export interface CategoryRowHandle {
   getInterestWindow: () => {
     media: Array<MediaDto | null>;
     center: number | null;
+    visible: number[];
   };
 }
 
@@ -166,6 +167,7 @@ interface CategoryRowProps {
   onSelect: (media: MediaDto) => void;
   progress?: ProgressEntry[];
   mediaOverride?: MediaDto[];
+  onMediaLoaded?: (slug: string, media: MediaDto[]) => void;
 }
 
 /**
@@ -191,6 +193,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     onSelect,
     progress,
     mediaOverride,
+    onMediaLoaded,
   },
   forwardedRef
 ) {
@@ -254,6 +257,20 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     }
     return result;
   }, [current.currentData, mediaOverride, nextPage.currentData, previousPage.currentData]);
+
+  useEffect(() => {
+    const loaded = [previousPage.currentData, current.currentData, nextPage.currentData].flatMap(
+      response => response?.results ?? []
+    );
+    onMediaLoaded?.(category.slug, mediaOverride ?? loaded);
+  }, [
+    category.slug,
+    current.currentData,
+    mediaOverride,
+    nextPage.currentData,
+    onMediaLoaded,
+    previousPage.currentData,
+  ]);
 
   const selectIndex = useCallback(
     (requested: number, focus = true) => {
@@ -345,17 +362,27 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       handleAction,
       getNavigationContext,
       getInterestWindow: () => {
-        if (!total) return { media: [], center: null };
+        if (!total) return { media: [], center: null, visible: [] };
         const start = Math.max(0, Math.min(selectedIndex - 5, total - 11));
         const length = Math.min(11, total - start);
         return {
           media: Array.from({ length }, (_, offset) => mediaByIndex.get(start + offset) ?? null),
           center: selectedIndex - start,
+          visible: Array.from({ length }, (_, offset) => start + offset)
+            .filter(index => {
+              const left = scrollRef.current?.scrollLeft ?? scrollLeft;
+              return index * step < left + contentWidth && (index + 1) * step - gap > left;
+            })
+            .map(index => index - start),
         };
       },
     }),
     [
       current.currentData?.total,
+      scrollLeft,
+      step,
+      gap,
+      contentWidth,
       getNavigationContext,
       handleAction,
       mediaByIndex,

@@ -1,3 +1,4 @@
+import type { ArtworkRepository } from '../db/artwork.repo';
 import { BackdropFocusRepository } from '../db/backdrop-focus.repo';
 import type { EpisodeRow, MovieRow, SeasonRow, TVShowRow } from '../db/catalog-db.types';
 import { LocalizationRepository } from '../db/localization.repo';
@@ -15,7 +16,8 @@ export class CatalogLocalizer {
     private readonly localization: LocalizationRepository,
     private readonly tvShows: TVShowRepository,
     private readonly provider: CatalogProvider,
-    private readonly backdropFocus: BackdropFocusRepository
+    private readonly backdropFocus: BackdropFocusRepository,
+    private readonly artwork?: ArtworkRepository
   ) {}
 
   /**
@@ -29,6 +31,7 @@ export class CatalogLocalizer {
       language
     );
     const translation = this.translationFor('movie', row.media_id, language);
+    const artwork = this.artwork?.get('movie', row.media_id);
     return {
       mediaType: 'movie',
       mediaId: row.media_id,
@@ -41,7 +44,11 @@ export class CatalogLocalizer {
       poster: row.poster,
       backdrop: row.backdrop,
       backdropFocus: this.cachedBackdropFocus(row.backdrop),
-      logo: row.logo,
+      logo: artwork?.cardLogo ?? row.logo,
+      heroLogo: artwork?.heroLogo ?? row.logo,
+      artworkRevision: artwork?.revision ?? 0,
+      cardLogoStatus: artwork?.cardStatus ?? 'pending',
+      heroLogoStatus: artwork?.heroStatus ?? 'pending',
       genres: this.localization.localizedGenreNames(
         'movie',
         row.media_id,
@@ -62,6 +69,7 @@ export class CatalogLocalizer {
   async localizeTVShow(row: TVShowRow, language: string): Promise<TVShowDetail> {
     await this.ensureGenreTranslations(this.localization.genreIdsOf('tv', row.media_id), language);
     const translation = this.translationFor('tv', row.media_id, language);
+    const artwork = this.artwork?.get('tv', row.media_id);
     return {
       mediaType: 'tv',
       mediaId: row.media_id,
@@ -77,7 +85,11 @@ export class CatalogLocalizer {
       poster: row.poster,
       backdrop: row.backdrop,
       backdropFocus: this.cachedBackdropFocus(row.backdrop),
-      logo: '',
+      logo: artwork?.cardLogo ?? row.logo ?? '',
+      heroLogo: artwork?.heroLogo ?? row.logo ?? '',
+      artworkRevision: artwork?.revision ?? 0,
+      cardLogoStatus: artwork?.cardStatus ?? 'pending',
+      heroLogoStatus: artwork?.heroStatus ?? 'pending',
       genres: this.localization.localizedGenreNames('tv', row.media_id, language, DEFAULT_LANGUAGE),
       popularity: row.popularity,
       rating: row.rating,

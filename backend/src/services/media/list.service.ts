@@ -230,7 +230,11 @@ export class ListService {
       mediaType: item.mediaType,
       mediaId: item.mediaId,
     }));
-    const batch = await this.catalogClient.batch(refs, language);
+    const batch = await this.catalogClient.batch(
+      refs,
+      language,
+      loadPriority === 'prefetch' ? 'prefetch' : 'returned'
+    );
     const medias = await this.hydrateMediaDetails(
       batch.items,
       this.listRank(slug),
@@ -387,7 +391,8 @@ export class ListService {
     void Promise.all(items.map(item => this.prepareWatchlistItem(item.mediaType, item.mediaId)));
     const batch = await this.catalogClient.batch(
       items.map(item => ({ mediaType: item.mediaType, mediaId: item.mediaId })),
-      language
+      language,
+      loadPriority === 'prefetch' ? 'prefetch' : 'returned'
     );
     const medias = await this.hydrateMediaDetails(batch.items, 0, page * limit, loadPriority);
     return { medias, total };
@@ -453,7 +458,8 @@ export class ListService {
     const refs = await this.resolveExternalRefs(requestedItems.map(item => item.media));
     const batch = await this.catalogClient.batch(
       refs.map(({ ref }) => ref),
-      language
+      language,
+      loadPriority === 'prefetch' ? 'prefetch' : 'returned'
     );
     const medias = await this.hydrateMediaDetails(
       batch.items,
@@ -478,7 +484,7 @@ export class ListService {
       mediaId: media.mediaId,
     }));
     try {
-      const batch = await this.catalogClient.batch(refs, 'en');
+      const batch = await this.catalogClient.batch(refs, 'en', 'background');
       const hydrated = await this.hydrateMediaDetails(batch.items, listRank, itemOffset);
       return hydrated.map(detail => ({ mediaType: detail.mediaType, mediaId: detail.mediaId }));
     } catch (error) {

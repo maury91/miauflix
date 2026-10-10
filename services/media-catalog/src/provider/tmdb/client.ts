@@ -34,7 +34,16 @@ interface TmdbMovieDetails {
   genres: TmdbGenre[];
   popularity: number;
   vote_average: number;
-  images?: { logos?: Array<{ file_path: string }> };
+  images?: {
+    logos?: Array<{
+      file_path: string;
+      iso_639_1?: string | null;
+      width: number;
+      height: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+  };
   translations: {
     translations: Array<{
       iso_639_1: string;
@@ -58,6 +67,16 @@ interface TmdbTVShowDetails {
   genres: TmdbGenre[];
   popularity: number;
   vote_average: number;
+  images?: {
+    logos?: Array<{
+      file_path: string;
+      iso_639_1?: string | null;
+      width: number;
+      height: number;
+      vote_average: number;
+      vote_count: number;
+    }>;
+  };
   seasons: Array<{
     id: number;
     season_number: number;
@@ -220,14 +239,38 @@ export class TmdbClient {
   /** Movie details projected to the persistable shape (port of getMovieDetails v2). */
   async getMovieDetails(mediaId: number) {
     const data = await this.cached<TmdbMovieDetails>(
-      `movie:${mediaId}:v2`,
+      `movie:${mediaId}:v3`,
       oneHourMs,
-      `/movie/${mediaId}?append_to_response=translations,images&language=${this.language}`
+      `/movie/${mediaId}?append_to_response=translations,images&language=${this.language}&include_image_language=${this.language},null`
     );
-    const [poster, backdrop, logo] = await Promise.all([
+    const seenLogoPaths = new Set<string>();
+    const candidates = (data.images?.logos ?? [])
+      .map((image, index) => ({ image, index }))
+      .sort((a, b) => {
+        const rank = (language: string | null | undefined) =>
+          language === this.language ? 0 : language == null ? 1 : 2;
+        return rank(a.image.iso_639_1) - rank(b.image.iso_639_1) || a.index - b.index;
+      })
+      .filter(({ image }) => image.iso_639_1 === this.language || image.iso_639_1 == null)
+      .filter(({ image }) => {
+        if (seenLogoPaths.has(image.file_path)) return false;
+        seenLogoPaths.add(image.file_path);
+        return true;
+      });
+    const [poster, backdrop, logo, logoCandidates] = await Promise.all([
       this.imageUrl(data.poster_path),
       this.imageUrl(data.backdrop_path),
-      this.imageUrl(data.images?.logos?.[0]?.file_path),
+      this.imageUrl(candidates[0]?.image.file_path),
+      Promise.all(
+        candidates.map(async ({ image }) => ({
+          url: await this.imageUrl(image.file_path),
+          language: image.iso_639_1 ?? null,
+          width: image.width ?? 0,
+          height: image.height ?? 0,
+          voteAverage: image.vote_average ?? 0,
+          voteCount: image.vote_count ?? 0,
+        }))
+      ),
     ]);
     return {
       mediaId: data.id,
@@ -239,6 +282,7 @@ export class TmdbClient {
       poster,
       backdrop,
       logo,
+      logoCandidates,
       runtime: data.runtime ?? 0,
       genreIds: data.genres.map(genre => genre.id),
       popularity: data.popularity,
@@ -255,13 +299,30 @@ export class TmdbClient {
   /** TV show details projected to the persistable shape (port of getTVShowDetails v2). */
   async getTVShowDetails(mediaId: number) {
     const data = await this.cached<TmdbTVShowDetails>(
-      `tv:${mediaId}:v2`,
+      `tv:${mediaId}:v3`,
       oneHourMs,
-      `/tv/${mediaId}?append_to_response=external_ids,translations&language=${this.language}`
+      `/tv/${mediaId}?append_to_response=external_ids,translations,images&language=${this.language}&include_image_language=${this.language},null`
     );
-    const [poster, backdrop] = await Promise.all([
+    const seenLogoPaths = new Set<string>();
+    const logos = (data.images?.logos ?? [])
+      .map((image, index) => ({ image, index }))
+      .sort((a, b) => {
+        const rank = (language: string | null | undefined) =>
+          language === this.language ? 0 : language == null ? 1 : 2;
+        return rank(a.image.iso_639_1) - rank(b.image.iso_639_1) || a.index - b.index;
+      })
+      .filter(({ image }) => image.iso_639_1 === this.language || image.iso_639_1 == null)
+      .filter(({ image }) => {
+        if (seenLogoPaths.has(image.file_path)) return false;
+        seenLogoPaths.add(image.file_path);
+        return true;
+      })
+      .map(({ image }) => image);
+    const logoImage = logos.find(image => image.iso_639_1 === this.language) ?? logos[0];
+    const [poster, backdrop, logo] = await Promise.all([
       this.imageUrl(data.poster_path),
       this.imageUrl(data.backdrop_path),
+      this.imageUrl(logoImage?.file_path),
     ]);
     const seasons = await Promise.all(
       data.seasons.map(async season => ({
@@ -282,7 +343,17 @@ export class TmdbClient {
       firstAirDate: data.first_air_date,
       poster,
       backdrop,
-      logo: '',
+      logo,
+      logoCandidates: await Promise.all(
+        logos.map(async image => ({
+          url: await this.imageUrl(image.file_path),
+          language: image.iso_639_1 ?? null,
+          width: image.width ?? 0,
+          height: image.height ?? 0,
+          voteAverage: image.vote_average ?? 0,
+          voteCount: image.vote_count ?? 0,
+        }))
+      ),
       status: data.status,
       type: data.type,
       inProduction: data.in_production,
