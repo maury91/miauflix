@@ -16,6 +16,7 @@ interface FileDescriptor {
   path: string;
   length: number;
   offset: number;
+  isOpen: () => boolean;
   open: () => Promise<RAF>;
 }
 
@@ -113,7 +114,8 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
     this.name = opts.name || path.join('fs-chunk-store', randomBytes(20).toString('hex'));
     this.addUID = opts.addUID;
 
-    const openableFile = (file: Omit<FileDescriptor, 'open'>): FileDescriptor => {
+    const openableFile = (file: Omit<FileDescriptor, 'isOpen' | 'open'>): FileDescriptor => {
+      let opened = false;
       return {
         ...file,
         open: thunky(async () => {
@@ -121,8 +123,11 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
 
           await mkdir(path.dirname(file.path), { recursive: true });
           if (this.closed) throw new Error('Storage is closed');
-          return new RAF(file.path);
+          const handle = new RAF(file.path);
+          opened = true;
+          return handle;
         }),
+        isOpen: () => opened,
       };
     };
 
@@ -369,19 +374,21 @@ export default class EncryptedChunkStore implements AbstractChunkStore {
     if (this.closed) throw new Error('Storage is closed');
     this.closed = true;
 
-    const tasks = this.files.map(({ open }: FileDescriptor) => {
-      return open().then(
-        (file: RAF) => {
-          return new Promise<void>((resolve, reject) => {
-            file.close(err => {
-              if (err) return reject(err);
-              resolve();
+    const tasks = this.files
+      .filter(file => file.isOpen())
+      .map(({ open }: FileDescriptor) => {
+        return open().then(
+          (file: RAF) => {
+            return new Promise<void>((resolve, reject) => {
+              file.close(err => {
+                if (err) return reject(err);
+                resolve();
+              });
             });
-          });
-        },
-        () => null
-      );
-    });
+          },
+          () => null
+        );
+      });
     await Promise.all(tasks);
   }
 

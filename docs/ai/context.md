@@ -20,6 +20,9 @@
 - **Build Status**: Builds successfully (no TypeScript errors)
 - **Authentication**: JWT access tokens + HttpOnly refresh token cookies
 - **Integration**: Backend serves frontend, API mounted under `/api`
+- **Personal ratings**: Details reads and writes Like/Dislike/Love through authenticated `/api/ratings` routes. Ratings persist in the additive `media_ratings` table, keyed by account, media type, and media ID. Selecting the saved rating clears it; load/save failures are surfaced, and pending saves retain keyboard focus. These are local account ratings, independent of provider scores.
+- **Details keyboard navigation**: Arrow keys move DOM focus between Back, ratings/watchlist, Watch, seasons, and episodes. Enter/Space activates the focused control; Escape/Back returns to browsing. Season loading preserves focus unless the user explicitly selects a season.
+- **Settings**: The Home sidebar opens Settings by mouse or keyboard. Administrators can open the existing Configuration editor; closing it returns to Settings, and Back to Home returns to browsing. Non-admins see Configuration disabled.
 
 ## 🎯 **What This Means for Development**
 

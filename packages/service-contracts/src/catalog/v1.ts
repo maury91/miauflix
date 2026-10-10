@@ -23,6 +23,24 @@ export const backdropFocusBackgroundRequestSchema = z.object({
 export const backdropFocusBackgroundResponseSchema = z.object({
   accepted: z.number().int().nonnegative(),
 });
+export const artworkPrioritySchema = z.enum(['focused', 'visible', 'returned', 'prefetch']);
+export const artworkUpdateSchema = z.object({
+  mediaType: mediaTypeSchema,
+  mediaId: z.number().int().positive(),
+  backdrop: z.string(),
+  logo: z.string(),
+  heroLogo: z.string(),
+  artworkRevision: z.number().int().nonnegative(),
+  cardLogoStatus: z.enum(['pending', 'ready', 'failed']),
+  heroLogoStatus: z.enum(['pending', 'ready', 'failed']),
+});
+export const artworkSnapshotRequestSchema = z.object({ items: z.array(mediaRefSchema).max(50) });
+export const artworkSnapshotResponseSchema = z.object({ updates: z.array(artworkUpdateSchema) });
+export const artworkQueueRequestSchema = z.object({
+  items: z.array(mediaRefSchema).max(50),
+  priority: artworkPrioritySchema,
+});
+export const artworkQueueResponseSchema = z.object({ accepted: z.number().int().nonnegative() });
 
 export const movieDetailSchema = mediaRefSchema.extend({
   mediaType: z.literal('movie'),
@@ -35,6 +53,10 @@ export const movieDetailSchema = mediaRefSchema.extend({
   poster: z.string(),
   backdrop: z.string(),
   logo: z.string(),
+  heroLogo: z.string().optional(),
+  artworkRevision: z.number().int().nonnegative().optional(),
+  cardLogoStatus: z.enum(['pending', 'ready', 'failed']).optional(),
+  heroLogoStatus: z.enum(['pending', 'ready', 'failed']).optional(),
   backdropFocus: backdropFocusSchema.nullable().default(null),
   genres: z.array(localizedGenreSchema),
   popularity: z.number(),
@@ -67,6 +89,10 @@ export const tvShowDetailSchema = mediaRefSchema.extend({
   poster: z.string(),
   backdrop: z.string(),
   logo: z.string(),
+  heroLogo: z.string().optional(),
+  artworkRevision: z.number().int().nonnegative().optional(),
+  cardLogoStatus: z.enum(['pending', 'ready', 'failed']).optional(),
+  heroLogoStatus: z.enum(['pending', 'ready', 'failed']).optional(),
   backdropFocus: backdropFocusSchema.nullable().default(null),
   genres: z.array(localizedGenreSchema),
   popularity: z.number(),
@@ -134,6 +160,7 @@ export const externalMediaResolveResponseSchema = z.object({
 export const batchRequestSchema = z.object({
   items: z.array(mediaRefSchema).max(50),
   language: z.string().default('en'),
+  artworkPriority: z.enum(['returned', 'background', 'prefetch']).default('returned'),
 });
 export const batchErrorSchema = z.object({
   ref: mediaRefSchema,
@@ -162,6 +189,12 @@ export type LocalizedGenre = z.infer<typeof localizedGenreSchema>;
 export type BackdropFocus = z.infer<typeof backdropFocusSchema>;
 export type BackdropFocusBackgroundRequest = z.infer<typeof backdropFocusBackgroundRequestSchema>;
 export type BackdropFocusBackgroundResponse = z.infer<typeof backdropFocusBackgroundResponseSchema>;
+export type ArtworkPriority = z.infer<typeof artworkPrioritySchema>;
+export type ArtworkUpdate = z.infer<typeof artworkUpdateSchema>;
+export type ArtworkSnapshotRequest = z.infer<typeof artworkSnapshotRequestSchema>;
+export type ArtworkSnapshotResponse = z.infer<typeof artworkSnapshotResponseSchema>;
+export type ArtworkQueueRequest = z.infer<typeof artworkQueueRequestSchema>;
+export type ArtworkQueueResponse = z.infer<typeof artworkQueueResponseSchema>;
 export type MovieDetail = z.infer<typeof movieDetailSchema>;
 export type SeasonSummary = z.infer<typeof seasonSummarySchema>;
 export type TVShowDetail = z.infer<typeof tvShowDetailSchema>;

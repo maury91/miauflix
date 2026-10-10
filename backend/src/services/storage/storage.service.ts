@@ -6,11 +6,24 @@ import { EventEmitter } from 'events';
 import type TypedEmitter from 'typed-emitter';
 
 import type { Database } from '@database/database';
-import type { Storage } from '@entities/storage.entity';
+import type { EncryptedStorageLayout, Storage } from '@entities/storage.entity';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { StorageRepository } from '@repositories/storage.repository';
 import { humanReadableBytes } from '@utils/numbers';
 import { traced } from '@utils/tracing.util';
+
+export type StorageRemovalResult =
+  | { status: 'active_playback' | 'cleanup_failed' | 'not_found' }
+  | { status: 'removed'; bytes: number };
+
+export interface StorageInventory {
+  items: Storage[];
+  physicalBytes: number | null;
+  storageBudgetBytes: number;
+  reservedBytes: number;
+  chargedBytes: number;
+  filesystem: { totalBytes: number; freeBytes: number } | null;
+}
 
 /**
  * Service for tracking and managing storage of downloaded movie sources
@@ -111,6 +124,9 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       activeStreams: 0,
       lastAccessAt: null,
       lastWriteAt: null,
+      videoCompletedAt: null,
+      localOnly: false,
+      encryptedLayout: null,
     };
 
     return this.withAdmission(async () => {
@@ -253,6 +269,48 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     return this.storageRepository.findByMovieSourceId(movieSourceId);
   }
 
+  async getStoragesWithCompletion(): Promise<Storage[]> {
+    return this.storageRepository.findStoragesWithCompletion();
+  }
+
+  async updateEncryptedLayout(
+    movieSourceId: number,
+    encryptedLayout: EncryptedStorageLayout
+  ): Promise<void> {
+    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    if (!storage || storage.encryptedLayout) return;
+    await this.storageRepository.update(storage.id, { encryptedLayout });
+  }
+
+  async markVideoComplete(
+    movieSourceId: number,
+    encryptedLayout: EncryptedStorageLayout
+  ): Promise<Storage | null> {
+    return this.withSourceLock(movieSourceId, async () => {
+      const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+      if (!storage) return null;
+      if (storage.videoCompletedAt) return storage;
+      const completed = await this.storageRepository.update(storage.id, {
+        videoCompletedAt: new Date(),
+        encryptedLayout: storage.encryptedLayout ?? encryptedLayout,
+      });
+      if (completed) await this.markAsAccessed(movieSourceId);
+      return completed;
+    });
+  }
+
+  async detachCompletedStorage(
+    movieSourceId: number,
+    detachTorrent: () => Promise<void>
+  ): Promise<Storage | null> {
+    return this.withSourceLock(movieSourceId, async () => {
+      const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+      if (!storage || storage.localOnly) return storage;
+      await detachTorrent();
+      return this.storageRepository.update(storage.id, { localOnly: true });
+    });
+  }
+
   /**
    * Get storage information by storage ID
    */
@@ -271,14 +329,19 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    */
   @traced('StorageService')
   async removeStorage(movieSourceId: number): Promise<number> {
+    const result = await this.removeStorageWithResult(movieSourceId);
+    return result.status === 'removed' ? result.bytes : 0;
+  }
+
+  async removeStorageWithResult(movieSourceId: number): Promise<StorageRemovalResult> {
     return this.withSourceLock(movieSourceId, () => this.removeStorageLocked(movieSourceId));
   }
 
-  private async removeStorageLocked(movieSourceId: number): Promise<number> {
+  private async removeStorageLocked(movieSourceId: number): Promise<StorageRemovalResult> {
     const storage = await this.storageRepository.findByMovieSourceIdWithRelation(movieSourceId);
     if (!storage) {
       logger.warn('StorageService', `Storage record not found for movie source ${movieSourceId}`);
-      return 0;
+      return { status: 'not_found' };
     }
 
     if ((storage.activeStreams ?? 0) > 0) {
@@ -286,7 +349,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         'StorageService',
         `Refusing to remove active storage for source ${movieSourceId}`
       );
-      return 0;
+      return { status: 'active_playback' };
     }
 
     try {
@@ -297,7 +360,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         `Physical cleanup failed for movie source ${movieSourceId}; keeping the database record`,
         error
       );
-      return 0;
+      return { status: 'cleanup_failed' };
     }
 
     const success = await this.storageRepository.deleteByMovieSourceId(movieSourceId);
@@ -311,7 +374,31 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       this.emit('delete', storage);
     }
 
-    return success ? storage.size : 0;
+    return success ? { status: 'removed', bytes: storage.size } : { status: 'cleanup_failed' };
+  }
+
+  async getInventory(): Promise<StorageInventory> {
+    const items = await this.storageRepository.findAllWithSourceAndMovie();
+
+    let filesystem: { totalBytes: number; freeBytes: number } | null = null;
+    try {
+      const result = await statfs(this.config.getOrThrow('DOWNLOAD_PATH'));
+      filesystem = {
+        totalBytes: Number(BigInt(result.blocks) * BigInt(result.bsize)),
+        freeBytes: Number(BigInt(result.bavail) * BigInt(result.bsize)),
+      };
+    } catch {
+      filesystem = null;
+    }
+
+    return {
+      items,
+      physicalBytes: items.reduce((sum, storage) => sum + (storage.allocatedBytes ?? 0), 0),
+      storageBudgetBytes: Number(this.maxStorageBytes),
+      reservedBytes: Number(await this.storageRepository.getTotalReservedStorageUsage()),
+      chargedBytes: Number(await this.storageRepository.getChargedStorageUsage()),
+      filesystem,
+    };
   }
 
   /**
@@ -334,6 +421,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
     if (!storage) return null;
     const allocatedBytes = await this.measureAllocatedBytes(storage.location);
+    if (allocatedBytes === null) return storage;
     await this.storageRepository.reconcileAllocation(storage.id, allocatedBytes);
     return this.storageRepository.findByMovieSourceId(movieSourceId);
   }
@@ -460,22 +548,25 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     }
   }
 
-  private async measureAllocatedBytes(location: string): Promise<number> {
-    const visit = async (path: string): Promise<number> => {
+  private async measureAllocatedBytes(location: string): Promise<number | null> {
+    const visit = async (path: string, isRoot: boolean): Promise<number | null> => {
       let entry;
       try {
         entry = await stat(path);
-      } catch {
-        return 0;
+      } catch (error) {
+        if ((error as NodeJS.ErrnoException).code === 'ENOENT') return 0;
+        if (isRoot) throw error;
+        return null;
       }
       if (!entry.isDirectory()) {
         return entry.blocks > 0 ? entry.blocks * 512 : entry.size;
       }
       const children = await readdir(path);
-      const sizes = await Promise.all(children.map(child => visit(`${path}/${child}`)));
-      return sizes.reduce((sum, value) => sum + value, 0);
+      const sizes = await Promise.all(children.map(child => visit(`${path}/${child}`, false)));
+      if (sizes.some(size => size === null)) return null;
+      return (sizes as number[]).reduce((sum, value) => sum + value, 0);
     };
-    return visit(location);
+    return visit(location, true);
   }
 
   /**

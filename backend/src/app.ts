@@ -9,6 +9,7 @@ import { Database } from '@database/database';
 import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
+import { MediaRatingRepository } from '@repositories/media-rating.repository';
 import { AuthService } from '@services/auth/auth.service';
 import { QrLoginService } from '@services/auth/qr-login.service';
 import { registerBackgroundJobHandlers } from '@services/background-job/background-job.handlers';
@@ -22,6 +23,7 @@ import { DownloadService } from '@services/download/download.service';
 import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
+import { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
@@ -36,6 +38,7 @@ import { ContentDirectoryService } from '@services/source-metadata/content-direc
 import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 import { StreamService } from '@services/stream/stream.service';
+import { SubtitlesService } from '@services/subtitles/subtitles.service';
 
 import { initializeInstrumentation } from './instrumentation';
 import { createRoutes } from './routes';
@@ -126,14 +129,24 @@ try {
     authService,
     configurationService,
     preloadIntentService,
-    progressService
+    progressService,
+    catalogClient
   );
+  const audioPlaybackService = new AudioPlaybackService(downloadService);
   const playbackSessionService = new PlaybackSessionService(
     db,
     playablePreparationService,
     configurationService,
     torrentWarmupController,
-    storageService
+    storageService,
+    audioPlaybackService
+  );
+  const subtitlesService = new SubtitlesService(
+    configurationService,
+    requestService,
+    playbackSessionService,
+    streamService,
+    mediaService
   );
 
   const serverService = {
@@ -213,6 +226,9 @@ try {
     preloadIntentService.close();
     backgroundJobs.close();
 
+    await audioPlaybackService.close();
+    await downloadService.close();
+
     await db.close();
 
     // Give some time for ongoing operations to complete
@@ -225,6 +241,7 @@ try {
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
   const app = createRoutes({
+    mediaRatingRepository: new MediaRatingRepository(db),
     authService,
     auditLogService,
     catalogClient,
@@ -243,7 +260,10 @@ try {
     statsService,
     preloadIntentService,
     playbackSessionService,
+    audioPlaybackService,
     progressService,
+    subtitlesService,
+    storageService,
   });
 
   // Error handling middleware - must be added first

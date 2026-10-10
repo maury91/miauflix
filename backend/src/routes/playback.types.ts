@@ -1,6 +1,8 @@
 import { Quality, type VideoCodec } from '@miauflix/source-metadata-extractor';
 import { z } from 'zod';
 
+import type { PlaybackDelivery } from '@services/playback/audio-playback.service';
+
 import { type PlayableRef, playableRefSchema } from './playable.types';
 
 const supportedQualities = ['auto', ...Object.values(Quality)] as ['auto', ...Quality[]];
@@ -28,6 +30,7 @@ export interface CreatePlaybackSessionResponse {
   playbackId: string;
   streamingKey: string;
   streamUrl: string;
+  delivery?: PlaybackDelivery;
   source: {
     id: number;
     quality: Quality | '3D' | null;

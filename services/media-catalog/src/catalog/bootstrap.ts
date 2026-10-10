@@ -1,6 +1,7 @@
 import type { ConfigurationProbe } from '@miauflix/service-configuration';
 
 import type { CatalogConfigService } from '../config/config.service';
+import { ArtworkRepository } from '../db/artwork.repo';
 import { BackdropFocusRepository } from '../db/backdrop-focus.repo';
 import { LocalizationRepository } from '../db/localization.repo';
 import { MovieRepository } from '../db/movie.repo';
@@ -30,6 +31,7 @@ export class CatalogRuntime {
   private readonly syncState: SyncStateRepository;
   private readonly apiCache: ApiCache;
   private readonly backdropFocus: BackdropFocusRepository;
+  private readonly artwork: ArtworkRepository;
   private workerManager: CatalogWorkerManager;
   private stopped = false;
 
@@ -43,19 +45,20 @@ export class CatalogRuntime {
     this.syncState = new SyncStateRepository(ctx.db);
     this.apiCache = new ApiCache(ctx.db);
     this.backdropFocus = new BackdropFocusRepository(ctx.db);
+    this.artwork = new ArtworkRepository(ctx.db);
     this.workerManager = new CatalogWorkerManager(ctx.env, () => ctx.catalog);
     config.registerProber(this.prober);
   }
 
   async stop(): Promise<void> {
     this.stopped = true;
-    this.ctx.catalog?.stopBackdropFocusBackground();
+    await this.ctx.catalog?.stopArtworkBackground();
     await this.workerManager.stop();
     this.ctx.catalog = null;
   }
 
   private async deactivate(): Promise<void> {
-    this.ctx.catalog?.stopBackdropFocusBackground();
+    await this.ctx.catalog?.stopArtworkBackground();
     this.ctx.catalog = null;
     await this.workerManager.pause();
   }
@@ -113,7 +116,8 @@ export class CatalogRuntime {
         this.syncState,
         provider,
         this.catalogValues(values),
-        this.backdropFocus
+        this.backdropFocus,
+        this.artwork
       );
       this.ctx.catalog = catalog;
       if (!this.ctx.env.disableBackgroundTasks) catalog.startBackdropFocusBackground();

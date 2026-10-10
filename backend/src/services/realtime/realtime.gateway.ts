@@ -1,5 +1,6 @@
 import type { IncomingMessage, Server as HttpServer } from 'node:http';
 
+import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts';
 import WebSocket, { WebSocketServer } from 'ws';
 
 import type { ConfigService } from '@mytypes/configuration';
@@ -7,12 +8,15 @@ import type { MediaIntentRef, PreloadIntentRequest, ReachableIntent } from '@rou
 import type { PreloadPreparationSnapshot } from '@routes/preload.types';
 import type { ProgressRequest } from '@routes/progress.types';
 import type { AuthService } from '@services/auth/auth.service';
+import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProgressService } from '@services/progress/progress.service';
 
 const MAX_MAP_SIDE = 11;
 const MAX_MAP_CELLS = MAX_MAP_SIDE * MAX_MAP_SIDE;
 const AUTH_TIMEOUT_MS = 5_000;
+const MAX_ARTWORK_SUBSCRIPTIONS = 5_000;
+const ARTWORK_BATCH_SIZE = 50;
 
 type Coordinate = [number, number];
 
@@ -57,6 +61,7 @@ interface ClientState {
   focusSequence: number;
   progressChain: Promise<void>;
   authTimer: ReturnType<typeof setTimeout>;
+  artworkRefs: Set<string>;
 }
 
 interface RealtimeEvent {
@@ -89,12 +94,25 @@ export class RealtimeGateway {
     private readonly authService: AuthService,
     private readonly config: ConfigService,
     private readonly preload: PreloadIntentService,
-    private readonly progress: ProgressService
+    private readonly progress: ProgressService,
+    private readonly catalog: CatalogClientService
   ) {
     this.server.on('connection', (socket: WebSocket, request: IncomingMessage) => {
       this.accept(socket, request);
     });
     this.preload.onChange(this.onPreparationChange);
+    this.removeArtworkListener = this.catalog.onArtwork(update => this.deliverArtwork(update));
+    this.removeArtworkStreamReadyListener = this.catalog.onArtworkStreamReady(() => {
+      for (const client of this.clients) {
+        if (client.artworkRefs.size) {
+          const refs = [...client.artworkRefs].map(key => {
+            const [mediaType, mediaId] = key.split(':');
+            return { mediaType: mediaType as MediaRef['mediaType'], mediaId: Number(mediaId) };
+          });
+          void this.sendArtworkSnapshots(client, refs);
+        }
+      }
+    });
   }
 
   attach(httpServer: HttpServer): void {
@@ -116,7 +134,12 @@ export class RealtimeGateway {
     this.clients.clear();
     this.server.close();
     this.preload.offChange(this.onPreparationChange);
+    this.removeArtworkListener?.();
+    this.removeArtworkStreamReadyListener?.();
   }
+
+  private removeArtworkListener: (() => void) | null = null;
+  private removeArtworkStreamReadyListener: (() => void) | null = null;
 
   private accept(socket: WebSocket, request: IncomingMessage): void {
     const state = {
@@ -132,6 +155,7 @@ export class RealtimeGateway {
       focusSequence: 0,
       progressChain: Promise.resolve(),
       authTimer: setTimeout(() => socket.close(1008, 'Authentication required'), AUTH_TIMEOUT_MS),
+      artworkRefs: new Set<string>(),
     } satisfies ClientState;
     this.clients.add(state);
     socket.on('message', data => this.handleMessage(state, data.toString()));
@@ -169,6 +193,9 @@ export class RealtimeGateway {
         state.focusSequence = message.clientSequence;
         const result = this.updateIntent(state, message.clientSequence);
         this.sendPreparation(state, result.preparation, message.clientSequence);
+        if (message.media && message.view !== 'player') {
+          this.queueArtwork([this.catalogRef(message.media)], 'focused');
+        }
         return;
       }
       if (message.type === 'map') {
@@ -176,10 +203,30 @@ export class RealtimeGateway {
         if (message.clientSequence <= state.sequence) return;
         state.map = message;
         state.sequence = Math.max(state.sequence, message.clientSequence);
+        this.queueArtwork(this.visibleMedia(message), 'visible');
         if (state.focused) {
           const result = this.updateIntent(state, message.clientSequence);
           this.sendPreparation(state, result.preparation, state.focusSequence);
         }
+        return;
+      }
+      if (message.type === 'artwork-subscribe') {
+        if (!this.isArtworkSubscription(message))
+          return this.invalid(state, 'Invalid artwork subscription');
+        const next = new Set(state.artworkRefs);
+        for (const item of message.items) next.add(this.artworkKey(item));
+        if (next.size > MAX_ARTWORK_SUBSCRIPTIONS) {
+          this.send(state, { type: 'artwork-subscription-rejected', reason: 'limit-exceeded' });
+          return;
+        }
+        state.artworkRefs = next;
+        void this.sendArtworkSnapshots(state, message.items);
+        return;
+      }
+      if (message.type === 'artwork-unsubscribe') {
+        if (!this.isArtworkSubscription(message))
+          return this.invalid(state, 'Invalid artwork unsubscription');
+        for (const item of message.items) state.artworkRefs.delete(this.artworkKey(item));
         return;
       }
       if (message.type === 'interest-heartbeat') {
@@ -257,6 +304,60 @@ export class RealtimeGateway {
       focused: state.focused,
       reachable: this.reachable(state.map),
     });
+  }
+
+  private deliverArtwork(update: ArtworkUpdate): void {
+    const key = `${update.mediaType}:${update.mediaId}`;
+    for (const client of this.clients) {
+      if (client.userId && client.artworkRefs.has(key)) {
+        this.send(client, { type: 'artwork-update', ...update });
+      }
+    }
+  }
+
+  private async sendArtworkSnapshots(state: ClientState, refs: MediaRef[]): Promise<void> {
+    for (let offset = 0; offset < refs.length; offset += ARTWORK_BATCH_SIZE) {
+      const batch = refs.slice(offset, offset + ARTWORK_BATCH_SIZE);
+      try {
+        const updates = await this.catalog.artworkSnapshot(batch);
+        for (const update of updates) {
+          if (state.artworkRefs.has(this.artworkKey(update))) {
+            this.send(state, { type: 'artwork-update', ...update });
+          }
+        }
+      } catch {
+        // Reconnection and later subscription snapshots recover transient catalog outages.
+        return;
+      }
+    }
+  }
+
+  private queueArtwork(refs: MediaRef[], priority: 'focused' | 'returned' | 'visible'): void {
+    const unique = [...new Map(refs.map(ref => [this.artworkKey(ref), ref])).values()];
+    for (let offset = 0; offset < unique.length; offset += ARTWORK_BATCH_SIZE) {
+      void this.catalog
+        .queueArtwork(unique.slice(offset, offset + ARTWORK_BATCH_SIZE), priority)
+        .catch(() => undefined);
+    }
+  }
+
+  private visibleMedia(message: MapMessage): MediaRef[] {
+    const coordinates = message.visible ?? [];
+    return coordinates.flatMap(([row, column]) => {
+      const media = message.mediaIds[row]?.[column];
+      return media ? [this.catalogRef(media)] : [];
+    });
+  }
+
+  private catalogRef(media: MediaIntentRef): MediaRef {
+    return {
+      mediaType: media.kind === 'movie' ? 'movie' : 'tv',
+      mediaId: media.kind === 'episode' ? media.showMediaId : media.mediaId,
+    };
+  }
+
+  private artworkKey(media: MediaRef): string {
+    return `${media.mediaType}:${media.mediaId}`;
   }
 
   private sendPreparation(
@@ -428,6 +529,23 @@ export class RealtimeGateway {
 
   private isHeartbeat(value: Record<string, unknown>): value is HeartbeatMessage {
     return this.isSequence(value.clientSequence) && typeof value.visible === 'boolean';
+  }
+
+  private isArtworkSubscription(
+    value: Record<string, unknown>
+  ): value is Record<string, unknown> & { items: MediaRef[] } {
+    return (
+      Array.isArray(value.items) &&
+      value.items.length <= ARTWORK_BATCH_SIZE &&
+      value.items.every(
+        item =>
+          this.isRecord(item) &&
+          (item.mediaType === 'movie' || item.mediaType === 'tv') &&
+          typeof item.mediaId === 'number' &&
+          Number.isSafeInteger(item.mediaId) &&
+          item.mediaId > 0
+      )
+    );
   }
 
   private isProgress(

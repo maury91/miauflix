@@ -96,6 +96,31 @@ describe('RemoteServiceManager', () => {
     );
   });
 
+  it('reports a standby service with missing required configuration as degraded', async () => {
+    const { manager } = setupTest();
+    jest.spyOn(global, 'fetch').mockImplementation(async input => {
+      const path = new URL(String(input)).pathname;
+      if (path === SERVICE_MANIFEST_PATH) return Response.json(manifest);
+      if (path === '/configuration/schema') return Response.json({ groups: [] });
+      if (path === '/status') {
+        return Response.json({
+          state: 'standby',
+          missingConfiguration: ['TMDB_API_ACCESS_TOKEN'],
+        });
+      }
+      throw new Error(`Unexpected request ${path}`);
+    });
+
+    await manager.initialize();
+    manager.stop();
+
+    expect(manager.getStatus()).toEqual({
+      status: 'degraded',
+      reason: 'Missing required configuration: TMDB_API_ACCESS_TOKEN',
+      missingVars: ['TMDB_API_ACCESS_TOKEN'],
+    });
+  });
+
   it('reapplies the complete backend snapshot when a running service returns to standby', async () => {
     const { configuration, manager } = setupTest();
     configuration.getServiceConfigSnapshot.mockReturnValue({

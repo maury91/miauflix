@@ -16,6 +16,7 @@ export const movies = sqliteTable(
     poster: text().notNull().default(''),
     backdrop: text().notNull().default(''),
     logo: text().notNull().default(''),
+    logoCandidates: text('logo_candidates'),
     popularity: real().notNull().default(0),
     rating: real().notNull().default(0),
     detailsSyncedAt: integer('details_synced_at'),

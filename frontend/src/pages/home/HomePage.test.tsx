@@ -293,7 +293,7 @@ describe('HomePage focus transitions', () => {
       const first = screen.getByRole('button', { name: "Let's go" });
       const close = screen.getByRole('button', { name: 'Close Trakt dialog' });
       const never = screen.getByRole('button', { name: 'Don’t ask again' });
-      expect(first).toHaveFocus();
+      await waitFor(() => expect(first).toHaveFocus());
       // A late-loading carousel must not be able to reclaim keyboard focus.
       background.focus();
       expect(first).toHaveFocus();
