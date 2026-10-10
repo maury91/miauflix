@@ -12,7 +12,14 @@ export default defineConfig({
   /* Only run e2e test files */
   testMatch: '**/*.e2e.spec.ts',
   /* The initial-user flow owns its own fresh database and single-browser project. */
-  testIgnore: ['**/initial-user-setup.e2e.spec.ts', '**/details-preparation.e2e.spec.ts'],
+  testIgnore: [
+    '**/initial-user-setup.e2e.spec.ts',
+    '**/details-preparation.e2e.spec.ts',
+    // Voting has a complete offline details lane with the same project matrix.
+    '**/details-voting.e2e.spec.ts',
+    // Lighthouse uses fixed CDP ports and runs in its own serial invocation.
+    '**/lighthouse.e2e.spec.ts',
+  ],
   /* Run tests in files in parallel */
   fullyParallel: true,
   /* Fail the build on CI if you accidentally left test.only in the source code. */
@@ -23,6 +30,7 @@ export default defineConfig({
   workers: process.env['CI'] ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
   reporter: [
+    ['list'],
     ['html', { outputFolder: 'playwright-report', open: 'never' }],
     ['json', { outputFile: 'test-results-e2e/results.json' }],
   ],
@@ -63,7 +71,6 @@ export default defineConfig({
         deviceScaleFactor: 1,
         launchOptions: {
           args: [
-            '--remote-debugging-port=9222',
             '--force-device-scale-factor=1',
             '--force-color-profile=srgb',
             '--disable-font-subpixel-positioning',
@@ -99,7 +106,6 @@ export default defineConfig({
         ...devices['Pixel 5'],
         launchOptions: {
           args: [
-            '--remote-debugging-port=9223',
             '--force-color-profile=srgb',
             '--disable-font-subpixel-positioning',
             '--disable-lcd-text',
@@ -124,7 +130,6 @@ export default defineConfig({
         deviceScaleFactor: 2,
         launchOptions: {
           args: [
-            '--remote-debugging-port=9224',
             '--force-device-scale-factor=2',
             '--force-color-profile=srgb',
             '--disable-font-subpixel-positioning',

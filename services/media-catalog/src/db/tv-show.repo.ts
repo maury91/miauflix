@@ -1,4 +1,4 @@
-import { and, eq, inArray, isNotNull, ne, sql } from 'drizzle-orm';
+import { and, asc, eq, inArray, isNotNull, ne, sql } from 'drizzle-orm';
 
 import { type CatalogTx, replaceGenres, replaceTranslations } from './catalog-db.helpers';
 import { episodeRow, seasonRow, showRow } from './catalog-db.mappers';
@@ -24,6 +24,17 @@ export class TVShowRepository {
   getTVShow(mediaId: number): TVShowRow | undefined {
     const row = this.db.select().from(tvShows).where(eq(tvShows.mediaId, mediaId)).get();
     return row && showRow(row);
+  }
+
+  getBackdropCandidates(limit = 32, offset = 0): Array<{ mediaId: number; backdrop: string }> {
+    return this.db
+      .select({ mediaId: tvShows.mediaId, backdrop: tvShows.backdrop })
+      .from(tvShows)
+      .where(and(isNotNull(tvShows.detailsSyncedAt), ne(tvShows.backdrop, '')))
+      .orderBy(asc(tvShows.mediaId))
+      .limit(limit)
+      .offset(offset)
+      .all();
   }
 
   hasKnownTVShows(): boolean {

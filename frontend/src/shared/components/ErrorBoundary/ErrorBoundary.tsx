@@ -1,4 +1,4 @@
-import { PALETTE } from '@shared/config/constants';
+import { Button } from '@shared/ui/button/Button';
 import type { ComponentType, ReactNode } from 'react';
 import { Component } from 'react';
 import styled from 'styled-components';
@@ -64,20 +64,8 @@ const ErrorStack = styled.pre`
   color: #ff6666;
 `;
 
-const RetryButton = styled.button`
-  background-color: ${PALETTE.color.brand};
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 4px;
-  font-size: 1rem;
-  cursor: pointer;
+const RetryArea = styled.div`
   margin-top: 1rem;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${PALETTE.color.brandHover};
-  }
 `;
 
 const DefaultErrorFallback: ComponentType<{ error?: Error; resetError: () => void }> = ({
@@ -96,7 +84,9 @@ const DefaultErrorFallback: ComponentType<{ error?: Error; resetError: () => voi
         <ErrorStack>{error.stack}</ErrorStack>
       </ErrorDetails>
     )}
-    <RetryButton onClick={resetError}>Try Again</RetryButton>
+    <RetryArea>
+      <Button onClick={resetError}>Try Again</Button>
+    </RetryArea>
   </ErrorContainer>
 );
 
@@ -113,6 +103,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     };
   }
 
+  /** Store the caught React error and component details, then notify the optional onError callback. */
   override componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
     this.setState({
       error,
@@ -123,7 +114,7 @@ export class ErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundarySt
     this.props.onError?.(error, errorInfo);
 
     // Log error to console in development
-    if (process.env['NODE_ENV'] === 'development') {
+    if (import.meta.env.DEV) {
       console.error('ErrorBoundary caught an error:', error, errorInfo);
     }
   }

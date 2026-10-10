@@ -164,6 +164,28 @@ describe('TorrentWarmupController', () => {
     }
   });
 
+  it('publishes measured byte progress while the range is warming', async () => {
+    const { controller, driver } = setupTest();
+    driver.getRangeProgress = jest.fn(async () => ({
+      verifiedBytes: 37,
+      targetBytes: 100,
+      progress: 37,
+      isComplete: false,
+    }));
+    try {
+      const state = await controller.warm(source(1), 'm:1', 'm:1');
+
+      expect(state).toMatchObject({
+        state: 'warming',
+        verifiedBytes: 37,
+        targetVerifiedBytes: 100,
+        progress: 37,
+      });
+    } finally {
+      controller.close();
+    }
+  });
+
   it('does not let an aborted generation pause a newer slot', async () => {
     const { controller, driver } = setupTest();
     try {

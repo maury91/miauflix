@@ -33,7 +33,10 @@ type Preparation = {
   playable: { kind: 'movie'; mediaId: number };
   state: 'checking' | 'source_found' | 'error' | 'no_source';
   source: typeof source | null;
-  warmup: { state: 'not_requested' | 'warming' | 'ready' | 'paused' | 'failed' };
+  warmup: {
+    state: 'not_requested' | 'warming' | 'ready' | 'paused' | 'failed';
+    progress?: number;
+  };
 };
 
 type Harness = {
@@ -123,6 +126,14 @@ async function installOfflineHarness(page: Page): Promise<Harness> {
     }
     if (path === '/api/config' && request.method() === 'GET') return json(route, []);
     if (path === '/api/status' && request.method() === 'GET') return json(route, { services: {} });
+    if (path === '/api/integrations/trakt/association' && request.method() === 'GET') {
+      return json(route, {
+        connected: true,
+        provider: 'trakt',
+        accountId: 'fixture-account',
+        username: 'fixture-user',
+      });
+    }
     if (path === '/api/lists' && request.method() === 'GET') {
       return json(route, [
         {
@@ -149,8 +160,22 @@ async function installOfflineHarness(page: Page): Promise<Harness> {
       return json(route, { accepted: 1 });
     if (path === '/api/progress' && request.method() === 'GET')
       return json(route, { progress: [] });
+    if (path === '/api/watchlist' && request.method() === 'GET') {
+      return json(route, {
+        mediaType: 'movie',
+        mediaId: fixtureMovie.mediaId,
+        inWatchlist: false,
+      });
+    }
     if (path === '/api/media/movie/83533/backdrop-focus' && request.method() === 'POST') {
       return json(route, { backdropFocus: null });
+    }
+    if (path === '/api/media/backdrop-focus/background' && request.method() === 'POST') {
+      const body = request.postDataJSON() as {
+        items?: Array<{ mediaType: string; mediaId: number }>;
+      };
+      if (!Array.isArray(body.items)) throw new Error('Invalid backdrop-focus request');
+      return json(route, { accepted: body.items.length });
     }
     if (path === '/api/movies/83533' && request.method() === 'GET')
       return json(route, detailsResponse());
@@ -170,7 +195,10 @@ async function installOfflineHarness(page: Page): Promise<Harness> {
         source,
         warmup:
           intent.view === 'details'
-            ? { state: harness.detailsHeartbeats > 1 ? 'ready' : 'warming' }
+            ? {
+                state: harness.detailsHeartbeats > 1 ? 'ready' : 'warming',
+                progress: harness.detailsHeartbeats > 1 ? 100 : 50,
+              }
             : { state: 'not_requested' },
       };
       return json(route, {
@@ -243,12 +271,17 @@ test.describe('details page preparation contract', () => {
     await expect(page.getByRole('button', { name: 'Watch now' })).toBeVisible();
     await expect(page.getByRole('button', { name: 'Back to browse' })).toBeVisible();
     await expect(page.getByLabel(/1080p, WEB source/)).toBeVisible();
-    await expect(page.getByText(/Warming up torrent/)).toBeVisible();
+    const warmupBorder = page.locator('[data-warmup-state]');
+    await expect(warmupBorder).toHaveAttribute('data-warmup-state', 'warming');
+    await expect(warmupBorder).toHaveAttribute('data-warmup-progress', '50');
+    await expect(page.getByText('Initial buffer ready')).not.toBeVisible();
 
     await expect
       .poll(() => harness.torrentEvents.includes('warmup:ready'), { timeout: 12_000 })
       .toBe(true);
-    await expect(page.getByText('Initial buffer ready')).toBeVisible();
+    await expect(warmupBorder).toHaveAttribute('data-warmup-state', 'ready');
+    await expect(warmupBorder).toHaveAttribute('data-warmup-progress', '100');
+    await expect(page.getByText('Initial buffer ready')).not.toBeVisible();
     await expect(page.getByLabel(/1080p, WEB source/)).toBeVisible();
 
     const screenshot = await page.screenshot({ animations: 'disabled', fullPage: true });
@@ -259,6 +292,8 @@ test.describe('details page preparation contract', () => {
     await expect(page).toHaveScreenshot('details-page-source-ready.png', {
       animations: 'disabled',
       fullPage: true,
+      // Allow the Linux fallback-star glyph to shift the adjacent quality badge.
+      maxDiffPixels: 700,
     });
 
     await page.getByRole('button', { name: 'Back to browse' }).click();

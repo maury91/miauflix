@@ -192,6 +192,16 @@ export default [
     rules: {
       'simple-import-sort/imports': 'warn',
       'simple-import-sort/exports': 'warn',
+      // Prefer library variants to feature-local visual overrides.
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector:
+            "CallExpression[callee.name='styled'] > Identifier.arguments[name=/^(Button|BaseButton|Input|Select|FieldLabel|LoadingIndicator|Spinner|Alert|Switch)$/]",
+          message:
+            'Use the Miauflix UI component props. Add shared visual variants in shared/ui and put positioning/spacing on a parent. Document any existing domain-specific exception.',
+        },
+      ],
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'react-refresh/only-export-components': ['warn', { allowConstantExport: true }],

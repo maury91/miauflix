@@ -48,6 +48,26 @@ describe('ServiceConfigGroup', () => {
     expect(screen.getByText('Optional Key')).toBeInTheDocument();
   });
 
+  it('labels a degraded service and explains the runtime reason', () => {
+    render(
+      <ServiceConfigGroup
+        groupName="THE_RARBG"
+        entries={[entry('OPTIONAL_KEY', false)]}
+        values={{ OPTIONAL_KEY: '' }}
+        onChange={vi.fn()}
+        onTest={vi.fn()}
+        onSave={vi.fn()}
+        hasChanges={false}
+        serviceStatus={{ status: 'degraded', reason: 'all mirrors unavailable; retrying soon' }}
+      />
+    );
+
+    expect(screen.getByText('degraded')).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent(
+      'Service degraded: all mirrors unavailable; retrying soon'
+    );
+  });
+
   it('shows a single optional field without a collapsible section', () => {
     render(
       <ServiceConfigGroup

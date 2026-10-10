@@ -1,4 +1,4 @@
-import { navigateToLogin } from './utils/login';
+import { dismissTraktPrompt, navigateToLogin, waitForTraktAssociation } from './utils/login';
 import { expect, test } from './fixtures';
 
 const adminEmail = process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com';
@@ -39,12 +39,14 @@ test.describe('Home row loading priority', () => {
     await navigateToLogin(page);
     await page.locator('#email').fill(adminEmail);
     await page.locator('#password').fill(adminPassword);
+    const associationResponse = waitForTraktAssociation(page);
     await Promise.all([
       page.waitForResponse(response => response.url().includes('/api/auth/login')),
       page.locator('button[type="submit"]').click(),
     ]);
 
     await expect(page.getByRole('main')).toBeVisible();
+    await dismissTraktPrompt(page, associationResponse);
     await expect
       .poll(() => listRequests.filter(request => request.method === 'GET').length, {
         timeout: 30000,

@@ -25,6 +25,7 @@ if [[ -n "${E2E_HOME_CROSS_LOAD+x}" ]]; then
     home_cross_load_was_set=true
     home_cross_load_requested="$E2E_HOME_CROSS_LOAD"
 fi
+background_tasks_requested="${BACKGROUND_TASKS_ENABLED:-false}"
 
 script_dir=$(dirname $(realpath "$0"))
 backend_e2e_dir=$(dirname "$script_dir")
@@ -109,6 +110,17 @@ echo "🚀 Starting $DESCRIPTION..."
 # Import shared Docker utilities
 source "$script_dir/docker-utils.sh"
 
+# Keep phase markers in the environment log so CI timing includes setup,
+# readiness, test lanes, and teardown rather than only Playwright's totals.
+phase() {
+    local name="$1"
+    printf '[E2E_PHASE] %s %s\n' "$(date -u +'%Y-%m-%dT%H:%M:%SZ')" "$name" | tee -a "$log_file"
+}
+
+compose() {
+    docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" "$@"
+}
+
 # Function to check if environment is already running (wraps shared function with mode-specific messaging)
 check_environment_running() {
     log_verbose "🔍 Checking if $MODE environment is already running..."
@@ -179,7 +191,8 @@ fi
 
 # The background-priority E2E lane must be deterministic even when a developer's
 # local .env contains the normal disabled-worker setting.
-if [[ "${BACKGROUND_TASKS_ENABLED:-false}" == "true" ]]; then
+if [[ "$background_tasks_requested" == "true" || "${BACKGROUND_TASKS_ENABLED:-false}" == "true" ]]; then
+    export BACKGROUND_TASKS_ENABLED=true
     export DISABLE_BACKGROUND_TASKS=false
     export CATALOG_DISABLE_BACKGROUND_TASKS=false
 fi
@@ -217,6 +230,7 @@ cleanupArtifacts() {
 # Function to cleanup on exit
 cleanup() {
     TERM_SIGNAL=$?
+    phase "teardown-start"
     if [[ $TERM_SIGNAL -ne 0 ]]; then
         echo "⚠️  Script terminated with signal $TERM_SIGNAL"
         # docker compose -p $PROJECT_NAME -f $DOCKER_COMPOSE_FILE logs --tail '5000'
@@ -230,7 +244,7 @@ cleanup() {
     if [[ -f $log_file ]]; then
         echo "📜 Full Logs saved to $log_file"
     else
-        docker compose -p $PROJECT_NAME -f $DOCKER_COMPOSE_FILE logs --tail 2000
+        compose logs --tail 2000
         echo "⚠️  No logs were generated"
     fi
     
@@ -238,7 +252,7 @@ cleanup() {
     if [[ "$DETACHED_MODE" == "false" ]]; then
         echo "🧹 Cleaning up $MODE environment..."
         cleanupArtifacts
-        docker compose -p $PROJECT_NAME -f $DOCKER_COMPOSE_FILE down -v --remove-orphans
+        compose down -v --remove-orphans
     else
         echo "🚀 Detached mode - leaving containers running"
         cleanupArtifacts
@@ -250,6 +264,7 @@ cleanup() {
         rm -f "$ENV_TEST_BACKUP"
     fi
 
+    phase "teardown-end"
     exit $TERM_SIGNAL
 }
 
@@ -261,7 +276,13 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     # Build libraries only when starting fresh - ensure we're in root directory
     cd "$root_dir"
     # Build backend package and dependencies for use outside Docker; frontend is built inside Docker
-    npm run build:backend
+    if [[ "${E2E_HOST_BUILD_PREPARED:-false}" == "true" ]]; then
+        phase "host-prerequisites-reused"
+    else
+        phase "host-prerequisites-start"
+        npm run build:backend
+        phase "host-prerequisites-end"
+    fi
 
     # Build frontend only in dev so static assets are available/mounted
     if [[ "$MODE" == "dev" ]]; then
@@ -272,12 +293,7 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     # Clean up previous build artifacts
     cleanupArtifacts
     cd ${root_dir}
-    mkdir -p backend-e2e/docker/dist
-
-    # Copy new build artifacts
-    cp -r packages/yts-sanitizer backend-e2e/docker/dist
-    cp -r packages/therarbg-sanitizer backend-e2e/docker/dist
-    cp -r packages/source-metadata-extractor backend-e2e/docker/dist
+    bash "$script_dir/prepare-docker-build-context.sh"
 
     # Navigate to the integration tests directory
     cd "${backend_e2e_dir}"
@@ -285,45 +301,38 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
 
     # Make sure all previous containers are removed
     echo "🧹 Removing any existing $MODE containers..."
-    docker compose -p $PROJECT_NAME -f $DOCKER_COMPOSE_FILE down -v --remove-orphans
+    compose down -v --remove-orphans
 
     # Start all services
-    echo "🚀 Starting the $MODE environment with Docker Compose..."    
+    phase "service-startup-start"
+    echo "🚀 Starting the $MODE environment with Docker Compose..."
     export DOCKER_BUILDKIT=1
-    docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" up --build -d
-
-    docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" logs --since 1m  --follow &> "$log_file" &
+    compose_args=(up -d)
+    if [[ "${E2E_USE_PREBUILT_IMAGES:-false}" == "true" ]]; then
+        compose_args+=(--no-build)
+    else
+        compose_args+=(--build)
+    fi
+    if [[ "$MODE" == "test" ]]; then
+        compose_args+=(--wait --wait-timeout 120)
+    fi
+    # Start following before startup so failures during `up --wait` are retained.
+    # Some Compose versions exit when no container exists yet; the fallback below
+    # starts a follower after startup without a time window in that case.
+    compose logs --follow >> "$log_file" 2>&1 &
     logged_pid=$!
-    cleanupArtifacts
+    compose "${compose_args[@]}"
+    if ! kill -0 "$logged_pid" 2>/dev/null; then
+        compose logs --follow >> "$log_file" 2>&1 &
+        logged_pid=$!
+    fi
 
     # Wait for services to start
     echo "⏳ Waiting for services to start..."
     if [[ "$MODE" == "dev" ]]; then
         sleep 2
-    else
-        sleep 5
-        
-        # For test mode, check if backend is ready
-        echo "🔍 Checking if backend is ready..."
-        MAX_ATTEMPTS=10
-        ATTEMPT=1
-        BACKEND_READY=false
-
-        while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
-            if docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" ps | grep backend | grep "(healthy)" > /dev/null; then
-                BACKEND_READY=true
-                break
-            fi
-            echo "⏳ Waiting for backend to be ready (attempt $ATTEMPT/$MAX_ATTEMPTS)..."
-            ATTEMPT=$((ATTEMPT+1))
-            sleep 2
-        done
-
-        if [ "$BACKEND_READY" = false ]; then
-            echo "❌ Backend failed to become ready. Exiting..."
-            exit 1
-        fi
     fi
+    phase "service-startup-end"
 
     if [[ "$INITIAL_SETUP" == "true" ]]; then
         echo "🧪 Initial-user setup mode - skipping generated-admin credential extraction"
@@ -338,7 +347,7 @@ else
     echo "🔄 Using existing containers - skipping Docker startup"
     # Still need to set up logging for existing containers, but from the right directory
     cd "$backend_e2e_dir"
-    docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" logs --since 1m  --follow &> "$log_file" &
+    compose logs --follow >> "$log_file" 2>&1 &
     logged_pid=$!
 fi
 
@@ -371,6 +380,7 @@ else
 
     # Run backend tests if not frontend-only
     if [[ "$FRONTEND_ONLY" != "true" ]]; then
+        phase "backend-tests-start"
         echo "🧪 Running backend integration tests..."
         
         # Pass any additional arguments to npm test (e.g., test name patterns)
@@ -381,6 +391,7 @@ else
             echo "🧪 Running all tests..."
             npm test || BACKEND_TEST_PASSED=false
         fi
+        phase "backend-tests-end"
     else
         echo "⏭️  Skipping backend tests (--frontend-only flag)"
     fi
@@ -389,6 +400,7 @@ else
 
     # Run frontend tests if not backend-only
     if [[ "$BACKEND_ONLY" != "true" ]]; then
+        phase "browser-lane-start"
         if [[ "$INITIAL_SETUP" == "true" ]]; then
             echo "🧪 Running initial-user setup frontend E2E test..."
             if [[ "$UPDATE_SNAPSHOTS" == "true" ]]; then
@@ -406,6 +418,15 @@ else
             else
                 npm run test:e2e -w frontend || FRONTEND_TEST_PASSED=false
             fi
+        fi
+        phase "browser-lane-end"
+
+        # Lighthouse owns fixed CDP ports and therefore runs serially after
+        # ordinary browser tests, while the Docker stack is still available.
+        if [[ "$INITIAL_SETUP" == "false" && "$UPDATE_SNAPSHOTS" == "false" && $# -eq 0 ]]; then
+            phase "lighthouse-lane-start"
+            npm run test:e2e:lighthouse -w frontend || FRONTEND_TEST_PASSED=false
+            phase "lighthouse-lane-end"
         fi
     else
         echo "⏭️  Skipping frontend tests (--backend-only flag)"

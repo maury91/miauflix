@@ -17,6 +17,12 @@ export const backdropFocusSchema = z.object({
 export const backdropFocusResponseSchema = z.object({
   backdropFocus: backdropFocusSchema,
 });
+export const backdropFocusBackgroundRequestSchema = z.object({
+  items: z.array(mediaRefSchema).max(50),
+});
+export const backdropFocusBackgroundResponseSchema = z.object({
+  accepted: z.number().int().nonnegative(),
+});
 
 export const movieDetailSchema = mediaRefSchema.extend({
   mediaType: z.literal('movie'),
@@ -154,6 +160,8 @@ export type MediaType = z.infer<typeof mediaTypeSchema>;
 export type MediaRef = z.infer<typeof mediaRefSchema>;
 export type LocalizedGenre = z.infer<typeof localizedGenreSchema>;
 export type BackdropFocus = z.infer<typeof backdropFocusSchema>;
+export type BackdropFocusBackgroundRequest = z.infer<typeof backdropFocusBackgroundRequestSchema>;
+export type BackdropFocusBackgroundResponse = z.infer<typeof backdropFocusBackgroundResponseSchema>;
 export type MovieDetail = z.infer<typeof movieDetailSchema>;
 export type SeasonSummary = z.infer<typeof seasonSummarySchema>;
 export type TVShowDetail = z.infer<typeof tvShowDetailSchema>;

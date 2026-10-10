@@ -1,8 +1,13 @@
 import { PALETTE } from '@shared/config/constants';
-import { type FC, type KeyboardEvent, useEffect, useRef, useState } from 'react';
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { Button as BaseButton } from '@shared/ui/button/Button';
+import { type FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import type { HomeAction, NavigationOutcome } from '../homeNavigation';
+
+import SettingsIcon from '~icons/mdi/cog-outline';
+import HomeIcon from '~icons/mdi/home-outline';
 
 const Rail = styled.aside<{ $active: boolean }>`
   position: fixed;
@@ -33,12 +38,15 @@ const Navigation = styled.nav`
   align-content: space-between;
 `;
 
-const Item = styled.button<{ $active: boolean; $selected: boolean }>`
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
+const Item = styled(BaseButton)<{ $active: boolean; $selected: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
   gap: 0.8vw;
+  justify-content: flex-start;
   width: 100%;
+  min-height: 0;
   min-width: 44px;
   height: clamp(42px, 3.7vw, 62px);
   padding: 0 0.8vw;
@@ -52,9 +60,16 @@ const Item = styled.button<{ $active: boolean; $selected: boolean }>`
   text-align: left;
   cursor: pointer;
   outline: none;
+  box-shadow: none;
 
   &:focus-visible {
+    outline: none;
     box-shadow: 0 0 0 2px ${PALETTE.text.primary};
+  }
+
+  > span[aria-hidden='true'] {
+    width: 1.35em;
+    height: 1.35em;
   }
 
   &::before {
@@ -88,6 +103,7 @@ interface HomeSidebarProps {
   onSettings: () => void;
 }
 
+/** Render Home and Settings actions, restoring the selected button’s focus when the sidebar becomes active. */
 export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, onSettings }) => {
   const homeRef = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
@@ -105,22 +121,43 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
     onHover();
   };
 
-  const handleItemKeyDown = (event: KeyboardEvent, item: 'home' | 'settings') => {
-    if (event.key === 'ArrowDown' || event.key === 'ArrowRight') {
-      event.preventDefault();
-      const next = item === 'home' ? settingsRef.current : homeRef.current;
-      move(item === 'home' ? 'settings' : 'home');
-      next?.focus({ preventScroll: true });
-    } else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') {
-      event.preventDefault();
-      const next = item === 'settings' ? homeRef.current : settingsRef.current;
-      move(item === 'settings' ? 'home' : 'settings');
-      next?.focus({ preventScroll: true });
-    }
-  };
+  const navigationRef = useKeyboardNavigation({
+    enabled: active,
+    onDown: () => {
+      const next = selected === 'home' ? 'settings' : 'home';
+      move(next);
+      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      return true;
+    },
+    onUp: () => {
+      const next = selected === 'settings' ? 'home' : 'settings';
+      move(next);
+      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      return true;
+    },
+    onLeft: () => {
+      const next = selected === 'settings' ? 'home' : 'settings';
+      move(next);
+      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      return true;
+    },
+    onRight: () => {
+      onAction('right');
+      return true;
+    },
+    onConfirm: () => {
+      onAction('confirm');
+      return true;
+    },
+    onBack: () => {
+      onAction('back');
+      return true;
+    },
+  });
 
   return (
     <Rail
+      ref={navigationRef}
       $active={active}
       aria-label="Home navigation"
       onMouseEnter={onHover}
@@ -136,12 +173,13 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
           $selected={selected === 'home'}
           aria-label="Home"
           aria-current="page"
-          onKeyDown={event => handleItemKeyDown(event, 'home')}
           onFocus={() => move('home')}
           onMouseEnter={() => move('home')}
           onClick={() => onAction('confirm')}
         >
-          <Icon aria-hidden="true">⌂</Icon>
+          <Icon aria-hidden="true">
+            <HomeIcon />
+          </Icon>
           {active && <span>Home</span>}
         </Item>
         <Item
@@ -150,12 +188,13 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
           $active={active && selected === 'settings'}
           $selected={selected === 'settings'}
           aria-label="Settings"
-          onKeyDown={event => handleItemKeyDown(event, 'settings')}
           onFocus={() => move('settings')}
           onMouseEnter={() => move('settings')}
           onClick={onSettings}
         >
-          <Icon aria-hidden="true">⚙</Icon>
+          <Icon aria-hidden="true">
+            <SettingsIcon />
+          </Icon>
           {active && <span>Settings</span>}
         </Item>
       </Navigation>

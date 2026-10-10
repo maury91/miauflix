@@ -74,7 +74,7 @@ describe('SourcePreparationStatus', () => {
     expect(screen.getByText('CAM')).toBeInTheDocument();
   });
 
-  it('shows warmup only in details while browse remains discovery-only', () => {
+  it('keeps warmup status out of the source metadata row', () => {
     const preparation = baseSnapshot({
       source: { id: 9, quality: 'FHD', sourceType: 'WEB' },
       warmup: { state: 'warming' },
@@ -90,7 +90,7 @@ describe('SourcePreparationStatus', () => {
       <SourcePreparationStatus mediaKind="movie" mode="details" preparation={preparation} />
     );
     expect(screen.queryByText('Source found')).not.toBeInTheDocument();
-    expect(screen.getByText('Warming up torrent…')).toBeInTheDocument();
+    expect(screen.queryByText('Warming up torrent…')).not.toBeInTheDocument();
 
     rerender(
       <SourcePreparationStatus
@@ -99,7 +99,7 @@ describe('SourcePreparationStatus', () => {
         preparation={baseSnapshot({ warmup: { state: 'ready' } })}
       />
     );
-    expect(screen.getByText('Initial buffer ready')).toBeInTheDocument();
+    expect(screen.queryByText('Initial buffer ready')).not.toBeInTheDocument();
   });
 
   it('shows checking for a movie without a snapshot and nothing for a show', () => {
@@ -129,7 +129,7 @@ describe('SourcePreparationStatus', () => {
         preparation={baseSnapshot({ state: 'unknown', warmup: { state: 'paused' } })}
       />
     );
-    expect(screen.getByText('Paused')).toBeInTheDocument();
+    expect(screen.queryByText('Paused')).not.toBeInTheDocument();
     expect(screen.queryByText('Checking sources')).not.toBeInTheDocument();
   });
 });

@@ -12,6 +12,93 @@ import { type BackdropFaceFocusDetector, detectBackdropSubjectFocus } from './ba
 
 const DOWNLOAD_TIMEOUT_MS = 15_000;
 const MAX_IMAGE_BYTES = 8 * 1024 * 1024;
+export const DEFAULT_BACKDROP_FOCUS_CONCURRENCY = 2;
+
+type BackgroundPriority = 'displayed' | 'database';
+
+interface QueuedTask {
+  key: string;
+  run: () => Promise<unknown>;
+  resolve: (value: unknown) => void;
+  reject: (reason?: unknown) => void;
+}
+
+/**
+ * Two logical queues share one concurrency budget. Immediate work always drains
+ * before background work; displayed-list work drains before the database sweep.
+ */
+class BackdropFocusScheduler {
+  private active = 0;
+  private readonly immediate: QueuedTask[] = [];
+  private readonly backgroundDisplayed: QueuedTask[] = [];
+  private readonly backgroundDatabase: QueuedTask[] = [];
+
+  constructor(private readonly concurrency: number) {}
+
+  addImmediate<T>(key: string, run: () => Promise<T>): Promise<T> {
+    return this.add(this.immediate, key, run);
+  }
+
+  addBackground<T>(key: string, priority: BackgroundPriority, run: () => Promise<T>): Promise<T> {
+    return this.add(
+      priority === 'displayed' ? this.backgroundDisplayed : this.backgroundDatabase,
+      key,
+      run
+    );
+  }
+
+  promote(key: string): boolean {
+    const index = this.backgroundDisplayed.findIndex(task => task.key === key);
+    if (index >= 0) {
+      const [task] = this.backgroundDisplayed.splice(index, 1);
+      if (task) this.immediate.push(task);
+      this.drain();
+      return true;
+    }
+    const databaseIndex = this.backgroundDatabase.findIndex(task => task.key === key);
+    if (databaseIndex < 0) return false;
+    const [task] = this.backgroundDatabase.splice(databaseIndex, 1);
+    if (task) this.immediate.push(task);
+    this.drain();
+    return true;
+  }
+
+  hasPending(priority: BackgroundPriority): boolean {
+    return (
+      (priority === 'displayed' ? this.backgroundDisplayed : this.backgroundDatabase).length > 0
+    );
+  }
+
+  private add<T>(queue: QueuedTask[], key: string, run: () => Promise<T>): Promise<T> {
+    return new Promise<T>((resolve, reject) => {
+      queue.push({
+        key,
+        run: async () => run(),
+        resolve: value => resolve(value as T),
+        reject,
+      });
+      this.drain();
+    });
+  }
+
+  private drain(): void {
+    while (this.active < this.concurrency) {
+      const task =
+        this.immediate.shift() ??
+        this.backgroundDisplayed.shift() ??
+        this.backgroundDatabase.shift();
+      if (!task) return;
+      this.active++;
+      void Promise.resolve()
+        .then(task.run)
+        .then(task.resolve, task.reject)
+        .finally(() => {
+          this.active--;
+          this.drain();
+        });
+    }
+  }
+}
 
 interface SharpImage {
   width: number;
@@ -31,11 +118,18 @@ const smartcropRuntime = smartcrop as unknown as SmartcropRuntime;
 
 export class BackdropFocusService {
   private readonly inflight = new Map<string, Promise<BackdropFocus>>();
+  private readonly computationQueue: BackdropFocusScheduler;
 
   constructor(
     private readonly repository: BackdropFocusRepository,
-    private readonly detectFaceFocus: BackdropFaceFocusDetector = detectBackdropSubjectFocus
-  ) {}
+    private readonly detectFaceFocus: BackdropFaceFocusDetector = detectBackdropSubjectFocus,
+    concurrency = DEFAULT_BACKDROP_FOCUS_CONCURRENCY
+  ) {
+    const normalizedConcurrency = Number.isFinite(concurrency)
+      ? Math.max(1, Math.floor(concurrency))
+      : DEFAULT_BACKDROP_FOCUS_CONCURRENCY;
+    this.computationQueue = new BackdropFocusScheduler(normalizedConcurrency);
+  }
 
   /**
    * Returns cached focus or analyzes and persists it, sharing concurrent work for the same
@@ -53,10 +147,53 @@ export class BackdropFocusService {
 
     const inflightKey = `${provider}:${source.key}:${BACKDROP_FOCUS_ALGORITHM_VERSION}`;
     const existing = this.inflight.get(inflightKey);
-    if (existing) return existing;
-    const promise = this.compute(source, key).finally(() => this.inflight.delete(inflightKey));
+    if (existing) {
+      this.computationQueue.promote(inflightKey);
+      return existing;
+    }
+    const promise = this.schedule(inflightKey, key, source, 'immediate');
+    return promise;
+  }
+
+  /** Enqueues preemptive work without making the caller wait for model analysis. */
+  enqueueBackground(
+    source: ProviderBackdropSource,
+    provider: string,
+    priority: BackgroundPriority
+  ): boolean {
+    const key: BackdropFocusKey = { provider, imageKey: source.key };
+    const inflightKey = this.inflightKey(key);
+    if (this.repository.get(key) || !this.repository.shouldRetry(key)) return false;
+    if (this.inflight.has(inflightKey)) return false;
+    const promise = this.schedule(inflightKey, key, source, priority);
+    void promise.catch(() => undefined);
+    return true;
+  }
+
+  /** Returns whether work is already waiting in the selected background queue. */
+  hasPendingBackground(priority: 'displayed' | 'database'): boolean {
+    return this.computationQueue.hasPending(priority);
+  }
+
+  private schedule(
+    inflightKey: string,
+    key: BackdropFocusKey,
+    source: ProviderBackdropSource,
+    priority: 'immediate' | BackgroundPriority
+  ): Promise<BackdropFocus> {
+    const promise = (
+      priority === 'immediate'
+        ? this.computationQueue.addImmediate(inflightKey, () => this.compute(source, key))
+        : this.computationQueue.addBackground(inflightKey, priority, () =>
+            this.compute(source, key)
+          )
+    ).finally(() => this.inflight.delete(inflightKey));
     this.inflight.set(inflightKey, promise);
     return promise;
+  }
+
+  private inflightKey(key: BackdropFocusKey): string {
+    return `${key.provider}:${key.imageKey}:${BACKDROP_FOCUS_ALGORITHM_VERSION}`;
   }
 
   /**

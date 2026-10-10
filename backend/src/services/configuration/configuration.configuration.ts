@@ -11,7 +11,7 @@ export const serverConfigurationDefinition = serviceConfiguration({
       description: "Allowed origins for CORS (comma-separated list or '*' for all origins)",
       required: false,
       defaultValue:
-        'http://localhost:3000,http://localhost:4173,http://localhost:4174,http://localhost:4175',
+        'http://localhost:3000,http://localhost:4173,http://localhost:4174,http://localhost:4175,https://localhost:3000,https://localhost:4173,https://localhost:4174,https://localhost:4175',
       example: 'http://localhost:3000,https://myapp.com',
       transform: transforms.stringArray(),
     }),

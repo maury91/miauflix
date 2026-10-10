@@ -4,7 +4,8 @@
 
 /**
  * Chrome DevTools Protocol (CDP) port mapping for Playwright projects.
- * These ports must match the remote-debugging-port args in playwright.config.e2e.ts
+ * These ports must match the remote-debugging-port args in
+ * playwright.config.lighthouse.ts.
  */
 export const CDP_PORT_MAP: Record<string, number> = {
   'chromium-desktop': 9222,

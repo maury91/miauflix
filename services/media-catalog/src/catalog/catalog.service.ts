@@ -6,7 +6,10 @@ import { TVShowRepository } from '../db/tv-show.repo';
 import { HttpError } from '../errors';
 import { logger } from '../logger';
 import type { CatalogProvider } from '../provider/provider';
-import { BackdropFocusService } from '../services/backdrop-focus.service';
+import {
+  BackdropFocusService,
+  DEFAULT_BACKDROP_FOCUS_CONCURRENCY,
+} from '../services/backdrop-focus.service';
 import type { BatchResponse, MediaRef, MovieDetail, SeasonDetail, TVShowDetail } from '../types';
 import type { BackdropFocus, MediaType } from '../types';
 import { CatalogHydrator } from './catalog.hydrator';
@@ -14,12 +17,17 @@ import { CatalogLocalizer } from './catalog.localizer';
 import { CatalogSynchronizer } from './catalog.syncer';
 
 const SCOPE = 'CatalogService';
+const BACKDROP_FOCUS_SCAN_PAGE_SIZE = 32;
 
 export interface CatalogValues {
   /** Refresh details older than this (ms). */
   hydrationTtlMs: number;
   /** 'GREEDY' syncs every show's episodes, 'ON_DEMAND' only watching ones. */
   episodeSyncMode: 'GREEDY' | 'ON_DEMAND';
+  /** Maximum number of concurrent backdrop image-model calculations. */
+  backdropFocusConcurrency: number;
+  /** Interval between low-priority database backdrop calculations (ms). */
+  backdropFocusBackgroundIntervalMs: number;
 }
 
 /**
@@ -34,6 +42,8 @@ export class CatalogService {
   private readonly localizer: CatalogLocalizer;
   private readonly synchronizer: CatalogSynchronizer;
   private readonly backdropFocusService: BackdropFocusService;
+  private backdropFocusBackgroundTimer: ReturnType<typeof setInterval> | undefined;
+  private backdropFocusScanOffset = 0;
 
   constructor(
     private readonly movies: MovieRepository,
@@ -56,7 +66,11 @@ export class CatalogService {
       this.provider,
       backdropFocusRepository
     );
-    this.backdropFocusService = new BackdropFocusService(backdropFocusRepository);
+    this.backdropFocusService = new BackdropFocusService(
+      backdropFocusRepository,
+      undefined,
+      this.values.backdropFocusConcurrency ?? DEFAULT_BACKDROP_FOCUS_CONCURRENCY
+    );
     this.synchronizer = new CatalogSynchronizer(
       this.movies,
       this.tvShows,
@@ -155,6 +169,65 @@ export class CatalogService {
     const source = this.provider.getBackdropAnalysisSource(row.backdrop);
     if (!source) throw new HttpError(422, 'backdrop_not_available');
     return this.backdropFocusService.ensure(source, this.provider.name);
+  }
+
+  /** Enqueues displayed-list work without delaying the frontend request path. */
+  enqueueBackdropFocus(items: MediaRef[]): number {
+    let accepted = 0;
+    for (const item of items) {
+      const row =
+        item.mediaType === 'movie'
+          ? this.movies.getMovie(item.mediaId)
+          : this.tvShows.getTVShow(item.mediaId);
+      if (!row) continue;
+      const source = this.provider.getBackdropAnalysisSource(row.backdrop);
+      if (
+        source &&
+        this.backdropFocusService.enqueueBackground(source, this.provider.name, 'displayed')
+      )
+        accepted++;
+    }
+    return accepted;
+  }
+
+  startBackdropFocusBackground(): void {
+    if (this.backdropFocusBackgroundTimer) return;
+    this.backdropFocusBackgroundTimer = setInterval(() => {
+      this.enqueueNextDatabaseBackdropFocus();
+    }, this.values.backdropFocusBackgroundIntervalMs);
+  }
+
+  stopBackdropFocusBackground(): void {
+    if (!this.backdropFocusBackgroundTimer) return;
+    clearInterval(this.backdropFocusBackgroundTimer);
+    this.backdropFocusBackgroundTimer = undefined;
+  }
+
+  private enqueueNextDatabaseBackdropFocus(): void {
+    if (this.backdropFocusService.hasPendingBackground('database')) return;
+    // Advance bounded pages so cached rows in the first page cannot starve later media.
+    const offset = this.backdropFocusScanOffset;
+    const candidates = [
+      ...this.movies
+        .getBackdropCandidates(BACKDROP_FOCUS_SCAN_PAGE_SIZE, offset)
+        .map(row => ({ mediaType: 'movie' as const, ...row })),
+      ...this.tvShows
+        .getBackdropCandidates(BACKDROP_FOCUS_SCAN_PAGE_SIZE, offset)
+        .map(row => ({ mediaType: 'tv' as const, ...row })),
+    ];
+    if (candidates.length === 0) {
+      this.backdropFocusScanOffset = 0;
+      return;
+    }
+    this.backdropFocusScanOffset += BACKDROP_FOCUS_SCAN_PAGE_SIZE;
+    for (const candidate of candidates) {
+      const source = this.provider.getBackdropAnalysisSource(candidate.backdrop);
+      if (
+        source &&
+        this.backdropFocusService.enqueueBackground(source, this.provider.name, 'database')
+      )
+        return;
+    }
   }
 
   /* -------------------------------------------------------------- change syncs */

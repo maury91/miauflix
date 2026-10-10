@@ -10,6 +10,9 @@ sb.mock(import('../src/features/media/api/media.api.ts'));
 
 const preview: Preview = {
   parameters: {
+    options: {
+      storySort: { order: ['Miauflix UI', ['Introduction', 'Composition', 'Components'], '*'] },
+    },
     controls: {
       matchers: {
         color: /(background|color)$/i,

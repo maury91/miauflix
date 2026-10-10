@@ -1,3 +1,5 @@
+import { getKeyboardNavigationAction } from '@shared/hooks/useKeyboardNavigation';
+
 export type HomeAction = 'left' | 'right' | 'up' | 'down' | 'confirm' | 'back';
 
 export type NavigationOutcome =
@@ -6,26 +8,7 @@ export type NavigationOutcome =
   | { type: 'activate' }
   | { type: 'ignored' };
 
-export function getHomeAction(key: string): HomeAction | null {
-  switch (key) {
-    case 'ArrowLeft':
-      return 'left';
-    case 'ArrowRight':
-      return 'right';
-    case 'ArrowUp':
-      return 'up';
-    case 'ArrowDown':
-      return 'down';
-    case 'Enter':
-    case ' ':
-      return 'confirm';
-    case 'Escape':
-    case 'Backspace':
-      return 'back';
-    default:
-      return null;
-  }
-}
+export const getHomeAction = getKeyboardNavigationAction;
 
 export function moveIndex(action: HomeAction, index: number, total: number): NavigationOutcome {
   if (total <= 0) return { type: 'ignored' };

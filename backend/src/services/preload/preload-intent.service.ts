@@ -5,6 +5,7 @@ import type {
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
   PreloadPreparationState,
+  PreloadWarmupSnapshot,
   PreloadWarmupState,
 } from '@routes/preload.types';
 
@@ -17,7 +18,7 @@ type PreparationLevel = 'sources' | 'warm';
 
 interface PreparationDetails {
   source: PreloadPreparationSource | null;
-  warmup: PreloadWarmupState;
+  warmup: PreloadWarmupSnapshot;
 }
 
 type PreparationEntry =
@@ -63,10 +64,31 @@ export interface PreloadIntentResult {
  * warming is required to stop when the lease expires.
  */
 export class PreloadIntentService {
+  private readonly changeListeners = new Set<
+    (event: {
+      userId: string;
+      sessionId: string;
+      clientId: string;
+      preparation: PreloadPreparationSnapshot | null;
+    }) => void
+  >();
   private readonly leases = new Map<IntentLeaseKey, PreloadLease>();
   private readonly preparations = new Map<string, PreparationEntry>();
   private readonly sourceMetadataCache = new Map<string, PreloadPreparationSource>();
   private readonly cleanupTimer: ReturnType<typeof setInterval>;
+  private readonly onWarmupChange = (slot: { playableKey: string } | null): void => {
+    if (slot) {
+      this.emitPreparationChangeForKey(slot.playableKey);
+      return;
+    }
+    // Promotion or shutdown can remove the slot entirely. Re-evaluate every
+    // focused lease so clients see readiness disappear with the source.
+    for (const lease of this.leases.values()) {
+      if (lease.focused && lease.focused.kind !== 'show') {
+        this.emitChange(lease, this.snapshotForLease(lease));
+      }
+    }
+  };
 
   constructor(
     private readonly preparation?: PlayablePreparationService,
@@ -76,6 +98,29 @@ export class PreloadIntentService {
     if (typeof this.cleanupTimer === 'object' && 'unref' in this.cleanupTimer) {
       this.cleanupTimer.unref();
     }
+    this.warmup?.onChange?.(this.onWarmupChange);
+  }
+
+  onChange(
+    listener: (event: {
+      userId: string;
+      sessionId: string;
+      clientId: string;
+      preparation: PreloadPreparationSnapshot | null;
+    }) => void
+  ): void {
+    this.changeListeners.add(listener);
+  }
+
+  offChange(
+    listener: (event: {
+      userId: string;
+      sessionId: string;
+      clientId: string;
+      preparation: PreloadPreparationSnapshot | null;
+    }) => void
+  ): void {
+    this.changeListeners.delete(listener);
   }
 
   update(
@@ -154,6 +199,7 @@ export class PreloadIntentService {
     if (lease && (sequence === undefined || lease.sequence !== sequence)) return false;
     const removed = this.leases.delete(key);
     this.reconcile(now);
+    if (removed) this.emitChange(lease, null);
     return removed;
   }
 
@@ -173,6 +219,7 @@ export class PreloadIntentService {
         preparation.controller.abort();
       }
     }
+    this.warmup?.offChange?.(this.onWarmupChange);
     this.warmup?.close();
     this.preparations.clear();
     this.sourceMetadataCache.clear();
@@ -188,12 +235,19 @@ export class PreloadIntentService {
     for (const [key, lease] of this.leases) {
       if (lease.expiresAt <= now) {
         this.leases.delete(key);
+        this.emitChange(lease, null);
         expired = true;
       }
     }
     if (expired) this.reconcile(now);
   }
 
+  /**
+   * Match preparation work to the highest level requested by each focused playable’s leases.
+   * Cancel obsolete work, pause unwanted payloads, and retain selected source metadata on downgrade.
+   * Schedule new preparation immediately for the player or after 350 ms otherwise; preparation
+   * rejections become error snapshots while preserving any selected source.
+   */
   private reconcile(now: number): void {
     const wanted = new Map<
       string,
@@ -239,11 +293,11 @@ export class PreloadIntentService {
       const details: PreparationDetails = existing
         ? {
             source: existing.details.source,
-            warmup: isDowngrade ? 'not_requested' : existing.details.warmup,
+            warmup: isDowngrade ? emptyWarmup() : existing.details.warmup,
           }
         : {
             source: this.sourceMetadataCache.get(key) ?? null,
-            warmup: 'not_requested',
+            warmup: emptyWarmup(),
           };
       // A completed warm preparation remains the selected source when a lease
       // downgrades to browse, but its speculative payload is no longer wanted.
@@ -263,7 +317,7 @@ export class PreloadIntentService {
           this.preparations.set(key, {
             ...existing,
             level,
-            details: { ...details, warmup: 'not_requested' },
+            details: { ...details, warmup: emptyWarmup() },
           });
           continue;
         }
@@ -302,9 +356,10 @@ export class PreloadIntentService {
                     ...current,
                     details: {
                       source: sourceSnapshot,
-                      warmup: level === 'warm' ? 'warming' : 'not_requested',
+                      warmup: level === 'warm' ? emptyWarmup('warming') : emptyWarmup(),
                     },
                   });
+                  this.emitPreparationChangeForKey(key);
                 }
               },
             })
@@ -321,9 +376,10 @@ export class PreloadIntentService {
                   outcome: result?.source ? 'source_found' : 'no_source',
                   details: {
                     source,
-                    warmup: result?.warmup?.state ?? 'not_requested',
+                    warmup: result?.warmup ?? emptyWarmup(),
                   },
                 });
+                this.emitPreparationChangeForKey(key);
               }
             })
             .catch(() => {
@@ -336,9 +392,10 @@ export class PreloadIntentService {
                   outcome: 'error',
                   details: {
                     source: current.details.source,
-                    warmup: 'not_requested',
+                    warmup: emptyWarmup(),
                   },
                 });
+                this.emitPreparationChangeForKey(key);
               }
             });
         },
@@ -356,6 +413,10 @@ export class PreloadIntentService {
     void now;
   }
 
+  /**
+   * Return the focused playable’s preparation, or null for a show or absent focus.
+   * Use cached source metadata while checking, or report unknown when preparation is unavailable.
+   */
   private snapshotForLease(lease?: PreloadLease): PreloadPreparationSnapshot | null {
     if (!lease?.focused || lease.focused.kind === 'show') return null;
     if (!this.preparation) {
@@ -363,7 +424,7 @@ export class PreloadIntentService {
         playable: lease.focused,
         state: 'unknown',
         source: this.sourceMetadataCache.get(playableKey(lease.focused)) ?? null,
-        warmup: { state: 'not_requested' },
+        warmup: emptyWarmup(),
       };
     }
     return (
@@ -371,11 +432,12 @@ export class PreloadIntentService {
         playable: lease.focused,
         state: 'checking',
         source: this.sourceMetadataCache.get(playableKey(lease.focused)) ?? null,
-        warmup: { state: 'not_requested' },
+        warmup: emptyWarmup(),
       }
     );
   }
 
+  /** Return a preparation snapshot with live warmup data, or null when no entry exists. */
   private snapshotForEntry(entry?: PreparationEntry): PreloadPreparationSnapshot | null {
     if (!entry) return null;
     if (entry.state === 'pending') {
@@ -383,15 +445,54 @@ export class PreloadIntentService {
         playable: entry.playable,
         state: entry.details.source ? 'source_found' : 'checking',
         source: entry.details.source,
-        warmup: { state: entry.details.warmup },
+        warmup: this.snapshotWarmup(entry),
       };
     }
     return {
       playable: entry.playable,
       state: entry.outcome,
       source: entry.details.source,
-      warmup: { state: entry.details.warmup },
+      warmup: this.snapshotWarmup(entry),
     };
+  }
+
+  /**
+   * Use the current slot’s progress when its playable and selected source match a warm request.
+   * Otherwise retain the saved warmup state, except that a completed ready snapshot is reset
+   * when no matching live slot remains.
+   */
+  private snapshotWarmup(entry: PreparationEntry): PreloadWarmupSnapshot {
+    const slot = this.warmup?.getState();
+    const source = entry.details.source;
+    if (
+      entry.level === 'warm' &&
+      slot &&
+      slot.playableKey === playableKey(entry.playable) &&
+      (!source || slot.sourceId === source.id)
+    ) {
+      const state: PreloadWarmupState =
+        slot.state === 'ready'
+          ? 'ready'
+          : slot.state === 'paused'
+            ? 'paused'
+            : slot.state === 'failed'
+              ? 'failed'
+              : slot.state === 'warming' ||
+                  slot.state === 'adding_torrent' ||
+                  slot.state === 'resolving_store'
+                ? 'warming'
+                : 'not_requested';
+      return {
+        state,
+        progress: slot.progress,
+        verifiedBytes: slot.verifiedBytes,
+        targetBytes: slot.targetVerifiedBytes,
+      };
+    }
+    if (entry.state === 'complete' && entry.details.warmup.state === 'ready') {
+      return emptyWarmup();
+    }
+    return entry.details.warmup;
   }
 
   private levelForView(view: PreloadIntentRequest['view']): PreparationLevel {
@@ -420,6 +521,28 @@ export class PreloadIntentService {
     }
   }
 
+  private emitChange(
+    lease: PreloadLease | undefined,
+    preparation: PreloadPreparationSnapshot | null
+  ): void {
+    if (!lease) return;
+    const event = {
+      userId: lease.userId,
+      sessionId: lease.sessionId,
+      clientId: lease.clientId,
+      preparation,
+    };
+    for (const listener of this.changeListeners) listener(event);
+  }
+
+  private emitPreparationChangeForKey(key: string): void {
+    for (const lease of this.leases.values()) {
+      if (lease.focused && lease.focused.kind !== 'show' && playableKey(lease.focused) === key) {
+        this.emitChange(lease, this.snapshotForLease(lease));
+      }
+    }
+  }
+
   private dedupeReachable(reachable: PreloadIntentRequest['reachable']) {
     const unique = new Map<string, PreloadIntentRequest['reachable'][number]>();
     for (const candidate of reachable) {
@@ -434,3 +557,8 @@ export class PreloadIntentService {
 }
 
 export const PRELOAD_LEASE_TTL_MS = LEASE_TTL_MS;
+
+/** Create a warmup state without claiming measured progress or byte counts. */
+function emptyWarmup(state: PreloadWarmupState = 'not_requested'): PreloadWarmupSnapshot {
+  return { state };
+}

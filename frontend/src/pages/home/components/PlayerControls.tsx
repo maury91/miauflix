@@ -1,7 +1,10 @@
 import { PALETTE } from '@shared/config/constants';
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { Button as BaseButton } from '@shared/ui/button/Button';
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
+import ArrowLeftIcon from '~icons/mdi/arrow-left';
 import FullscreenIcon from '~icons/mdi/fullscreen';
 import PauseIcon from '~icons/mdi/pause';
 import PawIcon from '~icons/mdi/paw';
@@ -42,16 +45,22 @@ const Header = styled.header<{ $visible: boolean }>`
     width: 14.5vh;
     height: 4vh;
   }
-  button {
-    padding: 0.7rem 1.2rem;
-    border: 1px solid ${PALETTE.background.border};
-    border-radius: 0.35rem;
-    background: ${PALETTE.background.surface2};
-    color: ${PALETTE.text.primary};
-    cursor: pointer;
-  }
 `;
 
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
+const HeaderButton = styled(BaseButton)`
+  min-width: auto;
+  min-height: 0;
+  padding: 0.7rem 1.2rem;
+  border: 1px solid ${PALETTE.background.border};
+  border-radius: 0.35rem;
+  background: ${PALETTE.background.surface2};
+  color: ${PALETTE.text.primary};
+  font-size: 1rem;
+  box-shadow: none;
+`;
+
+/** Render the playback header with an action returning to details. */
 export function PlayerHeader({
   onBack,
   visible = true,
@@ -61,15 +70,16 @@ export function PlayerHeader({
 }) {
   return (
     <Header $visible={visible}>
-      <button type="button" onClick={onBack}>
-        ← Back to details
-      </button>
+      <HeaderButton type="button" icon={<ArrowLeftIcon aria-hidden="true" />} onClick={onBack}>
+        Back to details
+      </HeaderButton>
       <img src="/assets/images/logo.svg" alt="Miauflix logo" />
     </Header>
   );
 }
 
-const Button = styled.button`
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
+const Button = styled(BaseButton)`
   display: inline-grid;
   place-items: center;
   min-width: 44px;
@@ -79,6 +89,7 @@ const Button = styled.button`
   background: transparent;
   color: inherit;
   font-size: 1.8rem;
+  box-shadow: none;
   cursor: pointer;
   &:hover {
     background: rgba(255, 255, 255, 0.12);
@@ -88,6 +99,7 @@ const Button = styled.button`
     outline-offset: 3px;
   }
 `;
+// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const CenterPlay = styled(Button)`
   position: absolute;
   top: 50%;
@@ -95,6 +107,11 @@ const CenterPlay = styled(Button)`
   transform: translate(-50%, -50%);
   font-size: clamp(3rem, 10vh, 7rem);
   padding: 1rem;
+
+  > svg {
+    width: 1em;
+    height: 1em;
+  }
 `;
 const Seek = styled.div`
   position: relative;
@@ -156,6 +173,11 @@ function formatTime(seconds: number) {
   return parts.map(part => String(part).padStart(2, '0')).join(':');
 }
 
+/**
+ * Control the referenced video’s playback, seeking, volume, and fullscreen state.
+ * Keyboard confirm and ten-second seeks apply when the overlay itself has focus.
+ * Controls stay visible while paused; play/fullscreen failures appear as notices.
+ */
 export function PlayerControls({
   videoRef,
   onBack,
@@ -224,12 +246,32 @@ export function PlayerControls({
     if (video && duration > 0) video.currentTime = Math.min(duration, Math.max(0, value));
     reveal();
   };
+  const navigationRef = useKeyboardNavigation({
+    onConfirm: event => {
+      if (event.target !== overlay.current) return false;
+      toggle();
+      return true;
+    },
+    onLeft: event => {
+      if (event.target !== overlay.current) return false;
+      seek(position - 10);
+      return true;
+    },
+    onRight: event => {
+      if (event.target !== overlay.current) return false;
+      seek(position + 10);
+      return true;
+    },
+  });
   const shown = visible || paused;
   const percent = duration > 0 ? Math.min(100, Math.max(0, (position / duration) * 100)) : 0;
 
   return (
     <Overlay
-      ref={overlay}
+      ref={node => {
+        overlay.current = node;
+        navigationRef(node);
+      }}
       $visible={shown}
       $paused={paused}
       onPointerMove={reveal}
@@ -237,17 +279,6 @@ export function PlayerControls({
         if (event.target === event.currentTarget) toggle();
       }}
       onFocus={reveal}
-      onKeyDown={event => {
-        if (event.target !== event.currentTarget) return;
-        if (event.key === ' ' || event.key === 'Enter') {
-          event.preventDefault();
-          toggle();
-        }
-        if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-          event.preventDefault();
-          seek(position + (event.key === 'ArrowLeft' ? -10 : 10));
-        }
-      }}
       tabIndex={0}
       aria-label="Playback controls"
     >

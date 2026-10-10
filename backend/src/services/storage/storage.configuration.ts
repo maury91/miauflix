@@ -13,5 +13,13 @@ export const storageConfigurationDefinition = serviceConfiguration({
       // FixMe: Add support for percentage
       transform: transforms.size(),
     }),
+    STORAGE_PLAYBACK_RESERVE: variable({
+      description:
+        'Storage kept available for on-demand playback; background downloads must leave this amount free.',
+      example: '10GB',
+      required: false,
+      defaultValue: '10GB',
+      transform: transforms.size(),
+    }),
   },
 });
