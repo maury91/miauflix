@@ -95,6 +95,15 @@ export class YTSApi extends Api {
       return;
     }
 
+    // An explicitly configured endpoint is authoritative. Besides preserving custom mirrors,
+    // this keeps isolated environments from contacting yifystatus.com or public fallbacks.
+    const configuredUrl = new URL(this.config.getOrThrow('YTS_API_URL'));
+    if (configuredUrl.hostname !== 'yts.mx') {
+      this.domainMirrors = [configuredUrl.hostname];
+      this.domainMirrorsPromise = Promise.resolve(this.domainMirrors);
+      return;
+    }
+
     this.domainMirrorsPromise = discoverYTSMirrors(this.cache, this.requestService)
       .catch(() => fallbackDomainMirrors)
       .then(domains => {

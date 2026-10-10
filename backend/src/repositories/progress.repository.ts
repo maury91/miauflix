@@ -24,6 +24,8 @@ export class ProgressRepository {
       positionSeconds: update.positionSeconds,
       durationSeconds: update.durationSeconds,
       state: update.state,
+      // SQLite upsert does not apply TypeORM's UpdateDateColumn automatically on conflict.
+      updatedAt: new Date(),
     } satisfies Partial<Progress>;
     await this.progressRepository.upsert(row, ['userId', 'playableKey']);
     return this.findByKey(userId, row.playableKey) as Promise<Progress>;

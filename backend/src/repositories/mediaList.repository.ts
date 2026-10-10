@@ -38,6 +38,36 @@ export class MediaListRepository {
     );
   }
 
+  async findOrCreateMediaList(
+    name: string,
+    description: string,
+    slug: string,
+    ownerKey = 'public',
+    remoteListId: string | null = slug
+  ): Promise<MediaList> {
+    const existing = await this.repository.findOne({ where: { slug, ownerKey } });
+    if (existing) return existing;
+
+    return this.database.write(async () => {
+      // A second caller may have created the row after the read above. Keep this
+      // check inside the serialized write lane before attempting the insert.
+      const raced = await this.repository.findOne({ where: { slug, ownerKey } });
+      if (raced) return raced;
+
+      await this.repository
+        .createQueryBuilder()
+        .insert()
+        .into(MediaList)
+        .values({ name, description, slug, ownerKey, remoteListId, provider: 'trakt' })
+        .orIgnore()
+        .execute();
+
+      const created = await this.repository.findOne({ where: { slug, ownerKey } });
+      if (!created) throw new Error(`Unable to create media list ${ownerKey}/${slug}`);
+      return created;
+    });
+  }
+
   async stagePage(
     listId: number,
     generation: string,
@@ -93,5 +123,77 @@ export class MediaListRepository {
 
   countItems(listId: number, generation: string): Promise<number> {
     return this.itemRepository.countBy({ listId, generation });
+  }
+
+  async addItem(
+    listId: number,
+    generation: string,
+    item: { mediaType: MediaListItemType; mediaId: number }
+  ): Promise<void> {
+    await this.database.write(async () => {
+      const result = await this.itemRepository
+        .createQueryBuilder('item')
+        .select('MAX(item.position)', 'maxPosition')
+        .where('item.listId = :listId AND item.generation = :generation', { listId, generation })
+        .getRawOne<{ maxPosition: number | null }>();
+      await this.itemRepository
+        .createQueryBuilder()
+        .insert()
+        .into(MediaListItem)
+        .values({
+          listId,
+          generation,
+          position: (result?.maxPosition ?? -1) + 1,
+          ...item,
+        })
+        .orIgnore()
+        .execute();
+    });
+  }
+
+  async removeItem(
+    listId: number,
+    generation: string,
+    item: { mediaType: MediaListItemType; mediaId: number }
+  ): Promise<void> {
+    await this.itemRepository.delete({ listId, generation, ...item });
+  }
+
+  getActiveItems(listId: number, generation: string): Promise<MediaListItem[]> {
+    return this.itemRepository.find({
+      where: { listId, generation },
+      order: { position: 'ASC' },
+    });
+  }
+
+  hasActiveItem(
+    listId: number,
+    generation: string,
+    item: { mediaType: MediaListItemType; mediaId: number }
+  ): Promise<boolean> {
+    return this.itemRepository.exist({ where: { listId, generation, ...item } });
+  }
+
+  async hasAnyLocalMovie(mediaId: number): Promise<boolean> {
+    return this.itemRepository
+      .createQueryBuilder('item')
+      .innerJoin(MediaList, 'list', 'list.id = item.listId')
+      .where('item.generation = :generation', { generation: 'local' })
+      .andWhere('item.mediaType = :mediaType', { mediaType: 'movie' })
+      .andWhere('item.mediaId = :mediaId', { mediaId })
+      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .getExists();
+  }
+
+  /** Count local watchlist owners for a movie so shared interest can influence planning priority. */
+  async countLocalMovieInterests(mediaId: number): Promise<number> {
+    return this.itemRepository
+      .createQueryBuilder('item')
+      .innerJoin(MediaList, 'list', 'list.id = item.listId')
+      .where('item.generation = :generation', { generation: 'local' })
+      .andWhere('item.mediaType = :mediaType', { mediaType: 'movie' })
+      .andWhere('item.mediaId = :mediaId', { mediaId })
+      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .getCount();
   }
 }

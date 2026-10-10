@@ -144,7 +144,7 @@ export const QRDisplay: FC<QRDisplayProps> = props => {
       <QRCodeContainer $size={qrSize}>
         <QRCode value={codeUrl} size={qrSize} level="M" aria-label="Login QR code" />
       </QRCodeContainer>
-      <QRInstructions>{instructions}</QRInstructions>
+      {instructions && <QRInstructions>{instructions}</QRInstructions>}
       <UserCode $hasCode={Boolean(userCode)}>
         {userCode ? <UserCodeText>{formatCode(userCode)}</UserCodeText> : null}
         <ExpiryText>

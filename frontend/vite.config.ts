@@ -102,6 +102,7 @@ export default defineConfig({
         target: devBackendUrl,
         changeOrigin: true,
         secure: false,
+        ws: true,
         configure: proxyCookieRewriteConfigure,
       },
     },
@@ -116,6 +117,7 @@ export default defineConfig({
               target: previewBackendUrl,
               changeOrigin: true,
               secure: false,
+              ws: true,
               configure: proxyCookieRewriteConfigure,
             },
           }

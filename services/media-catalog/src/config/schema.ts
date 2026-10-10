@@ -66,6 +66,23 @@ export const CATALOG_CONFIG_SCHEMA: CatalogConfigSchema = {
           description:
             'How long (in milliseconds) stored media details stay fresh before a refresh',
         },
+        {
+          key: 'BACKDROP_FOCUS_CONCURRENCY',
+          inputType: 'number',
+          required: false,
+          defaultValue: '2',
+          numberOptions: { min: 1, max: 8, integer: true },
+          description: 'Maximum number of backdrop image-model calculations that may run at once',
+        },
+        {
+          key: 'BACKDROP_FOCUS_BACKGROUND_INTERVAL_MS',
+          inputType: 'number',
+          required: false,
+          defaultValue: '20000',
+          numberOptions: { min: 1000, max: 3600000, integer: true },
+          description:
+            'Delay between low-priority backdrop calculations for uncached catalog images',
+        },
       ],
     },
   ],

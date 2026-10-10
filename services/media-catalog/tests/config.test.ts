@@ -16,6 +16,8 @@ const snapshot = (token = 'provider-token') => ({
   TMDB_API_ACCESS_TOKEN: token,
   EPISODE_SYNC_MODE: 'ON_DEMAND',
   CATALOG_HYDRATION_TTL_MS: '86400000',
+  BACKDROP_FOCUS_CONCURRENCY: '2',
+  BACKDROP_FOCUS_BACKGROUND_INTERVAL_MS: '20000',
 });
 
 describe('CatalogConfigService', () => {
@@ -25,6 +27,23 @@ describe('CatalogConfigService', () => {
     expect(config.getSchema().groups.map(group => group.id)).toEqual(['TMDB', 'CATALOG_RUNTIME']);
     expect(config.getSchema().groups[0]?.variables.map(variable => variable.key)).toContain(
       'TMDB_API_ACCESS_TOKEN'
+    );
+    const runtime = config.getSchema().groups[1];
+    expect(
+      runtime?.variables.find(variable => variable.key === 'BACKDROP_FOCUS_CONCURRENCY')
+    ).toEqual(
+      expect.objectContaining({
+        defaultValue: '2',
+        numberOptions: { min: 1, max: 8, integer: true },
+      })
+    );
+    expect(
+      runtime?.variables.find(variable => variable.key === 'BACKDROP_FOCUS_BACKGROUND_INTERVAL_MS')
+    ).toEqual(
+      expect.objectContaining({
+        defaultValue: '20000',
+        numberOptions: { min: 1000, max: 3600000, integer: true },
+      })
     );
   });
 

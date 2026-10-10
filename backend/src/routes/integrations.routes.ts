@@ -8,6 +8,7 @@ import type { Deps } from './common.types';
 export const createIntegrationRoutes = ({
   auditLogService,
   configurationService,
+  listService,
   listClient,
 }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
@@ -22,9 +23,14 @@ export const createIntegrationRoutes = ({
       authGuard(),
       async context => {
         const { user } = context.get('sessionInfo');
-        return context.json(
-          await listClient.checkTraktConnection(user.id, context.req.param('authorizationId'))
+        const result = await listClient.checkTraktConnection(
+          user.id,
+          context.req.param('authorizationId')
         );
+        if (result.state === 'connected') {
+          await listService.reconcileRemoteWatchlist(user.id);
+        }
+        return context.json(result);
       }
     )
     .get('/trakt/association', rateLimitGuard(5), authGuard(), async context => {

@@ -47,3 +47,9 @@ export const useEnsureBackdropFocusMutation = () =>
       unwrap: async () => ({ backdropFocus: { x: 0.5, y: 0.5 } }),
     }),
   ] as const;
+export const useQueueBackdropFocusMutation = () =>
+  [
+    (request: { items: Array<{ mediaType: 'movie' | 'tv'; mediaId: number }> }) => ({
+      unwrap: async () => ({ accepted: request.items.length }),
+    }),
+  ] as const;

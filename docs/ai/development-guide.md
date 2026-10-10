@@ -219,6 +219,8 @@ npm run test:frontend:visual       # Visual regression tests
 npm test
 ```
 
+For Playwright changes, use the focused details preparation and details voting commands before pushing. The [E2E and CI Playbook](./e2e-ci-playbook.md) documents the required no-update verification, snapshot regeneration rules, and CI failure triage order.
+
 ### Code Quality Workflow
 
 ```bash

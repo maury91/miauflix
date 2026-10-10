@@ -2,7 +2,7 @@ import type { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { MovieSource } from '@entities/movie-source.entity';
 import type { PlayableRef } from '@routes/playable.types';
-import type { PreloadWarmupState } from '@routes/preload.types';
+import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@routes/preload.types';
 import type { MediaService } from '@services/media/media.service';
 import type { SourceService } from '@services/source/source.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
@@ -18,7 +18,7 @@ export interface PreparedPlayable {
   playable: PlayableRef;
   source: MovieSource | null;
   state: 'cold' | 'metadata' | 'ready' | 'warming';
-  warmup: { state: PreloadWarmupState };
+  warmup: PreloadWarmupSnapshot;
 }
 
 export interface PreparationOptions {
@@ -38,19 +38,27 @@ export class PlayablePreparationService {
     private readonly warmup?: TorrentWarmupController
   ) {}
 
+  /**
+   * Prepare a movie through catalog lookup, source discovery, metadata resolution, or payload warmup.
+   * Episodes, missing movies, and empty source lists return a cold result with no source.
+   * Quality and HEVC preferences guide selection; workClass sets the source discovery wait budget.
+   * Metadata-resolution failures permit fallback selection, and warmup failures retain the source.
+   * Lookup and source-selection callback errors propagate; observed cancellation rejects with
+   * AbortError, or with an in-flight error if cancellation coincides with a failure.
+   */
   async prepare(playable: PlayableRef, options: PreparationOptions): Promise<PreparedPlayable> {
     if (playable.kind !== 'movie') {
-      return { playable, source: null, state: 'cold', warmup: { state: 'not_requested' } };
+      return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
     }
 
     this.throwIfAborted(options.signal);
     const media = await this.mediaService.getMovieByMediaId(playable.mediaId);
     this.throwIfAborted(options.signal);
     if (!media) {
-      return { playable, source: null, state: 'cold', warmup: { state: 'not_requested' } };
+      return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
     }
     if (options.through === 'catalog') {
-      return { playable, source: null, state: 'metadata', warmup: { state: 'not_requested' } };
+      return { playable, source: null, state: 'metadata', warmup: emptyWarmup() };
     }
 
     let sources = await this.sourceService.getSourcesForMovieWithOnDemandSearch(
@@ -64,7 +72,7 @@ export class PlayablePreparationService {
     );
     this.throwIfAborted(options.signal);
     if (!sources.length) {
-      return { playable, source: null, state: 'cold', warmup: { state: 'not_requested' } };
+      return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
     }
     const usableSource = this.select(sources, options.preferences);
     if (options.through === 'sources') {
@@ -74,7 +82,7 @@ export class PlayablePreparationService {
         playable,
         source,
         state: 'metadata',
-        warmup: { state: 'not_requested' },
+        warmup: emptyWarmup(),
       };
     }
     if (usableSource) {
@@ -112,10 +120,15 @@ export class PlayablePreparationService {
       playable,
       source: fallbackSource,
       state: 'metadata',
-      warmup: { state: 'not_requested' },
+      warmup: emptyWarmup(),
     };
   }
 
+  /**
+   * Notify the caller of the selected source and optionally request payload warmup.
+   * Return warmup byte counts and percentage when available. Warmup failures become a cold result
+   * unless aborted; callback errors, cancellation, and failures while pausing on abort propagate.
+   */
   private async finish(
     playable: PlayableRef,
     source: MovieSource,
@@ -123,10 +136,10 @@ export class PlayablePreparationService {
   ): Promise<PreparedPlayable> {
     options.onSourceSelected?.(source);
     if (options.through !== 'warm') {
-      return { playable, source, state: 'ready', warmup: { state: 'not_requested' } };
+      return { playable, source, state: 'ready', warmup: emptyWarmup() };
     }
     if (!this.warmup) {
-      return { playable, source, state: 'cold', warmup: { state: 'not_requested' } };
+      return { playable, source, state: 'cold', warmup: emptyWarmup() };
     }
     let slot: Awaited<ReturnType<TorrentWarmupController['warm']>>;
     try {
@@ -140,26 +153,66 @@ export class PlayablePreparationService {
       if (options.signal?.aborted) throw error;
       // Payload warming is optional. Keep the exact prepared source available
       // so Watch can use the normal cold streaming path.
-      return { playable, source, state: 'cold', warmup: { state: 'failed' } };
+      return { playable, source, state: 'cold', warmup: emptyWarmup('failed') };
     }
     if (options.signal?.aborted) {
       await this.warmup.pause(options.ownerKey ?? playableKey(playable), slot.generation);
       this.throwIfAborted(options.signal);
     }
     if (slot.state === 'ready') {
-      return { playable, source, state: 'ready', warmup: { state: 'ready' } };
+      return {
+        playable,
+        source,
+        state: 'ready',
+        warmup: {
+          state: 'ready',
+          progress: slot.progress,
+          verifiedBytes: slot.verifiedBytes,
+          targetBytes: slot.targetVerifiedBytes,
+        },
+      };
     }
     if (
       slot.state === 'warming' ||
       slot.state === 'adding_torrent' ||
       slot.state === 'resolving_store'
     ) {
-      return { playable, source, state: 'warming', warmup: { state: 'warming' } };
+      return {
+        playable,
+        source,
+        state: 'warming',
+        warmup: {
+          state: 'warming',
+          progress: slot.progress,
+          verifiedBytes: slot.verifiedBytes,
+          targetBytes: slot.targetVerifiedBytes,
+        },
+      };
     }
     if (slot.state === 'paused') {
-      return { playable, source, state: 'cold', warmup: { state: 'paused' } };
+      return {
+        playable,
+        source,
+        state: 'cold',
+        warmup: {
+          state: 'paused',
+          progress: slot.progress,
+          verifiedBytes: slot.verifiedBytes,
+          targetBytes: slot.targetVerifiedBytes,
+        },
+      };
     }
-    return { playable, source, state: 'cold', warmup: { state: 'failed' } };
+    return {
+      playable,
+      source,
+      state: 'cold',
+      warmup: {
+        state: 'failed',
+        progress: slot.progress,
+        verifiedBytes: slot.verifiedBytes,
+        targetBytes: slot.targetVerifiedBytes,
+      },
+    };
   }
 
   private select(
@@ -193,6 +246,11 @@ export class PlayablePreparationService {
   private throwIfAborted(signal?: AbortSignal): void {
     if (signal?.aborted) throw new DOMException('Preparation cancelled', 'AbortError');
   }
+}
+
+/** Create a warmup snapshot with zero measured progress and byte counts. */
+function emptyWarmup(state: PreloadWarmupState = 'not_requested'): PreloadWarmupSnapshot {
+  return { state, progress: 0, verifiedBytes: 0, targetBytes: 0 };
 }
 
 function playableKey(playable: PlayableRef): string {

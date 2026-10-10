@@ -25,6 +25,13 @@ export class StorageRepository {
     });
   }
 
+  async findSpeculativeStorage(): Promise<Storage[]> {
+    return this.repository.find({
+      where: { retentionClass: 'speculative' },
+      order: { lastInterestAt: 'ASC', createdAt: 'ASC' },
+    });
+  }
+
   async create(storage: Partial<Storage>): Promise<Storage> {
     const newStorage = this.repository.create(storage);
     return this.repository.save(newStorage);
@@ -147,14 +154,26 @@ export class StorageRepository {
    * Find the most stale storage record (least recently accessed)
    * Returns null if no storage records exist
    */
-  async findMostStaleStorage(excludeMovieSourceId?: number): Promise<Storage | null> {
+  async findMostStaleStorage(
+    excludeMovieSourceId?: number,
+    includeUnexpiredSpeculative = false
+  ): Promise<Storage | null> {
     const query = this.repository
       .createQueryBuilder('storage')
       .where('storage.retentionClass = :retentionClass', { retentionClass: 'speculative' })
-      .andWhere('storage.speculativeExpiresAt <= :now', { now: new Date() })
       .andWhere('storage.activeStreams = 0')
-      .orderBy('storage.lastAccessAt', 'ASC')
-      .addOrderBy('storage.createdAt', 'ASC'); // Secondary sort by creation date
+      .andWhere(
+        includeUnexpiredSpeculative
+          ? '1 = 1'
+          : '(storage.speculativeExpiresAt IS NOT NULL AND storage.speculativeExpiresAt <= :now)',
+        { now: new Date() }
+      );
+    if (includeUnexpiredSpeculative) {
+      query.orderBy('storage.lastInterestAt', 'ASC').addOrderBy('storage.lastAccessAt', 'ASC');
+    } else {
+      query.orderBy('storage.lastAccessAt', 'ASC');
+    }
+    query.addOrderBy('storage.createdAt', 'ASC'); // Secondary sort by creation date
     if (excludeMovieSourceId !== undefined) {
       query.andWhere('storage.movieSourceId != :excludeMovieSourceId', { excludeMovieSourceId });
     }

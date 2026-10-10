@@ -20,11 +20,8 @@ dist
 # Test files
 backend-e2e/admin-credentials.json
 coverage
-frontend/test-results
-frontend/test-results-e2e
-frontend/test-results-initial-setup
-frontend/playwright-report
-frontend/playwright-report-initial-setup
+frontend/test-results*
+frontend/playwright-report*
 
 # Environment files
 .env

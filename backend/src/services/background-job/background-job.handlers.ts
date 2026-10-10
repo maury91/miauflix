@@ -1,4 +1,6 @@
 import type { CacheService } from '@services/cache/cache.service';
+import type { DownloadService } from '@services/download/download.service';
+import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
 import type { SourceMetadataFileService } from '@services/source';
@@ -17,17 +19,21 @@ export function registerBackgroundJobHandlers({
   backgroundJobs,
   cacheService,
   listService,
+  listClient,
   magnetService,
   mediaService,
   sourceService,
+  downloadService,
   worker,
 }: {
   backgroundJobs: BackgroundJobService;
   cacheService: CacheService;
   listService: ListService;
+  listClient: ListClientService;
   magnetService: SourceMetadataFileService;
   mediaService: MediaService;
   sourceService: SourceService;
+  downloadService: DownloadService;
   worker: BackgroundJobWorker;
 }): void {
   worker.register('list.refresh.plan', {
@@ -112,6 +118,55 @@ export function registerBackgroundJobHandlers({
       if (!(await sourceService.canRunSourceJobs())) return;
       if (sourceId) await sourceService.processSourceStats(sourceId);
       else await sourceService.seedSourceStatsJobs();
+    },
+  });
+  worker.register('watchlist.movie.download', {
+    concurrency: 1,
+    leaseMs: 10 * 60 * 1000,
+    run: async ({ movieMediaId }) => {
+      if (!(await listService.hasAnyMovieWatchlistInterest(movieMediaId))) return;
+      const media = await mediaService.getMovieByMediaId(movieMediaId);
+      if (!media) return;
+      const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
+        {
+          id: media.local.id,
+          imdbId: media.local.imdbId,
+          title: media.local.title,
+          contentDirectoriesSearched: media.local.contentDirectoriesSearched,
+        },
+        3000
+      );
+      let source = sources
+        .filter(candidate => candidate.file)
+        .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
+      if (!source && sources[0]) {
+        await sourceService.processSourceMetadata(sources[0].id);
+        source = (await sourceService.getSourcesForMovie(media.local.id))
+          .filter(candidate => candidate.file)
+          .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
+      }
+      if (!source) {
+        if (sourceService.isOnDemandSearchPending(media.local.id))
+          throw new Error('Watchlist source discovery is still pending');
+        return;
+      }
+      // Re-check after source discovery and after the settling delay. A removal
+      // during discovery must never turn into a new background download.
+      if (!(await listService.hasAnyMovieWatchlistInterest(movieMediaId))) return;
+      await downloadService.predownloadSource(source);
+    },
+  });
+  worker.register('watchlist.sync', {
+    concurrency: 2,
+    leaseMs: 2 * 60 * 1000,
+    run: async ({ subjectId, mediaType, mediaId }) => {
+      if (!listClient.isReady()) throw new Error('List service is not ready');
+      const inWatchlist = await listService.getWatchlistMembership(subjectId, mediaType, mediaId);
+      await listClient.syncWatchlist(subjectId, {
+        mediaType,
+        mediaId,
+        operation: inWatchlist ? 'add' : 'remove',
+      });
     },
   });
   worker.register('cache.cleanup', {

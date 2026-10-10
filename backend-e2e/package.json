@@ -30,6 +30,9 @@
   },
   "type": "module",
   "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
     "preset": "ts-jest/presets/default-esm",
     "testEnvironment": "node",
     "extensionsToTreatAsEsm": [
