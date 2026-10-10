@@ -26,6 +26,7 @@ export class CatalogHydrator {
       const row = this.movies.getMovie(mediaId);
       if (
         row &&
+        row.logo_candidates !== null &&
         row.details_synced_at &&
         Date.now() - row.details_synced_at < this.hydrationTtlMs
       ) {
@@ -52,6 +53,8 @@ export class CatalogHydrator {
       const row = this.tvShows.getTVShow(mediaId);
       if (
         row &&
+        row.logo !== null &&
+        row.logo_candidates !== null &&
         row.details_synced_at &&
         Date.now() - row.details_synced_at < this.hydrationTtlMs
       ) {

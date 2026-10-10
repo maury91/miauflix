@@ -15,6 +15,10 @@ export interface ShowResponse {
   backdrop: string | null;
   backdropFocus: BackdropFocus | null;
   logo: string | null;
+  heroLogo?: string | null;
+  artworkRevision?: number;
+  cardLogoStatus?: 'failed' | 'pending' | 'ready';
+  heroLogoStatus?: 'failed' | 'pending' | 'ready';
   genres: string[];
   popularity: number | null;
   rating: number | null;

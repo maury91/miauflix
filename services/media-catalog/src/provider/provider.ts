@@ -20,6 +20,15 @@ export interface ProviderTranslation {
   tagline: string;
 }
 
+export interface ProviderLogoCandidate {
+  url: string;
+  language: string | null;
+  width: number;
+  height: number;
+  voteAverage: number;
+  voteCount: number;
+}
+
 export interface ProviderMovie {
   mediaId: number;
   imdbId: string | null;
@@ -32,6 +41,7 @@ export interface ProviderMovie {
   poster: string;
   backdrop: string;
   logo: string;
+  logoCandidates?: ProviderLogoCandidate[];
   genreIds: number[];
   popularity: number;
   rating: number;
@@ -73,6 +83,7 @@ export interface ProviderTVShow {
   poster: string;
   backdrop: string;
   logo: string;
+  logoCandidates?: ProviderLogoCandidate[];
   genreIds: number[];
   episodeRunTime: number[];
   popularity: number;

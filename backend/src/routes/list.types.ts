@@ -27,6 +27,10 @@ export interface MovieDto {
   backdrop: string;
   backdropFocus: { x: number; y: number } | null;
   logo?: string;
+  heroLogo?: string;
+  artworkRevision?: number;
+  cardLogoStatus?: 'failed' | 'pending' | 'ready';
+  heroLogoStatus?: 'failed' | 'pending' | 'ready';
   genres: string[];
   popularity: number;
   rating: number;
@@ -46,6 +50,10 @@ export interface TVShowDto {
   backdrop: string;
   backdropFocus: { x: number; y: number } | null;
   logo?: string;
+  heroLogo?: string;
+  artworkRevision?: number;
+  cardLogoStatus?: 'failed' | 'pending' | 'ready';
+  heroLogoStatus?: 'failed' | 'pending' | 'ready';
   genres: string[];
   popularity: number;
   rating: number;

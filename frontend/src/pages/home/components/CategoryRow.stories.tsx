@@ -1,6 +1,9 @@
 import { useGetListQuery, usePromoteListMediaMutation } from '@features/media/api/lists.api';
+import { configureStore } from '@reduxjs/toolkit';
 import { skipToken } from '@reduxjs/toolkit/query';
+import { artworkSlice } from '@store/slices/artwork';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { Provider } from 'react-redux';
 import { expect, fn, mocked } from 'storybook/test';
 
 import { homeCategories, mediaForCategory, mediaForCategoryBySlug } from '../home.fixtures';
@@ -11,19 +14,24 @@ const meta = {
   component: CategoryRow,
   parameters: { layout: 'fullscreen' },
   decorators: [
-    Story => (
-      <div
-        style={{
-          width: '100%',
-          maxWidth: 1280,
-          margin: '0 auto',
-          padding: '32px 0',
-          boxSizing: 'border-box',
-        }}
-      >
-        <Story />
-      </div>
-    ),
+    Story => {
+      const store = configureStore({ reducer: { artwork: artworkSlice.reducer } });
+      return (
+        <Provider store={store}>
+          <div
+            style={{
+              width: '100%',
+              maxWidth: 1280,
+              margin: '0 auto',
+              padding: '32px 0',
+              boxSizing: 'border-box',
+            }}
+          >
+            <Story />
+          </div>
+        </Provider>
+      );
+    },
   ],
 } satisfies Meta<typeof CategoryRow>;
 
