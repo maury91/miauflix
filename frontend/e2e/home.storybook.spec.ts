@@ -62,10 +62,12 @@ test.describe('Home stories - visual regression', () => {
     await page.goto(`${STORYBOOK_BASE_URL}?id=home-category-row--loaded-visual&viewMode=story`);
     await waitForHomeArtwork(page);
 
-    await expect(page).toHaveScreenshot('category-row-loaded.png', {
-      fullPage: false,
-      animations: 'disabled',
-    });
+    await expect(page.getByRole('region', { name: 'Popular Movies' })).toHaveScreenshot(
+      'category-row-loaded.png',
+      {
+        animations: 'disabled',
+      }
+    );
   });
 
   test('captures fixed CategoryRow arrow positions at 1280px', async ({ page }) => {
@@ -84,10 +86,12 @@ test.describe('Home stories - visual regression', () => {
         .poll(() => scrollContainer.evaluate(element => element.scrollLeft))
         .toBe(Math.round(position * stride));
       await expect(page.locator('[aria-current="true"]')).toHaveCount(1);
-      await expect(page).toHaveScreenshot(`category-row-arrow-${name}.png`, {
-        fullPage: false,
-        animations: 'disabled',
-      });
+      await expect(page.getByRole('region', { name: 'Popular Movies' })).toHaveScreenshot(
+        `category-row-arrow-${name}.png`,
+        {
+          animations: 'disabled',
+        }
+      );
     };
 
     await screenshot(0, 'initial');

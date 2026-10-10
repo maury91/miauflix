@@ -6,8 +6,15 @@ import { backendClient } from '@shared/api/backend-client';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
+type WatchlistMembership = {
+  mediaType: 'movie' | 'tv';
+  mediaId: number;
+  inWatchlist: boolean;
+};
+
 export const listsApi = createApi({
   reducerPath: 'listsApi',
+  tagTypes: ['Watchlist'],
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
   endpoints: builder => ({
     getLists: builder.query<ListsResponse, void>({
@@ -24,6 +31,7 @@ export const listsApi = createApi({
           },
         });
       },
+      providesTags: ['Watchlist'],
     }),
 
     getList: builder.query<
@@ -60,6 +68,8 @@ export const listsApi = createApi({
           },
         });
       },
+      providesTags: (_result, _error, args) =>
+        args.category === 'my-watchlist' ? ['Watchlist'] : [],
     }),
 
     promoteListMedia: builder.mutation<
@@ -100,12 +110,7 @@ export const listsApi = createApi({
         return authenticatedRequest<ListsPageResponse>({
           requestFn: () =>
             backendClient.api.lists.popular.$get(
-              {
-                query: {
-                  page: String(pageParam),
-                  limit: String(queryArg?.limit ?? 20),
-                },
-              },
+              { query: { page: String(pageParam), limit: String(queryArg?.limit ?? 20) } },
               { headers }
             ),
           session: sessionId,
@@ -117,6 +122,69 @@ export const listsApi = createApi({
         });
       },
     }),
+    getWatchlistMembership: builder.query<
+      { mediaType: 'movie' | 'tv'; mediaId: number; inWatchlist: boolean },
+      { mediaType: 'movie' | 'tv'; mediaId: number }
+    >({
+      async queryFn({ mediaType, mediaId }, { getState, dispatch }) {
+        const sessionId = selectCurrentSessionId(getState() as RootState);
+        const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
+        return authenticatedRequest<WatchlistMembership>({
+          requestFn: () =>
+            backendClient.api.watchlist.$get(
+              { query: { mediaType, mediaId: String(mediaId) } },
+              { headers }
+            ),
+          session: sessionId,
+          errorContext: 'Failed to fetch watchlist membership',
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
+      },
+      providesTags: (_result, _error, args) => [
+        { type: 'Watchlist', id: `${args.mediaType}:${args.mediaId}` },
+      ],
+    }),
+    addToWatchlist: builder.mutation<
+      { mediaType: 'movie' | 'tv'; mediaId: number; inWatchlist: boolean },
+      { mediaType: 'movie' | 'tv'; mediaId: number }
+    >({
+      async queryFn(item, { getState, dispatch }) {
+        const sessionId = selectCurrentSessionId(getState() as RootState);
+        const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
+        return authenticatedRequest<WatchlistMembership>({
+          requestFn: () => backendClient.api.watchlist.$post({ json: item }, { headers }),
+          session: sessionId,
+          errorContext: 'Failed to add to watchlist',
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
+      },
+      invalidatesTags: ['Watchlist'],
+    }),
+    removeFromWatchlist: builder.mutation<
+      { mediaType: 'movie' | 'tv'; mediaId: number; inWatchlist: boolean },
+      { mediaType: 'movie' | 'tv'; mediaId: number }
+    >({
+      async queryFn(item, { getState, dispatch }) {
+        const sessionId = selectCurrentSessionId(getState() as RootState);
+        const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
+        return authenticatedRequest<WatchlistMembership>({
+          requestFn: () => backendClient.api.watchlist.$delete({ json: item }, { headers }),
+          session: sessionId,
+          errorContext: 'Failed to remove from watchlist',
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
+      },
+      invalidatesTags: ['Watchlist'],
+    }),
   }),
 });
 
@@ -125,5 +193,8 @@ export const {
   useGetListQuery,
   useGetPopularListsInfiniteQuery,
   usePromoteListMediaMutation,
+  useGetWatchlistMembershipQuery,
+  useAddToWatchlistMutation,
+  useRemoveFromWatchlistMutation,
   usePrefetch,
 } = listsApi;

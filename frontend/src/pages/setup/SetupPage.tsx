@@ -1,5 +1,6 @@
 import { useCreateAdminMutation } from '@features/setup/api/setup.api';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { Button, FieldLabel as Label, Input } from '@shared/ui';
 import { useAppDispatch } from '@store';
 import { authSlice } from '@store/slices/auth';
 import { motion } from 'framer-motion';
@@ -50,68 +51,9 @@ const InputGroup = styled.div`
   margin-bottom: 24px;
 `;
 
-const Label = styled.label`
-  display: block;
-  margin-bottom: 6px;
-  font-size: 13px;
-  color: ${SETTINGS_PALETTE.text.primary};
-`;
-
-const Input = styled.input`
-  width: 100%;
-  padding: 10px 12px;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 4px;
-  background-color: ${SETTINGS_PALETTE.background.input};
-  color: white;
-  font-size: 14px;
-  font-family: 'Poppins', sans-serif;
-  box-sizing: border-box;
-
-  &:focus {
-    outline: none;
-    border-color: ${SETTINGS_PALETTE.color.interactive};
-    box-shadow: 0 0 0 3px ${SETTINGS_PALETTE.color.interactiveSubtle};
-  }
-
-  &::placeholder {
-    color: #70777a;
-  }
-`;
-
 const PasswordInputRow = styled.div`
   display: flex;
   gap: 8px;
-`;
-
-const PasswordInput = styled(Input)`
-  min-width: 0;
-  flex: 1;
-`;
-
-const PasswordVisibilityButton = styled.button`
-  flex: 0 0 auto;
-  min-width: 58px;
-  padding: 0 10px;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 4px;
-  background: ${SETTINGS_PALETTE.background.input};
-  color: ${SETTINGS_PALETTE.text.secondary};
-  font:
-    500 12px 'Poppins',
-    sans-serif;
-  cursor: pointer;
-
-  &:hover {
-    color: ${SETTINGS_PALETTE.text.primary};
-    border-color: ${SETTINGS_PALETTE.color.interactive};
-  }
-
-  &:focus-visible {
-    outline: none;
-    border-color: ${SETTINGS_PALETTE.color.interactive};
-    box-shadow: 0 0 0 3px ${SETTINGS_PALETTE.color.interactiveSubtle};
-  }
 `;
 
 const PasswordStrengthBar = styled.div`
@@ -136,32 +78,8 @@ const PasswordStrengthFill = styled.div<{ $strength: number }>`
     background-color 0.3s ease;
 `;
 
-const SubmitButton = styled.button`
-  width: 100%;
-  padding: 10px 12px;
-  background-color: ${SETTINGS_PALETTE.color.primaryButton};
-  color: #0a0d0f;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: background-color 0.2s;
+const SubmitArea = styled.div`
   margin-top: 24px;
-
-  &:hover {
-    background-color: ${SETTINGS_PALETTE.color.primaryButtonHover};
-  }
-
-  &:active:not(:disabled) {
-    background-color: ${SETTINGS_PALETTE.color.primaryButtonPressed};
-  }
-
-  &:disabled {
-    background-color: #50585b;
-    cursor: not-allowed;
-  }
 `;
 
 const ErrorMessage = styled.p`
@@ -181,6 +99,7 @@ function getPasswordStrength(password: string): number {
   return Math.min(4, score);
 }
 
+/** Create the initial admin account after password confirmation and store the returned login session. */
 const SetupPage: FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -247,7 +166,7 @@ const SetupPage: FC = () => {
           <InputGroup>
             <Label htmlFor="setup-password">Password</Label>
             <PasswordInputRow>
-              <PasswordInput
+              <Input
                 type={showPassword ? 'text' : 'password'}
                 id="setup-password"
                 value={password}
@@ -256,14 +175,17 @@ const SetupPage: FC = () => {
                 required
                 autoComplete="new-password"
               />
-              <PasswordVisibilityButton
+              <Button
+                appearance="settings"
+                size="small"
                 type="button"
+                color="secondary"
                 aria-label="Show password"
                 aria-pressed={showPassword}
                 onClick={() => setShowPassword(current => !current)}
               >
                 {showPassword ? 'Hide' : 'Show'}
-              </PasswordVisibilityButton>
+              </Button>
             </PasswordInputRow>
             <PasswordStrengthBar>
               <PasswordStrengthFill $strength={passwordStrength} />
@@ -273,7 +195,7 @@ const SetupPage: FC = () => {
           <InputGroup>
             <Label htmlFor="setup-confirm-password">Confirm Password</Label>
             <PasswordInputRow>
-              <PasswordInput
+              <Input
                 type={showConfirmPassword ? 'text' : 'password'}
                 id="setup-confirm-password"
                 value={confirmPassword}
@@ -282,23 +204,31 @@ const SetupPage: FC = () => {
                 required
                 autoComplete="new-password"
               />
-              <PasswordVisibilityButton
+              <Button
+                appearance="settings"
+                size="small"
                 type="button"
+                color="secondary"
                 aria-label="Show confirmation password"
                 aria-pressed={showConfirmPassword}
                 onClick={() => setShowConfirmPassword(current => !current)}
               >
                 {showConfirmPassword ? 'Hide' : 'Show'}
-              </PasswordVisibilityButton>
+              </Button>
             </PasswordInputRow>
           </InputGroup>
 
-          <SubmitButton
-            type="submit"
-            disabled={isLoading || !email.trim() || !password.trim() || !confirmPassword.trim()}
-          >
-            {isLoading ? 'Creating account...' : 'Create Admin Account'}
-          </SubmitButton>
+          <SubmitArea>
+            <Button
+              appearance="settings"
+              size="medium"
+              fullWidth
+              type="submit"
+              disabled={isLoading || !email.trim() || !password.trim() || !confirmPassword.trim()}
+            >
+              {isLoading ? 'Creating account...' : 'Create Admin Account'}
+            </Button>
+          </SubmitArea>
 
           {(validationError || apiError) && (
             <ErrorMessage>{validationError || apiError}</ErrorMessage>

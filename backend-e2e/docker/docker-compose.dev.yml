@@ -33,9 +33,10 @@ services:
       - THE_RARBG_API_URL=http://therarbg-mock
       - DISABLE_VPN_CHECK=true
       - DISABLE_DISCOVERY=true
-      - STATIC_TRACKERS=udp://tracker-mock
-      - BEST_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/trackers_best.txt
-      - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-list-mock/blacklist.txt
+      - STATIC_TRACKERS=udp://tracker-mock:6969/announce
+      - SCRAPE_TRACKERS=udp://tracker-mock:6969/announce
+      - BEST_TRACKERS_DOWNLOAD_URL=http://tracker-mock:8080/trackers_best.txt
+      - BLACKLISTED_TRACKERS_DOWNLOAD_URL=http://tracker-mock:8080/blacklist.txt
       - DOWNLOAD_PATH=/usr/src/app/downloads
       - ENABLE_TRACING=true
       - DEBUG=*,-require-in-the-middle
@@ -76,6 +77,8 @@ services:
       list-service:
         condition: service_healthy
       therarbg-mock:
+        condition: service_healthy
+      tracker-mock:
         condition: service_healthy
 
   # Media catalog service (fronts the TMDB mock)
@@ -259,6 +262,27 @@ services:
       - ./therarbg/data:/app/data
     networks:
       - test-network
+
+  # Local HTTP tracker lists and UDP scrape responses keep torrent setup offline.
+  tracker-mock:
+    image: node:22-alpine
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
+    command: ['node', '/app/index.js']
+    volumes:
+      - ./mock/tracker/index.js:/app/index.js:ro
+    networks:
+      - test-network
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'node',
+          '-e',
+          "fetch('http://localhost:8080/health').then(r => { if (!r.ok) process.exit(1) }).catch(() => process.exit(1))",
+        ]
+      interval: 2s
+      timeout: 5s
+      retries: 30
 
 networks:
   test-network:

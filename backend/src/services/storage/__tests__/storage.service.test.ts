@@ -694,6 +694,44 @@ describe('StorageService', () => {
   });
 
   describe('Storage pressure cleanup', () => {
+    it('reclaims unexpired speculative storage for watched playback admission', async () => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '50GB';
+      try {
+        const { storageService } = setupTest();
+        const movie = await testDataFactory.createTestMovie();
+        const backgroundSource = await testDataFactory.createTestMovieSource(movie.id);
+        await storageService.createStorage({
+          movieSourceId: backgroundSource.id,
+          location: '/tmp/test/unexpired-background.mkv',
+          size: 2 * 1024 * 1024 * 1024,
+          retentionClass: 'speculative',
+          reservedBytes: 2 * 1024 * 1024 * 1024,
+          speculativeExpiresAt: new Date(Date.now() + 60_000),
+        });
+        process.env.STORAGE_THRESHOLD = '1GB';
+        await storageService.reload();
+
+        const playbackSource = await testDataFactory.createTestMovieSource(movie.id);
+        await storageService.createStorage({
+          movieSourceId: playbackSource.id,
+          location: '/tmp/test/playback-admission.mkv',
+          size: 100 * 1024 * 1024,
+          retentionClass: 'watched',
+        });
+
+        await expect(
+          storageService.getStorageByMovieSource(backgroundSource.id)
+        ).resolves.toBeNull();
+        await expect(storageService.getStorageByMovieSource(playbackSource.id)).resolves.toEqual(
+          expect.objectContaining({ retentionClass: 'watched' })
+        );
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    });
+
     it('should emit delete events when cleaning up due to storage pressure', async () => {
       // Arrange
       const originalEnv = process.env.STORAGE_THRESHOLD;

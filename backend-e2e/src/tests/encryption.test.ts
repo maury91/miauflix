@@ -1,4 +1,4 @@
-import { execSync } from 'child_process';
+import { execFileSync, execSync } from 'child_process';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -23,9 +23,20 @@ describe('Database Encryption E2E Tests', () => {
     // Find the running backend container name (docker-compose test env)
     let containerName = '';
     try {
-      containerName = execSync('docker ps --filter "name=backend" --format "{{.Names}}" | head -n1')
-        .toString()
-        .trim();
+      const backendPort = new URL(global.BACKEND_URL).port;
+      containerName = execFileSync(
+        'docker',
+        [
+          'ps',
+          '--filter',
+          `publish=${backendPort}`,
+          '--filter',
+          'label=com.docker.compose.service=backend',
+          '--format',
+          '{{.Names}}',
+        ],
+        { encoding: 'utf8' }
+      ).trim();
     } catch (err) {
       throw new Error('Could not find running backend container: ' + err);
     }
@@ -86,21 +97,33 @@ describe('Database Encryption E2E Tests', () => {
         );
       }
 
-      // First, get a movie with sources to ensure we have data to test
-      const movieResponse = await client.get(['api', 'movies', ':id'], {
-        param: { id: '550' },
-        query: { includeSources: 'true' },
-      });
+      // The YTS mock has a checked-in recording for Fight Club (movie 550). Source discovery is
+      // on demand, so allow it to finish even when the first request reaches the API's timeout.
+      const deadline = Date.now() + 15000;
+      const getMovie = () =>
+        client.get(['api', 'movies', ':id'], {
+          param: { id: '550' },
+          query: { includeSources: 'true' },
+        });
+      let movieResponse = await getMovie();
+
+      while (
+        !(
+          movieResponse.status === 200 &&
+          'sources' in movieResponse.data &&
+          movieResponse.data.sources?.length
+        ) &&
+        Date.now() < deadline
+      ) {
+        await new Promise(resolve => setTimeout(resolve, 250));
+        movieResponse = await getMovie();
+      }
 
       expect(movieResponse).toBeHttpStatus(200);
-
-      if (
-        movieResponse.status !== 200 ||
-        'sources' in movieResponse.data === false ||
-        !movieResponse.data.sources ||
-        movieResponse.data.sources.length === 0
-      ) {
-        throw new Error('No sources available for encryption testing - test data is required');
+      if ('sources' in movieResponse.data === false || !movieResponse.data.sources?.length) {
+        throw new Error(
+          'The checked-in YTS fixture for movie 550 did not produce a source within 15 seconds'
+        );
       }
 
       const source = movieResponse.data.sources[0];

@@ -1,5 +1,6 @@
 import { authApi } from '@features/auth/api/auth.api';
 import type {
+  BackdropFocusBackgroundResponse,
   BackdropFocusResponse,
   MovieResponse,
   SeasonResponse,
@@ -10,6 +11,31 @@ import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
+
+// The backend protects each media-detail route at five requests per second. Continue Watching
+// can hydrate several shows at once, so keep requests for the same route below that ceiling while
+// still allowing RTK Query to deduplicate identical media IDs.
+const MEDIA_DETAIL_INTERVAL_MS = 225;
+let nextMovieRequestAt = 0;
+let nextShowRequestAt = 0;
+
+async function scheduleMediaDetailRequest<T>(
+  kind: 'movie' | 'show',
+  request: () => Promise<T>
+): Promise<T> {
+  const now = Date.now();
+  const nextRequestAt = kind === 'movie' ? nextMovieRequestAt : nextShowRequestAt;
+  const startAt = Math.max(now, nextRequestAt);
+  if (kind === 'movie') {
+    nextMovieRequestAt = startAt + MEDIA_DETAIL_INTERVAL_MS;
+  } else {
+    nextShowRequestAt = startAt + MEDIA_DETAIL_INTERVAL_MS;
+  }
+  if (startAt > now) {
+    await new Promise<void>(resolve => setTimeout(resolve, startAt - now));
+  }
+  return request();
+}
 
 const sessionRequest = <T>(
   requestFn: (headers: Record<string, string>) => Promise<Response>,
@@ -37,15 +63,17 @@ export const mediaApi = createApi({
     getMovie: builder.query<MovieResponse, number>({
       async queryFn(mediaId, api) {
         return {
-          ...(await sessionRequest<MovieResponse>(
-            headers =>
-              backendClient.api.movies[':id'].$get(
-                { param: { id: String(mediaId) }, query: { lang: 'en' } },
-                { headers }
-              ),
-            api.getState,
-            api.dispatch,
-            'Failed to fetch movie details'
+          ...(await scheduleMediaDetailRequest('movie', () =>
+            sessionRequest<MovieResponse>(
+              headers =>
+                backendClient.api.movies[':id'].$get(
+                  { param: { id: String(mediaId) }, query: { lang: 'en' } },
+                  { headers }
+                ),
+              api.getState,
+              api.dispatch,
+              'Failed to fetch movie details'
+            )
           )),
         };
       },
@@ -53,15 +81,17 @@ export const mediaApi = createApi({
     getShow: builder.query<ShowResponse, number>({
       async queryFn(mediaId, api) {
         return {
-          ...(await sessionRequest<ShowResponse>(
-            headers =>
-              backendClient.api.shows[':id'].$get(
-                { param: { id: String(mediaId) }, query: { lang: 'en' } },
-                { headers }
-              ),
-            api.getState,
-            api.dispatch,
-            'Failed to fetch show details'
+          ...(await scheduleMediaDetailRequest('show', () =>
+            sessionRequest<ShowResponse>(
+              headers =>
+                backendClient.api.shows[':id'].$get(
+                  { param: { id: String(mediaId) }, query: { lang: 'en' } },
+                  { headers }
+                ),
+              api.getState,
+              api.dispatch,
+              'Failed to fetch show details'
+            )
           )),
         };
       },
@@ -104,6 +134,26 @@ export const mediaApi = createApi({
         };
       },
     }),
+    queueBackdropFocus: builder.mutation<
+      BackdropFocusBackgroundResponse,
+      { items: Array<{ mediaType: 'movie' | 'tv'; mediaId: number }> }
+    >({
+      /** Enqueues displayed-list backdrop work without waiting for model analysis. */
+      async queryFn({ items }, api) {
+        return {
+          ...(await sessionRequest<BackdropFocusBackgroundResponse>(
+            headers =>
+              backendClient.api.media['backdrop-focus'].background.$post(
+                { json: { items } },
+                { headers }
+              ),
+            api.getState,
+            api.dispatch,
+            'Failed to queue backdrop focus preparation'
+          )),
+        };
+      },
+    }),
   }),
 });
 
@@ -113,4 +163,5 @@ export const {
   useGetSeasonQuery,
   useLazyGetSeasonQuery,
   useEnsureBackdropFocusMutation,
+  useQueueBackdropFocusMutation,
 } = mediaApi;

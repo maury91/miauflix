@@ -1,11 +1,13 @@
 import {
   useGetConfigQuery,
+  useGetServiceStatusesQuery,
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
   useUpdateConfigMutation,
 } from '@features/config/api/config.api';
 import type { ConfigServiceActionResult } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { ActionRow, Alert, Button } from '@shared/ui';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
@@ -78,77 +80,19 @@ const MissingConfigIcon = styled(AlertIcon)`
   color: ${SETTINGS_PALETTE.color.danger};
 `;
 
-const Footer = styled.div`
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  margin-top: 24px;
-  padding-top: 24px;
-  border-top: 1px solid ${SETTINGS_PALETTE.background.border};
-`;
-
-const SaveButton = styled.button`
-  padding: 10px 24px;
-  background-color: ${SETTINGS_PALETTE.color.primaryButton};
-  color: #0a0d0f;
-  border: none;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: background-color 0.2s;
-
-  &:hover {
-    background-color: ${SETTINGS_PALETTE.color.primaryButtonHover};
-  }
-
-  &:active:not(:disabled) {
-    background-color: ${SETTINGS_PALETTE.color.primaryButtonPressed};
-  }
-
-  &:disabled {
-    background-color: #50585b;
-    cursor: not-allowed;
-  }
-`;
-
-const SkipButton = styled.button`
-  padding: 10px 24px;
-  background-color: transparent;
-  color: ${SETTINGS_PALETTE.text.secondary};
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 4px;
-  font-size: 14px;
-  font-family: 'Poppins', sans-serif;
-  cursor: pointer;
-  transition: all 0.2s;
-
-  &:hover {
-    color: ${SETTINGS_PALETTE.text.primary};
-    border-color: ${SETTINGS_PALETTE.color.interactive};
-  }
-`;
-
-const StatusMessage = styled.div<{ $isError?: boolean }>`
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-size: 13px;
+const FeedbackArea = styled.div`
   margin-top: 16px;
-  background-color: ${props =>
-    props.$isError ? SETTINGS_PALETTE.color.dangerSubtle : 'rgba(66, 184, 131, 0.1)'};
-  border: 1px solid
-    ${props => (props.$isError ? SETTINGS_PALETTE.color.dangerBorder : 'rgba(66, 184, 131, 0.3)')};
-  color: ${props =>
-    props.$isError ? SETTINGS_PALETTE.color.danger : SETTINGS_PALETTE.color.success};
 `;
 
 interface ConfigWizardPageProps {
   onDismiss: () => void;
 }
 
+/** Edit and test service configuration while keeping the initial service-card order after saves. */
 const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
   const { data: configEntries = [], isLoading: isConfigLoading } = useGetConfigQuery(undefined);
+  const { data: serviceStatuses = {}, isLoading: isServiceStatusesLoading } =
+    useGetServiceStatusesQuery(undefined);
   const [updateConfig, { isLoading: isSaving }] = useUpdateConfigMutation();
   const [testServiceConfig] = useTestServiceConfigMutation();
   const [saveServiceConfig] = useSaveServiceConfigMutation();
@@ -194,13 +138,21 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
       .map(([group]) => group);
   }, [groupedEntries]);
 
-  const initiallySortedGroups = useMemo(() => sortServiceGroups(groupedEntries), [groupedEntries]);
+  const initiallySortedGroups = useMemo(
+    () => sortServiceGroups(groupedEntries, serviceStatuses),
+    [groupedEntries, serviceStatuses]
+  );
 
   useEffect(() => {
-    if (initialGroupOrder === null && initiallySortedGroups.length > 0) {
+    if (
+      initialGroupOrder === null &&
+      !isConfigLoading &&
+      !isServiceStatusesLoading &&
+      initiallySortedGroups.length > 0
+    ) {
       setInitialGroupOrder(initiallySortedGroups.map(([serviceName]) => serviceName));
     }
-  }, [initialGroupOrder, initiallySortedGroups]);
+  }, [initialGroupOrder, initiallySortedGroups, isConfigLoading, isServiceStatusesLoading]);
 
   const sortedGroups = useMemo(
     () => preserveInitialServiceOrder(initiallySortedGroups, initialGroupOrder),
@@ -444,24 +396,33 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             result={serviceResults[groupName]}
             restarted={serviceNotices[groupName]?.restarted}
             needsProcessRestart={serviceNotices[groupName]?.needsProcessRestart}
+            serviceStatus={serviceStatuses[groupName]}
           />
         ))}
 
         {globalResult && (
-          <StatusMessage $isError={!globalResult.success}>{globalResult.message}</StatusMessage>
+          <FeedbackArea>
+            <Alert severity={globalResult.success ? 'success' : 'error'}>
+              {globalResult.message}
+            </Alert>
+          </FeedbackArea>
         )}
 
-        <Footer>
-          <SaveButton
+        <ActionRow>
+          <Button
+            appearance="settings"
+            size="medium"
             onClick={handleSave}
             disabled={
               isSaving || dirtyServices.size === 0 || Object.keys(serviceActions).length > 0
             }
           >
             {isSaving ? 'Saving...' : 'Save Configuration'}
-          </SaveButton>
-          <SkipButton onClick={onDismiss}>Go to Home</SkipButton>
-        </Footer>
+          </Button>
+          <Button appearance="settings" size="medium" color="secondary" onClick={onDismiss}>
+            Go to Home
+          </Button>
+        </ActionRow>
       </ContentWrapper>
     </PageContainer>
   );

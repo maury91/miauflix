@@ -91,3 +91,33 @@ export type ProviderAuthorization = z.infer<typeof providerAuthorizationSchema>;
 export type ProviderAssociation = z.infer<typeof providerAssociationSchema>;
 export type ConnectionResult = z.infer<typeof connectionResultSchema>;
 export type ListStatusDetails = z.infer<typeof listStatusDetailsSchema>;
+
+export const playbackRefSchema = z.discriminatedUnion('kind', [
+  z.object({ kind: z.literal('movie'), mediaId: z.number().int().positive() }),
+  z.object({
+    kind: z.literal('episode'),
+    showMediaId: z.number().int().positive(),
+    seasonNumber: z.number().int().nonnegative(),
+    episodeNumber: z.number().int().positive(),
+  }),
+]);
+export const playbackProgressSchema = z
+  .object({
+    playable: playbackRefSchema,
+    positionSeconds: z.number().finite().nonnegative(),
+    durationSeconds: z.number().finite().positive(),
+    state: z.enum(['playing', 'paused', 'completed']),
+  })
+  .refine(value => value.positionSeconds <= value.durationSeconds, {
+    message: 'Position cannot exceed duration',
+  });
+export const playbackEntrySchema = playbackProgressSchema.safeExtend({
+  updatedAt: z.string().datetime({ offset: true }),
+  nextEpisode: z.literal(true).optional(),
+});
+export const playbackSnapshotSchema = z.object({ progress: z.array(playbackEntrySchema) });
+export const playbackSyncSchema = playbackProgressSchema.safeExtend({
+  subjectId: z.string().min(1),
+});
+export type PlaybackProgress = z.infer<typeof playbackProgressSchema>;
+export type PlaybackEntry = z.infer<typeof playbackEntrySchema>;

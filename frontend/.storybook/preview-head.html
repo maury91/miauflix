@@ -1,0 +1,21 @@
+<style>
+  .miauflix-composition-canvas .docs-story {
+    background: #000000;
+  }
+
+  /* Docs share the app stylesheet, whose html/body viewport lock must be released together. */
+  html:has(#storybook-docs),
+  body:has(#storybook-docs) {
+    overflow: auto;
+    height: auto;
+    min-height: 100%;
+  }
+
+  body.sb-show-main.sb-main-padded,
+  body.sb-show-main.sb-main-centered,
+  body.sb-show-docs {
+    overflow: auto;
+    min-height: 100vh;
+    height: auto;
+  }
+</style>

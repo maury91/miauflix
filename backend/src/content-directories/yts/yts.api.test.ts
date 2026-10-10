@@ -15,6 +15,7 @@ describe('YTSApi', () => {
     const mockConfigService =
       new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
     mockConfigService.get.mockReturnValue(undefined as never);
+    mockConfigService.getOrThrow.mockReturnValue('https://yts.mx' as never);
     // Create a minimal mock cache with just the required methods
     const mockCache = new MockCache();
     const statsService = new StatsService();

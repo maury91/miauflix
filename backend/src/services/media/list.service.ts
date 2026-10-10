@@ -21,10 +21,12 @@ import type { ListClientService } from '@services/list/list-client.service';
 import { traced } from '@utils/tracing.util';
 
 export const DEFAULT_LIST_REFRESH_PAGES = 6;
+export const LOCAL_WATCHLIST_SLUG = 'my-watchlist';
 const LIST_BASE_PRIORITY = 90;
 const LIST_MIN_PRIORITY = 20;
 const LIST_PREFETCH_PRIORITY_OFFSET = 20;
 const VIEWPORT_PRIORITY = 100;
+const WATCHLIST_SETTLE_MS = 5_000;
 
 export type ListLoadPriority = 'prefetch' | 'visible';
 export type MediaPriorityRequest = {
@@ -69,7 +71,26 @@ export class ListService {
   }
 
   async getLists(subjectId = 'public'): Promise<ListServiceDefinition[]> {
-    const lists = await this.listClient.getDefinitions(subjectId);
+    let lists: ListServiceDefinition[] = [];
+    try {
+      lists = await this.listClient.getDefinitions(subjectId);
+    } catch (error) {
+      logger.warn('ListService', 'Unable to load remote list definitions', error);
+    }
+    if (subjectId !== 'public') {
+      const watchlist = await this.getLocalWatchlist(subjectId);
+      if (watchlist.total > 0) {
+        lists.unshift({
+          id: LOCAL_WATCHLIST_SLUG,
+          slug: LOCAL_WATCHLIST_SLUG,
+          name: 'My watchlist',
+          description: 'Titles you added to your watchlist',
+          provider: 'local',
+          scope: 'personal',
+          requiresConnection: false,
+        });
+      }
+    }
     lists.forEach((list, index) => {
       this.listRanks.set(list.slug, list.rank ?? index);
       this.listDefinitions.set(list.slug, list);
@@ -194,6 +215,9 @@ export class ListService {
     subjectId = 'public',
     loadPriority: ListLoadPriority = 'visible'
   ) {
+    if (slug === LOCAL_WATCHLIST_SLUG) {
+      return this.getLocalWatchlistPage(language, page, limit, subjectId, loadPriority);
+    }
     const list = await this.getOrCreateList(slug, subjectId);
     if (!list.activeGeneration) {
       return this.getOnDemandListPage(slug, language, page, limit, subjectId, loadPriority);
@@ -214,6 +238,191 @@ export class ListService {
       loadPriority
     );
     return { medias, total };
+  }
+
+  async getWatchlistMembership(
+    subjectId: string,
+    mediaType: MediaListItemType,
+    mediaId: number
+  ): Promise<boolean> {
+    const list = await this.getOrCreateLocalWatchlist(subjectId);
+    return this.mediaListRepository.hasActiveItem(list.id, 'local', { mediaType, mediaId });
+  }
+
+  async addToWatchlist(
+    subjectId: string,
+    mediaType: MediaListItemType,
+    mediaId: number
+  ): Promise<void> {
+    const list = await this.getOrCreateLocalWatchlist(subjectId);
+    await this.mediaListRepository.addItem(list.id, 'local', { mediaType, mediaId });
+    this.enqueueWatchlistSync(subjectId, mediaType, mediaId);
+    void this.prepareWatchlistItem(mediaType, mediaId);
+  }
+
+  async removeFromWatchlist(
+    subjectId: string,
+    mediaType: MediaListItemType,
+    mediaId: number
+  ): Promise<void> {
+    const list = await this.getOrCreateLocalWatchlist(subjectId);
+    await this.mediaListRepository.removeItem(list.id, 'local', { mediaType, mediaId });
+    this.enqueueWatchlistSync(subjectId, mediaType, mediaId);
+  }
+
+  async hasAnyMovieWatchlistInterest(mediaId: number): Promise<boolean> {
+    return this.mediaListRepository.hasAnyLocalMovie(mediaId);
+  }
+
+  /**
+   * Union the connected provider watchlists into the durable local watchlist.
+   * This is intentionally additive: a pairing must not erase local intent when a
+   * provider page is stale or temporarily incomplete.
+   */
+  async reconcileRemoteWatchlist(subjectId: string): Promise<void> {
+    if (!this.listClient.isReady()) return;
+    try {
+      const definitions = await this.listClient.getDefinitions(subjectId);
+      const remoteWatchlists = definitions.filter(list =>
+        /watchlist-(movies|shows)$/.test(list.slug)
+      );
+      const local = await this.getOrCreateLocalWatchlist(subjectId);
+      for (const definition of remoteWatchlists) {
+        const first = await this.listClient.getPage(subjectId, definition.slug, 1);
+        const pageCount = Math.min(first.totalPages, DEFAULT_LIST_REFRESH_PAGES);
+        for (let page = 1; page <= pageCount; page += 1) {
+          const result =
+            page === 1 ? first : await this.listClient.getPage(subjectId, definition.slug, page);
+          const refs = await this.resolveExternalRefs(result.items.map(item => item.media));
+          for (const { ref } of refs) {
+            await this.mediaListRepository.addItem(local.id, 'local', ref);
+          }
+        }
+      }
+    } catch (error) {
+      // Pairing remains successful when provider pages are temporarily unavailable;
+      // the next explicit reconciliation can complete the additive import.
+      logger.warn('ListService', 'Unable to import Trakt watchlist after pairing', error);
+    }
+  }
+
+  /** Shared interest is a deterministic signal for the background download planner. */
+  async movieWatchlistPriority(mediaId: number): Promise<number> {
+    const countInterests = this.mediaListRepository.countLocalMovieInterests;
+    if (typeof countInterests !== 'function') return 50;
+    const interestCount = await countInterests.call(this.mediaListRepository, mediaId);
+    return Math.min(90, 50 + interestCount * 10);
+  }
+
+  private enqueueWatchlistSync(
+    subjectId: string,
+    mediaType: MediaListItemType,
+    mediaId: number
+  ): void {
+    const spec = {
+      type: 'watchlist.sync',
+      dedupeKey: `watchlist-sync:${subjectId}:${mediaType}:${mediaId}`,
+      payload: { subjectId, mediaType, mediaId },
+      options: { priority: 80 },
+    } as const;
+    const fallback = async (error: unknown) => {
+      logger.warn(
+        'ListService',
+        'Watchlist sync queue unavailable; attempting immediate sync',
+        error
+      );
+      try {
+        const inWatchlist = await this.getWatchlistMembership(subjectId, mediaType, mediaId);
+        await this.listClient.syncWatchlist(subjectId, {
+          mediaType,
+          mediaId,
+          operation: inWatchlist ? 'add' : 'remove',
+        });
+      } catch (fallbackError) {
+        logger.warn('ListService', 'Immediate watchlist sync also failed', fallbackError);
+      }
+    };
+    try {
+      const enqueueResult = this.backgroundJobs?.enqueue(
+        spec.type,
+        spec.dedupeKey,
+        spec.payload,
+        spec.options
+      );
+      void Promise.resolve(enqueueResult).catch(fallback);
+    } catch (error) {
+      void fallback(error);
+    }
+  }
+
+  private async getLocalWatchlist(subjectId: string) {
+    const list = await this.getOrCreateLocalWatchlist(subjectId);
+    const total = await this.mediaListRepository.countItems(list.id, 'local');
+    return { list, total };
+  }
+
+  private async getOrCreateLocalWatchlist(subjectId: string): Promise<MediaList> {
+    const list = await this.mediaListRepository.findOrCreateMediaList(
+      'My watchlist',
+      'Titles you added to your watchlist',
+      LOCAL_WATCHLIST_SLUG,
+      subjectId,
+      null
+    );
+    if (list.activeGeneration !== 'local')
+      await this.mediaListRepository.activateGeneration(list.id, 'local');
+    return list;
+  }
+
+  private async getLocalWatchlistPage(
+    language: string,
+    page: number,
+    limit: number,
+    subjectId: string,
+    loadPriority: ListLoadPriority
+  ) {
+    const { list, total } = await this.getLocalWatchlist(subjectId);
+    const items = await this.mediaListRepository.getPage(list.id, 'local', page * limit, limit);
+    // Retry preparation on reads so temporary catalog or queue outages do not strand local items.
+    void Promise.all(items.map(item => this.prepareWatchlistItem(item.mediaType, item.mediaId)));
+    const batch = await this.catalogClient.batch(
+      items.map(item => ({ mediaType: item.mediaType, mediaId: item.mediaId })),
+      language
+    );
+    const medias = await this.hydrateMediaDetails(batch.items, 0, page * limit, loadPriority);
+    return { medias, total };
+  }
+
+  private async prepareWatchlistItem(mediaType: MediaListItemType, mediaId: number): Promise<void> {
+    try {
+      if (mediaType === 'movie') {
+        await this.catalogClient.getMovie(mediaId, 'en');
+        await this.catalogClient.ensureBackdropFocus('movie', mediaId);
+        await this.backgroundJobs?.enqueueBestEffort({
+          type: 'watchlist.movie.download',
+          dedupeKey: `watchlist:movie:${mediaId}`,
+          payload: { movieMediaId: mediaId },
+          options: {
+            priority: await this.movieWatchlistPriority(mediaId),
+            runAfter: new Date(Date.now() + WATCHLIST_SETTLE_MS),
+          },
+        });
+        return;
+      }
+      await this.catalogClient.getTVShow(mediaId, 'en');
+      await this.catalogClient.ensureBackdropFocus('tv', mediaId);
+      await this.backgroundJobs?.enqueueBestEffort({
+        type: 'catalog.season-sync.seed',
+        dedupeKey: `watchlist:show:${mediaId}`,
+        payload: { tvMediaId: mediaId, priority: 50 },
+        options: { priority: 50 },
+      });
+      // TODO: When episode sources/playback are supported, predownload the next episode
+      // from playback progress using the same storage reserve. Keep this separate from
+      // watchlist membership and Continue watching; Trakt may auto-remove watched shows.
+    } catch (error) {
+      logger.warn('ListService', `Watchlist preparation failed for ${mediaType} ${mediaId}`, error);
+    }
   }
 
   /**
@@ -285,53 +494,75 @@ export class ListService {
     loadPriority: ListLoadPriority = 'visible'
   ): Promise<Array<{ localId: number } & (MovieDetail | TVShowDetail)>> {
     const resolved: Array<{ localId: number } & (MovieDetail | TVShowDetail)> = [];
-    for (const detail of details) {
-      try {
-        if (detail.mediaType === 'movie') {
+    const localIds = new Map<string, number>();
+    const movieDetails = details.filter(
+      (detail): detail is MovieDetail => detail.mediaType === 'movie'
+    );
+    const tvDetails = details.filter((detail): detail is TVShowDetail => detail.mediaType === 'tv');
+
+    try {
+      const references = await this.movieRepository.upsertMovieDetails(movieDetails);
+      references.forEach(reference => localIds.set(`movie:${reference.mediaId}`, reference.id));
+    } catch (bulkError) {
+      logger.warn(
+        'ListService',
+        'Bulk movie projection failed; retrying entries individually',
+        bulkError
+      );
+      for (const detail of movieDetails) {
+        try {
           const local = await this.movieRepository.upsertMovieDetail(detail);
+          localIds.set(`movie:${detail.mediaId}`, local.id);
+        } catch (error) {
+          logger.warn('ListService', `Skipping movie ${detail.mediaId} while projecting`, error);
+        }
+      }
+    }
+
+    try {
+      const references = await this.tvShowRepository.upsertTVShowDetails(tvDetails);
+      references.forEach(reference => localIds.set(`tv:${reference.mediaId}`, reference.id));
+    } catch (bulkError) {
+      logger.warn(
+        'ListService',
+        'Bulk TV projection failed; retrying entries individually',
+        bulkError
+      );
+      for (const detail of tvDetails) {
+        try {
+          const local = await this.tvShowRepository.upsertTVShowDetail(detail);
+          localIds.set(`tv:${detail.mediaId}`, local.id);
+        } catch (error) {
+          logger.warn('ListService', `Skipping tv ${detail.mediaId} while projecting`, error);
+        }
+      }
+    }
+
+    for (const detail of details) {
+      const localId = localIds.get(`${detail.mediaType}:${detail.mediaId}`);
+      if (localId === undefined) continue;
+      try {
+        const priority = listDownstreamPriority(
+          listRank,
+          itemOffset + resolved.length,
+          loadPriority
+        );
+        if (detail.mediaType === 'movie') {
           this.backgroundJobs?.enqueueBestEffort({
             type: 'source.discover',
             dedupeKey: `media:${detail.mediaId}`,
-            payload: {
-              movieMediaId: detail.mediaId,
-              priority: listDownstreamPriority(
-                listRank,
-                itemOffset + resolved.length,
-                loadPriority
-              ),
-            },
-            options: {
-              priority: listDownstreamPriority(
-                listRank,
-                itemOffset + resolved.length,
-                loadPriority
-              ),
-            },
+            payload: { movieMediaId: detail.mediaId, priority },
+            options: { priority },
           });
-          resolved.push({ ...detail, localId: local.id });
         } else {
-          const local = await this.tvShowRepository.upsertTVShowDetail(detail);
           this.backgroundJobs?.enqueueBestEffort({
             type: 'catalog.season-sync.seed',
             dedupeKey: `show:${detail.mediaId}`,
-            payload: {
-              tvMediaId: detail.mediaId,
-              priority: listDownstreamPriority(
-                listRank,
-                itemOffset + resolved.length,
-                loadPriority
-              ),
-            },
-            options: {
-              priority: listDownstreamPriority(
-                listRank,
-                itemOffset + resolved.length,
-                loadPriority
-              ),
-            },
+            payload: { tvMediaId: detail.mediaId, priority },
+            options: { priority },
           });
-          resolved.push({ ...detail, localId: local.id });
         }
+        resolved.push({ ...detail, localId });
       } catch (error) {
         logger.warn(
           'ListService',
@@ -388,6 +619,9 @@ export class ListService {
   }
 
   private async getOrCreateList(slug: string, ownerKey = 'public'): Promise<MediaList> {
+    if (slug === LOCAL_WATCHLIST_SLUG && ownerKey !== 'public') {
+      return this.getOrCreateLocalWatchlist(ownerKey);
+    }
     const definition =
       this.listDefinitions.get(slug) ??
       (await this.listClient.getDefinitions(ownerKey)).find(item => item.slug === slug);
@@ -408,17 +642,13 @@ export class ListService {
     if (!resolvedDefinition)
       throw new MediaError(`List with slug ${slug} not found`, 'list_not_found');
     const actualOwner = resolvedDefinition.scope === 'public' ? 'public' : ownerKey;
-    let list = await this.mediaListRepository.findBySlug(slug, false, actualOwner);
-    if (!list) {
-      list = await this.mediaListRepository.createMediaList(
-        resolvedDefinition.name,
-        resolvedDefinition.description,
-        slug,
-        actualOwner,
-        resolvedDefinition.id
-      );
-    }
-    return list;
+    return this.mediaListRepository.findOrCreateMediaList(
+      resolvedDefinition.name,
+      resolvedDefinition.description,
+      slug,
+      actualOwner,
+      resolvedDefinition.id
+    );
   }
 
   private listRank(slug: string): number {

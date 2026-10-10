@@ -1,5 +1,10 @@
 import { zValidator } from '@hono/zod-validator';
-import { backdropFocusResponseSchema, mediaTypeSchema } from '@miauflix/service-contracts';
+import {
+  backdropFocusBackgroundRequestSchema,
+  backdropFocusBackgroundResponseSchema,
+  backdropFocusResponseSchema,
+  mediaTypeSchema,
+} from '@miauflix/service-contracts';
 import { Hono } from 'hono';
 import { z } from 'zod';
 
@@ -14,8 +19,8 @@ const paramsSchema = z.object({
 });
 
 /**
- * Creates the authenticated, rate-limited backdrop analysis route for catalog media IDs.
- * The handler rejects invalid IDs with 400 and forwards catalog and response validation errors
+ * Creates authenticated, rate-limited immediate and background backdrop-focus routes.
+ * The handlers reject invalid payloads and forward catalog and response validation errors
  * to Hono's error handling.
  */
 export const createMediaRoutes = ({
@@ -24,18 +29,29 @@ export const createMediaRoutes = ({
   configurationService,
 }: Pick<Deps, 'auditLogService' | 'catalogClient' | 'configurationService'>) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
-  return new Hono().post(
-    '/:mediaType/:mediaId/backdrop-focus',
-    rateLimitGuard(5),
-    authGuard(),
-    zValidator('param', paramsSchema),
-    async context => {
-      const { mediaType, mediaId: rawMediaId } = context.req.valid('param');
-      const mediaId = Number(rawMediaId);
-      if (!Number.isSafeInteger(mediaId) || mediaId <= 0)
-        return context.json({ error: 'Invalid media ID' }, 400);
-      const backdropFocus = await catalogClient.ensureBackdropFocus(mediaType, mediaId);
-      return context.json(backdropFocusResponseSchema.parse({ backdropFocus }));
-    }
-  );
+  return new Hono()
+    .post(
+      '/backdrop-focus/background',
+      rateLimitGuard(30),
+      authGuard(),
+      zValidator('json', backdropFocusBackgroundRequestSchema),
+      async context => {
+        const accepted = await catalogClient.queueBackdropFocus(context.req.valid('json').items);
+        return context.json(backdropFocusBackgroundResponseSchema.parse({ accepted }), 202);
+      }
+    )
+    .post(
+      '/:mediaType/:mediaId/backdrop-focus',
+      rateLimitGuard(5),
+      authGuard(),
+      zValidator('param', paramsSchema),
+      async context => {
+        const { mediaType, mediaId: rawMediaId } = context.req.valid('param');
+        const mediaId = Number(rawMediaId);
+        if (!Number.isSafeInteger(mediaId) || mediaId <= 0)
+          return context.json({ error: 'Invalid media ID' }, 400);
+        const backdropFocus = await catalogClient.ensureBackdropFocus(mediaType, mediaId);
+        return context.json(backdropFocusResponseSchema.parse({ backdropFocus }));
+      }
+    );
 };

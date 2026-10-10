@@ -29,6 +29,7 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
  * Service for searching and managing sources
  */
 export class SourceService {
+  private readonly pendingOnDemandSearches = new Set<number>();
   private readonly movieRepository: MovieRepository;
   private readonly movieSourceRepository: MovieSourceRepository;
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
@@ -435,6 +436,11 @@ export class SourceService {
         }
         return [];
       })();
+      this.pendingOnDemandSearches.add(movie.id);
+      void searchPromise.then(
+        () => this.pendingOnDemandSearches.delete(movie.id),
+        () => this.pendingOnDemandSearches.delete(movie.id)
+      );
       const timeoutPromise = (async () => {
         await sleep(timeoutMs);
         if (status === 'pending') {
@@ -455,6 +461,11 @@ export class SourceService {
 
     // Movie has been searched but no sources found, or no IMDb ID
     return [];
+  }
+
+  /** Whether an on-demand source search is still running after its caller timed out. */
+  public isOnDemandSearchPending(movieId: number): boolean {
+    return this.pendingOnDemandSearches.has(movieId);
   }
 
   /**

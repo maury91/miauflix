@@ -1,10 +1,12 @@
 import {
   useGetConfigQuery,
+  useGetServiceStatusesQuery,
   useSaveServiceConfigMutation,
   useTestServiceConfigMutation,
 } from '@features/config/api/config.api';
 import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { Button as BaseButton, Button } from '@shared/ui';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -165,53 +167,13 @@ const NextStepHint = styled.span`
   text-align: center;
 `;
 
-const Button = styled.button<{ $primary?: boolean }>`
-  padding: 10px 20px;
-  border: 1px solid
-    ${props =>
-      props.$primary ? SETTINGS_PALETTE.color.primaryButton : SETTINGS_PALETTE.background.border};
-  border-radius: 4px;
-  background: ${props => (props.$primary ? SETTINGS_PALETTE.color.primaryButton : 'transparent')};
-  color: ${props => (props.$primary ? '#0a0d0f' : SETTINGS_PALETTE.text.primary)};
-  cursor: pointer;
-  font:
-    500 14px 'Poppins',
-    sans-serif;
-
-  &:disabled {
-    opacity: 0.55;
-    cursor: not-allowed;
-  }
-`;
-
-const ChevronButton = styled.button`
-  display: inline-grid;
-  width: 42px;
-  height: 42px;
-  place-items: center;
-  border: 1px solid ${SETTINGS_PALETTE.background.border};
-  border-radius: 50%;
-  background: ${SETTINGS_PALETTE.background.surface};
-  color: ${SETTINGS_PALETTE.text.primary};
-  cursor: pointer;
-
-  &:hover:not(:disabled) {
-    border-color: ${SETTINGS_PALETTE.color.interactive};
-    color: ${SETTINGS_PALETTE.color.interactive};
-  }
-
-  &:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-  }
-`;
-
 const OptionalList = styled.div`
   display: grid;
   gap: 12px;
 `;
 
-const OptionalService = styled.button`
+// eslint-disable-next-line no-restricted-syntax -- Service-selection card owns its multi-line content layout; see shared/ui/README.md.
+const OptionalService = styled(BaseButton)`
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -222,6 +184,7 @@ const OptionalService = styled.button`
   border-radius: 8px;
   background: ${SETTINGS_PALETTE.background.surface};
   color: ${SETTINGS_PALETTE.text.primary};
+  box-shadow: none;
   cursor: pointer;
   text-align: left;
 
@@ -339,8 +302,10 @@ function getReadiness(entries: ConfigEntryView[]): string {
 
 const wait = (duration: number) => new Promise(resolve => setTimeout(resolve, duration));
 
+/** Guide required service configuration step by step, then offer optional settings before dismissal. */
 export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
   const { data: entries = [], isLoading } = useGetConfigQuery(undefined);
+  const { data: serviceStatuses = {} } = useGetServiceStatusesQuery(undefined);
   const [testServiceConfig] = useTestServiceConfigMutation();
   const [saveServiceConfig] = useSaveServiceConfigMutation();
   const { values, dirtyServices, handleChange, getServiceEntries, markServiceSaved } =
@@ -366,9 +331,10 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
           Object.entries(groups).filter(([, group]) => {
             return group.some(entry => entry.required && !entry.hasValue);
           })
-        )
+        ),
+        serviceStatuses
       ),
-    [groups]
+    [groups, serviceStatuses]
   );
   useEffect(() => {
     if (!isLoading && !initialRequiredServiceNames) {
@@ -394,9 +360,10 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
             );
             return hasCompleteRequiredValues && !initialRequiredServiceNames?.includes(name);
           })
-        )
+        ),
+        serviceStatuses
       ),
-    [groups, initialRequiredServiceNames]
+    [groups, initialRequiredServiceNames, serviceStatuses]
   );
   const currentRequired = requiredGroups[step];
   const currentOptional = optionalService ? groups[optionalService] : undefined;
@@ -524,14 +491,18 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
             </AdvancedOptionalSettings>
           )}
           <Navigation>
-            <ChevronButton
+            <Button
+              appearance="settings"
+              size="medium"
+              color="secondary"
+              iconOnly
               type="button"
               aria-label="Previous step"
               onClick={() => setStep(Math.max(0, requiredGroups.length - 1))}
             >
               <ChevronLeftIcon aria-hidden="true" />
-            </ChevronButton>
-            <Button type="button" $primary onClick={onDismiss}>
+            </Button>
+            <Button appearance="settings" size="medium" type="button" onClick={onDismiss}>
               Finish and start using Miauflix
             </Button>
           </Navigation>
@@ -583,7 +554,11 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
         <ServiceStep>
           <div>
             {hasPreviousStep && (
-              <ChevronButton
+              <Button
+                appearance="settings"
+                size="medium"
+                color="secondary"
+                iconOnly
                 type="button"
                 aria-label="Previous step"
                 onClick={() =>
@@ -591,7 +566,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
                 }
               >
                 <ChevronLeftIcon aria-hidden="true" />
-              </ChevronButton>
+              </Button>
             )}
           </div>
           <ServiceConfigGroup
@@ -604,10 +579,15 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
             hasChanges={dirtyServices.has(currentName)}
             activeAction={actions[currentName]}
             result={currentResult}
+            serviceStatus={serviceStatuses[currentName]}
           />
           {!isOptionalStep && (
             <NextStepArea>
-              <ChevronButton
+              <Button
+                appearance="settings"
+                size="medium"
+                color="secondary"
+                iconOnly
                 type="button"
                 aria-label="Next step"
                 aria-describedby={nextStepHint ? 'next-step-hint' : undefined}
@@ -615,7 +595,7 @@ export const ConfigurationWizardPage: FC<Props> = ({ onDismiss }) => {
                 disabled={!canContinue}
               >
                 <ChevronRightIcon aria-hidden="true" />
-              </ChevronButton>
+              </Button>
             </NextStepArea>
           )}
         </ServiceStep>

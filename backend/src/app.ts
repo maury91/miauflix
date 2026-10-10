@@ -1,5 +1,7 @@
 import 'reflect-metadata';
 
+import type { Server as HttpServer } from 'node:http';
+
 import { serve } from '@hono/node-server';
 import { logger } from '@logger';
 
@@ -24,6 +26,8 @@ import { PlaybackSessionService } from '@services/playback/playback-session.serv
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
+import { ProgressService } from '@services/progress/progress.service';
+import { RealtimeGateway } from '@services/realtime/realtime.gateway';
 import { RequestService } from '@services/request/request.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
@@ -78,6 +82,7 @@ try {
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db);
+  const progressService = new ProgressService(db, listClient);
   const mediaService = new MediaService(db, catalogClient);
   const backgroundJobs = new BackgroundJobService(configurationService);
   const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
@@ -116,6 +121,12 @@ try {
   const preloadIntentService = new PreloadIntentService(
     playablePreparationService,
     torrentWarmupController
+  );
+  const realtimeGateway = new RealtimeGateway(
+    authService,
+    configurationService,
+    preloadIntentService,
+    progressService
   );
   const playbackSessionService = new PlaybackSessionService(
     db,
@@ -178,9 +189,11 @@ try {
       backgroundJobs,
       cacheService,
       listService,
+      listClient,
       magnetService,
       mediaService,
       sourceService,
+      downloadService,
       worker: backgroundWorker,
     });
 
@@ -196,6 +209,8 @@ try {
     catalogClient.stop();
     listClient.stop();
     await backgroundWorker.stop();
+    realtimeGateway.close();
+    preloadIntentService.close();
     backgroundJobs.close();
 
     await db.close();
@@ -228,7 +243,7 @@ try {
     statsService,
     preloadIntentService,
     playbackSessionService,
-    progressRepository: db.getProgressRepository(),
+    progressService,
   });
 
   // Error handling middleware - must be added first
@@ -273,6 +288,9 @@ try {
 
   const port = configurationService.getOrThrow('PORT');
   const server = serve({ fetch: app.fetch, port });
+  // The default Hono adapter above creates an HTTP/1 server, which is the
+  // upgrade-capable variant used by the realtime gateway.
+  realtimeGateway.attach(server as HttpServer);
   server.on('error', err => {
     logger.error('App', `Server error: ${err}`);
     serverService._status = { status: 'error', errorMessage: err.message, error: err };

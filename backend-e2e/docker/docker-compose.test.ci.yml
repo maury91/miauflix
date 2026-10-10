@@ -1,0 +1,56 @@
+services:
+  backend:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-backend
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-backend
+
+  list-service:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-list-service
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-list-service
+
+  media-catalog:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-media-catalog
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-media-catalog
+
+  tmdb-images:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-tmdb-images
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-tmdb-images
+
+  tmdb-mock:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-tmdb-mock
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-tmdb-mock
+
+  trakt-mock:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-trakt-mock
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-trakt-mock
+
+  yts-mock:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-yts-mock
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-yts-mock
+
+  therarbg-mock:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-therarbg-mock
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-therarbg-mock

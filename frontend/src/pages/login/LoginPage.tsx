@@ -6,6 +6,8 @@ import type { FC } from 'react';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import RemoteIcon from '~icons/mdi/remote';
+
 const LoginContainer = styled(motion.div)`
   position: fixed;
   top: 0;
@@ -42,26 +44,6 @@ const BottomInstructions = styled.div`
   color: #666;
 `;
 
-const RemoteIcon = styled.div`
-  width: 16px;
-  height: 16px;
-  background-color: #666;
-  border-radius: 2px;
-  position: relative;
-
-  &::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 8px;
-    height: 8px;
-    background-color: #333;
-    border-radius: 1px;
-  }
-`;
-
 const LoginPage: FC = () => {
   // Email login state
   const [showQR, setShowQR] = useState(false);
@@ -85,7 +67,7 @@ const LoginPage: FC = () => {
       </LoginContent>
 
       <BottomInstructions>
-        <RemoteIcon />
+        <RemoteIcon aria-hidden="true" />
         Use remote to navigate and focus
       </BottomInstructions>
     </LoginContainer>

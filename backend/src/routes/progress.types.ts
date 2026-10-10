@@ -16,6 +16,7 @@ export interface ProgressResponse {
 
 export interface ProgressEntry extends ProgressUpdateRequest {
   updatedAt: string;
+  nextEpisode?: true;
 }
 
 export interface ProgressListResponse {

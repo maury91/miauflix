@@ -1,0 +1,1 @@
+export { TraktModal } from './TraktModal';

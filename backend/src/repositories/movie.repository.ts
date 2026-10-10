@@ -98,6 +98,65 @@ export class MovieRepository {
     return stored;
   }
 
+  /** Mirrors a page of catalog movies with one queued write and one ID lookup. */
+  async upsertMovieDetails(details: MovieDetail[]): Promise<Array<Pick<Movie, 'id' | 'mediaId'>>> {
+    const uniqueDetails = [...new Map(details.map(detail => [detail.mediaId, detail])).values()];
+    if (uniqueDetails.length === 0) return [];
+
+    return this.database.write(async () => {
+      for (let offset = 0; offset < uniqueDetails.length; offset += 50) {
+        const batch = uniqueDetails.slice(offset, offset + 50);
+        const values = batch.map(detail =>
+          this.movieRepository.create({
+            backdrop: detail.backdrop,
+            contentDirectoriesSearched: [],
+            imdbId: detail.imdbId,
+            overview: detail.overview,
+            popularity: detail.popularity,
+            poster: detail.poster,
+            rating: detail.rating,
+            releaseDate: detail.releaseDate,
+            runtime: detail.runtime,
+            title: detail.title,
+            mediaId: detail.mediaId,
+          })
+        );
+        await this.movieRepository
+          .createQueryBuilder()
+          .insert()
+          .into(Movie)
+          .values(values)
+          .orUpdate(
+            [
+              'title',
+              'overview',
+              'popularity',
+              'releaseDate',
+              'poster',
+              'backdrop',
+              'runtime',
+              'rating',
+              'imdbId',
+            ],
+            ['tmdbId']
+          )
+          .updateEntity(false)
+          .execute();
+      }
+
+      const mediaIds = uniqueDetails.map(detail => detail.mediaId);
+      const stored = await this.movieRepository
+        .createQueryBuilder('movie')
+        .select(['movie.id', 'movie.mediaId'])
+        .where('movie.tmdbId IN (:...mediaIds)', { mediaIds })
+        .getMany();
+      if (stored.length !== mediaIds.length) {
+        throw new RepositoryError('Failed to persist movie index entries', 'retrieve_failed');
+      }
+      return stored.map(movie => ({ id: movie.id, mediaId: movie.mediaId }));
+    });
+  }
+
   async updateFromSummary(mediaId: number, movie: Partial<Movie>): Promise<void> {
     await this.movieRepository.update({ mediaId }, movie);
   }

@@ -14,7 +14,7 @@
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],
-      "outputs": ["dist/**"],
+      "outputs": ["../dist/backend/**"],
       "cache": true
     },
     "@miauflix/backend#build:client": {

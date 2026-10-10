@@ -10,12 +10,15 @@ import {
   listServiceDefinitionsPageSchema,
   type ListServicePage,
   listServicePageSchema,
+  type PlaybackEntry,
+  type PlaybackProgress,
+  playbackSnapshotSchema,
   type ProviderAssociation,
   providerAssociationSchema,
   type ProviderAuthorization,
   providerAuthorizationSchema,
 } from '@miauflix/service-contracts';
-import type { ZodType } from 'zod';
+import { z, type ZodType } from 'zod';
 
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
@@ -128,6 +131,43 @@ export class ListClientService {
       providerAssociationSchema,
       this.path(`/connections/trakt/${encodeURIComponent(subjectId)}`),
       { method: 'DELETE' }
+    );
+  }
+
+  /**
+   * Submit progress for a backend user ID to the list service’s export queue.
+   * A successful response does not guarantee a connected account or delivery to Trakt.
+   * Service availability, request, and response validation failures propagate.
+   */
+  async syncPlayback(subjectId: string, update: PlaybackProgress): Promise<void> {
+    await this.remote.requestCapability(z.object({ synced: z.boolean() }), this.path('/progress'), {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ subjectId, ...update }),
+    });
+  }
+
+  /**
+   * Read the list service’s cached playback snapshot for a backend user ID.
+   * Service availability, request, and response validation failures propagate.
+   */
+  async getPlayback(subjectId: string): Promise<PlaybackEntry[]> {
+    const result = await this.get(playbackSnapshotSchema, '/progress', { subjectId });
+    return result.progress;
+  }
+
+  async syncWatchlist(
+    subjectId: string,
+    update: { mediaType: 'movie' | 'tv'; mediaId: number; operation: 'add' | 'remove' }
+  ): Promise<void> {
+    await this.remote.requestCapability(
+      z.object({ synced: z.boolean() }),
+      this.path('/watchlist'),
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ subjectId, ...update }),
+      }
     );
   }
 

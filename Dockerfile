@@ -35,16 +35,15 @@ RUN --mount=type=cache,target=/root/.npm \
 COPY packages/ ./packages/
 COPY backend/ ./backend/
 
-# Build backend dependencies and backend
-RUN --mount=type=cache,target=/usr/src/app/.turbo \
-    npm run build:backend
-
-# Copy frontend sources and build the client bundle with Vite cache mount
+# Copy frontend sources before running the complete build graph so the same
+# Turbo cache is available to the backend client and frontend tasks.
 COPY frontend/ ./frontend/
 # The frontend TypeScript build includes Storybook fixtures under src/. Those
 # fixtures intentionally reuse the repository-level provider recordings.
 COPY test-fixtures/ ./test-fixtures/
-RUN --mount=type=cache,target=/usr/src/app/node_modules/.vite \
+RUN --mount=type=cache,target=/usr/src/app/.turbo \
+    --mount=type=cache,target=/usr/src/app/node_modules/.vite \
+    npm run build:backend && \
     VITE_API_URL=/ npm run build:frontend
 
 # Create empty .env file for runtime stage

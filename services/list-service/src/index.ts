@@ -10,6 +10,8 @@ import {
   listServiceDefinitionsPageSchema,
   listServicePageSchema,
   MANAGEMENT_PROTOCOL_VERSION,
+  playbackSnapshotSchema,
+  playbackSyncSchema,
   providerAssociationSchema,
   providerAuthorizationSchema,
   SERVICE_MANIFEST_PATH,
@@ -27,6 +29,7 @@ import { z } from 'zod';
 import { ListConfigService } from './config/config.service';
 import { disconnectAssociation, replaceAssociation } from './association-store';
 import { listPage } from './list-page-cache';
+import { PlaybackSync } from './playback-sync';
 import { parsePositivePage } from './request-validation';
 import { TraktClient } from './trakt-client';
 
@@ -203,7 +206,11 @@ const association = (subjectId: string) =>
     connection_id: string;
   } | null;
 
-const accessToken = async (subjectId: string, connectionId: string): Promise<string> => {
+/**
+ * Return the connection’s token, refreshing and persisting encrypted credentials if expiry is within five minutes.
+ * Reject if the user’s connection changed; provider, database, and encryption errors propagate.
+ */
+const refreshAccessToken = async (subjectId: string, connectionId: string): Promise<string> => {
   const record = association(subjectId);
   if (!record || record.connection_id !== connectionId)
     throw new Error('Trakt account connection changed');
@@ -225,11 +232,32 @@ const accessToken = async (subjectId: string, connectionId: string): Promise<str
   return refreshed.access_token;
 };
 
+// Refresh tokens are single-use: share one refresh across list reads and the worker.
+const tokenFlights = new Map<string, Promise<string>>();
+/** Share an in-flight token lookup/refresh per user and connection; return its token or propagate its failure. */
+const accessToken = (subjectId: string, connectionId: string): Promise<string> => {
+  const key = `${subjectId}:${connectionId}`;
+  const existing = tokenFlights.get(key);
+  if (existing) return existing;
+  const flight = refreshAccessToken(subjectId, connectionId).finally(() =>
+    tokenFlights.delete(key)
+  );
+  tokenFlights.set(key, flight);
+  return flight;
+};
+
+const playbackSync = new PlaybackSync(database, client, association, accessToken, seal, open);
+
 const json = (body: unknown, status = 200) => Response.json(body, { status });
 const serviceReady = () => {
   if (!config.ready) throw new Error('list_service_not_configured');
 };
 
+/**
+ * Serve management, list, account connection, and cached playback APIs.
+ * Progress writes enqueue export. Unconfigured capability requests return 503; errors caught
+ * while handling routes become 500 responses, and unmatched ready-service routes return 404.
+ */
 const handler = async (request: Request): Promise<Response> => {
   const url = new URL(request.url);
   const path = url.pathname.replace(/\/+$/, '') || '/';
@@ -379,6 +407,36 @@ const handler = async (request: Request): Promise<Response> => {
         }).then(value => listServicePageSchema.parse(value))
       );
     }
+    if (request.method === 'GET' && path === '/v1/progress') {
+      const subjectId = z.string().min(1).parse(url.searchParams.get('subjectId'));
+      return json(playbackSnapshotSchema.parse({ progress: await playbackSync.read(subjectId) }));
+    }
+    if (request.method === 'POST' && path === '/v1/progress') {
+      const body = playbackSyncSchema.parse(await request.json());
+      return json({ synced: await playbackSync.write(body.subjectId, body) });
+    }
+    if (request.method === 'POST' && path === '/v1/watchlist') {
+      const body = z
+        .object({
+          subjectId: z.string().min(1),
+          mediaType: z.enum(['movie', 'tv']),
+          mediaId: z.number().int().positive(),
+          operation: z.enum(['add', 'remove']),
+        })
+        .parse(await request.json());
+      const record = association(body.subjectId);
+      if (!record) return json({ synced: false, reason: 'not_connected' }, 409);
+      const token = await accessToken(body.subjectId, record.connection_id);
+      if (body.operation === 'add') {
+        await client().addToWatchlist({ mediaType: body.mediaType, tmdbId: body.mediaId }, token);
+      } else {
+        await client().removeFromWatchlist(
+          { mediaType: body.mediaType, tmdbId: body.mediaId },
+          token
+        );
+      }
+      return json({ synced: true });
+    }
     if (request.method === 'POST' && path === '/v1/connections/trakt/device') {
       const { subjectId } = z.object({ subjectId: z.string().min(1) }).parse(await request.json());
       const code = await client().deviceCode();
@@ -479,10 +537,17 @@ const handler = async (request: Request): Promise<Response> => {
 const server = Bun.serve({ hostname: HOST, port: PORT, fetch: handler });
 console.info(`List Service listening on http://${HOST}:${server.port}`);
 
+const playbackTimer = setInterval(() => {
+  if (config.ready)
+    void playbackSync.tick().catch(() => console.warn('Trakt background playback sync failed'));
+}, 5_000);
+
 let stopping = false;
+/** Stop scheduling playback sync, await server shutdown, then close the database; repeated calls do nothing. */
 const shutdown = async (signal: string) => {
   if (stopping) return;
   stopping = true;
+  clearInterval(playbackTimer);
   console.info(`List Service received ${signal}, shutting down`);
   await server.stop();
   database.close();

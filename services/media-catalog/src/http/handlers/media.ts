@@ -1,4 +1,6 @@
 import {
+  backdropFocusBackgroundRequestSchema,
+  backdropFocusBackgroundResponseSchema,
   backdropFocusResponseSchema,
   batchRequestSchema,
   batchResponseSchema,
@@ -88,6 +90,16 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
     const body = batchRequestSchema.parse(await req.json().catch(() => null));
     const catalog = dataPlane();
     return json(batchResponseSchema.parse(await catalog.batch(body.items, body.language)));
+  });
+
+  router.add('POST', `${BASE_PATH}/media/backdrop-focus/background`, async ({ req, json }) => {
+    const body = backdropFocusBackgroundRequestSchema.parse(await req.json().catch(() => null));
+    const catalog = dataPlane();
+    return json(
+      backdropFocusBackgroundResponseSchema.parse({
+        accepted: catalog.enqueueBackdropFocus(body.items),
+      })
+    );
   });
 
   router.add(

@@ -26,6 +26,19 @@ describe('sortServiceGroups', () => {
 
     expect(groups.map(([name]) => name)).toEqual(['Alpha', 'Bravo', 'Echo', 'Zulu']);
   });
+
+  it('places degraded services after missing configuration and before ready services', () => {
+    const groups = sortServiceGroups(
+      {
+        READY: [entry(false, true)],
+        DEGRADED: [entry(false, true)],
+        MISSING: [entry(true, false)],
+      },
+      { DEGRADED: { status: 'degraded', reason: 'all mirrors unavailable' } }
+    );
+
+    expect(groups.map(([name]) => name)).toEqual(['MISSING', 'DEGRADED', 'READY']);
+  });
 });
 
 describe('preserveInitialServiceOrder', () => {

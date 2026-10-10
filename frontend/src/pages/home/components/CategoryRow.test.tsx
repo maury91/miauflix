@@ -4,12 +4,16 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { createRef } from 'react';
 import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { useGetListQuery, usePromoteListMediaMutation } = vi.hoisted(() => ({
-  useGetListQuery: vi.fn(),
-  usePromoteListMediaMutation: vi.fn(() => [vi.fn()]),
-}));
+const { useGetListQuery, usePromoteListMediaMutation, useQueueBackdropFocusMutation } = vi.hoisted(
+  () => ({
+    useGetListQuery: vi.fn(),
+    usePromoteListMediaMutation: vi.fn(() => [vi.fn()]),
+    useQueueBackdropFocusMutation: vi.fn(() => [vi.fn()]),
+  })
+);
 
 vi.mock('@features/media/api/lists.api', () => ({ useGetListQuery, usePromoteListMediaMutation }));
+vi.mock('@features/media/api/media.api', () => ({ useQueueBackdropFocusMutation }));
 vi.mock('./MediaCard', async () => {
   const React = await import('react');
   return {

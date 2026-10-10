@@ -12,8 +12,6 @@ test.describe('Login flow', () => {
   });
 
   test('renders the email login form with basic elements', async ({ page }) => {
-    await page.waitForLoadState('networkidle');
-
     await expect(page.getByLabel('Email')).toBeVisible();
     await expect(page.getByLabel('Password')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Continue' })).toBeDisabled();
@@ -21,7 +19,6 @@ test.describe('Login flow', () => {
 
   test('should display complete login page and take screenshot', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
-    await page.waitForLoadState('networkidle');
 
     // The login page fades in via a framer-motion opacity animation (JS-driven, not a
     // CSS transition/animation), so Playwright's `animations: 'disabled'` option cannot
