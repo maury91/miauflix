@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import { detailsNavigationSlice } from '@store/slices/detailsNavigation';
-import { fireEvent, render, screen } from '@testing-library/react';
+import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { query, mutation, save, reset } = vi.hoisted(() => ({
+const { query, mutation, save, reset, ensureBackdropFocus } = vi.hoisted(() => ({
   query: {
     currentData: { rating: 'like' as string | null },
     isFetching: false,
@@ -14,6 +14,9 @@ const { query, mutation, save, reset } = vi.hoisted(() => ({
   mutation: { isLoading: false, isError: false },
   save: vi.fn(),
   reset: vi.fn(),
+  ensureBackdropFocus: vi.fn(function ensureBackdropFocus() {
+    return { unwrap: () => Promise.resolve({ backdropFocus: null }) };
+  }),
 }));
 vi.mock('@features/media/api/ratings.api', () => ({
   useGetMediaRatingQuery: () => query,
@@ -25,7 +28,7 @@ vi.mock('@features/media/api/lists.api', () => ({
   useRemoveFromWatchlistMutation: () => [vi.fn(), { isLoading: false }],
 }));
 vi.mock('@features/media/api/media.api', () => ({
-  useEnsureBackdropFocusMutation: () => [vi.fn()],
+  useEnsureBackdropFocusMutation: () => [ensureBackdropFocus],
   useGetMovieQuery: () => ({
     data: { type: 'movie', title: 'Coyote vs. Acme', genres: [], overview: 'Example' },
   }),
@@ -41,7 +44,10 @@ import type { MediaDto } from '@miauflix/backend';
 
 import { MediaDetails } from './MediaDetails';
 
-const setupTest = () => {
+const makeMedia = (overrides: Partial<MediaDto> = {}): MediaDto =>
+  ({ _type: 'movie', mediaId: 123, title: 'Coyote vs. Acme', ...overrides }) as MediaDto;
+
+const setupTest = (media = makeMedia()) => {
   const store = configureStore({
     reducer: {
       auth: () => ({ currentUser: { id: 'user-1' } }),
@@ -49,17 +55,16 @@ const setupTest = () => {
       detailsNavigation: detailsNavigationSlice.reducer,
     },
   });
-  const createTree = () => (
+  const createTree = (currentMedia: MediaDto) => (
     <Provider store={store}>
-      <MediaDetails
-        media={{ _type: 'movie', mediaId: 123, title: 'Coyote vs. Acme' } as MediaDto}
-        onWatch={vi.fn()}
-        onBack={vi.fn()}
-      />
+      <MediaDetails media={currentMedia} onWatch={vi.fn()} onBack={vi.fn()} />
     </Provider>
   );
-  const view = render(createTree());
-  return { ...view, rerender: () => view.rerender(createTree()) };
+  const view = render(createTree(media));
+  return {
+    ...view,
+    rerender: (currentMedia = media) => view.rerender(createTree(currentMedia)),
+  };
 };
 
 beforeEach(() => {
@@ -69,6 +74,7 @@ beforeEach(() => {
   mutation.isLoading = false;
   mutation.isError = false;
   save.mockReset();
+  ensureBackdropFocus.mockClear();
 });
 
 // These tests check rating state; browser E2E tests cover visibility and layout.
@@ -122,6 +128,28 @@ describe('Details saved ratings', () => {
       mediaId: 123,
       rating: null,
     });
+  });
+
+  it('does not repeat backdrop work when refreshed media keeps the same identity and artwork', async () => {
+    vi.stubGlobal(
+      'ResizeObserver',
+      class {
+        observe() {}
+        disconnect() {}
+      }
+    );
+    const media = makeMedia({ backdrop: '/backdrop.jpg' });
+    const view = setupTest(media);
+    await act(async () => Promise.resolve());
+    expect(ensureBackdropFocus).toHaveBeenCalledOnce();
+
+    await act(async () => {
+      view.rerender({ ...media, title: 'Coyote vs. Acme (refreshed)' });
+      await Promise.resolve();
+    });
+
+    expect(ensureBackdropFocus).toHaveBeenCalledOnce();
+    expect(screen.getByRole('main')).toBeInTheDocument();
   });
 
   it('prevents changes while fetching and explains failed saves without changing the saved rating', () => {

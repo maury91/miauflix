@@ -635,7 +635,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
 
   useEffect(() => {
     pageRef.current?.focus({ preventScroll: true });
-  }, [media]);
+  }, [media.mediaId, media._type]);
 
   useEffect(() => {
     document.body.dataset['miauflixDetails'] = 'true';
@@ -650,7 +650,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     setLoadingSeasons({});
     inflight.current.clear();
     jumpToSeason.current = null;
-  }, [media]);
+  }, [media.mediaId, media._type]);
 
   useEffect(() => {
     let cancelled = false;
@@ -670,7 +670,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     return () => {
       cancelled = true;
     };
-  }, [ensureBackdropFocus, media]);
+  }, [ensureBackdropFocus, media.backdrop, media.backdropFocus, media.mediaId, media._type]);
 
   useEffect(() => {
     if (media._type === 'tvshow' && seasons[0]) {

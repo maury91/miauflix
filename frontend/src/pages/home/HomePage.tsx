@@ -314,11 +314,15 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth } = useMediaBoxSizes();
   const pageRef = useRef<HTMLElement>(null);
   const [browseSelectedMedia, setBrowseSelectedMedia] = useState<MediaDto | null>(null);
-  const routeMedia = routedMovie.data
-    ? mediaFromMovie(routedMovie.data)
-    : routedShow.data
-      ? mediaFromShow(routedShow.data)
-      : null;
+  const routeMedia = useMemo(
+    () =>
+      routedMovie.data
+        ? mediaFromMovie(routedMovie.data)
+        : routedShow.data
+          ? mediaFromShow(routedShow.data)
+          : null,
+    [routedMovie.data, routedShow.data]
+  );
   const routeMatchesBrowseSelection =
     browseSelectedMedia &&
     (activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'

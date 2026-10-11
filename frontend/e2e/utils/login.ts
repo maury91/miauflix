@@ -7,6 +7,11 @@ export async function navigateToLogin(page: Page): Promise<void> {
   await page.waitForSelector('#email', { state: 'visible', timeout: 5000 });
 }
 
+/** Wait until Home has finished its intro and is available to browser interaction. */
+export async function waitForHomeReady(page: Page): Promise<void> {
+  await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 });
+}
+
 export function waitForTraktAssociation(page: Page): Promise<Response> {
   return page.waitForResponse(response => {
     const url = new URL(response.url());

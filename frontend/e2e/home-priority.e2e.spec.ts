@@ -1,4 +1,9 @@
-import { dismissTraktPrompt, navigateToLogin, waitForTraktAssociation } from './utils/login';
+import {
+  dismissTraktPrompt,
+  navigateToLogin,
+  waitForHomeReady,
+  waitForTraktAssociation,
+} from './utils/login';
 import { expect, test } from './fixtures';
 
 const adminEmail = process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com';
@@ -45,7 +50,7 @@ test.describe('Home row loading priority', () => {
       page.locator('button[type="submit"]').click(),
     ]);
 
-    await expect(page.getByRole('main')).toBeVisible();
+    await waitForHomeReady(page);
     await dismissTraktPrompt(page, associationResponse);
     await expect
       .poll(() => listRequests.filter(request => request.method === 'GET').length, {
