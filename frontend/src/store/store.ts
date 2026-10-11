@@ -6,6 +6,7 @@ import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
 import { progressApi } from '@features/progress/api/progress.api';
 import { setupApi } from '@features/setup/api/setup.api';
+import { storageApi } from '@features/storage/api/storage.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { appStateSlice } from '@store/slices/appState';
 import { artworkSlice } from '@store/slices/artwork';
@@ -21,6 +22,7 @@ export const store = configureStore({
     [progressApi.reducerPath]: progressApi.reducer,
     [configApi.reducerPath]: configApi.reducer,
     [setupApi.reducerPath]: setupApi.reducer,
+    [storageApi.reducerPath]: storageApi.reducer,
     [authSlice.name]: authSlice.reducer,
     [artworkSlice.name]: artworkSlice.reducer,
     [appStateSlice.name]: appStateSlice.reducer,
@@ -34,7 +36,8 @@ export const store = configureStore({
       preloadApi.middleware,
       progressApi.middleware,
       configApi.middleware,
-      setupApi.middleware
+      setupApi.middleware,
+      storageApi.middleware
     ),
 });
 

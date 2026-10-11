@@ -5,6 +5,7 @@ import type { PlayableRef } from '@routes/playable.types';
 import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@routes/preload.types';
 import type { MediaService } from '@services/media/media.service';
 import type { SourceService } from '@services/source/source.service';
+import type { StorageService } from '@services/storage/storage.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
 
 import type { TorrentWarmupController } from './torrent-warmup.controller';
@@ -35,13 +36,15 @@ export class PlayablePreparationService {
   constructor(
     private readonly mediaService: MediaService,
     private readonly sourceService: SourceService,
-    private readonly warmup?: TorrentWarmupController
+    private readonly warmup?: TorrentWarmupController,
+    private readonly storageService?: StorageService
   ) {}
 
   /**
    * Prepare a movie through catalog lookup, source discovery, metadata resolution, or payload warmup.
    * Episodes, missing movies, and empty source lists return a cold result with no source.
-   * Quality and HEVC preferences guide selection; workClass sets the source discovery wait budget.
+   * Completed local downloads take priority over fresh torrents. Quality ranks copies within
+   * that group; HEVC compatibility still applies. workClass sets the discovery wait budget.
    * Metadata-resolution failures permit fallback selection, and warmup failures retain the source.
    * Lookup and source-selection callback errors propagate; observed cancellation rejects with
    * AbortError, or with an in-flight error if cancellation coincides with a failure.
@@ -74,7 +77,24 @@ export class PlayablePreparationService {
     if (!sources.length) {
       return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
     }
-    const usableSource = this.select(sources, options.preferences);
+    const completedSources = this.storageService
+      ? await Promise.all(
+          filterHevcSources(sources, options.preferences.allowHevc).map(async source => {
+            const storage = await this.storageService!.getStorageByMovieSource(source.id);
+            return storage &&
+              (storage.videoCompletedAt || storage.localOnly || storage.downloaded >= 10000)
+              ? source
+              : null;
+          })
+        )
+      : [];
+    this.throwIfAborted(options.signal);
+    const localSource = this.select(
+      completedSources.filter((source): source is MovieSource => source !== null),
+      options.preferences,
+      false
+    );
+    const usableSource = localSource ?? this.select(sources, options.preferences);
     if (options.through === 'sources') {
       const source = usableSource ?? this.select(sources, options.preferences, false);
       if (source) options.onSourceSelected?.(source);
