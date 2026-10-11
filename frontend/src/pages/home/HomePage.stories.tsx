@@ -4,6 +4,9 @@ import {
   useGetPopularListsInfiniteQuery,
   usePromoteListMediaMutation,
 } from '@features/media/api/lists.api';
+import { mediaApi } from '@features/media/api/media.api';
+import { preloadApi } from '@features/preload/api/preload.api';
+import { progressApi } from '@features/progress/api/progress.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
@@ -29,6 +32,9 @@ const meta = {
     Story => {
       const store = configureStore({
         reducer: {
+          [mediaApi.reducerPath]: mediaApi.reducer,
+          [preloadApi.reducerPath]: preloadApi.reducer,
+          [progressApi.reducerPath]: progressApi.reducer,
           auth: authSlice.reducer,
           artwork: artworkSlice.reducer,
           homeNavigation: homeNavigationSlice.reducer,
