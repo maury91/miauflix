@@ -214,7 +214,7 @@ test('completes first-run admin and required configuration through the UI', asyn
   await expect(redirectUriInput).toHaveValue(new URL(page.url()).origin);
   await redirectUriInput.fill('https://app.example/trakt/callback');
   const listSaveResponsePromise = page.waitForResponse(response => {
-    return response.url().endsWith('/api/config/TRAKT') && response.request().method() === 'PUT';
+    return response.url().endsWith('/api/config/LIST') && response.request().method() === 'PUT';
   });
   const traktGroup = page
     .getByRole('heading', { name: 'Trakt', exact: true })
