@@ -29,19 +29,27 @@ const setupTest = (directory: string) => {
   const verify = jest.fn().mockResolvedValue(grant);
   const source = { id: 9, movieId: 12, file: Buffer.from('mock torrent') };
   const request = jest.fn();
-  const config = { get: () => 'fixture-key', getOrThrow: () => directory };
+  const config = {
+    get: jest.fn<string | undefined, []>().mockReturnValue('fixture-key'),
+    getOrThrow: () => directory,
+  };
+  const torrentSubtitles = {
+    discover: jest.fn().mockResolvedValue([]),
+    getTrack: jest.fn().mockResolvedValue('WEBVTT\n\n00:00:01.000 --> 00:00:02.000\nLocal cue\n'),
+  };
   const service = new SubtitlesService(
     config as never,
     { request } as never,
     { verify } as never,
     { getSourceById: async () => source } as never,
-    { getMovieById: async () => ({ mediaId: 123, imdbId: 'tt123' }) } as never
+    { getMovieById: async () => ({ mediaId: 123, imdbId: 'tt123' }) } as never,
+    torrentSubtitles as never
   );
   const search = (results: unknown[]) => {
     request.mockResolvedValueOnce({ ok: true, body: { data: results } });
     return service.search('streaming-key', 'user', 'en', false, true);
   };
-  return { service, request, verify, source, search };
+  return { service, request, verify, source, search, config, torrentSubtitles };
 };
 
 describe('subtitle ranking and durable downloads', () => {
@@ -59,6 +67,67 @@ describe('subtitle ranking and durable downloads', () => {
   afterEach(async () => {
     await rm(directory, { recursive: true, force: true });
     jest.clearAllMocks();
+  });
+
+  it('discovers local subtitles without provider configuration and shares authorized cached content', async () => {
+    const { service, config, torrentSubtitles, request, verify, source } = setupTest(directory);
+    config.get.mockReturnValue(undefined);
+    torrentSubtitles.discover.mockResolvedValue([
+      {
+        fileId: '9:torrent:Movie.en.srt',
+        provider: 'torrent',
+        language: 'en',
+        release: 'Movie.en.srt',
+        hearingImpaired: false,
+        path: 'Movie.en.srt',
+      },
+    ]);
+    const first = await service.search('streaming-key', 'user', 'en', false, false, true);
+    const second = await service.search('streaming-key', 'user', 'en', false, false, true);
+    expect(first).toMatchObject({
+      configured: false,
+      available: true,
+      candidates: [{ provider: 'torrent' }],
+    });
+    const bodies = await Promise.all([
+      service.getTrack(first.candidates[0].id),
+      service.getTrack(second.candidates[0].id),
+    ]);
+    expect(bodies[0]).toContain('Local cue');
+    expect(torrentSubtitles.getTrack).toHaveBeenCalledTimes(1);
+    expect(torrentSubtitles.getTrack).toHaveBeenCalledWith(
+      source,
+      expect.objectContaining({ path: 'Movie.en.srt' }),
+      0
+    );
+    expect(request).not.toHaveBeenCalled();
+    verify.mockResolvedValue(null);
+    await expect(service.getTrack(first.candidates[0].id)).rejects.toThrow(
+      'Subtitle is unavailable'
+    );
+  });
+
+  it('retains local tracks when the remote provider fails and isolates embedded windows', async () => {
+    const { service, torrentSubtitles, request } = setupTest(directory);
+    torrentSubtitles.discover.mockResolvedValue([
+      {
+        fileId: '9:embedded:2',
+        provider: 'embedded',
+        streamIndex: 2,
+        language: 'en',
+        release: 'Embedded English',
+        hearingImpaired: false,
+      },
+    ]);
+    request.mockRejectedValue(new Error('Offline provider'));
+    const result = await service.search('streaming-key', 'user', 'en', false, true);
+    expect(result).toMatchObject({ available: true, candidates: [{ provider: 'embedded' }] });
+    const candidate = result.candidates[0];
+    await service.getTrack(candidate.id, 61);
+    await service.getTrack(candidate.id, 65);
+    await service.getTrack(candidate.id, 121);
+    expect(torrentSubtitles.getTrack.mock.calls.map(call => call[2])).toEqual([60, 120]);
+    await expect(service.getTrack(candidate.id, -1)).rejects.toThrow('Invalid subtitle position');
   });
 
   it('ranks by the main video filename, ahead of provider popularity and trust', async () => {

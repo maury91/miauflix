@@ -11,6 +11,10 @@ export const playbackPreferencesSchema = z
   .object({
     quality: z.enum(supportedQualities),
     allowHevc: z.boolean(),
+    supportedMseVideoCodecs: z
+      .array(z.enum(['h264', 'hevc']))
+      .max(2)
+      .optional(),
     audioLanguages: z.array(z.string().min(1).max(35)).max(20).optional(),
     supportedAudioCodecs: z
       .array(z.enum(['aac', 'mp3', 'opus', 'vorbis', 'flac', 'ac3', 'eac3', 'dts']))

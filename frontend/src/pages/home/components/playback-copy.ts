@@ -15,7 +15,7 @@ export function isUnavailablePlaybackFailure(reason: unknown): boolean {
 }
 
 export function describePlaybackFailure(reason: unknown, title: string): string {
-  const { status } = getFailureDetails(reason);
+  const { status, data } = getFailureDetails(reason);
   const quotedTitle = `“${title}”`;
 
   if (isUnavailablePlaybackFailure(reason)) {
@@ -26,6 +26,9 @@ export function describePlaybackFailure(reason: unknown, title: string): string 
   }
   if (status === 429) {
     return `Playback checks for ${quotedTitle} are temporarily limited. Wait a moment, then retry.`;
+  }
+  if (status === 422 && typeof data === 'string' && data.trim()) {
+    return `Playback for ${quotedTitle} could not start: ${data}`;
   }
   if (status === 0) {
     return `Miauflix could not reach the playback service for ${quotedTitle}. Check your connection, then retry.`;

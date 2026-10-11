@@ -70,7 +70,9 @@ describe('PlayerView', () => {
     window.localStorage.clear();
     createSession.mockReset();
     updateProgress.mockReset();
-    searchSubtitles.mockReset();
+    searchSubtitles.mockReset().mockReturnValue({
+      unwrap: () => Promise.resolve({ configured: false, available: false, candidates: [] }),
+    });
     resumeEntry.current = undefined;
     startAudioPlayback.mockReset().mockReturnValue(stopAudioPlayback);
     stopAudioPlayback.mockReset();
@@ -334,6 +336,71 @@ describe('PlayerView', () => {
     expect(screen.getByRole('slider', { name: 'Seek' })).toHaveValue('45');
   });
 
+  it.each(['embedded', 'torrent'] as const)(
+    'offers %s subtitles without provider setup and loads them on the media clock',
+    async provider => {
+      createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+      searchSubtitles.mockReturnValue({
+        unwrap: () =>
+          Promise.resolve({
+            configured: false,
+            available: true,
+            candidates: [
+              {
+                id: 'local-candidate',
+                provider,
+                fileId: `9:${provider}:2`,
+                language: 'en',
+                languageLabel: 'English',
+                release: 'Local English',
+                hearingImpaired: false,
+                trusted: false,
+                match: 'file',
+                filenameSimilarity: null,
+              },
+            ],
+          }),
+      });
+      const prototype = window.HTMLTrackElement.prototype;
+      const descriptor = Object.getOwnPropertyDescriptor(prototype, 'track');
+      Object.defineProperty(prototype, 'track', {
+        configurable: true,
+        get: () => ({ mode: 'disabled', cues: [] }),
+      });
+      try {
+        const view = render(
+          <PlayerView playable={playable} title="Local subtitles" onBack={vi.fn()} />
+        );
+        const video = (await screen.findByLabelText('Local subtitles')) as HTMLVideoElement;
+        await waitFor(() =>
+          expect(searchSubtitles).toHaveBeenCalledWith(
+            expect.objectContaining({ localOnly: true, refresh: false })
+          )
+        );
+        fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
+        await screen.findByRole('option', { name: /Local English/ });
+        fireEvent.change(screen.getByLabelText('Subtitle track'), {
+          target: { value: 'local-candidate' },
+        });
+        expect(view.container.querySelector('track')?.getAttribute('src')).toContain(
+          'local-candidate'
+        );
+        video.currentTime = 70;
+        fireEvent.seeked(video);
+        const src = view.container.querySelector('track')?.getAttribute('src');
+        if (provider === 'embedded') expect(src).toContain('?start=60');
+        else expect(src).not.toContain('?start=');
+        expect(
+          JSON.parse(window.localStorage.getItem('miauflix.media-subtitles.anonymous.m:123')!)
+        ).toMatchObject({ selectedFileId: `9:${provider}:2` });
+        view.unmount();
+      } finally {
+        if (descriptor) Object.defineProperty(prototype, 'track', descriptor);
+        else Reflect.deleteProperty(prototype, 'track');
+      }
+    }
+  );
+
   it('loads selected subtitles from the API route with their track enabled', async () => {
     createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
     searchSubtitles.mockReturnValue({
@@ -378,6 +445,11 @@ describe('PlayerView', () => {
       expect(track?.getAttribute('src')).toMatch(/\/api\/subtitles\/tracks\/candidate-1$/);
       expect(textTrack.mode).toBe('showing');
       fireEvent.load(track!);
+      expect(textTrack.cues[0]).toMatchObject({
+        snapToLines: false,
+        line: 75,
+        lineAlign: 'end',
+      });
       fireEvent.click(screen.getByRole('button', { name: /Adjust subtitle timing/ }));
       expect(screen.getByText('Preview word')).toBeInTheDocument();
       expect(screen.getByLabelText('Now')).toBeInTheDocument();
@@ -494,7 +566,7 @@ describe('PlayerView', () => {
         onBack={vi.fn()}
       />
     );
-    await waitFor(() => expect(searchSubtitles).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(searchSubtitles).toHaveBeenCalledTimes(2));
     expect(searchSubtitles).toHaveBeenCalledWith({
       streamingKey: 'second-media-key',
       language: 'fr',
@@ -546,6 +618,12 @@ describe('PlayerView', () => {
 
 describe('playback status copy', () => {
   it('keeps transient and failure states actionable', () => {
+    expect(
+      describePlaybackFailure(
+        { status: 422, data: 'Audio conversion requires an H.264 video source.' },
+        'Coyote vs. Acme'
+      )
+    ).toContain('Audio conversion requires an H.264 video source.');
     expect(getPlaybackStatusMessage('preparing', 'Toy Story 5')).toBe(
       'Preparing “Toy Story 5” for playback…'
     );

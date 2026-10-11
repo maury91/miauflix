@@ -480,10 +480,15 @@ export class DownloadService {
     torrent: Torrent | null,
     storage: Storage,
     pieceIndex: number,
-    signal: AbortSignal
+    signal: AbortSignal,
+    videoRange = true
   ): Promise<Buffer> {
     while (!signal.aborted) {
-      if (torrent?.bitfield?.get(pieceIndex) || storage.videoCompletedAt || storage.localOnly) {
+      if (
+        torrent?.bitfield?.get(pieceIndex) ||
+        (videoRange && storage.videoCompletedAt) ||
+        storage.localOnly
+      ) {
         return reader.readPiece(pieceIndex);
       }
       if (!torrent || torrent.destroyed) {
@@ -1408,12 +1413,44 @@ export class DownloadService {
     return reconcile;
   }
 
+  /** Use the same persisted file selection as playback, including detached local media. */
+  async getMediaFiles(movieSource: MovieSource): Promise<EncryptedStorageLayout> {
+    const download = await this.startDownload(movieSource, {
+      retentionClass: 'watched',
+      reservedBytes: movieSource.size,
+    });
+    const layout = download.layout ?? download.storage.encryptedLayout;
+    if (!layout) throw new Error('Encrypted media layout is unavailable');
+    return layout;
+  }
+
+  /** Preserve small subtitle companions while the watched torrent is still attached. */
+  async prepareSubtitleFiles(movieSource: MovieSource, paths: string[]): Promise<void> {
+    if (!paths.length) return;
+    const download = await this.startDownload(movieSource, {
+      retentionClass: 'watched',
+      reservedBytes: movieSource.size,
+    });
+    for (const file of download.torrent?.files ?? []) {
+      if (
+        paths.includes(file.path) &&
+        file.length <= 2 * 1024 * 1024 &&
+        /\.(srt|vtt|ass|ssa)$/i.test(file.path)
+      )
+        file.select();
+    }
+  }
+
   /**
    * Stream a file from a torrent with range request support
    * Based on WebTorrent server implementation
    */
   @traced('DownloadService')
-  async streamFile(movieSource: MovieSource, rangeHeader?: string): Promise<Response> {
+  async streamFile(
+    movieSource: MovieSource,
+    rangeHeader?: string,
+    torrentFilePath?: string
+  ): Promise<Response> {
     return new Promise((resolve, reject) => {
       const handleRequest = async () => {
         const download = await this.startDownload(movieSource, {
@@ -1427,7 +1464,11 @@ export class DownloadService {
             'Encrypted media layout is unavailable',
             'local_media_unavailable'
           );
-        const file = layout.video;
+        const selected = torrentFilePath
+          ? layout.files.find(file => file.path === torrentFilePath)
+          : layout.video;
+        if (!selected) throw new Error('Requested torrent file is unavailable');
+        const file = { ...selected, name: torrentFilePath ?? layout.video.name };
         const reader = new EncryptedFileReader(
           storage.location,
           layout,
@@ -1515,7 +1556,8 @@ export class DownloadService {
                   torrent,
                   storage,
                   pieceIndex,
-                  abortController.signal
+                  abortController.signal,
+                  file.path === layout.video.path
                 );
                 const bytes = piece.subarray(
                   pieceOffset,

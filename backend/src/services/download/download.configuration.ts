@@ -42,6 +42,14 @@ export const downloadConfigurationDefinition = serviceConfiguration({
   name: 'Download',
   description: 'Download and streaming configuration',
   variables: {
+    CONVERT_H265_TO_H264: variable({
+      label: 'Convert H.265 to H.264',
+      description:
+        'Allow CPU-intensive real-time H.265 video conversion when the client cannot play or remux it. Output is limited to 1080p at 30 fps. Supported clients keep the original video.',
+      defaultValue: 'false',
+      required: false,
+      transform: transforms.boolean(),
+    }),
     CONTENT_DOWNLOAD_LIMIT: variable({
       description: 'Download limit for peer-to-peer client',
       example: '20MB',

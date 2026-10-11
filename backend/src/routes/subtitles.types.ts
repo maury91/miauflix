@@ -6,6 +6,7 @@ export const subtitleSearchRequestSchema = z
     language: z.string().regex(/^[a-z]{2,3}$/i),
     hearingImpaired: z.boolean().default(false),
     refresh: z.boolean().default(false),
+    localOnly: z.boolean().optional(),
   })
   .strict();
 
@@ -13,8 +14,8 @@ export type SubtitleSearchRequest = z.infer<typeof subtitleSearchRequestSchema>;
 
 export interface SubtitleCandidateDto {
   id: string;
-  provider: 'opensubtitles';
-  fileId: number;
+  provider: 'embedded' | 'opensubtitles' | 'torrent';
+  fileId: number | string;
   language: string;
   languageLabel: string;
   release: string;

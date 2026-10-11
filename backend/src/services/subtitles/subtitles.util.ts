@@ -1,5 +1,24 @@
 const safeTags = new Set(['b', 'i', 'u', 's', 'ruby', 'rt']);
 
+/** Retain cues overlapping the requested original-media clock window. */
+export function webVttWindow(input: string, startSeconds: number, endSeconds: number): string {
+  if (input.trim() === 'WEBVTT') return 'WEBVTT\n\n';
+  const blocks = toWebVtt(input)
+    .split(/\n{2,}/)
+    .slice(1)
+    .filter(block => {
+      const timing = block.split('\n').find(line => line.includes('-->'));
+      if (!timing) return false;
+      const [start, end] = timing
+        .split('-->')
+        .map(value => parseSrtTime(value.trim().split(/\s+/)[0]));
+      return (
+        start !== null && end !== null && end > startSeconds * 1000 && start < endSeconds * 1000
+      );
+    });
+  return `WEBVTT\n\n${blocks.join('\n\n')}\n`;
+}
+
 export function toWebVtt(input: string): string {
   const source = input.replace(/^\uFEFF/, '').replace(/\r\n?/g, '\n');
   if (source.length > 2 * 1024 * 1024) throw new Error('Subtitle file is too large');

@@ -33,6 +33,7 @@ export function playbackAudioCapabilities(
   | 'supportedMseAudioCodecs'
   | 'nativeAudioTracks'
   | 'allowHevc'
+  | 'supportedMseVideoCodecs'
 > {
   const codecs = {
     aac: 'mp4a.40.2',
@@ -46,6 +47,13 @@ export function playbackAudioCapabilities(
   };
   return {
     allowHevc: video.canPlayType('video/mp4; codecs="hvc1.1.6.L93.B0"') !== '',
+    supportedMseVideoCodecs: (['h264', 'hevc'] as const).filter(
+      codec =>
+        typeof MediaSource !== 'undefined' &&
+        MediaSource.isTypeSupported(
+          `video/mp4; codecs="${codec === 'hevc' ? 'hvc1.1.6.L93.B0' : 'avc1.640028'}, mp4a.40.2"`
+        )
+    ),
     audioLanguages: [...navigator.languages].slice(0, 20),
     supportedAudioCodecs: (Object.keys(codecs) as Array<keyof typeof codecs>).filter(
       codec => video.canPlayType(`audio/mp4; codecs="${codecs[codec]}"`) !== ''

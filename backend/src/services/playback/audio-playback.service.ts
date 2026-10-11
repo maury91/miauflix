@@ -1,15 +1,11 @@
 import { type ChildProcess, spawn } from 'node:child_process';
-import { randomBytes } from 'node:crypto';
-import { createServer } from 'node:http';
-import type { Socket } from 'node:net';
-import { Readable } from 'node:stream';
-import { pipeline } from 'node:stream/promises';
-import type { ReadableStream as NodeReadableStream } from 'node:stream/web';
 
 import type { MovieSource } from '@entities/movie-source.entity';
+import type { ConfigService } from '@mytypes/configuration';
 import type { DownloadService } from '@services/download/download.service';
 
 import { FragmentedMp4Timeline } from './fragmented-mp4';
+import { openTorrentInput } from './torrent-input';
 
 export interface PlaybackAudioTrack {
   index: number;
@@ -25,6 +21,8 @@ export interface PlaybackAudioTrack {
 
 export interface PlaybackDelivery {
   mode: 'audio-transcode' | 'direct';
+  transcodeVideo?: boolean;
+  videoCodec?: 'h264' | 'hevc';
   audioCodec: string | null;
   durationSeconds: number;
   mimeType: string;
@@ -33,6 +31,8 @@ export interface PlaybackDelivery {
 }
 
 export interface AudioPlaybackPreferences {
+  allowHevc?: boolean;
+  supportedMseVideoCodecs?: Array<'h264' | 'hevc'>;
   audioLanguages?: string[];
   supportedAudioCodecs?: string[];
   supportedMseAudioCodecs?: string[];
@@ -66,10 +66,28 @@ interface ProbeResult {
   }>;
 }
 
+/** RFC 6381 codec parameter from the HEVCDecoderConfigurationRecord header. */
+function hevcCodec(extradata: string | undefined): string | undefined {
+  const hex = extradata?.match(/00000000:\s+([\da-f ]+)/i)?.[1].replace(/\s/g, '');
+  if (!hex || hex.length < 26 || !hex.startsWith('01')) return undefined;
+  const header = Buffer.from(hex, 'hex');
+  const profile = `${['', 'A', 'B', 'C'][header[1] >> 6]}${header[1] & 31}`;
+  let compatibility = header.readUInt32BE(2);
+  let reversed = 0;
+  for (let bit = 0; bit < 32; bit++) {
+    reversed = (reversed * 2 + (compatibility & 1)) >>> 0;
+    compatibility >>>= 1;
+  }
+  const constraints = [...header.subarray(6, 12)];
+  while (constraints.at(-1) === 0) constraints.pop();
+  return `hvc1.${profile}.${reversed.toString(16).toUpperCase()}.${header[1] & 32 ? 'H' : 'L'}${header[12]}${constraints.map(byte => `.${byte.toString(16).toUpperCase().padStart(2, '0')}`).join('')}`;
+}
+
 /** Inspect actual streams and expose selectable audio tracks without changing video. */
 export function deliveryFromProbe(
   probe: ProbeResult,
-  preferences: AudioPlaybackPreferences = {}
+  preferences: AudioPlaybackPreferences = {},
+  convertHevc = false
 ): PlaybackDelivery {
   const video = probe.streams?.find(stream => stream.codec_type === 'video');
   const audioTracks: PlaybackAudioTrack[] = (probe.streams ?? [])
@@ -110,17 +128,31 @@ export function deliveryFromProbe(
   let compatible = !audio || supported.includes(audioCodec ?? '');
   const avc = video.extradata?.match(/00000000:\s+([\da-f ]+)/i)?.[1].replace(/\s/g, '');
   const usableAvc = video.codec_name === 'h264' && !!avc?.startsWith('01') && avc.length >= 8;
+  const hevc = video.codec_name === 'hevc' ? hevcCodec(video.extradata) : undefined;
+  const copyHevc = !!hevc && preferences.supportedMseVideoCodecs?.includes('hevc');
+  const nativeVideo = video.codec_name !== 'hevc' || preferences.allowHevc !== false;
+  let videoCodec = usableAvc ? `avc1.${avc!.slice(2, 8)}` : copyHevc ? hevc : undefined;
+  const transcodeVideo =
+    video.codec_name === 'hevc' &&
+    convertHevc &&
+    !copyHevc &&
+    (!nativeVideo ||
+      !compatible ||
+      (defaultAudioTrackIndex !== (audioTracks.find(track => track.isDefault)?.index ?? 0) &&
+        !preferences.nativeAudioTracks));
+  if (transcodeVideo) videoCodec = 'avc1.640029';
   const containerDefault = audioTracks.find(track => track.isDefault)?.index ?? 0;
   const selectionRequiresConversion =
     defaultAudioTrackIndex !== containerDefault && !preferences.nativeAudioTracks;
-  if (compatible && selectionRequiresConversion && !usableAvc) {
+  if (compatible && selectionRequiresConversion && !videoCodec && !transcodeVideo) {
     // Without a usable AVC header keep the container's default track playable.
     defaultAudioTrackIndex = containerDefault;
     audio = audioTracks[defaultAudioTrackIndex];
     audioCodec = audio?.codec ?? null;
     compatible = !audio || supported.includes(audioCodec ?? '');
   }
-  const direct = compatible && (!selectionRequiresConversion || !usableAvc);
+  const direct =
+    nativeVideo && !transcodeVideo && compatible && (!selectionRequiresConversion || !videoCodec);
   const audioCodecs: Record<string, string> = {
     aac: 'mp4a.40.2',
     mp3: 'mp4a.69',
@@ -134,34 +166,41 @@ export function deliveryFromProbe(
     track.copyAudio =
       (preferences.supportedMseAudioCodecs ?? supported).includes(track.codec ?? '') &&
       !!audioCodecs[track.codec ?? ''];
-    track.mimeType = usableAvc
-      ? `video/mp4; codecs="avc1.${avc!.slice(2, 8)}, ${track.copyAudio ? audioCodecs[track.codec!] : 'mp4a.40.2'}"`
+    track.mimeType = videoCodec
+      ? `video/mp4; codecs="${videoCodec}, ${track.copyAudio ? audioCodecs[track.codec!] : 'mp4a.40.2'}"`
       : undefined;
   }
   if (direct)
     return {
       mode: 'direct',
+      videoCodec: video.codec_name === 'hevc' ? 'hevc' : 'h264',
       audioCodec,
       durationSeconds,
       mimeType: '',
       audioTracks,
       defaultAudioTrackIndex,
     };
-  if (video.codec_name !== 'h264') {
+  if (!nativeVideo && !copyHevc && !transcodeVideo)
+    throw new AudioConversionRequiredError(
+      'This client cannot decode H.265 and video conversion is disabled.'
+    );
+  if (video.codec_name !== 'h264' && !copyHevc && !transcodeVideo) {
     throw new AudioConversionRequiredError('Audio conversion requires an H.264 video source.');
   }
-  if (!usableAvc) {
+  if (!videoCodec) {
     throw new AudioConversionRequiredError(
       'The selected source has no usable H.264 configuration.'
     );
   }
   return {
     mode: 'audio-transcode',
+    transcodeVideo,
+    videoCodec: transcodeVideo ? 'h264' : video.codec_name === 'hevc' ? 'hevc' : 'h264',
     audioCodec,
     audioTracks,
     defaultAudioTrackIndex,
     durationSeconds,
-    mimeType: audio?.mimeType ?? `video/mp4; codecs="avc1.${avc!.slice(2, 8)}, mp4a.40.2"`,
+    mimeType: audio?.mimeType ?? `video/mp4; codecs="${videoCodec}, mp4a.40.2"`,
   };
 }
 
@@ -169,7 +208,8 @@ export function audioConversionArgs(
   input: string,
   startSeconds: number,
   audioTrackIndex = 0,
-  copyAudio = false
+  copyAudio = false,
+  videoMode: 'copy' | 'hevc' | 'transcode' = 'copy'
 ): string[] {
   return [
     '-nostdin',
@@ -193,7 +233,27 @@ export function audioConversionArgs(
     '-map',
     `0:a:${audioTrackIndex}`,
     '-c:v',
-    'copy',
+    ...(videoMode === 'transcode'
+      ? [
+          'libx264',
+          '-preset',
+          'veryfast',
+          '-crf',
+          '23',
+          '-pix_fmt',
+          'yuv420p',
+          '-vf',
+          'scale=w=min(1920\\,iw):h=min(1080\\,ih):force_original_aspect_ratio=decrease:force_divisible_by=2',
+          '-r',
+          '30',
+          '-profile:v',
+          'high',
+          '-level:v',
+          '4.1',
+          '-g',
+          '60',
+        ]
+      : ['copy', ...(videoMode === 'hevc' ? ['-tag:v', 'hvc1'] : [])]),
     '-c:a',
     ...(copyAudio ? ['copy'] : ['aac', '-ac', '2', '-b:a', '192k']),
     '-threads',
@@ -221,7 +281,14 @@ export class AudioPlaybackService {
   private readonly processes = new Set<ChildProcess>();
   private closed = false;
 
-  constructor(private readonly downloadService: DownloadService) {}
+  constructor(
+    private readonly downloadService: DownloadService,
+    private readonly config?: ConfigService
+  ) {}
+
+  canConvertHevc(): boolean {
+    return this.config?.get('CONVERT_H265_TO_H264') === true;
+  }
 
   async inspect(
     source: MovieSource,
@@ -230,7 +297,7 @@ export class AudioPlaybackService {
     if (this.closed) throw new AudioPlaybackError('Audio playback is shutting down.');
     const cached = this.probes.get(source.id);
     if (cached && cached.expires > Date.now())
-      return deliveryFromProbe(await cached.value, preferences);
+      return deliveryFromProbe(await cached.value, preferences, this.canConvertHevc());
     if (this.probes.size >= 64) {
       for (const [id, entry] of this.probes)
         if (entry.expires <= Date.now()) this.probes.delete(id);
@@ -241,11 +308,11 @@ export class AudioPlaybackService {
       throw error;
     });
     this.probes.set(source.id, { expires: Date.now() + 15 * 60_000, value });
-    return deliveryFromProbe(await value, preferences);
+    return deliveryFromProbe(await value, preferences, this.canConvertHevc());
   }
 
   private async probe(source: MovieSource): Promise<ProbeResult> {
-    const input = await this.openInput(source);
+    const input = await openTorrentInput(this.downloadService, source);
     try {
       if (this.closed || this.processes.size >= 4)
         throw new AudioPlaybackError('Audio preparation is busy. Retry shortly.');
@@ -310,12 +377,17 @@ export class AudioPlaybackService {
     expiresAt: Date,
     signal: AbortSignal,
     audioTrackIndex?: number,
-    copyAudio = false
+    copyAudio = false,
+    transcodeVideo = false
   ): Promise<Response> {
-    // This endpoint also remuxes a selected compatible track without re-encoding it.
+    if (transcodeVideo && !this.canConvertHevc())
+      throw new AudioPlaybackError('Video conversion is disabled.', 422);
+    // Reinspect the source; query parameters cannot enable conversion against server policy.
     const delivery = await this.inspect(source, {
       supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'opus', 'flac', 'vorbis'],
       nativeAudioTracks: true,
+      allowHevc: !transcodeVideo,
+      supportedMseVideoCodecs: transcodeVideo ? ['h264'] : ['h264', 'hevc'],
     });
     if (
       !Number.isFinite(startSeconds) ||
@@ -332,7 +404,7 @@ export class AudioPlaybackService {
       throw new AudioPlaybackError('The requested audio track is unavailable.', 422);
     }
     if (!delivery.audioTracks?.find(track => track.index === selectedAudioTrack)?.mimeType)
-      throw new AudioPlaybackError('The selected source cannot be remuxed as H.264.', 422);
+      throw new AudioPlaybackError('The selected source cannot be remuxed for playback.', 422);
     const previous = this.jobs.get(owner);
     previous?.controller.abort();
     const controller = new AbortController();
@@ -345,7 +417,7 @@ export class AudioPlaybackService {
     const abort = () => controller.abort();
     signal.addEventListener('abort', abort, { once: true });
     if (signal.aborted) abort();
-    let input: Awaited<ReturnType<AudioPlaybackService['openInput']>> | undefined;
+    let input: Awaited<ReturnType<typeof openTorrentInput>> | undefined;
     let child: ReturnType<typeof spawn> | undefined;
     let timeline: FragmentedMp4Timeline | undefined;
     let expiry: ReturnType<typeof setTimeout> | undefined;
@@ -381,12 +453,18 @@ export class AudioPlaybackService {
       if (this.closed || this.jobs.size > 2 || this.processes.size >= 4) {
         throw new AudioPlaybackError('Audio conversion is busy. Retry shortly.');
       }
-      input = await this.openInput(source);
+      input = await openTorrentInput(this.downloadService, source);
       if (controller.signal.aborted)
         throw new AudioPlaybackError('Audio preparation was cancelled.');
       child = spawn(
         'ffmpeg',
-        audioConversionArgs(input.url, startSeconds, selectedAudioTrack, copyAudio),
+        audioConversionArgs(
+          input.url,
+          startSeconds,
+          selectedAudioTrack,
+          copyAudio,
+          delivery.transcodeVideo ? 'transcode' : delivery.videoCodec === 'hevc' ? 'hevc' : 'copy'
+        ),
         {
           stdio: ['ignore', 'pipe', 'pipe'],
         }
@@ -485,67 +563,6 @@ export class AudioPlaybackService {
       await cleanup();
       throw error;
     }
-  }
-
-  /** A private loopback capability exposes only this source; no arbitrary URLs or plaintext files. */
-  private async openInput(source: MovieSource) {
-    const path = `/${randomBytes(24).toString('hex')}`;
-    const sockets = new Set<Socket>();
-    const server = createServer(async (request, response) => {
-      if (request.url !== path || !['GET', 'HEAD'].includes(request.method ?? '')) {
-        response.writeHead(404).end();
-        return;
-      }
-      const range = request.headers.range;
-      if (range && !/^bytes=\d+-\d*$/.test(range)) {
-        response.writeHead(416).end();
-        return;
-      }
-      try {
-        const result = await this.downloadService.streamFile(source, range);
-        if (response.destroyed || request.method === 'HEAD') {
-          if (!response.destroyed) {
-            result.headers.forEach((value, key) => response.setHeader(key, value));
-            response.writeHead(result.status).end();
-          }
-          await result.body?.cancel();
-          return;
-        }
-        result.headers.forEach((value, key) => response.setHeader(key, value));
-        response.writeHead(result.status);
-        if (!result.body) {
-          response.end();
-          return;
-        }
-        const readable = Readable.fromWeb(result.body as NodeReadableStream<Uint8Array>);
-        response.once('close', () => readable.destroy());
-        await pipeline(readable, response);
-      } catch {
-        if (!response.headersSent) response.writeHead(503).end();
-        else response.destroy();
-      }
-    });
-    server.on('connection', socket => {
-      sockets.add(socket);
-      socket.once('close', () => sockets.delete(socket));
-    });
-    await new Promise<void>((resolve, reject) => {
-      server.once('error', reject);
-      server.listen(0, '127.0.0.1', () => {
-        server.removeListener('error', reject);
-        resolve();
-      });
-    });
-    const address = server.address() as { port: number };
-    let closePromise: Promise<void> | undefined;
-    return {
-      url: `http://127.0.0.1:${address.port}${path}`,
-      close: () =>
-        (closePromise ??= new Promise<void>(resolve => {
-          for (const socket of sockets) socket.destroy();
-          server.close(() => resolve());
-        })),
-    };
   }
 
   async close(): Promise<void> {

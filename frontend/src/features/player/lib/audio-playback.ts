@@ -7,6 +7,7 @@ interface AudioPlaybackOptions {
   autoplay: boolean;
   audioTrackIndex?: number;
   copyAudio?: boolean;
+  transcodeVideo?: boolean;
   onReady: () => void;
   onError: (message: string) => void;
 }
@@ -106,6 +107,7 @@ export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
     if (options.audioTrackIndex !== undefined)
       url.searchParams.set('audioTrack', String(options.audioTrackIndex));
     url.searchParams.set('audioCopy', String(options.copyAudio === true));
+    if (options.transcodeVideo) url.searchParams.set('transcodeVideo', 'true');
     const response = await fetch(url, { signal, credentials: 'include' });
     if (!response.ok || !response.body) {
       const failure = (await response.json().catch(() => null)) as { error?: unknown } | null;

@@ -1,6 +1,7 @@
 import {
   audioConversionArgs,
   AudioPlaybackError,
+  AudioPlaybackService,
   deliveryFromProbe,
 } from './audio-playback.service';
 
@@ -59,6 +60,75 @@ describe('audio playback delivery', () => {
       AudioPlaybackError
     );
     expect(() => deliveryFromProbe(setupTest('ac3', 'hevc'))).toThrow('H.264');
+  });
+
+  const hevcProbe = (audioCodec = 'ac3') => ({
+    ...setupTest(audioCodec, 'hevc'),
+    streams: [
+      {
+        codec_type: 'video',
+        codec_name: 'hevc',
+        extradata: '00000000: 0101 6000 0000 b000 0000 0000 5d00 f000',
+      },
+      { codec_type: 'audio', codec_name: audioCodec },
+    ],
+  });
+
+  it('returns supported HEVC and audio as-is, even when conversion is enabled', () => {
+    expect(deliveryFromProbe(hevcProbe('aac'), { allowHevc: true }, true)).toMatchObject({
+      mode: 'direct',
+    });
+  });
+
+  it('copies supported HEVC while converting unsupported audio', () => {
+    expect(
+      deliveryFromProbe(
+        hevcProbe(),
+        {
+          allowHevc: true,
+          supportedMseVideoCodecs: ['hevc'],
+          supportedAudioCodecs: ['aac'],
+        },
+        true
+      )
+    ).toMatchObject({
+      mode: 'audio-transcode',
+      transcodeVideo: false,
+      videoCodec: 'hevc',
+      mimeType: 'video/mp4; codecs="hvc1.1.6.L93.B0, mp4a.40.2"',
+    });
+    expect(audioConversionArgs('http://localhost/input', 0, 0, false, 'hevc')).toContain('hvc1');
+  });
+
+  it('converts HEVC only when the client needs it and server policy enables it', () => {
+    expect(deliveryFromProbe(hevcProbe('aac'), { allowHevc: false }, true)).toMatchObject({
+      mode: 'audio-transcode',
+      transcodeVideo: true,
+      videoCodec: 'h264',
+      mimeType: 'video/mp4; codecs="avc1.640029, mp4a.40.2"',
+    });
+    expect(() => deliveryFromProbe(hevcProbe('aac'), { allowHevc: false }, false)).toThrow(
+      'video conversion is disabled'
+    );
+    const args = audioConversionArgs('http://localhost/input', 0, 0, true, 'transcode');
+    expect(args).toContain('libx264');
+    expect(args.slice(args.indexOf('-c:a'), args.indexOf('-c:a') + 2)).toEqual(['-c:a', 'copy']);
+  });
+
+  it('rejects attempts to enable video conversion through a stream URL when disabled', async () => {
+    const service = new AudioPlaybackService({} as never, { get: () => false } as never);
+    await expect(
+      service.stream(
+        {} as never,
+        'owner',
+        0,
+        new Date(Date.now() + 1000),
+        new AbortController().signal,
+        0,
+        false,
+        true
+      )
+    ).rejects.toThrow('Video conversion is disabled');
   });
 
   it('does not convert an unwanted secondary language, even with Annex B video', () => {

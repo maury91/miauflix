@@ -1,4 +1,4 @@
-import { describe, expect, it } from 'vitest';
+import { describe, expect, it, vi } from 'vitest';
 
 import { playbackAudioCapabilities, preferredAudioTrack } from './audio-language';
 
@@ -28,6 +28,18 @@ describe('browser audio language', () => {
     expect(
       playbackAudioCapabilities({ canPlayType: () => '' } as unknown as HTMLVideoElement)
     ).toMatchObject({ supportedAudioCodecs: [], allowHevc: false, nativeAudioTracks: false });
+  });
+  it('reports MediaSource HEVC support separately from native playback', () => {
+    vi.stubGlobal('MediaSource', {
+      isTypeSupported: (mime: string) => mime.includes('hvc1'),
+    });
+    try {
+      expect(
+        playbackAudioCapabilities({ canPlayType: () => '' } as unknown as HTMLVideoElement)
+      ).toMatchObject({ allowHevc: false, supportedMseVideoCodecs: ['hevc'] });
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
   it('matches ISO audio tags to regional browser languages', () => {
     expect(preferredAudioTrack(delivery, ['en-GB'])).toBe(1);

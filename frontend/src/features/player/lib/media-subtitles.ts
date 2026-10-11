@@ -3,7 +3,7 @@ import type { PlayableRef } from '@miauflix/backend';
 export interface MediaSubtitles {
   language: string;
   hearingImpaired: boolean;
-  selectedFileId: number | null;
+  selectedFileId: number | string | null;
   offset: number;
 }
 
@@ -25,7 +25,9 @@ export function readMediaSubtitles(key: string): MediaSubtitles | null {
       typeof value.hearingImpaired !== 'boolean' ||
       !Number.isFinite(value.offset) ||
       (value.selectedFileId !== null &&
-        (!Number.isSafeInteger(value.selectedFileId) || value.selectedFileId <= 0))
+        (typeof value.selectedFileId === 'string'
+          ? value.selectedFileId.length === 0 || value.selectedFileId.length > 4096
+          : !Number.isSafeInteger(value.selectedFileId) || value.selectedFileId <= 0))
     )
       return null;
     return {

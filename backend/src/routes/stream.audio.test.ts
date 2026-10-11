@@ -55,9 +55,25 @@ describe('audio streaming authorization', () => {
       grant.expiresAt,
       expect.any(AbortSignal),
       1,
+      false,
       false
     );
     expect(streamService.getBestSourceForStreaming).not.toHaveBeenCalled();
+  });
+
+  it('forwards explicit video conversion for the pinned source', async () => {
+    const { app, audioPlaybackService, source, grant } = setupTest();
+    expect((await app.request(`/${token}/audio?transcodeVideo=true`)).status).toBe(200);
+    expect(audioPlaybackService.stream).toHaveBeenCalledWith(
+      source,
+      token,
+      0,
+      grant.expiresAt,
+      expect.any(AbortSignal),
+      undefined,
+      false,
+      true
+    );
   });
 
   it('rejects expired grants before opening the source', async () => {

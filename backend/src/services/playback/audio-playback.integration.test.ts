@@ -67,34 +67,119 @@ integration('audio conversion with a seekable, delayed range reader', () => {
     if (directory) await rm(directory, { recursive: true, force: true });
   });
 
-  const setupTest = () => {
+  const setupTest = (bytes = fixture, convertHevc = false) => {
     const ranges: number[] = [];
     const download = {
       async streamFile(_source: MovieSource, range?: string) {
         const match = range?.match(/^bytes=(\d+)-(\d*)$/);
         const start = match ? Number(match[1]) : 0;
-        const end = match?.[2]
-          ? Math.min(fixture.length - 1, Number(match[2]))
-          : fixture.length - 1;
+        const end = match?.[2] ? Math.min(bytes.length - 1, Number(match[2])) : bytes.length - 1;
         ranges.push(start);
         await new Promise(resolve => setTimeout(resolve, start > 0 ? 50 : 1));
-        return new Response(new Uint8Array(fixture.subarray(start, end + 1)), {
+        return new Response(new Uint8Array(bytes.subarray(start, end + 1)), {
           status: match ? 206 : 200,
           headers: {
             'Content-Type': 'video/x-matroska',
             'Accept-Ranges': 'bytes',
             'Content-Length': String(end - start + 1),
-            ...(match ? { 'Content-Range': `bytes ${start}-${end}/${fixture.length}` } : {}),
+            ...(match ? { 'Content-Range': `bytes ${start}-${end}/${bytes.length}` } : {}),
           },
         });
       },
     };
     return {
-      service: new AudioPlaybackService(download as never),
+      service: new AudioPlaybackService(download as never, { get: () => convertHevc } as never),
       source: { id: 1 } as MovieSource,
       ranges,
     };
   };
+
+  it.each([false, true])(
+    'delivers HEVC with AAC or optional H.264 conversion and original seek timestamps (convert=%s)',
+    async convert => {
+      const input = join(directory, 'hevc.mkv');
+      execFileSync(
+        'ffmpeg',
+        [
+          '-v',
+          'error',
+          '-i',
+          join(directory, 'fixture.mkv'),
+          '-map',
+          '0:v:0',
+          '-map',
+          '0:a:0',
+          '-c:v',
+          'libx265',
+          '-preset',
+          'ultrafast',
+          '-g',
+          '100',
+          '-x265-params',
+          'pools=1:frame-threads=1:log-level=error:open-gop=0:bframes=0',
+          '-c:a',
+          'copy',
+          '-y',
+          input,
+        ],
+        { stdio: 'ignore' }
+      );
+      const { service, source } = setupTest(await readFile(input), convert);
+      try {
+        expect(
+          await service.inspect(source, {
+            allowHevc: !convert,
+            supportedMseVideoCodecs: convert ? ['h264'] : ['hevc'],
+            supportedAudioCodecs: ['aac'],
+          })
+        ).toMatchObject({ mode: 'audio-transcode', transcodeVideo: convert });
+        for (const start of [9, 0]) {
+          const response = await service.stream(
+            source,
+            'owner',
+            start,
+            new Date(Date.now() + 60000),
+            new AbortController().signal,
+            0,
+            false,
+            convert
+          );
+          const offset = Number(response.headers.get('X-Playback-Timestamp-Offset'));
+          const output = join(directory, `hevc-output-${convert}-${start}.mp4`);
+          await writeFile(output, Buffer.from(await response.arrayBuffer()));
+          const probe = JSON.parse(
+            execFileSync(
+              'ffprobe',
+              [
+                '-v',
+                'error',
+                '-show_entries',
+                'stream=codec_name,codec_tag_string,start_time,level',
+                '-of',
+                'json',
+                output,
+              ],
+              { encoding: 'utf8' }
+            )
+          );
+          expect(probe.streams.map((stream: { codec_name: string }) => stream.codec_name)).toEqual([
+            convert ? 'h264' : 'hevc',
+            'aac',
+          ]);
+          if (!convert) expect(probe.streams[0].codec_tag_string).toBe('hvc1');
+          else expect(probe.streams[0].level).toBe(41);
+          const videoStart = Number(probe.streams[0].start_time) + offset;
+          const audioStart = Number(probe.streams[1].start_time) + offset;
+          expect(videoStart).toBeGreaterThanOrEqual(Math.max(0, start - 5) - 0.001);
+          expect(videoStart).toBeLessThanOrEqual(start + 0.15);
+          expect(Math.abs(videoStart - audioStart)).toBeLessThan(0.15);
+        }
+      } finally {
+        await service.close();
+      }
+    },
+    30000
+  );
 
   it('converts AC-3 to AAC, copies H.264, and seeks forward and backward on the original clock', async () => {
     const { service, source, ranges } = setupTest();

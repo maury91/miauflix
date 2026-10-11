@@ -31,6 +31,7 @@ export const createStreamRoutes = ({
           start: z.coerce.number().finite().min(0).default(0),
           audioTrack: z.coerce.number().int().min(0).optional(),
           audioCopy: z.enum(['true', 'false']).optional(),
+          transcodeVideo: z.enum(['true', 'false']).optional(),
         })
       ),
       async context => {
@@ -52,7 +53,8 @@ export const createStreamRoutes = ({
             grant.expiresAt,
             context.req.raw.signal,
             context.req.valid('query').audioTrack,
-            context.req.valid('query').audioCopy === 'true'
+            context.req.valid('query').audioCopy === 'true',
+            context.req.valid('query').transcodeVideo === 'true'
           );
         } catch (error) {
           if (error instanceof AudioPlaybackError)

@@ -23,7 +23,8 @@ export const createSubtitleRoutes = ({
       zValidator('json', subtitleSearchRequestSchema),
       async context => {
         const session = context.get('sessionInfo');
-        const { streamingKey, language, hearingImpaired, refresh } = context.req.valid('json');
+        const { streamingKey, language, hearingImpaired, refresh, localOnly } =
+          context.req.valid('json');
         try {
           return context.json(
             await subtitlesService.search(
@@ -31,7 +32,8 @@ export const createSubtitleRoutes = ({
               session.user.id,
               language,
               hearingImpaired,
-              refresh
+              refresh,
+              localOnly
             )
           );
         } catch (error) {
@@ -47,8 +49,11 @@ export const createSubtitleRoutes = ({
       if (!/^[A-Za-z0-9_-]{24}$/.test(candidateId)) {
         return context.text('Subtitle is unavailable', 404);
       }
+      const start = context.req.query('start') ?? '0';
+      if (!/^\d{1,6}$/.test(start) || Number(start) > 7 * 24 * 3600)
+        return context.text('Invalid subtitle position', 400);
       try {
-        const body = await subtitlesService.getTrack(candidateId);
+        const body = await subtitlesService.getTrack(candidateId, Number(start));
         return context.body(body, 200, {
           'content-type': 'text/vtt; charset=utf-8',
           'cache-control': 'private, no-store',

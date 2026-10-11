@@ -128,6 +128,8 @@ const Panel = styled.div`
 
 function candidateLabel(candidate: SubtitleCandidateDto): string {
   const details = [candidate.languageLabel];
+  if (candidate.provider === 'embedded') details.push('Embedded');
+  else if (candidate.provider === 'torrent') details.push('Torrent file');
   if (candidate.filenameSimilarity != null)
     details.push(`Filename match: ${candidate.filenameSimilarity}/100`);
   details.push(candidate.release);
@@ -330,7 +332,12 @@ export function SubtitleMenu({
               {message}
             </p>
           )}
-          {configured === false && <p>Subtitle search is not configured on this server.</p>}
+          {configured === false && (
+            <p>
+              OpenSubtitles search is not configured. Embedded and torrent subtitles remain
+              available.
+            </p>
+          )}
           {configured && available === false && <p>Subtitle provider is currently unavailable.</p>}
         </Panel>
       )}

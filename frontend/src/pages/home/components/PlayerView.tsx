@@ -142,6 +142,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
   const [subtitleMessage, setSubtitleMessage] = useState('');
   const [selectedSubtitleId, setSelectedSubtitleId] = useState<string | null>(null);
   const [subtitleOffset, setSubtitleOffset] = useState(0);
+  const [subtitleWindow, setSubtitleWindow] = useState(0);
   const [subtitleCues, setSubtitleCues] = useState<SubtitleTimingCue[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [status, setStatus] = useState<PlaybackStatus>('checking');
@@ -202,6 +203,12 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
     }
   }, []);
 
+  useEffect(() => {
+    setSubtitleWindow(
+      Math.floor(Math.max(0, (videoRef.current?.currentTime ?? 0) - subtitleOffset) / 60) * 60
+    );
+  }, [subtitleOffset]);
+
   const handleSubtitleLoaded = useCallback(() => {
     const cues = subtitleTrackRef.current?.track.cues;
     if (cues)
@@ -209,6 +216,10 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
         Array.from(cues).map(cue => {
           const original = cueTimes.current.get(cue) ?? { start: cue.startTime, end: cue.endTime };
           const vttCue = cue as VTTCue;
+          // Keep the entire caption above the playback controls and screen edge.
+          vttCue.snapToLines = false;
+          vttCue.line = 75;
+          vttCue.lineAlign = 'end';
           const text =
             typeof vttCue.getCueAsHTML === 'function'
               ? (vttCue.getCueAsHTML().textContent ?? '')
@@ -220,7 +231,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
   }, [applySubtitleOffset]);
 
   const handleSubtitleSearch = useCallback(
-    async (language: string, hearingImpaired: boolean, restoring = false) => {
+    async (language: string, hearingImpaired: boolean, restoring = false, localOnly = false) => {
       if (!session || sessionSubtitleStorageKey.current !== subtitleStorageKey) return;
       const request = ++subtitleRequestId.current;
       const streamingKey = session.streamingKey;
@@ -241,13 +252,14 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
           language,
           hearingImpaired,
           refresh: !restoring,
+          ...(localOnly ? { localOnly: true } : {}),
         }).unwrap();
         if (subtitleRequestId.current !== request || currentStreamingKey.current !== streamingKey)
           return;
         setSubtitleCandidates(result.candidates);
         setSubtitleConfigured(result.configured);
         setSubtitleAvailable(result.available);
-        if (result.available && result.configured) {
+        if (result.available && (result.configured || result.candidates.length > 0)) {
           const selected =
             remembered?.selectedFileId == null
               ? undefined
@@ -259,7 +271,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
             offset: selected ? (remembered?.offset ?? 0) : 0,
           };
           rememberedSubtitles.current = preferences;
-          saveMediaSubtitles(subtitleStorageKey, preferences);
+          if (!localOnly) saveMediaSubtitles(subtitleStorageKey, preferences);
           setSelectedSubtitleId(selected?.id ?? null);
           setSubtitleOffset(preferences.offset);
         }
@@ -286,10 +298,12 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
     const remembered = rememberedSubtitles.current;
     if (remembered)
       void handleSubtitleSearch(remembered.language, remembered.hearingImpaired, true);
+    else void handleSubtitleSearch(navigator.language.split('-')[0] || 'en', false, true, true);
   }, [session, subtitleStorageKey, handleSubtitleSearch]);
 
   const handleSubtitleSelect = useCallback(
     (id: string | null) => {
+      setSubtitleWindow(Math.floor((videoRef.current?.currentTime ?? 0) / 60) * 60);
       setSelectedSubtitleId(id);
       setSubtitleCues([]);
       setSubtitleOffset(0);
@@ -419,6 +433,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
     setPendingPosition(position);
     return startAudioPlayback({
       video,
+      transcodeVideo: audioDelivery.transcodeVideo,
       url: session.streamUrl.endsWith('/audio') ? session.streamUrl : `${session.streamUrl}/audio`,
       mimeType:
         audioDelivery.audioTracks?.find(track => track.index === audioTrackIndex)?.mimeType ??
@@ -454,7 +469,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
       track.removeEventListener('load', handleSubtitleLoaded);
       track.removeEventListener('error', failed);
     };
-  }, [selectedSubtitle, handleSubtitleLoaded]);
+  }, [selectedSubtitle, handleSubtitleLoaded, subtitleWindow]);
 
   useEffect(() => {
     const track = subtitleTrackRef.current;
@@ -571,8 +586,22 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
               }
               readProgressSnapshot();
             }}
-            onTimeUpdate={() => {
-              if (!audioPreparing.current) readProgressSnapshot();
+            onSeeked={event => {
+              if (audioPreparing.current) return;
+              setSubtitleWindow(
+                Math.floor(
+                  Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60
+                ) * 60
+              );
+            }}
+            onTimeUpdate={event => {
+              if (audioPreparing.current) return;
+              setSubtitleWindow(
+                Math.floor(
+                  Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60
+                ) * 60
+              );
+              readProgressSnapshot();
             }}
             onCanPlay={() => {
               if (!audioPreparing.current) setStatus('ready');
@@ -600,7 +629,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
           >
             {selectedSubtitle && (
               <track
-                key={selectedSubtitle.id}
+                key={`${selectedSubtitle.id}:${selectedSubtitle.provider === 'embedded' ? subtitleWindow : 0}`}
                 ref={node => {
                   subtitleTrackRef.current = node;
                   if (node) node.track.mode = 'showing';
@@ -608,7 +637,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
                 kind="subtitles"
                 srcLang={selectedSubtitle.language}
                 label={`${selectedSubtitle.languageLabel}${selectedSubtitle.hearingImpaired ? ' (SDH)' : ''}`}
-                src={`${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}`}
+                src={`${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}${selectedSubtitle.provider === 'embedded' ? `?start=${subtitleWindow}` : ''}`}
                 default
               />
             )}

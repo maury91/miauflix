@@ -39,6 +39,7 @@ import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 import { StreamService } from '@services/stream/stream.service';
 import { SubtitlesService } from '@services/subtitles/subtitles.service';
+import { TorrentSubtitlesService } from '@services/subtitles/torrent-subtitles.service';
 
 import { initializeInstrumentation } from './instrumentation';
 import { createRoutes } from './routes';
@@ -119,7 +120,8 @@ try {
   const playablePreparationService = new PlayablePreparationService(
     mediaService,
     sourceService,
-    torrentWarmupController
+    torrentWarmupController,
+    storageService
   );
   const preloadIntentService = new PreloadIntentService(
     playablePreparationService,
@@ -132,7 +134,7 @@ try {
     progressService,
     catalogClient
   );
-  const audioPlaybackService = new AudioPlaybackService(downloadService);
+  const audioPlaybackService = new AudioPlaybackService(downloadService, configurationService);
   const playbackSessionService = new PlaybackSessionService(
     db,
     playablePreparationService,
@@ -141,12 +143,14 @@ try {
     storageService,
     audioPlaybackService
   );
+  const torrentSubtitlesService = new TorrentSubtitlesService(downloadService);
   const subtitlesService = new SubtitlesService(
     configurationService,
     requestService,
     playbackSessionService,
     streamService,
-    mediaService
+    mediaService,
+    torrentSubtitlesService
   );
 
   const serverService = {
@@ -226,6 +230,7 @@ try {
     preloadIntentService.close();
     backgroundJobs.close();
 
+    torrentSubtitlesService.close();
     await audioPlaybackService.close();
     await downloadService.close();
 

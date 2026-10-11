@@ -6,6 +6,8 @@ jest.mock('./encrypted-file-reader', () => ({
   })),
 }));
 
+import { EventEmitter } from 'node:events';
+
 import {
   createMockStorage,
   createMockStorageWithHash,
@@ -646,6 +648,69 @@ describe('DownloadService', () => {
       expect(response.headers.get('Content-Length')).toBe('3');
       expect((await response.arrayBuffer()).byteLength).toBe(3);
       expect(service.hasActivePlayback()).toBe(false);
+    });
+
+    it('selects the requested subtitle and waits for its verified pieces even when the video is complete', async () => {
+      const { service, mockStorageService } = setupTest();
+      (service.client as unknown as { ready: boolean }).ready = true;
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength: 4,
+        files: [
+          { path: 'movie.mkv', offset: 0, length: 8 },
+          { path: 'movie.en.srt', offset: 8, length: 4 },
+        ],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/movie',
+        size: 12,
+        videoCompletedAt: new Date(),
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      let subtitleVerified = false;
+      const subtitleFile = { path: 'movie.en.srt', select: jest.fn() };
+      const torrent = Object.assign(new EventEmitter(), {
+        files: [subtitleFile],
+        bitfield: { get: (piece: number) => piece < 2 || subtitleVerified },
+        destroyed: false,
+      }) as unknown as Torrent;
+      jest.spyOn(service, 'startDownload').mockResolvedValue({
+        movieSourceId: storage.movieSourceId,
+        torrent,
+        storage,
+        layout,
+        startTime: new Date(),
+      });
+      mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+      const response = await service.streamFile(
+        { id: storage.movieSourceId, size: 12 } as never,
+        undefined,
+        'movie.en.srt'
+      );
+      expect(subtitleFile.select).toHaveBeenCalled();
+      expect(response.headers.get('Content-Length')).toBe('4');
+      let finished = false;
+      const body = response.arrayBuffer().then(bytes => {
+        finished = true;
+        return bytes;
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(finished).toBe(false);
+      subtitleVerified = true;
+      torrent.emit('verified', 2);
+      expect((await body).byteLength).toBe(4);
+      expect(service.hasActivePlayback()).toBe(false);
+      await expect(
+        service.streamFile(
+          { id: storage.movieSourceId, size: 12 } as never,
+          undefined,
+          '../../unrelated.srt'
+        )
+      ).rejects.toThrow('Requested torrent file is unavailable');
     });
 
     it('plays a detached encrypted source without adding it back to WebTorrent', async () => {
