@@ -7,6 +7,7 @@ import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { traceContextMiddleware } from '@middleware/trace-context.middleware';
+import { expandEquivalentOrigins } from '@utils/origin.util';
 
 import { createAuthRoutes } from './auth.routes';
 import type { Deps } from './common.types';
@@ -71,9 +72,11 @@ function createApiRoutes(deps: Deps) {
 export function createRoutes(deps: Deps) {
   const frontendDir = deps.configurationService.get('FRONTEND_DIR');
   const frontendEnabled = deps.configurationService.get('ENABLE_FRONTEND');
-  const origins = (deps.configurationService.get('CORS_ORIGIN') ?? [])
-    .map((origin: string) => origin.trim())
-    .filter(Boolean);
+  const origins = expandEquivalentOrigins(
+    (deps.configurationService.get('CORS_ORIGIN') ?? [])
+      .map((origin: string) => origin.trim())
+      .filter(Boolean)
+  );
 
   const app = new Hono()
     .use(

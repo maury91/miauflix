@@ -218,28 +218,38 @@ try {
   }
   scheduleCoordinator.start(!disableBackgroundTasks);
 
-  // Graceful shutdown handlers
-  const gracefulShutdown = async (signal: string) => {
-    logger.info('App', `Received ${signal}, shutting down gracefully...`);
+  const httpServer: { current?: ReturnType<typeof serve> } = {};
+  let shutdownPromise: Promise<void> | undefined;
 
-    await scheduleCoordinator.stop();
-    catalogClient.stop();
-    listClient.stop();
-    await backgroundWorker.stop();
-    realtimeGateway.close();
-    preloadIntentService.close();
-    backgroundJobs.close();
+  // Graceful shutdown handlers. Stop accepting new work first, then drain
+  // existing HTTP handlers before closing the services they depend on.
+  const gracefulShutdown = (signal: string): Promise<void> => {
+    if (shutdownPromise) return shutdownPromise;
+    shutdownPromise = (async () => {
+      logger.info('App', `Received ${signal}, shutting down gracefully...`);
 
-    torrentSubtitlesService.close();
-    await audioPlaybackService.close();
-    await downloadService.close();
+      let drained = Promise.resolve();
+      if (httpServer.current) {
+        drained = new Promise<void>(resolve => httpServer.current!.close(() => resolve()));
+      }
+      realtimeGateway.close();
+      await scheduleCoordinator.stop();
+      catalogClient.stop();
+      listClient.stop();
+      await backgroundWorker.stop();
+      preloadIntentService.close();
+      backgroundJobs.close();
 
-    await db.close();
+      // Do not leave a request holding the database open indefinitely.
+      await Promise.race([drained, new Promise<void>(resolve => setTimeout(resolve, 5_000))]);
 
-    // Give some time for ongoing operations to complete
-    setTimeout(() => {
+      torrentSubtitlesService.close();
+      await audioPlaybackService.close();
+      await downloadService.close();
+      await db.close();
       process.exit(0);
-    }, 5000);
+    })();
+    return shutdownPromise;
   };
 
   process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
@@ -312,15 +322,16 @@ try {
   });
 
   const port = configurationService.getOrThrow('PORT');
-  const server = serve({ fetch: app.fetch, port });
+  httpServer.current = serve({ fetch: app.fetch, port });
   // The default Hono adapter above creates an HTTP/1 server, which is the
   // upgrade-capable variant used by the realtime gateway.
-  realtimeGateway.attach(server as HttpServer);
-  server.on('error', err => {
+  const runningServer = httpServer.current as HttpServer;
+  realtimeGateway.attach(runningServer);
+  runningServer.on('error', err => {
     logger.error('App', `Server error: ${err}`);
     serverService._status = { status: 'error', errorMessage: err.message, error: err };
   });
-  server.on('listening', () => {
+  runningServer.on('listening', () => {
     logger.info('App', `Server is listening on http://localhost:${port}`);
     serverService._status = { status: 'ready' };
   });

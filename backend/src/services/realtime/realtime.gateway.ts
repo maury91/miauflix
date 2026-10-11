@@ -11,6 +11,7 @@ import type { AuthService } from '@services/auth/auth.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProgressService } from '@services/progress/progress.service';
+import { isAllowedOrigin } from '@utils/origin.util';
 
 const MAX_MAP_SIDE = 11;
 const MAX_MAP_CELLS = MAX_MAP_SIDE * MAX_MAP_SIDE;
@@ -437,8 +438,9 @@ export class RealtimeGateway {
 
   private isAllowedOrigin(origin: string | undefined): boolean {
     const configured = this.config.get('CORS_ORIGIN') as unknown;
-    if (!origin || !configured || configured === '*') return true;
-    return Array.isArray(configured) ? configured.includes(origin) : configured === origin;
+    if (!configured || configured === '*') return true;
+    const allowed = Array.isArray(configured) ? configured : [String(configured)];
+    return isAllowedOrigin(origin, allowed);
   }
 
   private cookies(header: string): Record<string, string> {

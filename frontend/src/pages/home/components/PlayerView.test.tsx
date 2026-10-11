@@ -388,7 +388,7 @@ describe('PlayerView', () => {
         video.currentTime = 70;
         fireEvent.seeked(video);
         const src = view.container.querySelector('track')?.getAttribute('src');
-        if (provider === 'embedded') expect(src).toContain('?start=60');
+        if (provider === 'embedded') expect(src).toContain('&start=60');
         else expect(src).not.toContain('?start=');
         expect(
           JSON.parse(window.localStorage.getItem('miauflix.media-subtitles.anonymous.m:123')!)
@@ -442,7 +442,9 @@ describe('PlayerView', () => {
     try {
       fireEvent.change(select.parentElement!, { target: { value: 'candidate-1' } });
       const track = view.container.querySelector('track');
-      expect(track?.getAttribute('src')).toMatch(/\/api\/subtitles\/tracks\/candidate-1$/);
+      expect(track?.getAttribute('src')).toMatch(
+        /\/api\/subtitles\/tracks\/candidate-1\?streamingKey=streaming-key$/
+      );
       expect(textTrack.mode).toBe('showing');
       fireEvent.load(track!);
       expect(textTrack.cues[0]).toMatchObject({
@@ -471,7 +473,7 @@ describe('PlayerView', () => {
     }
   });
 
-  it('automatically restores a media subtitle list, selection and sync using fresh candidate IDs', async () => {
+  it('automatically restores a media subtitle list, selection and sync using stable candidate IDs', async () => {
     window.localStorage.setItem(
       'miauflix.media-subtitles.anonymous.m:123',
       JSON.stringify({

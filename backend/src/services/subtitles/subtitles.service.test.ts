@@ -198,14 +198,14 @@ describe('subtitle ranking and durable downloads', () => {
     );
   });
 
-  it('restores search results with fresh access IDs after a restart without a provider request', async () => {
+  it('restores search results with stable access IDs after a restart without a provider request', async () => {
     const original = setupTest(directory);
     const first = (await original.search([entry(42, 'Movie Title')])).candidates[0];
     const restarted = setupTest(directory);
     const restored = await restarted.service.search('new-streaming-key', 'user', 'en', false);
     expect(restarted.request).not.toHaveBeenCalled();
     expect(restored.candidates[0]).toMatchObject({ fileId: 42, release: 'Movie Title' });
-    expect(restored.candidates[0].id).not.toBe(first.id);
+    expect(restored.candidates[0].id).toBe(first.id);
     restarted.verify.mockResolvedValue(null);
     await expect(restarted.service.search('expired-key', 'user', 'en', false)).rejects.toThrow(
       'Playback is unavailable'

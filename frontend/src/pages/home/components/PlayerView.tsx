@@ -167,6 +167,9 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
   const subtitleRequestId = useRef(0);
   const currentStreamingKey = useRef<string | null>(null);
   const cueTimes = useRef(new WeakMap<TextTrackCue, { start: number; end: number }>());
+  const resume = progress.data ? progressForPlayable(progress.data.progress, playable) : undefined;
+  const resumeRef = useRef(resume);
+  resumeRef.current = resume;
   const subtitleOffsetRef = useRef(0);
   realtimeClientRef.current = realtimeClient;
   currentStreamingKey.current = session?.streamingKey ?? null;
@@ -296,6 +299,9 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
     if (!session || sessionSubtitleStorageKey.current !== subtitleStorageKey) return;
     rememberedSubtitles.current = readMediaSubtitles(subtitleStorageKey);
     const remembered = rememberedSubtitles.current;
+    const saved = resumeRef.current;
+    if (remembered && saved && saved.state !== 'completed' && saved.positionSeconds > 5)
+      setSubtitleWindow(Math.floor(Math.max(0, saved.positionSeconds) / 60) * 60);
     if (remembered)
       void handleSubtitleSearch(remembered.language, remembered.hearingImpaired, true);
     else void handleSubtitleSearch(navigator.language.split('-')[0] || 'en', false, true, true);
@@ -369,12 +375,9 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
     },
     [dispatch, playable, readProgressSnapshot, updateProgress]
   );
-  const resume = progress.data ? progressForPlayable(progress.data.progress, playable) : undefined;
   const selectedSubtitle = subtitleCandidates.find(
     candidate => candidate.id === selectedSubtitleId
   );
-  const resumeRef = useRef(resume);
-  resumeRef.current = resume;
   const hasProgress = !!progress.data;
   const selectedAudio = session?.delivery?.audioTracks?.find(
     track => track.index === audioTrackIndex
@@ -637,7 +640,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
                 kind="subtitles"
                 srcLang={selectedSubtitle.language}
                 label={`${selectedSubtitle.languageLabel}${selectedSubtitle.hearingImpaired ? ' (SDH)' : ''}`}
-                src={`${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}${selectedSubtitle.provider === 'embedded' ? `?start=${subtitleWindow}` : ''}`}
+                src={`${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}?streamingKey=${encodeURIComponent(session?.streamingKey ?? '')}${selectedSubtitle.provider === 'embedded' ? `&start=${subtitleWindow}` : ''}`}
                 default
               />
             )}

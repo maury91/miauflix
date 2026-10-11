@@ -62,8 +62,9 @@ describe('audio playback delivery', () => {
     expect(() => deliveryFromProbe(setupTest('ac3', 'hevc'))).toThrow('H.264');
   });
 
-  const hevcProbe = (audioCodec = 'ac3') => ({
+  const hevcProbe = (audioCodec = 'ac3', formatName?: string) => ({
     ...setupTest(audioCodec, 'hevc'),
+    format: { duration: '120.5', format_name: formatName },
     streams: [
       {
         codec_type: 'video',
@@ -113,6 +114,32 @@ describe('audio playback delivery', () => {
     const args = audioConversionArgs('http://localhost/input', 0, 0, true, 'transcode');
     expect(args).toContain('libx264');
     expect(args.slice(args.indexOf('-c:a'), args.indexOf('-c:a') + 2)).toEqual(['-c:a', 'copy']);
+  });
+
+  it('uses the probed container when deciding whether native HEVC is supported', () => {
+    const preferences = {
+      allowHevc: true,
+      nativeHevcContainers: ['mp4'] as ('matroska' | 'mp4')[],
+    };
+    expect(deliveryFromProbe(hevcProbe('aac', 'mov,mp4,m4a,3gp,3g2,mj2'), preferences).mode).toBe(
+      'direct'
+    );
+    expect(
+      deliveryFromProbe(hevcProbe('aac', 'matroska,webm'), {
+        ...preferences,
+        supportedMseVideoCodecs: ['hevc'],
+      })
+    ).toMatchObject({ mode: 'audio-transcode', transcodeVideo: false, videoCodec: 'hevc' });
+    expect(() => deliveryFromProbe(hevcProbe('aac', 'avi'), preferences)).toThrow(
+      'client cannot decode H.265'
+    );
+    expect(() => deliveryFromProbe(hevcProbe('aac', 'unknown'), preferences)).toThrow(
+      'client cannot decode H.265'
+    );
+  });
+
+  it('preserves the legacy HEVC preference behavior when container capabilities are omitted', () => {
+    expect(deliveryFromProbe(hevcProbe('aac', 'avi'), { allowHevc: true }).mode).toBe('direct');
   });
 
   it('rejects attempts to enable video conversion through a stream URL when disabled', async () => {

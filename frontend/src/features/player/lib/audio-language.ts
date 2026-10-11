@@ -33,6 +33,7 @@ export function playbackAudioCapabilities(
   | 'supportedMseAudioCodecs'
   | 'nativeAudioTracks'
   | 'allowHevc'
+  | 'nativeHevcContainers'
   | 'supportedMseVideoCodecs'
 > {
   const codecs = {
@@ -45,8 +46,17 @@ export function playbackAudioCapabilities(
     flac: 'flac',
     vorbis: 'vorbis',
   };
+  const nativeHevcContainers = (
+    [
+      ['mp4', 'video/mp4; codecs="hvc1.1.6.L93.B0"'],
+      ['matroska', 'video/x-matroska; codecs="hvc1.1.6.L93.B0"'],
+    ] as const
+  )
+    .filter(([, mimeType]) => video.canPlayType(mimeType) !== '')
+    .map(([container]) => container);
   return {
-    allowHevc: video.canPlayType('video/mp4; codecs="hvc1.1.6.L93.B0"') !== '',
+    allowHevc: nativeHevcContainers.length > 0,
+    nativeHevcContainers,
     supportedMseVideoCodecs: (['h264', 'hevc'] as const).filter(
       codec =>
         typeof MediaSource !== 'undefined' &&

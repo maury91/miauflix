@@ -33,6 +33,7 @@ export interface PlaybackDelivery {
 export interface AudioPlaybackPreferences {
   allowHevc?: boolean;
   supportedMseVideoCodecs?: Array<'h264' | 'hevc'>;
+  nativeHevcContainers?: Array<'matroska' | 'mp4'>;
   audioLanguages?: string[];
   supportedAudioCodecs?: string[];
   supportedMseAudioCodecs?: string[];
@@ -55,7 +56,7 @@ export class AudioConversionRequiredError extends AudioPlaybackError {
 }
 
 interface ProbeResult {
-  format?: { duration?: string };
+  format?: { duration?: string; format_name?: string };
   streams?: Array<{
     codec_type?: string;
     codec_name?: string;
@@ -64,6 +65,15 @@ interface ProbeResult {
     tags?: { language?: string; title?: string };
     disposition?: { default?: number };
   }>;
+}
+
+function nativeHevcContainer(formatName: string | undefined): 'matroska' | 'mp4' | undefined {
+  const formats = new Set((formatName ?? '').split(',').map(format => format.trim().toLowerCase()));
+  if (['mov', 'mp4', 'm4a', '3gp', '3g2', 'mj2'].some(format => formats.has(format))) {
+    return 'mp4';
+  }
+  if (formats.has('matroska')) return 'matroska';
+  return undefined;
 }
 
 /** RFC 6381 codec parameter from the HEVCDecoderConfigurationRecord header. */
@@ -130,7 +140,13 @@ export function deliveryFromProbe(
   const usableAvc = video.codec_name === 'h264' && !!avc?.startsWith('01') && avc.length >= 8;
   const hevc = video.codec_name === 'hevc' ? hevcCodec(video.extradata) : undefined;
   const copyHevc = !!hevc && preferences.supportedMseVideoCodecs?.includes('hevc');
-  const nativeVideo = video.codec_name !== 'hevc' || preferences.allowHevc !== false;
+  const nativeContainer = nativeHevcContainer(probe.format?.format_name);
+  const nativeVideo =
+    video.codec_name !== 'hevc' ||
+    (preferences.nativeHevcContainers === undefined
+      ? preferences.allowHevc !== false
+      : nativeContainer !== undefined &&
+        preferences.nativeHevcContainers.includes(nativeContainer));
   let videoCodec = usableAvc ? `avc1.${avc!.slice(2, 8)}` : copyHevc ? hevc : undefined;
   const transcodeVideo =
     video.codec_name === 'hevc' &&
@@ -331,7 +347,7 @@ export class AudioPlaybackService {
           '-show_format',
           '-show_data',
           '-show_entries',
-          'stream=codec_type,codec_name,extradata,channels:stream_tags=language,title:stream_disposition=default:format=duration',
+          'stream=codec_type,codec_name,extradata,channels:stream_tags=language,title:stream_disposition=default:format=duration,format_name',
           '-of',
           'json',
           input.url,

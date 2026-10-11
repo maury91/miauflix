@@ -1,4 +1,4 @@
-import { randomBytes } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { mkdir, open, rename, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
@@ -17,7 +17,6 @@ import { toWebVtt } from './subtitles.util';
 import type { TorrentSubtitle, TorrentSubtitlesService } from './torrent-subtitles.service';
 
 const API_BASE = 'https://api.opensubtitles.com/api/v1';
-const TRACK_TTL_MS = 15 * 60 * 1000;
 const MAX_CANDIDATES = 500;
 const MAX_CACHED_TRACK_BYTES = 32 * 1024 * 1024;
 const MAX_CACHED_TRACKS = 256;
@@ -70,6 +69,38 @@ interface CandidateRecord {
   local?: TorrentSubtitle;
 }
 
+function makeCandidateId(
+  provider: SubtitleCandidate['provider'],
+  sourceId: number,
+  fileId: number | string
+): string {
+  if (provider === 'opensubtitles')
+    return Buffer.from(`v1:${sourceId}:${String(fileId)}`).toString('base64url');
+  return createHash('sha256')
+    .update(`v1:${provider}:${sourceId}:${String(fileId)}`)
+    .digest('base64url')
+    .slice(0, 24);
+}
+
+function decodeOpenSubtitlesCandidate(id: string): { sourceId: number; fileId: number } | null {
+  try {
+    const decoded = Buffer.from(id, 'base64url').toString('utf8').split(':');
+    if (decoded.length !== 3 || decoded[0] !== 'v1') return null;
+    const sourceId = Number(decoded[1]);
+    const fileId = Number(decoded[2]);
+    if (
+      !Number.isSafeInteger(sourceId) ||
+      sourceId < 1 ||
+      !Number.isSafeInteger(fileId) ||
+      fileId < 1
+    )
+      return null;
+    return { sourceId, fileId };
+  } catch {
+    return null;
+  }
+}
+
 /** OpenSubtitles search and playback-bound subtitle delivery. */
 export class SubtitlesService {
   private readonly candidates = new Map<string, CandidateRecord>();
@@ -102,7 +133,7 @@ export class SubtitlesService {
     try {
       for (const track of await this.torrentSubtitles.discover(source)) {
         const candidate: SubtitleCandidate = {
-          id: randomBytes(18).toString('base64url'),
+          id: makeCandidateId(track.provider, source.id, track.fileId),
           provider: track.provider,
           fileId: track.fileId,
           language: track.language,
@@ -194,7 +225,7 @@ export class SubtitlesService {
 
       this.prune();
       const candidates = ranked.map(({ result, candidate, match, release, score }) => {
-        const id = randomBytes(18).toString('base64url');
+        const id = makeCandidateId('opensubtitles', source.id, result.attributes.files[0].file_id);
         const item: SubtitleCandidate = {
           id,
           provider: 'opensubtitles',
@@ -214,7 +245,7 @@ export class SubtitlesService {
           userId,
           sourceId: grant.sourceId,
           playableKey: grant.playableKey,
-          expiresAt: Math.min(grant.expiresAt.getTime(), Date.now() + TRACK_TTL_MS),
+          expiresAt: grant.expiresAt.getTime(),
         });
         return item;
       });
@@ -285,9 +316,84 @@ export class SubtitlesService {
     }
   }
 
-  async getTrack(candidateId: string, startSeconds = 0): Promise<string> {
-    const record = this.candidates.get(candidateId);
-    const grant = record ? await this.playbackSessionService.verify(record.streamingKey) : null;
+  async getTrack(
+    candidateId: string,
+    streamingKeyOrStart: number | string = 0,
+    requestedStartSeconds = 0
+  ): Promise<string> {
+    const legacyCall = typeof streamingKeyOrStart === 'number';
+    const streamingKey: string = legacyCall
+      ? (this.candidates.get(candidateId)?.streamingKey ?? '')
+      : streamingKeyOrStart;
+    const startSeconds = legacyCall ? streamingKeyOrStart : requestedStartSeconds;
+    let record = this.candidates.get(candidateId);
+    if (record && record.streamingKey !== streamingKey) {
+      this.removeCandidate(candidateId);
+      record = undefined;
+    }
+    let grant = streamingKey ? await this.playbackSessionService.verify(streamingKey) : null;
+    if (!record && grant) {
+      const source = await this.streamService.getSourceById(grant.sourceId);
+      if (source) {
+        const remote = decodeOpenSubtitlesCandidate(candidateId);
+        if (remote?.sourceId === source.id) {
+          record = {
+            candidate: {
+              id: candidateId,
+              provider: 'opensubtitles',
+              fileId: remote.fileId,
+              language: 'und',
+              languageLabel: 'Unknown',
+              release: 'Subtitle',
+              hearingImpaired: false,
+              trusted: false,
+              match: 'title',
+              filenameSimilarity: null,
+            },
+            fileId: remote.fileId,
+            streamingKey,
+            userId: grant.userId,
+            sourceId: source.id,
+            playableKey: grant.playableKey,
+            expiresAt: grant.expiresAt.getTime(),
+          };
+        } else {
+          try {
+            const local = await this.torrentSubtitles.discover(source);
+            const track = local.find(
+              item => makeCandidateId(item.provider, source.id, item.fileId) === candidateId
+            );
+            if (track) {
+              record = {
+                candidate: {
+                  id: candidateId,
+                  provider: track.provider,
+                  fileId: track.fileId,
+                  language: track.language,
+                  languageLabel: this.languageName(track.language),
+                  release: track.release,
+                  hearingImpaired: track.hearingImpaired,
+                  trusted: false,
+                  match: 'file',
+                  filenameSimilarity: track.provider === 'torrent' ? 100 : null,
+                },
+                fileId: track.fileId,
+                local: track,
+                streamingKey,
+                userId: grant.userId,
+                sourceId: source.id,
+                playableKey: grant.playableKey,
+                expiresAt: grant.expiresAt.getTime(),
+              };
+            }
+          } catch {
+            // Preserve the normal unavailable response for failed rediscovery.
+          }
+        }
+        if (record) this.candidates.set(candidateId, record);
+      }
+    }
+    grant = record ? await this.playbackSessionService.verify(record.streamingKey) : null;
     if (
       !grant ||
       !record ||
@@ -303,7 +409,7 @@ export class SubtitlesService {
     if (!Number.isSafeInteger(startSeconds) || startSeconds < 0 || startSeconds > 7 * 24 * 3600)
       throw new SubtitleAccessError('Invalid subtitle position');
     const window = record.local?.provider === 'embedded' ? Math.floor(startSeconds / 60) * 60 : 0;
-    const key = `${record.fileId}${record.local?.provider === 'embedded' ? `:${window}` : ''}`;
+    const key = `${record.sourceId}:${record.candidate.provider}:${record.fileId}${record.local?.provider === 'embedded' ? `:${window}` : ''}`;
     const cached = this.tracks.get(key);
     if (cached) {
       this.tracks.delete(key);

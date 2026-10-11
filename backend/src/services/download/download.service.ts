@@ -907,8 +907,23 @@ export class DownloadService {
     const storage = await this.storageService.getStorageByMovieSource(sourceId);
     if (!storage) return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     const torrent = this.client.torrents.find(item => item.path === storage.location);
-    if (!torrent?.bitfield)
+    let layout = storage.encryptedLayout;
+    if (!layout && torrent?.ready) {
+      try {
+        layout = this.createEncryptedLayout(torrent);
+      } catch {
+        // A ready torrent can still have incomplete or invalid file metadata.
+      }
+    }
+    if (!torrent?.bitfield) {
+      if ((storage.videoCompletedAt || storage.localOnly) && layout) {
+        const targetBytes = this.getVideoRangeByteLength(layout, firstPiece, lastPiece);
+        if (targetBytes > 0) {
+          return { verifiedBytes: targetBytes, targetBytes, progress: 100, isComplete: true };
+        }
+      }
       return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
+    }
     const totalPieces = torrent.pieces?.length;
     if (
       !Number.isInteger(totalPieces) ||
@@ -918,13 +933,19 @@ export class DownloadService {
     ) {
       return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     }
-    const targetBytes = this.getRangeByteLength(torrent, firstPiece, lastPiece);
+    const targetBytes = layout
+      ? this.getVideoRangeByteLength(layout, firstPiece, lastPiece)
+      : this.getRangeByteLength(torrent, firstPiece, lastPiece);
     if (targetBytes <= 0) {
       return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     }
     let verifiedBytes = 0;
     for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
-      if (torrent.bitfield.get(piece)) verifiedBytes += this.getPieceByteLength(torrent, piece);
+      if (torrent.bitfield.get(piece)) {
+        verifiedBytes += layout
+          ? this.getVideoRangeByteLength(layout, piece, piece)
+          : this.getPieceByteLength(torrent, piece);
+      }
     }
     const progress = Math.min(100, Math.max(0, (verifiedBytes / targetBytes) * 100));
     return {
@@ -952,6 +973,31 @@ export class DownloadService {
     }
     const start = piece * pieceLength;
     return Math.max(0, Math.min(pieceLength, torrentLength - start));
+  }
+
+  /** Count only video bytes covered by an inclusive piece range. */
+  private getVideoRangeByteLength(
+    layout: EncryptedStorageLayout,
+    firstPiece: number,
+    lastPiece: number
+  ): number {
+    const pieceLength = Number(layout.pieceLength);
+    const videoStart = Number(layout.video?.offset);
+    const videoLength = Number(layout.video?.length);
+    if (
+      !Number.isFinite(pieceLength) ||
+      pieceLength <= 0 ||
+      !Number.isFinite(videoStart) ||
+      videoStart < 0 ||
+      !Number.isFinite(videoLength) ||
+      videoLength <= 0
+    ) {
+      return 0;
+    }
+    const rangeStart = firstPiece * pieceLength;
+    const rangeEnd = (lastPiece + 1) * pieceLength;
+    const videoEnd = videoStart + videoLength;
+    return Math.max(0, Math.min(rangeEnd, videoEnd) - Math.max(rangeStart, videoStart));
   }
 
   /** Sum byte lengths across an inclusive, zero-based piece range, including a short final piece. */
@@ -1174,7 +1220,7 @@ export class DownloadService {
         return null;
       }
 
-      if (storage.videoCompletedAt) {
+      if (storage.videoCompletedAt || storage.localOnly) {
         const bytes = storage.encryptedLayout?.video.length ?? storage.size;
         return {
           movieSourceId,
@@ -1207,7 +1253,7 @@ export class DownloadService {
         downloadedBytes: torrent.downloaded,
         totalBytes: torrent.length,
         downloadSpeed: torrent.downloadSpeed,
-        isComplete: Boolean(storage.videoCompletedAt) || this.isVideoComplete(torrent),
+        isComplete: this.getStorageActivity(storage).videoComplete,
       };
     } catch (error) {
       logger.warn(

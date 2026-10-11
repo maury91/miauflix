@@ -217,6 +217,149 @@ describe('DownloadService', () => {
     });
   });
 
+  describe('range progress without an attached torrent', () => {
+    const layout: EncryptedStorageLayout = {
+      storeName: 'test',
+      filenameSalt: 'download-AbCd',
+      pieceLength: 4,
+      files: [{ path: 'video.mkv', length: 5, offset: 3 }],
+      video: { name: 'video.mkv', path: 'video.mkv', offset: 3, length: 5 },
+    };
+
+    it.each([
+      ['completed', { videoCompletedAt: new Date('2026-10-10T12:00:00Z') }],
+      ['local-only', { localOnly: true }],
+    ])('reports the requested video bytes verified for %s media', async (_name, completion) => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({
+        id: 1,
+        movieSourceId: 1,
+        location: '/downloads/item',
+        encryptedLayout: layout,
+        ...completion,
+      });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [];
+
+      await expect(service.getRangeProgress(1, 0, 1)).resolves.toEqual({
+        verifiedBytes: 5,
+        targetBytes: 5,
+        progress: 100,
+        isComplete: true,
+      });
+      await expect(service.getRangeProgress(1, 2, 2)).resolves.toEqual({
+        verifiedBytes: 0,
+        targetBytes: 0,
+        progress: 0,
+        isComplete: false,
+      });
+    });
+
+    it('keeps an incomplete result when detached storage is not marked complete', async () => {
+      const { service, mockStorageService } = setupTest();
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(
+        createMockStorage({ encryptedLayout: layout })
+      );
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [];
+
+      await expect(service.getRangeProgress(1, 0, 1)).resolves.toMatchObject({
+        verifiedBytes: 0,
+        targetBytes: 0,
+        progress: 0,
+        isComplete: false,
+      });
+    });
+
+    it('counts only video bytes in boundary pieces for an active torrent', async () => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({ location: '/downloads/item', encryptedLayout: layout });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [
+        {
+          path: storage.location,
+          length: 12,
+          pieceLength: 4,
+          pieces: [{}, {}, {}],
+          bitfield: { get: (piece: number) => piece === 0 },
+        } as unknown as Torrent,
+      ];
+
+      await expect(service.getRangeProgress(storage.movieSourceId, 0, 1)).resolves.toEqual({
+        verifiedBytes: 1,
+        targetBytes: 5,
+        progress: 20,
+        isComplete: false,
+      });
+    });
+  });
+
+  describe('download progress while torrent metadata loads', () => {
+    it('returns incomplete progress instead of null before torrent metadata is ready', async () => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({
+        id: 1,
+        movieSourceId: 1,
+        location: '/downloads/item',
+        encryptedLayout: null,
+        downloaded: 2500,
+        size: 12,
+      });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [
+        {
+          path: storage.location,
+          ready: false,
+          progress: 0.25,
+          downloaded: 3,
+          length: 12,
+          downloadSpeed: 0,
+          done: false,
+        } as Torrent,
+      ];
+
+      await expect(service.getDownloadProgress(1)).resolves.toMatchObject({
+        movieSourceId: 1,
+        progress: 25,
+        downloadedBytes: 3,
+        totalBytes: 12,
+        isComplete: false,
+      });
+    });
+
+    it('returns progress when a ready torrent has unusable file metadata', async () => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({
+        id: 1,
+        movieSourceId: 1,
+        location: '/downloads/item',
+        encryptedLayout: null,
+        downloaded: 2500,
+        size: 12,
+      });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [
+        {
+          path: storage.location,
+          infoHash: storage.movieSource.hash,
+          name: 'pending',
+          ready: true,
+          files: [],
+          progress: 0.25,
+          downloaded: 3,
+          length: 12,
+          downloadSpeed: 0,
+          done: false,
+        } as unknown as Torrent,
+      ];
+
+      await expect(service.getDownloadProgress(1)).resolves.toMatchObject({
+        movieSourceId: 1,
+        progress: 25,
+        isComplete: false,
+      });
+    });
+  });
+
   describe('tracker loading', () => {
     it('should load trackers and IP sets on initialization', async () => {
       const { mockRequestService, mockLoadIPSet } = setupTest({

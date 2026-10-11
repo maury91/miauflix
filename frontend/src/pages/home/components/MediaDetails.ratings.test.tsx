@@ -44,7 +44,7 @@ const setupTest = () => {
   const store = configureStore({
     reducer: () => ({ auth: { currentUser: { id: 'user-1' } }, artwork: { byMedia: {} } }),
   });
-  return render(
+  const createTree = () => (
     <Provider store={store}>
       <MediaDetails
         media={{ _type: 'movie', mediaId: 123, title: 'Coyote vs. Acme' } as MediaDto}
@@ -53,6 +53,8 @@ const setupTest = () => {
       />
     </Provider>
   );
+  const view = render(createTree());
+  return { ...view, rerender: () => view.rerender(createTree()) };
 };
 
 beforeEach(() => {
@@ -86,8 +88,8 @@ describe('Details saved ratings', () => {
     );
   }, 15_000);
 
-  it('sends account-scoped replacements and toggles the saved selection off', () => {
-    setupTest();
+  it('sends account-scoped replacements using the latest saved rating', () => {
+    const view = setupTest();
     fireEvent.click(screen.getByLabelText('Love it', { selector: 'button' }));
     expect(save).toHaveBeenLastCalledWith({
       userId: 'user-1',
@@ -95,6 +97,19 @@ describe('Details saved ratings', () => {
       mediaId: 123,
       rating: 'love',
     });
+    query.currentData = { rating: 'love' };
+    view.rerender();
+    fireEvent.click(screen.getByLabelText('Like it', { selector: 'button' }));
+    expect(save).toHaveBeenLastCalledWith({
+      userId: 'user-1',
+      mediaType: 'movie',
+      mediaId: 123,
+      rating: 'like',
+    });
+  });
+
+  it('clears the currently saved rating when selected again', () => {
+    setupTest();
     fireEvent.click(screen.getByLabelText('Like it', { selector: 'button' }));
     expect(save).toHaveBeenLastCalledWith({
       userId: 'user-1',

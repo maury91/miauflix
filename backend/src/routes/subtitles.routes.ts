@@ -44,16 +44,18 @@ export const createSubtitleRoutes = ({
         }
       }
     )
-    .get('/tracks/:candidateId', rateLimitGuard(1), async context => {
+    .get('/tracks/:candidateId', rateLimitGuard(5), async context => {
       const { candidateId } = context.req.param();
-      if (!/^[A-Za-z0-9_-]{24}$/.test(candidateId)) {
+      if (!/^[A-Za-z0-9_-]{8,128}$/.test(candidateId)) {
         return context.text('Subtitle is unavailable', 404);
       }
+      const streamingKey = context.req.query('streamingKey');
+      if (!streamingKey) return context.text('Subtitle is unavailable', 404);
       const start = context.req.query('start') ?? '0';
       if (!/^\d{1,6}$/.test(start) || Number(start) > 7 * 24 * 3600)
         return context.text('Invalid subtitle position', 400);
       try {
-        const body = await subtitlesService.getTrack(candidateId, Number(start));
+        const body = await subtitlesService.getTrack(candidateId, streamingKey, Number(start));
         return context.body(body, 200, {
           'content-type': 'text/vtt; charset=utf-8',
           'cache-control': 'private, no-store',

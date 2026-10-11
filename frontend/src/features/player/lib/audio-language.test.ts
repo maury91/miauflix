@@ -41,6 +41,13 @@ describe('browser audio language', () => {
       vi.unstubAllGlobals();
     }
   });
+  it('reports native HEVC support for each container independently', () => {
+    const capabilities = playbackAudioCapabilities({
+      canPlayType: (mime: string) => (mime.startsWith('video/mp4') ? 'probably' : ''),
+      audioTracks: [],
+    } as unknown as HTMLVideoElement);
+    expect(capabilities).toMatchObject({ allowHevc: true, nativeHevcContainers: ['mp4'] });
+  });
   it('matches ISO audio tags to regional browser languages', () => {
     expect(preferredAudioTrack(delivery, ['en-GB'])).toBe(1);
     expect(preferredAudioTrack(delivery, ['fr-CA'])).toBe(0);
