@@ -206,6 +206,9 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
         <Discovery>
           {loading && <Loading width="1.1em" height="1.1em" aria-hidden="true" />}
           {loading && <VisuallyHidden>Checking sources</VisuallyHidden>}
+          {preparation?.state === 'error' && (
+            <VisuallyHidden>Could not check sources.</VisuallyHidden>
+          )}
           {preparation?.state === 'no_source' && (
             <VisuallyHidden>No compatible source found yet</VisuallyHidden>
           )}

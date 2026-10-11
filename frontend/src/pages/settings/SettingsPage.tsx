@@ -70,17 +70,19 @@ export default function SettingsPage({
     target?.focus({ preventScroll: true });
   }, [canConfigure, canManageStorage, initialFocus]);
 
-  const moveFocus = () => {
+  const moveFocus = (direction: -1 | 1) => {
     const buttons = [configurationRef.current, storageRef.current, backRef.current].filter(
       (button): button is HTMLButtonElement => Boolean(button && !button.disabled)
     );
     const currentIndex = buttons.indexOf(document.activeElement as HTMLButtonElement);
-    buttons[(currentIndex + 1) % buttons.length]?.focus({ preventScroll: true });
+    const nextIndex =
+      currentIndex < 0 ? 0 : (currentIndex + direction + buttons.length) % buttons.length;
+    buttons[nextIndex]?.focus({ preventScroll: true });
     return true;
   };
   const navigationRef = useKeyboardNavigation({
-    onUp: moveFocus,
-    onDown: moveFocus,
+    onUp: () => moveFocus(-1),
+    onDown: () => moveFocus(1),
     onBack: () => {
       onDismiss();
       return true;

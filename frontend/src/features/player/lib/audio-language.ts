@@ -22,3 +22,39 @@ export function preferredAudioTrack(
   }
   return delivery?.defaultAudioTrackIndex ?? tracks[0]?.index;
 }
+
+/** Report actual decoder support; device names cannot tell us which codecs work. */
+export function playbackAudioCapabilities(
+  video: HTMLVideoElement
+): Pick<
+  import('@miauflix/backend').CreatePlaybackSessionRequest['preferences'],
+  | 'audioLanguages'
+  | 'supportedAudioCodecs'
+  | 'supportedMseAudioCodecs'
+  | 'nativeAudioTracks'
+  | 'allowHevc'
+> {
+  const codecs = {
+    aac: 'mp4a.40.2',
+    mp3: 'mp4a.69',
+    ac3: 'ac-3',
+    eac3: 'ec-3',
+    dts: 'dtsc',
+    opus: 'opus',
+    flac: 'flac',
+    vorbis: 'vorbis',
+  };
+  return {
+    allowHevc: video.canPlayType('video/mp4; codecs="hvc1.1.6.L93.B0"') !== '',
+    audioLanguages: [...navigator.languages].slice(0, 20),
+    supportedAudioCodecs: (Object.keys(codecs) as Array<keyof typeof codecs>).filter(
+      codec => video.canPlayType(`audio/mp4; codecs="${codecs[codec]}"`) !== ''
+    ),
+    supportedMseAudioCodecs: (Object.keys(codecs) as Array<keyof typeof codecs>).filter(
+      codec =>
+        typeof MediaSource !== 'undefined' &&
+        MediaSource.isTypeSupported(`video/mp4; codecs="avc1.42E01E, ${codecs[codec]}"`)
+    ),
+    nativeAudioTracks: 'audioTracks' in video,
+  };
+}

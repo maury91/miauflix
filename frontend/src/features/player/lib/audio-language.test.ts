@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { preferredAudioTrack } from './audio-language';
+import { playbackAudioCapabilities, preferredAudioTrack } from './audio-language';
 
 const delivery = {
   mode: 'audio-transcode' as const,
@@ -14,6 +14,21 @@ const delivery = {
   ],
 };
 describe('browser audio language', () => {
+  it('reports decoder support from the current device instead of assuming a codec list', () => {
+    const video = {
+      canPlayType: (mime: string) =>
+        mime.includes('ac-3') || mime.includes('hvc1') ? 'probably' : '',
+      audioTracks: [],
+    } as unknown as HTMLVideoElement;
+    expect(playbackAudioCapabilities(video)).toMatchObject({
+      supportedAudioCodecs: ['ac3'],
+      allowHevc: true,
+      nativeAudioTracks: true,
+    });
+    expect(
+      playbackAudioCapabilities({ canPlayType: () => '' } as unknown as HTMLVideoElement)
+    ).toMatchObject({ supportedAudioCodecs: [], allowHevc: false, nativeAudioTracks: false });
+  });
   it('matches ISO audio tags to regional browser languages', () => {
     expect(preferredAudioTrack(delivery, ['en-GB'])).toBe(1);
     expect(preferredAudioTrack(delivery, ['fr-CA'])).toBe(0);

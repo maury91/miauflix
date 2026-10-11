@@ -2,7 +2,7 @@ import {
   useCreateSessionMutation,
   useSearchSubtitlesMutation,
 } from '@features/player/api/playback.api';
-import { preferredAudioTrack } from '@features/player/lib/audio-language';
+import { playbackAudioCapabilities } from '@features/player/lib/audio-language';
 import { startAudioPlayback } from '@features/player/lib/audio-playback';
 import {
   mediaSubtitleKey,
@@ -362,8 +362,37 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
   const resumeRef = useRef(resume);
   resumeRef.current = resume;
   const hasProgress = !!progress.data;
+  const selectedAudio = session?.delivery?.audioTracks?.find(
+    track => track.index === audioTrackIndex
+  );
+  const needsSelectedTrack =
+    session?.delivery?.mode === 'direct' &&
+    audioTrackIndex !== session.delivery.defaultAudioTrackIndex &&
+    (!(videoRef.current && 'audioTracks' in videoRef.current) ||
+      selectedAudio?.canPlayDirect === false) &&
+    !!selectedAudio?.mimeType;
+  const [audioRemux, setAudioRemux] = useState(false);
   const audioDelivery =
-    session?.delivery?.mode === 'audio-transcode' ? session.delivery : undefined;
+    session?.delivery?.mode === 'audio-transcode' || needsSelectedTrack || audioRemux
+      ? session?.delivery
+      : undefined;
+
+  useEffect(() => {
+    const video = videoRef.current as
+      | (HTMLVideoElement & {
+          audioTracks?: { length: number; [index: number]: { enabled: boolean } };
+        })
+      | null;
+    if (audioDelivery || !video?.audioTracks || audioTrackIndex === undefined) return;
+    const select = () => {
+      if (!video.audioTracks || !video.audioTracks[audioTrackIndex]) return;
+      for (let index = 0; index < video.audioTracks.length; index++)
+        video.audioTracks[index].enabled = index === audioTrackIndex;
+    };
+    select();
+    video.addEventListener('loadedmetadata', select);
+    return () => video.removeEventListener('loadedmetadata', select);
+  }, [session, audioDelivery, audioTrackIndex]);
 
   useEffect(() => {
     if (!session || !audioDelivery) return;
@@ -390,8 +419,12 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
     setPendingPosition(position);
     return startAudioPlayback({
       video,
-      url: session.streamUrl,
-      mimeType: audioDelivery.mimeType,
+      url: session.streamUrl.endsWith('/audio') ? session.streamUrl : `${session.streamUrl}/audio`,
+      mimeType:
+        audioDelivery.audioTracks?.find(track => track.index === audioTrackIndex)?.mimeType ??
+        audioDelivery.mimeType,
+      copyAudio: audioDelivery.audioTracks?.find(track => track.index === audioTrackIndex)
+        ?.copyAudio,
       durationSeconds: audioDelivery.durationSeconds,
       startSeconds: position,
       autoplay: audioSeek.autoplay,
@@ -442,7 +475,10 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
 
     void createSession({
       playable,
-      preferences: { quality: 'auto', allowHevc: false },
+      preferences: {
+        quality: 'auto',
+        ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
+      },
     })
       .unwrap()
       .then(result => {
@@ -450,7 +486,8 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
         setStatus(result.preparation.state === 'warm' ? 'ready' : 'preparing');
         setAudioSeek({ position: 0, autoplay: true, revision: 0 });
         setPendingPosition(undefined);
-        setAudioTrackIndex(preferredAudioTrack(result.delivery));
+        setAudioRemux(false);
+        setAudioTrackIndex(result.delivery?.defaultAudioTrackIndex);
         audioPreparing.current = result.delivery?.mode === 'audio-transcode';
         sessionSubtitleStorageKey.current = subtitleStorageKey;
         setSession(result);
@@ -594,16 +631,33 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
             subtitlePreferencesKey={currentUser?.id ?? null}
             durationSeconds={audioDelivery?.durationSeconds}
             pendingPosition={pendingPosition}
-            audioTracks={audioDelivery?.audioTracks}
+            audioTracks={session?.delivery?.audioTracks?.filter(
+              track =>
+                session.delivery?.mode === 'audio-transcode' ||
+                track.index === session.delivery?.defaultAudioTrackIndex ||
+                !!track.mimeType ||
+                (videoRef.current && 'audioTracks' in videoRef.current && track.canPlayDirect)
+            )}
             selectedAudioTrackIndex={audioTrackIndex}
             onSelectAudioTrack={index => {
+              if (index === audioTrackIndex) return;
               const position = pendingPosition ?? videoRef.current?.currentTime ?? 0;
               const autoplay = audioPreparing.current
                 ? audioSeek.autoplay
                 : !videoRef.current?.paused;
               resumeApplied.current = true;
-              audioPreparing.current = true;
-              setPendingPosition(position);
+              const nativeSelection =
+                session.delivery?.mode === 'direct' &&
+                !audioRemux &&
+                videoRef.current &&
+                'audioTracks' in videoRef.current &&
+                session.delivery.audioTracks?.find(track => track.index === index)
+                  ?.canPlayDirect !== false;
+              audioPreparing.current = !nativeSelection;
+              if (!nativeSelection) {
+                setAudioRemux(true);
+                setPendingPosition(position);
+              }
               setAudioTrackIndex(index);
               setAudioSeek(previous => ({ position, autoplay, revision: previous.revision + 1 }));
             }}

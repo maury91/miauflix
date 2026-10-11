@@ -1,5 +1,6 @@
 import { createHash, randomBytes } from 'node:crypto';
 
+import { logger } from '@logger';
 import type { Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
@@ -14,7 +15,13 @@ import type {
 import type { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
 import type { StorageService } from '@services/storage/storage.service';
 
-import type { AudioPlaybackService, PlaybackDelivery } from './audio-playback.service';
+import {
+  AudioConversionRequiredError,
+  AudioPlaybackError,
+  type AudioPlaybackPreferences,
+  type AudioPlaybackService,
+  type PlaybackDelivery,
+} from './audio-playback.service';
 
 export interface PlaybackSessionSource {
   id: number;
@@ -58,7 +65,7 @@ export class PlaybackSessionService {
   async create(
     userId: string,
     playable: PlayableRef,
-    preferences: PlaybackPreferences
+    preferences: AudioPlaybackPreferences & PlaybackPreferences
   ): Promise<PlaybackSession | null> {
     const prepared = await this.preparation.prepare(playable, {
       through: 'warm',
@@ -71,7 +78,18 @@ export class PlaybackSessionService {
       await this.warmup?.promote(prepared.source, this.playableKey(playable));
     }
     const storage = await this.storageService?.getStorageByMovieSource(prepared.source.id);
-    const delivery = await this.audioPlaybackService?.inspect(prepared.source);
+    let delivery: PlaybackDelivery | undefined;
+    try {
+      delivery = await this.audioPlaybackService?.inspect(prepared.source, preferences);
+    } catch (error) {
+      if (error instanceof AudioConversionRequiredError)
+        throw new AudioPlaybackError(error.message, 422);
+      logger.warn(
+        'PlaybackSessionService',
+        'Audio inspection failed; using direct delivery',
+        error
+      );
+    }
 
     const streamingKey = randomBytes(32).toString('base64url');
     const expiresAt = new Date(Date.now() + this.ttlMs);

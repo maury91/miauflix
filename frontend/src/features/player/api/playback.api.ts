@@ -2,7 +2,6 @@ import { authApi } from '@features/auth/api/auth.api';
 import type {
   CreatePlaybackSessionResponse,
   PlayableRef,
-  Quality,
   SubtitleSearchResponse,
 } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
@@ -11,10 +10,8 @@ import { backendClient } from '@shared/api/backend-client';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import type { RootState } from '@store/store';
 
-export interface PlaybackPreferences {
-  quality: Quality | 'auto';
-  allowHevc: boolean;
-}
+export type PlaybackPreferences =
+  import('@miauflix/backend').CreatePlaybackSessionRequest['preferences'];
 
 export interface CreatePlaybackSessionRequest {
   playable: PlayableRef;

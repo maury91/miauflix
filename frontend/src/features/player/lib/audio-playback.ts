@@ -6,6 +6,7 @@ interface AudioPlaybackOptions {
   startSeconds: number;
   autoplay: boolean;
   audioTrackIndex?: number;
+  copyAudio?: boolean;
   onReady: () => void;
   onError: (message: string) => void;
 }
@@ -104,6 +105,7 @@ export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
     url.searchParams.set('start', String(startSeconds));
     if (options.audioTrackIndex !== undefined)
       url.searchParams.set('audioTrack', String(options.audioTrackIndex));
+    url.searchParams.set('audioCopy', String(options.copyAudio === true));
     const response = await fetch(url, { signal, credentials: 'include' });
     if (!response.ok || !response.body) {
       const failure = (await response.json().catch(() => null)) as { error?: unknown } | null;

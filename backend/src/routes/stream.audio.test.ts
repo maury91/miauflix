@@ -54,7 +54,8 @@ describe('audio streaming authorization', () => {
       45,
       grant.expiresAt,
       expect.any(AbortSignal),
-      1
+      1,
+      false
     );
     expect(streamService.getBestSourceForStreaming).not.toHaveBeenCalled();
   });

@@ -75,6 +75,19 @@ describe('getConfigurationPageState', () => {
     ).toBe('config_wizard');
   });
 
+  it('allows dismissing missing Trakt credentials while catalog configuration is complete', () => {
+    const entries = [
+      entry({ hasValue: true }),
+      entry({ key: 'TRAKT_CLIENT_ID', serviceGroup: 'LIST' }),
+    ];
+    const statuses = {
+      LIST: { status: 'degraded', missingVars: ['TRAKT_CLIENT_ID'] },
+      CATALOG: { status: 'ready' },
+    };
+    expect(getConfigurationPageState(entries, statuses, false)).toBe('config');
+    expect(getConfigurationPageState(entries, statuses, true)).toBeNull();
+  });
+
   it('does not force the wizard for a degraded service with no missing configuration', () => {
     expect(
       getConfigurationPageState(

@@ -18,6 +18,9 @@ export interface PlaybackAudioTrack {
   codec: string | null;
   channels: number | null;
   isDefault: boolean;
+  copyAudio?: boolean;
+  canPlayDirect?: boolean;
+  mimeType?: string;
 }
 
 export interface PlaybackDelivery {
@@ -29,12 +32,25 @@ export interface PlaybackDelivery {
   defaultAudioTrackIndex?: number;
 }
 
+export interface AudioPlaybackPreferences {
+  audioLanguages?: string[];
+  supportedAudioCodecs?: string[];
+  supportedMseAudioCodecs?: string[];
+  nativeAudioTracks?: boolean;
+}
+
 export class AudioPlaybackError extends Error {
   constructor(
     message: string,
     readonly status: 422 | 503 = 503
   ) {
     super(message);
+  }
+}
+
+export class AudioConversionRequiredError extends AudioPlaybackError {
+  constructor(message: string) {
+    super(message, 422);
   }
 }
 
@@ -51,9 +67,12 @@ interface ProbeResult {
 }
 
 /** Inspect actual streams and expose selectable audio tracks without changing video. */
-export function deliveryFromProbe(probe: ProbeResult): PlaybackDelivery {
+export function deliveryFromProbe(
+  probe: ProbeResult,
+  preferences: AudioPlaybackPreferences = {}
+): PlaybackDelivery {
   const video = probe.streams?.find(stream => stream.codec_type === 'video');
-  const audioTracks = (probe.streams ?? [])
+  const audioTracks: PlaybackAudioTrack[] = (probe.streams ?? [])
     .filter(stream => stream.codec_type === 'audio')
     .map((stream, index) => ({
       index,
@@ -63,16 +82,63 @@ export function deliveryFromProbe(probe: ProbeResult): PlaybackDelivery {
       channels: stream.channels ?? null,
       isDefault: stream.disposition?.default === 1,
     }));
-  const defaultAudioTrackIndex = audioTracks.find(track => track.isDefault)?.index ?? 0;
-  const audio = audioTracks[defaultAudioTrackIndex];
+  let defaultAudioTrackIndex = audioTracks.find(track => track.isDefault)?.index ?? 0;
+  const normalizeLanguage = (language: string) => {
+    try {
+      return new Intl.Locale(language.replace(/_/g, '-')).language;
+    } catch {
+      return language;
+    }
+  };
+  for (const language of preferences.audioLanguages ?? []) {
+    const wanted = normalizeLanguage(language);
+    const match = audioTracks.find(
+      track => track.language && normalizeLanguage(track.language) === wanted
+    );
+    if (match) {
+      defaultAudioTrackIndex = match.index;
+      break;
+    }
+  }
+  let audio = audioTracks[defaultAudioTrackIndex];
   const durationSeconds = Number(probe.format?.duration);
   if (!video || !Number.isFinite(durationSeconds) || durationSeconds <= 0) {
     throw new AudioPlaybackError('The selected source has no usable video duration.', 422);
   }
-  const audioCodec = audio?.codec ?? null;
-  const compatible = !audio || ['aac', 'mp3', 'opus', 'vorbis', 'flac'].includes(audioCodec ?? '');
-  const selectionRequiresConversion = video.codec_name === 'h264' && audioTracks.length > 1;
-  if (compatible && !selectionRequiresConversion)
+  const supported = preferences.supportedAudioCodecs ?? ['aac', 'mp3', 'opus', 'vorbis', 'flac'];
+  let audioCodec = audio?.codec ?? null;
+  let compatible = !audio || supported.includes(audioCodec ?? '');
+  const avc = video.extradata?.match(/00000000:\s+([\da-f ]+)/i)?.[1].replace(/\s/g, '');
+  const usableAvc = video.codec_name === 'h264' && !!avc?.startsWith('01') && avc.length >= 8;
+  const containerDefault = audioTracks.find(track => track.isDefault)?.index ?? 0;
+  const selectionRequiresConversion =
+    defaultAudioTrackIndex !== containerDefault && !preferences.nativeAudioTracks;
+  if (compatible && selectionRequiresConversion && !usableAvc) {
+    // Without a usable AVC header keep the container's default track playable.
+    defaultAudioTrackIndex = containerDefault;
+    audio = audioTracks[defaultAudioTrackIndex];
+    audioCodec = audio?.codec ?? null;
+    compatible = !audio || supported.includes(audioCodec ?? '');
+  }
+  const direct = compatible && (!selectionRequiresConversion || !usableAvc);
+  const audioCodecs: Record<string, string> = {
+    aac: 'mp4a.40.2',
+    mp3: 'mp4a.69',
+    ac3: 'ac-3',
+    eac3: 'ec-3',
+    opus: 'opus',
+    flac: 'flac',
+  };
+  for (const track of audioTracks) {
+    track.canPlayDirect = supported.includes(track.codec ?? '');
+    track.copyAudio =
+      (preferences.supportedMseAudioCodecs ?? supported).includes(track.codec ?? '') &&
+      !!audioCodecs[track.codec ?? ''];
+    track.mimeType = usableAvc
+      ? `video/mp4; codecs="avc1.${avc!.slice(2, 8)}, ${track.copyAudio ? audioCodecs[track.codec!] : 'mp4a.40.2'}"`
+      : undefined;
+  }
+  if (direct)
     return {
       mode: 'direct',
       audioCodec,
@@ -82,13 +148,12 @@ export function deliveryFromProbe(probe: ProbeResult): PlaybackDelivery {
       defaultAudioTrackIndex,
     };
   if (video.codec_name !== 'h264') {
-    throw new AudioPlaybackError('Audio conversion requires an H.264 video source.', 422);
+    throw new AudioConversionRequiredError('Audio conversion requires an H.264 video source.');
   }
-  // Matroska H.264 CodecPrivate is an AVCDecoderConfigurationRecord. Use the actual
-  // profile/constraints/level so the browser can reject unsupported video explicitly.
-  const avc = video.extradata?.match(/00000000:\s+([\da-f ]+)/i)?.[1].replace(/\s/g, '');
-  if (!avc?.startsWith('01') || avc.length < 8) {
-    throw new AudioPlaybackError('The selected source has no usable H.264 configuration.', 422);
+  if (!usableAvc) {
+    throw new AudioConversionRequiredError(
+      'The selected source has no usable H.264 configuration.'
+    );
   }
   return {
     mode: 'audio-transcode',
@@ -96,14 +161,15 @@ export function deliveryFromProbe(probe: ProbeResult): PlaybackDelivery {
     audioTracks,
     defaultAudioTrackIndex,
     durationSeconds,
-    mimeType: `video/mp4; codecs="avc1.${avc.slice(2, 8)}, mp4a.40.2"`,
+    mimeType: audio?.mimeType ?? `video/mp4; codecs="avc1.${avc!.slice(2, 8)}, mp4a.40.2"`,
   };
 }
 
 export function audioConversionArgs(
   input: string,
   startSeconds: number,
-  audioTrackIndex = 0
+  audioTrackIndex = 0,
+  copyAudio = false
 ): string[] {
   return [
     '-nostdin',
@@ -129,11 +195,7 @@ export function audioConversionArgs(
     '-c:v',
     'copy',
     '-c:a',
-    'aac',
-    '-ac',
-    '2',
-    '-b:a',
-    '192k',
+    ...(copyAudio ? ['copy'] : ['aac', '-ac', '2', '-b:a', '192k']),
     '-threads',
     '1',
     '-avoid_negative_ts',
@@ -154,20 +216,21 @@ interface ConversionJob {
 
 /** Bounded, disk-free audio conversion over the existing decrypted torrent range reader. */
 export class AudioPlaybackService {
-  private readonly probes = new Map<
-    number,
-    { expires: number; value: Promise<PlaybackDelivery> }
-  >();
+  private readonly probes = new Map<number, { expires: number; value: Promise<ProbeResult> }>();
   private readonly jobs = new Map<string, ConversionJob>();
   private readonly processes = new Set<ChildProcess>();
   private closed = false;
 
   constructor(private readonly downloadService: DownloadService) {}
 
-  async inspect(source: MovieSource): Promise<PlaybackDelivery> {
+  async inspect(
+    source: MovieSource,
+    preferences: AudioPlaybackPreferences = {}
+  ): Promise<PlaybackDelivery> {
     if (this.closed) throw new AudioPlaybackError('Audio playback is shutting down.');
     const cached = this.probes.get(source.id);
-    if (cached && cached.expires > Date.now()) return cached.value;
+    if (cached && cached.expires > Date.now())
+      return deliveryFromProbe(await cached.value, preferences);
     if (this.probes.size >= 64) {
       for (const [id, entry] of this.probes)
         if (entry.expires <= Date.now()) this.probes.delete(id);
@@ -178,10 +241,10 @@ export class AudioPlaybackService {
       throw error;
     });
     this.probes.set(source.id, { expires: Date.now() + 15 * 60_000, value });
-    return value;
+    return deliveryFromProbe(await value, preferences);
   }
 
-  private async probe(source: MovieSource): Promise<PlaybackDelivery> {
+  private async probe(source: MovieSource): Promise<ProbeResult> {
     const input = await this.openInput(source);
     try {
       if (this.closed || this.processes.size >= 4)
@@ -230,7 +293,7 @@ export class AudioPlaybackService {
                 )
           );
         });
-        return deliveryFromProbe(JSON.parse(body) as ProbeResult);
+        return JSON.parse(body) as ProbeResult;
       } finally {
         clearTimeout(timeout);
         this.processes.delete(child);
@@ -246,11 +309,14 @@ export class AudioPlaybackService {
     startSeconds: number,
     expiresAt: Date,
     signal: AbortSignal,
-    audioTrackIndex?: number
+    audioTrackIndex?: number,
+    copyAudio = false
   ): Promise<Response> {
-    const delivery = await this.inspect(source);
-    if (delivery.mode !== 'audio-transcode')
-      throw new AudioPlaybackError('This source does not require audio conversion.', 422);
+    // This endpoint also remuxes a selected compatible track without re-encoding it.
+    const delivery = await this.inspect(source, {
+      supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'opus', 'flac', 'vorbis'],
+      nativeAudioTracks: true,
+    });
     if (
       !Number.isFinite(startSeconds) ||
       startSeconds < 0 ||
@@ -265,6 +331,8 @@ export class AudioPlaybackService {
     ) {
       throw new AudioPlaybackError('The requested audio track is unavailable.', 422);
     }
+    if (!delivery.audioTracks?.find(track => track.index === selectedAudioTrack)?.mimeType)
+      throw new AudioPlaybackError('The selected source cannot be remuxed as H.264.', 422);
     const previous = this.jobs.get(owner);
     previous?.controller.abort();
     const controller = new AbortController();
@@ -316,9 +384,13 @@ export class AudioPlaybackService {
       input = await this.openInput(source);
       if (controller.signal.aborted)
         throw new AudioPlaybackError('Audio preparation was cancelled.');
-      child = spawn('ffmpeg', audioConversionArgs(input.url, startSeconds, selectedAudioTrack), {
-        stdio: ['ignore', 'pipe', 'pipe'],
-      });
+      child = spawn(
+        'ffmpeg',
+        audioConversionArgs(input.url, startSeconds, selectedAudioTrack, copyAudio),
+        {
+          stdio: ['ignore', 'pipe', 'pipe'],
+        }
+      );
       this.processes.add(child);
       child.stderr!.resume();
       controller.signal.addEventListener(

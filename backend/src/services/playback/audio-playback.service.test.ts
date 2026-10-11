@@ -46,11 +46,11 @@ describe('audio playback delivery', () => {
       ],
     });
     expect(delivery.defaultAudioTrackIndex).toBe(1);
-    expect(delivery.audioTracks).toEqual([
+    expect(delivery.audioTracks).toMatchObject([
       { index: 0, language: 'fra', title: null, codec: 'ac3', channels: 6, isDefault: false },
       { index: 1, language: 'eng', title: 'Original', codec: 'aac', channels: 2, isDefault: true },
     ]);
-    expect(delivery.mode).toBe('audio-transcode');
+    expect(delivery.mode).toBe('direct');
     expect(audioConversionArgs('http://localhost/input', 45, 1)).toContain('0:a:1');
   });
 
@@ -59,6 +59,64 @@ describe('audio playback delivery', () => {
       AudioPlaybackError
     );
     expect(() => deliveryFromProbe(setupTest('ac3', 'hevc'))).toThrow('H.264');
+  });
+
+  it('does not convert an unwanted secondary language, even with Annex B video', () => {
+    const probe = setupTest('aac');
+    probe.streams[0].extradata = '00000000: 0000 0001 6742';
+    probe.streams.push({ codec_type: 'audio', codec_name: 'ac3' });
+    expect(
+      deliveryFromProbe(probe, { audioLanguages: ['en'], supportedAudioCodecs: ['aac'] }).mode
+    ).toBe('direct');
+  });
+
+  it('selects a preferred language and only converts its unsupported codec', () => {
+    const video = setupTest().streams[0];
+    const probe = {
+      format: { duration: '120' },
+      streams: [
+        video,
+        {
+          codec_type: 'audio',
+          codec_name: 'aac',
+          tags: { language: 'fra' },
+          disposition: { default: 1 },
+        },
+        { codec_type: 'audio', codec_name: 'ac3', tags: { language: 'eng' } },
+      ],
+    };
+    const chrome = deliveryFromProbe(probe, {
+      audioLanguages: ['en-GB'],
+      supportedAudioCodecs: ['aac'],
+    });
+    expect(chrome).toMatchObject({
+      mode: 'audio-transcode',
+      defaultAudioTrackIndex: 1,
+      audioCodec: 'ac3',
+    });
+    expect(chrome.audioTracks?.[1].copyAudio).toBe(false);
+    const tv = deliveryFromProbe(probe, {
+      audioLanguages: ['en-GB'],
+      supportedAudioCodecs: ['aac', 'ac3'],
+      nativeAudioTracks: true,
+    });
+    expect(tv.mode).toBe('direct');
+    expect(tv.audioTracks?.[1].copyAudio).toBe(true);
+    const remux = deliveryFromProbe(probe, {
+      audioLanguages: ['en-GB'],
+      supportedAudioCodecs: ['aac', 'ac3'],
+    });
+    expect(remux.mode).toBe('audio-transcode');
+    expect(remux.mimeType).toContain('ac-3');
+    const mseFallback = deliveryFromProbe(probe, {
+      audioLanguages: ['en'],
+      supportedAudioCodecs: ['ac3'],
+      supportedMseAudioCodecs: ['aac'],
+    });
+    expect(mseFallback.audioTracks?.[1]).toMatchObject({ canPlayDirect: true, copyAudio: false });
+    expect(mseFallback.mimeType).toContain('mp4a.40.2');
+    expect(audioConversionArgs('http://localhost/input', 0, 1, true)).toContain('copy');
+    expect(audioConversionArgs('http://localhost/input', 0, 1, true)).not.toContain('aac');
   });
 
   it('builds a seekable, video-copy command with original timestamps', () => {

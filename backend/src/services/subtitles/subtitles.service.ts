@@ -263,10 +263,11 @@ export class SubtitlesService {
       throw new SubtitleAccessError('Subtitle is unavailable');
     }
 
-    const cached = this.tracks.get(candidateId);
+    const key = String(record.fileId);
+    const cached = this.tracks.get(key);
     if (cached) {
-      this.tracks.delete(candidateId);
-      this.tracks.set(candidateId, cached);
+      this.tracks.delete(key);
+      this.tracks.set(key, cached);
       return cached.body;
     }
     if (record.trackPromise) return record.trackPromise;
@@ -274,8 +275,8 @@ export class SubtitlesService {
     record.trackPromise = this.loadTrack(record.fileId)
       .then(body => {
         const bytes = Buffer.byteLength(body);
-        if (bytes <= MAX_CACHED_TRACK_BYTES) {
-          this.tracks.set(candidateId, { body, bytes });
+        if (bytes <= MAX_CACHED_TRACK_BYTES && !this.tracks.has(key)) {
+          this.tracks.set(key, { body, bytes });
           this.cachedTrackBytes += bytes;
           this.trimTrackCache();
         }
@@ -468,11 +469,6 @@ export class SubtitlesService {
 
   private removeCandidate(id: string): void {
     this.candidates.delete(id);
-    const cached = this.tracks.get(id);
-    if (cached) {
-      this.tracks.delete(id);
-      this.cachedTrackBytes -= cached.bytes;
-    }
   }
 }
 

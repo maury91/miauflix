@@ -76,6 +76,21 @@ describe('PlayerView', () => {
     stopAudioPlayback.mockReset();
   });
 
+  it('sends device codecs and preferred languages before a video element is mounted', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    render(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
+    await waitFor(() => expect(createSession).toHaveBeenCalled());
+    expect(createSession).toHaveBeenCalledWith(
+      expect.objectContaining({
+        preferences: expect.objectContaining({
+          audioLanguages: [...navigator.languages],
+          supportedAudioCodecs: expect.any(Array),
+          nativeAudioTracks: expect.any(Boolean),
+        }),
+      })
+    );
+  });
+
   it('explains an unavailable source with the title and a recovery action', async () => {
     createSession.mockReturnValue({
       unwrap: () => Promise.reject({ status: 404, data: 'No playable source available' }),

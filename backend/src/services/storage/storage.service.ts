@@ -278,8 +278,12 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     encryptedLayout: EncryptedStorageLayout
   ): Promise<void> {
     const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
-    if (!storage || storage.encryptedLayout) return;
-    await this.storageRepository.update(storage.id, { encryptedLayout });
+    if (!storage) return;
+    if (storage.encryptedLayout?.filenameSalt === encryptedLayout.filenameSalt) return;
+    const next = storage.encryptedLayout
+      ? { ...storage.encryptedLayout, filenameSalt: encryptedLayout.filenameSalt }
+      : encryptedLayout;
+    await this.storageRepository.update(storage.id, { encryptedLayout: next });
   }
 
   async markVideoComplete(

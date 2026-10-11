@@ -143,11 +143,55 @@ integration('audio conversion with a seekable, delayed range reader', () => {
           Math.max(
             ...probe.packets
               .filter(packet => packet.stream_index === 0)
-              .map(packet => Number(packet.pts_time) + Number(packet.duration_time))
+              // Some FFprobe versions omit per-packet duration; the fixture is 25 fps.
+              .map(packet => Number(packet.pts_time) + Number(packet.duration_time ?? 1 / 25))
           ) + offset;
         expect(videoEnd).toBeCloseTo(20.005, 1);
       }
       expect(ranges.some(start => start > 0)).toBe(true);
+    } finally {
+      await service.close();
+    }
+  }, 30_000);
+
+  it('reuses source inspection across clients and copies supported AC-3 without converting other languages', async () => {
+    const { service, source, ranges } = setupTest();
+    try {
+      const tv = await service.inspect(source, {
+        audioLanguages: ['en'],
+        supportedAudioCodecs: ['ac3'],
+        nativeAudioTracks: true,
+      });
+      expect(tv).toMatchObject({ mode: 'direct', defaultAudioTrackIndex: 1 });
+      const requests = ranges.length;
+      const chrome = await service.inspect(source, {
+        audioLanguages: ['en'],
+        supportedAudioCodecs: ['aac'],
+      });
+      expect(chrome).toMatchObject({ mode: 'audio-transcode', defaultAudioTrackIndex: 1 });
+      expect(ranges.length).toBe(requests);
+      const response = await service.stream(
+        source,
+        'copy',
+        0,
+        new Date(Date.now() + 60_000),
+        new AbortController().signal,
+        1,
+        true
+      );
+      const output = join(directory, 'copied-ac3.mp4');
+      await writeFile(output, Buffer.from(await response.arrayBuffer()));
+      const probe = JSON.parse(
+        execFileSync(
+          'ffprobe',
+          ['-v', 'error', '-show_entries', 'stream=codec_name', '-of', 'json', output],
+          { encoding: 'utf8' }
+        )
+      );
+      expect(probe.streams.map((stream: { codec_name: string }) => stream.codec_name)).toEqual([
+        'h264',
+        'ac3',
+      ]);
     } finally {
       await service.close();
     }

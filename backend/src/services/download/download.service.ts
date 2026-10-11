@@ -188,17 +188,17 @@ export class DownloadService {
         ? item.infoHash?.toLowerCase() === sourceHash.toLowerCase()
         : item.path === storage.location
     );
-    const videoComplete =
-      Boolean(storage.videoCompletedAt) ||
-      storage.localOnly ||
-      Boolean(
-        torrent &&
-          (torrent.done ||
-            this.isVideoComplete(
-              torrent,
-              storage.encryptedLayout ?? this.createEncryptedLayout(torrent)
-            ))
-      );
+    let videoComplete =
+      Boolean(storage.videoCompletedAt) || storage.localOnly || Boolean(torrent?.done);
+    if (!videoComplete && torrent?.ready) {
+      try {
+        const layout = storage.encryptedLayout ?? this.createEncryptedLayout(torrent);
+        videoComplete = this.isVideoComplete(torrent, layout);
+      } catch {
+        // Metadata can be incomplete while a torrent is being admitted.
+        videoComplete = false;
+      }
+    }
     const activity: StorageActivity = videoComplete
       ? storage.localOnly
         ? 'local_only'
@@ -1519,7 +1519,12 @@ export class DownloadService {
                 );
                 const bytes = piece.subarray(
                   pieceOffset,
-                  Math.min(piece.length, layout.pieceLength, pieceOffset + 256 * 1024)
+                  Math.min(
+                    piece.length,
+                    layout.pieceLength,
+                    pieceOffset + 256 * 1024,
+                    pieceOffset + lastByte - cursor + 1
+                  )
                 );
                 if (!bytes.length)
                   throw new ErrorWithStatus(

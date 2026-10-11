@@ -11,6 +11,16 @@ export const playbackPreferencesSchema = z
   .object({
     quality: z.enum(supportedQualities),
     allowHevc: z.boolean(),
+    audioLanguages: z.array(z.string().min(1).max(35)).max(20).optional(),
+    supportedAudioCodecs: z
+      .array(z.enum(['aac', 'mp3', 'opus', 'vorbis', 'flac', 'ac3', 'eac3', 'dts']))
+      .max(8)
+      .optional(),
+    supportedMseAudioCodecs: z
+      .array(z.enum(['aac', 'mp3', 'opus', 'vorbis', 'flac', 'ac3', 'eac3', 'dts']))
+      .max(8)
+      .optional(),
+    nativeAudioTracks: z.boolean().optional(),
   })
   .strict();
 
@@ -23,7 +33,7 @@ export const createPlaybackSessionRequestSchema = z
 
 export interface CreatePlaybackSessionRequest {
   playable: PlayableRef;
-  preferences: { quality: Quality | 'auto'; allowHevc: boolean };
+  preferences: z.infer<typeof playbackPreferencesSchema>;
 }
 
 export interface CreatePlaybackSessionResponse {

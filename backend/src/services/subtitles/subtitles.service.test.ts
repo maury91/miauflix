@@ -107,6 +107,12 @@ describe('subtitle ranking and durable downloads', () => {
     request.mockResolvedValueOnce({ ok: true, body: bytes.buffer });
     const tracks = await Promise.all([service.getTrack(first.id), service.getTrack(second.id)]);
     expect(tracks[0]).toBe(tracks[1]);
+    const cache = service as unknown as { tracks: Map<string, unknown>; cachedTrackBytes: number };
+    expect(cache.tracks.size).toBe(1);
+    expect(cache.cachedTrackBytes).toBe(Buffer.byteLength(tracks[0]));
+    const third = (await search([entry(42, 'Movie Title')])).candidates[0];
+    expect(await service.getTrack(third.id)).toBe(tracks[0]);
+    expect(cache.tracks.size).toBe(1);
     expect(request.mock.calls.filter(([url]) => String(url).endsWith('/download'))).toHaveLength(1);
     expect(await readFile(join(directory, 'subtitles/opensubtitles/42.vtt'), 'utf8')).toBe(
       tracks[0]

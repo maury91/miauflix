@@ -33,13 +33,19 @@ export function getConfigurationPageState(
   serviceStatuses: ServiceStatuses | undefined,
   configDismissed: boolean
 ): 'config' | 'config_wizard' | null {
+  // LIST (Trakt) enriches browsing but is not required to use the catalog.
+  const isEssential = (group: string) =>
+    group !== 'LIST' && group !== 'TRAKT' && group !== 'SUBTITLES';
   const hasMissingRequiredConfig =
-    configEntries?.some(entry => entry.required && !entry.hasValue) === true ||
-    Object.values(serviceStatuses ?? {}).some(({ missingVars }) => (missingVars?.length ?? 0) > 0);
-
-  // Required configuration must be completed before catalog routes can work; dismissing the
-  // prompt only applies to optional runtime service issues.
-  if (hasMissingRequiredConfig) return 'config_wizard';
+    configEntries?.some(
+      entry => entry.required && !entry.hasValue && isEssential(entry.serviceGroup)
+    ) === true;
+  const hasMissingEssentialService = Object.entries(serviceStatuses ?? {}).some(
+    ([group, service]) =>
+      isEssential(group) &&
+      (service.status === 'needs_configuration' || (service.missingVars?.length ?? 0) > 0)
+  );
+  if (hasMissingRequiredConfig || hasMissingEssentialService) return 'config_wizard';
   if (!configDismissed && hasConfigurationIssue(configEntries, serviceStatuses)) return 'config';
   return null;
 }

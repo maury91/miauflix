@@ -66,6 +66,36 @@ describe('StorageService', () => {
     }
   });
 
+  it('persists a repaired filename salt while preserving the stored layout', async () => {
+    const { storageService } = setupTest();
+    const movie = await testDataFactory.createTestMovie();
+    const source = await testDataFactory.createTestMovieSource(movie.id);
+    await storageService.createStorage({
+      movieSourceId: source.id,
+      location: '/tmp/test/salt',
+      size: 8,
+      totalPieces: 2,
+      downloadedPieces: testDataFactory.createBitfield(2, 100),
+    });
+    const layout = {
+      storeName: 'original',
+      filenameSalt: 'old',
+      pieceLength: 4,
+      files: [{ path: 'movie.mkv', length: 8, offset: 0 }],
+      video: { name: 'movie.mkv', path: 'movie.mkv', length: 8, offset: 0 },
+    };
+    await storageService.updateEncryptedLayout(source.id, layout);
+    await storageService.updateEncryptedLayout(source.id, {
+      ...layout,
+      storeName: 'must not replace',
+      filenameSalt: 'fixed',
+    });
+    expect((await storageService.getStorageByMovieSource(source.id))?.encryptedLayout).toEqual({
+      ...layout,
+      filenameSalt: 'fixed',
+    });
+  });
+
   describe('Core CRUD Operations', () => {
     it('should create storage record for a movie source', async () => {
       // Arrange
