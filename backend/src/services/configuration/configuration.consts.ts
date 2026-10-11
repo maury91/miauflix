@@ -10,6 +10,7 @@ import { listConfigurationDefinition } from '@services/list/list.configuration';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
 import { storageConfigurationDefinition } from '@services/storage/storage.configuration';
+import { subtitlesConfigurationDefinition } from '@services/subtitles/subtitles.configuration';
 import { objectKeys } from '@utils/object.util';
 
 export const services = {
@@ -24,6 +25,7 @@ export const services = {
   YTS: ytsConfigurationDefinition,
   DOWNLOAD: downloadConfigurationDefinition,
   STORAGE: storageConfigurationDefinition,
+  SUBTITLES: subtitlesConfigurationDefinition,
 };
 
 export type ConfigurationGroup = {

@@ -5,6 +5,10 @@ import { AppShell } from './AppShell';
 
 import { render, screen, waitFor } from '@/__test-utils__';
 
+vi.mock('@app/hooks/useAppState', () => ({
+  useAppState: () => 'login',
+}));
+
 // Mock the IntroAnimation component
 vi.mock('@app/shell/IntroAnimation', () => ({
   IntroAnimation: ({ onComplete }: { onComplete: () => void }) => {

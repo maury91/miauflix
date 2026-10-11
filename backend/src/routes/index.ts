@@ -7,6 +7,7 @@ import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { traceContextMiddleware } from '@middleware/trace-context.middleware';
+import { expandEquivalentOrigins } from '@utils/origin.util';
 
 import { createAuthRoutes } from './auth.routes';
 import type { Deps } from './common.types';
@@ -18,8 +19,11 @@ import { createMovieRoutes } from './movie.routes';
 import { createPlaybackRoutes } from './playback.routes';
 import { createPreloadRoutes } from './preload.routes';
 import { createProgressRoutes } from './progress.routes';
+import { createRatingRoutes } from './ratings.routes';
 import { createShowRoutes } from './show.routes';
+import { createStorageRoutes } from './storage.routes';
 import { createStreamRoutes } from './stream.routes';
+import { createSubtitleRoutes } from './subtitles.routes';
 
 function createApiRoutes(deps: Deps) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(
@@ -56,18 +60,23 @@ function createApiRoutes(deps: Deps) {
     .route('/shows', createShowRoutes(deps))
     .route('/media', createMediaRoutes(deps))
     .route('/stream', createStreamRoutes(deps))
+    .route('/ratings', createRatingRoutes(deps))
     .route('/progress', createProgressRoutes(deps))
     .route('/preload', createPreloadRoutes(deps))
     .route('/playback', createPlaybackRoutes(deps))
+    .route('/subtitles', createSubtitleRoutes(deps))
+    .route('/storage', createStorageRoutes(deps))
     .route('/', createListRoutes(deps));
 }
 
 export function createRoutes(deps: Deps) {
   const frontendDir = deps.configurationService.get('FRONTEND_DIR');
   const frontendEnabled = deps.configurationService.get('ENABLE_FRONTEND');
-  const origins = (deps.configurationService.get('CORS_ORIGIN') ?? [])
-    .map((origin: string) => origin.trim())
-    .filter(Boolean);
+  const origins = expandEquivalentOrigins(
+    (deps.configurationService.get('CORS_ORIGIN') ?? [])
+      .map((origin: string) => origin.trim())
+      .filter(Boolean)
+  );
 
   const app = new Hono()
     .use(

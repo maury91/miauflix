@@ -7,6 +7,9 @@ import { sb } from 'storybook/test';
 // Keeping this mock in Storybook leaves the production API module untouched.
 sb.mock(import('../src/features/media/api/lists.api.ts'), { spy: true });
 sb.mock(import('../src/features/media/api/media.api.ts'));
+sb.mock(import('../src/features/media/api/ratings.api.ts'));
+sb.mock(import('../src/features/preload/api/preload.api.ts'));
+sb.mock(import('../src/features/progress/api/progress.api.ts'));
 
 const preview: Preview = {
   parameters: {

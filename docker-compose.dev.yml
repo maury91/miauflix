@@ -80,6 +80,8 @@ services:
       - ./backend/tsconfig.client.json:/usr/src/app/backend/tsconfig.client.json:ro
       - ./data:/usr/data
       - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
+      # npm workspace commands run from backend; persist the default DOWNLOAD_PATH too.
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/backend/downloads
 
   frontend:
     build:

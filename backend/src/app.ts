@@ -9,6 +9,7 @@ import { Database } from '@database/database';
 import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
+import { MediaRatingRepository } from '@repositories/media-rating.repository';
 import { AuthService } from '@services/auth/auth.service';
 import { QrLoginService } from '@services/auth/qr-login.service';
 import { registerBackgroundJobHandlers } from '@services/background-job/background-job.handlers';
@@ -22,6 +23,7 @@ import { DownloadService } from '@services/download/download.service';
 import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
+import { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
@@ -36,6 +38,8 @@ import { ContentDirectoryService } from '@services/source-metadata/content-direc
 import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 import { StreamService } from '@services/stream/stream.service';
+import { SubtitlesService } from '@services/subtitles/subtitles.service';
+import { TorrentSubtitlesService } from '@services/subtitles/torrent-subtitles.service';
 
 import { initializeInstrumentation } from './instrumentation';
 import { createRoutes } from './routes';
@@ -116,7 +120,8 @@ try {
   const playablePreparationService = new PlayablePreparationService(
     mediaService,
     sourceService,
-    torrentWarmupController
+    torrentWarmupController,
+    storageService
   );
   const preloadIntentService = new PreloadIntentService(
     playablePreparationService,
@@ -129,12 +134,23 @@ try {
     progressService,
     catalogClient
   );
+  const audioPlaybackService = new AudioPlaybackService(downloadService, configurationService);
   const playbackSessionService = new PlaybackSessionService(
     db,
     playablePreparationService,
     configurationService,
     torrentWarmupController,
-    storageService
+    storageService,
+    audioPlaybackService
+  );
+  const torrentSubtitlesService = new TorrentSubtitlesService(downloadService);
+  const subtitlesService = new SubtitlesService(
+    configurationService,
+    requestService,
+    playbackSessionService,
+    streamService,
+    mediaService,
+    torrentSubtitlesService
   );
 
   const serverService = {
@@ -202,30 +218,45 @@ try {
   }
   scheduleCoordinator.start(!disableBackgroundTasks);
 
-  // Graceful shutdown handlers
-  const gracefulShutdown = async (signal: string) => {
-    logger.info('App', `Received ${signal}, shutting down gracefully...`);
+  const httpServer: { current?: ReturnType<typeof serve> } = {};
+  let shutdownPromise: Promise<void> | undefined;
 
-    await scheduleCoordinator.stop();
-    catalogClient.stop();
-    listClient.stop();
-    await backgroundWorker.stop();
-    realtimeGateway.close();
-    preloadIntentService.close();
-    backgroundJobs.close();
+  // Graceful shutdown handlers. Stop accepting new work first, then drain
+  // existing HTTP handlers before closing the services they depend on.
+  const gracefulShutdown = (signal: string): Promise<void> => {
+    if (shutdownPromise) return shutdownPromise;
+    shutdownPromise = (async () => {
+      logger.info('App', `Received ${signal}, shutting down gracefully...`);
 
-    await db.close();
+      let drained = Promise.resolve();
+      if (httpServer.current) {
+        drained = new Promise<void>(resolve => httpServer.current!.close(() => resolve()));
+      }
+      realtimeGateway.close();
+      await scheduleCoordinator.stop();
+      catalogClient.stop();
+      listClient.stop();
+      await backgroundWorker.stop();
+      preloadIntentService.close();
+      backgroundJobs.close();
 
-    // Give some time for ongoing operations to complete
-    setTimeout(() => {
+      // Do not leave a request holding the database open indefinitely.
+      await Promise.race([drained, new Promise<void>(resolve => setTimeout(resolve, 5_000))]);
+
+      torrentSubtitlesService.close();
+      await audioPlaybackService.close();
+      await downloadService.close();
+      await db.close();
       process.exit(0);
-    }, 5000);
+    })();
+    return shutdownPromise;
   };
 
   process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
   process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
   const app = createRoutes({
+    mediaRatingRepository: new MediaRatingRepository(db),
     authService,
     auditLogService,
     catalogClient,
@@ -244,7 +275,10 @@ try {
     statsService,
     preloadIntentService,
     playbackSessionService,
+    audioPlaybackService,
     progressService,
+    subtitlesService,
+    storageService,
   });
 
   // Error handling middleware - must be added first
@@ -288,15 +322,16 @@ try {
   });
 
   const port = configurationService.getOrThrow('PORT');
-  const server = serve({ fetch: app.fetch, port });
+  httpServer.current = serve({ fetch: app.fetch, port });
   // The default Hono adapter above creates an HTTP/1 server, which is the
   // upgrade-capable variant used by the realtime gateway.
-  realtimeGateway.attach(server as HttpServer);
-  server.on('error', err => {
+  const runningServer = httpServer.current as HttpServer;
+  realtimeGateway.attach(runningServer);
+  runningServer.on('error', err => {
     logger.error('App', `Server error: ${err}`);
     serverService._status = { status: 'error', errorMessage: err.message, error: err };
   });
-  server.on('listening', () => {
+  runningServer.on('listening', () => {
     logger.info('App', `Server is listening on http://localhost:${port}`);
     serverService._status = { status: 'ready' };
   });

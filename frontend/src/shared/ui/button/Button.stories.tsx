@@ -65,6 +65,15 @@ export const KeyboardFocus: Story = {
   },
 };
 
+export const CollapsibleIcon: Story = {
+  args: {
+    color: 'secondary',
+    icon: <ExternalLinkIcon />,
+    children: 'Open externally',
+    collapseWhenNotFocused: true,
+  },
+};
+
 export const Disabled: Story = {
   args: {
     color: 'secondary',

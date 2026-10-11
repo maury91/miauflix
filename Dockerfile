@@ -55,7 +55,7 @@ WORKDIR /usr/src/app
 
 # Install gosu and curl for entrypoint/healthcheck
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends gosu curl && \
+    apt-get install -y --no-install-recommends gosu curl ffmpeg && \
     rm -rf /var/lib/apt/lists/*
 
 # Copy built output from dist directory (where tsc puts compiled JS files)

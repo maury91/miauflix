@@ -22,10 +22,32 @@ export function hasConfigurationIssue(
 ): boolean {
   const hasMissingRequiredValue = configEntries?.some(entry => entry.required && !entry.hasValue);
   const hasMisconfiguredService = Object.values(serviceStatuses ?? {}).some(
-    ({ status }) => status === 'needs_configuration'
+    ({ status, missingVars }) => status === 'needs_configuration' || (missingVars?.length ?? 0) > 0
   );
 
   return hasMissingRequiredValue === true || hasMisconfiguredService;
+}
+
+export function getConfigurationPageState(
+  configEntries: ConfigEntryView[] | undefined,
+  serviceStatuses: ServiceStatuses | undefined,
+  configDismissed: boolean
+): 'config' | 'config_wizard' | null {
+  // LIST (Trakt) enriches browsing but is not required to use the catalog.
+  const isEssential = (group: string) =>
+    group !== 'LIST' && group !== 'TRAKT' && group !== 'SUBTITLES';
+  const hasMissingRequiredConfig =
+    configEntries?.some(
+      entry => entry.required && !entry.hasValue && isEssential(entry.serviceGroup)
+    ) === true;
+  const hasMissingEssentialService = Object.entries(serviceStatuses ?? {}).some(
+    ([group, service]) =>
+      isEssential(group) &&
+      (service.status === 'needs_configuration' || (service.missingVars?.length ?? 0) > 0)
+  );
+  if (hasMissingRequiredConfig || hasMissingEssentialService) return 'config_wizard';
+  if (!configDismissed && hasConfigurationIssue(configEntries, serviceStatuses)) return 'config';
+  return null;
 }
 
 export function useAppState(): AppState {
@@ -74,16 +96,10 @@ export function useAppState(): AppState {
     return 'loading';
   }
 
-  // 6. The setup flag only governs first-admin registration. The wizard is
-  // exclusively driven by missing configuration or a degraded/error service.
-  const hasMissingRequiredValue = configData?.some(entry => entry.required && !entry.hasValue);
-  if (hasMissingRequiredValue && !configDismissed) {
-    return 'config_wizard';
-  }
-
-  if (hasConfigurationIssue(configData, serviceStatuses) && !configDismissed) {
-    return 'config';
-  }
+  // 6. The setup flag only governs first-admin registration. Missing required
+  // configuration always opens the wizard; dismiss only applies to runtime issues.
+  const configurationPage = getConfigurationPageState(configData, serviceStatuses, configDismissed);
+  if (configurationPage) return configurationPage;
 
   // 7. Default: home
   return 'home';

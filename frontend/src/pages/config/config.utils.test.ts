@@ -39,6 +39,22 @@ describe('sortServiceGroups', () => {
 
     expect(groups.map(([name]) => name)).toEqual(['MISSING', 'DEGRADED', 'READY']);
   });
+
+  it('orders remote-reported missing values before other degraded services', () => {
+    const groups = sortServiceGroups(
+      {
+        READY: [entry(false, true)],
+        CATALOG: [entry(true, true)],
+        DEGRADED: [entry(false, true)],
+      },
+      {
+        CATALOG: { status: 'degraded', missingVars: ['TMDB_API_ACCESS_TOKEN'] },
+        DEGRADED: { status: 'degraded', reason: 'temporary provider failure' },
+      }
+    );
+
+    expect(groups.map(([name]) => name)).toEqual(['CATALOG', 'DEGRADED', 'READY']);
+  });
 });
 
 describe('preserveInitialServiceOrder', () => {

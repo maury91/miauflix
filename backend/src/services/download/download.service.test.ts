@@ -1,4 +1,15 @@
+jest.mock('./torrent-diagnostics');
+jest.mock('./encrypted-file-reader', () => ({
+  EncryptedFileReader: jest.fn().mockImplementation(() => ({
+    readPiece: jest.fn().mockResolvedValue(Buffer.alloc(10)),
+    close: jest.fn().mockResolvedValue(undefined),
+  })),
+}));
+
+import { EventEmitter } from 'node:events';
+
 import {
+  createMockStorage,
   createMockStorageWithHash,
   createMockStorageWithoutMovieSource,
   createMockStorageWithUndefinedHash,
@@ -9,6 +20,7 @@ import loadIPSet from 'load-ip-set';
 import type { Torrent } from 'webtorrent';
 
 import { Database } from '@database/database';
+import type { EncryptedStorageLayout, Storage } from '@entities/storage.entity';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { RequestServiceResponse } from '@services/request/request.service';
 import { RequestService } from '@services/request/request.service';
@@ -27,11 +39,16 @@ jest.mock('@services/request/request.service');
 jest.mock('@database/database');
 jest.mock('@services/configuration/configuration.service');
 
-const createMockConfig = (): ConfigurationService => {
+type TestConfigurationService = ConfigurationService & {
+  setSeedDurationSeconds: (seconds: number) => void;
+};
+
+const createMockConfig = (seedDurationSeconds = 3600): TestConfigurationService => {
   const values: Record<string, unknown> = {
     CONTENT_CONNECTION_LIMIT: 100,
     CONTENT_DOWNLOAD_LIMIT: 1000000,
     CONTENT_UPLOAD_LIMIT: 500000,
+    CONTENT_SEED_DURATION_SECONDS: seedDurationSeconds,
     DISABLE_DISCOVERY: false,
     STATIC_TRACKERS: ['udp://tracker1.example.com:1337', 'udp://tracker2.example.com:1337'],
     SCRAPE_TRACKERS: ['udp://tracker.opentrackr.org:1337/announce'],
@@ -48,7 +65,11 @@ const createMockConfig = (): ConfigurationService => {
     if (key in values) return values[key] as never;
     throw new Error(`${key} is not set`);
   });
-  return mockedConfigService;
+  return Object.assign(mockedConfigService, {
+    setSeedDurationSeconds: (seconds: number) => {
+      values.CONTENT_SEED_DURATION_SECONDS = seconds;
+    },
+  }) as TestConfigurationService;
 };
 
 describe('DownloadService', () => {
@@ -57,10 +78,11 @@ describe('DownloadService', () => {
   });
 
   const setupTest = (mockConfig?: {
+    seedDurationSeconds?: number;
     requestServiceMock?: (mock: jest.Mocked<RequestService>) => void;
     loadIPSetMock?: (mock: jest.MockedFunction<typeof loadIPSet>) => void;
   }) => {
-    const configService = createMockConfig();
+    const configService = createMockConfig(mockConfig?.seedDurationSeconds);
 
     // Mock BT Client
     const mockBTClient = {
@@ -95,15 +117,248 @@ describe('DownloadService', () => {
     ) as jest.Mocked<StorageService>;
 
     const service = new DownloadService(mockStorageService, mockRequestService, configService);
+    mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
 
     return {
       service,
+      configService,
       mockBTClient,
       mockRequestService,
       mockLoadIPSet,
       mockStorageService,
     };
   };
+
+  describe('storage activity snapshot', () => {
+    it('distinguishes incomplete activity from complete offline and local-only content', () => {
+      const { service } = setupTest({ seedDurationSeconds: 3600 });
+      const completedAt = new Date('2026-10-08T10:00:00Z');
+      const baseStorage = {
+        location: '/downloads/item',
+        localOnly: false,
+        videoCompletedAt: null,
+        encryptedLayout: {
+          storeName: 'test',
+          filenameSalt: 'download-AbCd',
+          pieceLength: 4,
+          files: [{ path: 'video.mkv', length: 12, offset: 0 }],
+          video: { name: 'video.mkv', path: 'video.mkv', offset: 3, length: 5 },
+        },
+        movieSource: { hash: 'AbCd' },
+      };
+      const torrentList: Torrent[] = [];
+      (service.client as unknown as { torrents: Torrent[] }).torrents = torrentList;
+
+      expect(service.getStorageActivity(baseStorage)).toMatchObject({
+        activity: 'inactive',
+        videoComplete: false,
+        torrentLoaded: false,
+      });
+      expect(service.getStorageActivity({ ...baseStorage, localOnly: true })).toMatchObject({
+        activity: 'local_only',
+        videoComplete: true,
+        torrentLoaded: false,
+      });
+      expect(service.getStorageActivity({ ...baseStorage, videoCompletedAt: completedAt })).toEqual(
+        {
+          activity: 'available_offline',
+          seedEndsAt: new Date('2026-10-08T11:00:00Z'),
+          videoComplete: true,
+          torrentLoaded: false,
+        }
+      );
+
+      torrentList.push({
+        infoHash: 'unrelated',
+        path: baseStorage.location,
+        paused: false,
+        done: false,
+      } as Torrent);
+      expect(service.getStorageActivity(baseStorage).activity).toBe('inactive');
+      torrentList[0] = {
+        ...torrentList[0],
+        infoHash: 'aBcD',
+        path: '/downloads/different-path',
+      } as Torrent;
+      expect(service.getStorageActivity(baseStorage)).toMatchObject({
+        activity: 'active',
+        videoComplete: false,
+        torrentLoaded: true,
+      });
+      expect(service.getStorageActivity({ ...baseStorage, videoCompletedAt: completedAt })).toEqual(
+        {
+          activity: 'available_offline',
+          seedEndsAt: new Date('2026-10-08T11:00:00Z'),
+          videoComplete: true,
+          torrentLoaded: true,
+        }
+      );
+
+      torrentList[0] = { ...torrentList[0], paused: true } as Torrent;
+      expect(service.getStorageActivity(baseStorage).activity).toBe('active');
+      expect(
+        service.getStorageActivity({ ...baseStorage, encryptedLayout: null }).videoComplete
+      ).toBe(false);
+      torrentList[0] = { ...torrentList[0], paused: false } as Torrent;
+      (service as unknown as { pausedForPlayback: Set<number> }).pausedForPlayback.add(1);
+      expect(service.getStorageActivity(baseStorage).activity).toBe('active');
+
+      torrentList[0] = {
+        ...torrentList[0],
+        done: false,
+        ready: true,
+        bitfield: { get: (piece: number) => piece < 2 },
+      } as Torrent;
+      expect(service.getStorageActivity(baseStorage)).toMatchObject({
+        activity: 'available_offline',
+        videoComplete: true,
+        torrentLoaded: true,
+      });
+    });
+  });
+
+  describe('range progress without an attached torrent', () => {
+    const layout: EncryptedStorageLayout = {
+      storeName: 'test',
+      filenameSalt: 'download-AbCd',
+      pieceLength: 4,
+      files: [{ path: 'video.mkv', length: 5, offset: 3 }],
+      video: { name: 'video.mkv', path: 'video.mkv', offset: 3, length: 5 },
+    };
+
+    it.each([
+      ['completed', { videoCompletedAt: new Date('2026-10-10T12:00:00Z') }],
+      ['local-only', { localOnly: true }],
+    ])('reports the requested video bytes verified for %s media', async (_name, completion) => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({
+        id: 1,
+        movieSourceId: 1,
+        location: '/downloads/item',
+        encryptedLayout: layout,
+        ...completion,
+      });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [];
+
+      await expect(service.getRangeProgress(1, 0, 1)).resolves.toEqual({
+        verifiedBytes: 5,
+        targetBytes: 5,
+        progress: 100,
+        isComplete: true,
+      });
+      await expect(service.getRangeProgress(1, 2, 2)).resolves.toEqual({
+        verifiedBytes: 0,
+        targetBytes: 0,
+        progress: 0,
+        isComplete: false,
+      });
+    });
+
+    it('keeps an incomplete result when detached storage is not marked complete', async () => {
+      const { service, mockStorageService } = setupTest();
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(
+        createMockStorage({ encryptedLayout: layout })
+      );
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [];
+
+      await expect(service.getRangeProgress(1, 0, 1)).resolves.toMatchObject({
+        verifiedBytes: 0,
+        targetBytes: 0,
+        progress: 0,
+        isComplete: false,
+      });
+    });
+
+    it('counts only video bytes in boundary pieces for an active torrent', async () => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({ location: '/downloads/item', encryptedLayout: layout });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [
+        {
+          path: storage.location,
+          length: 12,
+          pieceLength: 4,
+          pieces: [{}, {}, {}],
+          bitfield: { get: (piece: number) => piece === 0 },
+        } as unknown as Torrent,
+      ];
+
+      await expect(service.getRangeProgress(storage.movieSourceId, 0, 1)).resolves.toEqual({
+        verifiedBytes: 1,
+        targetBytes: 5,
+        progress: 20,
+        isComplete: false,
+      });
+    });
+  });
+
+  describe('download progress while torrent metadata loads', () => {
+    it('returns incomplete progress instead of null before torrent metadata is ready', async () => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({
+        id: 1,
+        movieSourceId: 1,
+        location: '/downloads/item',
+        encryptedLayout: null,
+        downloaded: 2500,
+        size: 12,
+      });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [
+        {
+          path: storage.location,
+          ready: false,
+          progress: 0.25,
+          downloaded: 3,
+          length: 12,
+          downloadSpeed: 0,
+          done: false,
+        } as Torrent,
+      ];
+
+      await expect(service.getDownloadProgress(1)).resolves.toMatchObject({
+        movieSourceId: 1,
+        progress: 25,
+        downloadedBytes: 3,
+        totalBytes: 12,
+        isComplete: false,
+      });
+    });
+
+    it('returns progress when a ready torrent has unusable file metadata', async () => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({
+        id: 1,
+        movieSourceId: 1,
+        location: '/downloads/item',
+        encryptedLayout: null,
+        downloaded: 2500,
+        size: 12,
+      });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      (service.client as unknown as { torrents: Torrent[] }).torrents = [
+        {
+          path: storage.location,
+          infoHash: storage.movieSource.hash,
+          name: 'pending',
+          ready: true,
+          files: [],
+          progress: 0.25,
+          downloaded: 3,
+          length: 12,
+          downloadSpeed: 0,
+          done: false,
+        } as unknown as Torrent,
+      ];
+
+      await expect(service.getDownloadProgress(1)).resolves.toMatchObject({
+        movieSourceId: 1,
+        progress: 25,
+        isComplete: false,
+      });
+    });
+  });
 
   describe('tracker loading', () => {
     it('should load trackers and IP sets on initialization', async () => {
@@ -353,7 +608,7 @@ describe('DownloadService', () => {
   });
 
   describe('stream cancellation', () => {
-    it('releases stream activity once when cancellation interrupts a pending read', async () => {
+    it('releases stream activity once when cancellation interrupts a pending piece read', async () => {
       const { service, mockStorageService } = setupTest();
       const webtorrent = service.client as unknown as {
         ready: boolean;
@@ -371,21 +626,19 @@ describe('DownloadService', () => {
         operation()
       );
       mockStorageService.createStorage.mockResolvedValue(storage as never);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage as never);
       mockStorageService.setPlaybackActive.mockResolvedValue(true);
 
-      let resolveRead!: (value: IteratorResult<Uint8Array>) => void;
-      const returnIterator = jest.fn(async () => ({ done: true, value: undefined }));
       const file = {
         name: 'movie.mkv',
+        path: 'movie.mkv',
         length: 10,
         offset: 0,
         select: jest.fn(),
-        [Symbol.asyncIterator]: () => ({
-          next: () => new Promise<IteratorResult<Uint8Array>>(resolve => (resolveRead = resolve)),
-          return: returnIterator,
-        }),
       };
       const torrent = {
+        infoHash: 'a'.repeat(40),
+        name: 'movie',
         bitfield: undefined,
         pieces: new Array(1),
         ready: true,
@@ -393,6 +646,8 @@ describe('DownloadService', () => {
         length: 10,
         files: [file],
         on: jest.fn(),
+        once: jest.fn(),
+        removeListener: jest.fn(),
         off: jest.fn(),
       };
       webtorrent.torrents = [];
@@ -415,10 +670,229 @@ describe('DownloadService', () => {
       expect(service.isPlaybackActive(1)).toBe(false);
       expect(mockStorageService.setPlaybackActive).toHaveBeenNthCalledWith(1, 1, true);
       expect(mockStorageService.setPlaybackActive).toHaveBeenNthCalledWith(2, 1, false);
-      expect(returnIterator).toHaveBeenCalledTimes(1);
+    });
 
-      // Settle the underlying read after cancellation to ensure it is ignored.
-      resolveRead({ done: true, value: undefined });
+    it('keeps an active response readable after seeding expires and removes the torrent without its files', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as {
+        ready: boolean;
+        torrents: Torrent[];
+        remove: jest.Mock;
+      };
+      webtorrent.ready = true;
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie - abcdef12',
+        filenameSalt: 'download-a',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 8 }],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/movie',
+        size: 8,
+        videoCompletedAt: new Date(),
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      const file = { path: 'movie.mkv', select: jest.fn() };
+      const torrent = {
+        path: storage.location,
+        files: [file],
+        bitfield: { get: () => true },
+        destroyed: false,
+      } as unknown as Torrent;
+      webtorrent.torrents = [torrent];
+      webtorrent.remove.mockResolvedValue(undefined);
+      mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
+        await detach();
+        return { ...storage, localOnly: true };
+      });
+      jest.spyOn(service, 'startDownload').mockResolvedValue({
+        movieSourceId: storage.movieSourceId,
+        torrent,
+        storage,
+        layout,
+        startTime: new Date(),
+      });
+
+      const response = await service.streamFile({ id: storage.movieSourceId, size: 8 } as never);
+      const reader = response.body!.getReader();
+      const first = await reader.read();
+      const detach = (
+        service as unknown as {
+          detachCompletedTorrent: (sourceId: number) => Promise<void>;
+        }
+      ).detachCompletedTorrent;
+      await detach.call(service, storage.movieSourceId);
+      const second = await reader.read();
+      const end = await reader.read();
+
+      expect(Buffer.concat([Buffer.from(first.value!), Buffer.from(second.value!)])).toHaveLength(
+        8
+      );
+      expect(end.done).toBe(true);
+      expect(webtorrent.remove).toHaveBeenCalledWith(torrent, { destroyStore: false });
+      expect(service.hasActivePlayback()).toBe(false);
+    });
+
+    it('caps a partial range inside an encrypted piece', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as {
+        ready: boolean;
+        torrents: Torrent[];
+        remove: jest.Mock;
+      };
+      webtorrent.ready = true;
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie - abcdef12',
+        filenameSalt: 'download-a',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 8 }],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/movie',
+        size: 8,
+        videoCompletedAt: new Date(),
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      const file = { path: 'movie.mkv', select: jest.fn() };
+      const torrent = {
+        path: storage.location,
+        files: [file],
+        bitfield: { get: () => true },
+        destroyed: false,
+      } as unknown as Torrent;
+      webtorrent.torrents = [torrent];
+      webtorrent.remove.mockResolvedValue(undefined);
+      mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
+        await detach();
+        return { ...storage, localOnly: true };
+      });
+      jest.spyOn(service, 'startDownload').mockResolvedValue({
+        movieSourceId: storage.movieSourceId,
+        torrent,
+        storage,
+        layout,
+        startTime: new Date(),
+      });
+
+      const response = await service.streamFile(
+        { id: storage.movieSourceId, size: 8 } as never,
+        'bytes=0-2'
+      );
+      expect(response.headers.get('Content-Length')).toBe('3');
+      expect((await response.arrayBuffer()).byteLength).toBe(3);
+      expect(service.hasActivePlayback()).toBe(false);
+    });
+
+    it('selects the requested subtitle and waits for its verified pieces even when the video is complete', async () => {
+      const { service, mockStorageService } = setupTest();
+      (service.client as unknown as { ready: boolean }).ready = true;
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength: 4,
+        files: [
+          { path: 'movie.mkv', offset: 0, length: 8 },
+          { path: 'movie.en.srt', offset: 8, length: 4 },
+        ],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/movie',
+        size: 12,
+        videoCompletedAt: new Date(),
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      let subtitleVerified = false;
+      const subtitleFile = { path: 'movie.en.srt', select: jest.fn() };
+      const torrent = Object.assign(new EventEmitter(), {
+        files: [subtitleFile],
+        bitfield: { get: (piece: number) => piece < 2 || subtitleVerified },
+        destroyed: false,
+      }) as unknown as Torrent;
+      jest.spyOn(service, 'startDownload').mockResolvedValue({
+        movieSourceId: storage.movieSourceId,
+        torrent,
+        storage,
+        layout,
+        startTime: new Date(),
+      });
+      mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+      const response = await service.streamFile(
+        { id: storage.movieSourceId, size: 12 } as never,
+        undefined,
+        'movie.en.srt'
+      );
+      expect(subtitleFile.select).toHaveBeenCalled();
+      expect(response.headers.get('Content-Length')).toBe('4');
+      let finished = false;
+      const body = response.arrayBuffer().then(bytes => {
+        finished = true;
+        return bytes;
+      });
+      await new Promise(resolve => setTimeout(resolve, 0));
+      expect(finished).toBe(false);
+      subtitleVerified = true;
+      torrent.emit('verified', 2);
+      expect((await body).byteLength).toBe(4);
+      expect(service.hasActivePlayback()).toBe(false);
+      await expect(
+        service.streamFile(
+          { id: storage.movieSourceId, size: 12 } as never,
+          undefined,
+          '../../unrelated.srt'
+        )
+      ).rejects.toThrow('Requested torrent file is unavailable');
+    });
+
+    it('plays a detached encrypted source without adding it back to WebTorrent', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as {
+        ready: boolean;
+        torrents: Torrent[];
+        add: jest.Mock;
+      };
+      webtorrent.ready = true;
+      webtorrent.torrents = [];
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie - abcdef12',
+        filenameSalt: 'download-a',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 8 }],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/movie',
+        size: 8,
+        videoCompletedAt: new Date(Date.now() - 60 * 60_000),
+        localOnly: true,
+        encryptedLayout: layout,
+      });
+      mockStorageService.createStorage.mockResolvedValue(storage);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+
+      const response = await service.streamFile({
+        id: storage.movieSourceId,
+        size: 8,
+        hash: storage.movieSource.hash,
+      } as never);
+      const media = await response.arrayBuffer();
+
+      expect(media.byteLength).toBe(8);
+      expect(webtorrent.add).not.toHaveBeenCalled();
     });
   });
 
@@ -487,9 +961,228 @@ describe('DownloadService', () => {
   });
 
   describe('download tracking and allocation reconciliation', () => {
+    it('starts completion from the selected video pieces even when auxiliary torrent pieces are missing', async () => {
+      const { service, mockStorageService } = setupTest();
+      const completedStorage = createMockStorage({
+        videoCompletedAt: new Date(),
+        localOnly: false,
+      });
+      mockStorageService.markVideoComplete.mockResolvedValue(completedStorage);
+      const schedule = jest.spyOn(
+        service as unknown as { scheduleSeedExpiry: (storage: Storage) => void },
+        'scheduleSeedExpiry'
+      );
+      const layout = {
+        storeName: 'movie - abcdef12',
+        filenameSalt: 'download-a'.repeat(5),
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 12 }],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 3, length: 5 },
+      };
+      const torrent = { bitfield: { get: (index: number) => index < 2 } };
+      const maybeMark = (
+        service as unknown as {
+          maybeMarkVideoComplete: (
+            torrent: Torrent,
+            id: number,
+            layout: EncryptedStorageLayout
+          ) => Promise<void>;
+        }
+      ).maybeMarkVideoComplete;
+
+      await maybeMark.call(service, torrent as never, 42, layout);
+
+      expect(mockStorageService.markVideoComplete).toHaveBeenCalledWith(42, layout);
+      expect(schedule).toHaveBeenCalledWith(completedStorage);
+    });
+
+    it('detaches at the configured deadline and preserves a completed storage row', async () => {
+      const { service, mockStorageService } = setupTest();
+      jest.useFakeTimers();
+      try {
+        const completionTime = new Date(Date.now());
+        let storage = createMockStorage({ videoCompletedAt: completionTime, localOnly: false });
+        mockStorageService.getStorageByMovieSource.mockImplementation(async () => storage);
+        mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
+          await detach();
+          storage = { ...storage, localOnly: true };
+          return storage;
+        });
+        const torrent = { path: storage.location } as Torrent;
+        (mockedTorrentInstance as unknown as { torrents: Torrent[] }).torrents = [torrent];
+        mockedTorrentInstance.remove.mockResolvedValue(undefined);
+        const schedule = (service as unknown as { scheduleSeedExpiry: (item: Storage) => void })
+          .scheduleSeedExpiry;
+
+        schedule.call(service, storage);
+        await jest.advanceTimersByTimeAsync(3_599_999);
+        expect(mockStorageService.detachCompletedStorage).not.toHaveBeenCalled();
+        await jest.advanceTimersByTimeAsync(1);
+
+        expect(mockStorageService.detachCompletedStorage).toHaveBeenCalledWith(
+          storage.movieSourceId,
+          expect.any(Function)
+        );
+        expect(storage.localOnly).toBe(true);
+        expect(mockedTorrentInstance.remove).toHaveBeenCalledWith(torrent, {
+          destroyStore: false,
+        });
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    it('detaches immediately when the configured seeding duration is zero', async () => {
+      const { service, mockStorageService } = setupTest({ seedDurationSeconds: 0 });
+      jest.useFakeTimers();
+      try {
+        const storage = createMockStorage({ videoCompletedAt: new Date(), localOnly: false });
+        mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+        mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
+          await detach();
+          return { ...storage, localOnly: true };
+        });
+        (mockedTorrentInstance as unknown as { torrents: Torrent[] }).torrents = [
+          { path: storage.location } as Torrent,
+        ];
+        mockedTorrentInstance.remove.mockResolvedValue(undefined);
+
+        const schedule = (service as unknown as { scheduleSeedExpiry: (item: Storage) => void })
+          .scheduleSeedExpiry;
+        schedule.call(service, storage);
+        await jest.advanceTimersByTimeAsync(0);
+
+        expect(mockedTorrentInstance.remove).toHaveBeenCalledWith(expect.any(Object), {
+          destroyStore: false,
+        });
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    it('recalculates pending deadlines when the configuration reloads', async () => {
+      const { service, configService, mockStorageService } = setupTest();
+      jest.useFakeTimers();
+      try {
+        const storage = createMockStorage({ videoCompletedAt: new Date(), localOnly: false });
+        mockStorageService.getStoragesWithCompletion.mockResolvedValue([storage]);
+        mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+        mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
+          await detach();
+          return { ...storage, localOnly: true };
+        });
+        (mockedTorrentInstance as unknown as { torrents: Torrent[] }).torrents = [
+          { path: storage.location } as Torrent,
+        ];
+        mockedTorrentInstance.remove.mockResolvedValue(undefined);
+        jest
+          .spyOn(service as unknown as { init: () => Promise<void> }, 'init')
+          .mockResolvedValue(undefined);
+
+        await service.reload();
+        configService.setSeedDurationSeconds(0);
+        await service.reload();
+        await jest.advanceTimersByTimeAsync(0);
+
+        expect(mockStorageService.detachCompletedStorage).toHaveBeenCalledWith(
+          storage.movieSourceId,
+          expect.any(Function)
+        );
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
+    it('restores seeding after restart only while the saved deadline remains', async () => {
+      const { service, mockStorageService } = setupTest();
+      mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
+      (mockedTorrentInstance as unknown as { torrents: Torrent[] }).torrents = [];
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie - abcdef12',
+        filenameSalt: 'download-abc',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 8 }],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+      };
+      const activeStorage = createMockStorage({
+        videoCompletedAt: new Date(Date.now() - 30 * 60_000),
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      mockStorageService.getStoragesWithCompletion.mockResolvedValue([activeStorage]);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(activeStorage);
+      const file = { path: 'movie.mkv', select: jest.fn() };
+      const torrent = {
+        files: [file],
+        bitfield: { get: () => true },
+        pieces: new Array(2),
+        pieceLength: 4,
+        length: 8,
+        on: jest.fn(),
+        once: jest.fn(),
+        removeListener: jest.fn(),
+      } as unknown as Torrent;
+      const addTorrent = jest
+        .spyOn(
+          service as unknown as { addTorrentWithLock: (...args: never[]) => Promise<Torrent> },
+          'addTorrentWithLock'
+        )
+        .mockResolvedValue(torrent);
+      const restore = (service as unknown as { restoreCompletedDownloads: () => Promise<void> })
+        .restoreCompletedDownloads;
+
+      await restore.call(service);
+
+      expect(addTorrent).toHaveBeenCalledWith(activeStorage.movieSource, activeStorage);
+      expect(file.select).toHaveBeenCalledTimes(1);
+
+      const expiredStorage = createMockStorage({
+        videoCompletedAt: new Date(Date.now() - 2 * 60 * 60_000),
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      mockStorageService.getStoragesWithCompletion.mockResolvedValue([expiredStorage]);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(expiredStorage);
+      addTorrent.mockClear();
+      await restore.call(service);
+
+      expect(addTorrent).not.toHaveBeenCalled();
+      expect(mockStorageService.detachCompletedStorage).toHaveBeenCalledWith(
+        expiredStorage.movieSourceId,
+        expect.any(Function)
+      );
+    });
+
+    it('retries detaching an expired source when startup removal fails', async () => {
+      const { service, mockStorageService } = setupTest();
+      const storage = createMockStorage({
+        videoCompletedAt: new Date(Date.now() - 2 * 60 * 60_000),
+        localOnly: false,
+      });
+      mockStorageService.getStoragesWithCompletion.mockResolvedValue([storage]);
+      const internals = service as unknown as {
+        detachCompletedTorrent: (sourceId: number) => Promise<void>;
+        scheduleDetachRetry: (sourceId: number) => void;
+        restoreCompletedDownloads: () => Promise<void>;
+      };
+      const detach = jest
+        .spyOn(internals, 'detachCompletedTorrent')
+        .mockRejectedValue(new Error('remove failed'));
+      const retry = jest.spyOn(internals, 'scheduleDetachRetry');
+
+      await internals.restoreCompletedDownloads();
+
+      expect(detach).toHaveBeenCalledWith(storage.movieSourceId);
+      expect(retry).toHaveBeenCalledWith(storage.movieSourceId);
+    });
+
     it('uses the runtime WebTorrent piece list for persisted layout', async () => {
       const { service, mockStorageService } = setupTest();
+      const sourceHash = 'ABCDEF1234'.padEnd(40, 'A');
       const torrent = {
+        infoHash: sourceHash.toLowerCase(),
+        name: 'movie',
+        files: [{ name: 'movie.mkv', path: 'movie.mkv', length: 50, offset: 0 }],
         pieces: new Array(5),
         bitfield: undefined,
         pieceLength: 10,
@@ -497,6 +1190,10 @@ describe('DownloadService', () => {
         on: jest.fn(),
       } as unknown as Torrent;
       mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue({
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
@@ -510,7 +1207,7 @@ describe('DownloadService', () => {
       await service.startDownload({
         id: 1,
         size: 50,
-        hash: 'a'.repeat(40),
+        hash: sourceHash,
         magnetLink: 'magnet:?xt=urn:btih:test',
       } as never);
 
@@ -518,11 +1215,98 @@ describe('DownloadService', () => {
         expect.objectContaining({ totalPieces: 5 })
       );
       expect(mockStorageService.updateTorrentLayout).toHaveBeenCalledWith(1, 5, 10, 50);
+      expect(mockStorageService.updateEncryptedLayout).toHaveBeenCalledWith(
+        1,
+        expect.objectContaining({ filenameSalt: `download-${sourceHash}` })
+      );
+    });
+
+    it('repairs a completed local layout to use the exact source hash before skipping WebTorrent', async () => {
+      const { service, mockStorageService } = setupTest();
+      const sourceHash = 'ABCDEF1234'.padEnd(40, 'A');
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie - abcdef12',
+        filenameSalt: `download-${sourceHash.toLowerCase()}`,
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 4 }],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 4 },
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/local-movie',
+        videoCompletedAt: new Date(),
+        localOnly: true,
+        encryptedLayout: layout,
+      });
+      mockStorageService.createStorage.mockResolvedValue(storage);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+
+      const result = await service.startDownload({
+        id: storage.movieSourceId,
+        hash: sourceHash,
+        magnetLink: `magnet:?xt=urn:btih:${sourceHash}`,
+        size: 4,
+      } as never);
+
+      expect(result.torrent).toBeNull();
+      expect(result.layout?.filenameSalt).toBe(`download-${sourceHash}`);
+      expect(mockStorageService.updateEncryptedLayout).toHaveBeenCalledWith(
+        storage.movieSourceId,
+        expect.objectContaining({ filenameSalt: `download-${sourceHash}` })
+      );
+    });
+
+    it('records completion when the selected video is already verified on open', async () => {
+      const { service, mockStorageService } = setupTest();
+      const sourceId = 44;
+      const hash = 'a'.repeat(40);
+      const storage = createMockStorage({
+        movieSourceId: sourceId,
+        location: '/tmp/test-downloads/completed-movie',
+        size: 8,
+      });
+      mockStorageService.createStorage.mockResolvedValue(storage);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.markVideoComplete.mockResolvedValue(
+        createMockStorage({ videoCompletedAt: new Date(), localOnly: false })
+      );
+      const torrent = {
+        infoHash: hash,
+        name: 'movie',
+        files: [{ name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8, select: jest.fn() }],
+        pieces: new Array(2),
+        bitfield: { get: () => true, buffer: Uint8Array.of(3) },
+        pieceLength: 4,
+        length: 8,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockResolvedValue(torrent);
+
+      await service.startDownload({
+        id: sourceId,
+        size: 8,
+        hash,
+        magnetLink: `magnet:?xt=urn:btih:${hash}`,
+      } as never);
+
+      expect(mockStorageService.markVideoComplete).toHaveBeenCalledWith(
+        sourceId,
+        expect.objectContaining({
+          video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+        })
+      );
     });
 
     it('shares an in-flight torrent start for concurrent requests of the same hash', async () => {
       const { service, mockStorageService } = setupTest();
       const torrent = {
+        infoHash: 'a'.repeat(40),
+        name: 'movie',
+        files: [{ name: 'movie.mkv', path: 'movie.mkv', length: 10, offset: 0 }],
         pieces: new Array(1),
         bitfield: undefined,
         pieceLength: 10,
@@ -530,6 +1314,10 @@ describe('DownloadService', () => {
         on: jest.fn(),
       } as unknown as Torrent;
       mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue({
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
@@ -549,7 +1337,7 @@ describe('DownloadService', () => {
 
       const first = service.startDownload(source);
       const second = service.startDownload(source);
-      await Promise.resolve();
+      await new Promise(resolve => setTimeout(resolve, 0));
       expect(addTorrent).toHaveBeenCalledTimes(1);
 
       resolveStart(torrent);
@@ -560,6 +1348,9 @@ describe('DownloadService', () => {
     it('sets up bitfield tracking once when a torrent is reused', async () => {
       const { service, mockStorageService } = setupTest();
       const torrent = {
+        infoHash: 'a'.repeat(40),
+        name: 'movie',
+        files: [{ name: 'movie.mkv', path: 'movie.mkv', length: 10, offset: 0 }],
         bitfield: undefined,
         pieces: new Array(1),
         pieceLength: 10,
@@ -567,6 +1358,10 @@ describe('DownloadService', () => {
         on: jest.fn(),
       } as unknown as Torrent;
       mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue({
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
@@ -594,6 +1389,9 @@ describe('DownloadService', () => {
     it('tracks each source when different sources reuse one torrent', async () => {
       const { service, mockStorageService } = setupTest();
       const torrent = {
+        infoHash: 'a'.repeat(40),
+        name: 'movie',
+        files: [{ name: 'movie.mkv', path: 'movie.mkv', length: 10, offset: 0 }],
         bitfield: undefined,
         pieces: new Array(1),
         pieceLength: 10,
@@ -601,6 +1399,10 @@ describe('DownloadService', () => {
         on: jest.fn(),
       } as unknown as Torrent;
       mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      mockStorageService.getStorageByMovieSource.mockResolvedValue({
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);

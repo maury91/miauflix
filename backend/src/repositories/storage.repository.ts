@@ -25,11 +25,30 @@ export class StorageRepository {
     });
   }
 
+  async findAllWithSourceAndMovie(): Promise<Storage[]> {
+    return this.repository
+      .createQueryBuilder('storage')
+      .leftJoinAndSelect('storage.movieSource', 'movieSource')
+      .leftJoinAndSelect('movieSource.movie', 'movie')
+      .orderBy('storage.allocatedBytes', 'DESC')
+      .addOrderBy('storage.reservedBytes', 'DESC')
+      .addOrderBy('movie.title', 'ASC')
+      .getMany();
+  }
+
   async findSpeculativeStorage(): Promise<Storage[]> {
     return this.repository.find({
       where: { retentionClass: 'speculative' },
       order: { lastInterestAt: 'ASC', createdAt: 'ASC' },
     });
+  }
+
+  async findStoragesWithCompletion(): Promise<Storage[]> {
+    return this.repository
+      .createQueryBuilder('storage')
+      .leftJoinAndSelect('storage.movieSource', 'movieSource')
+      .where('storage.videoCompletedAt IS NOT NULL')
+      .getMany();
   }
 
   async create(storage: Partial<Storage>): Promise<Storage> {
@@ -206,6 +225,14 @@ export class StorageRepository {
       .select('SUM(MAX(storage.allocatedBytes, storage.reservedBytes))', 'totalSize')
       .getRawOne<{ totalSize: string }>();
 
+    return BigInt(result?.totalSize || 0);
+  }
+
+  async getTotalReservedStorageUsage(): Promise<bigint> {
+    const result = await this.repository
+      .createQueryBuilder('storage')
+      .select('SUM(storage.reservedBytes)', 'totalSize')
+      .getRawOne<{ totalSize: string }>();
     return BigInt(result?.totalSize || 0);
   }
 
