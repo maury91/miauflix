@@ -1,8 +1,12 @@
+import type { SubtitleCandidateDto } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+
+import { type AudioTrack, SubtitleMenu } from './SubtitleMenu';
+import type { SubtitleTimingCue } from './SubtitleTiming';
 
 import ArrowLeftIcon from '~icons/mdi/arrow-left';
 import FullscreenIcon from '~icons/mdi/fullscreen';
@@ -151,6 +155,7 @@ const SeekInput = styled.input`
   }
 `;
 const Row = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   gap: 0.75rem;
@@ -181,12 +186,51 @@ function formatTime(seconds: number) {
 export function PlayerControls({
   videoRef,
   onBack,
+  subtitleSearchPreferences,
+  subtitleCues,
+  subtitleCandidates,
+  subtitleConfigured,
+  subtitleAvailable,
+  subtitleLoading,
+  subtitleMessage,
+  selectedSubtitleId,
+  subtitleOffset,
+  onSearchSubtitles,
+  onSelectSubtitle,
+  onSubtitleOffsetChange,
+  subtitlePreferencesKey,
+  durationSeconds,
+  onSeek,
+  pendingPosition,
+  audioTracks,
+  selectedAudioTrackIndex,
+  onSelectAudioTrack,
 }: {
   videoRef: RefObject<HTMLVideoElement | null>;
   onBack: () => void;
+  subtitleSearchPreferences?: { language: string; hearingImpaired: boolean };
+  subtitleCues?: SubtitleTimingCue[];
+  subtitleCandidates: SubtitleCandidateDto[];
+  subtitleConfigured: boolean | null;
+  subtitleAvailable: boolean | null;
+  subtitleLoading: boolean;
+  subtitleMessage: string;
+  selectedSubtitleId: string | null;
+  subtitleOffset: number;
+  onSearchSubtitles: (language: string, hearingImpaired: boolean) => void;
+  onSelectSubtitle: (id: string | null) => void;
+  onSubtitleOffsetChange: (offset: number) => void;
+  subtitlePreferencesKey: string | null;
+  durationSeconds?: number;
+  onSeek?: (position: number) => void;
+  pendingPosition?: number;
+  audioTracks?: AudioTrack[];
+  selectedAudioTrackIndex?: number;
+  onSelectAudioTrack?: (index: number) => void;
 }) {
   const [paused, setPaused] = useState(true);
-  const [position, setPosition] = useState(0);
+  const [nativePosition, setPosition] = useState(0);
+  const position = pendingPosition ?? nativePosition;
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [muted, setMuted] = useState(false);
@@ -213,7 +257,7 @@ export function PlayerControls({
     const sync = () => {
       setPaused(video.paused);
       setPosition(video.currentTime);
-      setDuration(Number.isFinite(video.duration) ? video.duration : 0);
+      setDuration(durationSeconds ?? (Number.isFinite(video.duration) ? video.duration : 0));
       setVolume(video.volume);
       setMuted(video.muted);
     };
@@ -228,7 +272,7 @@ export function PlayerControls({
       video.removeEventListener('play', reveal);
       clearTimeout(timer.current);
     };
-  }, [videoRef, reveal]);
+  }, [videoRef, reveal, durationSeconds]);
 
   const toggle = () => {
     const video = videoRef.current;
@@ -243,7 +287,13 @@ export function PlayerControls({
   };
   const seek = (value: number) => {
     const video = videoRef.current;
-    if (video && duration > 0) video.currentTime = Math.min(duration, Math.max(0, value));
+    if (video && duration > 0) {
+      const position = Math.min(Math.max(0, duration - 0.1), Math.max(0, value));
+      if (onSeek) {
+        setPosition(position);
+        onSeek(position);
+      } else video.currentTime = position;
+    }
     reveal();
   };
   const navigationRef = useKeyboardNavigation({
@@ -312,6 +362,26 @@ export function PlayerControls({
           <Time>
             {formatTime(position)} / {formatTime(duration)}
           </Time>
+          <SubtitleMenu
+            searchPreferences={subtitleSearchPreferences}
+            videoRef={videoRef}
+            subtitleCues={subtitleCues}
+            pendingPosition={pendingPosition}
+            audioTracks={audioTracks}
+            selectedAudioTrackIndex={selectedAudioTrackIndex}
+            onSelectAudioTrack={onSelectAudioTrack}
+            candidates={subtitleCandidates}
+            configured={subtitleConfigured}
+            available={subtitleAvailable}
+            loading={subtitleLoading}
+            message={subtitleMessage}
+            selectedId={selectedSubtitleId}
+            offset={subtitleOffset}
+            onSearch={onSearchSubtitles}
+            onSelect={onSelectSubtitle}
+            onOffsetChange={onSubtitleOffsetChange}
+            preferencesKey={subtitlePreferencesKey}
+          />
           <Button
             type="button"
             aria-label={muted ? 'Unmute' : 'Mute'}

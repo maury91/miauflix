@@ -705,6 +705,18 @@ export class ConfigurationService {
         case 'ready':
           result[key] = { status: 'ready' };
           break;
+        case 'degraded': {
+          const missingVars = status.missingVars;
+          const resolvedMissingVars =
+            missingVars && missingVars.length > 0
+              ? missingVars
+              : this.getMissingVarsForGroup(key as keyof typeof services);
+          result[key] =
+            resolvedMissingVars.length > 0
+              ? { ...status, missingVars: resolvedMissingVars }
+              : status;
+          break;
+        }
         case 'error': {
           const missingVars = this.getMissingVarsForGroup(key as keyof typeof services);
           result[key] =
@@ -1748,7 +1760,14 @@ export class ConfigurationService {
   }
 
   async getAllConfigs(): Promise<ConfigEntryView[]> {
-    return buildAllConfigs(this._rawValues);
+    const missingVars = new Set(
+      Object.values(this.getServiceStatuses()).flatMap(status =>
+        'missingVars' in status ? (status.missingVars ?? []) : []
+      )
+    );
+    return buildAllConfigs(this._rawValues).map(entry =>
+      missingVars.has(entry.key) ? { ...entry, value: '', hasValue: false } : entry
+    );
   }
 
   private findVariableInfo(variableName: VariableName): {

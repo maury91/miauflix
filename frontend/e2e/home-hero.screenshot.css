@@ -2,8 +2,8 @@ header[aria-live='polite'] + div {
   visibility: hidden !important;
 }
 
-/* Source discovery is covered by the details tests. Visibility alone still lets
-   asynchronously arriving quality badges change the metadata row's height. */
+/* Source discovery is covered by the details tests. Keep its footprint stable
+   while hiding asynchronous source metadata from the capture. */
 header[aria-live='polite'] div[aria-live='polite'] {
   visibility: hidden !important;
   height: 1.8rem !important;

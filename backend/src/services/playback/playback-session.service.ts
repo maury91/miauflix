@@ -1,6 +1,7 @@
 import { createHash, randomBytes } from 'node:crypto';
 
-import type { Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { logger } from '@logger';
+import { type Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
 import type { PlaybackGrant } from '@entities/playback-grant.entity';
@@ -13,6 +14,14 @@ import type {
 } from '@services/preload/playable-preparation.service';
 import type { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
 import type { StorageService } from '@services/storage/storage.service';
+
+import {
+  AudioConversionRequiredError,
+  AudioPlaybackError,
+  type AudioPlaybackPreferences,
+  type AudioPlaybackService,
+  type PlaybackDelivery,
+} from './audio-playback.service';
 
 export interface PlaybackSessionSource {
   id: number;
@@ -27,6 +36,7 @@ export interface PlaybackSession {
   playbackId: string;
   streamingKey: string;
   streamUrl: string;
+  delivery?: PlaybackDelivery;
   source: PlaybackSessionSource;
   preparation: {
     state: 'cold' | 'warm' | 'warming';
@@ -45,7 +55,8 @@ export class PlaybackSessionService {
     private readonly preparation: PlayablePreparationService,
     config: ConfigService,
     private readonly warmup?: TorrentWarmupController,
-    private readonly storageService?: StorageService
+    private readonly storageService?: StorageService,
+    private readonly audioPlaybackService?: AudioPlaybackService
   ) {
     this.grants = db.getPlaybackGrantRepository();
     this.ttlMs = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
@@ -54,18 +65,57 @@ export class PlaybackSessionService {
   async create(
     userId: string,
     playable: PlayableRef,
-    preferences: PlaybackPreferences
+    preferences: AudioPlaybackPreferences & PlaybackPreferences
   ): Promise<PlaybackSession | null> {
-    const prepared = await this.preparation.prepare(playable, {
-      through: 'warm',
-      preferences,
-      workClass: 'interactive',
-      ownerKey: this.playableKey(playable),
-    });
+    const prepare = (allowHevc: boolean) =>
+      this.preparation.prepare(playable, {
+        through: 'warm',
+        preferences: { ...preferences, allowHevc },
+        workClass: 'interactive',
+        ownerKey: this.playableKey(playable),
+      });
+    let prepared = await prepare(
+      preferences.allowHevc ||
+        preferences.supportedMseVideoCodecs?.includes('hevc') === true ||
+        (this.audioPlaybackService?.canConvertHevc?.() ?? false)
+    );
     if (!prepared.source) return null;
     if (prepared.state !== 'cold') {
       await this.warmup?.promote(prepared.source, this.playableKey(playable));
     }
+    let delivery: PlaybackDelivery | undefined;
+    for (let attempt = 0; attempt < 2; attempt++) {
+      const source = prepared.source;
+      if (!source) return null;
+      try {
+        delivery = await this.audioPlaybackService?.inspect(source, preferences);
+        break;
+      } catch (error) {
+        if (error instanceof AudioConversionRequiredError) {
+          logger.warn('PlaybackSessionService', `Source ${source.id}: ${error.message}`);
+          if (
+            attempt === 0 &&
+            (source.videoCodec === VideoCodec.X265 || source.videoCodec === VideoCodec.X265_10BIT)
+          ) {
+            const fallback = await prepare(false);
+            if (fallback.source) {
+              prepared = fallback;
+              if (prepared.state !== 'cold')
+                await this.warmup?.promote(fallback.source, this.playableKey(playable));
+              continue;
+            }
+          }
+          throw new AudioPlaybackError(error.message, 422);
+        }
+        logger.warn(
+          'PlaybackSessionService',
+          'Audio inspection failed; using direct delivery',
+          error
+        );
+        break;
+      }
+    }
+    if (!prepared.source) return null;
     const storage = await this.storageService?.getStorageByMovieSource(prepared.source.id);
 
     const streamingKey = randomBytes(32).toString('base64url');
@@ -82,7 +132,8 @@ export class PlaybackSessionService {
     return {
       playbackId: randomBytes(16).toString('hex'),
       streamingKey,
-      streamUrl: `/api/stream/${streamingKey}`,
+      streamUrl: `/api/stream/${streamingKey}${delivery?.mode === 'audio-transcode' ? '/audio' : ''}`,
+      delivery,
       source: {
         id: prepared.source.id,
         quality: prepared.source.quality,

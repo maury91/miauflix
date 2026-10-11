@@ -79,7 +79,7 @@ export type VariableInfo =
 export type ServiceVariables<T extends Record<string, VariableInfo>> = T;
 
 export type ServiceInstanceStatus =
-  | { status: 'degraded'; reason: string }
+  | { status: 'degraded'; reason: string; missingVars?: string[] }
   | { status: 'error'; errorMessage: string; error: unknown }
   | { status: 'initializing' | `initializing_${string}`; details: string; startedAt: number }
   | { status: 'ready' };

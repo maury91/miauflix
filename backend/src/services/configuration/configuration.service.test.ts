@@ -79,6 +79,55 @@ const registerCatalogProvider = (
 };
 
 describe('ConfigurationService web configuration actions', () => {
+  it('reports remote missing values and degraded service status to the configuration API', async () => {
+    const key = 'DYNAMIC_CATALOG_MISSING_TOKEN_STATUS_TEST';
+    const restoreEnvironment = clearEnvironmentVariable(key);
+    try {
+      const configuration = setupTest();
+      configuration.registerRemoteConfiguration('CATALOG', {
+        groups: [
+          {
+            id: 'CATALOG_PROVIDER_STATUS_TEST',
+            name: 'Catalog provider',
+            description: 'Catalog provider settings',
+            variables: [
+              {
+                key,
+                description: 'Provider access token',
+                required: true,
+                inputType: 'password',
+                secret: true,
+              },
+            ],
+          },
+        ],
+      });
+      await configuration.setValue(key as never, 'stored-provider-token');
+      const reason = `Missing required configuration: ${key}`;
+      configuration.registerService('CATALOG', {
+        testable: true,
+        getStatus: () => ({ status: 'degraded', reason, missingVars: [key] }),
+        reload: jest.fn().mockResolvedValue(undefined),
+      });
+
+      const configs = await configuration.getAllConfigs();
+      expect(configs.find(entry => entry.key === key)).toMatchObject({
+        key,
+        required: true,
+        isSecret: true,
+        hasValue: false,
+        value: '',
+      });
+      expect(configuration.getServiceStatuses().CATALOG).toEqual({
+        status: 'degraded',
+        reason,
+        missingVars: [key],
+      });
+    } finally {
+      restoreEnvironment();
+    }
+  });
+
   it('registers discovered canonical keys and builds complete remote snapshots', () => {
     const configuration = setupTest();
 

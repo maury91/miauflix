@@ -14,6 +14,7 @@ import { AuditLog } from '@entities/audit-log.entity';
 import { BackgroundJob } from '@entities/background-job.entity';
 import { Episode } from '@entities/episode.entity';
 import { MediaList, MediaListItem } from '@entities/list.entity';
+import { MediaRating } from '@entities/media-rating.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
 import { PlaybackGrant } from '@entities/playback-grant.entity';
@@ -128,6 +129,7 @@ export class Database {
     // Set up static encryption services for entities
     Movie.encryptionService = encryptionService;
     MovieSource.encryptionService = encryptionService;
+    Storage.encryptionService = encryptionService;
 
     logger.debug('DATABASE', `Initializing database ${databasePath}`);
 
@@ -142,6 +144,7 @@ export class Database {
         Episode,
         MediaList,
         MediaListItem,
+        MediaRating,
         User,
         RefreshToken,
         AuditLog,

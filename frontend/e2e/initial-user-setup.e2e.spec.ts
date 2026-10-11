@@ -23,7 +23,7 @@ type ConfigEntry = {
 };
 
 type ServiceStatusResponse = {
-  services: Record<string, { status: string }>;
+  services: Record<string, { status: string; missingVars?: string[] }>;
 };
 
 const visualStylePath = path.resolve('e2e/visual-sanitization.css');
@@ -147,7 +147,10 @@ test('completes first-run admin and required configuration through the UI', asyn
   const statusBeforeTestResponse = await api.get('/api/status');
   expect(statusBeforeTestResponse.status()).toBe(200);
   const statusBeforeTest = (await statusBeforeTestResponse.json()) as ServiceStatusResponse;
-  expect(statusBeforeTest.services.CATALOG.status).toBe('needs_configuration');
+  expect(statusBeforeTest.services.CATALOG).toMatchObject({
+    status: 'degraded',
+    missingVars: expect.arrayContaining(['TMDB_API_ACCESS_TOKEN']),
+  });
 
   await tokenInput.fill('e2e-dummy-token');
   await expect(saveButton).toBeEnabled();

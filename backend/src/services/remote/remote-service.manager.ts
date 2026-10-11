@@ -429,7 +429,13 @@ export class RemoteServiceManager {
   private toLocalStatus(remote: ServiceStatus): ServiceInstanceStatus {
     if (remote.state === 'ready') return { status: 'ready' };
     if (remote.state === 'degraded')
-      return { status: 'degraded', reason: remote.message ?? 'Degraded' };
+      return {
+        status: 'degraded',
+        reason: remote.message ?? 'Degraded',
+        ...(remote.missingConfiguration?.length
+          ? { missingVars: remote.missingConfiguration }
+          : {}),
+      };
     if (remote.state === 'error') {
       return {
         status: 'error',
@@ -439,9 +445,9 @@ export class RemoteServiceManager {
     }
     if (remote.state === 'standby' && remote.missingConfiguration?.length) {
       return {
-        status: 'error',
-        errorMessage: `Waiting for configuration: ${remote.missingConfiguration.join(', ')}`,
-        error: null,
+        status: 'degraded',
+        reason: `Missing required configuration: ${remote.missingConfiguration.join(', ')}`,
+        missingVars: remote.missingConfiguration,
       };
     }
     return {

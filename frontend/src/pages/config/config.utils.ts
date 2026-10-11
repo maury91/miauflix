@@ -1,13 +1,5 @@
+import type { ServiceStatuses } from '@features/config/api/config.api';
 import type { ConfigEntryView } from '@miauflix/backend';
-
-export type ServiceStatusInfo = {
-  status: string;
-  reason?: string;
-  errorMessage?: string;
-  details?: string;
-};
-
-export type ServiceStatuses = Record<string, ServiceStatusInfo>;
 
 /**
  * Order groups needing configuration first, then degraded/error services, then the rest.
@@ -22,7 +14,8 @@ export function sortServiceGroups(
       const priority = (name: string, entries: ConfigEntryView[]) => {
         if (
           entries.some(entry => entry.required && !entry.hasValue) ||
-          serviceStatuses[name]?.status === 'needs_configuration'
+          serviceStatuses[name]?.status === 'needs_configuration' ||
+          (serviceStatuses[name]?.missingVars?.length ?? 0) > 0
         )
           return 0;
         if (['degraded', 'error'].includes(serviceStatuses[name]?.status ?? '')) return 1;

@@ -28,6 +28,8 @@ ESLint rejects new `styled(Button)` / `styled(BaseButton)` and the standard form
 
 Layout-only wrappers may position components. Primitive visual changes must be implemented here with a documented prop and story. Keep component modules importing sibling modules directly to avoid barrel cycles. Keep backend DTOs, Redux, API hooks and authentication out of new primitives.
 
+Use Button's `collapseWhenNotFocused` with `icon` and a text label for actions that expand on focus. The label stays accessible while visually collapsed, and reduced-motion preferences disable the expansion animation. Details uses this for watchlist and rating actions. See the CollapsibleIcon story.
+
 ## Verification
 
 ```sh
