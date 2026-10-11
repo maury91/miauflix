@@ -1,7 +1,9 @@
 /** Match origins while treating loopback hostnames as equivalent. */
 export function isAllowedOrigin(origin: string | undefined, allowedOrigins: string[]): boolean {
   if (!origin) return false;
-  if (allowedOrigins.includes('*')) return true;
+  // A wildcard is unrestricted only when it is the complete allowlist. A
+  // mixed list must remain restrictive for both HTTP and WebSocket callers.
+  if (allowedOrigins.length === 1 && allowedOrigins[0] === '*') return true;
 
   let candidate: URL;
   try {
@@ -11,9 +13,18 @@ export function isAllowedOrigin(origin: string | undefined, allowedOrigins: stri
   }
 
   return allowedOrigins.some(allowed => {
-    if (allowed.startsWith('*.')) {
-      const domain = allowed.slice(2);
-      return candidate.hostname === domain || candidate.hostname.endsWith(`.${domain}`);
+    if (allowed.includes('*')) {
+      const wildcard = /^(?:(https?):\/\/)?\*\.([^/:]+)(?::(\d+))?$/.exec(allowed);
+      if (!wildcard) return false;
+      const [, protocol, domain, port] = wildcard;
+      const expectedProtocol = protocol ? `${protocol}:` : 'https:';
+      const defaultPort = expectedProtocol === 'https:' ? '443' : '80';
+      const expectedPort = port ?? defaultPort;
+      return (
+        candidate.protocol === expectedProtocol &&
+        (candidate.port || defaultPort) === expectedPort &&
+        (candidate.hostname === domain || candidate.hostname.endsWith(`.${domain}`))
+      );
     }
     try {
       const configured = new URL(allowed);

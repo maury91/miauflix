@@ -316,16 +316,7 @@ export class SubtitlesService {
     }
   }
 
-  async getTrack(
-    candidateId: string,
-    streamingKeyOrStart: number | string = 0,
-    requestedStartSeconds = 0
-  ): Promise<string> {
-    const legacyCall = typeof streamingKeyOrStart === 'number';
-    const streamingKey: string = legacyCall
-      ? (this.candidates.get(candidateId)?.streamingKey ?? '')
-      : streamingKeyOrStart;
-    const startSeconds = legacyCall ? streamingKeyOrStart : requestedStartSeconds;
+  async getTrack(candidateId: string, streamingKey: string, startSeconds = 0): Promise<string> {
     let record = this.candidates.get(candidateId);
     if (record && record.streamingKey !== streamingKey) {
       this.removeCandidate(candidateId);

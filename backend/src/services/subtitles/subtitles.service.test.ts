@@ -90,8 +90,8 @@ describe('subtitle ranking and durable downloads', () => {
       candidates: [{ provider: 'torrent' }],
     });
     const bodies = await Promise.all([
-      service.getTrack(first.candidates[0].id),
-      service.getTrack(second.candidates[0].id),
+      service.getTrack(first.candidates[0].id, 'streaming-key'),
+      service.getTrack(second.candidates[0].id, 'streaming-key'),
     ]);
     expect(bodies[0]).toContain('Local cue');
     expect(torrentSubtitles.getTrack).toHaveBeenCalledTimes(1);
@@ -102,7 +102,7 @@ describe('subtitle ranking and durable downloads', () => {
     );
     expect(request).not.toHaveBeenCalled();
     verify.mockResolvedValue(null);
-    await expect(service.getTrack(first.candidates[0].id)).rejects.toThrow(
+    await expect(service.getTrack(first.candidates[0].id, 'streaming-key')).rejects.toThrow(
       'Subtitle is unavailable'
     );
   });
@@ -123,11 +123,13 @@ describe('subtitle ranking and durable downloads', () => {
     const result = await service.search('streaming-key', 'user', 'en', false, true);
     expect(result).toMatchObject({ available: true, candidates: [{ provider: 'embedded' }] });
     const candidate = result.candidates[0];
-    await service.getTrack(candidate.id, 61);
-    await service.getTrack(candidate.id, 65);
-    await service.getTrack(candidate.id, 121);
+    await service.getTrack(candidate.id, 'streaming-key', 61);
+    await service.getTrack(candidate.id, 'streaming-key', 65);
+    await service.getTrack(candidate.id, 'streaming-key', 121);
     expect(torrentSubtitles.getTrack.mock.calls.map(call => call[2])).toEqual([60, 120]);
-    await expect(service.getTrack(candidate.id, -1)).rejects.toThrow('Invalid subtitle position');
+    await expect(service.getTrack(candidate.id, 'streaming-key', -1)).rejects.toThrow(
+      'Invalid subtitle position'
+    );
   });
 
   it('ranks by the main video filename, ahead of provider popularity and trust', async () => {
@@ -174,13 +176,16 @@ describe('subtitle ranking and durable downloads', () => {
     });
     const bytes = new TextEncoder().encode('1\n00:00:01,000 --> 00:00:02,000\nHello\n');
     request.mockResolvedValueOnce({ ok: true, body: bytes.buffer });
-    const tracks = await Promise.all([service.getTrack(first.id), service.getTrack(second.id)]);
+    const tracks = await Promise.all([
+      service.getTrack(first.id, 'streaming-key'),
+      service.getTrack(second.id, 'streaming-key'),
+    ]);
     expect(tracks[0]).toBe(tracks[1]);
     const cache = service as unknown as { tracks: Map<string, unknown>; cachedTrackBytes: number };
     expect(cache.tracks.size).toBe(1);
     expect(cache.cachedTrackBytes).toBe(Buffer.byteLength(tracks[0]));
     const third = (await search([entry(42, 'Movie Title')])).candidates[0];
-    expect(await service.getTrack(third.id)).toBe(tracks[0]);
+    expect(await service.getTrack(third.id, 'streaming-key')).toBe(tracks[0]);
     expect(cache.tracks.size).toBe(1);
     expect(request.mock.calls.filter(([url]) => String(url).endsWith('/download'))).toHaveLength(1);
     expect(await readFile(join(directory, 'subtitles/opensubtitles/42.vtt'), 'utf8')).toBe(
@@ -190,10 +195,10 @@ describe('subtitle ranking and durable downloads', () => {
     const restarted = setupTest(directory);
     const candidate = (await restarted.search([entry(42, 'Movie Title')])).candidates[0];
     restarted.request.mockClear();
-    expect(await restarted.service.getTrack(candidate.id)).toBe(tracks[0]);
+    expect(await restarted.service.getTrack(candidate.id, 'streaming-key')).toBe(tracks[0]);
     expect(restarted.request).not.toHaveBeenCalled();
     restarted.verify.mockResolvedValue(null);
-    await expect(restarted.service.getTrack(candidate.id)).rejects.toThrow(
+    await expect(restarted.service.getTrack(candidate.id, 'streaming-key')).rejects.toThrow(
       'Subtitle is unavailable'
     );
   });
@@ -233,7 +238,7 @@ describe('subtitle ranking and durable downloads', () => {
     await mkdir(cacheDirectory, { recursive: true });
     await writeFile(join(cacheDirectory, '42.vtt'), 'invalid cached content');
     request.mockClear();
-    await expect(service.getTrack(candidate.id)).rejects.toThrow('no valid cues');
+    await expect(service.getTrack(candidate.id, 'streaming-key')).rejects.toThrow('no valid cues');
     expect(request).not.toHaveBeenCalled();
   });
 
@@ -241,7 +246,9 @@ describe('subtitle ranking and durable downloads', () => {
     const { service, request, search } = setupTest(directory);
     const candidate = (await search([entry(42, 'Movie Title')])).candidates[0];
     request.mockResolvedValueOnce({ ok: false });
-    await expect(service.getTrack(candidate.id)).rejects.toThrow('download request failed');
+    await expect(service.getTrack(candidate.id, 'streaming-key')).rejects.toThrow(
+      'download request failed'
+    );
     request.mockResolvedValueOnce({
       ok: true,
       body: { link: 'https://dl.opensubtitles.com/fixture' },
@@ -250,6 +257,6 @@ describe('subtitle ranking and durable downloads', () => {
       ok: true,
       body: new TextEncoder().encode('1\n00:00:01,000 --> 00:00:02,000\nHello\n').buffer,
     });
-    expect(await service.getTrack(candidate.id)).toContain('Hello');
+    expect(await service.getTrack(candidate.id, 'streaming-key')).toContain('Hello');
   });
 });

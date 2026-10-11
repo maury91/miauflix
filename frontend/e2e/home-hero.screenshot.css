@@ -2,8 +2,11 @@ header[aria-live='polite'] + div {
   visibility: hidden !important;
 }
 
-/* Source discovery is covered by the details tests. Remove the status from the
-   capture layout so changing source metadata cannot move the visible metadata. */
+/* Source discovery is covered by the details tests. Keep its footprint stable
+   while hiding asynchronous source metadata from the capture. */
 header[aria-live='polite'] div[aria-live='polite'] {
-  display: none !important;
+  visibility: hidden !important;
+  height: 1.8rem !important;
+  min-height: 1.8rem !important;
+  overflow: hidden !important;
 }
