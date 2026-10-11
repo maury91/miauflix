@@ -64,29 +64,38 @@ beforeEach(() => {
   save.mockReset();
 });
 
+// These tests check rating state; browser E2E tests cover visibility and layout.
+// Label queries avoid repeated styled-DOM visibility calculations in jsdom.
 describe('Details saved ratings', () => {
+  // The first styled Details mount and reopen are CPU-heavy on shared CI runners.
   it('restores Like on entry and when Details is reopened', () => {
     const first = setupTest();
-    expect(screen.getByRole('button', { name: 'Like it' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByLabelText('Like it', { selector: 'button' })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    );
     first.unmount();
     setupTest();
-    expect(screen.getByRole('button', { name: 'Like it' })).toHaveAttribute('aria-pressed', 'true');
-    expect(screen.getByRole('button', { name: 'Love it' })).toHaveAttribute(
+    expect(screen.getByLabelText('Like it', { selector: 'button' })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    );
+    expect(screen.getByLabelText('Love it', { selector: 'button' })).toHaveAttribute(
       'aria-pressed',
       'false'
     );
-  });
+  }, 15_000);
 
   it('sends account-scoped replacements and toggles the saved selection off', () => {
     setupTest();
-    fireEvent.click(screen.getByRole('button', { name: 'Love it' }));
+    fireEvent.click(screen.getByLabelText('Love it', { selector: 'button' }));
     expect(save).toHaveBeenLastCalledWith({
       userId: 'user-1',
       mediaType: 'movie',
       mediaId: 123,
       rating: 'love',
     });
-    fireEvent.click(screen.getByRole('button', { name: 'Like it' }));
+    fireEvent.click(screen.getByLabelText('Like it', { selector: 'button' }));
     expect(save).toHaveBeenLastCalledWith({
       userId: 'user-1',
       mediaType: 'movie',
@@ -98,17 +107,20 @@ describe('Details saved ratings', () => {
   it('prevents changes while fetching and explains failed saves without changing the saved rating', () => {
     query.isFetching = true;
     const view = setupTest();
-    expect(screen.getByRole('button', { name: 'Like it' })).toHaveAttribute(
+    expect(screen.getByLabelText('Like it', { selector: 'button' })).toHaveAttribute(
       'aria-disabled',
       'true'
     );
-    fireEvent.click(screen.getByRole('button', { name: 'Love it' }));
+    fireEvent.click(screen.getByLabelText('Love it', { selector: 'button' }));
     expect(save).not.toHaveBeenCalled();
     view.unmount();
     query.isFetching = false;
     mutation.isError = true;
     setupTest();
     expect(screen.getByRole('alert')).toHaveTextContent('Could not save your rating');
-    expect(screen.getByRole('button', { name: 'Like it' })).toHaveAttribute('aria-pressed', 'true');
+    expect(screen.getByLabelText('Like it', { selector: 'button' })).toHaveAttribute(
+      'aria-pressed',
+      'true'
+    );
   });
 });
