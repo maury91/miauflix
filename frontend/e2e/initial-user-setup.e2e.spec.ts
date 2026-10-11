@@ -231,8 +231,7 @@ test('completes first-run admin and required configuration through the UI', asyn
     timeout: 5_000,
   });
   await expect(page.getByAltText('Miauflix logo')).toHaveCSS('height', '56px');
-  // Keep the screenshot hover state independent of where the preceding Save click landed.
-  await page.getByRole('button', { name: /^Subtitles\b/ }).hover();
+  await page.mouse.move(0, 0);
   await expect(page).toHaveScreenshot('configuration-optional-settings.png', screenshotOptions);
 
   const configAfterSaveResponse = await api.get('/api/config', { headers: sessionHeaders });
