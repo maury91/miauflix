@@ -1,5 +1,7 @@
+import { type AppRoute, navigate, navigateBack, useRoute } from '@app/router';
 import { getTraktAssociation } from '@features/integrations/api/trakt.api';
 import { useGetListsQuery, useGetPopularListsInfiniteQuery } from '@features/media/api/lists.api';
+import { useGetMovieQuery, useGetShowQuery } from '@features/media/api/media.api';
 import { mediaApi } from '@features/media/api/media.api';
 import {
   useRemoveIntentMutation,
@@ -11,19 +13,21 @@ import type { RealtimeMediaRef } from '@features/realtime/realtime.client';
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type {
   MediaDto,
+  MovieResponse,
   PlayableRef,
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
   ProgressEntry,
+  ShowResponse,
 } from '@miauflix/backend';
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { openSettings as openSettingsAction } from '@store/slices/appState';
 import { artworkActions } from '@store/slices/artwork';
 import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
-import { homeNavigationActions, selectHomeNavigation } from '@store/slices/homeNavigation';
+import { homeNavigationActions } from '@store/slices/homeNavigation';
 import { selectPreparationByMediaId, selectRealtimeReady } from '@store/slices/realtime';
 import type { AppDispatch, RootState } from '@store/store';
 import { type FC, type UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
@@ -135,7 +139,55 @@ function mediaFromProgress(
   };
 }
 
+function mediaFromMovie(response: MovieResponse): MediaDto {
+  return {
+    _type: 'movie',
+    id: response.id,
+    mediaId: response.mediaId,
+    imdbId: response.imdbId,
+    title: response.title,
+    overview: response.overview,
+    poster: response.poster,
+    backdrop: response.backdrop,
+    backdropFocus: response.backdropFocus,
+    logo: response.logo,
+    heroLogo: response.heroLogo,
+    artworkRevision: response.artworkRevision,
+    cardLogoStatus: response.cardLogoStatus,
+    heroLogoStatus: response.heroLogoStatus,
+    genres: response.genres,
+    popularity: response.popularity,
+    rating: response.rating,
+    releaseDate: response.releaseDate,
+    runtime: response.runtime,
+  };
+}
+
+function mediaFromShow(response: ShowResponse): MediaDto {
+  return {
+    _type: 'tvshow',
+    id: response.id,
+    mediaId: response.mediaId,
+    imdbId: response.imdbId,
+    name: response.title,
+    overview: response.overview ?? '',
+    poster: response.poster ?? '',
+    backdrop: response.backdrop ?? '',
+    backdropFocus: response.backdropFocus,
+    logo: response.logo ?? undefined,
+    heroLogo: response.heroLogo ?? undefined,
+    artworkRevision: response.artworkRevision,
+    cardLogoStatus: response.cardLogoStatus,
+    heroLogoStatus: response.heroLogoStatus,
+    genres: response.genres,
+    popularity: response.popularity ?? 0,
+    rating: response.rating ?? 0,
+    firstAirDate: response.firstAirDate ?? '',
+  };
+}
+
 interface HomePageProps {
+  route?: AppRoute;
   /** Keep browser interaction and focus disabled while Home is preloading behind the intro. */
   interactive?: boolean;
   /** Signal that the initial row, selected hero, and artwork are ready for the intro. */
@@ -143,17 +195,62 @@ interface HomePageProps {
 }
 
 /** Coordinate browsing, details, and playback with progress refresh, preload interest, and Trakt prompts. */
-const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
+const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
   const dispatch = useDispatch<AppDispatch>();
-  const navigation = useSelector(selectHomeNavigation);
-  const {
-    view,
-    activeRegion,
-    activeCategory,
-    selectedByCategory,
-    pendingCategoryAdvance,
-    playable,
-  } = navigation;
+  const currentRoute = useRoute();
+  const activeRoute = route ?? currentRoute;
+  const view =
+    activeRoute.type === 'movieDetails' || activeRoute.type === 'showDetails'
+      ? 'details'
+      : activeRoute.type === 'moviePlayer' || activeRoute.type === 'episodePlayer'
+        ? 'player'
+        : 'browse';
+  const activeRegion = useSelector((state: RootState) => state.homeNavigation.activeRegion);
+  const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
+  const selectedByCategory = useSelector(
+    (state: RootState) => state.homeNavigation.selectedByCategory
+  );
+  const pendingCategoryAdvance = useSelector(
+    (state: RootState) => state.homeNavigation.pendingCategoryAdvance
+  );
+  const playable = useMemo<PlayableRef | null>(
+    () =>
+      activeRoute.type === 'moviePlayer'
+        ? { kind: 'movie', mediaId: activeRoute.mediaId }
+        : activeRoute.type === 'episodePlayer'
+          ? {
+              kind: 'episode',
+              showMediaId: activeRoute.showMediaId,
+              seasonNumber: activeRoute.seasonNumber,
+              episodeNumber: activeRoute.episodeNumber,
+            }
+          : null,
+    [activeRoute]
+  );
+  const detailMediaId =
+    activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
+      ? activeRoute.mediaId
+      : activeRoute.type === 'showDetails' || activeRoute.type === 'episodePlayer'
+        ? activeRoute.type === 'showDetails'
+          ? activeRoute.mediaId
+          : activeRoute.showMediaId
+        : null;
+  const routedMovie = useGetMovieQuery(
+    detailMediaId !== null &&
+      (activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer')
+      ? detailMediaId
+      : skipToken
+  );
+  const routedShow = useGetShowQuery(
+    detailMediaId !== null &&
+      (activeRoute.type === 'showDetails' || activeRoute.type === 'episodePlayer')
+      ? detailMediaId
+      : skipToken
+  );
+  const routeQuery =
+    activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
+      ? routedMovie
+      : routedShow;
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
   const currentUser = useSelector((state: RootState) => selectCurrentUser(state));
   const progressFromStore = useSelector(
@@ -168,14 +265,18 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
   );
   const [updateIntent, intentState] = useUpdateIntentMutation();
   const [removeIntent] = useRemoveIntentMutation();
-  const { data: fixedCategories, isLoading, isError } = useGetListsQuery();
+  const {
+    data: fixedCategories,
+    isLoading,
+    isError,
+  } = useGetListsQuery(undefined, { skip: view !== 'browse' });
   const {
     data: popularPages,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
     isLoading: isPopularListsLoading,
-  } = useGetPopularListsInfiniteQuery({ limit: 20 });
+  } = useGetPopularListsInfiniteQuery({ limit: 20 }, { skip: view !== 'browse' });
   const categories = useMemo(
     () => [
       ...(fixedCategories ?? []),
@@ -212,7 +313,25 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
   );
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth } = useMediaBoxSizes();
   const pageRef = useRef<HTMLElement>(null);
-  const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
+  const [browseSelectedMedia, setBrowseSelectedMedia] = useState<MediaDto | null>(null);
+  const routeMedia = routedMovie.data
+    ? mediaFromMovie(routedMovie.data)
+    : routedShow.data
+      ? mediaFromShow(routedShow.data)
+      : null;
+  const routeMatchesBrowseSelection =
+    browseSelectedMedia &&
+    (activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
+      ? browseSelectedMedia._type === 'movie' && browseSelectedMedia.mediaId === activeRoute.mediaId
+      : activeRoute.type === 'showDetails' || activeRoute.type === 'episodePlayer'
+        ? browseSelectedMedia._type === 'tvshow' &&
+          browseSelectedMedia.mediaId ===
+            (activeRoute.type === 'showDetails' ? activeRoute.mediaId : activeRoute.showMediaId)
+        : false);
+  const selectedMedia =
+    view === 'browse'
+      ? browseSelectedMedia
+      : (routeMedia ?? (routeMatchesBrowseSelection ? browseSelectedMedia : null));
   const [readyRowSlugs, setReadyRowSlugs] = useState<Record<string, true>>({});
   const [heroReadyMediaId, setHeroReadyMediaId] = useState<number | null | undefined>(undefined);
   const hydrationNotified = useRef(false);
@@ -236,6 +355,8 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
   const categoryCount = displayCategories.length;
   const navigationRevision = useRef(0);
   const artworkRefsRef = useRef<MediaRef[]>([]);
+  const browseFocusState = useRef({ activeCategory, displayCategories, selectedByCategory });
+  browseFocusState.current = { activeCategory, displayCategories, selectedByCategory };
 
   const publishIntent = useCallback(
     (request: Parameters<typeof updateIntent>[0]) => {
@@ -254,7 +375,7 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
     lastPreparationSession.current = sessionId;
     lastPreparation.current = null;
     sourceCache.current.clear();
-    setSelectedMedia(null);
+    setBrowseSelectedMedia(null);
     setReadyRowSlugs({});
     setHeroReadyMediaId(undefined);
     setLoadedMediaRefsByCategory({});
@@ -317,7 +438,6 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
   /** Publish the bounded navigation window owned by the visible rows. */
   const publishRealtimeInterest = useCallback(() => {
     const rowCount = displayCategories.length;
-    if (!rowCount) return;
     const rowWindows = Array.from({ length: rowCount }, (_, rowIndex) => {
       const window = rowRefs.current.get(rowIndex)?.getInterestWindow?.();
       return window
@@ -335,7 +455,6 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
       selectedMedia: toRealtimeMedia(selectedMedia),
       view,
     });
-    if (!interest) return;
     const navigation = navigationRevision.current + 1;
     navigationRevision.current = navigation;
     dispatch(
@@ -353,7 +472,7 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
   }, [activeCategory, dispatch, displayCategories.length, selectedMedia, toRealtimeMedia, view]);
 
   useEffect(() => {
-    if (!interactive) {
+    if (!interactive || view !== 'browse') {
       setShowTraktPrompt(false);
       return;
     }
@@ -375,11 +494,11 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
     return () => {
       cancelled = true;
     };
-  }, [currentUser, interactive, sessionId]);
+  }, [currentUser, interactive, sessionId, view]);
 
   useEffect(() => {
     dispatch(progressApi.util.resetApiState());
-    if (!sessionId) return;
+    if (!sessionId || view !== 'browse') return;
     const subscription = dispatch(
       progressApi.endpoints.getProgress.initiate(undefined, {
         forceRefetch: true,
@@ -387,7 +506,7 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
       })
     );
     return () => subscription?.unsubscribe?.();
-  }, [dispatch, sessionId]);
+  }, [dispatch, sessionId, view]);
 
   const artworkRefs = useMemo(() => {
     const byKey = new Map<string, MediaRef>();
@@ -585,7 +704,7 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
   const handleActive = useCallback(
     (categoryIndex: number, _mediaIndex: number, media: MediaDto) => {
       dispatch(homeNavigationActions.setActiveCategory(categoryIndex));
-      setSelectedMedia(media);
+      setBrowseSelectedMedia(media);
     },
     [dispatch]
   );
@@ -600,8 +719,13 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
 
   const openDetails = useCallback(
     (media: MediaDto) => {
-      setSelectedMedia(media);
-      dispatch(homeNavigationActions.setView('details'));
+      setBrowseSelectedMedia(media);
+      navigate(
+        media._type === 'movie'
+          ? { type: 'movieDetails', mediaId: media.mediaId }
+          : { type: 'showDetails', mediaId: media.mediaId },
+        { parent: { type: 'home' } }
+      );
       dispatch(homeNavigationActions.setActiveRegion('details'));
     },
     [dispatch]
@@ -650,27 +774,42 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
       categoryIndex,
       mediaIndex: category ? (selectedByCategory[category.slug] ?? 0) : 0,
     };
-    dispatch(homeNavigationActions.setView('browse'));
+    navigateBack({ type: 'home' });
     dispatch(homeNavigationActions.setActiveRegion('carousel'));
   }, [activeCategory, dispatch, displayCategories, selectedByCategory]);
 
   const returnToDetails = useCallback(() => {
-    dispatch(homeNavigationActions.setView('details'));
+    const parent =
+      playable?.kind === 'movie'
+        ? { type: 'movieDetails' as const, mediaId: playable.mediaId }
+        : playable?.kind === 'episode'
+          ? { type: 'showDetails' as const, mediaId: playable.showMediaId }
+          : { type: 'home' as const };
+    navigateBack(parent);
     dispatch(homeNavigationActions.setActiveRegion('details'));
-  }, [dispatch]);
+  }, [dispatch, playable]);
 
   const openPlayer = useCallback(
     (nextPlayable: PlayableRef) => {
-      dispatch(homeNavigationActions.setPlayable(nextPlayable));
-      dispatch(homeNavigationActions.setView('player'));
+      navigate(
+        nextPlayable.kind === 'movie'
+          ? { type: 'moviePlayer', mediaId: nextPlayable.mediaId }
+          : { type: 'episodePlayer', ...nextPlayable },
+        {
+          parent:
+            activeRoute.type === 'movieDetails' || activeRoute.type === 'showDetails'
+              ? activeRoute
+              : undefined,
+        }
+      );
       dispatch(homeNavigationActions.setActiveRegion('player'));
     },
-    [dispatch]
+    [activeRoute, dispatch]
   );
 
   const openSettings = useCallback(() => {
-    if (sessionId) dispatch(openSettingsAction());
-  }, [dispatch, sessionId]);
+    if (sessionId) navigate({ type: 'settings' }, { parent: { type: 'home' } });
+  }, [sessionId]);
 
   const dismissTraktPrompt = useCallback(
     (permanent: boolean) => {
@@ -755,14 +894,26 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
           : null));
 
   useEffect(() => {
-    if (view !== 'browse') return;
+    if (view === 'details') {
+      dispatch(homeNavigationActions.setActiveRegion('details'));
+      return;
+    }
+    if (view === 'player') {
+      dispatch(homeNavigationActions.setActiveRegion('player'));
+      return;
+    }
+    dispatch(homeNavigationActions.setActiveRegion('carousel'));
     const pending = pendingBrowseFocus.current;
-    if (!pending) return;
-    const row = rowRefs.current.get(pending.categoryIndex);
+    const { activeCategory, displayCategories, selectedByCategory } = browseFocusState.current;
+    const categoryIndex = pending?.categoryIndex ?? activeCategory;
+    const category = displayCategories[categoryIndex];
+    const mediaIndex =
+      pending?.mediaIndex ?? (category ? (selectedByCategory[category.slug] ?? 0) : 0);
+    const row = rowRefs.current.get(categoryIndex);
     if (!row) return;
-    row.focusIndex(pending.mediaIndex);
+    row.focusIndex(mediaIndex);
     pendingBrowseFocus.current = null;
-  }, [view]);
+  }, [activeRoute, dispatch, view]);
 
   const handleSidebarAction = useCallback(
     (action: HomeAction): NavigationOutcome => {
@@ -829,7 +980,7 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
     onBack: () => handleHomeAction('back').type !== 'ignored',
   });
 
-  if (isLoading) {
+  if (view === 'browse' && isLoading) {
     return (
       <PageContainer>
         <FullPageState>
@@ -838,7 +989,7 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
       </PageContainer>
     );
   }
-  if (isError || !fixedCategories) {
+  if (view === 'browse' && (isError || !fixedCategories)) {
     return (
       <PageContainer>
         <FullPageState>Failed to load categories.</FullPageState>
@@ -924,6 +1075,22 @@ const HomePage: FC<HomePageProps> = ({ interactive = true, onHydrated }) => {
             onWatch={openPlayer}
             preparation={preparation}
           />
+        ) : view === 'details' ? (
+          <FullPageState role="status">
+            {routeQuery.isError ? (
+              <div>
+                <p>Unable to load this title.</p>
+                <button type="button" onClick={() => void routeQuery.refetch()}>
+                  Retry
+                </button>
+                <button type="button" onClick={returnToBrowse}>
+                  Back to Home
+                </button>
+              </div>
+            ) : (
+              <Spinner />
+            )}
+          </FullPageState>
         ) : view === 'player' && playable ? (
           <PlayerView
             playable={playable}

@@ -1,6 +1,7 @@
 import { getKeyboardNavigationAction } from '@shared/hooks/useKeyboardNavigation';
 
 export type HomeAction = 'left' | 'right' | 'up' | 'down' | 'confirm' | 'back';
+/** Used only to describe the user's current focus to realtime preload APIs. */
 export type HomeView = 'browse' | 'details' | 'player';
 export type HomeRegion = 'sidebar' | 'carousel' | 'details' | 'player';
 

@@ -24,9 +24,8 @@ export function buildHomeRealtimeInterest(input: {
   rowWindows: Array<HomeInterestWindow | undefined>;
   selectedMedia: RealtimeMediaRef | null;
   view: HomeView;
-}): HomeRealtimeInterest | null {
+}): HomeRealtimeInterest {
   const { activeCategory, rowCount, rowWindows, selectedMedia, view } = input;
-  if (!rowCount) return null;
 
   const rowStart = Math.max(0, Math.min(activeCategory - 5, rowCount - 11));
   const rows: Array<Array<RealtimeMediaRef | null>> = [];

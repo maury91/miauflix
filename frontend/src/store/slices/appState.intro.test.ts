@@ -1,12 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  appStateSlice,
-  beginIntroCentering,
-  beginIntroPlayback,
-  cancelIntro,
-  completeIntro,
-} from './appState';
+import { appStateSlice, beginIntroPlayback, completeIntro, setIntroEligible } from './appState';
 import { clearAuth } from './auth';
 
 describe('intro state transitions', () => {
@@ -15,7 +9,7 @@ describe('intro state transitions', () => {
     state = appStateSlice.reducer(state, beginIntroPlayback());
     expect(state.introPhase).toBe('pending');
 
-    state = appStateSlice.reducer(state, beginIntroCentering());
+    state = appStateSlice.reducer(state, setIntroEligible(true));
     expect(state.introPhase).toBe('centering');
 
     state = appStateSlice.reducer(state, completeIntro());
@@ -28,34 +22,29 @@ describe('intro state transitions', () => {
   });
 
   it('cancels interrupted transitions and can start again when Home becomes eligible', () => {
-    let state = appStateSlice.reducer(undefined, beginIntroCentering());
+    let state = appStateSlice.reducer(undefined, setIntroEligible(true));
     state = appStateSlice.reducer(state, beginIntroPlayback());
-    state = appStateSlice.reducer(state, cancelIntro());
+    state = appStateSlice.reducer(state, setIntroEligible(false));
     expect(state.introPhase).toBe('pending');
 
-    state = appStateSlice.reducer(state, beginIntroCentering());
+    state = appStateSlice.reducer(state, setIntroEligible(true));
     expect(state.introPhase).toBe('centering');
   });
 
   it('does not replay after completion', () => {
-    let state = appStateSlice.reducer(undefined, beginIntroCentering());
+    let state = appStateSlice.reducer(undefined, setIntroEligible(true));
     state = appStateSlice.reducer(state, beginIntroPlayback());
     state = appStateSlice.reducer(state, completeIntro());
-    state = appStateSlice.reducer(state, cancelIntro());
-    state = appStateSlice.reducer(state, beginIntroCentering());
+    state = appStateSlice.reducer(state, setIntroEligible(false));
+    state = appStateSlice.reducer(state, setIntroEligible(true));
     expect(state.introPhase).toBe('complete');
   });
 
-  it('keeps settings navigation in app state and clears it on logout without replaying intro', () => {
-    let state = appStateSlice.reducer(undefined, beginIntroCentering());
+  it('keeps a completed intro complete when authentication clears', () => {
+    let state = appStateSlice.reducer(undefined, setIntroEligible(true));
     state = appStateSlice.reducer(state, beginIntroPlayback());
     state = appStateSlice.reducer(state, completeIntro());
-    state = appStateSlice.reducer(state, { type: 'appState/openSettings' });
-    state = appStateSlice.reducer(state, { type: 'appState/openSettingsStorage' });
-    expect(state.settingsPage).toBe('storage');
-
     state = appStateSlice.reducer(state, clearAuth());
-    expect(state.settingsPage).toBeNull();
     expect(state.introPhase).toBe('complete');
   });
 });

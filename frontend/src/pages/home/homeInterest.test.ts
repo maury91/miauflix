@@ -50,15 +50,18 @@ describe('home realtime interest', () => {
     });
   });
 
-  it('does not publish an empty category map', () => {
+  it('publishes an empty map when there are no categories and preserves the current focus', () => {
     expect(
       buildHomeRealtimeInterest({
         activeCategory: 0,
         rowCount: 0,
         rowWindows: [],
-        selectedMedia: null,
-        view: 'browse',
+        selectedMedia: movie(42),
+        view: 'details',
       })
-    ).toBeNull();
+    ).toEqual({
+      focus: { view: 'details', media: movie(42) },
+      map: { center: null, mediaIds: [], visible: [] },
+    });
   });
 });

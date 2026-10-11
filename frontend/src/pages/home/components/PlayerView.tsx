@@ -115,7 +115,9 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector(selectCurrentUser);
   const [createSession, sessionRequest] = useCreateSessionMutation();
-  const resetSessionRequest = sessionRequest.reset;
+  const resetSessionRequestRef = useRef(sessionRequest.reset);
+  resetSessionRequestRef.current = sessionRequest.reset;
+  const resetSessionRequest = useCallback(() => resetSessionRequestRef.current(), []);
   const session = sessionRequest.data ?? null;
   const [searchSubtitles] = useSearchSubtitlesMutation();
   const progress = useGetProgressQuery(undefined);

@@ -1,3 +1,4 @@
+import { navigate } from '@app/router';
 import type { RootState } from '@store/store';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -5,6 +6,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 const {
   useGetListsQuery,
   useGetPopularListsInfiniteQuery,
+  useGetMovieQuery,
+  useGetShowQuery,
   rowHandles,
   rowProps,
   mediaIndexes,
@@ -27,6 +30,8 @@ const {
 } = vi.hoisted(() => ({
   useGetListsQuery: vi.fn(),
   useGetPopularListsInfiniteQuery: vi.fn(),
+  useGetMovieQuery: vi.fn(),
+  useGetShowQuery: vi.fn(),
   rowHandles: new Map<number, Record<string, unknown>>(),
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
   mediaIndexes: new Map<number, number>(),
@@ -52,12 +57,10 @@ const {
   ),
   homeNavigationState: {
     value: {
-      view: 'browse',
       activeRegion: 'carousel',
       activeCategory: 0,
       selectedByCategory: {} as Record<string, number>,
       pendingCategoryAdvance: false,
-      playable: null,
     } as RootState['homeNavigation'],
     revision: 0,
     listeners: new Set<() => void>(),
@@ -77,6 +80,8 @@ vi.mock('@features/media/api/lists.api', () => ({
   useGetPopularListsInfiniteQuery,
 }));
 vi.mock('@features/media/api/media.api', () => ({
+  useGetMovieQuery,
+  useGetShowQuery,
   mediaApi: {
     util: { prefetch: vi.fn() },
     endpoints: {
@@ -155,7 +160,15 @@ vi.mock('./components/CategoryRow', async () => {
           loadIntent: props.loadIntent,
           visible: props.visible,
         });
-        const { mediaOverride, onActive, categoryIndex, isCurrentRow } = props;
+        const {
+          mediaOverride,
+          onActive,
+          categoryIndex,
+          isCurrentRow,
+          loadIntent,
+          onDataReady,
+          category,
+        } = props;
         const mediaIndex = mediaIndexes.get(categoryIndex) ?? 0;
         const media = React.useMemo(
           () =>
@@ -167,7 +180,7 @@ vi.mock('./components/CategoryRow', async () => {
           [categoryIndex, mediaIndex, mediaOverride]
         );
         React.useEffect(() => {
-          if (props.loadIntent !== 'dormant') props.onDataReady(props.category.slug);
+          if (loadIntent !== 'dormant') onDataReady(category.slug);
           if (isCurrentRow) onActive(categoryIndex, mediaIndex, media);
         }, [
           categoryIndex,
@@ -175,9 +188,9 @@ vi.mock('./components/CategoryRow', async () => {
           media,
           mediaIndex,
           onActive,
-          props.category.slug,
-          props.loadIntent,
-          props.onDataReady,
+          category.slug,
+          loadIntent,
+          onDataReady,
         ]);
         const handle = rowHandles.get(props.categoryIndex);
         React.useImperativeHandle(ref, () => handle, [handle]);
@@ -204,7 +217,9 @@ vi.mock('./components/CategoryRow', async () => {
   };
 });
 vi.mock('./components/PlayerView', () => ({
-  PlayerView: () => <div data-testid="player" />,
+  PlayerView: (props: { playable: { kind: string; mediaId?: number; showMediaId?: number } }) => (
+    <div data-testid="player" data-playable-kind={props.playable.kind} />
+  ),
 }));
 vi.mock('./components/MediaHero', async () => {
   const React = await import('react');
@@ -235,6 +250,7 @@ vi.mock('./components/MediaDetails', async () => {
     MediaDetails: React.forwardRef(
       (
         props: {
+          media: { mediaId: number };
           preparation?: {
             state: string;
             source?: { quality: string };
@@ -246,6 +262,7 @@ vi.mock('./components/MediaDetails', async () => {
         React.useImperativeHandle(ref, () => ({ handleAction: detailsHandleAction }), []);
         return React.createElement('div', {
           'data-testid': 'details',
+          'data-media-id': props.media.mediaId,
           'data-source-status': props.preparation?.state ?? 'checking',
           'data-quality': props.preparation?.source?.quality,
           'data-warmup': props.preparation?.warmup?.state,
@@ -279,6 +296,7 @@ const makeHandle = (focusResult: boolean, empty: boolean) => ({
 
 describe('HomePage focus transitions', () => {
   beforeEach(() => {
+    navigate({ type: 'home' }, { replace: true });
     dispatch.mockReset();
     dispatch.mockImplementation(action => {
       if (typeof action === 'object' && action && 'type' in action) {
@@ -319,6 +337,18 @@ describe('HomePage focus transitions', () => {
       hasNextPage: false,
       isFetchingNextPage: false,
     });
+    useGetMovieQuery.mockReset().mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+    useGetShowQuery.mockReset().mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
     detailsHandleAction.mockReset().mockReturnValue({ type: 'escape', direction: 'left' });
   });
 
@@ -327,7 +357,7 @@ describe('HomePage focus transitions', () => {
     render(<HomePage interactive={false} onHydrated={onHydrated} />);
 
     expect(useGetListsQuery).toHaveBeenCalled();
-    expect(useGetPopularListsInfiniteQuery).toHaveBeenCalledWith({ limit: 20 });
+    expect(useGetPopularListsInfiniteQuery).toHaveBeenCalledWith({ limit: 20 }, { skip: false });
     expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'false');
     expect(screen.getByTestId('hero')).toHaveAttribute('data-media-id', '100');
     expect(screen.queryByRole('dialog', { name: 'Connect Trakt' })).not.toBeInTheDocument();
@@ -335,6 +365,49 @@ describe('HomePage focus transitions', () => {
 
     await act(async () => heroControls.ready?.(100));
     await waitFor(() => expect(onHydrated).toHaveBeenCalledTimes(1));
+  });
+
+  it('loads a directly addressed movie route without loading the category feed', () => {
+    useGetListsQuery.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    useGetMovieQuery.mockReturnValue({
+      data: {
+        type: 'movie',
+        id: 7,
+        mediaId: 789,
+        imdbId: null,
+        title: 'Direct title',
+        overview: 'Overview',
+        tagline: '',
+        releaseDate: '',
+        runtime: 90,
+        poster: '',
+        backdrop: '',
+        backdropFocus: null,
+        logo: '',
+        genres: [],
+        popularity: 0,
+        rating: 0,
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+    navigate({ type: 'movieDetails', mediaId: 789 }, { replace: true });
+    render(<HomePage />);
+    expect(useGetListsQuery).toHaveBeenCalledWith(undefined, { skip: true });
+    expect(useGetMovieQuery).toHaveBeenCalledWith(789);
+    expect(screen.getByTestId('details')).toHaveAttribute('data-media-id', '789');
+    const mapAction = dispatch.mock.calls
+      .map(([action]) => action as { type?: string; payload?: unknown })
+      .find(action => action.type === 'realtimeRuntime/publishMapRequested');
+    const focusAction = dispatch.mock.calls
+      .map(([action]) => action as { type?: string; payload?: unknown })
+      .find(action => action.type === 'realtimeRuntime/publishFocusRequested');
+    expect(mapAction?.payload).toMatchObject({ center: null, mediaIds: [], visible: [] });
+    expect(focusAction?.payload).toMatchObject({
+      view: 'details',
+      media: { kind: 'movie', mediaId: 789 },
+    });
   });
 
   it.each([
