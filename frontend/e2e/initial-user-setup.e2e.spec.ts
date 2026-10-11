@@ -213,16 +213,16 @@ test('completes first-run admin and required configuration through the UI', asyn
   const redirectUriInput = page.getByRole('textbox', { name: 'Trakt Redirect URI' });
   await expect(redirectUriInput).toHaveValue(new URL(page.url()).origin);
   await redirectUriInput.fill('https://app.example/trakt/callback');
-  const listSaveResponsePromise = page.waitForResponse(response => {
-    return response.url().endsWith('/api/config/LIST') && response.request().method() === 'PUT';
+  const traktSaveResponsePromise = page.waitForResponse(response => {
+    return response.url().endsWith('/api/config/TRAKT') && response.request().method() === 'PUT';
   });
   const traktGroup = page
-    .getByRole('heading', { name: 'Trakt', exact: true })
+    .getByRole('heading', { name: 'TRAKT', exact: true })
     .locator('xpath=../../..');
   await traktGroup.getByRole('button', { name: 'Save', exact: true }).click();
-  const listSaveResponse = await listSaveResponsePromise;
-  expect(listSaveResponse.ok()).toBeTruthy();
-  await expect(listSaveResponse.json()).resolves.toMatchObject({
+  const traktSaveResponse = await traktSaveResponsePromise;
+  expect(traktSaveResponse.ok()).toBeTruthy();
+  await expect(traktSaveResponse.json()).resolves.toMatchObject({
     success: true,
     services: [expect.objectContaining({ service: 'LIST', success: true })],
   });
