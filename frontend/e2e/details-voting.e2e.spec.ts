@@ -31,6 +31,7 @@ function json(route: Route, body: unknown, status = 200): Promise<void> {
 }
 
 async function installVotingHarness(page: Page): Promise<void> {
+  let rating: string | null = null;
   await page.route('**/test-assets/*', route => {
     const asset = route.request().url().endsWith('logo.png')
       ? resolve(process.cwd(), '../test-fixtures/providers/tmdb/images/tmdb-83533-logo.png')
@@ -42,6 +43,26 @@ async function installVotingHarness(page: Page): Promise<void> {
     const request = route.request();
     const path = new URL(request.url()).pathname;
     if (!path.startsWith('/api/')) return route.continue();
+    if (path === '/api/ratings' && request.method() === 'GET') {
+      const url = new URL(request.url());
+      if (
+        url.searchParams.get('mediaType') !== 'movie' ||
+        url.searchParams.get('mediaId') !== String(movie.mediaId)
+      )
+        throw new Error('Unexpected rating target');
+      return json(route, { mediaType: 'movie', mediaId: movie.mediaId, rating });
+    }
+    if (path === '/api/ratings' && request.method() === 'PUT') {
+      const body = request.postDataJSON();
+      if (
+        body.mediaType !== 'movie' ||
+        body.mediaId !== movie.mediaId ||
+        ![null, 'like', 'dislike', 'love'].includes(body.rating)
+      )
+        throw new Error('Invalid rating update');
+      rating = body.rating;
+      return json(route, { mediaType: 'movie', mediaId: movie.mediaId, rating });
+    }
     if (path === '/api/auth/sessions' && request.method() === 'GET') return json(route, []);
     if (path === '/api/auth/setup' && request.method() === 'GET')
       return json(route, { available: false });
@@ -161,16 +182,21 @@ test.describe('details page voting controls', () => {
     await expect(love).toHaveAttribute('aria-pressed', 'false');
     await expect(dislike).toHaveScreenshot('details-vote-dislike.png');
 
+    await expect(like).toHaveAttribute('aria-disabled', 'false');
+    await like.focus();
     await like.click();
     await expect(dislike).toHaveAttribute('aria-pressed', 'false');
     await expect(like).toHaveAttribute('aria-pressed', 'true');
     await expect(like).toHaveScreenshot('details-vote-like.png');
 
+    await expect(love).toHaveAttribute('aria-disabled', 'false');
+    await love.focus();
     await love.click();
     await expect(like).toHaveAttribute('aria-pressed', 'false');
     await expect(love).toHaveAttribute('aria-pressed', 'true');
     await expect(love).toHaveScreenshot('details-vote-love.png');
 
+    await expect(love).toHaveAttribute('aria-disabled', 'false');
     await love.click();
     await expect(love).toHaveAttribute('aria-pressed', 'false');
     await expect(details).toHaveScreenshot('details-vote-cleared.png', {

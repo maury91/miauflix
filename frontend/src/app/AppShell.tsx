@@ -5,6 +5,8 @@ import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
 import QrApprovalPage from '@pages/qr/QrApprovalPage';
+import SettingsPage from '@pages/settings/SettingsPage';
+import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
 import { Logo } from '@shared/ui/logo/Logo';
@@ -30,6 +32,12 @@ export function AppShell() {
   const isAdmin = useAppSelector(selectIsAdmin);
   const [introComplete, setIntroComplete] = useState(false);
   const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
+  const [settingsActive, setSettingsActive] = useState(false);
+  const [storageActive, setStorageActive] = useState(false);
+  const [settingsInitialFocus, setSettingsInitialFocus] = useState<'configuration' | 'storage'>(
+    'configuration'
+  );
+  const [configurationActive, setConfigurationActive] = useState(false);
   const logoRef = useRef<LogoAnimationHandle>(null);
   const appState = useAppState();
 
@@ -61,7 +69,7 @@ export function AppShell() {
     dispatch(dismissConfigWizard());
   }, [dispatch]);
 
-  const logoPage = configurationWizardActive ? 'config_wizard' : appState;
+  const logoPage = configurationWizardActive || settingsActive ? 'config_wizard' : appState;
 
   useEffect(() => {
     if (appState === 'config_wizard' && isAuthenticated && isAdmin) {
@@ -73,10 +81,24 @@ export function AppShell() {
 
   useEffect(() => {
     const openSettings = () => {
-      if (isAuthenticated && isAdmin) setConfigurationWizardActive(true);
+      if (isAuthenticated) {
+        setConfigurationActive(false);
+        setStorageActive(false);
+        setSettingsInitialFocus('configuration');
+        setSettingsActive(true);
+      }
     };
     window.addEventListener('miauflix:settings:open', openSettings);
     return () => window.removeEventListener('miauflix:settings:open', openSettings);
+  }, [isAuthenticated]);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setSettingsActive(false);
+      setStorageActive(false);
+    }
+    if (!isAuthenticated || !isAdmin) setConfigurationActive(false);
+    if (!isAdmin) setStorageActive(false);
   }, [isAdmin, isAuthenticated]);
 
   const renderPage = () => {
@@ -85,6 +107,41 @@ export function AppShell() {
     }
     if (configurationWizardActive) {
       return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
+    }
+    if (settingsActive && isAuthenticated && appState === 'home') {
+      if (configurationActive && isAdmin) {
+        return (
+          <ConfigWizardPage
+            key="settings-configuration"
+            onDismiss={() => setConfigurationActive(false)}
+          />
+        );
+      }
+      if (storageActive && isAdmin) {
+        return (
+          <StoragePage
+            key="settings-storage"
+            onDismiss={() => {
+              setStorageActive(false);
+              setSettingsInitialFocus('storage');
+            }}
+          />
+        );
+      }
+      return (
+        <SettingsPage
+          key="settings"
+          canConfigure={isAdmin}
+          onConfiguration={() => {
+            setSettingsInitialFocus('configuration');
+            setConfigurationActive(true);
+          }}
+          canManageStorage={isAdmin}
+          onStorage={() => setStorageActive(true)}
+          initialFocus={settingsInitialFocus}
+          onDismiss={() => setSettingsActive(false)}
+        />
+      );
     }
     switch (appState) {
       case 'loading':

@@ -1,0 +1,60 @@
+import { describe, expect, it, vi } from 'vitest';
+
+import { playbackAudioCapabilities, preferredAudioTrack } from './audio-language';
+
+const delivery = {
+  mode: 'audio-transcode' as const,
+  audioCodec: 'ac3',
+  mimeType: 'video/mp4',
+  durationSeconds: 100,
+  defaultAudioTrackIndex: 0,
+  audioTracks: [
+    { index: 0, language: 'fra', title: null, codec: 'ac3', channels: 6, isDefault: true },
+    { index: 1, language: 'eng', title: null, codec: 'ac3', channels: 6, isDefault: false },
+  ],
+};
+describe('browser audio language', () => {
+  it('reports decoder support from the current device instead of assuming a codec list', () => {
+    const video = {
+      canPlayType: (mime: string) =>
+        mime.includes('ac-3') || mime.includes('hvc1') ? 'probably' : '',
+      audioTracks: [],
+    } as unknown as HTMLVideoElement;
+    expect(playbackAudioCapabilities(video)).toMatchObject({
+      supportedAudioCodecs: ['ac3'],
+      allowHevc: true,
+      nativeAudioTracks: true,
+    });
+    expect(
+      playbackAudioCapabilities({ canPlayType: () => '' } as unknown as HTMLVideoElement)
+    ).toMatchObject({ supportedAudioCodecs: [], allowHevc: false, nativeAudioTracks: false });
+  });
+  it('reports MediaSource HEVC support separately from native playback', () => {
+    vi.stubGlobal('MediaSource', {
+      isTypeSupported: (mime: string) => mime.includes('hvc1'),
+    });
+    try {
+      expect(
+        playbackAudioCapabilities({ canPlayType: () => '' } as unknown as HTMLVideoElement)
+      ).toMatchObject({ allowHevc: false, supportedMseVideoCodecs: ['hevc'] });
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+  it('reports native HEVC support for each container independently', () => {
+    const capabilities = playbackAudioCapabilities({
+      canPlayType: (mime: string) => (mime.startsWith('video/mp4') ? 'probably' : ''),
+      audioTracks: [],
+    } as unknown as HTMLVideoElement);
+    expect(capabilities).toMatchObject({ allowHevc: true, nativeHevcContainers: ['mp4'] });
+  });
+  it('matches ISO audio tags to regional browser languages', () => {
+    expect(preferredAudioTrack(delivery, ['en-GB'])).toBe(1);
+    expect(preferredAudioTrack(delivery, ['fr-CA'])).toBe(0);
+  });
+  it('follows browser preference order and falls back to the source default', () => {
+    expect(preferredAudioTrack(delivery, ['lt', 'en-US', 'fr'])).toBe(1);
+    expect(preferredAudioTrack(delivery, ['ja'])).toBe(0);
+    expect(preferredAudioTrack(undefined, ['en'])).toBeUndefined();
+  });
+});

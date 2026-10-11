@@ -17,6 +17,8 @@ export type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'color'>
   fullWidth?: boolean;
   /** Square icon action; supply an aria-label. */
   iconOnly?: boolean;
+  /** Show only the icon until focused, while retaining the accessible label. Requires icon. */
+  collapseWhenNotFocused?: boolean;
   /** Optional leading icon. Icons are hidden from assistive technology. */
   icon?: ReactNode;
 };
@@ -58,6 +60,7 @@ const StyledButton = styled.button<{
   $size: 'small' | 'medium' | 'large';
   $fullWidth: boolean;
   $iconOnly: boolean;
+  $collapseWhenNotFocused: boolean;
 }>`
   display: inline-flex;
   align-items: center;
@@ -183,6 +186,40 @@ const StyledButton = styled.button<{
     width: 28px;
     height: 28px;
   }
+
+  ${({ $collapseWhenNotFocused }) =>
+    $collapseWhenNotFocused &&
+    css`
+      && {
+        min-width: 0;
+        gap: 0;
+      }
+
+      > [data-button-label] {
+        display: inline-grid;
+        grid-template-columns: 0fr;
+        margin-inline-start: 0;
+        transition:
+          grid-template-columns 180ms ease,
+          margin-inline-start 180ms ease;
+      }
+
+      > [data-button-label] > span {
+        min-width: 0;
+        overflow: hidden;
+      }
+
+      &:focus > [data-button-label] {
+        grid-template-columns: 1fr;
+        margin-inline-start: 0.5rem;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        > [data-button-label] {
+          transition: none;
+        }
+      }
+    `}
 `;
 
 /** Render a native button with a forwarded ref, defaulting to type="button" and hiding its icon from assistive technology. */
@@ -194,6 +231,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
     size = 'large',
     fullWidth = false,
     iconOnly = false,
+    collapseWhenNotFocused = false,
     icon,
     children,
     type = 'button',
@@ -211,10 +249,17 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(function Button
       $size={size}
       $fullWidth={fullWidth}
       $iconOnly={iconOnly}
+      $collapseWhenNotFocused={collapseWhenNotFocused && icon !== undefined && !iconOnly}
       {...props}
     >
       {icon !== undefined && <span aria-hidden="true">{icon}</span>}
-      {children}
+      {collapseWhenNotFocused && icon !== undefined && !iconOnly ? (
+        <span data-button-label>
+          <span>{children}</span>
+        </span>
+      ) : (
+        children
+      )}
     </StyledButton>
   );
 });

@@ -10,11 +10,23 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import type { EncryptionService } from '@services/encryption/encryption.service';
+
 import { MovieSource } from './movie-source.entity';
+
+export interface EncryptedStorageLayout {
+  storeName: string;
+  filenameSalt: string;
+  pieceLength: number;
+  files: Array<{ path: string; length: number; offset: number }>;
+  video: { name: string; path: string; offset: number; length: number };
+}
 
 @Entity('storage')
 @Index('idx_storage_last_access', ['lastAccessAt'])
 export class Storage {
+  static encryptionService: EncryptionService;
+
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -69,6 +81,26 @@ export class Storage {
 
   @Column({ type: 'datetime', nullable: true })
   speculativeExpiresAt: Date | null;
+
+  @Column({ type: 'datetime', nullable: true })
+  videoCompletedAt: Date | null;
+
+  @Column({ type: 'boolean', default: false })
+  localOnly: boolean;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+    transformer: {
+      to: (value: EncryptedStorageLayout | null) =>
+        value ? Storage.encryptionService.encryptString(JSON.stringify(value)) : null,
+      from: (value: string | null) =>
+        value
+          ? (JSON.parse(Storage.encryptionService.decryptString(value)) as EncryptedStorageLayout)
+          : null,
+    },
+  })
+  encryptedLayout: EncryptedStorageLayout | null;
 
   @Column({ type: 'integer', default: 0 })
   activeStreams: number;

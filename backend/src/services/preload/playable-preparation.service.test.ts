@@ -1,10 +1,92 @@
-import { Quality, Source } from '@miauflix/source-metadata-extractor';
+import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { PlayableRef } from '@routes/playable.types';
 
 import { PlayablePreparationService } from './playable-preparation.service';
 
 describe('PlayablePreparationService', () => {
+  it.each([
+    { videoCompletedAt: new Date(), downloaded: 8000 },
+    { localOnly: true, downloaded: 10000 },
+    { downloaded: 10000 },
+  ])('reuses completed storage before higher-ranked torrents (%j)', async completion => {
+    const downloaded = { id: 1, quality: Quality.HD, streamingScore: 1, file: null };
+    const fresh = {
+      id: 2,
+      quality: Quality.FHD,
+      streamingScore: 100,
+      file: Buffer.from('torrent'),
+    };
+    const mediaService = {
+      getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+    };
+    const sourceService = {
+      getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([fresh, downloaded]),
+      processSourceMetadata: jest.fn(),
+    };
+    const storageService = {
+      getStorageByMovieSource: jest.fn(async (id: number) => (id === 1 ? completion : null)),
+    };
+    const warmup = { warm: jest.fn().mockResolvedValue({ state: 'ready' }) };
+    const service = new PlayablePreparationService(
+      mediaService as never,
+      sourceService as never,
+      warmup as never,
+      storageService as never
+    );
+    for (const through of ['sources', 'warm'] as const) {
+      const result = await service.prepare(
+        { kind: 'movie', mediaId: 42 },
+        {
+          through,
+          preferences: { quality: Quality.FHD, allowHevc: false },
+          workClass: 'interactive',
+        }
+      );
+      expect(result.source).toBe(downloaded);
+    }
+    expect(warmup.warm).toHaveBeenCalledWith(downloaded, 'm:42', 'm:42', expect.anything());
+    expect(sourceService.processSourceMetadata).not.toHaveBeenCalled();
+  });
+
+  it.each([
+    { downloaded: 9999, videoCodec: null },
+    { downloaded: 10000, videoCodec: VideoCodec.X265 },
+  ])('does not prefer incomplete or incompatible downloads (%j)', async cached => {
+    const downloaded = {
+      id: 1,
+      quality: Quality.HD,
+      streamingScore: 1,
+      file: Buffer.from('torrent'),
+      videoCodec: cached.videoCodec,
+    };
+    const fresh = {
+      id: 2,
+      quality: Quality.FHD,
+      streamingScore: 100,
+      file: Buffer.from('torrent'),
+    };
+    const service = new PlayablePreparationService(
+      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
+      {
+        getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([fresh, downloaded]),
+      } as never,
+      undefined,
+      {
+        getStorageByMovieSource: jest.fn(async (id: number) => (id === 1 ? cached : null)),
+      } as never
+    );
+    const result = await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      {
+        through: 'sources',
+        preferences: { quality: 'auto', allowHevc: false },
+        workClass: 'interactive',
+      }
+    );
+    expect(result.source).toBe(fresh);
+  });
+
   it('discovers source metadata for browse without starting torrent work', async () => {
     const source = {
       id: 11,

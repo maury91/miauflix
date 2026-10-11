@@ -1,6 +1,5 @@
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { Button as BaseButton } from '@shared/ui/button/Button';
 import { type FC, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -38,50 +37,37 @@ const Navigation = styled.nav`
   align-content: space-between;
 `;
 
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const Item = styled(BaseButton)<{ $active: boolean; $selected: boolean }>`
+const Item = styled.button<{ $active: boolean; $selected: boolean }>`
   position: relative;
   display: flex;
   align-items: center;
   gap: 0.8vw;
-  justify-content: flex-start;
+  justify-content: ${({ $active }) => ($active ? 'flex-start' : 'center')};
   width: 100%;
   min-height: 0;
   min-width: 44px;
   height: clamp(42px, 3.7vw, 62px);
   padding: 0 0.8vw;
   border: 0;
-  border-radius: 0.5vw;
-  background: ${({ $selected }) => ($selected ? 'rgba(255, 255, 255, 0.1)' : 'transparent')};
+  border-radius: clamp(8px, 0.5vw, 12px);
+  background: ${({ $selected }) =>
+    $selected ? 'linear-gradient(115deg, #e60019 0%, #870d1a 100%)' : 'transparent'};
   color: ${PALETTE.text.primary};
   font:
     500 clamp(0.8rem, 1.8vw, 1.5rem) 'Poppins',
     sans-serif;
+  letter-spacing: 0;
+  white-space: nowrap;
   text-align: left;
   cursor: pointer;
   outline: none;
-  box-shadow: none;
+  transition:
+    background 140ms ease,
+    box-shadow 140ms ease;
 
   &:focus-visible {
     outline: none;
     box-shadow: 0 0 0 2px ${PALETTE.text.primary};
-  }
-
-  > span[aria-hidden='true'] {
-    width: 1.35em;
-    height: 1.35em;
-  }
-
-  &::before {
-    content: '';
-    position: absolute;
-    top: 0.22rem;
-    bottom: 0.22rem;
-    left: -0.65vw;
-    width: 0.28rem;
-    border-radius: 0 0.22rem 0.22rem 0;
-    background: ${PALETTE.color.brand};
-    opacity: ${({ $active }) => ($active ? 1 : 0)};
   }
 `;
 
@@ -94,6 +80,12 @@ const Icon = styled.span`
   color: currentColor;
   font-size: 1.05em;
   line-height: 1;
+
+  > svg {
+    display: block;
+    width: 28px;
+    height: 28px;
+  }
 `;
 
 interface HomeSidebarProps {
@@ -146,7 +138,8 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
       return true;
     },
     onConfirm: () => {
-      onAction('confirm');
+      if (selected === 'settings') onSettings();
+      else onAction('confirm');
       return true;
     },
     onBack: () => {
@@ -169,7 +162,7 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
         <Item
           ref={homeRef}
           type="button"
-          $active={active && selected === 'home'}
+          $active={active}
           $selected={selected === 'home'}
           aria-label="Home"
           aria-current="page"
@@ -185,7 +178,7 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
         <Item
           ref={settingsRef}
           type="button"
-          $active={active && selected === 'settings'}
+          $active={active}
           $selected={selected === 'settings'}
           aria-label="Settings"
           onFocus={() => move('settings')}

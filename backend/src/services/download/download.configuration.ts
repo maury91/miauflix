@@ -42,6 +42,14 @@ export const downloadConfigurationDefinition = serviceConfiguration({
   name: 'Download',
   description: 'Download and streaming configuration',
   variables: {
+    CONVERT_H265_TO_H264: variable({
+      label: 'Convert H.265 to H.264',
+      description:
+        'Allow CPU-intensive real-time H.265 video conversion when the client cannot play or remux it. Output is limited to 1080p at 30 fps. Supported clients keep the original video.',
+      defaultValue: 'false',
+      required: false,
+      transform: transforms.boolean(),
+    }),
     CONTENT_DOWNLOAD_LIMIT: variable({
       description: 'Download limit for peer-to-peer client',
       example: '20MB',
@@ -57,6 +65,15 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       skipUserInteraction: true,
       required: true,
       transform: transforms.size(['KB', 'MB', 'GB', 'TB']),
+    }),
+    CONTENT_SEED_DURATION_SECONDS: variable({
+      label: 'Seeding duration after video download',
+      description:
+        'How many seconds to seed after the main video is fully downloaded. Set to 0 to stop seeding immediately.',
+      example: '3600',
+      defaultValue: '3600',
+      required: true,
+      transform: transforms.number({ min: 0, integer: true }),
     }),
     DISABLE_DISCOVERY: variable({
       description: 'Disable DHT for peer-to-peer client',
