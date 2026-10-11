@@ -216,7 +216,10 @@ test('completes first-run admin and required configuration through the UI', asyn
   const listSaveResponsePromise = page.waitForResponse(response => {
     return response.url().endsWith('/api/config/TRAKT') && response.request().method() === 'PUT';
   });
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
+  const traktGroup = page
+    .getByRole('heading', { name: 'Trakt', exact: true })
+    .locator('xpath=../../..');
+  await traktGroup.getByRole('button', { name: 'Save', exact: true }).click();
   const listSaveResponse = await listSaveResponsePromise;
   expect(listSaveResponse.ok()).toBeTruthy();
   await expect(listSaveResponse.json()).resolves.toMatchObject({
