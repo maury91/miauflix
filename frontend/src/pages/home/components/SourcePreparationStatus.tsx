@@ -190,7 +190,8 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
   if (preparation && !matchesMedia(preparation, mediaKind)) return null;
 
   const source = preparation?.source;
-  const quality = qualityLabel(source?.quality ?? null);
+  // Unknown resolution gets a display-only fallback once a source is available.
+  const quality = source && source.quality == null ? '720p' : qualityLabel(source?.quality ?? null);
   const release = sourceLabel(source?.sourceType ?? null);
   const qualityState = sourceQualityState(source?.sourceType ?? null);
   const loading = !preparation || preparation.state === 'checking';

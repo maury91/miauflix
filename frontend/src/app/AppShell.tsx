@@ -11,13 +11,24 @@ import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
 import { Logo } from '@shared/ui/logo/Logo';
 import { useAppDispatch, useAppSelector } from '@store';
-import { dismissConfigWizard } from '@store/slices/appState';
+import {
+  beginIntroCentering,
+  beginIntroPlayback,
+  cancelIntro,
+  closeSettings,
+  completeIntro,
+  dismissConfigWizard,
+  openSettingsConfiguration,
+  openSettingsStorage,
+  returnToSettings,
+  selectIntroPhase,
+  selectSettingsInitialFocus,
+  selectSettingsPage,
+} from '@store/slices/appState';
 import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-
-const INTRO_AUTO_START_DELAY = 0.1;
 
 const LoadingContainer = styled.div`
   position: fixed;
@@ -26,23 +37,49 @@ const LoadingContainer = styled.div`
   z-index: 999;
 `;
 
+type IdleWindow = Window & {
+  requestIdleCallback?: (callback: () => void) => number;
+  cancelIdleCallback?: (handle: number) => void;
+};
+
+function scheduleWhenIdle(callback: () => void): () => void {
+  const idleWindow = window as IdleWindow;
+  if (idleWindow.requestIdleCallback) {
+    const handle = idleWindow.requestIdleCallback(callback);
+    return () => idleWindow.cancelIdleCallback?.(handle);
+  }
+
+  const handle = window.setTimeout(callback, 50);
+  return () => window.clearTimeout(handle);
+}
+
 export function AppShell() {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAdmin = useAppSelector(selectIsAdmin);
-  const [introComplete, setIntroComplete] = useState(false);
-  const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
-  const [settingsActive, setSettingsActive] = useState(false);
-  const [storageActive, setStorageActive] = useState(false);
-  const [settingsInitialFocus, setSettingsInitialFocus] = useState<'configuration' | 'storage'>(
-    'configuration'
-  );
-  const [configurationActive, setConfigurationActive] = useState(false);
-  const logoRef = useRef<LogoAnimationHandle>(null);
+  const introPhase = useAppSelector(selectIntroPhase);
+  const settingsPage = useAppSelector(selectSettingsPage);
+  const settingsInitialFocus = useAppSelector(selectSettingsInitialFocus);
   const appState = useAppState();
+  const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
+  const [homeHydrated, setHomeHydrated] = useState(false);
+  const [introAnimationReady, setIntroAnimationReady] = useState(false);
+  const [logoCentered, setLogoCentered] = useState(false);
+  const [introHasStarted, setIntroHasStarted] = useState(false);
+  const logoRef = useRef<LogoAnimationHandle>(null);
+  const hasShownScreenRef = useRef(false);
+  const introPhaseRef = useRef(introPhase);
+  const isQrApproval =
+    typeof window !== 'undefined' && window.location.pathname.startsWith('/auth/qr/');
+  const homeEligible = appState === 'home' && !isQrApproval && !configurationWizardActive;
+  const homeEligibleRef = useRef(homeEligible);
+  introPhaseRef.current = introPhase;
+  homeEligibleRef.current = homeEligible;
 
   const handleIntroComplete = useCallback(() => {
-    setIntroComplete(true);
+    if (!homeEligibleRef.current || introPhaseRef.current !== 'playing') return;
+    introPhaseRef.current = 'complete';
+    dispatch(completeIntro());
 
     if (typeof window !== 'undefined') {
       window.dispatchEvent(new Event('miauflix:intro:animation:complete'));
@@ -50,18 +87,69 @@ export function AppShell() {
       // Expose a flag for automated tests that wait for the intro animation to finish
       window._miauflixAnimationComplete = true;
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
-    if (typeof window === 'undefined' || !logoRef.current) {
+    if (homeEligible) {
+      if (introPhase === 'pending') {
+        setLogoCentered(!hasShownScreenRef.current);
+      }
+      dispatch(beginIntroCentering());
+    } else {
+      setHomeHydrated(false);
+      setIntroAnimationReady(false);
+      setLogoCentered(false);
+      setIntroHasStarted(false);
+      if (introPhase === 'centering' || introPhase === 'playing') {
+        dispatch(cancelIntro());
+      }
+    }
+  }, [dispatch, homeEligible, introPhase]);
+
+  useEffect(() => {
+    if (
+      introPhase !== 'centering' ||
+      !homeEligible ||
+      !homeHydrated ||
+      !introAnimationReady ||
+      !logoCentered
+    ) {
       return undefined;
     }
 
-    const timeout = window.setTimeout(() => {
-      logoRef.current?.start();
-    }, INTRO_AUTO_START_DELAY * 1000);
+    return scheduleWhenIdle(() => {
+      if (homeEligibleRef.current && introPhaseRef.current === 'centering') {
+        dispatch(beginIntroPlayback());
+      }
+    });
+  }, [dispatch, homeEligible, homeHydrated, introAnimationReady, introPhase, logoCentered]);
 
-    return () => window.clearTimeout(timeout);
+  const handleIntroReady = useCallback(() => {
+    if (homeEligibleRef.current && introPhaseRef.current !== 'complete') {
+      setIntroAnimationReady(true);
+    }
+  }, []);
+
+  const handleLogoCentered = useCallback(() => {
+    if (homeEligibleRef.current && introPhaseRef.current === 'centering') {
+      setLogoCentered(true);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (homeEligible && introPhase === 'playing' && homeHydrated && introAnimationReady) {
+      logoRef.current?.start();
+    }
+  }, [homeEligible, homeHydrated, introAnimationReady, introPhase]);
+
+  const handleIntroStart = useCallback(() => {
+    if (homeEligibleRef.current && introPhaseRef.current === 'playing') {
+      setIntroHasStarted(true);
+    }
+  }, []);
+
+  const handleHomeHydrated = useCallback(() => {
+    setHomeHydrated(true);
   }, []);
 
   const handleConfigDismiss = useCallback(() => {
@@ -69,7 +157,25 @@ export function AppShell() {
     dispatch(dismissConfigWizard());
   }, [dispatch]);
 
-  const logoPage = configurationWizardActive || settingsActive ? 'config_wizard' : appState;
+  const logoPage =
+    homeEligible && introPhase !== 'complete'
+      ? introPhase === 'playing' && introHasStarted
+        ? 'home'
+        : 'intro'
+      : appState === 'loading' && !hasShownScreenRef.current
+        ? 'intro'
+        : configurationWizardActive ||
+            settingsPage === 'configuration' ||
+            settingsPage === 'storage'
+          ? 'config_wizard'
+          : appState;
+  const logoMotionDisabled =
+    !hasShownScreenRef.current || (homeEligible && introPhase === 'playing');
+  const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);
+
+  useEffect(() => {
+    if (appState !== 'loading') hasShownScreenRef.current = true;
+  }, [appState]);
 
   useEffect(() => {
     if (appState === 'config_wizard' && isAuthenticated && isAdmin) {
@@ -80,50 +186,31 @@ export function AppShell() {
   }, [appState, isAdmin, isAuthenticated]);
 
   useEffect(() => {
-    const openSettings = () => {
-      if (isAuthenticated) {
-        setConfigurationActive(false);
-        setStorageActive(false);
-        setSettingsInitialFocus('configuration');
-        setSettingsActive(true);
-      }
-    };
-    window.addEventListener('miauflix:settings:open', openSettings);
-    return () => window.removeEventListener('miauflix:settings:open', openSettings);
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setSettingsActive(false);
-      setStorageActive(false);
-    }
-    if (!isAuthenticated || !isAdmin) setConfigurationActive(false);
-    if (!isAdmin) setStorageActive(false);
-  }, [isAdmin, isAuthenticated]);
+    if (!isAuthenticated && settingsPage) dispatch(closeSettings());
+  }, [dispatch, isAuthenticated, settingsPage]);
 
   const renderPage = () => {
-    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/auth/qr/')) {
+    if (isQrApproval) {
       return <QrApprovalPage key="qr-approval" />;
     }
     if (configurationWizardActive) {
       return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
     }
-    if (settingsActive && isAuthenticated && appState === 'home') {
-      if (configurationActive && isAdmin) {
+    if (settingsPage && isAuthenticated && appState === 'home') {
+      if (settingsPage === 'configuration' && isAdmin) {
         return (
           <ConfigWizardPage
             key="settings-configuration"
-            onDismiss={() => setConfigurationActive(false)}
+            onDismiss={() => dispatch(returnToSettings('configuration'))}
           />
         );
       }
-      if (storageActive && isAdmin) {
+      if (settingsPage === 'storage' && isAdmin) {
         return (
           <StoragePage
             key="settings-storage"
             onDismiss={() => {
-              setStorageActive(false);
-              setSettingsInitialFocus('storage');
+              dispatch(returnToSettings('storage'));
             }}
           />
         );
@@ -132,14 +219,11 @@ export function AppShell() {
         <SettingsPage
           key="settings"
           canConfigure={isAdmin}
-          onConfiguration={() => {
-            setSettingsInitialFocus('configuration');
-            setConfigurationActive(true);
-          }}
+          onConfiguration={() => dispatch(openSettingsConfiguration())}
           canManageStorage={isAdmin}
-          onStorage={() => setStorageActive(true)}
+          onStorage={() => dispatch(openSettingsStorage())}
           initialFocus={settingsInitialFocus}
-          onDismiss={() => setSettingsActive(false)}
+          onDismiss={() => dispatch(closeSettings())}
         />
       );
     }
@@ -155,22 +239,47 @@ export function AppShell() {
       case 'config_wizard':
         return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
       case 'home':
-      default:
-        return <HomePage key="home" />;
+      default: {
+        const homeInteractive = introPhase === 'complete';
+        const homeVisible = homeEligible || homeInteractive;
+        return (
+          <div
+            key="home"
+            aria-hidden={!homeInteractive}
+            inert={!homeInteractive}
+            style={{ visibility: homeVisible ? 'visible' : 'hidden' }}
+          >
+            <HomePage interactive={homeInteractive} onHydrated={handleHomeHydrated} />
+          </div>
+        );
+      }
     }
   };
 
   return (
     <ErrorBoundary>
-      <Logo page={logoPage} />
+      <Logo
+        page={logoPage}
+        disableMotion={logoMotionDisabled}
+        visible={showSharedLogo}
+        aboveIntro={homeEligible && (introPhase === 'pending' || introPhase === 'centering')}
+        onPositionTransitionEnd={handleLogoCentered}
+      />
       <MotionConfig transition={{ duration: 0.5 }}>
         <AnimatePresence initial={false} mode="wait">
           {renderPage()}
         </AnimatePresence>
       </MotionConfig>
 
-      {!introComplete && (
-        <IntroAnimation ref={logoRef} autoStart={false} onComplete={handleIntroComplete} />
+      {homeEligible && introPhase !== 'complete' && (
+        <IntroAnimation
+          ref={logoRef}
+          autoStart={false}
+          logoVisible={introPhase === 'playing'}
+          onStart={handleIntroStart}
+          onReady={handleIntroReady}
+          onComplete={handleIntroComplete}
+        />
       )}
     </ErrorBoundary>
   );

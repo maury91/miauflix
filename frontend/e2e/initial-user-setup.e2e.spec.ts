@@ -53,7 +53,6 @@ test('completes first-run admin and required configuration through the UI', asyn
   };
 
   await page.goto('/');
-  await waitForIntro(page);
 
   const initialStatus = await api.get('/api/auth/setup');
   expect(initialStatus.status()).toBe(200);

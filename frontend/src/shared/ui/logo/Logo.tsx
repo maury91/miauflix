@@ -7,14 +7,24 @@ const logoSvgUrl = '/assets/images/logo.svg';
 /** Admin creation (`initial_setup`) uses a smaller mark */
 const setupScale = 1;
 
-const LogoImage = styled.img<{ $setup: boolean; $configuration: boolean; $home: boolean }>`
+const LogoImage = styled.img<{
+  $setup: boolean;
+  $configuration: boolean;
+  $home: boolean;
+  $intro: boolean;
+  $disableMotion: boolean;
+  $visible: boolean;
+  $aboveIntro: boolean;
+}>`
   display: block;
   position: fixed;
-  z-index: 1002;
+  z-index: ${({ $aboveIntro }) => ($aboveIntro ? 1003 : 1002)};
   pointer-events: none;
-  transition: all 0.4s ease-in-out;
+  visibility: ${({ $visible }) => ($visible ? 'visible' : 'hidden')};
+  transition: ${({ $disableMotion }) => ($disableMotion ? 'none' : 'all 0.4s ease-in-out')};
 
-  transform: ${({ $home }) => ($home ? 'none' : 'translate(-50%, 0%)')};
+  transform: ${({ $home, $intro }) =>
+    $home ? 'none' : $intro ? 'translate(-50%, -50%)' : 'translate(-50%, 0%)'};
   left: ${({ $home }) => ($home ? '5vw' : '50%')};
 
   body[data-miauflix-details='true'] & {
@@ -26,10 +36,12 @@ const LogoImage = styled.img<{ $setup: boolean; $configuration: boolean; $home: 
   }
 
   /* Desktop */
-  top: ${({ $home, $configuration }) =>
-    $home ? '3vh' : $configuration ? '24px' : 'calc(50% - 380px)'};
+  top: ${({ $home, $configuration, $intro }) =>
+    $home ? '3vh' : $intro ? '50%' : $configuration ? '24px' : 'calc(50% - 380px)'};
   height: ${({ $setup, $configuration }) =>
     $configuration ? '56px' : $setup ? `${130 * setupScale}px` : '130px'};
+
+  ${({ $intro }) => $intro && 'height: 130px;'}
 
   ${({ $home }) =>
     $home &&
@@ -40,9 +52,18 @@ const LogoImage = styled.img<{ $setup: boolean; $configuration: boolean; $home: 
 
   /* Mobile */
   @media (max-width: 720px) {
-    top: ${({ $home, $configuration }) => ($home ? '3vh' : $configuration ? '16px' : '50px')};
-    height: ${({ $home, $setup, $configuration }) =>
-      $home ? '4vh' : $configuration ? '48px' : $setup ? `${70 * setupScale}px` : '70px'};
+    top: ${({ $home, $configuration, $intro }) =>
+      $home ? '3vh' : $intro ? '50%' : $configuration ? '16px' : '50px'};
+    height: ${({ $home, $setup, $configuration, $intro }) =>
+      $home
+        ? '4vh'
+        : $intro
+          ? '70px'
+          : $configuration
+            ? '48px'
+            : $setup
+              ? `${70 * setupScale}px`
+              : '70px'};
 
     body[data-miauflix-details='true'] & {
       left: 30vw;
@@ -62,10 +83,23 @@ const ConfigurationHeaderBackdrop = styled.div`
   }
 `;
 
-export const Logo = ({ page }: { page?: AppState }) => {
+export const Logo = ({
+  page,
+  disableMotion = false,
+  visible = true,
+  aboveIntro = false,
+  onPositionTransitionEnd,
+}: {
+  page?: AppState | 'intro';
+  disableMotion?: boolean;
+  visible?: boolean;
+  aboveIntro?: boolean;
+  onPositionTransitionEnd?: () => void;
+}) => {
   const isSetup = page === 'initial_setup';
   const isConfiguration = page === 'config' || page === 'config_wizard';
   const isHome = page === 'home';
+  const isIntro = page === 'intro';
 
   return (
     <MotionConfig transition={{ duration: 0.4 }}>
@@ -74,8 +108,15 @@ export const Logo = ({ page }: { page?: AppState }) => {
         $setup={isSetup}
         $configuration={isConfiguration}
         $home={isHome}
+        $intro={isIntro}
+        $disableMotion={disableMotion}
+        $visible={visible}
+        $aboveIntro={aboveIntro}
         src={logoSvgUrl}
         alt="Miauflix logo"
+        onTransitionEnd={event => {
+          if (event.propertyName === 'top') onPositionTransitionEnd?.();
+        }}
       />
     </MotionConfig>
   );

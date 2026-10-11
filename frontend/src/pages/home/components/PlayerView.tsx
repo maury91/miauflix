@@ -10,19 +10,9 @@ import {
   readMediaSubtitles,
   saveMediaSubtitles,
 } from '@features/player/lib/media-subtitles';
-import {
-  applyProgressUpdate,
-  progressForPlayable,
-  useGetProgressQuery,
-  useUpdateProgressMutation,
-} from '@features/progress/api/progress.api';
-import { RealtimeClient } from '@features/realtime/realtime.client';
-import type {
-  CreatePlaybackSessionResponse,
-  PlayableRef,
-  ProgressRequest,
-  SubtitleCandidateDto,
-} from '@miauflix/backend';
+import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
+import { saveProgressWithRealtime } from '@features/realtime/realtime.middleware';
+import type { PlayableRef, ProgressRequest, SubtitleCandidateDto } from '@miauflix/backend';
 import { API_URL, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
@@ -114,7 +104,6 @@ interface PlayerViewProps {
   playable: PlayableRef;
   title: string;
   onBack: () => void;
-  realtimeClient?: RealtimeClient | null;
 }
 
 /**
@@ -122,19 +111,19 @@ interface PlayerViewProps {
  * Resume unfinished progress beyond five seconds by its fraction of the saved duration,
  * capped one second before the current video’s end. Preparation failures offer a retry.
  */
-export function PlayerView({ playable, title, onBack, realtimeClient = null }: PlayerViewProps) {
+export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector(selectCurrentUser);
-  const [createSession] = useCreateSessionMutation();
+  const [createSession, sessionRequest] = useCreateSessionMutation();
+  const resetSessionRequest = sessionRequest.reset;
+  const session = sessionRequest.data ?? null;
   const [searchSubtitles] = useSearchSubtitlesMutation();
-  const [updateProgress] = useUpdateProgressMutation();
   const progress = useGetProgressQuery(undefined);
   const subtitleStorageKey = mediaSubtitleKey(currentUser?.id, playable);
   const rememberedSubtitles = useRef<MediaSubtitles | null>(readMediaSubtitles(subtitleStorageKey));
   const [subtitleSearchPreferences, setSubtitleSearchPreferences] = useState<
     { language: string; hearingImpaired: boolean } | undefined
   >();
-  const [session, setSession] = useState<CreatePlaybackSessionResponse | null>(null);
   const [subtitleCandidates, setSubtitleCandidates] = useState<SubtitleCandidateDto[]>([]);
   const [subtitleConfigured, setSubtitleConfigured] = useState<boolean | null>(null);
   const [subtitleAvailable, setSubtitleAvailable] = useState<boolean | null>(null);
@@ -162,7 +151,6 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
     durationSeconds: number;
   } | null>(null);
   const completedRef = useRef(false);
-  const realtimeClientRef = useRef<RealtimeClient | null>(realtimeClient);
   const subtitleTrackRef = useRef<HTMLTrackElement | null>(null);
   const subtitleRequestId = useRef(0);
   const currentStreamingKey = useRef<string | null>(null);
@@ -171,7 +159,6 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
   const resumeRef = useRef(resume);
   resumeRef.current = resume;
   const subtitleOffsetRef = useRef(0);
-  realtimeClientRef.current = realtimeClient;
   currentStreamingKey.current = session?.streamingKey ?? null;
   subtitleOffsetRef.current = subtitleOffset;
 
@@ -367,13 +354,9 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
         ...snapshot,
         state,
       };
-      if (realtimeClientRef.current?.publishProgress(update)) {
-        applyProgressUpdate(dispatch, update);
-        return;
-      }
-      void updateProgress(update);
+      void dispatch(saveProgressWithRealtime(update));
     },
-    [dispatch, playable, readProgressSnapshot, updateProgress]
+    [dispatch, playable, readProgressSnapshot]
   );
   const selectedSubtitle = subtitleCandidates.find(
     candidate => candidate.id === selectedSubtitleId
@@ -455,10 +438,10 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
       onError: message => {
         setStatus('error');
         setError(message);
-        setSession(null);
+        resetSessionRequest();
       },
     });
-  }, [session, audioDelivery, audioSeek, hasProgress, audioTrackIndex]);
+  }, [session, audioDelivery, audioSeek, hasProgress, audioTrackIndex, resetSessionRequest]);
 
   useEffect(() => {
     const track = subtitleTrackRef.current;
@@ -484,7 +467,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
   useEffect(() => {
     const currentRequest = ++requestId.current;
     sessionSubtitleStorageKey.current = null;
-    setSession(null);
+    resetSessionRequest();
     setError(null);
     setStatus('preparing');
     resumeApplied.current = false;
@@ -508,7 +491,6 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
         setAudioTrackIndex(result.delivery?.defaultAudioTrackIndex);
         audioPreparing.current = result.delivery?.mode === 'audio-transcode';
         sessionSubtitleStorageKey.current = subtitleStorageKey;
-        setSession(result);
       })
       .catch((reason: unknown) => {
         if (currentRequest !== requestId.current) return;
@@ -521,7 +503,15 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
       requestId.current += 1;
       if (!completedRef.current) saveProgress('paused');
     };
-  }, [attempt, createSession, playable, saveProgress, subtitleStorageKey, title]);
+  }, [
+    attempt,
+    createSession,
+    playable,
+    resetSessionRequest,
+    saveProgress,
+    subtitleStorageKey,
+    title,
+  ]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -623,7 +613,7 @@ export function PlayerView({ playable, title, onBack, realtimeClient = null }: P
               saveProgress('completed');
             }}
             onError={() => {
-              setSession(null);
+              resetSessionRequest();
               setStatus('error');
               setError(
                 `Playback for “${title}” could not load the selected source. Retry to try source preparation again.`

@@ -21,15 +21,45 @@ const {
   stopAudioPlayback: vi.fn(),
 }));
 
-vi.mock('@features/player/api/playback.api', () => ({
-  useCreateSessionMutation: () => [createSession],
-  useSearchSubtitlesMutation: () => [searchSubtitles],
-}));
+vi.mock('@features/player/api/playback.api', async () => {
+  const React = await import('react');
+  return {
+    useCreateSessionMutation: () => {
+      const [result, setResult] = React.useState<{
+        data?: CreatePlaybackSessionResponse;
+        reset?: () => void;
+      }>({});
+      const reset = React.useCallback(() => setResult({}), []);
+      const trigger = React.useCallback(
+        (request: unknown) => {
+          const response = createSession(request);
+          const requestPromise = response.unwrap().then(
+            (data: CreatePlaybackSessionResponse) => {
+              setResult({ data, reset });
+              return data;
+            },
+            (error: unknown) => {
+              setResult({ reset });
+              throw error;
+            }
+          );
+          return { unwrap: () => requestPromise, reset };
+        },
+        [reset]
+      );
+      return [trigger, { ...result, reset }] as const;
+    },
+    useSearchSubtitlesMutation: () => [searchSubtitles],
+  };
+});
 vi.mock('@features/player/lib/audio-playback', () => ({ startAudioPlayback }));
 vi.mock('@features/progress/api/progress.api', () => ({
   progressForPlayable: () => resumeEntry.current,
   useGetProgressQuery: () => ({ data: { progress: [] } }),
   useUpdateProgressMutation: () => [updateProgress],
+}));
+vi.mock('@features/realtime/realtime.middleware', () => ({
+  saveProgressWithRealtime: (progress: unknown) => () => updateProgress(progress),
 }));
 
 import { describePlaybackFailure, getPlaybackStatusMessage } from './playback-copy';

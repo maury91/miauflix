@@ -1,4 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
+import { detailsNavigationSlice } from '@store/slices/detailsNavigation';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -42,7 +43,11 @@ import { MediaDetails } from './MediaDetails';
 
 const setupTest = () => {
   const store = configureStore({
-    reducer: () => ({ auth: { currentUser: { id: 'user-1' } }, artwork: { byMedia: {} } }),
+    reducer: {
+      auth: () => ({ currentUser: { id: 'user-1' } }),
+      artwork: () => ({ byMedia: {} }),
+      detailsNavigation: detailsNavigationSlice.reducer,
+    },
   });
   const createTree = () => (
     <Provider store={store}>

@@ -251,7 +251,6 @@ async function installOfflineHarness(page: Page): Promise<Harness> {
 
 async function login(page: Page): Promise<void> {
   await page.goto('/');
-  await page.waitForFunction(() => window._miauflixAnimationComplete === true);
   await page.getByLabel('Email').fill('test@example.com');
   await page.getByLabel('Password').fill('testpassword123');
   await page.getByRole('button', { name: 'Continue' }).click();

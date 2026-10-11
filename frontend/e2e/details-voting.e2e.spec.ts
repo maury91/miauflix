@@ -148,7 +148,6 @@ async function installVotingHarness(page: Page): Promise<void> {
 
 async function login(page: Page): Promise<void> {
   await page.goto('/');
-  await page.waitForFunction(() => window._miauflixAnimationComplete === true);
   await page.getByLabel('Email').fill('voting@example.com');
   await page.getByLabel('Password').fill('testpassword123');
   await page.getByRole('button', { name: 'Continue' }).click();
