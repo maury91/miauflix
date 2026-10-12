@@ -57,7 +57,7 @@ const SOURCE_TYPES: Source[] = [
  */
 
 @Entity()
-@Unique(['movieId', 'hash']) // avoid duplicates per film
+@Unique(['movieId', 'hash']) // avoid duplicates per film; TV torrents use a null movieId
 @Index('idx_movie_source_no_file', ['movieId'], { where: '"file" IS NULL' }) // fast "file IS NULL" scans - partial index
 @Index('idx_movie_source_streaming_score', ['movieId', 'streamingScore'], {
   where: '"file" IS NOT NULL',
@@ -68,11 +68,11 @@ export class MovieSource {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Movie, movie => movie.sources, { onDelete: 'CASCADE' })
-  movie: Relation<Movie>;
+  @ManyToOne(() => Movie, movie => movie.sources, { onDelete: 'CASCADE', nullable: true })
+  movie?: Relation<Movie> | null;
 
-  @Column()
-  movieId: number;
+  @Column({ nullable: true })
+  movieId: number | null;
 
   @Column({
     length: 92,

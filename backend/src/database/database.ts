@@ -13,10 +13,12 @@ import { AbstractLogger, DataSource } from 'typeorm';
 import { AuditLog } from '@entities/audit-log.entity';
 import { BackgroundJob } from '@entities/background-job.entity';
 import { Episode } from '@entities/episode.entity';
+import { EpisodeSource } from '@entities/episode-source.entity';
 import { MediaList, MediaListItem } from '@entities/list.entity';
 import { MediaRating } from '@entities/media-rating.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
+import { Notification } from '@entities/notification.entity';
 import { PlaybackGrant } from '@entities/playback-grant.entity';
 import { Progress } from '@entities/progress.entity';
 import { QrLoginRequest } from '@entities/qr-login-request.entity';
@@ -27,6 +29,7 @@ import { StreamingKey } from '@entities/streaming-key.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { User } from '@entities/user.entity';
 import { AuditLogRepository } from '@repositories/audit-log.repository';
+import { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { MovieSourceRepository } from '@repositories/movie-source.repository';
@@ -110,6 +113,7 @@ export class Database {
   private mediaListRepository: MediaListRepository;
   private movieRepository: MovieRepository;
   private movieSourceRepository: MovieSourceRepository;
+  private episodeSourceRepository: EpisodeSourceRepository;
   private tvShowRepository: TVShowRepository;
   private userRepository: UserRepository;
   private refreshTokenRepository: RefreshTokenRepository;
@@ -139,9 +143,11 @@ export class Database {
       entities: [
         Movie,
         MovieSource,
+        Notification,
         TVShow,
         Season,
         Episode,
+        EpisodeSource,
         MediaList,
         MediaListItem,
         MediaRating,
@@ -166,6 +172,7 @@ export class Database {
     await this.dataSource.synchronize();
     this.mediaListRepository = new MediaListRepository(this);
     this.movieSourceRepository = new MovieSourceRepository(this);
+    this.episodeSourceRepository = new EpisodeSourceRepository(this);
     this.movieRepository = new MovieRepository(this);
     this.tvShowRepository = new TVShowRepository(this);
     this.userRepository = new UserRepository(this);
@@ -250,6 +257,10 @@ export class Database {
 
   public getMovieSourceRepository() {
     return this.movieSourceRepository;
+  }
+
+  public getEpisodeSourceRepository() {
+    return this.episodeSourceRepository;
   }
 
   public getQrLoginRequestRepository() {

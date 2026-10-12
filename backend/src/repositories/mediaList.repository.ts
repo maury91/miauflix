@@ -185,6 +185,36 @@ export class MediaListRepository {
       .getExists();
   }
 
+  findLocalWatchlistOwners(mediaType: MediaListItemType, mediaId: number): Promise<string[]> {
+    return this.itemRepository
+      .createQueryBuilder('item')
+      .innerJoin(MediaList, 'list', 'list.id = item.listId')
+      .select('list.ownerKey', 'ownerKey')
+      .where('item.generation = :generation', { generation: 'local' })
+      .andWhere('item.mediaType = :mediaType', { mediaType })
+      .andWhere('item.mediaId = :mediaId', { mediaId })
+      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .andWhere('list.ownerKey != :publicOwner', { publicOwner: 'public' })
+      .distinct(true)
+      .getRawMany<{ ownerKey: string }>()
+      .then(rows => rows.map(row => row.ownerKey));
+  }
+
+  async getLocalTVWatchlistInterests(): Promise<Array<{ mediaId: number; ownerCount: number }>> {
+    const rows = await this.itemRepository
+      .createQueryBuilder('item')
+      .innerJoin(MediaList, 'list', 'list.id = item.listId')
+      .select('item.mediaId', 'mediaId')
+      .addSelect('COUNT(DISTINCT list.ownerKey)', 'ownerCount')
+      .where('item.generation = :generation', { generation: 'local' })
+      .andWhere('item.mediaType = :mediaType', { mediaType: 'tv' })
+      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .groupBy('item.mediaId')
+      .orderBy('ownerCount', 'DESC')
+      .getRawMany<{ mediaId: number; ownerCount: number }>();
+    return rows.map(row => ({ mediaId: Number(row.mediaId), ownerCount: Number(row.ownerCount) }));
+  }
+
   /** Count local watchlist owners for a movie so shared interest can influence planning priority. */
   async countLocalMovieInterests(mediaId: number): Promise<number> {
     return this.itemRepository

@@ -41,7 +41,7 @@ describe('TorrentWarmupController', () => {
     await controller.warm(source(1), 'm:1', 'm:1');
 
     await expect(controller.promote(source(1), 'm:1')).resolves.toBe(true);
-    expect(driver.promoteSource).toHaveBeenCalledWith(source(1));
+    expect(driver.promoteSource).toHaveBeenCalledWith(source(1), undefined);
     expect(driver.pauseSource).not.toHaveBeenCalled();
     expect(controller.getState()).toBeNull();
   });

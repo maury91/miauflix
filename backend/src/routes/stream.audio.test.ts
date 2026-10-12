@@ -19,6 +19,7 @@ const setupTest = () => {
   const streamService = {
     getSourceById: jest.fn().mockResolvedValue(source),
     getBestSourceForStreaming: jest.fn(),
+    resolvePlaybackSource: jest.fn().mockResolvedValue({ source, episodeSource: null }),
   };
   const mediaService = { getMovieById: jest.fn().mockResolvedValue({ mediaId: 123 }) };
   const audioPlaybackService = {
@@ -56,7 +57,8 @@ describe('audio streaming authorization', () => {
       expect.any(AbortSignal),
       1,
       false,
-      false
+      false,
+      undefined
     );
     expect(streamService.getBestSourceForStreaming).not.toHaveBeenCalled();
   });
@@ -72,7 +74,8 @@ describe('audio streaming authorization', () => {
       expect.any(AbortSignal),
       undefined,
       false,
-      true
+      true,
+      undefined
     );
   });
 
@@ -85,8 +88,8 @@ describe('audio streaming authorization', () => {
   });
 
   it('rejects a source whose movie no longer matches the grant', async () => {
-    const { app, mediaService, audioPlaybackService } = setupTest();
-    mediaService.getMovieById.mockResolvedValue({ mediaId: 999 });
+    const { app, streamService, audioPlaybackService } = setupTest();
+    streamService.resolvePlaybackSource.mockResolvedValue(null);
     expect((await app.request(`/${token}/audio`)).status).toBe(403);
     expect(audioPlaybackService.stream).not.toHaveBeenCalled();
   });

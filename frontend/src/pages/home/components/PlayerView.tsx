@@ -12,7 +12,12 @@ import {
 } from '@features/player/lib/media-subtitles';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
 import { saveProgressWithRealtime } from '@features/realtime/realtime.middleware';
-import type { PlayableRef, ProgressRequest, SubtitleCandidateDto } from '@miauflix/backend';
+import type {
+  CreatePlaybackSessionResponse,
+  PlayableRef,
+  ProgressRequest,
+  SubtitleCandidateDto,
+} from '@miauflix/backend';
 import { API_URL, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
@@ -100,10 +105,30 @@ const RetryButton = styled(BackButton)`
   background: ${PALETTE.color.interactive};
 `;
 
+const NextEpisodePrompt = styled.div`
+  position: fixed;
+  z-index: 6;
+  left: 50%;
+  bottom: 16vh;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  transform: translateX(-50%);
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: rgba(0, 0, 0, 0.82);
+`;
+
+const NextEpisodeButton = styled(BackButton)`
+  background: ${PALETTE.color.interactive};
+`;
+
 interface PlayerViewProps {
   playable: PlayableRef;
   title: string;
   onBack: () => void;
+  nextEpisode: { playable: PlayableRef; title: string } | null;
+  onPlayNext: () => void;
 }
 
 /**
@@ -111,14 +136,32 @@ interface PlayerViewProps {
  * Resume unfinished progress beyond five seconds by its fraction of the saved duration,
  * capped one second before the current video’s end. Preparation failures offer a retry.
  */
-export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
+export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }: PlayerViewProps) {
   const dispatch = useDispatch<AppDispatch>();
   const currentUser = useSelector(selectCurrentUser);
   const [createSession, sessionRequest] = useCreateSessionMutation();
+  const [createNextSession] = useCreateSessionMutation();
   const resetSessionRequestRef = useRef(sessionRequest.reset);
   resetSessionRequestRef.current = sessionRequest.reset;
   const resetSessionRequest = useCallback(() => resetSessionRequestRef.current(), []);
   const session = sessionRequest.data ?? null;
+  const [prefetchedNextSession, setPrefetchedNextSession] =
+    useState<CreatePlaybackSessionResponse | null>(null);
+  const prefetchedNextRef = useRef<CreatePlaybackSessionResponse | null>(null);
+  const nextRequestInFlight = useRef<Promise<void> | null>(null);
+  const nextEpisodeKeyRef = useRef<string | null>(null);
+  const nextDownloadStarted = useRef<string | null>(null);
+  const [nextSearchReached, setNextSearchReached] = useState(false);
+  const nextDismissed = useRef<string | null>(null);
+  const nextTransitioned = useRef<string | null>(null);
+  const suppressCreditAfterSeek = useRef(false);
+  const [nextCountdown, setNextCountdown] = useState<number | null>(null);
+  const nextEpisodeKey = nextEpisode
+    ? `${nextEpisode.playable.kind === 'movie' ? `m:${nextEpisode.playable.mediaId}` : `e:${nextEpisode.playable.showMediaId}:${nextEpisode.playable.seasonNumber}:${nextEpisode.playable.episodeNumber}`}`
+    : null;
+  const nextEpisodeRef = useRef(nextEpisode);
+  nextEpisodeRef.current = nextEpisode;
+  nextEpisodeKeyRef.current = nextEpisodeKey;
   const [searchSubtitles] = useSearchSubtitlesMutation();
   const progress = useGetProgressQuery(undefined);
   const subtitleStorageKey = mediaSubtitleKey(currentUser?.id, playable);
@@ -163,6 +206,128 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
   const subtitleOffsetRef = useRef(0);
   currentStreamingKey.current = session?.streamingKey ?? null;
   subtitleOffsetRef.current = subtitleOffset;
+
+  const prepareNextEpisode = useCallback(() => {
+    const target = nextEpisodeRef.current;
+    const key = nextEpisodeKeyRef.current;
+    if (!target || !key) return Promise.resolve();
+    if (prefetchedNextRef.current && nextEpisodeKeyRef.current === key) return Promise.resolve();
+    if (nextRequestInFlight.current) return nextRequestInFlight.current;
+    const request = createNextSession({
+      playable: target.playable,
+      deferDownload: true,
+      preferences: {
+        quality: 'auto',
+        ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
+      },
+    })
+      .unwrap()
+      .then(result => {
+        if (nextEpisodeKeyRef.current !== key) return;
+        prefetchedNextRef.current = result;
+        setPrefetchedNextSession(result);
+      })
+      .catch(() => {
+        // A missing next source is retried once playback reaches the 70% prefetch point.
+      })
+      .finally(() => {
+        if (nextRequestInFlight.current === request) nextRequestInFlight.current = null;
+      });
+    nextRequestInFlight.current = request;
+    return request;
+  }, [createNextSession]);
+
+  const startNextEpisodeDownload = useCallback(() => {
+    if (
+      !nextEpisodeKey ||
+      !prefetchedNextRef.current ||
+      nextDownloadStarted.current === nextEpisodeKey
+    )
+      return;
+    nextDownloadStarted.current = nextEpisodeKey;
+    const streamUrl = prefetchedNextRef.current.streamUrl.replace(/\/audio$/, '');
+    void fetch(`${streamUrl}/prefetch`, {
+      method: 'POST',
+      cache: 'no-store',
+    })
+      .then(async response => {
+        if (!response.ok) throw new Error('Next episode download could not start');
+        await response.body?.cancel();
+      })
+      .catch(() => {
+        // Prefetch is best-effort. Retrying on every media timeupdate would
+        // flood the route when capacity is unavailable; playback itself retries.
+      });
+  }, [nextEpisodeKey]);
+
+  const playNextEpisode = useCallback(() => {
+    if (!nextEpisodeKey || nextTransitioned.current === nextEpisodeKey) return;
+    nextTransitioned.current = nextEpisodeKey;
+    setNextCountdown(null);
+    onPlayNext();
+  }, [nextEpisodeKey, onPlayNext]);
+
+  const updateNextCountdown = useCallback(() => {
+    const video = videoRef.current;
+    if (
+      !video ||
+      !session ||
+      !nextEpisodeKey ||
+      !prefetchedNextRef.current ||
+      session?.episodeMatchKind === 'combined' ||
+      nextDismissed.current === nextEpisodeKey ||
+      nextTransitioned.current === nextEpisodeKey
+    ) {
+      setNextCountdown(null);
+      return;
+    }
+    const duration =
+      session.delivery?.durationSeconds ?? (Number.isFinite(video.duration) ? video.duration : 0);
+    if (!Number.isFinite(duration) || duration <= 0) {
+      setNextCountdown(null);
+      return;
+    }
+    const creditsStart = session.delivery?.creditsStartSeconds;
+    const hasCreditsMarker =
+      !suppressCreditAfterSeek.current &&
+      creditsStart !== undefined &&
+      Number.isFinite(creditsStart) &&
+      creditsStart > 0 &&
+      creditsStart < duration;
+    let remaining: number | null = null;
+    if (hasCreditsMarker) {
+      if (video.currentTime >= creditsStart!) remaining = 5 - (video.currentTime - creditsStart!);
+    } else {
+      const threshold = duration <= 90 ? 0 : duration - 90;
+      if (video.currentTime >= threshold) remaining = duration - video.currentTime;
+    }
+    if (remaining === null) {
+      setNextCountdown(null);
+      return;
+    }
+    const seconds = Math.max(0, Math.ceil(remaining));
+    setNextCountdown(seconds);
+    if (remaining <= 0) playNextEpisode();
+  }, [nextEpisodeKey, playNextEpisode, session]);
+
+  useEffect(() => {
+    prefetchedNextRef.current = null;
+    setPrefetchedNextSession(null);
+    nextDownloadStarted.current = null;
+    setNextSearchReached(false);
+    nextDismissed.current = null;
+    nextTransitioned.current = null;
+    suppressCreditAfterSeek.current = false;
+    setNextCountdown(null);
+  }, [playable, nextEpisodeKey]);
+
+  useEffect(() => {
+    if (session?.streamingKey && nextEpisodeKey) void prepareNextEpisode();
+  }, [session?.streamingKey, nextEpisodeKey, prepareNextEpisode]);
+
+  useEffect(() => {
+    if (nextSearchReached && prefetchedNextSession) startNextEpisodeDownload();
+  }, [nextSearchReached, prefetchedNextSession, startNextEpisodeDownload]);
 
   useEffect(() => {
     subtitleRequestId.current += 1;
@@ -583,20 +748,36 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
             }}
             onSeeked={event => {
               if (audioPreparing.current) return;
+              const creditsStart = session.delivery?.creditsStartSeconds;
+              suppressCreditAfterSeek.current =
+                creditsStart !== undefined && event.currentTarget.currentTime >= creditsStart;
               setSubtitleWindow(
                 Math.floor(
                   Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60
                 ) * 60
               );
+              updateNextCountdown();
             }}
             onTimeUpdate={event => {
               if (audioPreparing.current) return;
+              const duration = session.delivery?.durationSeconds ?? event.currentTarget.duration;
+              if (
+                nextEpisode &&
+                Number.isFinite(duration) &&
+                duration > 0 &&
+                event.currentTarget.currentTime / duration >= 0.7
+              ) {
+                if (!nextSearchReached) setNextSearchReached(true);
+                void prepareNextEpisode();
+                startNextEpisodeDownload();
+              }
               setSubtitleWindow(
                 Math.floor(
                   Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60
                 ) * 60
               );
               readProgressSnapshot();
+              updateNextCountdown();
             }}
             onCanPlay={() => {
               if (!audioPreparing.current) setStatus('ready');
@@ -613,6 +794,7 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
             onEnded={() => {
               completedRef.current = true;
               saveProgress('completed');
+              updateNextCountdown();
             }}
             onError={() => {
               resetSessionRequest();
@@ -637,6 +819,22 @@ export function PlayerView({ playable, title, onBack }: PlayerViewProps) {
               />
             )}
           </Video>
+          {nextEpisode && nextCountdown !== null && (
+            <NextEpisodePrompt role="group" aria-label="Next episode">
+              <NextEpisodeButton type="button" onClick={playNextEpisode}>
+                Play next episode ({nextCountdown}s)
+              </NextEpisodeButton>
+              <BackButton
+                type="button"
+                onClick={() => {
+                  nextDismissed.current = nextEpisodeKey;
+                  setNextCountdown(null);
+                }}
+              >
+                Stay
+              </BackButton>
+            </NextEpisodePrompt>
+          )}
           <PlayerControls
             videoRef={videoRef}
             onBack={onBack}

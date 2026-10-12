@@ -78,6 +78,8 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     pieceLength?: number;
     retentionClass?: 'speculative' | 'watched';
     reservedBytes?: number;
+    /** Reserve only the selected file set when a shared torrent pack is used. */
+    partialReservation?: boolean;
     speculativeExpiresAt?: Date | null;
   }): Promise<Storage> {
     const {
@@ -89,12 +91,15 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       pieceLength,
       retentionClass = 'watched',
       reservedBytes,
+      partialReservation = false,
       speculativeExpiresAt = null,
     } = params;
     const requestedReservation = reservedBytes ?? (retentionClass === 'watched' ? size : 0);
     const reservation =
       requestedReservation > 0 && this.allocationMode !== 'sparse'
-        ? Math.max(requestedReservation, size)
+        ? partialReservation
+          ? requestedReservation
+          : Math.max(requestedReservation, size)
         : requestedReservation;
 
     // Create empty bitfield if not provided
@@ -126,6 +131,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       lastWriteAt: null,
       videoCompletedAt: null,
       localOnly: false,
+      selectedFiles: [],
       encryptedLayout: null,
     };
 
@@ -138,8 +144,15 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       const nextCharge = Math.max(current?.allocatedBytes ?? 0, nextReservation);
       const delta = nextCharge - currentCharge;
 
-      if (delta > 0 && retentionClass === 'watched') {
-        await this.cleanupWithinAdmission(true, delta, movieSourceId, false, true);
+      if (delta > 0) {
+        await this.cleanupWithinAdmission(
+          true,
+          delta,
+          movieSourceId,
+          retentionClass === 'speculative',
+          true,
+          true
+        );
       }
       if (delta > 0) await this.assertCapacity(delta, retentionClass !== 'watched');
 
@@ -216,7 +229,8 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     movieSourceId: number,
     totalPieces: number,
     pieceLength: number,
-    logicalBytes: number
+    logicalBytes: number,
+    selectedLogicalBytes?: number
   ): Promise<void> {
     const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
     if (!storage) return;
@@ -237,7 +251,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     await this.storageRepository.update(storage.id, {
       totalPieces,
       pieceLength,
-      logicalBytes,
+      logicalBytes: selectedLogicalBytes ?? logicalBytes,
       size: logicalBytes,
     });
   }
@@ -284,6 +298,29 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       ? { ...storage.encryptedLayout, filenameSalt: encryptedLayout.filenameSalt }
       : encryptedLayout;
     await this.storageRepository.update(storage.id, { encryptedLayout: next });
+  }
+
+  /** Record the file needed by an episode; reopening a pack cancels its completed seed window. */
+  async selectTorrentFile(
+    movieSourceId: number,
+    path: string,
+    fileAlreadyComplete: boolean
+  ): Promise<Storage | null> {
+    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    if (!storage) return null;
+    const selectedFiles = [...new Set([...(storage.selectedFiles ?? []), path])];
+    const next = {
+      selectedFiles,
+      ...(fileAlreadyComplete ? {} : { videoCompletedAt: null, localOnly: false }),
+    };
+    return this.storageRepository.update(storage.id, next);
+  }
+
+  async reactivateTorrent(movieSourceId: number): Promise<Storage | null> {
+    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    if (!storage) return null;
+    if (!storage.localOnly && !storage.videoCompletedAt) return storage;
+    return this.storageRepository.update(storage.id, { localOnly: false, videoCompletedAt: null });
   }
 
   async markVideoComplete(
@@ -462,7 +499,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
       const delta = nextCharge - currentCharge;
       if (delta > 0) {
-        await this.cleanupWithinAdmission(true, delta, movieSourceId);
+        await this.cleanupWithinAdmission(true, delta, movieSourceId, false, true, true);
         await this.assertCapacity(delta);
       }
       await this.storageRepository.update(storage.id, {
@@ -485,7 +522,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
       const delta = nextCharge - currentCharge;
       if (delta > 0) {
-        await this.cleanupWithinAdmission(true, delta, movieSourceId, true);
+        await this.cleanupWithinAdmission(true, delta, movieSourceId, true, true, true);
         await this.assertCapacity(delta, true);
       }
       await this.storageRepository.update(storage.id, {
@@ -646,7 +683,8 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     additionalBytes: number,
     excludeMovieSourceId?: number,
     preservePlaybackReserve = false,
-    evictUnexpiredSpeculative = false
+    evictUnexpiredSpeculative = false,
+    evictWatchedEpisodes = false
   ): Promise<void> {
     let currentUsage = await this.storageRepository.getChargedStorageUsage();
     const requested = BigInt(additionalBytes);
@@ -669,10 +707,14 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       currentUsage + requested + reserve > this.maxStorageBytes &&
       cleanupAttempts < maxCleanupAttempts
     ) {
-      const removalCandidate = await this.storageRepository.findMostStaleStorage(
+      let removalCandidate = await this.storageRepository.findMostStaleStorage(
         excludeMovieSourceId,
         evictUnexpiredSpeculative
       );
+      if (!removalCandidate && evictWatchedEpisodes) {
+        removalCandidate =
+          await this.storageRepository.findMostStaleWatchedEpisodeStorage(excludeMovieSourceId);
+      }
       if (!removalCandidate) {
         logger.warn('StorageService', 'No storage records found');
         break;

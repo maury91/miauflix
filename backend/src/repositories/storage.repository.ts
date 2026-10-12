@@ -1,6 +1,7 @@
 import type { Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
+import { EpisodeSource } from '@entities/episode-source.entity';
 import { Storage } from '@entities/storage.entity';
 
 export class StorageRepository {
@@ -193,6 +194,25 @@ export class StorageRepository {
       query.orderBy('storage.lastAccessAt', 'ASC');
     }
     query.addOrderBy('storage.createdAt', 'ASC'); // Secondary sort by creation date
+    if (excludeMovieSourceId !== undefined) {
+      query.andWhere('storage.movieSourceId != :excludeMovieSourceId', { excludeMovieSourceId });
+    }
+    return query.getOne();
+  }
+
+  /** Find an idle, completed TV torrent after lower-priority speculative storage is exhausted. */
+  async findMostStaleWatchedEpisodeStorage(excludeMovieSourceId?: number): Promise<Storage | null> {
+    const query = this.repository
+      .createQueryBuilder('storage')
+      .innerJoin(EpisodeSource, 'episodeSource', 'episodeSource.sourceId = storage.movieSourceId')
+      .where('storage.retentionClass = :retentionClass', { retentionClass: 'watched' })
+      .andWhere('storage.activeStreams = 0')
+      .andWhere('storage.videoCompletedAt IS NOT NULL')
+      .andWhere('storage.selectedFiles != :emptySelection', { emptySelection: '[]' })
+      .orderBy('storage.lastInterestAt', 'ASC')
+      .addOrderBy('storage.lastAccessAt', 'ASC')
+      .addOrderBy('storage.createdAt', 'ASC')
+      .distinct(true);
     if (excludeMovieSourceId !== undefined) {
       query.andWhere('storage.movieSourceId != :excludeMovieSourceId', { excludeMovieSourceId });
     }

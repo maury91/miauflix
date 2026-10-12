@@ -278,6 +278,18 @@ export class ListService {
     return this.mediaListRepository.hasAnyLocalMovie(mediaId);
   }
 
+  getLocalTVWatchlistInterests(): Promise<Array<{ mediaId: number; ownerCount: number }>> {
+    return this.mediaListRepository.getLocalTVWatchlistInterests();
+  }
+
+  getLocalTVWatchlistOwners(mediaId: number): Promise<string[]> {
+    return this.mediaListRepository.findLocalWatchlistOwners('tv', mediaId);
+  }
+
+  async hasAnyTVWatchlistInterest(mediaId: number): Promise<boolean> {
+    return (await this.getLocalTVWatchlistOwners(mediaId)).length > 0;
+  }
+
   /**
    * Union the connected provider watchlists into the durable local watchlist.
    * This is intentionally additive: a pairing must not erase local intent when a
@@ -422,9 +434,12 @@ export class ListService {
         payload: { tvMediaId: mediaId, priority: 50 },
         options: { priority: 50 },
       });
-      // TODO: When episode sources/playback are supported, predownload the next episode
-      // from playback progress using the same storage reserve. Keep this separate from
-      // watchlist membership and Continue watching; Trakt may auto-remove watched shows.
+      await this.backgroundJobs?.enqueueBestEffort({
+        type: 'watchlist.tv.acquire',
+        dedupeKey: `watchlist:tv:${mediaId}`,
+        payload: { showMediaId: mediaId },
+        options: { priority: 50 },
+      });
     } catch (error) {
       logger.warn('ListService', `Watchlist preparation failed for ${mediaType} ${mediaId}`, error);
     }

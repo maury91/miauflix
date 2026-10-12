@@ -123,6 +123,60 @@ describe('PlaybackSessionService', () => {
     expect(grants.create).not.toHaveBeenCalled();
   });
 
+  it('discovers a next episode without starting its download', async () => {
+    const source = {
+      id: 31,
+      quality: null,
+      size: 1_000,
+      videoCodec: null,
+      broadcasters: null,
+      watchers: null,
+    };
+    const grants = { create: jest.fn() };
+    const preparation = {
+      prepare: jest.fn().mockResolvedValue({
+        source,
+        state: 'metadata',
+        videoFilePath: 'Show.S01E02.mkv',
+        episodeMatchKind: 'single',
+      }),
+    };
+    const warmup = { promote: jest.fn() };
+    const audio = { inspect: jest.fn() };
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => grants } as never,
+      preparation as never,
+      { getOrThrow: () => 60_000 } as never,
+      warmup as never,
+      undefined,
+      audio as never
+    );
+    const playable = {
+      kind: 'episode' as const,
+      showMediaId: 42,
+      seasonNumber: 1,
+      episodeNumber: 2,
+    };
+
+    const result = await service.create(
+      'user',
+      playable,
+      { quality: 'auto', allowHevc: false },
+      { deferDownload: true }
+    );
+
+    expect(preparation.prepare).toHaveBeenCalledWith(
+      playable,
+      expect.objectContaining({ through: 'sources' })
+    );
+    expect(warmup.promote).not.toHaveBeenCalled();
+    expect(audio.inspect).not.toHaveBeenCalled();
+    expect(grants.create).toHaveBeenCalledWith(
+      expect.objectContaining({ sourceId: source.id, playableKey: 'e:42:1:2' })
+    );
+    expect(result).toMatchObject({ source: { id: source.id }, episodeMatchKind: 'single' });
+  });
+
   it('creates a grant for a valid magnet-only source after preparation', async () => {
     const source = {
       id: 208,

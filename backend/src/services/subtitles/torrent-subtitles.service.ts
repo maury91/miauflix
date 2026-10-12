@@ -22,6 +22,7 @@ export interface TorrentSubtitle {
   release: string;
   hearingImpaired: boolean;
   path?: string;
+  videoFilePath?: string;
   streamIndex?: number;
 }
 
@@ -109,7 +110,7 @@ export function matchingSubtitleFiles(layout: EncryptedStorageLayout): TorrentSu
 /** Text subtitle discovery/extraction through decrypted, verified torrent ranges. */
 export class TorrentSubtitlesService {
   private readonly probes = new Map<
-    number,
+    string,
     { expires: number; promise: Promise<TorrentSubtitle[]> }
   >();
   private readonly processes = new Set<ChildProcess>();
@@ -118,24 +119,26 @@ export class TorrentSubtitlesService {
 
   constructor(private readonly downloads: DownloadService) {}
 
-  async discover(source: MovieSource): Promise<TorrentSubtitle[]> {
-    const layout = await this.downloads.getMediaFiles(source);
+  async discover(source: MovieSource, videoFilePath?: string): Promise<TorrentSubtitle[]> {
+    const layout = await this.downloads.getMediaFiles(source, videoFilePath);
     const sidecars = matchingSubtitleFiles(layout);
     await this.downloads.prepareSubtitleFiles(
       source,
-      sidecars.map(track => track.path!)
+      sidecars.map(track => track.path!),
+      videoFilePath
     );
     let embedded: TorrentSubtitle[] = [];
     try {
-      const cached = this.probes.get(source.id);
+      const cacheKey = `${source.id}:${videoFilePath ?? ''}`;
+      const cached = this.probes.get(cacheKey);
       if (cached && cached.expires > Date.now()) embedded = await cached.promise;
       else {
         if (this.probes.size >= 64) this.probes.delete(this.probes.keys().next().value!);
-        const promise = this.probe(source).catch(error => {
-          this.probes.delete(source.id);
+        const promise = this.probe(source, videoFilePath).catch(error => {
+          this.probes.delete(cacheKey);
           throw error;
         });
-        this.probes.set(source.id, { expires: Date.now() + 15 * 60_000, promise });
+        this.probes.set(cacheKey, { expires: Date.now() + 15 * 60_000, promise });
         embedded = await promise;
       }
     } catch (error) {
@@ -147,19 +150,27 @@ export class TorrentSubtitlesService {
     }
     return [...embedded, ...sidecars].map(track => ({
       ...track,
+      videoFilePath,
       fileId: `${source.id}:${track.fileId}`,
     }));
   }
 
-  private async probe(source: MovieSource): Promise<TorrentSubtitle[]> {
-    const body = await this.run(source, 'ffprobe', [
-      '-select_streams',
-      's',
-      '-show_entries',
-      'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
-      '-of',
-      'json',
-    ]);
+  private async probe(source: MovieSource, videoFilePath?: string): Promise<TorrentSubtitle[]> {
+    const body = await this.run(
+      source,
+      'ffprobe',
+      [
+        '-select_streams',
+        's',
+        '-show_entries',
+        'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
+        '-of',
+        'json',
+      ],
+      undefined,
+      0,
+      videoFilePath
+    );
     const probe = JSON.parse(body) as {
       streams?: Array<{
         index: number;
@@ -190,7 +201,7 @@ export class TorrentSubtitlesService {
   async getTrack(source: MovieSource, track: TorrentSubtitle, startSeconds = 0): Promise<string> {
     if (track.provider === 'torrent') {
       // Revalidate against the current selected video and layout before opening a sidecar.
-      const layout = await this.downloads.getMediaFiles(source);
+      const layout = await this.downloads.getMediaFiles(source, track.videoFilePath);
       if (!matchingSubtitleFiles(layout).some(file => file.path === track.path))
         throw new Error('Subtitle file no longer matches this video');
     }
@@ -205,7 +216,14 @@ export class TorrentSubtitlesService {
       'webvtt',
       'pipe:1',
     ];
-    const body = await this.run(source, 'ffmpeg', args, track.path, startSeconds);
+    const body = await this.run(
+      source,
+      'ffmpeg',
+      args,
+      track.path,
+      startSeconds,
+      track.videoFilePath
+    );
     return track.provider === 'embedded'
       ? webVttWindow(body, startSeconds, startSeconds + 120)
       : toWebVtt(body);
@@ -216,7 +234,8 @@ export class TorrentSubtitlesService {
     program: 'ffmpeg' | 'ffprobe',
     args: string[],
     path?: string,
-    startSeconds = 0
+    startSeconds = 0,
+    videoFilePath?: string
   ): Promise<string> {
     if (this.closed || this.active >= 2) throw new Error('Subtitle preparation is busy');
     this.active++;
@@ -224,7 +243,7 @@ export class TorrentSubtitlesService {
     let child: ChildProcess | undefined;
     let timeout: ReturnType<typeof setTimeout> | undefined;
     try {
-      input = await openTorrentInput(this.downloads, source, path);
+      input = await openTorrentInput(this.downloads, source, path ?? videoFilePath);
       if (this.closed) throw new Error('Subtitle preparation is shutting down');
       const common = [
         '-v',

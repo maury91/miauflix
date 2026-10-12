@@ -647,6 +647,123 @@ describe('PlayerView', () => {
     view.unmount();
     expect(stopAudioPlayback).toHaveBeenCalledTimes(3);
   });
+
+  it('searches ahead at playback start and requests the next episode download at 70%', async () => {
+    const nextEpisode = {
+      playable: { kind: 'episode' as const, showMediaId: 9001, seasonNumber: 1, episodeNumber: 2 },
+      title: 'Episode 2',
+    };
+    const nextSession = { ...session, streamingKey: 'next-key', streamUrl: '/api/stream/next-key' };
+    createSession
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(session) })
+      .mockReturnValue({ unwrap: () => Promise.resolve(nextSession) });
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      body: { cancel: vi.fn() },
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    try {
+      render(
+        <PlayerView
+          playable={playable}
+          title="Episode 1"
+          onBack={vi.fn()}
+          nextEpisode={nextEpisode}
+          onPlayNext={vi.fn()}
+        />
+      );
+      const video = (await screen.findByLabelText('Episode 1')) as HTMLVideoElement;
+      await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+      expect(createSession).toHaveBeenLastCalledWith(
+        expect.objectContaining({ playable: nextEpisode.playable, deferDownload: true })
+      );
+
+      Object.defineProperty(video, 'duration', { configurable: true, value: 100 });
+      video.currentTime = 69;
+      fireEvent.timeUpdate(video);
+      expect(fetchMock).not.toHaveBeenCalled();
+      video.currentTime = 70;
+      fireEvent.timeUpdate(video);
+
+      await waitFor(() =>
+        expect(fetchMock).toHaveBeenCalledWith('/api/stream/next-key/prefetch', {
+          method: 'POST',
+          cache: 'no-store',
+        })
+      );
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
+  it('uses a five-second chapter countdown and suppresses auto-next for combined files', async () => {
+    const nextEpisode = {
+      playable: { kind: 'episode' as const, showMediaId: 9001, seasonNumber: 1, episodeNumber: 2 },
+      title: 'Episode 2',
+    };
+    const currentSession = {
+      ...session,
+      episodeMatchKind: 'single' as const,
+      delivery: {
+        mode: 'direct' as const,
+        audioCodec: null,
+        durationSeconds: 120,
+        creditsStartSeconds: 80,
+        mimeType: 'video/mp4',
+      },
+    };
+    const nextSession = { ...session, streamingKey: 'next-key', streamUrl: '/api/stream/next-key' };
+    createSession
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(currentSession) })
+      .mockReturnValue({ unwrap: () => Promise.resolve(nextSession) });
+    const fetchMock = vi.fn().mockResolvedValue({
+      ok: true,
+      body: { cancel: vi.fn() },
+    });
+    vi.stubGlobal('fetch', fetchMock);
+    try {
+      const onPlayNext = vi.fn();
+      const view = render(
+        <PlayerView
+          playable={playable}
+          title="Episode 1"
+          onBack={vi.fn()}
+          nextEpisode={nextEpisode}
+          onPlayNext={onPlayNext}
+        />
+      );
+      const video = (await screen.findByLabelText('Episode 1')) as HTMLVideoElement;
+      await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+      video.currentTime = 80;
+      fireEvent.timeUpdate(video);
+      expect(screen.getByRole('button', { name: 'Play next episode (5s)' })).toBeInTheDocument();
+      video.currentTime = 85;
+      fireEvent.timeUpdate(video);
+      expect(onPlayNext).toHaveBeenCalledTimes(1);
+      view.unmount();
+
+      createSession.mockReset().mockReturnValue({
+        unwrap: () => Promise.resolve({ ...currentSession, episodeMatchKind: 'combined' }),
+      });
+      const combinedView = render(
+        <PlayerView
+          playable={playable}
+          title="Combined episode"
+          onBack={vi.fn()}
+          nextEpisode={nextEpisode}
+          onPlayNext={onPlayNext}
+        />
+      );
+      const combinedVideo = (await screen.findByLabelText('Combined episode')) as HTMLVideoElement;
+      combinedVideo.currentTime = 115;
+      fireEvent.timeUpdate(combinedVideo);
+      expect(screen.queryByRole('button', { name: /Play next episode/ })).not.toBeInTheDocument();
+      expect(onPlayNext).toHaveBeenCalledTimes(1);
+      combinedView.unmount();
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
 });
 
 describe('playback status copy', () => {

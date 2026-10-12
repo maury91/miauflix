@@ -16,6 +16,7 @@ export type PlaybackPreferences =
 export interface CreatePlaybackSessionRequest {
   playable: PlayableRef;
   preferences: PlaybackPreferences;
+  deferDownload?: boolean;
 }
 
 export const playbackApi = createApi({
@@ -47,13 +48,13 @@ export const playbackApi = createApi({
       },
     }),
     createSession: builder.mutation<CreatePlaybackSessionResponse, CreatePlaybackSessionRequest>({
-      async queryFn({ playable, preferences }, api) {
+      async queryFn({ playable, preferences, deferDownload }, api) {
         const session = selectCurrentSessionId(api.getState() as RootState);
         const headers: Record<string, string> = session ? { 'X-Session-Id': session } : {};
         return authenticatedRequest<CreatePlaybackSessionResponse>({
           requestFn: () =>
             backendClient.api.playback.sessions.$post(
-              { json: { playable, preferences } },
+              { json: { playable, preferences, ...(deferDownload ? { deferDownload } : {}) } },
               { headers }
             ),
           session,

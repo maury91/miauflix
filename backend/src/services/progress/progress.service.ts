@@ -1,7 +1,9 @@
 import { logger } from '@logger';
 
 import type { Database } from '@database/database';
+import type { Progress } from '@entities/progress.entity';
 import type { ProgressRepository } from '@repositories/progress.repository';
+import { playableKey } from '@routes/playable.types';
 import type { ProgressEntry, ProgressUpdateRequest } from '@routes/progress.types';
 import type { ListClientService } from '@services/list/list-client.service';
 
@@ -9,6 +11,10 @@ import { mergeProgress } from './progress.merge';
 
 export class ProgressService {
   private readonly progressRepository: ProgressRepository;
+  private readonly backgroundPlaybackCache = new Map<
+    string,
+    { expiresAt: number; entries: ProgressEntry[] }
+  >();
 
   constructor(
     database: Database,
@@ -57,6 +63,63 @@ export class ProgressService {
       })),
       remote
     );
+  }
+
+  /** Local and imported episode progress used by the background TV acquisition planner. */
+  async findEpisodeProgressForShow(
+    showMediaId: number,
+    userIds: string[]
+  ): Promise<Array<Pick<Progress, 'playableKey' | 'updatedAt' | 'userId'>>> {
+    const local = await this.progressRepository.findEpisodeProgressForShow(showMediaId, userIds);
+    if (!userIds.length || !this.listClient?.isReady()) return local;
+
+    const merged = new Map(
+      local.map(item => [
+        `${item.userId}:${item.playableKey}`,
+        { userId: item.userId, playableKey: item.playableKey, updatedAt: item.updatedAt },
+      ])
+    );
+    await Promise.all(
+      userIds.map(async userId => {
+        const remote = await this.getBackgroundPlayback(userId);
+        for (const item of remote) {
+          if (item.playable.kind !== 'episode' || item.playable.showMediaId !== showMediaId)
+            continue;
+          const updatedAt = new Date(item.updatedAt);
+          if (!Number.isFinite(updatedAt.getTime())) continue;
+          const key = `${userId}:${playableKey(item.playable)}`;
+          const existing = merged.get(key);
+          if (!existing || updatedAt > existing.updatedAt) {
+            merged.set(key, { userId, playableKey: playableKey(item.playable), updatedAt });
+          }
+        }
+      })
+    );
+    return [...merged.values()].sort(
+      (left, right) => right.updatedAt.getTime() - left.updatedAt.getTime()
+    );
+  }
+
+  private async getBackgroundPlayback(userId: string): Promise<ProgressEntry[]> {
+    const cached = this.backgroundPlaybackCache.get(userId);
+    if (cached && cached.expiresAt > Date.now()) return cached.entries;
+    try {
+      const entries = await this.listClient!.getPlayback(userId);
+      if (this.backgroundPlaybackCache.size >= 256)
+        this.backgroundPlaybackCache.delete(this.backgroundPlaybackCache.keys().next().value!);
+      this.backgroundPlaybackCache.set(userId, { entries, expiresAt: Date.now() + 15 * 60_000 });
+      return entries;
+    } catch {
+      logger.warn(
+        'Progress',
+        'Trakt playback import failed for TV acquisition; using local progress'
+      );
+      this.backgroundPlaybackCache.set(userId, {
+        entries: [],
+        expiresAt: Date.now() + 2 * 60_000,
+      });
+      return [];
+    }
   }
 }
 

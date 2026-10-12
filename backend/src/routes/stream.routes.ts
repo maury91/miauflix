@@ -21,6 +21,21 @@ export const createStreamRoutes = ({
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   return new Hono()
+    .post(
+      '/:token/prefetch',
+      rateLimitGuard(60),
+      zValidator('param', z.object({ token: z.string().regex(/^[A-Za-z0-9_-]{43}$/) })),
+      async context => {
+        const grant = await playbackSessionService.verify(context.req.valid('param').token);
+        if (!grant) return context.json({ error: 'Invalid or expired streaming key' }, 401);
+        const resolved = await streamService.resolvePlaybackSource(grant);
+        if (!resolved) return context.json({ error: 'Playback grant does not match source' }, 403);
+        const videoFilePath = resolved.episodeSource?.videoFilePath;
+        if (!videoFilePath) return context.json({ error: 'Episode file is unavailable' }, 404);
+        await downloadService.predownloadEpisode(resolved.source, videoFilePath);
+        return context.body(null, 202);
+      }
+    )
     .get(
       '/:token/audio',
       rateLimitGuard(60),
@@ -38,23 +53,21 @@ export const createStreamRoutes = ({
         const { token } = context.req.valid('param');
         const grant = await playbackSessionService.verify(token);
         if (!grant) return context.json({ error: 'Invalid or expired streaming key' }, 401);
-        if (grant.playableKind !== 'movie')
-          return context.json({ error: 'Playable source is unavailable' }, 404);
-        const source = await streamService.getSourceById(grant.sourceId);
-        const movie = source ? await mediaService.getMovieById(source.movieId) : null;
-        if (!source || !movie || `m:${movie.mediaId}` !== grant.playableKey) {
+        const resolved = await streamService.resolvePlaybackSource(grant);
+        if (!resolved) {
           return context.json({ error: 'Playback grant does not match source' }, 403);
         }
         try {
           return await audioPlaybackService.stream(
-            source,
+            resolved.source,
             token,
             context.req.valid('query').start,
             grant.expiresAt,
             context.req.raw.signal,
             context.req.valid('query').audioTrack,
             context.req.valid('query').audioCopy === 'true',
-            context.req.valid('query').transcodeVideo === 'true'
+            context.req.valid('query').transcodeVideo === 'true',
+            resolved.episodeSource?.videoFilePath ?? undefined
           );
         } catch (error) {
           if (error instanceof AudioPlaybackError)
@@ -91,26 +104,25 @@ export const createStreamRoutes = ({
           // preparation pipeline. They must never fall back to source ranking.
           const playbackGrant = await playbackSessionService.verify(token);
           if (playbackGrant) {
-            if (playbackGrant.playableKind !== 'movie') {
-              return context.json(
-                { error: 'Playable source is unavailable' } satisfies ErrorResponse,
-                404
-              );
-            }
-            const source = await streamService.getSourceById(playbackGrant.sourceId);
-            const movie = source ? await mediaService.getMovieById(source.movieId) : null;
-            if (!source || !movie || `m:${movie.mediaId}` !== playbackGrant.playableKey) {
+            const resolved = await streamService.resolvePlaybackSource(playbackGrant);
+            if (!resolved) {
               return context.json(
                 { error: 'Playback grant does not match source' } satisfies ErrorResponse,
                 403
               );
             }
-            return await downloadService.streamFile(source, context.req.header('range'));
+            return await downloadService.streamFile(
+              resolved.source,
+              context.req.header('range'),
+              resolved.episodeSource?.videoFilePath ?? undefined
+            );
           }
 
           // Verify streaming key (includes timing attack protection)
           const keyData = await authService.verifyStreamingKey(token);
           const { movieId } = keyData;
+          if (!movieId)
+            return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           const movie = await mediaService.getMovieById(movieId);
 
           if (!movie) {

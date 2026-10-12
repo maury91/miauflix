@@ -186,6 +186,11 @@ describe('SourceService', () => {
 
     mockDatabase.getMovieRepository.mockReturnValue(mockMovieRepository);
     mockDatabase.getMovieSourceRepository.mockReturnValue(mockMovieSourceRepository);
+    Object.assign(mockDatabase, {
+      getEpisodeSourceRepository: jest.fn().mockReturnValue({
+        findByEpisodeId: jest.fn().mockResolvedValue([]),
+      }),
+    });
 
     // Create service instance
     const service = new SourceService(

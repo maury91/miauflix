@@ -2,8 +2,12 @@ import { logger } from '@logger';
 import type { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
+import type { EpisodeSource } from '@entities/episode-source.entity';
 import type { MovieSource } from '@entities/movie-source.entity';
+import type { PlaybackGrant } from '@entities/playback-grant.entity';
+import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import type { MovieSourceRepository } from '@repositories/movie-source.repository';
+import { playableFromKey } from '@routes/playable.types';
 import type { DownloadService } from '@services/download/download.service';
 import type { MediaService } from '@services/media/media.service';
 import type { SourceService } from '@services/source/source.service';
@@ -12,6 +16,7 @@ import { traced } from '@utils/tracing.util';
 
 export class StreamService {
   private readonly movieSourceRepository: MovieSourceRepository;
+  private readonly episodeSourceRepository: EpisodeSourceRepository;
 
   constructor(
     db: Database,
@@ -20,6 +25,33 @@ export class StreamService {
     private readonly mediaService: MediaService
   ) {
     this.movieSourceRepository = db.getMovieSourceRepository();
+    this.episodeSourceRepository = db.getEpisodeSourceRepository();
+  }
+
+  /** Resolve a playback grant only when its source is associated with that exact playable. */
+  async resolvePlaybackSource(
+    grant: Pick<PlaybackGrant, 'playableKey' | 'playableKind' | 'sourceId'>
+  ): Promise<{ source: MovieSource; episodeSource: EpisodeSource | null } | null> {
+    const source = await this.getSourceById(grant.sourceId);
+    if (!source) return null;
+    const playable = playableFromKey(grant.playableKey);
+    if (!playable || playable.kind !== grant.playableKind) return null;
+
+    if (playable.kind === 'movie') {
+      if (source.movieId === null) return null;
+      const movie = await this.mediaService.getMovieById(source.movieId);
+      return movie && `m:${movie.mediaId}` === grant.playableKey
+        ? { source, episodeSource: null }
+        : null;
+    }
+
+    const episodeSource = await this.episodeSourceRepository.findForPlayback(
+      playable.showMediaId,
+      playable.seasonNumber,
+      playable.episodeNumber,
+      source.id
+    );
+    return episodeSource?.videoFilePath ? { source, episodeSource } : null;
   }
 
   /**

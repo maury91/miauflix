@@ -72,12 +72,13 @@ interface CandidateRecord {
 function makeCandidateId(
   provider: SubtitleCandidate['provider'],
   sourceId: number,
-  fileId: number | string
+  fileId: number | string,
+  playableKey?: string
 ): string {
-  if (provider === 'opensubtitles')
+  if (provider === 'opensubtitles' && !playableKey)
     return Buffer.from(`v1:${sourceId}:${String(fileId)}`).toString('base64url');
   return createHash('sha256')
-    .update(`v1:${provider}:${sourceId}:${String(fileId)}`)
+    .update(`v1:${provider}:${sourceId}:${String(fileId)}:${playableKey ?? ''}`)
     .digest('base64url')
     .slice(0, 24);
 }
@@ -127,13 +128,15 @@ export class SubtitlesService {
   ): Promise<SubtitleSearchResult> {
     const grant = await this.playbackSessionService.verify(streamingKey);
     if (!grant || grant.userId !== userId) throw new SubtitleAccessError('Playback is unavailable');
-    const source = await this.streamService.getSourceById(grant.sourceId);
-    if (!source) throw new SubtitleAccessError('Playback source is unavailable');
+    const resolved = await this.streamService.resolvePlaybackSource(grant);
+    if (!resolved) throw new SubtitleAccessError('Playback source is unavailable');
+    const { source } = resolved;
+    const videoFilePath = resolved.episodeSource?.videoFilePath ?? undefined;
     const local: SubtitleCandidate[] = [];
     try {
-      for (const track of await this.torrentSubtitles.discover(source)) {
+      for (const track of await this.torrentSubtitles.discover(source, videoFilePath)) {
         const candidate: SubtitleCandidate = {
-          id: makeCandidateId(track.provider, source.id, track.fileId),
+          id: makeCandidateId(track.provider, source.id, track.fileId, grant.playableKey),
           provider: track.provider,
           fileId: track.fileId,
           language: track.language,
@@ -171,6 +174,7 @@ export class SubtitlesService {
       candidates: local,
     });
     if (localOnly || grant.playableKind !== 'movie' || !apiKey) return localResult();
+    if (source.movieId === null) throw new SubtitleAccessError('Playback source is unavailable');
     const movie = await this.mediaService.getMovieById(source.movieId);
     if (!movie || `m:${movie.mediaId}` !== grant.playableKey)
       throw new SubtitleAccessError('Playback source is unavailable');
@@ -324,10 +328,11 @@ export class SubtitlesService {
     }
     let grant = streamingKey ? await this.playbackSessionService.verify(streamingKey) : null;
     if (!record && grant) {
-      const source = await this.streamService.getSourceById(grant.sourceId);
-      if (source) {
+      const resolved = await this.streamService.resolvePlaybackSource(grant);
+      const source = resolved?.source;
+      if (source && resolved) {
         const remote = decodeOpenSubtitlesCandidate(candidateId);
-        if (remote?.sourceId === source.id) {
+        if (grant.playableKind === 'movie' && remote?.sourceId === source.id) {
           record = {
             candidate: {
               id: candidateId,
@@ -350,9 +355,14 @@ export class SubtitlesService {
           };
         } else {
           try {
-            const local = await this.torrentSubtitles.discover(source);
+            const local = await this.torrentSubtitles.discover(
+              source,
+              resolved.episodeSource?.videoFilePath ?? undefined
+            );
             const track = local.find(
-              item => makeCandidateId(item.provider, source.id, item.fileId) === candidateId
+              item =>
+                makeCandidateId(item.provider, source.id, item.fileId, grant!.playableKey) ===
+                candidateId
             );
             if (track) {
               record = {
@@ -385,8 +395,10 @@ export class SubtitlesService {
       }
     }
     grant = record ? await this.playbackSessionService.verify(record.streamingKey) : null;
+    const resolved = grant ? await this.streamService.resolvePlaybackSource(grant) : null;
     if (
       !grant ||
+      !resolved ||
       !record ||
       record.expiresAt <= Date.now() ||
       grant.sourceId !== record.sourceId ||
@@ -412,9 +424,10 @@ export class SubtitlesService {
 
     const loading = (
       record.local
-        ? this.streamService.getSourceById(record.sourceId).then(source => {
-            if (!source) throw new SubtitleAccessError('Playback source is unavailable');
-            return this.torrentSubtitles.getTrack(source, record.local!, window);
+        ? Promise.resolve().then(() => {
+            if (resolved.source.id !== record.sourceId)
+              throw new SubtitleAccessError('Playback source is unavailable');
+            return this.torrentSubtitles.getTrack(resolved.source, record.local!, window);
           })
         : this.loadStoredTrack(record.fileId as number)
     )

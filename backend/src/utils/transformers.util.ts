@@ -10,7 +10,7 @@ import type { MovieSource } from '@entities/movie-source.entity';
  */
 export const providerSourceToEntity = (
   providerSource: SourceMetadata,
-  movieId: number,
+  movieId: number | null,
   providerName: string
 ): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'> => ({
   movieId,
@@ -34,7 +34,7 @@ export const providerSourceToEntity = (
  */
 export const providerSourcesToEntities = (
   sources: SourceMetadata[],
-  movieId: number,
+  movieId: number | null,
   providerName: string
 ): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'>[] => {
   return sources.map(source => providerSourceToEntity(source, movieId, providerName));

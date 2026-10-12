@@ -31,10 +31,11 @@ export interface TorrentWarmupDriver {
   warmSource(
     source: MovieSource,
     targetBytes: number,
-    speculativeExpiresAt?: Date | null
+    speculativeExpiresAt?: Date | null,
+    videoFilePath?: string
   ): Promise<WarmupResult>;
   pauseSource(sourceId: number): Promise<boolean>;
-  promoteSource(source: MovieSource): Promise<boolean>;
+  promoteSource(source: MovieSource, videoFilePath?: string): Promise<boolean>;
   hasActivePlayback(): boolean;
   isPlaybackActive(sourceId: number): boolean;
   isRangeVerified?(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean>;
@@ -84,7 +85,11 @@ export class TorrentWarmupController {
     source: MovieSource,
     leaseKey: string,
     playableKey: string,
-    options: { targetBytes?: number; speculativeExpiresAt?: Date | null } = {}
+    options: {
+      targetBytes?: number;
+      speculativeExpiresAt?: Date | null;
+      videoFilePath?: string;
+    } = {}
   ): Promise<WarmSlot> {
     return this.withTransition(async () => {
       if (this.driver.hasActivePlayback()) {
@@ -154,7 +159,8 @@ export class TorrentWarmupController {
         const result = await this.driver.warmSource(
           source,
           slot.targetVerifiedBytes,
-          options.speculativeExpiresAt
+          options.speculativeExpiresAt,
+          options.videoFilePath
         );
         if (this.slot?.generation !== generation) {
           await this.driver.pauseSource(source.id);
@@ -205,12 +211,16 @@ export class TorrentWarmupController {
   }
 
   /** Promote the exact source currently selected for this playable. */
-  async promote(source: MovieSource, playableKey: string): Promise<boolean> {
+  async promote(
+    source: MovieSource,
+    playableKey: string,
+    videoFilePath?: string
+  ): Promise<boolean> {
     return this.withTransition(async () => {
       if (this.slot && this.slot.playableKey === playableKey && this.slot.sourceId !== source.id) {
         return false;
       }
-      const promoted = await this.driver.promoteSource(source);
+      const promoted = await this.driver.promoteSource(source, videoFilePath);
       if (promoted && this.slot?.sourceId === source.id) {
         this.cancelReadinessCheck();
         this.setSlot(null);

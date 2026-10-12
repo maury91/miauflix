@@ -207,7 +207,10 @@ describe('DownloadService', () => {
         ...torrentList[0],
         done: false,
         ready: true,
-        bitfield: { get: (piece: number) => piece < 2 },
+        bitfield: {
+          get: (piece: number) => piece < 2,
+          buffer: Uint8Array.of(0b11000000),
+        },
       } as Torrent;
       expect(service.getStorageActivity(baseStorage)).toMatchObject({
         activity: 'available_offline',
@@ -963,6 +966,9 @@ describe('DownloadService', () => {
   describe('download tracking and allocation reconciliation', () => {
     it('starts completion from the selected video pieces even when auxiliary torrent pieces are missing', async () => {
       const { service, mockStorageService } = setupTest();
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(
+        createMockStorage({ selectedFiles: [] })
+      );
       const completedStorage = createMockStorage({
         videoCompletedAt: new Date(),
         localOnly: false,
@@ -979,7 +985,9 @@ describe('DownloadService', () => {
         files: [{ path: 'movie.mkv', offset: 0, length: 12 }],
         video: { name: 'movie.mkv', path: 'movie.mkv', offset: 3, length: 5 },
       };
-      const torrent = { bitfield: { get: (index: number) => index < 2 } };
+      const torrent = {
+        bitfield: { get: (index: number) => index < 2, buffer: Uint8Array.of(0b11000000) },
+      };
       const maybeMark = (
         service as unknown as {
           maybeMarkVideoComplete: (
@@ -1274,7 +1282,7 @@ describe('DownloadService', () => {
         name: 'movie',
         files: [{ name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8, select: jest.fn() }],
         pieces: new Array(2),
-        bitfield: { get: () => true, buffer: Uint8Array.of(3) },
+        bitfield: { get: () => true, buffer: Uint8Array.of(0b11000000) },
         pieceLength: 4,
         length: 8,
         on: jest.fn(),

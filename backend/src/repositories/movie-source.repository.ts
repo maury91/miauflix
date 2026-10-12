@@ -39,6 +39,7 @@ interface SourceToProcessMetadata {
 
 export class MovieSourceRepository {
   private readonly movieSourceRepository: Repository<MovieSource>;
+  private readonly torrentCreationTails = new Map<string, Promise<void>>();
 
   constructor(db: Database) {
     this.movieSourceRepository = db.getRepository(MovieSource);
@@ -71,6 +72,34 @@ export class MovieSourceRepository {
     }
     const newSource = this.movieSourceRepository.create(source);
     return this.movieSourceRepository.save(newSource);
+  }
+
+  /** Reuse the canonical TV torrent row for every episode association with the same hash. */
+  async createTorrentSource(source: Partial<MovieSource>): Promise<MovieSource> {
+    if (!source.hash) throw new Error('Torrent source hash is required');
+    const hash = source.hash.toLowerCase();
+    const previous = this.torrentCreationTails.get(hash) ?? Promise.resolve();
+    let release!: () => void;
+    const current = new Promise<void>(resolve => (release = resolve));
+    this.torrentCreationTails.set(hash, current);
+    await previous;
+    try {
+      const existing = await this.movieSourceRepository
+        .createQueryBuilder('movieSource')
+        .where('movieSource.hash = :hash', { hash })
+        .andWhere('movieSource.movieId IS NULL')
+        .getOne();
+      if (existing) {
+        await this.refreshProviderMetadata(existing.id, source);
+        return (await this.findById(existing.id)) ?? existing;
+      }
+      return this.movieSourceRepository.save(
+        this.movieSourceRepository.create({ ...source, hash, movieId: null })
+      );
+    } finally {
+      release();
+      if (this.torrentCreationTails.get(hash) === current) this.torrentCreationTails.delete(hash);
+    }
   }
 
   /**
