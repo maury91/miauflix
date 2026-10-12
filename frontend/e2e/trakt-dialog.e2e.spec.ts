@@ -1,6 +1,6 @@
 import type { Page, Response } from '@playwright/test';
 
-import { navigateToLogin } from './utils/login';
+import { navigateToLogin, waitForHomeReady } from './utils/login';
 import { expect, test } from './fixtures';
 
 async function login(page: Page, beforeSubmit?: () => void): Promise<string> {
@@ -23,6 +23,7 @@ async function login(page: Page, beforeSubmit?: () => void): Promise<string> {
   const response = page.waitForResponse(response => response.url().endsWith('/api/auth/login'));
   await page.getByRole('button', { name: 'Continue' }).click();
   const result = await (await response).json();
+  await waitForHomeReady(page);
   await expect(page.getByRole('dialog', { name: 'Connect Trakt', exact: true })).toBeVisible();
   return result.user.id;
 }
@@ -82,6 +83,6 @@ test('remembers Don’t ask again when the page reloads', async ({ page }) => {
   );
   await page.reload();
   await association;
-  await expect(page.getByRole('main')).toBeVisible();
+  await waitForHomeReady(page);
   await expect(dialog).toBeHidden();
 });

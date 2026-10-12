@@ -50,6 +50,39 @@ export function getConfigurationPageState(
   return null;
 }
 
+export function resolveAppState(input: {
+  setupCheckLoading: boolean;
+  sessionsLoading: boolean;
+  setupAvailable: boolean | null;
+  authenticated: boolean;
+  admin: boolean;
+  configLoading: boolean;
+  serviceStatusesLoading: boolean;
+  configEntries: ConfigEntryView[] | undefined;
+  serviceStatuses: ServiceStatuses | undefined;
+  configDismissed: boolean;
+}): AppState {
+  const {
+    setupCheckLoading,
+    sessionsLoading,
+    setupAvailable,
+    authenticated,
+    admin,
+    configLoading,
+    serviceStatusesLoading,
+    configEntries,
+    serviceStatuses,
+    configDismissed,
+  } = input;
+
+  if (setupCheckLoading || sessionsLoading) return 'loading';
+  if (setupAvailable === true) return 'initial_setup';
+  if (!authenticated) return 'login';
+  if (!admin) return 'home';
+  if (configLoading || serviceStatusesLoading) return 'loading';
+  return getConfigurationPageState(configEntries, serviceStatuses, configDismissed) ?? 'home';
+}
+
 export function useAppState(): AppState {
   const configDismissed = useAppSelector(selectConfigDismissed);
   const setupAvailable = useAppSelector(selectSetupAvailable);
@@ -69,38 +102,16 @@ export function useAppState(): AppState {
     { skip: !isAuthenticated || !isAdmin }
   );
 
-  // 1. Still loading initial checks
-  if (isSetupCheckLoading || isSessionsLoading) {
-    return 'loading';
-  }
-
-  // 2. Initial setup mode (ALLOW_CREATE_ADMIN_ON_FIRST_RUN=true, no admin yet)
-  if (setupAvailable === true) {
-    return 'initial_setup';
-  }
-
-  // 3. Not authenticated → show login
-  if (!isAuthenticated) {
-    return 'login';
-  }
-
-  // 4. Authenticated but not admin → go home (non-admin users don't see config wizard)
-  if (!isAdmin) {
-    return 'home';
-  }
-
-  // 5. Wait for the admin configuration check before selecting a destination.
-  // This prevents a newly logged-in admin from landing on Home before being
-  // redirected to the configuration wizard when required values are missing.
-  if (isConfigLoading || isServiceStatusesLoading) {
-    return 'loading';
-  }
-
-  // 6. The setup flag only governs first-admin registration. Missing required
-  // configuration always opens the wizard; dismiss only applies to runtime issues.
-  const configurationPage = getConfigurationPageState(configData, serviceStatuses, configDismissed);
-  if (configurationPage) return configurationPage;
-
-  // 7. Default: home
-  return 'home';
+  return resolveAppState({
+    setupCheckLoading: isSetupCheckLoading,
+    sessionsLoading: isSessionsLoading,
+    setupAvailable,
+    authenticated: isAuthenticated,
+    admin: isAdmin,
+    configLoading: isConfigLoading,
+    serviceStatusesLoading: isServiceStatusesLoading,
+    configEntries: configData,
+    serviceStatuses,
+    configDismissed,
+  });
 }

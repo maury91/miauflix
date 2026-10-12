@@ -5,12 +5,16 @@ import { mediaApi } from '@features/media/api/media.api';
 import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
 import { progressApi } from '@features/progress/api/progress.api';
+import { realtimeMiddleware } from '@features/realtime/realtime.middleware';
 import { setupApi } from '@features/setup/api/setup.api';
 import { storageApi } from '@features/storage/api/storage.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { appStateSlice } from '@store/slices/appState';
 import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
+import { detailsNavigationSlice } from '@store/slices/detailsNavigation';
+import { homeNavigationSlice } from '@store/slices/homeNavigation';
+import { realtimeSlice } from '@store/slices/realtime';
 
 export const store = configureStore({
   reducer: {
@@ -25,7 +29,10 @@ export const store = configureStore({
     [storageApi.reducerPath]: storageApi.reducer,
     [authSlice.name]: authSlice.reducer,
     [artworkSlice.name]: artworkSlice.reducer,
+    [detailsNavigationSlice.name]: detailsNavigationSlice.reducer,
     [appStateSlice.name]: appStateSlice.reducer,
+    [homeNavigationSlice.name]: homeNavigationSlice.reducer,
+    [realtimeSlice.name]: realtimeSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(
@@ -37,7 +44,8 @@ export const store = configureStore({
       progressApi.middleware,
       configApi.middleware,
       setupApi.middleware,
-      storageApi.middleware
+      storageApi.middleware,
+      realtimeMiddleware
     ),
 });
 
