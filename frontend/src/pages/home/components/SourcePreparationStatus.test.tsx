@@ -12,6 +12,29 @@ const baseSnapshot = (overrides: Record<string, unknown> = {}): PreloadPreparati
   }) as PreloadPreparationSnapshot;
 
 describe('SourcePreparationStatus', () => {
+  it('displays 720p for a found WEB source with unknown resolution', () => {
+    render(
+      <SourcePreparationStatus
+        mediaKind="movie"
+        mode="browse"
+        preparation={baseSnapshot({ source: { id: 11623, quality: null, sourceType: 'WEB' } })}
+      />
+    );
+    expect(screen.getByText('720p')).toBeInTheDocument();
+    expect(screen.getByText('WEB')).toBeInTheDocument();
+  });
+
+  it('does not invent a resolution when no source exists', () => {
+    render(
+      <SourcePreparationStatus
+        mediaKind="movie"
+        mode="browse"
+        preparation={baseSnapshot({ state: 'no_source' })}
+      />
+    );
+    expect(screen.queryByText('720p')).not.toBeInTheDocument();
+  });
+
   it('shows digital cinema source metadata', () => {
     render(
       <SourcePreparationStatus

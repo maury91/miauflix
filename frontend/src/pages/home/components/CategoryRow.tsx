@@ -16,7 +16,7 @@ import {
 } from 'react';
 import styled from 'styled-components';
 
-import { type HomeAction, moveIndex, type NavigationOutcome } from '../homeNavigation';
+import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '../homeNavigation';
 import { getImageUrl } from '../media.utils';
 import { MediaCard } from './MediaCard';
 
@@ -153,6 +153,8 @@ interface CategoryRowProps {
   category: ListDto;
   categoryIndex: number;
   initialIndex: number;
+  selectedIndex?: number;
+  onSelectionChange?: (index: number) => void;
   nearby?: boolean;
   loadIntent?: 'visible' | 'prefetch' | 'dormant';
   visible?: boolean;
@@ -161,8 +163,11 @@ interface CategoryRowProps {
   gap: number;
   peekWidth: number;
   contentWidth?: number;
+  /** The row whose selected media should supply the hero while Home is non-interactive. */
+  isCurrentRow: boolean;
   active: boolean;
   onActive: (categoryIndex: number, mediaIndex: number, media: MediaDto) => void;
+  onDataReady?: (slug: string) => void;
   onInterest?: () => void;
   onSelect: (media: MediaDto) => void;
   progress?: ProgressEntry[];
@@ -179,7 +184,10 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     active,
     category,
     categoryIndex,
+    selectedIndex: controlledIndex,
+    onSelectionChange,
     gap,
+    isCurrentRow,
     initialIndex,
     nearby,
     loadIntent,
@@ -189,6 +197,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     peekWidth,
     contentWidth = mediaWidth * mediaPerPage + gap * (mediaPerPage - 1),
     onActive,
+    onDataReady,
     onInterest,
     onSelect,
     progress,
@@ -197,8 +206,9 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   },
   forwardedRef
 ) {
-  const [selectedIndex, setSelectedIndex] = useState(initialIndex);
-  const [page, setPage] = useState(() => Math.floor(Math.max(0, initialIndex) / PAGE_SIZE));
+  const [uncontrolledIndex, setUncontrolledIndex] = useState(initialIndex);
+  const selectedIndex = controlledIndex ?? uncontrolledIndex;
+  const page = Math.floor(Math.max(0, selectedIndex) / PAGE_SIZE);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [alignmentRequest, setAlignmentRequest] = useState(0);
   const effectiveLoadIntent = loadIntent ?? (nearby ? 'visible' : 'dormant');
@@ -258,6 +268,14 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     return result;
   }, [current.currentData, mediaOverride, nextPage.currentData, previousPage.currentData]);
 
+  const updateSelectedIndex = useCallback(
+    (index: number) => {
+      if (controlledIndex === undefined) setUncontrolledIndex(index);
+      onSelectionChange?.(index);
+    },
+    [controlledIndex, onSelectionChange]
+  );
+
   useEffect(() => {
     const loaded = [previousPage.currentData, current.currentData, nextPage.currentData].flatMap(
       response => response?.results ?? []
@@ -272,45 +290,48 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     previousPage.currentData,
   ]);
 
+  useEffect(() => {
+    if (effectiveLoadIntent === 'dormant') return;
+    if (!mediaOverride && !current.currentData && !current.isError) return;
+    onDataReady?.(category.slug);
+  }, [
+    category.slug,
+    current.currentData,
+    current.isError,
+    effectiveLoadIntent,
+    mediaOverride,
+    onDataReady,
+  ]);
+
   const selectIndex = useCallback(
     (requested: number, focus = true) => {
       if (!total) {
         pendingIndex.current = requested;
         shouldFocus.current = focus;
+        updateSelectedIndex(requested);
         return;
       }
       const bounded = Math.max(0, Math.min(requested, total - 1));
       shouldFocus.current = focus;
-      setSelectedIndex(bounded);
-      setPage(Math.floor(bounded / PAGE_SIZE));
+      updateSelectedIndex(bounded);
     },
-    [total]
+    [total, updateSelectedIndex]
   );
 
   const handleAction = useCallback(
     (action: HomeAction): NavigationOutcome => {
-      if (action === 'up' || action === 'down') {
-        return { type: 'escape', direction: action };
+      const command = resolveCarouselAction(
+        action,
+        selectedIndex,
+        total,
+        mediaByIndex.get(selectedIndex) ?? null
+      );
+      if (command.nextIndex !== undefined) {
+        pendingAlignedIndex.current = command.nextIndex;
+        selectIndex(command.nextIndex);
       }
-      const outcome = moveIndex(action, selectedIndex, total);
-      if (action === 'left' && selectedIndex > 0) {
-        pendingAlignedIndex.current = selectedIndex - 1;
-        selectIndex(selectedIndex - 1);
-        return { type: 'handled' };
-      }
-      if (action === 'right' && selectedIndex < total - 1) {
-        pendingAlignedIndex.current = selectedIndex + 1;
-        selectIndex(selectedIndex + 1);
-        return { type: 'handled' };
-      }
-      if (action === 'confirm') {
-        const media = mediaByIndex.get(selectedIndex);
-        if (media) {
-          onSelect(media);
-          return { type: 'activate' };
-        }
-      }
-      return outcome;
+      if (command.activation) onSelect(command.activation);
+      return command.outcome;
     },
     [mediaByIndex, onSelect, selectIndex, selectedIndex, total]
   );
@@ -403,7 +424,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   useEffect(() => {
     const media = mediaByIndex.get(selectedIndex);
     if (!media) return;
-    if (active) onActive(categoryIndex, selectedIndex, media);
+    if (isCurrentRow) onActive(categoryIndex, selectedIndex, media);
     const alignedIndex = pendingAlignedIndex.current;
     if (alignedIndex === null && (!active || !shouldFocus.current)) return;
     const card = cardRefs.current.get(selectedIndex);
@@ -429,6 +450,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     active,
     categoryIndex,
     gap,
+    isCurrentRow,
     mediaByIndex,
     mediaPerPage,
     mediaWidth,
@@ -607,13 +629,11 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
                 selected={active && index === selectedIndex}
                 tabIndex={active && index === selectedIndex ? 0 : -1}
                 onFocus={() => {
-                  setSelectedIndex(index);
-                  setPage(Math.floor(index / PAGE_SIZE));
+                  updateSelectedIndex(index);
                   onActive(categoryIndex, index, media);
                 }}
                 onHover={() => {
-                  setSelectedIndex(index);
-                  setPage(Math.floor(index / PAGE_SIZE));
+                  updateSelectedIndex(index);
                   onActive(categoryIndex, index, media);
                   cardRefs.current.get(index)?.focus({ preventScroll: true });
                 }}
@@ -621,8 +641,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
                 onSelect={() => {
                   // Clicking a card must update the logical selection before opening details;
                   // otherwise Back returns to the row's previous keyboard selection.
-                  setSelectedIndex(index);
-                  setPage(Math.floor(index / PAGE_SIZE));
+                  updateSelectedIndex(index);
                   onActive(categoryIndex, index, media);
                   onSelect(media);
                 }}

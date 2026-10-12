@@ -6,11 +6,13 @@ interface AppStateSlice {
   setupAvailable: boolean | null; // null = not yet checked
   /** Admin chose "continue anyway" while required config is still missing */
   configDismissed: boolean;
+  introPhase: 'pending' | 'centering' | 'playing' | 'complete';
 }
 
 const initialState: AppStateSlice = {
   setupAvailable: null,
   configDismissed: false,
+  introPhase: 'pending',
 };
 
 export const appStateSlice = createSlice({
@@ -22,6 +24,18 @@ export const appStateSlice = createSlice({
     },
     resetConfigDismissed(state) {
       state.configDismissed = false;
+    },
+    setIntroEligible(state, action: { payload: boolean }) {
+      if (action.payload && state.introPhase === 'pending') state.introPhase = 'centering';
+      if (!action.payload && (state.introPhase === 'centering' || state.introPhase === 'playing')) {
+        state.introPhase = 'pending';
+      }
+    },
+    beginIntroPlayback(state) {
+      if (state.introPhase === 'centering') state.introPhase = 'playing';
+    },
+    completeIntro(state) {
+      if (state.introPhase === 'playing') state.introPhase = 'complete';
     },
   },
   extraReducers: builder => {
@@ -49,10 +63,18 @@ export const appStateSlice = createSlice({
   },
 });
 
-export const { dismissConfigWizard, resetConfigDismissed } = appStateSlice.actions;
+export const {
+  beginIntroPlayback,
+  completeIntro,
+  dismissConfigWizard,
+  resetConfigDismissed,
+  setIntroEligible,
+} = appStateSlice.actions;
 
 export const selectSetupAvailable = (state: { appState: AppStateSlice }) =>
   state.appState.setupAvailable;
 
 export const selectConfigDismissed = (state: { appState: AppStateSlice }) =>
   state.appState.configDismissed;
+
+export const selectIntroPhase = (state: { appState: AppStateSlice }) => state.appState.introPhase;

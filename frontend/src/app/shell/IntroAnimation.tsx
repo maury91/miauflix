@@ -33,6 +33,8 @@ interface LogoAnimatedProps {
   onReady?: () => void;
   duration?: number;
   lowResourceAnimation?: boolean;
+  /** Keep the centered animation logo hidden while the shared page logo moves into place. */
+  logoVisible?: boolean;
 }
 
 const lettersXMovementMultipliers: Record<keyof LogoHandle, number> = {
@@ -102,6 +104,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       duration = 2.5,
       onReady,
       lowResourceAnimation = false,
+      logoVisible = true,
     },
     ref
   ) => {
@@ -450,7 +453,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
 
     return (
       <AnimationContainer ref={containerRef} className={className} style={style}>
-        <LogoGlyphs ref={logoRef} />
+        <LogoGlyphs ref={logoRef} style={{ visibility: logoVisible ? 'visible' : 'hidden' }} />
       </AnimationContainer>
     );
   }

@@ -186,10 +186,11 @@ const Overview = styled.p`
 interface MediaHeroProps {
   media: MediaDto | null;
   preparation?: PreloadPreparationSnapshot | null;
+  onReady?: (mediaId: number | null) => void;
 }
 
 /** Show the selected title, source status, and a backdrop that transitions after loading. */
-export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => {
+export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onReady }) => {
   const mediaType = media?._type === 'movie' ? 'movie' : 'tv';
   const artwork = useSelector((state: RootState) =>
     media ? state.artwork.byMedia[`${mediaType}:${media.mediaId}`] : undefined
@@ -230,6 +231,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
     if (media?.mediaId === undefined || !selectedBackdrop) {
       setActiveBackdrop(null);
       activeBackdropRef.current = null;
+      onReady?.(media?.mediaId ?? null);
       return;
     }
 
@@ -277,6 +279,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
         if (!cancelled && currentRequest === requestId.current) {
           activeBackdropRef.current = null;
           setActiveBackdrop(null);
+          onReady?.(media.mediaId);
         }
         return;
       }
@@ -292,10 +295,15 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
       if (!activeBackdropRef.current) {
         activeBackdropRef.current = next;
         setActiveBackdrop(next);
+        onReady?.(media.mediaId);
         return;
       }
-      if (activeBackdropRef.current.key === key) return;
+      if (activeBackdropRef.current.key === key) {
+        onReady?.(media.mediaId);
+        return;
+      }
       setIncomingBackdrop(next);
+      onReady?.(media.mediaId);
       requestAnimationFrame(() => {
         if (!cancelled && currentRequest === requestId.current) setIncomingVisible(true);
       });
@@ -305,7 +313,14 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null }) => 
     return () => {
       cancelled = true;
     };
-  }, [ensureBackdropFocus, selectedBackdrop, media?.backdropFocus, media?._type, media?.mediaId]);
+  }, [
+    ensureBackdropFocus,
+    onReady,
+    selectedBackdrop,
+    media?.backdropFocus,
+    media?._type,
+    media?.mediaId,
+  ]);
 
   const promoteIncoming = useCallback(() => {
     if (!incomingBackdrop) return;

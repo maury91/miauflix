@@ -4,9 +4,12 @@ import {
   useGetPopularListsInfiniteQuery,
   usePromoteListMediaMutation,
 } from '@features/media/api/lists.api';
+import { useGetMovieQuery, useGetShowQuery } from '@features/media/api/media.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
+import { homeNavigationSlice } from '@store/slices/homeNavigation';
+import { realtimeSlice } from '@store/slices/realtime';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
 import { expect, fn, mocked } from 'storybook/test';
@@ -26,7 +29,12 @@ const meta = {
   decorators: [
     Story => {
       const store = configureStore({
-        reducer: { auth: authSlice.reducer, artwork: artworkSlice.reducer },
+        reducer: {
+          auth: authSlice.reducer,
+          artwork: artworkSlice.reducer,
+          homeNavigation: homeNavigationSlice.reducer,
+          realtime: realtimeSlice.reducer,
+        },
       });
       return (
         <Provider store={store}>
@@ -70,6 +78,8 @@ function setupHomeMocks() {
   const getPopular = mocked(useGetPopularListsInfiniteQuery);
   const getList = mocked(useGetListQuery);
   const promote = mocked(usePromoteListMediaMutation);
+  const getMovie = mocked(useGetMovieQuery);
+  const getShow = mocked(useGetShowQuery);
 
   getLists.mockReturnValue({
     data: homeCategories.slice(0, 1),
@@ -90,6 +100,8 @@ function setupHomeMocks() {
     return (listResponses[(query as { category: string }).category] ?? emptyQuery) as never;
   });
   promote.mockReturnValue([fn()] as never);
+  getMovie.mockReturnValue(emptyQuery);
+  getShow.mockReturnValue(emptyQuery);
 }
 
 export const Browse: Story = {

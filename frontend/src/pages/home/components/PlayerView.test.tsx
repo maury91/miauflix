@@ -21,15 +21,45 @@ const {
   stopAudioPlayback: vi.fn(),
 }));
 
-vi.mock('@features/player/api/playback.api', () => ({
-  useCreateSessionMutation: () => [createSession],
-  useSearchSubtitlesMutation: () => [searchSubtitles],
-}));
+vi.mock('@features/player/api/playback.api', async () => {
+  const React = await import('react');
+  return {
+    useCreateSessionMutation: () => {
+      const [result, setResult] = React.useState<{ data?: CreatePlaybackSessionResponse }>({});
+      const [requestVersion, setRequestVersion] = React.useState(0);
+      const reset = React.useCallback(() => {
+        setResult({});
+        setRequestVersion(requestVersion + 1);
+      }, [requestVersion]);
+      const trigger = React.useCallback((request: unknown) => {
+        const response = createSession(request);
+        setResult({});
+        setRequestVersion(version => version + 1);
+        const requestPromise = response.unwrap().then(
+          (data: CreatePlaybackSessionResponse) => {
+            setResult({ data });
+            return data;
+          },
+          (error: unknown) => {
+            setResult({});
+            throw error;
+          }
+        );
+        return { unwrap: () => requestPromise };
+      }, []);
+      return [trigger, { ...result, reset }] as const;
+    },
+    useSearchSubtitlesMutation: () => [searchSubtitles],
+  };
+});
 vi.mock('@features/player/lib/audio-playback', () => ({ startAudioPlayback }));
 vi.mock('@features/progress/api/progress.api', () => ({
   progressForPlayable: () => resumeEntry.current,
   useGetProgressQuery: () => ({ data: { progress: [] } }),
   useUpdateProgressMutation: () => [updateProgress],
+}));
+vi.mock('@features/realtime/realtime.middleware', () => ({
+  saveProgressWithRealtime: (progress: unknown) => () => updateProgress(progress),
 }));
 
 import { describePlaybackFailure, getPlaybackStatusMessage } from './playback-copy';
@@ -81,7 +111,8 @@ describe('PlayerView', () => {
   it('sends device codecs and preferred languages before a video element is mounted', async () => {
     createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
     render(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
-    await waitFor(() => expect(createSession).toHaveBeenCalled());
+    await screen.findByLabelText('Movie');
+    expect(createSession).toHaveBeenCalledTimes(1);
     expect(createSession).toHaveBeenCalledWith(
       expect.objectContaining({
         preferences: expect.objectContaining({

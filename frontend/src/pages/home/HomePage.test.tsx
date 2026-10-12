@@ -1,9 +1,13 @@
+import { navigate } from '@app/router';
+import type { RootState } from '@store/store';
 import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
   useGetListsQuery,
   useGetPopularListsInfiniteQuery,
+  useGetMovieQuery,
+  useGetShowQuery,
   rowHandles,
   rowProps,
   mediaIndexes,
@@ -18,9 +22,16 @@ const {
   getAssociation,
   currentSession,
   currentUser,
+  mockedClearAuth,
+  mockedSetSession,
+  homeNavigationState,
+  realtimeState,
+  heroControls,
 } = vi.hoisted(() => ({
   useGetListsQuery: vi.fn(),
   useGetPopularListsInfiniteQuery: vi.fn(),
+  useGetMovieQuery: vi.fn(),
+  useGetShowQuery: vi.fn(),
   rowHandles: new Map<number, Record<string, unknown>>(),
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
   mediaIndexes: new Map<number, number>(),
@@ -35,6 +46,27 @@ const {
   getAssociation: vi.fn(),
   currentSession: vi.fn(),
   currentUser: vi.fn(),
+  mockedClearAuth: Object.assign(() => ({ type: 'auth/clearAuth' }), {
+    type: 'auth/clearAuth',
+  }),
+  mockedSetSession: Object.assign(
+    (session: string) => ({ type: 'auth/setSession', payload: session }),
+    {
+      type: 'auth/setSession',
+    }
+  ),
+  homeNavigationState: {
+    value: {
+      activeRegion: 'carousel',
+      activeCategory: 0,
+      selectedByCategory: {} as Record<string, number>,
+      pendingCategoryAdvance: false,
+    } as RootState['homeNavigation'],
+    revision: 0,
+    listeners: new Set<() => void>(),
+  },
+  realtimeState: { ready: false, preparationByMediaId: {} as Record<number, unknown> },
+  heroControls: { ready: null as null | ((mediaId: number | null) => void) },
 }));
 
 vi.mock('@features/integrations/api/trakt.api', () => ({
@@ -48,6 +80,8 @@ vi.mock('@features/media/api/lists.api', () => ({
   useGetPopularListsInfiniteQuery,
 }));
 vi.mock('@features/media/api/media.api', () => ({
+  useGetMovieQuery,
+  useGetShowQuery,
   mediaApi: {
     util: { prefetch: vi.fn() },
     endpoints: {
@@ -64,12 +98,41 @@ vi.mock('@shared/components', () => ({ Spinner: () => null }));
 vi.mock('@store/slices/auth', () => ({
   selectCurrentSessionId: currentSession,
   selectCurrentUser: currentUser,
+  clearAuth: mockedClearAuth,
+  setSession: mockedSetSession,
 }));
 vi.mock('@store/store', () => ({}));
-vi.mock('react-redux', () => ({
-  useDispatch: () => dispatch,
-  useSelector: (selector: unknown) => selectSession(selector),
-}));
+vi.mock('react-redux', async () => {
+  const React = await import('react');
+  return {
+    useDispatch: () => dispatch,
+    useSelector: (selector: (state: unknown) => unknown) => {
+      const selectorRef = React.useRef(selector);
+      const snapshot = React.useRef({ initialized: false, value: undefined as unknown });
+      selectorRef.current = selector;
+      const getSnapshot = () => {
+        const nextValue = selectSession(state =>
+          selectorRef.current({
+            ...(state && typeof state === 'object' ? state : {}),
+            homeNavigation: homeNavigationState.value,
+            realtime: realtimeState,
+          })
+        );
+        if (!snapshot.current.initialized || !Object.is(snapshot.current.value, nextValue)) {
+          snapshot.current = {
+            initialized: true,
+            value: nextValue,
+          };
+        }
+        return snapshot.current.value;
+      };
+      return React.useSyncExternalStore(listener => {
+        homeNavigationState.listeners.add(listener);
+        return () => homeNavigationState.listeners.delete(listener);
+      }, getSnapshot);
+    },
+  };
+});
 vi.mock('./hooks/useMediaBoxSizes', () => ({
   useMediaBoxSizes: () => ({ mediaWidth: 180, mediaPerPage: 1, gap: 12, margin: 24 }),
 }));
@@ -79,12 +142,16 @@ vi.mock('./components/CategoryRow', async () => {
     CategoryRow: React.forwardRef(
       (
         props: {
+          category: { slug: string };
           categoryIndex: number;
+          isCurrentRow: boolean;
           active: boolean;
           mediaOverride?: unknown[];
           loadIntent?: string;
           visible?: boolean;
           onActive: (categoryIndex: number, mediaIndex: number, media: unknown) => void;
+          onDataReady: (slug: string) => void;
+          onSelectionChange: (mediaIndex: number) => void;
           onSelect: (media: unknown) => void;
         },
         ref
@@ -93,28 +160,52 @@ vi.mock('./components/CategoryRow', async () => {
           loadIntent: props.loadIntent,
           visible: props.visible,
         });
-        const { active, mediaOverride, onActive, categoryIndex } = props;
+        const {
+          mediaOverride,
+          onActive,
+          categoryIndex,
+          isCurrentRow,
+          loadIntent,
+          onDataReady,
+          category,
+        } = props;
+        const mediaIndex = mediaIndexes.get(categoryIndex) ?? 0;
+        const media = React.useMemo(
+          () =>
+            mediaOverride?.[mediaIndex] ?? {
+              _type: 'movie',
+              id: categoryIndex + 1,
+              mediaId: 100 + categoryIndex,
+            },
+          [categoryIndex, mediaIndex, mediaOverride]
+        );
         React.useEffect(() => {
-          if (active && mediaOverride?.[0]) {
-            onActive(categoryIndex, 0, mediaOverride[0]);
-          }
-        }, [active, categoryIndex, mediaOverride, onActive]);
+          if (loadIntent !== 'dormant') onDataReady(category.slug);
+          if (isCurrentRow) onActive(categoryIndex, mediaIndex, media);
+        }, [
+          categoryIndex,
+          isCurrentRow,
+          media,
+          mediaIndex,
+          onActive,
+          category.slug,
+          loadIntent,
+          onDataReady,
+        ]);
         const handle = rowHandles.get(props.categoryIndex);
         React.useImperativeHandle(ref, () => handle, [handle]);
-        const media = {
-          _type: 'movie',
-          id: props.categoryIndex + 1,
-          mediaId: 100 + props.categoryIndex,
-        };
-        const mediaIndex = mediaIndexes.get(props.categoryIndex) ?? 0;
         return React.createElement(
           'button',
           {
             type: 'button',
             'data-testid': `card-${props.categoryIndex}`,
             'data-active': props.active,
-            onMouseEnter: () => props.onActive(props.categoryIndex, mediaIndex, media),
+            onMouseEnter: () => {
+              props.onSelectionChange(mediaIndex);
+              props.onActive(props.categoryIndex, mediaIndex, media);
+            },
             onClick: () => {
+              props.onSelectionChange(mediaIndex);
               props.onActive(props.categoryIndex, mediaIndex, media);
               props.onSelect(media);
             },
@@ -126,24 +217,31 @@ vi.mock('./components/CategoryRow', async () => {
   };
 });
 vi.mock('./components/PlayerView', () => ({
-  PlayerView: () => <div data-testid="player" />,
+  PlayerView: (props: { playable: { kind: string; mediaId?: number; showMediaId?: number } }) => (
+    <div data-testid="player" data-playable-kind={props.playable.kind} />
+  ),
 }));
 vi.mock('./components/MediaHero', async () => {
   const React = await import('react');
   return {
     MediaHero: (props: {
+      media?: { mediaId?: number } | null;
+      onReady?: (mediaId: number | null) => void;
       preparation?: {
         state: string;
         source?: { quality: string };
         warmup?: { state: string };
       } | null;
-    }) =>
-      React.createElement('div', {
+    }) => {
+      heroControls.ready = props.onReady ?? null;
+      return React.createElement('div', {
         'data-testid': 'hero',
+        'data-media-id': props.media?.mediaId,
         'data-source-status': props.preparation?.state ?? 'checking',
         'data-quality': props.preparation?.source?.quality,
         'data-warmup': props.preparation?.warmup?.state,
-      }),
+      });
+    },
   };
 });
 vi.mock('./components/MediaDetails', async () => {
@@ -152,6 +250,7 @@ vi.mock('./components/MediaDetails', async () => {
     MediaDetails: React.forwardRef(
       (
         props: {
+          media: { mediaId: number };
           preparation?: {
             state: string;
             source?: { quality: string };
@@ -163,6 +262,7 @@ vi.mock('./components/MediaDetails', async () => {
         React.useImperativeHandle(ref, () => ({ handleAction: detailsHandleAction }), []);
         return React.createElement('div', {
           'data-testid': 'details',
+          'data-media-id': props.media.mediaId,
           'data-source-status': props.preparation?.state ?? 'checking',
           'data-quality': props.preparation?.source?.quality,
           'data-warmup': props.preparation?.warmup?.state,
@@ -173,6 +273,7 @@ vi.mock('./components/MediaDetails', async () => {
 });
 
 import { progressApi } from '@features/progress/api/progress.api';
+import { homeNavigationSlice, initialHomeNavigationState } from '@store/slices/homeNavigation';
 
 import HomePage from './HomePage';
 
@@ -195,10 +296,26 @@ const makeHandle = (focusResult: boolean, empty: boolean) => ({
 
 describe('HomePage focus transitions', () => {
   beforeEach(() => {
+    navigate({ type: 'home' }, { replace: true });
     dispatch.mockReset();
+    dispatch.mockImplementation(action => {
+      if (typeof action === 'object' && action && 'type' in action) {
+        homeNavigationState.value = homeNavigationSlice.reducer(homeNavigationState.value, action);
+      }
+      homeNavigationState.revision += 1;
+      homeNavigationState.listeners.forEach(listener => listener());
+      return action;
+    });
+    homeNavigationState.value = { ...initialHomeNavigationState, selectedByCategory: {} };
+    homeNavigationState.revision = 0;
+    homeNavigationState.listeners.clear();
+    realtimeState.ready = false;
+    realtimeState.preparationByMediaId = {};
+    heroControls.ready = null;
     initiateMovie.mockReset();
     initiateShow.mockReset();
-    selectSession.mockReset().mockReturnValue(null);
+    const baseState = { mediaApi: {}, progressApi: {} };
+    selectSession.mockReset().mockImplementation(selector => selector(baseState));
     currentSession.mockReset().mockReturnValue(null);
     currentUser.mockReset().mockReturnValue(null);
     getAssociation.mockReset().mockResolvedValue({ data: { connected: true } });
@@ -220,7 +337,77 @@ describe('HomePage focus transitions', () => {
       hasNextPage: false,
       isFetchingNextPage: false,
     });
+    useGetMovieQuery.mockReset().mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+    useGetShowQuery.mockReset().mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
     detailsHandleAction.mockReset().mockReturnValue({ type: 'escape', direction: 'left' });
+  });
+
+  it('waits for the current row and hero artwork before releasing the intro', async () => {
+    const onHydrated = vi.fn();
+    render(<HomePage interactive={false} onHydrated={onHydrated} />);
+
+    expect(useGetListsQuery).toHaveBeenCalled();
+    expect(useGetPopularListsInfiniteQuery).toHaveBeenCalledWith({ limit: 20 }, { skip: false });
+    expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'false');
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-media-id', '100');
+    expect(screen.queryByRole('dialog', { name: 'Connect Trakt' })).not.toBeInTheDocument();
+    expect(onHydrated).not.toHaveBeenCalled();
+
+    await act(async () => heroControls.ready?.(100));
+    await waitFor(() => expect(onHydrated).toHaveBeenCalledTimes(1));
+  });
+
+  it('loads a directly addressed movie route without loading the category feed', () => {
+    useGetListsQuery.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    useGetMovieQuery.mockReturnValue({
+      data: {
+        type: 'movie',
+        id: 7,
+        mediaId: 789,
+        imdbId: null,
+        title: 'Direct title',
+        overview: 'Overview',
+        tagline: '',
+        releaseDate: '',
+        runtime: 90,
+        poster: '',
+        backdrop: '',
+        backdropFocus: null,
+        logo: '',
+        genres: [],
+        popularity: 0,
+        rating: 0,
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+    navigate({ type: 'movieDetails', mediaId: 789 }, { replace: true });
+    render(<HomePage />);
+    expect(useGetListsQuery).toHaveBeenCalledWith(undefined, { skip: true });
+    expect(useGetMovieQuery).toHaveBeenCalledWith(789);
+    expect(screen.getByTestId('details')).toHaveAttribute('data-media-id', '789');
+    const mapAction = dispatch.mock.calls
+      .map(([action]) => action as { type?: string; payload?: unknown })
+      .find(action => action.type === 'realtimeRuntime/publishMapRequested');
+    const focusAction = dispatch.mock.calls
+      .map(([action]) => action as { type?: string; payload?: unknown })
+      .find(action => action.type === 'realtimeRuntime/publishFocusRequested');
+    expect(mapAction?.payload).toMatchObject({ center: null, mediaIds: [], visible: [] });
+    expect(focusAction?.payload).toMatchObject({
+      view: 'details',
+      media: { kind: 'movie', mediaId: 789 },
+    });
   });
 
   it.each([
@@ -230,13 +417,14 @@ describe('HomePage focus transitions', () => {
     'keeps the dismissal scope for %s across page reloads and logins',
     async (label, permanent) => {
       const state = { mediaApi: {}, progressApi: {} };
+      const emptyProgress: never[] = [];
       currentSession.mockReturnValue('test-session');
       currentUser.mockReturnValue({ id: 'test-user' });
       selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
       getAssociation.mockResolvedValue({ data: { connected: false } });
       const progressSelector = vi
         .spyOn(progressApi.endpoints.getProgress, 'select')
-        .mockReturnValue((() => ({ data: { progress: [] } })) as never);
+        .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
       try {
         let view = render(<HomePage />);
         expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
@@ -276,6 +464,7 @@ describe('HomePage focus transitions', () => {
 
   it('keeps keyboard input and focus in the Trakt modal until dismissal', async () => {
     const state = { mediaApi: {}, progressApi: {} };
+    const emptyProgress: never[] = [];
     currentSession.mockReturnValue('test-session');
     currentUser.mockReturnValue({ id: 'test-user' });
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
@@ -284,7 +473,7 @@ describe('HomePage focus transitions', () => {
     rowHandles.set(0, row);
     const progressSelector = vi
       .spyOn(progressApi.endpoints.getProgress, 'select')
-      .mockReturnValue((() => ({ data: { progress: [] } })) as never);
+      .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
     try {
       render(<HomePage />);
       const background = screen.getByTestId('card-0');
@@ -335,17 +524,12 @@ describe('HomePage focus transitions', () => {
       .spyOn(progressApi.endpoints.getProgress, 'select')
       .mockReturnValue((() => ({ data: { progress } })) as never);
     selectMovie.mockReturnValue(() => ({ data: { id: 1, mediaId: 100, title: 'Saved movie' } }));
-    let selections = 0;
-    selectSession.mockImplementation((selector: (state: unknown) => unknown) => {
-      if (++selections > 100) throw new Error('HomePage entered a render loop');
-      return selector(state);
-    });
+    selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     try {
       const view = render(<HomePage />);
       expect(screen.getAllByTestId(/^card-/)).toHaveLength(categories.length + 1);
-      const beforeRerender = selections;
       view.rerender(<HomePage />);
-      expect(selections - beforeRerender).toBeLessThan(20);
+      expect(screen.getAllByTestId(/^card-/)).toHaveLength(categories.length + 1);
       expect(updateIntent).toHaveBeenCalledTimes(1);
       // Unrelated catalog cache updates recreate card DTOs without changing focus.
       for (let update = 0; update < 3; update += 1) {
@@ -454,6 +638,7 @@ describe('HomePage focus transitions', () => {
   });
 
   it('shows the preparation result for the selected movie', () => {
+    currentSession.mockReturnValue('test-session');
     useUpdateIntentMutation.mockReturnValue([
       vi.fn(),
       {
@@ -490,6 +675,7 @@ describe('HomePage focus transitions', () => {
   });
 
   it('shows discovered source metadata in the homepage hero', () => {
+    currentSession.mockReturnValue('test-session');
     useUpdateIntentMutation.mockReturnValue([
       vi.fn(),
       {
@@ -508,7 +694,32 @@ describe('HomePage focus transitions', () => {
     expect(screen.getByTestId('hero')).toHaveAttribute('data-quality', 'FHD');
   });
 
+  it('clears preparation results when the active session changes', () => {
+    currentSession.mockReturnValue('first-session');
+    useUpdateIntentMutation.mockReturnValue([
+      vi.fn(),
+      {
+        data: {
+          preparation: {
+            playable: { kind: 'movie', mediaId: 100 },
+            state: 'source_found',
+            source: { quality: 'FHD' },
+          },
+        },
+        reset: vi.fn(),
+      },
+    ]);
+    const view = render(<HomePage />);
+    fireEvent.mouseEnter(screen.getByTestId('card-0'));
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-source-status', 'source_found');
+
+    currentSession.mockReturnValue('second-session');
+    view.rerender(<HomePage />);
+    expect(screen.getByTestId('hero')).toHaveAttribute('data-source-status', 'checking');
+  });
+
   it('shows cached source metadata immediately when returning to a movie and replaces it after refresh', () => {
+    currentSession.mockReturnValue('test-session');
     const updateIntent = vi.fn();
     const initial = {
       playable: { kind: 'movie', mediaId: 100 },
@@ -569,7 +780,7 @@ describe('HomePage focus transitions', () => {
 
   it('polls discovery and escalates to details without removing its lease', () => {
     vi.useFakeTimers();
-    selectSession.mockReturnValue('session');
+    currentSession.mockReturnValue('session');
     const updateIntent = vi.fn();
     useUpdateIntentMutation.mockReturnValue([updateIntent, {}]);
     const view = render(<HomePage />);

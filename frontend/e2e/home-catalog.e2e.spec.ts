@@ -1,4 +1,4 @@
-import { navigateToLogin } from './utils/login';
+import { navigateToLogin, waitForHomeReady } from './utils/login';
 import { expect, test } from './fixtures';
 
 const adminEmail = process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com';
@@ -34,7 +34,7 @@ async function login(page: import('@playwright/test').Page): Promise<void> {
     page.waitForResponse(response => response.url().includes('/api/auth/login')),
     page.locator('button[type="submit"]').click(),
   ]);
-  await expect(page.getByRole('main')).toBeVisible();
+  await waitForHomeReady(page);
 }
 
 function captureApiResponses(page: import('@playwright/test').Page) {

@@ -10,3 +10,12 @@ export const useGetWatchlistMembershipQuery = fn().mockName('useGetWatchlistMemb
 export const useAddToWatchlistMutation = fn().mockName('useAddToWatchlistMutation');
 export const useRemoveFromWatchlistMutation = fn().mockName('useRemoveFromWatchlistMutation');
 export const usePrefetch = fn().mockName('usePrefetch');
+
+// Non-hook consumers import listsApi for utility actions (for example, realtime
+// cache resets). Stories do not install its reducer or middleware, so expose
+// only the utility surface needed to keep those imports loadable.
+export const listsApi = {
+  util: {
+    resetApiState: fn().mockName('listsApi.util.resetApiState'),
+  },
+};

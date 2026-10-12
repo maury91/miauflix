@@ -1,5 +1,7 @@
 import { useAppState } from '@app/hooks/useAppState';
-import { IntroAnimation, type LogoAnimationHandle } from '@app/shell/IntroAnimation';
+import { useIntroController } from '@app/hooks/useIntroController';
+import { type AppRoute, navigate, navigateBack, useRoute, useRouteFocus } from '@app/router';
+import { IntroAnimation } from '@app/shell/IntroAnimation';
 import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
@@ -14,10 +16,8 @@ import { useAppDispatch, useAppSelector } from '@store';
 import { dismissConfigWizard } from '@store/slices/appState';
 import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-const INTRO_AUTO_START_DELAY = 0.1;
 
 const LoadingContainer = styled.div`
   position: fixed;
@@ -28,48 +28,30 @@ const LoadingContainer = styled.div`
 
 export function AppShell() {
   const dispatch = useAppDispatch();
+  const route = useRoute();
+  const settingsFocus = useRouteFocus();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAdmin = useAppSelector(selectIsAdmin);
-  const [introComplete, setIntroComplete] = useState(false);
-  const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
-  const [settingsActive, setSettingsActive] = useState(false);
-  const [storageActive, setStorageActive] = useState(false);
-  const [settingsInitialFocus, setSettingsInitialFocus] = useState<'configuration' | 'storage'>(
-    'configuration'
-  );
-  const [configurationActive, setConfigurationActive] = useState(false);
-  const logoRef = useRef<LogoAnimationHandle>(null);
   const appState = useAppState();
-
-  const handleIntroComplete = useCallback(() => {
-    setIntroComplete(true);
-
-    if (typeof window !== 'undefined') {
-      window.dispatchEvent(new Event('miauflix:intro:animation:complete'));
-
-      // Expose a flag for automated tests that wait for the intro animation to finish
-      window._miauflixAnimationComplete = true;
-    }
-  }, []);
-
-  useEffect(() => {
-    if (typeof window === 'undefined' || !logoRef.current) {
-      return undefined;
-    }
-
-    const timeout = window.setTimeout(() => {
-      logoRef.current?.start();
-    }, INTRO_AUTO_START_DELAY * 1000);
-
-    return () => window.clearTimeout(timeout);
-  }, []);
+  const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
+  const homeEligible = appState === 'home' && route.type === 'home' && !configurationWizardActive;
+  const {
+    introPhase,
+    introHasStarted,
+    hasShownScreen,
+    logoRef,
+    handleIntroComplete,
+    handleIntroReady,
+    handleLogoCentered,
+    handleIntroStart,
+    handleHomeHydrated,
+  } = useIntroController(appState, homeEligible);
 
   const handleConfigDismiss = useCallback(() => {
     setConfigurationWizardActive(false);
     dispatch(dismissConfigWizard());
   }, [dispatch]);
-
-  const logoPage = configurationWizardActive || settingsActive ? 'config_wizard' : appState;
+  const backTo = (parent: AppRoute) => () => navigateBack(parent);
 
   useEffect(() => {
     if (appState === 'config_wizard' && isAuthenticated && isAdmin) {
@@ -80,97 +62,114 @@ export function AppShell() {
   }, [appState, isAdmin, isAuthenticated]);
 
   useEffect(() => {
-    const openSettings = () => {
-      if (isAuthenticated) {
-        setConfigurationActive(false);
-        setStorageActive(false);
-        setSettingsInitialFocus('configuration');
-        setSettingsActive(true);
-      }
-    };
-    window.addEventListener('miauflix:settings:open', openSettings);
-    return () => window.removeEventListener('miauflix:settings:open', openSettings);
-  }, [isAuthenticated]);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setSettingsActive(false);
-      setStorageActive(false);
+    if (
+      appState === 'home' &&
+      !isAdmin &&
+      (route.type === 'configuration' || route.type === 'storage')
+    ) {
+      navigate({ type: 'settings' }, { replace: true });
     }
-    if (!isAuthenticated || !isAdmin) setConfigurationActive(false);
-    if (!isAdmin) setStorageActive(false);
-  }, [isAdmin, isAuthenticated]);
+  }, [appState, isAdmin, route]);
+
+  const logoPage =
+    homeEligible && introPhase !== 'complete'
+      ? introPhase === 'playing' && introHasStarted
+        ? 'home'
+        : 'intro'
+      : appState === 'loading' && !hasShownScreen
+        ? 'intro'
+        : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
+          ? 'config_wizard'
+          : appState;
+  const logoMotionDisabled = !hasShownScreen || (homeEligible && introPhase === 'playing');
+  const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);
 
   const renderPage = () => {
-    if (typeof window !== 'undefined' && window.location.pathname.startsWith('/auth/qr/')) {
-      return <QrApprovalPage key="qr-approval" />;
+    // QR approval remains available before the user has signed in or completed setup.
+    if (route.type === 'qrApproval') {
+      return <QrApprovalPage key="qr-approval" approvalToken={route.approvalToken} />;
     }
-    if (configurationWizardActive) {
+    if (appState === 'loading') return <LoadingContainer key="loading" />;
+    if (appState === 'initial_setup') return <SetupPage key="setup" />;
+    if (appState === 'login') return <LoginPage key="login" />;
+    if (appState === 'config') {
+      return <ConfigWizardPage key="config" onDismiss={handleConfigDismiss} />;
+    }
+    if (configurationWizardActive || appState === 'config_wizard') {
       return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
     }
-    if (settingsActive && isAuthenticated && appState === 'home') {
-      if (configurationActive && isAdmin) {
-        return (
-          <ConfigWizardPage
-            key="settings-configuration"
-            onDismiss={() => setConfigurationActive(false)}
-          />
-        );
-      }
-      if (storageActive && isAdmin) {
-        return (
-          <StoragePage
-            key="settings-storage"
-            onDismiss={() => {
-              setStorageActive(false);
-              setSettingsInitialFocus('storage');
-            }}
-          />
-        );
-      }
+    if (route.type === 'configuration' && isAuthenticated && isAdmin) {
+      return (
+        <ConfigWizardPage key="route-configuration" onDismiss={backTo({ type: 'settings' })} />
+      );
+    }
+    if (route.type === 'storage' && isAuthenticated && isAdmin) {
+      return <StoragePage key="route-storage" onDismiss={backTo({ type: 'settings' })} />;
+    }
+    if (route.type === 'settings' && isAuthenticated) {
       return (
         <SettingsPage
           key="settings"
           canConfigure={isAdmin}
-          onConfiguration={() => {
-            setSettingsInitialFocus('configuration');
-            setConfigurationActive(true);
-          }}
+          onConfiguration={() => navigate({ type: 'configuration' })}
           canManageStorage={isAdmin}
-          onStorage={() => setStorageActive(true)}
-          initialFocus={settingsInitialFocus}
-          onDismiss={() => setSettingsActive(false)}
+          onStorage={() => navigate({ type: 'storage' })}
+          initialFocus={settingsFocus}
+          onDismiss={backTo({ type: 'home' })}
         />
       );
     }
-    switch (appState) {
-      case 'loading':
-        return <LoadingContainer key="loading" />;
-      case 'initial_setup':
-        return <SetupPage key="setup" />;
-      case 'login':
-        return <LoginPage key="login" />;
-      case 'config':
-        return <ConfigWizardPage key="config" onDismiss={handleConfigDismiss} />;
-      case 'config_wizard':
-        return <ConfigurationWizardPage key="config-wizard" onDismiss={handleConfigDismiss} />;
-      case 'home':
-      default:
-        return <HomePage key="home" />;
+    if (route.type === 'notFound') {
+      return (
+        <main key="not-found">
+          <h1>Page not found</h1>
+          <button type="button" onClick={() => navigate({ type: 'home' })}>
+            Home
+          </button>
+        </main>
+      );
     }
+    const homeInteractive = route.type === 'home' && introPhase === 'complete';
+    const homeVisible = route.type === 'home' && (homeEligible || homeInteractive);
+    return (
+      <div
+        key="home"
+        aria-hidden={route.type === 'home' && !homeInteractive}
+        inert={route.type === 'home' && !homeInteractive}
+        style={{ visibility: route.type === 'home' && !homeVisible ? 'hidden' : 'visible' }}
+      >
+        <HomePage
+          route={route}
+          interactive={route.type === 'home' ? homeInteractive : true}
+          onHydrated={handleHomeHydrated}
+        />
+      </div>
+    );
   };
 
   return (
     <ErrorBoundary>
-      <Logo page={logoPage} />
+      <Logo
+        page={logoPage}
+        disableMotion={logoMotionDisabled}
+        visible={showSharedLogo}
+        aboveIntro={homeEligible && (introPhase === 'pending' || introPhase === 'centering')}
+        onPositionTransitionEnd={handleLogoCentered}
+      />
       <MotionConfig transition={{ duration: 0.5 }}>
         <AnimatePresence initial={false} mode="wait">
           {renderPage()}
         </AnimatePresence>
       </MotionConfig>
-
-      {!introComplete && (
-        <IntroAnimation ref={logoRef} autoStart={false} onComplete={handleIntroComplete} />
+      {homeEligible && introPhase !== 'complete' && (
+        <IntroAnimation
+          ref={logoRef}
+          autoStart={false}
+          logoVisible={introPhase === 'playing'}
+          onStart={handleIntroStart}
+          onReady={handleIntroReady}
+          onComplete={handleIntroComplete}
+        />
       )}
     </ErrorBoundary>
   );
