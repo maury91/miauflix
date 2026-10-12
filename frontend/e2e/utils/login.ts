@@ -9,7 +9,11 @@ export async function navigateToLogin(page: Page): Promise<void> {
 
 /** Wait until Home has finished its intro and is available to browser interaction. */
 export async function waitForHomeReady(page: Page): Promise<void> {
-  await expect(page.getByRole('main')).toBeVisible({ timeout: 30000 });
+  const home = page.getByRole('main');
+  await expect(home).toBeVisible({ timeout: 30000 });
+  await expect(home.locator('..')).not.toHaveAttribute('aria-hidden', 'true', {
+    timeout: 30000,
+  });
 }
 
 export function waitForTraktAssociation(page: Page): Promise<Response> {
