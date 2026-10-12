@@ -1,5 +1,7 @@
+import { type AppRoute, navigate, navigateBack, useRoute } from '@app/router';
 import { getTraktAssociation } from '@features/integrations/api/trakt.api';
 import { useGetListsQuery, useGetPopularListsInfiniteQuery } from '@features/media/api/lists.api';
+import { useGetMovieQuery, useGetShowQuery } from '@features/media/api/media.api';
 import { mediaApi } from '@features/media/api/media.api';
 import {
   useRemoveIntentMutation,
@@ -7,24 +9,26 @@ import {
 } from '@features/preload/api/preload.api';
 import { nextPreloadSequence, PRELOAD_CLIENT_ID } from '@features/preload/lib/intent-client';
 import { progressApi } from '@features/progress/api/progress.api';
-import {
-  RealtimeClient,
-  type RealtimeMediaRef,
-  type RealtimeStatusMessage,
-} from '@features/realtime/realtime.client';
+import type { RealtimeMediaRef } from '@features/realtime/realtime.client';
+import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type {
   MediaDto,
+  MovieResponse,
   PlayableRef,
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
   ProgressEntry,
+  ShowResponse,
 } from '@miauflix/backend';
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
+import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { artworkActions } from '@store/slices/artwork';
 import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
+import { homeNavigationActions } from '@store/slices/homeNavigation';
+import { selectPreparationByMediaId, selectRealtimeReady } from '@store/slices/realtime';
 import type { AppDispatch, RootState } from '@store/store';
 import { type FC, type UIEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,6 +42,7 @@ import { PlayerView } from './components/PlayerView';
 import { TraktModal } from './components/TraktModal';
 import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
 import { unfinishedProgress } from './continue-watching';
+import { buildHomeRealtimeInterest } from './homeInterest';
 import { type HomeAction, type NavigationOutcome } from './homeNavigation';
 import { getMediaTitle } from './media.utils';
 
@@ -72,9 +77,6 @@ const FullPageState = styled.div`
   justify-content: center;
   color: ${PALETTE.text.muted};
 `;
-
-type HomeView = 'browse' | 'details' | 'player';
-type HomeRegion = 'sidebar' | 'carousel' | 'details' | 'player';
 
 const CONTINUE_CATEGORY = {
   name: 'Continue watching',
@@ -137,13 +139,125 @@ function mediaFromProgress(
   };
 }
 
+function mediaFromMovie(response: MovieResponse): MediaDto {
+  return {
+    _type: 'movie',
+    id: response.id,
+    mediaId: response.mediaId,
+    imdbId: response.imdbId,
+    title: response.title,
+    overview: response.overview,
+    poster: response.poster,
+    backdrop: response.backdrop,
+    backdropFocus: response.backdropFocus,
+    logo: response.logo,
+    heroLogo: response.heroLogo,
+    artworkRevision: response.artworkRevision,
+    cardLogoStatus: response.cardLogoStatus,
+    heroLogoStatus: response.heroLogoStatus,
+    genres: response.genres,
+    popularity: response.popularity,
+    rating: response.rating,
+    releaseDate: response.releaseDate,
+    runtime: response.runtime,
+  };
+}
+
+function mediaFromShow(response: ShowResponse): MediaDto {
+  return {
+    _type: 'tvshow',
+    id: response.id,
+    mediaId: response.mediaId,
+    imdbId: response.imdbId,
+    name: response.title,
+    overview: response.overview ?? '',
+    poster: response.poster ?? '',
+    backdrop: response.backdrop ?? '',
+    backdropFocus: response.backdropFocus,
+    logo: response.logo ?? undefined,
+    heroLogo: response.heroLogo ?? undefined,
+    artworkRevision: response.artworkRevision,
+    cardLogoStatus: response.cardLogoStatus,
+    heroLogoStatus: response.heroLogoStatus,
+    genres: response.genres,
+    popularity: response.popularity ?? 0,
+    rating: response.rating ?? 0,
+    firstAirDate: response.firstAirDate ?? '',
+  };
+}
+
+interface HomePageProps {
+  route?: AppRoute;
+  /** Keep browser interaction and focus disabled while Home is preloading behind the intro. */
+  interactive?: boolean;
+  /** Signal that the initial row, selected hero, and artwork are ready for the intro. */
+  onHydrated?: () => void;
+}
+
 /** Coordinate browsing, details, and playback with progress refresh, preload interest, and Trakt prompts. */
-const HomePage: FC = () => {
+const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
   const dispatch = useDispatch<AppDispatch>();
+  const currentRoute = useRoute();
+  const activeRoute = route ?? currentRoute;
+  const view =
+    activeRoute.type === 'movieDetails' || activeRoute.type === 'showDetails'
+      ? 'details'
+      : activeRoute.type === 'moviePlayer' || activeRoute.type === 'episodePlayer'
+        ? 'player'
+        : 'browse';
+  const activeRegion = useSelector((state: RootState) => state.homeNavigation.activeRegion);
+  const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
+  const selectedByCategory = useSelector(
+    (state: RootState) => state.homeNavigation.selectedByCategory
+  );
+  const pendingCategoryAdvance = useSelector(
+    (state: RootState) => state.homeNavigation.pendingCategoryAdvance
+  );
+  const playable = useMemo<PlayableRef | null>(
+    () =>
+      activeRoute.type === 'moviePlayer'
+        ? { kind: 'movie', mediaId: activeRoute.mediaId }
+        : activeRoute.type === 'episodePlayer'
+          ? {
+              kind: 'episode',
+              showMediaId: activeRoute.showMediaId,
+              seasonNumber: activeRoute.seasonNumber,
+              episodeNumber: activeRoute.episodeNumber,
+            }
+          : null,
+    [activeRoute]
+  );
+  const detailMediaId =
+    activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
+      ? activeRoute.mediaId
+      : activeRoute.type === 'showDetails' || activeRoute.type === 'episodePlayer'
+        ? activeRoute.type === 'showDetails'
+          ? activeRoute.mediaId
+          : activeRoute.showMediaId
+        : null;
+  const routedMovie = useGetMovieQuery(
+    detailMediaId !== null &&
+      (activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer')
+      ? detailMediaId
+      : skipToken
+  );
+  const routedShow = useGetShowQuery(
+    detailMediaId !== null &&
+      (activeRoute.type === 'showDetails' || activeRoute.type === 'episodePlayer')
+      ? detailMediaId
+      : skipToken
+  );
+  const routeQuery =
+    activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
+      ? routedMovie
+      : routedShow;
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
   const currentUser = useSelector((state: RootState) => selectCurrentUser(state));
   const progressFromStore = useSelector(
     (state: RootState) => progressApi.endpoints.getProgress.select(undefined)(state).data?.progress
+  );
+  const progressQueryStatus = useSelector(
+    (state: RootState) => progressApi.endpoints.getProgress.select(undefined)(state).status
   );
   const progressEntries = useMemo(
     () => (Array.isArray(progressFromStore) ? progressFromStore : []),
@@ -151,13 +265,18 @@ const HomePage: FC = () => {
   );
   const [updateIntent, intentState] = useUpdateIntentMutation();
   const [removeIntent] = useRemoveIntentMutation();
-  const { data: fixedCategories, isLoading, isError } = useGetListsQuery();
+  const {
+    data: fixedCategories,
+    isLoading,
+    isError,
+  } = useGetListsQuery(undefined, { skip: view !== 'browse' });
   const {
     data: popularPages,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-  } = useGetPopularListsInfiniteQuery({ limit: 20 });
+    isLoading: isPopularListsLoading,
+  } = useGetPopularListsInfiniteQuery({ limit: 20 }, { skip: view !== 'browse' });
   const categories = useMemo(
     () => [
       ...(fixedCategories ?? []),
@@ -194,36 +313,78 @@ const HomePage: FC = () => {
   );
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth } = useMediaBoxSizes();
   const pageRef = useRef<HTMLElement>(null);
-  const [view, setView] = useState<HomeView>('browse');
-  const [activeRegion, setActiveRegion] = useState<HomeRegion>('carousel');
-  const [activeCategory, setActiveCategory] = useState(0);
-  const activeCategoryRef = useRef(0);
-  const [selectedByCategory, setSelectedByCategory] = useState<Record<string, number>>({});
-  const [selectedMedia, setSelectedMedia] = useState<MediaDto | null>(null);
-  const [loadedMediaByCategory, setLoadedMediaByCategory] = useState<Record<string, MediaDto[]>>(
-    {}
+  const [browseSelectedMedia, setBrowseSelectedMedia] = useState<MediaDto | null>(null);
+  const routeMedia = useMemo(
+    () =>
+      routedMovie.data
+        ? mediaFromMovie(routedMovie.data)
+        : routedShow.data
+          ? mediaFromShow(routedShow.data)
+          : null,
+    [routedMovie.data, routedShow.data]
   );
-  const [playable, setPlayable] = useState<PlayableRef | null>(null);
-  const [realtimePreparation, setRealtimePreparation] = useState<PreloadPreparationSnapshot | null>(
-    null
-  );
-  const [realtimeReady, setRealtimeReady] = useState(false);
+  const routeMatchesBrowseSelection =
+    browseSelectedMedia &&
+    (activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
+      ? browseSelectedMedia._type === 'movie' && browseSelectedMedia.mediaId === activeRoute.mediaId
+      : activeRoute.type === 'showDetails' || activeRoute.type === 'episodePlayer'
+        ? browseSelectedMedia._type === 'tvshow' &&
+          browseSelectedMedia.mediaId ===
+            (activeRoute.type === 'showDetails' ? activeRoute.mediaId : activeRoute.showMediaId)
+        : false);
+  const selectedMedia =
+    view === 'browse'
+      ? browseSelectedMedia
+      : (routeMedia ?? (routeMatchesBrowseSelection ? browseSelectedMedia : null));
+  const [readyRowSlugs, setReadyRowSlugs] = useState<Record<string, true>>({});
+  const [heroReadyMediaId, setHeroReadyMediaId] = useState<number | null | undefined>(undefined);
+  const hydrationNotified = useRef(false);
+  const realtimePreparation = useSelector(selectPreparationByMediaId(selectedMedia?.mediaId));
+  const realtimeReady = useSelector(selectRealtimeReady);
+  const [loadedMediaRefsByCategory, setLoadedMediaRefsByCategory] = useState<
+    Record<string, MediaRef[]>
+  >({});
   const [showTraktPrompt, setShowTraktPrompt] = useState(false);
   const traktPromptFocus = useRef<HTMLElement | null>(null);
   const traktDismissedSession = useRef<string | null>(null);
   const lastIntentSequence = useRef(0);
   const sourceCache = useRef(new Map<number, PreloadPreparationSource>());
   const lastPreparation = useRef<PreloadPreparationSnapshot | null>(null);
+  const previousSessionId = useRef(sessionId);
+  const latestIntentSession = useRef<string | null>(sessionId);
+  const lastPreparationSession = useRef(sessionId);
   const rowRefs = useRef(new Map<number, CategoryRowHandle>());
   const detailsRef = useRef<MediaDetailsHandle>(null);
   const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
-  const pendingCategoryAdvance = useRef(false);
   const categoryCount = displayCategories.length;
-  const realtimeRef = useRef<RealtimeClient | null>(null);
   const navigationRevision = useRef(0);
-  const selectedMediaRef = useRef<MediaDto | null>(null);
   const artworkRefsRef = useRef<MediaRef[]>([]);
-  selectedMediaRef.current = selectedMedia;
+  const browseFocusState = useRef({ activeCategory, displayCategories, selectedByCategory });
+  browseFocusState.current = { activeCategory, displayCategories, selectedByCategory };
+
+  const publishIntent = useCallback(
+    (request: Parameters<typeof updateIntent>[0]) => {
+      if (!sessionId) return;
+      latestIntentSession.current = sessionId;
+      return updateIntent(request);
+    },
+    [sessionId, updateIntent]
+  );
+  const resetIntentState = intentState.reset;
+
+  useEffect(() => {
+    if (previousSessionId.current === sessionId) return;
+    previousSessionId.current = sessionId;
+    latestIntentSession.current = null;
+    lastPreparationSession.current = sessionId;
+    lastPreparation.current = null;
+    sourceCache.current.clear();
+    setBrowseSelectedMedia(null);
+    setReadyRowSlugs({});
+    setHeroReadyMediaId(undefined);
+    setLoadedMediaRefsByCategory({});
+    resetIntentState?.();
+  }, [resetIntentState, sessionId]);
 
   const toRealtimeMedia = useCallback((media: MediaDto | null): RealtimeMediaRef | null => {
     if (!media) return null;
@@ -232,16 +393,45 @@ const HomePage: FC = () => {
       : { kind: 'show', mediaId: media.mediaId };
   }, []);
 
-  const onMediaLoaded = useCallback((slug: string, media: MediaDto[]) => {
-    setLoadedMediaByCategory(previous => {
-      if (previous[slug] === media) return previous;
-      return { ...previous, [slug]: media };
-    });
-  }, []);
+  const onMediaLoaded = useCallback(
+    (slug: string, media: MediaDto[]) => {
+      const refs = media.map(item => ({
+        mediaType: item._type === 'movie' ? ('movie' as const) : ('tv' as const),
+        mediaId: item.mediaId,
+      }));
+      for (const item of media) {
+        dispatch(
+          artworkActions.received({
+            mediaType: item._type === 'movie' ? 'movie' : 'tv',
+            mediaId: item.mediaId,
+            backdrop: item.backdrop ?? '',
+            logo: item.logo ?? '',
+            heroLogo: item.heroLogo ?? item.logo ?? '',
+            artworkRevision: item.artworkRevision ?? 0,
+            cardLogoStatus: item.cardLogoStatus ?? 'pending',
+            heroLogoStatus: item.heroLogoStatus ?? 'pending',
+          })
+        );
+      }
+      setLoadedMediaRefsByCategory(previous => {
+        const current = previous[slug];
+        if (
+          current?.length === refs.length &&
+          current.every(
+            (ref, index) =>
+              ref.mediaType === refs[index]?.mediaType && ref.mediaId === refs[index]?.mediaId
+          )
+        )
+          return previous;
+        return { ...previous, [slug]: refs };
+      });
+    },
+    [dispatch]
+  );
 
   useEffect(() => {
     const activeSlugs = new Set(displayCategories.map(category => category.slug));
-    setLoadedMediaByCategory(previous => {
+    setLoadedMediaRefsByCategory(previous => {
       const next = Object.fromEntries(
         Object.entries(previous).filter(([slug]) => activeSlugs.has(slug))
       );
@@ -252,86 +442,44 @@ const HomePage: FC = () => {
   /** Publish the bounded navigation window owned by the visible rows. */
   const publishRealtimeInterest = useCallback(() => {
     const rowCount = displayCategories.length;
-    if (!rowCount) return;
-    const rowStart = Math.max(0, Math.min(activeCategory - 5, rowCount - 11));
-    const rows: Array<Array<RealtimeMediaRef | null>> = [];
-    const visible: Array<[number, number]> = [];
-    let center: [number, number] | null = null;
-    for (let rowIndex = rowStart; rowIndex < Math.min(rowCount, rowStart + 11); rowIndex += 1) {
+    const rowWindows = Array.from({ length: rowCount }, (_, rowIndex) => {
       const window = rowRefs.current.get(rowIndex)?.getInterestWindow?.();
-      const media = (window?.media ?? []).map(toRealtimeMedia);
-      rows.push(media);
-      if (
-        window?.center !== null &&
-        window?.center !== undefined &&
-        rowIndex >= activeCategory &&
-        rowIndex <= activeCategory + 1
-      ) {
-        for (const column of window.visible) {
-          if (media[column]) visible.push([rowIndex - rowStart, column]);
-        }
-      }
-      if (rowIndex === activeCategory && window?.center !== null && window?.center !== undefined) {
-        center = [rowIndex - rowStart, window.center];
-      }
-    }
-    const focused = view === 'player' ? null : toRealtimeMedia(selectedMedia);
+      return window
+        ? {
+            media: window.media.map(toRealtimeMedia),
+            center: window.center,
+            visible: window.visible,
+          }
+        : undefined;
+    });
+    const interest = buildHomeRealtimeInterest({
+      activeCategory,
+      rowCount,
+      rowWindows,
+      selectedMedia: toRealtimeMedia(selectedMedia),
+      view,
+    });
     const navigation = navigationRevision.current + 1;
     navigationRevision.current = navigation;
-    realtimeRef.current?.publishFocus({
-      navigationRevision: navigation,
-      view,
-      media: focused,
-    });
-    realtimeRef.current?.publishMap({
-      navigationRevision: navigation,
-      center: view === 'browse' ? center : null,
-      mediaIds: view === 'browse' ? rows : [],
-      visible: view === 'browse' ? visible : [],
-    });
-  }, [activeCategory, displayCategories.length, selectedMedia, toRealtimeMedia, view]);
-
-  const handleRealtimeStatus = useCallback((message: RealtimeStatusMessage) => {
-    const selected = selectedMediaRef.current;
-    if (!selected || selected.mediaId !== message.mediaId) return;
-    setRealtimePreparation(previous => {
-      const playableRef: PlayableRef =
-        selected._type === 'movie'
-          ? { kind: 'movie', mediaId: selected.mediaId }
-          : { kind: 'show', mediaId: selected.mediaId };
-      const base = previous ?? {
-        playable: playableRef,
-        state: 'checking' as const,
-        source: null,
-        warmup: { state: 'not_requested' as const },
-      };
-      if (message.type === 'source-status') {
-        return {
-          ...base,
-          state: message.status as PreloadPreparationSnapshot['state'],
-          source: message.sourceId
-            ? {
-                id: message.sourceId,
-                quality: message.quality as PreloadPreparationSource['quality'],
-                sourceType: message.source as PreloadPreparationSource['sourceType'],
-              }
-            : null,
-        };
-      }
-      return {
-        ...base,
-        playable: message.playable as PlayableRef,
-        warmup: {
-          state: message.status as PreloadPreparationSnapshot['warmup']['state'],
-          progress: message.loaded ?? undefined,
-          verifiedBytes: message.verifiedBytes ?? undefined,
-          targetBytes: message.targetBytes ?? undefined,
-        },
-      };
-    });
-  }, []);
+    dispatch(
+      realtimeRuntimeActions.publishFocusRequested({
+        navigationRevision: navigation,
+        ...interest.focus,
+      })
+    );
+    dispatch(
+      realtimeRuntimeActions.publishMapRequested({
+        navigationRevision: navigation,
+        ...interest.map,
+      })
+    );
+  }, [activeCategory, dispatch, displayCategories.length, selectedMedia, toRealtimeMedia, view]);
 
   useEffect(() => {
+    if (!interactive || view !== 'browse') {
+      setShowTraktPrompt(false);
+      return;
+    }
     if (!sessionId || !currentUser) {
       setShowTraktPrompt(false);
       return;
@@ -350,11 +498,11 @@ const HomePage: FC = () => {
     return () => {
       cancelled = true;
     };
-  }, [currentUser, sessionId]);
+  }, [currentUser, interactive, sessionId, view]);
 
   useEffect(() => {
     dispatch(progressApi.util.resetApiState());
-    if (!sessionId) return;
+    if (!sessionId || view !== 'browse') return;
     const subscription = dispatch(
       progressApi.endpoints.getProgress.initiate(undefined, {
         forceRefetch: true,
@@ -362,41 +510,7 @@ const HomePage: FC = () => {
       })
     );
     return () => subscription?.unsubscribe?.();
-  }, [dispatch, sessionId]);
-
-  useEffect(() => {
-    if (!sessionId) {
-      realtimeRef.current?.stop();
-      realtimeRef.current = null;
-      return;
-    }
-    setRealtimeReady(false);
-    const client = new RealtimeClient(
-      sessionId,
-      PRELOAD_CLIENT_ID,
-      message => handleRealtimeStatus(message),
-      ready => {
-        setRealtimeReady(ready);
-        if (!ready) setRealtimePreparation(null);
-      },
-      update => dispatch(artworkActions.received(update))
-    );
-    realtimeRef.current = client;
-    client.start();
-    client.setArtworkSubscriptions(artworkRefsRef.current);
-    const visibility = () => client.setVisible(document.visibilityState !== 'hidden');
-    client.setVisible(document.visibilityState !== 'hidden');
-    document.addEventListener('visibilitychange', visibility);
-    return () => {
-      document.removeEventListener('visibilitychange', visibility);
-      client.stop();
-      if (artworkRefsRef.current.length) {
-        dispatch(artworkActions.removed(artworkRefsRef.current));
-      }
-      setRealtimeReady(false);
-      if (realtimeRef.current === client) realtimeRef.current = null;
-    };
-  }, [dispatch, handleRealtimeStatus, sessionId]);
+  }, [dispatch, sessionId, view]);
 
   const artworkRefs = useMemo(() => {
     const byKey = new Map<string, MediaRef>();
@@ -407,9 +521,11 @@ const HomePage: FC = () => {
     };
     add(selectedMedia);
     for (const media of continueMedia) add(media);
-    for (const media of Object.values(loadedMediaByCategory).flat()) add(media);
+    for (const ref of Object.values(loadedMediaRefsByCategory).flat()) {
+      byKey.set(`${ref.mediaType}:${ref.mediaId}`, ref);
+    }
     return [...byKey.values()].slice(0, 5_000);
-  }, [continueMedia, loadedMediaByCategory, selectedMedia]);
+  }, [continueMedia, loadedMediaRefsByCategory, selectedMedia]);
 
   useEffect(() => {
     const previous = new Map(
@@ -417,17 +533,23 @@ const HomePage: FC = () => {
     );
     const next = new Map(artworkRefs.map(ref => [`${ref.mediaType}:${ref.mediaId}`, ref]));
     const removed = [...previous].filter(([key]) => !next.has(key)).map(([, ref]) => ref);
-    realtimeRef.current?.setArtworkSubscriptions(artworkRefs);
+    dispatch(realtimeRuntimeActions.artworkSubscriptionsChanged(artworkRefs));
     if (removed.length) dispatch(artworkActions.removed(removed));
     artworkRefsRef.current = artworkRefs;
   }, [artworkRefs, dispatch]);
 
+  useEffect(
+    () => () => {
+      dispatch(realtimeRuntimeActions.artworkSubscriptionsChanged([]));
+      if (artworkRefsRef.current.length) {
+        dispatch(artworkActions.removed(artworkRefsRef.current));
+      }
+    },
+    [dispatch]
+  );
+
   useEffect(() => {
-    const retained = [
-      ...continueMedia,
-      ...Object.values(loadedMediaByCategory).flat(),
-      ...(selectedMedia ? [selectedMedia] : []),
-    ];
+    const retained = [...continueMedia, ...(selectedMedia ? [selectedMedia] : [])];
     for (const media of retained) {
       const update: ArtworkUpdate = {
         mediaType: media._type === 'movie' ? 'movie' : 'tv',
@@ -441,7 +563,7 @@ const HomePage: FC = () => {
       };
       dispatch(artworkActions.received(update));
     }
-  }, [continueMedia, dispatch, loadedMediaByCategory, selectedMedia]);
+  }, [continueMedia, dispatch, selectedMedia]);
 
   useEffect(() => {
     // These queries supply rendered cards, so retain their data while the row needs it.
@@ -469,21 +591,45 @@ const HomePage: FC = () => {
     return { visible, prefetch: new Set(prefetch) };
   }, [activeCategory, categoryCount]);
 
+  const hydrationRows = [...rowLoadState.visible, ...rowLoadState.prefetch];
+  const rowDataReady =
+    isError ||
+    hydrationRows.every(index => {
+      const category = displayCategories[index];
+      return !category || readyRowSlugs[category.slug];
+    });
+  const heroReady = isError || heroReadyMediaId === (selectedMedia?.mediaId ?? null);
+  const listsReady =
+    isError ||
+    (!isLoading && fixedCategories !== undefined && !isPopularListsLoading && !isFetchingNextPage);
+  const progressReady = isError || !sessionId || progressQueryStatus !== 'pending';
+  const homeHydrated = listsReady && progressReady && rowDataReady && heroReady;
+
+  useEffect(() => {
+    if (!homeHydrated || !onHydrated || hydrationNotified.current) return undefined;
+    let secondFrame = 0;
+    const firstFrame = window.requestAnimationFrame(() => {
+      secondFrame = window.requestAnimationFrame(() => {
+        hydrationNotified.current = true;
+        onHydrated();
+      });
+    });
+    return () => {
+      window.cancelAnimationFrame(firstFrame);
+      if (secondFrame) window.cancelAnimationFrame(secondFrame);
+    };
+  }, [homeHydrated, onHydrated]);
+
   useEffect(() => {
     if (!hasNextPage || isFetchingNextPage || categories.length === 0) return;
-    if (activeCategoryRef.current >= categories.length - 3) void fetchNextPage();
+    if (activeCategory >= categories.length - 3) void fetchNextPage();
   }, [activeCategory, categories.length, fetchNextPage, hasNextPage, isFetchingNextPage]);
 
   useEffect(() => {
-    if (
-      !pendingCategoryAdvance.current ||
-      activeCategoryRef.current + 1 >= displayCategories.length
-    )
-      return;
-    pendingCategoryAdvance.current = false;
-    activeCategoryRef.current += 1;
-    setActiveCategory(activeCategoryRef.current);
-  }, [displayCategories.length]);
+    if (!pendingCategoryAdvance || activeCategory + 1 >= displayCategories.length) return;
+    dispatch(homeNavigationActions.setPendingCategoryAdvance(false));
+    dispatch(homeNavigationActions.setActiveCategory(activeCategory + 1));
+  }, [activeCategory, dispatch, displayCategories.length, pendingCategoryAdvance]);
 
   const handleContentScroll = useCallback(
     (event: UIEvent<HTMLDivElement>) => {
@@ -531,7 +677,7 @@ const HomePage: FC = () => {
       if (document.visibilityState === 'hidden') return;
       const sequence = nextPreloadSequence();
       lastIntentSequence.current = sequence;
-      void updateIntent({
+      void publishIntent({
         clientId: PRELOAD_CLIENT_ID,
         intent: {
           sequence,
@@ -544,7 +690,7 @@ const HomePage: FC = () => {
     publish();
     const heartbeat = window.setInterval(publish, 5_000);
     return () => window.clearInterval(heartbeat);
-  }, [focusedMediaId, focusedMediaKind, realtimeReady, sessionId, updateIntent, view]);
+  }, [focusedMediaId, focusedMediaKind, publishIntent, realtimeReady, sessionId, view]);
 
   // Keep the same lease when browsing transitions to details, so discovered
   // source metadata survives the escalation to torrent warmup.
@@ -560,48 +706,41 @@ const HomePage: FC = () => {
   }, [removeIntent, sessionId]);
 
   const handleActive = useCallback(
-    (categoryIndex: number, mediaIndex: number, media: MediaDto) => {
-      activeCategoryRef.current = categoryIndex;
-      setActiveCategory(categoryIndex);
-      setSelectedMedia(media);
-      setRealtimePreparation(previous =>
-        previous &&
-        media._type === 'movie' &&
-        previous.playable.kind === 'movie' &&
-        previous.playable.mediaId === media.mediaId
-          ? previous
-          : null
-      );
-      setSelectedByCategory(previous => {
-        const slug = displayCategories?.[categoryIndex]?.slug;
-        return slug && previous[slug] !== mediaIndex
-          ? { ...previous, [slug]: mediaIndex }
-          : previous;
-      });
+    (categoryIndex: number, _mediaIndex: number, media: MediaDto) => {
+      dispatch(homeNavigationActions.setActiveCategory(categoryIndex));
+      setBrowseSelectedMedia(media);
     },
-    [displayCategories]
+    [dispatch]
   );
 
-  const openDetails = useCallback((media: MediaDto) => {
-    setSelectedMedia(media);
-    setRealtimePreparation(previous =>
-      previous &&
-      media._type === 'movie' &&
-      previous.playable.kind === 'movie' &&
-      previous.playable.mediaId === media.mediaId
-        ? previous
-        : null
-    );
-    setView('details');
-    setActiveRegion('details');
+  const handleRowDataReady = useCallback((slug: string) => {
+    setReadyRowSlugs(previous => (previous[slug] ? previous : { ...previous, [slug]: true }));
   }, []);
+
+  const handleHeroReady = useCallback((mediaId: number | null) => {
+    setHeroReadyMediaId(mediaId);
+  }, []);
+
+  const openDetails = useCallback(
+    (media: MediaDto) => {
+      setBrowseSelectedMedia(media);
+      navigate(
+        media._type === 'movie'
+          ? { type: 'movieDetails', mediaId: media.mediaId }
+          : { type: 'showDetails', mediaId: media.mediaId },
+        { parent: { type: 'home' } }
+      );
+      dispatch(homeNavigationActions.setActiveRegion('details'));
+    },
+    [dispatch]
+  );
 
   const handleMoveCategory = useCallback(
     (delta: -1 | 1) => {
       if (!displayCategories?.length) return;
-      let nextCategory = activeCategoryRef.current + delta;
+      let nextCategory = activeCategory + delta;
       if (nextCategory >= displayCategories.length && delta === 1 && hasNextPage) {
-        pendingCategoryAdvance.current = true;
+        dispatch(homeNavigationActions.setPendingCategoryAdvance(true));
         if (!isFetchingNextPage) void fetchNextPage();
         return;
       }
@@ -615,41 +754,66 @@ const HomePage: FC = () => {
         nextCategory += delta;
       }
       if (nextCategory < 0 || nextCategory >= displayCategories.length) return;
-      if (nextCategory === activeCategoryRef.current) return;
-      activeCategoryRef.current = nextCategory;
-      setActiveCategory(nextCategory);
+      if (nextCategory === activeCategory) return;
+      dispatch(homeNavigationActions.setActiveCategory(nextCategory));
       if (destinationPending) {
         pageRef.current?.focus({ preventScroll: true });
       }
     },
-    [displayCategories, fetchNextPage, hasNextPage, isFetchingNextPage, selectedByCategory]
+    [
+      activeCategory,
+      dispatch,
+      displayCategories,
+      fetchNextPage,
+      hasNextPage,
+      isFetchingNextPage,
+      selectedByCategory,
+    ]
   );
 
   const returnToBrowse = useCallback(() => {
-    const categoryIndex = activeCategoryRef.current;
+    const categoryIndex = activeCategory;
     const category = displayCategories?.[categoryIndex];
     pendingBrowseFocus.current = {
       categoryIndex,
       mediaIndex: category ? (selectedByCategory[category.slug] ?? 0) : 0,
     };
-    setView('browse');
-    setActiveRegion('carousel');
-  }, [displayCategories, selectedByCategory]);
+    navigateBack({ type: 'home' });
+    dispatch(homeNavigationActions.setActiveRegion('carousel'));
+  }, [activeCategory, dispatch, displayCategories, selectedByCategory]);
 
   const returnToDetails = useCallback(() => {
-    setView('details');
-    setActiveRegion('details');
-  }, []);
+    const parent =
+      playable?.kind === 'movie'
+        ? { type: 'movieDetails' as const, mediaId: playable.mediaId }
+        : playable?.kind === 'episode'
+          ? { type: 'showDetails' as const, mediaId: playable.showMediaId }
+          : { type: 'home' as const };
+    navigateBack(parent);
+    dispatch(homeNavigationActions.setActiveRegion('details'));
+  }, [dispatch, playable]);
 
-  const openPlayer = useCallback((nextPlayable: PlayableRef) => {
-    setPlayable(nextPlayable);
-    setView('player');
-    setActiveRegion('player');
-  }, []);
+  const openPlayer = useCallback(
+    (nextPlayable: PlayableRef) => {
+      navigate(
+        nextPlayable.kind === 'movie'
+          ? { type: 'moviePlayer', mediaId: nextPlayable.mediaId }
+          : { type: 'episodePlayer', ...nextPlayable },
+        {
+          parent:
+            activeRoute.type === 'movieDetails' || activeRoute.type === 'showDetails'
+              ? activeRoute
+              : undefined,
+        }
+      );
+      dispatch(homeNavigationActions.setActiveRegion('player'));
+    },
+    [activeRoute, dispatch]
+  );
 
   const openSettings = useCallback(() => {
-    window.dispatchEvent(new Event('miauflix:settings:open'));
-  }, []);
+    if (sessionId) navigate({ type: 'settings' }, { parent: { type: 'home' } });
+  }, [sessionId]);
 
   const dismissTraktPrompt = useCallback(
     (permanent: boolean) => {
@@ -672,14 +836,20 @@ const HomePage: FC = () => {
     requestAnimationFrame(() => traktPromptFocus.current?.focus({ preventScroll: true }));
   }, [dispatch]);
 
-  if (intentState.data) {
-    lastPreparation.current = intentState.data.preparation ?? null;
+  const isCurrentIntentResult = Boolean(sessionId && latestIntentSession.current === sessionId);
+  const intentData = isCurrentIntentResult ? intentState.data : undefined;
+  const intentIsLoading = isCurrentIntentResult && intentState.isLoading;
+  const intentError = isCurrentIntentResult ? intentState.error : undefined;
+  const intentOriginalArgs = isCurrentIntentResult ? intentState.originalArgs : undefined;
+  if (intentData) {
+    lastPreparation.current = intentData.preparation ?? null;
+    lastPreparationSession.current = sessionId;
   }
   const responsePreparation =
     realtimePreparation ??
-    (intentState.data
-      ? intentState.data.preparation
-      : intentState.isLoading
+    (intentData
+      ? intentData.preparation
+      : intentIsLoading && lastPreparationSession.current === sessionId
         ? lastPreparation.current
         : undefined);
   useEffect(() => {
@@ -716,9 +886,9 @@ const HomePage: FC = () => {
         }
       : (matchedPreparation ??
         (selectedMedia?._type === 'movie' &&
-        intentState.originalArgs?.intent.focused?.kind === 'movie' &&
-        intentState.originalArgs.intent.focused.mediaId === selectedMedia.mediaId &&
-        intentState.error
+        intentOriginalArgs?.intent.focused?.kind === 'movie' &&
+        intentOriginalArgs.intent.focused.mediaId === selectedMedia.mediaId &&
+        intentError
           ? {
               playable: { kind: 'movie', mediaId: selectedMedia.mediaId },
               state: 'error',
@@ -728,19 +898,31 @@ const HomePage: FC = () => {
           : null));
 
   useEffect(() => {
-    if (view !== 'browse') return;
+    if (view === 'details') {
+      dispatch(homeNavigationActions.setActiveRegion('details'));
+      return;
+    }
+    if (view === 'player') {
+      dispatch(homeNavigationActions.setActiveRegion('player'));
+      return;
+    }
+    dispatch(homeNavigationActions.setActiveRegion('carousel'));
     const pending = pendingBrowseFocus.current;
-    if (!pending) return;
-    const row = rowRefs.current.get(pending.categoryIndex);
+    const { activeCategory, displayCategories, selectedByCategory } = browseFocusState.current;
+    const categoryIndex = pending?.categoryIndex ?? activeCategory;
+    const category = displayCategories[categoryIndex];
+    const mediaIndex =
+      pending?.mediaIndex ?? (category ? (selectedByCategory[category.slug] ?? 0) : 0);
+    const row = rowRefs.current.get(categoryIndex);
     if (!row) return;
-    row.focusIndex(pending.mediaIndex);
+    row.focusIndex(mediaIndex);
     pendingBrowseFocus.current = null;
-  }, [view]);
+  }, [activeRoute, dispatch, view]);
 
   const handleSidebarAction = useCallback(
     (action: HomeAction): NavigationOutcome => {
       if (action === 'right' || action === 'confirm' || action === 'back') {
-        setActiveRegion('carousel');
+        dispatch(homeNavigationActions.setActiveRegion('carousel'));
         const category = displayCategories?.[activeCategory];
         rowRefs.current
           .get(activeCategory)
@@ -749,7 +931,7 @@ const HomePage: FC = () => {
       }
       return { type: 'handled' };
     },
-    [activeCategory, displayCategories, selectedByCategory]
+    [activeCategory, dispatch, displayCategories, selectedByCategory]
   );
 
   const handleHomeAction = useCallback(
@@ -772,7 +954,7 @@ const HomePage: FC = () => {
       const outcome = row?.handleAction(action) ?? { type: 'ignored' as const };
       if (outcome.type === 'escape') {
         if (outcome.direction === 'left') {
-          setActiveRegion('sidebar');
+          dispatch(homeNavigationActions.setActiveRegion('sidebar'));
         } else if (outcome.direction === 'up' || outcome.direction === 'down') {
           handleMoveCategory(outcome.direction === 'up' ? -1 : 1);
         }
@@ -782,6 +964,7 @@ const HomePage: FC = () => {
     [
       activeCategory,
       activeRegion,
+      dispatch,
       handleMoveCategory,
       handleSidebarAction,
       returnToBrowse,
@@ -792,7 +975,7 @@ const HomePage: FC = () => {
   );
 
   const navigationRef = useKeyboardNavigation({
-    enabled: !showTraktPrompt,
+    enabled: interactive && !showTraktPrompt,
     onLeft: () => handleHomeAction('left').type !== 'ignored',
     onRight: () => handleHomeAction('right').type !== 'ignored',
     onUp: () => handleHomeAction('up').type !== 'ignored',
@@ -801,7 +984,7 @@ const HomePage: FC = () => {
     onBack: () => handleHomeAction('back').type !== 'ignored',
   });
 
-  if (isLoading) {
+  if (view === 'browse' && isLoading) {
     return (
       <PageContainer>
         <FullPageState>
@@ -810,7 +993,7 @@ const HomePage: FC = () => {
       </PageContainer>
     );
   }
-  if (isError || !fixedCategories) {
+  if (view === 'browse' && (isError || !fixedCategories)) {
     return (
       <PageContainer>
         <FullPageState>Failed to load categories.</FullPageState>
@@ -829,7 +1012,7 @@ const HomePage: FC = () => {
       <div inert={showTraktPrompt} style={{ display: 'contents' }}>
         {view === 'browse' ? (
           <>
-            <MediaHero media={selectedMedia} preparation={preparation} />
+            <MediaHero media={selectedMedia} preparation={preparation} onReady={handleHeroReady} />
             <Content $margin={margin} onScroll={handleContentScroll}>
               {displayCategories.map((category, index) => (
                 <CategoryRow
@@ -841,6 +1024,15 @@ const HomePage: FC = () => {
                   category={category}
                   categoryIndex={index}
                   initialIndex={selectedByCategory[category.slug] ?? 0}
+                  selectedIndex={selectedByCategory[category.slug] ?? 0}
+                  onSelectionChange={mediaIndex =>
+                    dispatch(
+                      homeNavigationActions.setCategorySelection({
+                        slug: category.slug,
+                        index: mediaIndex,
+                      })
+                    )
+                  }
                   loadIntent={
                     rowLoadState.visible.has(index)
                       ? 'visible'
@@ -853,8 +1045,13 @@ const HomePage: FC = () => {
                   mediaPerPage={mediaPerPage}
                   gap={gap}
                   peekWidth={peekWidth}
+                  isCurrentRow={activeCategory === index}
+                  onDataReady={handleRowDataReady}
                   active={
-                    !showTraktPrompt && activeRegion === 'carousel' && activeCategory === index
+                    interactive &&
+                    !showTraktPrompt &&
+                    activeRegion === 'carousel' &&
+                    activeCategory === index
                   }
                   onActive={handleActive}
                   onInterest={publishRealtimeInterest}
@@ -868,9 +1065,9 @@ const HomePage: FC = () => {
               ))}
             </Content>
             <HomeSidebar
-              active={!showTraktPrompt && activeRegion === 'sidebar'}
+              active={interactive && !showTraktPrompt && activeRegion === 'sidebar'}
               onAction={handleSidebarAction}
-              onHover={() => setActiveRegion('sidebar')}
+              onHover={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
               onSettings={openSettings}
             />
           </>
@@ -882,16 +1079,31 @@ const HomePage: FC = () => {
             onWatch={openPlayer}
             preparation={preparation}
           />
+        ) : view === 'details' ? (
+          <FullPageState role="status">
+            {routeQuery.isError ? (
+              <div>
+                <p>Unable to load this title.</p>
+                <button type="button" onClick={() => void routeQuery.refetch()}>
+                  Retry
+                </button>
+                <button type="button" onClick={returnToBrowse}>
+                  Back to Home
+                </button>
+              </div>
+            ) : (
+              <Spinner />
+            )}
+          </FullPageState>
         ) : view === 'player' && playable ? (
           <PlayerView
             playable={playable}
             title={selectedMedia ? getMediaTitle(selectedMedia) : 'Selected title'}
             onBack={returnToDetails}
-            realtimeClient={realtimeRef.current}
           />
         ) : null}
       </div>
-      {showTraktPrompt && sessionId && (
+      {interactive && showTraktPrompt && sessionId && (
         <TraktModal
           sessionId={sessionId}
           onConnected={handleTraktConnected}

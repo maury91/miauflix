@@ -96,6 +96,7 @@ const baseArgs = {
   mediaPerPage: 3,
   gap: 18,
   peekWidth: 75,
+  isCurrentRow: true,
   active: true,
   loadIntent: 'visible' as const,
   visible: true,

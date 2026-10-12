@@ -17,14 +17,19 @@ import type {
   PreloadPreparationSnapshot,
   SeasonResponse,
 } from '@miauflix/backend';
+import { createSelector } from '@reduxjs/toolkit';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import {
+  detailsNavigationActions,
+  selectDetailsNavigationForMedia,
+} from '@store/slices/detailsNavigation';
 import type { RootState } from '@store/store';
 import { forwardRef, type UIEvent } from 'react';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import type { BackdropPositionContext } from '../backdrop-focus';
@@ -511,6 +516,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   { media, onBack, onWatch, preparation = null },
   forwardedRef
 ) {
+  const dispatch = useDispatch();
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const watchlistType: 'movie' | 'tv' = media._type === 'movie' ? 'movie' : 'tv';
   const watchlist = useGetWatchlistMembershipQuery({
@@ -534,15 +540,16 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const seasonFocusOrigin = useRef<Element | null>(null);
   const [resolvedBackdropFocus, setResolvedBackdropFocus] = useState(media.backdropFocus);
   const [backdropContext, setBackdropContext] = useState<BackdropPositionContext>();
-  const [focusedArea, setFocusedArea] = useState<'action' | 'season' | 'episodes'>(
-    media._type === 'movie' ? 'action' : 'season'
+  const selectCurrentDetailsNavigation = useMemo(
+    () =>
+      createSelector([(state: RootState) => state.detailsNavigation], detailsNavigation =>
+        selectDetailsNavigationForMedia({ detailsNavigation }, media.mediaId, media._type)
+      ),
+    [media.mediaId, media._type]
   );
-  const [focusedSeasonIndex, setFocusedSeasonIndex] = useState(0);
-  const [activeSeasonNumber, setActiveSeasonNumber] = useState<number | null>(null);
-  const [selectedEpisode, setSelectedEpisode] = useState<{
-    seasonNumber: number;
-    episodeNumber: number;
-  } | null>(null);
+  const { focusedArea, focusedSeasonIndex, activeSeasonNumber, selectedEpisode } = useSelector(
+    selectCurrentDetailsNavigation
+  );
   const userId = useSelector((state: RootState) => state.auth.currentUser?.id);
   const ratingItem = { mediaType: watchlistType, mediaId: media.mediaId, userId: userId ?? '' };
   const savedRating = useGetMediaRatingQuery(userId ? ratingItem : skipToken, {
@@ -572,6 +579,12 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
         })
       : undefined;
   const seasons = useMemo(() => showDetails?.seasons ?? [], [showDetails?.seasons]);
+
+  useEffect(() => {
+    dispatch(
+      detailsNavigationActions.activateDetails({ mediaId: media.mediaId, mediaType: media._type })
+    );
+  }, [dispatch, media.mediaId, media._type]);
 
   useEffect(() => {
     resetRatingUpdate();
@@ -622,7 +635,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
 
   useEffect(() => {
     pageRef.current?.focus({ preventScroll: true });
-  }, [media]);
+  }, [media.mediaId, media._type]);
 
   useEffect(() => {
     document.body.dataset['miauflixDetails'] = 'true';
@@ -632,16 +645,12 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, []);
 
   useEffect(() => {
-    setFocusedArea(media._type === 'movie' ? 'action' : 'season');
-    setFocusedSeasonIndex(0);
-    setActiveSeasonNumber(null);
-    setSelectedEpisode(null);
     setLoadedSeasons({});
     setSeasonErrors({});
     setLoadingSeasons({});
     inflight.current.clear();
     jumpToSeason.current = null;
-  }, [media]);
+  }, [media.mediaId, media._type]);
 
   useEffect(() => {
     let cancelled = false;
@@ -661,15 +670,17 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     return () => {
       cancelled = true;
     };
-  }, [ensureBackdropFocus, media]);
+  }, [ensureBackdropFocus, media.backdrop, media.backdropFocus, media.mediaId, media._type]);
 
   useEffect(() => {
     if (media._type === 'tvshow' && seasons[0]) {
-      setActiveSeasonNumber(previous => previous ?? seasons[0].seasonNumber);
+      if (activeSeasonNumber === null) {
+        dispatch(detailsNavigationActions.setActiveSeasonNumber(seasons[0].seasonNumber));
+      }
       if (!selectedEpisode) jumpToSeason.current = seasons[0].seasonNumber;
       void loadSeasonData(seasons[0].seasonNumber);
     }
-  }, [loadSeasonData, media._type, seasons, selectedEpisode]);
+  }, [activeSeasonNumber, dispatch, loadSeasonData, media._type, seasons, selectedEpisode]);
 
   useEffect(() => {
     const season = seasons[focusedSeasonIndex];
@@ -781,7 +792,12 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     jumpToSeason.current = null;
     const target = targetEpisodeForSeason(section);
     if (!target) return;
-    setSelectedEpisode({ seasonNumber: requested, episodeNumber: target.episodeNumber });
+    dispatch(
+      detailsNavigationActions.selectEpisode({
+        seasonNumber: requested,
+        episodeNumber: target.episodeNumber,
+      })
+    );
     const origin = seasonFocusOrigin.current;
     seasonFocusOrigin.current = null;
     requestAnimationFrame(() => {
@@ -795,6 +811,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     focusedArea,
     focusedSeasonIndex,
     loadedSeasons,
+    dispatch,
     media.mediaId,
     progress.isLoading,
     targetEpisodeForSeason,
@@ -804,21 +821,19 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     (index: number) => {
       const item = seasons[index];
       if (!item) return;
-      setFocusedSeasonIndex(index);
-      setActiveSeasonNumber(item.seasonNumber);
-      setFocusedArea('episodes');
+      dispatch(detailsNavigationActions.setFocusedSeasonIndex(index));
+      dispatch(detailsNavigationActions.setActiveSeasonNumber(item.seasonNumber));
+      dispatch(detailsNavigationActions.setFocusedArea('episodes'));
       jumpToSeason.current = item.seasonNumber;
       seasonFocusOrigin.current = document.activeElement;
       void loadSeasonData(item.seasonNumber);
     },
-    [loadSeasonData, seasons]
+    [dispatch, loadSeasonData, seasons]
   );
 
   const selectEpisode = useCallback(
     (seasonNumber: number, episodeNumber: number, play = false) => {
-      setActiveSeasonNumber(seasonNumber);
-      setSelectedEpisode({ seasonNumber, episodeNumber });
-      setFocusedArea('episodes');
+      dispatch(detailsNavigationActions.selectEpisode({ seasonNumber, episodeNumber }));
       requestAnimationFrame(() =>
         document
           .getElementById(`episode-${media.mediaId}-${episodeKey(seasonNumber, episodeNumber)}`)
@@ -827,7 +842,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       if (play)
         onWatch({ kind: 'episode', showMediaId: media.mediaId, seasonNumber, episodeNumber });
     },
-    [media.mediaId, onWatch]
+    [dispatch, media.mediaId, onWatch]
   );
 
   const handleEpisodeScroll = useCallback(
@@ -837,7 +852,9 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       sectionRefs.current.forEach((node, seasonNumber) => {
         if (node.getBoundingClientRect().top <= top) currentSeason = seasonNumber;
       });
-      if (currentSeason !== null) setActiveSeasonNumber(currentSeason);
+      if (currentSeason !== null) {
+        dispatch(detailsNavigationActions.setActiveSeasonNumber(currentSeason));
+      }
       const element = event.currentTarget;
       if (
         element.scrollTop + element.clientHeight >=
@@ -848,7 +865,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
         if (next > 0 && seasons[next]) void loadSeasonData(seasons[next].seasonNumber);
       }
     },
-    [loadSeasonData, loadedSections, seasons]
+    [dispatch, loadSeasonData, loadedSections, seasons]
   );
 
   const handleAction = useCallback((action: HomeAction): NavigationOutcome => {
@@ -1022,7 +1039,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                   type="button"
                   $selected={focusedArea === 'action'}
                   aria-describedby={`warmup-status-${media.mediaId}`}
-                  onMouseEnter={() => setFocusedArea('action')}
+                  onMouseEnter={() => dispatch(detailsNavigationActions.setFocusedArea('action'))}
                   onClick={() => onWatch({ kind: 'movie', mediaId: media.mediaId })}
                 >
                   {movieProgress && movieProgress.state !== 'completed'
@@ -1042,8 +1059,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                     <SeasonButton
                       data-details-primary
                       onFocus={() => {
-                        setFocusedArea('season');
-                        setFocusedSeasonIndex(index);
+                        dispatch(detailsNavigationActions.setFocusedArea('season'));
+                        dispatch(detailsNavigationActions.setFocusedSeasonIndex(index));
                       }}
                       id={`season-${media.mediaId}-${item.seasonNumber}`}
                       key={item.id}
@@ -1051,8 +1068,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                       $selected={activeSeasonNumber === item.seasonNumber}
                       $focused={focusedArea === 'season' && focusedSeasonIndex === index}
                       onMouseEnter={() => {
-                        setFocusedArea('season');
-                        setFocusedSeasonIndex(index);
+                        dispatch(detailsNavigationActions.setFocusedArea('season'));
+                        dispatch(detailsNavigationActions.setFocusedSeasonIndex(index));
                       }}
                       onClick={() => selectSeason(index)}
                     >

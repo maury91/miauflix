@@ -2,29 +2,18 @@ import type { Page, Response } from '@playwright/test';
 
 import { expect } from '../fixtures';
 
-function setAnimationCompleteFlag(isComplete: boolean): void {
-  window._miauflixAnimationComplete = isComplete;
-}
-
-function isAnimationComplete(): boolean {
-  return window._miauflixAnimationComplete === true;
-}
-
 export async function navigateToLogin(page: Page): Promise<void> {
-  // Install before navigation so the real intro timeline's timers are
-  // controlled. Run enough time to cover the audio fallback and 2.5s GSAP
-  // animation, then leave the clock running for the rest of the test.
-  await page.clock.install();
-  await page.addInitScript(setAnimationCompleteFlag, false);
-
   await page.goto('/');
-  await page.clock.runFor(4000);
-
-  await page.waitForFunction(isAnimationComplete, undefined, {
-    timeout: 15000,
-  });
-
   await page.waitForSelector('#email', { state: 'visible', timeout: 5000 });
+}
+
+/** Wait until Home has finished its intro and is available to browser interaction. */
+export async function waitForHomeReady(page: Page): Promise<void> {
+  const home = page.getByRole('main');
+  await expect(home).toBeVisible({ timeout: 30000 });
+  await expect(home.locator('..')).not.toHaveAttribute('aria-hidden', 'true', {
+    timeout: 30000,
+  });
 }
 
 export function waitForTraktAssociation(page: Page): Promise<Response> {
