@@ -23,6 +23,7 @@ describe('StreamService immediate source readiness', () => {
     const repository = { findById: jest.fn() };
     const database = {
       getMovieSourceRepository: jest.fn().mockReturnValue(repository),
+      getEpisodeSourceRepository: jest.fn().mockReturnValue({ findForPlayback: jest.fn() }),
     } as unknown as Database;
     const sourceService = {
       getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([pending]),

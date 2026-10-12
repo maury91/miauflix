@@ -211,9 +211,14 @@ export function createMockEpisode(overrides: Partial<Episode> = {}): Episode {
 }
 
 export function createMockMovieSource(overrides: Partial<MovieSource> = {}): MovieSource {
-  const defaultMovie = overrides.movie ?? createMockMovie({ id: overrides.movieId });
+  const defaultMovie =
+    overrides.movie ??
+    (overrides.movieId === null ? null : createMockMovie({ id: overrides.movieId }));
   const sourceMetadata = generateSourceMetadata();
-  const movieId = overrides.movieId ?? defaultMovie?.id ?? faker.number.int({ min: 1, max: 1000 });
+  const movieId =
+    overrides.movieId !== undefined
+      ? overrides.movieId
+      : (defaultMovie?.id ?? faker.number.int({ min: 1, max: 1000 }));
   const hash = overrides.hash ?? sourceMetadata.hash;
   const title = defaultMovie?.title ?? faker.lorem.words(3);
 

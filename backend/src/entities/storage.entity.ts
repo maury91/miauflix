@@ -88,6 +88,10 @@ export class Storage {
   @Column({ type: 'boolean', default: false })
   localOnly: boolean;
 
+  /** File paths requested from a shared torrent pack; completion is checked per file. */
+  @Column({ type: 'simple-json', default: '[]' })
+  selectedFiles: string[];
+
   @Column({
     type: 'text',
     nullable: true,

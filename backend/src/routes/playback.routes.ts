@@ -23,13 +23,21 @@ export const createPlaybackRoutes = ({
     zValidator('json', createPlaybackSessionRequestSchema),
     async c => {
       const session = c.get('sessionInfo');
+      const request = c.req.valid('json');
       let result;
       try {
-        result = await playbackSessionService.create(
-          session.user.id,
-          c.req.valid('json').playable,
-          c.req.valid('json').preferences
-        );
+        result = request.deferDownload
+          ? await playbackSessionService.create(
+              session.user.id,
+              request.playable,
+              request.preferences,
+              { deferDownload: true }
+            )
+          : await playbackSessionService.create(
+              session.user.id,
+              request.playable,
+              request.preferences
+            );
       } catch (error) {
         if (error instanceof AudioPlaybackError)
           return c.json({ error: error.message }, error.status);

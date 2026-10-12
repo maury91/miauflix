@@ -37,6 +37,7 @@ export interface PlaybackSession {
   streamingKey: string;
   streamUrl: string;
   delivery?: PlaybackDelivery;
+  episodeMatchKind?: 'combined' | 'single';
   source: PlaybackSessionSource;
   preparation: {
     state: 'cold' | 'warm' | 'warming';
@@ -65,11 +66,12 @@ export class PlaybackSessionService {
   async create(
     userId: string,
     playable: PlayableRef,
-    preferences: AudioPlaybackPreferences & PlaybackPreferences
+    preferences: AudioPlaybackPreferences & PlaybackPreferences,
+    options: { deferDownload?: boolean } = {}
   ): Promise<PlaybackSession | null> {
     const prepare = (allowHevc: boolean) =>
       this.preparation.prepare(playable, {
-        through: 'warm',
+        through: options.deferDownload ? 'sources' : 'warm',
         preferences: { ...preferences, allowHevc },
         workClass: 'interactive',
         ownerKey: this.playableKey(playable),
@@ -80,15 +82,19 @@ export class PlaybackSessionService {
         (this.audioPlaybackService?.canConvertHevc?.() ?? false)
     );
     if (!prepared.source) return null;
-    if (prepared.state !== 'cold') {
-      await this.warmup?.promote(prepared.source, this.playableKey(playable));
+    if (prepared.state === 'ready' || prepared.state === 'warming') {
+      const warmupArgs = [prepared.source, this.playableKey(playable)] as const;
+      if (prepared.videoFilePath) await this.warmup?.promote(...warmupArgs, prepared.videoFilePath);
+      else await this.warmup?.promote(...warmupArgs);
     }
     let delivery: PlaybackDelivery | undefined;
-    for (let attempt = 0; attempt < 2; attempt++) {
+    for (let attempt = 0; !options.deferDownload && attempt < 2; attempt++) {
       const source = prepared.source;
       if (!source) return null;
       try {
-        delivery = await this.audioPlaybackService?.inspect(source, preferences);
+        delivery = prepared.videoFilePath
+          ? await this.audioPlaybackService?.inspect(source, preferences, prepared.videoFilePath)
+          : await this.audioPlaybackService?.inspect(source, preferences);
         break;
       } catch (error) {
         if (error instanceof AudioConversionRequiredError) {
@@ -100,8 +106,12 @@ export class PlaybackSessionService {
             const fallback = await prepare(false);
             if (fallback.source) {
               prepared = fallback;
-              if (prepared.state !== 'cold')
-                await this.warmup?.promote(fallback.source, this.playableKey(playable));
+              if (prepared.state !== 'cold') {
+                const warmupArgs = [fallback.source, this.playableKey(playable)] as const;
+                if (prepared.videoFilePath)
+                  await this.warmup?.promote(...warmupArgs, prepared.videoFilePath);
+                else await this.warmup?.promote(...warmupArgs);
+              }
               continue;
             }
           }
@@ -134,6 +144,7 @@ export class PlaybackSessionService {
       streamingKey,
       streamUrl: `/api/stream/${streamingKey}${delivery?.mode === 'audio-transcode' ? '/audio' : ''}`,
       delivery,
+      episodeMatchKind: prepared.episodeMatchKind,
       source: {
         id: prepared.source.id,
         quality: prepared.source.quality,

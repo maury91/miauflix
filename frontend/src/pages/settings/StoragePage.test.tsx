@@ -191,7 +191,9 @@ describe('Storage settings page', () => {
     expect(storageApi.removeStorage).toHaveBeenCalledWith(7);
     expect(storageApi.refetch).not.toHaveBeenCalled();
     expect(screen.getByText(/Freed .* used by Example Film/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Free space used by Example Film' })).toHaveFocus();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Free space used by Example Film' })).toHaveFocus()
+    );
   });
 
   it('prevents removing a download while it is being watched', () => {

@@ -23,6 +23,7 @@ import { DownloadService } from '@services/download/download.service';
 import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
+import { NotificationService } from '@services/notifications/notification.service';
 import { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
@@ -87,6 +88,7 @@ try {
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db);
   const progressService = new ProgressService(db, listClient);
+  const notificationService = new NotificationService(db);
   const mediaService = new MediaService(db, catalogClient);
   const backgroundJobs = new BackgroundJobService(configurationService);
   const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
@@ -113,7 +115,8 @@ try {
     magnetService,
     requestService,
     configurationService,
-    backgroundJobs
+    backgroundJobs,
+    notificationService
   );
   const streamService = new StreamService(db, sourceService, downloadService, mediaService);
   const torrentWarmupController = new TorrentWarmupController(downloadService);
@@ -211,6 +214,7 @@ try {
       mediaService,
       sourceService,
       downloadService,
+      progressService,
       worker: backgroundWorker,
     });
 
@@ -277,6 +281,7 @@ try {
     playbackSessionService,
     audioPlaybackService,
     progressService,
+    notificationService,
     subtitlesService,
     storageService,
   });

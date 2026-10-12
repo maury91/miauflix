@@ -28,6 +28,9 @@ const setupTest = (directory: string) => {
   };
   const verify = jest.fn().mockResolvedValue(grant);
   const source = { id: 9, movieId: 12, file: Buffer.from('mock torrent') };
+  const streamService = {
+    resolvePlaybackSource: jest.fn().mockResolvedValue({ source, episodeSource: null }),
+  };
   const request = jest.fn();
   const config = {
     get: jest.fn<string | undefined, []>().mockReturnValue('fixture-key'),
@@ -41,7 +44,7 @@ const setupTest = (directory: string) => {
     config as never,
     { request } as never,
     { verify } as never,
-    { getSourceById: async () => source } as never,
+    streamService as never,
     { getMovieById: async () => ({ mediaId: 123, imdbId: 'tt123' }) } as never,
     torrentSubtitles as never
   );
@@ -49,7 +52,7 @@ const setupTest = (directory: string) => {
     request.mockResolvedValueOnce({ ok: true, body: { data: results } });
     return service.search('streaming-key', 'user', 'en', false, true);
   };
-  return { service, request, verify, source, search, config, torrentSubtitles };
+  return { service, request, verify, source, search, config, torrentSubtitles, streamService };
 };
 
 describe('subtitle ranking and durable downloads', () => {

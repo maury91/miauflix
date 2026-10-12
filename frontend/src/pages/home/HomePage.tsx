@@ -1,8 +1,16 @@
 import { type AppRoute, navigate, navigateBack, useRoute } from '@app/router';
 import { getTraktAssociation } from '@features/integrations/api/trakt.api';
 import { useGetListsQuery, useGetPopularListsInfiniteQuery } from '@features/media/api/lists.api';
-import { useGetMovieQuery, useGetShowQuery } from '@features/media/api/media.api';
+import {
+  useGetMovieQuery,
+  useGetSeasonQuery,
+  useGetShowQuery,
+} from '@features/media/api/media.api';
 import { mediaApi } from '@features/media/api/media.api';
+import {
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
+} from '@features/notifications/api/notifications.api';
 import {
   useRemoveIntentMutation,
   useUpdateIntentMutation,
@@ -38,6 +46,7 @@ import { CategoryRow, type CategoryRowHandle } from './components/CategoryRow';
 import { HomeSidebar } from './components/HomeSidebar';
 import { MediaDetails, type MediaDetailsHandle } from './components/MediaDetails';
 import { MediaHero } from './components/MediaHero';
+import { NotificationsMenu } from './components/NotificationsMenu';
 import { PlayerView } from './components/PlayerView';
 import { TraktModal } from './components/TraktModal';
 import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
@@ -251,8 +260,64 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
       ? routedMovie
       : routedShow;
+  const episodeRoute = activeRoute.type === 'episodePlayer' ? activeRoute : null;
+  const currentSeasonQuery = useGetSeasonQuery(
+    episodeRoute
+      ? { showId: episodeRoute.showMediaId, season: episodeRoute.seasonNumber }
+      : skipToken
+  );
+  const nextEpisodeInSeason = currentSeasonQuery.data?.episodes
+    .filter(episode => episode.episodeNumber > (episodeRoute?.episodeNumber ?? Infinity))
+    .sort((left, right) => left.episodeNumber - right.episodeNumber)[0];
+  const nextSeasonNumber = (routedShow.data?.seasons ?? [])
+    .filter(
+      season =>
+        season.seasonNumber > (episodeRoute?.seasonNumber ?? Infinity) && season.seasonNumber > 0
+    )
+    .sort((left, right) => left.seasonNumber - right.seasonNumber)[0]?.seasonNumber;
+  const nextSeasonQuery = useGetSeasonQuery(
+    episodeRoute &&
+      currentSeasonQuery.isSuccess &&
+      !nextEpisodeInSeason &&
+      nextSeasonNumber !== undefined
+      ? { showId: episodeRoute.showMediaId, season: nextSeasonNumber }
+      : skipToken
+  );
+  const nextEpisodeAcrossSeason = nextSeasonQuery.data?.episodes
+    .filter(episode => episode.episodeNumber > 0)
+    .sort((left, right) => left.episodeNumber - right.episodeNumber)[0];
+  const nextEpisode = episodeRoute
+    ? nextEpisodeInSeason
+      ? {
+          playable: {
+            kind: 'episode' as const,
+            showMediaId: episodeRoute.showMediaId,
+            seasonNumber: episodeRoute.seasonNumber,
+            episodeNumber: nextEpisodeInSeason.episodeNumber,
+          },
+          title: nextEpisodeInSeason.title,
+        }
+      : nextEpisodeAcrossSeason && nextSeasonNumber !== undefined
+        ? {
+            playable: {
+              kind: 'episode' as const,
+              showMediaId: episodeRoute.showMediaId,
+              seasonNumber: nextSeasonNumber,
+              episodeNumber: nextEpisodeAcrossSeason.episodeNumber,
+            },
+            title: nextEpisodeAcrossSeason.title,
+          }
+        : null
+    : null;
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
   const currentUser = useSelector((state: RootState) => selectCurrentUser(state));
+  const notificationsButtonRef = useRef<HTMLButtonElement>(null);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationsQuery = useGetNotificationsQuery(undefined, {
+    skip: !sessionId,
+    pollingInterval: 60_000,
+  });
+  const [markNotificationRead] = useMarkNotificationReadMutation();
   const progressFromStore = useSelector(
     (state: RootState) => progressApi.endpoints.getProgress.select(undefined)(state).data?.progress
   );
@@ -975,7 +1040,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   );
 
   const navigationRef = useKeyboardNavigation({
-    enabled: interactive && !showTraktPrompt,
+    enabled: interactive && !showTraktPrompt && !notificationsOpen,
     onLeft: () => handleHomeAction('left').type !== 'ignored',
     onRight: () => handleHomeAction('right').type !== 'ignored',
     onUp: () => handleHomeAction('up').type !== 'ignored',
@@ -983,6 +1048,15 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     onConfirm: () => handleHomeAction('confirm').type !== 'ignored',
     onBack: () => handleHomeAction('back').type !== 'ignored',
   });
+
+  const closeNotifications = useCallback(() => {
+    setNotificationsOpen(false);
+    requestAnimationFrame(() => notificationsButtonRef.current?.focus({ preventScroll: true }));
+  }, []);
+
+  useEffect(() => {
+    if (view !== 'browse') setNotificationsOpen(false);
+  }, [view]);
 
   if (view === 'browse' && isLoading) {
     return (
@@ -1065,10 +1139,18 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
               ))}
             </Content>
             <HomeSidebar
-              active={interactive && !showTraktPrompt && activeRegion === 'sidebar'}
+              active={
+                interactive && !showTraktPrompt && !notificationsOpen && activeRegion === 'sidebar'
+              }
               onAction={handleSidebarAction}
               onHover={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
               onSettings={openSettings}
+              onNotifications={() => {
+                setNotificationsOpen(true);
+                if (sessionId) void notificationsQuery.refetch();
+              }}
+              notificationsRef={notificationsButtonRef}
+              unreadCount={notificationsQuery.data?.unreadCount ?? 0}
             />
           </>
         ) : view === 'details' && selectedMedia ? (
@@ -1100,9 +1182,24 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
             playable={playable}
             title={selectedMedia ? getMediaTitle(selectedMedia) : 'Selected title'}
             onBack={returnToDetails}
+            nextEpisode={nextEpisode}
+            onPlayNext={() => {
+              if (nextEpisode) openPlayer(nextEpisode.playable);
+            }}
           />
         ) : null}
       </div>
+      {view === 'browse' && notificationsOpen && (
+        <NotificationsMenu
+          notifications={notificationsQuery.data?.notifications ?? []}
+          loading={notificationsQuery.isLoading}
+          failed={notificationsQuery.isError}
+          sidebarActive={activeRegion === 'sidebar'}
+          onClose={closeNotifications}
+          onRetry={() => void notificationsQuery.refetch()}
+          onMarkRead={id => void markNotificationRead(id)}
+        />
+      )}
       {interactive && showTraktPrompt && sessionId && (
         <TraktModal
           sessionId={sessionId}

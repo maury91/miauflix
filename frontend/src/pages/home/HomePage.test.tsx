@@ -8,6 +8,10 @@ const {
   useGetPopularListsInfiniteQuery,
   useGetMovieQuery,
   useGetShowQuery,
+  useGetSeasonQuery,
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
+  markNotificationRead,
   rowHandles,
   rowProps,
   mediaIndexes,
@@ -32,6 +36,10 @@ const {
   useGetPopularListsInfiniteQuery: vi.fn(),
   useGetMovieQuery: vi.fn(),
   useGetShowQuery: vi.fn(),
+  useGetSeasonQuery: vi.fn(),
+  useGetNotificationsQuery: vi.fn(),
+  useMarkNotificationReadMutation: vi.fn(),
+  markNotificationRead: vi.fn(),
   rowHandles: new Map<number, Record<string, unknown>>(),
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
   mediaIndexes: new Map<number, number>(),
@@ -82,6 +90,7 @@ vi.mock('@features/media/api/lists.api', () => ({
 vi.mock('@features/media/api/media.api', () => ({
   useGetMovieQuery,
   useGetShowQuery,
+  useGetSeasonQuery,
   mediaApi: {
     util: { prefetch: vi.fn() },
     endpoints: {
@@ -93,6 +102,10 @@ vi.mock('@features/media/api/media.api', () => ({
 vi.mock('@features/preload/api/preload.api', () => ({
   useUpdateIntentMutation,
   useRemoveIntentMutation: () => [removeIntent],
+}));
+vi.mock('@features/notifications/api/notifications.api', () => ({
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
 }));
 vi.mock('@shared/components', () => ({ Spinner: () => null }));
 vi.mock('@store/slices/auth', () => ({
@@ -349,7 +362,56 @@ describe('HomePage focus transitions', () => {
       isError: false,
       refetch: vi.fn(),
     });
+    useGetSeasonQuery.mockReset().mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      isSuccess: false,
+    });
+    useGetNotificationsQuery.mockReset().mockReturnValue({
+      data: { notifications: [], unreadCount: 0 },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+    useMarkNotificationReadMutation.mockReset().mockReturnValue([markNotificationRead]);
+    markNotificationRead.mockReset();
     detailsHandleAction.mockReset().mockReturnValue({ type: 'escape', direction: 'left' });
+  });
+
+  it('opens the sidebar notification overlay, marks items read, and restores focus', async () => {
+    useGetNotificationsQuery.mockReturnValue({
+      data: {
+        unreadCount: 1,
+        notifications: [
+          {
+            id: 5,
+            type: 'tv_episode_available',
+            mediaType: 'tv',
+            mediaId: 9001,
+            title: 'Show',
+            message: 'S01E08 is ready to watch.',
+            seasonNumber: 1,
+            episodeNumber: 8,
+            createdAt: '2026-10-12T00:00:00.000Z',
+            readAt: null,
+          },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+
+    render(<HomePage />);
+    const notificationButton = screen.getByRole('button', { name: 'Notifications, 1 unread' });
+    fireEvent.click(notificationButton);
+
+    expect(screen.getByRole('dialog', { name: 'Notifications' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Show.*S01E08 is ready to watch/ }));
+    expect(markNotificationRead).toHaveBeenCalledWith(5);
+    fireEvent.click(screen.getByRole('button', { name: 'Close notifications' }));
+    await waitFor(() => expect(notificationButton).toHaveFocus());
   });
 
   it('waits for the current row and hero artwork before releasing the intro', async () => {

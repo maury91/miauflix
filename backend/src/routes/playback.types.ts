@@ -36,12 +36,14 @@ export const createPlaybackSessionRequestSchema = z
   .object({
     playable: playableRefSchema,
     preferences: playbackPreferencesSchema,
+    deferDownload: z.boolean().optional(),
   })
   .strict();
 
 export interface CreatePlaybackSessionRequest {
   playable: PlayableRef;
   preferences: z.infer<typeof playbackPreferencesSchema>;
+  deferDownload?: boolean;
 }
 
 export interface CreatePlaybackSessionResponse {
@@ -49,6 +51,7 @@ export interface CreatePlaybackSessionResponse {
   streamingKey: string;
   streamUrl: string;
   delivery?: PlaybackDelivery;
+  episodeMatchKind?: 'combined' | 'single';
   source: {
     id: number;
     quality: Quality | '3D' | null;
