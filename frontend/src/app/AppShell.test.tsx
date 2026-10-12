@@ -1,95 +1,327 @@
-import { useEffect } from 'react';
+import { configureStore } from '@reduxjs/toolkit';
+import { act, render as rtlRender, screen } from '@testing-library/react';
+import type { ReactNode } from 'react';
+import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { AppShell } from './AppShell';
-
-import { render, screen, waitFor } from '@/__test-utils__';
-
-vi.mock('@app/hooks/useAppState', () => ({
-  useAppState: () => 'login',
+const { appPage, introControls, homeControls, logoControls, idleControls } = vi.hoisted(() => ({
+  appPage: { value: 'login' },
+  introControls: {
+    ready: null as null | (() => void),
+    start: null as null | (() => void),
+    started: false,
+    delayStart: false,
+    complete: null as null | (() => void),
+    logoVisible: false,
+  },
+  homeControls: { hydrated: null as null | (() => void) },
+  logoControls: { centered: null as null | (() => void) },
+  idleControls: { callback: null as null | (() => void) },
 }));
 
-// Mock the IntroAnimation component
-vi.mock('@app/shell/IntroAnimation', () => ({
-  IntroAnimation: ({ onComplete }: { onComplete: () => void }) => {
-    // Call onComplete immediately for testing
-    useEffect(() => {
-      onComplete();
-    }, [onComplete]);
-    return <div data-testid="intro-animation">Intro Animation</div>;
+vi.mock('@app/hooks/useAppState', () => ({ useAppState: () => appPage.value }));
+
+vi.mock('@app/shell/IntroAnimation', async () => {
+  const React = await import('react');
+  const IntroAnimation = React.forwardRef<
+    { start: () => void },
+    { onReady?: () => void; onStart?: () => void; onComplete: () => void; logoVisible?: boolean }
+  >(({ onReady, onStart, onComplete, logoVisible }, ref) => {
+    introControls.ready = onReady ?? null;
+    introControls.complete = onComplete;
+    introControls.logoVisible = logoVisible ?? false;
+    React.useImperativeHandle(
+      ref,
+      () => ({
+        start: () => {
+          introControls.started = true;
+          if (introControls.delayStart) introControls.start = onStart ?? null;
+          else onStart?.();
+        },
+      }),
+      [onStart]
+    );
+    React.useEffect(() => {
+      introControls.started = false;
+    }, []);
+    React.useEffect(() => {
+      onReady?.();
+    }, [onComplete, onReady]);
+    return (
+      <div data-testid="intro-animation" data-logo-visible={String(logoVisible ?? false)}>
+        Intro Animation
+      </div>
+    );
+  });
+  return { IntroAnimation };
+});
+
+vi.mock('@shared/ui/logo/Logo', () => ({
+  Logo: ({
+    page,
+    disableMotion,
+    visible,
+    aboveIntro,
+    onPositionTransitionEnd,
+  }: {
+    page: string;
+    disableMotion?: boolean;
+    visible?: boolean;
+    aboveIntro?: boolean;
+    onPositionTransitionEnd?: () => void;
+  }) => {
+    logoControls.centered = onPositionTransitionEnd ?? null;
+    return (
+      <div
+        data-testid="logo"
+        data-page={page}
+        data-disable-motion={String(disableMotion ?? false)}
+        data-visible={String(visible ?? true)}
+        data-above-intro={String(aboveIntro ?? false)}
+      />
+    );
   },
 }));
 
-// Mock the Logo component
-vi.mock('@shared/ui/logo/Logo', () => ({
-  Logo: () => <div data-testid="logo">Logo</div>,
+vi.mock('@shared/components', () => ({
+  ErrorBoundary: ({ children }: { children: ReactNode }) => children,
 }));
 
-// Mock the LoginPage component
-vi.mock('@pages/login/LoginPage', () => ({
-  __esModule: true,
-  default: () => <div data-testid="login-page">Login Page</div>,
+vi.mock('framer-motion', () => ({
+  AnimatePresence: ({ children }: { children: ReactNode }) => children,
+  MotionConfig: ({ children }: { children: ReactNode }) => children,
+  motion: new Proxy({}, { get: () => 'div' }),
 }));
 
-describe('AppShell', () => {
+vi.mock('@pages/home/HomePage', () => ({
+  default: ({ interactive, onHydrated }: { interactive: boolean; onHydrated?: () => void }) => {
+    homeControls.hydrated = onHydrated ?? null;
+    return <main data-testid="home-page" data-interactive={String(interactive)} />;
+  },
+}));
+vi.mock('@pages/login/LoginPage', () => ({ default: () => <main data-testid="login-page" /> }));
+vi.mock('@pages/config/ConfigWizardPage', () => ({
+  default: () => <main data-testid="config-page" />,
+}));
+vi.mock('@pages/config/ConfigurationWizardPage', () => ({
+  default: () => <main data-testid="required-config-page" />,
+}));
+
+import { appStateSlice } from '@store/slices/appState';
+import { authSlice, setCurrentUser, setSession } from '@store/slices/auth';
+
+import { AppShell } from './AppShell';
+
+function renderAppShell(authenticated = false) {
+  const store = configureStore({
+    reducer: { appState: appStateSlice.reducer, auth: authSlice.reducer },
+  });
+  if (authenticated) {
+    store.dispatch(setSession('test-session'));
+    store.dispatch(
+      setCurrentUser({
+        id: 'test-user',
+        email: 'test@example.com',
+        displayName: 'Test User',
+        role: 'user',
+      })
+    );
+  }
+  return rtlRender(<AppShell />, {
+    wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
+  });
+}
+
+describe('AppShell intro sequence', () => {
   beforeEach(() => {
-    // Clear any existing window events
+    appPage.value = 'login';
+    introControls.ready = null;
+    introControls.start = null;
+    introControls.started = false;
+    introControls.delayStart = false;
+    introControls.complete = null;
+    introControls.logoVisible = false;
+    homeControls.hydrated = null;
+    logoControls.centered = null;
+    idleControls.callback = null;
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    idleWindow.requestIdleCallback = callback => {
+      idleControls.callback = callback;
+      return 1;
+    };
+    idleWindow.cancelIdleCallback = () => {};
     window.dispatchEvent = vi.fn();
     window._miauflixAnimationComplete = undefined;
   });
 
   afterEach(() => {
     vi.clearAllTimers();
+    vi.useRealTimers();
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (callback: () => void) => number;
+      cancelIdleCallback?: (handle: number) => void;
+    };
+    delete idleWindow.requestIdleCallback;
+    delete idleWindow.cancelIdleCallback;
   });
 
-  it('should render logo and login page', () => {
-    render(<AppShell />);
+  it('keeps login visible without playing the intro before authentication', () => {
+    renderAppShell();
 
     expect(screen.getByTestId('logo')).toBeInTheDocument();
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
     expect(screen.getByTestId('login-page')).toBeInTheDocument();
+    expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
+    expect(window._miauflixAnimationComplete).toBeUndefined();
   });
 
-  it('should show intro animation initially', () => {
-    render(<AppShell />);
+  it('keeps required configuration visible without playing the intro', () => {
+    appPage.value = 'config_wizard';
+    renderAppShell();
 
-    // The intro animation should be present (mocked component)
-    // Since our mock calls onComplete immediately, the animation might not be visible
-    // Let's check that the component was rendered at least once
-    expect(screen.getByTestId('logo')).toBeInTheDocument();
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
+    expect(screen.getByTestId('required-config-page')).toBeInTheDocument();
+    expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
+    expect(window._miauflixAnimationComplete).toBeUndefined();
   });
 
-  it('should hide intro animation after completion', async () => {
-    render(<AppShell />);
-
-    // Wait for animation to complete (mocked to complete immediately)
-    await waitFor(() => {
-      expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
-    });
-  });
-
-  it('should dispatch animation complete event', async () => {
+  it('keeps Home behind a static black screen until it reports ready', () => {
     const dispatchEventSpy = vi.spyOn(window, 'dispatchEvent');
+    appPage.value = 'config_wizard';
+    const view = renderAppShell();
 
-    render(<AppShell />);
+    expect(screen.getByTestId('required-config-page')).toBeInTheDocument();
+    expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
 
-    // Wait for animation to complete and event to be dispatched
-    await waitFor(() => {
-      expect(dispatchEventSpy).toHaveBeenCalledWith(
-        expect.objectContaining({
-          type: 'miauflix:intro:animation:complete',
-        })
-      );
-    });
+    appPage.value = 'home';
+    act(() => view.rerender(<AppShell />));
 
-    dispatchEventSpy.mockRestore();
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-above-intro', 'true');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'false');
+    expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
+    expect(screen.getByTestId('home-page').parentElement).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
+    expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
+    expect(screen.getByTestId('intro-animation')).toHaveAttribute('data-logo-visible', 'false');
+    expect(introControls.started).toBe(false);
+
+    act(() => homeControls.hydrated?.());
+    expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
+    expect(introControls.started).toBe(false);
+    act(() => logoControls.centered?.());
+    expect(introControls.started).toBe(false);
+    act(() => idleControls.callback?.());
+    expect(introControls.started).toBe(true);
+    expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
+    expect(screen.getByTestId('home-page').parentElement).toHaveAttribute('aria-hidden', 'true');
+    expect(screen.getByTestId('home-page').parentElement).toHaveAttribute('inert');
+    expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
+    act(() => introControls.complete?.());
+
+    expect(window._miauflixAnimationComplete).toBe(true);
+    expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'true');
+    expect(screen.getByTestId('home-page').parentElement).toHaveAttribute('aria-hidden', 'false');
+    expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
+    expect(dispatchEventSpy).toHaveBeenCalledWith(
+      expect.objectContaining({ type: 'miauflix:intro:animation:complete' })
+    );
   });
 
-  it('should set animation complete flag', async () => {
-    render(<AppShell />);
+  it('plays the intro before Home when an authenticated session is already available', () => {
+    introControls.delayStart = true;
+    appPage.value = 'home';
+    renderAppShell(true);
 
-    // Wait for animation to complete and flag to be set
-    await waitFor(() => {
-      expect(window._miauflixAnimationComplete).toBe(true);
-    });
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
+    expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
+    expect(screen.getByTestId('home-page').parentElement).toHaveAttribute('aria-hidden', 'true');
+    expect(introControls.started).toBe(false);
+
+    act(() => homeControls.hydrated?.());
+    expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
+    act(() => idleControls.callback?.());
+    expect(introControls.started).toBe(true);
+    expect(screen.getByTestId('intro-animation')).toHaveAttribute('data-logo-visible', 'true');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
+    expect(introControls.start).not.toBeNull();
+    act(() => introControls.start?.());
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
+    expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
+    expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
+    act(() => introControls.complete?.());
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
+    expect(window._miauflixAnimationComplete).toBe(true);
+    expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'true');
+  });
+
+  it('starts at the centered logo during a cold authenticated load and reveals Home logo in place', () => {
+    appPage.value = 'loading';
+    const view = renderAppShell(true);
+
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
+
+    appPage.value = 'home';
+    act(() => view.rerender(<AppShell />));
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
+    expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
+    act(() => homeControls.hydrated?.());
+    act(() => idleControls.callback?.());
+
+    expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
+    expect(screen.getByTestId('home-page')).toHaveAttribute('data-interactive', 'false');
+    expect(screen.getByTestId('home-page').parentElement).toHaveStyle({ visibility: 'visible' });
+    act(() => introControls.complete?.());
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
+  });
+
+  it('keeps the logo centered while the initial session check is unresolved', () => {
+    appPage.value = 'loading';
+    const view = renderAppShell();
+
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+
+    appPage.value = 'login';
+    act(() => view.rerender(<AppShell />));
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'login');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
+  });
+
+  it('waits for unresolved initial checks and does not complete an interrupted intro', () => {
+    appPage.value = 'loading';
+    const view = renderAppShell();
+    expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
+
+    appPage.value = 'home';
+    act(() => view.rerender(<AppShell />));
+    expect(introControls.started).toBe(false);
+    act(() => homeControls.hydrated?.());
+    act(() => idleControls.callback?.());
+    expect(introControls.complete).not.toBeNull();
+
+    const interruptedCompletion = introControls.complete;
+    appPage.value = 'login';
+    act(() => view.rerender(<AppShell />));
+    act(() => interruptedCompletion?.());
+    expect(window._miauflixAnimationComplete).toBeUndefined();
+
+    appPage.value = 'home';
+    act(() => view.rerender(<AppShell />));
+    expect(introControls.started).toBe(false);
+    act(() => homeControls.hydrated?.());
+    act(() => logoControls.centered?.());
+    act(() => idleControls.callback?.());
+    expect(screen.getByTestId('intro-animation')).toBeInTheDocument();
+    act(() => introControls.complete?.());
+    expect(window._miauflixAnimationComplete).toBe(true);
   });
 });

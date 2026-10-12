@@ -53,7 +53,6 @@ test('completes first-run admin and required configuration through the UI', asyn
   };
 
   await page.goto('/');
-  await waitForIntro(page);
 
   const initialStatus = await api.get('/api/auth/setup');
   expect(initialStatus.status()).toBe(200);
@@ -214,13 +213,16 @@ test('completes first-run admin and required configuration through the UI', asyn
   const redirectUriInput = page.getByRole('textbox', { name: 'Trakt Redirect URI' });
   await expect(redirectUriInput).toHaveValue(new URL(page.url()).origin);
   await redirectUriInput.fill('https://app.example/trakt/callback');
-  const listSaveResponsePromise = page.waitForResponse(response => {
+  const traktSaveResponsePromise = page.waitForResponse(response => {
     return response.url().endsWith('/api/config/TRAKT') && response.request().method() === 'PUT';
   });
-  await page.getByRole('button', { name: 'Save', exact: true }).click();
-  const listSaveResponse = await listSaveResponsePromise;
-  expect(listSaveResponse.ok()).toBeTruthy();
-  await expect(listSaveResponse.json()).resolves.toMatchObject({
+  const traktGroup = page
+    .getByRole('heading', { name: 'TRAKT', exact: true })
+    .locator('xpath=../../..');
+  await traktGroup.getByRole('button', { name: 'Save', exact: true }).click();
+  const traktSaveResponse = await traktSaveResponsePromise;
+  expect(traktSaveResponse.ok()).toBeTruthy();
+  await expect(traktSaveResponse.json()).resolves.toMatchObject({
     success: true,
     services: [expect.objectContaining({ service: 'LIST', success: true })],
   });
@@ -229,6 +231,7 @@ test('completes first-run admin and required configuration through the UI', asyn
     timeout: 5_000,
   });
   await expect(page.getByAltText('Miauflix logo')).toHaveCSS('height', '56px');
+  await page.mouse.move(0, 0);
   await expect(page).toHaveScreenshot('configuration-optional-settings.png', screenshotOptions);
 
   const configAfterSaveResponse = await api.get('/api/config', { headers: sessionHeaders });

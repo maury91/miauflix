@@ -4,7 +4,7 @@ import { backendClient } from '@shared/api/backend-client';
 import { Button } from '@shared/ui/button/Button';
 import { useAppSelector } from '@store';
 import { selectIsAuthenticated } from '@store/slices/auth';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type ApprovalState = {
   state: 'pending' | 'approved' | 'rejected' | 'expired' | 'claimed';
@@ -13,9 +13,8 @@ type ApprovalState = {
 };
 
 /** Inspect the QR login token from the URL and offer approval after the user signs in. */
-export default function QrApprovalPage() {
+export default function QrApprovalPage({ approvalToken }: { approvalToken: string }) {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const token = useMemo(() => window.location.pathname.split('/').pop() ?? '', []);
   const [approval, setApproval] = useState<ApprovalState | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
@@ -23,7 +22,7 @@ export default function QrApprovalPage() {
   useEffect(() => {
     let cancelled = false;
     void request(
-      () => backendClient.api.auth.qr[':approvalToken'].$get({ param: { approvalToken: token } }),
+      () => backendClient.api.auth.qr[':approvalToken'].$get({ param: { approvalToken } }),
       'Unable to inspect QR login request'
     ).then(result => {
       if (cancelled) return;
@@ -33,14 +32,14 @@ export default function QrApprovalPage() {
     return () => {
       cancelled = true;
     };
-  }, [token]);
+  }, [approvalToken]);
 
   const approve = async () => {
     setBusy(true);
     const result = await request(
       () =>
         backendClient.api.auth.qr[':approvalToken'].approve.$post({
-          param: { approvalToken: token },
+          param: { approvalToken },
         }),
       'Unable to approve QR login'
     );

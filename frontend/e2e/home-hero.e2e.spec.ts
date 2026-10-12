@@ -2,7 +2,12 @@ import { fileURLToPath } from 'node:url';
 
 import type { Page } from '@playwright/test';
 
-import { dismissTraktPrompt, navigateToLogin, waitForTraktAssociation } from './utils/login';
+import {
+  dismissTraktPrompt,
+  navigateToLogin,
+  waitForHomeReady,
+  waitForTraktAssociation,
+} from './utils/login';
 import { expect, test } from './fixtures';
 
 const adminEmail = process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com';
@@ -61,7 +66,7 @@ async function login(page: Page): Promise<void> {
     page.waitForResponse(response => response.url().includes('/api/auth/login')),
     page.locator('button[type="submit"]').click(),
   ]);
-  await expect(page.getByRole('main')).toBeVisible();
+  await waitForHomeReady(page);
   await dismissTraktPrompt(page, associationResponse);
 }
 

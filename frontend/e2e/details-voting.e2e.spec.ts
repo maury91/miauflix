@@ -2,6 +2,7 @@ import { resolve } from 'node:path';
 
 import type { Page, Route } from '@playwright/test';
 
+import { waitForHomeReady } from './utils/login';
 import { expect, test } from './fixtures';
 
 const movie = {
@@ -148,11 +149,10 @@ async function installVotingHarness(page: Page): Promise<void> {
 
 async function login(page: Page): Promise<void> {
   await page.goto('/');
-  await page.waitForFunction(() => window._miauflixAnimationComplete === true);
   await page.getByLabel('Email').fill('voting@example.com');
   await page.getByLabel('Password').fill('testpassword123');
   await page.getByRole('button', { name: 'Continue' }).click();
-  await expect(page.getByRole('main')).toBeVisible();
+  await waitForHomeReady(page);
 }
 
 test.describe('details page voting controls', () => {
