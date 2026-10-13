@@ -15,7 +15,11 @@ export function retryAfterMs(value: string | null, now = Date.now()): number {
 let requestQueue: Promise<unknown> = Promise.resolve();
 let nextRequestAt = 0;
 
-/** One shared provider lane prevents bursts after a cooldown across all accounts. */
+/**
+ * Serialize requests across accounts, waiting 300 ms after a GET settles or 1,000 ms after any
+ * other method before starting the next request. Return the request result or propagate its
+ * failure without preventing later requests from running.
+ */
 export function withTraktRequestSlot<T>(method: string, request: () => Promise<T>): Promise<T> {
   const pending = requestQueue
     .catch(() => undefined)
