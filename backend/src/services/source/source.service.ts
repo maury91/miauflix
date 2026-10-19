@@ -431,6 +431,7 @@ export class SourceService {
     episodeNumber: number;
     airDate?: string | null;
   }): Promise<EpisodeSource[]> {
+    if (!this.isEpisodeWithinLeakTolerance(episode.airDate)) return [];
     const existing = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
     if (existing.some(association => association.matchKind === 'single')) return existing;
     if (!episode.showImdbId || !(await this.checkForVpnConnection('TV source search')))
@@ -529,6 +530,14 @@ export class SourceService {
       }
     }
     return associations;
+  }
+
+  /** Unknown air dates preserve on-demand behavior; known upcoming episodes wait for the configured window. */
+  public isEpisodeWithinLeakTolerance(airDate?: string | null, now = Date.now()): boolean {
+    if (!airDate) return true;
+    const airTime = Date.parse(airDate);
+    if (!Number.isFinite(airTime)) return true;
+    return airTime <= now + (this.config.get('LEAK_TOLERANCE') ?? 0);
   }
 
   private async getTVReleases(imdbId: string): Promise<TVRelease[]> {

@@ -234,6 +234,40 @@ describe('SourceService', () => {
     jest.useRealTimers();
   });
 
+  describe('episode availability', () => {
+    const now = Date.parse('2026-10-19T12:00:00Z');
+
+    it.each([undefined, null, '', 'unknown', '2026-10-18', '2026-10-19T12:00:00Z'])(
+      'allows available or unknown air dates: %s',
+      airDate => {
+        const { service } = setupTest();
+        expect(service.isEpisodeWithinLeakTolerance(airDate, now)).toBe(true);
+      }
+    );
+
+    it('allows the configured boundary but rejects dates beyond it', () => {
+      const { service, mockConfigService } = setupTest();
+      mockConfigService.get.mockReturnValue((2 * 24 * 60 * 60 * 1000) as never);
+      expect(service.isEpisodeWithinLeakTolerance('2026-10-21T12:00:00Z', now)).toBe(true);
+      expect(service.isEpisodeWithinLeakTolerance('2026-10-21T12:00:00.001Z', now)).toBe(false);
+    });
+
+    it('skips episode source lookup before the availability window', async () => {
+      const { service, mockDatabase } = setupTest();
+      const findByEpisodeId = mockDatabase.getEpisodeSourceRepository().findByEpisodeId;
+      expect(
+        await service.getSourcesForEpisodeWithOnDemandSearch({
+          episodeId: 1,
+          showImdbId: 'tt1234567',
+          seasonNumber: 1,
+          episodeNumber: 1,
+          airDate: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        })
+      ).toEqual([]);
+      expect(findByEpisodeId).not.toHaveBeenCalled();
+    });
+  });
+
   describe('searchSourcesForMovies', () => {
     it('should process movies without sources', async () => {
       const {
