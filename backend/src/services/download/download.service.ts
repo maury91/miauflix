@@ -1722,6 +1722,19 @@ export class DownloadService {
     videoFilePath?: string
   ): Promise<void> {
     if (!paths.length) return;
+    const existing = await this.storageService.getStorageByMovieSource(movieSource.id);
+    const knownLayout = existing?.encryptedLayout;
+    const storedBitfield = existing?.downloadedPieces;
+    if (
+      existing &&
+      knownLayout &&
+      paths.every(
+        path =>
+          existing.selectedFiles?.includes(path) &&
+          this.isFileCompleteInBitfield(knownLayout, path, storedBitfield)
+      )
+    )
+      return;
     const download = await this.startDownload(movieSource, {
       retentionClass: 'watched',
       reservedBytes: movieSource.size,
@@ -1751,7 +1764,18 @@ export class DownloadService {
     this.seedTimers.delete(movieSource.id);
     for (const file of subtitles) {
       file.select();
-      await this.storageService.selectTorrentFile(movieSource.id, file.path, false);
+      await this.storageService.selectTorrentFile(
+        movieSource.id,
+        file.path,
+        Boolean(
+          layout &&
+            this.isFileCompleteInBitfield(
+              layout,
+              file.path,
+              download.torrent.bitfield?.buffer ?? download.storage.downloadedPieces
+            )
+        )
+      );
     }
     if (layout) await this.maybeMarkVideoComplete(download.torrent, movieSource.id, layout);
   }

@@ -796,6 +796,37 @@ describe('DownloadService', () => {
       expect(service.hasActivePlayback()).toBe(false);
     });
 
+    it('does not reattach a torrent when requested subtitles are already complete', async () => {
+      const { service, mockStorageService } = setupTest();
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength: 4,
+        files: [
+          { path: 'movie.mkv', offset: 0, length: 8 },
+          { path: 'movie.en.srt', offset: 8, length: 4 },
+        ],
+        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
+      };
+      const storage = createMockStorage({
+        movieSourceId: 12,
+        selectedFiles: ['movie.en.srt'],
+        encryptedLayout: layout,
+        downloadedPieces: Uint8Array.of(0b00100000),
+        localOnly: true,
+        videoCompletedAt: new Date(),
+      });
+      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      const startDownload = jest.spyOn(service, 'startDownload');
+
+      await service.prepareSubtitleFiles({ id: 12, hash: 'a'.repeat(40), size: 12 } as never, [
+        'movie.en.srt',
+      ]);
+
+      expect(startDownload).not.toHaveBeenCalled();
+      expect(mockStorageService.selectTorrentFile).not.toHaveBeenCalled();
+    });
+
     it('selects the requested subtitle and waits for its verified pieces even when the video is complete', async () => {
       const { service, mockStorageService } = setupTest();
       (service.client as unknown as { ready: boolean }).ready = true;

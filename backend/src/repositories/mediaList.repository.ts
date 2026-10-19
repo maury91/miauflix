@@ -2,6 +2,7 @@ import { Not, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { MediaList, MediaListItem, type MediaListItemType } from '@entities/list.entity';
+import { LOCAL_WATCHLIST_SLUG } from '@services/media/list.service';
 
 export class MediaListRepository {
   private readonly repository: Repository<MediaList>;
@@ -181,23 +182,23 @@ export class MediaListRepository {
       .where('item.generation = :generation', { generation: 'local' })
       .andWhere('item.mediaType = :mediaType', { mediaType: 'movie' })
       .andWhere('item.mediaId = :mediaId', { mediaId })
-      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .andWhere('list.slug = :slug', { slug: LOCAL_WATCHLIST_SLUG })
       .getExists();
   }
 
-  findLocalWatchlistOwners(mediaType: MediaListItemType, mediaId: number): Promise<string[]> {
-    return this.itemRepository
+  async findLocalWatchlistOwners(mediaType: MediaListItemType, mediaId: number): Promise<string[]> {
+    const rows = await this.itemRepository
       .createQueryBuilder('item')
       .innerJoin(MediaList, 'list', 'list.id = item.listId')
       .select('list.ownerKey', 'ownerKey')
       .where('item.generation = :generation', { generation: 'local' })
       .andWhere('item.mediaType = :mediaType', { mediaType })
       .andWhere('item.mediaId = :mediaId', { mediaId })
-      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .andWhere('list.slug = :slug', { slug: LOCAL_WATCHLIST_SLUG })
       .andWhere('list.ownerKey != :publicOwner', { publicOwner: 'public' })
       .distinct(true)
-      .getRawMany<{ ownerKey: string }>()
-      .then(rows => rows.map(row => row.ownerKey));
+      .getRawMany<{ ownerKey: string }>();
+    return rows.map(row => row.ownerKey);
   }
 
   async getLocalTVWatchlistInterests(): Promise<Array<{ mediaId: number; ownerCount: number }>> {
@@ -208,7 +209,8 @@ export class MediaListRepository {
       .addSelect('COUNT(DISTINCT list.ownerKey)', 'ownerCount')
       .where('item.generation = :generation', { generation: 'local' })
       .andWhere('item.mediaType = :mediaType', { mediaType: 'tv' })
-      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .andWhere('list.slug = :slug', { slug: LOCAL_WATCHLIST_SLUG })
+      .andWhere('list.ownerKey != :publicOwner', { publicOwner: 'public' })
       .groupBy('item.mediaId')
       .orderBy('ownerCount', 'DESC')
       .getRawMany<{ mediaId: number; ownerCount: number }>();
@@ -223,7 +225,7 @@ export class MediaListRepository {
       .where('item.generation = :generation', { generation: 'local' })
       .andWhere('item.mediaType = :mediaType', { mediaType: 'movie' })
       .andWhere('item.mediaId = :mediaId', { mediaId })
-      .andWhere('list.slug = :slug', { slug: 'my-watchlist' })
+      .andWhere('list.slug = :slug', { slug: LOCAL_WATCHLIST_SLUG })
       .getCount();
   }
 }

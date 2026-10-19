@@ -203,11 +203,13 @@ interface HomePageProps {
   onHydrated?: () => void;
 }
 
+const FALLBACK_HOME_ROUTE: AppRoute = { type: 'home' };
+
 /** Coordinate browsing, details, and playback with progress refresh, preload interest, and Trakt prompts. */
 const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
   const dispatch = useDispatch<AppDispatch>();
   const currentRoute = useRoute();
-  const activeRoute = route ?? currentRoute;
+  const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
   const view =
     activeRoute.type === 'movieDetails' || activeRoute.type === 'showDetails'
       ? 'details'

@@ -37,6 +37,7 @@ const setupTest = () => {
       {
         userId: 'user-1',
         playableKey: 'e:9001:1:7',
+        state: 'completed',
         updatedAt: new Date(),
       },
     ]),
@@ -65,6 +66,7 @@ const setupTest = () => {
   return {
     handlers,
     listService,
+    progressService,
     sourceService,
     downloadService,
     episodeSource,
@@ -95,4 +97,25 @@ describe('watchlist TV acquisition', () => {
       'Show.S01E08.mkv'
     );
   });
+
+  it.each(['playing', 'paused'] as const)(
+    'retries the latest episode when its progress is %s',
+    async state => {
+      const { handlers, progressService, sourceService } = setupTest();
+      progressService.findEpisodeProgressForShow.mockResolvedValueOnce([
+        {
+          userId: 'user-1',
+          playableKey: 'e:9001:1:7',
+          state,
+          updatedAt: new Date(),
+        },
+      ]);
+
+      await handlers.get('watchlist.tv.acquire')!.run({ showMediaId: 9001 });
+
+      expect(sourceService.getSourcesForEpisodeWithOnDemandSearch).toHaveBeenCalledWith(
+        expect.objectContaining({ episodeId: 107, seasonNumber: 1, episodeNumber: 7 })
+      );
+    }
+  );
 });

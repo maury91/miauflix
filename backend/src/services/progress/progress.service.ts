@@ -69,14 +69,19 @@ export class ProgressService {
   async findEpisodeProgressForShow(
     showMediaId: number,
     userIds: string[]
-  ): Promise<Array<Pick<Progress, 'playableKey' | 'updatedAt' | 'userId'>>> {
+  ): Promise<Array<Pick<Progress, 'playableKey' | 'state' | 'updatedAt' | 'userId'>>> {
     const local = await this.progressRepository.findEpisodeProgressForShow(showMediaId, userIds);
     if (!userIds.length || !this.listClient?.isReady()) return local;
 
     const merged = new Map(
       local.map(item => [
         `${item.userId}:${item.playableKey}`,
-        { userId: item.userId, playableKey: item.playableKey, updatedAt: item.updatedAt },
+        {
+          userId: item.userId,
+          playableKey: item.playableKey,
+          state: item.state,
+          updatedAt: item.updatedAt,
+        },
       ])
     );
     await Promise.all(
@@ -90,7 +95,12 @@ export class ProgressService {
           const key = `${userId}:${playableKey(item.playable)}`;
           const existing = merged.get(key);
           if (!existing || updatedAt > existing.updatedAt) {
-            merged.set(key, { userId, playableKey: playableKey(item.playable), updatedAt });
+            merged.set(key, {
+              userId,
+              playableKey: playableKey(item.playable),
+              state: item.state,
+              updatedAt,
+            });
           }
         }
       })

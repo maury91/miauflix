@@ -41,4 +41,19 @@ describe('matchEpisodeFile', () => {
   it('does not match a video from another season', () => {
     expect(matchEpisodeFile(release(['Show.S02E02.mkv']), 1, 2, true)).toBeNull();
   });
+
+  it('does not treat resolution digits as another episode', () => {
+    expect(matchEpisodeFile(release(['Show.S01E05 - 1080p.mkv']), 1, 5)).toEqual({
+      videoFilePath: 'Show.S01E05 - 1080p.mkv',
+      matchKind: 'single',
+    });
+    expect(matchEpisodeFile(release(['Show.S01E05 - 1080p.mkv']), 1, 108)).toBeNull();
+  });
+
+  it('accepts a bounded x-style multi-episode range', () => {
+    expect(matchEpisodeFile(release(['Show.1x05-1x06.mkv']), 1, 6, true)).toEqual({
+      videoFilePath: 'Show.1x05-1x06.mkv',
+      matchKind: 'combined',
+    });
+  });
 });

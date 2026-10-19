@@ -49,8 +49,8 @@ export function matchEpisodeFile(
 function episodeIdentity(name: string, seasonNumber: number): { episodes: number[] } {
   const episodes = new Set<number>();
   const expressions = [
-    /s(\d{1,2})[ ._-]*e(\d{1,3})((?:[ ._-]*e\d{1,3})|(?:\s*[-–]\s*e?\d{1,3}))*/gi,
-    /(?:^|\D)(\d{1,2})x(\d{1,3})(?:(?:[ ._-]*\d{1,2}x\d{1,3})|(?:\s*[-–]\s*\d{1,2}x?\d{1,3}))*/gi,
+    /s(\d{1,2})[ ._-]*e(\d{1,3})(?!\d)((?:[ ._-]*e\d{1,3}(?!\d))|(?:\s*[-–]\s*e?\d{1,3}(?!\d)))*/gi,
+    /(?:^|\D)(\d{1,2})x(\d{1,3})(?!\d)(?:(?:[ ._-]*\d{1,2}x\d{1,3}(?!\d))|(?:\s*[-–]\s*\d{1,2}x?\d{1,3}(?!\d)))*/gi,
   ];
   for (const expression of expressions) {
     for (const match of name.matchAll(expression)) {
@@ -63,8 +63,6 @@ function episodeIdentity(name: string, seasonNumber: number): { episodes: number
         const value = Number(token[1]);
         if (value > firstEpisode && value <= firstEpisode + 20) {
           for (let episode = firstEpisode + 1; episode <= value; episode++) episodes.add(episode);
-        } else if (value > 0) {
-          episodes.add(value);
         }
       }
     }

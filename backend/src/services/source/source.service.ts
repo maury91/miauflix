@@ -43,7 +43,7 @@ function mayContainEpisode(
 ): boolean {
   if (
     metadata.season === seasonNumber &&
-    (metadata.episode === 0 || metadata.episode === episodeNumber)
+    (metadata.episode === undefined || metadata.episode === 0 || metadata.episode === episodeNumber)
   )
     return true;
 

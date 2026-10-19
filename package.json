@@ -61,7 +61,7 @@
     "validate:provider-fixtures": "node scripts/validate-provider-fixtures.mjs",
     "extract:provider-fictionalization": "node scripts/extract-provider-fictionalization.mjs",
     "apply:provider-fictionalization": "node scripts/apply-provider-fictionalization.mjs",
-    "test": "turbo run test --filter='./backend' --filter='./frontend' --filter='./packages/*' --filter='./services/*'"
+    "test": "turbo run test --concurrency=2 --filter='./backend' --filter='./frontend' --filter='./packages/*' --filter='./services/*'"
   },
   "dependencies": {
     "concurrently": "9.2.1"

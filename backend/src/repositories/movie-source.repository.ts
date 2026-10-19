@@ -1,5 +1,5 @@
 import type { Source } from '@miauflix/source-metadata-extractor';
-import { In, LessThan, type Repository } from 'typeorm';
+import { In, IsNull, LessThan, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { MovieSource, QUALITIES } from '@entities/movie-source.entity';
@@ -84,11 +84,9 @@ export class MovieSourceRepository {
     this.torrentCreationTails.set(hash, current);
     await previous;
     try {
-      const existing = await this.movieSourceRepository
-        .createQueryBuilder('movieSource')
-        .where('movieSource.hash = :hash', { hash })
-        .andWhere('movieSource.movieId IS NULL')
-        .getOne();
+      const existing = await this.movieSourceRepository.findOne({
+        where: { hash, movieId: IsNull() },
+      });
       if (existing) {
         await this.refreshProviderMetadata(existing.id, source);
         return (await this.findById(existing.id)) ?? existing;

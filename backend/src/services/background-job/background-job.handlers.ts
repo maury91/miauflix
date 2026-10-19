@@ -237,7 +237,12 @@ export function registerBackgroundJobHandlers({
         lastWatched?.kind === 'episode'
           ? episodeIndex.get(`${lastWatched.seasonNumber}:${lastWatched.episodeNumber}`)
           : undefined;
-      const startAt = lastWatchedIndex === undefined ? 0 : lastWatchedIndex + 1;
+      const startAt =
+        lastWatchedIndex === undefined
+          ? 0
+          : latest?.state === 'completed'
+            ? lastWatchedIndex + 1
+            : lastWatchedIndex;
 
       const candidates = episodes.slice(startAt);
       for (const [offset, episode] of candidates.entries()) {

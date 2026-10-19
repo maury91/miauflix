@@ -415,7 +415,7 @@ export class ListService {
       if (mediaType === 'movie') {
         await this.catalogClient.getMovie(mediaId, 'en');
         await this.catalogClient.ensureBackdropFocus('movie', mediaId);
-        await this.backgroundJobs?.enqueueBestEffort({
+        this.backgroundJobs?.enqueueBestEffort({
           type: 'watchlist.movie.download',
           dedupeKey: `watchlist:movie:${mediaId}`,
           payload: { movieMediaId: mediaId },
@@ -428,13 +428,13 @@ export class ListService {
       }
       await this.catalogClient.getTVShow(mediaId, 'en');
       await this.catalogClient.ensureBackdropFocus('tv', mediaId);
-      await this.backgroundJobs?.enqueueBestEffort({
+      this.backgroundJobs?.enqueueBestEffort({
         type: 'catalog.season-sync.seed',
         dedupeKey: `watchlist:show:${mediaId}`,
         payload: { tvMediaId: mediaId, priority: 50 },
         options: { priority: 50 },
       });
-      await this.backgroundJobs?.enqueueBestEffort({
+      this.backgroundJobs?.enqueueBestEffort({
         type: 'watchlist.tv.acquire',
         dedupeKey: `watchlist:tv:${mediaId}`,
         payload: { showMediaId: mediaId },

@@ -25,6 +25,7 @@ import HomePage from './HomePage';
 const meta = {
   title: 'Home/Home Page',
   component: HomePage,
+  args: { route: { type: 'home' } },
   parameters: { layout: 'fullscreen' },
   decorators: [
     Story => {
