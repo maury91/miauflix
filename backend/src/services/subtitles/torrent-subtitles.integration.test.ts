@@ -4,6 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import type { ContentSource } from '@entities/content-source.entity';
+import type { PlaybackTarget } from '@services/playback/playback-target';
 
 import { TorrentSubtitlesService } from './torrent-subtitles.service';
 
@@ -63,21 +64,24 @@ integration('torrent and embedded subtitle delivery', () => {
   });
 
   const setupTest = () => {
-    const source = { id: 9 } as ContentSource;
+    const source: PlaybackTarget = {
+      source: { id: 9 } as ContentSource,
+      filePath: 'Movie.mkv',
+      matchKind: 'movie',
+    };
     const download = {
       prepareSubtitleFiles: async () => {},
       getMediaFiles: async () => ({
         storeName: 'fixture',
         filenameSalt: 'salt',
         pieceLength: 1024,
-        video: { name: 'Movie.mkv', path: 'Movie.mkv', offset: 0, length: media.length },
         files: [
           { path: 'Movie.mkv', offset: 0, length: media.length },
           { path: 'Movie.en.ass', offset: media.length, length: sidecar.length },
         ],
       }),
-      async streamFile(_source: ContentSource, range?: string, path?: string) {
-        const bytes = path ? sidecar : media;
+      async streamFile(target: PlaybackTarget, range?: string) {
+        const bytes = target.filePath === 'Movie.en.ass' ? sidecar : media;
         const match = range?.match(/^bytes=(\d+)-(\d*)$/);
         const start = match ? Number(match[1]) : 0;
         const end = match?.[2] ? Math.min(bytes.length - 1, Number(match[2])) : bytes.length - 1;

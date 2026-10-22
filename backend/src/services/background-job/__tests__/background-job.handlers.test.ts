@@ -1,5 +1,7 @@
 import { configureFakerSeed } from '@__test-utils__/utils';
 
+import { PlaybackTargetService } from '@services/playback/playback-target.service';
+
 import { registerBackgroundJobHandlers } from '../background-job.handlers';
 import type { BackgroundJobWorker } from '../background-job.worker';
 
@@ -44,11 +46,18 @@ const setupTest = () => {
   };
   const sourceService = {
     getSourcesForEpisodeWithOnDemandSearch: jest.fn().mockResolvedValue([episodeSource]),
+    isEpisodeWithinLeakTolerance: jest.fn(
+      (airDate: string | null, now: number) => !airDate || Date.parse(airDate) <= now
+    ),
   };
   const downloadService = {
-    isEpisodeFileComplete: jest.fn().mockResolvedValue(false),
-    predownloadEpisode: jest.fn().mockResolvedValue(true),
+    isFileComplete: jest.fn().mockResolvedValue(false),
+    predownload: jest.fn().mockResolvedValue(true),
   };
+  const playbackTargets = new PlaybackTargetService(
+    { getContentSourceRepository: () => ({}) } as never,
+    downloadService as never
+  );
 
   registerBackgroundJobHandlers({
     backgroundJobs: { enqueueBulk: jest.fn() } as never,
@@ -60,12 +69,14 @@ const setupTest = () => {
     sourceService: sourceService as never,
     downloadService: downloadService as never,
     progressService: progressService as never,
+    playbackTargets,
     worker,
   });
 
   return {
     handlers,
     listService,
+    mediaService,
     progressService,
     sourceService,
     downloadService,
@@ -92,10 +103,11 @@ describe('watchlist TV acquisition', () => {
     expect(sourceService.getSourcesForEpisodeWithOnDemandSearch).toHaveBeenCalledWith(
       expect.objectContaining({ episodeId: 108, seasonNumber: 1, episodeNumber: 8 })
     );
-    expect(downloadService.predownloadEpisode).toHaveBeenCalledWith(
-      episodeSource.source,
-      'Show.S01E08.mkv'
-    );
+    expect(downloadService.predownload).toHaveBeenCalledWith({
+      source: episodeSource.source,
+      filePath: 'Show.S01E08.mkv',
+      matchKind: 'single',
+    });
   });
 
   it.each(['playing', 'paused'] as const)(
@@ -118,4 +130,43 @@ describe('watchlist TV acquisition', () => {
       );
     }
   );
+
+  it('searches an unaired next episode once it is within the leak tolerance window', async () => {
+    const { handlers, mediaService, sourceService } = setupTest();
+    const episodes = Array.from({ length: 8 }, (_, index) => ({
+      id: 101 + index,
+      episodeNumber: index + 1,
+      airDate: index === 7 ? '2026-10-13' : '2020-01-01',
+    }));
+    mediaService.getSeason.mockResolvedValue({ episodes });
+    sourceService.isEpisodeWithinLeakTolerance.mockImplementation(
+      (airDate: string | null, now: number) =>
+        !airDate || Date.parse(airDate) <= now + 2 * 86_400_000
+    );
+
+    await handlers.get('watchlist.tv.acquire')!.run({ showMediaId: 9001 });
+
+    expect(sourceService.isEpisodeWithinLeakTolerance).toHaveBeenCalledWith(
+      '2026-10-13',
+      expect.any(Number)
+    );
+    expect(sourceService.getSourcesForEpisodeWithOnDemandSearch).toHaveBeenCalledWith(
+      expect.objectContaining({ episodeId: 108, episodeNumber: 8 })
+    );
+  });
+
+  it('stops before an unaired episode outside the leak tolerance window', async () => {
+    const { handlers, mediaService, sourceService } = setupTest();
+    mediaService.getSeason.mockResolvedValue({
+      episodes: Array.from({ length: 8 }, (_, index) => ({
+        id: 101 + index,
+        episodeNumber: index + 1,
+        airDate: index === 7 ? '2026-11-30' : '2020-01-01',
+      })),
+    });
+
+    await handlers.get('watchlist.tv.acquire')!.run({ showMediaId: 9001 });
+
+    expect(sourceService.getSourcesForEpisodeWithOnDemandSearch).not.toHaveBeenCalled();
+  });
 });

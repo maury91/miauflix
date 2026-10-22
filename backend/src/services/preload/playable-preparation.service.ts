@@ -4,6 +4,8 @@ import type { ContentSource } from '@entities/content-source.entity';
 import type { PlayableRef } from '@routes/playable.types';
 import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@routes/preload.types';
 import type { MediaService } from '@services/media/media.service';
+import type { PlaybackTarget } from '@services/playback/playback-target';
+import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
 import type { StorageService } from '@services/storage/storage.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
@@ -18,8 +20,8 @@ export interface PlaybackPreferences {
 export interface PreparedPlayable {
   playable: PlayableRef;
   source: ContentSource | null;
-  videoFilePath?: string;
-  episodeMatchKind?: 'combined' | 'single';
+  /** The file to play. Episodes always know it; movies resolve it once they are warmed. */
+  target: PlaybackTarget | null;
   state: 'cold' | 'metadata' | 'ready' | 'warming';
   warmup: PreloadWarmupSnapshot;
 }
@@ -39,7 +41,8 @@ export class PlayablePreparationService {
     private readonly mediaService: MediaService,
     private readonly sourceService: SourceService,
     private readonly warmup?: TorrentWarmupController,
-    private readonly storageService?: StorageService
+    private readonly storageService?: StorageService,
+    private readonly targets?: Pick<PlaybackTargetService, 'forMovie'>
   ) {}
 
   /**
@@ -58,10 +61,10 @@ export class PlayablePreparationService {
     const media = await this.mediaService.getMovieByMediaId(playable.mediaId);
     this.throwIfAborted(options.signal);
     if (!media) {
-      return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
+      return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
     }
     if (options.through === 'catalog') {
-      return { playable, source: null, state: 'metadata', warmup: emptyWarmup() };
+      return { playable, source: null, target: null, state: 'metadata', warmup: emptyWarmup() };
     }
 
     let sources = await this.sourceService.getSourcesForMovieWithOnDemandSearch(
@@ -75,7 +78,7 @@ export class PlayablePreparationService {
     );
     this.throwIfAborted(options.signal);
     if (!sources.length) {
-      return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
+      return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
     }
     const completedSources = this.storageService
       ? await Promise.all(
@@ -101,12 +104,14 @@ export class PlayablePreparationService {
       return {
         playable,
         source,
+        target: null,
         state: 'metadata',
         warmup: emptyWarmup(),
       };
     }
+    const movieTarget = (source: ContentSource) => this.resolveMovieTarget(media.local.id, source);
     if (usableSource) {
-      return this.finish(playable, usableSource, options);
+      return this.finish(playable, usableSource, options, movieTarget);
     }
 
     let fallbackSource = this.select(sources, options.preferences, false);
@@ -128,17 +133,18 @@ export class PlayablePreparationService {
       sources = await this.sourceService.getSourcesForMovie(media.local.id);
       const selected = this.select(sources, options.preferences);
       if (selected) {
-        return this.finish(playable, selected, options);
+        return this.finish(playable, selected, options, movieTarget);
       }
       fallbackSource = this.select(sources, options.preferences, false);
     }
 
     if (fallbackSource && options.through === 'warm') {
-      return this.finish(playable, fallbackSource, options);
+      return this.finish(playable, fallbackSource, options, movieTarget);
     }
     return {
       playable,
       source: fallbackSource,
+      target: null,
       state: 'metadata',
       warmup: emptyWarmup(),
     };
@@ -150,14 +156,16 @@ export class PlayablePreparationService {
   ): Promise<PreparedPlayable> {
     this.throwIfAborted(options.signal);
     const show = await this.mediaService.getTVShowByMediaId(playable.showMediaId);
-    if (!show) return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
+    if (!show)
+      return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
     if (options.through === 'catalog')
-      return { playable, source: null, state: 'metadata', warmup: emptyWarmup() };
+      return { playable, source: null, target: null, state: 'metadata', warmup: emptyWarmup() };
     await this.mediaService.markShowAsWatching(show.local.id);
     const season = await this.mediaService.getSeason(playable.showMediaId, playable.seasonNumber);
     this.throwIfAborted(options.signal);
     const episode = season?.episodes.find(item => item.episodeNumber === playable.episodeNumber);
-    if (!episode) return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
+    if (!episode)
+      return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
 
     const matches = await this.sourceService.getSourcesForEpisodeWithOnDemandSearch({
       episodeId: episode.id,
@@ -183,18 +191,25 @@ export class PlayablePreparationService {
     );
     const match = usableCandidates.find(candidate => candidate.source.id === selected?.id);
     if (!selected || !match)
-      return { playable, source: null, state: 'cold', warmup: emptyWarmup() };
+      return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
+    const target: PlaybackTarget = {
+      source: selected,
+      filePath: match.videoFilePath!,
+      matchKind: match.matchKind,
+    };
     options.onSourceSelected?.(selected);
     if (options.through === 'sources')
-      return {
-        playable,
-        source: selected,
-        videoFilePath: match.videoFilePath!,
-        episodeMatchKind: match.matchKind,
-        state: 'metadata',
-        warmup: emptyWarmup(),
-      };
-    return this.finish(playable, selected, options, match.videoFilePath!, match.matchKind);
+      return { playable, source: selected, target, state: 'metadata', warmup: emptyWarmup() };
+    return this.finish(playable, selected, options, async () => target);
+  }
+
+  /** Movie targets need the source's file list; a missing resolver or file list leaves it unknown. */
+  private async resolveMovieTarget(
+    movieId: number,
+    source: ContentSource
+  ): Promise<PlaybackTarget | null> {
+    if (!this.targets) return null;
+    return this.targets.forMovie(movieId, source);
   }
 
   /**
@@ -206,53 +221,37 @@ export class PlayablePreparationService {
     playable: PlayableRef,
     source: ContentSource,
     options: PreparationOptions,
-    videoFilePath?: string,
-    episodeMatchKind?: 'combined' | 'single'
+    resolveTarget: (source: ContentSource) => Promise<PlaybackTarget | null>
   ): Promise<PreparedPlayable> {
     options.onSourceSelected?.(source);
     if (options.through !== 'warm') {
-      return {
-        playable,
-        source,
-        videoFilePath,
-        episodeMatchKind,
-        state: 'ready',
-        warmup: emptyWarmup(),
-      };
+      return { playable, source, target: null, state: 'ready', warmup: emptyWarmup() };
     }
-    if (!this.warmup) {
-      return {
-        playable,
-        source,
-        videoFilePath,
-        episodeMatchKind,
-        state: 'cold',
-        warmup: emptyWarmup(),
-      };
+    let target: PlaybackTarget | null;
+    try {
+      target = await resolveTarget(source);
+    } catch (error) {
+      if (options.signal?.aborted) throw error;
+      // Without the source's file list nothing can be warmed or played yet.
+      return { playable, source, target: null, state: 'cold', warmup: emptyWarmup('failed') };
+    }
+    this.throwIfAborted(options.signal);
+    if (!this.warmup || !target) {
+      return { playable, source, target, state: 'cold', warmup: emptyWarmup() };
     }
     let slot: Awaited<ReturnType<TorrentWarmupController['warm']>>;
     try {
       slot = await this.warmup.warm(
-        source,
+        target,
         options.ownerKey ?? playableKey(playable),
         playableKey(playable),
-        {
-          speculativeExpiresAt: new Date(Date.now() + 15_000),
-          videoFilePath,
-        }
+        { speculativeExpiresAt: new Date(Date.now() + 15_000) }
       );
     } catch (error) {
       if (options.signal?.aborted) throw error;
       // Payload warming is optional. Keep the exact prepared source available
       // so Watch can use the normal cold streaming path.
-      return {
-        playable,
-        source,
-        videoFilePath,
-        episodeMatchKind,
-        state: 'cold',
-        warmup: emptyWarmup('failed'),
-      };
+      return { playable, source, target, state: 'cold', warmup: emptyWarmup('failed') };
     }
     if (options.signal?.aborted) {
       await this.warmup.pause(options.ownerKey ?? playableKey(playable), slot.generation);
@@ -262,8 +261,7 @@ export class PlayablePreparationService {
       return {
         playable,
         source,
-        videoFilePath,
-        episodeMatchKind,
+        target,
         state: 'ready',
         warmup: {
           state: 'ready',
@@ -281,8 +279,7 @@ export class PlayablePreparationService {
       return {
         playable,
         source,
-        videoFilePath,
-        episodeMatchKind,
+        target,
         state: 'warming',
         warmup: {
           state: 'warming',
@@ -296,8 +293,7 @@ export class PlayablePreparationService {
       return {
         playable,
         source,
-        videoFilePath,
-        episodeMatchKind,
+        target,
         state: 'cold',
         warmup: {
           state: 'paused',
@@ -310,8 +306,7 @@ export class PlayablePreparationService {
     return {
       playable,
       source,
-      videoFilePath,
-      episodeMatchKind,
+      target,
       state: 'cold',
       warmup: {
         state: 'failed',

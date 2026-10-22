@@ -5,6 +5,8 @@ import type { Database } from '@database/database';
 import { AudioConversionRequiredError, AudioPlaybackError } from './audio-playback.service';
 import { PlaybackSessionService } from './playback-session.service';
 
+const movie = <T>(source: T) => ({ source, filePath: 'movie.mkv', matchKind: 'movie' as const });
+
 describe('PlaybackSessionService', () => {
   it.each([new AudioPlaybackError('busy'), new AudioPlaybackError('duration missing', 422)])(
     'keeps direct playback available on inspection failure: %s',
@@ -12,7 +14,9 @@ describe('PlaybackSessionService', () => {
       const grants = { create: jest.fn() };
       const service = new PlaybackSessionService(
         { getPlaybackGrantRepository: () => grants } as never,
-        { prepare: async () => ({ source: { id: 1 }, state: 'cold' }) } as never,
+        {
+          prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
+        } as never,
         { getOrThrow: () => 60000 } as never,
         undefined,
         undefined,
@@ -35,8 +39,8 @@ describe('PlaybackSessionService', () => {
     const preparation = {
       prepare: jest
         .fn()
-        .mockResolvedValueOnce({ source: hevc, state: 'ready' })
-        .mockResolvedValueOnce({ source: h264, state: 'ready' }),
+        .mockResolvedValueOnce({ source: hevc, target: movie(hevc), state: 'ready' })
+        .mockResolvedValueOnce({ source: h264, target: movie(h264), state: 'ready' }),
     };
     const audio = {
       inspect: jest
@@ -65,7 +69,8 @@ describe('PlaybackSessionService', () => {
     );
     expect(result?.source.id).toBe(2);
     expect(preparation.prepare.mock.calls[1][1].preferences.allowHevc).toBe(false);
-    expect(audio.inspect).toHaveBeenNthCalledWith(2, h264, expect.anything());
+    expect(audio.inspect).toHaveBeenNthCalledWith(2, movie(h264), expect.anything());
+    expect(warmup.promote).toHaveBeenLastCalledWith(movie(h264), 'm:42');
     expect(grants.create).toHaveBeenCalledTimes(1);
     expect(grants.create).toHaveBeenCalledWith(expect.objectContaining({ sourceId: 2 }));
   });
@@ -75,9 +80,11 @@ describe('PlaybackSessionService', () => {
     async convert => {
       const grants = { create: jest.fn() };
       const preparation = {
-        prepare: jest
-          .fn()
-          .mockResolvedValue({ source: { id: 1, videoCodec: VideoCodec.X265 }, state: 'cold' }),
+        prepare: jest.fn().mockResolvedValue({
+          source: { id: 1, videoCodec: VideoCodec.X265 },
+          target: movie({ id: 1, videoCodec: VideoCodec.X265 }),
+          state: 'cold',
+        }),
       };
       const audio = {
         canConvertHevc: () => convert,
@@ -109,7 +116,9 @@ describe('PlaybackSessionService', () => {
     const grants = { create: jest.fn() };
     const service = new PlaybackSessionService(
       { getPlaybackGrantRepository: () => grants } as never,
-      { prepare: async () => ({ source: { id: 1 }, state: 'cold' }) } as never,
+      {
+        prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
+      } as never,
       { getOrThrow: () => 60000 } as never,
       undefined,
       undefined,
@@ -136,9 +145,8 @@ describe('PlaybackSessionService', () => {
     const preparation = {
       prepare: jest.fn().mockResolvedValue({
         source,
+        target: { source, filePath: 'Show.S01E02.mkv', matchKind: 'single' },
         state: 'metadata',
-        videoFilePath: 'Show.S01E02.mkv',
-        episodeMatchKind: 'single',
       }),
     };
     const warmup = { promote: jest.fn() };
@@ -192,6 +200,7 @@ describe('PlaybackSessionService', () => {
       prepare: jest.fn().mockResolvedValue({
         playable: { kind: 'movie', mediaId: 42 },
         source,
+        target: movie(source),
         state: 'warming',
       }),
     };
@@ -216,9 +225,32 @@ describe('PlaybackSessionService', () => {
     );
 
     expect(session).toMatchObject({ source: { id: 208 }, preparation: { state: 'warming' } });
-    expect(warmup.promote).toHaveBeenCalledWith(source, 'm:42');
+    expect(warmup.promote).toHaveBeenCalledWith(movie(source), 'm:42');
     expect(grants.create).toHaveBeenCalledWith(
       expect.objectContaining({ sourceId: 208, playableKey: 'm:42' })
     );
+  });
+
+  it('grants a movie whose file is not resolved yet without inspecting it', async () => {
+    const grants = { create: jest.fn() };
+    const audio = { inspect: jest.fn() };
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => grants } as never,
+      { prepare: async () => ({ source: { id: 3 }, target: null, state: 'cold' }) } as never,
+      { getOrThrow: () => 60000 } as never,
+      undefined,
+      undefined,
+      audio as never
+    );
+
+    const session = await service.create(
+      'user',
+      { kind: 'movie', mediaId: 1 },
+      { quality: 'auto', allowHevc: false }
+    );
+
+    expect(audio.inspect).not.toHaveBeenCalled();
+    expect(session?.delivery).toBeUndefined();
+    expect(grants.create).toHaveBeenCalledWith(expect.objectContaining({ sourceId: 3 }));
   });
 });

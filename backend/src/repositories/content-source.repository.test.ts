@@ -185,4 +185,19 @@ describe('ContentSourceRepository', () => {
     await expect(repository.upsertByHash(withoutProvider)).rejects.toThrow(/NOT NULL/);
     expect(await countSources()).toBe(0);
   });
+
+  it('keeps the first stored main video path for a movie link', async () => {
+    const { repository, factory } = await setupTest();
+    const movie = await factory.createTestMovie();
+    const [source] = await repository.upsertForMovie(movie.id, [sourceInput()]);
+
+    expect(await repository.findMovieVideoFilePath(movie.id, source.id)).toBeNull();
+    await expect(
+      repository.setMovieVideoFilePath(movie.id, source.id, 'Movie/Movie.mkv')
+    ).resolves.toBe('Movie/Movie.mkv');
+    await expect(
+      repository.setMovieVideoFilePath(movie.id, source.id, 'Movie/Other.mkv')
+    ).resolves.toBe('Movie/Movie.mkv');
+    expect(await repository.findMovieVideoFilePath(movie.id, source.id)).toBe('Movie/Movie.mkv');
+  });
 });

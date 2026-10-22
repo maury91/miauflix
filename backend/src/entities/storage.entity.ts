@@ -19,7 +19,6 @@ export interface EncryptedStorageLayout {
   filenameSalt: string;
   pieceLength: number;
   files: Array<{ path: string; length: number; offset: number }>;
-  video: { name: string; path: string; offset: number; length: number };
 }
 
 @Entity('storage')

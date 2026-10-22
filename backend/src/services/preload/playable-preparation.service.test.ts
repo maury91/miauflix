@@ -4,6 +4,17 @@ import type { PlayableRef } from '@routes/playable.types';
 
 import { PlayablePreparationService } from './playable-preparation.service';
 
+/** Movies play their main video; tests only need a stable path per source. */
+const movieTargets = {
+  forMovie: jest.fn(async (_movieId: number, source: unknown) => ({
+    source,
+    filePath: 'movie.mkv',
+    matchKind: 'movie',
+  })),
+};
+const movieTarget = (source: unknown) =>
+  expect.objectContaining({ source, filePath: 'movie.mkv', matchKind: 'movie' });
+
 describe('PlayablePreparationService', () => {
   it.each([
     { videoCompletedAt: new Date(), downloaded: 8000 },
@@ -32,7 +43,8 @@ describe('PlayablePreparationService', () => {
       mediaService as never,
       sourceService as never,
       warmup as never,
-      storageService as never
+      storageService as never,
+      movieTargets as never
     );
     for (const through of ['sources', 'warm'] as const) {
       const result = await service.prepare(
@@ -45,7 +57,12 @@ describe('PlayablePreparationService', () => {
       );
       expect(result.source).toBe(downloaded);
     }
-    expect(warmup.warm).toHaveBeenCalledWith(downloaded, 'm:42', 'm:42', expect.anything());
+    expect(warmup.warm).toHaveBeenCalledWith(
+      movieTarget(downloaded),
+      'm:42',
+      'm:42',
+      expect.anything()
+    );
     expect(sourceService.processSourceMetadata).not.toHaveBeenCalled();
   });
 
@@ -118,7 +135,9 @@ describe('PlayablePreparationService', () => {
     const service = new PlayablePreparationService(
       mediaService as never,
       sourceService as never,
-      warmup as never
+      warmup as never,
+      undefined,
+      movieTargets as never
     );
 
     const prepared = await service.prepare(
@@ -170,7 +189,9 @@ describe('PlayablePreparationService', () => {
     const service = new PlayablePreparationService(
       mediaService as never,
       sourceService as never,
-      warmup as never
+      warmup as never,
+      undefined,
+      movieTargets as never
     );
 
     const prepared = await service.prepare(
@@ -229,7 +250,9 @@ describe('PlayablePreparationService', () => {
     const service = new PlayablePreparationService(
       mediaService as never,
       sourceService as never,
-      warmup as never
+      warmup as never,
+      undefined,
+      movieTargets as never
     );
 
     const prepared = await service.prepare(
@@ -245,7 +268,7 @@ describe('PlayablePreparationService', () => {
     expect(prepared.state).toBe('warming');
     expect(sourceService.processSourceMetadata).not.toHaveBeenCalled();
     expect(warmup.warm).toHaveBeenCalledWith(
-      ready,
+      movieTarget(ready),
       'm:42',
       'm:42',
       expect.objectContaining({ speculativeExpiresAt: expect.any(Date) })
@@ -286,7 +309,9 @@ describe('PlayablePreparationService', () => {
     const service = new PlayablePreparationService(
       mediaService as never,
       sourceService as never,
-      warmup as never
+      warmup as never,
+      undefined,
+      movieTargets as never
     );
     const playable: PlayableRef = { kind: 'movie', mediaId: 42 };
 
@@ -300,7 +325,7 @@ describe('PlayablePreparationService', () => {
     expect(prepared).toMatchObject({ playable, source, state: 'warming' });
     expect(sourceService.processSourceMetadata).toHaveBeenCalledWith(208);
     expect(warmup.warm).toHaveBeenCalledWith(
-      source,
+      movieTarget(source),
       'm:42',
       'm:42',
       expect.objectContaining({ speculativeExpiresAt: expect.any(Date) })
@@ -336,7 +361,9 @@ describe('PlayablePreparationService', () => {
     const service = new PlayablePreparationService(
       mediaService as never,
       sourceService as never,
-      warmup as never
+      warmup as never,
+      undefined,
+      movieTargets as never
     );
 
     await expect(
@@ -381,7 +408,9 @@ describe('PlayablePreparationService', () => {
     const service = new PlayablePreparationService(
       mediaService as never,
       sourceService as never,
-      warmup as never
+      warmup as never,
+      undefined,
+      movieTargets as never
     );
 
     await expect(
@@ -394,6 +423,31 @@ describe('PlayablePreparationService', () => {
         }
       )
     ).resolves.toMatchObject({ source: null, state: 'metadata' });
+    expect(warmup.warm).not.toHaveBeenCalled();
+  });
+
+  it('keeps the selected movie source cold when its file list cannot be resolved', async () => {
+    const source = { id: 9, quality: Quality.FHD, streamingScore: 10, file: Buffer.from('t') };
+    const warmup = { warm: jest.fn() };
+    const service = new PlayablePreparationService(
+      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
+      { getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([source]) } as never,
+      warmup as never,
+      undefined,
+      { forMovie: jest.fn().mockRejectedValue(new Error('metadata timeout')) } as never
+    );
+
+    const prepared = await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      {
+        through: 'warm',
+        preferences: { quality: 'auto', allowHevc: true },
+        workClass: 'interactive',
+      }
+    );
+
+    expect(prepared).toMatchObject({ source, target: null, state: 'cold' });
+    expect(prepared.warmup.state).toBe('failed');
     expect(warmup.warm).not.toHaveBeenCalled();
   });
 });

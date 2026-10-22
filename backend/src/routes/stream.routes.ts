@@ -28,11 +28,12 @@ export const createStreamRoutes = ({
       async context => {
         const grant = await playbackSessionService.verify(context.req.valid('param').token);
         if (!grant) return context.json({ error: 'Invalid or expired streaming key' }, 401);
-        const resolved = await streamService.resolvePlaybackSource(grant);
+        // Only the next episode is prefetched; movie grants never reach source resolution.
+        if (grant.playableKind !== 'episode')
+          return context.json({ error: 'Episode file is unavailable' }, 404);
+        const resolved = await streamService.resolvePlaybackTarget(grant);
         if (!resolved) return context.json({ error: 'Playback grant does not match source' }, 403);
-        const videoFilePath = resolved.episodeSource?.videoFilePath;
-        if (!videoFilePath) return context.json({ error: 'Episode file is unavailable' }, 404);
-        await downloadService.predownloadEpisode(resolved.source, videoFilePath);
+        await downloadService.predownload(resolved.target);
         return context.body(null, 202);
       }
     )
@@ -53,21 +54,20 @@ export const createStreamRoutes = ({
         const { token } = context.req.valid('param');
         const grant = await playbackSessionService.verify(token);
         if (!grant) return context.json({ error: 'Invalid or expired streaming key' }, 401);
-        const resolved = await streamService.resolvePlaybackSource(grant);
+        const resolved = await streamService.resolvePlaybackTarget(grant);
         if (!resolved) {
           return context.json({ error: 'Playback grant does not match source' }, 403);
         }
         try {
           return await audioPlaybackService.stream(
-            resolved.source,
+            resolved.target,
             token,
             context.req.valid('query').start,
             grant.expiresAt,
             context.req.raw.signal,
             context.req.valid('query').audioTrack,
             context.req.valid('query').audioCopy === 'true',
-            context.req.valid('query').transcodeVideo === 'true',
-            resolved.episodeSource?.videoFilePath ?? undefined
+            context.req.valid('query').transcodeVideo === 'true'
           );
         } catch (error) {
           if (error instanceof AudioPlaybackError)
@@ -104,18 +104,14 @@ export const createStreamRoutes = ({
           // preparation pipeline. They must never fall back to source ranking.
           const playbackGrant = await playbackSessionService.verify(token);
           if (playbackGrant) {
-            const resolved = await streamService.resolvePlaybackSource(playbackGrant);
+            const resolved = await streamService.resolvePlaybackTarget(playbackGrant);
             if (!resolved) {
               return context.json(
                 { error: 'Playback grant does not match source' } satisfies ErrorResponse,
                 403
               );
             }
-            return await downloadService.streamFile(
-              resolved.source,
-              context.req.header('range'),
-              resolved.episodeSource?.videoFilePath ?? undefined
-            );
+            return await downloadService.streamFile(resolved.target, context.req.header('range'));
           }
 
           // Verify streaming key (includes timing attack protection)
@@ -142,9 +138,9 @@ export const createStreamRoutes = ({
             );
           }
 
-          // Stream the file
-          const rangeHeader = context.req.header('range');
-          return await downloadService.streamFile(source, rangeHeader);
+          // Stream the movie's main video
+          const target = await streamService.movieTarget(movieId, source);
+          return await downloadService.streamFile(target, context.req.header('range'));
         } catch (error: unknown) {
           console.error('Failed to stream content:', error);
 

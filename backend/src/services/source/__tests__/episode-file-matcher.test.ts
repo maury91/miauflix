@@ -56,4 +56,30 @@ describe('matchEpisodeFile', () => {
       matchKind: 'combined',
     });
   });
+
+  it('does not extend an x-style range into another season', () => {
+    const pack = release(['Show.1x05-2x06.mkv']);
+    expect(matchEpisodeFile(pack, 1, 6, true)).toBeNull();
+    expect(matchEpisodeFile(pack, 1, 5)).toEqual({
+      videoFilePath: 'Show.1x05-2x06.mkv',
+      matchKind: 'single',
+    });
+  });
+
+  it('expands bare same-season x-style ranges', () => {
+    expect(matchEpisodeFile(release(['Show.1x05-07.mkv']), 1, 6, true)).toEqual({
+      videoFilePath: 'Show.1x05-07.mkv',
+      matchKind: 'combined',
+    });
+  });
+
+  it('uses release metadata for a lone video only when its filename names no episode', () => {
+    const metadata = (file: string) => ({ ...release([file]), season: 1, episode: 5 });
+    expect(matchEpisodeFile(metadata('Show.720p.WEB.mkv'), 1, 5)).toEqual({
+      videoFilePath: 'Show.720p.WEB.mkv',
+      matchKind: 'single',
+    });
+    expect(matchEpisodeFile(metadata('Show.S01E06.mkv'), 1, 5)).toBeNull();
+    expect(matchEpisodeFile(metadata('Show.S02E05.mkv'), 1, 5)).toBeNull();
+  });
 });

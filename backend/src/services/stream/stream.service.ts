@@ -3,7 +3,6 @@ import type { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
 import type { ContentSource } from '@entities/content-source.entity';
-import type { EpisodeSource } from '@entities/episode-source.entity';
 import type { Movie } from '@entities/movie.entity';
 import type { PlaybackGrant } from '@entities/playback-grant.entity';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
@@ -11,13 +10,14 @@ import type { EpisodeSourceRepository } from '@repositories/episode-source.repos
 import { playableFromKey } from '@routes/playable.types';
 import type { DownloadService } from '@services/download/download.service';
 import type { MediaService } from '@services/media/media.service';
+import type { PlaybackTarget } from '@services/playback/playback-target';
+import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
 import { traced } from '@utils/tracing.util';
 
-export interface ResolvedPlaybackSource {
-  source: ContentSource;
-  episodeSource: EpisodeSource | null;
+export interface ResolvedPlayback {
+  target: PlaybackTarget;
   /** Set for movie grants; the source is verified to be linked to this movie. */
   movie: Movie | null;
 }
@@ -30,16 +30,20 @@ export class StreamService {
     db: Database,
     private readonly sourceService: SourceService,
     private readonly downloadService: DownloadService,
-    private readonly mediaService: MediaService
+    private readonly mediaService: MediaService,
+    private readonly targets: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>
   ) {
     this.contentSourceRepository = db.getContentSourceRepository();
     this.episodeSourceRepository = db.getEpisodeSourceRepository();
   }
 
-  /** Resolve a playback grant only when its source is associated with that exact playable. */
-  async resolvePlaybackSource(
+  /**
+   * Resolve a playback grant to the exact file it may read, only when its source is associated
+   * with that playable. Movie grants may attach the torrent once to learn the source's file list.
+   */
+  async resolvePlaybackTarget(
     grant: Pick<PlaybackGrant, 'playableKey' | 'playableKind' | 'sourceId'>
-  ): Promise<ResolvedPlaybackSource | null> {
+  ): Promise<ResolvedPlayback | null> {
     const source = await this.getSourceById(grant.sourceId);
     if (!source) return null;
     const playable = playableFromKey(grant.playableKey);
@@ -49,7 +53,7 @@ export class StreamService {
       const movie = await this.mediaService.getLocalMovieByMediaId(playable.mediaId);
       if (!movie || !(await this.contentSourceRepository.isLinkedToMovie(movie.id, source.id)))
         return null;
-      return { source, episodeSource: null, movie };
+      return { target: await this.targets.forMovie(movie.id, source), movie };
     }
 
     const episodeSource = await this.episodeSourceRepository.findForPlayback(
@@ -58,7 +62,13 @@ export class StreamService {
       playable.episodeNumber,
       source.id
     );
-    return episodeSource?.videoFilePath ? { source, episodeSource, movie: null } : null;
+    const target = episodeSource && this.targets.forEpisode({ ...episodeSource, source });
+    return target ? { target, movie: null } : null;
+  }
+
+  /** The movie's main video inside a source chosen for it. */
+  movieTarget(movieId: number, source: ContentSource): Promise<PlaybackTarget> {
+    return this.targets.forMovie(movieId, source);
   }
 
   /**

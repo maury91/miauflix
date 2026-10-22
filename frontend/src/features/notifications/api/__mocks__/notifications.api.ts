@@ -1,5 +1,12 @@
 import { fn } from 'storybook/test';
 
+// Realtime middleware resets this cache on session change; stories only need the utility.
+export const notificationsApi = {
+  util: {
+    resetApiState: fn().mockName('notificationsApi.util.resetApiState'),
+  },
+};
+
 const emptyNotifications = {
   data: { notifications: [], unreadCount: 0 },
   isLoading: false,

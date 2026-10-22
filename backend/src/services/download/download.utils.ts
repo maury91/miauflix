@@ -77,6 +77,58 @@ export const getVideoFile = (torrent: Torrent): TorrentFile => {
   const mainFile = files[0];
   return mainFile;
 };
+
+/** The largest video in a file list (first wins on ties), or null when there is none. */
+export const mainVideoPath = (files: ReadonlyArray<{ path: string; length: number }>) => {
+  let best: { path: string; length: number } | null = null;
+  for (const file of files) {
+    if (isVideoFile(file.path) && (!best || file.length > best.length)) best = file;
+  }
+  return best?.path ?? null;
+};
+
+/** Read one piece's bit from a BitTorrent bitfield (most significant bit first). */
+export const isPieceInBitfield = (
+  bitfield: Uint8Array | null | undefined,
+  pieceIndex: number
+): boolean => {
+  const byte = bitfield?.[Math.floor(pieceIndex / 8)] ?? 0;
+  return (byte & (1 << (7 - (pieceIndex % 8)))) !== 0;
+};
+
+/** True when every piece overlapping the byte range is present in the bitfield. */
+export const isByteRangeCompleteInBitfield = (
+  pieceLength: number,
+  offset: number,
+  length: number,
+  bitfield: Uint8Array | null | undefined
+): boolean => {
+  if (length <= 0 || !bitfield?.length || pieceLength <= 0) return false;
+  const firstPiece = Math.floor(offset / pieceLength);
+  const lastPiece = Math.floor((offset + length - 1) / pieceLength);
+  for (let piece = firstPiece; piece <= lastPiece; piece++) {
+    if (!isPieceInBitfield(bitfield, piece)) return false;
+  }
+  return true;
+};
+
+/** True when the named file exists in the layout and all of its pieces are verified. */
+export const isFileCompleteInBitfield = (
+  layout: { pieceLength: number; files: ReadonlyArray<LayoutFile> },
+  path: string,
+  bitfield: Uint8Array | null | undefined
+): boolean => {
+  const file = layout.files.find(candidate => candidate.path === path);
+  return file
+    ? isByteRangeCompleteInBitfield(layout.pieceLength, file.offset, file.length, bitfield)
+    : false;
+};
+
+interface LayoutFile {
+  path: string;
+  offset: number;
+  length: number;
+}
 export const getContentType = (filename: string): string => {
   const ext = filename.toLowerCase().split('.').pop();
 

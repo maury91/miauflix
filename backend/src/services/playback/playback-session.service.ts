@@ -82,19 +82,17 @@ export class PlaybackSessionService {
         (this.audioPlaybackService?.canConvertHevc?.() ?? false)
     );
     if (!prepared.source) return null;
-    if (prepared.state === 'ready' || prepared.state === 'warming') {
-      const warmupArgs = [prepared.source, this.playableKey(playable)] as const;
-      if (prepared.videoFilePath) await this.warmup?.promote(...warmupArgs, prepared.videoFilePath);
-      else await this.warmup?.promote(...warmupArgs);
+    if (prepared.target && (prepared.state === 'ready' || prepared.state === 'warming')) {
+      await this.warmup?.promote(prepared.target, this.playableKey(playable));
     }
     let delivery: PlaybackDelivery | undefined;
     for (let attempt = 0; !options.deferDownload && attempt < 2; attempt++) {
-      const source = prepared.source;
+      const { source, target } = prepared;
       if (!source) return null;
+      // Without a resolved file the stream route resolves it later; deliver directly.
+      if (!target) break;
       try {
-        delivery = prepared.videoFilePath
-          ? await this.audioPlaybackService?.inspect(source, preferences, prepared.videoFilePath)
-          : await this.audioPlaybackService?.inspect(source, preferences);
+        delivery = await this.audioPlaybackService?.inspect(target, preferences);
         break;
       } catch (error) {
         if (error instanceof AudioConversionRequiredError) {
@@ -106,11 +104,8 @@ export class PlaybackSessionService {
             const fallback = await prepare(false);
             if (fallback.source) {
               prepared = fallback;
-              if (prepared.state !== 'cold') {
-                const warmupArgs = [fallback.source, this.playableKey(playable)] as const;
-                if (prepared.videoFilePath)
-                  await this.warmup?.promote(...warmupArgs, prepared.videoFilePath);
-                else await this.warmup?.promote(...warmupArgs);
+              if (prepared.target && prepared.state !== 'cold') {
+                await this.warmup?.promote(prepared.target, this.playableKey(playable));
               }
               continue;
             }
@@ -144,7 +139,10 @@ export class PlaybackSessionService {
       streamingKey,
       streamUrl: `/api/stream/${streamingKey}${delivery?.mode === 'audio-transcode' ? '/audio' : ''}`,
       delivery,
-      episodeMatchKind: prepared.episodeMatchKind,
+      episodeMatchKind:
+        prepared.target && prepared.target.matchKind !== 'movie'
+          ? prepared.target.matchKind
+          : undefined,
       source: {
         id: prepared.source.id,
         quality: prepared.source.quality,

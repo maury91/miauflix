@@ -8,7 +8,7 @@ import { createStreamRoutes } from './stream.routes';
 
 const token = 'a'.repeat(43);
 const setupTest = () => {
-  const source = { id: 9, movieId: 12 };
+  const source = { source: { id: 9 }, filePath: 'movie.mkv', matchKind: 'movie' };
   const grant = {
     sourceId: 9,
     playableKind: 'movie',
@@ -17,9 +17,9 @@ const setupTest = () => {
   };
   const playbackSessionService = { verify: jest.fn().mockResolvedValue(grant) };
   const streamService = {
-    getSourceById: jest.fn().mockResolvedValue(source),
+    getSourceById: jest.fn(),
     getBestSourceForStreaming: jest.fn(),
-    resolvePlaybackSource: jest.fn().mockResolvedValue({ source, episodeSource: null }),
+    resolvePlaybackTarget: jest.fn().mockResolvedValue({ target: source, movie: { id: 12 } }),
   };
   const mediaService = { getMovieById: jest.fn().mockResolvedValue({ mediaId: 123 }) };
   const audioPlaybackService = {
@@ -57,8 +57,7 @@ describe('audio streaming authorization', () => {
       expect.any(AbortSignal),
       1,
       false,
-      false,
-      undefined
+      false
     );
     expect(streamService.getBestSourceForStreaming).not.toHaveBeenCalled();
   });
@@ -74,8 +73,7 @@ describe('audio streaming authorization', () => {
       expect.any(AbortSignal),
       undefined,
       false,
-      true,
-      undefined
+      true
     );
   });
 
@@ -83,13 +81,13 @@ describe('audio streaming authorization', () => {
     const { app, playbackSessionService, audioPlaybackService, streamService } = setupTest();
     playbackSessionService.verify.mockResolvedValue(null);
     expect((await app.request(`/${token}/audio`)).status).toBe(401);
-    expect(streamService.getSourceById).not.toHaveBeenCalled();
+    expect(streamService.resolvePlaybackTarget).not.toHaveBeenCalled();
     expect(audioPlaybackService.stream).not.toHaveBeenCalled();
   });
 
   it('rejects a source whose movie no longer matches the grant', async () => {
     const { app, streamService, audioPlaybackService } = setupTest();
-    streamService.resolvePlaybackSource.mockResolvedValue(null);
+    streamService.resolvePlaybackTarget.mockResolvedValue(null);
     expect((await app.request(`/${token}/audio`)).status).toBe(403);
     expect(audioPlaybackService.stream).not.toHaveBeenCalled();
   });

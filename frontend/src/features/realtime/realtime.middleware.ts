@@ -1,4 +1,5 @@
 import { listsApi } from '@features/media/api/lists.api';
+import { notificationsApi } from '@features/notifications/api/notifications.api';
 import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
 import { PRELOAD_CLIENT_ID } from '@features/preload/lib/intent-client';
@@ -57,6 +58,7 @@ export const realtimeMiddleware: Middleware = api => next => action => {
     api.dispatch(progressApi.util.resetApiState());
     api.dispatch(playbackApi.util.resetApiState());
     api.dispatch(preloadApi.util.resetApiState());
+    api.dispatch(notificationsApi.util.resetApiState());
     if (session && typeof window !== 'undefined') {
       const isCurrentClient = () => activeGeneration === generation && activeSession === session;
       const client = new RealtimeClient(

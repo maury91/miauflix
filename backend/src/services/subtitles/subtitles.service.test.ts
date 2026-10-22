@@ -27,10 +27,14 @@ const setupTest = (directory: string) => {
     expiresAt: new Date(Date.now() + 60_000),
   };
   const verify = jest.fn().mockResolvedValue(grant);
-  const source = { id: 9, file: Buffer.from('mock torrent') };
+  const source = {
+    source: { id: 9, file: Buffer.from('mock torrent') },
+    filePath: 'Movie.mkv',
+    matchKind: 'movie',
+  };
   const movie = { id: 12, mediaId: 123, imdbId: 'tt123' };
   const streamService = {
-    resolvePlaybackSource: jest.fn().mockResolvedValue({ source, episodeSource: null, movie }),
+    resolvePlaybackTarget: jest.fn().mockResolvedValue({ target: source, movie }),
   };
   const request = jest.fn();
   const config = {
@@ -163,7 +167,7 @@ describe('subtitle ranking and durable downloads', () => {
 
   it('returns unknown scores and preserves trust ordering when metadata is missing', async () => {
     const { source, search } = setupTest(directory);
-    source.file = Buffer.alloc(0);
+    source.source.file = Buffer.alloc(0);
     const result = await search([entry(1, 'Other'), entry(2, 'Trusted', { from_trusted: true })]);
     expect(result.candidates[0].release).toBe('Trusted');
     expect(result.candidates.every(candidate => candidate.filenameSimilarity === null)).toBe(true);

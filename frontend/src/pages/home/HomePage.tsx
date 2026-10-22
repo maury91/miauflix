@@ -268,10 +268,11 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       ? { showId: episodeRoute.showMediaId, season: episodeRoute.seasonNumber }
       : skipToken
   );
-  const nextEpisodeInSeason = currentSeasonQuery.data?.episodes
+  // currentData, not data: while a new route loads, data still holds the previous show/season.
+  const nextEpisodeInSeason = currentSeasonQuery.currentData?.episodes
     .filter(episode => episode.episodeNumber > (episodeRoute?.episodeNumber ?? Infinity))
     .sort((left, right) => left.episodeNumber - right.episodeNumber)[0];
-  const nextSeasonNumber = (routedShow.data?.seasons ?? [])
+  const nextSeasonNumber = (routedShow.currentData?.seasons ?? [])
     .filter(
       season =>
         season.seasonNumber > (episodeRoute?.seasonNumber ?? Infinity) && season.seasonNumber > 0
@@ -279,13 +280,13 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     .sort((left, right) => left.seasonNumber - right.seasonNumber)[0]?.seasonNumber;
   const nextSeasonQuery = useGetSeasonQuery(
     episodeRoute &&
-      currentSeasonQuery.isSuccess &&
+      currentSeasonQuery.currentData &&
       !nextEpisodeInSeason &&
       nextSeasonNumber !== undefined
       ? { showId: episodeRoute.showMediaId, season: nextSeasonNumber }
       : skipToken
   );
-  const nextEpisodeAcrossSeason = nextSeasonQuery.data?.episodes
+  const nextEpisodeAcrossSeason = nextSeasonQuery.currentData?.episodes
     .filter(episode => episode.episodeNumber > 0)
     .sort((left, right) => left.episodeNumber - right.episodeNumber)[0];
   const nextEpisode = episodeRoute

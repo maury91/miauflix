@@ -1,20 +1,26 @@
 import type { ContentSource } from '@entities/content-source.entity';
+import type { PlaybackTarget } from '@services/playback/playback-target';
 
 import { TorrentWarmupController, type TorrentWarmupDriver } from './torrent-warmup.controller';
 
-const source = (id: number) => ({ id, size: 100, file: Buffer.from('torrent') }) as ContentSource;
+const source = (id: number, filePath = 'movie.mkv'): PlaybackTarget => ({
+  source: { id, size: 100, file: Buffer.from('torrent') } as ContentSource,
+  filePath,
+  matchKind: 'movie',
+});
 
 describe('TorrentWarmupController', () => {
   const setupTest = () => {
     const driver: jest.Mocked<TorrentWarmupDriver> = {
-      warmSource: jest.fn(async (item: ContentSource, targetBytes: number) => ({
-        sourceId: item.id,
+      warmSource: jest.fn(async (item: PlaybackTarget, targetBytes: number) => ({
+        sourceId: item.source.id,
+        filePath: item.filePath,
         targetBytes,
         firstPiece: 0,
         lastPiece: 2,
       })),
       pauseSource: jest.fn(async (_sourceId: number) => true),
-      promoteSource: jest.fn(async (_source: ContentSource) => true),
+      promoteSource: jest.fn(async (_target: PlaybackTarget) => true),
       hasActivePlayback: jest.fn(() => false),
       isPlaybackActive: jest.fn((_sourceId: number) => false),
     };
@@ -41,7 +47,7 @@ describe('TorrentWarmupController', () => {
     await controller.warm(source(1), 'm:1', 'm:1');
 
     await expect(controller.promote(source(1), 'm:1')).resolves.toBe(true);
-    expect(driver.promoteSource).toHaveBeenCalledWith(source(1), undefined);
+    expect(driver.promoteSource).toHaveBeenCalledWith(source(1));
     expect(driver.pauseSource).not.toHaveBeenCalled();
     expect(controller.getState()).toBeNull();
   });
@@ -198,5 +204,16 @@ describe('TorrentWarmupController', () => {
     } finally {
       controller.close();
     }
+  });
+
+  it('treats another file of the same source as a different warmup', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1, 'Show.S01E01.mkv'), 'lease', 'e:1:1:1');
+
+    await controller.warm(source(1, 'Show.S01E02.mkv'), 'lease', 'e:1:1:2');
+
+    expect(driver.warmSource).toHaveBeenCalledTimes(2);
+    expect(controller.getState()).toMatchObject({ filePath: 'Show.S01E02.mkv' });
+    await expect(controller.promote(source(1, 'Show.S01E01.mkv'), 'e:1:1:2')).resolves.toBe(false);
   });
 });

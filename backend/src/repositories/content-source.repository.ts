@@ -93,6 +93,35 @@ export class ContentSourceRepository {
     return results;
   }
 
+  /** The movie's main video inside the source, if it has been resolved. */
+  async findMovieVideoFilePath(movieId: number, sourceId: number): Promise<string | null> {
+    const link = await this.movieSources.findOne({ where: { movieId, sourceId } });
+    return link?.videoFilePath ?? null;
+  }
+
+  /**
+   * Record the movie's main video inside the source. The first writer wins, so concurrent
+   * resolutions agree; returns the stored path.
+   */
+  async setMovieVideoFilePath(
+    movieId: number,
+    sourceId: number,
+    videoFilePath: string
+  ): Promise<string> {
+    await this.db.write(() =>
+      this.movieSources
+        .createQueryBuilder()
+        .update(MovieSource)
+        .set({ videoFilePath })
+        .where('movieId = :movieId AND sourceId = :sourceId AND videoFilePath IS NULL', {
+          movieId,
+          sourceId,
+        })
+        .execute()
+    );
+    return (await this.findMovieVideoFilePath(movieId, sourceId)) ?? videoFilePath;
+  }
+
   async linkMovie(movieId: number, sourceId: number): Promise<void> {
     await this.db.write(() =>
       this.movieSources

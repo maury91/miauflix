@@ -26,6 +26,7 @@ import { MediaService } from '@services/media/media.service';
 import { NotificationService } from '@services/notifications/notification.service';
 import { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
+import { PlaybackTargetService } from '@services/playback/playback-target.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
@@ -118,13 +119,21 @@ try {
     backgroundJobs,
     notificationService
   );
-  const streamService = new StreamService(db, sourceService, downloadService, mediaService);
+  const playbackTargetService = new PlaybackTargetService(db, downloadService);
+  const streamService = new StreamService(
+    db,
+    sourceService,
+    downloadService,
+    mediaService,
+    playbackTargetService
+  );
   const torrentWarmupController = new TorrentWarmupController(downloadService);
   const playablePreparationService = new PlayablePreparationService(
     mediaService,
     sourceService,
     torrentWarmupController,
-    storageService
+    storageService,
+    playbackTargetService
   );
   const preloadIntentService = new PreloadIntentService(
     playablePreparationService,
@@ -214,6 +223,7 @@ try {
       sourceService,
       downloadService,
       progressService,
+      playbackTargets: playbackTargetService,
       worker: backgroundWorker,
     });
 

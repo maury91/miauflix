@@ -4,6 +4,7 @@ import type { DownloadService } from '@services/download/download.service';
 import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
+import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { ProgressService } from '@services/progress/progress.service';
 import type { SourceMetadataFileService } from '@services/source';
 import type { SourceService } from '@services/source/source.service';
@@ -27,6 +28,7 @@ export function registerBackgroundJobHandlers({
   sourceService,
   downloadService,
   progressService,
+  playbackTargets,
   worker,
 }: {
   backgroundJobs: BackgroundJobService;
@@ -38,6 +40,7 @@ export function registerBackgroundJobHandlers({
   sourceService: SourceService;
   downloadService: DownloadService;
   progressService: ProgressService;
+  playbackTargets: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
   worker: BackgroundJobWorker;
 }): void {
   worker.register('list.refresh.plan', {
@@ -157,7 +160,7 @@ export function registerBackgroundJobHandlers({
       // Re-check after source discovery and after the settling delay. A removal
       // during discovery must never turn into a new background download.
       if (!(await listService.hasAnyMovieWatchlistInterest(movieMediaId))) return;
-      await downloadService.predownloadSource(source);
+      await downloadService.predownload(await playbackTargets.forMovie(media.local.id, source));
     },
   });
   worker.register('watchlist.tv.scan', {
@@ -250,7 +253,8 @@ export function registerBackgroundJobHandlers({
         const airTime = episode.airDate ? Date.parse(episode.airDate) : NaN;
         if (!Number.isFinite(airTime)) continue;
         const now = Date.now();
-        if (airTime > now) return;
+        // Unaired episodes are searched once they enter the configured LEAK_TOLERANCE window.
+        if (!sourceService.isEpisodeWithinLeakTolerance(episode.airDate, now)) return;
         // Always keep the immediate next episode eligible. Beyond that, background
         // acquisition follows recent releases instead of filling old back catalogs.
         if (offset > 0 && now - airTime > 45 * 86_400_000) return;
@@ -274,7 +278,7 @@ export function registerBackgroundJobHandlers({
         if (
           await Promise.all(
             usable.map(match =>
-              downloadService.isEpisodeFileComplete(match.source.id, match.videoFilePath!)
+              downloadService.isFileComplete(match.source.id, match.videoFilePath!)
             )
           ).then(complete => complete.some(Boolean))
         )
@@ -282,7 +286,7 @@ export function registerBackgroundJobHandlers({
 
         const selected = usable[0];
         try {
-          await downloadService.predownloadEpisode(selected.source, selected.videoFilePath!);
+          await downloadService.predownload(playbackTargets.forEpisode(selected)!);
         } catch (error) {
           if (error instanceof Error && /insufficient .* capacity/i.test(error.message)) return;
           throw error;

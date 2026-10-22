@@ -1,10 +1,10 @@
 import { type ChildProcess, spawn } from 'node:child_process';
 
-import type { ContentSource } from '@entities/content-source.entity';
 import type { ConfigService } from '@mytypes/configuration';
 import type { DownloadService } from '@services/download/download.service';
 
 import { FragmentedMp4Timeline } from './fragmented-mp4';
+import type { PlaybackTarget } from './playback-target';
 import { openTorrentInput } from './torrent-input';
 
 export interface PlaybackAudioTrack {
@@ -321,12 +321,11 @@ export class AudioPlaybackService {
   }
 
   async inspect(
-    source: ContentSource,
-    preferences: AudioPlaybackPreferences = {},
-    videoFilePath?: string
+    target: PlaybackTarget,
+    preferences: AudioPlaybackPreferences = {}
   ): Promise<PlaybackDelivery> {
     if (this.closed) throw new AudioPlaybackError('Audio playback is shutting down.');
-    const cacheKey = `${source.id}:${videoFilePath ?? ''}`;
+    const cacheKey = `${target.source.id}:${target.filePath}`;
     const cached = this.probes.get(cacheKey);
     if (cached && cached.expires > Date.now())
       return deliveryFromProbe(await cached.value, preferences, this.canConvertHevc());
@@ -335,7 +334,7 @@ export class AudioPlaybackService {
         if (entry.expires <= Date.now()) this.probes.delete(id);
       if (this.probes.size >= 64) this.probes.delete(this.probes.keys().next().value!);
     }
-    const value = this.probe(source, videoFilePath).catch(error => {
+    const value = this.probe(target).catch(error => {
       if (this.probes.get(cacheKey)?.value === value) this.probes.delete(cacheKey);
       throw error;
     });
@@ -343,8 +342,8 @@ export class AudioPlaybackService {
     return deliveryFromProbe(await value, preferences, this.canConvertHevc());
   }
 
-  private async probe(source: ContentSource, videoFilePath?: string): Promise<ProbeResult> {
-    const input = await openTorrentInput(this.downloadService, source, videoFilePath);
+  private async probe(target: PlaybackTarget): Promise<ProbeResult> {
+    const input = await openTorrentInput(this.downloadService, target);
     try {
       if (this.closed || this.processes.size >= 4)
         throw new AudioPlaybackError('Audio preparation is busy. Retry shortly.');
@@ -403,29 +402,24 @@ export class AudioPlaybackService {
   }
 
   async stream(
-    source: ContentSource,
+    target: PlaybackTarget,
     owner: string,
     startSeconds: number,
     expiresAt: Date,
     signal: AbortSignal,
     audioTrackIndex?: number,
     copyAudio = false,
-    transcodeVideo = false,
-    videoFilePath?: string
+    transcodeVideo = false
   ): Promise<Response> {
     if (transcodeVideo && !this.canConvertHevc())
       throw new AudioPlaybackError('Video conversion is disabled.', 422);
     // Reinspect the source; query parameters cannot enable conversion against server policy.
-    const delivery = await this.inspect(
-      source,
-      {
-        supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'opus', 'flac', 'vorbis'],
-        nativeAudioTracks: true,
-        allowHevc: !transcodeVideo,
-        supportedMseVideoCodecs: transcodeVideo ? ['h264'] : ['h264', 'hevc'],
-      },
-      videoFilePath
-    );
+    const delivery = await this.inspect(target, {
+      supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'opus', 'flac', 'vorbis'],
+      nativeAudioTracks: true,
+      allowHevc: !transcodeVideo,
+      supportedMseVideoCodecs: transcodeVideo ? ['h264'] : ['h264', 'hevc'],
+    });
     if (
       !Number.isFinite(startSeconds) ||
       startSeconds < 0 ||
@@ -493,7 +487,7 @@ export class AudioPlaybackService {
       if (this.closed || this.jobs.size > 2 || this.processes.size >= 4) {
         throw new AudioPlaybackError('Audio conversion is busy. Retry shortly.');
       }
-      input = await openTorrentInput(this.downloadService, source, videoFilePath);
+      input = await openTorrentInput(this.downloadService, target);
       if (controller.signal.aborted)
         throw new AudioPlaybackError('Audio preparation was cancelled.');
       child = spawn(

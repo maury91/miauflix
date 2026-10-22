@@ -230,8 +230,15 @@ vi.mock('./components/CategoryRow', async () => {
   };
 });
 vi.mock('./components/PlayerView', () => ({
-  PlayerView: (props: { playable: { kind: string; mediaId?: number; showMediaId?: number } }) => (
-    <div data-testid="player" data-playable-kind={props.playable.kind} />
+  PlayerView: (props: {
+    playable: { kind: string; mediaId?: number; showMediaId?: number };
+    nextEpisode?: { playable: unknown } | null;
+  }) => (
+    <div
+      data-testid="player"
+      data-playable-kind={props.playable.kind}
+      data-next-episode={props.nextEpisode ? JSON.stringify(props.nextEpisode.playable) : ''}
+    />
   ),
 }));
 vi.mock('./components/MediaHero', async () => {
@@ -956,5 +963,49 @@ describe('HomePage focus transitions', () => {
     expect(rowProps.get(0)).toEqual({ loadIntent: 'visible', visible: true });
     expect(rowProps.get(1)).toEqual({ loadIntent: 'visible', visible: true });
     expect(rowProps.get(2)).toEqual({ loadIntent: 'prefetch', visible: false });
+  });
+
+  it("ignores the previous route's show and season while the next episode route loads", () => {
+    const season = (episodes: number[]) => ({
+      episodes: episodes.map(episodeNumber => ({
+        episodeNumber,
+        title: `Episode ${episodeNumber}`,
+      })),
+    });
+    const firstShow = { seasons: [{ seasonNumber: 1 }, { seasonNumber: 2 }] };
+    useGetShowQuery.mockReturnValue({ data: firstShow, currentData: firstShow, isError: false });
+    useGetSeasonQuery.mockImplementation(args =>
+      args && typeof args === 'object' && 'showId' in args && args.showId === 1
+        ? { data: season([1, 2]), currentData: season([1, 2]), isSuccess: true }
+        : { data: undefined, currentData: undefined, isSuccess: false }
+    );
+    const { rerender } = render(
+      <HomePage
+        route={{ type: 'episodePlayer', showMediaId: 1, seasonNumber: 1, episodeNumber: 1 }}
+      />
+    );
+    expect(JSON.parse(screen.getByTestId('player').dataset.nextEpisode!)).toEqual({
+      kind: 'episode',
+      showMediaId: 1,
+      seasonNumber: 1,
+      episodeNumber: 2,
+    });
+
+    // RTK Query keeps the previous arguments' result in data while the new show is fetching.
+    useGetShowQuery.mockReturnValue({ data: firstShow, currentData: undefined, isError: false });
+    useGetSeasonQuery.mockImplementation(() => ({
+      data: season([1, 2]),
+      currentData: undefined,
+      isSuccess: true,
+      isFetching: true,
+    }));
+    rerender(
+      <HomePage
+        route={{ type: 'episodePlayer', showMediaId: 2, seasonNumber: 1, episodeNumber: 1 }}
+      />
+    );
+
+    expect(screen.getByTestId('player').dataset.nextEpisode).toBe('');
+    expect(useGetSeasonQuery).not.toHaveBeenCalledWith({ showId: 2, season: 2 });
   });
 });

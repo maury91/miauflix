@@ -1,7 +1,7 @@
 import { logger } from '@logger';
 
-import type { ContentSource } from '@entities/content-source.entity';
 import type { WarmupRangeProgress, WarmupResult } from '@services/download/download.service';
+import type { PlaybackTarget } from '@services/playback/playback-target';
 
 export type WarmState =
   | 'adding_torrent'
@@ -18,29 +18,35 @@ export interface WarmSlot {
   leaseKey: string;
   playableKey: string;
   sourceId: number;
+  filePath: string;
   state: WarmState;
   targetVerifiedBytes: number;
   verifiedBytesAtStart: number;
   verifiedBytes: number;
   progress: number;
   startedAt: number;
-  range?: Pick<WarmupResult, 'firstPiece' | 'lastPiece' | 'targetBytes'>;
+  range?: Pick<WarmupResult, 'filePath' | 'firstPiece' | 'lastPiece' | 'targetBytes'>;
 }
 
 export interface TorrentWarmupDriver {
   warmSource(
-    source: ContentSource,
+    target: PlaybackTarget,
     targetBytes: number,
-    speculativeExpiresAt?: Date | null,
-    videoFilePath?: string
+    speculativeExpiresAt?: Date | null
   ): Promise<WarmupResult>;
   pauseSource(sourceId: number): Promise<boolean>;
-  promoteSource(source: ContentSource, videoFilePath?: string): Promise<boolean>;
+  promoteSource(target: PlaybackTarget): Promise<boolean>;
   hasActivePlayback(): boolean;
   isPlaybackActive(sourceId: number): boolean;
-  isRangeVerified?(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean>;
+  isRangeVerified?(
+    sourceId: number,
+    filePath: string,
+    firstPiece: number,
+    lastPiece: number
+  ): Promise<boolean>;
   getRangeProgress?(
     sourceId: number,
+    filePath: string,
     firstPiece: number,
     lastPiece: number
   ): Promise<WarmupRangeProgress>;
@@ -82,15 +88,15 @@ export class TorrentWarmupController {
    * the newly created slot failed.
    */
   async warm(
-    source: ContentSource,
+    target: PlaybackTarget,
     leaseKey: string,
     playableKey: string,
     options: {
       targetBytes?: number;
       speculativeExpiresAt?: Date | null;
-      videoFilePath?: string;
     } = {}
   ): Promise<WarmSlot> {
+    const { source, filePath } = target;
     return this.withTransition(async () => {
       if (this.driver.hasActivePlayback()) {
         if (this.slot) {
@@ -109,6 +115,7 @@ export class TorrentWarmupController {
           leaseKey,
           playableKey,
           sourceId: source.id,
+          filePath,
           state: 'paused',
           targetVerifiedBytes:
             options.targetBytes ?? this.driver.getWarmupTargetBytes?.() ?? DEFAULT_TARGET_BYTES,
@@ -120,6 +127,7 @@ export class TorrentWarmupController {
       }
       if (
         this.slot?.sourceId === source.id &&
+        this.slot.filePath === filePath &&
         this.slot.leaseKey === leaseKey &&
         ['adding_torrent', 'resolving_store', 'warming', 'ready'].includes(this.slot.state)
       ) {
@@ -143,6 +151,7 @@ export class TorrentWarmupController {
         leaseKey,
         playableKey,
         sourceId: source.id,
+        filePath,
         state: 'resolving_store',
         targetVerifiedBytes:
           options.targetBytes ?? this.driver.getWarmupTargetBytes?.() ?? DEFAULT_TARGET_BYTES,
@@ -157,10 +166,9 @@ export class TorrentWarmupController {
         if (!slot) throw new Error('Warmup slot was lost before torrent setup');
         this.setSlot({ ...slot, state: 'adding_torrent' });
         const result = await this.driver.warmSource(
-          source,
+          target,
           slot.targetVerifiedBytes,
-          options.speculativeExpiresAt,
-          options.videoFilePath
+          options.speculativeExpiresAt
         );
         if (this.slot?.generation !== generation) {
           await this.driver.pauseSource(source.id);
@@ -210,18 +218,19 @@ export class TorrentWarmupController {
     });
   }
 
-  /** Promote the exact source currently selected for this playable. */
-  async promote(
-    source: ContentSource,
-    playableKey: string,
-    videoFilePath?: string
-  ): Promise<boolean> {
+  /** Promote the exact source file currently selected for this playable. */
+  async promote(target: PlaybackTarget, playableKey: string): Promise<boolean> {
+    const { source, filePath } = target;
     return this.withTransition(async () => {
-      if (this.slot && this.slot.playableKey === playableKey && this.slot.sourceId !== source.id) {
+      if (
+        this.slot &&
+        this.slot.playableKey === playableKey &&
+        (this.slot.sourceId !== source.id || this.slot.filePath !== filePath)
+      ) {
         return false;
       }
-      const promoted = await this.driver.promoteSource(source, videoFilePath);
-      if (promoted && this.slot?.sourceId === source.id) {
+      const promoted = await this.driver.promoteSource(target);
+      if (promoted && this.slot?.sourceId === source.id && this.slot.filePath === filePath) {
         this.cancelReadinessCheck();
         this.setSlot(null);
       }
@@ -257,7 +266,7 @@ export class TorrentWarmupController {
   private scheduleReadinessCheck(
     generation: number,
     sourceId: number,
-    range: Pick<WarmupResult, 'firstPiece' | 'lastPiece' | 'targetBytes'>
+    range: Pick<WarmupResult, 'filePath' | 'firstPiece' | 'lastPiece' | 'targetBytes'>
   ): void {
     this.cancelReadinessCheck();
     const check = async (): Promise<void> => {
@@ -292,14 +301,20 @@ export class TorrentWarmupController {
    */
   private async readRangeProgress(
     sourceId: number,
-    range: Pick<WarmupResult, 'firstPiece' | 'lastPiece' | 'targetBytes'>
+    range: Pick<WarmupResult, 'filePath' | 'firstPiece' | 'lastPiece' | 'targetBytes'>
   ): Promise<WarmupRangeProgress | null> {
     if (this.driver.getRangeProgress) {
-      return this.driver.getRangeProgress(sourceId, range.firstPiece, range.lastPiece);
+      return this.driver.getRangeProgress(
+        sourceId,
+        range.filePath,
+        range.firstPiece,
+        range.lastPiece
+      );
     }
     if (this.driver.isRangeVerified) {
       const complete = await this.driver.isRangeVerified(
         sourceId,
+        range.filePath,
         range.firstPiece,
         range.lastPiece
       );

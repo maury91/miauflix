@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { UserRole } from '@entities/user.entity';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { isVideoFile } from '@services/download/download.utils';
 
 import type { Deps } from './common.types';
 import type { StorageInventoryResponse } from './storage.types';
@@ -45,7 +46,7 @@ export const createStorageRoutes = (
             sourceId: storage.sourceId,
             title:
               storage.contentSource?.movies?.[0]?.movie?.title ?? `Download ${storage.sourceId}`,
-            fileName: storage.encryptedLayout?.video.name ?? null,
+            fileName: storage.selectedFiles?.find(isVideoFile)?.split('/').pop() ?? null,
             quality: storage.contentSource?.quality ?? null,
             physicalBytes: storage.allocatedBytes,
             reservedBytes: storage.reservedBytes,

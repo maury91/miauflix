@@ -12,6 +12,8 @@ import WebTorrent from 'webtorrent';
 import type { ContentSource } from '@entities/content-source.entity';
 import type { EncryptedStorageLayout, Storage } from '@entities/storage.entity';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
+import type { PlaybackTarget } from '@services/playback/playback-target';
+import { withFile } from '@services/playback/playback-target';
 import type { RequestService } from '@services/request/request.service';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import type { StorageService } from '@services/storage/storage.service';
@@ -24,8 +26,8 @@ import {
   getContentType,
   getIpSet,
   getTrackers,
-  getVideoFile,
-  isVideoFile,
+  isFileCompleteInBitfield,
+  isPieceInBitfield,
   parseRangeHeader,
 } from './download.utils';
 import { EncryptedFileReader } from './encrypted-file-reader';
@@ -38,7 +40,7 @@ export interface GreedyDownload {
   sourceId: number;
   torrent: Torrent | null;
   storage: Storage;
-  layout?: EncryptedStorageLayout;
+  layout: EncryptedStorageLayout;
   // priority: DownloadPriority;
   startTime: Date;
 }
@@ -54,17 +56,16 @@ export interface DownloadProgress {
 
 export interface WarmupResult {
   sourceId: number;
+  filePath: string;
   targetBytes: number;
   firstPiece: number;
   lastPiece: number;
 }
 
-export type StorageActivity = 'active' | 'available_offline' | 'inactive' | 'local_only';
+const MAX_SIDECAR_BYTES = 2 * 1024 * 1024;
+const SIDECAR_SUBTITLE = /\.(srt|vtt|ass|ssa)$/i;
 
-function isStoredPieceVerified(pieces: Uint8Array, pieceIndex: number): boolean {
-  const byte = pieces[Math.floor(pieceIndex / 8)] ?? 0;
-  return (byte & (1 << (7 - (pieceIndex % 8)))) !== 0;
-}
+export type StorageActivity = 'active' | 'available_offline' | 'inactive' | 'local_only';
 
 export interface StorageActivitySnapshot {
   activity: StorageActivity;
@@ -200,12 +201,10 @@ export class DownloadService {
     if (!videoComplete && torrent?.ready) {
       try {
         const layout = storage.encryptedLayout ?? this.createEncryptedLayout(torrent);
-        const selected = storage.selectedFiles?.length ? storage.selectedFiles : null;
-        videoComplete = selected
-          ? selected.every(path =>
-              this.isFileCompleteInBitfield(layout, path, torrent.bitfield?.buffer)
-            )
-          : this.isLayoutVideoCompleteInBitfield(layout, torrent.bitfield?.buffer);
+        const selected = storage.selectedFiles ?? [];
+        videoComplete =
+          selected.length > 0 &&
+          selected.every(path => isFileCompleteInBitfield(layout, path, torrent.bitfield?.buffer));
       } catch {
         // Metadata can be incomplete while a torrent is being admitted.
         videoComplete = false;
@@ -299,8 +298,7 @@ export class DownloadService {
 
   private createEncryptedLayout(
     torrent: Torrent,
-    sourceHash = torrent.infoHash,
-    video = getVideoFile(torrent)
+    sourceHash = torrent.infoHash
   ): EncryptedStorageLayout {
     return {
       storeName: `${torrent.name} - ${torrent.infoHash.slice(0, 8)}`,
@@ -313,82 +311,24 @@ export class DownloadService {
         length: file.length,
         offset: Number(file.offset ?? 0),
       })),
-      video: {
-        name: video.name,
-        path: video.path,
-        offset: Number(video.offset ?? 0),
-        length: video.length,
-      },
     };
   }
 
+  /** Record completion once every file requested from the source is verified. */
   private async maybeMarkVideoComplete(
     torrent: Torrent,
     sourceId: number,
     layout: EncryptedStorageLayout
   ): Promise<void> {
     const current = await this.storageService.getStorageBySource(sourceId);
-    if (!current) return;
-    const selected = current.selectedFiles ?? [];
+    const selected = current?.selectedFiles ?? [];
     if (
-      selected.length
-        ? !selected.every(path =>
-            this.isFileCompleteInBitfield(layout, path, torrent.bitfield?.buffer)
-          )
-        : !this.isLayoutVideoCompleteInBitfield(layout, torrent.bitfield?.buffer)
+      !selected.length ||
+      !selected.every(path => isFileCompleteInBitfield(layout, path, torrent.bitfield?.buffer))
     )
       return;
-    const finalPath = [...selected].reverse().find(path => isVideoFile(path));
-    const completedLayout = finalPath ? this.selectLayoutVideo(layout, finalPath) : layout;
-    const storage = await this.storageService.markVideoComplete(sourceId, completedLayout);
+    const storage = await this.storageService.markVideoComplete(sourceId, layout);
     if (storage) this.scheduleSeedExpiry(storage);
-  }
-
-  private selectLayoutVideo(layout: EncryptedStorageLayout, path?: string): EncryptedStorageLayout {
-    if (!path) return layout;
-    const file = layout.files.find(candidate => candidate.path === path);
-    if (!file || !isVideoFile(file.path))
-      throw new ErrorWithStatus('Episode video file is unavailable', 'episode_file_unavailable');
-    return { ...layout, video: { ...file, name: file.path } };
-  }
-
-  private isFileCompleteInBitfield(
-    layout: EncryptedStorageLayout,
-    path: string,
-    bitfield?: Uint8Array | null
-  ): boolean {
-    const file = layout.files.find(candidate => candidate.path === path);
-    return file
-      ? this.isByteRangeCompleteInBitfield(layout, file.offset, file.length, bitfield)
-      : false;
-  }
-
-  private isLayoutVideoCompleteInBitfield(
-    layout: EncryptedStorageLayout,
-    bitfield?: Uint8Array | null
-  ): boolean {
-    return this.isByteRangeCompleteInBitfield(
-      layout,
-      layout.video.offset,
-      layout.video.length,
-      bitfield
-    );
-  }
-
-  private isByteRangeCompleteInBitfield(
-    layout: EncryptedStorageLayout,
-    offset: number,
-    length: number,
-    bitfield?: Uint8Array | null
-  ): boolean {
-    if (length <= 0 || !bitfield?.length || layout.pieceLength <= 0) return false;
-    const firstPiece = Math.floor(offset / layout.pieceLength);
-    const lastPiece = Math.floor((offset + length - 1) / layout.pieceLength);
-    for (let piece = firstPiece; piece <= lastPiece; piece++) {
-      const byte = bitfield[Math.floor(piece / 8)] ?? 0;
-      if ((byte & (1 << (7 - (piece % 8)))) === 0) return false;
-    }
-    return true;
   }
 
   private withSourceFilenameSalt(
@@ -436,10 +376,8 @@ export class DownloadService {
             this.createEncryptedLayout(torrent, current.contentSource.hash);
           const layout = this.withSourceFilenameSalt(savedLayout, current.contentSource.hash);
           await this.storageService.updateEncryptedLayout(current.sourceId, layout);
-          const selected = current.selectedFiles?.length
-            ? current.selectedFiles
-            : [layout.video.path];
-          for (const path of selected) torrent.files.find(file => file.path === path)?.select();
+          for (const path of current.selectedFiles ?? [])
+            torrent.files.find(file => file.path === path)?.select();
           this.trackTorrent(torrent, current.sourceId, layout);
           this.scheduleSeedExpiry(current);
         });
@@ -532,7 +470,7 @@ export class DownloadService {
       if (
         storage.localOnly ||
         torrent?.bitfield?.get(pieceIndex) ||
-        isStoredPieceVerified(storage.downloadedPieces, pieceIndex)
+        isPieceInBitfield(storage.downloadedPieces, pieceIndex)
       ) {
         return reader.readPiece(pieceIndex);
       }
@@ -702,37 +640,25 @@ export class DownloadService {
    */
   @traced('DownloadService')
   async startDownload(
-    source: ContentSource,
+    target: PlaybackTarget,
     options: {
       retentionClass?: 'speculative' | 'watched';
+      /** Admission charge used only while the source's file list is still unknown. */
       reservedBytes?: number;
       speculativeExpiresAt?: Date | null;
-      videoFilePath?: string;
-      forceAttach?: boolean;
     } = {}
   ): Promise<GreedyDownload> {
+    const { source, filePath } = target;
     try {
       logger.info('DownloadService', `Starting download for source ${source.id}`);
 
       const existingStorage = await this.storageService.getStorageBySource(source.id);
-      const selectedPaths = new Set(existingStorage?.selectedFiles ?? []);
-      if (options.videoFilePath) selectedPaths.add(options.videoFilePath);
-      const reservation = options.videoFilePath
-        ? await this.getSelectedFilesReservation(
-            source,
-            [...selectedPaths],
-            existingStorage?.encryptedLayout ?? undefined
-          )
-        : null;
-      const reservedBytes = options.videoFilePath
-        ? reservation?.known
-          ? reservation.bytes
-          : (existingStorage?.reservedBytes ?? 0)
-        : (options.reservedBytes ?? (options.retentionClass === 'speculative' ? 0 : source.size));
+      const reservation = await this.getSelectedFilesReservation(
+        source,
+        [...new Set([...(existingStorage?.selectedFiles ?? []), filePath])],
+        existingStorage?.encryptedLayout ?? undefined
+      );
 
-      // FixMe: Create or get storage
-      // If storage already exists use the bitfield for the torrent
-      // Create storage record first
       await this.storageService.createStorage({
         sourceId: source.id,
         location: this.generateStoragePath(source.hash),
@@ -740,8 +666,10 @@ export class DownloadService {
         downloadedPieces: new Uint8Array(0),
         totalPieces: 0,
         retentionClass: options.retentionClass,
-        reservedBytes,
-        partialReservation: Boolean(options.videoFilePath),
+        reservedBytes: reservation.known
+          ? reservation.bytes
+          : (options.reservedBytes ?? (options.retentionClass === 'speculative' ? 0 : source.size)),
+        partialReservation: reservation.known,
         speculativeExpiresAt: options.speculativeExpiresAt,
       });
 
@@ -750,103 +678,52 @@ export class DownloadService {
         if (!current) {
           throw new ErrorWithStatus('Storage record is unavailable', 'local_media_unavailable');
         }
-        if (options.videoFilePath) {
-          const savedLayout =
-            current.encryptedLayout ?? (await this.recoverEncryptedLayout(source));
-          if (
-            !options.forceAttach &&
-            savedLayout &&
-            this.isFileCompleteInBitfield(
-              savedLayout,
-              options.videoFilePath,
-              current.downloadedPieces
-            )
-          ) {
-            const layout = this.selectLayoutVideo(
-              this.withSourceFilenameSalt(savedLayout, source.hash),
-              options.videoFilePath
-            );
-            await this.storageService.selectTorrentFile(source.id, options.videoFilePath, true);
-            return {
-              sourceId: source.id,
-              torrent: null,
-              storage: current,
-              layout,
-              shouldDetach: false,
-              startTime: new Date(),
-            };
+        const savedLayout = current.encryptedLayout ?? (await this.recoverEncryptedLayout(source));
+        if (savedLayout) this.assertFileInLayout(savedLayout, filePath);
+
+        // A fully stored file is read from disk; the torrent stays as it is.
+        if (savedLayout && this.isFileStored(current, savedLayout, filePath)) {
+          const layout = this.withSourceFilenameSalt(savedLayout, source.hash);
+          if (layout.filenameSalt !== current.encryptedLayout?.filenameSalt) {
+            await this.storageService.updateEncryptedLayout(source.id, layout);
           }
-          await this.storageService.selectTorrentFile(
-            source.id,
-            options.videoFilePath,
-            Boolean(
-              savedLayout &&
-                this.isFileCompleteInBitfield(
-                  savedLayout,
-                  options.videoFilePath,
-                  current.downloadedPieces
-                )
-            )
-          );
-          const timer = this.seedTimers.get(source.id);
-          if (timer) clearTimeout(timer);
-          this.seedTimers.delete(source.id);
-          current = (await this.storageService.reactivateTorrent(source.id)) ?? current;
-        }
-        if (
-          !options.forceAttach &&
-          !options.videoFilePath &&
-          (current.localOnly || current.videoCompletedAt)
-        ) {
+          await this.storageService.selectTorrentFile(source.id, filePath, true);
           const expired = Boolean(
             current.videoCompletedAt &&
               Date.now() >= current.videoCompletedAt.getTime() + this.getSeedDurationMs()
           );
-          if (current.localOnly || expired) {
-            const savedLayout =
-              current.encryptedLayout ?? (await this.recoverEncryptedLayout(source));
-            const layout = savedLayout
-              ? this.withSourceFilenameSalt(savedLayout, source.hash)
-              : null;
-            if (layout && layout.filenameSalt !== current.encryptedLayout?.filenameSalt) {
-              await this.storageService.updateEncryptedLayout(source.id, layout);
-            }
-            return {
-              sourceId: source.id,
-              torrent: null,
-              storage: current,
-              layout: layout ?? undefined,
-              shouldDetach: expired && !current.localOnly,
-              startTime: new Date(),
-            };
-          }
+          return {
+            sourceId: source.id,
+            torrent: null,
+            storage: current,
+            layout,
+            shouldDetach: expired && !current.localOnly,
+            startTime: new Date(),
+          };
         }
+
+        // Requesting an incomplete file reopens a completed source and cancels its seed window.
+        await this.storageService.selectTorrentFile(source.id, filePath, false);
+        const timer = this.seedTimers.get(source.id);
+        if (timer) clearTimeout(timer);
+        this.seedTimers.delete(source.id);
+        current = (await this.storageService.reactivateTorrent(source.id)) ?? current;
 
         // Serialize torrent startup against expiry detachment and storage deletion.
         const torrent = await this.addTorrentWithLock(source, current);
-        const layout = this.selectLayoutVideo(
-          this.createEncryptedLayout(torrent, source.hash),
-          options.videoFilePath
-        );
+        const layout = this.createEncryptedLayout(torrent, source.hash);
+        this.assertFileInLayout(layout, filePath);
         await this.storageService.updateEncryptedLayout(source.id, layout);
-        if (options.videoFilePath)
-          await this.storageService.selectTorrentFile(
-            source.id,
-            options.videoFilePath,
-            this.isFileCompleteInBitfield(layout, options.videoFilePath, current.downloadedPieces)
-          );
-        if (options.videoFilePath) {
-          const selectedStorage = await this.storageService.getStorageBySource(source.id);
-          const required = await this.getSelectedFilesReservation(
-            source,
-            selectedStorage?.selectedFiles ?? [options.videoFilePath],
-            layout
-          );
-          if (required.known) {
-            if (options.retentionClass === 'speculative')
-              await this.storageService.reserveSpeculativeStorage(source.id, required.bytes);
-            else await this.storageService.reserveStorage(source.id, required.bytes);
-          }
+        const selectedStorage = await this.storageService.getStorageBySource(source.id);
+        const required = await this.getSelectedFilesReservation(
+          source,
+          selectedStorage?.selectedFiles ?? [filePath],
+          layout
+        );
+        if (required.known) {
+          if (options.retentionClass === 'speculative')
+            await this.storageService.reserveSpeculativeStorage(source.id, required.bytes);
+          else await this.storageService.reserveStorage(source.id, required.bytes);
         }
         return {
           sourceId: source.id,
@@ -871,12 +748,6 @@ export class DownloadService {
             this.scheduleDetachRetry(source.id);
           }
         }
-        if (!start.layout) {
-          throw new ErrorWithStatus(
-            'Completed encrypted media layout is unavailable',
-            'local_media_unavailable'
-          );
-        }
         return start;
       }
 
@@ -896,21 +767,8 @@ export class DownloadService {
         totalPieces,
         torrent.pieceLength,
         torrent.length,
-        ...(options.videoFilePath
-          ? [
-              layout.files
-                .filter(file => latestStorage?.selectedFiles.includes(file.path))
-                .reduce((total, file) => total + file.length, 0),
-            ]
-          : [])
+        this.getSelectedBytes(layout, latestStorage?.selectedFiles ?? [filePath])
       );
-      if (!options.videoFilePath) {
-        if (options.retentionClass === 'speculative') {
-          await this.storageService.reserveSpeculativeStorage(source.id, torrent.length);
-        } else {
-          await this.storageService.reserveStorage(source.id, torrent.length);
-        }
-      }
       await this.storageService.reconcileAllocation(source.id);
 
       // Set up bitfield tracking
@@ -935,30 +793,90 @@ export class DownloadService {
     }
   }
 
+  /**
+   * A file is stored when its pieces are verified, or when it was requested from a source that
+   * is already marked complete (completion is cleared whenever an incomplete file is requested).
+   */
+  private isFileStored(
+    storage: Pick<Storage, 'downloadedPieces' | 'localOnly' | 'selectedFiles' | 'videoCompletedAt'>,
+    layout: EncryptedStorageLayout,
+    filePath: string
+  ): boolean {
+    return (
+      isFileCompleteInBitfield(layout, filePath, storage.downloadedPieces) ||
+      (Boolean(storage.localOnly || storage.videoCompletedAt) &&
+        (storage.selectedFiles ?? []).includes(filePath))
+    );
+  }
+
+  private assertFileInLayout(layout: EncryptedStorageLayout, filePath: string): void {
+    if (!layout.files.some(file => file.path === filePath))
+      throw new ErrorWithStatus(
+        'Requested file is not part of this source',
+        'source_file_unavailable'
+      );
+  }
+
+  /** Logical bytes of the requested files within the source. */
+  private getSelectedBytes(layout: EncryptedStorageLayout, paths: string[]): number {
+    return layout.files
+      .filter(file => paths.includes(file.path))
+      .reduce((total, file) => total + file.length, 0);
+  }
+
+  /** File list of a source, from storage or its torrent file, without attaching the torrent. */
+  async getKnownLayout(source: ContentSource): Promise<EncryptedStorageLayout | null> {
+    const storage = await this.storageService.getStorageBySource(source.id);
+    return storage?.encryptedLayout ?? (await this.recoverEncryptedLayout(source));
+  }
+
+  /**
+   * File list of a source. When neither storage nor a torrent file knows it, the torrent is
+   * attached with nothing selected so its metadata arrives through the normal download path.
+   */
+  async resolveLayout(source: ContentSource): Promise<EncryptedStorageLayout> {
+    const known = await this.getKnownLayout(source);
+    if (known) return known;
+    await this.storageService.createStorage({
+      sourceId: source.id,
+      location: this.generateStoragePath(source.hash),
+      size: source.size || 0,
+      downloadedPieces: new Uint8Array(0),
+      totalPieces: 0,
+      retentionClass: 'speculative',
+      reservedBytes: 0,
+    });
+    return this.storageService.withSourceLock(source.id, async () => {
+      const current = await this.storageService.getStorageBySource(source.id);
+      if (!current) {
+        throw new ErrorWithStatus('Storage record is unavailable', 'local_media_unavailable');
+      }
+      if (current.encryptedLayout) return current.encryptedLayout;
+      const torrent = await this.addTorrentWithLock(source, current);
+      const layout = this.createEncryptedLayout(torrent, source.hash);
+      await this.storageService.updateEncryptedLayout(source.id, layout);
+      return layout;
+    });
+  }
+
   private async recoverEncryptedLayout(
     source: ContentSource
   ): Promise<EncryptedStorageLayout | null> {
     if (!source.file) return null;
     const parsed = await parseTorrent(source.file);
     const files = parsed.files ?? [];
-    const video = files
-      .filter(file => isVideoFile(file.path))
-      .sort((a, b) => b.length - a.length)[0];
-    if (!video || !parsed.pieceLength || !parsed.name) return null;
-    const recoveredFiles = files.map((file, index) => ({
-      path: file.path,
-      length: file.length,
-      offset:
-        file.offset ??
-        files.slice(0, index).reduce((offset, previous) => offset + previous.length, 0),
-    }));
-    const videoOffset = recoveredFiles.find(file => file.path === video.path)?.offset ?? 0;
+    if (!files.length || !parsed.pieceLength || !parsed.name) return null;
     return {
       storeName: `${parsed.name} - ${source.hash.slice(0, 8)}`,
       filenameSalt: `download-${source.hash}`,
       pieceLength: parsed.pieceLength,
-      files: recoveredFiles,
-      video: { name: video.name, path: video.path, offset: videoOffset, length: video.length },
+      files: files.map((file, index) => ({
+        path: file.path,
+        length: file.length,
+        offset:
+          file.offset ??
+          files.slice(0, index).reduce((offset, previous) => offset + previous.length, 0),
+      })),
     };
   }
 
@@ -989,47 +907,47 @@ export class DownloadService {
 
   /**
    * Start or reuse a speculative download and select the smallest piece-aligned
-   * prefix of the largest video file that covers the byte target, capped at the file end.
-   * A source already retained as watched keeps the full video selected.
+   * prefix of the target file that covers the byte target, capped at the file end.
+   * A source already retained as watched keeps the full file selected.
    *
    * @param speculativeExpiresAt Expiry for speculative retention, or null for no supplied expiry.
    * @returns Inclusive piece indices and their actual byte length, which can exceed the target.
-   * @throws Propagates download failures; rejects with TypeError if no video file is found.
+   * @throws Propagates download failures, including a target file missing from the source.
    */
   async warmSource(
-    source: ContentSource,
+    target: PlaybackTarget,
     targetBytes: number,
-    speculativeExpiresAt: Date | null = null,
-    videoFilePath?: string
+    speculativeExpiresAt: Date | null = null
   ): Promise<WarmupResult> {
-    const target = Math.max(1, Math.min(Math.floor(targetBytes), source.size || targetBytes));
-    const download = await this.startDownload(source, {
+    const { source, filePath } = target;
+    const requested = Math.max(1, Math.min(Math.floor(targetBytes), source.size || targetBytes));
+    const download = await this.startDownload(target, {
       retentionClass: 'speculative',
-      reservedBytes: target,
+      reservedBytes: requested,
       speculativeExpiresAt,
-      videoFilePath,
     });
+    const layoutFile = download.layout.files.find(file => file.path === filePath)!;
+    const pieceLength = download.layout.pieceLength;
     if (!download.torrent) {
-      const layout = download.layout!;
-      const firstPiece = Math.floor(layout.video.offset / layout.pieceLength);
+      const firstPiece = Math.floor(layoutFile.offset / pieceLength);
       const lastPiece = Math.floor(
-        (layout.video.offset + Math.min(target, layout.video.length) - 1) / layout.pieceLength
+        (layoutFile.offset + Math.min(requested, layoutFile.length) - 1) / pieceLength
       );
-      return { sourceId: source.id, targetBytes: target, firstPiece, lastPiece };
+      return { sourceId: source.id, filePath, targetBytes: requested, firstPiece, lastPiece };
     }
-    const file = videoFilePath
-      ? download.torrent.files.find(candidate => candidate.path === videoFilePath)
-      : getVideoFile(download.torrent);
+    const file = download.torrent.files.find(candidate => candidate.path === filePath);
     if (!file)
-      throw new ErrorWithStatus('Episode video file is unavailable', 'episode_file_unavailable');
-    const pieceLength = download.torrent.pieceLength;
+      throw new ErrorWithStatus(
+        'Requested file is not part of this source',
+        'source_file_unavailable'
+      );
     const fileOffset = Number(file.offset ?? 0);
     const firstPiece = Math.max(0, Math.floor(fileOffset / pieceLength));
     const lastPiece = Math.min(
       this.getTorrentPieceCount(download.torrent) - 1,
       Math.max(
         firstPiece,
-        Math.ceil((fileOffset + Math.min(target, file.length)) / pieceLength) - 1
+        Math.ceil((fileOffset + Math.min(requested, file.length)) / pieceLength) - 1
       )
     );
     const selectedTargetBytes = this.getRangeByteLength(download.torrent, firstPiece, lastPiece);
@@ -1043,7 +961,13 @@ export class DownloadService {
       download.torrent.select(firstPiece, lastPiece, 1);
       this.warmupSelections.set(source.id, { firstPiece, lastPiece });
     }
-    return { sourceId: source.id, targetBytes: selectedTargetBytes, firstPiece, lastPiece };
+    return {
+      sourceId: source.id,
+      filePath,
+      targetBytes: selectedTargetBytes,
+      firstPiece,
+      lastPiece,
+    };
   }
 
   async pauseSource(sourceId: number): Promise<boolean> {
@@ -1054,18 +978,24 @@ export class DownloadService {
    * Return whether every byte in an inclusive, zero-based piece range is verified.
    * Invalid or unavailable ranges return false; storage lookup failures propagate.
    */
-  async isRangeVerified(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean> {
-    const progress = await this.getRangeProgress(sourceId, firstPiece, lastPiece);
+  async isRangeVerified(
+    sourceId: number,
+    filePath: string,
+    firstPiece: number,
+    lastPiece: number
+  ): Promise<boolean> {
+    const progress = await this.getRangeProgress(sourceId, filePath, firstPiece, lastPiece);
     return progress.isComplete;
   }
 
   /**
-   * Measure verified bytes and completion percentage (0–100) for an inclusive, zero-based piece range.
-   * Invalid ranges or unavailable torrent data return zero counts and an incomplete result.
-   * Storage lookup failures propagate.
+   * Measure verified bytes of one file and completion percentage (0–100) for an inclusive,
+   * zero-based piece range. Invalid ranges or unavailable torrent data return zero counts and an
+   * incomplete result. Storage lookup failures propagate.
    */
   async getRangeProgress(
     sourceId: number,
+    filePath: string,
     firstPiece: number,
     lastPiece: number
   ): Promise<WarmupRangeProgress> {
@@ -1090,7 +1020,7 @@ export class DownloadService {
     }
     if (!torrent?.bitfield) {
       if ((storage.videoCompletedAt || storage.localOnly) && layout) {
-        const targetBytes = this.getVideoRangeByteLength(layout, firstPiece, lastPiece);
+        const targetBytes = this.getFileRangeByteLength(layout, filePath, firstPiece, lastPiece);
         if (targetBytes > 0) {
           return { verifiedBytes: targetBytes, targetBytes, progress: 100, isComplete: true };
         }
@@ -1107,7 +1037,7 @@ export class DownloadService {
       return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
     }
     const targetBytes = layout
-      ? this.getVideoRangeByteLength(layout, firstPiece, lastPiece)
+      ? this.getFileRangeByteLength(layout, filePath, firstPiece, lastPiece)
       : this.getRangeByteLength(torrent, firstPiece, lastPiece);
     if (targetBytes <= 0) {
       return { verifiedBytes: 0, targetBytes: 0, progress: 0, isComplete: false };
@@ -1116,7 +1046,7 @@ export class DownloadService {
     for (let piece = firstPiece; piece <= lastPiece; piece += 1) {
       if (torrent.bitfield.get(piece)) {
         verifiedBytes += layout
-          ? this.getVideoRangeByteLength(layout, piece, piece)
+          ? this.getFileRangeByteLength(layout, filePath, piece, piece)
           : this.getPieceByteLength(torrent, piece);
       }
     }
@@ -1148,29 +1078,31 @@ export class DownloadService {
     return Math.max(0, Math.min(pieceLength, torrentLength - start));
   }
 
-  /** Count only video bytes covered by an inclusive piece range. */
-  private getVideoRangeByteLength(
+  /** Count only the named file's bytes covered by an inclusive piece range. */
+  private getFileRangeByteLength(
     layout: EncryptedStorageLayout,
+    filePath: string,
     firstPiece: number,
     lastPiece: number
   ): number {
     const pieceLength = Number(layout.pieceLength);
-    const videoStart = Number(layout.video?.offset);
-    const videoLength = Number(layout.video?.length);
+    const file = layout.files.find(candidate => candidate.path === filePath);
+    const fileStart = Number(file?.offset);
+    const fileLength = Number(file?.length);
     if (
       !Number.isFinite(pieceLength) ||
       pieceLength <= 0 ||
-      !Number.isFinite(videoStart) ||
-      videoStart < 0 ||
-      !Number.isFinite(videoLength) ||
-      videoLength <= 0
+      !Number.isFinite(fileStart) ||
+      fileStart < 0 ||
+      !Number.isFinite(fileLength) ||
+      fileLength <= 0
     ) {
       return 0;
     }
     const rangeStart = firstPiece * pieceLength;
     const rangeEnd = (lastPiece + 1) * pieceLength;
-    const videoEnd = videoStart + videoLength;
-    return Math.max(0, Math.min(rangeEnd, videoEnd) - Math.max(rangeStart, videoStart));
+    const fileEnd = fileStart + fileLength;
+    return Math.max(0, Math.min(rangeEnd, fileEnd) - Math.max(rangeStart, fileStart));
   }
 
   /** Sum byte lengths across an inclusive, zero-based piece range, including a short final piece. */
@@ -1183,19 +1115,14 @@ export class DownloadService {
   }
 
   /** Promote the already-added source; no source ranking or replacement occurs. */
-  async promoteSource(source: ContentSource, videoFilePath?: string): Promise<boolean> {
-    const download = await this.startDownload(source, {
-      retentionClass: 'watched',
-      reservedBytes: source.size,
-      videoFilePath,
-    });
+  async promoteSource(target: PlaybackTarget): Promise<boolean> {
+    const { source, filePath } = target;
+    const download = await this.startDownload(target, { retentionClass: 'watched' });
     if (!download.torrent) {
       await this.storageService.markAsAccessed(source.id);
       return true;
     }
-    const file = videoFilePath
-      ? download.torrent.files.find(candidate => candidate.path === videoFilePath)
-      : getVideoFile(download.torrent);
+    const file = download.torrent.files.find(candidate => candidate.path === filePath);
     if (!file) return false;
     this.warmupSelections.delete(source.id);
     file.select();
@@ -1203,40 +1130,26 @@ export class DownloadService {
     return true;
   }
 
-  /** Download a watchlisted movie in the background while preserving the playback reserve. */
-  async predownloadSource(source: ContentSource): Promise<boolean> {
-    const download = await this.startDownload(source, {
-      retentionClass: 'speculative',
-      reservedBytes: source.size,
-    });
+  /**
+   * Download one file in the background while preserving the playback reserve. Within a shared
+   * source the playing file keeps higher piece priority; another source waits only until active
+   * playback has fully buffered its file.
+   */
+  async predownload(target: PlaybackTarget): Promise<boolean> {
+    const { source, filePath } = target;
+    if (await this.isFileComplete(source.id, filePath)) return true;
+    const download = await this.startDownload(target, { retentionClass: 'speculative' });
     if (!download.torrent) return true;
-    const torrent = download.torrent;
-    await this.storageService.withSourceLock(source.id, async () => {
-      this.warmupSelections.delete(source.id);
-      getVideoFile(torrent).select();
-      if (this.activeStreams <= 0) return;
-      if (await this.pauseDownload(source.id)) this.pausedForPlayback.add(source.id);
-    });
-    return true;
-  }
-
-  /** Download only the selected video from a shared TV pack. */
-  async predownloadEpisode(source: ContentSource, videoFilePath: string): Promise<boolean> {
-    if (await this.isEpisodeFileComplete(source.id, videoFilePath)) return true;
-    const download = await this.startDownload(source, {
-      retentionClass: 'speculative',
-      videoFilePath,
-    });
-    if (!download.torrent) return true;
-    const file = download.torrent.files.find(candidate => candidate.path === videoFilePath);
+    const file = download.torrent.files.find(candidate => candidate.path === filePath);
     if (!file)
-      throw new ErrorWithStatus('Episode video file is unavailable', 'episode_file_unavailable');
+      throw new ErrorWithStatus(
+        'Requested file is not part of this source',
+        'source_file_unavailable'
+      );
 
     await this.storageService.withSourceLock(source.id, async () => {
       this.warmupSelections.delete(source.id);
       file.select(1);
-      // In a shared pack, the current file has higher piece priority. A separate
-      // torrent waits only until active playback has fully buffered its file.
       if (
         this.activeStreams > 0 &&
         !this.activeSourceCounts.get(source.id) &&
@@ -1248,20 +1161,16 @@ export class DownloadService {
     return true;
   }
 
-  async isEpisodeFileComplete(sourceId: number, videoFilePath: string): Promise<boolean> {
+  async isFileComplete(sourceId: number, filePath: string): Promise<boolean> {
     const storage = await this.storageService.getStorageBySource(sourceId);
     if (
       !storage ||
       (!storage.videoCompletedAt && !storage.localOnly) ||
-      !storage.selectedFiles?.includes(videoFilePath)
+      !storage.selectedFiles?.includes(filePath)
     )
       return false;
     return storage.encryptedLayout
-      ? this.isFileCompleteInBitfield(
-          storage.encryptedLayout,
-          videoFilePath,
-          storage.downloadedPieces
-        )
+      ? isFileCompleteInBitfield(storage.encryptedLayout, filePath, storage.downloadedPieces)
       : true;
   }
 
@@ -1442,8 +1351,12 @@ export class DownloadService {
         return null;
       }
 
+      const requestedBytes = storage.encryptedLayout
+        ? this.getSelectedBytes(storage.encryptedLayout, storage.selectedFiles ?? [])
+        : 0;
+      const fileBytes = requestedBytes || storage.size;
       if (storage.videoCompletedAt || storage.localOnly) {
-        const bytes = storage.encryptedLayout?.video.length ?? storage.size;
+        const bytes = fileBytes;
         return {
           sourceId,
           progress: 100,
@@ -1460,10 +1373,8 @@ export class DownloadService {
         return {
           sourceId,
           progress: storage.videoCompletedAt ? 100 : storage.downloaded / 100, // Convert from basis points
-          downloadedBytes: storage.videoCompletedAt
-            ? (storage.encryptedLayout?.video.length ?? storage.size)
-            : 0,
-          totalBytes: storage.encryptedLayout?.video.length ?? storage.size,
+          downloadedBytes: storage.videoCompletedAt ? fileBytes : 0,
+          totalBytes: fileBytes,
           downloadSpeed: 0,
           isComplete: Boolean(storage.videoCompletedAt) || storage.downloaded >= 10000,
         };
@@ -1550,9 +1461,9 @@ export class DownloadService {
 
       // Resume by selecting files
       if (torrent.files && torrent.files.length > 0) {
-        const selectedPaths = storage.selectedFiles?.length ? new Set(storage.selectedFiles) : null;
+        const selectedPaths = new Set(storage.selectedFiles ?? []);
         torrent.files.forEach(file => {
-          if (!selectedPaths || selectedPaths.has(file.path)) file.select(1);
+          if (selectedPaths.has(file.path)) file.select(1);
         });
         logger.info('DownloadService', `Resumed download for movie source ${sourceId}`);
         return true;
@@ -1674,83 +1585,32 @@ export class DownloadService {
   }
 
   /** Use the same persisted file selection as playback, including detached local media. */
-  async getMediaFiles(
-    contentSource: ContentSource,
-    videoFilePath?: string
-  ): Promise<EncryptedStorageLayout> {
-    const download = await this.startDownload(contentSource, {
-      retentionClass: 'watched',
-      reservedBytes: contentSource.size,
-      videoFilePath,
-    });
-    const layout = download.layout ?? download.storage.encryptedLayout;
-    if (!layout) throw new Error('Encrypted media layout is unavailable');
-    return layout;
+  async getMediaFiles(target: PlaybackTarget): Promise<EncryptedStorageLayout> {
+    const download = await this.startDownload(target, { retentionClass: 'watched' });
+    return download.layout;
   }
 
-  /** Preserve small subtitle companions while the watched torrent is still attached. */
-  async prepareSubtitleFiles(
-    contentSource: ContentSource,
-    paths: string[],
-    videoFilePath?: string
-  ): Promise<void> {
+  /** Request small subtitle sidecars of the target's source; already verified ones are skipped. */
+  async prepareSubtitleFiles(target: PlaybackTarget, paths: string[]): Promise<void> {
     if (!paths.length) return;
-    const existing = await this.storageService.getStorageBySource(contentSource.id);
-    const knownLayout = existing?.encryptedLayout;
-    const storedBitfield = existing?.downloadedPieces;
-    if (
-      existing &&
-      knownLayout &&
-      paths.every(
-        path =>
-          existing.selectedFiles?.includes(path) &&
-          this.isFileCompleteInBitfield(knownLayout, path, storedBitfield)
-      )
-    )
-      return;
-    const download = await this.startDownload(contentSource, {
-      retentionClass: 'watched',
-      reservedBytes: contentSource.size,
-      videoFilePath,
-      forceAttach: true,
-    });
-    const subtitles = (download.torrent?.files ?? []).filter(
-      file =>
-        paths.includes(file.path) &&
-        file.length <= 2 * 1024 * 1024 &&
-        /\.(srt|vtt|ass|ssa)$/i.test(file.path)
-    );
-    if (!subtitles.length || !download.torrent) return;
-    const current = await this.storageService.getStorageBySource(contentSource.id);
-    const layout = download.layout ?? download.storage.encryptedLayout;
-    const selected = new Set([
-      ...(current?.selectedFiles ?? []),
-      ...subtitles.map(file => file.path),
-    ]);
-    const reservation = layout
-      ? await this.getSelectedFilesReservation(contentSource, [...selected], layout)
-      : { bytes: contentSource.size, known: false };
-    if (reservation.known)
-      await this.storageService.reserveStorage(contentSource.id, reservation.bytes);
-    const seedTimer = this.seedTimers.get(contentSource.id);
-    if (seedTimer) clearTimeout(seedTimer);
-    this.seedTimers.delete(contentSource.id);
-    for (const file of subtitles) {
-      file.select();
-      await this.storageService.selectTorrentFile(
-        contentSource.id,
-        file.path,
-        Boolean(
-          layout &&
-            this.isFileCompleteInBitfield(
-              layout,
-              file.path,
-              download.torrent.bitfield?.buffer ?? download.storage.downloadedPieces
-            )
-        )
+    const existing = await this.storageService.getStorageBySource(target.source.id);
+    const layout = existing?.encryptedLayout;
+    if (!existing || !layout) return;
+    const missing = paths.filter(path => {
+      const file = layout.files.find(candidate => candidate.path === path);
+      return (
+        file &&
+        file.length <= MAX_SIDECAR_BYTES &&
+        SIDECAR_SUBTITLE.test(path) &&
+        !(existing.selectedFiles?.includes(path) && this.isFileStored(existing, layout, path))
       );
+    });
+    for (const path of missing) {
+      const download = await this.startDownload(withFile(target, path), {
+        retentionClass: 'watched',
+      });
+      download.torrent?.files.find(file => file.path === path)?.select();
     }
-    if (layout) await this.maybeMarkVideoComplete(download.torrent, contentSource.id, layout);
   }
 
   /**
@@ -1758,33 +1618,19 @@ export class DownloadService {
    * Based on WebTorrent server implementation
    */
   @traced('DownloadService')
-  async streamFile(
-    contentSource: ContentSource,
-    rangeHeader?: string,
-    torrentFilePath?: string
-  ): Promise<Response> {
+  async streamFile(target: PlaybackTarget, rangeHeader?: string): Promise<Response> {
+    const contentSource = target.source;
     return new Promise((resolve, reject) => {
       const handleRequest = async () => {
-        const download = await this.startDownload(contentSource, {
-          retentionClass: 'watched',
-          reservedBytes: contentSource.size,
-          videoFilePath: torrentFilePath,
-        });
-        const { torrent, storage } = download;
-        const layout = download.layout ?? storage.encryptedLayout;
-        if (!layout)
-          throw new ErrorWithStatus(
-            'Encrypted media layout is unavailable',
-            'local_media_unavailable'
-          );
-        const selected = torrentFilePath
-          ? layout.files.find(file => file.path === torrentFilePath)
-          : layout.video;
+        const download = await this.startDownload(target, { retentionClass: 'watched' });
+        const { torrent, storage, layout } = download;
+        const selected = layout.files.find(file => file.path === target.filePath);
         if (!selected) throw new Error('Requested torrent file is unavailable');
-        const file = { ...selected, name: torrentFilePath ?? layout.video.name };
+        const file = { ...selected, name: selected.path.split('/').pop() || selected.path };
         const reader = new EncryptedFileReader(
           storage.location,
           layout,
+          selected.path,
           this.config.getOrThrow('SOURCE_SECURITY_KEY')
         );
         await this.storageService.withSourceLock(contentSource.id, async () => {
@@ -1984,7 +1830,7 @@ export class DownloadService {
       const paths = this.activeSourceFiles.get(sourceId);
       if (!paths?.size) return true;
       for (const path of paths.keys()) {
-        if (!this.isFileCompleteInBitfield(layout, path, bitfield)) return true;
+        if (!isFileCompleteInBitfield(layout, path, bitfield)) return true;
       }
     }
     return false;

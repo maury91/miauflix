@@ -21,10 +21,12 @@ export function matchEpisodeFile(
   if (exact.length === 1) return { videoFilePath: exact[0], matchKind: 'single' };
   if (exact.length > 1) return null;
 
+  // Trust release metadata for a lone video only when its filename names no episode itself.
   if (
     source.season === seasonNumber &&
     source.episode === episodeNumber &&
-    videoFiles.length === 1
+    videoFiles.length === 1 &&
+    !namesAnyEpisode(videoFiles[0])
   ) {
     return { videoFilePath: videoFiles[0], matchKind: 'single' };
   }
@@ -46,21 +48,29 @@ export function matchEpisodeFile(
   return null;
 }
 
+const EPISODE_EXPRESSIONS = [
+  /s(\d{1,2})[ ._-]*e(\d{1,3})(?!\d)((?:[ ._-]*e\d{1,3}(?!\d))|(?:\s*[-–]\s*e?\d{1,3}(?!\d)))*/gi,
+  /(?:^|\D)(\d{1,2})x(\d{1,3})(?!\d)(?:(?:[ ._-]*\d{1,2}x\d{1,3}(?!\d))|(?:\s*[-–]\s*\d{1,2}x?\d{1,3}(?!\d)))*/gi,
+];
+
+/** True when the filename carries any SxxEyy or NxM episode marker, whatever its season. */
+function namesAnyEpisode(name: string): boolean {
+  return EPISODE_EXPRESSIONS.some(expression => new RegExp(expression.source, 'i').test(name));
+}
+
 function episodeIdentity(name: string, seasonNumber: number): { episodes: number[] } {
   const episodes = new Set<number>();
-  const expressions = [
-    /s(\d{1,2})[ ._-]*e(\d{1,3})(?!\d)((?:[ ._-]*e\d{1,3}(?!\d))|(?:\s*[-–]\s*e?\d{1,3}(?!\d)))*/gi,
-    /(?:^|\D)(\d{1,2})x(\d{1,3})(?!\d)(?:(?:[ ._-]*\d{1,2}x\d{1,3}(?!\d))|(?:\s*[-–]\s*\d{1,2}x?\d{1,3}(?!\d)))*/gi,
-  ];
-  for (const expression of expressions) {
+  for (const expression of EPISODE_EXPRESSIONS) {
     for (const match of name.matchAll(expression)) {
       const foundSeason = Number(match[1]);
       if (foundSeason !== seasonNumber) continue;
       const firstEpisode = Number(match[2]);
       episodes.add(firstEpisode);
       const suffix = match[3] ?? match[0].slice(match[0].indexOf(match[2]) + match[2].length);
-      for (const token of suffix.matchAll(/(?:e|x)?(\d{1,3})/gi)) {
-        const value = Number(token[1]);
+      // An NxM suffix names its own season; only same-season episodes extend the range.
+      for (const token of suffix.matchAll(/(?:(\d{1,2})x|e)?(\d{1,3})/gi)) {
+        if (token[1] !== undefined && Number(token[1]) !== seasonNumber) continue;
+        const value = Number(token[2]);
         if (value > firstEpisode && value <= firstEpisode + 20) {
           for (let episode = firstEpisode + 1; episode <= value; episode++) episodes.add(episode);
         }
