@@ -1,6 +1,6 @@
 import { type ChildProcess, spawn } from 'node:child_process';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { ConfigService } from '@mytypes/configuration';
 import type { DownloadService } from '@services/download/download.service';
 
@@ -321,7 +321,7 @@ export class AudioPlaybackService {
   }
 
   async inspect(
-    source: MovieSource,
+    source: ContentSource,
     preferences: AudioPlaybackPreferences = {},
     videoFilePath?: string
   ): Promise<PlaybackDelivery> {
@@ -343,7 +343,7 @@ export class AudioPlaybackService {
     return deliveryFromProbe(await value, preferences, this.canConvertHevc());
   }
 
-  private async probe(source: MovieSource, videoFilePath?: string): Promise<ProbeResult> {
+  private async probe(source: ContentSource, videoFilePath?: string): Promise<ProbeResult> {
     const input = await openTorrentInput(this.downloadService, source, videoFilePath);
     try {
       if (this.closed || this.processes.size >= 4)
@@ -403,7 +403,7 @@ export class AudioPlaybackService {
   }
 
   async stream(
-    source: MovieSource,
+    source: ContentSource,
     owner: string,
     startSeconds: number,
     expiresAt: Date,

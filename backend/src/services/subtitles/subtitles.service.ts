@@ -7,7 +7,6 @@ import parseTorrent from 'parse-torrent';
 
 import type { ConfigService } from '@mytypes/configuration';
 import { isVideoFile } from '@services/download/download.utils';
-import type { MediaService } from '@services/media/media.service';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
 import type { RequestService } from '@services/request/request.service';
 import type { StreamService } from '@services/stream/stream.service';
@@ -114,7 +113,6 @@ export class SubtitlesService {
     private readonly requestService: RequestService,
     private readonly playbackSessionService: PlaybackSessionService,
     private readonly streamService: StreamService,
-    private readonly mediaService: MediaService,
     private readonly torrentSubtitles: TorrentSubtitlesService
   ) {}
 
@@ -174,10 +172,8 @@ export class SubtitlesService {
       candidates: local,
     });
     if (localOnly || grant.playableKind !== 'movie' || !apiKey) return localResult();
-    if (source.movieId === null) throw new SubtitleAccessError('Playback source is unavailable');
-    const movie = await this.mediaService.getMovieById(source.movieId);
-    if (!movie || `m:${movie.mediaId}` !== grant.playableKey)
-      throw new SubtitleAccessError('Playback source is unavailable');
+    const { movie } = resolved;
+    if (!movie) throw new SubtitleAccessError('Playback source is unavailable');
     if (!movie.imdbId || !/^tt\d+$/.test(movie.imdbId)) return localResult();
 
     const params = new URLSearchParams({

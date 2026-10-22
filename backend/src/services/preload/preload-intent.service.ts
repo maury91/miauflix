@@ -1,4 +1,4 @@
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { IntentLeaseKey, MediaIntentRef, PreloadIntentRequest } from '@routes/playable.types';
 import { playableKey } from '@routes/playable.types';
 import type {
@@ -503,7 +503,7 @@ export class PreloadIntentService {
     return level === 'warm' ? 2 : 1;
   }
 
-  private sourceSnapshot(source: MovieSource): PreloadPreparationSource {
+  private sourceSnapshot(source: ContentSource): PreloadPreparationSource {
     return {
       id: source.id,
       quality: source.quality ?? null,

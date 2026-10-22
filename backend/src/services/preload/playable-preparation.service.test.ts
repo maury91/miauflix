@@ -25,7 +25,7 @@ describe('PlayablePreparationService', () => {
       processSourceMetadata: jest.fn(),
     };
     const storageService = {
-      getStorageByMovieSource: jest.fn(async (id: number) => (id === 1 ? completion : null)),
+      getStorageBySource: jest.fn(async (id: number) => (id === 1 ? completion : null)),
     };
     const warmup = { warm: jest.fn().mockResolvedValue({ state: 'ready' }) };
     const service = new PlayablePreparationService(
@@ -73,7 +73,7 @@ describe('PlayablePreparationService', () => {
       } as never,
       undefined,
       {
-        getStorageByMovieSource: jest.fn(async (id: number) => (id === 1 ? cached : null)),
+        getStorageBySource: jest.fn(async (id: number) => (id === 1 ? cached : null)),
       } as never
     );
     const result = await service.prepare(

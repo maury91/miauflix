@@ -152,7 +152,6 @@ try {
     requestService,
     playbackSessionService,
     streamService,
-    mediaService,
     torrentSubtitlesService
   );
 

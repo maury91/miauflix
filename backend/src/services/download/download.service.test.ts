@@ -11,7 +11,7 @@ import { EventEmitter } from 'node:events';
 import {
   createMockStorage,
   createMockStorageWithHash,
-  createMockStorageWithoutMovieSource,
+  createMockStorageWithoutContentSource,
   createMockStorageWithUndefinedHash,
 } from '@__test-utils__/mocks/storage.mock';
 import { logger } from '@logger';
@@ -144,7 +144,7 @@ describe('DownloadService', () => {
           files: [{ path: 'video.mkv', length: 12, offset: 0 }],
           video: { name: 'video.mkv', path: 'video.mkv', offset: 3, length: 5 },
         },
-        movieSource: { hash: 'AbCd' },
+        contentSource: { hash: 'AbCd' },
       };
       const torrentList: Torrent[] = [];
       (service.client as unknown as { torrents: Torrent[] }).torrents = torrentList;
@@ -236,12 +236,12 @@ describe('DownloadService', () => {
       const { service, mockStorageService } = setupTest();
       const storage = createMockStorage({
         id: 1,
-        movieSourceId: 1,
+        sourceId: 1,
         location: '/downloads/item',
         encryptedLayout: layout,
         ...completion,
       });
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       (service.client as unknown as { torrents: Torrent[] }).torrents = [];
 
       await expect(service.getRangeProgress(1, 0, 1)).resolves.toEqual({
@@ -260,7 +260,7 @@ describe('DownloadService', () => {
 
     it('keeps an incomplete result when detached storage is not marked complete', async () => {
       const { service, mockStorageService } = setupTest();
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(
+      mockStorageService.getStorageBySource.mockResolvedValue(
         createMockStorage({ encryptedLayout: layout })
       );
       (service.client as unknown as { torrents: Torrent[] }).torrents = [];
@@ -276,7 +276,7 @@ describe('DownloadService', () => {
     it('counts only video bytes in boundary pieces for an active torrent', async () => {
       const { service, mockStorageService } = setupTest();
       const storage = createMockStorage({ location: '/downloads/item', encryptedLayout: layout });
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       (service.client as unknown as { torrents: Torrent[] }).torrents = [
         {
           path: storage.location,
@@ -287,7 +287,7 @@ describe('DownloadService', () => {
         } as unknown as Torrent,
       ];
 
-      await expect(service.getRangeProgress(storage.movieSourceId, 0, 1)).resolves.toEqual({
+      await expect(service.getRangeProgress(storage.sourceId, 0, 1)).resolves.toEqual({
         verifiedBytes: 1,
         targetBytes: 5,
         progress: 20,
@@ -301,13 +301,13 @@ describe('DownloadService', () => {
       const { service, mockStorageService } = setupTest();
       const storage = createMockStorage({
         id: 1,
-        movieSourceId: 1,
+        sourceId: 1,
         location: '/downloads/item',
         encryptedLayout: null,
         downloaded: 2500,
         size: 12,
       });
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       (service.client as unknown as { torrents: Torrent[] }).torrents = [
         {
           path: storage.location,
@@ -321,7 +321,7 @@ describe('DownloadService', () => {
       ];
 
       await expect(service.getDownloadProgress(1)).resolves.toMatchObject({
-        movieSourceId: 1,
+        sourceId: 1,
         progress: 25,
         downloadedBytes: 3,
         totalBytes: 12,
@@ -333,17 +333,17 @@ describe('DownloadService', () => {
       const { service, mockStorageService } = setupTest();
       const storage = createMockStorage({
         id: 1,
-        movieSourceId: 1,
+        sourceId: 1,
         location: '/downloads/item',
         encryptedLayout: null,
         downloaded: 2500,
         size: 12,
       });
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       (service.client as unknown as { torrents: Torrent[] }).torrents = [
         {
           path: storage.location,
-          infoHash: storage.movieSource.hash,
+          infoHash: storage.contentSource.hash,
           name: 'pending',
           ready: true,
           files: [],
@@ -356,7 +356,7 @@ describe('DownloadService', () => {
       ];
 
       await expect(service.getDownloadProgress(1)).resolves.toMatchObject({
-        movieSourceId: 1,
+        sourceId: 1,
         progress: 25,
         isComplete: false,
       });
@@ -629,7 +629,7 @@ describe('DownloadService', () => {
         operation()
       );
       mockStorageService.createStorage.mockResolvedValue(storage as never);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage as never);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage as never);
       mockStorageService.setPlaybackActive.mockResolvedValue(true);
 
       const file = {
@@ -708,20 +708,20 @@ describe('DownloadService', () => {
       webtorrent.remove.mockResolvedValue(undefined);
       mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
       mockStorageService.setPlaybackActive.mockResolvedValue(true);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
         await detach();
         return { ...storage, localOnly: true };
       });
       jest.spyOn(service, 'startDownload').mockResolvedValue({
-        movieSourceId: storage.movieSourceId,
+        sourceId: storage.sourceId,
         torrent,
         storage,
         layout,
         startTime: new Date(),
       });
 
-      const response = await service.streamFile({ id: storage.movieSourceId, size: 8 } as never);
+      const response = await service.streamFile({ id: storage.sourceId, size: 8 } as never);
       const reader = response.body!.getReader();
       const first = await reader.read();
       const detach = (
@@ -729,7 +729,7 @@ describe('DownloadService', () => {
           detachCompletedTorrent: (sourceId: number) => Promise<void>;
         }
       ).detachCompletedTorrent;
-      await detach.call(service, storage.movieSourceId);
+      await detach.call(service, storage.sourceId);
       const second = await reader.read();
       const end = await reader.read();
 
@@ -774,13 +774,13 @@ describe('DownloadService', () => {
       webtorrent.remove.mockResolvedValue(undefined);
       mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
       mockStorageService.setPlaybackActive.mockResolvedValue(true);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
         await detach();
         return { ...storage, localOnly: true };
       });
       jest.spyOn(service, 'startDownload').mockResolvedValue({
-        movieSourceId: storage.movieSourceId,
+        sourceId: storage.sourceId,
         torrent,
         storage,
         layout,
@@ -788,7 +788,7 @@ describe('DownloadService', () => {
       });
 
       const response = await service.streamFile(
-        { id: storage.movieSourceId, size: 8 } as never,
+        { id: storage.sourceId, size: 8 } as never,
         'bytes=0-2'
       );
       expect(response.headers.get('Content-Length')).toBe('3');
@@ -809,14 +809,14 @@ describe('DownloadService', () => {
         video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
       };
       const storage = createMockStorage({
-        movieSourceId: 12,
+        sourceId: 12,
         selectedFiles: ['movie.en.srt'],
         encryptedLayout: layout,
         downloadedPieces: Uint8Array.of(0b00100000),
         localOnly: true,
         videoCompletedAt: new Date(),
       });
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       const startDownload = jest.spyOn(service, 'startDownload');
 
       await service.prepareSubtitleFiles({ id: 12, hash: 'a'.repeat(40), size: 12 } as never, [
@@ -855,7 +855,7 @@ describe('DownloadService', () => {
         destroyed: false,
       }) as unknown as Torrent;
       jest.spyOn(service, 'startDownload').mockResolvedValue({
-        movieSourceId: storage.movieSourceId,
+        sourceId: storage.sourceId,
         torrent,
         storage,
         layout,
@@ -864,7 +864,7 @@ describe('DownloadService', () => {
       mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
       mockStorageService.setPlaybackActive.mockResolvedValue(true);
       const response = await service.streamFile(
-        { id: storage.movieSourceId, size: 12 } as never,
+        { id: storage.sourceId, size: 12 } as never,
         undefined,
         'movie.en.srt'
       );
@@ -883,7 +883,7 @@ describe('DownloadService', () => {
       expect(service.hasActivePlayback()).toBe(false);
       await expect(
         service.streamFile(
-          { id: storage.movieSourceId, size: 12 } as never,
+          { id: storage.sourceId, size: 12 } as never,
           undefined,
           '../../unrelated.srt'
         )
@@ -914,14 +914,14 @@ describe('DownloadService', () => {
         encryptedLayout: layout,
       });
       mockStorageService.createStorage.mockResolvedValue(storage);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
       mockStorageService.setPlaybackActive.mockResolvedValue(true);
 
       const response = await service.streamFile({
-        id: storage.movieSourceId,
+        id: storage.sourceId,
         size: 8,
-        hash: storage.movieSource.hash,
+        hash: storage.contentSource.hash,
       } as never);
       const media = await response.arrayBuffer();
 
@@ -997,7 +997,7 @@ describe('DownloadService', () => {
   describe('download tracking and allocation reconciliation', () => {
     it('starts completion from the selected video pieces even when auxiliary torrent pieces are missing', async () => {
       const { service, mockStorageService } = setupTest();
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(
+      mockStorageService.getStorageBySource.mockResolvedValue(
         createMockStorage({ selectedFiles: [] })
       );
       const completedStorage = createMockStorage({
@@ -1041,7 +1041,7 @@ describe('DownloadService', () => {
       try {
         const completionTime = new Date(Date.now());
         let storage = createMockStorage({ videoCompletedAt: completionTime, localOnly: false });
-        mockStorageService.getStorageByMovieSource.mockImplementation(async () => storage);
+        mockStorageService.getStorageBySource.mockImplementation(async () => storage);
         mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
           await detach();
           storage = { ...storage, localOnly: true };
@@ -1059,7 +1059,7 @@ describe('DownloadService', () => {
         await jest.advanceTimersByTimeAsync(1);
 
         expect(mockStorageService.detachCompletedStorage).toHaveBeenCalledWith(
-          storage.movieSourceId,
+          storage.sourceId,
           expect.any(Function)
         );
         expect(storage.localOnly).toBe(true);
@@ -1076,7 +1076,7 @@ describe('DownloadService', () => {
       jest.useFakeTimers();
       try {
         const storage = createMockStorage({ videoCompletedAt: new Date(), localOnly: false });
-        mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+        mockStorageService.getStorageBySource.mockResolvedValue(storage);
         mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
           await detach();
           return { ...storage, localOnly: true };
@@ -1105,7 +1105,7 @@ describe('DownloadService', () => {
       try {
         const storage = createMockStorage({ videoCompletedAt: new Date(), localOnly: false });
         mockStorageService.getStoragesWithCompletion.mockResolvedValue([storage]);
-        mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+        mockStorageService.getStorageBySource.mockResolvedValue(storage);
         mockStorageService.detachCompletedStorage.mockImplementation(async (_id, detach) => {
           await detach();
           return { ...storage, localOnly: true };
@@ -1124,7 +1124,7 @@ describe('DownloadService', () => {
         await jest.advanceTimersByTimeAsync(0);
 
         expect(mockStorageService.detachCompletedStorage).toHaveBeenCalledWith(
-          storage.movieSourceId,
+          storage.sourceId,
           expect.any(Function)
         );
       } finally {
@@ -1149,7 +1149,7 @@ describe('DownloadService', () => {
         encryptedLayout: layout,
       });
       mockStorageService.getStoragesWithCompletion.mockResolvedValue([activeStorage]);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(activeStorage);
+      mockStorageService.getStorageBySource.mockResolvedValue(activeStorage);
       const file = { path: 'movie.mkv', select: jest.fn() };
       const torrent = {
         files: [file],
@@ -1172,7 +1172,7 @@ describe('DownloadService', () => {
 
       await restore.call(service);
 
-      expect(addTorrent).toHaveBeenCalledWith(activeStorage.movieSource, activeStorage);
+      expect(addTorrent).toHaveBeenCalledWith(activeStorage.contentSource, activeStorage);
       expect(file.select).toHaveBeenCalledTimes(1);
 
       const expiredStorage = createMockStorage({
@@ -1181,13 +1181,13 @@ describe('DownloadService', () => {
         encryptedLayout: layout,
       });
       mockStorageService.getStoragesWithCompletion.mockResolvedValue([expiredStorage]);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(expiredStorage);
+      mockStorageService.getStorageBySource.mockResolvedValue(expiredStorage);
       addTorrent.mockClear();
       await restore.call(service);
 
       expect(addTorrent).not.toHaveBeenCalled();
       expect(mockStorageService.detachCompletedStorage).toHaveBeenCalledWith(
-        expiredStorage.movieSourceId,
+        expiredStorage.sourceId,
         expect.any(Function)
       );
     });
@@ -1211,8 +1211,8 @@ describe('DownloadService', () => {
 
       await internals.restoreCompletedDownloads();
 
-      expect(detach).toHaveBeenCalledWith(storage.movieSourceId);
-      expect(retry).toHaveBeenCalledWith(storage.movieSourceId);
+      expect(detach).toHaveBeenCalledWith(storage.sourceId);
+      expect(retry).toHaveBeenCalledWith(storage.sourceId);
     });
 
     it('uses the runtime WebTorrent piece list for persisted layout', async () => {
@@ -1232,7 +1232,7 @@ describe('DownloadService', () => {
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue({
+      mockStorageService.getStorageBySource.mockResolvedValue({
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
@@ -1277,10 +1277,10 @@ describe('DownloadService', () => {
         encryptedLayout: layout,
       });
       mockStorageService.createStorage.mockResolvedValue(storage);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
 
       const result = await service.startDownload({
-        id: storage.movieSourceId,
+        id: storage.sourceId,
         hash: sourceHash,
         magnetLink: `magnet:?xt=urn:btih:${sourceHash}`,
         size: 4,
@@ -1289,7 +1289,7 @@ describe('DownloadService', () => {
       expect(result.torrent).toBeNull();
       expect(result.layout?.filenameSalt).toBe(`download-${sourceHash}`);
       expect(mockStorageService.updateEncryptedLayout).toHaveBeenCalledWith(
-        storage.movieSourceId,
+        storage.sourceId,
         expect.objectContaining({ filenameSalt: `download-${sourceHash}` })
       );
     });
@@ -1299,12 +1299,12 @@ describe('DownloadService', () => {
       const sourceId = 44;
       const hash = 'a'.repeat(40);
       const storage = createMockStorage({
-        movieSourceId: sourceId,
+        sourceId: sourceId,
         location: '/tmp/test-downloads/completed-movie',
         size: 8,
       });
       mockStorageService.createStorage.mockResolvedValue(storage);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
       mockStorageService.markVideoComplete.mockResolvedValue(
         createMockStorage({ videoCompletedAt: new Date(), localOnly: false })
       );
@@ -1356,7 +1356,7 @@ describe('DownloadService', () => {
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue({
+      mockStorageService.getStorageBySource.mockResolvedValue({
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
@@ -1400,7 +1400,7 @@ describe('DownloadService', () => {
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue({
+      mockStorageService.getStorageBySource.mockResolvedValue({
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
@@ -1441,7 +1441,7 @@ describe('DownloadService', () => {
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
-      mockStorageService.getStorageByMovieSource.mockResolvedValue({
+      mockStorageService.getStorageBySource.mockResolvedValue({
         location: '/tmp/test-downloads/movie',
         downloadedPieces: new Uint8Array(0),
       } as never);
@@ -1475,10 +1475,10 @@ describe('DownloadService', () => {
       await Promise.all(verifiedHandlers.map(handler => handler()));
 
       expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
-        expect.objectContaining({ movieSourceId: 1 })
+        expect.objectContaining({ sourceId: 1 })
       );
       expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
-        expect.objectContaining({ movieSourceId: 2 })
+        expect.objectContaining({ sourceId: 2 })
       );
     });
 
@@ -1491,7 +1491,7 @@ describe('DownloadService', () => {
       mockStorageService.reconcileAllocation.mockReturnValueOnce(pending);
       const reconcile = (
         service as unknown as {
-          reconcileAllocationIfDue: (movieSourceId: number, force?: boolean) => Promise<void>;
+          reconcileAllocationIfDue: (sourceId: number, force?: boolean) => Promise<void>;
         }
       ).reconcileAllocationIfDue.bind(service);
 
@@ -1515,7 +1515,7 @@ describe('DownloadService', () => {
         .mockResolvedValueOnce(null);
       const reconcile = (
         service as unknown as {
-          reconcileAllocationIfDue: (movieSourceId: number, force?: boolean) => Promise<void>;
+          reconcileAllocationIfDue: (sourceId: number, force?: boolean) => Promise<void>;
         }
       ).reconcileAllocationIfDue.bind(service);
 
@@ -1818,10 +1818,10 @@ describe('DownloadService', () => {
         throw new Error('Delete event handler not found');
       }
 
-      // Create a mock storage with MovieSource relation
+      // Create a mock storage with ContentSource relation
       const mockStorage = createMockStorageWithHash('testhash123', {
         id: 1,
-        movieSourceId: 123,
+        sourceId: 123,
         location: '/test/location',
       });
 
@@ -1846,10 +1846,10 @@ describe('DownloadService', () => {
         throw new Error('Delete event handler not found');
       }
 
-      // Create a mock storage without MovieSource relation
-      const mockStorage = createMockStorageWithoutMovieSource({
+      // Create a mock storage without ContentSource relation
+      const mockStorage = createMockStorageWithoutContentSource({
         id: 1,
-        movieSourceId: 123,
+        sourceId: 123,
         location: '/test/location',
       });
 
@@ -1875,7 +1875,7 @@ describe('DownloadService', () => {
       // Create a mock storage with undefined hash
       const mockStorage = createMockStorageWithUndefinedHash({
         id: 1,
-        movieSourceId: 123,
+        sourceId: 123,
         location: '/test/location',
       });
 

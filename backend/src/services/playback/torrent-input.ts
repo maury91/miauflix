@@ -5,13 +5,13 @@ import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import type { ReadableStream as NodeReadableStream } from 'node:stream/web';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { DownloadService } from '@services/download/download.service';
 
 /** A private loopback capability exposes only this source; no arbitrary URLs or plaintext files. */
 export async function openTorrentInput(
   downloadService: DownloadService,
-  source: MovieSource,
+  source: ContentSource,
   torrentFilePath?: string
 ) {
   const path = `/${randomBytes(24).toString('hex')}`;

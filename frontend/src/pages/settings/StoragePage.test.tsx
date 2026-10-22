@@ -11,7 +11,7 @@ const storageApi = vi.hoisted(() => ({
       filesystem: { totalBytes: number; freeBytes: number } | null;
     };
     items: Array<{
-      movieSourceId: number;
+      sourceId: number;
       title: string;
       fileName: string | null;
       quality: string | null;
@@ -48,7 +48,7 @@ vi.mock('@features/storage/api/storage.api', () => ({
 import StoragePage from './StoragePage';
 
 const baseItem = {
-  movieSourceId: 7,
+  sourceId: 7,
   title: 'Example Film',
   fileName: 'example.mkv',
   quality: '1080p',

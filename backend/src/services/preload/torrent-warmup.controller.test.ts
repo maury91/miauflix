@@ -1,20 +1,20 @@
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 
 import { TorrentWarmupController, type TorrentWarmupDriver } from './torrent-warmup.controller';
 
-const source = (id: number) => ({ id, size: 100, file: Buffer.from('torrent') }) as MovieSource;
+const source = (id: number) => ({ id, size: 100, file: Buffer.from('torrent') }) as ContentSource;
 
 describe('TorrentWarmupController', () => {
   const setupTest = () => {
     const driver: jest.Mocked<TorrentWarmupDriver> = {
-      warmSource: jest.fn(async (item: MovieSource, targetBytes: number) => ({
+      warmSource: jest.fn(async (item: ContentSource, targetBytes: number) => ({
         sourceId: item.id,
         targetBytes,
         firstPiece: 0,
         lastPiece: 2,
       })),
       pauseSource: jest.fn(async (_sourceId: number) => true),
-      promoteSource: jest.fn(async (_source: MovieSource) => true),
+      promoteSource: jest.fn(async (_source: ContentSource) => true),
       hasActivePlayback: jest.fn(() => false),
       isPlaybackActive: jest.fn((_sourceId: number) => false),
     };

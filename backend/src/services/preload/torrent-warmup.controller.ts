@@ -1,6 +1,6 @@
 import { logger } from '@logger';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { WarmupRangeProgress, WarmupResult } from '@services/download/download.service';
 
 export type WarmState =
@@ -29,13 +29,13 @@ export interface WarmSlot {
 
 export interface TorrentWarmupDriver {
   warmSource(
-    source: MovieSource,
+    source: ContentSource,
     targetBytes: number,
     speculativeExpiresAt?: Date | null,
     videoFilePath?: string
   ): Promise<WarmupResult>;
   pauseSource(sourceId: number): Promise<boolean>;
-  promoteSource(source: MovieSource, videoFilePath?: string): Promise<boolean>;
+  promoteSource(source: ContentSource, videoFilePath?: string): Promise<boolean>;
   hasActivePlayback(): boolean;
   isPlaybackActive(sourceId: number): boolean;
   isRangeVerified?(sourceId: number, firstPiece: number, lastPiece: number): Promise<boolean>;
@@ -82,7 +82,7 @@ export class TorrentWarmupController {
    * the newly created slot failed.
    */
   async warm(
-    source: MovieSource,
+    source: ContentSource,
     leaseKey: string,
     playableKey: string,
     options: {
@@ -212,7 +212,7 @@ export class TorrentWarmupController {
 
   /** Promote the exact source currently selected for this playable. */
   async promote(
-    source: MovieSource,
+    source: ContentSource,
     playableKey: string,
     videoFilePath?: string
   ): Promise<boolean> {

@@ -3,16 +3,16 @@ import parseTorrent from 'parse-torrent';
 
 import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import type { Database } from '@database/database';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { EpisodeSource } from '@entities/episode-source.entity';
-import type { MovieSource } from '@entities/movie-source.entity';
 import { SourceError } from '@errors/source.errors';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
+import type {
+  ContentSourceRepository,
+  SourceProcessingResult,
+} from '@repositories/content-source.repository';
 import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
-import type {
-  MovieSourceRepository,
-  SourceProcessingResult,
-} from '@repositories/movie-source.repository';
 import type { BackgroundJobService } from '@services/background-job/background-job.service';
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { RequestService } from '@services/request/request.service';
@@ -33,7 +33,7 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
 
 interface TVRelease {
   metadata: SourceMetadata;
-  source: MovieSource;
+  source: ContentSource;
 }
 
 function mayContainEpisode(
@@ -92,7 +92,7 @@ function releaseQualityName(rank: number): string {
 export class SourceService {
   private readonly pendingOnDemandSearches = new Set<number>();
   private readonly movieRepository: MovieRepository;
-  private readonly movieSourceRepository: MovieSourceRepository;
+  private readonly contentSourceRepository: ContentSourceRepository;
   private readonly episodeSourceRepository: EpisodeSourceRepository;
   private readonly tvReleaseSearches = new Map<
     string,
@@ -126,7 +126,7 @@ export class SourceService {
     this.vpnService = vpnService;
     this.searchOnlyBehindVpn = !config.getOrThrow('DISABLE_VPN_CHECK');
     this.movieRepository = db.getMovieRepository();
-    this.movieSourceRepository = db.getMovieSourceRepository();
+    this.contentSourceRepository = db.getContentSourceRepository();
     this.episodeSourceRepository = db.getEpisodeSourceRepository();
     this.backgroundJobs = backgroundJobs;
     config.registerService('SOURCE', this);
@@ -276,7 +276,7 @@ export class SourceService {
     },
     isOnDemand: boolean = false,
     priority = 20
-  ): Promise<{ directory: string; sources: MovieSource[] } | void> {
+  ): Promise<{ directory: string; sources: ContentSource[] } | void> {
     if (!(await this.checkForVpnConnection('searchSourcesForMovie'))) {
       return;
     }
@@ -295,7 +295,7 @@ export class SourceService {
     );
 
     try {
-      const previousSources = await this.movieSourceRepository.findByMovieId(movie.id);
+      const previousSources = await this.contentSourceRepository.findByMovieId(movie.id);
       const previousQuality = previousSources.reduce(
         (best, source) => Math.max(best, releaseQualityRank(source.sourceType)),
         0
@@ -331,14 +331,10 @@ export class SourceService {
         );
       }
 
-      // Convert sources to MovieSource objects and save them
-      const sources = providerSourcesToEntities(
-        movieWithSources.sources,
-        movie.id,
-        movieWithSources.source
-      );
+      // Convert sources to ContentSource objects and save them
+      const sources = providerSourcesToEntities(movieWithSources.sources, movieWithSources.source);
 
-      const createdSources = await this.movieSourceRepository.createMany(sources);
+      const createdSources = await this.contentSourceRepository.upsertForMovie(movie.id, sources);
       const nextQualitySource = createdSources
         .map(source => ({ source, rank: releaseQualityRank(source.sourceType) }))
         .sort((left, right) => right.rank - left.rank)[0];
@@ -469,7 +465,7 @@ export class SourceService {
       for (const candidate of metadataCandidates) {
         try {
           const source =
-            (await this.movieSourceRepository.findById(candidate.source.id)) ?? candidate.source;
+            (await this.contentSourceRepository.findById(candidate.source.id)) ?? candidate.source;
           let torrentFile = source.file;
           if (!torrentFile && source.magnetLink) {
             torrentFile =
@@ -490,7 +486,7 @@ export class SourceService {
           }
           const files = (parsed.files ?? []).map(file => file.path).filter(Boolean);
           if (!source.file) {
-            await this.movieSourceRepository.updateSourceFile(source.id, torrentFile);
+            await this.contentSourceRepository.updateSourceFile(source.id, torrentFile);
             source.file = torrentFile;
           }
           candidate.source = source;
@@ -549,8 +545,8 @@ export class SourceService {
       if (!result?.sources.length) return [];
       const releases: TVRelease[] = [];
       for (const metadata of result.sources) {
-        const row = providerSourcesToEntities([metadata], null, result.source)[0];
-        const source = await this.movieSourceRepository.createTorrentSource(row);
+        const row = providerSourcesToEntities([metadata], result.source)[0];
+        const source = await this.contentSourceRepository.upsertByHash(row);
         releases.push({ metadata, source });
         this.backgroundJobs?.enqueueBestEffort({
           type: 'source.stats',
@@ -588,7 +584,7 @@ export class SourceService {
   }
 
   public async seedSourceMetadataJobs(): Promise<void> {
-    const sources = await this.movieSourceRepository.getNextSourcesToProcess(
+    const sources = await this.contentSourceRepository.getNextSourcesToProcess(
       Math.max(2, this.magnetService.getAvailableConcurrency())
     );
     await this.backgroundJobs?.enqueueBulk(
@@ -602,7 +598,7 @@ export class SourceService {
   }
 
   public async seedSourceStatsJobs(limit = 25): Promise<void> {
-    const sources = await this.movieSourceRepository.findSourceThatNeedsStatsUpdate(limit);
+    const sources = await this.contentSourceRepository.findSourceThatNeedsStatsUpdate(limit);
     await this.backgroundJobs?.enqueueBulk(
       sources.map(source => ({
         type: 'source.stats',
@@ -614,17 +610,17 @@ export class SourceService {
   }
 
   public async processSourceMetadata(sourceId: number): Promise<void> {
-    const source = await this.movieSourceRepository.findById(sourceId);
+    const source = await this.contentSourceRepository.findById(sourceId);
     if (!source?.file) {
       if (!source) return;
       await this.downloadSourceFileForSource(source as unknown as SourceProcessingResult);
-      const updated = await this.movieSourceRepository.findById(sourceId);
+      const updated = await this.contentSourceRepository.findById(sourceId);
       if (!updated?.file) throw new Error('Source metadata could not be resolved');
     }
   }
 
   public async processSourceStats(sourceId: number): Promise<Date> {
-    const source = await this.movieSourceRepository.findById(sourceId);
+    const source = await this.contentSourceRepository.findById(sourceId);
     if (!source) return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     const { broadcasters, watchers } = await this.magnetService.getStats(source.hash);
     const nextCheckTime = scheduleNextCheck(
@@ -634,7 +630,12 @@ export class SourceService {
       { old: source.broadcasters ?? 0, new: broadcasters },
       { old: source.watchers ?? 0, new: watchers }
     );
-    await this.movieSourceRepository.updateStats(source.id, broadcasters, watchers, nextCheckTime);
+    await this.contentSourceRepository.updateStats(
+      source.id,
+      broadcasters,
+      watchers,
+      nextCheckTime
+    );
     return nextCheckTime;
   }
 
@@ -642,8 +643,8 @@ export class SourceService {
    * Find all sources for a specific movie
    */
   @traced('SourceService')
-  public async getSourcesForMovie(movieId: number): Promise<MovieSource[]> {
-    return this.movieSourceRepository.findByMovieId(movieId);
+  public async getSourcesForMovie(movieId: number): Promise<ContentSource[]> {
+    return this.contentSourceRepository.findByMovieId(movieId);
   }
 
   /**
@@ -659,7 +660,7 @@ export class SourceService {
       contentDirectoriesSearched: string[];
     },
     timeoutMs: number = 1200
-  ): Promise<MovieSource[]> {
+  ): Promise<ContentSource[]> {
     // First check if we already have sources
     const existingSources = await this.getSourcesForMovie(movie.id);
     if (existingSources.length > 0) {
@@ -724,8 +725,8 @@ export class SourceService {
    * Find all sources with source metadata files for a specific movie
    */
   @traced('SourceService')
-  public async getSourcesWithFilesForMovie(movieId: number): Promise<MovieSource[]> {
-    const sources = await this.movieSourceRepository.findByMovieId(movieId);
+  public async getSourcesWithFilesForMovie(movieId: number): Promise<ContentSource[]> {
+    const sources = await this.contentSourceRepository.findByMovieId(movieId);
     return sources.filter(source => source.file !== null);
   }
 
@@ -739,7 +740,7 @@ export class SourceService {
       return;
     }
 
-    const sourcesToUpdate = await this.movieSourceRepository.findSourceThatNeedsStatsUpdate(5);
+    const sourcesToUpdate = await this.contentSourceRepository.findSourceThatNeedsStatsUpdate(5);
     if (sourcesToUpdate.length === 0) {
       return;
     }
@@ -756,7 +757,7 @@ export class SourceService {
             { old: source.watchers ?? 0, new: watchers }
           );
 
-          await this.movieSourceRepository.updateStats(
+          await this.contentSourceRepository.updateStats(
             source.id,
             broadcasters,
             watchers,
@@ -809,7 +810,7 @@ export class SourceService {
     // 4. Get a group of 50 sources that need data files
 
     const batchSize = Math.max(2, this.magnetService.getAvailableConcurrency());
-    const sourcesToProcess = await this.movieSourceRepository.getNextSourcesToProcess(batchSize);
+    const sourcesToProcess = await this.contentSourceRepository.getNextSourcesToProcess(batchSize);
 
     // Early exit if no movies need processing - avoid log spam with exponential backoff
     if (sourcesToProcess.length === 0) {
@@ -898,7 +899,7 @@ export class SourceService {
       }
 
       // Save the source file to the database
-      await this.movieSourceRepository.updateSourceFile(source.id, file);
+      await this.contentSourceRepository.updateSourceFile(source.id, file);
 
       logger.debug(
         'SourceService',

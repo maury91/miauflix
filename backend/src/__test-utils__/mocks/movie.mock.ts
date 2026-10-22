@@ -14,9 +14,9 @@ import {
 } from '@miauflix/source-metadata-extractor';
 
 import type { SourceMetadata } from '@content-directories/content-directory.abstract';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { Episode } from '@entities/episode.entity';
 import type { Movie } from '@entities/movie.entity';
-import type { MovieSource } from '@entities/movie-source.entity';
 import type { Season } from '@entities/season.entity';
 import type { TVShow } from '@entities/tvshow.entity';
 import type { MovieDetail, SeasonDetail, TVShowDetail } from '@services/catalog/catalog.types';
@@ -210,22 +210,13 @@ export function createMockEpisode(overrides: Partial<Episode> = {}): Episode {
   };
 }
 
-export function createMockMovieSource(overrides: Partial<MovieSource> = {}): MovieSource {
-  const defaultMovie =
-    overrides.movie ??
-    (overrides.movieId === null ? null : createMockMovie({ id: overrides.movieId }));
+export function createMockContentSource(overrides: Partial<ContentSource> = {}): ContentSource {
   const sourceMetadata = generateSourceMetadata();
-  const movieId =
-    overrides.movieId !== undefined
-      ? overrides.movieId
-      : (defaultMovie?.id ?? faker.number.int({ min: 1, max: 1000 }));
   const hash = overrides.hash ?? sourceMetadata.hash;
-  const title = defaultMovie?.title ?? faker.lorem.words(3);
+  const title = faker.lorem.words(3);
 
   return {
     id: overrides.id ?? faker.number.int({ min: 1, max: 100000 }),
-    movie: defaultMovie,
-    movieId,
     hash,
     magnetLink: overrides.magnetLink ?? generateMagnetLink(hash, title),
     url: overrides.url ?? sourceMetadata.url,
@@ -290,13 +281,9 @@ export function createMockSourceMetadata(overrides: Partial<SourceMetadata> = {}
   };
 }
 
-export function createMockMovieSources(count = 2, movieId?: number): MovieSource[] {
-  const baseMovieId = movieId ?? faker.number.int({ min: 1, max: 1000 });
+export function createMockContentSources(count = 2): ContentSource[] {
   return Array.from({ length: count }, () =>
-    createMockMovieSource({
-      id: faker.number.int({ min: 1, max: 100000 }),
-      movieId: baseMovieId,
-    })
+    createMockContentSource({ id: faker.number.int({ min: 1, max: 100000 }) })
   );
 }
 

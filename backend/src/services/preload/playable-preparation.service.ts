@@ -1,6 +1,6 @@
 import type { Quality } from '@miauflix/source-metadata-extractor';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { PlayableRef } from '@routes/playable.types';
 import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@routes/preload.types';
 import type { MediaService } from '@services/media/media.service';
@@ -17,7 +17,7 @@ export interface PlaybackPreferences {
 
 export interface PreparedPlayable {
   playable: PlayableRef;
-  source: MovieSource | null;
+  source: ContentSource | null;
   videoFilePath?: string;
   episodeMatchKind?: 'combined' | 'single';
   state: 'cold' | 'metadata' | 'ready' | 'warming';
@@ -30,7 +30,7 @@ export interface PreparationOptions {
   workClass: 'background' | 'interactive';
   ownerKey?: string;
   signal?: AbortSignal;
-  onSourceSelected?: (source: MovieSource) => void;
+  onSourceSelected?: (source: ContentSource) => void;
 }
 
 /** Shared inline preparation seam for focus, details, and Watch. */
@@ -80,7 +80,7 @@ export class PlayablePreparationService {
     const completedSources = this.storageService
       ? await Promise.all(
           filterHevcSources(sources, options.preferences.allowHevc).map(async source => {
-            const storage = await this.storageService!.getStorageByMovieSource(source.id);
+            const storage = await this.storageService!.getStorageBySource(source.id);
             return storage &&
               (storage.videoCompletedAt || storage.localOnly || storage.downloaded >= 10000)
               ? source
@@ -90,7 +90,7 @@ export class PlayablePreparationService {
       : [];
     this.throwIfAborted(options.signal);
     const localSource = this.select(
-      completedSources.filter((source): source is MovieSource => source !== null),
+      completedSources.filter((source): source is ContentSource => source !== null),
       options.preferences,
       false
     );
@@ -204,7 +204,7 @@ export class PlayablePreparationService {
    */
   private async finish(
     playable: PlayableRef,
-    source: MovieSource,
+    source: ContentSource,
     options: PreparationOptions,
     videoFilePath?: string,
     episodeMatchKind?: 'combined' | 'single'
@@ -323,10 +323,10 @@ export class PlayablePreparationService {
   }
 
   private select(
-    sources: MovieSource[],
+    sources: ContentSource[],
     preferences: PlaybackPreferences,
     requireFile = true
-  ): MovieSource | null {
+  ): ContentSource | null {
     const compatible = this.sortCandidates(sources, preferences, requireFile);
     if (!compatible.length) return null;
     if (preferences.quality === 'auto') return compatible[0];
@@ -338,10 +338,10 @@ export class PlayablePreparationService {
   }
 
   private sortCandidates(
-    sources: MovieSource[],
+    sources: ContentSource[],
     preferences: PlaybackPreferences,
     requireFile: boolean
-  ): MovieSource[] {
+  ): ContentSource[] {
     const compatible = requireFile
       ? filterSources([...sources], preferences.allowHevc)
       : filterHevcSources([...sources], preferences.allowHevc).sort(

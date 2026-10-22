@@ -1,7 +1,7 @@
 // Mock the dependencies
 jest.mock('@database/database');
 jest.mock('@repositories/movie.repository');
-jest.mock('@repositories/movie-source.repository');
+jest.mock('@repositories/content-source.repository');
 jest.mock('@services/source/source-metadata-file.service');
 jest.mock('@services/security/vpn.service');
 jest.mock('@services/download/download.service');
@@ -11,8 +11,8 @@ jest.mock('@services/configuration/configuration.service');
 jest.mock('@logger');
 
 import {
+  createMockContentSource,
   createMockMovie,
-  createMockMovieSource,
   createMockSourceMetadata,
 } from '@__test-utils__/mocks/movie.mock';
 import { configureFakerSeed, delayedResult } from '@__test-utils__/utils';
@@ -21,9 +21,9 @@ import { Quality, Source } from '@miauflix/source-metadata-extractor';
 import type { UpdateResult } from 'typeorm';
 
 import { Database } from '@database/database';
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
+import { ContentSourceRepository } from '@repositories/content-source.repository';
 import { MovieRepository } from '@repositories/movie.repository';
-import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import { DownloadService } from '@services/download/download.service';
 import type { RequestService } from '@services/request/request.service';
@@ -68,8 +68,8 @@ describe('SourceService', () => {
     };
   };
 
-  const createMockSourceForStats = (overrides: Partial<MovieSource> = {}): MovieSource => {
-    return createMockMovieSource({
+  const createMockSourceForStats = (overrides: Partial<ContentSource> = {}): ContentSource => {
+    return createMockContentSource({
       file: Buffer.from('mock file'),
       lastStatsCheck: new Date(Date.now() - 7 * 60 * 60 * 1000),
       nextStatsCheckAt: new Date(Date.now() - 1000),
@@ -81,32 +81,30 @@ describe('SourceService', () => {
     const mockMovie = createMockMovie();
 
     // Generate movie sources that reference the first movie
-    const mockMovieSource1 = createMockMovieSource({
-      movieId: mockMovie.id,
+    const mockContentSource1 = createMockContentSource({
       quality: Quality.FHD,
     });
 
-    const mockMovieSource2 = createMockMovieSource({
-      movieId: mockMovie.id,
+    const mockContentSource2 = createMockContentSource({
       quality: Quality.HD,
     });
 
     // Generate source metadata that matches the movie sources
     const mockSource1 = createMockSourceMetadata({
-      hash: mockMovieSource1.hash,
+      hash: mockContentSource1.hash,
     });
 
     const mockSource2 = createMockSourceMetadata({
-      hash: mockMovieSource2.hash,
+      hash: mockContentSource2.hash,
       quality: Quality.HD,
       source: Source.BLURAY,
     });
 
     // Mock repositories
     const mockMovieRepository = new MovieRepository({} as never) as jest.Mocked<MovieRepository>;
-    const mockMovieSourceRepository = new MovieSourceRepository(
+    const mockContentSourceRepository = new ContentSourceRepository(
       {} as never
-    ) as jest.Mocked<MovieSourceRepository>;
+    ) as jest.Mocked<ContentSourceRepository>;
     const mockDatabase = new Database({} as never) as jest.Mocked<Database>;
     const mockConfigService =
       new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
@@ -155,13 +153,19 @@ describe('SourceService', () => {
     mockMovieRepository.updateMovieTrailerIfDoesntExists.mockResolvedValue(undefined);
     mockMovieRepository.findMoviesByIdsWithImdb.mockResolvedValue([]);
 
-    mockMovieSourceRepository.createMany.mockResolvedValue([mockMovieSource1, mockMovieSource2]);
-    mockMovieSourceRepository.findByMovieId.mockResolvedValue([mockMovieSource1, mockMovieSource2]);
-    mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValue([]);
-    mockMovieSourceRepository.updateStats.mockResolvedValue({} as UpdateResult);
-    mockMovieSourceRepository.getNextSourcesToProcess.mockResolvedValue([]);
-    mockMovieSourceRepository.updateSourceFile.mockResolvedValue({} as UpdateResult);
-    mockMovieSourceRepository.updateSourceMetadata.mockResolvedValue({} as UpdateResult);
+    mockContentSourceRepository.upsertForMovie.mockResolvedValue([
+      mockContentSource1,
+      mockContentSource2,
+    ]);
+    mockContentSourceRepository.findByMovieId.mockResolvedValue([
+      mockContentSource1,
+      mockContentSource2,
+    ]);
+    mockContentSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValue([]);
+    mockContentSourceRepository.updateStats.mockResolvedValue({} as UpdateResult);
+    mockContentSourceRepository.getNextSourcesToProcess.mockResolvedValue([]);
+    mockContentSourceRepository.updateSourceFile.mockResolvedValue({} as UpdateResult);
+    mockContentSourceRepository.updateSourceMetadata.mockResolvedValue({} as UpdateResult);
 
     // Setup service mocks
     mockDownloadService.generateLink.mockReturnValue(`magnet:?xt=urn:btih:${mockSource1.hash}`);
@@ -185,7 +189,7 @@ describe('SourceService', () => {
     mockSourceMetadataFileService.isIdle.mockReturnValue(true);
 
     mockDatabase.getMovieRepository.mockReturnValue(mockMovieRepository);
-    mockDatabase.getMovieSourceRepository.mockReturnValue(mockMovieSourceRepository);
+    mockDatabase.getContentSourceRepository.mockReturnValue(mockContentSourceRepository);
     Object.assign(mockDatabase, {
       getEpisodeSourceRepository: jest.fn().mockReturnValue({
         findByEpisodeId: jest.fn().mockResolvedValue([]),
@@ -204,8 +208,8 @@ describe('SourceService', () => {
 
     return {
       service,
-      mockMovieSource1,
-      mockMovieSource2,
+      mockContentSource1,
+      mockContentSource2,
       mockSource1,
       mockSource2,
       mockMovie,
@@ -213,7 +217,7 @@ describe('SourceService', () => {
       mockRequestService,
       mockDatabase,
       mockMovieRepository,
-      mockMovieSourceRepository,
+      mockContentSourceRepository,
       mockDownloadService,
       mockContentDirectoryService,
       mockSourceMetadataFileService,
@@ -275,7 +279,7 @@ describe('SourceService', () => {
         mockMovie,
         mockMovieRepository,
         mockContentDirectoryService,
-        mockMovieSourceRepository,
+        mockContentSourceRepository,
       } = setupTest();
 
       mockContentDirectoryService.searchSourcesForMovie.mockImplementationOnce(async () => {
@@ -295,7 +299,7 @@ describe('SourceService', () => {
         true
       );
       // The search failed, so no sources were created
-      expect(mockMovieSourceRepository.createMany).not.toHaveBeenCalled();
+      expect(mockContentSourceRepository.upsertForMovie).not.toHaveBeenCalled();
       expect(mockMovieRepository.markSourceSearched).not.toHaveBeenCalled();
     });
   });
@@ -323,21 +327,21 @@ describe('SourceService', () => {
     it('should return sources for a movie', async () => {
       const {
         service,
-        mockMovieSource1,
-        mockMovieSource2,
+        mockContentSource1,
+        mockContentSource2,
         mockMovie,
-        mockMovieSourceRepository,
+        mockContentSourceRepository,
         mockContentDirectoryService,
       } = setupTest();
 
       const sources = await service.getSourcesForMovie(mockMovie.id);
 
-      expect(mockMovieSourceRepository.findByMovieId).toHaveBeenCalledWith(mockMovie.id);
+      expect(mockContentSourceRepository.findByMovieId).toHaveBeenCalledWith(mockMovie.id);
 
       // findByMovieId returns two sources
       expect(sources).toHaveLength(2);
-      expect(sources[0]).toEqual(mockMovieSource1);
-      expect(sources[1]).toEqual(mockMovieSource2);
+      expect(sources[0]).toEqual(mockContentSource1);
+      expect(sources[1]).toEqual(mockContentSource2);
 
       // Because we have sources in the database, the search is not triggered
       expect(mockContentDirectoryService.searchSourcesForMovie).not.toHaveBeenCalled();
@@ -349,18 +353,18 @@ describe('SourceService', () => {
       it('should return immediately without triggering API calls', async () => {
         const {
           service,
-          mockMovieSource1,
-          mockMovieSource2,
+          mockContentSource1,
+          mockContentSource2,
           mockMovie,
-          mockMovieSourceRepository,
+          mockContentSourceRepository,
           mockContentDirectoryService,
         } = setupTest();
 
         const sources = await service.getSourcesForMovieWithOnDemandSearch(mockMovie);
 
-        expect(mockMovieSourceRepository.findByMovieId).toHaveBeenCalledWith(mockMovie.id);
+        expect(mockContentSourceRepository.findByMovieId).toHaveBeenCalledWith(mockMovie.id);
         // we mocked findByMovieId to return two sources
-        expect(sources).toEqual([mockMovieSource1, mockMovieSource2]);
+        expect(sources).toEqual([mockContentSource1, mockContentSource2]);
 
         // Similar to getSourcesForMovie, we don't trigger the search
         expect(mockContentDirectoryService.searchSourcesForMovie).not.toHaveBeenCalled();
@@ -373,12 +377,12 @@ describe('SourceService', () => {
           service,
           mockMovie,
           mockSource1,
-          mockMovieSourceRepository,
+          mockContentSourceRepository,
           mockContentDirectoryService,
           mockMovieRepository,
         } = setupTest();
 
-        mockMovieSourceRepository.findByMovieId.mockResolvedValueOnce([]);
+        mockContentSourceRepository.findByMovieId.mockResolvedValueOnce([]);
         mockContentDirectoryService.searchSourcesForMovie.mockResolvedValueOnce(
           delayedResult(
             {
@@ -401,7 +405,7 @@ describe('SourceService', () => {
         expect(sources).toEqual([]);
 
         // The search is triggered
-        expect(mockMovieSourceRepository.findByMovieId).toHaveBeenCalledWith(mockMovie.id);
+        expect(mockContentSourceRepository.findByMovieId).toHaveBeenCalledWith(mockMovie.id);
         expect(mockContentDirectoryService.searchSourcesForMovie).toHaveBeenCalledWith(
           mockMovie.imdbId,
           true,
@@ -414,10 +418,10 @@ describe('SourceService', () => {
       });
 
       it('should pass high priority flag to content directory service', async () => {
-        const { service, mockMovie, mockMovieSourceRepository, mockContentDirectoryService } =
+        const { service, mockMovie, mockContentSourceRepository, mockContentDirectoryService } =
           setupTest();
 
-        mockMovieSourceRepository.findByMovieId.mockResolvedValueOnce([]);
+        mockContentSourceRepository.findByMovieId.mockResolvedValueOnce([]);
 
         await service.getSourcesForMovieWithOnDemandSearch(mockMovie);
 
@@ -434,12 +438,12 @@ describe('SourceService', () => {
           service,
           mockMovie,
           mockSource1,
-          mockMovieSourceRepository,
+          mockContentSourceRepository,
           mockContentDirectoryService,
           mockMovieRepository,
         } = setupTest();
 
-        mockMovieSourceRepository.findByMovieId.mockResolvedValueOnce([]);
+        mockContentSourceRepository.findByMovieId.mockResolvedValueOnce([]);
         const timeout1 = 200;
         const timeout2 = 400;
 
@@ -472,7 +476,7 @@ describe('SourceService', () => {
 
         // The search is finished, so sources are created
         expect(mockMovieRepository.markSourceSearched).toHaveBeenCalledTimes(1);
-        expect(mockMovieSourceRepository.createMany).toHaveBeenCalledTimes(1);
+        expect(mockContentSourceRepository.upsertForMovie).toHaveBeenCalledTimes(1);
       });
     });
 
@@ -480,12 +484,12 @@ describe('SourceService', () => {
       it('should return empty array without triggering search', async () => {
         const {
           service,
-          mockMovieSourceRepository,
+          mockContentSourceRepository,
           mockContentDirectoryService,
           mockMovieRepository,
         } = setupTest();
 
-        mockMovieSourceRepository.findByMovieId.mockResolvedValueOnce([]);
+        mockContentSourceRepository.findByMovieId.mockResolvedValueOnce([]);
 
         const sources = await service.getSourcesForMovieWithOnDemandSearch(
           createMockMovie({ imdbId: null })
@@ -499,10 +503,10 @@ describe('SourceService', () => {
 
     describe('when search fails', () => {
       it('should handle errors gracefully and return empty array', async () => {
-        const { service, mockMovie, mockMovieSourceRepository, mockContentDirectoryService } =
+        const { service, mockMovie, mockContentSourceRepository, mockContentDirectoryService } =
           setupTest();
 
-        mockMovieSourceRepository.findByMovieId.mockResolvedValueOnce([]);
+        mockContentSourceRepository.findByMovieId.mockResolvedValueOnce([]);
         mockContentDirectoryService.searchSourcesForMovie.mockRejectedValue(
           new Error('Search failed')
         );
@@ -525,7 +529,7 @@ describe('SourceService', () => {
 
   describe('syncStatsForSources', () => {
     it('should update stats for sources that need updates', async () => {
-      const { service, mockSource1, mockMovieSourceRepository, mockSourceMetadataFileService } =
+      const { service, mockSource1, mockContentSourceRepository, mockSourceMetadataFileService } =
         setupTest();
 
       const newWatchers = mockSource1.watchers + 10;
@@ -534,7 +538,7 @@ describe('SourceService', () => {
       const sourceToUpdate = createMockSourceForStats({
         hash: mockSource1.hash,
       });
-      mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
+      mockContentSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
         sourceToUpdate,
       ]);
       mockSourceMetadataFileService.getStats.mockResolvedValueOnce({
@@ -545,14 +549,14 @@ describe('SourceService', () => {
       await service.syncStatsForSources();
 
       // It processes 5 sources at a time
-      expect(mockMovieSourceRepository.findSourceThatNeedsStatsUpdate).toHaveBeenCalledWith(5);
+      expect(mockContentSourceRepository.findSourceThatNeedsStatsUpdate).toHaveBeenCalledWith(5);
 
       // But we only return one source so it should be called only once
       expect(mockSourceMetadataFileService.getStats).toHaveBeenCalledTimes(1);
       expect(mockSourceMetadataFileService.getStats).toHaveBeenCalledWith(sourceToUpdate.hash);
 
       // And it should update the stats for the source
-      expect(mockMovieSourceRepository.updateStats).toHaveBeenCalledWith(
+      expect(mockContentSourceRepository.updateStats).toHaveBeenCalledWith(
         sourceToUpdate.id,
         newBroadcasters,
         newWatchers,
@@ -561,7 +565,7 @@ describe('SourceService', () => {
     });
 
     it('should update stats also for sources without file', async () => {
-      const { service, mockSource1, mockSourceMetadataFileService, mockMovieSourceRepository } =
+      const { service, mockSource1, mockSourceMetadataFileService, mockContentSourceRepository } =
         setupTest();
 
       const sourceWithoutFile = createMockSourceForStats({
@@ -571,7 +575,7 @@ describe('SourceService', () => {
       const newWatchers = mockSource1.watchers + 10;
       const newBroadcasters = mockSource1.broadcasters + 10;
 
-      mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
+      mockContentSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
         sourceWithoutFile,
       ]);
       mockSourceMetadataFileService.getStats.mockResolvedValueOnce({
@@ -586,7 +590,7 @@ describe('SourceService', () => {
       expect(mockSourceMetadataFileService.getStats).toHaveBeenCalledWith(sourceWithoutFile.hash);
 
       // And it should update the stats for the source
-      expect(mockMovieSourceRepository.updateStats).toHaveBeenCalledWith(
+      expect(mockContentSourceRepository.updateStats).toHaveBeenCalledWith(
         sourceWithoutFile.id,
         newBroadcasters,
         newWatchers,
@@ -595,13 +599,13 @@ describe('SourceService', () => {
     });
 
     it('should handle magnet service errors gracefully', async () => {
-      const { service, mockSource1, mockSourceMetadataFileService, mockMovieSourceRepository } =
+      const { service, mockSource1, mockSourceMetadataFileService, mockContentSourceRepository } =
         setupTest();
 
       const sourceToUpdate = createMockSourceForStats({
         hash: mockSource1.hash,
       });
-      mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
+      mockContentSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
         sourceToUpdate,
       ]);
       mockSourceMetadataFileService.getStats.mockRejectedValueOnce(new Error('Stats fetch failed'));
@@ -612,14 +616,14 @@ describe('SourceService', () => {
       expect(mockSourceMetadataFileService.getStats).toHaveBeenCalledWith(sourceToUpdate.hash);
 
       // So it should not update the stats for the source
-      expect(mockMovieSourceRepository.updateStats).not.toHaveBeenCalled();
+      expect(mockContentSourceRepository.updateStats).not.toHaveBeenCalled();
     });
 
     it('should classify scrape timeouts as expected debug events', async () => {
-      const { service, mockSource1, mockSourceMetadataFileService, mockMovieSourceRepository } =
+      const { service, mockSource1, mockSourceMetadataFileService, mockContentSourceRepository } =
         setupTest();
       const sourceToUpdate = createMockSourceForStats({ hash: mockSource1.hash });
-      mockMovieSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
+      mockContentSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValueOnce([
         sourceToUpdate,
       ]);
       mockSourceMetadataFileService.getStats.mockRejectedValueOnce(
@@ -637,14 +641,14 @@ describe('SourceService', () => {
         expect.stringContaining(`source ${sourceToUpdate.id}`),
         expect.anything()
       );
-      expect(mockMovieSourceRepository.updateStats).not.toHaveBeenCalled();
+      expect(mockContentSourceRepository.updateStats).not.toHaveBeenCalled();
     });
 
     it('should skip when VPN is disconnected', async () => {
-      const { service, mockMovieSourceRepository } = createServiceWithDisconnectedVpn();
+      const { service, mockContentSourceRepository } = createServiceWithDisconnectedVpn();
       await service.syncStatsForSources();
 
-      expect(mockMovieSourceRepository.findSourceThatNeedsStatsUpdate).not.toHaveBeenCalled();
+      expect(mockContentSourceRepository.findSourceThatNeedsStatsUpdate).not.toHaveBeenCalled();
     });
   });
 

@@ -27,9 +27,10 @@ const setupTest = (directory: string) => {
     expiresAt: new Date(Date.now() + 60_000),
   };
   const verify = jest.fn().mockResolvedValue(grant);
-  const source = { id: 9, movieId: 12, file: Buffer.from('mock torrent') };
+  const source = { id: 9, file: Buffer.from('mock torrent') };
+  const movie = { id: 12, mediaId: 123, imdbId: 'tt123' };
   const streamService = {
-    resolvePlaybackSource: jest.fn().mockResolvedValue({ source, episodeSource: null }),
+    resolvePlaybackSource: jest.fn().mockResolvedValue({ source, episodeSource: null, movie }),
   };
   const request = jest.fn();
   const config = {
@@ -45,7 +46,6 @@ const setupTest = (directory: string) => {
     { request } as never,
     { verify } as never,
     streamService as never,
-    { getMovieById: async () => ({ mediaId: 123, imdbId: 'tt123' }) } as never,
     torrentSubtitles as never
   );
   const search = (results: unknown[]) => {

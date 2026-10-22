@@ -3,7 +3,7 @@ import { posix } from 'node:path';
 
 import { logger } from '@logger';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { EncryptedStorageLayout } from '@entities/storage.entity';
 import type { DownloadService } from '@services/download/download.service';
 import { isVideoFile } from '@services/download/download.utils';
@@ -119,7 +119,7 @@ export class TorrentSubtitlesService {
 
   constructor(private readonly downloads: DownloadService) {}
 
-  async discover(source: MovieSource, videoFilePath?: string): Promise<TorrentSubtitle[]> {
+  async discover(source: ContentSource, videoFilePath?: string): Promise<TorrentSubtitle[]> {
     const layout = await this.downloads.getMediaFiles(source, videoFilePath);
     const sidecars = matchingSubtitleFiles(layout);
     await this.downloads.prepareSubtitleFiles(
@@ -155,7 +155,7 @@ export class TorrentSubtitlesService {
     }));
   }
 
-  private async probe(source: MovieSource, videoFilePath?: string): Promise<TorrentSubtitle[]> {
+  private async probe(source: ContentSource, videoFilePath?: string): Promise<TorrentSubtitle[]> {
     const body = await this.run(
       source,
       'ffprobe',
@@ -198,7 +198,7 @@ export class TorrentSubtitlesService {
       }));
   }
 
-  async getTrack(source: MovieSource, track: TorrentSubtitle, startSeconds = 0): Promise<string> {
+  async getTrack(source: ContentSource, track: TorrentSubtitle, startSeconds = 0): Promise<string> {
     if (track.provider === 'torrent') {
       // Revalidate against the current selected video and layout before opening a sidecar.
       const layout = await this.downloads.getMediaFiles(source, track.videoFilePath);
@@ -230,7 +230,7 @@ export class TorrentSubtitlesService {
   }
 
   private async run(
-    source: MovieSource,
+    source: ContentSource,
     program: 'ffmpeg' | 'ffprobe',
     args: string[],
     path?: string,

@@ -3,7 +3,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 
 import { TorrentSubtitlesService } from './torrent-subtitles.service';
 
@@ -63,7 +63,7 @@ integration('torrent and embedded subtitle delivery', () => {
   });
 
   const setupTest = () => {
-    const source = { id: 9 } as MovieSource;
+    const source = { id: 9 } as ContentSource;
     const download = {
       prepareSubtitleFiles: async () => {},
       getMediaFiles: async () => ({
@@ -76,7 +76,7 @@ integration('torrent and embedded subtitle delivery', () => {
           { path: 'Movie.en.ass', offset: media.length, length: sidecar.length },
         ],
       }),
-      async streamFile(_source: MovieSource, range?: string, path?: string) {
+      async streamFile(_source: ContentSource, range?: string, path?: string) {
         const bytes = path ? sidecar : media;
         const match = range?.match(/^bytes=(\d+)-(\d*)$/);
         const start = match ? Number(match[1]) : 0;

@@ -126,7 +126,7 @@ export class PlaybackSessionService {
       }
     }
     if (!prepared.source) return null;
-    const storage = await this.storageService?.getStorageByMovieSource(prepared.source.id);
+    const storage = await this.storageService?.getStorageBySource(prepared.source.id);
 
     const streamingKey = randomBytes(32).toString('base64url');
     const expiresAt = new Date(Date.now() + this.ttlMs);

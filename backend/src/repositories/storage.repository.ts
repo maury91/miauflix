@@ -15,21 +15,22 @@ export class StorageRepository {
     return this.repository.findOne({ where: { id } });
   }
 
-  async findByMovieSourceId(movieSourceId: number): Promise<Storage | null> {
-    return this.repository.findOne({ where: { movieSourceId } });
+  async findBySourceId(sourceId: number): Promise<Storage | null> {
+    return this.repository.findOne({ where: { sourceId } });
   }
 
-  async findByMovieSourceIdWithRelation(movieSourceId: number): Promise<Storage | null> {
+  async findBySourceIdWithRelation(sourceId: number): Promise<Storage | null> {
     return this.repository.findOne({
-      where: { movieSourceId },
-      relations: ['movieSource'],
+      where: { sourceId },
+      relations: ['contentSource'],
     });
   }
 
   async findAllWithSourceAndMovie(): Promise<Storage[]> {
     return this.repository
       .createQueryBuilder('storage')
-      .leftJoinAndSelect('storage.movieSource', 'movieSource')
+      .leftJoinAndSelect('storage.contentSource', 'contentSource')
+      .leftJoinAndSelect('contentSource.movies', 'movieSource')
       .leftJoinAndSelect('movieSource.movie', 'movie')
       .orderBy('storage.allocatedBytes', 'DESC')
       .addOrderBy('storage.reservedBytes', 'DESC')
@@ -47,7 +48,7 @@ export class StorageRepository {
   async findStoragesWithCompletion(): Promise<Storage[]> {
     return this.repository
       .createQueryBuilder('storage')
-      .leftJoinAndSelect('storage.movieSource', 'movieSource')
+      .leftJoinAndSelect('storage.contentSource', 'contentSource')
       .where('storage.videoCompletedAt IS NOT NULL')
       .getMany();
   }
@@ -67,8 +68,8 @@ export class StorageRepository {
     return result.affected ? result.affected > 0 : false;
   }
 
-  async deleteByMovieSourceId(movieSourceId: number): Promise<boolean> {
-    const result = await this.repository.delete({ movieSourceId });
+  async deleteBySourceId(sourceId: number): Promise<boolean> {
+    const result = await this.repository.delete({ sourceId });
     return result.affected ? result.affected > 0 : false;
   }
 
@@ -175,7 +176,7 @@ export class StorageRepository {
    * Returns null if no storage records exist
    */
   async findMostStaleStorage(
-    excludeMovieSourceId?: number,
+    excludeSourceId?: number,
     includeUnexpiredSpeculative = false
   ): Promise<Storage | null> {
     const query = this.repository
@@ -194,17 +195,17 @@ export class StorageRepository {
       query.orderBy('storage.lastAccessAt', 'ASC');
     }
     query.addOrderBy('storage.createdAt', 'ASC'); // Secondary sort by creation date
-    if (excludeMovieSourceId !== undefined) {
-      query.andWhere('storage.movieSourceId != :excludeMovieSourceId', { excludeMovieSourceId });
+    if (excludeSourceId !== undefined) {
+      query.andWhere('storage.sourceId != :excludeSourceId', { excludeSourceId });
     }
     return query.getOne();
   }
 
   /** Find an idle, completed TV torrent after lower-priority speculative storage is exhausted. */
-  async findMostStaleWatchedEpisodeStorage(excludeMovieSourceId?: number): Promise<Storage | null> {
+  async findMostStaleWatchedEpisodeStorage(excludeSourceId?: number): Promise<Storage | null> {
     const query = this.repository
       .createQueryBuilder('storage')
-      .innerJoin(EpisodeSource, 'episodeSource', 'episodeSource.sourceId = storage.movieSourceId')
+      .innerJoin(EpisodeSource, 'episodeSource', 'episodeSource.sourceId = storage.sourceId')
       .where('storage.retentionClass = :retentionClass', { retentionClass: 'watched' })
       .andWhere('storage.activeStreams = 0')
       .andWhere('storage.videoCompletedAt IS NOT NULL')
@@ -213,8 +214,8 @@ export class StorageRepository {
       .addOrderBy('storage.lastAccessAt', 'ASC')
       .addOrderBy('storage.createdAt', 'ASC')
       .distinct(true);
-    if (excludeMovieSourceId !== undefined) {
-      query.andWhere('storage.movieSourceId != :excludeMovieSourceId', { excludeMovieSourceId });
+    if (excludeSourceId !== undefined) {
+      query.andWhere('storage.sourceId != :excludeSourceId', { excludeSourceId });
     }
     return query.getOne();
   }

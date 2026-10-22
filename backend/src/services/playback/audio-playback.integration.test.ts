@@ -3,7 +3,7 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 
 import { AudioPlaybackService } from './audio-playback.service';
 
@@ -70,7 +70,7 @@ integration('audio conversion with a seekable, delayed range reader', () => {
   const setupTest = (bytes = fixture, convertHevc = false) => {
     const ranges: number[] = [];
     const download = {
-      async streamFile(_source: MovieSource, range?: string) {
+      async streamFile(_source: ContentSource, range?: string) {
         const match = range?.match(/^bytes=(\d+)-(\d*)$/);
         const start = match ? Number(match[1]) : 0;
         const end = match?.[2] ? Math.min(bytes.length - 1, Number(match[2])) : bytes.length - 1;
@@ -89,7 +89,7 @@ integration('audio conversion with a seekable, delayed range reader', () => {
     };
     return {
       service: new AudioPlaybackService(download as never, { get: () => convertHevc } as never),
-      source: { id: 1 } as MovieSource,
+      source: { id: 1 } as ContentSource,
       ranges,
     };
   };

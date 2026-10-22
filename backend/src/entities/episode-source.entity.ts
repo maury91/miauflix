@@ -10,10 +10,10 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { ContentSource } from './content-source.entity';
 import { Episode } from './episode.entity';
-import { MovieSource } from './movie-source.entity';
 
-/** Maps a playable episode to its exact video file within a shared torrent. */
+/** Maps a playable episode to its exact video file within a shared source. */
 @Entity()
 @Unique(['episodeId', 'sourceId', 'videoFilePath'])
 @Index(['episodeId', 'sourceId'])
@@ -27,8 +27,8 @@ export class EpisodeSource {
   @Column()
   episodeId: number;
 
-  @ManyToOne(() => MovieSource, { onDelete: 'CASCADE' })
-  source: Relation<MovieSource>;
+  @ManyToOne(() => ContentSource, source => source.episodes, { onDelete: 'CASCADE' })
+  source: Relation<ContentSource>;
 
   @Column()
   sourceId: number;

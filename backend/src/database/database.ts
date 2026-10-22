@@ -12,6 +12,7 @@ import { AbstractLogger, DataSource } from 'typeorm';
 
 import { AuditLog } from '@entities/audit-log.entity';
 import { BackgroundJob } from '@entities/background-job.entity';
+import { ContentSource } from '@entities/content-source.entity';
 import { Episode } from '@entities/episode.entity';
 import { EpisodeSource } from '@entities/episode-source.entity';
 import { MediaList, MediaListItem } from '@entities/list.entity';
@@ -29,10 +30,10 @@ import { StreamingKey } from '@entities/streaming-key.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { User } from '@entities/user.entity';
 import { AuditLogRepository } from '@repositories/audit-log.repository';
+import { ContentSourceRepository } from '@repositories/content-source.repository';
 import { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
-import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import { ProgressRepository } from '@repositories/progress.repository';
 import { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
@@ -112,7 +113,7 @@ export class Database {
   private transactionQueue: Promise<void> = Promise.resolve();
   private mediaListRepository: MediaListRepository;
   private movieRepository: MovieRepository;
-  private movieSourceRepository: MovieSourceRepository;
+  private contentSourceRepository: ContentSourceRepository;
   private episodeSourceRepository: EpisodeSourceRepository;
   private tvShowRepository: TVShowRepository;
   private userRepository: UserRepository;
@@ -132,7 +133,7 @@ export class Database {
     const databasePath = path.resolve(dataDir, 'database.sqlite');
     // Set up static encryption services for entities
     Movie.encryptionService = encryptionService;
-    MovieSource.encryptionService = encryptionService;
+    ContentSource.encryptionService = encryptionService;
     Storage.encryptionService = encryptionService;
 
     logger.debug('DATABASE', `Initializing database ${databasePath}`);
@@ -142,6 +143,7 @@ export class Database {
       database: databasePath,
       entities: [
         Movie,
+        ContentSource,
         MovieSource,
         Notification,
         TVShow,
@@ -171,7 +173,7 @@ export class Database {
     await this.dataSource.initialize();
     await this.dataSource.synchronize();
     this.mediaListRepository = new MediaListRepository(this);
-    this.movieSourceRepository = new MovieSourceRepository(this);
+    this.contentSourceRepository = new ContentSourceRepository(this);
     this.episodeSourceRepository = new EpisodeSourceRepository(this);
     this.movieRepository = new MovieRepository(this);
     this.tvShowRepository = new TVShowRepository(this);
@@ -255,8 +257,8 @@ export class Database {
     return this.auditLogRepository;
   }
 
-  public getMovieSourceRepository() {
-    return this.movieSourceRepository;
+  public getContentSourceRepository() {
+    return this.contentSourceRepository;
   }
 
   public getEpisodeSourceRepository() {

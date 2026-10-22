@@ -70,7 +70,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    */
   @traced('StorageService')
   async createStorage(params: {
-    movieSourceId: number;
+    sourceId: number;
     location: string;
     size: number;
     downloadedPieces?: Uint8Array;
@@ -83,7 +83,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     speculativeExpiresAt?: Date | null;
   }): Promise<Storage> {
     const {
-      movieSourceId,
+      sourceId,
       location,
       size,
       downloadedPieces,
@@ -112,7 +112,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         : 0;
 
     const storageData: Partial<Storage> = {
-      movieSourceId,
+      sourceId,
       location,
       size,
       downloadedPieces: bitfield,
@@ -136,7 +136,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     };
 
     return this.withAdmission(async () => {
-      const current = await this.storageRepository.findByMovieSourceId(movieSourceId);
+      const current = await this.storageRepository.findBySourceId(sourceId);
       const currentCharge = current
         ? Math.max(current.allocatedBytes ?? 0, current.reservedBytes ?? 0)
         : 0;
@@ -148,7 +148,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         await this.cleanupWithinAdmission(
           true,
           delta,
-          movieSourceId,
+          sourceId,
           retentionClass === 'speculative',
           true,
           true
@@ -164,7 +164,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
           speculativeExpiresAt: keepWatched ? null : speculativeExpiresAt,
           lastInterestAt: new Date(),
         });
-        return (await this.storageRepository.findByMovieSourceId(movieSourceId)) ?? current;
+        return (await this.storageRepository.findBySourceId(sourceId)) ?? current;
       }
 
       return this.storageRepository.create(storageData);
@@ -176,16 +176,16 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    */
   @traced('StorageService')
   async updateDownloadProgress(params: {
-    movieSourceId: number;
+    sourceId: number;
     downloadedPieces: Uint8Array;
     totalPieces: number;
     size?: number;
   }): Promise<void> {
-    const { movieSourceId, downloadedPieces, totalPieces, size } = params;
+    const { sourceId, downloadedPieces, totalPieces, size } = params;
 
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) {
-      logger.warn('StorageService', `Storage record not found for movie source ${movieSourceId}`);
+      logger.warn('StorageService', `Storage record not found for movie source ${sourceId}`);
       return;
     }
 
@@ -196,7 +196,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     ) {
       logger.warn(
         'StorageService',
-        `Ignoring download progress with invalid torrent metadata for movie source ${movieSourceId}`
+        `Ignoring download progress with invalid torrent metadata for movie source ${sourceId}`
       );
       return;
     }
@@ -221,18 +221,18 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
 
     logger.debug(
       'StorageService',
-      `Updated download progress for movie source ${movieSourceId}: ${(downloaded / 100).toFixed(2)}%`
+      `Updated download progress for movie source ${sourceId}: ${(downloaded / 100).toFixed(2)}%`
     );
   }
 
   async updateTorrentLayout(
-    movieSourceId: number,
+    sourceId: number,
     totalPieces: number,
     pieceLength: number,
     logicalBytes: number,
     selectedLogicalBytes?: number
   ): Promise<void> {
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) return;
     if (
       !Number.isInteger(totalPieces) ||
@@ -242,10 +242,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       !Number.isFinite(logicalBytes) ||
       logicalBytes < 0
     ) {
-      logger.warn(
-        'StorageService',
-        `Ignoring invalid torrent layout for movie source ${movieSourceId}`
-      );
+      logger.warn('StorageService', `Ignoring invalid torrent layout for movie source ${sourceId}`);
       return;
     }
     await this.storageRepository.update(storage.id, {
@@ -260,10 +257,10 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * Mark a storage record as accessed
    */
   @traced('StorageService')
-  async markAsAccessed(movieSourceId: number): Promise<void> {
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+  async markAsAccessed(sourceId: number): Promise<void> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) {
-      logger.warn('StorageService', `Storage record not found for movie source ${movieSourceId}`);
+      logger.warn('StorageService', `Storage record not found for movie source ${sourceId}`);
       return;
     }
 
@@ -279,8 +276,8 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * Get storage information for a movie source
    */
   @traced('StorageService')
-  async getStorageByMovieSource(movieSourceId: number): Promise<Storage | null> {
-    return this.storageRepository.findByMovieSourceId(movieSourceId);
+  async getStorageBySource(sourceId: number): Promise<Storage | null> {
+    return this.storageRepository.findBySourceId(sourceId);
   }
 
   async getStoragesWithCompletion(): Promise<Storage[]> {
@@ -288,10 +285,10 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   }
 
   async updateEncryptedLayout(
-    movieSourceId: number,
+    sourceId: number,
     encryptedLayout: EncryptedStorageLayout
   ): Promise<void> {
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) return;
     if (storage.encryptedLayout?.filenameSalt === encryptedLayout.filenameSalt) return;
     const next = storage.encryptedLayout
@@ -302,11 +299,11 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
 
   /** Record the file needed by an episode; reopening a pack cancels its completed seed window. */
   async selectTorrentFile(
-    movieSourceId: number,
+    sourceId: number,
     path: string,
     fileAlreadyComplete: boolean
   ): Promise<Storage | null> {
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) return null;
     const selectedFiles = [...new Set([...(storage.selectedFiles ?? []), path])];
     const next = {
@@ -316,36 +313,36 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     return this.storageRepository.update(storage.id, next);
   }
 
-  async reactivateTorrent(movieSourceId: number): Promise<Storage | null> {
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+  async reactivateTorrent(sourceId: number): Promise<Storage | null> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) return null;
     if (!storage.localOnly && !storage.videoCompletedAt) return storage;
     return this.storageRepository.update(storage.id, { localOnly: false, videoCompletedAt: null });
   }
 
   async markVideoComplete(
-    movieSourceId: number,
+    sourceId: number,
     encryptedLayout: EncryptedStorageLayout
   ): Promise<Storage | null> {
-    return this.withSourceLock(movieSourceId, async () => {
-      const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    return this.withSourceLock(sourceId, async () => {
+      const storage = await this.storageRepository.findBySourceId(sourceId);
       if (!storage) return null;
       if (storage.videoCompletedAt) return storage;
       const completed = await this.storageRepository.update(storage.id, {
         videoCompletedAt: new Date(),
         encryptedLayout: storage.encryptedLayout ?? encryptedLayout,
       });
-      if (completed) await this.markAsAccessed(movieSourceId);
+      if (completed) await this.markAsAccessed(sourceId);
       return completed;
     });
   }
 
   async detachCompletedStorage(
-    movieSourceId: number,
+    sourceId: number,
     detachTorrent: () => Promise<void>
   ): Promise<Storage | null> {
-    return this.withSourceLock(movieSourceId, async () => {
-      const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+    return this.withSourceLock(sourceId, async () => {
+      const storage = await this.storageRepository.findBySourceId(sourceId);
       if (!storage || storage.localOnly) return storage;
       await detachTorrent();
       return this.storageRepository.update(storage.id, { localOnly: true });
@@ -369,27 +366,24 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * Emits 'delete' event
    */
   @traced('StorageService')
-  async removeStorage(movieSourceId: number): Promise<number> {
-    const result = await this.removeStorageWithResult(movieSourceId);
+  async removeStorage(sourceId: number): Promise<number> {
+    const result = await this.removeStorageWithResult(sourceId);
     return result.status === 'removed' ? result.bytes : 0;
   }
 
-  async removeStorageWithResult(movieSourceId: number): Promise<StorageRemovalResult> {
-    return this.withSourceLock(movieSourceId, () => this.removeStorageLocked(movieSourceId));
+  async removeStorageWithResult(sourceId: number): Promise<StorageRemovalResult> {
+    return this.withSourceLock(sourceId, () => this.removeStorageLocked(sourceId));
   }
 
-  private async removeStorageLocked(movieSourceId: number): Promise<StorageRemovalResult> {
-    const storage = await this.storageRepository.findByMovieSourceIdWithRelation(movieSourceId);
+  private async removeStorageLocked(sourceId: number): Promise<StorageRemovalResult> {
+    const storage = await this.storageRepository.findBySourceIdWithRelation(sourceId);
     if (!storage) {
-      logger.warn('StorageService', `Storage record not found for movie source ${movieSourceId}`);
+      logger.warn('StorageService', `Storage record not found for movie source ${sourceId}`);
       return { status: 'not_found' };
     }
 
     if ((storage.activeStreams ?? 0) > 0) {
-      logger.warn(
-        'StorageService',
-        `Refusing to remove active storage for source ${movieSourceId}`
-      );
+      logger.warn('StorageService', `Refusing to remove active storage for source ${sourceId}`);
       return { status: 'active_playback' };
     }
 
@@ -398,19 +392,19 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     } catch (error) {
       logger.warn(
         'StorageService',
-        `Physical cleanup failed for movie source ${movieSourceId}; keeping the database record`,
+        `Physical cleanup failed for movie source ${sourceId}; keeping the database record`,
         error
       );
       return { status: 'cleanup_failed' };
     }
 
-    const success = await this.storageRepository.deleteByMovieSourceId(movieSourceId);
+    const success = await this.storageRepository.deleteBySourceId(sourceId);
 
     if (success) {
       (storage as Storage & { physicalCleanupDone?: boolean }).physicalCleanupDone = true;
       logger.info(
         'StorageService',
-        `Removed storage record for movie source ${movieSourceId} at ${storage.location}`
+        `Removed storage record for movie source ${sourceId} at ${storage.location}`
       );
       this.emit('delete', storage);
     }
@@ -458,48 +452,48 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     return this.allocationMode;
   }
 
-  async reconcileAllocation(movieSourceId: number): Promise<Storage | null> {
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+  async reconcileAllocation(sourceId: number): Promise<Storage | null> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) return null;
     const allocatedBytes = await this.measureAllocatedBytes(storage.location);
     if (allocatedBytes === null) return storage;
     await this.storageRepository.reconcileAllocation(storage.id, allocatedBytes);
-    return this.storageRepository.findByMovieSourceId(movieSourceId);
+    return this.storageRepository.findBySourceId(sourceId);
   }
 
-  async setPlaybackActive(movieSourceId: number, active: boolean): Promise<boolean> {
-    const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
+  async setPlaybackActive(sourceId: number, active: boolean): Promise<boolean> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) return false;
     return this.storageRepository.changeActiveStreams(storage.id, active ? 1 : -1);
   }
 
   /** Serialize a source's stream startup against cleanup and removal. */
-  async withSourceLock<T>(movieSourceId: number, operation: () => Promise<T>): Promise<T> {
-    const previous = this.sourceTails.get(movieSourceId) ?? Promise.resolve();
+  async withSourceLock<T>(sourceId: number, operation: () => Promise<T>): Promise<T> {
+    const previous = this.sourceTails.get(sourceId) ?? Promise.resolve();
     let release!: () => void;
     const current = new Promise<void>(resolve => (release = resolve));
-    this.sourceTails.set(movieSourceId, current);
+    this.sourceTails.set(sourceId, current);
     await previous;
     try {
       return await operation();
     } finally {
       release();
-      if (this.sourceTails.get(movieSourceId) === current) this.sourceTails.delete(movieSourceId);
+      if (this.sourceTails.get(sourceId) === current) this.sourceTails.delete(sourceId);
     }
   }
 
   /** Increase a row's reservation before promoting speculative storage. */
-  async reserveStorage(movieSourceId: number, bytes: number): Promise<void> {
+  async reserveStorage(sourceId: number, bytes: number): Promise<void> {
     await this.withAdmission(async () => {
-      const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
-      if (!storage) throw new Error(`Storage not found for movie source ${movieSourceId}`);
+      const storage = await this.storageRepository.findBySourceId(sourceId);
+      if (!storage) throw new Error(`Storage not found for movie source ${sourceId}`);
       const requested = Math.max(0, Math.floor(bytes));
       const nextReservation = Math.max(storage.reservedBytes ?? 0, requested);
       const currentCharge = Math.max(storage.allocatedBytes ?? 0, storage.reservedBytes ?? 0);
       const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
       const delta = nextCharge - currentCharge;
       if (delta > 0) {
-        await this.cleanupWithinAdmission(true, delta, movieSourceId, false, true, true);
+        await this.cleanupWithinAdmission(true, delta, sourceId, false, true, true);
         await this.assertCapacity(delta);
       }
       await this.storageRepository.update(storage.id, {
@@ -512,17 +506,17 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   }
 
   /** Increase a speculative reservation without promoting it to watched retention. */
-  async reserveSpeculativeStorage(movieSourceId: number, bytes: number): Promise<void> {
+  async reserveSpeculativeStorage(sourceId: number, bytes: number): Promise<void> {
     await this.withAdmission(async () => {
-      const storage = await this.storageRepository.findByMovieSourceId(movieSourceId);
-      if (!storage) throw new Error(`Storage not found for movie source ${movieSourceId}`);
+      const storage = await this.storageRepository.findBySourceId(sourceId);
+      if (!storage) throw new Error(`Storage not found for movie source ${sourceId}`);
       const requested = Math.max(0, Math.floor(bytes));
       const nextReservation = Math.max(storage.reservedBytes ?? 0, requested);
       const currentCharge = Math.max(storage.allocatedBytes ?? 0, storage.reservedBytes ?? 0);
       const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
       const delta = nextCharge - currentCharge;
       if (delta > 0) {
-        await this.cleanupWithinAdmission(true, delta, movieSourceId, true, true, true);
+        await this.cleanupWithinAdmission(true, delta, sourceId, true, true, true);
         await this.assertCapacity(delta, true);
       }
       await this.storageRepository.update(storage.id, {
@@ -681,7 +675,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   private async cleanupWithinAdmission(
     canCleanEverything: boolean,
     additionalBytes: number,
-    excludeMovieSourceId?: number,
+    excludeSourceId?: number,
     preservePlaybackReserve = false,
     evictUnexpiredSpeculative = false,
     evictWatchedEpisodes = false
@@ -708,12 +702,12 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       cleanupAttempts < maxCleanupAttempts
     ) {
       let removalCandidate = await this.storageRepository.findMostStaleStorage(
-        excludeMovieSourceId,
+        excludeSourceId,
         evictUnexpiredSpeculative
       );
       if (!removalCandidate && evictWatchedEpisodes) {
         removalCandidate =
-          await this.storageRepository.findMostStaleWatchedEpisodeStorage(excludeMovieSourceId);
+          await this.storageRepository.findMostStaleWatchedEpisodeStorage(excludeSourceId);
       }
       if (!removalCandidate) {
         logger.warn('StorageService', 'No storage records found');
@@ -733,13 +727,13 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
         }
       }
 
-      const removedSize = await this.removeStorage(removalCandidate.movieSourceId);
+      const removedSize = await this.removeStorage(removalCandidate.sourceId);
 
       if (removedSize > 0) {
         totalCleanedUp += BigInt(removedSize);
         logger.info(
           'StorageService',
-          `Removed storage record for movie source ${removalCandidate.movieSourceId} (${humanReadableBytes(removedSize)})`
+          `Removed storage record for movie source ${removalCandidate.sourceId} (${humanReadableBytes(removedSize)})`
         );
 
         // Recalculate current usage to get accurate state
@@ -747,7 +741,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       } else {
         logger.warn(
           'StorageService',
-          `Failed to remove storage record for movie source ${removalCandidate.movieSourceId}`
+          `Failed to remove storage record for movie source ${removalCandidate.sourceId}`
         );
         // If we can't remove this record, we can't continue since it's the most stale
         break;

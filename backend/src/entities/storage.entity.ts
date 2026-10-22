@@ -12,7 +12,7 @@ import {
 
 import type { EncryptionService } from '@services/encryption/encryption.service';
 
-import { MovieSource } from './movie-source.entity';
+import { ContentSource } from './content-source.entity';
 
 export interface EncryptedStorageLayout {
   storeName: string;
@@ -30,12 +30,12 @@ export class Storage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => MovieSource, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'movieSourceId' })
-  movieSource: Relation<MovieSource>;
+  @OneToOne(() => ContentSource, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'sourceId' })
+  contentSource: Relation<ContentSource>;
 
   @Column()
-  movieSourceId: number;
+  sourceId: number;
 
   @Column({
     type: 'blob',
