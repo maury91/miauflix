@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
 
   media-catalog:
-    image: ghcr.io/${GITHUB_REPOSITORY:-miauflix}-media-catalog:${MIAUFLIX_VERSION:-latest}
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-media-catalog:${MIAUFLIX_VERSION:-latest}
     container_name: miauflix-media-catalog
     depends_on:
       nordvpn:
@@ -43,7 +43,7 @@ services:
     restart: unless-stopped
 
   list-service:
-    image: ghcr.io/${GITHUB_REPOSITORY:-miauflix}-list-service:${MIAUFLIX_VERSION:-latest}
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-list-service:${MIAUFLIX_VERSION:-latest}
     container_name: miauflix-list-service
     depends_on:
       nordvpn:
@@ -57,7 +57,7 @@ services:
     restart: unless-stopped
 
   backend:
-    image: ghcr.io/${GITHUB_REPOSITORY:-miauflix}:${MIAUFLIX_VERSION:-latest}
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix:${MIAUFLIX_VERSION:-latest}
     container_name: miauflix-backend
     depends_on:
       nordvpn:

@@ -1,5 +1,5 @@
-# --- Build Stage ---
-FROM node:22-slim AS builder
+# --- Dependency manifests (shared by builder and prod-deps) ---
+FROM node:22-slim AS deps-base
 WORKDIR /usr/src/app
 
 # Install build tools (no unnecessary recommends)
@@ -27,6 +27,15 @@ COPY services/list-service/package.json ./services/list-service/
 # Temporarily remove problematic prepare scripts that require source code
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 
+# --- Production dependencies for the backend workspace only ---
+# Keeps devDependencies (TypeScript, Vite, Jest, Storybook, ...) and other
+# workspaces' dependencies out of the runtime image.
+FROM deps-base AS prod-deps
+RUN --mount=type=cache,target=/root/.npm \
+    npm ci --omit=dev --workspace backend
+
+# --- Build Stage ---
+FROM deps-base AS builder
 # Install dependencies with npm cache mount for faster installs
 RUN --mount=type=cache,target=/root/.npm \
     npm ci
@@ -69,9 +78,9 @@ COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/dist /usr/src/app/p
 COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/package.json /usr/src/app/packages/therarbg-sanitizer/package.json
 COPY --from=builder /usr/src/app/packages/service-contracts/dist /usr/src/app/packages/service-contracts/dist
 COPY --from=builder /usr/src/app/packages/service-contracts/package.json /usr/src/app/packages/service-contracts/package.json
-# Copy all node_modules from root (workspace dependencies)
-COPY --from=builder /usr/src/app/node_modules /usr/src/app/node_modules
-COPY --from=builder /usr/src/app/backend/node_modules /usr/src/app/backend/node_modules
+# Copy production-only node_modules (workspace dependencies)
+COPY --from=prod-deps /usr/src/app/node_modules /usr/src/app/node_modules
+COPY --from=prod-deps /usr/src/app/backend/node_modules /usr/src/app/backend/node_modules
 COPY --from=builder /usr/src/app/.env /usr/src/app/.env
 # Copy built frontend into public directory to be served by backend (and shared with nginx)
 COPY --from=builder /usr/src/app/dist/frontend /usr/src/app/public

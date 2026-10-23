@@ -55,7 +55,7 @@ exit_code=$?
 set -e
 
 if [[ $exit_code -eq 0 ]]; then
-  echo 'A managed E2E service exited unexpectedly' >&2
+  echo 'A managed service exited unexpectedly' >&2
   exit_code=1
 fi
 exit "$exit_code"

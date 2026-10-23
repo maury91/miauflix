@@ -44,6 +44,12 @@ echo "Ensuring /usr/src/app/downloads exists and is owned by $PUID:$PGID"
 mkdir -p /usr/src/app/downloads
 chown -R $PUID:$PGID /usr/src/app/downloads
 
+# The app persists generated settings to .env; the image ships it root-owned.
+# Leave user-mounted files alone and only fix the image's own copy.
+if [ -f /usr/src/app/.env ] && [ "$(stat -c %u /usr/src/app/.env)" = "0" ]; then
+    chown $PUID:$PGID /usr/src/app/.env
+fi
+
 # Ensure directories are writable
 chmod 755 /usr/src/app/data
 
