@@ -1217,21 +1217,21 @@ describe('StorageService', () => {
       await storageRepo.update(storage3.id, { lastInterestAt: tenDaysAgo });
 
       // Act
-      const mostStale = await database.getStorageFileRepository().findEvictionCandidate(0);
+      const [mostStale] = await database.getStorageFileRepository().findIdleStorageIds();
 
       // Assert
       expect(mostStale).toBe(storage3.id); // Should be the most stale (10 days ago)
     });
 
-    it('should return null when no storage records exist', async () => {
+    it('should return no idle storage when no storage records exist', async () => {
       // Arrange
       const { database } = setupTest();
 
       // Act
-      const mostStale = await database.getStorageFileRepository().findEvictionCandidate(5);
+      const idle = await database.getStorageFileRepository().findIdleStorageIds();
 
       // Assert
-      expect(mostStale).toBeNull();
+      expect(idle).toEqual([]);
     });
 
     it('should get correct storage count', async () => {

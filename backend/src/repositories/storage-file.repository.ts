@@ -58,6 +58,12 @@ export class StorageFileRepository {
     );
   }
 
+  /** Forget the completion of files whose pieces were cleared. */
+  async clearFilesComplete(storageId: number, paths: string[]): Promise<void> {
+    if (!paths.length) return;
+    await this.files.update({ storageId, path: In(paths) }, { completedAt: null });
+  }
+
   /** Insert or refresh one owner's claim on a file. */
   async upsertClaim(storageId: number, path: string, claim: ClaimInput): Promise<void> {
     await this.database.write(() =>
@@ -81,7 +87,7 @@ export class StorageFileRepository {
 
   async deleteClaims(
     storageId: number,
-    where: { ownerKey?: string; kind?: ClaimKind } = {}
+    where: { ownerKey?: string; kind?: ClaimKind; path?: string } = {}
   ): Promise<void> {
     await this.claims.delete({ storageId, ...where });
   }
@@ -122,14 +128,11 @@ export class StorageFileRepository {
   }
 
   /**
-   * The idle storage whose strongest live claim ranks lowest (at most `maxRank`), then least
-   * recently wanted. Storage with no live claims ranks 0.
+   * Idle storage (no active stream), least protected first: by strongest live claim rank (storage
+   * with no live claims ranks 0), then least recently wanted. Whether any of it may actually go
+   * depends on the rank of each file; see `StorageService.reclaimFiles`.
    */
-  async findEvictionCandidate(
-    maxRank: number,
-    excludeSourceId?: number,
-    now = new Date()
-  ): Promise<number | null> {
+  async findIdleStorageIds(excludeSourceId?: number, now = new Date()): Promise<number[]> {
     const query = this.database
       .getRepository(Storage)
       .createQueryBuilder('s')
@@ -138,16 +141,14 @@ export class StorageFileRepository {
       .addSelect(`COALESCE(MAX(${CLAIM_RANK_SQL}), 0)`, 'claimRank')
       .where('s.activeStreams = 0')
       .groupBy('s.id')
-      .having('claimRank <= :maxRank', { maxRank })
       .orderBy('claimRank', 'ASC')
       .addOrderBy('s.lastInterestAt', 'ASC')
       .addOrderBy('s.lastAccessAt', 'ASC')
-      .addOrderBy('s.createdAt', 'ASC')
-      .limit(1);
+      .addOrderBy('s.createdAt', 'ASC');
     if (excludeSourceId !== undefined)
       query.andWhere('s.sourceId != :excludeSourceId', { excludeSourceId });
-    const row = await query.getRawOne<{ id: number }>();
-    return row ? Number(row.id) : null;
+    const rows = await query.getRawMany<{ id: number }>();
+    return rows.map(row => Number(row.id));
   }
 
   /** Sources whose live claims are all speculative (nobody is watching or has watched them). */

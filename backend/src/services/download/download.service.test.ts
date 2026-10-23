@@ -1316,6 +1316,71 @@ describe('DownloadService', () => {
       expect(retry).toHaveBeenCalledWith(storage.sourceId);
     });
 
+    it('drops its claim when an unknown layout turns out not to contain the file', async () => {
+      const { service, mockStorageService } = setupTest();
+      const torrent = {
+        infoHash: 'b'.repeat(40),
+        name: 'pack',
+        files: [{ name: 'Show.S01E01.mkv', path: 'Show.S01E01.mkv', length: 10, offset: 0 }],
+        pieces: new Array(1),
+        pieceLength: 10,
+        length: 10,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      const storage = { location: '/tmp/test-downloads/pack', downloadedPieces: new Uint8Array(0) };
+      mockStorageService.createStorage.mockResolvedValue(storage as never);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage as never);
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockResolvedValue(torrent);
+      const episode = target(
+        { id: 3, size: 10, hash: 'b'.repeat(40), magnetLink: 'magnet:?xt=urn:btih:pack' },
+        'Show.S01E02.mkv'
+      );
+
+      await expect(service.startDownload(episode, WATCHED)).rejects.toThrow(
+        'Requested file is not part of this source'
+      );
+      expect(mockStorageService.releaseClaims).toHaveBeenCalledWith(3, {
+        kind: 'watched',
+        ownerKey: 'user:test',
+        path: 'Show.S01E02.mkv',
+      });
+      expect(mockStorageService.updateEncryptedLayout).not.toHaveBeenCalled();
+    });
+
+    it('completes a source even if a stray claim names a file it does not contain', async () => {
+      const { service, mockStorageService } = setupTest();
+      mockStorageService.getClaimedPaths.mockResolvedValue(['movie.mkv', 'missing.mkv']);
+      mockStorageService.getFiles.mockResolvedValue([
+        { path: 'movie.mkv', completedAt: null },
+      ] as never);
+      mockStorageService.markVideoComplete.mockResolvedValue(null);
+      const layout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 8 }],
+      };
+      const torrent = { bitfield: { buffer: Uint8Array.of(0b11000000) } };
+      const recordCompletion = (
+        service as unknown as {
+          recordCompletion: (
+            torrent: Torrent,
+            id: number,
+            layout: EncryptedStorageLayout
+          ) => Promise<void>;
+        }
+      ).recordCompletion;
+
+      await recordCompletion.call(service, torrent as never, 9, layout);
+
+      expect(mockStorageService.markVideoComplete).toHaveBeenCalledWith(9, layout);
+    });
+
     it('uses the runtime WebTorrent piece list for persisted layout', async () => {
       const { service, mockStorageService } = setupTest();
       const sourceHash = 'ABCDEF1234'.padEnd(40, 'A');
@@ -1594,6 +1659,83 @@ describe('DownloadService', () => {
       );
       expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
         expect.objectContaining({ sourceId: 2 })
+      );
+    });
+
+    it('writes the bitfield under the source lock from a fresh snapshot, coalescing verifies', async () => {
+      const { service, mockStorageService } = setupTest();
+      const bitfield = { buffer: new Uint8Array([0b11000000]) };
+      const torrent = {
+        infoHash: 'a'.repeat(40),
+        name: 'movie',
+        files: [{ name: 'movie.mkv', path: 'movie.mkv', length: 10, offset: 0 }],
+        bitfield,
+        pieces: new Array(2),
+        pieceLength: 5,
+        length: 10,
+        on: jest.fn(),
+      } as unknown as Torrent;
+      mockStorageService.createStorage.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      mockStorageService.getStorageBySource.mockResolvedValue({
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+      } as never);
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockResolvedValue(torrent);
+      await service.startDownload(
+        target({
+          id: 1,
+          size: 10,
+          hash: 'a'.repeat(40),
+          magnetLink: 'magnet:?xt=urn:btih:test',
+        }),
+        WATCHED
+      );
+      const [, onVerified] = (torrent.on as jest.Mock).mock.calls.find(
+        ([event]) => event === 'verified'
+      );
+
+      // A serial lock, held by a reclaim while verifies arrive.
+      let tail: Promise<void> = Promise.resolve();
+      mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => {
+        const previous = tail;
+        let release!: () => void;
+        tail = new Promise<void>(resolve => (release = resolve));
+        await previous;
+        try {
+          return await operation();
+        } finally {
+          release();
+        }
+      });
+      let finishReclaim!: () => void;
+      const reclaim = mockStorageService.withSourceLock(
+        1,
+        () => new Promise<void>(resolve => (finishReclaim = resolve))
+      );
+      mockStorageService.updateDownloadProgress.mockClear();
+
+      const first = onVerified();
+      const second = onVerified();
+      await new Promise(resolve => setImmediate(resolve));
+      expect(mockStorageService.updateDownloadProgress).not.toHaveBeenCalled();
+
+      // The reclaim clears the pieces, then lets go of the lock.
+      bitfield.buffer = new Uint8Array([0b00000000]);
+      finishReclaim();
+      await reclaim;
+      await Promise.all([first, second]);
+
+      expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledTimes(1);
+      expect(mockStorageService.updateDownloadProgress).toHaveBeenCalledWith(
+        expect.objectContaining({ sourceId: 1, downloadedPieces: new Uint8Array([0]) })
       );
     });
 

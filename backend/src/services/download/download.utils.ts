@@ -5,18 +5,10 @@ import type { Torrent, TorrentFile } from 'webtorrent';
 
 import type { RequestService } from '@services/request/request.service';
 
-export const isVideoFile = (filename: string) => {
-  return (
-    filename.endsWith('.mp4') ||
-    filename.endsWith('.mkv') ||
-    filename.endsWith('.avi') ||
-    filename.endsWith('.mov') ||
-    filename.endsWith('.wmv') ||
-    filename.endsWith('.flv') ||
-    filename.endsWith('.webm') ||
-    filename.endsWith('.m4v')
-  );
-};
+const VIDEO_EXTENSION = /\.(?:mp4|mkv|avi|mov|wmv|flv|webm|m4v)$/i;
+
+/** Video container by extension, ignoring case (releases ship `Movie.MKV` too). */
+export const isVideoFile = (filename: string) => VIDEO_EXTENSION.test(filename);
 
 // From https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/encodeURIComponent
 export function encodeRFC5987(str: string) {
@@ -129,6 +121,34 @@ interface LayoutFile {
   offset: number;
   length: number;
 }
+
+/** Inclusive piece indices overlapping a byte range, or null for an empty range. */
+export const pieceRangeOf = (
+  pieceLength: number,
+  offset: number,
+  length: number
+): { first: number; last: number } | null =>
+  length <= 0 || pieceLength <= 0
+    ? null
+    : {
+        first: Math.floor(offset / pieceLength),
+        last: Math.floor((offset + length - 1) / pieceLength),
+      };
+
+/** A copy of the bitfield with every piece in the inclusive ranges cleared. */
+export const clearPiecesInBitfield = (
+  bitfield: Uint8Array,
+  ranges: ReadonlyArray<{ first: number; last: number }>
+): Uint8Array => {
+  const next = new Uint8Array(bitfield);
+  for (const { first, last } of ranges) {
+    for (let piece = first; piece <= last; piece++) {
+      const index = Math.floor(piece / 8);
+      if (index < next.length) next[index] &= ~(1 << (7 - (piece % 8)));
+    }
+  }
+  return next;
+};
 export const getContentType = (filename: string): string => {
   const ext = filename.toLowerCase().split('.').pop();
 

@@ -23,7 +23,7 @@ import type { PlaybackTarget } from '@services/playback/playback-target';
 import { withFile } from '@services/playback/playback-target';
 import type { RequestService } from '@services/request/request.service';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
-import type { StorageService } from '@services/storage/storage.service';
+import type { PieceRange, StorageService } from '@services/storage/storage.service';
 import { traced } from '@utils/tracing.util';
 
 import type { EncryptedStorageOptions } from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
@@ -68,6 +68,18 @@ export interface WarmupResult {
   firstPiece: number;
   lastPiece: number;
 }
+
+/** The encrypted store under WebTorrent's cache and immediate-write wrappers, if there is one. */
+const findEncryptedStore = (store: unknown): EncryptedChunkStore | null => {
+  for (
+    let layer = store;
+    layer && typeof layer === 'object';
+    layer = (layer as { store?: unknown }).store
+  ) {
+    if (layer instanceof EncryptedChunkStore) return layer;
+  }
+  return null;
+};
 
 const MAX_SIDECAR_BYTES = 2 * 1024 * 1024;
 const CLAIM_SWEEP_INTERVAL_MS = 60_000;
@@ -208,6 +220,10 @@ export class DownloadService {
     // row. Keep the event hook for existing observers and unit-level callers.
     this.storageService.registerDeleteHandler(storage => cleanupStorage(storage, true));
     this.storageService.on('delete', storage => cleanupStorage(storage, false));
+    this.storageService.registerReclaimHandler({
+      reclaim: (storage, paths, pieces) => this.reclaimStoredFiles(storage, paths, pieces),
+      reselect: storage => this.reselectAfterReclaim(storage),
+    });
   }
 
   testable = true;
@@ -359,7 +375,10 @@ export class DownloadService {
       ...files.filter(file => file.completedAt).map(file => file.path),
       ...newlyComplete,
     ]);
-    const claimed = await this.storageService.getClaimedPaths(sourceId);
+    // A claim on a path the source does not contain can never complete; it must not block others.
+    const claimed = (await this.storageService.getClaimedPaths(sourceId)).filter(path =>
+      layout.files.some(file => file.path === path)
+    );
     if (!claimed.length || !claimed.every(path => complete.has(path))) return;
     const storage = await this.storageService.markVideoComplete(sourceId, layout);
     if (storage) this.scheduleSeedExpiry(storage);
@@ -470,6 +489,96 @@ export class DownloadService {
   async releaseClaims(sourceId: number, ownerKey: string, kind?: ClaimKind): Promise<void> {
     await this.storageService.releaseClaims(sourceId, { ownerKey, kind });
     await this.refreshClaims(sourceId);
+  }
+
+  /**
+   * Delete the encrypted files of `paths` and clear every piece overlapping them, boundary pieces
+   * shared with a neighbor included, from the attached torrent (WebTorrent forgets the piece and
+   * fetches it again if a claimed file still selects it). Runs under the source lock, inside
+   * StorageService.reclaimFiles, so it cannot interleave with torrent startup, detach or removal.
+   *
+   * @returns The attached torrent's bitfield after clearing, or nothing when none is attached.
+   */
+  private async reclaimStoredFiles(
+    storage: Storage,
+    paths: string[],
+    pieces: PieceRange[]
+  ): Promise<Uint8Array | void> {
+    const layout = storage.encryptedLayout;
+    if (!layout) throw new Error(`Storage ${storage.id} has no file layout to reclaim from`);
+    // The claims on these files are already gone; this drops their selections before the data.
+    await this.reconcileSelection(storage.sourceId);
+
+    const torrent = this.client.torrents.find(item => item.path === storage.location);
+    const live = torrent && !torrent.destroyed && torrent.bitfield ? torrent : null;
+    if (live) {
+      for (const { first, last } of pieces) {
+        for (let piece = first; piece <= last; piece++) {
+          if (live.bitfield.get(piece)) this.unverifyPiece(live, piece);
+        }
+      }
+      (live as unknown as { done: boolean }).done = false;
+    }
+
+    const store =
+      (live && findEncryptedStore((live as unknown as { store?: unknown }).store)) ??
+      new EncryptedChunkStore(layout.pieceLength, {
+        path: storage.location,
+        name: layout.storeName,
+        files: layout.files.map(file => ({ ...file })),
+        encryptionKey: this.config.getOrThrow('SOURCE_SECURITY_KEY'),
+        filenameSalt: layout.filenameSalt,
+      });
+    await store.removeFiles(paths);
+    logger.info(
+      'DownloadService',
+      `Reclaimed ${paths.length} file(s) of source ${storage.sourceId}`
+    );
+    return live ? new Uint8Array(live.bitfield.buffer) : undefined;
+  }
+
+  /** Make WebTorrent treat a verified piece as missing again. */
+  private unverifyPiece(torrent: Torrent, index: number): void {
+    const internals = torrent as unknown as {
+      _markUnverified?: (piece: number) => void;
+      _reservations?: unknown[];
+    };
+    if (internals._markUnverified) internals._markUnverified(index);
+    else torrent.bitfield.set(index, false);
+    // A verified piece has no reservation list; request bookkeeping needs one to fetch it again.
+    if (internals._reservations) internals._reservations[index] = [];
+  }
+
+  /**
+   * After a reclaim: bring the torrent back if a claimed file lost pieces (a boundary piece
+   * shared with a reclaimed neighbor), then reapply selection so those pieces are fetched.
+   */
+  private async reselectAfterReclaim(storage: Storage): Promise<void> {
+    const { sourceId, contentSource: source, encryptedLayout: layout } = storage;
+    if (source && layout) {
+      const files = await this.storageService.getFiles(sourceId);
+      const claimed = (await this.storageService.getClaimedPaths(sourceId)).filter(path =>
+        layout.files.some(file => file.path === path)
+      );
+      const missing = claimed.some(path => !this.isFileStored(storage, layout, path, files));
+      const attached = this.client.torrents.some(item => item.path === storage.location);
+      if (missing && !attached) {
+        await this.storageService.withSourceLock(sourceId, async () => {
+          const current = await this.storageService.getStorageBySource(sourceId);
+          if (!current) return;
+          const timer = this.seedTimers.get(sourceId);
+          if (timer) clearTimeout(timer);
+          this.seedTimers.delete(sourceId);
+          const torrent = await this.addTorrentWithLock(source, current);
+          this.trackTorrent(torrent, sourceId, this.createEncryptedLayout(torrent, source.hash));
+        });
+      }
+    }
+    await this.reconcileSelection(sourceId);
+    const current = await this.storageService.getStorageBySource(sourceId);
+    const torrent = current && this.client.torrents.find(item => item.path === current.location);
+    if (torrent?.ready && current?.encryptedLayout)
+      await this.recordCompletion(torrent, sourceId, current.encryptedLayout);
   }
 
   private withSourceFilenameSalt(
@@ -796,6 +905,11 @@ export class DownloadService {
       logger.info('DownloadService', `Starting download for source ${source.id}`);
 
       const existingStorage = await this.storageService.getStorageBySource(source.id);
+      // Reject a path the source does not contain before it is claimed, when the files are known.
+      const knownLayout =
+        existingStorage?.encryptedLayout ??
+        (await this.recoverEncryptedLayout(source).catch(() => null));
+      if (knownLayout) this.assertFileInLayout(knownLayout, filePath);
       const claimedPaths = await this.storageService.getClaimedPaths(source.id);
       const reservation = await this.getSelectedFilesReservation(
         source,
@@ -870,7 +984,15 @@ export class DownloadService {
         // Serialize torrent startup against expiry detachment and storage deletion.
         const torrent = await this.addTorrentWithLock(source, current);
         const layout = this.createEncryptedLayout(torrent, source.hash);
-        this.assertFileInLayout(layout, filePath);
+        if (!layout.files.some(file => file.path === filePath)) {
+          // The files were unknown at admission; drop the claim on a path that does not exist.
+          await this.storageService.releaseClaims(source.id, {
+            kind: claim.kind,
+            ownerKey: claim.ownerKey,
+            path: filePath,
+          });
+          this.assertFileInLayout(layout, filePath);
+        }
         await this.storageService.updateEncryptedLayout(source.id, layout);
         await this.storageService.recordFiles(source.id, layout);
         const required = await this.getSelectedFilesReservation(
@@ -1622,19 +1744,30 @@ export class DownloadService {
     sourceId: number,
     layout: EncryptedStorageLayout
   ): void {
-    torrent.on('verified', async () => {
-      try {
-        // Convert BitField to Uint8Array for storage service
+    // Verifies arrive in bursts; one pending write covers them all. The bitfield is read once the
+    // write holds the source lock, so a write queued before a reclaim cannot restore its bits.
+    let pendingWrite: Promise<void> | null = null;
+    const persistBitfield = (): Promise<void> => {
+      if (pendingWrite) return pendingWrite;
+      const write = this.storageService.withSourceLock(sourceId, async () => {
+        pendingWrite = null;
         const bitfieldBuffer = torrent.bitfield?.buffer
           ? Buffer.from(torrent.bitfield.buffer)
           : new Uint8Array(0);
-
         await this.storageService.updateDownloadProgress({
           sourceId,
           downloadedPieces: new Uint8Array(bitfieldBuffer),
           totalPieces: this.getTorrentPieceCount(torrent),
           size: torrent.length,
         });
+      });
+      pendingWrite = write;
+      return write;
+    };
+
+    torrent.on('verified', async () => {
+      try {
+        await persistBitfield();
         await this.reconcileAllocationIfDue(sourceId);
         await this.recordCompletion(torrent, sourceId, layout);
         await this.resumeSpeculativeDownloadsWhenPlaybackReady();

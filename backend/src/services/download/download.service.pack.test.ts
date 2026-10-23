@@ -7,7 +7,7 @@ jest.mock('@database/database');
 jest.mock('@services/configuration/configuration.service');
 jest.mock('./torrent-diagnostics');
 
-import { mkdtemp, rm } from 'node:fs/promises';
+import { mkdtemp, readdir, rm } from 'node:fs/promises';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -25,6 +25,7 @@ import { StorageService } from '@services/storage/storage.service';
 
 import EncryptedChunkStore from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
 import { DownloadService } from './download.service';
+import { EncryptedFileReader } from './encrypted-file-reader';
 
 const ENCRYPTION_KEY = 'b'.repeat(32);
 const HASH = 'c'.repeat(40);
@@ -189,5 +190,140 @@ describe('DownloadService with a shared season pack', () => {
     await expect(service.streamFile(episode('Show/Show.S01E03.mkv'))).rejects.toThrow(
       'Requested file is not part of this source'
     );
+  });
+});
+
+describe('DownloadService reclaiming one file of a pack', () => {
+  let location: string;
+
+  // Pieces of 4 bytes: A [0,6) = pieces 0-1, B [6,20) = pieces 1-4, C [20,26) = pieces 5-6.
+  // Piece 1 is shared by A and B, so reclaiming A also clears B's first piece.
+  const layout: EncryptedStorageLayout = {
+    storeName: 'Show S01 - cccccccc',
+    filenameSalt: `download-${HASH}`,
+    pieceLength: 4,
+    files: [
+      { path: 'Show/A.mkv', offset: 0, length: 6 },
+      { path: 'Show/B.mkv', offset: 6, length: 14 },
+      { path: 'Show/C.mkv', offset: 20, length: 6 },
+    ],
+  };
+  const FULL = Uint8Array.of(0b11111110);
+
+  const setupTest = async () => {
+    const config = createConfig();
+    const storageService = new StorageService(
+      new Database({} as never),
+      config
+    ) as jest.Mocked<StorageService>;
+    const service = new DownloadService(
+      storageService,
+      new RequestService(new StatsService(), config) as never,
+      config
+    );
+    storageService.getLiveClaims.mockResolvedValue([]);
+    await writePack(location, layout, Buffer.from('AAAAAA' + 'B'.repeat(14) + 'CCCCCC'));
+    const source = createMockContentSource({ id: 41, hash: HASH, size: 26 });
+    const storage = createMockStorage({
+      sourceId: source.id,
+      contentSource: source,
+      location,
+      size: 26,
+      downloadedPieces: FULL,
+      encryptedLayout: structuredClone(layout),
+    });
+    storageService.getStorageBySource.mockResolvedValue(storage);
+    const reclaim = (paths: string[], pieces: Array<{ first: number; last: number }>) =>
+      (
+        service as unknown as {
+          reclaimStoredFiles: (...args: unknown[]) => Promise<Uint8Array | void>;
+        }
+      ).reclaimStoredFiles(storage, paths, pieces);
+    const readPiece = async (filePath: string, index: number) => {
+      const reader = new EncryptedFileReader(location, layout, filePath, ENCRYPTION_KEY);
+      try {
+        return (await reader.readPiece(index)).toString();
+      } finally {
+        await reader.close();
+      }
+    };
+    return { service, storage, reclaim, readPiece };
+  };
+
+  beforeEach(async () => {
+    jest.useFakeTimers({ doNotFake: ['Date', 'queueMicrotask', 'setImmediate'] });
+    location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-reclaim-'));
+  });
+
+  afterEach(async () => {
+    jest.useRealTimers();
+    await rm(location, { recursive: true, force: true });
+  });
+
+  it('deletes only that file and leaves the neighbor readable for the pieces it owns', async () => {
+    const { reclaim, readPiece } = await setupTest();
+    expect(await readdir(location)).toHaveLength(3);
+
+    await reclaim(['Show/A.mkv'], [{ first: 0, last: 1 }]);
+
+    expect(await readdir(location)).toHaveLength(2);
+    // B owns pieces 2-4 outright; they still decrypt to its bytes.
+    expect(await readPiece('Show/B.mkv', 2)).toBe('BBBB');
+    expect(await readPiece('Show/B.mkv', 4)).toBe('BBBB');
+    expect(await readPiece('Show/C.mkv', 5)).toBe('CCCC');
+  });
+
+  it('clears the piece range, boundary piece included, from the attached torrent', async () => {
+    const { service, storage, reclaim } = await setupTest();
+    const bits = new Uint8Array(FULL);
+    const bitfield = {
+      buffer: bits,
+      get: (piece: number) => (bits[piece >> 3] & (0x80 >> (piece & 7))) !== 0,
+      set: (piece: number, value: boolean) => {
+        if (value) bits[piece >> 3] |= 0x80 >> (piece & 7);
+        else bits[piece >> 3] &= ~(0x80 >> (piece & 7));
+      },
+    };
+    const markUnverified = jest.fn((piece: number) => bitfield.set(piece, false));
+    const reservations: unknown[] = [null, null, null, null, null, null, null];
+    const live = new EncryptedChunkStore(4, {
+      path: location,
+      name: layout.storeName,
+      files: layout.files.map(file => ({ ...file })),
+      encryptionKey: ENCRYPTION_KEY,
+      filenameSalt: layout.filenameSalt,
+    });
+    const torrent = {
+      path: location,
+      destroyed: false,
+      done: true,
+      bitfield,
+      store: { store: { store: live } },
+      _markUnverified: markUnverified,
+      _reservations: reservations,
+    };
+    const torrents = (service.client as unknown as { torrents: unknown[] }).torrents;
+    torrents.push(torrent);
+    try {
+      const result = await reclaim(['Show/A.mkv'], [{ first: 0, last: 1 }]);
+
+      expect(markUnverified.mock.calls).toEqual([[0], [1]]);
+      expect(reservations[1]).toEqual([]);
+      expect(reservations[2]).toBeNull();
+      expect(torrent.done).toBe(false);
+      // Only B's first piece is missing now; its other pieces stay verified.
+      expect(Array.from(result as Uint8Array)).toEqual([0b00111110]);
+      expect(storage.downloadedPieces).toEqual(FULL);
+      expect(await readdir(location)).toHaveLength(2);
+
+      // The live store reopens the removed file when the boundary piece arrives again.
+      await new Promise<void>((resolve, reject) =>
+        live.put(1, Buffer.from('AABB'), error => (error ? reject(error) : resolve()))
+      );
+      expect(await readdir(location)).toHaveLength(3);
+    } finally {
+      torrents.length = 0;
+      await new Promise<void>(resolve => live.close(() => resolve()));
+    }
   });
 });
