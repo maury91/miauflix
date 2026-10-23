@@ -82,3 +82,41 @@ it('kills obsolete subtitle probes and releases admission capacity before anothe
     await pending;
   }
 });
+
+it('stores a finished probe and serves later sessions from it without running ffprobe', async () => {
+  const { children, downloads } = setupTest();
+  const probe = {
+    format: { duration: '120.5' },
+    streams: [
+      { codec_type: 'video', codec_name: 'h264', extradata: '\n00000000: 0164 0028 ffe1 00ab' },
+      { codec_type: 'audio', codec_name: 'ac3' },
+    ],
+  };
+  const stored = new Map<string, string>();
+  const store = {
+    find: jest.fn(
+      async (sourceId: number, path: string) => stored.get(`${sourceId}:${path}`) ?? null
+    ),
+    save: jest.fn(async (sourceId: number, path: string, result: string) => {
+      stored.set(`${sourceId}:${path}`, result);
+    }),
+  };
+  const first = new AudioPlaybackService(downloads as never, undefined, store);
+  await expect(first.knownDelivery(target(1))).resolves.toBeNull();
+  const inspected = first.inspect(target(1));
+  await settle();
+  children[0].stdout.end(JSON.stringify(probe));
+  children[0].emit('close', 0);
+  await expect(inspected).resolves.toMatchObject({ mode: 'audio-transcode' });
+  expect(store.save).toHaveBeenCalledWith(1, 'movie.mkv', JSON.stringify(probe));
+  await expect(first.knownDelivery(target(1))).resolves.toMatchObject({ mode: 'audio-transcode' });
+
+  // A restarted backend has an empty memory cache but the same store.
+  const restarted = new AudioPlaybackService(downloads as never, undefined, store);
+  await expect(restarted.knownDelivery(target(1))).resolves.toMatchObject({
+    mode: 'audio-transcode',
+    durationSeconds: 120.5,
+  });
+  await expect(restarted.inspect(target(1))).resolves.toMatchObject({ mode: 'audio-transcode' });
+  expect(children).toHaveLength(1);
+});

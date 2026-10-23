@@ -159,13 +159,6 @@ try {
     playablePreparationService,
     torrentWarmupController
   );
-  const realtimeGateway = new RealtimeGateway(
-    authService,
-    configurationService,
-    preloadIntentService,
-    progressService,
-    catalogClient
-  );
   const playbackSessionService = new PlaybackSessionService(
     db,
     playablePreparationService,
@@ -173,6 +166,14 @@ try {
     torrentWarmupController,
     storageService,
     audioPlaybackService
+  );
+  const realtimeGateway = new RealtimeGateway(
+    authService,
+    configurationService,
+    preloadIntentService,
+    progressService,
+    catalogClient,
+    playbackSessionService
   );
   const subtitlesService = new SubtitlesService(
     configurationService,

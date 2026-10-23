@@ -9,6 +9,10 @@ import type { PreloadPreparationSnapshot } from '@routes/preload.types';
 import type { ProgressRequest } from '@routes/progress.types';
 import type { AuthService } from '@services/auth/auth.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
+import type {
+  PlaybackDeliveryUpdate,
+  PlaybackSessionService,
+} from '@services/playback/playback-session.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProgressService } from '@services/progress/progress.service';
 import { isAllowedOrigin } from '@utils/origin.util';
@@ -98,8 +102,11 @@ export class RealtimeGateway {
     private readonly config: ConfigService,
     private readonly preload: PreloadIntentService,
     private readonly progress: ProgressService,
-    private readonly catalog: CatalogClientService
+    private readonly catalog: CatalogClientService,
+    playback?: Pick<PlaybackSessionService, 'onDeliveryUpdate'>
   ) {
+    this.removeDeliveryListener =
+      playback?.onDeliveryUpdate(event => this.deliverPlayback(event)) ?? null;
     this.server.on('connection', (socket: WebSocket, request: IncomingMessage) => {
       this.accept(socket, request);
     });
@@ -139,8 +146,10 @@ export class RealtimeGateway {
     this.preload.offChange(this.onPreparationChange);
     this.removeArtworkListener?.();
     this.removeArtworkStreamReadyListener?.();
+    this.removeDeliveryListener?.();
   }
 
+  private readonly removeDeliveryListener: (() => void) | null;
   private removeArtworkListener: (() => void) | null = null;
   private removeArtworkStreamReadyListener: (() => void) | null = null;
 
@@ -316,6 +325,22 @@ export class RealtimeGateway {
     for (const client of this.clients) {
       if (client.userId && client.artworkRefs.has(key)) {
         this.send(client, { type: 'artwork-update', ...update });
+      }
+    }
+  }
+
+  /** Background probe results go to every tab of the session that started the playback. */
+  private deliverPlayback(event: PlaybackDeliveryUpdate): void {
+    for (const client of this.clients) {
+      if (
+        client.userId === event.userId &&
+        (!event.sessionId || client.sessionId === event.sessionId)
+      ) {
+        this.send(client, {
+          type: 'playback-delivery',
+          playbackId: event.playbackId,
+          update: event.update,
+        });
       }
     }
   }

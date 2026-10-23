@@ -1,5 +1,8 @@
 import { EventEmitter } from 'node:events';
 
+import type { PlaybackDelivery } from '@services/playback/audio-playback.service';
+import type { PlaybackDeliveryUpdate } from '@services/playback/playback-session.service';
+
 import { RealtimeGateway } from './realtime.gateway';
 
 const setupTest = async () => {
@@ -87,4 +90,61 @@ describe('RealtimeGateway subtitle warm-up language', () => {
       }
     }
   );
+});
+
+describe('RealtimeGateway playback delivery', () => {
+  it('forwards a background probe result only to the session that started the playback', async () => {
+    let deliver: ((event: PlaybackDeliveryUpdate) => void) | undefined;
+    const unsubscribe = jest.fn();
+    const gateway = new RealtimeGateway(
+      { verifyAccessToken: jest.fn().mockResolvedValue({ userId: 'user' }) } as never,
+      { get: jest.fn().mockReturnValue('__at') } as never,
+      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
+      {} as never,
+      {
+        onArtwork: jest.fn(() => jest.fn()),
+        onArtworkStreamReady: jest.fn(() => jest.fn()),
+      } as never,
+      {
+        onDeliveryUpdate: (listener: (event: PlaybackDeliveryUpdate) => void) => {
+          deliver = listener;
+          return unsubscribe;
+        },
+      }
+    );
+    const connect = async (session: string) => {
+      const socket = Object.assign(new EventEmitter(), {
+        readyState: 1,
+        send: jest.fn(),
+        close: jest.fn(),
+      });
+      const server = (gateway as unknown as { server: EventEmitter }).server;
+      server.emit('connection', socket, { headers: { cookie: `__at_${session}=fixture-token` } });
+      socket.emit('message', JSON.stringify({ type: 'authenticate', session, clientId: 'client' }));
+      await Promise.resolve();
+      return socket;
+    };
+    try {
+      const player = await connect('session');
+      const otherDevice = await connect('other-session');
+      const update = {
+        type: 'delivery' as const,
+        delivery: { mode: 'audio-transcode' } as PlaybackDelivery,
+        streamUrl: '/x/audio',
+      };
+      deliver?.({ userId: 'user', sessionId: 'session', playbackId: 'playback', update });
+
+      const sent = (socket: typeof player) =>
+        socket.send.mock.calls.map(([raw]) => JSON.parse(raw as string));
+      expect(sent(player)).toContainEqual({
+        type: 'playback-delivery',
+        playbackId: 'playback',
+        update,
+      });
+      expect(sent(otherDevice).some(message => message.type === 'playback-delivery')).toBe(false);
+    } finally {
+      gateway.close();
+    }
+    expect(unsubscribe).toHaveBeenCalled();
+  });
 });

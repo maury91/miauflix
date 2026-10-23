@@ -22,8 +22,9 @@ import { API_URL, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { selectCurrentUser } from '@store/slices/auth';
+import { selectPlaybackDelivery } from '@store/slices/realtime';
 import type { AppDispatch } from '@store/store';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -144,7 +145,23 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const resetSessionRequestRef = useRef(sessionRequest.reset);
   resetSessionRequestRef.current = sessionRequest.reset;
   const resetSessionRequest = useCallback(() => resetSessionRequestRef.current(), []);
-  const session = sessionRequest.data ?? null;
+  const createdSession = sessionRequest.data ?? null;
+  // Streams start before the file is probed; the probe's delivery arrives over realtime.
+  const deliveryUpdate = useSelector(selectPlaybackDelivery(createdSession?.playbackId));
+  const session = useMemo(
+    () =>
+      createdSession && deliveryUpdate?.type === 'delivery'
+        ? {
+            ...createdSession,
+            delivery: deliveryUpdate.delivery,
+            streamUrl: deliveryUpdate.streamUrl,
+            deliveryPending: false,
+          }
+        : createdSession,
+    [createdSession, deliveryUpdate]
+  );
+  /** The direct stream failed before the probe said how this file must be delivered. */
+  const directFailedWhilePending = useRef(false);
   const [prefetchedNextSession, setPrefetchedNextSession] =
     useState<CreatePlaybackSessionResponse | null>(null);
   const prefetchedNextRef = useRef<CreatePlaybackSessionResponse | null>(null);
@@ -645,7 +662,36 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   }, [applySubtitleOffset, selectedSubtitle, subtitleOffset, audioSeek, audioTrackIndex]);
 
   useEffect(() => {
+    if (!deliveryUpdate) return;
+    if (deliveryUpdate.type === 'recreate') {
+      setAttempt(value => value + 1);
+      return;
+    }
+    const { delivery } = deliveryUpdate;
+    setAudioTrackIndex(delivery.defaultAudioTrackIndex);
+    if (delivery.mode === 'audio-transcode') {
+      // Continue from where the optimistic direct stream got to.
+      const video = videoRef.current;
+      audioPreparing.current = true;
+      directFailedWhilePending.current = false;
+      setAudioSeek(previous => ({
+        position: video?.currentTime ?? 0,
+        autoplay: video ? !video.paused || video.autoplay : true,
+        revision: previous.revision + 1,
+      }));
+    } else if (directFailedWhilePending.current) {
+      directFailedWhilePending.current = false;
+      resetSessionRequest();
+      setStatus('error');
+      setError(
+        `Playback for “${title}” could not load the selected source. Retry to try source preparation again.`
+      );
+    }
+  }, [deliveryUpdate, resetSessionRequest, title]);
+
+  useEffect(() => {
     const currentRequest = ++requestId.current;
+    directFailedWhilePending.current = false;
     sessionSubtitleStorageKey.current = null;
     const sessionKey = JSON.stringify([playable, attempt]);
     if (sessionInFlight.current?.key !== sessionKey) resetSessionRequest();
@@ -830,6 +876,12 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               updateNextCountdown();
             }}
             onError={() => {
+              // The browser may reject an unprobed file whose audio needs transcoding;
+              // the pending delivery decides whether that is a real failure.
+              if (session?.deliveryPending) {
+                directFailedWhilePending.current = true;
+                return;
+              }
               resetSessionRequest();
               setStatus('error');
               setError(

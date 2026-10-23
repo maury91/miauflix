@@ -1,4 +1,4 @@
-import { PreloadIntentService } from './preload-intent.service';
+import { BROWSE_WARM_DWELL_MS, PreloadIntentService } from './preload-intent.service';
 
 const intent = (sequence: number, view: 'browse' | 'details' | 'player' = 'details') => ({
   sequence,
@@ -157,6 +157,31 @@ describe('PreloadIntentService', () => {
         source: { id: 9, quality: 'FHD', sourceType: 'WEB' },
         warmup: { state: 'not_requested' },
       });
+    } finally {
+      service.close();
+    }
+  });
+
+  it('warms a browse focus once it dwells, but not a focus that moves on', async () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(1_000);
+    const prepare = jest.fn().mockResolvedValue({ source: { id: 9 } });
+    const service = new PreloadIntentService({ prepare } as never);
+    const levels = (mediaId: number) =>
+      prepare.mock.calls
+        .filter(([playable]) => playable.mediaId === mediaId)
+        .map(([, options]) => options.through);
+    try {
+      service.update('user', 'session', 'client', movieIntent(1, 41, 'browse'), 1_000);
+      await jest.advanceTimersByTimeAsync(500);
+      service.update('user', 'session', 'client', movieIntent(2, 42, 'browse'), 1_500);
+      await jest.advanceTimersByTimeAsync(BROWSE_WARM_DWELL_MS - 1);
+      expect(levels(41)).toEqual(['sources']);
+      expect(levels(42)).toEqual(['sources']);
+
+      await jest.advanceTimersByTimeAsync(1 + 350);
+      expect(levels(42)).toEqual(['sources', 'warm']);
+      expect(levels(41)).toEqual(['sources']);
     } finally {
       service.close();
     }

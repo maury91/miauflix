@@ -20,17 +20,95 @@ describe('PlaybackSessionService', () => {
         { getOrThrow: () => 60000 } as never,
         undefined,
         undefined,
-        { inspect: jest.fn().mockRejectedValue(error) } as never
+        {
+          knownDelivery: jest.fn().mockResolvedValue(null),
+          inspect: jest.fn().mockRejectedValue(error),
+        } as never
       );
+      const listener = jest.fn();
+      service.onDeliveryUpdate(listener);
       const session = await service.create(
         'user',
         { kind: 'movie', mediaId: 1 },
         { quality: 'auto', allowHevc: false }
       );
+      await new Promise(resolve => setImmediate(resolve));
       expect(session?.streamUrl).not.toContain('/audio');
+      expect(session?.deliveryPending).toBe(true);
       expect(grants.create).toHaveBeenCalled();
+      expect(listener).not.toHaveBeenCalled();
     }
   );
+
+  it('streams an unprobed file directly and pushes the delivery its background probe finds', async () => {
+    const grants = { create: jest.fn() };
+    const audio = {
+      knownDelivery: jest.fn().mockResolvedValue(null),
+      inspect: jest.fn().mockResolvedValue({ mode: 'audio-transcode', durationSeconds: 60 }),
+    };
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => grants } as never,
+      {
+        prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
+      } as never,
+      { getOrThrow: () => 60000 } as never,
+      undefined,
+      undefined,
+      audio as never
+    );
+    const listener = jest.fn();
+    service.onDeliveryUpdate(listener);
+    const session = await service.create(
+      'user',
+      { kind: 'movie', mediaId: 1 },
+      { quality: 'auto', allowHevc: false },
+      { sessionId: 'session' }
+    );
+    expect(session).toMatchObject({ deliveryPending: true, delivery: undefined });
+    expect(session?.streamUrl).toBe(`/api/stream/${session?.streamingKey}`);
+    await new Promise(resolve => setImmediate(resolve));
+    expect(audio.inspect).toHaveBeenCalledWith(movie({ id: 1 }), expect.anything());
+    expect(listener).toHaveBeenCalledWith({
+      userId: 'user',
+      sessionId: 'session',
+      playbackId: session?.playbackId,
+      update: {
+        type: 'delivery',
+        delivery: { mode: 'audio-transcode', durationSeconds: 60 },
+        streamUrl: `/api/stream/${session?.streamingKey}/audio`,
+      },
+    });
+  });
+
+  it('asks the client to recreate an optimistic session the browser cannot play', async () => {
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      {
+        prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
+      } as never,
+      { getOrThrow: () => 60000 } as never,
+      undefined,
+      undefined,
+      {
+        knownDelivery: jest.fn().mockResolvedValue(null),
+        inspect: jest.fn().mockRejectedValue(new AudioConversionRequiredError('needs H.264')),
+      } as never
+    );
+    const listener = jest.fn();
+    service.onDeliveryUpdate(listener);
+    const session = await service.create(
+      'user',
+      { kind: 'movie', mediaId: 1 },
+      { quality: 'auto', allowHevc: false }
+    );
+    await new Promise(resolve => setImmediate(resolve));
+    expect(listener).toHaveBeenCalledWith(
+      expect.objectContaining({
+        playbackId: session?.playbackId,
+        update: { type: 'recreate', reason: 'needs H.264' },
+      })
+    );
+  });
 
   it('falls back to H.264 when HEVC audio cannot be converted, granting only the usable copy', async () => {
     const hevc = { id: 1, videoCodec: VideoCodec.X265 };
@@ -43,7 +121,7 @@ describe('PlaybackSessionService', () => {
         .mockResolvedValueOnce({ source: h264, target: movie(h264), state: 'ready' }),
     };
     const audio = {
-      inspect: jest
+      knownDelivery: jest
         .fn()
         .mockRejectedValueOnce(
           new AudioConversionRequiredError('Audio conversion requires an H.264 video source.')
@@ -69,7 +147,7 @@ describe('PlaybackSessionService', () => {
     );
     expect(result?.source.id).toBe(2);
     expect(preparation.prepare.mock.calls[1][1].preferences.allowHevc).toBe(false);
-    expect(audio.inspect).toHaveBeenNthCalledWith(2, movie(h264), expect.anything());
+    expect(audio.knownDelivery).toHaveBeenNthCalledWith(2, movie(h264), expect.anything());
     expect(warmup.promote).toHaveBeenLastCalledWith(movie(h264), 'm:42', 'user:user:m:42');
     expect(grants.create).toHaveBeenCalledTimes(1);
     expect(grants.create).toHaveBeenCalledWith(expect.objectContaining({ sourceId: 2 }));
@@ -88,7 +166,7 @@ describe('PlaybackSessionService', () => {
       };
       const audio = {
         canConvertHevc: () => convert,
-        inspect: jest.fn().mockResolvedValue({ mode: 'audio-transcode' }),
+        knownDelivery: jest.fn().mockResolvedValue({ mode: 'audio-transcode' }),
       };
       const service = new PlaybackSessionService(
         { getPlaybackGrantRepository: () => grants } as never,
@@ -108,7 +186,7 @@ describe('PlaybackSessionService', () => {
         }
       );
       expect(preparation.prepare.mock.calls[0][1].preferences.allowHevc).toBe(true);
-      expect(audio.inspect.mock.calls[0][1].allowHevc).toBe(false);
+      expect(audio.knownDelivery.mock.calls[0][1].allowHevc).toBe(false);
     }
   );
 
@@ -123,7 +201,9 @@ describe('PlaybackSessionService', () => {
       undefined,
       undefined,
       {
-        inspect: jest.fn().mockRejectedValue(new AudioConversionRequiredError('unsupported video')),
+        knownDelivery: jest
+          .fn()
+          .mockRejectedValue(new AudioConversionRequiredError('unsupported video')),
       } as never
     );
     await expect(

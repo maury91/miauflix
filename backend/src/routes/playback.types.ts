@@ -51,6 +51,8 @@ export interface CreatePlaybackSessionResponse {
   streamingKey: string;
   streamUrl: string;
   delivery?: PlaybackDelivery;
+  /** The file is probed in the background; its delivery arrives as `playback-delivery`. */
+  deliveryPending?: boolean;
   episodeMatchKind?: 'combined' | 'single';
   source: {
     id: number;

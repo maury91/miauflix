@@ -26,18 +26,14 @@ export const createPlaybackRoutes = ({
       const request = c.req.valid('json');
       let result;
       try {
-        result = request.deferDownload
-          ? await playbackSessionService.create(
-              session.user.id,
-              request.playable,
-              request.preferences,
-              { deferDownload: true }
-            )
-          : await playbackSessionService.create(
-              session.user.id,
-              request.playable,
-              request.preferences
-            );
+        result = await playbackSessionService.create(
+          session.user.id,
+          request.playable,
+          request.preferences,
+          request.deferDownload
+            ? { deferDownload: true, sessionId: session.sessionId }
+            : { sessionId: session.sessionId }
+        );
       } catch (error) {
         if (error instanceof AudioPlaybackError)
           return c.json({ error: error.message }, error.status);

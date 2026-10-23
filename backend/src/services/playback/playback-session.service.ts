@@ -8,6 +8,7 @@ import type { PlaybackGrant } from '@entities/playback-grant.entity';
 import type { ConfigService } from '@mytypes/configuration';
 import type { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import type { PlayableRef } from '@routes/playable.types';
+import type { PlaybackTarget } from '@services/playback/playback-target';
 import type {
   PlayablePreparationService,
   PlaybackPreferences,
@@ -32,11 +33,26 @@ export interface PlaybackSessionSource {
   watchers: number | null;
 }
 
+/**
+ * The delivery found once a session's background probe finishes. `recreate` means the
+ * optimistic source cannot play here; the client asks for a new session, which now knows why.
+ */
+export interface PlaybackDeliveryUpdate {
+  userId: string;
+  sessionId?: string;
+  playbackId: string;
+  update:
+    | { type: 'delivery'; delivery: PlaybackDelivery; streamUrl: string }
+    | { type: 'recreate'; reason: string };
+}
+
 export interface PlaybackSession {
   playbackId: string;
   streamingKey: string;
   streamUrl: string;
   delivery?: PlaybackDelivery;
+  /** Streams start before the file is probed; the delivery follows over realtime. */
+  deliveryPending?: boolean;
   episodeMatchKind?: 'combined' | 'single';
   source: PlaybackSessionSource;
   preparation: {
@@ -49,6 +65,7 @@ export interface PlaybackSession {
 
 export class PlaybackSessionService {
   private readonly grants: PlaybackGrantRepository;
+  private readonly deliveryListeners = new Set<(event: PlaybackDeliveryUpdate) => void>();
   private readonly ttlMs: number;
 
   constructor(
@@ -67,7 +84,7 @@ export class PlaybackSessionService {
     userId: string,
     playable: PlayableRef,
     preferences: AudioPlaybackPreferences & PlaybackPreferences,
-    options: { deferDownload?: boolean } = {}
+    options: { deferDownload?: boolean; sessionId?: string } = {}
   ): Promise<PlaybackSession | null> {
     const prepare = (allowHevc: boolean) =>
       this.preparation.prepare(playable, {
@@ -88,13 +105,18 @@ export class PlaybackSessionService {
       await this.warmup?.promote(prepared.target, this.playableKey(playable), ownerKey);
     }
     let delivery: PlaybackDelivery | undefined;
+    let pendingTarget: PlaybackTarget | undefined;
     for (let attempt = 0; !options.deferDownload && attempt < 2; attempt++) {
       const { source, target } = prepared;
       if (!source) return null;
       // Without a resolved file the stream route resolves it later; deliver directly.
       if (!target) break;
       try {
-        delivery = await this.audioPlaybackService?.inspect(target, preferences);
+        // Only a finished probe is consulted: an unknown file streams directly at once and
+        // is probed in the background (see deliverWhenProbed).
+        const known = await this.audioPlaybackService?.knownDelivery(target, preferences);
+        if (known === null) pendingTarget = target;
+        else delivery = known;
         break;
       } catch (error) {
         if (error instanceof AudioConversionRequiredError) {
@@ -136,11 +158,22 @@ export class PlaybackSessionService {
       expiresAt,
     });
 
+    const playbackId = randomBytes(16).toString('hex');
+    if (pendingTarget) {
+      this.deliverWhenProbed(pendingTarget, preferences, {
+        userId,
+        sessionId: options.sessionId,
+        playbackId,
+        streamingKey,
+      });
+    }
+
     return {
-      playbackId: randomBytes(16).toString('hex'),
+      playbackId,
       streamingKey,
-      streamUrl: `/api/stream/${streamingKey}${delivery?.mode === 'audio-transcode' ? '/audio' : ''}`,
+      streamUrl: this.streamUrl(streamingKey, delivery),
       delivery,
+      ...(pendingTarget ? { deliveryPending: true } : {}),
       episodeMatchKind:
         prepared.target && prepared.target.matchKind !== 'movie'
           ? prepared.target.matchKind
@@ -161,6 +194,44 @@ export class PlaybackSessionService {
       },
       expiresAt: expiresAt.toISOString(),
     };
+  }
+
+  /** Subscribe to background probe results; returns the unsubscribe function. */
+  onDeliveryUpdate(listener: (event: PlaybackDeliveryUpdate) => void): () => void {
+    this.deliveryListeners.add(listener);
+    return () => this.deliveryListeners.delete(listener);
+  }
+
+  private deliverWhenProbed(
+    target: PlaybackTarget,
+    preferences: AudioPlaybackPreferences,
+    session: { userId: string; sessionId?: string; playbackId: string; streamingKey: string }
+  ): void {
+    const { streamingKey, ...address } = session;
+    const emit = (update: PlaybackDeliveryUpdate['update']) => {
+      for (const listener of this.deliveryListeners) listener({ ...address, update });
+    };
+    void this.audioPlaybackService
+      ?.inspect(target, preferences)
+      .then(delivery =>
+        emit({ type: 'delivery', delivery, streamUrl: this.streamUrl(streamingKey, delivery) })
+      )
+      .catch(error => {
+        if (error instanceof AudioConversionRequiredError) {
+          logger.warn('PlaybackSessionService', `Source ${target.source.id}: ${error.message}`);
+          emit({ type: 'recreate', reason: error.message });
+          return;
+        }
+        logger.warn(
+          'PlaybackSessionService',
+          'Audio inspection failed; keeping direct delivery',
+          error
+        );
+      });
+  }
+
+  private streamUrl(streamingKey: string, delivery?: PlaybackDelivery): string {
+    return `/api/stream/${streamingKey}${delivery?.mode === 'audio-transcode' ? '/audio' : ''}`;
   }
 
   async verify(streamingKey: string): Promise<PlaybackGrant | null> {

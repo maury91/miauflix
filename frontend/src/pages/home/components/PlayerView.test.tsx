@@ -62,16 +62,20 @@ vi.mock('@features/realtime/realtime.middleware', () => ({
   saveProgressWithRealtime: (progress: unknown) => () => updateProgress(progress),
 }));
 
+import { realtimeActions, realtimeSlice } from '@store/slices/realtime';
+
 import { describePlaybackFailure, getPlaybackStatusMessage } from './playback-copy';
 import { PlayerView } from './PlayerView';
 
 function render(ui: ReactElement) {
-  const store = configureStore({ reducer: () => ({ auth: { currentUser: null } }) });
+  const store = configureStore({
+    reducer: { auth: () => ({ currentUser: null }), realtime: realtimeSlice.reducer },
+  });
   function Wrapper({ children }: PropsWithChildren) {
     return <Provider store={store}>{children}</Provider>;
   }
 
-  return rtlRender(ui, { wrapper: Wrapper });
+  return { ...rtlRender(ui, { wrapper: Wrapper }), store };
 }
 
 const playable = { kind: 'movie' as const, mediaId: 123 };
@@ -350,6 +354,66 @@ describe('PlayerView', () => {
     expect(screen.getByText('Preparing “Toy Story 5” for playback…')).toBeInTheDocument();
     fireEvent.canPlay(video);
     expect(screen.getByText('Ready to play “Toy Story 5”.')).toBeInTheDocument();
+  });
+
+  it('starts an unprobed source directly and moves to converted audio when its probe arrives', async () => {
+    createSession.mockReturnValue({
+      unwrap: () => Promise.resolve({ ...session, deliveryPending: true }),
+    });
+    const { store } = render(
+      <PlayerView playable={playable} title="Optimistic fixture" onBack={vi.fn()} />
+    );
+    const video = (await screen.findByLabelText('Optimistic fixture')) as HTMLVideoElement;
+    await waitFor(() => expect(video.getAttribute('src')).toBe('/api/stream/streaming-key'));
+    // The browser rejecting the unprobed audio is not a failure until the delivery is known.
+    fireEvent.error(video);
+    expect(screen.queryByText(/could not load the selected source/)).not.toBeInTheDocument();
+    video.currentTime = 42;
+    act(() => {
+      store.dispatch(
+        realtimeActions.playbackDeliveryReceived({
+          type: 'playback-delivery',
+          playbackId: session.playbackId,
+          update: {
+            type: 'delivery',
+            delivery: {
+              mode: 'audio-transcode',
+              audioCodec: 'ac3',
+              durationSeconds: 200,
+              mimeType: 'video/mp4',
+            },
+            streamUrl: '/api/stream/streaming-key/audio',
+          },
+        })
+      );
+    });
+    await waitFor(() => expect(startAudioPlayback).toHaveBeenCalled());
+    expect(startAudioPlayback.mock.lastCall?.[0]).toMatchObject({
+      url: '/api/stream/streaming-key/audio',
+      startSeconds: 42,
+      durationSeconds: 200,
+    });
+  });
+
+  it('requests a new session when the optimistic source cannot play here', async () => {
+    createSession.mockReturnValue({
+      unwrap: () => Promise.resolve({ ...session, deliveryPending: true }),
+    });
+    const { store } = render(
+      <PlayerView playable={playable} title="Recreate fixture" onBack={vi.fn()} />
+    );
+    await screen.findByLabelText('Recreate fixture');
+    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(1));
+    act(() => {
+      store.dispatch(
+        realtimeActions.playbackDeliveryReceived({
+          type: 'playback-delivery',
+          playbackId: session.playbackId,
+          update: { type: 'recreate', reason: 'needs H.264' },
+        })
+      );
+    });
+    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
   });
 
   it('resumes converted audio on the full movie timeline and reports original progress', async () => {
