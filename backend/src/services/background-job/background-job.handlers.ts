@@ -279,14 +279,18 @@ export function registerBackgroundJobHandlers({
         const exactMatches = allUsable.filter(match => match.matchKind === 'single');
         const usable = exactMatches.length ? exactMatches : allUsable;
         if (!usable.length) return;
-        if (
-          await Promise.all(
-            usable.map(match =>
-              downloadService.isFileComplete(match.source.id, match.videoFilePath!)
-            )
-          ).then(complete => complete.some(Boolean))
-        )
+        const completeFlags = await Promise.all(
+          usable.map(match => downloadService.isFileComplete(match.source.id, match.videoFilePath!))
+        );
+        const completeMatch = usable.find((_, index) => completeFlags[index]);
+        if (completeMatch) {
+          // Renew the claim so storage cleanup does not reclaim the completed file.
+          await downloadService.predownload(playbackTargets.forEpisode(completeMatch)!, {
+            kind: 'watchlist',
+            ownerKey: `watchlist:tv:${showMediaId}`,
+          });
           continue;
+        }
 
         const selected = usable[0];
         try {

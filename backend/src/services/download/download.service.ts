@@ -478,10 +478,32 @@ export class DownloadService {
   /** Drop expired claims and stop downloading what nobody wants any more. */
   async sweepExpiredClaims(): Promise<void> {
     try {
+      await this.renewActivePlaybackClaims();
       const sourceIds = await this.storageService.deleteClaims({ expiredAt: new Date() });
       for (const sourceId of sourceIds) await this.refreshClaims(sourceId);
     } catch (error) {
       logger.warn('DownloadService', 'Failed to sweep expired storage claims', error);
+    }
+  }
+
+  /**
+   * A stream claims its file once, when it starts. Renew the claim of every file still being
+   * read (sweeps run well inside the claim lifetime) so a long playback is not deselected.
+   */
+  private async renewActivePlaybackClaims(): Promise<void> {
+    for (const [sourceId, paths] of this.activeSourceFiles) {
+      for (const path of paths.keys()) {
+        try {
+          await this.storageService.claimFile(
+            sourceId,
+            path,
+            this.claimInput(PLAYBACK_CLAIM),
+            true
+          );
+        } catch (error) {
+          logger.warn('DownloadService', 'Failed to renew playback claim', sourceId, error);
+        }
+      }
     }
   }
 

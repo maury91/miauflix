@@ -1,4 +1,5 @@
 import { zValidator } from '@hono/zod-validator';
+import { logger } from '@logger';
 import { Quality } from '@miauflix/source-metadata-extractor';
 import { Hono } from 'hono';
 import { z } from 'zod';
@@ -33,10 +34,15 @@ export const createStreamRoutes = ({
           return context.json({ error: 'Episode file is unavailable' }, 404);
         const resolved = await streamService.resolvePlaybackTarget(grant);
         if (!resolved) return context.json({ error: 'Playback grant does not match source' }, 403);
-        await downloadService.predownload(resolved.target, {
-          kind: 'prefetch',
-          ownerKey: `next:${grant.userId}:${grant.playableKey}`,
-        });
+        // Best-effort: grant and source are validated above, so failures here are only logged.
+        void downloadService
+          .predownload(resolved.target, {
+            kind: 'prefetch',
+            ownerKey: `next:${grant.userId}:${grant.playableKey}`,
+          })
+          .catch((error: unknown) =>
+            logger.warn('StreamRoutes', 'Next-episode prefetch failed', error)
+          );
         return context.body(null, 202);
       }
     )

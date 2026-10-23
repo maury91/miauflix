@@ -1063,6 +1063,26 @@ describe('DownloadService', () => {
       expect(files[0].select).toHaveBeenCalledWith(0);
     });
 
+    it('renews the playback claim of files being streamed before sweeping', async () => {
+      const { service, mockStorageService } = setupSelection();
+      mockStorageService.deleteClaims.mockResolvedValue([]);
+      (
+        service as unknown as { activeSourceFiles: Map<number, Map<string, number>> }
+      ).activeSourceFiles.set(7, new Map([['Show.S01E01.mkv', 1]]));
+
+      await service.sweepExpiredClaims();
+
+      expect(mockStorageService.claimFile).toHaveBeenCalledWith(
+        7,
+        'Show.S01E01.mkv',
+        expect.objectContaining({ kind: 'playback', ownerKey: 'stream', rangeEnd: null }),
+        true
+      );
+      expect(mockStorageService.claimFile.mock.invocationCallOrder[0]).toBeLessThan(
+        mockStorageService.deleteClaims.mock.invocationCallOrder[0]
+      );
+    });
+
     it('stops a warmup by releasing only its warmup claims', async () => {
       const { service, mockStorageService } = setupSelection();
 

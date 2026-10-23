@@ -44,6 +44,32 @@ const setupTest = () => {
   };
 };
 
+describe('next-episode prefetch', () => {
+  it('returns 202 without awaiting or surfacing predownload failures', async () => {
+    const { playbackSessionService, streamService } = setupTest();
+    playbackSessionService.verify.mockResolvedValue({
+      sourceId: 9,
+      userId: 1,
+      playableKind: 'episode',
+      playableKey: 'e:1',
+    });
+    const downloadService = {
+      predownload: jest
+        .fn()
+        .mockReturnValue(new Promise((_, reject) => setTimeout(reject, 5, new Error('full')))),
+    };
+    const app = createStreamRoutes({
+      playbackSessionService,
+      streamService,
+      downloadService,
+    } as never);
+    const response = await app.request(`/${token}/prefetch`, { method: 'POST' });
+    expect(response.status).toBe(202);
+    expect(downloadService.predownload).toHaveBeenCalled();
+    await new Promise(resolve => setTimeout(resolve, 20));
+  });
+});
+
 describe('audio streaming authorization', () => {
   it('converts only the pinned source and forwards the seek and expiration', async () => {
     const { app, audioPlaybackService, streamService, source, grant } = setupTest();

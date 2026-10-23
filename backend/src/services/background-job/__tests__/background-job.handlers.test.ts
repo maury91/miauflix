@@ -109,6 +109,20 @@ describe('watchlist TV acquisition', () => {
     );
   });
 
+  it('renews the watchlist claim for a completed match and moves on', async () => {
+    const { handlers, downloadService, sourceService, episodeSource } = setupTest();
+    downloadService.isFileComplete.mockResolvedValueOnce(true);
+
+    await handlers.get('watchlist.tv.acquire')!.run({ showMediaId: 9001 });
+
+    expect(downloadService.predownload).toHaveBeenCalledWith(
+      { source: episodeSource.source, filePath: 'Show.S01E08.mkv', matchKind: 'single' },
+      { kind: 'watchlist', ownerKey: 'watchlist:tv:9001' }
+    );
+    // Only episode 8 exists after the watched one, so the loop ends after renewing it.
+    expect(sourceService.getSourcesForEpisodeWithOnDemandSearch).toHaveBeenCalledTimes(1);
+  });
+
   it.each(['playing', 'paused'] as const)(
     'retries the latest episode when its progress is %s',
     async state => {

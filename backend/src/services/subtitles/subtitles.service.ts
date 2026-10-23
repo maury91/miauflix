@@ -404,7 +404,7 @@ export class SubtitlesService {
     if (!Number.isSafeInteger(startSeconds) || startSeconds < 0 || startSeconds > 7 * 24 * 3600)
       throw new SubtitleAccessError('Invalid subtitle position');
     const window = record.local?.provider === 'embedded' ? Math.floor(startSeconds / 60) * 60 : 0;
-    const key = `${record.sourceId}:${record.candidate.provider}:${record.fileId}${record.local?.provider === 'embedded' ? `:${window}` : ''}`;
+    const key = `${record.sourceId}:${record.playableKey}:${record.candidate.provider}:${record.fileId}${record.local?.provider === 'embedded' ? `:${window}` : ''}`;
     const cached = this.tracks.get(key);
     if (cached) {
       this.tracks.delete(key);
