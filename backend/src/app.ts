@@ -127,7 +127,27 @@ try {
     mediaService,
     playbackTargetService
   );
-  const torrentWarmupController = new TorrentWarmupController(downloadService);
+  const audioPlaybackService = new AudioPlaybackService(
+    downloadService,
+    configurationService,
+    db.getMediaProbeRepository()
+  );
+  const torrentSubtitlesService = new TorrentSubtitlesService(downloadService);
+  const torrentWarmupController = new TorrentWarmupController(
+    downloadService,
+    async (target, playableKey, subtitleLanguage, signal) => {
+      await Promise.allSettled([
+        audioPlaybackService.inspect(target, {}, true, signal),
+        torrentSubtitlesService.discover(target, true, signal),
+        (async () => {
+          const movieId = /^m:(\d+)$/.exec(playableKey)?.[1];
+          if (!movieId) return;
+          const movie = await mediaService.getLocalMovieByMediaId(Number(movieId));
+          await subtitlesService.warmSearch(movie?.imdbId, subtitleLanguage ?? 'en');
+        })(),
+      ]);
+    }
+  );
   const playablePreparationService = new PlayablePreparationService(
     mediaService,
     sourceService,
@@ -146,7 +166,6 @@ try {
     progressService,
     catalogClient
   );
-  const audioPlaybackService = new AudioPlaybackService(downloadService, configurationService);
   const playbackSessionService = new PlaybackSessionService(
     db,
     playablePreparationService,
@@ -155,7 +174,6 @@ try {
     storageService,
     audioPlaybackService
   );
-  const torrentSubtitlesService = new TorrentSubtitlesService(downloadService);
   const subtitlesService = new SubtitlesService(
     configurationService,
     requestService,

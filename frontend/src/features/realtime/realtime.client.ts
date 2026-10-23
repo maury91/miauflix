@@ -42,6 +42,7 @@ export type RealtimeStatusMessage =
 
 export interface RealtimeFocus {
   type: 'focus';
+  subtitleLanguage?: string;
   clientSequence: number;
   navigationRevision: number;
   view: 'browse' | 'details' | 'player';

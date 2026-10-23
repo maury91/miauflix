@@ -23,6 +23,7 @@ type Coordinate = [number, number];
 
 type FocusMessage = {
   type: 'focus';
+  subtitleLanguage?: string;
   clientSequence: number;
   navigationRevision: number;
   view: PreloadIntentRequest['view'];
@@ -56,6 +57,7 @@ interface ClientState {
   sessionId: string;
   clientId: string;
   focused: MediaIntentRef | null;
+  subtitleLanguage?: string;
   view: PreloadIntentRequest['view'];
   map: MapMessage | null;
   sequence: number;
@@ -189,6 +191,7 @@ export class RealtimeGateway {
         if (!this.isFocus(message)) return this.invalid(state, 'Invalid focus');
         if (message.clientSequence <= state.sequence) return;
         state.focused = message.media;
+        state.subtitleLanguage = message.subtitleLanguage;
         state.view = message.view;
         state.sequence = Math.max(state.sequence, message.clientSequence);
         state.focusSequence = message.clientSequence;
@@ -303,6 +306,7 @@ export class RealtimeGateway {
       sequence,
       view: state.view,
       focused: state.focused,
+      ...(state.subtitleLanguage ? { subtitleLanguage: state.subtitleLanguage } : {}),
       reachable: this.reachable(state.map),
     });
   }
@@ -466,6 +470,9 @@ export class RealtimeGateway {
     return (
       this.isSequence(value.clientSequence) &&
       this.isSequence(value.navigationRevision) &&
+      (value.subtitleLanguage === undefined ||
+        (typeof value.subtitleLanguage === 'string' &&
+          /^[a-z]{2,3}$/i.test(value.subtitleLanguage))) &&
       (value.view === 'browse' || value.view === 'details' || value.view === 'player') &&
       (value.media === null || this.isMedia(value.media))
     );

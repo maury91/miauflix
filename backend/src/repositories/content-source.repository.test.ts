@@ -178,6 +178,67 @@ describe('ContentSourceRepository', () => {
     expect(playback?.videoFilePath).toBe('Show.S01E01.mkv');
   });
 
+  it('converges concurrent episode file associations on one row', async () => {
+    const { database, repository } = await setupTest();
+    const { episode } = await createEpisode(database);
+    const source = await repository.upsertByHash(sourceInput());
+    const episodeSources = database.getEpisodeSourceRepository();
+    const links = await Promise.all([
+      episodeSources.associate(episode.id, source.id, 'Pack/episode.mkv', 'single'),
+      episodeSources.associate(episode.id, source.id, 'Pack/episode.mkv', 'single'),
+    ]);
+    expect(links[0].id).toBe(links[1].id);
+    expect(await episodeSources.findByEpisodeId(episode.id)).toHaveLength(1);
+  });
+
+  it('converges concurrent episode associations with unknown filenames', async () => {
+    const { database, repository } = await setupTest();
+    const { episode } = await createEpisode(database);
+    const source = await repository.upsertByHash(sourceInput());
+    const associations = database.getEpisodeSourceRepository();
+    const links = await Promise.all([
+      associations.associate(episode.id, source.id, null, 'single'),
+      associations.associate(episode.id, source.id, null, 'single'),
+    ]);
+    expect(links[0].id).toBe(links[1].id);
+    expect(await associations.findByEpisodeId(episode.id)).toHaveLength(1);
+  });
+
+  it('merges a stale provider path into an already-associated canonical episode path', async () => {
+    const { database, repository } = await setupTest();
+    const { episode } = await createEpisode(database);
+    const source = await repository.upsertByHash(sourceInput());
+    const associations = database.getEpisodeSourceRepository();
+    const stale = await associations.associate(episode.id, source.id, 'episode.mkv', 'single');
+    await associations.associate(episode.id, source.id, 'Pack/episode.mkv', 'single');
+    await expect(
+      Promise.all([
+        associations.setVideoFilePath(stale.id, 'episode.mkv', 'Pack/episode.mkv'),
+        associations.setVideoFilePath(stale.id, 'episode.mkv', 'Pack/episode.mkv'),
+      ])
+    ).resolves.toEqual(['Pack/episode.mkv', 'Pack/episode.mkv']);
+    expect(await associations.findByEpisodeId(episode.id)).toHaveLength(1);
+  });
+
+  it('serializes association with canonicalization and reuses the canonical link on rediscovery', async () => {
+    const { database, repository } = await setupTest();
+    const { episode } = await createEpisode(database);
+    const source = await repository.upsertByHash(sourceInput());
+    const links = database.getEpisodeSourceRepository();
+    const stale = await links.associate(episode.id, source.id, 'episode.mkv', 'single');
+    await expect(
+      Promise.all([
+        links.associate(episode.id, source.id, 'episode.mkv', 'single'),
+        links.setVideoFilePath(stale.id, 'episode.mkv', 'Pack/episode.mkv'),
+        links.associate(episode.id, source.id, 'episode.mkv', 'single'),
+      ])
+    ).resolves.toHaveLength(3);
+    expect(await links.findByEpisodeId(episode.id)).toHaveLength(1);
+    await expect(
+      links.associate(episode.id, source.id, 'episode.mkv', 'single')
+    ).resolves.toMatchObject({ videoFilePath: 'Pack/episode.mkv' });
+  });
+
   it('surfaces constraint violations other than the hash conflict', async () => {
     const { repository, countSources } = await setupTest();
     const withoutProvider = sourceInput({ source: undefined });

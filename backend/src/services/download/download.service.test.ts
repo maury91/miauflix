@@ -614,6 +614,34 @@ describe('DownloadService', () => {
   });
 
   describe('stream cancellation', () => {
+    it('reads speculative inspection ranges without acquiring playback claims or activity', async () => {
+      const { service, mockStorageService } = setupTest();
+      const layout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength: 10,
+        files: [{ path: 'movie.mkv', length: 10, offset: 0 }],
+      };
+      const storage = {
+        id: 1,
+        sourceId: 1,
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array([128]),
+        encryptedLayout: layout,
+      };
+      const webtorrent = service.client as unknown as { ready: boolean; torrents: unknown[] };
+      webtorrent.ready = true;
+      webtorrent.torrents = [];
+      mockStorageService.getStorageBySource.mockResolvedValue(storage as never);
+      const startDownload = jest.spyOn(service, 'startDownload');
+      const response = await service.streamFile(target({ id: 1, size: 10 }), 'bytes=0-1', true);
+      await response.body!.cancel();
+      expect(startDownload).not.toHaveBeenCalled();
+      expect(mockStorageService.claimFile).not.toHaveBeenCalled();
+      expect(mockStorageService.setPlaybackActive).not.toHaveBeenCalled();
+      expect(service.hasActivePlayback()).toBe(false);
+    });
+
     it('releases stream activity once when cancellation interrupts a pending piece read', async () => {
       const { service, mockStorageService } = setupTest();
       const webtorrent = service.client as unknown as {
@@ -655,6 +683,9 @@ describe('DownloadService', () => {
         once: jest.fn(),
         removeListener: jest.fn(),
         off: jest.fn(),
+        _select: jest.fn(),
+        _deselect: jest.fn(),
+        critical: jest.fn(),
       };
       webtorrent.torrents = [];
       webtorrent.add.mockImplementation((_input, _options, callback) => {
@@ -850,10 +881,13 @@ describe('DownloadService', () => {
       });
       let subtitleVerified = false;
       const subtitleFile = { path: 'movie.en.srt', select: jest.fn() };
+      const streamSelection = { _select: jest.fn(), _deselect: jest.fn(), critical: jest.fn() };
       const torrent = Object.assign(new EventEmitter(), {
         files: [subtitleFile],
+        pieces: new Array(3),
         bitfield: { get: (piece: number) => piece < 2 || subtitleVerified },
         destroyed: false,
+        ...streamSelection,
       }) as unknown as Torrent;
       const startDownload = jest.spyOn(service, 'startDownload').mockResolvedValue({
         sourceId: storage.sourceId,
@@ -879,9 +913,14 @@ describe('DownloadService', () => {
       });
       await new Promise(resolve => setTimeout(resolve, 0));
       expect(finished).toBe(false);
+      // The blocked reader fetches its own window (clamped to the last piece) ahead of claims.
+      expect(streamSelection._select).toHaveBeenCalledWith(2, 2, 100, undefined, true);
+      expect(streamSelection.critical).toHaveBeenCalledWith(2, 2);
+      expect(streamSelection._deselect).not.toHaveBeenCalled();
       subtitleVerified = true;
       torrent.emit('verified', 2);
       expect((await body).byteLength).toBe(4);
+      expect(streamSelection._deselect).toHaveBeenCalledWith(2, 2, true);
       expect(service.hasActivePlayback()).toBe(false);
       await expect(
         service.streamFile(target({ id: storage.sourceId, size: 12 }, '../../unrelated.srt'))
@@ -977,7 +1016,7 @@ describe('DownloadService', () => {
       expect(startDownload).toHaveBeenCalledWith(
         movie,
         { kind: 'warmup', ownerKey: 'lease-a', rangeEnd: 4 },
-        { reservedBytes: 4 }
+        { reservedBytes: 10 }
       );
     });
   });
@@ -1026,6 +1065,23 @@ describe('DownloadService', () => {
       expect(files[0].select).toHaveBeenCalledWith(10);
       expect(files[1].select).not.toHaveBeenCalled();
       expect(torrent.select).toHaveBeenCalledWith(2, 3, 1);
+    });
+
+    it('keeps a small Matroska tail selected with its warm prefix and releases both together', async () => {
+      const { mockStorageService, files, torrent, reconcile } = setupSelection();
+      files[1].offset = 8 * 1024 * 1024;
+      files[1].length = 8 * 1024 * 1024;
+      Object.assign(torrent, { pieceLength: 1024 * 1024, pieces: new Array(16) });
+      mockStorageService.getLiveClaims.mockResolvedValue([
+        claim('Show.S01E02.mkv', 'warmup', 'lease', 1024 * 1024),
+      ]);
+      await reconcile(7);
+      expect(torrent.select).toHaveBeenCalledWith(8, 8, 1);
+      expect(torrent.select).toHaveBeenCalledWith(14, 15, 1);
+      jest.mocked(torrent.select).mockClear();
+      mockStorageService.getLiveClaims.mockResolvedValue([]);
+      await reconcile(7);
+      expect(torrent.select).not.toHaveBeenCalled();
     });
 
     it('keeps a file selected while another owner still claims it', async () => {

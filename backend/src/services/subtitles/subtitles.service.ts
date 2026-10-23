@@ -116,6 +116,21 @@ export class SubtitlesService {
     private readonly torrentSubtitles: TorrentSubtitlesService
   ) {}
 
+  /** Populate the same search cache used by authorized playback requests. */
+  async warmSearch(imdbId: string | null | undefined, language: string): Promise<void> {
+    const apiKey = this.apiKey();
+    if (!apiKey || !imdbId || !/^tt\d+$/.test(imdbId) || !/^[a-z]{2,3}$/i.test(language)) return;
+    const params = new URLSearchParams({
+      imdb_id: String(Number(imdbId.slice(2))),
+      languages: language,
+      type: 'movie',
+      order_by: 'download_count',
+      order_direction: 'desc',
+      hearing_impaired: 'exclude',
+    });
+    await this.searchResults(imdbId, language, false, params, apiKey, false);
+  }
+
   async search(
     streamingKey: string,
     userId: string,
@@ -260,7 +275,36 @@ export class SubtitlesService {
     }
   }
 
+  private readonly pendingSearches = new Map<string, Promise<OpenSubtitlesResult[] | null>>();
+
   private async searchResults(
+    imdbId: string,
+    language: string,
+    hearingImpaired: boolean,
+    params: URLSearchParams,
+    apiKey: string,
+    refresh: boolean
+  ): Promise<OpenSubtitlesResult[] | null> {
+    const key = `${imdbId}:${language.toLowerCase()}:${hearingImpaired}`;
+    const pending = this.pendingSearches.get(key);
+    if (pending) return pending;
+    const result = this.fetchSearchResults(
+      imdbId,
+      language,
+      hearingImpaired,
+      params,
+      apiKey,
+      refresh
+    );
+    this.pendingSearches.set(key, result);
+    try {
+      return await result;
+    } finally {
+      if (this.pendingSearches.get(key) === result) this.pendingSearches.delete(key);
+    }
+  }
+
+  private async fetchSearchResults(
     imdbId: string,
     language: string,
     hearingImpaired: boolean,

@@ -206,11 +206,11 @@ describe('live media artwork', () => {
 
       expect(view.container.querySelector('button img')).toHaveAttribute(
         'src',
-        'https://image.tmdb.org/t/p/original/card-logo.png'
+        'https://image.tmdb.org/t/p/w300/card-logo.png'
       );
       expect(screen.getByRole('img', { name: 'Orbital' })).toHaveAttribute(
         'src',
-        'https://image.tmdb.org/t/p/original/hero-logo.png'
+        'https://image.tmdb.org/t/p/w500/hero-logo.png'
       );
       expect(card).toHaveFocus();
     } finally {

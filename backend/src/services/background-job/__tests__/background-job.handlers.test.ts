@@ -53,9 +53,10 @@ const setupTest = () => {
   const downloadService = {
     isFileComplete: jest.fn().mockResolvedValue(false),
     predownload: jest.fn().mockResolvedValue(true),
+    resolveLayout: jest.fn().mockResolvedValue({ files: [{ path: 'Show.S01E08.mkv' }] }),
   };
   const playbackTargets = new PlaybackTargetService(
-    { getContentSourceRepository: () => ({}) } as never,
+    { getContentSourceRepository: () => ({}), getEpisodeSourceRepository: () => ({}) } as never,
     downloadService as never
   );
 

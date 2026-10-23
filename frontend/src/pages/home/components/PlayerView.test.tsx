@@ -1,7 +1,7 @@
 import type { CreatePlaybackSessionResponse, ProgressEntry } from '@miauflix/backend';
 import { configureStore } from '@reduxjs/toolkit';
 import { act, fireEvent, render as rtlRender, screen, waitFor } from '@testing-library/react';
-import type { PropsWithChildren, ReactElement } from 'react';
+import { type PropsWithChildren, type ReactElement, StrictMode } from 'react';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -108,6 +108,77 @@ describe('PlayerView', () => {
     stopAudioPlayback.mockReset();
   });
 
+  it('reuses a single session during StrictMode effect replay', async () => {
+    let resolve!: (value: CreatePlaybackSessionResponse) => void;
+    const promise = new Promise<CreatePlaybackSessionResponse>(done => {
+      resolve = done;
+    });
+    createSession.mockReturnValue({ unwrap: () => promise });
+    render(
+      <StrictMode>
+        <PlayerView
+          playable={playable}
+          title="Strict movie"
+          onBack={vi.fn()}
+          nextEpisode={null}
+          onPlayNext={vi.fn()}
+        />
+      </StrictMode>
+    );
+    expect(createSession).toHaveBeenCalledTimes(1);
+    await act(async () => resolve(session));
+    expect(await screen.findByLabelText('Strict movie')).toBeInTheDocument();
+    expect(updateProgress).not.toHaveBeenCalled();
+  });
+
+  it('saves the old playback snapshot when changing targets and when leaving', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    const view = render(
+      <PlayerView
+        playable={playable}
+        title="First movie"
+        onBack={vi.fn()}
+        nextEpisode={null}
+        onPlayNext={vi.fn()}
+      />
+    );
+    const video = (await screen.findByLabelText('First movie')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 100 });
+    video.currentTime = 25;
+    fireEvent.timeUpdate(video);
+    const nextPlayable = { kind: 'movie' as const, mediaId: 124 };
+    view.rerender(
+      <PlayerView
+        playable={nextPlayable}
+        title="Next movie"
+        onBack={vi.fn()}
+        nextEpisode={null}
+        onPlayNext={vi.fn()}
+      />
+    );
+    await waitFor(() =>
+      expect(updateProgress).toHaveBeenCalledWith({
+        playable,
+        positionSeconds: 25,
+        durationSeconds: 100,
+        state: 'paused',
+      })
+    );
+    const nextVideo = (await screen.findByLabelText('Next movie')) as HTMLVideoElement;
+    Object.defineProperty(nextVideo, 'duration', { configurable: true, value: 100 });
+    nextVideo.currentTime = 40;
+    fireEvent.timeUpdate(nextVideo);
+    view.unmount();
+    await waitFor(() =>
+      expect(updateProgress).toHaveBeenCalledWith({
+        playable: nextPlayable,
+        positionSeconds: 40,
+        durationSeconds: 100,
+        state: 'paused',
+      })
+    );
+  });
+
   it('sends device codecs and preferred languages before a video element is mounted', async () => {
     createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
     render(<PlayerView playable={playable} title="Movie" onBack={vi.fn()} />);
@@ -177,6 +248,9 @@ describe('PlayerView', () => {
     fireEvent.durationChange(video);
     fireEvent.change(screen.getByRole('slider', { name: 'Seek' }), { target: { value: '45' } });
     expect(video.currentTime).toBe(45);
+    expect(screen.getByText('Preparing playback…')).toBeInTheDocument();
+    Object.defineProperty(video, 'readyState', { configurable: true, value: 2 });
+    fireEvent.loadedData(video);
     fireEvent.timeUpdate(video);
     expect(screen.getByText('00:45 / 02:00')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: 'Mute' }));
@@ -355,8 +429,8 @@ describe('PlayerView', () => {
     act(() => startAudioPlayback.mock.lastCall?.[0].onReady());
     fireEvent.timeUpdate(video);
     fireEvent.click(screen.getByRole('button', { name: 'Audio and subtitles' }));
-    expect(screen.getByRole('option', { name: /French.*AC3/ })).toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText('Audio language'), { target: { value: '1' } });
+    expect(screen.getByRole('button', { name: /French.*AC3/ })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /English.*AC3/ }));
     expect(startAudioPlayback.mock.lastCall?.[0]).toMatchObject({
       startSeconds: 45,
       audioTrackIndex: 1,
@@ -409,10 +483,7 @@ describe('PlayerView', () => {
           )
         );
         fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
-        await screen.findByRole('option', { name: /Local English/ });
-        fireEvent.change(screen.getByLabelText('Subtitle track'), {
-          target: { value: 'local-candidate' },
-        });
+        fireEvent.click(await screen.findByRole('button', { name: /Local English/ }));
         expect(view.container.querySelector('track')?.getAttribute('src')).toContain(
           'local-candidate'
         );
@@ -459,10 +530,11 @@ describe('PlayerView', () => {
     );
     await screen.findByLabelText('Subtitles fixture');
     fireEvent.click(screen.getByRole('button', { name: 'Subtitles' }));
-    fireEvent.click(screen.getByRole('button', { name: /Find subtitles/ }));
-    const select = await screen.findByRole('option', {
-      name: /Filename match: 94\/100.*A long release/,
-    });
+    const search = await screen.findByRole('button', { name: /Find subtitles/ });
+    await waitFor(() => expect(search).not.toBeDisabled());
+    fireEvent.click(search);
+    const select = await screen.findByRole('button', { name: /A long release/ });
+    expect(screen.queryByText(/Filename match/)).not.toBeInTheDocument();
     const prototype = window.HTMLTrackElement.prototype;
     const descriptor = Object.getOwnPropertyDescriptor(prototype, 'track');
     const textTrack = {
@@ -471,7 +543,7 @@ describe('PlayerView', () => {
     };
     Object.defineProperty(prototype, 'track', { configurable: true, get: () => textTrack });
     try {
-      fireEvent.change(select.parentElement!, { target: { value: 'candidate-1' } });
+      fireEvent.click(select);
       const track = view.container.querySelector('track');
       expect(track?.getAttribute('src')).toMatch(
         /\/api\/subtitles\/tracks\/candidate-1\?streamingKey=streaming-key$/

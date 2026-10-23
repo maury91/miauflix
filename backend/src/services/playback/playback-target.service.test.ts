@@ -21,6 +21,9 @@ describe('PlaybackTargetService', () => {
         async (_movieId: number, _sourceId: number, path: string) => path
       ),
     };
+    const episodeRepository = {
+      setVideoFilePath: jest.fn(async (_id: number, _old: string, path: string) => path),
+    };
     const downloads = {
       resolveLayout: jest.fn().mockResolvedValue(
         layout([
@@ -30,10 +33,13 @@ describe('PlaybackTargetService', () => {
         ])
       ),
     };
-    const database = { getContentSourceRepository: () => repository } as unknown as Database;
+    const database = {
+      getContentSourceRepository: () => repository,
+      getEpisodeSourceRepository: () => episodeRepository,
+    } as unknown as Database;
     const service = new PlaybackTargetService(database, downloads);
     const source = createMockContentSource({ id: 5 });
-    return { service, repository, downloads, source };
+    return { service, repository, episodeRepository, downloads, source };
   };
 
   beforeAll(() => {
@@ -88,12 +94,45 @@ describe('PlaybackTargetService', () => {
     expect(repository.setMovieVideoFilePath).not.toHaveBeenCalled();
   });
 
-  it('maps episode matches and skips matches without a listed file', () => {
-    const { service, source } = setupTest();
+  it('resolves a unique episode suffix and persists its canonical path', async () => {
+    const { service, source, downloads, episodeRepository } = setupTest();
+    downloads.resolveLayout.mockResolvedValue(layout([['Pack/Show.S01E02.mkv', 900]]));
+    await expect(
+      service.forEpisode({ id: 3, source, videoFilePath: 'Show.S01E02.mkv', matchKind: 'single' })
+    ).resolves.toMatchObject({ filePath: 'Pack/Show.S01E02.mkv' });
+    expect(episodeRepository.setVideoFilePath).toHaveBeenCalledWith(
+      3,
+      'Show.S01E02.mkv',
+      'Pack/Show.S01E02.mkv'
+    );
+    await expect(
+      service.forEpisode({ source, videoFilePath: null, matchKind: 'single' })
+    ).resolves.toBeNull();
+  });
 
-    expect(
-      service.forEpisode({ source, videoFilePath: 'Show.S01E02.mkv', matchKind: 'combined' })
-    ).toEqual({ source, filePath: 'Show.S01E02.mkv', matchKind: 'combined' });
-    expect(service.forEpisode({ source, videoFilePath: null, matchKind: 'single' })).toBeNull();
+  it('prefers an exact episode path over suffix matches', async () => {
+    const { service, source, downloads } = setupTest();
+    downloads.resolveLayout.mockResolvedValue(
+      layout([
+        ['episode.mkv', 900],
+        ['Pack/episode.mkv', 900],
+      ])
+    );
+    await expect(
+      service.forEpisode({ source, videoFilePath: 'episode.mkv', matchKind: 'single' })
+    ).resolves.toMatchObject({ filePath: 'episode.mkv' });
+  });
+
+  it('rejects ambiguous episode suffixes', async () => {
+    const { service, source, downloads } = setupTest();
+    downloads.resolveLayout.mockResolvedValue(
+      layout([
+        ['A/episode.mkv', 900],
+        ['B/episode.mkv', 900],
+      ])
+    );
+    await expect(
+      service.forEpisode({ source, videoFilePath: 'episode.mkv', matchKind: 'single' })
+    ).rejects.toMatchObject({ status: 'source_file_unavailable' });
   });
 });

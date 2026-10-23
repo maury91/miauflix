@@ -16,6 +16,7 @@ import { ContentSource } from '@entities/content-source.entity';
 import { Episode } from '@entities/episode.entity';
 import { EpisodeSource } from '@entities/episode-source.entity';
 import { MediaList, MediaListItem } from '@entities/list.entity';
+import { MediaProbe } from '@entities/media-probe.entity';
 import { MediaRating } from '@entities/media-rating.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
@@ -34,6 +35,7 @@ import { User } from '@entities/user.entity';
 import { AuditLogRepository } from '@repositories/audit-log.repository';
 import { ContentSourceRepository } from '@repositories/content-source.repository';
 import { EpisodeSourceRepository } from '@repositories/episode-source.repository';
+import { MediaProbeRepository } from '@repositories/media-probe.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
@@ -128,6 +130,7 @@ export class Database {
   private streamingKeyRepository: StreamingKeyRepository;
   private progressRepository: ProgressRepository;
   private playbackGrantRepository: PlaybackGrantRepository;
+  private mediaProbeRepository: MediaProbeRepository;
 
   constructor(configurationService: ConfigurationService) {
     const encryptionService = new EncryptionService(
@@ -168,6 +171,7 @@ export class Database {
         StreamingKey,
         Progress,
         PlaybackGrant,
+        MediaProbe,
       ],
       synchronize: false,
       logger: new DatabaseLogger('all'),
@@ -193,6 +197,7 @@ export class Database {
     this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this);
     this.playbackGrantRepository = new PlaybackGrantRepository(this);
+    this.mediaProbeRepository = new MediaProbeRepository(this);
   }
 
   public async close(): Promise<void> {
@@ -294,5 +299,9 @@ export class Database {
 
   public getPlaybackGrantRepository() {
     return this.playbackGrantRepository;
+  }
+
+  public getMediaProbeRepository() {
+    return this.mediaProbeRepository;
   }
 }

@@ -285,7 +285,7 @@ export function registerBackgroundJobHandlers({
         const completeMatch = usable.find((_, index) => completeFlags[index]);
         if (completeMatch) {
           // Renew the claim so storage cleanup does not reclaim the completed file.
-          await downloadService.predownload(playbackTargets.forEpisode(completeMatch)!, {
+          await downloadService.predownload((await playbackTargets.forEpisode(completeMatch))!, {
             kind: 'watchlist',
             ownerKey: `watchlist:tv:${showMediaId}`,
           });
@@ -295,7 +295,7 @@ export function registerBackgroundJobHandlers({
         const selected = usable[0];
         try {
           // Each scan renews the claim; it lapses once the show leaves every watchlist.
-          await downloadService.predownload(playbackTargets.forEpisode(selected)!, {
+          await downloadService.predownload((await playbackTargets.forEpisode(selected))!, {
             kind: 'watchlist',
             ownerKey: `watchlist:tv:${showMediaId}`,
           });

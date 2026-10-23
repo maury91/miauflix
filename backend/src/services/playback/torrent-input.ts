@@ -9,8 +9,15 @@ import type { DownloadService } from '@services/download/download.service';
 
 import type { PlaybackTarget } from './playback-target';
 
+/** ffprobe read budget: container headers fit in it, so a probe waits on few torrent pieces. */
+export const PROBE_SIZE_BYTES = 2 * 1024 * 1024;
+
 /** A private loopback capability exposes only this file; no arbitrary URLs or plaintext files. */
-export async function openTorrentInput(downloadService: DownloadService, target: PlaybackTarget) {
+export async function openTorrentInput(
+  downloadService: DownloadService,
+  target: PlaybackTarget,
+  speculative = false
+) {
   const path = `/${randomBytes(24).toString('hex')}`;
   const sockets = new Set<Socket>();
   const server = createServer(async (request, response) => {
@@ -24,7 +31,7 @@ export async function openTorrentInput(downloadService: DownloadService, target:
       return;
     }
     try {
-      const result = await downloadService.streamFile(target, range);
+      const result = await downloadService.streamFile(target, range, speculative);
       if (response.destroyed || request.method === 'HEAD') {
         if (!response.destroyed) {
           result.headers.forEach((value, key) => response.setHeader(key, value));

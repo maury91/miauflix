@@ -176,6 +176,7 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
         <Logo
           key={logo}
           src={logo!}
+          decoding="async"
           alt=""
           draggable={false}
           onError={() => setFailedLogo(logo!)}

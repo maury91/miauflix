@@ -27,6 +27,39 @@ describe('TorrentWarmupController', () => {
     return { controller: new TorrentWarmupController(driver), driver };
   };
 
+  it('starts shared inspection once metadata is ready without waiting for the probe', async () => {
+    const { driver } = setupTest();
+    const inspect = jest.fn(() => new Promise<void>(() => {}));
+    const controller = new TorrentWarmupController(driver, inspect);
+    await expect(controller.warm(source(1), 'lease', 'm:1')).resolves.toMatchObject({
+      state: 'warming',
+    });
+    expect(inspect).toHaveBeenCalledWith(source(1), 'm:1', undefined, expect.any(AbortSignal));
+    await controller.warm(source(1), 'lease', 'm:1');
+    expect(inspect).toHaveBeenCalledTimes(1);
+  });
+
+  it('cancels obsolete preparation on replacement and pause but preserves a promoted probe', async () => {
+    const { driver } = setupTest();
+    const signals: AbortSignal[] = [];
+    const prepare = jest.fn(
+      async (_target: PlaybackTarget, _key: string, _language?: string, signal?: AbortSignal) => {
+        signals.push(signal!);
+      }
+    );
+    const controller = new TorrentWarmupController(driver, prepare);
+    await controller.warm(source(1), 'lease1', 'm:1');
+    await controller.warm(source(2), 'lease2', 'm:2');
+    expect(signals[0].aborted).toBe(true);
+    expect(signals[1].aborted).toBe(false);
+    await controller.pause('lease2');
+    expect(signals[1].aborted).toBe(true);
+    await controller.warm(source(3), 'lease3', 'm:3');
+    await controller.promote(source(3), 'm:3', 'viewer');
+    controller.close();
+    expect(signals[2].aborted).toBe(false);
+  });
+
   it('keeps one speculative source and pauses the previous source before replacement', async () => {
     const { controller, driver } = setupTest();
 

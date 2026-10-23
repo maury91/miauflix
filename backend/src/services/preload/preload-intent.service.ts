@@ -14,6 +14,8 @@ import type { TorrentWarmupController } from './torrent-warmup.controller';
 
 const LEASE_TTL_MS = 15_000;
 const SOURCE_METADATA_CACHE_LIMIT = 256;
+/** Browse focus held this long warms the torrent too, so details and Watch start warm. */
+export const BROWSE_WARM_DWELL_MS = 1_200;
 type PreparationLevel = 'sources' | 'warm';
 
 interface PreparationDetails {
@@ -44,11 +46,14 @@ export interface PreloadLease {
   sessionId: string;
   clientId: string;
   sequence: number;
+  subtitleLanguage?: string;
   view: PreloadIntentRequest['view'];
   focused: MediaIntentRef | null;
   reachable: PreloadIntentRequest['reachable'];
   expiresAt: number;
   createdAt: number;
+  /** When the current focused playable gained focus; drives the browse warm dwell. */
+  focusedAt: number;
 }
 
 export interface PreloadIntentResult {
@@ -76,6 +81,7 @@ export class PreloadIntentService {
   private readonly preparations = new Map<string, PreparationEntry>();
   private readonly sourceMetadataCache = new Map<string, PreloadPreparationSource>();
   private readonly cleanupTimer: ReturnType<typeof setInterval>;
+  private dwellTimer: ReturnType<typeof setTimeout> | undefined;
   private readonly onWarmupChange = (slot: { playableKey: string } | null): void => {
     if (slot) {
       this.emitPreparationChangeForKey(slot.playableKey);
@@ -144,19 +150,27 @@ export class PreloadIntentService {
       };
     }
 
+    const sameFocus =
+      previous?.focused &&
+      intent.focused &&
+      previous.focused.kind !== 'show' &&
+      intent.focused.kind !== 'show' &&
+      playableKey(previous.focused) === playableKey(intent.focused);
     this.leases.set(key, {
       key,
       userId,
       sessionId,
       clientId,
       sequence: intent.sequence,
+      subtitleLanguage: intent.subtitleLanguage,
       view: intent.view,
       focused: intent.focused,
       reachable: this.dedupeReachable(intent.reachable),
       expiresAt: expiresAt.getTime(),
       createdAt: previous?.createdAt ?? now,
+      focusedAt: sameFocus ? previous.focusedAt : now,
     });
-    const requestedLevel = this.levelForView(intent.view);
+    const requestedLevel = this.levelForLease(this.leases.get(key)!, now);
     const previousPreparation =
       previous?.focused && previous.focused.kind !== 'show'
         ? this.preparations.get(playableKey(previous.focused))
@@ -213,6 +227,7 @@ export class PreloadIntentService {
 
   close(): void {
     clearInterval(this.cleanupTimer);
+    clearTimeout(this.dwellTimer);
     for (const preparation of this.preparations.values()) {
       if (preparation.state === 'pending') {
         clearTimeout(preparation.timer);
@@ -251,20 +266,28 @@ export class PreloadIntentService {
   private reconcile(now: number): void {
     const wanted = new Map<
       string,
-      { playable: Exclude<MediaIntentRef, { kind: 'show' }>; view: PreloadIntentRequest['view'] }
+      {
+        playable: Exclude<MediaIntentRef, { kind: 'show' }>;
+        view: PreloadIntentRequest['view'];
+        level: PreparationLevel;
+        subtitleLanguage?: string;
+      }
     >();
     for (const lease of this.leases.values()) {
       if (!lease.focused || lease.focused.kind === 'show') continue;
       const key = playableKey(lease.focused);
       const existing = wanted.get(key);
-      if (
-        !existing ||
-        this.levelRank(this.levelForView(lease.view)) >
-          this.levelRank(this.levelForView(existing.view))
-      ) {
-        wanted.set(key, { playable: lease.focused, view: lease.view });
+      const level = this.levelForLease(lease, now);
+      if (!existing || this.levelRank(level) > this.levelRank(existing.level)) {
+        wanted.set(key, {
+          playable: lease.focused,
+          view: lease.view,
+          level,
+          subtitleLanguage: lease.subtitleLanguage,
+        });
       }
     }
+    this.scheduleDwell(now);
 
     for (const [key, preparation] of this.preparations) {
       if (!wanted.has(key)) {
@@ -280,14 +303,14 @@ export class PreloadIntentService {
     const slot = this.warmup?.getState();
     if (slot) {
       const target = wanted.get(slot.playableKey);
-      if (!target || this.levelForView(target.view) !== 'warm') {
+      if (!target || target.level !== 'warm') {
         void this.warmup?.pause(slot.leaseKey);
       }
     }
 
     if (!this.preparation) return;
     for (const [key, target] of wanted) {
-      const level = this.levelForView(target.view);
+      const level = target.level;
       const existing = this.preparations.get(key);
       const isDowngrade = existing && this.levelRank(existing.level) > this.levelRank(level);
       const details: PreparationDetails = existing
@@ -341,7 +364,11 @@ export class PreloadIntentService {
               through: level,
               // Keep speculative preparation compatible with the default player
               // policy so Watch can promote the same selected source.
-              preferences: { quality: 'auto', allowHevc: false },
+              preferences: {
+                quality: 'auto',
+                allowHevc: false,
+                ...(target.subtitleLanguage ? { subtitleLanguage: target.subtitleLanguage } : {}),
+              },
               // Details preparation is speculative. Keep the explicit Watch
               // request in the interactive lane so it can overtake this work.
               workClass: 'background',
@@ -497,6 +524,27 @@ export class PreloadIntentService {
 
   private levelForView(view: PreloadIntentRequest['view']): PreparationLevel {
     return view === 'details' || view === 'player' ? 'warm' : 'sources';
+  }
+
+  /** Details and the player warm at once; browse warms once focus has dwelt. */
+  private levelForLease(lease: PreloadLease, now: number): PreparationLevel {
+    if (this.levelForView(lease.view) === 'warm') return 'warm';
+    return now - lease.focusedAt >= BROWSE_WARM_DWELL_MS ? 'warm' : 'sources';
+  }
+
+  /** Re-reconcile when the next browse focus reaches its warm dwell. */
+  private scheduleDwell(now: number): void {
+    clearTimeout(this.dwellTimer);
+    this.dwellTimer = undefined;
+    let next = Infinity;
+    for (const lease of this.leases.values()) {
+      if (!lease.focused || lease.focused.kind === 'show' || lease.view !== 'browse') continue;
+      const due = lease.focusedAt + BROWSE_WARM_DWELL_MS;
+      if (due > now) next = Math.min(next, due);
+    }
+    if (next === Infinity) return;
+    this.dwellTimer = setTimeout(() => this.reconcile(Date.now()), next - now);
+    if (typeof this.dwellTimer === 'object' && 'unref' in this.dwellTimer) this.dwellTimer.unref();
   }
 
   private levelRank(level: PreparationLevel): number {

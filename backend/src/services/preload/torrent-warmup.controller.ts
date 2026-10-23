@@ -59,12 +59,21 @@ const DEFAULT_TARGET_BYTES = 64 * 1024 * 1024;
  */
 export class TorrentWarmupController {
   private slot: WarmSlot | null = null;
+  private preparationAbort: AbortController | null = null;
   private generation = 0;
   private transition: Promise<void> = Promise.resolve();
   private readinessTimer: ReturnType<typeof setTimeout> | null = null;
   private readonly changeListeners = new Set<(slot: WarmSlot | null) => void>();
 
-  constructor(private readonly driver: TorrentWarmupDriver) {}
+  constructor(
+    private readonly driver: TorrentWarmupDriver,
+    private readonly prepareTarget?: (
+      target: PlaybackTarget,
+      playableKey: string,
+      subtitleLanguage?: string,
+      signal?: AbortSignal
+    ) => Promise<unknown>
+  ) {}
 
   getState(): WarmSlot | null {
     return this.slot ? { ...this.slot, range: this.slot.range && { ...this.slot.range } } : null;
@@ -91,6 +100,7 @@ export class TorrentWarmupController {
     playableKey: string,
     options: {
       targetBytes?: number;
+      subtitleLanguage?: string;
     } = {}
   ): Promise<WarmSlot> {
     const { source, filePath } = target;
@@ -102,6 +112,7 @@ export class TorrentWarmupController {
             !this.driver.isPlaybackActive(this.slot.sourceId) &&
             (await this.driver.pauseSource(this.slot.sourceId))
           ) {
+            this.cancelPreparation();
             this.cancelReadinessCheck();
             this.setSlot({ ...this.slot, state: 'paused' });
           }
@@ -132,6 +143,7 @@ export class TorrentWarmupController {
       }
 
       const previous = this.slot;
+      this.cancelPreparation();
       if (previous && previous.state !== 'paused' && previous.state !== 'evicted') {
         this.cancelReadinessCheck();
         if (!this.driver.isPlaybackActive(previous.sourceId)) {
@@ -163,6 +175,16 @@ export class TorrentWarmupController {
         if (!slot) throw new Error('Warmup slot was lost before torrent setup');
         this.setSlot({ ...slot, state: 'adding_torrent' });
         const result = await this.driver.warmSource(target, slot.targetVerifiedBytes, leaseKey);
+        // Metadata is available now. Share inspection with Watch without holding the slot lock.
+        this.preparationAbort = new AbortController();
+        void this.prepareTarget?.(
+          target,
+          playableKey,
+          options.subtitleLanguage,
+          this.preparationAbort.signal
+        ).catch(error => {
+          logger.debug('TorrentWarmupController', 'Speculative playback inspection failed', error);
+        });
         if (this.slot?.generation !== generation) {
           await this.driver.pauseSource(source.id);
           return this.getState()!;
@@ -186,6 +208,7 @@ export class TorrentWarmupController {
         return this.getState()!;
       } catch (error) {
         if (this.slot?.generation === generation) {
+          this.cancelPreparation();
           this.cancelReadinessCheck();
           this.setSlot({ ...this.slot, state: 'failed' });
         }
@@ -204,6 +227,7 @@ export class TorrentWarmupController {
         ? false
         : await this.driver.pauseSource(this.slot.sourceId);
       if (paused) {
+        this.cancelPreparation();
         this.cancelReadinessCheck();
         this.setSlot({ ...this.slot, state: 'paused' });
       }
@@ -224,6 +248,8 @@ export class TorrentWarmupController {
       }
       const promoted = await this.driver.promoteSource(target, ownerKey);
       if (promoted && this.slot?.sourceId === source.id && this.slot.filePath === filePath) {
+        // Watch adopts the in-flight probe; losing speculative focus must not cancel it.
+        this.preparationAbort = null;
         this.cancelReadinessCheck();
         this.setSlot(null);
       }
@@ -232,6 +258,7 @@ export class TorrentWarmupController {
   }
 
   close(): void {
+    this.cancelPreparation();
     this.cancelReadinessCheck();
     const slot = this.slot;
     this.setSlot(null);
@@ -330,6 +357,11 @@ export class TorrentWarmupController {
       verifiedBytes: progress.verifiedBytes,
       progress: Math.min(100, Math.max(0, progress.progress)),
     });
+  }
+
+  private cancelPreparation(): void {
+    this.preparationAbort?.abort();
+    this.preparationAbort = null;
   }
 
   private cancelReadinessCheck(): void {

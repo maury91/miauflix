@@ -76,6 +76,15 @@ describe('subtitle ranking and durable downloads', () => {
     jest.clearAllMocks();
   });
 
+  it('reuses details warm-up search results without another provider request', async () => {
+    const { service, request } = setupTest(directory);
+    request.mockResolvedValueOnce({ ok: true, body: { data: [entry(1, video)] } });
+    await service.warmSearch('tt123', 'en');
+    const result = await service.search('streaming-key', 'user', 'en', false);
+    expect(result.candidates).toHaveLength(1);
+    expect(request).toHaveBeenCalledTimes(1);
+  });
+
   it('discovers local subtitles without provider configuration and shares authorized cached content', async () => {
     const { service, config, torrentSubtitles, request, verify, source } = setupTest(directory);
     config.get.mockReturnValue(undefined);

@@ -188,6 +188,11 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const deliveryRef = useRef(session?.delivery);
   deliveryRef.current = session?.delivery;
   const requestId = useRef(0);
+  const sessionInFlight = useRef<{
+    key: string;
+    promise: Promise<CreatePlaybackSessionResponse>;
+  } | null>(null);
+
   const sessionSubtitleStorageKey = useRef<string | null>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const resumeApplied = useRef(false);
@@ -618,7 +623,15 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     track.addEventListener('load', handleSubtitleLoaded);
     track.addEventListener('error', failed);
     if (track.readyState === 2) handleSubtitleLoaded();
+    const previewTimer = window.setInterval(() => {
+      if (track.readyState === 3) window.clearInterval(previewTimer);
+      if (track.track.cues?.length) {
+        handleSubtitleLoaded();
+        window.clearInterval(previewTimer);
+      }
+    }, 100);
     return () => {
+      window.clearInterval(previewTimer);
       track.removeEventListener('load', handleSubtitleLoaded);
       track.removeEventListener('error', failed);
     };
@@ -634,21 +647,26 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   useEffect(() => {
     const currentRequest = ++requestId.current;
     sessionSubtitleStorageKey.current = null;
-    resetSessionRequest();
+    const sessionKey = JSON.stringify([playable, attempt]);
+    if (sessionInFlight.current?.key !== sessionKey) resetSessionRequest();
     setError(null);
     setStatus('preparing');
     resumeApplied.current = false;
     completedRef.current = false;
     latestProgress.current = null;
 
-    void createSession({
-      playable,
-      preferences: {
-        quality: 'auto',
-        ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
-      },
-    })
-      .unwrap()
+    if (sessionInFlight.current?.key !== sessionKey)
+      sessionInFlight.current = {
+        key: sessionKey,
+        promise: createSession({
+          playable,
+          preferences: {
+            quality: 'auto',
+            ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
+          },
+        }).unwrap(),
+      };
+    void sessionInFlight.current.promise
       .then(result => {
         if (currentRequest !== requestId.current) return;
         setStatus(result.preparation.state === 'warm' ? 'ready' : 'preparing');
@@ -668,7 +686,20 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
 
     return () => {
       requestId.current += 1;
-      if (!completedRef.current) saveProgress('paused');
+      const cleanupRequest = requestId.current;
+      const snapshot = readProgressSnapshot();
+      const completed = completedRef.current;
+      queueMicrotask(() => {
+        // StrictMode immediately sets up the same target again. A real target change
+        // still saves the old target's snapshot before its refs are reused.
+        if (
+          snapshot &&
+          !completed &&
+          (requestId.current === cleanupRequest || sessionInFlight.current?.key !== sessionKey)
+        ) {
+          void dispatch(saveProgressWithRealtime({ playable, ...snapshot, state: 'paused' }));
+        }
+      });
     };
   }, [
     attempt,
@@ -676,6 +707,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     playable,
     resetSessionRequest,
     saveProgress,
+    readProgressSnapshot,
+    dispatch,
     subtitleStorageKey,
     title,
   ]);
@@ -837,6 +870,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
           )}
           <PlayerControls
             videoRef={videoRef}
+            preparing={status !== 'ready'}
             onBack={onBack}
             subtitleSearchPreferences={subtitleSearchPreferences}
             subtitleCues={subtitleCues}

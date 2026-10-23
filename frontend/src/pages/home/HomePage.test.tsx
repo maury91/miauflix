@@ -479,6 +479,15 @@ describe('HomePage focus transitions', () => {
     });
   });
 
+  it('opens a show after a movie even while the skipped movie query retains cached data', () => {
+    useGetMovieQuery.mockReturnValue({ data: { mediaId: 789, title: 'Previous movie' } });
+    useGetShowQuery.mockReturnValue({
+      data: { mediaId: 42, title: 'Selected show', seasons: [], genres: [] },
+    });
+    render(<HomePage route={{ type: 'showDetails', mediaId: 42 }} />);
+    expect(screen.getByTestId('details')).toHaveAttribute('data-media-id', '42');
+  });
+
   it.each([
     ['Close Trakt dialog', false],
     ['Don’t ask again', true],
@@ -496,7 +505,9 @@ describe('HomePage focus transitions', () => {
         .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
       try {
         let view = render(<HomePage />);
-        expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+        expect(
+          await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 })
+        ).toBeInTheDocument();
         expect(getAssociation).toHaveBeenCalledWith('test-session');
         fireEvent.click(screen.getByRole('button', { name: label }));
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -511,7 +522,9 @@ describe('HomePage focus transitions', () => {
         if (permanent) {
           expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         } else {
-          expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+          expect(
+            await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 })
+          ).toBeInTheDocument();
           fireEvent.click(screen.getByRole('button', { name: label }));
         }
         currentSession.mockReturnValue(null);
@@ -522,16 +535,19 @@ describe('HomePage focus transitions', () => {
         if (permanent) {
           expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         } else {
-          expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+          expect(
+            await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 })
+          ).toBeInTheDocument();
         }
       } finally {
         progressSelector.mockRestore();
       }
     },
-    15_000
+    30_000
   );
 
-  it('keeps keyboard input and focus in the Trakt modal until dismissal', async () => {
+  it('postpones the Trakt prompt while handled navigation keys keep arriving', async () => {
+    vi.useFakeTimers();
     const state = { mediaApi: {}, progressApi: {} };
     const emptyProgress: never[] = [];
     currentSession.mockReturnValue('test-session');
@@ -539,41 +555,79 @@ describe('HomePage focus transitions', () => {
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     getAssociation.mockResolvedValue({ data: { connected: false } });
     const row = makeHandle(true, false);
+    row.handleAction.mockReturnValue({ type: 'handled' } as never);
     rowHandles.set(0, row);
     const progressSelector = vi
       .spyOn(progressApi.endpoints.getProgress, 'select')
       .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
+    const view = render(<HomePage />);
     try {
-      render(<HomePage />);
-      const background = screen.getByTestId('card-0');
-      background.focus();
-      await screen.findByRole('dialog', { name: 'Connect Trakt' });
-      const first = screen.getByRole('button', { name: "Let's go" });
-      const close = screen.getByRole('button', { name: 'Close Trakt dialog' });
-      const never = screen.getByRole('button', { name: 'Don’t ask again' });
-      await waitFor(() => expect(first).toHaveFocus());
-      // A late-loading carousel must not be able to reclaim keyboard focus.
-      background.focus();
-      expect(first).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
-      expect(row.handleAction).not.toHaveBeenCalled();
-      fireEvent.keyDown(first, { key: 'ArrowRight' });
-      expect(never).toHaveFocus();
-      fireEvent.keyDown(never, { key: 'Tab' });
-      expect(close).toHaveFocus();
-      fireEvent.keyDown(close, { key: 'Tab' });
-      expect(first).toHaveFocus();
-      fireEvent.keyDown(first, { key: 'Tab', shiftKey: true });
-      expect(close).toHaveFocus();
-      fireEvent.keyDown(close, { key: 'Escape' });
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-      await waitFor(() => expect(background).toHaveFocus());
-      fireEvent.keyDown(background, { key: 'ArrowRight' });
-      expect(row.handleAction).toHaveBeenCalledTimes(1);
+      await act(async () => {});
+      expect(getAssociation).toHaveBeenCalledWith('test-session');
+      for (let press = 0; press < 3; press++) {
+        act(() => vi.advanceTimersByTime(4000));
+        fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
+      }
+      // Each handled key stops propagation at the document; it must still reset the idle timer.
+      expect(row.handleAction).toHaveBeenCalledTimes(3);
+      act(() => vi.advanceTimersByTime(4000));
+      expect(screen.queryByRole('dialog', { name: 'Connect Trakt' })).not.toBeInTheDocument();
+      act(() => vi.advanceTimersByTime(1000));
+      expect(screen.getByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
     } finally {
+      view.unmount();
       progressSelector.mockRestore();
+      vi.useRealTimers();
     }
   });
+
+  it(
+    'keeps keyboard input and focus in the Trakt modal until dismissal',
+    { timeout: 15000 },
+    async () => {
+      const state = { mediaApi: {}, progressApi: {} };
+      const emptyProgress: never[] = [];
+      currentSession.mockReturnValue('test-session');
+      currentUser.mockReturnValue({ id: 'test-user' });
+      selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
+      getAssociation.mockResolvedValue({ data: { connected: false } });
+      const row = makeHandle(true, false);
+      rowHandles.set(0, row);
+      const progressSelector = vi
+        .spyOn(progressApi.endpoints.getProgress, 'select')
+        .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
+      try {
+        render(<HomePage />);
+        const background = screen.getByTestId('card-0');
+        background.focus();
+        await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 });
+        const first = screen.getByRole('button', { name: "Let's go" });
+        const close = screen.getByRole('button', { name: 'Close Trakt dialog' });
+        const never = screen.getByRole('button', { name: 'Don’t ask again' });
+        await waitFor(() => expect(first).toHaveFocus());
+        // A late-loading carousel must not be able to reclaim keyboard focus.
+        background.focus();
+        expect(first).toHaveFocus();
+        fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
+        expect(row.handleAction).not.toHaveBeenCalled();
+        fireEvent.keyDown(first, { key: 'ArrowRight' });
+        expect(never).toHaveFocus();
+        fireEvent.keyDown(never, { key: 'Tab' });
+        expect(close).toHaveFocus();
+        fireEvent.keyDown(close, { key: 'Tab' });
+        expect(first).toHaveFocus();
+        fireEvent.keyDown(first, { key: 'Tab', shiftKey: true });
+        expect(close).toHaveFocus();
+        fireEvent.keyDown(close, { key: 'Escape' });
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        await waitFor(() => expect(background).toHaveFocus());
+        fireEvent.keyDown(background, { key: 'ArrowRight' });
+        expect(row.handleAction).toHaveBeenCalledTimes(1);
+      } finally {
+        progressSelector.mockRestore();
+      }
+    }
+  );
 
   it('keeps Continue Watching stable and opens details when selected', () => {
     const state = { mediaApi: {}, progressApi: {} };

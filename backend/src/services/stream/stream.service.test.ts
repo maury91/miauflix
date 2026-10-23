@@ -8,7 +8,7 @@ import type { Database } from '@database/database';
 import type { DownloadService } from '@services/download/download.service';
 import type { MediaService } from '@services/media/media.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
-import { PlaybackTargetService } from '@services/playback/playback-target.service';
+import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
 
 import { StreamService } from './stream.service';
@@ -89,7 +89,13 @@ describe('StreamService.resolvePlaybackTarget', () => {
     };
     const targets = {
       forMovie: jest.fn().mockResolvedValue(movieTarget),
-      forEpisode: new PlaybackTargetService(database, { resolveLayout: jest.fn() }).forEpisode,
+      forEpisode: jest.fn(
+        async (match: {
+          source: typeof contentSource;
+          videoFilePath: string;
+          matchKind: 'combined' | 'single';
+        }) => ({ source: match.source, filePath: match.videoFilePath, matchKind: match.matchKind })
+      ),
     };
     const service = new StreamService(
       database,

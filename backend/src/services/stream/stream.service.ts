@@ -62,7 +62,7 @@ export class StreamService {
       playable.episodeNumber,
       source.id
     );
-    const target = episodeSource && this.targets.forEpisode({ ...episodeSource, source });
+    const target = episodeSource && (await this.targets.forEpisode({ ...episodeSource, source }));
     return target ? { target, movie: null } : null;
   }
 

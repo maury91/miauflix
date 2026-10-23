@@ -13,6 +13,7 @@ import { filterHevcSources, filterSources } from '@services/stream/stream.util';
 import type { TorrentWarmupController } from './torrent-warmup.controller';
 
 export interface PlaybackPreferences {
+  subtitleLanguage?: string;
   quality: Quality | 'auto';
   allowHevc: boolean;
 }
@@ -42,7 +43,7 @@ export class PlayablePreparationService {
     private readonly sourceService: SourceService,
     private readonly warmup?: TorrentWarmupController,
     private readonly storageService?: StorageService,
-    private readonly targets?: Pick<PlaybackTargetService, 'forMovie'>
+    private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>
   ) {}
 
   /**
@@ -200,7 +201,9 @@ export class PlayablePreparationService {
     options.onSourceSelected?.(selected);
     if (options.through === 'sources')
       return { playable, source: selected, target, state: 'metadata', warmup: emptyWarmup() };
-    return this.finish(playable, selected, options, async () => target);
+    return this.finish(playable, selected, options, async () =>
+      this.targets ? this.targets.forEpisode(match) : target
+    );
   }
 
   /** Movie targets need the source's file list; a missing resolver or file list leaves it unknown. */
@@ -244,7 +247,10 @@ export class PlayablePreparationService {
       slot = await this.warmup.warm(
         target,
         options.ownerKey ?? playableKey(playable),
-        playableKey(playable)
+        playableKey(playable),
+        ...(options.preferences.subtitleLanguage
+          ? [{ subtitleLanguage: options.preferences.subtitleLanguage }]
+          : [])
       );
     } catch (error) {
       if (options.signal?.aborted) throw error;

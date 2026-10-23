@@ -37,7 +37,8 @@
     "test:e2e:vite:headed": "playwright test --config=playwright.config.e2e-vite.ts --headed",
     "test:e2e:vite:debug": "playwright test --config=playwright.config.e2e-vite.ts --debug",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test:e2e:smooth-core-flows": "playwright test --config=playwright.config.smooth-core-flows.ts"
   },
   "dependencies": {
     "@dicebear/collection": "9.2.4",

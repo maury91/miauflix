@@ -8,7 +8,7 @@ import type { DownloadService } from '@services/download/download.service';
 import { isVideoFile } from '@services/download/download.utils';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import { withFile } from '@services/playback/playback-target';
-import { openTorrentInput } from '@services/playback/torrent-input';
+import { openTorrentInput, PROBE_SIZE_BYTES } from '@services/playback/torrent-input';
 
 import { toWebVtt, webVttWindow } from './subtitles.util';
 
@@ -124,14 +124,20 @@ export class TorrentSubtitlesService {
   constructor(private readonly downloads: DownloadService) {}
 
   /** Embedded tracks of the target video plus sidecars that match it inside its source. */
-  async discover(target: PlaybackTarget): Promise<TorrentSubtitle[]> {
+  async discover(
+    target: PlaybackTarget,
+    speculative = false,
+    signal?: AbortSignal
+  ): Promise<TorrentSubtitle[]> {
+    signal?.throwIfAborted();
     const { source, filePath: videoFilePath } = target;
     const layout = await this.downloads.getMediaFiles(target);
     const sidecars = matchingSubtitleFiles(layout, videoFilePath);
-    await this.downloads.prepareSubtitleFiles(
-      target,
-      sidecars.map(track => track.path!)
-    );
+    if (!speculative)
+      await this.downloads.prepareSubtitleFiles(
+        target,
+        sidecars.map(track => track.path!)
+      );
     let embedded: TorrentSubtitle[] = [];
     try {
       const cacheKey = `${source.id}:${videoFilePath}`;
@@ -139,12 +145,20 @@ export class TorrentSubtitlesService {
       if (cached && cached.expires > Date.now()) embedded = await cached.promise;
       else {
         if (this.probes.size >= 64) this.probes.delete(this.probes.keys().next().value!);
-        const promise = this.probe(target).catch(error => {
-          this.probes.delete(cacheKey);
+        const promise = this.probe(target, speculative, signal).catch(error => {
+          if (this.probes.get(cacheKey)?.promise === promise) this.probes.delete(cacheKey);
           throw error;
         });
         this.probes.set(cacheKey, { expires: Date.now() + 15 * 60_000, promise });
-        embedded = await promise;
+        const cancelCache = () => {
+          if (this.probes.get(cacheKey)?.promise === promise) this.probes.delete(cacheKey);
+        };
+        signal?.addEventListener('abort', cancelCache, { once: true });
+        try {
+          embedded = await promise;
+        } finally {
+          signal?.removeEventListener('abort', cancelCache);
+        }
       }
     } catch (error) {
       logger.warn(
@@ -161,15 +175,24 @@ export class TorrentSubtitlesService {
     }));
   }
 
-  private async probe(target: PlaybackTarget): Promise<TorrentSubtitle[]> {
-    const body = await this.run(target, 'ffprobe', [
-      '-select_streams',
-      's',
-      '-show_entries',
-      'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
-      '-of',
-      'json',
-    ]);
+  private async probe(
+    target: PlaybackTarget,
+    speculative = false,
+    signal?: AbortSignal
+  ): Promise<TorrentSubtitle[]> {
+    const body = await this.run(
+      target,
+      'ffprobe',
+      [
+        '-select_streams',
+        's',
+        '-show_entries',
+        'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
+        '-of',
+        'json',
+      ],
+      { speculative, signal }
+    );
     const probe = JSON.parse(body) as {
       streams?: Array<{
         index: number;
@@ -236,15 +259,41 @@ export class TorrentSubtitlesService {
     input: PlaybackTarget,
     program: 'ffmpeg' | 'ffprobe',
     args: string[],
-    { sidecar = false, startSeconds = 0 }: { sidecar?: boolean; startSeconds?: number } = {}
+    {
+      sidecar = false,
+      startSeconds = 0,
+      speculative = false,
+      signal,
+    }: {
+      sidecar?: boolean;
+      startSeconds?: number;
+      speculative?: boolean;
+      signal?: AbortSignal;
+    } = {}
   ): Promise<string> {
+    signal?.throwIfAborted();
     if (this.closed || this.active >= 2) throw new Error('Subtitle preparation is busy');
     this.active++;
+    let active = true;
+    const release = () => {
+      if (active) {
+        active = false;
+        this.active--;
+      }
+    };
+    const cancel = () => {
+      release();
+      if (child) this.processes.delete(child);
+      child?.kill('SIGKILL');
+      void opened?.close();
+    };
+    signal?.addEventListener('abort', cancel, { once: true });
     let opened: Awaited<ReturnType<typeof openTorrentInput>> | undefined;
     let child: ChildProcess | undefined;
     let timeout: ReturnType<typeof setTimeout> | undefined;
     try {
-      opened = await openTorrentInput(this.downloads, input);
+      opened = await openTorrentInput(this.downloads, input, speculative);
+      signal?.throwIfAborted();
       if (this.closed) throw new Error('Subtitle preparation is shutting down');
       const common = [
         '-v',
@@ -268,7 +317,7 @@ export class TorrentSubtitlesService {
               ...(sidecar ? [] : ['-to', String(startSeconds + 120)]),
               ...args,
             ]
-          : [...common, ...args, opened.url],
+          : [...common, '-probesize', String(PROBE_SIZE_BYTES), ...args, opened.url],
         { stdio: ['ignore', 'pipe', 'pipe'] }
       );
       this.processes.add(child);
@@ -303,7 +352,8 @@ export class TorrentSubtitlesService {
       if (timeout) clearTimeout(timeout);
       if (child) this.processes.delete(child);
       await opened?.close();
-      this.active--;
+      signal?.removeEventListener('abort', cancel);
+      release();
     }
   }
 

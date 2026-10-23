@@ -1,11 +1,14 @@
 import { type ChildProcess, spawn } from 'node:child_process';
 
+import { logger } from '@logger';
+
 import type { ConfigService } from '@mytypes/configuration';
+import type { MediaProbeRepository } from '@repositories/media-probe.repository';
 import type { DownloadService } from '@services/download/download.service';
 
 import { FragmentedMp4Timeline } from './fragmented-mp4';
 import type { PlaybackTarget } from './playback-target';
-import { openTorrentInput } from './torrent-input';
+import { openTorrentInput, PROBE_SIZE_BYTES } from './torrent-input';
 
 export interface PlaybackAudioTrack {
   index: number;
@@ -306,14 +309,18 @@ interface ConversionJob {
 
 /** Bounded, disk-free audio conversion over the existing decrypted torrent range reader. */
 export class AudioPlaybackService {
-  private readonly probes = new Map<string, { expires: number; value: Promise<ProbeResult> }>();
+  private readonly probes = new Map<
+    string,
+    { expires: number; value: Promise<ProbeResult>; result?: ProbeResult }
+  >();
   private readonly jobs = new Map<string, ConversionJob>();
   private readonly processes = new Set<ChildProcess>();
   private closed = false;
 
   constructor(
     private readonly downloadService: DownloadService,
-    private readonly config?: ConfigService
+    private readonly config?: ConfigService,
+    private readonly store?: Pick<MediaProbeRepository, 'find' | 'save'>
   ) {}
 
   canConvertHevc(): boolean {
@@ -322,8 +329,11 @@ export class AudioPlaybackService {
 
   async inspect(
     target: PlaybackTarget,
-    preferences: AudioPlaybackPreferences = {}
+    preferences: AudioPlaybackPreferences = {},
+    speculative = false,
+    signal?: AbortSignal
   ): Promise<PlaybackDelivery> {
+    signal?.throwIfAborted();
     if (this.closed) throw new AudioPlaybackError('Audio playback is shutting down.');
     const cacheKey = `${target.source.id}:${target.filePath}`;
     const cached = this.probes.get(cacheKey);
@@ -334,17 +344,72 @@ export class AudioPlaybackService {
         if (entry.expires <= Date.now()) this.probes.delete(id);
       if (this.probes.size >= 64) this.probes.delete(this.probes.keys().next().value!);
     }
-    const value = this.probe(target).catch(error => {
-      if (this.probes.get(cacheKey)?.value === value) this.probes.delete(cacheKey);
-      throw error;
-    });
+    const value = this.storedOrProbe(target, speculative, signal)
+      .then(result => {
+        const entry = this.probes.get(cacheKey);
+        if (entry?.value === value) entry.result = result;
+        return result;
+      })
+      .catch(error => {
+        if (this.probes.get(cacheKey)?.value === value) this.probes.delete(cacheKey);
+        throw error;
+      });
     this.probes.set(cacheKey, { expires: Date.now() + 15 * 60_000, value });
-    return deliveryFromProbe(await value, preferences, this.canConvertHevc());
+    const cancelCache = () => {
+      if (this.probes.get(cacheKey)?.value === value) this.probes.delete(cacheKey);
+    };
+    signal?.addEventListener('abort', cancelCache, { once: true });
+    try {
+      return deliveryFromProbe(await value, preferences, this.canConvertHevc());
+    } finally {
+      signal?.removeEventListener('abort', cancelCache);
+    }
   }
 
-  private async probe(target: PlaybackTarget): Promise<ProbeResult> {
-    const input = await openTorrentInput(this.downloadService, target);
+  /**
+   * Delivery from a probe that already finished, in memory or stored, without starting one.
+   * Null means the file's streams are still unknown.
+   */
+  async knownDelivery(
+    target: PlaybackTarget,
+    preferences: AudioPlaybackPreferences = {}
+  ): Promise<PlaybackDelivery | null> {
+    const cached = this.probes.get(`${target.source.id}:${target.filePath}`);
+    let result = cached && cached.expires > Date.now() ? cached.result : undefined;
+    if (!result) {
+      const stored = await this.store?.find(target.source.id, target.filePath).catch(() => null);
+      if (stored) result = JSON.parse(stored) as ProbeResult;
+    }
+    return result ? deliveryFromProbe(result, preferences, this.canConvertHevc()) : null;
+  }
+
+  /** A torrent file never changes, so a stored probe is reused instead of reading it again. */
+  private async storedOrProbe(
+    target: PlaybackTarget,
+    speculative: boolean,
+    signal?: AbortSignal
+  ): Promise<ProbeResult> {
+    const stored = await this.store?.find(target.source.id, target.filePath).catch(() => null);
+    if (stored) return JSON.parse(stored) as ProbeResult;
+    const result = await this.probe(target, speculative, signal);
+    await this.store
+      ?.save(target.source.id, target.filePath, JSON.stringify(result))
+      .catch(error => logger.warn('AudioPlaybackService', 'Failed to store media probe', error));
+    return result;
+  }
+
+  private async probe(
+    target: PlaybackTarget,
+    speculative = false,
+    signal?: AbortSignal
+  ): Promise<ProbeResult> {
+    logger.debug('AudioPlaybackService', 'Inspecting source audio', {
+      sourceId: target.source.id,
+      speculative,
+    });
+    const input = await openTorrentInput(this.downloadService, target, speculative);
     try {
+      signal?.throwIfAborted();
       if (this.closed || this.processes.size >= 4)
         throw new AudioPlaybackError('Audio preparation is busy. Retry shortly.');
       const child = spawn(
@@ -358,6 +423,9 @@ export class AudioPlaybackService {
           'http,tcp',
           '-format_whitelist',
           'matroska,webm,mov,avi,asf,flv,ogg,mp3',
+          // Container headers carry everything inspected; the 5 MB default waits on extra pieces.
+          '-probesize',
+          String(PROBE_SIZE_BYTES),
           '-show_streams',
           '-show_format',
           '-show_data',
@@ -370,6 +438,12 @@ export class AudioPlaybackService {
         { stdio: ['ignore', 'pipe', 'pipe'] }
       );
       this.processes.add(child);
+      const cancel = () => {
+        this.processes.delete(child);
+        child.kill('SIGKILL');
+        void input.close();
+      };
+      signal?.addEventListener('abort', cancel, { once: true });
       let body = '';
       child.stdout.on('data', chunk => {
         body += chunk.toString();
@@ -394,6 +468,7 @@ export class AudioPlaybackService {
         return JSON.parse(body) as ProbeResult;
       } finally {
         clearTimeout(timeout);
+        signal?.removeEventListener('abort', cancel);
         this.processes.delete(child);
       }
     } finally {
@@ -490,6 +565,7 @@ export class AudioPlaybackService {
       input = await openTorrentInput(this.downloadService, target);
       if (controller.signal.aborted)
         throw new AudioPlaybackError('Audio preparation was cancelled.');
+      const spawnStartedAt = performance.now();
       child = spawn(
         'ffmpeg',
         audioConversionArgs(
@@ -537,7 +613,15 @@ export class AudioPlaybackService {
           if (error) reject(error);
           else resolve();
         };
-        const readable = () => finish();
+        const readable = () => {
+          logger.debug('AudioPlaybackService', 'FFmpeg produced its first output', {
+            sourceId: target.source.id,
+            elapsedMs: Math.round(performance.now() - spawnStartedAt),
+            copyAudio,
+            transcodeVideo: delivery.transcodeVideo === true,
+          });
+          finish();
+        };
         const failed = () =>
           finish(new AudioPlaybackError('FFmpeg is unavailable. Install FFmpeg on the backend.'));
         const closed = () =>

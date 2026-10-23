@@ -82,6 +82,13 @@ const findEncryptedStore = (store: unknown): EncryptedChunkStore | null => {
 };
 
 const MAX_SIDECAR_BYTES = 2 * 1024 * 1024;
+const MATROSKA_TAIL_BYTES = 2 * 1024 * 1024;
+/** Containers whose index may sit at the end of the file, so warmups also fetch the tail. */
+const TAIL_INDEXED_FILE = /\.(mkv|webm|mp4|m4v|mov)$/i;
+/** Pieces, from the one a reader is blocked on, that it selects and marks critical. */
+const READER_WINDOW_PIECES = 2;
+/** Above every claim priority: a reader is waiting on these bytes right now. */
+const READER_PRIORITY = 100;
 const CLAIM_SWEEP_INTERVAL_MS = 60_000;
 
 /** How long a claim of each kind lasts without renewal; null never expires. */
@@ -106,6 +113,18 @@ export interface ClaimRequest {
 /** Reads keep their file wanted for a short while; every range request renews it. */
 const PLAYBACK_CLAIM: ClaimRequest = { kind: 'playback', ownerKey: 'stream' };
 const SIDECAR_SUBTITLE = /\.(srt|vtt|ass|ssa)$/i;
+
+/** WebTorrent's stream selections (what its own file streams use), missing from its typings. */
+type StreamSelectingTorrent = Torrent & {
+  _select(
+    start: number,
+    end: number,
+    priority: number,
+    notify: (() => void) | undefined,
+    isStreamSelection: true
+  ): void;
+  _deselect(start: number, end: number, isStreamSelection: true): void;
+};
 
 export type StorageActivity = 'active' | 'available_offline' | 'inactive' | 'local_only';
 
@@ -417,12 +436,21 @@ export class DownloadService {
       if (!torrent?.files?.length) return;
       this.clearSelection(torrent);
       if (this.pausedSources.has(sourceId)) return;
-      const wanted = new Map<string, { priority: number; whole: boolean; prefix: number }>();
+      const wanted = new Map<
+        string,
+        { priority: number; whole: boolean; prefix: number; tail: boolean }
+      >();
       for (const claim of await this.storageService.getLiveClaims(sourceId)) {
-        const entry = wanted.get(claim.path) ?? { priority: 0, whole: false, prefix: 0 };
+        const entry = wanted.get(claim.path) ?? {
+          priority: 0,
+          whole: false,
+          prefix: 0,
+          tail: false,
+        };
         entry.priority = Math.max(entry.priority, CLAIM_PRIORITY[claim.kind]);
         if (claim.rangeEnd === null) entry.whole = true;
         else entry.prefix = Math.max(entry.prefix, claim.rangeEnd);
+        if (claim.kind === 'warmup' && TAIL_INDEXED_FILE.test(claim.path)) entry.tail = true;
         wanted.set(claim.path, entry);
       }
       const pieceCount = this.getTorrentPieceCount(torrent);
@@ -440,6 +468,16 @@ export class DownloadService {
           pieceCount
         );
         torrent.select(firstPiece, lastPiece, want.priority);
+        if (want.tail) {
+          const tailBytes = Math.min(file.length, MATROSKA_TAIL_BYTES);
+          const tail = this.prefixPieces(
+            Number(file.offset ?? 0) + file.length - tailBytes,
+            tailBytes,
+            torrent.pieceLength,
+            pieceCount
+          );
+          torrent.select(tail.firstPiece, tail.lastPiece, want.priority);
+        }
       }
     });
   }
@@ -754,11 +792,19 @@ export class DownloadService {
           'local_media_incomplete'
         );
       }
+      // Fetch what this reader needs now, even outside claimed ranges (an index at the end of
+      // the file): a stream selection survives selection rebuilds, and critical pieces let
+      // faster peers take over slow requests.
+      const lastPiece = Math.min(pieceIndex + READER_WINDOW_PIECES - 1, torrent.pieces.length - 1);
+      const streamTorrent = torrent as StreamSelectingTorrent;
+      streamTorrent._select(pieceIndex, lastPiece, READER_PRIORITY, undefined, true);
+      torrent.critical(pieceIndex, lastPiece);
       await new Promise<void>((resolve, reject) => {
         const cleanup = () => {
           torrent.removeListener('verified', onVerified);
           torrent.removeListener('close', onClose);
           signal.removeEventListener('abort', onAbort);
+          if (!torrent.destroyed) streamTorrent._deselect(pieceIndex, lastPiece, true);
         };
         const onVerified = () => {
           if (torrent.bitfield?.get(pieceIndex)) {
@@ -1222,7 +1268,12 @@ export class DownloadService {
     const download = await this.startDownload(
       target,
       { kind: 'warmup', ownerKey: leaseKey, rangeEnd: requested },
-      { reservedBytes: requested }
+      {
+        reservedBytes: Math.min(
+          source.size || Infinity,
+          requested + (/\.(mkv|webm)$/i.test(filePath) ? MATROSKA_TAIL_BYTES : 0)
+        ),
+      }
     );
     const file = download.layout.files.find(candidate => candidate.path === filePath)!;
     const pieceLength = download.layout.pieceLength;
@@ -1880,11 +1931,26 @@ export class DownloadService {
    * Based on WebTorrent server implementation
    */
   @traced('DownloadService')
-  async streamFile(target: PlaybackTarget, rangeHeader?: string): Promise<Response> {
+  async streamFile(
+    target: PlaybackTarget,
+    rangeHeader?: string,
+    speculative = false
+  ): Promise<Response> {
     const contentSource = target.source;
     return new Promise((resolve, reject) => {
       const handleRequest = async () => {
-        const download = await this.startDownload(target, PLAYBACK_CLAIM);
+        // Inspection reads an already-warming source without promoting it to active playback.
+        const existing = speculative
+          ? await this.storageService.getStorageBySource(contentSource.id)
+          : null;
+        const download = speculative
+          ? existing?.encryptedLayout && {
+              storage: existing,
+              layout: existing.encryptedLayout,
+              torrent: this.client.torrents.find(item => item.path === existing.location) ?? null,
+            }
+          : await this.startDownload(target, PLAYBACK_CLAIM);
+        if (!download) throw new Error('Speculative media source is no longer available');
         const { torrent, storage, layout } = download;
         const selected = layout.files.find(file => file.path === target.filePath);
         if (!selected) throw new Error('Requested torrent file is unavailable');
@@ -1895,33 +1961,34 @@ export class DownloadService {
           selected.path,
           this.config.getOrThrow('SOURCE_SECURITY_KEY')
         );
-        await this.storageService.withSourceLock(contentSource.id, async () => {
-          if (!(await this.storageService.setPlaybackActive(contentSource.id, true))) {
-            throw new Error(`Storage not found for movie source ${contentSource.id}`);
-          }
-          this.activeStreams += 1;
-          this.activeSourceCounts.set(
-            contentSource.id,
-            (this.activeSourceCounts.get(contentSource.id) ?? 0) + 1
-          );
-          this.changeActiveFileCount(contentSource.id, file.path, 1);
-          if (this.activeStreams === 1) {
-            try {
-              await this.pauseSpeculativeDownloads(contentSource.id);
-            } catch (error) {
-              // Undo admission before propagating startup failure. The stream has
-              // no release callback yet, so leaving these counts set would wedge
-              // future playback and prevent another pause sweep.
-              this.activeStreams = Math.max(0, this.activeStreams - 1);
-              const remaining = (this.activeSourceCounts.get(contentSource.id) ?? 1) - 1;
-              if (remaining > 0) this.activeSourceCounts.set(contentSource.id, remaining);
-              else this.activeSourceCounts.delete(contentSource.id);
-              this.changeActiveFileCount(contentSource.id, file.path, -1);
-              await this.storageService.setPlaybackActive(contentSource.id, false);
-              throw error;
+        if (!speculative)
+          await this.storageService.withSourceLock(contentSource.id, async () => {
+            if (!(await this.storageService.setPlaybackActive(contentSource.id, true))) {
+              throw new Error(`Storage not found for movie source ${contentSource.id}`);
             }
-          }
-        });
+            this.activeStreams += 1;
+            this.activeSourceCounts.set(
+              contentSource.id,
+              (this.activeSourceCounts.get(contentSource.id) ?? 0) + 1
+            );
+            this.changeActiveFileCount(contentSource.id, file.path, 1);
+            if (this.activeStreams === 1) {
+              try {
+                await this.pauseSpeculativeDownloads(contentSource.id);
+              } catch (error) {
+                // Undo admission before propagating startup failure. The stream has
+                // no release callback yet, so leaving these counts set would wedge
+                // future playback and prevent another pause sweep.
+                this.activeStreams = Math.max(0, this.activeStreams - 1);
+                const remaining = (this.activeSourceCounts.get(contentSource.id) ?? 1) - 1;
+                if (remaining > 0) this.activeSourceCounts.set(contentSource.id, remaining);
+                else this.activeSourceCounts.delete(contentSource.id);
+                this.changeActiveFileCount(contentSource.id, file.path, -1);
+                await this.storageService.setPlaybackActive(contentSource.id, false);
+                throw error;
+              }
+            }
+          });
 
         const headers: Record<string, string> = {
           'Accept-Ranges': 'bytes',
@@ -1953,6 +2020,7 @@ export class DownloadService {
         const abortController = new AbortController();
         let releasePromise: Promise<void> | undefined;
         const release = (): Promise<void> => {
+          if (speculative) return Promise.resolve();
           if (releasePromise) return releasePromise;
           this.activeStreams = Math.max(0, this.activeStreams - 1);
           const remaining = (this.activeSourceCounts.get(contentSource.id) ?? 1) - 1;

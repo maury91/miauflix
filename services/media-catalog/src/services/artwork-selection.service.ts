@@ -28,12 +28,10 @@ export interface ArtworkUpdate {
 const RETRY_DELAY_MS = 60 * 60_000;
 const SCOPE = 'ArtworkSelection';
 
-function displayLogoUrl(url: string): string {
-  return url.replace('/w300/', '/original/');
-}
-
 function analysisLogoUrl(url: string): string {
-  return url.replace('/original/', '/w300/');
+  return url.startsWith('/') && !url.startsWith('//')
+    ? `https://image.tmdb.org/t/p/w300${url}`
+    : url.replace('/original/', '/w300/');
 }
 
 function targetResult(
@@ -141,14 +139,13 @@ export class ArtworkSelectionService {
 
   private readCandidates(value: string | null, fallback: string): ArtworkCandidate[] {
     const candidates = value ? parseCandidates(value) : [];
-    if (candidates.length)
-      return candidates.map(candidate => ({ ...candidate, url: displayLogoUrl(candidate.url) }));
+    if (candidates.length) return candidates;
     // Existing provider rows have one display logo but no candidate list. Hydration
     // refreshes them; retain that logo as a usable single-candidate fallback meanwhile.
     return fallback
       ? [
           {
-            url: displayLogoUrl(fallback),
+            url: fallback,
             language: 'en',
             width: 0,
             height: 0,
