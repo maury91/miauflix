@@ -46,7 +46,7 @@ export const createStorageRoutes = (
             sourceId: storage.sourceId,
             title:
               storage.contentSource?.movies?.[0]?.movie?.title ?? `Download ${storage.sourceId}`,
-            fileName: storage.selectedFiles?.find(isVideoFile)?.split('/').pop() ?? null,
+            fileName: storage.requestedFiles.find(isVideoFile)?.split('/').pop() ?? null,
             quality: storage.contentSource?.quality ?? null,
             physicalBytes: storage.allocatedBytes,
             reservedBytes: storage.reservedBytes,

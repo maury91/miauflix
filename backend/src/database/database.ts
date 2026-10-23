@@ -26,6 +26,8 @@ import { QrLoginRequest } from '@entities/qr-login-request.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
+import { StorageFile } from '@entities/storage-file.entity';
+import { StorageFileClaim } from '@entities/storage-file-claim.entity';
 import { StreamingKey } from '@entities/streaming-key.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { User } from '@entities/user.entity';
@@ -39,6 +41,7 @@ import { ProgressRepository } from '@repositories/progress.repository';
 import { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { StorageRepository } from '@repositories/storage.repository';
+import { StorageFileRepository } from '@repositories/storage-file.repository';
 import { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
@@ -121,6 +124,7 @@ export class Database {
   private auditLogRepository: AuditLogRepository;
   private qrLoginRequestRepository: QrLoginRequestRepository;
   private storageRepository: StorageRepository;
+  private storageFileRepository: StorageFileRepository;
   private streamingKeyRepository: StreamingKeyRepository;
   private progressRepository: ProgressRepository;
   private playbackGrantRepository: PlaybackGrantRepository;
@@ -159,6 +163,8 @@ export class Database {
         BackgroundJob,
         QrLoginRequest,
         Storage,
+        StorageFile,
+        StorageFileClaim,
         StreamingKey,
         Progress,
         PlaybackGrant,
@@ -182,6 +188,7 @@ export class Database {
     this.auditLogRepository = new AuditLogRepository(this);
     this.qrLoginRequestRepository = new QrLoginRequestRepository(this);
     this.storageRepository = new StorageRepository(this);
+    this.storageFileRepository = new StorageFileRepository(this);
     await this.storageRepository.resetActiveStreams();
     this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this);
@@ -267,6 +274,10 @@ export class Database {
 
   public getQrLoginRequestRepository() {
     return this.qrLoginRequestRepository;
+  }
+
+  public getStorageFileRepository() {
+    return this.storageFileRepository;
   }
 
   public getStorageRepository() {

@@ -18,7 +18,7 @@ const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
     activeStreams: 0,
     localOnly: false,
     location: '/private/downloads/movie',
-    selectedFiles: ['Movie (2020)/movie.mkv', 'Movie (2020)/movie.en.srt'],
+    requestedFiles: ['Movie (2020)/movie.mkv', 'Movie (2020)/movie.en.srt'],
     contentSource: {
       quality: '1080p',
       hash: 'must-not-be-returned',

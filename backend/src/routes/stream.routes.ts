@@ -33,7 +33,10 @@ export const createStreamRoutes = ({
           return context.json({ error: 'Episode file is unavailable' }, 404);
         const resolved = await streamService.resolvePlaybackTarget(grant);
         if (!resolved) return context.json({ error: 'Playback grant does not match source' }, 403);
-        await downloadService.predownload(resolved.target);
+        await downloadService.predownload(resolved.target, {
+          kind: 'prefetch',
+          ownerKey: `next:${grant.userId}:${grant.playableKey}`,
+        });
         return context.body(null, 202);
       }
     )

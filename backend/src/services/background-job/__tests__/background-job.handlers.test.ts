@@ -103,11 +103,10 @@ describe('watchlist TV acquisition', () => {
     expect(sourceService.getSourcesForEpisodeWithOnDemandSearch).toHaveBeenCalledWith(
       expect.objectContaining({ episodeId: 108, seasonNumber: 1, episodeNumber: 8 })
     );
-    expect(downloadService.predownload).toHaveBeenCalledWith({
-      source: episodeSource.source,
-      filePath: 'Show.S01E08.mkv',
-      matchKind: 'single',
-    });
+    expect(downloadService.predownload).toHaveBeenCalledWith(
+      { source: episodeSource.source, filePath: 'Show.S01E08.mkv', matchKind: 'single' },
+      { kind: 'watchlist', ownerKey: 'watchlist:tv:9001' }
+    );
   });
 
   it.each(['playing', 'paused'] as const)(

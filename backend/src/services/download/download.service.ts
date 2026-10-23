@@ -11,7 +11,14 @@ import WebTorrent from 'webtorrent';
 
 import type { ContentSource } from '@entities/content-source.entity';
 import type { EncryptedStorageLayout, Storage } from '@entities/storage.entity';
+import type { StorageFile } from '@entities/storage-file.entity';
+import {
+  CLAIM_PRIORITY,
+  type ClaimKind,
+  SPECULATIVE_CLAIMS,
+} from '@entities/storage-file-claim.entity';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
+import type { ClaimInput } from '@repositories/storage-file.repository';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import { withFile } from '@services/playback/playback-target';
 import type { RequestService } from '@services/request/request.service';
@@ -63,6 +70,29 @@ export interface WarmupResult {
 }
 
 const MAX_SIDECAR_BYTES = 2 * 1024 * 1024;
+const CLAIM_SWEEP_INTERVAL_MS = 60_000;
+
+/** How long a claim of each kind lasts without renewal; null never expires. */
+export const CLAIM_TTL_MS: Record<ClaimKind, number | null> = {
+  playback: 2 * 60_000,
+  prefetch: 24 * 60 * 60_000,
+  warmup: 10 * 60_000,
+  watched: null,
+  watchlist: 30 * 60_000,
+};
+
+/** One owner's request for a file; see StorageFileClaim. */
+export interface ClaimRequest {
+  kind: ClaimKind;
+  ownerKey: string;
+  /** Wanted prefix in bytes; omitted wants the whole file. */
+  rangeEnd?: number;
+  /** Lifetime override; defaults to CLAIM_TTL_MS, null never expires. */
+  ttlMs?: number | null;
+}
+
+/** Reads keep their file wanted for a short while; every range request renews it. */
+const PLAYBACK_CLAIM: ClaimRequest = { kind: 'playback', ownerKey: 'stream' };
 const SIDECAR_SUBTITLE = /\.(srt|vtt|ass|ssa)$/i;
 
 export type StorageActivity = 'active' | 'available_offline' | 'inactive' | 'local_only';
@@ -95,7 +125,10 @@ export class DownloadService {
   private readonly torrentStartPromises = new Map<string, Promise<Torrent>>();
   private readonly pausedForPlayback = new Set<number>();
   private readonly seedTimers = new Map<number, NodeJS.Timeout>();
-  private readonly warmupSelections = new Map<number, { firstPiece: number; lastPiece: number }>();
+  /** Sources whose selection is held empty (warmup pause or yielding to playback). */
+  private readonly pausedSources = new Set<number>();
+  private readonly selectionTails = new Map<number, Promise<void>>();
+  private readonly claimSweep: NodeJS.Timeout;
   private _initStatus: ServiceInstanceStatus = {
     status: 'initializing',
     details: 'Starting up',
@@ -139,6 +172,8 @@ export class DownloadService {
       logger.error('DownloadService', 'Error:', error.message, error);
     });
     config.registerService('DOWNLOAD', this);
+    this.claimSweep = setInterval(() => void this.sweepExpiredClaims(), CLAIM_SWEEP_INTERVAL_MS);
+    this.claimSweep.unref?.();
     void this.init();
 
     const cleanupStorage = async (storage: Storage, strict: boolean): Promise<void> => {
@@ -165,7 +200,7 @@ export class DownloadService {
       }
       await rm(storage.location, { recursive: true, force: true });
       marker.physicalCleanupDone = true;
-      this.warmupSelections.delete(storage.sourceId);
+      this.pausedSources.delete(storage.sourceId);
       this.pausedForPlayback.delete(storage.sourceId);
     };
 
@@ -185,8 +220,7 @@ export class DownloadService {
   }
 
   getStorageActivity(
-    storage: Pick<Storage, 'encryptedLayout' | 'localOnly' | 'location' | 'videoCompletedAt'> & {
-      selectedFiles?: string[];
+    storage: Pick<Storage, 'localOnly' | 'location' | 'videoCompletedAt'> & {
       contentSource?: { hash: string } | null;
     }
   ): StorageActivitySnapshot {
@@ -196,20 +230,9 @@ export class DownloadService {
         ? item.infoHash?.toLowerCase() === sourceHash.toLowerCase()
         : item.path === storage.location
     );
-    let videoComplete =
+    // videoCompletedAt is set as soon as every claimed file verifies (see recordCompletion).
+    const videoComplete =
       Boolean(storage.videoCompletedAt) || storage.localOnly || Boolean(torrent?.done);
-    if (!videoComplete && torrent?.ready) {
-      try {
-        const layout = storage.encryptedLayout ?? this.createEncryptedLayout(torrent);
-        const selected = storage.selectedFiles ?? [];
-        videoComplete =
-          selected.length > 0 &&
-          selected.every(path => isFileCompleteInBitfield(layout, path, torrent.bitfield?.buffer));
-      } catch {
-        // Metadata can be incomplete while a torrent is being admitted.
-        videoComplete = false;
-      }
-    }
     const activity: StorageActivity = videoComplete
       ? storage.localOnly
         ? 'local_only'
@@ -255,6 +278,8 @@ export class DownloadService {
         await mkdir(downloadPath, { recursive: true });
         await access(downloadPath, constants.W_OK);
         this._initStatus = { status: 'ready' };
+        // Nothing is streaming yet; playback claims from a previous run are stale.
+        await this.storageService.deleteClaims({ kind: 'playback' });
         await this.restoreCompletedDownloads();
       } catch (err) {
         this._initStatus = {
@@ -273,6 +298,7 @@ export class DownloadService {
   }
 
   async close(): Promise<void> {
+    clearInterval(this.claimSweep);
     for (const timer of this.seedTimers.values()) clearTimeout(timer);
     this.seedTimers.clear();
     await new Promise<void>((resolve, reject) => {
@@ -314,21 +340,136 @@ export class DownloadService {
     };
   }
 
-  /** Record completion once every file requested from the source is verified. */
-  private async maybeMarkVideoComplete(
+  /**
+   * Mark files complete as their pieces verify, then the source once every claimed file is,
+   * which starts its seeding window.
+   */
+  private async recordCompletion(
     torrent: Torrent,
     sourceId: number,
     layout: EncryptedStorageLayout
   ): Promise<void> {
-    const current = await this.storageService.getStorageBySource(sourceId);
-    const selected = current?.selectedFiles ?? [];
-    if (
-      !selected.length ||
-      !selected.every(path => isFileCompleteInBitfield(layout, path, torrent.bitfield?.buffer))
-    )
-      return;
+    const bitfield = torrent.bitfield?.buffer;
+    const files = await this.storageService.getFiles(sourceId);
+    const newlyComplete = files
+      .filter(file => !file.completedAt && isFileCompleteInBitfield(layout, file.path, bitfield))
+      .map(file => file.path);
+    await this.storageService.markFilesComplete(sourceId, newlyComplete);
+    const complete = new Set([
+      ...files.filter(file => file.completedAt).map(file => file.path),
+      ...newlyComplete,
+    ]);
+    const claimed = await this.storageService.getClaimedPaths(sourceId);
+    if (!claimed.length || !claimed.every(path => complete.has(path))) return;
     const storage = await this.storageService.markVideoComplete(sourceId, layout);
     if (storage) this.scheduleSeedExpiry(storage);
+  }
+
+  private claimInput(claim: ClaimRequest): ClaimInput {
+    const ttlMs = claim.ttlMs === undefined ? CLAIM_TTL_MS[claim.kind] : claim.ttlMs;
+    return {
+      kind: claim.kind,
+      ownerKey: claim.ownerKey,
+      rangeEnd: claim.rangeEnd ?? null,
+      expiresAt: ttlMs === null ? null : new Date(Date.now() + ttlMs),
+    };
+  }
+
+  /** Run selection changes for one source in order, so the last applied state is the newest. */
+  private serializeSelection(sourceId: number, operation: () => Promise<void>): Promise<void> {
+    const run = (this.selectionTails.get(sourceId) ?? Promise.resolve()).then(operation);
+    const tail = run.catch(() => undefined);
+    this.selectionTails.set(sourceId, tail);
+    void tail.then(() => {
+      if (this.selectionTails.get(sourceId) === tail) this.selectionTails.delete(sourceId);
+    });
+    return run;
+  }
+
+  /**
+   * Apply the union of a source's live claims to its attached torrent: whole files at their
+   * highest claim priority, prefix-only claims as piece ranges, everything else deselected.
+   * A paused source keeps nothing selected until it is resumed.
+   */
+  private reconcileSelection(sourceId: number): Promise<void> {
+    return this.serializeSelection(sourceId, async () => {
+      const storage = await this.storageService.getStorageBySource(sourceId);
+      const torrent = storage && this.client.torrents.find(item => item.path === storage.location);
+      if (!torrent?.files?.length) return;
+      this.clearSelection(torrent);
+      if (this.pausedSources.has(sourceId)) return;
+      const wanted = new Map<string, { priority: number; whole: boolean; prefix: number }>();
+      for (const claim of await this.storageService.getLiveClaims(sourceId)) {
+        const entry = wanted.get(claim.path) ?? { priority: 0, whole: false, prefix: 0 };
+        entry.priority = Math.max(entry.priority, CLAIM_PRIORITY[claim.kind]);
+        if (claim.rangeEnd === null) entry.whole = true;
+        else entry.prefix = Math.max(entry.prefix, claim.rangeEnd);
+        wanted.set(claim.path, entry);
+      }
+      const pieceCount = this.getTorrentPieceCount(torrent);
+      for (const [path, want] of wanted) {
+        const file = torrent.files.find(candidate => candidate.path === path);
+        if (!file) continue;
+        if (want.whole) {
+          file.select(want.priority);
+          continue;
+        }
+        const { firstPiece, lastPiece } = this.prefixPieces(
+          Number(file.offset ?? 0),
+          Math.min(want.prefix, file.length),
+          torrent.pieceLength,
+          pieceCount
+        );
+        torrent.select(firstPiece, lastPiece, want.priority);
+      }
+    });
+  }
+
+  /** File and piece selections are independent in WebTorrent; clear both. */
+  private clearSelection(torrent: Torrent): void {
+    torrent.files?.forEach(file => file.deselect());
+    const pieceCount = torrent.pieces?.length ?? 0;
+    if (pieceCount > 0) torrent.deselect?.(0, pieceCount - 1);
+  }
+
+  /** Smallest piece range covering `bytes` from the start of a file at `offset`. */
+  private prefixPieces(
+    offset: number,
+    bytes: number,
+    pieceLength: number,
+    pieceCount: number
+  ): { firstPiece: number; lastPiece: number } {
+    const firstPiece = Math.max(0, Math.floor(offset / pieceLength));
+    const lastPiece = Math.min(
+      pieceCount - 1,
+      Math.max(firstPiece, Math.ceil((offset + Math.max(1, bytes)) / pieceLength) - 1)
+    );
+    return { firstPiece, lastPiece };
+  }
+
+  /** Re-apply selection after claims changed outside a download request, then check completion. */
+  private async refreshClaims(sourceId: number): Promise<void> {
+    await this.reconcileSelection(sourceId);
+    const storage = await this.storageService.getStorageBySource(sourceId);
+    const torrent = storage && this.client.torrents.find(item => item.path === storage.location);
+    if (torrent?.ready && storage?.encryptedLayout)
+      await this.recordCompletion(torrent, sourceId, storage.encryptedLayout);
+  }
+
+  /** Drop expired claims and stop downloading what nobody wants any more. */
+  async sweepExpiredClaims(): Promise<void> {
+    try {
+      const sourceIds = await this.storageService.deleteClaims({ expiredAt: new Date() });
+      for (const sourceId of sourceIds) await this.refreshClaims(sourceId);
+    } catch (error) {
+      logger.warn('DownloadService', 'Failed to sweep expired storage claims', error);
+    }
+  }
+
+  /** Withdraw one owner's claims on a source (for example a removed watchlist entry). */
+  async releaseClaims(sourceId: number, ownerKey: string, kind?: ClaimKind): Promise<void> {
+    await this.storageService.releaseClaims(sourceId, { ownerKey, kind });
+    await this.refreshClaims(sourceId);
   }
 
   private withSourceFilenameSalt(
@@ -376,8 +517,7 @@ export class DownloadService {
             this.createEncryptedLayout(torrent, current.contentSource.hash);
           const layout = this.withSourceFilenameSalt(savedLayout, current.contentSource.hash);
           await this.storageService.updateEncryptedLayout(current.sourceId, layout);
-          for (const path of current.selectedFiles ?? [])
-            torrent.files.find(file => file.path === path)?.select();
+          await this.storageService.recordFiles(current.sourceId, layout);
           this.trackTorrent(torrent, current.sourceId, layout);
           this.scheduleSeedExpiry(current);
         });
@@ -388,6 +528,9 @@ export class DownloadService {
           error
         );
       }
+      await this.reconcileSelection(storage.sourceId).catch(error =>
+        logger.warn('DownloadService', `Could not reselect source ${storage.sourceId}`, error)
+      );
     }
   }
 
@@ -641,21 +784,22 @@ export class DownloadService {
   @traced('DownloadService')
   async startDownload(
     target: PlaybackTarget,
+    claim: ClaimRequest,
     options: {
-      retentionClass?: 'speculative' | 'watched';
       /** Admission charge used only while the source's file list is still unknown. */
       reservedBytes?: number;
-      speculativeExpiresAt?: Date | null;
     } = {}
   ): Promise<GreedyDownload> {
     const { source, filePath } = target;
+    const speculative = SPECULATIVE_CLAIMS.includes(claim.kind);
     try {
       logger.info('DownloadService', `Starting download for source ${source.id}`);
 
       const existingStorage = await this.storageService.getStorageBySource(source.id);
+      const claimedPaths = await this.storageService.getClaimedPaths(source.id);
       const reservation = await this.getSelectedFilesReservation(
         source,
-        [...new Set([...(existingStorage?.selectedFiles ?? []), filePath])],
+        [...new Set([...claimedPaths, filePath])],
         existingStorage?.encryptedLayout ?? undefined
       );
 
@@ -665,12 +809,12 @@ export class DownloadService {
         size: source.size || 0,
         downloadedPieces: new Uint8Array(0),
         totalPieces: 0,
-        retentionClass: options.retentionClass,
+        speculative,
         reservedBytes: reservation.known
           ? reservation.bytes
-          : (options.reservedBytes ?? (options.retentionClass === 'speculative' ? 0 : source.size)),
+          : (options.reservedBytes ?? (speculative ? 0 : source.size)),
         partialReservation: reservation.known,
-        speculativeExpiresAt: options.speculativeExpiresAt,
+        claim: { path: filePath, input: this.claimInput(claim) },
       });
 
       const start = await this.storageService.withSourceLock(source.id, async () => {
@@ -680,14 +824,30 @@ export class DownloadService {
         }
         const savedLayout = current.encryptedLayout ?? (await this.recoverEncryptedLayout(source));
         if (savedLayout) this.assertFileInLayout(savedLayout, filePath);
+        const stored = Boolean(
+          savedLayout &&
+            this.isFileStored(
+              current,
+              savedLayout,
+              filePath,
+              await this.storageService.getFiles(source.id)
+            )
+        );
+        current =
+          (await this.storageService.claimFile(
+            source.id,
+            filePath,
+            this.claimInput(claim),
+            stored
+          )) ?? current;
 
         // A fully stored file is read from disk; the torrent stays as it is.
-        if (savedLayout && this.isFileStored(current, savedLayout, filePath)) {
+        if (stored && savedLayout) {
           const layout = this.withSourceFilenameSalt(savedLayout, source.hash);
           if (layout.filenameSalt !== current.encryptedLayout?.filenameSalt) {
             await this.storageService.updateEncryptedLayout(source.id, layout);
           }
-          await this.storageService.selectTorrentFile(source.id, filePath, true);
+          await this.storageService.recordFiles(source.id, layout);
           const expired = Boolean(
             current.videoCompletedAt &&
               Date.now() >= current.videoCompletedAt.getTime() + this.getSeedDurationMs()
@@ -702,29 +862,24 @@ export class DownloadService {
           };
         }
 
-        // Requesting an incomplete file reopens a completed source and cancels its seed window.
-        await this.storageService.selectTorrentFile(source.id, filePath, false);
+        // Claiming an incomplete file reopened the source; its seed window no longer applies.
         const timer = this.seedTimers.get(source.id);
         if (timer) clearTimeout(timer);
         this.seedTimers.delete(source.id);
-        current = (await this.storageService.reactivateTorrent(source.id)) ?? current;
 
         // Serialize torrent startup against expiry detachment and storage deletion.
         const torrent = await this.addTorrentWithLock(source, current);
         const layout = this.createEncryptedLayout(torrent, source.hash);
         this.assertFileInLayout(layout, filePath);
         await this.storageService.updateEncryptedLayout(source.id, layout);
-        const selectedStorage = await this.storageService.getStorageBySource(source.id);
+        await this.storageService.recordFiles(source.id, layout);
         const required = await this.getSelectedFilesReservation(
           source,
-          selectedStorage?.selectedFiles ?? [filePath],
+          await this.storageService.getClaimedPaths(source.id),
           layout
         );
-        if (required.known) {
-          if (options.retentionClass === 'speculative')
-            await this.storageService.reserveSpeculativeStorage(source.id, required.bytes);
-          else await this.storageService.reserveStorage(source.id, required.bytes);
-        }
+        if (required.known)
+          await this.storageService.reserveStorage(source.id, required.bytes, speculative);
         return {
           sourceId: source.id,
           torrent,
@@ -735,6 +890,8 @@ export class DownloadService {
         };
       });
 
+      // An explicit request resumes a paused source; background callers pause again if needed.
+      this.pausedSources.delete(source.id);
       if (!start.torrent) {
         if (start.shouldDetach) {
           try {
@@ -753,7 +910,6 @@ export class DownloadService {
 
       const { torrent, layout } = start;
       const totalPieces = this.getTorrentPieceCount(torrent);
-      const latestStorage = await this.storageService.getStorageBySource(source.id);
 
       // Patch storage with correct totalPieces and size after torrent is ready
       await this.storageService.updateDownloadProgress({
@@ -767,13 +923,14 @@ export class DownloadService {
         totalPieces,
         torrent.pieceLength,
         torrent.length,
-        this.getSelectedBytes(layout, latestStorage?.selectedFiles ?? [filePath])
+        this.getSelectedBytes(layout, await this.storageService.getClaimedPaths(source.id))
       );
       await this.storageService.reconcileAllocation(source.id);
 
       // Set up bitfield tracking
       this.trackTorrent(torrent, source.id, layout);
-      await this.maybeMarkVideoComplete(torrent, source.id, layout);
+      await this.reconcileSelection(source.id);
+      await this.recordCompletion(torrent, source.id, layout);
 
       logger.info(
         'DownloadService',
@@ -793,19 +950,16 @@ export class DownloadService {
     }
   }
 
-  /**
-   * A file is stored when its pieces are verified, or when it was requested from a source that
-   * is already marked complete (completion is cleared whenever an incomplete file is requested).
-   */
+  /** A file is stored when its pieces are verified or it was recorded complete. */
   private isFileStored(
-    storage: Pick<Storage, 'downloadedPieces' | 'localOnly' | 'selectedFiles' | 'videoCompletedAt'>,
+    storage: Pick<Storage, 'downloadedPieces'>,
     layout: EncryptedStorageLayout,
-    filePath: string
+    filePath: string,
+    files: StorageFile[]
   ): boolean {
     return (
       isFileCompleteInBitfield(layout, filePath, storage.downloadedPieces) ||
-      (Boolean(storage.localOnly || storage.videoCompletedAt) &&
-        (storage.selectedFiles ?? []).includes(filePath))
+      Boolean(files.find(file => file.path === filePath)?.completedAt)
     );
   }
 
@@ -843,7 +997,7 @@ export class DownloadService {
       size: source.size || 0,
       downloadedPieces: new Uint8Array(0),
       totalPieces: 0,
-      retentionClass: 'speculative',
+      speculative: true,
       reservedBytes: 0,
     });
     return this.storageService.withSourceLock(source.id, async () => {
@@ -855,6 +1009,7 @@ export class DownloadService {
       const torrent = await this.addTorrentWithLock(source, current);
       const layout = this.createEncryptedLayout(torrent, source.hash);
       await this.storageService.updateEncryptedLayout(source.id, layout);
+      await this.storageService.recordFiles(source.id, layout);
       return layout;
     });
   }
@@ -906,72 +1061,56 @@ export class DownloadService {
   }
 
   /**
-   * Start or reuse a speculative download and select the smallest piece-aligned
-   * prefix of the target file that covers the byte target, capped at the file end.
-   * A source already retained as watched keeps the full file selected.
+   * Claim the smallest piece-aligned prefix of the target file that covers the byte target,
+   * capped at the file end, for one warmup lease. A whole-file claim by anyone else on the same
+   * file keeps the full file selected.
    *
-   * @param speculativeExpiresAt Expiry for speculative retention, or null for no supplied expiry.
    * @returns Inclusive piece indices and their actual byte length, which can exceed the target.
    * @throws Propagates download failures, including a target file missing from the source.
    */
   async warmSource(
     target: PlaybackTarget,
     targetBytes: number,
-    speculativeExpiresAt: Date | null = null
+    leaseKey: string
   ): Promise<WarmupResult> {
     const { source, filePath } = target;
     const requested = Math.max(1, Math.min(Math.floor(targetBytes), source.size || targetBytes));
-    const download = await this.startDownload(target, {
-      retentionClass: 'speculative',
-      reservedBytes: requested,
-      speculativeExpiresAt,
-    });
-    const layoutFile = download.layout.files.find(file => file.path === filePath)!;
-    const pieceLength = download.layout.pieceLength;
-    if (!download.torrent) {
-      const firstPiece = Math.floor(layoutFile.offset / pieceLength);
-      const lastPiece = Math.floor(
-        (layoutFile.offset + Math.min(requested, layoutFile.length) - 1) / pieceLength
-      );
-      return { sourceId: source.id, filePath, targetBytes: requested, firstPiece, lastPiece };
-    }
-    const file = download.torrent.files.find(candidate => candidate.path === filePath);
-    if (!file)
-      throw new ErrorWithStatus(
-        'Requested file is not part of this source',
-        'source_file_unavailable'
-      );
-    const fileOffset = Number(file.offset ?? 0);
-    const firstPiece = Math.max(0, Math.floor(fileOffset / pieceLength));
-    const lastPiece = Math.min(
-      this.getTorrentPieceCount(download.torrent) - 1,
-      Math.max(
-        firstPiece,
-        Math.ceil((fileOffset + Math.min(requested, file.length)) / pieceLength) - 1
-      )
+    const download = await this.startDownload(
+      target,
+      { kind: 'warmup', ownerKey: leaseKey, rangeEnd: requested },
+      { reservedBytes: requested }
     );
-    const selectedTargetBytes = this.getRangeByteLength(download.torrent, firstPiece, lastPiece);
-
-    if (download.storage.retentionClass === 'watched') {
-      // A watched row may survive a torrent restart, so restore its full selection.
-      this.warmupSelections.delete(source.id);
-      file.select();
-    } else {
-      file.deselect();
-      download.torrent.select(firstPiece, lastPiece, 1);
-      this.warmupSelections.set(source.id, { firstPiece, lastPiece });
-    }
+    const file = download.layout.files.find(candidate => candidate.path === filePath)!;
+    const pieceLength = download.layout.pieceLength;
+    const pieceCount = download.torrent
+      ? this.getTorrentPieceCount(download.torrent)
+      : Math.ceil(
+          download.layout.files.reduce((total, item) => total + item.length, 0) / pieceLength
+        );
+    const { firstPiece, lastPiece } = this.prefixPieces(
+      file.offset,
+      Math.min(requested, file.length),
+      pieceLength,
+      pieceCount
+    );
     return {
       sourceId: source.id,
       filePath,
-      targetBytes: selectedTargetBytes,
+      targetBytes: download.torrent
+        ? this.getRangeByteLength(download.torrent, firstPiece, lastPiece)
+        : requested,
       firstPiece,
       lastPiece,
     };
   }
 
+  /** Stop warming a source: its warmup claims are released; other owners' claims continue. */
   async pauseSource(sourceId: number): Promise<boolean> {
-    return this.pauseDownload(sourceId);
+    const storage = await this.storageService.getStorageBySource(sourceId);
+    if (!storage) return false;
+    await this.storageService.releaseClaims(sourceId, { kind: 'warmup' });
+    await this.reconcileSelection(sourceId);
+    return true;
   }
 
   /**
@@ -1114,42 +1253,23 @@ export class DownloadService {
     return total;
   }
 
-  /** Promote the already-added source; no source ranking or replacement occurs. */
-  async promoteSource(target: PlaybackTarget): Promise<boolean> {
-    const { source, filePath } = target;
-    const download = await this.startDownload(target, { retentionClass: 'watched' });
-    if (!download.torrent) {
-      await this.storageService.markAsAccessed(source.id);
-      return true;
-    }
-    const file = download.torrent.files.find(candidate => candidate.path === filePath);
-    if (!file) return false;
-    this.warmupSelections.delete(source.id);
-    file.select();
-    await this.storageService.markAsAccessed(source.id);
+  /** Keep the target file for a viewer; no source ranking or replacement occurs. */
+  async promoteSource(target: PlaybackTarget, ownerKey: string): Promise<boolean> {
+    await this.startDownload(target, { kind: 'watched', ownerKey });
+    await this.storageService.markAsAccessed(target.source.id);
     return true;
   }
 
   /**
-   * Download one file in the background while preserving the playback reserve. Within a shared
-   * source the playing file keeps higher piece priority; another source waits only until active
-   * playback has fully buffered its file.
+   * Download one file in the background for a claim owner while preserving the playback reserve.
+   * Within a shared source the playing file keeps higher piece priority; another source waits
+   * only until active playback has fully buffered its file.
    */
-  async predownload(target: PlaybackTarget): Promise<boolean> {
-    const { source, filePath } = target;
-    if (await this.isFileComplete(source.id, filePath)) return true;
-    const download = await this.startDownload(target, { retentionClass: 'speculative' });
+  async predownload(target: PlaybackTarget, claim: ClaimRequest): Promise<boolean> {
+    const { source } = target;
+    const download = await this.startDownload(target, claim);
     if (!download.torrent) return true;
-    const file = download.torrent.files.find(candidate => candidate.path === filePath);
-    if (!file)
-      throw new ErrorWithStatus(
-        'Requested file is not part of this source',
-        'source_file_unavailable'
-      );
-
     await this.storageService.withSourceLock(source.id, async () => {
-      this.warmupSelections.delete(source.id);
-      file.select(1);
       if (
         this.activeStreams > 0 &&
         !this.activeSourceCounts.get(source.id) &&
@@ -1163,15 +1283,13 @@ export class DownloadService {
 
   async isFileComplete(sourceId: number, filePath: string): Promise<boolean> {
     const storage = await this.storageService.getStorageBySource(sourceId);
-    if (
-      !storage ||
-      (!storage.videoCompletedAt && !storage.localOnly) ||
-      !storage.selectedFiles?.includes(filePath)
-    )
-      return false;
-    return storage.encryptedLayout
-      ? isFileCompleteInBitfield(storage.encryptedLayout, filePath, storage.downloadedPieces)
-      : true;
+    if (!storage?.encryptedLayout) return false;
+    return this.isFileStored(
+      storage,
+      storage.encryptedLayout,
+      filePath,
+      await this.storageService.getFiles(sourceId)
+    );
   }
 
   /**
@@ -1352,7 +1470,10 @@ export class DownloadService {
       }
 
       const requestedBytes = storage.encryptedLayout
-        ? this.getSelectedBytes(storage.encryptedLayout, storage.selectedFiles ?? [])
+        ? this.getSelectedBytes(
+            storage.encryptedLayout,
+            await this.storageService.getClaimedPaths(sourceId)
+          )
         : 0;
       const fileBytes = requestedBytes || storage.size;
       if (storage.videoCompletedAt || storage.localOnly) {
@@ -1416,12 +1537,10 @@ export class DownloadService {
         return false;
       }
 
-      // Pause by deselecting all files
+      // Pause by clearing every selection; claims stay and are reapplied on resume.
       if (torrent.files && torrent.files.length > 0) {
-        torrent.files.forEach(file => file.deselect());
-        // File selection and explicit piece selection are independent in WebTorrent.
-        // Clear both so a paused warmup cannot continue downloading its range.
-        torrent.deselect(0, Math.max(0, this.getTorrentPieceCount(torrent) - 1));
+        this.pausedSources.add(sourceId);
+        this.clearSelection(torrent);
         logger.info('DownloadService', `Paused download for movie source ${sourceId}`);
         return true;
       }
@@ -1451,20 +1570,10 @@ export class DownloadService {
         return false;
       }
 
-      const warmup = this.warmupSelections.get(sourceId);
-      if (warmup) {
-        torrent.files?.forEach(file => file.deselect());
-        torrent.select(warmup.firstPiece, warmup.lastPiece, 1);
-        logger.info('DownloadService', `Resumed warmup for movie source ${sourceId}`);
-        return true;
-      }
-
-      // Resume by selecting files
+      // Resume by reapplying the source's live claims.
       if (torrent.files && torrent.files.length > 0) {
-        const selectedPaths = new Set(storage.selectedFiles ?? []);
-        torrent.files.forEach(file => {
-          if (selectedPaths.has(file.path)) file.select(1);
-        });
+        this.pausedSources.delete(sourceId);
+        await this.reconcileSelection(sourceId);
         logger.info('DownloadService', `Resumed download for movie source ${sourceId}`);
         return true;
       }
@@ -1491,7 +1600,7 @@ export class DownloadService {
       // StorageService serializes deletion with lifecycle detachment and removes both the
       // torrent and encrypted files through the registered cleanup handler.
       await this.storageService.removeStorage(sourceId);
-      this.warmupSelections.delete(sourceId);
+      this.pausedSources.delete(sourceId);
       this.pausedForPlayback.delete(sourceId);
       logger.info(
         'DownloadService',
@@ -1527,7 +1636,7 @@ export class DownloadService {
           size: torrent.length,
         });
         await this.reconcileAllocationIfDue(sourceId);
-        await this.maybeMarkVideoComplete(torrent, sourceId, layout);
+        await this.recordCompletion(torrent, sourceId, layout);
         await this.resumeSpeculativeDownloadsWhenPlaybackReady();
       } catch (error) {
         logger.warn(
@@ -1552,7 +1661,7 @@ export class DownloadService {
       }
     });
 
-    void this.maybeMarkVideoComplete(torrent, sourceId, layout).catch(error => {
+    void this.recordCompletion(torrent, sourceId, layout).catch(error => {
       logger.warn(
         'DownloadService',
         `Failed to record video completion for source ${sourceId}`,
@@ -1584,32 +1693,30 @@ export class DownloadService {
     return reconcile;
   }
 
-  /** Use the same persisted file selection as playback, including detached local media. */
+  /** The target's file table; attaches the torrent only when the source's files are unknown. */
   async getMediaFiles(target: PlaybackTarget): Promise<EncryptedStorageLayout> {
-    const download = await this.startDownload(target, { retentionClass: 'watched' });
-    return download.layout;
+    return this.resolveLayout(target.source);
   }
 
-  /** Request small subtitle sidecars of the target's source; already verified ones are skipped. */
+  /**
+   * Request small subtitle sidecars of the target video. Sidecars take the video's live claims,
+   * so they are kept, downloaded, and evicted together with it.
+   */
   async prepareSubtitleFiles(target: PlaybackTarget, paths: string[]): Promise<void> {
     if (!paths.length) return;
     const existing = await this.storageService.getStorageBySource(target.source.id);
     const layout = existing?.encryptedLayout;
     if (!existing || !layout) return;
-    const missing = paths.filter(path => {
+    const sidecars = paths.filter(path => {
       const file = layout.files.find(candidate => candidate.path === path);
-      return (
-        file &&
-        file.length <= MAX_SIDECAR_BYTES &&
-        SIDECAR_SUBTITLE.test(path) &&
-        !(existing.selectedFiles?.includes(path) && this.isFileStored(existing, layout, path))
-      );
+      return file && file.length <= MAX_SIDECAR_BYTES && SIDECAR_SUBTITLE.test(path);
     });
-    for (const path of missing) {
-      const download = await this.startDownload(withFile(target, path), {
-        retentionClass: 'watched',
-      });
-      download.torrent?.files.find(file => file.path === path)?.select();
+    if (!sidecars.length) return;
+    await this.storageService.copyClaims(target.source.id, target.filePath, sidecars);
+    const files = await this.storageService.getFiles(target.source.id);
+    for (const path of sidecars) {
+      if (this.isFileStored(existing, layout, path, files)) continue;
+      await this.startDownload(withFile(target, path), PLAYBACK_CLAIM);
     }
   }
 
@@ -1622,7 +1729,7 @@ export class DownloadService {
     const contentSource = target.source;
     return new Promise((resolve, reject) => {
       const handleRequest = async () => {
-        const download = await this.startDownload(target, { retentionClass: 'watched' });
+        const download = await this.startDownload(target, PLAYBACK_CLAIM);
         const { torrent, storage, layout } = download;
         const selected = layout.files.find(file => file.path === target.filePath);
         if (!selected) throw new Error('Requested torrent file is unavailable');
@@ -1637,7 +1744,6 @@ export class DownloadService {
           if (!(await this.storageService.setPlaybackActive(contentSource.id, true))) {
             throw new Error(`Storage not found for movie source ${contentSource.id}`);
           }
-          torrent?.files.find(item => item.path === file.path)?.select(10);
           this.activeStreams += 1;
           this.activeSourceCounts.set(
             contentSource.id,
@@ -1794,13 +1900,12 @@ export class DownloadService {
   /** Pause only speculative torrents while the first active stream is consuming bandwidth. */
   private async pauseSpeculativeDownloads(excludeSourceId: number): Promise<void> {
     if (!(await this.hasIncompleteActivePlayback())) return;
-    const records = (await this.storageService.getSpeculativeStorage()) ?? [];
+    const sourceIds = (await this.storageService.getSpeculativeSourceIds()) ?? [];
     await Promise.all(
-      records
-        .filter(record => record.sourceId !== excludeSourceId && record.activeStreams === 0)
-        .map(async record => {
-          if (await this.pauseDownload(record.sourceId))
-            this.pausedForPlayback.add(record.sourceId);
+      sourceIds
+        .filter(sourceId => sourceId !== excludeSourceId && !this.isPlaybackActive(sourceId))
+        .map(async sourceId => {
+          if (await this.pauseDownload(sourceId)) this.pausedForPlayback.add(sourceId);
         })
     );
   }

@@ -93,6 +93,9 @@ describe('DownloadService with a shared season pack', () => {
     (service.client as unknown as { ready: boolean }).ready = true;
     storageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
     storageService.setPlaybackActive.mockResolvedValue(true);
+    storageService.getFiles.mockResolvedValue([]);
+    storageService.getClaimedPaths.mockResolvedValue([]);
+    storageService.getLiveClaims.mockResolvedValue([]);
 
     const layout: EncryptedStorageLayout = {
       storeName: 'Show S01 - cccccccc',
@@ -112,7 +115,6 @@ describe('DownloadService with a shared season pack', () => {
       size: 12,
       localOnly: true,
       videoCompletedAt: new Date(),
-      selectedFiles: layout.files.map(file => file.path),
       downloadedPieces: Uint8Array.of(0b11100000),
       encryptedLayout: structuredClone(layout),
     });
@@ -156,6 +158,13 @@ describe('DownloadService with a shared season pack', () => {
     expect(first.headers.get('Content-Disposition')).toContain('Show.S01E01.mkv');
     expect(second.headers.get('Content-Disposition')).toContain('Show.S01E02.mkv');
     expect(storage.encryptedLayout).toEqual(layout);
+    for (const path of ['Show/Show.S01E01.mkv', 'Show/Show.S01E02.mkv'])
+      expect(storageService.claimFile).toHaveBeenCalledWith(
+        31,
+        path,
+        expect.objectContaining({ kind: 'playback', ownerKey: 'stream' }),
+        true
+      );
     expect(storageService.updateEncryptedLayout).not.toHaveBeenCalled();
     expect(add).not.toHaveBeenCalled();
     // Each stream releases playback after closing its reader, just after the body ends.

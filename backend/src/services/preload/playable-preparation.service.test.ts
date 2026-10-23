@@ -57,12 +57,7 @@ describe('PlayablePreparationService', () => {
       );
       expect(result.source).toBe(downloaded);
     }
-    expect(warmup.warm).toHaveBeenCalledWith(
-      movieTarget(downloaded),
-      'm:42',
-      'm:42',
-      expect.anything()
-    );
+    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(downloaded), 'm:42', 'm:42');
     expect(sourceService.processSourceMetadata).not.toHaveBeenCalled();
   });
 
@@ -267,12 +262,7 @@ describe('PlayablePreparationService', () => {
     expect(prepared.source).toBe(ready);
     expect(prepared.state).toBe('warming');
     expect(sourceService.processSourceMetadata).not.toHaveBeenCalled();
-    expect(warmup.warm).toHaveBeenCalledWith(
-      movieTarget(ready),
-      'm:42',
-      'm:42',
-      expect.objectContaining({ speculativeExpiresAt: expect.any(Date) })
-    );
+    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(ready), 'm:42', 'm:42');
   });
 
   it('falls back to magnet playback when source metadata cannot be resolved', async () => {
@@ -324,12 +314,7 @@ describe('PlayablePreparationService', () => {
 
     expect(prepared).toMatchObject({ playable, source, state: 'warming' });
     expect(sourceService.processSourceMetadata).toHaveBeenCalledWith(208);
-    expect(warmup.warm).toHaveBeenCalledWith(
-      movieTarget(source),
-      'm:42',
-      'm:42',
-      expect.objectContaining({ speculativeExpiresAt: expect.any(Date) })
-    );
+    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(source), 'm:42', 'm:42');
   });
 
   it('does not report metadata readiness when the selected source has no file', async () => {

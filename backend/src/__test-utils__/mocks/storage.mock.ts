@@ -20,12 +20,9 @@ export function createMockStorage(overrides: Partial<Storage> = {}): Storage {
     reservedBytes: overrides.reservedBytes ?? 0,
     totalPieces: overrides.totalPieces ?? 0,
     pieceLength: overrides.pieceLength ?? 0,
-    retentionClass: overrides.retentionClass ?? 'watched',
     lastInterestAt: overrides.lastInterestAt ?? null,
-    speculativeExpiresAt: overrides.speculativeExpiresAt ?? null,
     videoCompletedAt: overrides.videoCompletedAt ?? null,
     localOnly: overrides.localOnly ?? false,
-    selectedFiles: overrides.selectedFiles ?? [],
     encryptedLayout: overrides.encryptedLayout ?? null,
     activeStreams: overrides.activeStreams ?? 0,
     downloaded: overrides.downloaded ?? faker.number.int({ min: 0, max: 10000 }), // 0-100% in basis points

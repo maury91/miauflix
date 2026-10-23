@@ -70,7 +70,7 @@ describe('PlaybackSessionService', () => {
     expect(result?.source.id).toBe(2);
     expect(preparation.prepare.mock.calls[1][1].preferences.allowHevc).toBe(false);
     expect(audio.inspect).toHaveBeenNthCalledWith(2, movie(h264), expect.anything());
-    expect(warmup.promote).toHaveBeenLastCalledWith(movie(h264), 'm:42');
+    expect(warmup.promote).toHaveBeenLastCalledWith(movie(h264), 'm:42', 'user:user:m:42');
     expect(grants.create).toHaveBeenCalledTimes(1);
     expect(grants.create).toHaveBeenCalledWith(expect.objectContaining({ sourceId: 2 }));
   });
@@ -225,7 +225,7 @@ describe('PlaybackSessionService', () => {
     );
 
     expect(session).toMatchObject({ source: { id: 208 }, preparation: { state: 'warming' } });
-    expect(warmup.promote).toHaveBeenCalledWith(movie(source), 'm:42');
+    expect(warmup.promote).toHaveBeenCalledWith(movie(source), 'm:42', 'user:user-1:m:42');
     expect(grants.create).toHaveBeenCalledWith(
       expect.objectContaining({ sourceId: 208, playableKey: 'm:42' })
     );

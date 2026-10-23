@@ -160,7 +160,11 @@ export function registerBackgroundJobHandlers({
       // Re-check after source discovery and after the settling delay. A removal
       // during discovery must never turn into a new background download.
       if (!(await listService.hasAnyMovieWatchlistInterest(movieMediaId))) return;
-      await downloadService.predownload(await playbackTargets.forMovie(media.local.id, source));
+      await downloadService.predownload(await playbackTargets.forMovie(media.local.id, source), {
+        kind: 'watchlist',
+        ownerKey: `watchlist:movie:${movieMediaId}`,
+        ttlMs: null,
+      });
     },
   });
   worker.register('watchlist.tv.scan', {
@@ -286,7 +290,11 @@ export function registerBackgroundJobHandlers({
 
         const selected = usable[0];
         try {
-          await downloadService.predownload(playbackTargets.forEpisode(selected)!);
+          // Each scan renews the claim; it lapses once the show leaves every watchlist.
+          await downloadService.predownload(playbackTargets.forEpisode(selected)!, {
+            kind: 'watchlist',
+            ownerKey: `watchlist:tv:${showMediaId}`,
+          });
         } catch (error) {
           if (error instanceof Error && /insufficient .* capacity/i.test(error.message)) return;
           throw error;

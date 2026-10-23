@@ -12,7 +12,7 @@ const source = (id: number, filePath = 'movie.mkv'): PlaybackTarget => ({
 describe('TorrentWarmupController', () => {
   const setupTest = () => {
     const driver: jest.Mocked<TorrentWarmupDriver> = {
-      warmSource: jest.fn(async (item: PlaybackTarget, targetBytes: number) => ({
+      warmSource: jest.fn(async (item: PlaybackTarget, targetBytes: number, _leaseKey: string) => ({
         sourceId: item.source.id,
         filePath: item.filePath,
         targetBytes,
@@ -20,7 +20,7 @@ describe('TorrentWarmupController', () => {
         lastPiece: 2,
       })),
       pauseSource: jest.fn(async (_sourceId: number) => true),
-      promoteSource: jest.fn(async (_target: PlaybackTarget) => true),
+      promoteSource: jest.fn(async (_target: PlaybackTarget, _ownerKey: string) => true),
       hasActivePlayback: jest.fn(() => false),
       isPlaybackActive: jest.fn((_sourceId: number) => false),
     };
@@ -46,8 +46,8 @@ describe('TorrentWarmupController', () => {
     const { controller, driver } = setupTest();
     await controller.warm(source(1), 'm:1', 'm:1');
 
-    await expect(controller.promote(source(1), 'm:1')).resolves.toBe(true);
-    expect(driver.promoteSource).toHaveBeenCalledWith(source(1));
+    await expect(controller.promote(source(1), 'm:1', 'viewer')).resolves.toBe(true);
+    expect(driver.promoteSource).toHaveBeenCalledWith(source(1), 'viewer');
     expect(driver.pauseSource).not.toHaveBeenCalled();
     expect(controller.getState()).toBeNull();
   });
@@ -58,11 +58,13 @@ describe('TorrentWarmupController', () => {
     const slot = controller.getState();
 
     driver.promoteSource.mockResolvedValueOnce(false);
-    await expect(controller.promote(source(1), 'm:1')).resolves.toBe(false);
+    await expect(controller.promote(source(1), 'm:1', 'viewer')).resolves.toBe(false);
     expect(controller.getState()).toEqual(slot);
 
     driver.promoteSource.mockRejectedValueOnce(new Error('promotion failed'));
-    await expect(controller.promote(source(1), 'm:1')).rejects.toThrow('promotion failed');
+    await expect(controller.promote(source(1), 'm:1', 'viewer')).rejects.toThrow(
+      'promotion failed'
+    );
     expect(controller.getState()).toEqual(slot);
   });
 
@@ -71,7 +73,7 @@ describe('TorrentWarmupController', () => {
     await controller.warm(source(1), 'm:1', 'm:1');
     const slot = controller.getState();
 
-    await expect(controller.promote(source(2), 'm:2')).resolves.toBe(true);
+    await expect(controller.promote(source(2), 'm:2', 'viewer')).resolves.toBe(true);
 
     expect(controller.getState()).toEqual(slot);
     expect(driver.pauseSource).not.toHaveBeenCalled();
@@ -214,6 +216,8 @@ describe('TorrentWarmupController', () => {
 
     expect(driver.warmSource).toHaveBeenCalledTimes(2);
     expect(controller.getState()).toMatchObject({ filePath: 'Show.S01E02.mkv' });
-    await expect(controller.promote(source(1, 'Show.S01E01.mkv'), 'e:1:1:2')).resolves.toBe(false);
+    await expect(
+      controller.promote(source(1, 'Show.S01E01.mkv'), 'e:1:1:2', 'viewer')
+    ).resolves.toBe(false);
   });
 });

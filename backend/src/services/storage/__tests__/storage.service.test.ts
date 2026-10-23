@@ -4,10 +4,7 @@ import { createTestDatabase } from '@__test-utils__/database.helpers';
 import { TestDataFactory } from '@__test-utils__/test-data.factory';
 import fs from 'fs';
 
-import { Episode } from '@entities/episode.entity';
-import { EpisodeSource } from '@entities/episode-source.entity';
-import { Season } from '@entities/season.entity';
-import { TVShow } from '@entities/tvshow.entity';
+import type { ClaimKind } from '@entities/storage-file-claim.entity';
 
 import { StorageService } from '../storage.service';
 
@@ -59,6 +56,20 @@ describe('StorageService', () => {
     return { storageService, database };
   };
 
+  /** Give a stored source one live (or already expired) claim on its file. */
+  const claim = (
+    storageService: StorageService,
+    sourceId: number,
+    kind: ClaimKind,
+    options: { ownerKey?: string; path?: string; expiresAt?: Date | null } = {}
+  ) =>
+    storageService.claimFile(
+      sourceId,
+      options.path ?? 'movie.mkv',
+      { kind, ownerKey: options.ownerKey ?? `${kind}-owner`, expiresAt: options.expiresAt ?? null },
+      true
+    );
+
   beforeEach(async () => {
     dbHelper = createTestDatabase();
     const database = await dbHelper.setupTestDatabase();
@@ -87,7 +98,6 @@ describe('StorageService', () => {
       filenameSalt: 'old',
       pieceLength: 4,
       files: [{ path: 'movie.mkv', length: 8, offset: 0 }],
-      video: { name: 'movie.mkv', path: 'movie.mkv', length: 8, offset: 0 },
     };
     await storageService.updateEncryptedLayout(source.id, layout);
     await storageService.updateEncryptedLayout(source.id, {
@@ -101,64 +111,224 @@ describe('StorageService', () => {
     });
   });
 
-  it('selects completed TV episode packs as the last-resort storage eviction candidates', async () => {
-    const { storageService, database } = setupTest();
-    const show = await database.getRepository(TVShow).save({
-      mediaId: 9_810_001,
-      name: 'Storage Test Show',
-      overview: '',
-      firstAirDate: '2020-01-01',
-      poster: '',
-      backdrop: '',
-      status: 'Ended',
-    });
-    const season = await database.getRepository(Season).save({
-      mediaId: 9_820_001,
-      tvShowId: show.id,
-      seasonNumber: 1,
-      name: 'Season 1',
-      overview: '',
-    });
-    const episode = await database.getRepository(Episode).save({
-      mediaId: 9_830_001,
-      seasonId: season.id,
-      episodeNumber: 1,
-      name: 'Episode 1',
-      overview: '',
-      airDate: '2020-01-01',
-      stillPath: '',
-      imdbId: '',
-    });
-    const source = await database.getContentSourceRepository().upsertByHash({
-      hash: testDataFactory.generateRandomHash(),
-      magnetLink: testDataFactory.generateMagnetLink(testDataFactory.generateRandomHash()),
-      size: 4 * 1024 * 1024,
-      source: 'test',
-    });
-    await database.getRepository(EpisodeSource).save({
-      episodeId: episode.id,
-      sourceId: source.id,
-      videoFilePath: 'Show.S01E01.mkv',
-      matchKind: 'single',
-    });
-    await storageService.createStorage({
-      sourceId: source.id,
-      location: '/tmp/test/watched-episode-pack',
-      size: source.size,
-    });
-    await database
-      .getStorageRepository()
-      .update((await storageService.getStorageBySource(source.id))!.id, {
-        retentionClass: 'watched',
-        videoCompletedAt: new Date(),
-        selectedFiles: ['Show.S01E01.mkv'],
-        lastInterestAt: new Date(Date.now() - 10 * 86_400_000),
+  describe('claims', () => {
+    const createClaimed = async (storageService: StorageService, location: string) => {
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestContentSource(movie.id);
+      await storageService.createStorage({ sourceId: source.id, location, size: 1000 });
+      return source.id;
+    };
+
+    it('keeps only live claims and reports the sources whose claims expired', async () => {
+      const { storageService } = setupTest();
+      const sourceId = await createClaimed(storageService, '/tmp/test/claims-live');
+      await claim(storageService, sourceId, 'watched', { path: 'Show.S01E01.mkv' });
+      await claim(storageService, sourceId, 'warmup', {
+        path: 'Show.S01E02.mkv',
+        expiresAt: new Date(Date.now() - 1),
       });
 
-    expect(
-      await database.getStorageRepository().findMostStaleWatchedEpisodeStorage()
-    ).toMatchObject({
-      sourceId: source.id,
+      expect(await storageService.getClaimedPaths(sourceId)).toEqual(['Show.S01E01.mkv']);
+      await expect(storageService.deleteClaims({ expiredAt: new Date() })).resolves.toEqual([
+        sourceId,
+      ]);
+      await expect(storageService.deleteClaims({ expiredAt: new Date() })).resolves.toEqual([]);
+    });
+
+    it('releases one owner while another owner keeps the same file claimed', async () => {
+      const { storageService } = setupTest();
+      const sourceId = await createClaimed(storageService, '/tmp/test/claims-owners');
+      await claim(storageService, sourceId, 'watched', { ownerKey: 'user:1' });
+      await claim(storageService, sourceId, 'watched', { ownerKey: 'user:2' });
+
+      await storageService.releaseClaims(sourceId, { ownerKey: 'user:1' });
+
+      expect((await storageService.getLiveClaims(sourceId)).map(item => item.ownerKey)).toEqual([
+        'user:2',
+      ]);
+      expect(await storageService.getClaimedPaths(sourceId)).toEqual(['movie.mkv']);
+    });
+
+    it('reopens a completed source only when the claimed file is incomplete', async () => {
+      const { storageService } = setupTest();
+      const sourceId = await createClaimed(storageService, '/tmp/test/claims-reopen');
+      const layout = {
+        storeName: 'pack',
+        filenameSalt: 'salt',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', length: 4, offset: 0 }],
+      };
+      await storageService.markVideoComplete(sourceId, layout);
+
+      const kept = await storageService.claimFile(
+        sourceId,
+        'movie.mkv',
+        { kind: 'watched', ownerKey: 'user:1' },
+        true
+      );
+      expect(kept?.videoCompletedAt).toBeInstanceOf(Date);
+
+      const reopened = await storageService.claimFile(
+        sourceId,
+        'extras.mkv',
+        { kind: 'watched', ownerKey: 'user:1' },
+        false
+      );
+      expect(reopened?.videoCompletedAt).toBeNull();
+      expect(reopened?.localOnly).toBe(false);
+    });
+
+    it('gives subtitle sidecars the live claims of their video', async () => {
+      const { storageService } = setupTest();
+      const sourceId = await createClaimed(storageService, '/tmp/test/claims-sidecars');
+      await claim(storageService, sourceId, 'watched', { ownerKey: 'user:1' });
+
+      await storageService.copyClaims(sourceId, 'movie.mkv', ['movie.en.srt']);
+
+      expect(
+        (await storageService.getLiveClaims(sourceId))
+          .filter(item => item.path === 'movie.en.srt')
+          .map(item => [item.kind, item.ownerKey])
+      ).toEqual([['watched', 'user:1']]);
+    });
+
+    it('records file completion once per file', async () => {
+      const { storageService } = setupTest();
+      const sourceId = await createClaimed(storageService, '/tmp/test/claims-files');
+      await storageService.recordFiles(sourceId, {
+        storeName: 'pack',
+        filenameSalt: 'salt',
+        pieceLength: 4,
+        files: [
+          { path: 'Show.S01E01.mkv', length: 4, offset: 0 },
+          { path: 'Show.S01E02.mkv', length: 4, offset: 4 },
+        ],
+      });
+
+      await storageService.markFilesComplete(sourceId, ['Show.S01E01.mkv']);
+      const first = (await storageService.getFiles(sourceId)).find(
+        file => file.path === 'Show.S01E01.mkv'
+      )?.completedAt;
+      await storageService.markFilesComplete(sourceId, ['Show.S01E01.mkv']);
+
+      const files = await storageService.getFiles(sourceId);
+      expect(files.find(file => file.path === 'Show.S01E01.mkv')?.completedAt).toEqual(first);
+      expect(files.find(file => file.path === 'Show.S01E02.mkv')?.completedAt).toBeNull();
+    });
+
+    it('lists the requested files of each storage in the inventory', async () => {
+      const { storageService } = setupTest();
+      const sourceId = await createClaimed(storageService, '/tmp/test/claims-inventory');
+      await claim(storageService, sourceId, 'watched', { path: 'Movie/movie.mkv' });
+
+      const inventory = await storageService.getInventory();
+
+      expect(inventory.items.find(item => item.sourceId === sourceId)?.requestedFiles).toEqual([
+        'Movie/movie.mkv',
+      ]);
+    });
+
+    it('lists sources wanted only speculatively', async () => {
+      const { storageService } = setupTest();
+      const warmed = await createClaimed(storageService, '/tmp/test/claims-speculative');
+      const watched = await createClaimed(storageService, '/tmp/test/claims-watched');
+      await claim(storageService, warmed, 'warmup');
+      await claim(storageService, watched, 'warmup');
+      await claim(storageService, watched, 'watched');
+
+      expect(await storageService.getSpeculativeSourceIds()).toEqual([warmed]);
+    });
+  });
+
+  describe('eviction by claim', () => {
+    const withThreshold = async (run: () => Promise<void>) => {
+      const originalEnv = process.env.STORAGE_THRESHOLD;
+      process.env.STORAGE_THRESHOLD = '50GB';
+      try {
+        await run();
+      } finally {
+        if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+        else delete process.env.STORAGE_THRESHOLD;
+      }
+    };
+
+    const fill = async (storageService: StorageService, name: string, kinds: ClaimKind[]) => {
+      const movie = await testDataFactory.createTestMovie();
+      const source = await testDataFactory.createTestContentSource(movie.id);
+      await storageService.createStorage({
+        sourceId: source.id,
+        location: `/tmp/test/evict-${name}`,
+        size: 700 * 1024,
+        reservedBytes: 700 * 1024,
+      });
+      for (const [index, kind] of kinds.entries())
+        await claim(storageService, source.id, kind, { ownerKey: `${kind}:${index}` });
+      return source.id;
+    };
+
+    it("never lets speculative admission evict another user's prefetch or playback", async () => {
+      await withThreshold(async () => {
+        const { storageService } = setupTest();
+        const prefetched = await fill(storageService, 'prefetched', ['watchlist', 'prefetch']);
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
+        const movie = await testDataFactory.createTestMovie();
+        const warmup = await testDataFactory.createTestContentSource(movie.id);
+
+        await expect(
+          storageService.createStorage({
+            sourceId: warmup.id,
+            location: '/tmp/test/evict-warmup',
+            size: 600 * 1024,
+            reservedBytes: 600 * 1024,
+            speculative: true,
+          })
+        ).rejects.toThrow('Insufficient storage capacity');
+        expect(await storageService.getStorageBySource(prefetched)).not.toBeNull();
+      });
+    });
+
+    it('lets retained admission evict watched storage but never live playback', async () => {
+      await withThreshold(async () => {
+        const { storageService } = setupTest();
+        const playing = await fill(storageService, 'playing', ['playback']);
+        process.env.STORAGE_THRESHOLD = '1MB';
+        await storageService.reload();
+        const movie = await testDataFactory.createTestMovie();
+        const viewer = await testDataFactory.createTestContentSource(movie.id);
+
+        await expect(
+          storageService.createStorage({
+            sourceId: viewer.id,
+            location: '/tmp/test/evict-viewer',
+            size: 600 * 1024,
+            reservedBytes: 600 * 1024,
+          })
+        ).rejects.toThrow('Insufficient storage capacity');
+        expect(await storageService.getStorageBySource(playing)).not.toBeNull();
+      });
+    });
+
+    it('evicts the least protected storage first', async () => {
+      await withThreshold(async () => {
+        const { storageService } = setupTest();
+        const watched = await fill(storageService, 'watched', ['watched']);
+        const warmed = await fill(storageService, 'warmed', ['warmup']);
+        process.env.STORAGE_THRESHOLD = '2MB';
+        await storageService.reload();
+        const movie = await testDataFactory.createTestMovie();
+        const viewer = await testDataFactory.createTestContentSource(movie.id);
+
+        await storageService.createStorage({
+          sourceId: viewer.id,
+          location: '/tmp/test/evict-order',
+          size: 700 * 1024,
+          reservedBytes: 700 * 1024,
+        });
+
+        expect(await storageService.getStorageBySource(warmed)).toBeNull();
+        expect(await storageService.getStorageBySource(watched)).not.toBeNull();
+      });
     });
   });
 
@@ -227,7 +397,7 @@ describe('StorageService', () => {
       expect(foundStorage?.sourceId).toBe(contentSource.id);
     });
 
-    it('keeps watched retention when the same source is warmed again', async () => {
+    it('keeps the larger reservation when the same source is warmed again', async () => {
       const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const source = await testDataFactory.createTestContentSource(movie.id);
@@ -238,13 +408,10 @@ describe('StorageService', () => {
         sourceId: source.id,
         location,
         size: 1000,
-        retentionClass: 'speculative',
+        speculative: true,
         reservedBytes: 100,
-        speculativeExpiresAt: new Date(Date.now() + 15_000),
       });
 
-      expect(warmed.retentionClass).toBe('watched');
-      expect(warmed.speculativeExpiresAt).toBeNull();
       expect(warmed.reservedBytes).toBe(1000);
     });
 
@@ -441,7 +608,6 @@ describe('StorageService', () => {
         filenameSalt: 'download-abcdef12',
         pieceLength: 4,
         files: [{ path: 'movie.mkv', length: 8, offset: 0 }],
-        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 8 },
       };
 
       const first = await storageService.markVideoComplete(source.id, layout);
@@ -818,24 +984,24 @@ describe('StorageService', () => {
       expect(updatedStorage?.lastAccessAt).toBeInstanceOf(Date);
     });
 
-    it('should not promote speculative storage when marked as accessed', async () => {
+    it('does not claim speculative storage when it is marked as accessed', async () => {
       const { storageService } = setupTest();
       const movie = await testDataFactory.createTestMovie();
       const contentSource = await testDataFactory.createTestContentSource(movie.id);
-      const speculativeExpiresAt = new Date(Date.now() + 60_000);
       await storageService.createStorage({
         sourceId: contentSource.id,
         location: '/tmp/test/speculative-access-test.mkv',
         size: 1_000_000,
-        retentionClass: 'speculative',
-        speculativeExpiresAt,
+        speculative: true,
       });
+      await claim(storageService, contentSource.id, 'warmup');
 
       await storageService.markAsAccessed(contentSource.id);
 
       const updatedStorage = await storageService.getStorageBySource(contentSource.id);
-      expect(updatedStorage?.retentionClass).toBe('speculative');
-      expect(updatedStorage?.speculativeExpiresAt?.getTime()).toBe(speculativeExpiresAt.getTime());
+      expect((await storageService.getLiveClaims(contentSource.id)).map(c => c.kind)).toEqual([
+        'warmup',
+      ]);
       expect(updatedStorage?.lastAccessAt).toBeInstanceOf(Date);
     });
 
@@ -937,10 +1103,10 @@ describe('StorageService', () => {
           sourceId: backgroundSource.id,
           location: '/tmp/test/unexpired-background.mkv',
           size: 2 * 1024 * 1024 * 1024,
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 2 * 1024 * 1024 * 1024,
-          speculativeExpiresAt: new Date(Date.now() + 60_000),
         });
+        await claim(storageService, backgroundSource.id, 'warmup');
         process.env.STORAGE_THRESHOLD = '1GB';
         await storageService.reload();
 
@@ -949,13 +1115,10 @@ describe('StorageService', () => {
           sourceId: playbackSource.id,
           location: '/tmp/test/playback-admission.mkv',
           size: 100 * 1024 * 1024,
-          retentionClass: 'watched',
         });
 
         await expect(storageService.getStorageBySource(backgroundSource.id)).resolves.toBeNull();
-        await expect(storageService.getStorageBySource(playbackSource.id)).resolves.toEqual(
-          expect.objectContaining({ retentionClass: 'watched' })
-        );
+        await expect(storageService.getStorageBySource(playbackSource.id)).resolves.not.toBeNull();
       } finally {
         if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
         else delete process.env.STORAGE_THRESHOLD;
@@ -982,9 +1145,8 @@ describe('StorageService', () => {
             sourceId: contentSource.id,
             location: `/tmp/test/pressure-${i}.mkv`,
             size: 2 * 1024 * 1024 * 1024, // 2GB each, total 20GB
-            retentionClass: 'speculative',
+            speculative: true,
             reservedBytes: 2 * 1024 * 1024 * 1024,
-            speculativeExpiresAt: new Date(Date.now() - 1),
           });
         }
         process.env.STORAGE_THRESHOLD = '1GB';
@@ -1022,47 +1184,43 @@ describe('StorageService', () => {
         sourceId: (await testDataFactory.createTestContentSource(movie.id)).id,
         location: '/tmp/test/stale1.mkv',
         size: 1000000,
-        retentionClass: 'speculative',
-        speculativeExpiresAt: new Date(Date.now() - 1),
+        speculative: true,
       });
 
       const storage2 = await storageService.createStorage({
         sourceId: (await testDataFactory.createTestContentSource(movie.id)).id,
         location: '/tmp/test/stale2.mkv',
         size: 1000000,
-        retentionClass: 'speculative',
-        speculativeExpiresAt: new Date(Date.now() - 1),
+        speculative: true,
       });
 
       const storage3 = await storageService.createStorage({
         sourceId: (await testDataFactory.createTestContentSource(movie.id)).id,
         location: '/tmp/test/stale3.mkv',
         size: 1000000,
-        retentionClass: 'speculative',
-        speculativeExpiresAt: new Date(Date.now() - 1),
+        speculative: true,
       });
 
-      // Set different access times
+      // Set different interest times
       const db = dbHelper.getDatabase();
       const storageRepo = db.getStorageRepository();
 
       // storage1: most recent
-      await storageRepo.update(storage1.id, { lastAccessAt: new Date() });
+      await storageRepo.update(storage1.id, { lastInterestAt: new Date() });
       // storage2: 5 days ago
       const fiveDaysAgo = new Date();
       fiveDaysAgo.setDate(fiveDaysAgo.getDate() - 5);
-      await storageRepo.update(storage2.id, { lastAccessAt: fiveDaysAgo });
+      await storageRepo.update(storage2.id, { lastInterestAt: fiveDaysAgo });
       // storage3: 10 days ago (most stale)
       const tenDaysAgo = new Date();
       tenDaysAgo.setDate(tenDaysAgo.getDate() - 10);
-      await storageRepo.update(storage3.id, { lastAccessAt: tenDaysAgo });
+      await storageRepo.update(storage3.id, { lastInterestAt: tenDaysAgo });
 
       // Act
-      const mostStale = await database.getStorageRepository().findMostStaleStorage();
+      const mostStale = await database.getStorageFileRepository().findEvictionCandidate(0);
 
       // Assert
-      expect(mostStale).toBeDefined();
-      expect(mostStale?.id).toBe(storage3.id); // Should be the most stale (10 days ago)
+      expect(mostStale).toBe(storage3.id); // Should be the most stale (10 days ago)
     });
 
     it('should return null when no storage records exist', async () => {
@@ -1070,7 +1228,7 @@ describe('StorageService', () => {
       const { database } = setupTest();
 
       // Act
-      const mostStale = await database.getStorageRepository().findMostStaleStorage();
+      const mostStale = await database.getStorageFileRepository().findEvictionCandidate(5);
 
       // Assert
       expect(mostStale).toBeNull();
@@ -1115,9 +1273,8 @@ describe('StorageService', () => {
           sourceId: contentSource.id,
           location: '/tmp/test/last-record.mkv',
           size: 10 * 1024 * 1024, // 10MB, exceeds 1MB threshold
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 10 * 1024 * 1024,
-          speculativeExpiresAt: new Date(Date.now() - 1),
         });
         process.env.STORAGE_THRESHOLD = '1MB';
         await storageService.reload();
@@ -1160,9 +1317,8 @@ describe('StorageService', () => {
           sourceId: contentSource.id,
           location: '/tmp/test/clean-all.mkv',
           size: 10 * 1024 * 1024, // 10MB, exceeds 1MB threshold
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 10 * 1024 * 1024,
-          speculativeExpiresAt: new Date(Date.now() - 1),
         });
         process.env.STORAGE_THRESHOLD = '1MB';
         await storageService.reload();
@@ -1206,9 +1362,8 @@ describe('StorageService', () => {
             sourceId: contentSource.id,
             location: `/tmp/test/multi-${i}.mkv`,
             size: 3 * 1024 * 1024, // 3MB each, total 9MB exceeds 1MB threshold
-            retentionClass: 'speculative',
+            speculative: true,
             reservedBytes: 3 * 1024 * 1024,
-            speculativeExpiresAt: new Date(Date.now() - 1),
           });
           storages.push({ storage, contentSource });
         }
@@ -1260,9 +1415,8 @@ describe('StorageService', () => {
           sourceId: expiredSource.id,
           location: '/tmp/test/expired-speculative.mkv',
           size: 700 * 1024,
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 700 * 1024,
-          speculativeExpiresAt: new Date(Date.now() - 1),
         });
 
         process.env.STORAGE_THRESHOLD = '1MB';
@@ -1273,9 +1427,8 @@ describe('StorageService', () => {
           sourceId: newSource.id,
           location: '/tmp/test/new-speculative.mkv',
           size: 400 * 1024,
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 400 * 1024,
-          speculativeExpiresAt: new Date(Date.now() + 60_000),
         });
         expect(newStorage.reservedBytes).toBe(400 * 1024);
         expect(await storageService.getStorageBySource(expiredSource.id)).toBeNull();
@@ -1297,18 +1450,17 @@ describe('StorageService', () => {
           sourceId: expiredSource.id,
           location: '/tmp/test/existing-expired.mkv',
           size: 700 * 1024,
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 700 * 1024,
-          speculativeExpiresAt: new Date(Date.now() - 1),
         });
         await storageService.createStorage({
           sourceId: targetSource.id,
           location: '/tmp/test/existing-target.mkv',
           size: 200 * 1024,
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 200 * 1024,
-          speculativeExpiresAt: new Date(Date.now() + 60_000),
         });
+        await claim(storageService, targetSource.id, 'warmup');
 
         process.env.STORAGE_THRESHOLD = '1MB';
         await storageService.reload();
@@ -1316,9 +1468,8 @@ describe('StorageService', () => {
           sourceId: targetSource.id,
           location: '/tmp/test/existing-target.mkv',
           size: 500 * 1024,
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 500 * 1024,
-          speculativeExpiresAt: new Date(Date.now() + 60_000),
         });
         expect(updated.reservedBytes).toBe(500 * 1024);
         expect(await storageService.getStorageBySource(expiredSource.id)).toBeNull();
@@ -1336,9 +1487,8 @@ describe('StorageService', () => {
         sourceId: source.id,
         location: '/tmp/test/concurrent-source.mkv',
         size: reservedBytes,
-        retentionClass: 'speculative' as const,
+        speculative: true,
         reservedBytes,
-        speculativeExpiresAt: new Date(Date.now() + 60_000),
       });
 
       const rows = await Promise.all([
@@ -1351,7 +1501,7 @@ describe('StorageService', () => {
       expect(await dbHelper.getDatabase().getStorageRepository().getStorageCount()).toBe(1);
     });
 
-    it('evicts only expired speculative storage during watched admission', async () => {
+    it('evicts unclaimed storage before claimed storage during watched admission', async () => {
       const originalEnv = process.env.STORAGE_THRESHOLD;
       process.env.STORAGE_THRESHOLD = '50GB';
       try {
@@ -1364,23 +1514,23 @@ describe('StorageService', () => {
           sourceId: expiredSource.id,
           location: '/tmp/test/evict-expired.mkv',
           size: 700 * 1024,
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 700 * 1024,
-          speculativeExpiresAt: new Date(Date.now() - 1),
         });
         await storageService.createStorage({
           sourceId: unexpiredSource.id,
           location: '/tmp/test/keep-unexpired.mkv',
           size: 100 * 1024,
-          retentionClass: 'speculative',
+          speculative: true,
           reservedBytes: 100 * 1024,
-          speculativeExpiresAt: new Date(Date.now() + 60_000),
         });
+        await claim(storageService, unexpiredSource.id, 'warmup');
         const watchedStorage = await storageService.createStorage({
           sourceId: watchedSource.id,
           location: '/tmp/test/keep-watched.mkv',
           size: 100 * 1024,
         });
+        await claim(storageService, watchedSource.id, 'watched');
 
         process.env.STORAGE_THRESHOLD = '1MB';
         await storageService.reload();
@@ -1417,6 +1567,11 @@ describe('StorageService', () => {
               sourceId: source.id,
               location: `/tmp/test/admission-${index}.mkv`,
               size: 700 * 1024,
+              // Playback claims are never evictable, so only one admission can fit.
+              claim: {
+                path: 'movie.mkv',
+                input: { kind: 'playback', ownerKey: `stream:${index}` },
+              },
             })
           )
         );
@@ -1488,5 +1643,35 @@ describe('StorageService', () => {
       expect(reconciled?.allocatedBytes).toBe(0);
       expect(reconciled?.reservedBytes).toBe(storage.reservedBytes);
     });
+  });
+
+  it('records the admission claim with the row so a concurrent admission cannot evict it', async () => {
+    const originalEnv = process.env.STORAGE_THRESHOLD;
+    process.env.STORAGE_THRESHOLD = '1MB';
+    try {
+      const { storageService } = setupTest();
+      const movie = await testDataFactory.createTestMovie();
+      const first = await testDataFactory.createTestContentSource(movie.id);
+      await storageService.createStorage({
+        sourceId: first.id,
+        location: '/tmp/test/admitted-first.mkv',
+        size: 700 * 1024,
+        claim: { path: 'movie.mkv', input: { kind: 'playback', ownerKey: 'stream' } },
+      });
+
+      expect(await storageService.getClaimedPaths(first.id)).toEqual(['movie.mkv']);
+      const second = await testDataFactory.createTestContentSource(movie.id);
+      await expect(
+        storageService.createStorage({
+          sourceId: second.id,
+          location: '/tmp/test/admitted-second.mkv',
+          size: 700 * 1024,
+        })
+      ).rejects.toThrow('Insufficient storage capacity');
+      expect(await storageService.getStorageBySource(first.id)).not.toBeNull();
+    } finally {
+      if (originalEnv) process.env.STORAGE_THRESHOLD = originalEnv;
+      else delete process.env.STORAGE_THRESHOLD;
+    }
   });
 });

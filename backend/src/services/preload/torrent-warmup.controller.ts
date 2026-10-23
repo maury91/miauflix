@@ -29,13 +29,11 @@ export interface WarmSlot {
 }
 
 export interface TorrentWarmupDriver {
-  warmSource(
-    target: PlaybackTarget,
-    targetBytes: number,
-    speculativeExpiresAt?: Date | null
-  ): Promise<WarmupResult>;
+  /** Warm a prefix of the target for one lease; the lease key owns the warmup claim. */
+  warmSource(target: PlaybackTarget, targetBytes: number, leaseKey: string): Promise<WarmupResult>;
   pauseSource(sourceId: number): Promise<boolean>;
-  promoteSource(target: PlaybackTarget): Promise<boolean>;
+  /** Keep the target for a viewer identified by `ownerKey`. */
+  promoteSource(target: PlaybackTarget, ownerKey: string): Promise<boolean>;
   hasActivePlayback(): boolean;
   isPlaybackActive(sourceId: number): boolean;
   isRangeVerified?(
@@ -93,7 +91,6 @@ export class TorrentWarmupController {
     playableKey: string,
     options: {
       targetBytes?: number;
-      speculativeExpiresAt?: Date | null;
     } = {}
   ): Promise<WarmSlot> {
     const { source, filePath } = target;
@@ -165,11 +162,7 @@ export class TorrentWarmupController {
         const slot = this.slot;
         if (!slot) throw new Error('Warmup slot was lost before torrent setup');
         this.setSlot({ ...slot, state: 'adding_torrent' });
-        const result = await this.driver.warmSource(
-          target,
-          slot.targetVerifiedBytes,
-          options.speculativeExpiresAt
-        );
+        const result = await this.driver.warmSource(target, slot.targetVerifiedBytes, leaseKey);
         if (this.slot?.generation !== generation) {
           await this.driver.pauseSource(source.id);
           return this.getState()!;
@@ -218,8 +211,8 @@ export class TorrentWarmupController {
     });
   }
 
-  /** Promote the exact source file currently selected for this playable. */
-  async promote(target: PlaybackTarget, playableKey: string): Promise<boolean> {
+  /** Promote the exact source file currently selected for this playable, for one viewer. */
+  async promote(target: PlaybackTarget, playableKey: string, ownerKey: string): Promise<boolean> {
     const { source, filePath } = target;
     return this.withTransition(async () => {
       if (
@@ -229,7 +222,7 @@ export class TorrentWarmupController {
       ) {
         return false;
       }
-      const promoted = await this.driver.promoteSource(target);
+      const promoted = await this.driver.promoteSource(target, ownerKey);
       if (promoted && this.slot?.sourceId === source.id && this.slot.filePath === filePath) {
         this.cancelReadinessCheck();
         this.setSlot(null);

@@ -72,24 +72,18 @@ export class Storage {
   @Column({ type: 'integer', default: 0 })
   pieceLength: number;
 
-  @Column({ length: 16, default: 'watched' })
-  retentionClass: 'speculative' | 'watched';
-
   @Column({ type: 'datetime', nullable: true })
   lastInterestAt: Date | null;
 
-  @Column({ type: 'datetime', nullable: true })
-  speculativeExpiresAt: Date | null;
-
+  /**
+   * When every currently claimed file became complete; starts the seeding window.
+   * Cleared whenever an incomplete file is claimed.
+   */
   @Column({ type: 'datetime', nullable: true })
   videoCompletedAt: Date | null;
 
   @Column({ type: 'boolean', default: false })
   localOnly: boolean;
-
-  /** File paths requested from a shared torrent pack; completion is checked per file. */
-  @Column({ type: 'simple-json', default: '[]' })
-  selectedFiles: string[];
 
   @Column({
     type: 'text',

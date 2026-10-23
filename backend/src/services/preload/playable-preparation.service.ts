@@ -244,8 +244,7 @@ export class PlayablePreparationService {
       slot = await this.warmup.warm(
         target,
         options.ownerKey ?? playableKey(playable),
-        playableKey(playable),
-        { speculativeExpiresAt: new Date(Date.now() + 15_000) }
+        playableKey(playable)
       );
     } catch (error) {
       if (options.signal?.aborted) throw error;

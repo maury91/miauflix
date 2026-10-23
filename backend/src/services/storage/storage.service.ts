@@ -7,8 +7,15 @@ import type TypedEmitter from 'typed-emitter';
 
 import type { Database } from '@database/database';
 import type { EncryptedStorageLayout, Storage } from '@entities/storage.entity';
+import type { StorageFile } from '@entities/storage-file.entity';
+import {
+  CLAIM_RANK,
+  type ClaimKind,
+  type StorageFileClaim,
+} from '@entities/storage-file-claim.entity';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type { StorageRepository } from '@repositories/storage.repository';
+import type { ClaimInput, StorageFileRepository } from '@repositories/storage-file.repository';
 import { humanReadableBytes } from '@utils/numbers';
 import { traced } from '@utils/tracing.util';
 
@@ -16,8 +23,13 @@ export type StorageRemovalResult =
   | { status: 'active_playback' | 'cleanup_failed' | 'not_found' }
   | { status: 'removed'; bytes: number };
 
+/** Speculative admission may evict storage held only by warmups and watchlist downloads. */
+const SPECULATIVE_EVICTION_RANK = CLAIM_RANK.watchlist;
+/** Retained admission (watching) may also evict watched and prefetched storage, never playback. */
+const RETAINED_EVICTION_RANK = CLAIM_RANK.prefetch;
+
 export interface StorageInventory {
-  items: Storage[];
+  items: Array<Storage & { requestedFiles: string[] }>;
   physicalBytes: number | null;
   storageBudgetBytes: number;
   reservedBytes: number;
@@ -35,6 +47,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     return { status: 'ready' };
   }
   private readonly storageRepository: StorageRepository;
+  private readonly storageFiles: StorageFileRepository;
   private maxStorageBytes: bigint;
   private playbackReserveBytes: bigint;
   private readonly config: ConfigService;
@@ -47,6 +60,7 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     super();
     this.config = config;
     this.storageRepository = db.getStorageRepository();
+    this.storageFiles = db.getStorageFileRepository();
     this.maxStorageBytes = config.getOrThrow('STORAGE_THRESHOLD');
     this.playbackReserveBytes = config.get('STORAGE_PLAYBACK_RESERVE') ?? 0n;
     config.registerService('STORAGE', this);
@@ -76,11 +90,16 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     downloadedPieces?: Uint8Array;
     totalPieces?: number;
     pieceLength?: number;
-    retentionClass?: 'speculative' | 'watched';
+    /** Speculative admission keeps the playback reserve and evicts only speculative storage. */
+    speculative?: boolean;
     reservedBytes?: number;
-    /** Reserve only the selected file set when a shared torrent pack is used. */
+    /** Reserve only the requested file set when a shared torrent pack is used. */
     partialReservation?: boolean;
-    speculativeExpiresAt?: Date | null;
+    /**
+     * The claim this admission is for, recorded in the same admission step so a newly admitted
+     * row is never unclaimed (and therefore evictable) before its owner records it.
+     */
+    claim?: { path: string; input: ClaimInput };
   }): Promise<Storage> {
     const {
       sourceId,
@@ -89,12 +108,12 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       downloadedPieces,
       totalPieces,
       pieceLength,
-      retentionClass = 'watched',
+      speculative = false,
       reservedBytes,
       partialReservation = false,
-      speculativeExpiresAt = null,
+      claim,
     } = params;
-    const requestedReservation = reservedBytes ?? (retentionClass === 'watched' ? size : 0);
+    const requestedReservation = reservedBytes ?? (speculative ? 0 : size);
     const reservation =
       requestedReservation > 0 && this.allocationMode !== 'sparse'
         ? partialReservation
@@ -123,15 +142,12 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       reservedBytes: reservation,
       totalPieces: totalPieces ?? 0,
       pieceLength: pieceLength ?? 0,
-      retentionClass,
       lastInterestAt: new Date(),
-      speculativeExpiresAt,
       activeStreams: 0,
       lastAccessAt: null,
       lastWriteAt: null,
       videoCompletedAt: null,
       localOnly: false,
-      selectedFiles: [],
       encryptedLayout: null,
     };
 
@@ -149,25 +165,24 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
           true,
           delta,
           sourceId,
-          retentionClass === 'speculative',
-          true,
-          true
+          speculative,
+          speculative ? SPECULATIVE_EVICTION_RANK : RETAINED_EVICTION_RANK
         );
+        await this.assertCapacity(delta, speculative);
       }
-      if (delta > 0) await this.assertCapacity(delta, retentionClass !== 'watched');
 
       if (current) {
-        const keepWatched = current.retentionClass === 'watched';
         await this.storageRepository.update(current.id, {
           reservedBytes: nextReservation,
-          retentionClass: keepWatched ? 'watched' : retentionClass,
-          speculativeExpiresAt: keepWatched ? null : speculativeExpiresAt,
           lastInterestAt: new Date(),
         });
+        if (claim) await this.storageFiles.upsertClaim(current.id, claim.path, claim.input);
         return (await this.storageRepository.findBySourceId(sourceId)) ?? current;
       }
 
-      return this.storageRepository.create(storageData);
+      const created = await this.storageRepository.create(storageData);
+      if (claim) await this.storageFiles.upsertClaim(created.id, claim.path, claim.input);
+      return created;
     });
   }
 
@@ -297,27 +312,73 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     await this.storageRepository.update(storage.id, { encryptedLayout: next });
   }
 
-  /** Record the file needed by an episode; reopening a pack cancels its completed seed window. */
-  async selectTorrentFile(
+  /** Record a source's file table once its layout is known. */
+  async recordFiles(sourceId: number, layout: EncryptedStorageLayout): Promise<void> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
+    if (storage) await this.storageFiles.upsertFiles(storage.id, layout.files);
+  }
+
+  async getFiles(sourceId: number): Promise<StorageFile[]> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
+    return storage ? this.storageFiles.findFiles(storage.id) : [];
+  }
+
+  async markFilesComplete(sourceId: number, paths: string[]): Promise<void> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
+    if (storage) await this.storageFiles.markFilesComplete(storage.id, paths);
+  }
+
+  /**
+   * Record one owner's claim on a file. Claiming an incomplete file reopens a completed source,
+   * which cancels its seeding window and lets the torrent attach again.
+   */
+  async claimFile(
     sourceId: number,
     path: string,
-    fileAlreadyComplete: boolean
+    claim: ClaimInput,
+    fileComplete: boolean
   ): Promise<Storage | null> {
     const storage = await this.storageRepository.findBySourceId(sourceId);
     if (!storage) return null;
-    const selectedFiles = [...new Set([...(storage.selectedFiles ?? []), path])];
-    const next = {
-      selectedFiles,
-      ...(fileAlreadyComplete ? {} : { videoCompletedAt: null, localOnly: false }),
-    };
-    return this.storageRepository.update(storage.id, next);
+    await this.storageFiles.upsertClaim(storage.id, path, claim);
+    if (fileComplete || (!storage.videoCompletedAt && !storage.localOnly)) return storage;
+    return this.storageRepository.update(storage.id, { videoCompletedAt: null, localOnly: false });
   }
 
-  async reactivateTorrent(sourceId: number): Promise<Storage | null> {
+  async releaseClaims(
+    sourceId: number,
+    where: { ownerKey?: string; kind?: ClaimKind } = {}
+  ): Promise<void> {
     const storage = await this.storageRepository.findBySourceId(sourceId);
-    if (!storage) return null;
-    if (!storage.localOnly && !storage.videoCompletedAt) return storage;
-    return this.storageRepository.update(storage.id, { localOnly: false, videoCompletedAt: null });
+    if (storage) await this.storageFiles.deleteClaims(storage.id, where);
+  }
+
+  async getLiveClaims(sourceId: number): Promise<StorageFileClaim[]> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
+    return storage ? this.storageFiles.findLiveClaims(storage.id) : [];
+  }
+
+  /** Paths with at least one live claim. */
+  async getClaimedPaths(sourceId: number): Promise<string[]> {
+    return [...new Set((await this.getLiveClaims(sourceId)).map(claim => claim.path))];
+  }
+
+  /** Subtitle sidecars follow the retention of the video they belong to. */
+  async copyClaims(sourceId: number, fromPath: string, toPaths: string[]): Promise<void> {
+    const storage = await this.storageRepository.findBySourceId(sourceId);
+    if (storage) await this.storageFiles.copyClaims(storage.id, fromPath, toPaths);
+  }
+
+  /** Drop expired claims (or every claim of a kind); returns the source ids whose claims changed. */
+  async deleteClaims(where: { expiredAt?: Date; kind?: ClaimKind }): Promise<number[]> {
+    const storageIds = await this.storageFiles.deleteClaimsWhere(where);
+    const storages = await Promise.all(storageIds.map(id => this.storageRepository.findById(id)));
+    return storages.flatMap(storage => (storage ? [storage.sourceId] : []));
+  }
+
+  /** Sources wanted only speculatively; they yield bandwidth to active playback. */
+  getSpeculativeSourceIds(): Promise<number[]> {
+    return this.storageFiles.findSpeculativeSourceIds();
   }
 
   async markVideoComplete(
@@ -355,10 +416,6 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   @traced('StorageService')
   async getStorageById(id: number): Promise<Storage | null> {
     return this.storageRepository.findById(id);
-  }
-
-  async getSpeculativeStorage(): Promise<Storage[]> {
-    return this.storageRepository.findSpeculativeStorage();
   }
 
   /**
@@ -413,7 +470,16 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   }
 
   async getInventory(): Promise<StorageInventory> {
-    const items = await this.storageRepository.findAllWithSourceAndMovie();
+    const storages = await this.storageRepository.findAllWithSourceAndMovie();
+    const claimed = new Map<number, Set<string>>();
+    for (const claim of await this.storageFiles.findLiveClaims()) {
+      const paths = claimed.get(claim.storageId) ?? new Set<string>();
+      paths.add(claim.path);
+      claimed.set(claim.storageId, paths);
+    }
+    const items = storages.map(storage =>
+      Object.assign(storage, { requestedFiles: [...(claimed.get(storage.id) ?? [])] })
+    );
 
     let filesystem: { totalBytes: number; freeBytes: number } | null = null;
     try {
@@ -482,8 +548,8 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
     }
   }
 
-  /** Increase a row's reservation before promoting speculative storage. */
-  async reserveStorage(sourceId: number, bytes: number): Promise<void> {
+  /** Increase a row's reservation; speculative requests keep the playback reserve free. */
+  async reserveStorage(sourceId: number, bytes: number, speculative = false): Promise<void> {
     await this.withAdmission(async () => {
       const storage = await this.storageRepository.findBySourceId(sourceId);
       if (!storage) throw new Error(`Storage not found for movie source ${sourceId}`);
@@ -493,31 +559,14 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
       const delta = nextCharge - currentCharge;
       if (delta > 0) {
-        await this.cleanupWithinAdmission(true, delta, sourceId, false, true, true);
-        await this.assertCapacity(delta);
-      }
-      await this.storageRepository.update(storage.id, {
-        reservedBytes: nextReservation,
-        retentionClass: 'watched',
-        speculativeExpiresAt: null,
-        lastInterestAt: new Date(),
-      });
-    });
-  }
-
-  /** Increase a speculative reservation without promoting it to watched retention. */
-  async reserveSpeculativeStorage(sourceId: number, bytes: number): Promise<void> {
-    await this.withAdmission(async () => {
-      const storage = await this.storageRepository.findBySourceId(sourceId);
-      if (!storage) throw new Error(`Storage not found for movie source ${sourceId}`);
-      const requested = Math.max(0, Math.floor(bytes));
-      const nextReservation = Math.max(storage.reservedBytes ?? 0, requested);
-      const currentCharge = Math.max(storage.allocatedBytes ?? 0, storage.reservedBytes ?? 0);
-      const nextCharge = Math.max(storage.allocatedBytes ?? 0, nextReservation);
-      const delta = nextCharge - currentCharge;
-      if (delta > 0) {
-        await this.cleanupWithinAdmission(true, delta, sourceId, true, true, true);
-        await this.assertCapacity(delta, true);
+        await this.cleanupWithinAdmission(
+          true,
+          delta,
+          sourceId,
+          speculative,
+          speculative ? SPECULATIVE_EVICTION_RANK : RETAINED_EVICTION_RANK
+        );
+        await this.assertCapacity(delta, speculative);
       }
       await this.storageRepository.update(storage.id, {
         reservedBytes: nextReservation,
@@ -669,16 +718,22 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    */
   @traced('StorageService')
   async cleanup(canCleanEverything = false): Promise<void> {
-    await this.withAdmission(() => this.cleanupWithinAdmission(canCleanEverything, 0));
+    await this.withAdmission(() =>
+      this.cleanupWithinAdmission(canCleanEverything, 0, undefined, false, 0)
+    );
   }
 
+  /**
+   * Evict whole storage, least protected first, until the request fits. `maxClaimRank` bounds
+   * which storage may go: 0 only unclaimed storage, higher ranks also storage whose strongest live
+   * claim is that weak (see CLAIM_RANK). Live playback claims and active streams are never evicted.
+   */
   private async cleanupWithinAdmission(
     canCleanEverything: boolean,
     additionalBytes: number,
-    excludeSourceId?: number,
-    preservePlaybackReserve = false,
-    evictUnexpiredSpeculative = false,
-    evictWatchedEpisodes = false
+    excludeSourceId: number | undefined,
+    preservePlaybackReserve: boolean,
+    maxClaimRank: number
   ): Promise<void> {
     let currentUsage = await this.storageRepository.getChargedStorageUsage();
     const requested = BigInt(additionalBytes);
@@ -701,14 +756,12 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       currentUsage + requested + reserve > this.maxStorageBytes &&
       cleanupAttempts < maxCleanupAttempts
     ) {
-      let removalCandidate = await this.storageRepository.findMostStaleStorage(
-        excludeSourceId,
-        evictUnexpiredSpeculative
+      const candidateId = await this.storageFiles.findEvictionCandidate(
+        maxClaimRank,
+        excludeSourceId
       );
-      if (!removalCandidate && evictWatchedEpisodes) {
-        removalCandidate =
-          await this.storageRepository.findMostStaleWatchedEpisodeStorage(excludeSourceId);
-      }
+      const removalCandidate =
+        candidateId === null ? null : await this.storageRepository.findById(candidateId);
       if (!removalCandidate) {
         logger.warn('StorageService', 'No storage records found');
         break;

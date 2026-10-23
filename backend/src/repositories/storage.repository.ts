@@ -1,7 +1,6 @@
 import type { Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
-import { EpisodeSource } from '@entities/episode-source.entity';
 import { Storage } from '@entities/storage.entity';
 
 export class StorageRepository {
@@ -36,13 +35,6 @@ export class StorageRepository {
       .addOrderBy('storage.reservedBytes', 'DESC')
       .addOrderBy('movie.title', 'ASC')
       .getMany();
-  }
-
-  async findSpeculativeStorage(): Promise<Storage[]> {
-    return this.repository.find({
-      where: { retentionClass: 'speculative' },
-      order: { lastInterestAt: 'ASC', createdAt: 'ASC' },
-    });
   }
 
   async findStoragesWithCompletion(): Promise<Storage[]> {
@@ -169,55 +161,6 @@ export class StorageRepository {
     }
 
     return query.getMany();
-  }
-
-  /**
-   * Find the most stale storage record (least recently accessed)
-   * Returns null if no storage records exist
-   */
-  async findMostStaleStorage(
-    excludeSourceId?: number,
-    includeUnexpiredSpeculative = false
-  ): Promise<Storage | null> {
-    const query = this.repository
-      .createQueryBuilder('storage')
-      .where('storage.retentionClass = :retentionClass', { retentionClass: 'speculative' })
-      .andWhere('storage.activeStreams = 0')
-      .andWhere(
-        includeUnexpiredSpeculative
-          ? '1 = 1'
-          : '(storage.speculativeExpiresAt IS NOT NULL AND storage.speculativeExpiresAt <= :now)',
-        { now: new Date() }
-      );
-    if (includeUnexpiredSpeculative) {
-      query.orderBy('storage.lastInterestAt', 'ASC').addOrderBy('storage.lastAccessAt', 'ASC');
-    } else {
-      query.orderBy('storage.lastAccessAt', 'ASC');
-    }
-    query.addOrderBy('storage.createdAt', 'ASC'); // Secondary sort by creation date
-    if (excludeSourceId !== undefined) {
-      query.andWhere('storage.sourceId != :excludeSourceId', { excludeSourceId });
-    }
-    return query.getOne();
-  }
-
-  /** Find an idle, completed TV torrent after lower-priority speculative storage is exhausted. */
-  async findMostStaleWatchedEpisodeStorage(excludeSourceId?: number): Promise<Storage | null> {
-    const query = this.repository
-      .createQueryBuilder('storage')
-      .innerJoin(EpisodeSource, 'episodeSource', 'episodeSource.sourceId = storage.sourceId')
-      .where('storage.retentionClass = :retentionClass', { retentionClass: 'watched' })
-      .andWhere('storage.activeStreams = 0')
-      .andWhere('storage.videoCompletedAt IS NOT NULL')
-      .andWhere('storage.selectedFiles != :emptySelection', { emptySelection: '[]' })
-      .orderBy('storage.lastInterestAt', 'ASC')
-      .addOrderBy('storage.lastAccessAt', 'ASC')
-      .addOrderBy('storage.createdAt', 'ASC')
-      .distinct(true);
-    if (excludeSourceId !== undefined) {
-      query.andWhere('storage.sourceId != :excludeSourceId', { excludeSourceId });
-    }
-    return query.getOne();
   }
 
   /**

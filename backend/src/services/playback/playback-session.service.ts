@@ -82,8 +82,10 @@ export class PlaybackSessionService {
         (this.audioPlaybackService?.canConvertHevc?.() ?? false)
     );
     if (!prepared.source) return null;
+    // Each viewer keeps what they started watching; another viewer's claim is independent.
+    const ownerKey = `user:${userId}:${this.playableKey(playable)}`;
     if (prepared.target && (prepared.state === 'ready' || prepared.state === 'warming')) {
-      await this.warmup?.promote(prepared.target, this.playableKey(playable));
+      await this.warmup?.promote(prepared.target, this.playableKey(playable), ownerKey);
     }
     let delivery: PlaybackDelivery | undefined;
     for (let attempt = 0; !options.deferDownload && attempt < 2; attempt++) {
@@ -105,7 +107,7 @@ export class PlaybackSessionService {
             if (fallback.source) {
               prepared = fallback;
               if (prepared.target && prepared.state !== 'cold') {
-                await this.warmup?.promote(prepared.target, this.playableKey(playable));
+                await this.warmup?.promote(prepared.target, this.playableKey(playable), ownerKey);
               }
               continue;
             }
