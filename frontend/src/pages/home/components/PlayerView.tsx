@@ -168,6 +168,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     useState<CreatePlaybackSessionResponse | null>(null);
   const prefetchedNextRef = useRef<CreatePlaybackSessionResponse | null>(null);
   const nextRequestInFlight = useRef<Promise<void> | null>(null);
+  /** The next episode that already got its one retry at the 70% prefetch point. */
+  const nextRetriedAtPrefetch = useRef<string | null>(null);
   const nextEpisodeKeyRef = useRef<string | null>(null);
   const nextDownloadStarted = useRef<string | null>(null);
   const [nextSearchReached, setNextSearchReached] = useState(false);
@@ -231,35 +233,43 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   currentStreamingKey.current = session?.streamingKey ?? null;
   subtitleOffsetRef.current = subtitleOffset;
 
-  const prepareNextEpisode = useCallback(() => {
-    const target = nextEpisodeRef.current;
-    const key = nextEpisodeKeyRef.current;
-    if (!target || !key) return Promise.resolve();
-    if (prefetchedNextRef.current && nextEpisodeKeyRef.current === key) return Promise.resolve();
-    if (nextRequestInFlight.current) return nextRequestInFlight.current;
-    const request = createNextSession({
-      playable: target.playable,
-      deferDownload: true,
-      preferences: {
-        quality: 'auto',
-        ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
-      },
-    })
-      .unwrap()
-      .then(result => {
-        if (nextEpisodeKeyRef.current !== key) return;
-        prefetchedNextRef.current = result;
-        setPrefetchedNextSession(result);
+  const prepareNextEpisode = useCallback(
+    (atPrefetchPoint = false) => {
+      const target = nextEpisodeRef.current;
+      const key = nextEpisodeKeyRef.current;
+      if (!target || !key) return Promise.resolve();
+      if (prefetchedNextRef.current && nextEpisodeKeyRef.current === key) return Promise.resolve();
+      if (nextRequestInFlight.current) return nextRequestInFlight.current;
+      if (atPrefetchPoint) {
+        // Every timeupdate past 70% lands here; a failing source gets one retry, not one per tick.
+        if (nextRetriedAtPrefetch.current === key) return Promise.resolve();
+        nextRetriedAtPrefetch.current = key;
+      }
+      const request = createNextSession({
+        playable: target.playable,
+        deferDownload: true,
+        preferences: {
+          quality: 'auto',
+          ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
+        },
       })
-      .catch(() => {
-        // A missing next source is retried once playback reaches the 70% prefetch point.
-      })
-      .finally(() => {
-        if (nextRequestInFlight.current === request) nextRequestInFlight.current = null;
-      });
-    nextRequestInFlight.current = request;
-    return request;
-  }, [createNextSession]);
+        .unwrap()
+        .then(result => {
+          if (nextEpisodeKeyRef.current !== key) return;
+          prefetchedNextRef.current = result;
+          setPrefetchedNextSession(result);
+        })
+        .catch(() => {
+          // A missing next source is retried once playback reaches the 70% prefetch point.
+        })
+        .finally(() => {
+          if (nextRequestInFlight.current === request) nextRequestInFlight.current = null;
+        });
+      nextRequestInFlight.current = request;
+      return request;
+    },
+    [createNextSession]
+  );
 
   const startNextEpisodeDownload = useCallback(() => {
     if (
@@ -373,6 +383,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     prefetchedNextRef.current = null;
     setPrefetchedNextSession(null);
     nextDownloadStarted.current = null;
+    nextRetriedAtPrefetch.current = null;
     setNextSearchReached(false);
     nextDismissed.current = null;
     nextTransitioned.current = null;
@@ -866,7 +877,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
                 event.currentTarget.currentTime / duration >= 0.7
               ) {
                 if (!nextSearchReached) setNextSearchReached(true);
-                void prepareNextEpisode();
+                void prepareNextEpisode(true);
                 startNextEpisodeDownload();
               }
               setSubtitleWindow(

@@ -12,6 +12,7 @@ const {
   useGetNotificationsQuery,
   useMarkNotificationReadMutation,
   markNotificationRead,
+  resetNotificationsApi,
   rowHandles,
   rowProps,
   mediaIndexes,
@@ -40,6 +41,7 @@ const {
   useGetNotificationsQuery: vi.fn(),
   useMarkNotificationReadMutation: vi.fn(),
   markNotificationRead: vi.fn(),
+  resetNotificationsApi: vi.fn(() => ({ type: 'notificationsApi/resetApiState' })),
   rowHandles: new Map<number, Record<string, unknown>>(),
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
   mediaIndexes: new Map<number, number>(),
@@ -104,6 +106,7 @@ vi.mock('@features/preload/api/preload.api', () => ({
   useRemoveIntentMutation: () => [removeIntent],
 }));
 vi.mock('@features/notifications/api/notifications.api', () => ({
+  notificationsApi: { util: { resetApiState: resetNotificationsApi } },
   useGetNotificationsQuery,
   useMarkNotificationReadMutation,
 }));
@@ -839,6 +842,7 @@ describe('HomePage focus transitions', () => {
     currentSession.mockReturnValue('second-session');
     view.rerender(<HomePage />);
     expect(screen.getByTestId('hero')).toHaveAttribute('data-source-status', 'checking');
+    expect(dispatch).toHaveBeenCalledWith({ type: 'notificationsApi/resetApiState' });
   });
 
   it('shows cached source metadata immediately when returning to a movie and replaces it after refresh', () => {

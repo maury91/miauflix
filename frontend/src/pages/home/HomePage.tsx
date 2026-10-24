@@ -8,6 +8,7 @@ import {
 } from '@features/media/api/media.api';
 import { mediaApi } from '@features/media/api/media.api';
 import {
+  notificationsApi,
   useGetNotificationsQuery,
   useMarkNotificationReadMutation,
 } from '@features/notifications/api/notifications.api';
@@ -463,6 +464,8 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     if (previousSessionId.current === sessionId) return;
     previousSessionId.current = sessionId;
     dispatch(progressApi.util.resetApiState());
+    // The mounted notifications query re-subscribes after the reset, so polling continues.
+    dispatch(notificationsApi.util.resetApiState());
     latestIntentSession.current = null;
     lastPreparationSession.current = sessionId;
     lastPreparation.current = null;

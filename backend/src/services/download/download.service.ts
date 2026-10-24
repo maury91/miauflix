@@ -181,8 +181,8 @@ export class DownloadService {
   private readonly blockedReadsBySource = new Map<number, Map<symbol, number>>();
   /** When bytes last reached a viewer, by source. */
   private readonly lastDeliveryAt = new Map<number, number>();
-  /** Where viewers last read in the media, as a fraction of the file, by source. */
-  private readonly readFraction = new Map<number, number>();
+  /** Where viewers last read in the media, as a fraction of the file, by source and file path. */
+  private readonly readFraction = new Map<number, Map<string, number>>();
   private readonly activeSourceFiles = new Map<number, Map<string, number>>();
   private readonly allocationReconcileAt = new Map<number, number>();
   private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
@@ -310,7 +310,7 @@ export class DownloadService {
       blockedSince: blocked.length ? Math.min(...blocked) : null,
       lastDeliveryAt: this.lastDeliveryAt.get(sourceId) ?? null,
       fileLength: (filePath && layout?.files.find(file => file.path === filePath)?.length) || null,
-      readFraction: this.readFraction.get(sourceId) ?? null,
+      readFraction: (filePath ? this.readFraction.get(sourceId)?.get(filePath) : undefined) ?? null,
     };
   }
 
@@ -2154,7 +2154,7 @@ export class DownloadService {
                   cursor >= RESUME_HEADER_BYTES &&
                   cursor < file.length - MATROSKA_TAIL_BYTES
                 ) {
-                  this.readFraction.set(contentSource.id, cursor / file.length);
+                  this.setReadFraction(contentSource.id, file.path, cursor / file.length);
                 }
                 const torrentOffset = file.offset + cursor;
                 const pieceIndex = Math.floor(torrentOffset / layout.pieceLength);
@@ -2288,8 +2288,19 @@ export class DownloadService {
     const paths = this.activeSourceFiles.get(sourceId) ?? new Map<string, number>();
     const count = (paths.get(path) ?? 0) + delta;
     if (count > 0) paths.set(path, count);
-    else paths.delete(path);
+    else {
+      paths.delete(path);
+      const fractions = this.readFraction.get(sourceId);
+      fractions?.delete(path);
+      if (fractions && !fractions.size) this.readFraction.delete(sourceId);
+    }
     if (paths.size) this.activeSourceFiles.set(sourceId, paths);
     else this.activeSourceFiles.delete(sourceId);
+  }
+
+  private setReadFraction(sourceId: number, path: string, fraction: number): void {
+    const fractions = this.readFraction.get(sourceId) ?? new Map<string, number>();
+    fractions.set(path, fraction);
+    this.readFraction.set(sourceId, fractions);
   }
 }
