@@ -4,8 +4,7 @@ import { act, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const {
-  useGetListsQuery,
-  useGetPopularListsInfiniteQuery,
+  useGetListsInfiniteQuery,
   useGetMovieQuery,
   useGetShowQuery,
   useGetSeasonQuery,
@@ -33,8 +32,7 @@ const {
   realtimeState,
   heroControls,
 } = vi.hoisted(() => ({
-  useGetListsQuery: vi.fn(),
-  useGetPopularListsInfiniteQuery: vi.fn(),
+  useGetListsInfiniteQuery: vi.fn(),
   useGetMovieQuery: vi.fn(),
   useGetShowQuery: vi.fn(),
   useGetSeasonQuery: vi.fn(),
@@ -86,8 +84,7 @@ vi.mock('@features/integrations/api/trakt.api', () => ({
 }));
 
 vi.mock('@features/media/api/lists.api', () => ({
-  useGetListsQuery,
-  useGetPopularListsInfiniteQuery,
+  useGetListsInfiniteQuery,
 }));
 vi.mock('@features/media/api/media.api', () => ({
   useGetMovieQuery,
@@ -150,7 +147,13 @@ vi.mock('react-redux', async () => {
   };
 });
 vi.mock('./hooks/useMediaBoxSizes', () => ({
-  useMediaBoxSizes: () => ({ mediaWidth: 180, mediaPerPage: 1, gap: 12, margin: 24 }),
+  useMediaBoxSizes: () => ({
+    mediaWidth: 180,
+    mediaPerPage: 1,
+    gap: 12,
+    margin: 24,
+    rowHeight: 300,
+  }),
 }));
 vi.mock('./components/CategoryRow', async () => {
   const React = await import('react');
@@ -298,6 +301,7 @@ vi.mock('./components/MediaDetails', async () => {
 import { progressApi } from '@features/progress/api/progress.api';
 import { homeNavigationSlice, initialHomeNavigationState } from '@store/slices/homeNavigation';
 
+import { homeMountedRows } from './home-layout';
 import HomePage from './HomePage';
 
 const categories = [
@@ -349,16 +353,13 @@ describe('HomePage focus transitions', () => {
     rowHandles.clear();
     rowProps.clear();
     mediaIndexes.clear();
-    useGetListsQuery.mockReset().mockReturnValue({
-      data: categories,
-      isLoading: false,
-      isError: false,
-    });
-    useGetPopularListsInfiniteQuery.mockReset().mockReturnValue({
-      data: { pages: [{ results: [], totalPages: 0 }] },
+    useGetListsInfiniteQuery.mockReset().mockReturnValue({
+      data: { pages: [{ results: categories, totalPages: 1 }] },
       fetchNextPage: vi.fn(),
       hasNextPage: false,
       isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
     });
     useGetMovieQuery.mockReset().mockReturnValue({
       data: undefined,
@@ -428,8 +429,7 @@ describe('HomePage focus transitions', () => {
     const onHydrated = vi.fn();
     render(<HomePage interactive={false} onHydrated={onHydrated} />);
 
-    expect(useGetListsQuery).toHaveBeenCalled();
-    expect(useGetPopularListsInfiniteQuery).toHaveBeenCalledWith({ limit: 20 }, { skip: false });
+    expect(useGetListsInfiniteQuery).toHaveBeenCalledWith({ limit: 20 }, { skip: false });
     expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'false');
     expect(screen.getByTestId('hero')).toHaveAttribute('data-media-id', '100');
     expect(screen.queryByRole('dialog', { name: 'Connect Trakt' })).not.toBeInTheDocument();
@@ -440,7 +440,14 @@ describe('HomePage focus transitions', () => {
   });
 
   it('loads a directly addressed movie route without loading the category feed', () => {
-    useGetListsQuery.mockReturnValue({ data: undefined, isLoading: false, isError: false });
+    useGetListsInfiniteQuery.mockReturnValue({
+      data: undefined,
+      fetchNextPage: vi.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+    });
     useGetMovieQuery.mockReturnValue({
       data: {
         type: 'movie',
@@ -466,7 +473,7 @@ describe('HomePage focus transitions', () => {
     });
     navigate({ type: 'movieDetails', mediaId: 789 }, { replace: true });
     render(<HomePage />);
-    expect(useGetListsQuery).toHaveBeenCalledWith(undefined, { skip: true });
+    expect(useGetListsInfiniteQuery).toHaveBeenCalledWith({ limit: 20 }, { skip: true });
     expect(useGetMovieQuery).toHaveBeenCalledWith(789);
     expect(screen.getByTestId('details')).toHaveAttribute('data-media-id', '789');
     const mapAction = dispatch.mock.calls
@@ -652,10 +659,12 @@ describe('HomePage focus transitions', () => {
     selectMovie.mockReturnValue(() => ({ data: { id: 1, mediaId: 100, title: 'Saved movie' } }));
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     try {
+      // Only the rows around the focused one are mounted.
+      const mountedRows = homeMountedRows(0, 0, categories.length + 1).length;
       const view = render(<HomePage />);
-      expect(screen.getAllByTestId(/^card-/)).toHaveLength(categories.length + 1);
+      expect(screen.getAllByTestId(/^card-/)).toHaveLength(mountedRows);
       view.rerender(<HomePage />);
-      expect(screen.getAllByTestId(/^card-/)).toHaveLength(categories.length + 1);
+      expect(screen.getAllByTestId(/^card-/)).toHaveLength(mountedRows);
       expect(updateIntent).toHaveBeenCalledTimes(1);
       // Unrelated catalog cache updates recreate card DTOs without changing focus.
       for (let update = 0; update < 3; update += 1) {
@@ -998,17 +1007,19 @@ describe('HomePage focus transitions', () => {
     expect(rowProps.get(6)).toEqual({ loadIntent: 'prefetch', visible: false });
   });
 
-  it('renders fixed and popular categories as one ordered row collection', () => {
-    useGetListsQuery.mockReturnValue({
-      data: [categories[0]],
-      isLoading: false,
-      isError: false,
-    });
-    useGetPopularListsInfiniteQuery.mockReturnValue({
-      data: { pages: [{ results: categories.slice(1, 3), totalPages: 1 }] },
+  it('renders every loaded page of lists as one ordered row collection', () => {
+    useGetListsInfiniteQuery.mockReturnValue({
+      data: {
+        pages: [
+          { results: categories.slice(0, 2), totalPages: 2 },
+          { results: categories.slice(2, 3), totalPages: 2 },
+        ],
+      },
       fetchNextPage: vi.fn(),
       hasNextPage: false,
       isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
     });
 
     render(<HomePage />);

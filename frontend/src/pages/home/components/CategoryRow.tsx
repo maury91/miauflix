@@ -9,27 +9,32 @@ import {
   forwardRef,
   useCallback,
   useEffect,
+  useId,
   useImperativeHandle,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
 } from 'react';
 import styled from 'styled-components';
 
+import { ROW_GAP_VH, ROW_HEIGHT_VH } from '../home-layout';
 import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '../homeNavigation';
+import { useSmoothScroller } from '../hooks/useSmoothScroller';
+import { imagePreloader, NEARBY } from '../image-preloader';
 import { artworkUrl } from '../media.utils';
+import { ROW_PAGE_SIZE, rowPagesFor, rowRenderRadius } from '../row-pages';
 import { MediaCard } from './MediaCard';
 
 import ChevronLeftIcon from '~icons/line-md/chevron-left';
 import ChevronRightIcon from '~icons/line-md/chevron-right';
 
-const PAGE_SIZE = 20;
-const ALIGNMENT_TOLERANCE = 0.5;
 const VIEWPORT_PROMOTION_DEBOUNCE_MS = 300;
 
+/** Fixed height, whatever the row shows, so Home can place rows without measuring them. */
 const RowContainer = styled.section`
-  margin-bottom: 5vh;
-  scroll-margin-block: 7vh 8vh;
+  height: ${ROW_HEIGHT_VH - ROW_GAP_VH}vh;
+  margin-bottom: ${ROW_GAP_VH}vh;
 `;
 
 const CategoryTitle = styled.h2`
@@ -122,9 +127,11 @@ const ArrowButton = styled(BaseButton)<{ $side: 'left' | 'right' }>`
   }
 `;
 
-const Spacer = styled.div<{ $width: number }>`
-  flex: 0 0 ${({ $width }) => Math.max(0, $width)}px;
-`;
+/** Stands in for cards that are not rendered. Sized inline: a styled-components prop would add a
+ * CSS class per distinct width. */
+const Spacer = ({ width }: { width: number }) => (
+  <div style={{ flex: `0 0 ${Math.max(0, width)}px` }} />
+);
 
 const State = styled.div`
   display: flex;
@@ -175,9 +182,17 @@ interface CategoryRowProps {
   onMediaLoaded?: (slug: string, media: MediaDto[]) => void;
 }
 
+const mediaRef = (media: MediaDto) => ({
+  mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
+  mediaId: media.mediaId,
+});
+
 /**
- * Render a navigable media row with a window of cards around the selection.
- * Supplying mediaOverride bypasses list fetching and promotion, including for an empty array.
+ * A navigable media row. The selected card sits in the leading slot: moving the selection
+ * scrolls the row (animated, see smooth-scroll.ts) so the selection lands there. Only the cards
+ * around the selection are rendered, and only the list pages around it are loaded (see
+ * row-pages.ts). Supplying mediaOverride bypasses list fetching and promotion, including for an
+ * empty array.
  */
 export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(function CategoryRow(
   {
@@ -208,65 +223,44 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
 ) {
   const [uncontrolledIndex, setUncontrolledIndex] = useState(initialIndex);
   const selectedIndex = controlledIndex ?? uncontrolledIndex;
-  const page = Math.floor(Math.max(0, selectedIndex) / PAGE_SIZE);
-  const [scrollLeft, setScrollLeft] = useState(0);
-  const [alignmentRequest, setAlignmentRequest] = useState(0);
   const effectiveLoadIntent = loadIntent ?? (nearby ? 'visible' : 'dormant');
-  const current = useGetListQuery(
-    !mediaOverride && effectiveLoadIntent !== 'dormant'
-      ? { category: category.slug, page, limit: PAGE_SIZE, priority: effectiveLoadIntent }
-      : skipToken
-  );
-  const [promoteListMedia] = usePromoteListMediaMutation();
-  const [queueBackdropFocus] = useQueueBackdropFocusMutation();
+  const fetching = !mediaOverride && effectiveLoadIntent !== 'dormant';
+
+  // Data: the selection's page, and the neighbouring page once the selection nears it.
+  const pageQuery = (index: number | null) =>
+    fetching && index !== null
+      ? {
+          category: category.slug,
+          page: index,
+          limit: ROW_PAGE_SIZE,
+          priority: effectiveLoadIntent,
+        }
+      : skipToken;
+  const current = useGetListQuery(pageQuery(Math.floor(selectedIndex / ROW_PAGE_SIZE)));
   const total = mediaOverride?.length ?? current.currentData?.total ?? current.data?.total ?? 0;
-  const step = mediaWidth + gap;
-  const radius = mediaPerPage + 4;
-  const first = Math.max(0, selectedIndex - radius);
-  const last = Math.min(total - 1, selectedIndex + radius);
-  const previousPage = useGetListQuery(
-    !mediaOverride && effectiveLoadIntent !== 'dormant' && page > 0 && first < page * PAGE_SIZE
-      ? {
-          category: category.slug,
-          page: page - 1,
-          limit: PAGE_SIZE,
-          priority: effectiveLoadIntent,
-        }
-      : skipToken
-  );
-  const nextPage = useGetListQuery(
-    !mediaOverride &&
-      effectiveLoadIntent !== 'dormant' &&
-      (page + 1) * PAGE_SIZE < total &&
-      last >= (page + 1) * PAGE_SIZE
-      ? {
-          category: category.slug,
-          page: page + 1,
-          limit: PAGE_SIZE,
-          priority: effectiveLoadIntent,
-        }
-      : skipToken
-  );
-  const cardRefs = useRef(new Map<number, HTMLButtonElement>());
-  const rowRef = useRef<HTMLElement>(null);
-  const scrollRef = useRef<HTMLDivElement>(null);
-  const pendingAlignedIndex = useRef<number | null>(null);
-  const shouldFocus = useRef(categoryIndex === 0);
-  const pendingIndex = useRef<number | null>(categoryIndex === 0 ? initialIndex : null);
-  const preparedMedia = useRef(new Set<string>());
-  const queuedBackdropMedia = useRef(new Set<string>());
+  const adjacent = useGetListQuery(pageQuery(rowPagesFor(selectedIndex, total).neighbour));
 
   const mediaByIndex = useMemo(() => {
     if (mediaOverride) return new Map(mediaOverride.map((media, index) => [index, media]));
     const result = new Map<number, MediaDto>();
-    for (const response of [previousPage.currentData, nextPage.currentData, current.currentData]) {
+    for (const response of [adjacent.currentData, current.currentData]) {
       if (response?.page === undefined || response.pageSize === undefined) continue;
       response.results.forEach((media, index) =>
         result.set(response.page! * response.pageSize! + index, media)
       );
     }
     return result;
-  }, [current.currentData, mediaOverride, nextPage.currentData, previousPage.currentData]);
+  }, [adjacent.currentData, current.currentData, mediaOverride]);
+
+  const [promoteListMedia] = usePromoteListMediaMutation();
+  const [queueBackdropFocus] = useQueueBackdropFocusMutation();
+  const step = mediaWidth + gap;
+  const cardRefs = useRef(new Map<number, HTMLButtonElement>());
+  const scroller = useSmoothScroller('x');
+  /** Set by keyboard and arrow moves: focus the selected card once it is rendered. */
+  const wantsFocus = useRef(isCurrentRow);
+  /** Bumped to scroll the selection into the leading slot; hover selects without scrolling. */
+  const [alignRequest, setAlignRequest] = useState(0);
 
   const updateSelectedIndex = useCallback(
     (index: number) => {
@@ -276,19 +270,111 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     [controlledIndex, onSelectionChange]
   );
 
+  /** Select `index` (bounded once the row's size is known) and scroll it into the leading slot. */
+  const moveTo = useCallback(
+    (index: number, focus = true) => {
+      updateSelectedIndex(total ? Math.max(0, Math.min(index, total - 1)) : Math.max(0, index));
+      wantsFocus.current = focus;
+      setAlignRequest(request => request + 1);
+    },
+    [total, updateSelectedIndex]
+  );
+
+  // Scroll the selection into the leading slot (instantly the first time, see useSmoothScroller).
+  useLayoutEffect(() => {
+    if (total) scroller.scrollTo(Math.min(selectedIndex, total - 1) * step);
+    // Only explicit moves (and the row's size or card size changing) scroll the row.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [alignRequest, total, step]);
+
   useEffect(() => {
-    const loaded = [previousPage.currentData, current.currentData, nextPage.currentData].flatMap(
-      response => response?.results ?? []
+    const media = mediaByIndex.get(selectedIndex);
+    if (!media) return;
+    if (isCurrentRow) onActive(categoryIndex, selectedIndex, media);
+    if (!active || !wantsFocus.current) return;
+    const card = cardRefs.current.get(selectedIndex);
+    if (!card) return;
+    wantsFocus.current = false;
+    card.focus({ preventScroll: true });
+  }, [active, alignRequest, categoryIndex, isCurrentRow, mediaByIndex, onActive, selectedIndex]);
+
+  const handleAction = useCallback(
+    (action: HomeAction): NavigationOutcome => {
+      const command = resolveCarouselAction(
+        action,
+        selectedIndex,
+        total,
+        mediaByIndex.get(selectedIndex) ?? null
+      );
+      if (command.nextIndex !== undefined) moveTo(command.nextIndex);
+      if (command.activation) onSelect(command.activation);
+      return command.outcome;
+    },
+    [mediaByIndex, moveTo, onSelect, selectedIndex, total]
+  );
+
+  /** The browser arrows move like the keyboard, and make this the active row. */
+  const moveByArrow = (delta: -1 | 1) => {
+    const index = Math.max(0, Math.min(selectedIndex + delta, total - 1));
+    moveTo(index);
+    const media = mediaByIndex.get(index);
+    if (media) onActive(categoryIndex, index, media);
+  };
+
+  useImperativeHandle(
+    forwardedRef,
+    () => ({
+      focusIndex: index => {
+        moveTo(index);
+        return total > 0;
+      },
+      isEmpty: () => current.currentData?.total === 0,
+      handleAction,
+      getNavigationContext: () => ({
+        selected: mediaByIndex.get(selectedIndex) ?? null,
+        left: mediaByIndex.get(selectedIndex - 1) ?? null,
+        right: mediaByIndex.get(selectedIndex + 1) ?? null,
+      }),
+      getInterestWindow: () => {
+        if (!total) return { media: [], center: null, visible: [] };
+        const start = Math.max(0, Math.min(selectedIndex - 5, total - 11));
+        const length = Math.min(11, total - start);
+        const left = scroller.element.current?.scrollLeft ?? selectedIndex * step;
+        return {
+          media: Array.from({ length }, (_, offset) => mediaByIndex.get(start + offset) ?? null),
+          center: selectedIndex - start,
+          visible: Array.from({ length }, (_, offset) => start + offset)
+            .filter(index => index * step < left + contentWidth && (index + 1) * step - gap > left)
+            .map(index => index - start),
+        };
+      },
+    }),
+    [
+      contentWidth,
+      current.currentData?.total,
+      gap,
+      handleAction,
+      mediaByIndex,
+      moveTo,
+      scroller.element,
+      selectedIndex,
+      step,
+      total,
+    ]
+  );
+
+  // A selection restored past the end of a list that shrank moves to its last card.
+  useEffect(() => {
+    const loadedTotal = current.currentData?.total ?? 0;
+    if (loadedTotal > 0 && selectedIndex >= loadedTotal) moveTo(loadedTotal - 1, false);
+  }, [current.currentData, moveTo, selectedIndex]);
+
+  useEffect(() => {
+    onMediaLoaded?.(
+      category.slug,
+      mediaOverride ?? [current.currentData, adjacent.currentData].flatMap(r => r?.results ?? [])
     );
-    onMediaLoaded?.(category.slug, mediaOverride ?? loaded);
-  }, [
-    category.slug,
-    current.currentData,
-    mediaOverride,
-    nextPage.currentData,
-    onMediaLoaded,
-    previousPage.currentData,
-  ]);
+  }, [adjacent.currentData, category.slug, current.currentData, mediaOverride, onMediaLoaded]);
 
   useEffect(() => {
     if (effectiveLoadIntent === 'dormant') return;
@@ -303,235 +389,68 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     onDataReady,
   ]);
 
-  const selectIndex = useCallback(
-    (requested: number, focus = true) => {
-      if (!total) {
-        pendingIndex.current = requested;
-        shouldFocus.current = focus;
-        updateSelectedIndex(requested);
-        return;
-      }
-      const bounded = Math.max(0, Math.min(requested, total - 1));
-      shouldFocus.current = focus;
-      updateSelectedIndex(bounded);
-    },
-    [total, updateSelectedIndex]
-  );
-
-  const handleAction = useCallback(
-    (action: HomeAction): NavigationOutcome => {
-      const command = resolveCarouselAction(
-        action,
-        selectedIndex,
-        total,
-        mediaByIndex.get(selectedIndex) ?? null
-      );
-      if (command.nextIndex !== undefined) {
-        pendingAlignedIndex.current = command.nextIndex;
-        selectIndex(command.nextIndex);
-      }
-      if (command.activation) onSelect(command.activation);
-      return command.outcome;
-    },
-    [mediaByIndex, onSelect, selectIndex, selectedIndex, total]
-  );
-
-  const moveByArrow = useCallback(
-    (delta: -1 | 1) => {
-      if (!total) return;
-      const currentScrollLeft = scrollRef.current?.scrollLeft ?? scrollLeft;
-      const position = currentScrollLeft / step;
-      const nearestIndex = Math.round(position);
-      const isAligned = Math.abs(currentScrollLeft - nearestIndex * step) <= ALIGNMENT_TOLERANCE;
-      const requested =
-        delta > 0
-          ? (isAligned ? nearestIndex : Math.floor(position)) + 1
-          : (isAligned ? nearestIndex : Math.ceil(position)) - 1;
-      const bounded = Math.max(0, Math.min(requested, total - 1));
-      if (
-        isAligned &&
-        bounded === nearestIndex &&
-        (delta < 0 ? bounded === 0 : bounded === total - 1)
-      ) {
-        return;
-      }
-      const media = mediaByIndex.get(bounded);
-      if (media) onActive(categoryIndex, bounded, media);
-      pendingAlignedIndex.current = bounded;
-      selectIndex(bounded);
-      setAlignmentRequest(request => request + 1);
-    },
-    [categoryIndex, mediaByIndex, onActive, scrollLeft, selectIndex, step, total]
-  );
-
-  const getNavigationContext = useCallback(() => {
-    return {
-      selected: mediaByIndex.get(selectedIndex) ?? null,
-      left: mediaByIndex.get(selectedIndex - 1) ?? null,
-      right: mediaByIndex.get(selectedIndex + 1) ?? null,
-    };
-  }, [mediaByIndex, selectedIndex]);
-
-  useImperativeHandle(
-    forwardedRef,
-    () => ({
-      focusIndex: index => {
-        selectIndex(index);
-        // Returning from details may request the already-selected card.
-        setAlignmentRequest(request => request + 1);
-        return total > 0;
-      },
-      isEmpty: () => current.currentData?.total === 0,
-      handleAction,
-      getNavigationContext,
-      getInterestWindow: () => {
-        if (!total) return { media: [], center: null, visible: [] };
-        const start = Math.max(0, Math.min(selectedIndex - 5, total - 11));
-        const length = Math.min(11, total - start);
-        return {
-          media: Array.from({ length }, (_, offset) => mediaByIndex.get(start + offset) ?? null),
-          center: selectedIndex - start,
-          visible: Array.from({ length }, (_, offset) => start + offset)
-            .filter(index => {
-              const left = scrollRef.current?.scrollLeft ?? scrollLeft;
-              return index * step < left + contentWidth && (index + 1) * step - gap > left;
-            })
-            .map(index => index - start),
-        };
-      },
-    }),
-    [
-      current.currentData?.total,
-      scrollLeft,
-      step,
-      gap,
-      contentWidth,
-      getNavigationContext,
-      handleAction,
-      mediaByIndex,
-      selectIndex,
-      selectedIndex,
-      total,
-    ]
-  );
-
-  useEffect(() => {
-    if (total && pendingIndex.current !== null) {
-      const requested = pendingIndex.current;
-      pendingIndex.current = null;
-      selectIndex(requested, shouldFocus.current);
-    }
-  }, [selectIndex, total]);
-
-  useEffect(() => {
-    const media = mediaByIndex.get(selectedIndex);
-    if (!media) return;
-    if (isCurrentRow) onActive(categoryIndex, selectedIndex, media);
-    const alignedIndex = pendingAlignedIndex.current;
-    if (alignedIndex === null && (!active || !shouldFocus.current)) return;
-    const card = cardRefs.current.get(selectedIndex);
-    if (!card) return;
-    shouldFocus.current = false;
-    const behavior = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-      ? 'auto'
-      : 'smooth';
-    pendingAlignedIndex.current = null;
-    if (alignedIndex !== null) {
-      const targetScrollLeft = alignedIndex * step;
-      setScrollLeft(targetScrollLeft);
-      if (scrollRef.current && typeof scrollRef.current.scrollTo === 'function') {
-        scrollRef.current.scrollTo({ left: targetScrollLeft, behavior });
-      }
-      if (active) card.focus({ preventScroll: true });
-    } else {
-      card.focus({ preventScroll: true });
-      card.scrollIntoView({ behavior, block: 'nearest', inline: 'nearest' });
-    }
-    if (active) rowRef.current?.scrollIntoView({ behavior, block: 'nearest' });
-  }, [
-    active,
-    categoryIndex,
-    gap,
-    isCurrentRow,
-    mediaByIndex,
-    mediaPerPage,
-    mediaWidth,
-    onActive,
-    selectedIndex,
-    step,
-    total,
-    alignmentRequest,
-  ]);
-
+  // Ask the backend to prepare what is on screen: the visible page, then the cards in view.
   useEffect(() => {
     if (mediaOverride || !visible || !current.currentData?.results.length) return;
-    const visibleItems = current.currentData.results.map(media => ({
-      mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
-      mediaId: media.mediaId,
+    const items = current.currentData.results.map(media => ({
+      ...mediaRef(media),
       tier: 'visible' as const,
     }));
-    void promoteListMedia({ items: visibleItems });
-  }, [current.currentData, mediaOverride, page, promoteListMedia, visible]);
+    void promoteListMedia({ items });
+  }, [current.currentData, mediaOverride, promoteListMedia, visible]);
 
   useEffect(() => {
     if (mediaOverride || !visible || !current.currentData?.results.length) return;
     const timeout = window.setTimeout(() => {
-      const viewportItems = current
-        .currentData!.results.map((media, index) => ({ media, index: page * PAGE_SIZE + index }))
-        .filter(({ index }) => index >= selectedIndex && index < selectedIndex + mediaPerPage)
-        .map(({ media }) => ({
-          mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
-          mediaId: media.mediaId,
-          tier: 'viewport' as const,
-        }));
-      if (viewportItems.length) void promoteListMedia({ items: viewportItems });
+      const items = Array.from({ length: mediaPerPage }, (_, offset) =>
+        mediaByIndex.get(selectedIndex + offset)
+      )
+        .filter((media): media is MediaDto => Boolean(media))
+        .map(media => ({ ...mediaRef(media), tier: 'viewport' as const }));
+      if (items.length) void promoteListMedia({ items });
     }, VIEWPORT_PROMOTION_DEBOUNCE_MS);
     return () => window.clearTimeout(timeout);
   }, [
     current.currentData,
+    mediaByIndex,
     mediaOverride,
     mediaPerPage,
-    page,
     promoteListMedia,
     selectedIndex,
     visible,
   ]);
 
+  // Decode the hero backdrops around the selection ahead of time, so moving to a neighbour
+  // swaps the hero without decode work. A row that moves off screen stops wanting them.
+  const preloadOwner = useId();
   useEffect(() => {
-    if (!visible || !mediaByIndex.size) return;
-    const start = Math.max(0, selectedIndex - 2);
-    const end = Math.min(total - 1, selectedIndex + mediaPerPage + 2);
-    for (let index = start; index <= end; index += 1) {
-      const media = mediaByIndex.get(index);
-      if (!media) continue;
-      const key = `${media._type}:${media.mediaId}`;
-      if (preparedMedia.current.has(key)) continue;
-      preparedMedia.current.add(key);
-      if (preparedMedia.current.size > 128) {
-        preparedMedia.current.delete(preparedMedia.current.values().next().value!);
-      }
-      const image = new Image();
-      image.decoding = 'async';
-      image.src = artworkUrl(media.backdrop, 'backdrop');
-      if (typeof image.decode === 'function') void image.decode().catch(() => undefined);
+    if (!visible || !mediaByIndex.size) {
+      imagePreloader.clear(preloadOwner);
+      return;
     }
-  }, [mediaByIndex, mediaPerPage, selectedIndex, total, visible]);
+    const urls: string[] = [];
+    const end = Math.min(total - 1, selectedIndex + mediaPerPage + 2);
+    for (let index = Math.max(0, selectedIndex - 2); index <= end; index += 1) {
+      const media = mediaByIndex.get(index);
+      if (media?.backdrop) urls.push(artworkUrl(media.backdrop, 'backdrop'));
+    }
+    void imagePreloader.prepare(preloadOwner, urls, NEARBY);
+  }, [mediaByIndex, mediaPerPage, preloadOwner, selectedIndex, total, visible]);
+  useEffect(() => () => imagePreloader.clear(preloadOwner), [preloadOwner]);
 
+  const queuedBackdropMedia = useRef(new Set<string>());
   useEffect(() => {
     if (!visible || !mediaByIndex.size) return;
-    const backgroundItems = [...mediaByIndex.values()]
+    const items = [...mediaByIndex.values()]
       .filter(media => !media.backdropFocus && Boolean(media.backdrop))
       .filter(media => !queuedBackdropMedia.current.has(`${media._type}:${media.mediaId}`))
-      .map(media => ({
-        mediaType: media._type === 'movie' ? ('movie' as const) : ('tv' as const),
-        mediaId: media.mediaId,
-      }))
+      .map(mediaRef)
       .slice(0, 50);
-    if (!backgroundItems.length) return;
-    const keys = backgroundItems.map(item => `${item.mediaType}:${item.mediaId}`);
+    if (!items.length) return;
+    const keys = items.map(item => `${item.mediaType}:${item.mediaId}`);
     keys.forEach(key => queuedBackdropMedia.current.add(key));
     try {
-      void queueBackdropFocus({ items: backgroundItems })
+      void queueBackdropFocus({ items })
         .unwrap()
         .catch(() => keys.forEach(key => queuedBackdropMedia.current.delete(key)));
     } catch {
@@ -539,16 +458,11 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     }
   }, [mediaByIndex, queueBackdropFocus, visible]);
 
-  useEffect(() => {
-    if (current.currentData && selectedIndex >= current.currentData.total) {
-      selectIndex(Math.max(0, current.currentData.total - 1), false);
-    }
-  }, [current.currentData, selectIndex, selectedIndex]);
-
+  const title = <CategoryTitle id={`category-${category.slug}`}>{category.name}</CategoryTitle>;
   if (!mediaOverride && effectiveLoadIntent === 'dormant') {
     return (
       <RowContainer>
-        <CategoryTitle>{category.name}</CategoryTitle>
+        {title}
         <State aria-hidden="true" />
       </RowContainer>
     );
@@ -556,7 +470,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   if (!mediaOverride && (current.isLoading || current.isFetching) && !current.currentData) {
     return (
       <RowContainer>
-        <CategoryTitle>{category.name}</CategoryTitle>
+        {title}
         <State>
           <Spinner text="Loading..." />
         </State>
@@ -566,21 +480,31 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   if (!mediaOverride && current.isError && !current.currentData) {
     return (
       <RowContainer>
-        <CategoryTitle>{category.name}</CategoryTitle>
+        {title}
         <State>Failed to load content.</State>
       </RowContainer>
     );
   }
-  if (!total) return null;
+  if (!total) {
+    return (
+      <RowContainer>
+        {title}
+        <State>Nothing here yet.</State>
+      </RowContainer>
+    );
+  }
 
-  const indices = Array.from({ length: last - first + 1 }, (_, offset) => first + offset);
-  const canMoveLeft = scrollLeft > ALIGNMENT_TOLERANCE;
-  const canMoveRight = scrollLeft < (total - 1) * step - ALIGNMENT_TOLERANCE;
-  const keyboardTailWidth = Math.max(0, (mediaPerPage - 1) * step - gap);
+  const radius = rowRenderRadius(mediaPerPage);
+  const first = Math.max(0, selectedIndex - radius);
+  const last = Math.min(total - 1, selectedIndex + radius);
+  const canMoveLeft = selectedIndex > 0;
+  const canMoveRight = selectedIndex < total - 1;
+  // Room after the last card, so it too can scroll into the leading slot.
+  const tailWidth = Math.max(0, (mediaPerPage - 1) * step - gap);
 
   return (
-    <RowContainer ref={rowRef} aria-labelledby={`category-${category.slug}`}>
-      <CategoryTitle id={`category-${category.slug}`}>{category.name}</CategoryTitle>
+    <RowContainer aria-labelledby={`category-${category.slug}`}>
+      {title}
       <CarouselViewport $contentWidth={contentWidth} $peekWidth={peekWidth}>
         {canMoveLeft && <EdgeFade $side="left" $peekWidth={peekWidth} aria-hidden="true" />}
         {canMoveRight && <EdgeFade $side="right" $peekWidth={peekWidth} aria-hidden="true" />}
@@ -605,19 +529,22 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
           </ArrowButton>
         )}
         <ScrollContainer
-          ref={scrollRef}
+          ref={scroller.ref}
           $gap={gap}
           $peekWidth={peekWidth}
           data-testid="category-row-scroll-container"
-          onScroll={event => {
-            setScrollLeft(event.currentTarget.scrollLeft);
-            onInterest?.();
-          }}
+          onScroll={onInterest}
         >
-          {first > 0 && <Spacer $width={first * step - gap} />}
-          {indices.map(index => {
+          {first > 0 && <Spacer width={first * step - gap} />}
+          {Array.from({ length: last - first + 1 }, (_, offset) => {
+            const index = first + offset;
             const media = mediaByIndex.get(index);
-            return media ? (
+            if (!media) return <Spacer key={`placeholder-${index}`} width={mediaWidth} />;
+            const activate = () => {
+              updateSelectedIndex(index);
+              onActive(categoryIndex, index, media);
+            };
+            return (
               <MediaCard
                 // Include the logical position so malformed upstream duplicate identities
                 // cannot make React reconcile two cards as the same child.
@@ -630,30 +557,23 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
                 width={mediaWidth}
                 selected={active && index === selectedIndex}
                 tabIndex={active && index === selectedIndex ? 0 : -1}
-                onFocus={() => {
-                  updateSelectedIndex(index);
-                  onActive(categoryIndex, index, media);
-                }}
+                onFocus={activate}
                 onHover={() => {
-                  updateSelectedIndex(index);
-                  onActive(categoryIndex, index, media);
+                  activate();
                   cardRefs.current.get(index)?.focus({ preventScroll: true });
                 }}
                 progress={progress}
                 onSelect={() => {
                   // Clicking a card must update the logical selection before opening details;
                   // otherwise Back returns to the row's previous keyboard selection.
-                  updateSelectedIndex(index);
-                  onActive(categoryIndex, index, media);
+                  activate();
                   onSelect(media);
                 }}
               />
-            ) : (
-              <Spacer key={`placeholder-${index}`} $width={mediaWidth} />
             );
           })}
-          {last < total - 1 && <Spacer $width={(total - last - 1) * step - gap} />}
-          {keyboardTailWidth > 0 && <Spacer $width={keyboardTailWidth} />}
+          {last < total - 1 && <Spacer width={(total - last - 1) * step - gap} />}
+          {tailWidth > 0 && <Spacer width={tailWidth} />}
         </ScrollContainer>
       </CarouselViewport>
     </RowContainer>

@@ -99,16 +99,20 @@ async function installVotingHarness(page: Page): Promise<void> {
         username: 'fixture-user',
       });
     if (path === '/api/lists' && request.method() === 'GET')
-      return json(route, [
-        {
-          name: 'Fixture Movies',
-          slug: 'fixture-movies',
-          description: '',
-          url: '/list/fixture-movies',
-        },
-      ]);
-    if (path === '/api/lists/popular' && request.method() === 'GET')
-      return json(route, { results: [], page: 0, pageSize: 20, total: 0, totalPages: 0 });
+      return json(route, {
+        results: [
+          {
+            name: 'Fixture Movies',
+            slug: 'fixture-movies',
+            description: '',
+            url: '/list/fixture-movies',
+          },
+        ],
+        page: 0,
+        pageSize: 20,
+        total: 1,
+        totalPages: 1,
+      });
     if (path === '/api/watchlist' && request.method() === 'GET')
       return json(route, {
         mediaType: 'movie',
