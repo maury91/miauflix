@@ -43,6 +43,6 @@ describe('realtime state', () => {
     });
 
     state = realtimeSlice.reducer(state, realtimeActions.resetRealtimeState());
-    expect(state).toEqual({ ready: false, preparationByMediaId: {} });
+    expect(state).toEqual({ ready: false, preparationByMediaId: {}, playbackDeliveries: {} });
   });
 });

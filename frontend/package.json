@@ -37,7 +37,8 @@
     "test:e2e:vite:headed": "playwright test --config=playwright.config.e2e-vite.ts --headed",
     "test:e2e:vite:debug": "playwright test --config=playwright.config.e2e-vite.ts --debug",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "test:e2e:smooth-core-flows": "playwright test --config=playwright.config.smooth-core-flows.ts"
   },
   "dependencies": {
     "@dicebear/collection": "9.2.4",
@@ -60,6 +61,8 @@
   },
   "devDependencies": {
     "@chromatic-com/storybook": "4.1.3",
+    "@iconify-json/cib": "^1.2.3",
+    "@iconify-json/line-md": "^1.2.16",
     "@iconify/json": "2.2.538",
     "@playwright/test": "1.56.1",
     "@storybook/addon-a11y": "10.0.8",

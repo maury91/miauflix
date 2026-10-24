@@ -146,15 +146,99 @@ miauflix/
 
 ## ⚡ Quick Setup
 
-> Just want to try it? Here's the fastest path:
+> Just want to try it? No clone, no build: save this as `docker-compose.yml` and start it.
 
-```bash
-git clone https://github.com/maury91/miauflix.git && cd miauflix
-docker compose run --rm miauflix npm run config-only
-docker compose up
+```yaml
+services:
+  miauflix:
+    image: ghcr.io/maury91/miauflix:latest
+    ports:
+      - '3000:3000'
+    environment:
+      DATA_DIR: /usr/src/app/data
+      DOWNLOAD_PATH: /usr/src/app/downloads
+      BUNQUEUE_HOST: miauflix-services
+      BUNQUEUE_PORT: 6789
+      CATALOG_SERVICE_URL: http://miauflix-services:3001
+      LIST_SERVICE_URL: http://miauflix-services:3002
+      ALLOW_CREATE_ADMIN_ON_FIRST_RUN: 'true' # create the admin from the browser
+      DISABLE_VPN_CHECK: 'true' # remove if you route traffic through a VPN, see below
+    volumes:
+      - miauflix_data:/usr/src/app/data
+      - ./downloads:/usr/src/app/downloads
+    depends_on:
+      miauflix-services:
+        condition: service_healthy
+    restart: unless-stopped
+
+  miauflix-services:
+    image: ghcr.io/maury91/miauflix-services:latest
+    init: true
+    volumes:
+      - miauflix_services_data:/app/data
+    restart: unless-stopped
+
+volumes:
+  miauflix_data:
+  miauflix_services_data:
 ```
 
-First command runs the configuration wizard (TMDB API key, etc.), then start the full stack. No local Node.js installation needed!
+```bash
+docker compose up -d
+```
+
+Open <http://localhost:3000>, create the admin account, then add your [TMDB access token](https://developer.themoviedb.org/docs) (and optionally Trakt credentials) from the app settings.
+
+> **Security:** `ALLOW_CREATE_ADMIN_ON_FIRST_RUN` exposes an unauthenticated setup endpoint until the first admin exists. Create the admin right away, and don't expose port 3000 to the internet before you do.
+
+<details>
+<summary>Using a VPN (NordVPN)</summary>
+
+Route Miauflix through a VPN container and drop `DISABLE_VPN_CHECK`. The VPN container owns the network, so the published port moves to it and the other services use `network_mode`:
+
+```yaml
+services:
+  vpn:
+    image: ghcr.io/bubuntux/nordlynx
+    cap_add: [NET_ADMIN]
+    environment:
+      PRIVATE_KEY: ${NORDVPN_PRIVATE_KEY}
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+
+  miauflix:
+    network_mode: service:vpn
+    environment:
+      BUNQUEUE_HOST: 127.0.0.1
+      CATALOG_SERVICE_URL: http://127.0.0.1:3001
+      LIST_SERVICE_URL: http://127.0.0.1:3002
+    depends_on:
+      - vpn
+      - miauflix-services
+
+  miauflix-services:
+    network_mode: service:vpn
+    depends_on:
+      - vpn
+```
+
+Remove the `ports` and `DISABLE_VPN_CHECK` entries from the `miauflix` service in this layout.
+
+</details>
+
+### Published images
+
+| Image                                    | Contents                                              |
+| ---------------------------------------- | ----------------------------------------------------- |
+| `ghcr.io/maury91/miauflix`               | Main backend, also serves the web frontend            |
+| `ghcr.io/maury91/miauflix-services`      | Bunqueue, media catalog and list service in one image |
+| `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                      |
+| `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                       |
+
+All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for releases, `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
 
 ## 🚀 Getting Started
 

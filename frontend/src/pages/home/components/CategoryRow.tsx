@@ -17,7 +17,7 @@ import {
 import styled from 'styled-components';
 
 import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '../homeNavigation';
-import { getImageUrl } from '../media.utils';
+import { artworkUrl } from '../media.utils';
 import { MediaCard } from './MediaCard';
 
 import ChevronLeftIcon from '~icons/line-md/chevron-left';
@@ -377,6 +377,8 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     () => ({
       focusIndex: index => {
         selectIndex(index);
+        // Returning from details may request the already-selected card.
+        setAlignmentRequest(request => request + 1);
         return total > 0;
       },
       isEmpty: () => current.currentData?.total === 0,
@@ -510,7 +512,7 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
       }
       const image = new Image();
       image.decoding = 'async';
-      image.src = getImageUrl(media.backdrop, 'original');
+      image.src = artworkUrl(media.backdrop, 'backdrop');
       if (typeof image.decode === 'function') void image.decode().catch(() => undefined);
     }
   }, [mediaByIndex, mediaPerPage, selectedIndex, total, visible]);

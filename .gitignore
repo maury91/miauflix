@@ -18,6 +18,7 @@ dist
 /data
 /downloads
 /backend/downloads
+/services/*/data
 
 # Test files
 backend-e2e/admin-credentials.json

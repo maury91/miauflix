@@ -7,6 +7,7 @@ import type { DownloadService } from '@services/download/download.service';
 import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
+import type { NotificationService } from '@services/notifications/notification.service';
 import type { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
@@ -26,6 +27,7 @@ import type { SubtitlesService } from '@services/subtitles/subtitles.service';
 
 export interface Deps {
   mediaRatingRepository: MediaRatingRepository;
+  notificationService: NotificationService;
   auditLogService: AuditLogService;
   authService: AuthService;
   catalogClient: CatalogClientService;

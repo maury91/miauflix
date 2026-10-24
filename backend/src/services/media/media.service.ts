@@ -33,6 +33,12 @@ export class MediaService {
     return this.movieRepository.findById(id);
   }
 
+  /** Local mirror lookup only; never contacts the catalog. */
+  @traced('MediaService')
+  public async getLocalMovieByMediaId(mediaId: number): Promise<Movie | null> {
+    return this.movieRepository.findByMediaId(mediaId);
+  }
+
   /** Ensures the catalog has fresh details for the movie, then mirrors it locally. */
   @traced('MediaService')
   public async getMovieByMediaId(

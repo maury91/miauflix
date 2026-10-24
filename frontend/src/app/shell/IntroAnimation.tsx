@@ -65,7 +65,6 @@ const AnimationContainer = styled.div`
   contain: layout style paint;
   font: 7vw/1 sans-serif;
   z-index: 1002;
-  background-color: black;
 `;
 
 const useIntroAnimationAudio = () => {
@@ -109,6 +108,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     ref
   ) => {
     const containerRef = useRef<HTMLDivElement>(null);
+    const backgroundRef = useRef<HTMLDivElement>(null);
     const logoRef = useRef<LogoHandle | null>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
     const audioRef = useIntroAnimationAudio();
@@ -250,9 +250,9 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
 
       // Fade out the container
       animation.fromTo(
-        containerRef.current,
-        { backgroundColor: 'rgba(0,0,0,1)' },
-        { backgroundColor: 'rgba(0,0,0,0)', duration: duration * 0.4 },
+        backgroundRef.current,
+        { opacity: 1 },
+        { opacity: 0, duration: duration * 0.4 },
         duration * (lowResourceAnimation ? 0.6 : 0.4)
       );
 
@@ -453,6 +453,17 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
 
     return (
       <AnimationContainer ref={containerRef} className={className} style={style}>
+        <div
+          ref={backgroundRef}
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            zIndex: -1,
+            background: 'black',
+            willChange: 'opacity',
+          }}
+        />
         <LogoGlyphs ref={logoRef} style={{ visibility: logoVisible ? 'visible' : 'hidden' }} />
       </AnimationContainer>
     );

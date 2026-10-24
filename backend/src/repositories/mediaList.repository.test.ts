@@ -84,4 +84,17 @@ describe('MediaListRepository snapshots', () => {
     expect(lists[0].id).toBe(lists[1].id);
     expect(await repository.findBySlug('popular')).toMatchObject({ slug: 'popular' });
   });
+
+  it('excludes the public watchlist from TV acquisition interests', async () => {
+    const database = await dbHelper.setupTestDatabase();
+    const repository = database.getMediaListRepository();
+    const publicList = await repository.createMediaList('Public', '', 'my-watchlist', 'public');
+    const privateList = await repository.createMediaList('Private', '', 'my-watchlist', 'user-1');
+    await repository.stagePage(publicList.id, 'local', 0, [{ mediaType: 'tv', mediaId: 42 }]);
+    await repository.stagePage(privateList.id, 'local', 0, [{ mediaType: 'tv', mediaId: 42 }]);
+
+    expect(await repository.getLocalTVWatchlistInterests()).toEqual([
+      { mediaId: 42, ownerCount: 1 },
+    ]);
+  });
 });

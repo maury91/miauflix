@@ -15,6 +15,8 @@ export interface BackgroundJobPayloads {
   'source.metadata': { sourceId?: number };
   'source.stats': { sourceId?: number };
   'watchlist.movie.download': { movieMediaId: number };
+  'watchlist.tv.scan': Record<string, never>;
+  'watchlist.tv.acquire': { showMediaId: number };
   'watchlist.sync': {
     subjectId: string;
     mediaType: 'movie' | 'tv';
@@ -50,6 +52,8 @@ export const BACKGROUND_JOB_QUEUES: Record<BackgroundJobName, string> = {
   'source.metadata': 'miauflix-source-metadata',
   'source.stats': 'miauflix-source-stats',
   'watchlist.movie.download': 'miauflix-watchlist-downloads',
+  'watchlist.tv.scan': 'miauflix-watchlist-downloads',
+  'watchlist.tv.acquire': 'miauflix-watchlist-downloads',
   'watchlist.sync': 'miauflix-watchlist-sync',
   'cache.cleanup': 'miauflix-maintenance',
   'catalog.movie-changes.scan': 'miauflix-catalog-movie-changes',

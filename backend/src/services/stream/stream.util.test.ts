@@ -1,4 +1,4 @@
-import { createMockMovieSource } from '@__test-utils__/mocks/movie.mock';
+import { createMockContentSource } from '@__test-utils__/mocks/movie.mock';
 import { configureFakerSeed } from '@__test-utils__/utils';
 import { Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
 
@@ -10,11 +10,11 @@ describe('stream.util', () => {
   });
 
   describe('filterStreamableSources', () => {
-    const sourceWithFile1 = createMockMovieSource({ file: Buffer.from('mock file 1 ') });
-    const sourceWithFile2 = createMockMovieSource({ file: Buffer.from('mock file 2 ') });
-    const sourceWithFile3 = createMockMovieSource({ file: Buffer.from('mock file 3 ') });
-    const sourceWithoutFile1 = createMockMovieSource({ file: undefined });
-    const sourceWithoutFile2 = createMockMovieSource({ file: undefined });
+    const sourceWithFile1 = createMockContentSource({ file: Buffer.from('mock file 1 ') });
+    const sourceWithFile2 = createMockContentSource({ file: Buffer.from('mock file 2 ') });
+    const sourceWithFile3 = createMockContentSource({ file: Buffer.from('mock file 3 ') });
+    const sourceWithoutFile1 = createMockContentSource({ file: undefined });
+    const sourceWithoutFile2 = createMockContentSource({ file: undefined });
 
     it.each([
       [[sourceWithFile1, sourceWithoutFile1], [sourceWithFile1]],
@@ -35,19 +35,19 @@ describe('stream.util', () => {
   });
 
   describe('filterHevcSources', () => {
-    const h264Source = createMockMovieSource({
+    const h264Source = createMockContentSource({
       videoCodec: VideoCodec.X264,
     });
-    const hevcSource = createMockMovieSource({
+    const hevcSource = createMockContentSource({
       videoCodec: VideoCodec.X265,
     });
-    const hevc10BitSource = createMockMovieSource({
+    const hevc10BitSource = createMockContentSource({
       videoCodec: VideoCodec.X265_10BIT,
     });
-    const av1Source = createMockMovieSource({
+    const av1Source = createMockContentSource({
       videoCodec: VideoCodec.AV1,
     });
-    const undefinedSource = createMockMovieSource({
+    const undefinedSource = createMockContentSource({
       videoCodec: undefined,
     });
 
@@ -86,25 +86,25 @@ describe('stream.util', () => {
   });
 
   describe('filterSources', () => {
-    const streamableH264Source = createMockMovieSource({
+    const streamableH264Source = createMockContentSource({
       file: Buffer.from('h264 file'),
       videoCodec: VideoCodec.X264,
       quality: Quality.FHD,
       streamingScore: 85,
     });
-    const streamableHevcSource = createMockMovieSource({
+    const streamableHevcSource = createMockContentSource({
       file: Buffer.from('hevc file'),
       videoCodec: VideoCodec.X265,
       quality: Quality['4K'],
       streamingScore: 95,
     });
-    const nonStreamableH264Source = createMockMovieSource({
+    const nonStreamableH264Source = createMockContentSource({
       file: undefined,
       videoCodec: VideoCodec.X264,
       quality: Quality.HD,
       streamingScore: 75,
     });
-    const nonStreamableHevcSource = createMockMovieSource({
+    const nonStreamableHevcSource = createMockContentSource({
       file: undefined,
       videoCodec: VideoCodec.X265,
       quality: Quality['2K'],

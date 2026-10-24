@@ -3,11 +3,12 @@ import { posix } from 'node:path';
 
 import { logger } from '@logger';
 
-import type { MovieSource } from '@entities/movie-source.entity';
 import type { EncryptedStorageLayout } from '@entities/storage.entity';
 import type { DownloadService } from '@services/download/download.service';
 import { isVideoFile } from '@services/download/download.utils';
-import { openTorrentInput } from '@services/playback/torrent-input';
+import type { PlaybackTarget } from '@services/playback/playback-target';
+import { withFile } from '@services/playback/playback-target';
+import { openTorrentInput, PROBE_SIZE_BYTES } from '@services/playback/torrent-input';
 
 import { toWebVtt, webVttWindow } from './subtitles.util';
 
@@ -22,6 +23,7 @@ export interface TorrentSubtitle {
   release: string;
   hearingImpaired: boolean;
   path?: string;
+  videoFilePath?: string;
   streamIndex?: number;
 }
 
@@ -54,9 +56,12 @@ function stem(path: string): string {
     .replace(/[._ ]+/g, '.');
 }
 
-/** Require the selected video's exact stem, or an unambiguous single-video torrent. */
-export function matchingSubtitleFiles(layout: EncryptedStorageLayout): TorrentSubtitle[] {
-  const videoStem = stem(layout.video.path);
+/** Require the video's exact stem, or an unambiguous single-video torrent. */
+export function matchingSubtitleFiles(
+  layout: EncryptedStorageLayout,
+  videoPath: string
+): TorrentSubtitle[] {
+  const videoStem = stem(videoPath);
   const singleVideo =
     layout.files.filter(file => isVideoFile(file.path.toLowerCase())).length === 1;
   return layout.files.flatMap(file => {
@@ -109,7 +114,7 @@ export function matchingSubtitleFiles(layout: EncryptedStorageLayout): TorrentSu
 /** Text subtitle discovery/extraction through decrypted, verified torrent ranges. */
 export class TorrentSubtitlesService {
   private readonly probes = new Map<
-    number,
+    string,
     { expires: number; promise: Promise<TorrentSubtitle[]> }
   >();
   private readonly processes = new Set<ChildProcess>();
@@ -118,25 +123,42 @@ export class TorrentSubtitlesService {
 
   constructor(private readonly downloads: DownloadService) {}
 
-  async discover(source: MovieSource): Promise<TorrentSubtitle[]> {
-    const layout = await this.downloads.getMediaFiles(source);
-    const sidecars = matchingSubtitleFiles(layout);
-    await this.downloads.prepareSubtitleFiles(
-      source,
-      sidecars.map(track => track.path!)
-    );
+  /** Embedded tracks of the target video plus sidecars that match it inside its source. */
+  async discover(
+    target: PlaybackTarget,
+    speculative = false,
+    signal?: AbortSignal
+  ): Promise<TorrentSubtitle[]> {
+    signal?.throwIfAborted();
+    const { source, filePath: videoFilePath } = target;
+    const layout = await this.downloads.getMediaFiles(target);
+    const sidecars = matchingSubtitleFiles(layout, videoFilePath);
+    if (!speculative)
+      await this.downloads.prepareSubtitleFiles(
+        target,
+        sidecars.map(track => track.path!)
+      );
     let embedded: TorrentSubtitle[] = [];
     try {
-      const cached = this.probes.get(source.id);
+      const cacheKey = `${source.id}:${videoFilePath}`;
+      const cached = this.probes.get(cacheKey);
       if (cached && cached.expires > Date.now()) embedded = await cached.promise;
       else {
         if (this.probes.size >= 64) this.probes.delete(this.probes.keys().next().value!);
-        const promise = this.probe(source).catch(error => {
-          this.probes.delete(source.id);
+        const promise = this.probe(target, speculative, signal).catch(error => {
+          if (this.probes.get(cacheKey)?.promise === promise) this.probes.delete(cacheKey);
           throw error;
         });
-        this.probes.set(source.id, { expires: Date.now() + 15 * 60_000, promise });
-        embedded = await promise;
+        this.probes.set(cacheKey, { expires: Date.now() + 15 * 60_000, promise });
+        const cancelCache = () => {
+          if (this.probes.get(cacheKey)?.promise === promise) this.probes.delete(cacheKey);
+        };
+        signal?.addEventListener('abort', cancelCache, { once: true });
+        try {
+          embedded = await promise;
+        } finally {
+          signal?.removeEventListener('abort', cancelCache);
+        }
       }
     } catch (error) {
       logger.warn(
@@ -145,21 +167,32 @@ export class TorrentSubtitlesService {
         error instanceof Error ? error.message : error
       );
     }
+    // Track ids are scoped to the video: episodes of one pack share embedded stream indices.
     return [...embedded, ...sidecars].map(track => ({
       ...track,
-      fileId: `${source.id}:${track.fileId}`,
+      videoFilePath,
+      fileId: `${source.id}:${videoFilePath}:${track.fileId}`,
     }));
   }
 
-  private async probe(source: MovieSource): Promise<TorrentSubtitle[]> {
-    const body = await this.run(source, 'ffprobe', [
-      '-select_streams',
-      's',
-      '-show_entries',
-      'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
-      '-of',
-      'json',
-    ]);
+  private async probe(
+    target: PlaybackTarget,
+    speculative = false,
+    signal?: AbortSignal
+  ): Promise<TorrentSubtitle[]> {
+    const body = await this.run(
+      target,
+      'ffprobe',
+      [
+        '-select_streams',
+        's',
+        '-show_entries',
+        'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
+        '-of',
+        'json',
+      ],
+      { speculative, signal }
+    );
     const probe = JSON.parse(body) as {
       streams?: Array<{
         index: number;
@@ -187,11 +220,18 @@ export class TorrentSubtitlesService {
       }));
   }
 
-  async getTrack(source: MovieSource, track: TorrentSubtitle, startSeconds = 0): Promise<string> {
-    if (track.provider === 'torrent') {
-      // Revalidate against the current selected video and layout before opening a sidecar.
-      const layout = await this.downloads.getMediaFiles(source);
-      if (!matchingSubtitleFiles(layout).some(file => file.path === track.path))
+  /** Extract a track discovered for the target video; sidecars are revalidated against it. */
+  async getTrack(
+    target: PlaybackTarget,
+    track: TorrentSubtitle,
+    startSeconds = 0
+  ): Promise<string> {
+    if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
+      throw new Error('Subtitle track belongs to another video');
+    const sidecar = track.provider === 'torrent';
+    if (sidecar) {
+      const layout = await this.downloads.getMediaFiles(target);
+      if (!matchingSubtitleFiles(layout, target.filePath).some(file => file.path === track.path))
         throw new Error('Subtitle file no longer matches this video');
     }
     const args = [
@@ -205,26 +245,55 @@ export class TorrentSubtitlesService {
       'webvtt',
       'pipe:1',
     ];
-    const body = await this.run(source, 'ffmpeg', args, track.path, startSeconds);
+    const body = await this.run(sidecar ? withFile(target, track.path!) : target, 'ffmpeg', args, {
+      sidecar,
+      startSeconds,
+    });
     return track.provider === 'embedded'
       ? webVttWindow(body, startSeconds, startSeconds + 120)
       : toWebVtt(body);
   }
 
+  /** Run FFmpeg/FFprobe over one decrypted file; sidecars are read whole instead of windowed. */
   private async run(
-    source: MovieSource,
+    input: PlaybackTarget,
     program: 'ffmpeg' | 'ffprobe',
     args: string[],
-    path?: string,
-    startSeconds = 0
+    {
+      sidecar = false,
+      startSeconds = 0,
+      speculative = false,
+      signal,
+    }: {
+      sidecar?: boolean;
+      startSeconds?: number;
+      speculative?: boolean;
+      signal?: AbortSignal;
+    } = {}
   ): Promise<string> {
+    signal?.throwIfAborted();
     if (this.closed || this.active >= 2) throw new Error('Subtitle preparation is busy');
     this.active++;
-    let input: Awaited<ReturnType<typeof openTorrentInput>> | undefined;
+    let active = true;
+    const release = () => {
+      if (active) {
+        active = false;
+        this.active--;
+      }
+    };
+    const cancel = () => {
+      release();
+      if (child) this.processes.delete(child);
+      child?.kill('SIGKILL');
+      void opened?.close();
+    };
+    signal?.addEventListener('abort', cancel, { once: true });
+    let opened: Awaited<ReturnType<typeof openTorrentInput>> | undefined;
     let child: ChildProcess | undefined;
     let timeout: ReturnType<typeof setTimeout> | undefined;
     try {
-      input = await openTorrentInput(this.downloads, source, path);
+      opened = await openTorrentInput(this.downloads, input, speculative);
+      signal?.throwIfAborted();
       if (this.closed) throw new Error('Subtitle preparation is shutting down');
       const common = [
         '-v',
@@ -242,13 +311,13 @@ export class TorrentSubtitlesService {
           ? [
               '-nostdin',
               ...common,
-              ...(path ? [] : ['-ss', String(Math.max(0, startSeconds - 10)), '-copyts']),
+              ...(sidecar ? [] : ['-ss', String(Math.max(0, startSeconds - 10)), '-copyts']),
               '-i',
-              input.url,
-              ...(path ? [] : ['-to', String(startSeconds + 120)]),
+              opened.url,
+              ...(sidecar ? [] : ['-to', String(startSeconds + 120)]),
               ...args,
             ]
-          : [...common, ...args, input.url],
+          : [...common, '-probesize', String(PROBE_SIZE_BYTES), ...args, opened.url],
         { stdio: ['ignore', 'pipe', 'pipe'] }
       );
       this.processes.add(child);
@@ -267,7 +336,7 @@ export class TorrentSubtitlesService {
       timeout = setTimeout(() => {
         failure = new Error('Subtitle preparation timed out');
         process.kill('SIGKILL');
-        void input?.close();
+        void opened?.close();
       }, 45_000);
       timeout.unref();
       await new Promise<void>((resolve, reject) => {
@@ -282,8 +351,9 @@ export class TorrentSubtitlesService {
     } finally {
       if (timeout) clearTimeout(timeout);
       if (child) this.processes.delete(child);
-      await input?.close();
-      this.active--;
+      await opened?.close();
+      signal?.removeEventListener('abort', cancel);
+      release();
     }
   }
 

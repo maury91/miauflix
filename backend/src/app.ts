@@ -23,8 +23,10 @@ import { DownloadService } from '@services/download/download.service';
 import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
+import { NotificationService } from '@services/notifications/notification.service';
 import { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
+import { PlaybackTargetService } from '@services/playback/playback-target.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
@@ -34,6 +36,7 @@ import { RequestService } from '@services/request/request.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
+import { SourceHealthService } from '@services/source/source-health.service';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
@@ -87,11 +90,13 @@ try {
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db);
   const progressService = new ProgressService(db, listClient);
+  const notificationService = new NotificationService(db);
   const mediaService = new MediaService(db, catalogClient);
   const backgroundJobs = new BackgroundJobService(configurationService);
   const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
   const listService = new ListService(db, catalogClient, listClient, backgroundJobs);
   const storageService = new StorageService(db, configurationService);
+  const sourceHealthService = new SourceHealthService();
   const downloadService = new DownloadService(storageService, requestService, configurationService);
   const contentDirectoryService = new ContentDirectoryService(
     cacheService.cache,
@@ -113,43 +118,75 @@ try {
     magnetService,
     requestService,
     configurationService,
-    backgroundJobs
+    backgroundJobs,
+    notificationService
   );
-  const streamService = new StreamService(db, sourceService, downloadService, mediaService);
-  const torrentWarmupController = new TorrentWarmupController(downloadService);
+  const playbackTargetService = new PlaybackTargetService(db, downloadService, sourceHealthService);
+  const streamService = new StreamService(
+    db,
+    sourceService,
+    downloadService,
+    mediaService,
+    playbackTargetService
+  );
+  const audioPlaybackService = new AudioPlaybackService(
+    downloadService,
+    configurationService,
+    db.getMediaProbeRepository()
+  );
+  const torrentSubtitlesService = new TorrentSubtitlesService(downloadService);
+  const torrentWarmupController = new TorrentWarmupController(
+    downloadService,
+    async (target, playableKey, subtitleLanguage, signal) => {
+      await Promise.allSettled([
+        audioPlaybackService.inspect(target, {}, true, signal),
+        torrentSubtitlesService.discover(target, true, signal),
+        (async () => {
+          const movieId = /^m:(\d+)$/.exec(playableKey)?.[1];
+          if (!movieId) return;
+          const movie = await mediaService.getLocalMovieByMediaId(Number(movieId));
+          await subtitlesService.warmSearch(movie?.imdbId, subtitleLanguage ?? 'en');
+        })(),
+      ]);
+    }
+  );
   const playablePreparationService = new PlayablePreparationService(
     mediaService,
     sourceService,
     torrentWarmupController,
-    storageService
+    storageService,
+    playbackTargetService,
+    sourceHealthService
   );
   const preloadIntentService = new PreloadIntentService(
     playablePreparationService,
-    torrentWarmupController
+    torrentWarmupController,
+    db.getProgressRepository()
   );
-  const realtimeGateway = new RealtimeGateway(
-    authService,
-    configurationService,
-    preloadIntentService,
-    progressService,
-    catalogClient
-  );
-  const audioPlaybackService = new AudioPlaybackService(downloadService, configurationService);
   const playbackSessionService = new PlaybackSessionService(
     db,
     playablePreparationService,
     configurationService,
     torrentWarmupController,
     storageService,
-    audioPlaybackService
+    audioPlaybackService,
+    sourceHealthService,
+    downloadService,
+    db.getProgressRepository()
   );
-  const torrentSubtitlesService = new TorrentSubtitlesService(downloadService);
+  const realtimeGateway = new RealtimeGateway(
+    authService,
+    configurationService,
+    preloadIntentService,
+    progressService,
+    catalogClient,
+    playbackSessionService
+  );
   const subtitlesService = new SubtitlesService(
     configurationService,
     requestService,
     playbackSessionService,
     streamService,
-    mediaService,
     torrentSubtitlesService
   );
 
@@ -211,6 +248,8 @@ try {
       mediaService,
       sourceService,
       downloadService,
+      progressService,
+      playbackTargets: playbackTargetService,
       worker: backgroundWorker,
     });
 
@@ -277,6 +316,7 @@ try {
     playbackSessionService,
     audioPlaybackService,
     progressService,
+    notificationService,
     subtitlesService,
     storageService,
   });

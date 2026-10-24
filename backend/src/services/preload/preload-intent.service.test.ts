@@ -1,4 +1,4 @@
-import { PreloadIntentService } from './preload-intent.service';
+import { BROWSE_WARM_DWELL_MS, PreloadIntentService } from './preload-intent.service';
 
 const intent = (sequence: number, view: 'browse' | 'details' | 'player' = 'details') => ({
   sequence,
@@ -157,6 +157,31 @@ describe('PreloadIntentService', () => {
         source: { id: 9, quality: 'FHD', sourceType: 'WEB' },
         warmup: { state: 'not_requested' },
       });
+    } finally {
+      service.close();
+    }
+  });
+
+  it('warms a browse focus once it dwells, but not a focus that moves on', async () => {
+    jest.useFakeTimers();
+    jest.setSystemTime(1_000);
+    const prepare = jest.fn().mockResolvedValue({ source: { id: 9 } });
+    const service = new PreloadIntentService({ prepare } as never);
+    const levels = (mediaId: number) =>
+      prepare.mock.calls
+        .filter(([playable]) => playable.mediaId === mediaId)
+        .map(([, options]) => options.through);
+    try {
+      service.update('user', 'session', 'client', movieIntent(1, 41, 'browse'), 1_000);
+      await jest.advanceTimersByTimeAsync(500);
+      service.update('user', 'session', 'client', movieIntent(2, 42, 'browse'), 1_500);
+      await jest.advanceTimersByTimeAsync(BROWSE_WARM_DWELL_MS - 1);
+      expect(levels(41)).toEqual(['sources']);
+      expect(levels(42)).toEqual(['sources']);
+
+      await jest.advanceTimersByTimeAsync(1 + 350);
+      expect(levels(42)).toEqual(['sources', 'warm']);
+      expect(levels(41)).toEqual(['sources']);
     } finally {
       service.close();
     }
@@ -508,6 +533,49 @@ describe('PreloadIntentService', () => {
         expect.anything(),
         expect.objectContaining({ through: 'warm' })
       );
+    } finally {
+      service.close();
+    }
+  });
+
+  it.each([
+    [{ positionSeconds: 2_400, durationSeconds: 6_000, state: 'paused' }, 0.4],
+    [{ positionSeconds: 4, durationSeconds: 6_000, state: 'paused' }, undefined],
+    [{ positionSeconds: 5_990, durationSeconds: 6_000, state: 'completed' }, undefined],
+    [null, undefined],
+  ])('warms a details focus at the saved resume point (%j)', async (saved, resumeFraction) => {
+    jest.useFakeTimers();
+    const prepare = jest.fn().mockResolvedValue({});
+    const progress = { findByKey: jest.fn().mockResolvedValue(saved) };
+    const service = new PreloadIntentService({ prepare } as never, undefined, progress as never);
+    try {
+      service.update('user', 'session', 'client', intent(1, 'details'), 1_000);
+      await jest.advanceTimersByTimeAsync(350);
+
+      expect(progress.findByKey).toHaveBeenCalledWith('user', 'm:42');
+      expect(prepare).toHaveBeenCalledTimes(1);
+      const options = prepare.mock.calls[0][1];
+      expect(options.through).toBe('warm');
+      expect(options.resumeFraction).toBe(resumeFraction);
+    } finally {
+      service.close();
+    }
+  });
+
+  it('does not look up progress for a sources-only preparation', async () => {
+    jest.useFakeTimers();
+    const prepare = jest.fn().mockResolvedValue({});
+    const progress = { findByKey: jest.fn() };
+    const service = new PreloadIntentService({ prepare } as never, undefined, progress as never);
+    try {
+      service.update('user', 'session', 'client', intent(1, 'browse'), 1_000);
+      await jest.advanceTimersByTimeAsync(350);
+
+      expect(prepare).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ through: 'sources' })
+      );
+      expect(progress.findByKey).not.toHaveBeenCalled();
     } finally {
       service.close();
     }

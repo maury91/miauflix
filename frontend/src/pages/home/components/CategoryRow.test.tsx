@@ -279,11 +279,28 @@ describe('CategoryRow page window', () => {
     expect(ref.current?.isEmpty()).toBe(false);
   });
 
+  it('restores focus when the requested card is already selected', () => {
+    const ref = createRef<CategoryRowHandle>();
+    render(
+      <>
+        <button type="button">Outside</button>
+        <CategoryRow ref={ref} {...makeProps(0, true, { active: true })} />
+      </>
+    );
+    screen.getByRole('button', { name: 'Outside' }).focus();
+    act(() => {
+      expect(ref.current?.focusIndex(0)).toBe(true);
+    });
+    expect(screen.getByTestId('media-0')).toHaveFocus();
+  });
+
   it('honors a pending focus request after the row data arrives', async () => {
     const ref = createRef<import('./CategoryRow').CategoryRowHandle>();
     const { rerender } = render(<CategoryRow ref={ref} {...makeProps(7, false)} />);
 
-    expect(ref.current?.focusIndex(7)).toBe(false);
+    act(() => {
+      expect(ref.current?.focusIndex(7)).toBe(false);
+    });
     rerender(<CategoryRow ref={ref} {...makeProps(7, true)} />);
 
     await waitFor(() => expect(screen.getByTestId('media-7')).toBeInTheDocument());

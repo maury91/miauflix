@@ -79,7 +79,7 @@ describe('artwork selection', () => {
     const movies = new MovieRepository(database);
     const repository = new ArtworkRepository(database);
     const candidates = ['first', 'second', 'must-not-download'].map(path => ({
-      url: `https://image.tmdb.org/t/p/original/${path}.png`,
+      url: `/${path}.png`,
       language: 'en',
       width: 300,
       height: 100,
@@ -164,10 +164,10 @@ describe('artwork selection', () => {
       expect(saved.cardLogo).toBe(candidates[0]!.url);
       expect(saved.heroLogo).toBe(candidates[1]!.url);
       expect(measured).toEqual([
-        candidates[0]!.url.replace('/original/', '/w300/'),
-        candidates[1]!.url.replace('/original/', '/w300/'),
-        candidates[0]!.url.replace('/original/', '/w300/'),
-        candidates[1]!.url.replace('/original/', '/w300/'),
+        `https://image.tmdb.org/t/p/w300${candidates[0]!.url}`,
+        `https://image.tmdb.org/t/p/w300${candidates[1]!.url}`,
+        `https://image.tmdb.org/t/p/w300${candidates[0]!.url}`,
+        `https://image.tmdb.org/t/p/w300${candidates[1]!.url}`,
       ]);
       expect(decodedInputs).toEqual([undefined, undefined, 'decoded-logo', 'decoded-logo']);
       expect(updates[0]).toMatchObject({

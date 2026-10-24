@@ -94,6 +94,32 @@ export class ContentDirectoryService {
     return includeSearchState ? { sources: [], source: '', searched } : null;
   }
 
+  /** Search the TV-capable provider once for releases associated with a show's IMDb id. */
+  @traced('ContentDirectoryService')
+  public async searchSourcesForTVShow(
+    imdbId: string,
+    highPriority = false
+  ): Promise<{ source: string; sources: SourceMetadata[] } | null> {
+    try {
+      const result = await this.therarbgDirectory.getTVShow(imdbId, highPriority);
+      return { source: this.therarbgDirectory.name, sources: result.sources };
+    } catch (error) {
+      if (error instanceof ApiError && error.code === 'service_unavailable') {
+        logger.debug(
+          'ContentDirectoryService',
+          'TheRARBG is temporarily unavailable for TV search'
+        );
+      } else {
+        logger.warn(
+          'ContentDirectoryService',
+          `Error searching TheRARBG for TV show ${imdbId}:`,
+          error
+        );
+      }
+      return null;
+    }
+  }
+
   public getMovieDirectoryNames(): string[] {
     return this.movieDirectories.map(directory => directory.name);
   }

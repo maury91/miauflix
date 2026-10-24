@@ -1,9 +1,15 @@
 import type { SeasonResponse } from '@miauflix/backend';
 import { fn } from 'storybook/test';
 
+const emptySelector = () => () => ({ data: undefined });
+
 export const mediaApi = {
   util: {
     prefetch: fn(),
+  },
+  endpoints: {
+    getMovie: { select: emptySelector, initiate: fn() },
+    getShow: { select: emptySelector, initiate: fn() },
   },
 };
 

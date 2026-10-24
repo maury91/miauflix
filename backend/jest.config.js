@@ -10,6 +10,8 @@ const tsJestTransformCfg = createDefaultPreset().transform;
 export default {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  // Workspace tests run in parallel; leave capacity for the other runners and builds.
+  maxWorkers: 2,
   transform: {
     ...tsJestTransformCfg,
     '^.+\\.(js|jsx)$': 'babel-jest',

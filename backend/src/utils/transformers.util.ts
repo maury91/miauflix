@@ -1,19 +1,25 @@
 import type { SourceMetadata } from '@content-directories/content-directory.abstract';
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 
 /**
  * Utility functions for transforming data between formats
  */
+
+type ProviderSourceRow = Omit<
+  ContentSource,
+  'createdAt' | 'episodes' | 'id' | 'movies' | 'updatedAt'
+>;
+
+/** Info hashes are case-insensitive hex; the `ih` column stores this canonical form. */
+export const normalizeInfoHash = (hash: string): string => hash.trim().toLowerCase();
 
 /**
  * Transform a provider source to a database entity format
  */
 export const providerSourceToEntity = (
   providerSource: SourceMetadata,
-  movieId: number,
   providerName: string
-): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'> => ({
-  movieId,
+): ProviderSourceRow => ({
   hash: providerSource.hash,
   magnetLink: providerSource.magnetLink,
   quality: providerSource.quality,
@@ -34,8 +40,7 @@ export const providerSourceToEntity = (
  */
 export const providerSourcesToEntities = (
   sources: SourceMetadata[],
-  movieId: number,
   providerName: string
-): Omit<MovieSource, 'createdAt' | 'id' | 'movie' | 'updatedAt'>[] => {
-  return sources.map(source => providerSourceToEntity(source, movieId, providerName));
+): ProviderSourceRow[] => {
+  return sources.map(source => providerSourceToEntity(source, providerName));
 };

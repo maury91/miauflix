@@ -8,7 +8,7 @@ import { createStreamRoutes } from './stream.routes';
 
 const token = 'a'.repeat(43);
 const setupTest = () => {
-  const source = { id: 9, movieId: 12 };
+  const source = { source: { id: 9 }, filePath: 'movie.mkv', matchKind: 'movie' };
   const grant = {
     sourceId: 9,
     playableKind: 'movie',
@@ -17,8 +17,9 @@ const setupTest = () => {
   };
   const playbackSessionService = { verify: jest.fn().mockResolvedValue(grant) };
   const streamService = {
-    getSourceById: jest.fn().mockResolvedValue(source),
+    getSourceById: jest.fn(),
     getBestSourceForStreaming: jest.fn(),
+    resolvePlaybackTarget: jest.fn().mockResolvedValue({ target: source, movie: { id: 12 } }),
   };
   const mediaService = { getMovieById: jest.fn().mockResolvedValue({ mediaId: 123 }) };
   const audioPlaybackService = {
@@ -42,6 +43,32 @@ const setupTest = () => {
     grant,
   };
 };
+
+describe('next-episode prefetch', () => {
+  it('returns 202 without awaiting or surfacing predownload failures', async () => {
+    const { playbackSessionService, streamService } = setupTest();
+    playbackSessionService.verify.mockResolvedValue({
+      sourceId: 9,
+      userId: 1,
+      playableKind: 'episode',
+      playableKey: 'e:1',
+    });
+    const downloadService = {
+      predownload: jest
+        .fn()
+        .mockReturnValue(new Promise((_, reject) => setTimeout(reject, 5, new Error('full')))),
+    };
+    const app = createStreamRoutes({
+      playbackSessionService,
+      streamService,
+      downloadService,
+    } as never);
+    const response = await app.request(`/${token}/prefetch`, { method: 'POST' });
+    expect(response.status).toBe(202);
+    expect(downloadService.predownload).toHaveBeenCalled();
+    await new Promise(resolve => setTimeout(resolve, 20));
+  });
+});
 
 describe('audio streaming authorization', () => {
   it('converts only the pinned source and forwards the seek and expiration', async () => {
@@ -80,13 +107,13 @@ describe('audio streaming authorization', () => {
     const { app, playbackSessionService, audioPlaybackService, streamService } = setupTest();
     playbackSessionService.verify.mockResolvedValue(null);
     expect((await app.request(`/${token}/audio`)).status).toBe(401);
-    expect(streamService.getSourceById).not.toHaveBeenCalled();
+    expect(streamService.resolvePlaybackTarget).not.toHaveBeenCalled();
     expect(audioPlaybackService.stream).not.toHaveBeenCalled();
   });
 
   it('rejects a source whose movie no longer matches the grant', async () => {
-    const { app, mediaService, audioPlaybackService } = setupTest();
-    mediaService.getMovieById.mockResolvedValue({ mediaId: 999 });
+    const { app, streamService, audioPlaybackService } = setupTest();
+    streamService.resolvePlaybackTarget.mockResolvedValue(null);
     expect((await app.request(`/${token}/audio`)).status).toBe(403);
     expect(audioPlaybackService.stream).not.toHaveBeenCalled();
   });

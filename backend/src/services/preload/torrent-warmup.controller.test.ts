@@ -1,25 +1,77 @@
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
+import type { PlaybackTarget } from '@services/playback/playback-target';
 
 import { TorrentWarmupController, type TorrentWarmupDriver } from './torrent-warmup.controller';
 
-const source = (id: number) => ({ id, size: 100, file: Buffer.from('torrent') }) as MovieSource;
+const source = (id: number, filePath = 'movie.mkv'): PlaybackTarget => ({
+  source: { id, size: 100, file: Buffer.from('torrent') } as ContentSource,
+  filePath,
+  matchKind: 'movie',
+});
 
 describe('TorrentWarmupController', () => {
   const setupTest = () => {
     const driver: jest.Mocked<TorrentWarmupDriver> = {
-      warmSource: jest.fn(async (item: MovieSource, targetBytes: number) => ({
-        sourceId: item.id,
+      warmSource: jest.fn(async (item: PlaybackTarget, targetBytes: number, _leaseKey: string) => ({
+        sourceId: item.source.id,
+        filePath: item.filePath,
         targetBytes,
         firstPiece: 0,
         lastPiece: 2,
       })),
       pauseSource: jest.fn(async (_sourceId: number) => true),
-      promoteSource: jest.fn(async (_source: MovieSource) => true),
+      promoteSource: jest.fn(async (_target: PlaybackTarget, _ownerKey: string) => true),
       hasActivePlayback: jest.fn(() => false),
       isPlaybackActive: jest.fn((_sourceId: number) => false),
     };
     return { controller: new TorrentWarmupController(driver), driver };
   };
+
+  it('starts shared inspection once metadata is ready without waiting for the probe', async () => {
+    const { driver } = setupTest();
+    const inspect = jest.fn(() => new Promise<void>(() => {}));
+    const controller = new TorrentWarmupController(driver, inspect);
+    await expect(controller.warm(source(1), 'lease', 'm:1')).resolves.toMatchObject({
+      state: 'warming',
+    });
+    expect(inspect).toHaveBeenCalledWith(source(1), 'm:1', undefined, expect.any(AbortSignal));
+    await controller.warm(source(1), 'lease', 'm:1');
+    expect(inspect).toHaveBeenCalledTimes(1);
+  });
+
+  it('warms from the start by default and at the resume point when asked', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1), 'lease1', 'm:1');
+    expect(driver.warmSource).toHaveBeenLastCalledWith(source(1), expect.any(Number), 'lease1', 0);
+    await controller.warm(source(2), 'lease2', 'm:2', { startFraction: 0.4 });
+    expect(driver.warmSource).toHaveBeenLastCalledWith(
+      source(2),
+      expect.any(Number),
+      'lease2',
+      0.4
+    );
+  });
+
+  it('cancels obsolete preparation on replacement and pause but preserves a promoted probe', async () => {
+    const { driver } = setupTest();
+    const signals: AbortSignal[] = [];
+    const prepare = jest.fn(
+      async (_target: PlaybackTarget, _key: string, _language?: string, signal?: AbortSignal) => {
+        signals.push(signal!);
+      }
+    );
+    const controller = new TorrentWarmupController(driver, prepare);
+    await controller.warm(source(1), 'lease1', 'm:1');
+    await controller.warm(source(2), 'lease2', 'm:2');
+    expect(signals[0].aborted).toBe(true);
+    expect(signals[1].aborted).toBe(false);
+    await controller.pause('lease2');
+    expect(signals[1].aborted).toBe(true);
+    await controller.warm(source(3), 'lease3', 'm:3');
+    await controller.promote(source(3), 'm:3', 'viewer');
+    controller.close();
+    expect(signals[2].aborted).toBe(false);
+  });
 
   it('keeps one speculative source and pauses the previous source before replacement', async () => {
     const { controller, driver } = setupTest();
@@ -40,8 +92,8 @@ describe('TorrentWarmupController', () => {
     const { controller, driver } = setupTest();
     await controller.warm(source(1), 'm:1', 'm:1');
 
-    await expect(controller.promote(source(1), 'm:1')).resolves.toBe(true);
-    expect(driver.promoteSource).toHaveBeenCalledWith(source(1));
+    await expect(controller.promote(source(1), 'm:1', 'viewer')).resolves.toBe(true);
+    expect(driver.promoteSource).toHaveBeenCalledWith(source(1), 'viewer');
     expect(driver.pauseSource).not.toHaveBeenCalled();
     expect(controller.getState()).toBeNull();
   });
@@ -52,11 +104,13 @@ describe('TorrentWarmupController', () => {
     const slot = controller.getState();
 
     driver.promoteSource.mockResolvedValueOnce(false);
-    await expect(controller.promote(source(1), 'm:1')).resolves.toBe(false);
+    await expect(controller.promote(source(1), 'm:1', 'viewer')).resolves.toBe(false);
     expect(controller.getState()).toEqual(slot);
 
     driver.promoteSource.mockRejectedValueOnce(new Error('promotion failed'));
-    await expect(controller.promote(source(1), 'm:1')).rejects.toThrow('promotion failed');
+    await expect(controller.promote(source(1), 'm:1', 'viewer')).rejects.toThrow(
+      'promotion failed'
+    );
     expect(controller.getState()).toEqual(slot);
   });
 
@@ -65,7 +119,7 @@ describe('TorrentWarmupController', () => {
     await controller.warm(source(1), 'm:1', 'm:1');
     const slot = controller.getState();
 
-    await expect(controller.promote(source(2), 'm:2')).resolves.toBe(true);
+    await expect(controller.promote(source(2), 'm:2', 'viewer')).resolves.toBe(true);
 
     expect(controller.getState()).toEqual(slot);
     expect(driver.pauseSource).not.toHaveBeenCalled();
@@ -198,5 +252,18 @@ describe('TorrentWarmupController', () => {
     } finally {
       controller.close();
     }
+  });
+
+  it('treats another file of the same source as a different warmup', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1, 'Show.S01E01.mkv'), 'lease', 'e:1:1:1');
+
+    await controller.warm(source(1, 'Show.S01E02.mkv'), 'lease', 'e:1:1:2');
+
+    expect(driver.warmSource).toHaveBeenCalledTimes(2);
+    expect(controller.getState()).toMatchObject({ filePath: 'Show.S01E02.mkv' });
+    await expect(
+      controller.promote(source(1, 'Show.S01E01.mkv'), 'e:1:1:2', 'viewer')
+    ).resolves.toBe(false);
   });
 });

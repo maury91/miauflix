@@ -31,13 +31,13 @@ export const storageApi = createApi({
     }),
     removeStorage: builder.mutation<{ success: true }, number>({
       invalidatesTags: ['Storage'],
-      async queryFn(movieSourceId, api) {
+      async queryFn(sourceId, api) {
         const session = selectCurrentSessionId(api.getState() as RootState);
         const headers: Record<string, string> = session ? { 'X-Session-Id': session } : {};
         return authenticatedRequest<{ success: true }>({
           requestFn: () =>
-            backendClient.api.storage[':movieSourceId'].$delete(
-              { param: { movieSourceId: String(movieSourceId) } },
+            backendClient.api.storage[':sourceId'].$delete(
+              { param: { sourceId: String(sourceId) } },
               { headers }
             ),
           session,

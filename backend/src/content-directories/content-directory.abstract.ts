@@ -28,6 +28,11 @@ export interface SourceMetadata {
   /* Video codec of the source ( x264, x265, etc ) */
   videoCodec: VideoCodec | null;
   watchers: number;
+  /** Release information used to match a torrent or pack to catalog episodes. */
+  releaseName?: string;
+  season?: number;
+  episode?: number;
+  files?: string[];
 }
 
 export abstract class AbstractContentDirectory<T extends Api = Api> {

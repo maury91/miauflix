@@ -12,14 +12,13 @@ import {
 
 import type { EncryptionService } from '@services/encryption/encryption.service';
 
-import { MovieSource } from './movie-source.entity';
+import { ContentSource } from './content-source.entity';
 
 export interface EncryptedStorageLayout {
   storeName: string;
   filenameSalt: string;
   pieceLength: number;
   files: Array<{ path: string; length: number; offset: number }>;
-  video: { name: string; path: string; offset: number; length: number };
 }
 
 @Entity('storage')
@@ -30,12 +29,12 @@ export class Storage {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @OneToOne(() => MovieSource, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'movieSourceId' })
-  movieSource: Relation<MovieSource>;
+  @OneToOne(() => ContentSource, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'sourceId' })
+  contentSource: Relation<ContentSource>;
 
   @Column()
-  movieSourceId: number;
+  sourceId: number;
 
   @Column({
     type: 'blob',
@@ -73,15 +72,13 @@ export class Storage {
   @Column({ type: 'integer', default: 0 })
   pieceLength: number;
 
-  @Column({ length: 16, default: 'watched' })
-  retentionClass: 'speculative' | 'watched';
-
   @Column({ type: 'datetime', nullable: true })
   lastInterestAt: Date | null;
 
-  @Column({ type: 'datetime', nullable: true })
-  speculativeExpiresAt: Date | null;
-
+  /**
+   * When every currently claimed file became complete; starts the seeding window.
+   * Cleared whenever an incomplete file is claimed.
+   */
   @Column({ type: 'datetime', nullable: true })
   videoCompletedAt: Date | null;
 

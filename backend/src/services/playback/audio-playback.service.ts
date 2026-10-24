@@ -1,11 +1,14 @@
 import { type ChildProcess, spawn } from 'node:child_process';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import { logger } from '@logger';
+
 import type { ConfigService } from '@mytypes/configuration';
+import type { MediaProbeRepository } from '@repositories/media-probe.repository';
 import type { DownloadService } from '@services/download/download.service';
 
 import { FragmentedMp4Timeline } from './fragmented-mp4';
-import { openTorrentInput } from './torrent-input';
+import type { PlaybackTarget } from './playback-target';
+import { openTorrentInput, PROBE_SIZE_BYTES } from './torrent-input';
 
 export interface PlaybackAudioTrack {
   index: number;
@@ -25,6 +28,8 @@ export interface PlaybackDelivery {
   videoCodec?: 'h264' | 'hevc';
   audioCodec: string | null;
   durationSeconds: number;
+  /** Start time from an explicit end-credits chapter tag, when one exists. */
+  creditsStartSeconds?: number;
   mimeType: string;
   audioTracks?: PlaybackAudioTrack[];
   defaultAudioTrackIndex?: number;
@@ -57,6 +62,7 @@ export class AudioConversionRequiredError extends AudioPlaybackError {
 
 interface ProbeResult {
   format?: { duration?: string; format_name?: string };
+  chapters?: Array<{ start_time?: string; tags?: { title?: string } }>;
   streams?: Array<{
     codec_type?: string;
     codec_name?: string;
@@ -65,6 +71,15 @@ interface ProbeResult {
     tags?: { language?: string; title?: string };
     disposition?: { default?: number };
   }>;
+}
+
+function explicitCreditsStart(probe: ProbeResult): number | undefined {
+  const chapter = probe.chapters?.find(item => {
+    const title = item.tags?.title?.trim().toLowerCase();
+    return title && /^(?:closing\s+credits|end\s+credits|credits(?:\s+roll)?)$/.test(title);
+  });
+  const start = Number(chapter?.start_time);
+  return Number.isFinite(start) && start >= 0 ? start : undefined;
 }
 
 function nativeHevcContainer(formatName: string | undefined): 'matroska' | 'mp4' | undefined {
@@ -192,6 +207,7 @@ export function deliveryFromProbe(
       videoCodec: video.codec_name === 'hevc' ? 'hevc' : 'h264',
       audioCodec,
       durationSeconds,
+      creditsStartSeconds: explicitCreditsStart(probe),
       mimeType: '',
       audioTracks,
       defaultAudioTrackIndex,
@@ -216,6 +232,7 @@ export function deliveryFromProbe(
     audioTracks,
     defaultAudioTrackIndex,
     durationSeconds,
+    creditsStartSeconds: explicitCreditsStart(probe),
     mimeType: audio?.mimeType ?? `video/mp4; codecs="${videoCodec}, mp4a.40.2"`,
   };
 }
@@ -292,14 +309,18 @@ interface ConversionJob {
 
 /** Bounded, disk-free audio conversion over the existing decrypted torrent range reader. */
 export class AudioPlaybackService {
-  private readonly probes = new Map<number, { expires: number; value: Promise<ProbeResult> }>();
+  private readonly probes = new Map<
+    string,
+    { expires: number; value: Promise<ProbeResult>; result?: ProbeResult }
+  >();
   private readonly jobs = new Map<string, ConversionJob>();
   private readonly processes = new Set<ChildProcess>();
   private closed = false;
 
   constructor(
     private readonly downloadService: DownloadService,
-    private readonly config?: ConfigService
+    private readonly config?: ConfigService,
+    private readonly store?: Pick<MediaProbeRepository, 'find' | 'save'>
   ) {}
 
   canConvertHevc(): boolean {
@@ -307,11 +328,15 @@ export class AudioPlaybackService {
   }
 
   async inspect(
-    source: MovieSource,
-    preferences: AudioPlaybackPreferences = {}
+    target: PlaybackTarget,
+    preferences: AudioPlaybackPreferences = {},
+    speculative = false,
+    signal?: AbortSignal
   ): Promise<PlaybackDelivery> {
+    signal?.throwIfAborted();
     if (this.closed) throw new AudioPlaybackError('Audio playback is shutting down.');
-    const cached = this.probes.get(source.id);
+    const cacheKey = `${target.source.id}:${target.filePath}`;
+    const cached = this.probes.get(cacheKey);
     if (cached && cached.expires > Date.now())
       return deliveryFromProbe(await cached.value, preferences, this.canConvertHevc());
     if (this.probes.size >= 64) {
@@ -319,17 +344,72 @@ export class AudioPlaybackService {
         if (entry.expires <= Date.now()) this.probes.delete(id);
       if (this.probes.size >= 64) this.probes.delete(this.probes.keys().next().value!);
     }
-    const value = this.probe(source).catch(error => {
-      if (this.probes.get(source.id)?.value === value) this.probes.delete(source.id);
-      throw error;
-    });
-    this.probes.set(source.id, { expires: Date.now() + 15 * 60_000, value });
-    return deliveryFromProbe(await value, preferences, this.canConvertHevc());
+    const value = this.storedOrProbe(target, speculative, signal)
+      .then(result => {
+        const entry = this.probes.get(cacheKey);
+        if (entry?.value === value) entry.result = result;
+        return result;
+      })
+      .catch(error => {
+        if (this.probes.get(cacheKey)?.value === value) this.probes.delete(cacheKey);
+        throw error;
+      });
+    this.probes.set(cacheKey, { expires: Date.now() + 15 * 60_000, value });
+    const cancelCache = () => {
+      if (this.probes.get(cacheKey)?.value === value) this.probes.delete(cacheKey);
+    };
+    signal?.addEventListener('abort', cancelCache, { once: true });
+    try {
+      return deliveryFromProbe(await value, preferences, this.canConvertHevc());
+    } finally {
+      signal?.removeEventListener('abort', cancelCache);
+    }
   }
 
-  private async probe(source: MovieSource): Promise<ProbeResult> {
-    const input = await openTorrentInput(this.downloadService, source);
+  /**
+   * Delivery from a probe that already finished, in memory or stored, without starting one.
+   * Null means the file's streams are still unknown.
+   */
+  async knownDelivery(
+    target: PlaybackTarget,
+    preferences: AudioPlaybackPreferences = {}
+  ): Promise<PlaybackDelivery | null> {
+    const cached = this.probes.get(`${target.source.id}:${target.filePath}`);
+    let result = cached && cached.expires > Date.now() ? cached.result : undefined;
+    if (!result) {
+      const stored = await this.store?.find(target.source.id, target.filePath).catch(() => null);
+      if (stored) result = JSON.parse(stored) as ProbeResult;
+    }
+    return result ? deliveryFromProbe(result, preferences, this.canConvertHevc()) : null;
+  }
+
+  /** A torrent file never changes, so a stored probe is reused instead of reading it again. */
+  private async storedOrProbe(
+    target: PlaybackTarget,
+    speculative: boolean,
+    signal?: AbortSignal
+  ): Promise<ProbeResult> {
+    const stored = await this.store?.find(target.source.id, target.filePath).catch(() => null);
+    if (stored) return JSON.parse(stored) as ProbeResult;
+    const result = await this.probe(target, speculative, signal);
+    await this.store
+      ?.save(target.source.id, target.filePath, JSON.stringify(result))
+      .catch(error => logger.warn('AudioPlaybackService', 'Failed to store media probe', error));
+    return result;
+  }
+
+  private async probe(
+    target: PlaybackTarget,
+    speculative = false,
+    signal?: AbortSignal
+  ): Promise<ProbeResult> {
+    logger.debug('AudioPlaybackService', 'Inspecting source audio', {
+      sourceId: target.source.id,
+      speculative,
+    });
+    const input = await openTorrentInput(this.downloadService, target, speculative);
     try {
+      signal?.throwIfAborted();
       if (this.closed || this.processes.size >= 4)
         throw new AudioPlaybackError('Audio preparation is busy. Retry shortly.');
       const child = spawn(
@@ -343,11 +423,14 @@ export class AudioPlaybackService {
           'http,tcp',
           '-format_whitelist',
           'matroska,webm,mov,avi,asf,flv,ogg,mp3',
+          // Container headers carry everything inspected; the 5 MB default waits on extra pieces.
+          '-probesize',
+          String(PROBE_SIZE_BYTES),
           '-show_streams',
           '-show_format',
           '-show_data',
           '-show_entries',
-          'stream=codec_type,codec_name,extradata,channels:stream_tags=language,title:stream_disposition=default:format=duration,format_name',
+          'stream=codec_type,codec_name,extradata,channels:stream_tags=language,title:stream_disposition=default:chapter=start_time:chapter_tags=title:format=duration,format_name',
           '-of',
           'json',
           input.url,
@@ -355,6 +438,12 @@ export class AudioPlaybackService {
         { stdio: ['ignore', 'pipe', 'pipe'] }
       );
       this.processes.add(child);
+      const cancel = () => {
+        this.processes.delete(child);
+        child.kill('SIGKILL');
+        void input.close();
+      };
+      signal?.addEventListener('abort', cancel, { once: true });
       let body = '';
       child.stdout.on('data', chunk => {
         body += chunk.toString();
@@ -379,6 +468,7 @@ export class AudioPlaybackService {
         return JSON.parse(body) as ProbeResult;
       } finally {
         clearTimeout(timeout);
+        signal?.removeEventListener('abort', cancel);
         this.processes.delete(child);
       }
     } finally {
@@ -387,7 +477,7 @@ export class AudioPlaybackService {
   }
 
   async stream(
-    source: MovieSource,
+    target: PlaybackTarget,
     owner: string,
     startSeconds: number,
     expiresAt: Date,
@@ -399,7 +489,7 @@ export class AudioPlaybackService {
     if (transcodeVideo && !this.canConvertHevc())
       throw new AudioPlaybackError('Video conversion is disabled.', 422);
     // Reinspect the source; query parameters cannot enable conversion against server policy.
-    const delivery = await this.inspect(source, {
+    const delivery = await this.inspect(target, {
       supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'opus', 'flac', 'vorbis'],
       nativeAudioTracks: true,
       allowHevc: !transcodeVideo,
@@ -410,7 +500,10 @@ export class AudioPlaybackService {
       startSeconds < 0 ||
       startSeconds >= delivery.durationSeconds
     ) {
-      throw new AudioPlaybackError('The requested playback position is outside the movie.', 422);
+      throw new AudioPlaybackError(
+        'The requested playback position is outside the selected video.',
+        422
+      );
     }
     const selectedAudioTrack = audioTrackIndex ?? delivery.defaultAudioTrackIndex ?? 0;
     if (
@@ -469,9 +562,10 @@ export class AudioPlaybackService {
       if (this.closed || this.jobs.size > 2 || this.processes.size >= 4) {
         throw new AudioPlaybackError('Audio conversion is busy. Retry shortly.');
       }
-      input = await openTorrentInput(this.downloadService, source);
+      input = await openTorrentInput(this.downloadService, target);
       if (controller.signal.aborted)
         throw new AudioPlaybackError('Audio preparation was cancelled.');
+      const spawnStartedAt = performance.now();
       child = spawn(
         'ffmpeg',
         audioConversionArgs(
@@ -519,7 +613,15 @@ export class AudioPlaybackService {
           if (error) reject(error);
           else resolve();
         };
-        const readable = () => finish();
+        const readable = () => {
+          logger.debug('AudioPlaybackService', 'FFmpeg produced its first output', {
+            sourceId: target.source.id,
+            elapsedMs: Math.round(performance.now() - spawnStartedAt),
+            copyAudio,
+            transcodeVideo: delivery.transcodeVideo === true,
+          });
+          finish();
+        };
         const failed = () =>
           finish(new AudioPlaybackError('FFmpeg is unavailable. Install FFmpeg on the backend.'));
         const closed = () =>
