@@ -155,7 +155,11 @@ export class TmdbProvider implements CatalogProvider {
    */
   getBackdropAnalysisSource(backdrop: string): ProviderBackdropSource | null {
     try {
-      const url = new URL(backdrop);
+      const url = new URL(
+        backdrop.startsWith('/') && !backdrop.startsWith('//')
+          ? `https://image.tmdb.org/t/p/w780${backdrop}`
+          : backdrop
+      );
       if (url.protocol !== 'https:' || url.hostname !== 'image.tmdb.org') return null;
       const match = url.pathname.match(/^(.*\/t\/p\/)[^/]+(\/.*)$/u);
       if (!match) return null;

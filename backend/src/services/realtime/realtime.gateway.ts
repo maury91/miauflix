@@ -9,6 +9,10 @@ import type { PreloadPreparationSnapshot } from '@routes/preload.types';
 import type { ProgressRequest } from '@routes/progress.types';
 import type { AuthService } from '@services/auth/auth.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
+import type {
+  PlaybackDeliveryUpdate,
+  PlaybackSessionService,
+} from '@services/playback/playback-session.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProgressService } from '@services/progress/progress.service';
 import { isAllowedOrigin } from '@utils/origin.util';
@@ -23,6 +27,7 @@ type Coordinate = [number, number];
 
 type FocusMessage = {
   type: 'focus';
+  subtitleLanguage?: string;
   clientSequence: number;
   navigationRevision: number;
   view: PreloadIntentRequest['view'];
@@ -56,6 +61,7 @@ interface ClientState {
   sessionId: string;
   clientId: string;
   focused: MediaIntentRef | null;
+  subtitleLanguage?: string;
   view: PreloadIntentRequest['view'];
   map: MapMessage | null;
   sequence: number;
@@ -96,8 +102,11 @@ export class RealtimeGateway {
     private readonly config: ConfigService,
     private readonly preload: PreloadIntentService,
     private readonly progress: ProgressService,
-    private readonly catalog: CatalogClientService
+    private readonly catalog: CatalogClientService,
+    playback?: Pick<PlaybackSessionService, 'onDeliveryUpdate'>
   ) {
+    this.removeDeliveryListener =
+      playback?.onDeliveryUpdate(event => this.deliverPlayback(event)) ?? null;
     this.server.on('connection', (socket: WebSocket, request: IncomingMessage) => {
       this.accept(socket, request);
     });
@@ -137,8 +146,10 @@ export class RealtimeGateway {
     this.preload.offChange(this.onPreparationChange);
     this.removeArtworkListener?.();
     this.removeArtworkStreamReadyListener?.();
+    this.removeDeliveryListener?.();
   }
 
+  private readonly removeDeliveryListener: (() => void) | null;
   private removeArtworkListener: (() => void) | null = null;
   private removeArtworkStreamReadyListener: (() => void) | null = null;
 
@@ -189,6 +200,7 @@ export class RealtimeGateway {
         if (!this.isFocus(message)) return this.invalid(state, 'Invalid focus');
         if (message.clientSequence <= state.sequence) return;
         state.focused = message.media;
+        state.subtitleLanguage = message.subtitleLanguage;
         state.view = message.view;
         state.sequence = Math.max(state.sequence, message.clientSequence);
         state.focusSequence = message.clientSequence;
@@ -303,6 +315,7 @@ export class RealtimeGateway {
       sequence,
       view: state.view,
       focused: state.focused,
+      ...(state.subtitleLanguage ? { subtitleLanguage: state.subtitleLanguage } : {}),
       reachable: this.reachable(state.map),
     });
   }
@@ -312,6 +325,22 @@ export class RealtimeGateway {
     for (const client of this.clients) {
       if (client.userId && client.artworkRefs.has(key)) {
         this.send(client, { type: 'artwork-update', ...update });
+      }
+    }
+  }
+
+  /** Background probe results go to every tab of the session that started the playback. */
+  private deliverPlayback(event: PlaybackDeliveryUpdate): void {
+    for (const client of this.clients) {
+      if (
+        client.userId === event.userId &&
+        (!event.sessionId || client.sessionId === event.sessionId)
+      ) {
+        this.send(client, {
+          type: 'playback-delivery',
+          playbackId: event.playbackId,
+          update: event.update,
+        });
       }
     }
   }
@@ -466,6 +495,9 @@ export class RealtimeGateway {
     return (
       this.isSequence(value.clientSequence) &&
       this.isSequence(value.navigationRevision) &&
+      (value.subtitleLanguage === undefined ||
+        (typeof value.subtitleLanguage === 'string' &&
+          /^[a-z]{2,3}$/i.test(value.subtitleLanguage))) &&
       (value.view === 'browse' || value.view === 'details' || value.view === 'player') &&
       (value.media === null || this.isMedia(value.media))
     );

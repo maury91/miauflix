@@ -27,7 +27,15 @@ const setupTest = (directory: string) => {
     expiresAt: new Date(Date.now() + 60_000),
   };
   const verify = jest.fn().mockResolvedValue(grant);
-  const source = { id: 9, movieId: 12, file: Buffer.from('mock torrent') };
+  const source = {
+    source: { id: 9, file: Buffer.from('mock torrent') },
+    filePath: 'Movie.mkv',
+    matchKind: 'movie',
+  };
+  const movie = { id: 12, mediaId: 123, imdbId: 'tt123' };
+  const streamService = {
+    resolvePlaybackTarget: jest.fn().mockResolvedValue({ target: source, movie }),
+  };
   const request = jest.fn();
   const config = {
     get: jest.fn<string | undefined, []>().mockReturnValue('fixture-key'),
@@ -41,15 +49,14 @@ const setupTest = (directory: string) => {
     config as never,
     { request } as never,
     { verify } as never,
-    { getSourceById: async () => source } as never,
-    { getMovieById: async () => ({ mediaId: 123, imdbId: 'tt123' }) } as never,
+    streamService as never,
     torrentSubtitles as never
   );
   const search = (results: unknown[]) => {
     request.mockResolvedValueOnce({ ok: true, body: { data: results } });
     return service.search('streaming-key', 'user', 'en', false, true);
   };
-  return { service, request, verify, source, search, config, torrentSubtitles };
+  return { service, request, verify, source, search, config, torrentSubtitles, streamService };
 };
 
 describe('subtitle ranking and durable downloads', () => {
@@ -67,6 +74,15 @@ describe('subtitle ranking and durable downloads', () => {
   afterEach(async () => {
     await rm(directory, { recursive: true, force: true });
     jest.clearAllMocks();
+  });
+
+  it('reuses details warm-up search results without another provider request', async () => {
+    const { service, request } = setupTest(directory);
+    request.mockResolvedValueOnce({ ok: true, body: { data: [entry(1, video)] } });
+    await service.warmSearch('tt123', 'en');
+    const result = await service.search('streaming-key', 'user', 'en', false);
+    expect(result.candidates).toHaveLength(1);
+    expect(request).toHaveBeenCalledTimes(1);
   });
 
   it('discovers local subtitles without provider configuration and shares authorized cached content', async () => {
@@ -160,7 +176,7 @@ describe('subtitle ranking and durable downloads', () => {
 
   it('returns unknown scores and preserves trust ordering when metadata is missing', async () => {
     const { source, search } = setupTest(directory);
-    source.file = Buffer.alloc(0);
+    source.source.file = Buffer.alloc(0);
     const result = await search([entry(1, 'Other'), entry(2, 'Trusted', { from_trusted: true })]);
     expect(result.candidates[0].release).toBe('Trusted');
     expect(result.candidates.every(candidate => candidate.filenameSimilarity === null)).toBe(true);

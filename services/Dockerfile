@@ -52,7 +52,7 @@ COPY --from=builder --chown=1001:1001 /workspace/node_modules/@tensorflow/tfjs-b
 COPY --from=builder --chown=1001:1001 /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-simd.wasm /app/wasm/tfjs-backend-wasm-simd.wasm
 COPY --from=builder --chown=1001:1001 /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-threaded-simd.wasm /app/wasm/tfjs-backend-wasm-threaded-simd.wasm
 
-COPY --chown=1001:1001 backend-e2e/docker/miauflix-services-entrypoint.sh /app/miauflix-services-entrypoint.sh
+COPY --chown=1001:1001 services/entrypoint.sh /app/miauflix-services-entrypoint.sh
 RUN chmod +x /app/miauflix-services-entrypoint.sh
 
 ENV CATALOG_DATA_DIR=/app/data/catalog \
@@ -64,6 +64,11 @@ ENV CATALOG_DATA_DIR=/app/data/catalog \
     HTTP_PORT=6790 \
     BACKDROP_FOCUS_MODEL_DIR=/app/models \
     BACKDROP_FOCUS_WASM_DIR=/app/wasm
+
+EXPOSE 3001 3002 6789 6790
+VOLUME /app/data
+HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=10 \
+  CMD bun -e "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))"
 
 USER bunqueue
 ENTRYPOINT ["/bin/bash", "/app/miauflix-services-entrypoint.sh"]

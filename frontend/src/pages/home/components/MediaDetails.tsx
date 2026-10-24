@@ -4,8 +4,10 @@ import {
   useRemoveFromWatchlistMutation,
 } from '@features/media/api/lists.api';
 import {
+  mediaApi,
   useEnsureBackdropFocusMutation,
   useGetMovieQuery,
+  useGetSeasonQuery,
   useGetShowQuery,
   useLazyGetSeasonQuery,
 } from '@features/media/api/media.api';
@@ -29,13 +31,14 @@ import {
 import type { RootState } from '@store/store';
 import { forwardRef, type UIEvent } from 'react';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import type { BackdropPositionContext } from '../backdrop-focus';
 import { getBackdropPlacement } from '../backdrop-focus';
+import { firstSeason } from '../first-season';
 import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
-import { getImageUrl, getMediaTitle } from '../media.utils';
+import { artworkUrl, getMediaTitle } from '../media.utils';
 import { navigateDetails } from './detailsNavigation';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
@@ -225,6 +228,10 @@ const Overview = styled.p`
   color: ${PALETTE.text.primary};
   font-size: clamp(1rem, 2.4vh, 1.35rem);
   line-height: 1.55;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
 `;
 
 const SectionLabel = styled.h2`
@@ -564,7 +571,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     if (!userId || ratingPending) return;
     void setMediaRating({ ...ratingItem, rating: selectedRating === rating ? null : rating });
   };
-  const [loadedSeasons, setLoadedSeasons] = useState<Record<number, SeasonResponse>>({});
+
   const [seasonErrors, setSeasonErrors] = useState<Record<number, boolean>>({});
   const [loadingSeasons, setLoadingSeasons] = useState<Record<number, boolean>>({});
 
@@ -578,7 +585,35 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
           mediaId: media.mediaId,
         })
       : undefined;
-  const seasons = useMemo(() => showDetails?.seasons ?? [], [showDetails?.seasons]);
+  const seasons = useMemo(
+    () => [...(showDetails?.seasons ?? [])].sort((a, b) => a.seasonNumber - b.seasonNumber),
+    [showDetails?.seasons]
+  );
+  const initialSeason = showDetails
+    ? firstSeason(showDetails, progress.data?.progress ?? [])
+    : undefined;
+  const openingSeason = useGetSeasonQuery(
+    media._type === 'tvshow' && initialSeason !== undefined
+      ? { showId: media.mediaId, season: initialSeason }
+      : skipToken
+  );
+  const selectLoadedSeasons = useMemo(() => {
+    const queries = seasons.map(season => ({
+      number: season.seasonNumber,
+      select: mediaApi.endpoints.getSeason.select({
+        showId: media.mediaId,
+        season: season.seasonNumber,
+      }),
+    }));
+    return (state: RootState) =>
+      Object.fromEntries(
+        queries.flatMap(query => {
+          const data = query.select(state).data;
+          return data ? [[query.number, data]] : [];
+        })
+      ) as Record<number, SeasonResponse>;
+  }, [media.mediaId, seasons]);
+  const loadedSeasons = useSelector(selectLoadedSeasons, shallowEqual);
 
   useEffect(() => {
     dispatch(
@@ -598,7 +633,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       if (pending) return pending;
       const requestMediaId = media.mediaId;
       setLoadingSeasons(previous => ({ ...previous, [seasonNumber]: true }));
-      const request = loadSeason({ showId: requestMediaId, season: seasonNumber })
+      const request = loadSeason({ showId: requestMediaId, season: seasonNumber }, true)
         .unwrap()
         .then(data => {
           if (
@@ -607,7 +642,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
           ) {
             return undefined;
           }
-          setLoadedSeasons(previous => ({ ...previous, [seasonNumber]: data }));
+
           setSeasonErrors(previous => ({ ...previous, [seasonNumber]: false }));
           return data;
         })
@@ -645,7 +680,6 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, []);
 
   useEffect(() => {
-    setLoadedSeasons({});
     setSeasonErrors({});
     setLoadingSeasons({});
     inflight.current.clear();
@@ -673,14 +707,11 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, [ensureBackdropFocus, media.backdrop, media.backdropFocus, media.mediaId, media._type]);
 
   useEffect(() => {
-    if (media._type === 'tvshow' && seasons[0]) {
-      if (activeSeasonNumber === null) {
-        dispatch(detailsNavigationActions.setActiveSeasonNumber(seasons[0].seasonNumber));
-      }
-      if (!selectedEpisode) jumpToSeason.current = seasons[0].seasonNumber;
-      void loadSeasonData(seasons[0].seasonNumber);
-    }
-  }, [activeSeasonNumber, dispatch, loadSeasonData, media._type, seasons, selectedEpisode]);
+    if (media._type !== 'tvshow' || initialSeason === undefined) return;
+    if (activeSeasonNumber === null)
+      dispatch(detailsNavigationActions.setActiveSeasonNumber(initialSeason));
+    if (!selectedEpisode) jumpToSeason.current = initialSeason;
+  }, [activeSeasonNumber, dispatch, initialSeason, media._type, selectedEpisode]);
 
   useEffect(() => {
     const season = seasons[focusedSeasonIndex];
@@ -705,7 +736,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     artwork && artwork.artworkRevision >= currentRevision
       ? artwork.backdrop
       : (current?.backdrop ?? media.backdrop);
-  const backdrop = getImageUrl(selectedBackdrop, 'w1280');
+  const backdrop = artworkUrl(selectedBackdrop, 'backdrop');
   const backdropFocus = current?.backdropFocus ?? media.backdropFocus ?? resolvedBackdropFocus;
   const backdropPlacement = getBackdropPlacement(backdropFocus, backdropContext);
   const warmupState: WarmupState = preparation?.warmup?.state ?? 'not_requested';
@@ -754,7 +785,9 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     }
     return [
       formatYear(current.firstAirDate),
-      current.seasons.length ? `${current.seasons.length} seasons` : '',
+      current.seasons.length
+        ? `${current.seasons.length} season${current.seasons.length === 1 ? '' : 's'}`
+        : '',
     ].filter(Boolean);
   }, [current]);
   const rating = current?.rating ? current.rating.toFixed(1) : null;
@@ -911,7 +944,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
         <Layout>
           <Content>
             {detailLogo ? (
-              <Logo src={getImageUrl(detailLogo)} alt={title} />
+              <Logo decoding="async" src={artworkUrl(detailLogo, 'logo', 380)} alt={title} />
             ) : (
               <Title>{title}</Title>
             )}
@@ -1061,6 +1094,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                       onFocus={() => {
                         dispatch(detailsNavigationActions.setFocusedArea('season'));
                         dispatch(detailsNavigationActions.setFocusedSeasonIndex(index));
+                        for (const adjacent of seasons.slice(Math.max(0, index - 1), index + 2))
+                          void loadSeasonData(adjacent.seasonNumber);
                       }}
                       id={`season-${media.mediaId}-${item.seasonNumber}`}
                       key={item.id}
@@ -1115,7 +1150,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                           key={episode.id}
                           type="button"
                           $selected={selected}
-                          $image={getImageUrl(episode.still ?? current?.backdrop)}
+                          $image={artworkUrl(episode.still ?? current?.backdrop, 'still', 300)}
                           onMouseEnter={() =>
                             selectEpisode(section.seasonNumber, episode.episodeNumber)
                           }
@@ -1146,11 +1181,13 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                     })}
                   </SeasonSection>
                 ))}
-                {Object.values(loadingSeasons).some(Boolean) && (
+                {(openingSeason.isLoading || Object.values(loadingSeasons).some(Boolean)) && (
                   <Spinner text="Loading more episodes..." />
                 )}
                 {seasons.map((item, index) =>
-                  seasonErrors[item.seasonNumber] && !loadedSeasons[item.seasonNumber] ? (
+                  (seasonErrors[item.seasonNumber] ||
+                    (item.seasonNumber === initialSeason && openingSeason.isError)) &&
+                  !loadedSeasons[item.seasonNumber] ? (
                     <ErrorState key={`error-${item.seasonNumber}`}>
                       Failed to load {item.name}.
                       <PrimaryAction

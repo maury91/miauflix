@@ -33,5 +33,12 @@ export const sourceConfigurationDefinition = serviceConfiguration({
       required: false,
       transform: transforms.boolean(),
     }),
+    LEAK_TOLERANCE: variable({
+      description: 'How long before an episode airs to begin searching for sources',
+      required: false,
+      defaultValue: '0d',
+      example: '2d',
+      transform: transforms.time(['s', 'm', 'h', 'd']),
+    }),
   },
 });

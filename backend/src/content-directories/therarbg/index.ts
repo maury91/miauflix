@@ -83,6 +83,17 @@ export class TherarbgContentDirectory extends AbstractContentDirectory<TheRARBGA
       score: 0, // ToDo: use scoringService to calculate score
       size: sourceMetadata.size,
       source: extractedMetadata.source ?? null,
+      releaseName: sourceMetadata.name,
+      season: sourceMetadata.season > 0 ? sourceMetadata.season : undefined,
+      episode: sourceMetadata.episode > 0 ? sourceMetadata.episode : undefined,
+      files:
+        sourceMetadata.files?.map(file =>
+          'full_location' in file
+            ? file.full_location
+            : Array.isArray(file.name)
+              ? file.name.join('/')
+              : file.name
+        ) ?? [],
       uploadDate: new Date(sourceMetadata.timestamp),
       url: '', // TheRARBG does not provide a direct download URL
       videoCodec: extractedMetadata.videoCodec[0] ?? null,

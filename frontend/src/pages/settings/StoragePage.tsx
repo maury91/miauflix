@@ -237,13 +237,13 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
   const openConfirmation = (item: StorageItemView) => {
     setNotice('');
     setDialogError('');
-    setConfirmingId(item.movieSourceId);
+    setConfirmingId(item.sourceId);
   };
 
   const confirmRemoval = async (item: StorageItemView) => {
     setDialogError('');
     try {
-      await removeStorage(item.movieSourceId).unwrap();
+      await removeStorage(item.sourceId).unwrap();
       setConfirmingId(null);
       setNotice(`Freed ${formatBytes(item.physicalBytes)} used by ${item.title}.`);
     } catch (requestError) {
@@ -251,7 +251,7 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
     }
   };
 
-  const confirmedItem = data?.items.find(item => item.movieSourceId === confirmingId);
+  const confirmedItem = data?.items.find(item => item.sourceId === confirmingId);
   const summary = data?.summary;
 
   return (
@@ -325,7 +325,7 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
         {data && data.items.length > 0 && (
           <List aria-label="Downloaded content">
             {data.items.map(item => (
-              <Item key={item.movieSourceId}>
+              <Item key={item.sourceId}>
                 <div>
                   <ItemTitle>{item.title}</ItemTitle>
                   <Details>
@@ -347,8 +347,8 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
                 </div>
                 <Button
                   ref={node => {
-                    if (node) buttonRefs.current.set(item.movieSourceId, node);
-                    else buttonRefs.current.delete(item.movieSourceId);
+                    if (node) buttonRefs.current.set(item.sourceId, node);
+                    else buttonRefs.current.delete(item.sourceId);
                   }}
                   appearance="settings"
                   color="secondary"
