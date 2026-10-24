@@ -15,7 +15,11 @@ import styled from 'styled-components';
 
 import { ServiceConfigGroup } from './components/ServiceConfigGroup';
 import { useConfigForm } from './hooks/useConfigForm';
-import { preserveInitialServiceOrder, sortServiceGroups } from './config.utils';
+import {
+  attributeMissingVars,
+  preserveInitialServiceOrder,
+  sortServiceGroups,
+} from './config.utils';
 
 import AlertIcon from '~icons/line-md/alert';
 
@@ -396,7 +400,11 @@ const ConfigWizardPage: FC<ConfigWizardPageProps> = ({ onDismiss }) => {
             result={serviceResults[groupName]}
             restarted={serviceNotices[groupName]?.restarted}
             needsProcessRestart={serviceNotices[groupName]?.needsProcessRestart}
-            serviceStatus={serviceStatuses[groupName]}
+            serviceStatus={attributeMissingVars(
+              groupName,
+              serviceStatuses[groupName],
+              groupedEntries
+            )}
           />
         ))}
 

@@ -46,7 +46,9 @@ chown -R $PUID:$PGID /usr/src/app/downloads
 
 # The app persists generated settings to .env; the image ships it root-owned.
 # Leave user-mounted files alone and only fix the image's own copy.
-if [ -f /usr/src/app/.env ] && [ "$(stat -c %u /usr/src/app/.env)" = "0" ]; then
+if [ -f /usr/src/app/.env ] \
+    && ! awk '$5 == "/usr/src/app/.env" { found = 1 } END { exit !found }' /proc/self/mountinfo \
+    && [ "$(stat -c %u /usr/src/app/.env)" = "0" ]; then
     chown $PUID:$PGID /usr/src/app/.env
 fi
 
