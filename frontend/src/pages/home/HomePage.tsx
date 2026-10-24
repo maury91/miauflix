@@ -594,6 +594,8 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       clearTimeout(idleTimer);
       idleTimer = setTimeout(() => {
         if (cancelled || !eligible) return;
+        // Show once per effect run; modal input must not restart the timer or overwrite focus.
+        eligible = false;
         traktPromptFocus.current = document.activeElement as HTMLElement | null;
         setShowTraktPrompt(true);
       }, 5000);

@@ -39,6 +39,19 @@ describe('TorrentWarmupController', () => {
     expect(inspect).toHaveBeenCalledTimes(1);
   });
 
+  it('warms from the start by default and at the resume point when asked', async () => {
+    const { controller, driver } = setupTest();
+    await controller.warm(source(1), 'lease1', 'm:1');
+    expect(driver.warmSource).toHaveBeenLastCalledWith(source(1), expect.any(Number), 'lease1', 0);
+    await controller.warm(source(2), 'lease2', 'm:2', { startFraction: 0.4 });
+    expect(driver.warmSource).toHaveBeenLastCalledWith(
+      source(2),
+      expect.any(Number),
+      'lease2',
+      0.4
+    );
+  });
+
   it('cancels obsolete preparation on replacement and pause but preserves a promoted probe', async () => {
     const { driver } = setupTest();
     const signals: AbortSignal[] = [];

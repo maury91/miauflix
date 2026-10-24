@@ -5,6 +5,7 @@ import { EpisodeSource } from '@entities/episode-source.entity';
 
 export class EpisodeSourceRepository {
   private readonly repository: Repository<EpisodeSource>;
+  private readonly database: Database;
   private mutation: Promise<void> = Promise.resolve();
 
   private async serializeMutation<T>(operation: () => Promise<T>): Promise<T> {
@@ -22,6 +23,7 @@ export class EpisodeSourceRepository {
   }
 
   constructor(database: Database) {
+    this.database = database;
     this.repository = database.getRepository(EpisodeSource);
   }
 
@@ -61,9 +63,11 @@ export class EpisodeSourceRepository {
     canonicalPath: string
   ): Promise<string> {
     // An already-associated canonical row can win while this provider-relative row exists.
-    await this.repository.query(
-      'UPDATE OR IGNORE episode_source SET videoFilePath = ? WHERE id = ? AND videoFilePath = ?',
-      [canonicalPath, id, previousPath]
+    await this.database.write(() =>
+      this.repository.query(
+        'UPDATE OR IGNORE episode_source SET videoFilePath = ? WHERE id = ? AND videoFilePath = ?',
+        [canonicalPath, id, previousPath]
+      )
     );
     const stored = await this.repository.findOneBy({ id });
     if (!stored) return canonicalPath; // A concurrent resolver already merged this stale row.
@@ -116,18 +120,22 @@ export class EpisodeSourceRepository {
     else query.andWhere('episodeSource.videoFilePath = :videoFilePath', { videoFilePath });
     // SQLite UNIQUE constraints allow multiple NULLs; use one atomic statement for that case.
     if (videoFilePath === null) {
-      await this.repository.query(
-        'INSERT INTO episode_source (episodeId, sourceId, videoFilePath, matchKind) SELECT ?, ?, NULL, ? WHERE NOT EXISTS (SELECT 1 FROM episode_source WHERE episodeId = ? AND sourceId = ? AND videoFilePath IS NULL)',
-        [episodeId, sourceId, matchKind, episodeId, sourceId]
+      await this.database.write(() =>
+        this.repository.query(
+          'INSERT INTO episode_source (episodeId, sourceId, videoFilePath, matchKind) SELECT ?, ?, NULL, ? WHERE NOT EXISTS (SELECT 1 FROM episode_source WHERE episodeId = ? AND sourceId = ? AND videoFilePath IS NULL)',
+          [episodeId, sourceId, matchKind, episodeId, sourceId]
+        )
       );
     } else {
-      await this.repository
-        .createQueryBuilder()
-        .insert()
-        .into(EpisodeSource)
-        .values({ episodeId, sourceId, videoFilePath, matchKind })
-        .orIgnore()
-        .execute();
+      await this.database.write(() =>
+        this.repository
+          .createQueryBuilder()
+          .insert()
+          .into(EpisodeSource)
+          .values({ episodeId, sourceId, videoFilePath, matchKind })
+          .orIgnore()
+          .execute()
+      );
     }
     const existing = await query.getOne();
     if (existing) {

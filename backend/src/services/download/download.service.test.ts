@@ -927,6 +927,69 @@ describe('DownloadService', () => {
       ).rejects.toThrow('Requested torrent file is unavailable');
     });
 
+    it('reports a blocked playback read and the last delivery for source health', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as { ready: boolean; torrents: Torrent[] };
+      webtorrent.ready = true;
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 8 }],
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/movie',
+        size: 8,
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      let verified = false;
+      const torrent = Object.assign(new EventEmitter(), {
+        path: storage.location,
+        files: [],
+        pieces: new Array(2),
+        bitfield: { get: () => verified },
+        destroyed: false,
+        ready: true,
+        numPeers: 3,
+        downloadSpeed: 2048,
+        _select: jest.fn(),
+        _deselect: jest.fn(),
+        critical: jest.fn(),
+      }) as unknown as Torrent;
+      webtorrent.torrents = [torrent];
+      jest.spyOn(service, 'startDownload').mockResolvedValue({
+        sourceId: storage.sourceId,
+        torrent,
+        storage,
+        layout,
+        startTime: new Date(),
+      });
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+
+      const response = await service.streamFile(target({ id: storage.sourceId, size: 8 }));
+      const body = response.arrayBuffer();
+      await new Promise(resolve => setTimeout(resolve, 0));
+      const waiting = await service.getPlaybackHealth(storage.sourceId, 'movie.mkv');
+      expect(waiting).toMatchObject({
+        streaming: true,
+        hasMetadata: true,
+        peers: 3,
+        downloadSpeed: 2048,
+        lastDeliveryAt: null,
+        fileLength: 8,
+      });
+      expect(waiting?.blockedSince).toEqual(expect.any(Number));
+
+      verified = true;
+      torrent.emit('verified', 0);
+      await body;
+      const delivered = await service.getPlaybackHealth(storage.sourceId, 'movie.mkv');
+      expect(delivered?.blockedSince).toBeNull();
+      expect(delivered?.lastDeliveryAt).toEqual(expect.any(Number));
+    });
+
     it('plays a detached encrypted source without adding it back to WebTorrent', async () => {
       const { service, mockStorageService } = setupTest();
       const webtorrent = service.client as unknown as {
@@ -1019,11 +1082,82 @@ describe('DownloadService', () => {
         { reservedBytes: 10 }
       );
     });
+
+    describe('resume warmups', () => {
+      const MB = 1024 * 1024;
+      const setupResume = () => {
+        const setup = setupTest();
+        const file = { path: 'movie.mkv', offset: 0, length: 200 * MB };
+        const torrent = {
+          files: [file],
+          pieces: new Array(200),
+          pieceLength: MB,
+          length: file.length,
+        };
+        const startDownload = jest.spyOn(setup.service, 'startDownload').mockResolvedValue({
+          torrent,
+          layout: { pieceLength: MB, files: [file] },
+        } as never);
+        return { ...setup, startDownload, movie: target({ id: 12, size: file.length }) };
+      };
+
+      it('claims the header first, then moves the window ahead of the resume offset', async () => {
+        const { service, mockStorageService, startDownload, movie } = setupResume();
+
+        await expect(service.warmSource(movie, 64 * MB, 'lease-a', 0.5)).resolves.toEqual({
+          sourceId: 12,
+          filePath: 'movie.mkv',
+          targetBytes: 64 * MB,
+          firstPiece: 84,
+          lastPiece: 147,
+        });
+        expect(startDownload).toHaveBeenCalledWith(
+          movie,
+          { kind: 'warmup', ownerKey: 'lease-a', rangeEnd: 4 * MB },
+          { reservedBytes: 70 * MB }
+        );
+        expect(mockStorageService.claimFile).toHaveBeenCalledWith(
+          12,
+          'movie.mkv',
+          expect.objectContaining({ kind: 'warmup', rangeStart: 84 * MB, rangeEnd: 148 * MB }),
+          true
+        );
+      });
+
+      it('warms the plain prefix when the resume point is near the start', async () => {
+        const { service, mockStorageService, movie } = setupResume();
+
+        await expect(service.warmSource(movie, 64 * MB, 'lease-a', 0.05)).resolves.toMatchObject({
+          firstPiece: 0,
+          lastPiece: 63,
+        });
+        expect(mockStorageService.claimFile).toHaveBeenCalledWith(
+          12,
+          'movie.mkv',
+          expect.objectContaining({ rangeStart: 0, rangeEnd: 64 * MB }),
+          true
+        );
+      });
+
+      it('keeps the window inside the file near its end', async () => {
+        const { service, movie } = setupResume();
+
+        await expect(service.warmSource(movie, 64 * MB, 'lease-a', 0.99)).resolves.toMatchObject({
+          firstPiece: 136,
+          lastPiece: 199,
+        });
+      });
+    });
   });
 
   describe('claim-driven selection', () => {
-    const claim = (path: string, kind: string, ownerKey: string, rangeEnd: number | null = null) =>
-      ({ path, kind, ownerKey, rangeEnd, expiresAt: null }) as never;
+    const claim = (
+      path: string,
+      kind: string,
+      ownerKey: string,
+      rangeEnd: number | null = null,
+      rangeStart = 0
+    ) => ({ path, kind, ownerKey, rangeStart, rangeEnd, expiresAt: null }) as never;
 
     const setupSelection = () => {
       const setup = setupTest();
@@ -1082,6 +1216,23 @@ describe('DownloadService', () => {
       mockStorageService.getLiveClaims.mockResolvedValue([]);
       await reconcile(7);
       expect(torrent.select).not.toHaveBeenCalled();
+    });
+
+    it('selects a resume window with the file header and tail', async () => {
+      const { mockStorageService, files, torrent, reconcile } = setupSelection();
+      const MB = 1024 * 1024;
+      files[1].offset = 64 * MB;
+      files[1].length = 64 * MB;
+      Object.assign(torrent, { pieceLength: MB, pieces: new Array(128) });
+      mockStorageService.getLiveClaims.mockResolvedValue([
+        claim('Show.S01E02.mkv', 'warmup', 'lease', 40 * MB, 30 * MB),
+      ]);
+
+      await reconcile(7);
+
+      expect(torrent.select).toHaveBeenCalledWith(94, 103, 1);
+      expect(torrent.select).toHaveBeenCalledWith(64, 67, 1);
+      expect(torrent.select).toHaveBeenCalledWith(126, 127, 1);
     });
 
     it('keeps a file selected while another owner still claims it', async () => {

@@ -6,6 +6,7 @@ import type { EpisodeSourceRepository } from '@repositories/episode-source.repos
 import type { DownloadService } from '@services/download/download.service';
 import { mainVideoPath } from '@services/download/download.utils';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
+import type { SourceHealthService } from '@services/source/source-health.service';
 
 import type { PlaybackTarget } from './playback-target';
 
@@ -16,7 +17,8 @@ export class PlaybackTargetService {
 
   constructor(
     db: Database,
-    private readonly downloads: Pick<DownloadService, 'resolveLayout'>
+    private readonly downloads: Pick<DownloadService, 'resolveLayout'>,
+    private readonly sourceHealth?: Pick<SourceHealthService, 'markFailed'>
   ) {
     this.contentSources = db.getContentSourceRepository();
     this.episodeSources = db.getEpisodeSourceRepository();
@@ -32,8 +34,11 @@ export class PlaybackTargetService {
     if (known) return { source, filePath: known, matchKind: 'movie' };
     const layout = await this.downloads.resolveLayout(source);
     const videoPath = mainVideoPath(layout.files);
-    if (!videoPath)
+    if (!videoPath) {
+      // Typically a fake or archive-only torrent: never pick it for playback again soon.
+      this.sourceHealth?.markFailed(source.id);
       throw new ErrorWithStatus('Source does not contain a video file', 'source_file_unavailable');
+    }
     const filePath = await this.contentSources.setMovieVideoFilePath(movieId, source.id, videoPath);
     return { source, filePath, matchKind: 'movie' };
   }

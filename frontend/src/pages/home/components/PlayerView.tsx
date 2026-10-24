@@ -162,6 +162,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   );
   /** The direct stream failed before the probe said how this file must be delivered. */
   const directFailedWhilePending = useRef(false);
+  /** The playable that already got its automatic retry after a stream failure. */
+  const sourceRetriedFor = useRef<string | null>(null);
   const [prefetchedNextSession, setPrefetchedNextSession] =
     useState<CreatePlaybackSessionResponse | null>(null);
   const prefetchedNextRef = useRef<CreatePlaybackSessionResponse | null>(null);
@@ -282,12 +284,47 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       });
   }, [nextEpisodeKey]);
 
+  const readProgressSnapshot = useCallback(() => {
+    if (audioPreparing.current) return latestProgress.current;
+    const video = videoRef.current;
+    const duration =
+      deliveryRef.current?.mode === 'audio-transcode'
+        ? deliveryRef.current.durationSeconds
+        : video?.duration;
+    if (video && duration !== undefined && Number.isFinite(duration) && duration > 0) {
+      latestProgress.current = {
+        positionSeconds: Math.min(Math.max(video.currentTime, 0), duration),
+        durationSeconds: duration,
+      };
+    }
+    return latestProgress.current;
+  }, []);
+
+  const saveProgress = useCallback(
+    (state: 'playing' | 'paused' | 'completed') => {
+      const snapshot = readProgressSnapshot();
+      if (!snapshot) return;
+      const update: ProgressRequest = {
+        playable,
+        ...snapshot,
+        state,
+      };
+      void dispatch(saveProgressWithRealtime(update));
+    },
+    [dispatch, playable, readProgressSnapshot]
+  );
+
   const playNextEpisode = useCallback(() => {
     if (!nextEpisodeKey || nextTransitioned.current === nextEpisodeKey) return;
     nextTransitioned.current = nextEpisodeKey;
     setNextCountdown(null);
+    // Skipping the credits still finishes this episode; onEnded may never fire.
+    if (!completedRef.current) {
+      completedRef.current = true;
+      saveProgress('completed');
+    }
     onPlayNext();
-  }, [nextEpisodeKey, onPlayNext]);
+  }, [nextEpisodeKey, onPlayNext, saveProgress]);
 
   const updateNextCountdown = useCallback(() => {
     const video = videoRef.current;
@@ -518,35 +555,6 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     [subtitleStorageKey]
   );
 
-  const readProgressSnapshot = useCallback(() => {
-    if (audioPreparing.current) return latestProgress.current;
-    const video = videoRef.current;
-    const duration =
-      deliveryRef.current?.mode === 'audio-transcode'
-        ? deliveryRef.current.durationSeconds
-        : video?.duration;
-    if (video && duration !== undefined && Number.isFinite(duration) && duration > 0) {
-      latestProgress.current = {
-        positionSeconds: Math.min(Math.max(video.currentTime, 0), duration),
-        durationSeconds: duration,
-      };
-    }
-    return latestProgress.current;
-  }, []);
-
-  const saveProgress = useCallback(
-    (state: 'playing' | 'paused' | 'completed') => {
-      const snapshot = readProgressSnapshot();
-      if (!snapshot) return;
-      const update: ProgressRequest = {
-        playable,
-        ...snapshot,
-        state,
-      };
-      void dispatch(saveProgressWithRealtime(update));
-    },
-    [dispatch, playable, readProgressSnapshot]
-  );
   const selectedSubtitle = subtitleCandidates.find(
     candidate => candidate.id === selectedSubtitleId
   );
@@ -661,6 +669,21 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     if (selectedSubtitle) applySubtitleOffset();
   }, [applySubtitleOffset, selectedSubtitle, subtitleOffset, audioSeek, audioTrackIndex]);
 
+  const failSource = useCallback(() => {
+    const key = JSON.stringify(playable);
+    if (sourceRetriedFor.current !== key) {
+      // The backend records a source that cannot play, so a new session picks another one.
+      sourceRetriedFor.current = key;
+      setAttempt(value => value + 1);
+      return;
+    }
+    resetSessionRequest();
+    setStatus('error');
+    setError(
+      `Playback for “${title}” could not load the selected source. Retry to try source preparation again.`
+    );
+  }, [playable, resetSessionRequest, title]);
+
   useEffect(() => {
     if (!deliveryUpdate) return;
     if (deliveryUpdate.type === 'recreate') {
@@ -681,13 +704,9 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       }));
     } else if (directFailedWhilePending.current) {
       directFailedWhilePending.current = false;
-      resetSessionRequest();
-      setStatus('error');
-      setError(
-        `Playback for “${title}” could not load the selected source. Retry to try source preparation again.`
-      );
+      failSource();
     }
-  }, [deliveryUpdate, resetSessionRequest, title]);
+  }, [deliveryUpdate, failSource]);
 
   useEffect(() => {
     const currentRequest = ++requestId.current;
@@ -882,11 +901,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
                 directFailedWhilePending.current = true;
                 return;
               }
-              resetSessionRequest();
-              setStatus('error');
-              setError(
-                `Playback for “${title}” could not load the selected source. Retry to try source preparation again.`
-              );
+              failSource();
             }}
           >
             {selectedSubtitle && (

@@ -538,6 +538,49 @@ describe('PreloadIntentService', () => {
     }
   });
 
+  it.each([
+    [{ positionSeconds: 2_400, durationSeconds: 6_000, state: 'paused' }, 0.4],
+    [{ positionSeconds: 4, durationSeconds: 6_000, state: 'paused' }, undefined],
+    [{ positionSeconds: 5_990, durationSeconds: 6_000, state: 'completed' }, undefined],
+    [null, undefined],
+  ])('warms a details focus at the saved resume point (%j)', async (saved, resumeFraction) => {
+    jest.useFakeTimers();
+    const prepare = jest.fn().mockResolvedValue({});
+    const progress = { findByKey: jest.fn().mockResolvedValue(saved) };
+    const service = new PreloadIntentService({ prepare } as never, undefined, progress as never);
+    try {
+      service.update('user', 'session', 'client', intent(1, 'details'), 1_000);
+      await jest.advanceTimersByTimeAsync(350);
+
+      expect(progress.findByKey).toHaveBeenCalledWith('user', 'm:42');
+      expect(prepare).toHaveBeenCalledTimes(1);
+      const options = prepare.mock.calls[0][1];
+      expect(options.through).toBe('warm');
+      expect(options.resumeFraction).toBe(resumeFraction);
+    } finally {
+      service.close();
+    }
+  });
+
+  it('does not look up progress for a sources-only preparation', async () => {
+    jest.useFakeTimers();
+    const prepare = jest.fn().mockResolvedValue({});
+    const progress = { findByKey: jest.fn() };
+    const service = new PreloadIntentService({ prepare } as never, undefined, progress as never);
+    try {
+      service.update('user', 'session', 'client', intent(1, 'browse'), 1_000);
+      await jest.advanceTimersByTimeAsync(350);
+
+      expect(prepare).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ through: 'sources' })
+      );
+      expect(progress.findByKey).not.toHaveBeenCalled();
+    } finally {
+      service.close();
+    }
+  });
+
   it('allows a failed preparation to retry on the next reconcile', async () => {
     jest.useFakeTimers();
     const prepare = jest

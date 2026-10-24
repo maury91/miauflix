@@ -37,9 +37,10 @@ describe('PlaybackTargetService', () => {
       getContentSourceRepository: () => repository,
       getEpisodeSourceRepository: () => episodeRepository,
     } as unknown as Database;
-    const service = new PlaybackTargetService(database, downloads);
+    const sourceHealth = { markFailed: jest.fn() };
+    const service = new PlaybackTargetService(database, downloads, sourceHealth);
     const source = createMockContentSource({ id: 5 });
-    return { service, repository, episodeRepository, downloads, source };
+    return { service, repository, episodeRepository, downloads, source, sourceHealth };
   };
 
   beforeAll(() => {
@@ -84,14 +85,15 @@ describe('PlaybackTargetService', () => {
     });
   });
 
-  it('rejects a source without any video file', async () => {
-    const { service, downloads, repository, source } = setupTest();
+  it('rejects and reports a source without any video file', async () => {
+    const { service, downloads, repository, source, sourceHealth } = setupTest();
     downloads.resolveLayout.mockResolvedValue(layout([['readme.txt', 1]]));
 
     await expect(service.forMovie(7, source)).rejects.toThrow(
       'Source does not contain a video file'
     );
     expect(repository.setMovieVideoFilePath).not.toHaveBeenCalled();
+    expect(sourceHealth.markFailed).toHaveBeenCalledWith(5);
   });
 
   it('resolves a unique episode suffix and persists its canonical path', async () => {

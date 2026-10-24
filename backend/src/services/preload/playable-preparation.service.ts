@@ -1,3 +1,4 @@
+import { logger } from '@logger';
 import type { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { ContentSource } from '@entities/content-source.entity';
@@ -7,6 +8,7 @@ import type { MediaService } from '@services/media/media.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
+import type { SourceHealthService } from '@services/source/source-health.service';
 import type { StorageService } from '@services/storage/storage.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
 
@@ -34,7 +36,16 @@ export interface PreparationOptions {
   ownerKey?: string;
   signal?: AbortSignal;
   onSourceSelected?: (source: ContentSource) => void;
+  /** Sources to leave out, e.g. the one a backup is being prepared for. */
+  avoidSourceIds?: readonly number[];
+  /** With `warm`: resolve the file to play but leave warming to the caller. */
+  resolveOnly?: boolean;
+  /** With `warm`: where playback will resume, as a fraction (0–1) of the playable's duration. */
+  resumeFraction?: number;
 }
+
+/** Sources tried for one movie preparation before reporting the last result. */
+const MAX_MOVIE_SOURCE_ATTEMPTS = 3;
 
 /** Shared inline preparation seam for focus, details, and Watch. */
 export class PlayablePreparationService {
@@ -43,7 +54,8 @@ export class PlayablePreparationService {
     private readonly sourceService: SourceService,
     private readonly warmup?: TorrentWarmupController,
     private readonly storageService?: StorageService,
-    private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>
+    private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>,
+    private readonly sourceHealth?: Pick<SourceHealthService, 'hasFailed'>
   ) {}
 
   /**
@@ -68,15 +80,21 @@ export class PlayablePreparationService {
       return { playable, source: null, target: null, state: 'metadata', warmup: emptyWarmup() };
     }
 
-    let sources = await this.sourceService.getSourcesForMovieWithOnDemandSearch(
-      {
-        id: media.local.id,
-        imdbId: media.local.imdbId,
-        title: media.local.title,
-        contentDirectoriesSearched: media.local.contentDirectoriesSearched,
-      },
-      options.workClass === 'interactive' ? 3_000 : 500
-    );
+    const avoid = (list: ContentSource[]) =>
+      options.avoidSourceIds?.length
+        ? list.filter(source => !options.avoidSourceIds!.includes(source.id))
+        : list;
+    let sources = await this.sourceService
+      .getSourcesForMovieWithOnDemandSearch(
+        {
+          id: media.local.id,
+          imdbId: media.local.imdbId,
+          title: media.local.title,
+          contentDirectoriesSearched: media.local.contentDirectoriesSearched,
+        },
+        options.workClass === 'interactive' ? 3_000 : 500
+      )
+      .then(avoid);
     this.throwIfAborted(options.signal);
     if (!sources.length) {
       return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
@@ -111,8 +129,24 @@ export class PlayablePreparationService {
       };
     }
     const movieTarget = (source: ContentSource) => this.resolveMovieTarget(media.local.id, source);
+    // A source can turn out to hold no video (a fake torrent); try the next candidates.
+    const finishMovie = async (first: ContentSource): Promise<PreparedPlayable> => {
+      let source = first;
+      for (let attempt = 1; ; attempt++) {
+        const result = await this.finish(playable, source, options, movieTarget);
+        if (
+          result.target ||
+          attempt >= MAX_MOVIE_SOURCE_ATTEMPTS ||
+          !this.sourceHealth?.hasFailed(source.id)
+        )
+          return result;
+        const next = this.select(sources, options.preferences, false);
+        if (!next || this.sourceHealth.hasFailed(next.id)) return result;
+        source = next;
+      }
+    };
     if (usableSource) {
-      return this.finish(playable, usableSource, options, movieTarget);
+      return finishMovie(usableSource);
     }
 
     let fallbackSource = this.select(sources, options.preferences, false);
@@ -131,16 +165,16 @@ export class PlayablePreparationService {
         }
         this.throwIfAborted(options.signal);
       }
-      sources = await this.sourceService.getSourcesForMovie(media.local.id);
+      sources = avoid(await this.sourceService.getSourcesForMovie(media.local.id));
       const selected = this.select(sources, options.preferences);
       if (selected) {
-        return this.finish(playable, selected, options, movieTarget);
+        return finishMovie(selected);
       }
       fallbackSource = this.select(sources, options.preferences, false);
     }
 
     if (fallbackSource && options.through === 'warm') {
-      return this.finish(playable, fallbackSource, options, movieTarget);
+      return finishMovie(fallbackSource);
     }
     return {
       playable,
@@ -181,6 +215,7 @@ export class PlayablePreparationService {
     const candidates = matches.filter(
       match =>
         match.videoFilePath &&
+        !options.avoidSourceIds?.includes(match.source.id) &&
         filterHevcSources([match.source], options.preferences.allowHevc).length
     );
     const exactCandidates = candidates.filter(match => match.matchKind === 'single');
@@ -235,11 +270,16 @@ export class PlayablePreparationService {
       target = await resolveTarget(source);
     } catch (error) {
       if (options.signal?.aborted) throw error;
+      logger.warn(
+        'PlayablePreparationService',
+        `Source ${source.id} file could not be resolved`,
+        error
+      );
       // Without the source's file list nothing can be warmed or played yet.
       return { playable, source, target: null, state: 'cold', warmup: emptyWarmup('failed') };
     }
     this.throwIfAborted(options.signal);
-    if (!this.warmup || !target) {
+    if (!this.warmup || !target || options.resolveOnly) {
       return { playable, source, target, state: 'cold', warmup: emptyWarmup() };
     }
     let slot: Awaited<ReturnType<TorrentWarmupController['warm']>>;
@@ -248,9 +288,12 @@ export class PlayablePreparationService {
         target,
         options.ownerKey ?? playableKey(playable),
         playableKey(playable),
-        ...(options.preferences.subtitleLanguage
-          ? [{ subtitleLanguage: options.preferences.subtitleLanguage }]
-          : [])
+        {
+          ...(options.preferences.subtitleLanguage
+            ? { subtitleLanguage: options.preferences.subtitleLanguage }
+            : {}),
+          ...(options.resumeFraction ? { startFraction: options.resumeFraction } : {}),
+        }
       );
     } catch (error) {
       if (options.signal?.aborted) throw error;
@@ -347,7 +390,9 @@ export class PlayablePreparationService {
       : filterHevcSources([...sources], preferences.allowHevc).sort(
           (a, b) => (b.streamingScore || 0) - (a.streamingScore || 0)
         );
-    return compatible;
+    // A source that failed during playback is skipped while any other candidate remains.
+    const healthy = compatible.filter(source => !this.sourceHealth?.hasFailed(source.id));
+    return healthy.length ? healthy : compatible;
   }
 
   private throwIfAborted(signal?: AbortSignal): void {

@@ -83,12 +83,24 @@ const findEncryptedStore = (store: unknown): EncryptedChunkStore | null => {
 
 const MAX_SIDECAR_BYTES = 2 * 1024 * 1024;
 const MATROSKA_TAIL_BYTES = 2 * 1024 * 1024;
+/** File start kept with a mid-file warmup: the player reads the header before it seeks. */
+const RESUME_HEADER_BYTES = 4 * 1024 * 1024;
+/**
+ * A resume offset is position / duration × length, which misses on variable-bitrate files, so a
+ * resume warmup starts this much earlier.
+ */
+const RESUME_LEAD_BYTES = 16 * 1024 * 1024;
 /** Containers whose index may sit at the end of the file, so warmups also fetch the tail. */
 const TAIL_INDEXED_FILE = /\.(mkv|webm|mp4|m4v|mov)$/i;
 /** Pieces, from the one a reader is blocked on, that it selects and marks critical. */
 const READER_WINDOW_PIECES = 2;
 /** Above every claim priority: a reader is waiting on these bytes right now. */
 const READER_PRIORITY = 100;
+/**
+ * Pieces WebTorrent keeps decrypted in memory per torrent (its default is 20, i.e. 40-160 MB per
+ * torrent with typical piece sizes). Streams read from disk, so this only serves peers.
+ */
+const TORRENT_STORE_CACHE_SLOTS = 2;
 const CLAIM_SWEEP_INTERVAL_MS = 60_000;
 
 /** How long a claim of each kind lasts without renewal; null never expires. */
@@ -104,7 +116,9 @@ export const CLAIM_TTL_MS: Record<ClaimKind, number | null> = {
 export interface ClaimRequest {
   kind: ClaimKind;
   ownerKey: string;
-  /** Wanted prefix in bytes; omitted wants the whole file. */
+  /** Start of the wanted range in bytes; defaults to the file start. */
+  rangeStart?: number;
+  /** End of the wanted range in bytes; omitted wants the whole file. */
   rangeEnd?: number;
   /** Lifetime override; defaults to CLAIM_TTL_MS, null never expires. */
   ttlMs?: number | null;
@@ -125,6 +139,20 @@ type StreamSelectingTorrent = Torrent & {
   ): void;
   _deselect(start: number, end: number, isStreamSelection: true): void;
 };
+
+/** A source's state as its viewers experience it; see DownloadService.getPlaybackHealth. */
+export interface PlaybackHealth {
+  streaming: boolean;
+  local: boolean;
+  hasMetadata: boolean;
+  peers: number;
+  downloadSpeed: number;
+  blockedSince: number | null;
+  lastDeliveryAt: number | null;
+  fileLength: number | null;
+  /** Where in the file (0–1) viewers last read past the header and index, if they have. */
+  readFraction: number | null;
+}
 
 export type StorageActivity = 'active' | 'available_offline' | 'inactive' | 'local_only';
 
@@ -149,6 +177,12 @@ export class DownloadService {
   private completedScrapes = 0;
   private failedScrapes = 0;
   private readonly activeSourceCounts = new Map<number, number>();
+  /** Playback reads waiting on a piece, by source, with when each started waiting. */
+  private readonly blockedReadsBySource = new Map<number, Map<symbol, number>>();
+  /** When bytes last reached a viewer, by source. */
+  private readonly lastDeliveryAt = new Map<number, number>();
+  /** Where viewers last read in the media, as a fraction of the file, by source. */
+  private readonly readFraction = new Map<number, number>();
   private readonly activeSourceFiles = new Map<number, Map<string, number>>();
   private readonly allocationReconcileAt = new Map<number, number>();
   private readonly allocationReconcileInFlight = new Map<number, Promise<void>>();
@@ -252,6 +286,41 @@ export class DownloadService {
 
   isPlaybackActive(sourceId: number): boolean {
     return (this.activeSourceCounts.get(sourceId) ?? 0) > 0;
+  }
+
+  /**
+   * What a viewer of this source experiences right now, for judging the swarm: whether a stream
+   * is open, metadata has arrived, peers and speed, since when a playback read has been blocked,
+   * and when bytes last reached a viewer. Null when the source has neither storage nor torrent.
+   */
+  async getPlaybackHealth(sourceId: number, filePath?: string): Promise<PlaybackHealth | null> {
+    const storage = await this.storageService.getStorageBySource(sourceId);
+    const torrent = storage
+      ? this.client.torrents.find(item => item.path === storage.location)
+      : undefined;
+    if (!storage && !torrent) return null;
+    const blocked = [...(this.blockedReadsBySource.get(sourceId)?.values() ?? [])];
+    const layout = storage?.encryptedLayout;
+    return {
+      streaming: this.isPlaybackActive(sourceId),
+      local: Boolean(storage?.localOnly),
+      hasMetadata: Boolean(layout || torrent?.ready),
+      peers: torrent?.numPeers ?? 0,
+      downloadSpeed: torrent?.downloadSpeed ?? 0,
+      blockedSince: blocked.length ? Math.min(...blocked) : null,
+      lastDeliveryAt: this.lastDeliveryAt.get(sourceId) ?? null,
+      fileLength: (filePath && layout?.files.find(file => file.path === filePath)?.length) || null,
+      readFraction: this.readFraction.get(sourceId) ?? null,
+    };
+  }
+
+  private blockedReads(sourceId: number): Map<symbol, number> {
+    let reads = this.blockedReadsBySource.get(sourceId);
+    if (!reads) {
+      reads = new Map();
+      this.blockedReadsBySource.set(sourceId, reads);
+    }
+    return reads;
   }
 
   getStorageActivity(
@@ -408,6 +477,7 @@ export class DownloadService {
     return {
       kind: claim.kind,
       ownerKey: claim.ownerKey,
+      rangeStart: claim.rangeStart ?? 0,
       rangeEnd: claim.rangeEnd ?? null,
       expiresAt: ttlMs === null ? null : new Date(Date.now() + ttlMs),
     };
@@ -426,7 +496,7 @@ export class DownloadService {
 
   /**
    * Apply the union of a source's live claims to its attached torrent: whole files at their
-   * highest claim priority, prefix-only claims as piece ranges, everything else deselected.
+   * highest claim priority, range claims as piece ranges, everything else deselected.
    * A paused source keeps nothing selected until it is resumed.
    */
   private reconcileSelection(sourceId: number): Promise<void> {
@@ -438,18 +508,20 @@ export class DownloadService {
       if (this.pausedSources.has(sourceId)) return;
       const wanted = new Map<
         string,
-        { priority: number; whole: boolean; prefix: number; tail: boolean }
+        { priority: number; whole: boolean; ranges: Array<[number, number]>; tail: boolean }
       >();
       for (const claim of await this.storageService.getLiveClaims(sourceId)) {
         const entry = wanted.get(claim.path) ?? {
           priority: 0,
           whole: false,
-          prefix: 0,
+          ranges: [],
           tail: false,
         };
         entry.priority = Math.max(entry.priority, CLAIM_PRIORITY[claim.kind]);
+        const rangeStart = claim.rangeStart ?? 0;
         if (claim.rangeEnd === null) entry.whole = true;
-        else entry.prefix = Math.max(entry.prefix, claim.rangeEnd);
+        else entry.ranges.push([rangeStart, claim.rangeEnd]);
+        if (claim.kind === 'warmup' && rangeStart > 0) entry.ranges.push([0, RESUME_HEADER_BYTES]);
         if (claim.kind === 'warmup' && TAIL_INDEXED_FILE.test(claim.path)) entry.tail = true;
         wanted.set(claim.path, entry);
       }
@@ -461,13 +533,16 @@ export class DownloadService {
           file.select(want.priority);
           continue;
         }
-        const { firstPiece, lastPiece } = this.prefixPieces(
-          Number(file.offset ?? 0),
-          Math.min(want.prefix, file.length),
-          torrent.pieceLength,
-          pieceCount
-        );
-        torrent.select(firstPiece, lastPiece, want.priority);
+        for (const [rangeStart, rangeEnd] of want.ranges) {
+          const start = Math.min(rangeStart, file.length - 1);
+          const { firstPiece, lastPiece } = this.prefixPieces(
+            Number(file.offset ?? 0) + start,
+            Math.min(rangeEnd, file.length) - start,
+            torrent.pieceLength,
+            pieceCount
+          );
+          torrent.select(firstPiece, lastPiece, want.priority);
+        }
         if (want.tail) {
           const tailBytes = Math.min(file.length, MATROSKA_TAIL_BYTES);
           const tail = this.prefixPieces(
@@ -776,8 +851,10 @@ export class DownloadService {
     torrent: Torrent | null,
     storage: Storage,
     pieceIndex: number,
-    signal: AbortSignal
+    signal: AbortSignal,
+    playback = false
   ): Promise<Buffer> {
+    const waitStart = Date.now();
     while (!signal.aborted) {
       if (
         storage.localOnly ||
@@ -799,8 +876,12 @@ export class DownloadService {
       const streamTorrent = torrent as StreamSelectingTorrent;
       streamTorrent._select(pieceIndex, lastPiece, READER_PRIORITY, undefined, true);
       torrent.critical(pieceIndex, lastPiece);
+      // A viewer waiting on bytes is what source health judges (see getPlaybackHealth).
+      const blocked = Symbol('blocked read');
+      if (playback) this.blockedReads(storage.sourceId).set(blocked, waitStart);
       await new Promise<void>((resolve, reject) => {
         const cleanup = () => {
+          if (playback) this.blockedReads(storage.sourceId).delete(blocked);
           torrent.removeListener('verified', onVerified);
           torrent.removeListener('close', onClose);
           signal.removeEventListener('abort', onAbort);
@@ -1251,9 +1332,10 @@ export class DownloadService {
   }
 
   /**
-   * Claim the smallest piece-aligned prefix of the target file that covers the byte target,
-   * capped at the file end, for one warmup lease. A whole-file claim by anyone else on the same
-   * file keeps the full file selected.
+   * Claim the smallest piece-aligned range of the target file that covers the byte target,
+   * capped at the file end, for one warmup lease. The range starts at the file start, or near
+   * `startFraction` of the file for a resume (the header is then kept too). A whole-file claim
+   * by anyone else on the same file keeps the full file selected.
    *
    * @returns Inclusive piece indices and their actual byte length, which can exceed the target.
    * @throws Propagates download failures, including a target file missing from the source.
@@ -1261,21 +1343,38 @@ export class DownloadService {
   async warmSource(
     target: PlaybackTarget,
     targetBytes: number,
-    leaseKey: string
+    leaseKey: string,
+    startFraction = 0
   ): Promise<WarmupResult> {
     const { source, filePath } = target;
     const requested = Math.max(1, Math.min(Math.floor(targetBytes), source.size || targetBytes));
-    const download = await this.startDownload(
-      target,
-      { kind: 'warmup', ownerKey: leaseKey, rangeEnd: requested },
-      {
-        reservedBytes: Math.min(
-          source.size || Infinity,
-          requested + (/\.(mkv|webm)$/i.test(filePath) ? MATROSKA_TAIL_BYTES : 0)
-        ),
-      }
-    );
+    const resuming = startFraction > 0 && Number.isFinite(startFraction);
+    // A resume claims only the header until the file length places the window.
+    const claim: ClaimRequest = {
+      kind: 'warmup',
+      ownerKey: leaseKey,
+      rangeEnd: resuming ? Math.min(requested, RESUME_HEADER_BYTES) : requested,
+    };
+    const download = await this.startDownload(target, claim, {
+      reservedBytes: Math.min(
+        source.size || Infinity,
+        requested +
+          (resuming ? RESUME_HEADER_BYTES : 0) +
+          (/\.(mkv|webm)$/i.test(filePath) ? MATROSKA_TAIL_BYTES : 0)
+      ),
+    });
     const file = download.layout.files.find(candidate => candidate.path === filePath)!;
+    const rangeStart = this.resumeRangeStart(file.length, requested, startFraction);
+    if (resuming) {
+      // Completion was settled by the first claim, so this one must not reopen the source.
+      await this.storageService.claimFile(
+        source.id,
+        filePath,
+        this.claimInput({ ...claim, rangeStart, rangeEnd: rangeStart + requested }),
+        true
+      );
+      await this.reconcileSelection(source.id);
+    }
     const pieceLength = download.layout.pieceLength;
     const pieceCount = download.torrent
       ? this.getTorrentPieceCount(download.torrent)
@@ -1283,8 +1382,8 @@ export class DownloadService {
           download.layout.files.reduce((total, item) => total + item.length, 0) / pieceLength
         );
     const { firstPiece, lastPiece } = this.prefixPieces(
-      file.offset,
-      Math.min(requested, file.length),
+      file.offset + rangeStart,
+      Math.min(requested, file.length - rangeStart),
       pieceLength,
       pieceCount
     );
@@ -1297,6 +1396,15 @@ export class DownloadService {
       firstPiece,
       lastPiece,
     };
+  }
+
+  /** Start of a resume warmup window: early enough to absorb bitrate variation, within the file. */
+  private resumeRangeStart(fileLength: number, bytes: number, startFraction: number): number {
+    if (!(startFraction > 0) || !Number.isFinite(startFraction)) return 0;
+    const estimate = Math.floor(Math.min(1, startFraction) * fileLength);
+    const start = Math.min(estimate - RESUME_LEAD_BYTES, fileLength - bytes);
+    // Too close to the start to be worth a separate window: warm the prefix instead.
+    return start > RESUME_HEADER_BYTES ? start : 0;
   }
 
   /** Stop warming a source: its warmup claims are released; other owners' claims continue. */
@@ -1518,6 +1626,7 @@ export class DownloadService {
           path: location,
           deselect: true,
           store: EncryptedChunkStore,
+          storeCacheSlots: TORRENT_STORE_CACHE_SLOTS,
           announce: this.bestTrackers,
           storeOpts: {
             encryptionKey: this.config.getOrThrow('SOURCE_SECURITY_KEY'),
@@ -2039,6 +2148,14 @@ export class DownloadService {
             try {
               let cursor = firstByte;
               while (!cancelled && cursor <= lastByte) {
+                // Header and index reads say nothing about where the viewer is.
+                if (
+                  !speculative &&
+                  cursor >= RESUME_HEADER_BYTES &&
+                  cursor < file.length - MATROSKA_TAIL_BYTES
+                ) {
+                  this.readFraction.set(contentSource.id, cursor / file.length);
+                }
                 const torrentOffset = file.offset + cursor;
                 const pieceIndex = Math.floor(torrentOffset / layout.pieceLength);
                 const pieceOffset = torrentOffset % layout.pieceLength;
@@ -2047,7 +2164,9 @@ export class DownloadService {
                   torrent,
                   storage,
                   pieceIndex,
-                  abortController.signal
+                  abortController.signal,
+                  // Inspection reads are not playback; only viewers count toward source health.
+                  !speculative
                 );
                 const bytes = piece.subarray(
                   pieceOffset,
@@ -2080,6 +2199,7 @@ export class DownloadService {
                 }
                 if (cancelled) break;
                 controller.enqueue(bytes);
+                if (!speculative) this.lastDeliveryAt.set(contentSource.id, Date.now());
                 cursor += bytes.length;
               }
               if (!cancelled) controller.close();

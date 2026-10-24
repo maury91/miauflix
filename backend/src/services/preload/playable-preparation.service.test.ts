@@ -1,6 +1,7 @@
 import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { PlayableRef } from '@routes/playable.types';
+import { SourceHealthService } from '@services/source/source-health.service';
 
 import { PlayablePreparationService } from './playable-preparation.service';
 
@@ -57,8 +58,37 @@ describe('PlayablePreparationService', () => {
       );
       expect(result.source).toBe(downloaded);
     }
-    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(downloaded), 'm:42', 'm:42');
+    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(downloaded), 'm:42', 'm:42', {});
     expect(sourceService.processSourceMetadata).not.toHaveBeenCalled();
+  });
+
+  it('warms where a resume will start', async () => {
+    const source = { id: 1, quality: Quality.HD, streamingScore: 1, file: null };
+    const warmup = { warm: jest.fn().mockResolvedValue({ state: 'warming' }) };
+    const service = new PlayablePreparationService(
+      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
+      {
+        getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([source]),
+        processSourceMetadata: jest.fn(),
+      } as never,
+      warmup as never,
+      { getStorageBySource: jest.fn().mockResolvedValue({ downloaded: 10000 }) } as never,
+      movieTargets as never
+    );
+
+    await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      {
+        through: 'warm',
+        preferences: { quality: Quality.HD, allowHevc: false },
+        workClass: 'background',
+        resumeFraction: 0.4,
+      }
+    );
+
+    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(source), 'm:42', 'm:42', {
+      startFraction: 0.4,
+    });
   });
 
   it.each([
@@ -262,7 +292,143 @@ describe('PlayablePreparationService', () => {
     expect(prepared.source).toBe(ready);
     expect(prepared.state).toBe('warming');
     expect(sourceService.processSourceMetadata).not.toHaveBeenCalled();
-    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(ready), 'm:42', 'm:42');
+    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(ready), 'm:42', 'm:42', {});
+  });
+
+  it('skips a source that stalled during playback while another candidate remains', async () => {
+    const stalled = {
+      id: 1,
+      file: Buffer.from('a'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 9,
+    };
+    const healthy = {
+      id: 2,
+      file: Buffer.from('b'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 1,
+    };
+    const sourceService = {
+      getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([stalled, healthy]),
+      processSourceMetadata: jest.fn(),
+    };
+    const hasFailed = jest.fn((id: number) => id === 1);
+    const prepare = (sources: unknown[]) => {
+      sourceService.getSourcesForMovieWithOnDemandSearch.mockResolvedValue(sources);
+      return new PlayablePreparationService(
+        { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
+        sourceService as never,
+        undefined,
+        undefined,
+        movieTargets as never,
+        { hasFailed }
+      ).prepare(
+        { kind: 'movie', mediaId: 42 },
+        {
+          through: 'sources',
+          preferences: { quality: 'auto', allowHevc: true },
+          workClass: 'interactive',
+        }
+      );
+    };
+
+    expect((await prepare([stalled, healthy])).source).toBe(healthy);
+    // With nothing else to try, the stalled source is still better than no source.
+    expect((await prepare([stalled])).source).toBe(stalled);
+  });
+
+  it('moves to the next source when the chosen movie source holds no video', async () => {
+    const fake = {
+      id: 1,
+      file: Buffer.from('a'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 9,
+    };
+    const real = {
+      id: 2,
+      file: Buffer.from('b'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 1,
+    };
+    const health = new SourceHealthService();
+    const targets = {
+      forMovie: jest.fn(async (_movieId: number, source: { id: number }) => {
+        if (source.id === 1) {
+          health.markFailed(1);
+          throw new Error('Source does not contain a video file');
+        }
+        return { source, filePath: 'movie.mkv', matchKind: 'movie' };
+      }),
+    };
+    const service = new PlayablePreparationService(
+      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
+      {
+        getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([fake, real]),
+        processSourceMetadata: jest.fn(),
+      } as never,
+      undefined,
+      undefined,
+      targets as never,
+      health
+    );
+
+    const prepared = await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      {
+        through: 'warm',
+        preferences: { quality: 'auto', allowHevc: true },
+        workClass: 'interactive',
+      }
+    );
+
+    expect(targets.forMovie.mock.calls.map(([, source]) => source.id)).toEqual([1, 2]);
+    expect(prepared).toMatchObject({ source: real, target: { filePath: 'movie.mkv' } });
+  });
+
+  it('prepares a backup by resolving another source without warming it', async () => {
+    const primary = {
+      id: 1,
+      file: Buffer.from('a'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 9,
+    };
+    const backup = {
+      id: 2,
+      file: Buffer.from('b'),
+      quality: null,
+      videoCodec: null,
+      streamingScore: 1,
+    };
+    const warmup = { warm: jest.fn() };
+    const service = new PlayablePreparationService(
+      { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
+      {
+        getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([primary, backup]),
+        processSourceMetadata: jest.fn(),
+      } as never,
+      warmup as never,
+      undefined,
+      movieTargets as never
+    );
+
+    const prepared = await service.prepare(
+      { kind: 'movie', mediaId: 42 },
+      {
+        through: 'warm',
+        resolveOnly: true,
+        avoidSourceIds: [1],
+        preferences: { quality: 'auto', allowHevc: true },
+        workClass: 'background',
+      }
+    );
+
+    expect(prepared).toMatchObject({ source: backup, target: movieTarget(backup), state: 'cold' });
+    expect(warmup.warm).not.toHaveBeenCalled();
   });
 
   it('falls back to magnet playback when source metadata cannot be resolved', async () => {
@@ -314,7 +480,7 @@ describe('PlayablePreparationService', () => {
 
     expect(prepared).toMatchObject({ playable, source, state: 'warming' });
     expect(sourceService.processSourceMetadata).toHaveBeenCalledWith(208);
-    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(source), 'm:42', 'm:42');
+    expect(warmup.warm).toHaveBeenCalledWith(movieTarget(source), 'm:42', 'm:42', {});
   });
 
   it('does not report metadata readiness when the selected source has no file', async () => {

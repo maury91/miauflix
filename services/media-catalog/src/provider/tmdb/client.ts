@@ -21,6 +21,15 @@ interface TmdbPaged {
   total_pages: number;
   total_results: number;
 }
+interface TmdbLogo {
+  file_path: string;
+  iso_639_1?: string | null;
+  width: number;
+  height: number;
+  vote_average: number;
+  vote_count: number;
+}
+type TmdbShowSeason = TmdbTVShowDetails['seasons'][number];
 interface TmdbMovieDetails {
   id: number;
   imdb_id: string | null;
@@ -34,16 +43,7 @@ interface TmdbMovieDetails {
   genres: TmdbGenre[];
   popularity: number;
   vote_average: number;
-  images?: {
-    logos?: Array<{
-      file_path: string;
-      iso_639_1?: string | null;
-      width: number;
-      height: number;
-      vote_average: number;
-      vote_count: number;
-    }>;
-  };
+  images?: { logos?: TmdbLogo[] };
   translations: {
     translations: Array<{
       iso_639_1: string;
@@ -67,16 +67,7 @@ interface TmdbTVShowDetails {
   genres: TmdbGenre[];
   popularity: number;
   vote_average: number;
-  images?: {
-    logos?: Array<{
-      file_path: string;
-      iso_639_1?: string | null;
-      width: number;
-      height: number;
-      vote_average: number;
-      vote_count: number;
-    }>;
-  };
+  images?: { logos?: TmdbLogo[] };
   seasons: Array<{
     id: number;
     season_number: number;
@@ -262,7 +253,7 @@ export class TmdbClient {
       this.imageUrl(data.backdrop_path),
       this.imageUrl(candidates[0]?.image.file_path),
       Promise.all(
-        candidates.map(async ({ image }) => ({
+        candidates.map(async ({ image }: { image: TmdbLogo }) => ({
           url: await this.imageUrl(image.file_path),
           language: image.iso_639_1 ?? null,
           width: image.width ?? 0,
@@ -325,7 +316,7 @@ export class TmdbClient {
       this.imageUrl(logoImage?.file_path),
     ]);
     const seasons = await Promise.all(
-      data.seasons.map(async season => ({
+      data.seasons.map(async (season: TmdbShowSeason) => ({
         mediaId: season.id,
         seasonNumber: season.season_number,
         name: season.name,
@@ -345,7 +336,7 @@ export class TmdbClient {
       backdrop,
       logo,
       logoCandidates: await Promise.all(
-        logos.map(async image => ({
+        logos.map(async (image: TmdbLogo) => ({
           url: await this.imageUrl(image.file_path),
           language: image.iso_639_1 ?? null,
           width: image.width ?? 0,

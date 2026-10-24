@@ -1,4 +1,5 @@
 import type { ContentSource } from '@entities/content-source.entity';
+import type { ProgressRepository } from '@repositories/progress.repository';
 import type { IntentLeaseKey, MediaIntentRef, PreloadIntentRequest } from '@routes/playable.types';
 import { playableKey } from '@routes/playable.types';
 import type {
@@ -8,6 +9,7 @@ import type {
   PreloadWarmupSnapshot,
   PreloadWarmupState,
 } from '@routes/preload.types';
+import { findResumeFraction } from '@services/progress/resume-fraction';
 
 import type { PlayablePreparationService } from './playable-preparation.service';
 import type { TorrentWarmupController } from './torrent-warmup.controller';
@@ -98,7 +100,8 @@ export class PreloadIntentService {
 
   constructor(
     private readonly preparation?: PlayablePreparationService,
-    private readonly warmup?: TorrentWarmupController
+    private readonly warmup?: TorrentWarmupController,
+    private readonly progress?: Pick<ProgressRepository, 'findByKey'>
   ) {
     this.cleanupTimer = setInterval(() => this.expire(), 1_000);
     if (typeof this.cleanupTimer === 'object' && 'unref' in this.cleanupTimer) {
@@ -271,6 +274,7 @@ export class PreloadIntentService {
         view: PreloadIntentRequest['view'];
         level: PreparationLevel;
         subtitleLanguage?: string;
+        userId: string;
       }
     >();
     for (const lease of this.leases.values()) {
@@ -284,6 +288,7 @@ export class PreloadIntentService {
           view: lease.view,
           level,
           subtitleLanguage: lease.subtitleLanguage,
+          userId: lease.userId,
         });
       }
     }
@@ -359,37 +364,40 @@ export class PreloadIntentService {
       const controller = new AbortController();
       const timer = setTimeout(
         () => {
-          void this.preparation
-            ?.prepare(target.playable, {
-              through: level,
-              // Keep speculative preparation compatible with the default player
-              // policy so Watch can promote the same selected source.
-              preferences: {
-                quality: 'auto',
-                allowHevc: false,
-                ...(target.subtitleLanguage ? { subtitleLanguage: target.subtitleLanguage } : {}),
-              },
-              // Details preparation is speculative. Keep the explicit Watch
-              // request in the interactive lane so it can overtake this work.
-              workClass: 'background',
-              ownerKey: key,
-              signal: controller.signal,
-              onSourceSelected: source => {
-                const current = this.preparations.get(key);
-                if (current?.state === 'pending' && current.controller === controller) {
-                  const sourceSnapshot = this.sourceSnapshot(source);
-                  this.rememberSource(key, sourceSnapshot);
-                  this.preparations.set(key, {
-                    ...current,
-                    details: {
-                      source: sourceSnapshot,
-                      warmup: level === 'warm' ? emptyWarmup('warming') : emptyWarmup(),
-                    },
-                  });
-                  this.emitPreparationChangeForKey(key);
-                }
-              },
-            })
+          void this.lookUpResume(level, target.userId, target.playable)
+            .then(resumeFraction =>
+              this.preparation?.prepare(target.playable, {
+                through: level,
+                ...(resumeFraction ? { resumeFraction } : {}),
+                // Keep speculative preparation compatible with the default player
+                // policy so Watch can promote the same selected source.
+                preferences: {
+                  quality: 'auto',
+                  allowHevc: false,
+                  ...(target.subtitleLanguage ? { subtitleLanguage: target.subtitleLanguage } : {}),
+                },
+                // Details preparation is speculative. Keep the explicit Watch
+                // request in the interactive lane so it can overtake this work.
+                workClass: 'background',
+                ownerKey: key,
+                signal: controller.signal,
+                onSourceSelected: source => {
+                  const current = this.preparations.get(key);
+                  if (current?.state === 'pending' && current.controller === controller) {
+                    const sourceSnapshot = this.sourceSnapshot(source);
+                    this.rememberSource(key, sourceSnapshot);
+                    this.preparations.set(key, {
+                      ...current,
+                      details: {
+                        source: sourceSnapshot,
+                        warmup: level === 'warm' ? emptyWarmup('warming') : emptyWarmup(),
+                      },
+                    });
+                    this.emitPreparationChangeForKey(key);
+                  }
+                },
+              })
+            )
             .then(result => {
               const current = this.preparations.get(key);
               if (current?.state === 'pending' && current.controller === controller) {
@@ -520,6 +528,15 @@ export class PreloadIntentService {
       return emptyWarmup();
     }
     return entry.details.warmup;
+  }
+
+  /** Where a warm preparation's playback will resume; other levels never warm payload. */
+  private async lookUpResume(
+    level: PreparationLevel,
+    userId: string,
+    playable: Exclude<MediaIntentRef, { kind: 'show' }>
+  ): Promise<number | undefined> {
+    return level === 'warm' ? findResumeFraction(this.progress, userId, playable) : undefined;
   }
 
   private levelForView(view: PreloadIntentRequest['view']): PreparationLevel {

@@ -87,6 +87,9 @@ COPY --from=builder /usr/src/app/dist/frontend /usr/src/app/public
 
 # Set default frontend directory for static serving
 ENV FRONTEND_DIR=/usr/src/app/public
+# glibc gives every thread its own malloc arena and rarely returns freed memory; with
+# native work on many threads (crypto/sqlite in Node, libvips/WASM in Bun) RSS only grows.
+ENV MALLOC_ARENA_MAX=2
 
 # Copy entrypoint script
 COPY backend-e2e/docker/entrypoint.sh /usr/local/bin/entrypoint.sh

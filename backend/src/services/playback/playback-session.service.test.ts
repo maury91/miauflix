@@ -40,6 +40,44 @@ describe('PlaybackSessionService', () => {
     }
   );
 
+  it('warms the file where the viewer will resume', async () => {
+    const prepare = jest.fn(async () => ({
+      source: { id: 1 },
+      target: movie({ id: 1 }),
+      state: 'cold',
+    }));
+    const progress = {
+      findByKey: jest.fn().mockResolvedValue({
+        positionSeconds: 1_800,
+        durationSeconds: 7_200,
+        state: 'paused',
+      }),
+    };
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      { prepare } as never,
+      { getOrThrow: () => 60000 } as never,
+      undefined,
+      undefined,
+      { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) } as never,
+      undefined,
+      undefined,
+      progress
+    );
+
+    await service.create(
+      'user',
+      { kind: 'movie', mediaId: 1 },
+      { quality: 'auto', allowHevc: false }
+    );
+
+    expect(progress.findByKey).toHaveBeenCalledWith('user', 'm:1');
+    expect(prepare).toHaveBeenCalledWith(
+      { kind: 'movie', mediaId: 1 },
+      expect.objectContaining({ through: 'warm', resumeFraction: 0.25 })
+    );
+  });
+
   it('streams an unprobed file directly and pushes the delivery its background probe finds', async () => {
     const grants = { create: jest.fn() };
     const audio = {
@@ -77,6 +115,173 @@ describe('PlaybackSessionService', () => {
         delivery: { mode: 'audio-transcode', durationSeconds: 60 },
         streamUrl: `/api/stream/${session?.streamingKey}/audio`,
       },
+    });
+  });
+
+  it('moves live sessions off a source that stalls, and only those sessions', async () => {
+    let stalled: ((sourceId: number) => void) | undefined;
+    let sourceId = 1;
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      {
+        prepare: async () => ({
+          source: { id: sourceId },
+          target: movie({ id: sourceId }),
+          state: 'ready',
+        }),
+      } as never,
+      { getOrThrow: () => 60000 } as never,
+      undefined,
+      undefined,
+      { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) } as never,
+      { onFailed: listener => ((stalled = listener), () => undefined), markFailed: jest.fn() }
+    );
+    const listener = jest.fn();
+    service.onDeliveryUpdate(listener);
+    const preferences = { quality: 'auto' as const, allowHevc: false };
+    const onFailed = await service.create('user', { kind: 'movie', mediaId: 1 }, preferences, {
+      sessionId: 'session',
+    });
+    sourceId = 2;
+    await service.create('user', { kind: 'movie', mediaId: 2 }, preferences);
+
+    stalled?.(1);
+    expect(listener).toHaveBeenCalledTimes(1);
+    expect(listener).toHaveBeenCalledWith({
+      userId: 'user',
+      sessionId: 'session',
+      playbackId: onFailed?.playbackId,
+      update: { type: 'recreate', reason: 'The source stopped delivering data.' },
+    });
+    // The session was handed off; a later stall report does not recreate it again.
+    stalled?.(1);
+    expect(listener).toHaveBeenCalledTimes(1);
+  });
+
+  describe('source health monitor', () => {
+    const setupMonitor = () => {
+      jest.useFakeTimers();
+      jest.setSystemTime(100_000);
+      const health = {
+        streaming: true,
+        local: false,
+        hasMetadata: true,
+        peers: 2,
+        downloadSpeed: 0,
+        blockedSince: null as number | null,
+        lastDeliveryAt: null as number | null,
+        fileLength: 3_600 * 500 * 1024,
+        readFraction: null as number | null,
+      };
+      const backup = { id: 2 };
+      const preparation = {
+        prepare: jest.fn(async (_playable: unknown, options: { resolveOnly?: boolean }) =>
+          options.resolveOnly
+            ? { source: backup, target: movie(backup), state: 'cold' }
+            : { source: { id: 1 }, target: movie({ id: 1 }), state: 'ready' }
+        ),
+      };
+      const downloads = {
+        getPlaybackHealth: jest.fn(async () => ({ ...health })),
+        warmSource: jest.fn().mockResolvedValue({}),
+        releaseClaims: jest.fn().mockResolvedValue(undefined),
+        getWarmupTargetBytes: () => 1024,
+      };
+      const sourceHealth = { onFailed: jest.fn(() => () => undefined), markFailed: jest.fn() };
+      const service = new PlaybackSessionService(
+        { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+        preparation as never,
+        { getOrThrow: () => 3_600_000 } as never,
+        undefined,
+        undefined,
+        {
+          knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct', durationSeconds: 3_600 }),
+        } as never,
+        sourceHealth,
+        downloads
+      );
+      const start = () =>
+        service.create(
+          'user',
+          { kind: 'movie', mediaId: 1 },
+          { quality: 'auto', allowHevc: false }
+        );
+      const tick = async (ms: number) => {
+        jest.setSystemTime(Date.now() + ms);
+        await service.checkHealth();
+        await jest.advanceTimersByTimeAsync(0);
+      };
+      return { service, health, preparation, downloads, sourceHealth, start, tick };
+    };
+
+    afterEach(() => jest.useRealTimers());
+
+    it('warms a backup while a starting source is weak, avoiding the primary', async () => {
+      const { preparation, downloads, sourceHealth, start, tick } = setupMonitor();
+      const session = await start();
+      await tick(2_000);
+
+      expect(preparation.prepare).toHaveBeenLastCalledWith(
+        { kind: 'movie', mediaId: 1 },
+        expect.objectContaining({ through: 'warm', resolveOnly: true, avoidSourceIds: [1] })
+      );
+      expect(downloads.warmSource).toHaveBeenCalledWith(
+        movie({ id: 2 }),
+        1024,
+        `hedge:${session?.playbackId}`,
+        0
+      );
+      expect(sourceHealth.markFailed).not.toHaveBeenCalled();
+    });
+
+    it('warms the backup where the viewer is reading', async () => {
+      const { health, downloads, start, tick } = setupMonitor();
+      health.readFraction = 0.4;
+      const session = await start();
+      await tick(2_000);
+
+      expect(downloads.warmSource).toHaveBeenCalledWith(
+        movie({ id: 2 }),
+        1024,
+        `hedge:${session?.playbackId}`,
+        0.4
+      );
+    });
+
+    it('reports a source that stays flat after the grace period', async () => {
+      const { sourceHealth, start, tick } = setupMonitor();
+      await start();
+      for (let second = 0; second < 9; second++) await tick(1_000);
+      expect(sourceHealth.markFailed).not.toHaveBeenCalled();
+      for (let second = 0; second < 3; second++) await tick(1_000);
+      expect(sourceHealth.markFailed).toHaveBeenCalledWith(1);
+    });
+
+    it('releases the backup once the primary has delivered for a while', async () => {
+      const { health, downloads, start, tick } = setupMonitor();
+      const session = await start();
+      await tick(1_000);
+      expect(downloads.warmSource).toHaveBeenCalled();
+
+      health.lastDeliveryAt = Date.now() + 1_000;
+      health.downloadSpeed = 2 * 1024 * 1024;
+      for (let second = 0; second < 9; second++) await tick(1_000);
+      expect(downloads.releaseClaims).not.toHaveBeenCalled();
+      await tick(2_000);
+      expect(downloads.releaseClaims).toHaveBeenCalledWith(
+        2,
+        `hedge:${session?.playbackId}`,
+        'warmup'
+      );
+    });
+
+    it('ignores sessions whose stream never opened once the file list is known', async () => {
+      const { health, preparation, sourceHealth, start, tick } = setupMonitor();
+      health.streaming = false;
+      await start();
+      for (let second = 0; second < 30; second++) await tick(1_000);
+      expect(preparation.prepare).toHaveBeenCalledTimes(1);
+      expect(sourceHealth.markFailed).not.toHaveBeenCalled();
     });
   });
 

@@ -29,8 +29,16 @@ export interface WarmSlot {
 }
 
 export interface TorrentWarmupDriver {
-  /** Warm a prefix of the target for one lease; the lease key owns the warmup claim. */
-  warmSource(target: PlaybackTarget, targetBytes: number, leaseKey: string): Promise<WarmupResult>;
+  /**
+   * Warm a range of the target for one lease, from the file start or near `startFraction` of the
+   * file; the lease key owns the warmup claim.
+   */
+  warmSource(
+    target: PlaybackTarget,
+    targetBytes: number,
+    leaseKey: string,
+    startFraction?: number
+  ): Promise<WarmupResult>;
   pauseSource(sourceId: number): Promise<boolean>;
   /** Keep the target for a viewer identified by `ownerKey`. */
   promoteSource(target: PlaybackTarget, ownerKey: string): Promise<boolean>;
@@ -91,8 +99,9 @@ export class TorrentWarmupController {
    * Start or reuse the single speculative warmup slot, pausing the previous source as needed.
    * Active playback suppresses new warmup and returns the existing slot or a paused snapshot.
    * The byte target defaults to the driver’s setting, then 64 MiB; readiness is monitored after
-   * selection rather than awaited. Driver errors propagate, with setup/progress failures marking
-   * the newly created slot failed.
+   * selection rather than awaited. `startFraction` (0–1) warms where a resume will read instead
+   * of the file start. Driver errors propagate, with setup/progress failures marking the newly
+   * created slot failed.
    */
   async warm(
     target: PlaybackTarget,
@@ -101,6 +110,7 @@ export class TorrentWarmupController {
     options: {
       targetBytes?: number;
       subtitleLanguage?: string;
+      startFraction?: number;
     } = {}
   ): Promise<WarmSlot> {
     const { source, filePath } = target;
@@ -174,7 +184,12 @@ export class TorrentWarmupController {
         const slot = this.slot;
         if (!slot) throw new Error('Warmup slot was lost before torrent setup');
         this.setSlot({ ...slot, state: 'adding_torrent' });
-        const result = await this.driver.warmSource(target, slot.targetVerifiedBytes, leaseKey);
+        const result = await this.driver.warmSource(
+          target,
+          slot.targetVerifiedBytes,
+          leaseKey,
+          options.startFraction ?? 0
+        );
         // Metadata is available now. Share inspection with Watch without holding the slot lock.
         this.preparationAbort = new AbortController();
         void this.prepareTarget?.(

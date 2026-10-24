@@ -8,7 +8,9 @@ import { CLAIM_RANK, type ClaimKind, StorageFileClaim } from '@entities/storage-
 export interface ClaimInput {
   kind: ClaimKind;
   ownerKey: string;
-  /** Wanted prefix in bytes; null or omitted wants the whole file. */
+  /** Start of the wanted range in bytes; defaults to the file start. */
+  rangeStart?: number;
+  /** End of the wanted range in bytes; null or omitted wants the whole file. */
   rangeEnd?: number | null;
   expiresAt?: Date | null;
 }
@@ -76,11 +78,15 @@ export class StorageFileRepository {
           path,
           kind: claim.kind,
           ownerKey: claim.ownerKey,
+          rangeStart: claim.rangeStart ?? 0,
           rangeEnd: claim.rangeEnd ?? null,
           expiresAt: claim.expiresAt ?? null,
           updatedAt: new Date(),
         })
-        .orUpdate(['rangeEnd', 'expiresAt', 'updatedAt'], ['storageId', 'path', 'kind', 'ownerKey'])
+        .orUpdate(
+          ['rangeStart', 'rangeEnd', 'expiresAt', 'updatedAt'],
+          ['storageId', 'path', 'kind', 'ownerKey']
+        )
         .execute()
     );
   }

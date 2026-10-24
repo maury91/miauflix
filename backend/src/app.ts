@@ -36,6 +36,7 @@ import { RequestService } from '@services/request/request.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
+import { SourceHealthService } from '@services/source/source-health.service';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
@@ -95,6 +96,7 @@ try {
   const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
   const listService = new ListService(db, catalogClient, listClient, backgroundJobs);
   const storageService = new StorageService(db, configurationService);
+  const sourceHealthService = new SourceHealthService();
   const downloadService = new DownloadService(storageService, requestService, configurationService);
   const contentDirectoryService = new ContentDirectoryService(
     cacheService.cache,
@@ -119,7 +121,7 @@ try {
     backgroundJobs,
     notificationService
   );
-  const playbackTargetService = new PlaybackTargetService(db, downloadService);
+  const playbackTargetService = new PlaybackTargetService(db, downloadService, sourceHealthService);
   const streamService = new StreamService(
     db,
     sourceService,
@@ -153,11 +155,13 @@ try {
     sourceService,
     torrentWarmupController,
     storageService,
-    playbackTargetService
+    playbackTargetService,
+    sourceHealthService
   );
   const preloadIntentService = new PreloadIntentService(
     playablePreparationService,
-    torrentWarmupController
+    torrentWarmupController,
+    db.getProgressRepository()
   );
   const playbackSessionService = new PlaybackSessionService(
     db,
@@ -165,7 +169,10 @@ try {
     configurationService,
     torrentWarmupController,
     storageService,
-    audioPlaybackService
+    audioPlaybackService,
+    sourceHealthService,
+    downloadService,
+    db.getProgressRepository()
   );
   const realtimeGateway = new RealtimeGateway(
     authService,

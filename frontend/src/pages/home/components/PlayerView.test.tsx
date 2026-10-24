@@ -395,6 +395,22 @@ describe('PlayerView', () => {
     });
   });
 
+  it('retries a failed stream once with a new session before reporting the failure', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    render(<PlayerView playable={playable} title="Failing fixture" onBack={vi.fn()} />);
+    let video = (await screen.findByLabelText('Failing fixture')) as HTMLVideoElement;
+    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(1));
+
+    fireEvent.error(video);
+    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
+    expect(screen.queryByText(/could not load the selected source/)).not.toBeInTheDocument();
+
+    video = (await screen.findByLabelText('Failing fixture')) as HTMLVideoElement;
+    fireEvent.error(video);
+    expect(await screen.findByText(/could not load the selected source/)).toBeInTheDocument();
+    expect(createSession).toHaveBeenCalledTimes(2);
+  });
+
   it('requests a new session when the optimistic source cannot play here', async () => {
     createSession.mockReturnValue({
       unwrap: () => Promise.resolve({ ...session, deliveryPending: true }),

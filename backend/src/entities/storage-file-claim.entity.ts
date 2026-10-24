@@ -66,7 +66,11 @@ export class StorageFileClaim {
   @Column({ length: 128 })
   ownerKey: string;
 
-  /** Prefix claims (warmup) want bytes [0, rangeEnd) of the file; null wants the whole file. */
+  /** Range claims (warmup) want bytes [rangeStart, rangeEnd) of the file. */
+  @Column({ type: 'integer', default: 0 })
+  rangeStart: number;
+
+  /** End of a range claim; null wants the whole file. */
   @Column({ type: 'integer', nullable: true })
   rangeEnd: number | null;
 
