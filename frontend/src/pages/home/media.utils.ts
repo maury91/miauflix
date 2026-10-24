@@ -8,7 +8,9 @@ export function getImageUrl(path: string | null | undefined, size = 'w500'): str
   if (!path) return '';
   const isBundledAsset =
     path.startsWith('/src/') || path.startsWith('/assets/') || path.startsWith('/@fs/');
-  if (/^https:\/\/image\.tmdb\.org\/t\/p\/[^/]+\//u.test(path)) {
+  // The catalog returns URLs on the provider's configured image base (a local mock in E2E);
+  // keep the host and only choose the size.
+  if (/^https?:\/\/[^/]+\/t\/p\/[^/]+\//u.test(path)) {
     return path.replace(/(\/t\/p\/)[^/]+\//u, `$1${size}/`);
   }
   return path.startsWith('/') && !isBundledAsset

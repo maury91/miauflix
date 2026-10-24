@@ -104,6 +104,29 @@ describe('TmdbClient', () => {
     }
   });
 
+  it('shares concurrent configuration requests and clears the flight afterward', async () => {
+    const cacheKeys: string[] = [];
+    let requests = 0;
+    globalThis.fetch = (async () => {
+      requests++;
+      return Response.json({ images: { secure_base_url: 'https://image.test/' } });
+    }) as unknown as typeof fetch;
+    const client = new TmdbClient(makeCache(cacheKeys), {
+      apiUrl: 'https://tmdb.example/3',
+      accessToken: 'token',
+    });
+    const configuration = () =>
+      (client as unknown as { configuration(): Promise<unknown> }).configuration();
+
+    await Promise.all([configuration(), configuration()]);
+    expect(requests).toBe(1);
+    expect(cacheKeys).toEqual(['tmdb:v1:configuration']);
+
+    await configuration();
+    expect(requests).toBe(2);
+    expect(cacheKeys).toEqual(['tmdb:v1:configuration', 'tmdb:v1:configuration']);
+  });
+
   it.each([true, false])('loads TV logo artwork when available: %s', async hasLogo => {
     const urls: string[] = [];
     const cacheKeys: string[] = [];
@@ -146,11 +169,12 @@ describe('TmdbClient', () => {
       accessToken: 'token',
     });
     const show = await client.getTVShowDetails(100);
-    expect(urls.some(url => url.endsWith('/configuration'))).toBe(false);
-    expect(show.backdrop).toBe('/backdrop.jpg');
-    expect(show.logo).toBe(hasLogo ? '/arcane.png' : '');
+    // URLs use the provider's configured image base, so mocks can serve their own artwork.
+    expect(show.logo).toBe(hasLogo ? 'https://image.test/original/arcane.png' : '');
     expect(show.logoCandidates?.map(candidate => candidate.url)).toEqual(
-      hasLogo ? ['/arcane.png', '/neutral.png'] : []
+      hasLogo
+        ? ['https://image.test/original/arcane.png', 'https://image.test/original/neutral.png']
+        : []
     );
     expect(urls[0]).toContain('append_to_response=external_ids,translations,images');
     expect(urls[0]).toContain('include_image_language=en,null');
@@ -199,10 +223,10 @@ describe('TmdbClient', () => {
 
     const movie = await client.getMovieDetails(50);
 
-    expect(movie.logo).toBe('/french.png');
+    expect(movie.logo).toBe('https://image.test/original/french.png');
     expect(movie.logoCandidates.map(candidate => candidate.url)).toEqual([
-      '/french.png',
-      '/neutral.png',
+      'https://image.test/original/french.png',
+      'https://image.test/original/neutral.png',
     ]);
     expect(urls.find(url => url.includes('/movie/50?'))).toContain(
       'include_image_language=fr,null'

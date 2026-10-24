@@ -5,9 +5,12 @@ import { artworkUrl, getImageUrl } from './media.utils';
 afterEach(() => vi.unstubAllGlobals());
 
 describe('artwork sizing', () => {
-  it('normalizes stale absolute TMDB references while preserving other assets', () => {
+  it('resizes TMDB-layout URLs on any image host while preserving other assets', () => {
     expect(getImageUrl('https://image.tmdb.org/t/p/original/image.jpg', 'w300')).toBe(
       'https://image.tmdb.org/t/p/w300/image.jpg'
+    );
+    expect(getImageUrl('http://127.0.0.1:3001/t/p/original/image.jpg', 'w300')).toBe(
+      'http://127.0.0.1:3001/t/p/w300/image.jpg'
     );
     expect(getImageUrl('/image.jpg', 'w300')).toBe('https://image.tmdb.org/t/p/w300/image.jpg');
     for (const asset of ['/assets/image.jpg', 'https://example.com/image.jpg', '']) {

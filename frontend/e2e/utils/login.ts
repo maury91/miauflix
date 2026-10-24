@@ -16,6 +16,9 @@ export async function waitForHomeReady(page: Page): Promise<void> {
   });
 }
 
+/** Home opens the Trakt prompt only after 5 s without input; leave headroom for slow CI. */
+export const TRAKT_PROMPT_TIMEOUT_MS = 15_000;
+
 export function waitForTraktAssociation(page: Page): Promise<Response> {
   return page.waitForResponse(response => {
     const url = new URL(response.url());
@@ -39,7 +42,7 @@ export async function dismissTraktPrompt(
       return;
     }
   }
-  await expect(dialog).toBeVisible();
+  await expect(dialog).toBeVisible({ timeout: TRAKT_PROMPT_TIMEOUT_MS });
   await dialog.getByRole('button', { name: 'Close Trakt dialog' }).click();
   await expect(dialog).toBeHidden();
 }

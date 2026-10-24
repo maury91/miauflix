@@ -10,6 +10,12 @@ interface TmdbGenre {
   id: number;
   name: string;
 }
+interface TmdbImages {
+  secure_base_url: string;
+}
+interface TmdbConfiguration {
+  images: TmdbImages;
+}
 interface TmdbPaged {
   page: number;
   total_pages: number;
@@ -126,6 +132,7 @@ export class TmdbClient {
    * adapting its limit from the response headers.
    */
   private readonly rateLimiter = new RateLimiter(40, 'tmdb');
+  private readonly configurationFlight = new SingleFlight();
   private readonly genreFlight = new SingleFlight();
 
   constructor(
@@ -196,13 +203,37 @@ export class TmdbClient {
     return result?.id ?? null;
   }
 
-  /** Season with size-independent poster and episode still paths. */
+  private configuration(): Promise<TmdbConfiguration> {
+    return this.configurationFlight.run('configuration', () =>
+      this.cached('configuration', 30 * dayMs, '/configuration')
+    );
+  }
+
+  private async imageUrl(path: string | null | undefined, size = 'original'): Promise<string> {
+    if (!path) return '';
+    const configuration = await this.configuration();
+    return `${configuration.images.secure_base_url}${size}${path}`;
+  }
+
+  /** Season with poster and episode stills completed to absolute URLs. */
   async getSeasonWithImages(showId: number, season: number): Promise<TmdbSeason> {
-    return this.cached<TmdbSeason>(
+    const data = await this.cached<TmdbSeason>(
       `season:${showId}:${season}:${this.language}`,
       36e5,
       `/tv/${showId}/season/${season}?language=${this.language}`
     );
+    const [poster, stills] = await Promise.all([
+      this.imageUrl(data.poster_path),
+      Promise.all(data.episodes.map(episode => this.imageUrl(episode.still_path))),
+    ]);
+    return {
+      ...data,
+      poster_path: poster || null,
+      episodes: data.episodes.map((episode, index) => ({
+        ...episode,
+        still_path: stills[index] || null,
+      })),
+    };
   }
 
   /** Movie details projected to the persistable shape (port of getMovieDetails v2). */
@@ -226,6 +257,21 @@ export class TmdbClient {
         seenLogoPaths.add(image.file_path);
         return true;
       });
+    const [poster, backdrop, logo, logoCandidates] = await Promise.all([
+      this.imageUrl(data.poster_path),
+      this.imageUrl(data.backdrop_path),
+      this.imageUrl(candidates[0]?.image.file_path),
+      Promise.all(
+        candidates.map(async ({ image }) => ({
+          url: await this.imageUrl(image.file_path),
+          language: image.iso_639_1 ?? null,
+          width: image.width ?? 0,
+          height: image.height ?? 0,
+          voteAverage: image.vote_average ?? 0,
+          voteCount: image.vote_count ?? 0,
+        }))
+      ),
+    ]);
     return {
       mediaId: data.id,
       imdbId: data.imdb_id,
@@ -233,17 +279,10 @@ export class TmdbClient {
       overview: data.overview,
       tagline: data.tagline ?? '',
       releaseDate: data.release_date,
-      poster: data.poster_path ?? '',
-      backdrop: data.backdrop_path ?? '',
-      logo: candidates[0]?.image.file_path ?? '',
-      logoCandidates: candidates.map(({ image }) => ({
-        url: image.file_path,
-        language: image.iso_639_1 ?? null,
-        width: image.width ?? 0,
-        height: image.height ?? 0,
-        voteAverage: image.vote_average ?? 0,
-        voteCount: image.vote_count ?? 0,
-      })),
+      poster,
+      backdrop,
+      logo,
+      logoCandidates,
       runtime: data.runtime ?? 0,
       genreIds: data.genres.map(genre => genre.id),
       popularity: data.popularity,
@@ -280,6 +319,21 @@ export class TmdbClient {
       })
       .map(({ image }) => image);
     const logoImage = logos.find(image => image.iso_639_1 === this.language) ?? logos[0];
+    const [poster, backdrop, logo] = await Promise.all([
+      this.imageUrl(data.poster_path),
+      this.imageUrl(data.backdrop_path),
+      this.imageUrl(logoImage?.file_path),
+    ]);
+    const seasons = await Promise.all(
+      data.seasons.map(async season => ({
+        mediaId: season.id,
+        seasonNumber: season.season_number,
+        name: season.name,
+        overview: season.overview,
+        airDate: season.air_date,
+        poster: await this.imageUrl(season.poster_path),
+      }))
+    );
     return {
       mediaId: data.id,
       imdbId: data.external_ids.imdb_id || null,
@@ -287,17 +341,19 @@ export class TmdbClient {
       overview: data.overview,
       tagline: data.tagline ?? '',
       firstAirDate: data.first_air_date,
-      poster: data.poster_path ?? '',
-      backdrop: data.backdrop_path ?? '',
-      logo: logoImage?.file_path ?? '',
-      logoCandidates: logos.map(image => ({
-        url: image.file_path,
-        language: image.iso_639_1 ?? null,
-        width: image.width ?? 0,
-        height: image.height ?? 0,
-        voteAverage: image.vote_average ?? 0,
-        voteCount: image.vote_count ?? 0,
-      })),
+      poster,
+      backdrop,
+      logo,
+      logoCandidates: await Promise.all(
+        logos.map(async image => ({
+          url: await this.imageUrl(image.file_path),
+          language: image.iso_639_1 ?? null,
+          width: image.width ?? 0,
+          height: image.height ?? 0,
+          voteAverage: image.vote_average ?? 0,
+          voteCount: image.vote_count ?? 0,
+        }))
+      ),
       status: data.status,
       type: data.type,
       inProduction: data.in_production,
@@ -305,14 +361,7 @@ export class TmdbClient {
       genreIds: data.genres.map(genre => genre.id),
       popularity: data.popularity,
       rating: data.vote_average,
-      seasons: data.seasons.map(season => ({
-        mediaId: season.id,
-        seasonNumber: season.season_number,
-        name: season.name,
-        overview: season.overview,
-        airDate: season.air_date,
-        poster: season.poster_path ?? '',
-      })),
+      seasons,
       translations: data.translations.translations.map(translation => ({
         language: translation.iso_639_1,
         title: translation.data.name,
