@@ -33,6 +33,7 @@ vi.mock('@features/media/api/media.api', () => ({
     data: { type: 'movie', title: 'Coyote vs. Acme', genres: [], overview: 'Example' },
   }),
   useGetShowQuery: () => ({}),
+  useGetSeasonQuery: () => ({}),
   useLazyGetSeasonQuery: () => [vi.fn()],
 }));
 vi.mock('@features/progress/api/progress.api', () => ({

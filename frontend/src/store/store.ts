@@ -2,6 +2,7 @@ import { authApi } from '@features/auth/api/auth.api';
 import { configApi } from '@features/config/api/config.api';
 import { listsApi } from '@features/media/api/lists.api';
 import { mediaApi } from '@features/media/api/media.api';
+import { notificationsApi } from '@features/notifications/api/notifications.api';
 import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
 import { progressApi } from '@features/progress/api/progress.api';
@@ -21,6 +22,7 @@ export const store = configureStore({
     [authApi.reducerPath]: authApi.reducer,
     [listsApi.reducerPath]: listsApi.reducer,
     [mediaApi.reducerPath]: mediaApi.reducer,
+    [notificationsApi.reducerPath]: notificationsApi.reducer,
     [playbackApi.reducerPath]: playbackApi.reducer,
     [preloadApi.reducerPath]: preloadApi.reducer,
     [progressApi.reducerPath]: progressApi.reducer,
@@ -39,6 +41,7 @@ export const store = configureStore({
       authApi.middleware,
       listsApi.middleware,
       mediaApi.middleware,
+      notificationsApi.middleware,
       playbackApi.middleware,
       preloadApi.middleware,
       progressApi.middleware,

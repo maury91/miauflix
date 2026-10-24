@@ -8,6 +8,11 @@ const {
   useGetPopularListsInfiniteQuery,
   useGetMovieQuery,
   useGetShowQuery,
+  useGetSeasonQuery,
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
+  markNotificationRead,
+  resetNotificationsApi,
   rowHandles,
   rowProps,
   mediaIndexes,
@@ -32,6 +37,11 @@ const {
   useGetPopularListsInfiniteQuery: vi.fn(),
   useGetMovieQuery: vi.fn(),
   useGetShowQuery: vi.fn(),
+  useGetSeasonQuery: vi.fn(),
+  useGetNotificationsQuery: vi.fn(),
+  useMarkNotificationReadMutation: vi.fn(),
+  markNotificationRead: vi.fn(),
+  resetNotificationsApi: vi.fn(() => ({ type: 'notificationsApi/resetApiState' })),
   rowHandles: new Map<number, Record<string, unknown>>(),
   rowProps: new Map<number, { loadIntent?: string; visible?: boolean }>(),
   mediaIndexes: new Map<number, number>(),
@@ -82,6 +92,7 @@ vi.mock('@features/media/api/lists.api', () => ({
 vi.mock('@features/media/api/media.api', () => ({
   useGetMovieQuery,
   useGetShowQuery,
+  useGetSeasonQuery,
   mediaApi: {
     util: { prefetch: vi.fn() },
     endpoints: {
@@ -93,6 +104,11 @@ vi.mock('@features/media/api/media.api', () => ({
 vi.mock('@features/preload/api/preload.api', () => ({
   useUpdateIntentMutation,
   useRemoveIntentMutation: () => [removeIntent],
+}));
+vi.mock('@features/notifications/api/notifications.api', () => ({
+  notificationsApi: { util: { resetApiState: resetNotificationsApi } },
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
 }));
 vi.mock('@shared/components', () => ({ Spinner: () => null }));
 vi.mock('@store/slices/auth', () => ({
@@ -217,8 +233,15 @@ vi.mock('./components/CategoryRow', async () => {
   };
 });
 vi.mock('./components/PlayerView', () => ({
-  PlayerView: (props: { playable: { kind: string; mediaId?: number; showMediaId?: number } }) => (
-    <div data-testid="player" data-playable-kind={props.playable.kind} />
+  PlayerView: (props: {
+    playable: { kind: string; mediaId?: number; showMediaId?: number };
+    nextEpisode?: { playable: unknown } | null;
+  }) => (
+    <div
+      data-testid="player"
+      data-playable-kind={props.playable.kind}
+      data-next-episode={props.nextEpisode ? JSON.stringify(props.nextEpisode.playable) : ''}
+    />
   ),
 }));
 vi.mock('./components/MediaHero', async () => {
@@ -349,7 +372,56 @@ describe('HomePage focus transitions', () => {
       isError: false,
       refetch: vi.fn(),
     });
+    useGetSeasonQuery.mockReset().mockReturnValue({
+      data: undefined,
+      isLoading: false,
+      isError: false,
+      isSuccess: false,
+    });
+    useGetNotificationsQuery.mockReset().mockReturnValue({
+      data: { notifications: [], unreadCount: 0 },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+    useMarkNotificationReadMutation.mockReset().mockReturnValue([markNotificationRead]);
+    markNotificationRead.mockReset();
     detailsHandleAction.mockReset().mockReturnValue({ type: 'escape', direction: 'left' });
+  });
+
+  it('opens the sidebar notification overlay, marks items read, and restores focus', async () => {
+    useGetNotificationsQuery.mockReturnValue({
+      data: {
+        unreadCount: 1,
+        notifications: [
+          {
+            id: 5,
+            type: 'tv_episode_available',
+            mediaType: 'tv',
+            mediaId: 9001,
+            title: 'Show',
+            message: 'S01E08 is ready to watch.',
+            seasonNumber: 1,
+            episodeNumber: 8,
+            createdAt: '2026-10-12T00:00:00.000Z',
+            readAt: null,
+          },
+        ],
+      },
+      isLoading: false,
+      isError: false,
+      refetch: vi.fn(),
+    });
+
+    render(<HomePage />);
+    const notificationButton = screen.getByRole('button', { name: 'Notifications, 1 unread' });
+    fireEvent.click(notificationButton);
+
+    expect(screen.getByRole('dialog', { name: 'Notifications' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /Show.*S01E08 is ready to watch/ }));
+    expect(markNotificationRead).toHaveBeenCalledWith(5);
+    fireEvent.click(screen.getByRole('button', { name: 'Close notifications' }));
+    await waitFor(() => expect(notificationButton).toHaveFocus());
   });
 
   it('waits for the current row and hero artwork before releasing the intro', async () => {
@@ -410,6 +482,15 @@ describe('HomePage focus transitions', () => {
     });
   });
 
+  it('opens a show after a movie even while the skipped movie query retains cached data', () => {
+    useGetMovieQuery.mockReturnValue({ data: { mediaId: 789, title: 'Previous movie' } });
+    useGetShowQuery.mockReturnValue({
+      data: { mediaId: 42, title: 'Selected show', seasons: [], genres: [] },
+    });
+    render(<HomePage route={{ type: 'showDetails', mediaId: 42 }} />);
+    expect(screen.getByTestId('details')).toHaveAttribute('data-media-id', '42');
+  });
+
   it.each([
     ['Close Trakt dialog', false],
     ['Don’t ask again', true],
@@ -427,7 +508,9 @@ describe('HomePage focus transitions', () => {
         .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
       try {
         let view = render(<HomePage />);
-        expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+        expect(
+          await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 })
+        ).toBeInTheDocument();
         expect(getAssociation).toHaveBeenCalledWith('test-session');
         fireEvent.click(screen.getByRole('button', { name: label }));
         expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
@@ -442,7 +525,9 @@ describe('HomePage focus transitions', () => {
         if (permanent) {
           expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         } else {
-          expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+          expect(
+            await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 })
+          ).toBeInTheDocument();
           fireEvent.click(screen.getByRole('button', { name: label }));
         }
         currentSession.mockReturnValue(null);
@@ -453,16 +538,19 @@ describe('HomePage focus transitions', () => {
         if (permanent) {
           expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
         } else {
-          expect(await screen.findByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
+          expect(
+            await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 })
+          ).toBeInTheDocument();
         }
       } finally {
         progressSelector.mockRestore();
       }
     },
-    15_000
+    30_000
   );
 
-  it('keeps keyboard input and focus in the Trakt modal until dismissal', async () => {
+  it('postpones the Trakt prompt while handled navigation keys keep arriving', async () => {
+    vi.useFakeTimers();
     const state = { mediaApi: {}, progressApi: {} };
     const emptyProgress: never[] = [];
     currentSession.mockReturnValue('test-session');
@@ -470,41 +558,79 @@ describe('HomePage focus transitions', () => {
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     getAssociation.mockResolvedValue({ data: { connected: false } });
     const row = makeHandle(true, false);
+    row.handleAction.mockReturnValue({ type: 'handled' } as never);
     rowHandles.set(0, row);
     const progressSelector = vi
       .spyOn(progressApi.endpoints.getProgress, 'select')
       .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
+    const view = render(<HomePage />);
     try {
-      render(<HomePage />);
-      const background = screen.getByTestId('card-0');
-      background.focus();
-      await screen.findByRole('dialog', { name: 'Connect Trakt' });
-      const first = screen.getByRole('button', { name: "Let's go" });
-      const close = screen.getByRole('button', { name: 'Close Trakt dialog' });
-      const never = screen.getByRole('button', { name: 'Don’t ask again' });
-      await waitFor(() => expect(first).toHaveFocus());
-      // A late-loading carousel must not be able to reclaim keyboard focus.
-      background.focus();
-      expect(first).toHaveFocus();
-      fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
-      expect(row.handleAction).not.toHaveBeenCalled();
-      fireEvent.keyDown(first, { key: 'ArrowRight' });
-      expect(never).toHaveFocus();
-      fireEvent.keyDown(never, { key: 'Tab' });
-      expect(close).toHaveFocus();
-      fireEvent.keyDown(close, { key: 'Tab' });
-      expect(first).toHaveFocus();
-      fireEvent.keyDown(first, { key: 'Tab', shiftKey: true });
-      expect(close).toHaveFocus();
-      fireEvent.keyDown(close, { key: 'Escape' });
-      expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
-      await waitFor(() => expect(background).toHaveFocus());
-      fireEvent.keyDown(background, { key: 'ArrowRight' });
-      expect(row.handleAction).toHaveBeenCalledTimes(1);
+      await act(async () => {});
+      expect(getAssociation).toHaveBeenCalledWith('test-session');
+      for (let press = 0; press < 3; press++) {
+        act(() => vi.advanceTimersByTime(4000));
+        fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
+      }
+      // Each handled key stops propagation at the document; it must still reset the idle timer.
+      expect(row.handleAction).toHaveBeenCalledTimes(3);
+      act(() => vi.advanceTimersByTime(4000));
+      expect(screen.queryByRole('dialog', { name: 'Connect Trakt' })).not.toBeInTheDocument();
+      act(() => vi.advanceTimersByTime(1000));
+      expect(screen.getByRole('dialog', { name: 'Connect Trakt' })).toBeInTheDocument();
     } finally {
+      view.unmount();
       progressSelector.mockRestore();
+      vi.useRealTimers();
     }
   });
+
+  it(
+    'keeps keyboard input and focus in the Trakt modal until dismissal',
+    { timeout: 15000 },
+    async () => {
+      const state = { mediaApi: {}, progressApi: {} };
+      const emptyProgress: never[] = [];
+      currentSession.mockReturnValue('test-session');
+      currentUser.mockReturnValue({ id: 'test-user' });
+      selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
+      getAssociation.mockResolvedValue({ data: { connected: false } });
+      const row = makeHandle(true, false);
+      rowHandles.set(0, row);
+      const progressSelector = vi
+        .spyOn(progressApi.endpoints.getProgress, 'select')
+        .mockReturnValue((() => ({ data: { progress: emptyProgress } })) as never);
+      try {
+        render(<HomePage />);
+        const background = screen.getByTestId('card-0');
+        background.focus();
+        await screen.findByRole('dialog', { name: 'Connect Trakt' }, { timeout: 6500 });
+        const first = screen.getByRole('button', { name: "Let's go" });
+        const close = screen.getByRole('button', { name: 'Close Trakt dialog' });
+        const never = screen.getByRole('button', { name: 'Don’t ask again' });
+        await waitFor(() => expect(first).toHaveFocus());
+        // A late-loading carousel must not be able to reclaim keyboard focus.
+        background.focus();
+        expect(first).toHaveFocus();
+        fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowRight' });
+        expect(row.handleAction).not.toHaveBeenCalled();
+        fireEvent.keyDown(first, { key: 'ArrowRight' });
+        expect(never).toHaveFocus();
+        fireEvent.keyDown(never, { key: 'Tab' });
+        expect(close).toHaveFocus();
+        fireEvent.keyDown(close, { key: 'Tab' });
+        expect(first).toHaveFocus();
+        fireEvent.keyDown(first, { key: 'Tab', shiftKey: true });
+        expect(close).toHaveFocus();
+        fireEvent.keyDown(close, { key: 'Escape' });
+        expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+        await waitFor(() => expect(background).toHaveFocus());
+        fireEvent.keyDown(background, { key: 'ArrowRight' });
+        expect(row.handleAction).toHaveBeenCalledTimes(1);
+      } finally {
+        progressSelector.mockRestore();
+      }
+    }
+  );
 
   it('keeps Continue Watching stable and opens details when selected', () => {
     const state = { mediaApi: {}, progressApi: {} };
@@ -716,6 +842,7 @@ describe('HomePage focus transitions', () => {
     currentSession.mockReturnValue('second-session');
     view.rerender(<HomePage />);
     expect(screen.getByTestId('hero')).toHaveAttribute('data-source-status', 'checking');
+    expect(dispatch).toHaveBeenCalledWith({ type: 'notificationsApi/resetApiState' });
   });
 
   it('shows cached source metadata immediately when returning to a movie and replaces it after refresh', () => {
@@ -894,5 +1021,49 @@ describe('HomePage focus transitions', () => {
     expect(rowProps.get(0)).toEqual({ loadIntent: 'visible', visible: true });
     expect(rowProps.get(1)).toEqual({ loadIntent: 'visible', visible: true });
     expect(rowProps.get(2)).toEqual({ loadIntent: 'prefetch', visible: false });
+  });
+
+  it("ignores the previous route's show and season while the next episode route loads", () => {
+    const season = (episodes: number[]) => ({
+      episodes: episodes.map(episodeNumber => ({
+        episodeNumber,
+        title: `Episode ${episodeNumber}`,
+      })),
+    });
+    const firstShow = { seasons: [{ seasonNumber: 1 }, { seasonNumber: 2 }] };
+    useGetShowQuery.mockReturnValue({ data: firstShow, currentData: firstShow, isError: false });
+    useGetSeasonQuery.mockImplementation(args =>
+      args && typeof args === 'object' && 'showId' in args && args.showId === 1
+        ? { data: season([1, 2]), currentData: season([1, 2]), isSuccess: true }
+        : { data: undefined, currentData: undefined, isSuccess: false }
+    );
+    const { rerender } = render(
+      <HomePage
+        route={{ type: 'episodePlayer', showMediaId: 1, seasonNumber: 1, episodeNumber: 1 }}
+      />
+    );
+    expect(JSON.parse(screen.getByTestId('player').dataset.nextEpisode!)).toEqual({
+      kind: 'episode',
+      showMediaId: 1,
+      seasonNumber: 1,
+      episodeNumber: 2,
+    });
+
+    // RTK Query keeps the previous arguments' result in data while the new show is fetching.
+    useGetShowQuery.mockReturnValue({ data: firstShow, currentData: undefined, isError: false });
+    useGetSeasonQuery.mockImplementation(() => ({
+      data: season([1, 2]),
+      currentData: undefined,
+      isSuccess: true,
+      isFetching: true,
+    }));
+    rerender(
+      <HomePage
+        route={{ type: 'episodePlayer', showMediaId: 2, seasonNumber: 1, episodeNumber: 1 }}
+      />
+    );
+
+    expect(screen.getByTestId('player').dataset.nextEpisode).toBe('');
+    expect(useGetSeasonQuery).not.toHaveBeenCalledWith({ showId: 2, season: 2 });
   });
 });

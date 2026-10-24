@@ -1,6 +1,8 @@
 # Getting Started with Miauflix
 
-> **Quick Start**: Just want to try it? Run these commands and you're done in 5 minutes!
+> **Fastest path:** use the prebuilt images, no clone needed. See the [Quick Setup in the README](../../README.md#-quick-setup).
+
+> **Build from source**: Just want to try it? Run these commands and you're done in 5 minutes!
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix

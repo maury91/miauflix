@@ -90,7 +90,7 @@ describe('Database Encryption E2E Tests', () => {
   }, 60000);
 
   describe('Database Encryption', () => {
-    it('should store sensitive MovieSource fields encrypted in database', async () => {
+    it('should store sensitive ContentSource fields encrypted in database', async () => {
       if (!userCredentials) {
         throw new Error(
           'No user credentials available for testing - ensure backend is running and generating admin user'
@@ -136,7 +136,7 @@ describe('Database Encryption E2E Tests', () => {
           // Query the raw database to check if sensitive fields are encrypted
           const rawSourceData = await new Promise<any>((resolve, reject) => {
             db.get(
-              `SELECT ih, ml, file FROM movie_source WHERE id = ?`,
+              `SELECT ih, ml, file FROM content_source WHERE id = ?`,
               [source.id],
               (err, row) => {
                 if (err) reject(err);
@@ -174,7 +174,9 @@ describe('Database Encryption E2E Tests', () => {
     // The following tests are marked as .todo because they would properly test encryption functionality
     // rather than duplicating API validation tests that belong in sources.test.ts
 
-    it.todo('should test EncryptionService initialization with MovieSource entity static property');
+    it.todo(
+      'should test EncryptionService initialization with ContentSource entity static property'
+    );
 
     it.todo('should test end-to-end encryption/decryption through entity transformers');
 

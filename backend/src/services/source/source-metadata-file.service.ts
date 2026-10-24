@@ -31,6 +31,8 @@ const webTorrentMetadataTimeoutMs = 15_000;
  */
 export class SourceMetadataFileService {
   private readonly services: Record<string, ServiceData> = {};
+  private readonly playbackMetadataResolutions = new Map<string, Promise<Buffer | null>>();
+  private playbackMetadataQueue: Promise<void> = Promise.resolve();
   private readonly concurrency: number;
   private readonly queue: Array<{
     sourceLink: string;
@@ -181,6 +183,33 @@ export class SourceMetadataFileService {
     });
     this.pendingResolutions.set(hash, resolution);
     void resolution.finally(() => this.pendingResolutions.delete(hash));
+    return resolution;
+  }
+
+  /** Resolve one explicitly requested playback torrent without enabling background resolution. */
+  public getPlaybackTorrentMetadataFile(sourceLink: string, hash: string): Promise<Buffer | null> {
+    const normalizedHash = hash.toLowerCase();
+    const existing = this.playbackMetadataResolutions.get(normalizedHash);
+    if (existing) return existing;
+    // Keep interactive work bounded when multiple uncached TV packs are requested together.
+    if (this.playbackMetadataResolutions.size >= 2) return Promise.resolve(null);
+
+    const resolution = this.playbackMetadataQueue.then(() =>
+      this.downloadService.getSourceMetadataFile(
+        sourceLink,
+        normalizedHash,
+        webTorrentMetadataTimeoutMs
+      )
+    );
+    this.playbackMetadataQueue = resolution.then(
+      () => undefined,
+      () => undefined
+    );
+    this.playbackMetadataResolutions.set(normalizedHash, resolution);
+    void resolution.then(
+      () => this.playbackMetadataResolutions.delete(normalizedHash),
+      () => this.playbackMetadataResolutions.delete(normalizedHash)
+    );
     return resolution;
   }
 

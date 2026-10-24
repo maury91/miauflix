@@ -1,12 +1,12 @@
 import { Source } from '@miauflix/source-metadata-extractor';
 import { getMetadataArgsStorage, type ValueTransformer } from 'typeorm';
 
-import { MovieSource } from './movie-source.entity';
+import { ContentSource } from './content-source.entity';
 
-describe('MovieSource source type storage', () => {
+describe('ContentSource source type storage', () => {
   it('preserves existing stored values and appends DCP', () => {
     const column = getMetadataArgsStorage().columns.find(
-      entry => entry.target === MovieSource && entry.propertyName === 'sourceType'
+      entry => entry.target === ContentSource && entry.propertyName === 'sourceType'
     );
     const transformer = column!.options.transformer as ValueTransformer;
     const sources = [

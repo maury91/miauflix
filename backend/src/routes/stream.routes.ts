@@ -1,4 +1,5 @@
 import { zValidator } from '@hono/zod-validator';
+import { logger } from '@logger';
 import { Quality } from '@miauflix/source-metadata-extractor';
 import { Hono } from 'hono';
 import { z } from 'zod';
@@ -21,6 +22,30 @@ export const createStreamRoutes = ({
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   return new Hono()
+    .post(
+      '/:token/prefetch',
+      rateLimitGuard(60),
+      zValidator('param', z.object({ token: z.string().regex(/^[A-Za-z0-9_-]{43}$/) })),
+      async context => {
+        const grant = await playbackSessionService.verify(context.req.valid('param').token);
+        if (!grant) return context.json({ error: 'Invalid or expired streaming key' }, 401);
+        // Only the next episode is prefetched; movie grants never reach source resolution.
+        if (grant.playableKind !== 'episode')
+          return context.json({ error: 'Episode file is unavailable' }, 404);
+        const resolved = await streamService.resolvePlaybackTarget(grant);
+        if (!resolved) return context.json({ error: 'Playback grant does not match source' }, 403);
+        // Best-effort: grant and source are validated above, so failures here are only logged.
+        void downloadService
+          .predownload(resolved.target, {
+            kind: 'prefetch',
+            ownerKey: `next:${grant.userId}:${grant.playableKey}`,
+          })
+          .catch((error: unknown) =>
+            logger.warn('StreamRoutes', 'Next-episode prefetch failed', error)
+          );
+        return context.body(null, 202);
+      }
+    )
     .get(
       '/:token/audio',
       rateLimitGuard(60),
@@ -38,16 +63,13 @@ export const createStreamRoutes = ({
         const { token } = context.req.valid('param');
         const grant = await playbackSessionService.verify(token);
         if (!grant) return context.json({ error: 'Invalid or expired streaming key' }, 401);
-        if (grant.playableKind !== 'movie')
-          return context.json({ error: 'Playable source is unavailable' }, 404);
-        const source = await streamService.getSourceById(grant.sourceId);
-        const movie = source ? await mediaService.getMovieById(source.movieId) : null;
-        if (!source || !movie || `m:${movie.mediaId}` !== grant.playableKey) {
+        const resolved = await streamService.resolvePlaybackTarget(grant);
+        if (!resolved) {
           return context.json({ error: 'Playback grant does not match source' }, 403);
         }
         try {
           return await audioPlaybackService.stream(
-            source,
+            resolved.target,
             token,
             context.req.valid('query').start,
             grant.expiresAt,
@@ -91,26 +113,21 @@ export const createStreamRoutes = ({
           // preparation pipeline. They must never fall back to source ranking.
           const playbackGrant = await playbackSessionService.verify(token);
           if (playbackGrant) {
-            if (playbackGrant.playableKind !== 'movie') {
-              return context.json(
-                { error: 'Playable source is unavailable' } satisfies ErrorResponse,
-                404
-              );
-            }
-            const source = await streamService.getSourceById(playbackGrant.sourceId);
-            const movie = source ? await mediaService.getMovieById(source.movieId) : null;
-            if (!source || !movie || `m:${movie.mediaId}` !== playbackGrant.playableKey) {
+            const resolved = await streamService.resolvePlaybackTarget(playbackGrant);
+            if (!resolved) {
               return context.json(
                 { error: 'Playback grant does not match source' } satisfies ErrorResponse,
                 403
               );
             }
-            return await downloadService.streamFile(source, context.req.header('range'));
+            return await downloadService.streamFile(resolved.target, context.req.header('range'));
           }
 
           // Verify streaming key (includes timing attack protection)
           const keyData = await authService.verifyStreamingKey(token);
           const { movieId } = keyData;
+          if (!movieId)
+            return context.json({ error: 'Movie not found' } satisfies ErrorResponse, 404);
           const movie = await mediaService.getMovieById(movieId);
 
           if (!movie) {
@@ -130,9 +147,9 @@ export const createStreamRoutes = ({
             );
           }
 
-          // Stream the file
-          const rangeHeader = context.req.header('range');
-          return await downloadService.streamFile(source, rangeHeader);
+          // Stream the movie's main video
+          const target = await streamService.movieTarget(movieId, source);
+          return await downloadService.streamFile(target, context.req.header('range'));
         } catch (error: unknown) {
           console.error('Failed to stream content:', error);
 

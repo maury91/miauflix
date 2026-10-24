@@ -1,6 +1,6 @@
 import type { Page, Response } from '@playwright/test';
 
-import { navigateToLogin, waitForHomeReady } from './utils/login';
+import { navigateToLogin, TRAKT_PROMPT_TIMEOUT_MS, waitForHomeReady } from './utils/login';
 import { expect, test } from './fixtures';
 
 async function login(page: Page, beforeSubmit?: () => void): Promise<string> {
@@ -24,7 +24,9 @@ async function login(page: Page, beforeSubmit?: () => void): Promise<string> {
   await page.getByRole('button', { name: 'Continue' }).click();
   const result = await (await response).json();
   await waitForHomeReady(page);
-  await expect(page.getByRole('dialog', { name: 'Connect Trakt', exact: true })).toBeVisible();
+  await expect(page.getByRole('dialog', { name: 'Connect Trakt', exact: true })).toBeVisible({
+    timeout: TRAKT_PROMPT_TIMEOUT_MS,
+  });
   return result.user.id;
 }
 

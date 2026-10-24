@@ -5,7 +5,7 @@ import { catalogSchedules, LEGACY_CATALOG_SCHEDULES } from '@services/catalog/ca
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import type { ListClientService } from '@services/list/list-client.service';
-import { listSchedules } from '@services/media/list.schedule';
+import { listSchedules, tvWatchlistSchedules } from '@services/media/list.schedule';
 import type { ListService } from '@services/media/list.service';
 import { sourceSchedules } from '@services/source/source.schedule';
 
@@ -91,6 +91,13 @@ export class ServiceScheduleCoordinator {
       return;
     }
 
+    if (!this.catalog.isReady()) {
+      await this.removeCatalogSchedules();
+      await this.removeTVWatchlistSchedules();
+      return;
+    }
+    if (!(await this.install(tvWatchlistSchedules(), revision, true))) return;
+
     if (
       revision !== this.revision ||
       !this.catalog.isReady() ||
@@ -164,8 +171,15 @@ export class ServiceScheduleCoordinator {
     await this.removeLegacySchedules();
   }
 
+  private async removeTVWatchlistSchedules(): Promise<void> {
+    for (const schedule of tvWatchlistSchedules()) {
+      await this.jobs.removeSchedule(schedule.job, schedule.id);
+    }
+  }
+
   private async removeAllSchedules(): Promise<void> {
     await this.removeCatalogSchedules();
+    await this.removeTVWatchlistSchedules();
     for (const schedule of [...sourceSchedules(this.config), ...cacheSchedules(this.config)]) {
       await this.jobs.removeSchedule(schedule.job, schedule.id);
     }

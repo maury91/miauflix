@@ -5,14 +5,18 @@ import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import type { ReadableStream as NodeReadableStream } from 'node:stream/web';
 
-import type { MovieSource } from '@entities/movie-source.entity';
 import type { DownloadService } from '@services/download/download.service';
 
-/** A private loopback capability exposes only this source; no arbitrary URLs or plaintext files. */
+import type { PlaybackTarget } from './playback-target';
+
+/** ffprobe read budget: container headers fit in it, so a probe waits on few torrent pieces. */
+export const PROBE_SIZE_BYTES = 2 * 1024 * 1024;
+
+/** A private loopback capability exposes only this file; no arbitrary URLs or plaintext files. */
 export async function openTorrentInput(
   downloadService: DownloadService,
-  source: MovieSource,
-  torrentFilePath?: string
+  target: PlaybackTarget,
+  speculative = false
 ) {
   const path = `/${randomBytes(24).toString('hex')}`;
   const sockets = new Set<Socket>();
@@ -27,7 +31,7 @@ export async function openTorrentInput(
       return;
     }
     try {
-      const result = await downloadService.streamFile(source, range, torrentFilePath);
+      const result = await downloadService.streamFile(target, range, speculative);
       if (response.destroyed || request.method === 'HEAD') {
         if (!response.destroyed) {
           result.headers.forEach((value, key) => response.setHeader(key, value));

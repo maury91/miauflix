@@ -12,29 +12,38 @@ import { AbstractLogger, DataSource } from 'typeorm';
 
 import { AuditLog } from '@entities/audit-log.entity';
 import { BackgroundJob } from '@entities/background-job.entity';
+import { ContentSource } from '@entities/content-source.entity';
 import { Episode } from '@entities/episode.entity';
+import { EpisodeSource } from '@entities/episode-source.entity';
 import { MediaList, MediaListItem } from '@entities/list.entity';
+import { MediaProbe } from '@entities/media-probe.entity';
 import { MediaRating } from '@entities/media-rating.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
+import { Notification } from '@entities/notification.entity';
 import { PlaybackGrant } from '@entities/playback-grant.entity';
 import { Progress } from '@entities/progress.entity';
 import { QrLoginRequest } from '@entities/qr-login-request.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
+import { StorageFile } from '@entities/storage-file.entity';
+import { StorageFileClaim } from '@entities/storage-file-claim.entity';
 import { StreamingKey } from '@entities/streaming-key.entity';
 import { TVShow } from '@entities/tvshow.entity';
 import { User } from '@entities/user.entity';
 import { AuditLogRepository } from '@repositories/audit-log.repository';
+import { ContentSourceRepository } from '@repositories/content-source.repository';
+import { EpisodeSourceRepository } from '@repositories/episode-source.repository';
+import { MediaProbeRepository } from '@repositories/media-probe.repository';
 import { MediaListRepository } from '@repositories/mediaList.repository';
 import { MovieRepository } from '@repositories/movie.repository';
-import { MovieSourceRepository } from '@repositories/movie-source.repository';
 import { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import { ProgressRepository } from '@repositories/progress.repository';
 import { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
 import { RefreshTokenRepository } from '@repositories/refresh-token.repository';
 import { StorageRepository } from '@repositories/storage.repository';
+import { StorageFileRepository } from '@repositories/storage-file.repository';
 import { StreamingKeyRepository } from '@repositories/streaming-key.repository';
 import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
@@ -109,16 +118,19 @@ export class Database {
   private transactionQueue: Promise<void> = Promise.resolve();
   private mediaListRepository: MediaListRepository;
   private movieRepository: MovieRepository;
-  private movieSourceRepository: MovieSourceRepository;
+  private contentSourceRepository: ContentSourceRepository;
+  private episodeSourceRepository: EpisodeSourceRepository;
   private tvShowRepository: TVShowRepository;
   private userRepository: UserRepository;
   private refreshTokenRepository: RefreshTokenRepository;
   private auditLogRepository: AuditLogRepository;
   private qrLoginRequestRepository: QrLoginRequestRepository;
   private storageRepository: StorageRepository;
+  private storageFileRepository: StorageFileRepository;
   private streamingKeyRepository: StreamingKeyRepository;
   private progressRepository: ProgressRepository;
   private playbackGrantRepository: PlaybackGrantRepository;
+  private mediaProbeRepository: MediaProbeRepository;
 
   constructor(configurationService: ConfigurationService) {
     const encryptionService = new EncryptionService(
@@ -128,7 +140,7 @@ export class Database {
     const databasePath = path.resolve(dataDir, 'database.sqlite');
     // Set up static encryption services for entities
     Movie.encryptionService = encryptionService;
-    MovieSource.encryptionService = encryptionService;
+    ContentSource.encryptionService = encryptionService;
     Storage.encryptionService = encryptionService;
 
     logger.debug('DATABASE', `Initializing database ${databasePath}`);
@@ -138,10 +150,13 @@ export class Database {
       database: databasePath,
       entities: [
         Movie,
+        ContentSource,
         MovieSource,
+        Notification,
         TVShow,
         Season,
         Episode,
+        EpisodeSource,
         MediaList,
         MediaListItem,
         MediaRating,
@@ -151,9 +166,12 @@ export class Database {
         BackgroundJob,
         QrLoginRequest,
         Storage,
+        StorageFile,
+        StorageFileClaim,
         StreamingKey,
         Progress,
         PlaybackGrant,
+        MediaProbe,
       ],
       synchronize: false,
       logger: new DatabaseLogger('all'),
@@ -165,7 +183,8 @@ export class Database {
     await this.dataSource.initialize();
     await this.dataSource.synchronize();
     this.mediaListRepository = new MediaListRepository(this);
-    this.movieSourceRepository = new MovieSourceRepository(this);
+    this.contentSourceRepository = new ContentSourceRepository(this);
+    this.episodeSourceRepository = new EpisodeSourceRepository(this);
     this.movieRepository = new MovieRepository(this);
     this.tvShowRepository = new TVShowRepository(this);
     this.userRepository = new UserRepository(this);
@@ -173,10 +192,12 @@ export class Database {
     this.auditLogRepository = new AuditLogRepository(this);
     this.qrLoginRequestRepository = new QrLoginRequestRepository(this);
     this.storageRepository = new StorageRepository(this);
+    this.storageFileRepository = new StorageFileRepository(this);
     await this.storageRepository.resetActiveStreams();
     this.streamingKeyRepository = new StreamingKeyRepository(this);
     this.progressRepository = new ProgressRepository(this);
     this.playbackGrantRepository = new PlaybackGrantRepository(this);
+    this.mediaProbeRepository = new MediaProbeRepository(this);
   }
 
   public async close(): Promise<void> {
@@ -248,12 +269,20 @@ export class Database {
     return this.auditLogRepository;
   }
 
-  public getMovieSourceRepository() {
-    return this.movieSourceRepository;
+  public getContentSourceRepository() {
+    return this.contentSourceRepository;
+  }
+
+  public getEpisodeSourceRepository() {
+    return this.episodeSourceRepository;
   }
 
   public getQrLoginRequestRepository() {
     return this.qrLoginRequestRepository;
+  }
+
+  public getStorageFileRepository() {
+    return this.storageFileRepository;
   }
 
   public getStorageRepository() {
@@ -270,5 +299,9 @@ export class Database {
 
   public getPlaybackGrantRepository() {
     return this.playbackGrantRepository;
+  }
+
+  public getMediaProbeRepository() {
+    return this.mediaProbeRepository;
   }
 }

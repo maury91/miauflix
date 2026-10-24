@@ -46,6 +46,10 @@ export const reachableIntentSchema = z
 export const preloadIntentRequestSchema = z
   .object({
     sequence: z.number().int().nonnegative().safe(),
+    subtitleLanguage: z
+      .string()
+      .regex(/^[a-z]{2,3}$/i)
+      .optional(),
     view: z.enum(['browse', 'details', 'player']),
     focused: mediaIntentRefSchema.nullable(),
     reachable: z.array(reachableIntentSchema).max(8),

@@ -14,21 +14,22 @@ export class StorageRepository {
     return this.repository.findOne({ where: { id } });
   }
 
-  async findByMovieSourceId(movieSourceId: number): Promise<Storage | null> {
-    return this.repository.findOne({ where: { movieSourceId } });
+  async findBySourceId(sourceId: number): Promise<Storage | null> {
+    return this.repository.findOne({ where: { sourceId } });
   }
 
-  async findByMovieSourceIdWithRelation(movieSourceId: number): Promise<Storage | null> {
+  async findBySourceIdWithRelation(sourceId: number): Promise<Storage | null> {
     return this.repository.findOne({
-      where: { movieSourceId },
-      relations: ['movieSource'],
+      where: { sourceId },
+      relations: ['contentSource'],
     });
   }
 
   async findAllWithSourceAndMovie(): Promise<Storage[]> {
     return this.repository
       .createQueryBuilder('storage')
-      .leftJoinAndSelect('storage.movieSource', 'movieSource')
+      .leftJoinAndSelect('storage.contentSource', 'contentSource')
+      .leftJoinAndSelect('contentSource.movies', 'movieSource')
       .leftJoinAndSelect('movieSource.movie', 'movie')
       .orderBy('storage.allocatedBytes', 'DESC')
       .addOrderBy('storage.reservedBytes', 'DESC')
@@ -36,17 +37,10 @@ export class StorageRepository {
       .getMany();
   }
 
-  async findSpeculativeStorage(): Promise<Storage[]> {
-    return this.repository.find({
-      where: { retentionClass: 'speculative' },
-      order: { lastInterestAt: 'ASC', createdAt: 'ASC' },
-    });
-  }
-
   async findStoragesWithCompletion(): Promise<Storage[]> {
     return this.repository
       .createQueryBuilder('storage')
-      .leftJoinAndSelect('storage.movieSource', 'movieSource')
+      .leftJoinAndSelect('storage.contentSource', 'contentSource')
       .where('storage.videoCompletedAt IS NOT NULL')
       .getMany();
   }
@@ -66,8 +60,8 @@ export class StorageRepository {
     return result.affected ? result.affected > 0 : false;
   }
 
-  async deleteByMovieSourceId(movieSourceId: number): Promise<boolean> {
-    const result = await this.repository.delete({ movieSourceId });
+  async deleteBySourceId(sourceId: number): Promise<boolean> {
+    const result = await this.repository.delete({ sourceId });
     return result.affected ? result.affected > 0 : false;
   }
 
@@ -167,36 +161,6 @@ export class StorageRepository {
     }
 
     return query.getMany();
-  }
-
-  /**
-   * Find the most stale storage record (least recently accessed)
-   * Returns null if no storage records exist
-   */
-  async findMostStaleStorage(
-    excludeMovieSourceId?: number,
-    includeUnexpiredSpeculative = false
-  ): Promise<Storage | null> {
-    const query = this.repository
-      .createQueryBuilder('storage')
-      .where('storage.retentionClass = :retentionClass', { retentionClass: 'speculative' })
-      .andWhere('storage.activeStreams = 0')
-      .andWhere(
-        includeUnexpiredSpeculative
-          ? '1 = 1'
-          : '(storage.speculativeExpiresAt IS NOT NULL AND storage.speculativeExpiresAt <= :now)',
-        { now: new Date() }
-      );
-    if (includeUnexpiredSpeculative) {
-      query.orderBy('storage.lastInterestAt', 'ASC').addOrderBy('storage.lastAccessAt', 'ASC');
-    } else {
-      query.orderBy('storage.lastAccessAt', 'ASC');
-    }
-    query.addOrderBy('storage.createdAt', 'ASC'); // Secondary sort by creation date
-    if (excludeMovieSourceId !== undefined) {
-      query.andWhere('storage.movieSourceId != :excludeMovieSourceId', { excludeMovieSourceId });
-    }
-    return query.getOne();
   }
 
   /**

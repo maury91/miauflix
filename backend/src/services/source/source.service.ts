@@ -1,15 +1,20 @@
 import { logger } from '@logger';
+import parseTorrent from 'parse-torrent';
 
+import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import type { Database } from '@database/database';
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
+import type { EpisodeSource } from '@entities/episode-source.entity';
 import { SourceError } from '@errors/source.errors';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
-import type { MovieRepository } from '@repositories/movie.repository';
 import type {
-  MovieSourceRepository,
+  ContentSourceRepository,
   SourceProcessingResult,
-} from '@repositories/movie-source.repository';
+} from '@repositories/content-source.repository';
+import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
+import type { MovieRepository } from '@repositories/movie.repository';
 import type { BackgroundJobService } from '@services/background-job/background-job.service';
+import type { NotificationService } from '@services/notifications/notification.service';
 import type { RequestService } from '@services/request/request.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
@@ -23,7 +28,63 @@ import { providerSourcesToEntities } from '@utils/transformers.util';
 import { validateContentFileResponse } from '@utils/validation.util';
 
 import { ErrorWithStatus } from './services/error-with-status.util';
+import { matchEpisodeFile } from './episode-file-matcher';
 import type { SourceMetadataFileService } from './source-metadata-file.service';
+
+interface TVRelease {
+  metadata: SourceMetadata;
+  source: ContentSource;
+}
+
+function mayContainEpisode(
+  metadata: SourceMetadata,
+  seasonNumber: number,
+  episodeNumber: number
+): boolean {
+  if (
+    metadata.season === seasonNumber &&
+    (metadata.episode === undefined || metadata.episode === 0 || metadata.episode === episodeNumber)
+  )
+    return true;
+
+  const releaseName = metadata.releaseName ?? '';
+  const episodes = [...releaseName.matchAll(/s(\d{1,2})[ ._-]*e(\d{1,3})/gi)];
+  if (
+    episodes.some(match => Number(match[1]) === seasonNumber && Number(match[2]) === episodeNumber)
+  ) {
+    return true;
+  }
+
+  const namedSeasons = [...releaseName.matchAll(/s(\d{1,2})(?=\D|$)/gi)].map(match =>
+    Number(match[1])
+  );
+  return (
+    namedSeasons.includes(seasonNumber) &&
+    (namedSeasons.length > 1 || /\b(?:complete|pack)\b|season\s*\d+/i.test(releaseName))
+  );
+}
+
+function releaseQualityRank(value: string | null | undefined): number {
+  const type = value?.toUpperCase().replace(/[^A-Z0-9]/g, '') ?? '';
+  if (type.includes('REMUX')) return 9;
+  if (type.includes('BLURAY') || type.includes('BDRIP') || type.includes('BRRIP')) return 8;
+  if (type.includes('WEBDL') || type === 'WEB') return 7;
+  if (type.includes('WEBRIP')) return 6;
+  if (type.includes('DVDSCR')) return 3;
+  if (type.includes('HDTV')) return 4;
+  if (type.includes('DVD')) return 5;
+  if (type.includes('TELESYNC') || type === 'TS') return 2;
+  if (type.includes('CAM')) return 1;
+  return 0;
+}
+
+function releaseQualityName(rank: number): string {
+  return (
+    ['Unknown', 'CAM', 'TS', 'DVD screener', 'HDTV', 'DVD', 'WEB rip', 'WEB', 'Blu-ray', 'Remux'][
+      rank
+    ] ?? 'Unknown'
+  );
+}
 
 /**
  * Service for searching and managing sources
@@ -31,7 +92,12 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
 export class SourceService {
   private readonly pendingOnDemandSearches = new Set<number>();
   private readonly movieRepository: MovieRepository;
-  private readonly movieSourceRepository: MovieSourceRepository;
+  private readonly contentSourceRepository: ContentSourceRepository;
+  private readonly episodeSourceRepository: EpisodeSourceRepository;
+  private readonly tvReleaseSearches = new Map<
+    string,
+    { expiresAt: number; promise: Promise<TVRelease[]> }
+  >();
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
 
   private vpnConnected = false;
@@ -53,13 +119,15 @@ export class SourceService {
     private readonly magnetService: SourceMetadataFileService,
     private readonly requestService: RequestService,
     config: ConfigService,
-    backgroundJobs?: BackgroundJobService
+    backgroundJobs?: BackgroundJobService,
+    private readonly notifications?: NotificationService
   ) {
     this.config = config;
     this.vpnService = vpnService;
     this.searchOnlyBehindVpn = !config.getOrThrow('DISABLE_VPN_CHECK');
     this.movieRepository = db.getMovieRepository();
-    this.movieSourceRepository = db.getMovieSourceRepository();
+    this.contentSourceRepository = db.getContentSourceRepository();
+    this.episodeSourceRepository = db.getEpisodeSourceRepository();
     this.backgroundJobs = backgroundJobs;
     config.registerService('SOURCE', this);
     if (this.searchOnlyBehindVpn) {
@@ -201,13 +269,14 @@ export class SourceService {
   private async searchSourcesForMovie(
     movie: {
       id: number;
+      mediaId?: number;
       imdbId: string | null;
       title: string;
       contentDirectoriesSearched?: string[];
     },
     isOnDemand: boolean = false,
     priority = 20
-  ): Promise<{ directory: string; sources: MovieSource[] } | void> {
+  ): Promise<{ directory: string; sources: ContentSource[] } | void> {
     if (!(await this.checkForVpnConnection('searchSourcesForMovie'))) {
       return;
     }
@@ -226,6 +295,11 @@ export class SourceService {
     );
 
     try {
+      const previousSources = await this.contentSourceRepository.findByMovieId(movie.id);
+      const previousQuality = previousSources.reduce(
+        (best, source) => Math.max(best, releaseQualityRank(source.sourceType)),
+        0
+      );
       // Search for sources using the content directory service
       const movieWithSources = await this.contentDirectoryService.searchSourcesForMovie(
         movie.imdbId,
@@ -257,14 +331,34 @@ export class SourceService {
         );
       }
 
-      // Convert sources to MovieSource objects and save them
-      const sources = providerSourcesToEntities(
-        movieWithSources.sources,
-        movie.id,
-        movieWithSources.source
-      );
+      // Convert sources to ContentSource objects and save them
+      const sources = providerSourcesToEntities(movieWithSources.sources, movieWithSources.source);
 
-      const createdSources = await this.movieSourceRepository.createMany(sources);
+      const createdSources = await this.contentSourceRepository.upsertForMovie(movie.id, sources);
+      const nextQualitySource = createdSources
+        .map(source => ({ source, rank: releaseQualityRank(source.sourceType) }))
+        .sort((left, right) => right.rank - left.rank)[0];
+      const mediaId = movie.mediaId ?? (await this.movieRepository.findById(movie.id))?.mediaId;
+      if (
+        mediaId &&
+        previousQuality > 0 &&
+        nextQualitySource &&
+        nextQualitySource.rank > previousQuality
+      ) {
+        const previousQualityName = releaseQualityName(previousQuality);
+        const nextQualityName = releaseQualityName(nextQualitySource.rank);
+        try {
+          await this.notifications?.movieQualityUpgrade({
+            mediaId,
+            title: movie.title,
+            qualityKey: nextQualityName.toLowerCase(),
+            previousQuality: previousQualityName,
+            nextQuality: nextQualityName,
+          });
+        } catch (error) {
+          logger.warn('SourceService', 'Movie quality notification could not be stored', error);
+        }
+      }
       this.backgroundJobs?.bulkBestEffort(
         createdSources.flatMap(source => [
           {
@@ -323,6 +417,160 @@ export class SourceService {
     if (movie) await this.processSourceDiscovery(movie.id, priority);
   }
 
+  /** Search once per show, then associate exact torrent files with catalog episodes. */
+  public async getSourcesForEpisodeWithOnDemandSearch(episode: {
+    episodeId: number;
+    showMediaId?: number;
+    showTitle?: string;
+    showImdbId: string | null;
+    seasonNumber: number;
+    episodeNumber: number;
+    airDate?: string | null;
+  }): Promise<EpisodeSource[]> {
+    if (!this.isEpisodeWithinLeakTolerance(episode.airDate)) return [];
+    const existing = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
+    if (existing.some(association => association.matchKind === 'single')) return existing;
+    if (!episode.showImdbId || !(await this.checkForVpnConnection('TV source search')))
+      return existing;
+
+    const releases = await this.getTVReleases(episode.showImdbId);
+    const associate = (allowCombined: boolean) =>
+      releases.flatMap(release => {
+        const match = matchEpisodeFile(
+          release.metadata,
+          episode.seasonNumber,
+          episode.episodeNumber,
+          allowCombined
+        );
+        return match ? [{ release, match }] : [];
+      });
+    let matches = associate(false);
+    if (!matches.length) {
+      const metadataCandidates = releases
+        .filter(release =>
+          mayContainEpisode(release.metadata, episode.seasonNumber, episode.episodeNumber)
+        )
+        .sort((left, right) => {
+          const exact = (release: TVRelease) =>
+            release.metadata.season === episode.seasonNumber &&
+            release.metadata.episode === episode.episodeNumber
+              ? 1
+              : 0;
+          return (
+            exact(right) - exact(left) ||
+            (right.metadata.broadcasters ?? 0) - (left.metadata.broadcasters ?? 0)
+          );
+        })
+        .slice(0, 2);
+      for (const candidate of metadataCandidates) {
+        try {
+          const source =
+            (await this.contentSourceRepository.findById(candidate.source.id)) ?? candidate.source;
+          let torrentFile = source.file;
+          if (!torrentFile && source.magnetLink) {
+            torrentFile =
+              (await this.magnetService.getPlaybackTorrentMetadataFile(
+                source.magnetLink,
+                source.hash
+              )) ?? undefined;
+          }
+          if (!torrentFile) continue;
+
+          const parsed = await parseTorrent(torrentFile);
+          if (parsed.infoHash?.toLowerCase() !== source.hash.toLowerCase()) {
+            logger.warn(
+              'SourceService',
+              `Ignoring torrent metadata with a mismatched hash for TV source ${source.id}`
+            );
+            continue;
+          }
+          const files = (parsed.files ?? []).map(file => file.path).filter(Boolean);
+          if (!source.file) {
+            await this.contentSourceRepository.updateSourceFile(source.id, torrentFile);
+            source.file = torrentFile;
+          }
+          candidate.source = source;
+          candidate.metadata.files = files;
+        } catch (error) {
+          logger.warn(
+            'SourceService',
+            `Unable to resolve torrent files for TV source ${candidate.source.id}`,
+            error
+          );
+        }
+      }
+      matches = associate(false);
+    }
+    if (!matches.length) matches = associate(true);
+
+    for (const { release, match } of matches) {
+      await this.episodeSourceRepository.associate(
+        episode.episodeId,
+        release.source.id,
+        match.videoFilePath,
+        match.matchKind
+      );
+    }
+    const associations = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
+    if (associations.length && episode.showMediaId && episode.showTitle) {
+      try {
+        await this.notifications?.episodeAvailable({
+          showMediaId: episode.showMediaId,
+          showTitle: episode.showTitle,
+          seasonNumber: episode.seasonNumber,
+          episodeNumber: episode.episodeNumber,
+          airDate: episode.airDate ?? null,
+        });
+      } catch (error) {
+        logger.warn('SourceService', 'TV episode notification could not be stored', error);
+      }
+    }
+    return associations;
+  }
+
+  /** Unknown air dates preserve on-demand behavior; known upcoming episodes wait for the configured window. */
+  public isEpisodeWithinLeakTolerance(airDate?: string | null, now = Date.now()): boolean {
+    if (!airDate) return true;
+    const airTime = Date.parse(airDate);
+    if (!Number.isFinite(airTime)) return true;
+    return airTime <= now + (this.config.get('LEAK_TOLERANCE') ?? 0);
+  }
+
+  private async getTVReleases(imdbId: string): Promise<TVRelease[]> {
+    const cached = this.tvReleaseSearches.get(imdbId);
+    if (cached && cached.expiresAt > Date.now()) return cached.promise;
+
+    const promise = (async () => {
+      const result = await this.contentDirectoryService.searchSourcesForTVShow(imdbId, true);
+      if (!result?.sources.length) return [];
+      const releases: TVRelease[] = [];
+      for (const metadata of result.sources) {
+        const row = providerSourcesToEntities([metadata], result.source)[0];
+        const source = await this.contentSourceRepository.upsertByHash(row);
+        releases.push({ metadata, source });
+        this.backgroundJobs?.enqueueBestEffort({
+          type: 'source.stats',
+          dedupeKey: String(source.id),
+          payload: { sourceId: source.id },
+          options: { priority: 20 },
+        });
+      }
+      return releases;
+    })();
+    const cache = { expiresAt: Date.now() + 5 * 60_000, promise };
+    this.tvReleaseSearches.set(imdbId, cache);
+    try {
+      return await promise;
+    } catch (error) {
+      if (this.tvReleaseSearches.get(imdbId) === cache)
+        this.tvReleaseSearches.set(imdbId, {
+          expiresAt: Date.now() + 30_000,
+          promise: Promise.resolve([]),
+        });
+      throw error;
+    }
+  }
+
   public async seedSourceDiscoveryJobs(limit = 25): Promise<void> {
     const movies = await this.movieRepository.findMoviesPendingSourceSearch(limit);
     await this.backgroundJobs?.enqueueBulk(
@@ -336,7 +584,7 @@ export class SourceService {
   }
 
   public async seedSourceMetadataJobs(): Promise<void> {
-    const sources = await this.movieSourceRepository.getNextSourcesToProcess(
+    const sources = await this.contentSourceRepository.getNextSourcesToProcess(
       Math.max(2, this.magnetService.getAvailableConcurrency())
     );
     await this.backgroundJobs?.enqueueBulk(
@@ -350,7 +598,7 @@ export class SourceService {
   }
 
   public async seedSourceStatsJobs(limit = 25): Promise<void> {
-    const sources = await this.movieSourceRepository.findSourceThatNeedsStatsUpdate(limit);
+    const sources = await this.contentSourceRepository.findSourceThatNeedsStatsUpdate(limit);
     await this.backgroundJobs?.enqueueBulk(
       sources.map(source => ({
         type: 'source.stats',
@@ -362,17 +610,17 @@ export class SourceService {
   }
 
   public async processSourceMetadata(sourceId: number): Promise<void> {
-    const source = await this.movieSourceRepository.findById(sourceId);
+    const source = await this.contentSourceRepository.findById(sourceId);
     if (!source?.file) {
       if (!source) return;
       await this.downloadSourceFileForSource(source as unknown as SourceProcessingResult);
-      const updated = await this.movieSourceRepository.findById(sourceId);
+      const updated = await this.contentSourceRepository.findById(sourceId);
       if (!updated?.file) throw new Error('Source metadata could not be resolved');
     }
   }
 
   public async processSourceStats(sourceId: number): Promise<Date> {
-    const source = await this.movieSourceRepository.findById(sourceId);
+    const source = await this.contentSourceRepository.findById(sourceId);
     if (!source) return new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
     const { broadcasters, watchers } = await this.magnetService.getStats(source.hash);
     const nextCheckTime = scheduleNextCheck(
@@ -382,7 +630,12 @@ export class SourceService {
       { old: source.broadcasters ?? 0, new: broadcasters },
       { old: source.watchers ?? 0, new: watchers }
     );
-    await this.movieSourceRepository.updateStats(source.id, broadcasters, watchers, nextCheckTime);
+    await this.contentSourceRepository.updateStats(
+      source.id,
+      broadcasters,
+      watchers,
+      nextCheckTime
+    );
     return nextCheckTime;
   }
 
@@ -390,8 +643,8 @@ export class SourceService {
    * Find all sources for a specific movie
    */
   @traced('SourceService')
-  public async getSourcesForMovie(movieId: number): Promise<MovieSource[]> {
-    return this.movieSourceRepository.findByMovieId(movieId);
+  public async getSourcesForMovie(movieId: number): Promise<ContentSource[]> {
+    return this.contentSourceRepository.findByMovieId(movieId);
   }
 
   /**
@@ -407,7 +660,7 @@ export class SourceService {
       contentDirectoriesSearched: string[];
     },
     timeoutMs: number = 1200
-  ): Promise<MovieSource[]> {
+  ): Promise<ContentSource[]> {
     // First check if we already have sources
     const existingSources = await this.getSourcesForMovie(movie.id);
     if (existingSources.length > 0) {
@@ -472,8 +725,8 @@ export class SourceService {
    * Find all sources with source metadata files for a specific movie
    */
   @traced('SourceService')
-  public async getSourcesWithFilesForMovie(movieId: number): Promise<MovieSource[]> {
-    const sources = await this.movieSourceRepository.findByMovieId(movieId);
+  public async getSourcesWithFilesForMovie(movieId: number): Promise<ContentSource[]> {
+    const sources = await this.contentSourceRepository.findByMovieId(movieId);
     return sources.filter(source => source.file !== null);
   }
 
@@ -487,7 +740,7 @@ export class SourceService {
       return;
     }
 
-    const sourcesToUpdate = await this.movieSourceRepository.findSourceThatNeedsStatsUpdate(5);
+    const sourcesToUpdate = await this.contentSourceRepository.findSourceThatNeedsStatsUpdate(5);
     if (sourcesToUpdate.length === 0) {
       return;
     }
@@ -504,7 +757,7 @@ export class SourceService {
             { old: source.watchers ?? 0, new: watchers }
           );
 
-          await this.movieSourceRepository.updateStats(
+          await this.contentSourceRepository.updateStats(
             source.id,
             broadcasters,
             watchers,
@@ -557,7 +810,7 @@ export class SourceService {
     // 4. Get a group of 50 sources that need data files
 
     const batchSize = Math.max(2, this.magnetService.getAvailableConcurrency());
-    const sourcesToProcess = await this.movieSourceRepository.getNextSourcesToProcess(batchSize);
+    const sourcesToProcess = await this.contentSourceRepository.getNextSourcesToProcess(batchSize);
 
     // Early exit if no movies need processing - avoid log spam with exponential backoff
     if (sourcesToProcess.length === 0) {
@@ -646,7 +899,7 @@ export class SourceService {
       }
 
       // Save the source file to the database
-      await this.movieSourceRepository.updateSourceFile(source.id, file);
+      await this.contentSourceRepository.updateSourceFile(source.id, file);
 
       logger.debug(
         'SourceService',

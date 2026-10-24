@@ -28,6 +28,9 @@ RUN npm run build --workspace @miauflix/service-contracts && \
     bun build services/media-catalog/src/index.ts --target=bun --outfile=/tmp/media-catalog.js
 
 FROM builder AS development
+# glibc gives every thread its own malloc arena and rarely returns freed memory; with
+# native work on many threads (crypto/sqlite in Node, libvips/WASM in Bun) RSS only grows.
+ENV MALLOC_ARENA_MAX=2
 WORKDIR /workspace/services/media-catalog
 CMD ["bun", "--watch", "src/index.ts"]
 
@@ -50,6 +53,9 @@ COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/t
 COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-simd.wasm ./wasm/tfjs-backend-wasm-simd.wasm
 COPY --from=builder /workspace/node_modules/@tensorflow/tfjs-backend-wasm/dist/tfjs-backend-wasm-threaded-simd.wasm ./wasm/tfjs-backend-wasm-threaded-simd.wasm
 
+# glibc gives every thread its own malloc arena and rarely returns freed memory; with
+# native work on many threads (crypto/sqlite in Node, libvips/WASM in Bun) RSS only grows.
+ENV MALLOC_ARENA_MAX=2
 ENV DATA_DIR=/app/data
 ENV BACKDROP_FOCUS_MODEL_DIR=/app/models
 ENV BACKDROP_FOCUS_WASM_DIR=/app/wasm

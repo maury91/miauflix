@@ -9,7 +9,7 @@ import { createStorageRoutes } from './storage.routes';
 
 const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
   const storage = {
-    movieSourceId: 2,
+    sourceId: 2,
     size: 100,
     allocatedBytes: 80,
     reservedBytes: 100,
@@ -18,11 +18,11 @@ const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
     activeStreams: 0,
     localOnly: false,
     location: '/private/downloads/movie',
-    encryptedLayout: { video: { name: 'movie.mkv' } },
-    movieSource: {
+    requestedFiles: ['Movie (2020)/movie.mkv', 'Movie (2020)/movie.en.srt'],
+    contentSource: {
       quality: '1080p',
       hash: 'must-not-be-returned',
-      movie: { title: 'Example Movie' },
+      movies: [{ movie: { title: 'Example Movie' } }],
     },
   };
   const storageService = {
@@ -105,7 +105,7 @@ describe('storage routes', () => {
       },
       items: [
         {
-          movieSourceId: 2,
+          sourceId: 2,
           title: 'Example Movie',
           fileName: 'movie.mkv',
           quality: '1080p',

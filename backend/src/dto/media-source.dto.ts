@@ -30,11 +30,11 @@ export interface MediaSourceInternal extends MediaSource {
 }
 
 /**
- * DTO for transforming between internal MovieSource entity and public MediaSource
+ * DTO for transforming between internal ContentSource entity and public MediaSource
  */
 export class MediaSourceMapper {
   /**
-   * Transform internal MovieSource to public MediaSource
+   * Transform internal ContentSource to public MediaSource
    */
   static toPublicMediaSource(
     internal: MediaSourceInternal,

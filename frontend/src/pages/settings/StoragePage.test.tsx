@@ -11,7 +11,7 @@ const storageApi = vi.hoisted(() => ({
       filesystem: { totalBytes: number; freeBytes: number } | null;
     };
     items: Array<{
-      movieSourceId: number;
+      sourceId: number;
       title: string;
       fileName: string | null;
       quality: string | null;
@@ -48,7 +48,7 @@ vi.mock('@features/storage/api/storage.api', () => ({
 import StoragePage from './StoragePage';
 
 const baseItem = {
-  movieSourceId: 7,
+  sourceId: 7,
   title: 'Example Film',
   fileName: 'example.mkv',
   quality: '1080p',
@@ -191,7 +191,9 @@ describe('Storage settings page', () => {
     expect(storageApi.removeStorage).toHaveBeenCalledWith(7);
     expect(storageApi.refetch).not.toHaveBeenCalled();
     expect(screen.getByText(/Freed .* used by Example Film/)).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Free space used by Example Film' })).toHaveFocus();
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: 'Free space used by Example Film' })).toHaveFocus()
+    );
   });
 
   it('prevents removing a download while it is being watched', () => {
