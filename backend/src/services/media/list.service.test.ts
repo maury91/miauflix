@@ -298,13 +298,14 @@ describe('ListService.getListsPage', () => {
     expect(result).toMatchObject({ totalItems: 46, totalPages: 3 });
   });
 
-  it('serves only popular lists after the first page', async () => {
+  it('serves only popular lists after the first page, skipping the fixed ones', async () => {
     const { service, listClient } = setupTest();
-    listClient.getPopularDefinitions = jest.fn().mockResolvedValue(popularPage(2, ['dc']));
+    listClient.getPopularDefinitions = jest
+      .fn()
+      .mockResolvedValue(popularPage(2, ['dc', 'trakt-movies-popular']));
 
     const result = await service.getListsPage('public', 1, 20);
 
-    expect(listClient.getDefinitions).not.toHaveBeenCalled();
     expect(listClient.getPopularDefinitions).toHaveBeenCalledWith(2, 20);
     expect(result.results.map(list => list.slug)).toEqual(['dc']);
   });

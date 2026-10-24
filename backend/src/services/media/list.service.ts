@@ -118,9 +118,13 @@ export class ListService {
     limit = 20
   ): Promise<{ results: ListServiceDefinition[]; totalItems: number; totalPages: number }> {
     if (page > 0) {
-      const popular = await this.getPopularLists(page + 1, limit);
+      const [fixed, popular] = await Promise.all([
+        this.getLists(subjectId),
+        this.getPopularLists(page + 1, limit),
+      ]);
+      const fixedSlugs = new Set(fixed.map(list => list.slug));
       return {
-        results: popular.results,
+        results: popular.results.filter(list => !fixedSlugs.has(list.slug)),
         totalItems: popular.totalItems,
         totalPages: popular.totalPages,
       };
@@ -683,7 +687,7 @@ export class ListService {
     if (definition) this.listDefinitions.set(slug, definition);
     const resolvedDefinition =
       definition ??
-      (/^trakt-community-.+-\d+$/.test(slug)
+      (/^trakt-community-\d+$/.test(slug)
         ? {
             id: slug,
             slug,

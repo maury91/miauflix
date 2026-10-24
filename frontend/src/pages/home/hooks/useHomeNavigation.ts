@@ -12,6 +12,12 @@ import type { HomeAction, NavigationOutcome } from '../homeNavigation';
 import type { HomeView } from './useMediaRoute';
 
 /**
+ * Holding a direction key scrolls at this pace (ms per card or row) instead of the key-repeat
+ * rate, for a steady carousel that the smooth scrolling turns into one continuous motion.
+ */
+const HELD_KEY_STEP_MS = 90;
+
+/**
  * Remote and keyboard navigation for Home's three screens, moving between them, and where
  * focus lands: rows and the sidebar while browsing, the details page, and Back from the player.
  * Returning to browse refocuses the card that was selected.
@@ -25,6 +31,7 @@ export function useHomeNavigation({
   categories,
   requestNextPage,
   onBrowseSelection,
+  onRowFocus,
 }: {
   route: AppRoute;
   view: HomeView;
@@ -37,6 +44,8 @@ export function useHomeNavigation({
   requestNextPage: () => boolean;
   /** The card that becomes the browse selection (focused or opened). */
   onBrowseSelection: (media: MediaDto) => void;
+  /** Keyboard navigation moved to this row: bring it into view. */
+  onRowFocus: (categoryIndex: number) => void;
 }) {
   const dispatch = useDispatch<AppDispatch>();
   const activeRegion = useSelector((state: RootState) => state.homeNavigation.activeRegion);
@@ -51,8 +60,8 @@ export function useHomeNavigation({
   const rowRefs = useRef(new Map<number, CategoryRowHandle>());
   const detailsRef = useRef<MediaDetailsHandle>(null);
   const pendingBrowseFocus = useRef<{ categoryIndex: number; mediaIndex: number } | null>(null);
-  const browseFocusState = useRef({ activeCategory, categories, selectedByCategory });
-  browseFocusState.current = { activeCategory, categories, selectedByCategory };
+  const browseFocusState = useRef({ activeCategory, categories, selectedByCategory, onRowFocus });
+  browseFocusState.current = { activeCategory, categories, selectedByCategory, onRowFocus };
 
   const selectedIndexIn = useCallback(
     (categoryIndex: number) => {
@@ -93,6 +102,8 @@ export function useHomeNavigation({
         dispatch(homeNavigationActions.setPendingCategoryAdvance(true));
         return;
       }
+      // Any other move cancels a pending advance, so it cannot undo this one once rows arrive.
+      if (pendingCategoryAdvance) dispatch(homeNavigationActions.setPendingCategoryAdvance(false));
       // Skip rows that loaded empty; stop on a row that is still loading.
       let destinationPending = false;
       while (nextCategory >= 0 && nextCategory < categories.length) {
@@ -105,17 +116,27 @@ export function useHomeNavigation({
       if (nextCategory < 0 || nextCategory >= categories.length) return;
       if (nextCategory === activeCategory) return;
       dispatch(homeNavigationActions.setActiveCategory(nextCategory));
+      onRowFocus(nextCategory);
       // Keep keys working while the destination row mounts its cards.
       if (destinationPending) pageRef.current?.focus({ preventScroll: true });
     },
-    [activeCategory, categories.length, dispatch, requestNextPage, selectedIndexIn]
+    [
+      activeCategory,
+      categories.length,
+      dispatch,
+      onRowFocus,
+      pendingCategoryAdvance,
+      requestNextPage,
+      selectedIndexIn,
+    ]
   );
 
   useEffect(() => {
     if (!pendingCategoryAdvance || activeCategory + 1 >= categories.length) return;
     dispatch(homeNavigationActions.setPendingCategoryAdvance(false));
     dispatch(homeNavigationActions.setActiveCategory(activeCategory + 1));
-  }, [activeCategory, categories.length, dispatch, pendingCategoryAdvance]);
+    onRowFocus(activeCategory + 1);
+  }, [activeCategory, categories.length, dispatch, onRowFocus, pendingCategoryAdvance]);
 
   const returnToBrowse = useCallback(() => {
     pendingBrowseFocus.current = {
@@ -168,11 +189,12 @@ export function useHomeNavigation({
     }
     dispatch(homeNavigationActions.setActiveRegion('carousel'));
     const pending = pendingBrowseFocus.current;
-    const { activeCategory, categories, selectedByCategory } = browseFocusState.current;
+    const { activeCategory, categories, selectedByCategory, onRowFocus } = browseFocusState.current;
     const categoryIndex = pending?.categoryIndex ?? activeCategory;
     const category = categories[categoryIndex];
     const mediaIndex =
       pending?.mediaIndex ?? (category ? (selectedByCategory[category.slug] ?? 0) : 0);
+    onRowFocus(categoryIndex);
     const row = rowRefs.current.get(categoryIndex);
     if (!row) return;
     row.focusIndex(mediaIndex);
@@ -225,12 +247,23 @@ export function useHomeNavigation({
     ]
   );
 
+  // While browsing, a held key repeats far faster than anyone can follow; take one step per
+  // HELD_KEY_STEP_MS and swallow the repeats in between.
+  const lastStepAt = useRef(0);
+  const step = (action: HomeAction) => (event: KeyboardEvent) => {
+    const now = performance.now();
+    if (view === 'browse' && event.repeat && now - lastStepAt.current < HELD_KEY_STEP_MS)
+      return true;
+    lastStepAt.current = now;
+    return handleAction(action).type !== 'ignored';
+  };
+
   const navigationRef = useKeyboardNavigation({
     enabled,
-    onLeft: () => handleAction('left').type !== 'ignored',
-    onRight: () => handleAction('right').type !== 'ignored',
-    onUp: () => handleAction('up').type !== 'ignored',
-    onDown: () => handleAction('down').type !== 'ignored',
+    onLeft: step('left'),
+    onRight: step('right'),
+    onUp: step('up'),
+    onDown: step('down'),
     onConfirm: () => handleAction('confirm').type !== 'ignored',
     onBack: () => handleAction('back').type !== 'ignored',
   });

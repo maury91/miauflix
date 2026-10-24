@@ -147,7 +147,13 @@ vi.mock('react-redux', async () => {
   };
 });
 vi.mock('./hooks/useMediaBoxSizes', () => ({
-  useMediaBoxSizes: () => ({ mediaWidth: 180, mediaPerPage: 1, gap: 12, margin: 24 }),
+  useMediaBoxSizes: () => ({
+    mediaWidth: 180,
+    mediaPerPage: 1,
+    gap: 12,
+    margin: 24,
+    rowHeight: 300,
+  }),
 }));
 vi.mock('./components/CategoryRow', async () => {
   const React = await import('react');
@@ -295,6 +301,7 @@ vi.mock('./components/MediaDetails', async () => {
 import { progressApi } from '@features/progress/api/progress.api';
 import { homeNavigationSlice, initialHomeNavigationState } from '@store/slices/homeNavigation';
 
+import { homeMountedRows } from './home-layout';
 import HomePage from './HomePage';
 
 const categories = [
@@ -652,10 +659,12 @@ describe('HomePage focus transitions', () => {
     selectMovie.mockReturnValue(() => ({ data: { id: 1, mediaId: 100, title: 'Saved movie' } }));
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     try {
+      // Only the rows around the focused one are mounted.
+      const mountedRows = homeMountedRows(0, 0, categories.length + 1).length;
       const view = render(<HomePage />);
-      expect(screen.getAllByTestId(/^card-/)).toHaveLength(categories.length + 1);
+      expect(screen.getAllByTestId(/^card-/)).toHaveLength(mountedRows);
       view.rerender(<HomePage />);
-      expect(screen.getAllByTestId(/^card-/)).toHaveLength(categories.length + 1);
+      expect(screen.getAllByTestId(/^card-/)).toHaveLength(mountedRows);
       expect(updateIntent).toHaveBeenCalledTimes(1);
       // Unrelated catalog cache updates recreate card DTOs without changing focus.
       for (let update = 0; update < 3; update += 1) {

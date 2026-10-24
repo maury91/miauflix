@@ -1,7 +1,7 @@
 import type { AppState } from '@app/hooks/useAppState';
 import { MotionConfig } from 'framer-motion';
 import { useEffect, useRef } from 'react';
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'styled-components';
 
 import {
   INTRO_LOGO_HEIGHT_NARROW_PX,
@@ -13,21 +13,22 @@ const logoSvgUrl = '/assets/images/logo.svg';
 
 /**
  * The centred logo breathes while the app loads. It animates `scale`, not `transform`, so the
- * position transform still transitions smoothly when the pulse stops and the logo moves.
+ * position transform still transitions smoothly when the pulse stops and the logo moves. The
+ * origin is the box's top-left corner, which `translate(-50%, -50%)` puts at the logo's centre.
  */
+const PULSE_FRAME = { transformOrigin: '0 0' };
+const PULSE_KEYFRAMES: Keyframe[] = [
+  { ...PULSE_FRAME, scale: '1', opacity: 1 },
+  { ...PULSE_FRAME, scale: '1.1', opacity: 0.8 },
+  { ...PULSE_FRAME, scale: '1', opacity: 1 },
+];
+const PULSE_MS = 1400;
 /** How long a stopped pulse takes to ease back to full size before the intro takes over. */
 const PULSE_SETTLE_MS = 150;
 
-const loadingPulse = keyframes`
-  0%, 100% {
-    transform: translate(-50%, -50%) scale(1) ;
-    opacity: 1;
-  }
-  50% {
-    transform: translate(-50%, -50%) scale(1.1);
-    opacity: 0.8;
-  }
-`;
+const prefersReducedMotion = () =>
+  typeof window.matchMedia === 'function' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 /** Admin creation (`initial_setup`) uses a smaller mark */
 const setupScale = 1;
@@ -40,7 +41,6 @@ const LogoImage = styled.img<{
   $disableMotion: boolean;
   $visible: boolean;
   $aboveIntro: boolean;
-  $pulsing: boolean;
 }>`
   display: block;
   position: fixed;
@@ -68,17 +68,6 @@ const LogoImage = styled.img<{
     $configuration ? '56px' : $setup ? `${130 * setupScale}px` : '130px'};
 
   ${({ $intro }) => $intro && `height: ${INTRO_LOGO_HEIGHT_PX}px;`}
-
-  ${({ $intro, $pulsing }) =>
-    $intro &&
-    $pulsing &&
-    css`
-      animation: ${loadingPulse} 1.4s ease-in-out infinite;
-
-      @media (prefers-reduced-motion: reduce) {
-        animation: none;
-      }
-    `}
 
   ${({ $home }) =>
     $home &&
@@ -142,40 +131,53 @@ export const Logo = ({
   const imageRef = useRef<HTMLImageElement>(null);
   const settledRef = useRef(onPulseSettled);
   settledRef.current = onPulseSettled;
-  const motionDisabledRef = useRef(disableMotion);
-  motionDisabledRef.current = disableMotion;
   const isPulsing = page === 'intro' && pulsing;
 
-  // A stopped CSS animation snaps back to scale 1. Ease from wherever the pulse was instead,
+  // A cancelled animation snaps back to scale 1. Ease from wherever the pulse was instead,
   // so the intro (drawn at scale 1) starts exactly on top of the logo.
+  const settlingRef = useRef<Animation | null>(null);
   useEffect(() => {
-    if (isPulsing) return undefined;
     const image = imageRef.current;
-    const computed = image ? getComputedStyle(image).scale : 'none';
-    const from = computed === 'none' ? 1 : Number.parseFloat(computed);
-    if (!image || !Number.isFinite(from) || Math.abs(from - 1) < 0.001) {
-      settledRef.current?.();
-      return undefined;
+    if (!isPulsing) {
+      const settling = settlingRef.current;
+      if (!settling) {
+        settledRef.current?.();
+        return undefined;
+      }
+      let cancelled = false;
+      settling.finished
+        .catch(() => undefined)
+        .then(() => {
+          if (cancelled) return;
+          settlingRef.current = null;
+          settledRef.current?.();
+        });
+      return () => {
+        cancelled = true;
+      };
     }
-    image.style.scale = String(from);
-    // Keep the position transition: the logo may be moving to its page as the pulse stops.
-    image.style.transition = `${
-      motionDisabledRef.current ? '' : 'all 0.4s ease-in-out, '
-    }scale ${PULSE_SETTLE_MS}ms ease-out`;
-    let frame = window.requestAnimationFrame(() => {
-      frame = 0;
-      image.style.scale = '1';
+    if (!image || typeof image.animate !== 'function' || prefersReducedMotion()) return undefined;
+    settlingRef.current?.cancel();
+    settlingRef.current = null;
+    const pulse = image.animate(PULSE_KEYFRAMES, {
+      duration: PULSE_MS,
+      easing: 'ease-in-out',
+      iterations: Infinity,
     });
-    const timer = window.setTimeout(() => {
-      image.style.removeProperty('scale');
-      image.style.removeProperty('transition');
-      settledRef.current?.();
-    }, PULSE_SETTLE_MS + 20);
     return () => {
-      if (frame) window.cancelAnimationFrame(frame);
-      window.clearTimeout(timer);
-      image.style.removeProperty('scale');
-      image.style.removeProperty('transition');
+      // Read where the pulse is while it still runs, then ease from there to full size.
+      const computed = getComputedStyle(image);
+      const scale = Number.parseFloat(computed.scale);
+      const opacity = Number.parseFloat(computed.opacity);
+      pulse.cancel();
+      if (!Number.isFinite(scale) || Math.abs(scale - 1) < 0.001) return;
+      settlingRef.current = image.animate(
+        [
+          { ...PULSE_FRAME, scale: String(scale), opacity: Number.isFinite(opacity) ? opacity : 1 },
+          { ...PULSE_FRAME, scale: '1', opacity: 1 },
+        ],
+        { duration: PULSE_SETTLE_MS, easing: 'ease-out' }
+      );
     };
   }, [isPulsing]);
 
@@ -196,7 +198,6 @@ export const Logo = ({
         $disableMotion={disableMotion}
         $visible={visible}
         $aboveIntro={aboveIntro}
-        $pulsing={pulsing}
         data-pulsing={isIntro && pulsing ? 'true' : undefined}
         src={logoSvgUrl}
         alt="Miauflix logo"

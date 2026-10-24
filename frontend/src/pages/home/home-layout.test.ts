@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { homeRowLoadState, mediaBoxSizes, selectMediaBoxSizes } from './home-layout';
+import {
+  homeMountedRows,
+  homeRowLoadState,
+  mediaBoxSizes,
+  selectMediaBoxSizes,
+} from './home-layout';
 
 describe('mediaBoxSizes', () => {
   it.each([
@@ -29,6 +34,11 @@ describe('mediaBoxSizes', () => {
     expect(narrow.peekWidth).toBeGreaterThanOrEqual(0);
   });
 
+  it('fits at least one card, also in a tiny or unmeasured window', () => {
+    expect(mediaBoxSizes({ width: 200, height: 1080 }).mediaPerPage).toBe(1);
+    expect(mediaBoxSizes({ width: 0, height: 0 }).mediaPerPage).toBe(1);
+  });
+
   it('reads the measured window, defaulting when the store has no measurements', () => {
     expect(
       selectMediaBoxSizes({ measurements: { window: { width: 1280, height: 720 } } }).windowWidth
@@ -50,5 +60,23 @@ describe('homeRowLoadState', () => {
     const state = homeRowLoadState(active, count);
     expect([...state.visible]).toEqual(visible);
     expect([...state.prefetch]).toEqual(prefetch);
+  });
+});
+
+describe('homeMountedRows', () => {
+  it('mounts the rows around the focused row, covering every row that loads', () => {
+    const rows = homeMountedRows(5, 5, 100);
+    expect(rows).toEqual([3, 4, 5, 6, 7, 8, 9, 10]);
+    const { visible, prefetch } = homeRowLoadState(5, 100);
+    [...visible, ...prefetch].forEach(row => expect(rows).toContain(row));
+  });
+
+  it('also mounts the rows scrolled into view, without the rows in between', () => {
+    expect(homeMountedRows(0, 20, 100)).toEqual([0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23, 24, 25]);
+  });
+
+  it('stays within the loaded rows', () => {
+    expect(homeMountedRows(0, 0, 3)).toEqual([0, 1, 2]);
+    expect(homeMountedRows(0, 0, 0)).toEqual([]);
   });
 });

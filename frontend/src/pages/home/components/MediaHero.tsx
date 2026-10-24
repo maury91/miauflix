@@ -12,6 +12,12 @@ import {
   getBackdropPlacement,
 } from '../backdrop-focus';
 import {
+  pushBackdrop,
+  revealBackdrop,
+  settleBackdrop,
+  type StackedBackdrop,
+} from '../backdrop-stack';
+import {
   getHeroBackdropLayout,
   HERO_BACKDROP_LEFT_CSS,
   HERO_DETAILS_LEFT_CSS,
@@ -82,17 +88,17 @@ const Hero = styled.header`
   }
 `;
 
+/** Stacked in DOM order: a later layer fades in over the earlier ones. */
 const BackdropLayer = styled.div<{
   $url: string;
   $visible: boolean;
-  $top: boolean;
 }>`
   position: absolute;
   top: 0;
   left: ${HERO_BACKDROP_LEFT_CSS};
   right: 0;
   height: 55vh;
-  z-index: ${({ $top }) => ($top ? 1 : 0)};
+  z-index: 1;
   pointer-events: none;
   background-color: #000;
   background-image: ${({ $url }) => ($url ? `url(${JSON.stringify($url)})` : 'none')};
@@ -202,10 +208,32 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const heroRef = useRef<HTMLElement>(null);
   const [heroSize, setHeroSize] = useState({ width: 0, height: 0 });
-  const [activeBackdrop, setActiveBackdrop] = useState<BackdropLayerState | null>(null);
-  const [incomingBackdrop, setIncomingBackdrop] = useState<BackdropLayerState | null>(null);
-  const [incomingVisible, setIncomingVisible] = useState(false);
-  const activeBackdropRef = useRef<BackdropLayerState | null>(null);
+  const [layers, setLayersState] = useState<StackedBackdrop<BackdropLayerState>[]>([]);
+  const layersRef = useRef(layers);
+  const nextLayerId = useRef(0);
+  const settleTimers = useRef(new Set<number>());
+  const setLayers = useCallback(
+    (
+      update: (
+        stack: StackedBackdrop<BackdropLayerState>[]
+      ) => StackedBackdrop<BackdropLayerState>[]
+    ) => {
+      const next = update(layersRef.current);
+      // An empty stack stays the same array, so clearing twice does not re-render.
+      if (!next.length && !layersRef.current.length) return;
+      layersRef.current = next;
+      setLayersState(next);
+    },
+    []
+  );
+  const settle = useCallback(
+    (id: number) => setLayers(stack => settleBackdrop(stack, id)),
+    [setLayers]
+  );
+  useEffect(() => {
+    const timers = settleTimers.current;
+    return () => timers.forEach(timer => window.clearTimeout(timer));
+  }, []);
   const focusCacheRef = useRef(new Map<string, BackdropFocus>());
   const requestId = useRef(0);
 
@@ -227,11 +255,8 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
 
   useEffect(() => {
     const currentRequest = ++requestId.current;
-    setIncomingBackdrop(null);
-    setIncomingVisible(false);
     if (media?.mediaId === undefined || !selectedBackdrop) {
-      setActiveBackdrop(null);
-      activeBackdropRef.current = null;
+      setLayers(() => []);
       onReady?.(media?.mediaId ?? null);
       return;
     }
@@ -264,8 +289,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
         imageSize = await imagePromise;
       } catch {
         if (!cancelled && currentRequest === requestId.current) {
-          activeBackdropRef.current = null;
-          setActiveBackdrop(null);
+          setLayers(() => []);
           onReady?.(media.mediaId);
         }
         return;
@@ -279,20 +303,19 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
         imageWidth: imageSize.width,
         imageHeight: imageSize.height,
       };
-      if (!activeBackdropRef.current) {
-        activeBackdropRef.current = next;
-        setActiveBackdrop(next);
-        onReady?.(media.mediaId);
-        return;
-      }
-      if (activeBackdropRef.current.key === key) {
-        onReady?.(media.mediaId);
-        return;
-      }
-      setIncomingBackdrop(next);
       onReady?.(media.mediaId);
+      if (layersRef.current[layersRef.current.length - 1]?.backdrop.key === key) return;
+      const id = ++nextLayerId.current;
+      setLayers(stack => pushBackdrop(stack, next, id));
+      // Fade in from the next frame; transitionend settles the layer, or this timer if the
+      // fade never runs (reduced motion, a hidden page).
       requestAnimationFrame(() => {
-        if (!cancelled && currentRequest === requestId.current) setIncomingVisible(true);
+        setLayers(stack => revealBackdrop(stack, id));
+        const timer = window.setTimeout(() => {
+          settleTimers.current.delete(timer);
+          settle(id);
+        }, 400);
+        settleTimers.current.add(timer);
       });
     };
 
@@ -303,25 +326,13 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   }, [
     ensureBackdropFocus,
     onReady,
+    setLayers,
+    settle,
     selectedBackdrop,
     media?.backdropFocus,
     media?._type,
     media?.mediaId,
   ]);
-
-  const promoteIncoming = useCallback(() => {
-    if (!incomingBackdrop) return;
-    activeBackdropRef.current = incomingBackdrop;
-    setActiveBackdrop(incomingBackdrop);
-    setIncomingBackdrop(null);
-    setIncomingVisible(false);
-  }, [incomingBackdrop]);
-
-  useEffect(() => {
-    if (!incomingBackdrop || !incomingVisible) return;
-    const timer = window.setTimeout(promoteIncoming, 400);
-    return () => window.clearTimeout(timer);
-  }, [incomingBackdrop, incomingVisible, promoteIncoming]);
 
   const layout = getHeroBackdropLayout(heroSize.width);
   const placementFor = (layer: BackdropLayerState) => {
@@ -352,25 +363,16 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       : (media.heroLogo ?? media.logo);
   return (
     <Hero ref={heroRef} aria-live="polite">
-      {activeBackdrop && (
+      {layers.map(layer => (
         <BackdropLayer
-          $url={activeBackdrop.url}
-          style={placementFor(activeBackdrop)}
-          $visible
-          $top={!incomingBackdrop}
+          key={layer.id}
+          $url={layer.backdrop.url}
+          style={placementFor(layer.backdrop)}
+          $visible={layer.visible}
+          onTransitionEnd={() => settle(layer.id)}
           aria-hidden="true"
         />
-      )}
-      {incomingBackdrop && (
-        <BackdropLayer
-          $url={incomingBackdrop.url}
-          style={placementFor(incomingBackdrop)}
-          $visible={incomingVisible}
-          $top
-          onTransitionEnd={promoteIncoming}
-          aria-hidden="true"
-        />
-      )}
+      ))}
       <Details>
         {heroLogo ? (
           <Logo

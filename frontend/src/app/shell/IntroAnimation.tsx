@@ -127,6 +127,8 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
     /** The "pam pam" pulses that lead into the expansion. */
     const preRollRef = useRef<gsap.core.Timeline | null>(null);
+    /** A start() waiting for the audio; reset and unmount drop it, pause marks it paused. */
+    const pendingStartRef = useRef<{ paused: boolean } | null>(null);
     const audioRef = useIntroAnimationAudio();
     const [constants, setConstants] = useState<Record<
       string,
@@ -321,7 +323,11 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
 
       // Time the cues from when the audio actually starts. Without audio (blocked autoplay or
       // a load error) the same rhythm plays silently, so the intro always looks the same.
+      const pending = { paused: false };
+      pendingStartRef.current = pending;
       await audioRef.current?.play().catch(() => undefined);
+      if (pendingStartRef.current !== pending) return;
+      pendingStartRef.current = null;
 
       preRollRef.current?.kill();
       const preRoll = gsap.timeline();
@@ -349,9 +355,14 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
         INTRO_CUES.expand
       );
       preRollRef.current = preRoll;
+      if (pending.paused) {
+        preRoll.pause();
+        audioRef.current?.pause();
+      }
     }, [introAnimation, audioRef]);
 
     const pause = useCallback(() => {
+      if (pendingStartRef.current) pendingStartRef.current.paused = true;
       preRollRef.current?.pause();
       if (introAnimation && !introAnimation.paused()) {
         introAnimation.pause();
@@ -365,8 +376,10 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
 
     const resume = useCallback(() => {
       // Before the meow cue the pre-roll owns timing; it starts the expansion itself.
+      // While start() waits for the audio, the pre-roll it creates starts the timeline.
       const preRoll = preRollRef.current;
-      if (preRoll && preRoll.paused() && preRoll.progress() < 1) preRoll.resume();
+      if (pendingStartRef.current) pendingStartRef.current.paused = false;
+      else if (preRoll && preRoll.paused() && preRoll.progress() < 1) preRoll.resume();
       else if (introAnimation && introAnimation.paused()) {
         introAnimation.resume();
       }
@@ -426,6 +439,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     );
 
     const reset = useCallback(() => {
+      pendingStartRef.current = null;
       preRollRef.current?.kill();
       preRollRef.current = null;
       if (containerRef.current) gsap.set(containerRef.current, { clearProps: 'transform' });
@@ -490,6 +504,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       }
 
       return () => {
+        pendingStartRef.current = null;
         preRollRef.current?.kill();
         if (introAnimation) {
           introAnimation.kill();

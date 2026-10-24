@@ -1,6 +1,5 @@
 import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
 
-type ListDefinition = { slug: string };
 type Media = { _type?: string; mediaId?: number };
 
 async function assertPromotionForList(client: TestClient, slug: string): Promise<boolean> {
@@ -38,7 +37,7 @@ describeWithWorkers('List priority with background workers enabled', () => {
 
     const listsResponse = await client.get(['api', 'lists']);
     expect(listsResponse).toBeHttpStatus(200);
-    const slug = (listsResponse.data as ListDefinition[])[0]?.slug;
+    const slug = listsResponse.data.results[0]?.slug;
     if (!slug) throw new Error('No list available for priority test');
 
     expect(await assertPromotionForList(client, slug)).toBe(true);
@@ -53,7 +52,7 @@ describeWithWorkers('List priority with background workers enabled', () => {
 
     const listsResponse = await client.get(['api', 'lists']);
     expect(listsResponse).toBeHttpStatus(200);
-    const lists = listsResponse.data as ListDefinition[];
+    const lists = listsResponse.data.results;
     let validNonFirstLists = 0;
     for (const list of lists.slice(1)) {
       if (await assertPromotionForList(client, list.slug)) {

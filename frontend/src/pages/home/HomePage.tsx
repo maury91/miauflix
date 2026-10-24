@@ -5,7 +5,7 @@ import { PALETTE } from '@shared/config/constants';
 import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
-import { type FC, type UIEvent, useCallback, useMemo, useState } from 'react';
+import { type FC, useCallback, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -27,9 +27,10 @@ import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
 import { selectedMediaFor, useMediaRoute } from './hooks/useMediaRoute';
 import { useRealtimeInterest } from './hooks/useRealtimeInterest';
 import { useSessionChange } from './hooks/useSessionChange';
+import { useSmoothScroller } from './hooks/useSmoothScroller';
 import { useTraktPrompt } from './hooks/useTraktPrompt';
 import { CONTINUE_CATEGORY } from './home-feed';
-import { homeRowLoadState } from './home-layout';
+import { homeMountedRows, homeRowLoadState } from './home-layout';
 import { getMediaTitle } from './media.utils';
 import { subtitleLanguageForMedia } from './subtitle-language';
 
@@ -54,6 +55,19 @@ const Content = styled.div<{ $margin: number }>`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+/**
+ * Full height of every row; only the mounted rows are rendered, each at its own offset (inline
+ * styles: a styled-components prop would add a CSS class per distinct offset).
+ */
+const Rows = styled.div`
+  position: relative;
+`;
+
+const RowSlot = styled.div`
+  position: absolute;
+  inset-inline: 0;
 `;
 
 const FullPageState = styled.div`
@@ -96,7 +110,14 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     sessionId,
     userId: currentUser?.id,
   });
-  const feed = useHomeFeed({ browsing, sessionId, activeCategory });
+  const { mediaWidth, mediaPerPage, gap, margin, peekWidth, rowHeight } = useMediaBoxSizes();
+  // Rows are a fixed height, so the first row in view follows from the scroll position alone.
+  const [firstShownRow, setFirstShownRow] = useState(activeCategory);
+  const feed = useHomeFeed({
+    browsing,
+    sessionId,
+    furthestShownRow: Math.max(activeCategory, firstShownRow + 1),
+  });
   const { displayCategories, continueMedia, progressEntries, isLoading, isError } = feed;
   const subtitleLanguage = subtitleLanguageForMedia(
     selectedMedia,
@@ -104,6 +125,11 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     currentUser?.id
   );
 
+  const content = useSmoothScroller('y');
+  const scrollToRow = useCallback(
+    (categoryIndex: number) => content.scrollTo(categoryIndex * rowHeight),
+    [content, rowHeight]
+  );
   const navigation = useHomeNavigation({
     route: activeRoute,
     view,
@@ -113,6 +139,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     categories: displayCategories,
     requestNextPage: feed.requestNextPage,
     onBrowseSelection: setBrowseSelection,
+    onRowFocus: scrollToRow,
   });
   const { activeRegion, selectedByCategory, rowRefs } = navigation;
   const publishInterest = useRealtimeInterest({
@@ -150,16 +177,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     progressReady: feed.progressReady,
     selectedMediaId: selectedMedia?.mediaId ?? null,
   });
-  const { mediaWidth, mediaPerPage, gap, margin, peekWidth } = useMediaBoxSizes();
-
-  const { loadMoreNearEnd } = feed;
-  const handleContentScroll = useCallback(
-    (event: UIEvent<HTMLDivElement>) => {
-      publishInterest();
-      loadMoreNearEnd(event.currentTarget);
-    },
-    [loadMoreNearEnd, publishInterest]
-  );
+  const handleContentScroll = useCallback(() => {
+    publishInterest();
+    const scrollTop = content.element.current?.scrollTop ?? 0;
+    setFirstShownRow(Math.floor(scrollTop / rowHeight));
+  }, [content, publishInterest, rowHeight]);
+  const mountedRows = homeMountedRows(activeCategory, firstShownRow, displayCategories.length);
 
   if (view === 'browse' && isLoading) {
     return (
@@ -184,56 +207,62 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
         {view === 'browse' ? (
           <>
             <MediaHero media={selectedMedia} preparation={preparation} onReady={onHeroReady} />
-            <Content $margin={margin} onScroll={handleContentScroll}>
-              {displayCategories.map((category, index) => (
-                <CategoryRow
-                  key={category.slug}
-                  ref={handle => {
-                    if (handle) rowRefs.current.set(index, handle);
-                    else rowRefs.current.delete(index);
-                  }}
-                  category={category}
-                  categoryIndex={index}
-                  initialIndex={selectedByCategory[category.slug] ?? 0}
-                  selectedIndex={selectedByCategory[category.slug] ?? 0}
-                  onSelectionChange={mediaIndex =>
-                    dispatch(
-                      homeNavigationActions.setCategorySelection({
-                        slug: category.slug,
-                        index: mediaIndex,
-                      })
-                    )
-                  }
-                  loadIntent={
-                    rowLoadState.visible.has(index)
-                      ? 'visible'
-                      : rowLoadState.prefetch.has(index)
-                        ? 'prefetch'
-                        : 'dormant'
-                  }
-                  visible={rowLoadState.visible.has(index)}
-                  mediaWidth={mediaWidth}
-                  mediaPerPage={mediaPerPage}
-                  gap={gap}
-                  peekWidth={peekWidth}
-                  isCurrentRow={activeCategory === index}
-                  onDataReady={onRowDataReady}
-                  active={
-                    interactive &&
-                    !trakt.open &&
-                    activeRegion === 'carousel' &&
-                    activeCategory === index
-                  }
-                  onActive={navigation.onCardActive}
-                  onInterest={publishInterest}
-                  onMediaLoaded={onMediaLoaded}
-                  progress={progressEntries}
-                  mediaOverride={
-                    category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
-                  }
-                  onSelect={navigation.openDetails}
-                />
-              ))}
+            <Content ref={content.ref} $margin={margin} onScroll={handleContentScroll}>
+              <Rows style={{ height: displayCategories.length * rowHeight }}>
+                {mountedRows.map(index => {
+                  const category = displayCategories[index];
+                  return (
+                    <RowSlot key={category.slug} style={{ top: index * rowHeight }}>
+                      <CategoryRow
+                        ref={handle => {
+                          if (handle) rowRefs.current.set(index, handle);
+                          else rowRefs.current.delete(index);
+                        }}
+                        category={category}
+                        categoryIndex={index}
+                        initialIndex={selectedByCategory[category.slug] ?? 0}
+                        selectedIndex={selectedByCategory[category.slug] ?? 0}
+                        onSelectionChange={mediaIndex =>
+                          dispatch(
+                            homeNavigationActions.setCategorySelection({
+                              slug: category.slug,
+                              index: mediaIndex,
+                            })
+                          )
+                        }
+                        loadIntent={
+                          rowLoadState.visible.has(index)
+                            ? 'visible'
+                            : rowLoadState.prefetch.has(index)
+                              ? 'prefetch'
+                              : 'dormant'
+                        }
+                        visible={rowLoadState.visible.has(index)}
+                        mediaWidth={mediaWidth}
+                        mediaPerPage={mediaPerPage}
+                        gap={gap}
+                        peekWidth={peekWidth}
+                        isCurrentRow={activeCategory === index}
+                        onDataReady={onRowDataReady}
+                        active={
+                          interactive &&
+                          !trakt.open &&
+                          activeRegion === 'carousel' &&
+                          activeCategory === index
+                        }
+                        onActive={navigation.onCardActive}
+                        onInterest={publishInterest}
+                        onMediaLoaded={onMediaLoaded}
+                        progress={progressEntries}
+                        mediaOverride={
+                          category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
+                        }
+                        onSelect={navigation.openDetails}
+                      />
+                    </RowSlot>
+                  );
+                })}
+              </Rows>
             </Content>
             <HomeSidebar
               active={

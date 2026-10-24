@@ -9,6 +9,12 @@ export const CARD_GAP_OF_HEIGHT = 0.02;
 export const ROW_SIDE_MARGIN_OF_WIDTH = 0.05;
 /** At most half a card peeks in from either side of a row. */
 export const MAX_PEEK_OF_CARD = 0.5;
+/**
+ * Every row is exactly this tall (vh), space below included: title 6vh, cards 22vh, gap 5vh.
+ * A fixed height lets Home place and scroll to any row without measuring it.
+ */
+export const ROW_HEIGHT_VH = 33;
+export const ROW_GAP_VH = 5;
 
 export interface MediaBoxSizes {
   mediaWidth: number;
@@ -21,6 +27,8 @@ export interface MediaBoxSizes {
   peekWidth: number;
   /** Width of the whole cards and the gaps between them. */
   width: number;
+  /** Height of one row, the space below it included. */
+  rowHeight: number;
   windowWidth: number;
   windowHeight: number;
 }
@@ -30,7 +38,9 @@ export function mediaBoxSizes({ width, height }: WindowSize): MediaBoxSizes {
   const mediaWidth = CARD_WIDTH_OF_HEIGHT * height;
   const gap = CARD_GAP_OF_HEIGHT * height;
   const sideMargin = ROW_SIDE_MARGIN_OF_WIDTH * width;
-  const mediaPerPage = Math.floor((width - gap - sideMargin * 2) / (mediaWidth + gap));
+  const fitting = Math.floor((width - gap - sideMargin * 2) / (mediaWidth + gap));
+  // At least one card, also before the window is measured (a zero height divides by zero).
+  const mediaPerPage = Number.isFinite(fitting) ? Math.max(1, fitting) : 1;
   const totalMediaWidth = mediaWidth * mediaPerPage + gap * (mediaPerPage - 1);
   const margin = (width - totalMediaWidth) / 2;
   const peekWidth = Math.min(mediaWidth * MAX_PEEK_OF_CARD, Math.max(0, margin));
@@ -41,6 +51,7 @@ export function mediaBoxSizes({ width, height }: WindowSize): MediaBoxSizes {
     margin,
     peekWidth,
     width: totalMediaWidth,
+    rowHeight: (ROW_HEIGHT_VH / 100) * height,
     windowWidth: width,
     windowHeight: height,
   };
@@ -65,11 +76,32 @@ export interface RowLoadState {
 export function homeRowLoadState(activeCategory: number, categoryCount: number): RowLoadState {
   const inRange = (index: number) => index >= 0 && index < categoryCount;
   const visible = new Set([activeCategory, activeCategory + 1].filter(inRange));
-  const distance = (index: number) =>
-    index < activeCategory ? activeCategory - index : index - (activeCategory + 1);
-  const prefetch = Array.from({ length: categoryCount }, (_, index) => index)
-    .filter(index => !visible.has(index))
-    .sort((left, right) => distance(left) - distance(right) || right - left)
-    .slice(0, PREFETCH_ROWS);
-  return { visible, prefetch: new Set(prefetch) };
+  const prefetch = new Set<number>();
+  for (let distance = 1; prefetch.size < PREFETCH_ROWS && distance <= categoryCount; distance++) {
+    for (const index of [activeCategory + 1 + distance, activeCategory - distance]) {
+      if (inRange(index) && prefetch.size < PREFETCH_ROWS) prefetch.add(index);
+    }
+  }
+  return { visible, prefetch };
+}
+
+/** Rows kept mounted above and below the shown ones; further rows are empty space. */
+const MOUNTED_ROWS_ABOVE = 2;
+const MOUNTED_ROWS_BELOW = 4;
+
+/**
+ * The rows Home mounts, ascending: those around the focused row and those around the rows
+ * scrolled into view, covering every row `homeRowLoadState` loads. Every other row is empty space.
+ */
+export function homeMountedRows(
+  activeCategory: number,
+  firstShownRow: number,
+  categoryCount: number
+) {
+  const rows = new Set<number>();
+  for (const anchor of [activeCategory, firstShownRow]) {
+    const end = Math.min(categoryCount - 1, anchor + 1 + MOUNTED_ROWS_BELOW);
+    for (let row = Math.max(0, anchor - MOUNTED_ROWS_ABOVE); row <= end; row++) rows.add(row);
+  }
+  return [...rows].sort((left, right) => left - right);
 }
