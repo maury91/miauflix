@@ -21,11 +21,13 @@ vi.mock('framer-motion', () => ({
   AnimatePresence: ({ children }: { children: ReactNode }) => children,
   MotionConfig: ({ children }: { children: ReactNode }) => children,
 }));
+const { homeRenders } = vi.hoisted(() => ({ homeRenders: { count: 0 } }));
 vi.mock('@pages/home/HomePage', async () => {
   const { HomeSidebar } = await import('@pages/home/components/HomeSidebar');
   const { navigate } = await import('@app/router');
   return {
     default: function HomePageMock() {
+      homeRenders.count += 1;
       return (
         <HomeSidebar
           active
@@ -166,6 +168,26 @@ describe('Settings navigation', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Configuration' }));
     expect(screen.queryByText('Close configuration editor')).not.toBeInTheDocument();
   });
+
+  it.each([
+    ['configuration', '/settings/configuration'],
+    ['storage', '/settings/storage'],
+  ] as const)(
+    'sends a non-admin opening %s directly to Settings without mounting Home',
+    async (type, path) => {
+      state.admin = false;
+      store = createTestStore();
+      navigate({ type }, { replace: true });
+      expect(window.location.pathname).toBe(path);
+      homeRenders.count = 0;
+      await renderApp();
+      await waitFor(() =>
+        expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
+      );
+      expect(window.location.pathname).toBe('/settings');
+      expect(homeRenders.count).toBe(0);
+    }
+  );
 
   it('does not open settings when signed out', async () => {
     state.authenticated = false;

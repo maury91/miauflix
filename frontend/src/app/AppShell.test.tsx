@@ -106,9 +106,23 @@ vi.mock('framer-motion', () => ({
 }));
 
 vi.mock('@pages/home/HomePage', () => ({
-  default: ({ interactive, onHydrated }: { interactive: boolean; onHydrated?: () => void }) => {
+  default: ({
+    interactive,
+    onHydrated,
+    route,
+  }: {
+    interactive: boolean;
+    onHydrated?: () => void;
+    route?: { type: string };
+  }) => {
     homeControls.hydrated = onHydrated ?? null;
-    return <main data-testid="home-page" data-interactive={String(interactive)} />;
+    return (
+      <main
+        data-testid="home-page"
+        data-interactive={String(interactive)}
+        data-route={route ? JSON.stringify(route) : ''}
+      />
+    );
   },
 }));
 vi.mock('@pages/login/LoginPage', () => ({ default: () => <main data-testid="login-page" /> }));
@@ -124,6 +138,7 @@ import { appStateSlice } from '@store/slices/appState';
 import { authSlice, setCurrentUser, setSession } from '@store/slices/auth';
 
 import { AppShell } from './AppShell';
+import { navigate } from './router';
 
 function renderAppShell(authenticated = false) {
   const store = configureStore({
@@ -325,6 +340,27 @@ describe('AppShell intro sequence', () => {
     expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'login');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-pulsing', 'false');
     expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'false');
+  });
+
+  it('opens a deep link once sign-in clears, without changing the URL meanwhile', async () => {
+    navigate({ type: 'movieDetails', mediaId: 7 }, { replace: true });
+    try {
+      appPage.value = 'login';
+      const view = renderAppShell();
+      await finishBoot();
+      expect(screen.getByTestId('login-page')).toBeInTheDocument();
+      expect(window.location.pathname).toBe('/movies/7');
+
+      appPage.value = 'home';
+      act(() => view.rerender(<AppShell />));
+      expect(screen.getByTestId('home-page')).toHaveAttribute(
+        'data-route',
+        JSON.stringify({ type: 'movieDetails', mediaId: 7 })
+      );
+      expect(window.location.pathname).toBe('/movies/7');
+    } finally {
+      navigate({ type: 'home' }, { replace: true });
+    }
   });
 
   it('stops the loading pulse when the logged-in intro takes over', () => {

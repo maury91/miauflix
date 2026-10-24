@@ -1,4 +1,4 @@
-import { useGetListsQuery, useGetPopularListsInfiniteQuery } from '@features/media/api/lists.api';
+import { useGetListsInfiniteQuery } from '@features/media/api/lists.api';
 import { mediaApi } from '@features/media/api/media.api';
 import { progressApi } from '@features/progress/api/progress.api';
 import type { MediaDto } from '@miauflix/backend';
@@ -15,7 +15,7 @@ import { useSessionChange } from './useSessionChange';
 const ROWS_BEFORE_NEXT_PAGE = 3;
 
 /**
- * Home's rows: the fixed lists, popular lists page by page, and Continue watching built from
+ * Home's rows: the lists page by page (fixed, then popular), and Continue watching built from
  * progress. Lists load only while browsing; progress polls while browsing.
  */
 export function useHomeFeed({
@@ -29,23 +29,16 @@ export function useHomeFeed({
 }) {
   const dispatch = useDispatch<AppDispatch>();
   const {
-    data: fixedCategories,
-    isLoading,
-    isError,
-  } = useGetListsQuery(undefined, { skip: !browsing });
-  const {
-    data: popularPages,
+    data: listPages,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    isLoading: isPopularListsLoading,
-  } = useGetPopularListsInfiniteQuery({ limit: 20 }, { skip: !browsing });
+    isLoading,
+    isError,
+  } = useGetListsInfiniteQuery({ limit: 20 }, { skip: !browsing });
   const categories = useMemo(
-    () => [
-      ...(fixedCategories ?? []),
-      ...(popularPages?.pages.flatMap(page => page.results) ?? []),
-    ],
-    [fixedCategories, popularPages]
+    () => listPages?.pages.flatMap(page => page.results) ?? [],
+    [listPages]
   );
 
   const progressFromStore = useSelector(
@@ -137,9 +130,7 @@ export function useHomeFeed({
     return true;
   }, [fetchNextPage, hasNextPage, isFetchingNextPage]);
 
-  const listsReady =
-    isError ||
-    (!isLoading && fixedCategories !== undefined && !isPopularListsLoading && !isFetchingNextPage);
+  const listsReady = isError || (!isLoading && listPages !== undefined && !isFetchingNextPage);
   const progressReady = isError || !sessionId || progressQueryStatus !== 'pending';
 
   return {
@@ -148,8 +139,8 @@ export function useHomeFeed({
     progressEntries,
     isLoading,
     isError,
-    /** The fixed lists failed or have not arrived; browsing has nothing to show. */
-    failed: isError || !fixedCategories,
+    /** The lists failed or have not arrived; browsing has nothing to show. */
+    failed: isError || !listPages,
     listsReady,
     progressReady,
     loadMoreNearEnd,

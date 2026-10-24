@@ -107,6 +107,40 @@ export class ListService {
     return result;
   }
 
+  /**
+   * The lists to display, one page at a time: page 0 (zero-based) opens with the user's own and
+   * fixed lists, then every page carries the next popular lists. Pagination follows the popular
+   * lists; a popular list that is also a fixed one is shown once, in its fixed position.
+   */
+  async getListsPage(
+    subjectId: string,
+    page = 0,
+    limit = 20
+  ): Promise<{ results: ListServiceDefinition[]; totalItems: number; totalPages: number }> {
+    if (page > 0) {
+      const popular = await this.getPopularLists(page + 1, limit);
+      return {
+        results: popular.results,
+        totalItems: popular.totalItems,
+        totalPages: popular.totalPages,
+      };
+    }
+    const [fixed, popular] = await Promise.all([
+      this.getLists(subjectId),
+      this.getPopularLists(1, limit).catch(error => {
+        logger.warn('ListService', 'Unable to load popular list definitions', error);
+        return null;
+      }),
+    ]);
+    const fixedSlugs = new Set(fixed.map(list => list.slug));
+    const popularResults = popular?.results.filter(list => !fixedSlugs.has(list.slug)) ?? [];
+    return {
+      results: [...fixed, ...popularResults],
+      totalItems: fixed.length + (popular?.totalItems ?? 0),
+      totalPages: Math.max(1, popular?.totalPages ?? 0),
+    };
+  }
+
   @traced('ListService')
   async refreshList(slug: string, maxPages: number, subjectId = 'public'): Promise<void> {
     const mediaList = await this.getOrCreateList(slug, subjectId);

@@ -274,3 +274,48 @@ describe('ListService refresh safety', () => {
     );
   });
 });
+
+describe('ListService.getListsPage', () => {
+  const popularDefinition = (slug: string) => ({ ...publicDefinition, id: slug, slug, name: slug });
+  const popularPage = (page: number, slugs: string[]) => ({
+    results: slugs.map(popularDefinition),
+    page,
+    pageSize: 20,
+    totalPages: 3,
+    totalItems: 45,
+  });
+
+  it('opens the first page with the fixed lists, then the popular ones not already shown', async () => {
+    const { service, listClient } = setupTest();
+    listClient.getPopularDefinitions = jest
+      .fn()
+      .mockResolvedValue(popularPage(1, ['trakt-movies-popular', 'marvel']));
+
+    const result = await service.getListsPage('public', 0, 20);
+
+    expect(listClient.getPopularDefinitions).toHaveBeenCalledWith(1, 20);
+    expect(result.results.map(list => list.slug)).toEqual(['trakt-movies-popular', 'marvel']);
+    expect(result).toMatchObject({ totalItems: 46, totalPages: 3 });
+  });
+
+  it('serves only popular lists after the first page', async () => {
+    const { service, listClient } = setupTest();
+    listClient.getPopularDefinitions = jest.fn().mockResolvedValue(popularPage(2, ['dc']));
+
+    const result = await service.getListsPage('public', 1, 20);
+
+    expect(listClient.getDefinitions).not.toHaveBeenCalled();
+    expect(listClient.getPopularDefinitions).toHaveBeenCalledWith(2, 20);
+    expect(result.results.map(list => list.slug)).toEqual(['dc']);
+  });
+
+  it('still returns the fixed lists when popular lists are unavailable', async () => {
+    const { service, listClient } = setupTest();
+    listClient.getPopularDefinitions = jest.fn().mockRejectedValue(new Error('down'));
+
+    const result = await service.getListsPage('public', 0, 20);
+
+    expect(result.results.map(list => list.slug)).toEqual(['trakt-movies-popular']);
+    expect(result).toMatchObject({ totalItems: 1, totalPages: 1 });
+  });
+});

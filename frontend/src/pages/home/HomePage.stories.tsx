@@ -1,7 +1,6 @@
 import {
   useGetListQuery,
-  useGetListsQuery,
-  useGetPopularListsInfiniteQuery,
+  useGetListsInfiniteQuery,
   usePromoteListMediaMutation,
 } from '@features/media/api/lists.api';
 import {
@@ -91,8 +90,7 @@ const listResponses = Object.fromEntries(
 );
 
 function setupHomeMocks() {
-  const getLists = mocked(useGetListsQuery);
-  const getPopular = mocked(useGetPopularListsInfiniteQuery);
+  const getLists = mocked(useGetListsInfiniteQuery);
   const getList = mocked(useGetListQuery);
   const promote = mocked(usePromoteListMediaMutation);
   const getMovie = mocked(useGetMovieQuery);
@@ -102,18 +100,22 @@ function setupHomeMocks() {
   const markNotificationRead = mocked(useMarkNotificationReadMutation);
 
   getLists.mockReturnValue({
-    data: homeCategories.slice(0, 1),
-    isLoading: false,
-    isError: false,
-  } as never);
-  getPopular.mockReturnValue({
     data: {
-      pages: [{ page: 0, pageSize: 20, totalPages: 1, results: popularCategories }],
+      pages: [
+        {
+          page: 0,
+          pageSize: 20,
+          totalPages: 1,
+          results: [...homeCategories.slice(0, 1), ...popularCategories],
+        },
+      ],
       pageParams: [0],
     },
     fetchNextPage: fn(),
     hasNextPage: false,
     isFetchingNextPage: false,
+    isLoading: false,
+    isError: false,
   } as never);
   getList.mockImplementation(query => {
     if (typeof query !== 'object' || query === null) return emptyQuery;

@@ -1,5 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
-import type { ListResponse, ListsPageResponse, ListsResponse } from '@miauflix/backend';
+import type { ListResponse, ListsPageResponse } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
@@ -17,23 +17,6 @@ export const listsApi = createApi({
   tagTypes: ['Watchlist', 'Rating'],
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
   endpoints: builder => ({
-    getLists: builder.query<ListsResponse, void>({
-      async queryFn(_arg, { getState, dispatch }) {
-        const sessionId = selectCurrentSessionId(getState() as RootState);
-        const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
-        return authenticatedRequest<ListsResponse>({
-          requestFn: () => backendClient.api.lists.$get({}, { headers }),
-          session: sessionId,
-          errorContext: 'Failed to fetch lists',
-          onInvalidSession: () => {
-            dispatch({ type: 'auth/clearAuth' });
-            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
-          },
-        });
-      },
-      providesTags: ['Watchlist'],
-    }),
-
     getList: builder.query<
       ListResponse,
       { category: string; page: number; limit?: number; priority?: 'visible' | 'prefetch' }
@@ -98,7 +81,8 @@ export const listsApi = createApi({
       },
     }),
 
-    getPopularLists: builder.infiniteQuery<ListsPageResponse, { limit?: number }, number>({
+    /** The lists to display, page by page: the fixed lists first, then popular lists. */
+    getLists: builder.infiniteQuery<ListsPageResponse, { limit?: number }, number>({
       infiniteQueryOptions: {
         initialPageParam: 0,
         getNextPageParam: (lastPage, _allPages, lastPageParam) =>
@@ -109,18 +93,19 @@ export const listsApi = createApi({
         const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
         return authenticatedRequest<ListsPageResponse>({
           requestFn: () =>
-            backendClient.api.lists.popular.$get(
+            backendClient.api.lists.$get(
               { query: { page: String(pageParam), limit: String(queryArg?.limit ?? 20) } },
               { headers }
             ),
           session: sessionId,
-          errorContext: 'Failed to fetch popular lists',
+          errorContext: 'Failed to fetch lists',
           onInvalidSession: () => {
             dispatch({ type: 'auth/clearAuth' });
             dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
           },
         });
       },
+      providesTags: ['Watchlist'],
     }),
     getWatchlistMembership: builder.query<
       { mediaType: 'movie' | 'tv'; mediaId: number; inWatchlist: boolean },
@@ -189,9 +174,8 @@ export const listsApi = createApi({
 });
 
 export const {
-  useGetListsQuery,
+  useGetListsInfiniteQuery,
   useGetListQuery,
-  useGetPopularListsInfiniteQuery,
   usePromoteListMediaMutation,
   useGetWatchlistMembershipQuery,
   useAddToWatchlistMutation,
