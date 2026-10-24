@@ -52,7 +52,11 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
       },
     ],
   };
-  await page.route('**/api/lists', route => route.fulfill({ json: categories }));
+  await page.route(/\/api\/lists(?:\?.*)?$/, route =>
+    route.fulfill({
+      json: { results: categories, page: 0, pageSize: 20, total: 12, totalPages: 1 },
+    })
+  );
   await page.route('**/api/list/row-*', route =>
     route.fulfill({
       json: { results: [fixtureMovie, show], total: 2, page: 0, pageSize: 20, totalPages: 1 },

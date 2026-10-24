@@ -15,6 +15,7 @@ import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
 import { detailsNavigationSlice } from '@store/slices/detailsNavigation';
 import { homeNavigationSlice } from '@store/slices/homeNavigation';
+import { measurementsSlice } from '@store/slices/measurements';
 import { realtimeSlice } from '@store/slices/realtime';
 
 export const store = configureStore({
@@ -34,6 +35,7 @@ export const store = configureStore({
     [detailsNavigationSlice.name]: detailsNavigationSlice.reducer,
     [appStateSlice.name]: appStateSlice.reducer,
     [homeNavigationSlice.name]: homeNavigationSlice.reducer,
+    [measurementsSlice.name]: measurementsSlice.reducer,
     [realtimeSlice.name]: realtimeSlice.reducer,
   },
   middleware: getDefaultMiddleware =>

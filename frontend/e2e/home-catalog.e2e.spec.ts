@@ -22,7 +22,7 @@ type ListResponseBody = {
   total?: number;
 };
 
-type PopularListsResponseBody = {
+type ListsResponseBody = {
   results?: Array<{ name?: string; slug?: string }>;
 };
 
@@ -39,16 +39,16 @@ async function login(page: import('@playwright/test').Page): Promise<void> {
 
 function captureApiResponses(page: import('@playwright/test').Page) {
   const listBodies = new Map<string, ListResponseBody>();
-  const popularListsBodies: PopularListsResponseBody[] = [];
+  const listsBodies: ListsResponseBody[] = [];
 
   page.on('response', response => {
     const url = new URL(response.url());
     if (response.request().method() !== 'GET' || response.status() !== 200) return;
 
-    if (url.pathname === '/api/lists/popular') {
+    if (url.pathname === '/api/lists') {
       void response
         .json()
-        .then(body => popularListsBodies.push(body as PopularListsResponseBody))
+        .then(body => listsBodies.push(body as ListsResponseBody))
         .catch(() => undefined);
       return;
     }
@@ -61,7 +61,7 @@ function captureApiResponses(page: import('@playwright/test').Page) {
       .catch(() => undefined);
   });
 
-  return { listBodies, popularListsBodies };
+  return { listBodies, listsBodies };
 }
 
 async function waitForListBody(
@@ -104,13 +104,13 @@ test.describe('Home catalog cross-loading', () => {
   });
 
   test('keeps the Marvel list identities unique', async ({ page }) => {
-    const { listBodies, popularListsBodies } = captureApiResponses(page);
+    const { listBodies, listsBodies } = captureApiResponses(page);
     await login(page);
 
     await expect
-      .poll(() => popularListsBodies.flatMap(body => body.results ?? []), { timeout: 60000 })
+      .poll(() => listsBodies.flatMap(body => body.results ?? []), { timeout: 60000 })
       .not.toHaveLength(0);
-    const topMarvel = popularListsBodies
+    const topMarvel = listsBodies
       .flatMap(body => body.results ?? [])
       .find(list => /marvel/i.test(list.name ?? ''));
     expect(topMarvel?.slug).toBeTruthy();

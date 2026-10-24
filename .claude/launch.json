@@ -1,0 +1,35 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "frontend (docker dev)",
+      "url": "https://localhost:4173",
+      "port": 4173
+    },
+    {
+      "name": "frontend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:frontend"],
+      "port": 4173,
+      "url": "https://localhost:4173"
+    },
+    {
+      "name": "backend",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:backend"],
+      "port": 3000
+    },
+    {
+      "name": "media-catalog",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:catalog:watch"],
+      "port": 3001
+    },
+    {
+      "name": "list-service",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:list:watch"],
+      "port": 3002
+    }
+  ]
+}

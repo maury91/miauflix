@@ -8,25 +8,42 @@ import { type ListLoadPriority, LOCAL_WATCHLIST_SLUG } from '@services/media/lis
 
 import type { Deps } from './common.types';
 import { serializeMedia } from './list.serializers';
-import type { ListDto, ListResponse, ListsPageResponse, ListsResponse } from './list.types';
+import type { ListDto, ListResponse, ListsPageResponse } from './list.types';
 
 export const createListRoutes = ({ auditLogService, configurationService, listService }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
   return new Hono()
-    .get('/lists', rateLimitGuard(5), authGuard(), async c => {
-      const { user } = c.get('sessionInfo');
-      const lists = await listService.getLists(user.id);
-      return c.json(
-        lists.map(
-          (list): ListDto => ({
-            name: list.name,
-            slug: list.slug,
-            description: list.description,
-            url: `/list/${list.slug}`,
-          })
-        ) satisfies ListsResponse
-      );
-    })
+    .get(
+      '/lists',
+      rateLimitGuard(10),
+      authGuard(),
+      zValidator(
+        'query',
+        z.object({
+          page: z.coerce.number().int().min(0).optional(),
+          limit: z.coerce.number().int().min(1).max(20).optional(),
+        })
+      ),
+      async c => {
+        const { user } = c.get('sessionInfo');
+        const { page = 0, limit = 20 } = c.req.valid('query');
+        const result = await listService.getListsPage(user.id, page, limit);
+        return c.json({
+          results: result.results.map(
+            (list): ListDto => ({
+              name: list.name,
+              slug: list.slug,
+              description: list.description,
+              url: `/list/${list.slug}`,
+            })
+          ),
+          page,
+          pageSize: limit,
+          total: result.totalItems,
+          totalPages: result.totalPages,
+        } satisfies ListsPageResponse);
+      }
+    )
     .get(
       '/watchlist',
       rateLimitGuard(10),
@@ -100,36 +117,6 @@ export const createListRoutes = ({ auditLogService, configurationService, listSe
         const item = c.req.valid('json');
         await listService.removeFromWatchlist(user.id, item.mediaType, item.mediaId);
         return c.json({ ...item, inWatchlist: false });
-      }
-    )
-    .get(
-      '/lists/popular',
-      rateLimitGuard(5),
-      authGuard(),
-      zValidator(
-        'query',
-        z.object({
-          page: z.coerce.number().int().min(0).optional(),
-          limit: z.coerce.number().int().min(1).max(20).optional(),
-        })
-      ),
-      async c => {
-        const { page = 0, limit = 20 } = c.req.valid('query');
-        const result = await listService.getPopularLists(page + 1, limit);
-        return c.json({
-          results: result.results.map(
-            (list): ListDto => ({
-              name: list.name,
-              slug: list.slug,
-              description: list.description,
-              url: `/list/${list.slug}`,
-            })
-          ),
-          page,
-          pageSize: result.pageSize,
-          total: result.totalItems,
-          totalPages: result.totalPages,
-        } satisfies ListsPageResponse);
       }
     )
     .post(

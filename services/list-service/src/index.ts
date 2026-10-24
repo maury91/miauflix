@@ -153,7 +153,8 @@ const publicDefinitions = [
   ['trakt-shows-trending', 'Trending Shows', 'Trending shows from Trakt', 'shows/trending'],
 ] as const;
 
-const communitySlug = (owner: string, listId: number) => `trakt-community-${owner}-${listId}`;
+// Trakt serves a list by its numeric id alone; owner slugs can be null for private accounts.
+const communitySlug = (listId: number) => `trakt-community-${listId}`;
 
 const definitions = (subjectId?: string) => {
   const result = publicDefinitions.map(([id, name, description]) =>
@@ -356,8 +357,8 @@ const handler = async (request: Request): Promise<Response> => {
         const popular = await client().popularLists(page, limit);
         const results = popular.items.map((entry, index) =>
           listServiceDefinitionSchema.parse({
-            id: communitySlug(entry.list.user.ids.slug, entry.list.ids.trakt),
-            slug: communitySlug(entry.list.user.ids.slug, entry.list.ids.trakt),
+            id: communitySlug(entry.list.ids.trakt),
+            slug: communitySlug(entry.list.ids.trakt),
             name: entry.list.name || 'Untitled Trakt list',
             description: entry.list.description,
             provider: 'trakt',

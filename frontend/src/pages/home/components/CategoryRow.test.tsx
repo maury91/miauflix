@@ -14,6 +14,16 @@ const { useGetListQuery, usePromoteListMediaMutation, useQueueBackdropFocusMutat
 
 vi.mock('@features/media/api/lists.api', () => ({ useGetListQuery, usePromoteListMediaMutation }));
 vi.mock('@features/media/api/media.api', () => ({ useQueueBackdropFocusMutation }));
+// jsdom has no layout to animate; land every scroll immediately (the spring has its own tests).
+vi.mock('../smooth-scroll', () => ({
+  createSmoothScroller: (element: HTMLElement) => ({
+    scrollTo: (target: number) => {
+      element.scrollLeft = target;
+    },
+    stop: () => {},
+    dispose: () => {},
+  }),
+}));
 vi.mock('./MediaCard', async () => {
   const React = await import('react');
   return {
@@ -196,25 +206,30 @@ describe('CategoryRow page window', () => {
     expect(screen.getByTestId('media-19')).toBeInTheDocument();
   });
 
-  it('does not request adjacent pages when the window stays inside the current page', () => {
-    render(<CategoryRow {...makeProps(10)} />);
+  it('does not request an adjacent page before the selection reaches the middle of its page', () => {
+    render(<CategoryRow {...makeProps(9)} />);
 
-    expect(useGetListQuery).toHaveBeenCalledTimes(3);
     expect(useGetListQuery.mock.calls.map(([query]) => query)).toEqual([
       { category: 'popular', page: 0, limit: 20, priority: 'visible' },
       skipToken,
-      skipToken,
     ]);
+  });
+
+  it('requests the next page as soon as the selection reaches the middle of its page', () => {
+    render(<CategoryRow {...makeProps(10)} />);
+
+    expect(useGetListQuery).toHaveBeenCalledWith({
+      category: 'popular',
+      page: 1,
+      limit: 20,
+      priority: 'visible',
+    });
   });
 
   it('skips all page queries when nearby is false', () => {
     render(<CategoryRow {...makeProps(19, false)} />);
 
-    expect(useGetListQuery.mock.calls.map(([query]) => query)).toEqual([
-      skipToken,
-      skipToken,
-      skipToken,
-    ]);
+    expect(useGetListQuery.mock.calls.map(([query]) => query)).toEqual([skipToken, skipToken]);
   });
 
   it('loads a prefetched row with the lower downstream priority tier', () => {
@@ -325,7 +340,7 @@ describe('CategoryRow page window', () => {
     expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 1, mediaId: 1001 }));
   });
 
-  it('advances by one visible page when the browser next arrow is clicked', async () => {
+  it('advances one card when the browser next arrow is clicked', async () => {
     const onActive = vi.fn();
     const props = makeProps(0, true, { active: true, visible: true });
     props.onActive = onActive;
@@ -356,36 +371,19 @@ describe('CategoryRow page window', () => {
     expect(scrollContainer.scrollLeft).toBe(192);
   });
 
-  it('normalizes an arbitrary scroll position before moving in the requested direction', async () => {
-    render(<CategoryRow {...makeProps(0, true, { active: true, visible: true })} />);
-    await waitFor(() => expect(screen.getByTestId('media-0')).toBeInTheDocument());
+  it('moves the browser arrows from the selection, wherever the row was scrolled', async () => {
+    render(<CategoryRow {...makeProps(1, true, { active: true, visible: true })} />);
+    await waitFor(() => expect(screen.getByTestId('media-1')).toBeInTheDocument());
 
-    const scrollContainer = screen.getByTestId('media-0').parentElement as HTMLDivElement;
-    scrollContainer.scrollLeft = 100;
+    const scrollContainer = screen.getByTestId('media-1').parentElement as HTMLDivElement;
+    scrollContainer.scrollLeft = 1000;
     fireEvent.scroll(scrollContainer);
     fireEvent.click(screen.getByRole('button', { name: 'Previous Popular items' }));
+
     await waitFor(() =>
       expect(screen.getByTestId('media-0')).toHaveAttribute('aria-current', 'true')
     );
     expect(scrollContainer.scrollLeft).toBe(0);
-
-    scrollContainer.scrollLeft = 250;
-    fireEvent.scroll(scrollContainer);
-    fireEvent.click(screen.getByRole('button', { name: 'Previous Popular items' }));
-
-    await waitFor(() =>
-      expect(screen.getByTestId('media-1')).toHaveAttribute('aria-current', 'true')
-    );
-    expect(scrollContainer.scrollLeft).toBe(192);
-
-    scrollContainer.scrollLeft = 250;
-    fireEvent.scroll(scrollContainer);
-    fireEvent.click(screen.getByRole('button', { name: 'Next Popular items' }));
-
-    await waitFor(() =>
-      expect(screen.getByTestId('media-2')).toHaveAttribute('aria-current', 'true')
-    );
-    expect(scrollContainer.scrollLeft).toBe(384);
   });
 
   it('keeps each keyboard-focused card at the leading carousel slot', async () => {
