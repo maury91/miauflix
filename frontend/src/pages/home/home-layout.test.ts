@@ -66,13 +66,23 @@ describe('homeRowLoadState', () => {
 describe('homeMountedRows', () => {
   it('mounts the rows around the focused row, covering every row that loads', () => {
     const rows = homeMountedRows(5, 5, 100);
-    expect(rows).toEqual([3, 4, 5, 6, 7, 8, 9, 10]);
+    expect(rows).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
     const { visible, prefetch } = homeRowLoadState(5, 100);
     [...visible, ...prefetch].forEach(row => expect(rows).toContain(row));
   });
 
   it('also mounts the rows scrolled into view, without the rows in between', () => {
-    expect(homeMountedRows(0, 20, 100)).toEqual([0, 1, 2, 3, 4, 5, 18, 19, 20, 21, 22, 23, 24, 25]);
+    expect(homeMountedRows(0, 20, 100)).toEqual([
+      0, 1, 2, 3, 4, 5, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25,
+    ]);
+  });
+
+  it('mounts every row that the final category prefetches', () => {
+    const rows = homeMountedRows(9, 9, 10);
+    const { visible, prefetch } = homeRowLoadState(9, 10);
+
+    expect(rows).toEqual([5, 6, 7, 8, 9]);
+    [...visible, ...prefetch].forEach(row => expect(rows).toContain(row));
   });
 
   it('stays within the loaded rows', () => {

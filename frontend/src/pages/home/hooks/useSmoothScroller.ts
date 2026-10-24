@@ -21,10 +21,11 @@ export function useSmoothScroller(axis: 'x' | 'y') {
     },
     [axis]
   );
-  const scrollTo = useCallback(
-    (target: number, options?: { instant?: boolean }) =>
-      scroller.current?.scrollTo(target, options),
-    []
-  );
+  const scrollTo = useCallback((target: number, options?: { instant?: boolean }) => {
+    if (!scroller.current) return;
+    const firstScroll = !scrolled.current;
+    scrolled.current = true;
+    scroller.current.scrollTo(target, firstScroll ? { ...options, instant: true } : options);
+  }, []);
   return { ref, element, scrollTo };
 }

@@ -86,7 +86,7 @@ export function homeRowLoadState(activeCategory: number, categoryCount: number):
 }
 
 /** Rows kept mounted above and below the shown ones; further rows are empty space. */
-const MOUNTED_ROWS_ABOVE = 2;
+const MOUNTED_ROWS_ABOVE = PREFETCH_ROWS;
 const MOUNTED_ROWS_BELOW = 4;
 
 /**
