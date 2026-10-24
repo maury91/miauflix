@@ -9,6 +9,7 @@ import {
   forwardRef,
   useCallback,
   useEffect,
+  useId,
   useImperativeHandle,
   useMemo,
   useRef,
@@ -17,6 +18,7 @@ import {
 import styled from 'styled-components';
 
 import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '../homeNavigation';
+import { imagePreloader, NEARBY } from '../image-preloader';
 import { artworkUrl } from '../media.utils';
 import { MediaCard } from './MediaCard';
 
@@ -253,7 +255,6 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
   const pendingAlignedIndex = useRef<number | null>(null);
   const shouldFocus = useRef(categoryIndex === 0);
   const pendingIndex = useRef<number | null>(categoryIndex === 0 ? initialIndex : null);
-  const preparedMedia = useRef(new Set<string>());
   const queuedBackdropMedia = useRef(new Set<string>());
 
   const mediaByIndex = useMemo(() => {
@@ -497,25 +498,24 @@ export const CategoryRow = forwardRef<CategoryRowHandle, CategoryRowProps>(funct
     visible,
   ]);
 
+  // Decode the hero backdrops around the selection ahead of time, so moving to a neighbour
+  // swaps the hero without decode work. A row that moves off screen stops wanting them.
+  const preloadOwner = useId();
   useEffect(() => {
-    if (!visible || !mediaByIndex.size) return;
+    if (!visible || !mediaByIndex.size) {
+      imagePreloader.clear(preloadOwner);
+      return;
+    }
     const start = Math.max(0, selectedIndex - 2);
     const end = Math.min(total - 1, selectedIndex + mediaPerPage + 2);
+    const urls: string[] = [];
     for (let index = start; index <= end; index += 1) {
       const media = mediaByIndex.get(index);
-      if (!media) continue;
-      const key = `${media._type}:${media.mediaId}`;
-      if (preparedMedia.current.has(key)) continue;
-      preparedMedia.current.add(key);
-      if (preparedMedia.current.size > 128) {
-        preparedMedia.current.delete(preparedMedia.current.values().next().value!);
-      }
-      const image = new Image();
-      image.decoding = 'async';
-      image.src = artworkUrl(media.backdrop, 'backdrop');
-      if (typeof image.decode === 'function') void image.decode().catch(() => undefined);
+      if (media?.backdrop) urls.push(artworkUrl(media.backdrop, 'backdrop'));
     }
-  }, [mediaByIndex, mediaPerPage, selectedIndex, total, visible]);
+    void imagePreloader.prepare(preloadOwner, urls, NEARBY);
+  }, [mediaByIndex, mediaPerPage, preloadOwner, selectedIndex, total, visible]);
+  useEffect(() => () => imagePreloader.clear(preloadOwner), [preloadOwner]);
 
   useEffect(() => {
     if (!visible || !mediaByIndex.size) return;

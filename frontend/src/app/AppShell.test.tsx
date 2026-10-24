@@ -56,32 +56,44 @@ vi.mock('@app/shell/IntroAnimation', async () => {
   return { IntroAnimation };
 });
 
-vi.mock('@shared/ui/logo/Logo', () => ({
-  Logo: ({
-    page,
-    disableMotion,
-    visible,
-    aboveIntro,
-    onPositionTransitionEnd,
-  }: {
-    page: string;
-    disableMotion?: boolean;
-    visible?: boolean;
-    aboveIntro?: boolean;
-    onPositionTransitionEnd?: () => void;
-  }) => {
-    logoControls.centered = onPositionTransitionEnd ?? null;
-    return (
-      <div
-        data-testid="logo"
-        data-page={page}
-        data-disable-motion={String(disableMotion ?? false)}
-        data-visible={String(visible ?? true)}
-        data-above-intro={String(aboveIntro ?? false)}
-      />
-    );
-  },
-}));
+vi.mock('@shared/ui/logo/Logo', async () => {
+  const React = await import('react');
+  return {
+    Logo: ({
+      page,
+      disableMotion,
+      visible,
+      aboveIntro,
+      pulsing,
+      onPulseSettled,
+      onPositionTransitionEnd,
+    }: {
+      page: string;
+      disableMotion?: boolean;
+      visible?: boolean;
+      aboveIntro?: boolean;
+      pulsing?: boolean;
+      onPulseSettled?: () => void;
+      onPositionTransitionEnd?: () => void;
+    }) => {
+      logoControls.centered = onPositionTransitionEnd ?? null;
+      // The real logo settles at once when it is already at full size.
+      React.useEffect(() => {
+        if (!pulsing) onPulseSettled?.();
+      }, [pulsing, onPulseSettled]);
+      return (
+        <div
+          data-testid="logo"
+          data-page={page}
+          data-disable-motion={String(disableMotion ?? false)}
+          data-visible={String(visible ?? true)}
+          data-above-intro={String(aboveIntro ?? false)}
+          data-pulsing={String(pulsing ?? false)}
+        />
+      );
+    },
+  };
+});
 
 vi.mock('@shared/components', () => ({
   ErrorBoundary: ({ children }: { children: ReactNode }) => children,
@@ -100,6 +112,7 @@ vi.mock('@pages/home/HomePage', () => ({
   },
 }));
 vi.mock('@pages/login/LoginPage', () => ({ default: () => <main data-testid="login-page" /> }));
+vi.mock('@pages/setup/SetupPage', () => ({ default: () => <main data-testid="setup-page" /> }));
 vi.mock('@pages/config/ConfigWizardPage', () => ({
   default: () => <main data-testid="config-page" />,
 }));
@@ -131,6 +144,13 @@ function renderAppShell(authenticated = false) {
     wrapper: ({ children }) => <Provider store={store}>{children}</Provider>,
   });
 }
+
+/** Let the centred start paint; the logo then moves to the page the app resolved to. */
+const finishBoot = () =>
+  act(async () => {
+    for (let frame = 0; frame < 2; frame += 1)
+      await new Promise(resolve => requestAnimationFrame(resolve));
+  });
 
 describe('AppShell intro sequence', () => {
   beforeEach(() => {
@@ -168,30 +188,37 @@ describe('AppShell intro sequence', () => {
     delete idleWindow.cancelIdleCallback;
   });
 
-  it('keeps login visible without playing the intro before authentication', () => {
-    renderAppShell();
+  it.each([
+    ['login', 'login', 'login-page'],
+    ['required configuration', 'config_wizard', 'required-config-page'],
+    ['first user setup', 'initial_setup', 'setup-page'],
+  ])(
+    'opens on the pulsing centred logo, then moves it to %s and shows the page',
+    async (_name, page, testId) => {
+      appPage.value = page;
+      renderAppShell();
 
-    expect(screen.getByTestId('logo')).toBeInTheDocument();
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
-    expect(screen.getByTestId('login-page')).toBeInTheDocument();
-    expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
-    expect(window._miauflixAnimationComplete).toBeUndefined();
-  });
+      const logo = screen.getByTestId('logo');
+      expect(logo).toHaveAttribute('data-page', 'intro');
+      expect(logo).toHaveAttribute('data-pulsing', 'true');
+      expect(logo).toHaveAttribute('data-disable-motion', 'true');
+      expect(screen.queryByTestId(testId)).not.toBeInTheDocument();
 
-  it('keeps required configuration visible without playing the intro', () => {
-    appPage.value = 'config_wizard';
-    renderAppShell();
+      await finishBoot();
+      expect(logo).toHaveAttribute('data-page', page);
+      expect(logo).toHaveAttribute('data-pulsing', 'false');
+      expect(logo).toHaveAttribute('data-disable-motion', 'false');
+      expect(screen.getByTestId(testId)).toBeInTheDocument();
+      expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
+      expect(window._miauflixAnimationComplete).toBeUndefined();
+    }
+  );
 
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
-    expect(screen.getByTestId('required-config-page')).toBeInTheDocument();
-    expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
-    expect(window._miauflixAnimationComplete).toBeUndefined();
-  });
-
-  it('keeps Home behind a static black screen until it reports ready', () => {
+  it('keeps Home behind a static black screen until it reports ready', async () => {
     const dispatchEventSpy = vi.spyOn(window, 'dispatchEvent');
     appPage.value = 'config_wizard';
     const view = renderAppShell();
+    await finishBoot();
 
     expect(screen.getByTestId('required-config-page')).toBeInTheDocument();
     expect(screen.queryByTestId('intro-animation')).not.toBeInTheDocument();
@@ -284,16 +311,30 @@ describe('AppShell intro sequence', () => {
     expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'home');
   });
 
-  it('keeps the logo centered while the initial session check is unresolved', () => {
+  it('keeps the logo centred and pulsing while the initial checks are unresolved', async () => {
     appPage.value = 'loading';
     const view = renderAppShell();
+    await finishBoot();
 
     expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'intro');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-pulsing', 'true');
 
     appPage.value = 'login';
     act(() => view.rerender(<AppShell />));
+    await finishBoot();
     expect(screen.getByTestId('logo')).toHaveAttribute('data-page', 'login');
-    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'true');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-pulsing', 'false');
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-disable-motion', 'false');
+  });
+
+  it('stops the loading pulse when the logged-in intro takes over', () => {
+    appPage.value = 'home';
+    renderAppShell(true);
+
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-pulsing', 'true');
+    act(() => homeControls.hydrated?.());
+    act(() => idleControls.callback?.());
+    expect(screen.getByTestId('logo')).toHaveAttribute('data-pulsing', 'false');
   });
 
   it('waits for unresolved initial checks and does not complete an interrupted intro', () => {

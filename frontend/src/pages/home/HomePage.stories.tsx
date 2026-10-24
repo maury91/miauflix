@@ -17,6 +17,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
 import { homeNavigationSlice } from '@store/slices/homeNavigation';
+import { measurementActions, measurementsSlice } from '@store/slices/measurements';
 import { realtimeSlice } from '@store/slices/realtime';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { Provider } from 'react-redux';
@@ -42,9 +43,16 @@ const meta = {
           auth: authSlice.reducer,
           artwork: artworkSlice.reducer,
           homeNavigation: homeNavigationSlice.reducer,
+          measurements: measurementsSlice.reducer,
           realtime: realtimeSlice.reducer,
         },
       });
+      store.dispatch(
+        measurementActions.windowSizeChanged({
+          width: window.innerWidth,
+          height: window.innerHeight,
+        })
+      );
       return (
         <Provider store={store}>
           <Story />

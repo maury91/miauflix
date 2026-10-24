@@ -87,12 +87,19 @@ function createTestStore() {
 }
 
 let store = createTestStore();
-const renderApp = () =>
-  render(
+/** Render and let the app finish booting (the logo leaves its centred start after two frames). */
+const renderApp = async () => {
+  const view = render(
     <Provider store={store}>
       <AppShell />
     </Provider>
   );
+  await act(async () => {
+    for (let frame = 0; frame < 2; frame += 1)
+      await new Promise(resolve => requestAnimationFrame(resolve));
+  });
+  return view;
+};
 
 beforeEach(() => {
   state.authenticated = true;
@@ -108,7 +115,7 @@ afterEach(() => {
 
 describe('Settings navigation', () => {
   it('opens settings from the sidebar, edits configuration, and returns home', async () => {
-    renderApp();
+    await renderApp();
     fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
     expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Configuration' })).toHaveFocus();
@@ -122,7 +129,7 @@ describe('Settings navigation', () => {
   });
 
   it('opens Storage from settings and restores focus when returning', async () => {
-    renderApp();
+    await renderApp();
     fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
     fireEvent.click(screen.getByRole('button', { name: 'Storage' }));
     expect(screen.getByRole('heading', { name: 'Storage' })).toBeInTheDocument();
@@ -135,7 +142,7 @@ describe('Settings navigation', () => {
   });
 
   it('opens the selected Settings action with a remote and supports back navigation', async () => {
-    renderApp();
+    await renderApp();
     fireEvent.keyDown(screen.getByRole('button', { name: 'Home' }), { key: 'ArrowDown' });
     expect(screen.getByRole('button', { name: 'Settings' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'Enter' });
@@ -148,10 +155,10 @@ describe('Settings navigation', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: 'Home' })).toBeInTheDocument());
   });
 
-  it('allows non-admins to open settings while keeping configuration restricted', () => {
+  it('allows non-admins to open settings while keeping configuration restricted', async () => {
     state.admin = false;
     store = createTestStore();
-    renderApp();
+    await renderApp();
     fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
     expect(screen.getByRole('button', { name: 'Configuration' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Storage' })).toBeDisabled();
@@ -160,19 +167,19 @@ describe('Settings navigation', () => {
     expect(screen.queryByText('Close configuration editor')).not.toBeInTheDocument();
   });
 
-  it('does not open settings when signed out', () => {
+  it('does not open settings when signed out', async () => {
     state.authenticated = false;
     state.page = 'login';
     store = createTestStore();
-    renderApp();
+    await renderApp();
     act(() => navigate({ type: 'settings' }));
     expect(screen.getByText('Login')).toBeInTheDocument();
     expect(screen.queryByRole('heading', { name: 'Settings' })).not.toBeInTheDocument();
   });
 
-  it('preserves automatic configuration setup', () => {
+  it('preserves automatic configuration setup', async () => {
     state.page = 'config_wizard';
-    renderApp();
+    await renderApp();
     expect(screen.getByText('Required configuration wizard')).toBeInTheDocument();
   });
 });

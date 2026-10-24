@@ -17,6 +17,7 @@ import {
   HERO_DETAILS_LEFT_CSS,
   HERO_DETAILS_WIDTH_CSS,
 } from '../hero-backdrop-layout';
+import { imagePreloader, URGENT } from '../image-preloader';
 import { artworkUrl, getMediaTitle } from '../media.utils';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
@@ -255,22 +256,8 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
                 return result.backdropFocus;
               })
               .catch(() => null);
-      const imagePromise = new Promise<{ width: number; height: number }>((resolve, reject) => {
-        const image = new Image();
-        image.onload = () => {
-          const dimensions = { width: image.naturalWidth, height: image.naturalHeight };
-          if (typeof image.decode === 'function') {
-            void image
-              .decode()
-              .then(() => resolve(dimensions))
-              .catch(() => resolve(dimensions));
-          } else {
-            resolve(dimensions);
-          }
-        };
-        image.onerror = () => reject(new Error('backdrop_load_failed'));
-        image.src = url;
-      });
+      // Decoded before the swap; a backdrop the row already preloaded resolves at once.
+      const imagePromise = imagePreloader.load(url, URGENT);
       const focus = await focusPromise;
       let imageSize: { width: number; height: number };
       try {

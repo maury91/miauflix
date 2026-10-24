@@ -1,4 +1,5 @@
 import { mapObject, typedEntries } from '@shared/lib/object';
+import { introLetterRects } from '@shared/ui/logo/logoGeometry';
 import { LogoGlyphs, type LogoHandle } from '@shared/ui/logo/LogoGlyphs';
 import { gsap } from 'gsap';
 import React, {
@@ -47,6 +48,19 @@ const lettersXMovementMultipliers: Record<keyof LogoHandle, number> = {
   i2: 3.5,
   x: 5,
 };
+
+/**
+ * The intro follows /assets/pam-pam-meow.mp3, measured from when playback starts: the logo
+ * pulses on each "pam" and expands on the "meow".
+ */
+const INTRO_CUES = {
+  pulses: [0.02, 0.35],
+  expand: 0.62,
+} as const;
+/** How far a "pam" pulse grows the logo, and how quickly it swells and settles (seconds). */
+const PULSE_SCALE = 1.25;
+const PULSE_ATTACK_S = 0.05;
+const PULSE_RELEASE_S = 0.22;
 
 const AnimationContainer = styled.div`
   position: fixed;
@@ -111,20 +125,24 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     const backgroundRef = useRef<HTMLDivElement>(null);
     const logoRef = useRef<LogoHandle | null>(null);
     const timelineRef = useRef<gsap.core.Timeline | null>(null);
+    /** The "pam pam" pulses that lead into the expansion. */
+    const preRollRef = useRef<gsap.core.Timeline | null>(null);
     const audioRef = useIntroAnimationAudio();
     const [constants, setConstants] = useState<Record<
       string,
-      { box: DOMRect; multiplier: number }
+      { box: { left: number; top: number; width: number; height: number }; multiplier: number }
     > | null>(null);
 
-    // Calculate position of the letters, their size, and cache them
+    // Place each letter exactly where the centred logo draws it, so the hand-off from the
+    // loading logo to the intro does not shift or resize anything.
     const computeConstants = useCallback(() => {
       if (!logoRef.current) return;
 
       const letters = logoRef.current;
+      const rects = introLetterRects({ width: window.innerWidth, height: window.innerHeight });
 
       const precomputedData = mapObject(
-        mapObject(letters, (_, letter) => letter.getBoundingClientRect()),
+        mapObject(letters, key => rects[key]),
         (key, value, obj) => ({
           box: value,
           multiplier: lettersXMovementMultipliers[key] * obj['u'].width,
@@ -301,19 +319,40 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     const start = useCallback(async () => {
       if (!introAnimation) return;
 
-      const delay = !audioRef.current
-        ? 0
-        : await audioRef.current
-            .play()
-            .then(() => 620)
-            .catch(() => 200);
+      // Time the cues from when the audio actually starts. Without audio (blocked autoplay or
+      // a load error) the same rhythm plays silently, so the intro always looks the same.
+      await audioRef.current?.play().catch(() => undefined);
 
-      setTimeout(() => {
-        introAnimation.play();
-      }, delay);
+      preRollRef.current?.kill();
+      const preRoll = gsap.timeline();
+      const container = containerRef.current;
+      if (container) {
+        for (const at of INTRO_CUES.pulses) {
+          preRoll
+            .to(
+              container,
+              { scale: PULSE_SCALE, duration: PULSE_ATTACK_S, ease: 'power2.out', force3D: true },
+              at
+            )
+            .to(
+              container,
+              { scale: 1, duration: PULSE_RELEASE_S, ease: 'power2.out' },
+              at + PULSE_ATTACK_S
+            );
+        }
+      }
+      preRoll.call(
+        () => {
+          introAnimation.play();
+        },
+        [],
+        INTRO_CUES.expand
+      );
+      preRollRef.current = preRoll;
     }, [introAnimation, audioRef]);
 
     const pause = useCallback(() => {
+      preRollRef.current?.pause();
       if (introAnimation && !introAnimation.paused()) {
         introAnimation.pause();
       }
@@ -325,7 +364,10 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     }, [introAnimation, audioRef]);
 
     const resume = useCallback(() => {
-      if (introAnimation && introAnimation.paused()) {
+      // Before the meow cue the pre-roll owns timing; it starts the expansion itself.
+      const preRoll = preRollRef.current;
+      if (preRoll && preRoll.paused() && preRoll.progress() < 1) preRoll.resume();
+      else if (introAnimation && introAnimation.paused()) {
         introAnimation.resume();
       }
 
@@ -384,6 +426,9 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     );
 
     const reset = useCallback(() => {
+      preRollRef.current?.kill();
+      preRollRef.current = null;
+      if (containerRef.current) gsap.set(containerRef.current, { clearProps: 'transform' });
       // Kill timeline cleanly
       if (introAnimation) {
         introAnimation.kill();
@@ -445,6 +490,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       }
 
       return () => {
+        preRollRef.current?.kill();
         if (introAnimation) {
           introAnimation.kill();
         }

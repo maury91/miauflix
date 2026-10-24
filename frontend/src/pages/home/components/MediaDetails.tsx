@@ -39,6 +39,7 @@ import { getBackdropPlacement } from '../backdrop-focus';
 import { episodeForSeason } from '../episode-rules';
 import { firstSeason } from '../first-season';
 import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
+import { imagePreloader, URGENT } from '../image-preloader';
 import { artworkUrl, getMediaTitle } from '../media.utils';
 import { navigateDetails } from './detailsNavigation';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
@@ -749,13 +750,13 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     const element = pageRef.current;
     if (!element || !backdrop || typeof window === 'undefined') return;
     let cancelled = false;
-    const image = new window.Image();
+    let size: { width: number; height: number } | null = null;
     const update = () => {
-      if (cancelled || image.naturalWidth <= 0 || image.naturalHeight <= 0) return;
+      if (cancelled || !size || size.width <= 0 || size.height <= 0) return;
       const bounds = element.getBoundingClientRect();
       setBackdropContext({
-        imageWidth: image.naturalWidth,
-        imageHeight: image.naturalHeight,
+        imageWidth: size.width,
+        imageHeight: size.height,
         containerWidth: bounds.width,
         containerHeight: bounds.height,
         targetX: 0.51,
@@ -763,9 +764,14 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
         maxZoom: 1.25,
       });
     };
-    image.onload = update;
-    image.src = backdrop;
-    if (image.complete) update();
+    // The same queue as the hero, so a backdrop it already loaded is sized at once.
+    imagePreloader.load(backdrop, URGENT).then(
+      loaded => {
+        size = loaded;
+        update();
+      },
+      () => undefined
+    );
     const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
     observer?.observe(element);
     window.addEventListener('resize', update);

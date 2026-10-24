@@ -38,11 +38,14 @@ export function AppShell() {
   const {
     introPhase,
     introHasStarted,
+    introReady,
+    booted,
     hasShownScreen,
     logoRef,
     handleIntroComplete,
     handleIntroReady,
     handleLogoCentered,
+    handleLogoSettled,
     handleIntroStart,
     handleHomeHydrated,
   } = useIntroController(appState, homeEligible);
@@ -76,20 +79,27 @@ export function AppShell() {
       ? introPhase === 'playing' && introHasStarted
         ? 'home'
         : 'intro'
-      : appState === 'loading' && !hasShownScreen
+      : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
         ? 'intro'
         : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
           ? 'config_wizard'
           : appState;
-  const logoMotionDisabled = !hasShownScreen || (homeEligible && introPhase === 'playing');
+  const logoMotionDisabled =
+    (!booted && !homeEligible) || !hasShownScreen || (homeEligible && introPhase === 'playing');
   const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);
+  // The centred logo pulses until the app knows where to go; the intro then takes over.
+  const logoPulsing =
+    logoPage === 'intro' && !(homeEligible && (introReady || introPhase === 'playing'));
 
   const renderPage = () => {
     // QR approval remains available before the user has signed in or completed setup.
     if (route.type === 'qrApproval') {
       return <QrApprovalPage key="qr-approval" approvalToken={route.approvalToken} />;
     }
-    if (appState === 'loading') return <LoadingContainer key="loading" />;
+    // Pages fade in once the logo starts moving to them; Home mounts at once behind the intro.
+    if (appState === 'loading' || (!booted && !homeEligible)) {
+      return <LoadingContainer key="loading" />;
+    }
     if (appState === 'initial_setup') return <SetupPage key="setup" />;
     if (appState === 'login') return <LoginPage key="login" />;
     if (appState === 'config') {
@@ -154,6 +164,8 @@ export function AppShell() {
         disableMotion={logoMotionDisabled}
         visible={showSharedLogo}
         aboveIntro={homeEligible && (introPhase === 'pending' || introPhase === 'centering')}
+        pulsing={logoPulsing}
+        onPulseSettled={handleLogoSettled}
         onPositionTransitionEnd={handleLogoCentered}
       />
       <MotionConfig transition={{ duration: 0.5 }}>
