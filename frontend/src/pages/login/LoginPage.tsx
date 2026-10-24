@@ -1,9 +1,10 @@
 import { LoginWithEmail } from '@features/auth/ui/login/LoginWithEmail';
 import { LoginWithQR } from '@features/auth/ui/login/LoginWithQR';
-import { useWindowSize } from '@shared/hooks/useWindowSize';
+import { selectWindowSize } from '@store/slices/measurements';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import RemoteIcon from '~icons/mdi/remote';
@@ -47,7 +48,7 @@ const BottomInstructions = styled.div`
 const LoginPage: FC = () => {
   // Email login state
   const [showQR, setShowQR] = useState(false);
-  const { width: windowWidth } = useWindowSize();
+  const { width: windowWidth } = useSelector(selectWindowSize);
 
   useEffect(() => {
     setShowQR(windowWidth > 720);

@@ -1,14 +1,22 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { configureStore } from '@reduxjs/toolkit';
+import { measurementsSlice } from '@store/slices/measurements';
+import { render as rtlRender, screen, waitFor } from '@testing-library/react';
+import type { ReactElement } from 'react';
+import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import LoginPage from './LoginPage';
 
-const mockWindowSize = { width: 1024, height: 768 };
 const loginWithEmailSpy = vi.fn();
 
-vi.mock('@shared/hooks/useWindowSize', () => ({
-  useWindowSize: () => mockWindowSize,
-}));
+/** Render at a window width, as measured by the browser adapter. */
+const renderAt = (width: number, element: ReactElement) => {
+  const store = configureStore({
+    reducer: { measurements: measurementsSlice.reducer },
+    preloadedState: { measurements: { window: { width, height: 768 } } },
+  });
+  return rtlRender(<Provider store={store}>{element}</Provider>);
+};
 
 vi.mock('@features/auth/ui/login/LoginWithEmail', () => ({
   LoginWithEmail: ({ showTitle }: { showTitle: boolean }) => {
@@ -24,13 +32,10 @@ vi.mock('@features/auth/ui/login/LoginWithQR', () => ({
 describe('LoginPage', () => {
   beforeEach(() => {
     loginWithEmailSpy.mockClear();
-    mockWindowSize.width = 1024;
   });
 
   it('shows QR login on wide screens and passes showTitle to email login', async () => {
-    mockWindowSize.width = 1280;
-
-    render(<LoginPage />);
+    renderAt(1280, <LoginPage />);
 
     await waitFor(() => {
       expect(screen.getByTestId('login-with-email')).toHaveAttribute('data-show-title', 'true');
@@ -41,9 +46,7 @@ describe('LoginPage', () => {
   });
 
   it('hides QR login and email title on narrow screens', () => {
-    mockWindowSize.width = 600;
-
-    render(<LoginPage />);
+    renderAt(600, <LoginPage />);
 
     expect(screen.queryByTestId('login-with-qr')).not.toBeInTheDocument();
     expect(screen.getByTestId('login-with-email')).toHaveAttribute('data-show-title', 'false');

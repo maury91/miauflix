@@ -1,6 +1,7 @@
 import '@shared/styles/global.css';
 
 import { AppShell } from '@app/AppShell';
+import { installBrowserMeasurements } from '@app/browserMeasurements';
 import { IS_SLOW_DEVICE } from '@shared/config/constants';
 import { store } from '@store';
 import { gsap } from 'gsap';
@@ -11,6 +12,9 @@ import { Provider } from 'react-redux';
 if (IS_SLOW_DEVICE) {
   gsap.ticker.fps(24);
 }
+
+// Measure before the first render so layout starts at the real window size.
+installBrowserMeasurements(store.dispatch);
 
 // Client-side hydration component
 export function ClientApp() {

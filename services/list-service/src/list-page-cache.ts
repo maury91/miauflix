@@ -27,10 +27,8 @@ const personalPaths: Record<string, string> = {
 const flights = new Map<string, Promise<unknown>>();
 
 const communityListPath = (listId: string): string | undefined => {
-  const match = /^trakt-community-(.+)-(\d+)$/.exec(listId);
-  return match
-    ? `/users/${encodeURIComponent(match[1])}/lists/${match[2]}/items?limit=50`
-    : undefined;
+  const match = /^trakt-community-(\d+)$/.exec(listId);
+  return match ? `/lists/${match[1]}/items?limit=50` : undefined;
 };
 
 type Association = { connection_id: string };
