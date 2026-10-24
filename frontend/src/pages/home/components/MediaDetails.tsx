@@ -36,6 +36,7 @@ import styled from 'styled-components';
 
 import type { BackdropPositionContext } from '../backdrop-focus';
 import { getBackdropPlacement } from '../backdrop-focus';
+import { episodeForSeason } from '../episode-rules';
 import { firstSeason } from '../first-season';
 import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
 import { artworkUrl, getMediaTitle } from '../media.utils';
@@ -797,23 +798,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     [loadedSeasons, seasons]
   );
   const targetEpisodeForSeason = useCallback(
-    (season: SeasonResponse) => {
-      const watched = (progress.data?.progress ?? [])
-        .filter(
-          entry =>
-            entry.playable.kind === 'episode' &&
-            entry.playable.showMediaId === media.mediaId &&
-            entry.playable.seasonNumber === season.seasonNumber
-        )
-        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0];
-      if (watched?.playable.kind === 'episode') {
-        const matching = season.episodes.find(
-          episode => episode.episodeNumber === watched.playable.episodeNumber
-        );
-        if (matching) return matching;
-      }
-      return season.episodes[0];
-    },
+    (season: SeasonResponse) =>
+      episodeForSeason(season, media.mediaId, progress.data?.progress ?? []),
     [media.mediaId, progress.data?.progress]
   );
 

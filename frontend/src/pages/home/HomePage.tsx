@@ -23,12 +23,10 @@ import type { RealtimeMediaRef } from '@features/realtime/realtime.client';
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type {
   MediaDto,
-  MovieResponse,
   PlayableRef,
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
   ProgressEntry,
-  ShowResponse,
 } from '@miauflix/backend';
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -53,10 +51,18 @@ import { PlayerView } from './components/PlayerView';
 import { TraktModal } from './components/TraktModal';
 import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
 import { unfinishedProgress } from './continue-watching';
+import {
+  latestEpisodeProgress,
+  nextEpisode as findNextEpisode,
+  nextEpisodeInSeason,
+  nextSeasonNumber,
+} from './episode-rules';
 import { firstSeason } from './first-season';
+import { composeHomeCategories, CONTINUE_CATEGORY } from './home-feed';
 import { buildHomeRealtimeInterest } from './homeInterest';
 import { type HomeAction, type NavigationOutcome } from './homeNavigation';
 import { getMediaTitle } from './media.utils';
+import { mediaFromMovie, mediaFromProgress, mediaFromShow } from './media-mappers';
 
 const PageContainer = styled.main`
   position: fixed;
@@ -90,114 +96,6 @@ const FullPageState = styled.div`
   color: ${PALETTE.text.muted};
 `;
 
-const CONTINUE_CATEGORY = {
-  name: 'Continue watching',
-  slug: 'continue-watching',
-  description: 'Pick up where you left off',
-  url: '/continue-watching',
-};
-
-/** Build a movie or show card from cached catalog data, returning null when that data is absent. */
-function mediaFromProgress(
-  state: Pick<RootState, 'mediaApi'>,
-  entry: ProgressEntry
-): MediaDto | null {
-  if (entry.playable.kind === 'movie') {
-    const response = mediaApi.endpoints.getMovie.select(entry.playable.mediaId)(state).data;
-    if (!response) return null;
-    return {
-      _type: 'movie',
-      id: response.id,
-      mediaId: response.mediaId,
-      imdbId: response.imdbId,
-      title: response.title,
-      overview: response.overview,
-      poster: response.poster,
-      backdrop: response.backdrop,
-      backdropFocus: response.backdropFocus,
-      logo: response.logo,
-      heroLogo: response.heroLogo,
-      artworkRevision: response.artworkRevision,
-      cardLogoStatus: response.cardLogoStatus,
-      heroLogoStatus: response.heroLogoStatus,
-      genres: response.genres,
-      popularity: response.popularity,
-      rating: response.rating,
-      releaseDate: response.releaseDate,
-      runtime: response.runtime,
-    };
-  }
-  const response = mediaApi.endpoints.getShow.select(entry.playable.showMediaId)(state).data;
-  if (!response) return null;
-  return {
-    _type: 'tvshow',
-    id: response.id,
-    mediaId: response.mediaId,
-    imdbId: response.imdbId,
-    name: response.title,
-    overview: response.overview ?? '',
-    poster: response.poster ?? '',
-    backdrop: response.backdrop ?? '',
-    backdropFocus: response.backdropFocus,
-    logo: response.logo ?? undefined,
-    heroLogo: response.heroLogo ?? undefined,
-    artworkRevision: response.artworkRevision,
-    cardLogoStatus: response.cardLogoStatus,
-    heroLogoStatus: response.heroLogoStatus,
-    genres: response.genres,
-    popularity: response.popularity ?? 0,
-    rating: response.rating ?? 0,
-    firstAirDate: response.firstAirDate ?? '',
-  };
-}
-
-function mediaFromMovie(response: MovieResponse): MediaDto {
-  return {
-    _type: 'movie',
-    id: response.id,
-    mediaId: response.mediaId,
-    imdbId: response.imdbId,
-    title: response.title,
-    overview: response.overview,
-    poster: response.poster,
-    backdrop: response.backdrop,
-    backdropFocus: response.backdropFocus,
-    logo: response.logo,
-    heroLogo: response.heroLogo,
-    artworkRevision: response.artworkRevision,
-    cardLogoStatus: response.cardLogoStatus,
-    heroLogoStatus: response.heroLogoStatus,
-    genres: response.genres,
-    popularity: response.popularity,
-    rating: response.rating,
-    releaseDate: response.releaseDate,
-    runtime: response.runtime,
-  };
-}
-
-function mediaFromShow(response: ShowResponse): MediaDto {
-  return {
-    _type: 'tvshow',
-    id: response.id,
-    mediaId: response.mediaId,
-    imdbId: response.imdbId,
-    name: response.title,
-    overview: response.overview ?? '',
-    poster: response.poster ?? '',
-    backdrop: response.backdrop ?? '',
-    backdropFocus: response.backdropFocus,
-    logo: response.logo ?? undefined,
-    heroLogo: response.heroLogo ?? undefined,
-    artworkRevision: response.artworkRevision,
-    cardLogoStatus: response.cardLogoStatus,
-    heroLogoStatus: response.heroLogoStatus,
-    genres: response.genres,
-    popularity: response.popularity ?? 0,
-    rating: response.rating ?? 0,
-    firstAirDate: response.firstAirDate ?? '',
-  };
-}
-
 function subtitleLanguageForMedia(
   media: MediaDto | null,
   entries: ProgressEntry[],
@@ -206,12 +104,9 @@ function subtitleLanguageForMedia(
   const playable =
     media?._type === 'movie'
       ? { kind: 'movie' as const, mediaId: media.mediaId }
-      : entries
-          .filter(
-            entry =>
-              entry.playable.kind === 'episode' && entry.playable.showMediaId === media?.mediaId
-          )
-          .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))[0]?.playable;
+      : media
+        ? latestEpisodeProgress(entries, media.mediaId)?.playable
+        : undefined;
   const saved = playable ? readMediaSubtitles(mediaSubtitleKey(userId, playable)) : null;
   const browser =
     typeof navigator === 'undefined' ? 'en' : (navigator.language.split('-')[0] ?? 'en');
@@ -292,48 +187,20 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       : skipToken
   );
   // currentData, not data: while a new route loads, data still holds the previous show/season.
-  const nextEpisodeInSeason = currentSeasonQuery.currentData?.episodes
-    .filter(episode => episode.episodeNumber > (episodeRoute?.episodeNumber ?? Infinity))
-    .sort((left, right) => left.episodeNumber - right.episodeNumber)[0];
-  const nextSeasonNumber = (routedShow.currentData?.seasons ?? [])
-    .filter(
-      season =>
-        season.seasonNumber > (episodeRoute?.seasonNumber ?? Infinity) && season.seasonNumber > 0
-    )
-    .sort((left, right) => left.seasonNumber - right.seasonNumber)[0]?.seasonNumber;
+  const currentSeason = currentSeasonQuery.currentData;
+  const upcomingSeasonNumber = episodeRoute
+    ? nextSeasonNumber(routedShow.currentData?.seasons, episodeRoute.seasonNumber)
+    : undefined;
   const nextSeasonQuery = useGetSeasonQuery(
     episodeRoute &&
-      currentSeasonQuery.currentData &&
-      !nextEpisodeInSeason &&
-      nextSeasonNumber !== undefined
-      ? { showId: episodeRoute.showMediaId, season: nextSeasonNumber }
+      currentSeason &&
+      !nextEpisodeInSeason(currentSeason, episodeRoute.episodeNumber) &&
+      upcomingSeasonNumber !== undefined
+      ? { showId: episodeRoute.showMediaId, season: upcomingSeasonNumber }
       : skipToken
   );
-  const nextEpisodeAcrossSeason = nextSeasonQuery.currentData?.episodes
-    .filter(episode => episode.episodeNumber > 0)
-    .sort((left, right) => left.episodeNumber - right.episodeNumber)[0];
   const nextEpisode = episodeRoute
-    ? nextEpisodeInSeason
-      ? {
-          playable: {
-            kind: 'episode' as const,
-            showMediaId: episodeRoute.showMediaId,
-            seasonNumber: episodeRoute.seasonNumber,
-            episodeNumber: nextEpisodeInSeason.episodeNumber,
-          },
-          title: nextEpisodeInSeason.title,
-        }
-      : nextEpisodeAcrossSeason && nextSeasonNumber !== undefined
-        ? {
-            playable: {
-              kind: 'episode' as const,
-              showMediaId: episodeRoute.showMediaId,
-              seasonNumber: nextSeasonNumber,
-              episodeNumber: nextEpisodeAcrossSeason.episodeNumber,
-            },
-            title: nextEpisodeAcrossSeason.title,
-          }
-        : null
+    ? findNextEpisode(episodeRoute, currentSeason, nextSeasonQuery.currentData)
     : null;
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
   const currentUser = useSelector((state: RootState) => selectCurrentUser(state));
@@ -399,7 +266,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     [continueRefs, mediaCache]
   );
   const displayCategories = useMemo(
-    () => (continueMedia.length ? [CONTINUE_CATEGORY, ...categories] : categories),
+    () => composeHomeCategories(categories, continueMedia.length > 0),
     [categories, continueMedia.length]
   );
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth } = useMediaBoxSizes();
