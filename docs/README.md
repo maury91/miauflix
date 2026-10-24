@@ -39,7 +39,8 @@ docs/
 │   ├── workflow.md           # Development workflow
 │   ├── testing-guide.md      # Testing practices
 │   ├── ci-cd-guide.md        # GitHub Actions/CI
-│   └── coding-conventions.md # Code standards
+│   ├── coding-conventions.md # Code standards
+│   └── bun-compatibility.md  # What blocks moving back to Bun
 ├── architecture/       # System architecture
 │   └── system-overview.md    # Complete system overview
 ```

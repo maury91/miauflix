@@ -4,12 +4,9 @@ import {
   useRemoveFromWatchlistMutation,
 } from '@features/media/api/lists.api';
 import {
-  mediaApi,
   useEnsureBackdropFocusMutation,
   useGetMovieQuery,
-  useGetSeasonQuery,
   useGetShowQuery,
-  useLazyGetSeasonQuery,
 } from '@features/media/api/media.api';
 import { useGetMediaRatingQuery, useSetMediaRatingMutation } from '@features/media/api/ratings.api';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
@@ -29,17 +26,23 @@ import {
   selectDetailsNavigationForMedia,
 } from '@store/slices/detailsNavigation';
 import type { RootState } from '@store/store';
-import { forwardRef, type UIEvent } from 'react';
+import { forwardRef } from 'react';
 import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import type { BackdropPositionContext } from '../backdrop-focus';
 import { getBackdropPlacement } from '../backdrop-focus';
+import { episodeForSeason } from '../episode-rules';
 import { firstSeason } from '../first-season';
 import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
+import { useShowSeasons } from '../hooks/useShowSeasons';
+import { imagePreloader, URGENT } from '../image-preloader';
 import { artworkUrl, getMediaTitle } from '../media.utils';
+import { ErrorState, PrimaryAction, SectionLabel } from './details.styles';
 import { navigateDetails } from './detailsNavigation';
+import { episodeElementId } from './episodes.utils';
+import { EpisodesSection } from './EpisodesSection';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
 import BookmarkIcon from '~icons/mdi/bookmark-outline';
@@ -234,12 +237,6 @@ const Overview = styled.p`
   overflow: hidden;
 `;
 
-const SectionLabel = styled.h2`
-  margin: 3vh 0 1vh;
-  font-size: clamp(1rem, 2.5vh, 1.45rem);
-  font-weight: 500;
-`;
-
 const SeasonMenu = styled.nav`
   display: grid;
   gap: 0.65vh;
@@ -280,111 +277,6 @@ const SeasonButton = styled(BaseButton)<{ $selected: boolean; $focused: boolean 
     flex: 0 0 auto;
     min-width: 9rem;
   }
-`;
-
-const EpisodePane = styled.section`
-  min-width: 0;
-  height: 100%;
-  overflow: hidden;
-
-  @media (max-width: 860px) {
-    height: 60vh;
-    margin-top: 4vh;
-  }
-`;
-
-const EpisodeList = styled.div`
-  height: calc(100% - 3.5rem);
-  overflow: auto;
-  padding: 0.5rem 0.4rem 8vh 0;
-  scrollbar-width: thin;
-  scrollbar-color: ${PALETTE.background.border} transparent;
-`;
-
-const SeasonSection = styled.section`
-  scroll-margin-top: 1rem;
-  margin-bottom: 2.5vh;
-`;
-
-const EpisodeHeading = styled.h3`
-  margin: 0 0 0.8vh;
-  color: ${PALETTE.text.primary};
-  font-size: clamp(1rem, 2.5vh, 1.4rem);
-`;
-
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const EpisodeRow = styled(BaseButton)<{ $selected: boolean; $image: string }>`
-  display: grid;
-  grid-template-columns: minmax(150px, 18vw) 1fr;
-  width: 100%;
-  min-height: 10vh;
-  margin-bottom: 0.8vh;
-  padding: 0;
-  overflow: hidden;
-  border: 0.25vh solid
-    ${({ $selected }) => ($selected ? PALETTE.color.interactive : 'rgba(255, 255, 255, 0.14)')};
-  border-radius: 0.6vh;
-  background: rgba(17, 23, 25, 0.8);
-  color: ${PALETTE.text.primary};
-  text-align: left;
-  cursor: pointer;
-  box-shadow: none;
-
-  &::before {
-    display: block;
-    min-height: 10vh;
-    content: '';
-    background:
-      url(${({ $image }) => $image}) center / cover no-repeat,
-      ${PALETTE.background.surface2};
-  }
-
-  &:focus-visible {
-    outline: 0.3vh solid ${PALETTE.color.interactive};
-    outline-offset: 0.2vh;
-  }
-
-  @media (max-width: 860px) {
-    grid-template-columns: 38vw 1fr;
-  }
-`;
-
-const EpisodeCaption = styled.span`
-  align-self: center;
-  padding: 1rem;
-  font-size: clamp(0.85rem, 2vh, 1.1rem);
-  font-weight: 600;
-`;
-
-const ProgressMark = styled.span`
-  display: block;
-  margin-top: 0.5rem;
-  color: ${PALETTE.text.secondary};
-  font-size: 0.78em;
-  font-weight: 400;
-`;
-
-const ErrorState = styled.div`
-  padding: 3vh 0;
-  color: ${PALETTE.text.secondary};
-`;
-
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const PrimaryAction = styled(BaseButton)<{ $selected: boolean }>`
-  min-width: 0;
-  min-height: 5vh;
-  padding: 1vh 1.6vw;
-  border: 0.25vh solid
-    ${({ $selected }) => ($selected ? PALETTE.color.interactive : PALETTE.background.border)};
-  border-radius: 0.7vh;
-  background: ${({ $selected }) =>
-    $selected ? PALETTE.color.interactive : PALETTE.background.surface2};
-  color: ${PALETTE.text.primary};
-  font:
-    600 clamp(0.9rem, 2.1vh, 1.2rem) 'Poppins',
-    sans-serif;
-  cursor: pointer;
-  box-shadow: none;
 `;
 
 const WatchAction = styled(PrimaryAction)`
@@ -498,8 +390,6 @@ export interface MediaDetailsHandle {
 }
 
 const formatYear = (value: string | null | undefined) => value?.slice(0, 4) ?? '';
-const episodeKey = (seasonNumber: number, episodeNumber: number) =>
-  `${seasonNumber}:${episodeNumber}`;
 
 /** Describe torrent warmup for assistive text; progress is an already formatted percentage. */
 function warmupDescription(state: WarmupState, progress: number): string {
@@ -534,15 +424,9 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const [removeFromWatchlist, removeState] = useRemoveFromWatchlistMutation();
   const watchlistPending = addState.isLoading || removeState.isLoading;
   const inWatchlist = watchlist.data?.inWatchlist ?? false;
-  const [loadSeason] = useLazyGetSeasonQuery();
   const progress = useGetProgressQuery(undefined);
   const pageRef = useRef<HTMLElement>(null);
   const backRef = useRef<HTMLButtonElement>(null);
-  const episodeListRef = useRef<HTMLDivElement>(null);
-  const sectionRefs = useRef(new Map<number, HTMLElement>());
-  const inflight = useRef(new Map<number, Promise<SeasonResponse | undefined>>());
-  const currentMediaId = useRef(media.mediaId);
-  currentMediaId.current = media.mediaId;
   const jumpToSeason = useRef<number | null>(null);
   const seasonFocusOrigin = useRef<Element | null>(null);
   const [resolvedBackdropFocus, setResolvedBackdropFocus] = useState(media.backdropFocus);
@@ -572,9 +456,6 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     void setMediaRating({ ...ratingItem, rating: selectedRating === rating ? null : rating });
   };
 
-  const [seasonErrors, setSeasonErrors] = useState<Record<number, boolean>>({});
-  const [loadingSeasons, setLoadingSeasons] = useState<Record<number, boolean>>({});
-
   const movie = useGetMovieQuery(media._type === 'movie' ? media.mediaId : skipToken);
   const show = useGetShowQuery(media._type === 'tvshow' ? media.mediaId : skipToken);
   const showDetails = show.data;
@@ -592,28 +473,13 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   const initialSeason = showDetails
     ? firstSeason(showDetails, progress.data?.progress ?? [])
     : undefined;
-  const openingSeason = useGetSeasonQuery(
-    media._type === 'tvshow' && initialSeason !== undefined
-      ? { showId: media.mediaId, season: initialSeason }
-      : skipToken
-  );
-  const selectLoadedSeasons = useMemo(() => {
-    const queries = seasons.map(season => ({
-      number: season.seasonNumber,
-      select: mediaApi.endpoints.getSeason.select({
-        showId: media.mediaId,
-        season: season.seasonNumber,
-      }),
-    }));
-    return (state: RootState) =>
-      Object.fromEntries(
-        queries.flatMap(query => {
-          const data = query.select(state).data;
-          return data ? [[query.number, data]] : [];
-        })
-      ) as Record<number, SeasonResponse>;
-  }, [media.mediaId, seasons]);
-  const loadedSeasons = useSelector(selectLoadedSeasons, shallowEqual);
+  const seasonNumbers = useMemo(() => seasons.map(season => season.seasonNumber), [seasons]);
+  const showSeasons = useShowSeasons({
+    showId: media._type === 'tvshow' ? media.mediaId : null,
+    seasonNumbers,
+    openingSeason: initialSeason,
+  });
+  const { loaded: loadedSeasons, request: requestSeason, retry: retrySeasonLoad } = showSeasons;
 
   useEffect(() => {
     dispatch(
@@ -624,49 +490,6 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   useEffect(() => {
     resetRatingUpdate();
   }, [media._type, media.mediaId, userId, resetRatingUpdate]);
-
-  const loadSeasonData = useCallback(
-    (seasonNumber: number) => {
-      const cached = loadedSeasons[seasonNumber];
-      if (cached) return Promise.resolve(cached);
-      const pending = inflight.current.get(seasonNumber);
-      if (pending) return pending;
-      const requestMediaId = media.mediaId;
-      setLoadingSeasons(previous => ({ ...previous, [seasonNumber]: true }));
-      const request = loadSeason({ showId: requestMediaId, season: seasonNumber }, true)
-        .unwrap()
-        .then(data => {
-          if (
-            currentMediaId.current !== requestMediaId ||
-            inflight.current.get(seasonNumber) !== request
-          ) {
-            return undefined;
-          }
-
-          setSeasonErrors(previous => ({ ...previous, [seasonNumber]: false }));
-          return data;
-        })
-        .catch(() => {
-          if (
-            currentMediaId.current !== requestMediaId ||
-            inflight.current.get(seasonNumber) !== request
-          ) {
-            return undefined;
-          }
-          setSeasonErrors(previous => ({ ...previous, [seasonNumber]: true }));
-          return undefined;
-        })
-        .finally(() => {
-          if (inflight.current.get(seasonNumber) !== request) return;
-          inflight.current.delete(seasonNumber);
-          if (currentMediaId.current !== requestMediaId) return;
-          setLoadingSeasons(previous => ({ ...previous, [seasonNumber]: false }));
-        });
-      inflight.current.set(seasonNumber, request);
-      return request;
-    },
-    [loadedSeasons, loadSeason, media.mediaId]
-  );
 
   useEffect(() => {
     pageRef.current?.focus({ preventScroll: true });
@@ -680,9 +503,6 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, []);
 
   useEffect(() => {
-    setSeasonErrors({});
-    setLoadingSeasons({});
-    inflight.current.clear();
     jumpToSeason.current = null;
   }, [media.mediaId, media._type]);
 
@@ -748,13 +568,13 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     const element = pageRef.current;
     if (!element || !backdrop || typeof window === 'undefined') return;
     let cancelled = false;
-    const image = new window.Image();
+    let size: { width: number; height: number } | null = null;
     const update = () => {
-      if (cancelled || image.naturalWidth <= 0 || image.naturalHeight <= 0) return;
+      if (cancelled || !size || size.width <= 0 || size.height <= 0) return;
       const bounds = element.getBoundingClientRect();
       setBackdropContext({
-        imageWidth: image.naturalWidth,
-        imageHeight: image.naturalHeight,
+        imageWidth: size.width,
+        imageHeight: size.height,
         containerWidth: bounds.width,
         containerHeight: bounds.height,
         targetX: 0.51,
@@ -762,9 +582,14 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
         maxZoom: 1.25,
       });
     };
-    image.onload = update;
-    image.src = backdrop;
-    if (image.complete) update();
+    // The same queue as the hero, so a backdrop it already loaded is sized at once.
+    imagePreloader.load(backdrop, URGENT).then(
+      loaded => {
+        size = loaded;
+        update();
+      },
+      () => undefined
+    );
     const observer = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(update) : null;
     observer?.observe(element);
     window.addEventListener('resize', update);
@@ -792,28 +617,9 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   }, [current]);
   const rating = current?.rating ? current.rating.toFixed(1) : null;
 
-  const loadedSections = useMemo(
-    () => seasons.map(item => loadedSeasons[item.seasonNumber]).filter(Boolean) as SeasonResponse[],
-    [loadedSeasons, seasons]
-  );
   const targetEpisodeForSeason = useCallback(
-    (season: SeasonResponse) => {
-      const watched = (progress.data?.progress ?? [])
-        .filter(
-          entry =>
-            entry.playable.kind === 'episode' &&
-            entry.playable.showMediaId === media.mediaId &&
-            entry.playable.seasonNumber === season.seasonNumber
-        )
-        .sort((left, right) => right.updatedAt.localeCompare(left.updatedAt))[0];
-      if (watched?.playable.kind === 'episode') {
-        const matching = season.episodes.find(
-          episode => episode.episodeNumber === watched.playable.episodeNumber
-        );
-        if (matching) return matching;
-      }
-      return season.episodes[0];
-    },
+    (season: SeasonResponse) =>
+      episodeForSeason(season, media.mediaId, progress.data?.progress ?? []),
     [media.mediaId, progress.data?.progress]
   );
 
@@ -836,7 +642,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     requestAnimationFrame(() => {
       if (origin && document.activeElement === origin) {
         document
-          .getElementById(`episode-${media.mediaId}-${episodeKey(requested, target.episodeNumber)}`)
+          .getElementById(episodeElementId(media.mediaId, requested, target.episodeNumber))
           ?.focus();
       }
     });
@@ -859,9 +665,17 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       dispatch(detailsNavigationActions.setFocusedArea('episodes'));
       jumpToSeason.current = item.seasonNumber;
       seasonFocusOrigin.current = document.activeElement;
-      void loadSeasonData(item.seasonNumber);
+      requestSeason(item.seasonNumber);
     },
-    [dispatch, loadSeasonData, seasons]
+    [dispatch, requestSeason, seasons]
+  );
+
+  const retrySeason = useCallback(
+    (seasonNumber: number) => {
+      selectSeason(seasons.findIndex(item => item.seasonNumber === seasonNumber));
+      retrySeasonLoad(seasonNumber);
+    },
+    [retrySeasonLoad, seasons, selectSeason]
   );
 
   const selectEpisode = useCallback(
@@ -869,7 +683,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
       dispatch(detailsNavigationActions.selectEpisode({ seasonNumber, episodeNumber }));
       requestAnimationFrame(() =>
         document
-          .getElementById(`episode-${media.mediaId}-${episodeKey(seasonNumber, episodeNumber)}`)
+          .getElementById(episodeElementId(media.mediaId, seasonNumber, episodeNumber))
           ?.scrollIntoView({ block: 'nearest' })
       );
       if (play)
@@ -878,28 +692,19 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     [dispatch, media.mediaId, onWatch]
   );
 
-  const handleEpisodeScroll = useCallback(
-    (event: UIEvent<HTMLDivElement>) => {
-      const top = event.currentTarget.getBoundingClientRect().top + 24;
-      let currentSeason: number | null = null;
-      sectionRefs.current.forEach((node, seasonNumber) => {
-        if (node.getBoundingClientRect().top <= top) currentSeason = seasonNumber;
-      });
-      if (currentSeason !== null) {
-        dispatch(detailsNavigationActions.setActiveSeasonNumber(currentSeason));
-      }
-      const element = event.currentTarget;
-      if (
-        element.scrollTop + element.clientHeight >=
-        element.scrollHeight - element.clientHeight * 1.5
-      ) {
-        const lastLoaded = loadedSections[loadedSections.length - 1]?.seasonNumber;
-        const next = seasons.findIndex(item => item.seasonNumber === lastLoaded) + 1;
-        if (next > 0 && seasons[next]) void loadSeasonData(seasons[next].seasonNumber);
-      }
-    },
-    [dispatch, loadSeasonData, loadedSections, seasons]
+  const showVisibleSeason = useCallback(
+    (seasonNumber: number) =>
+      dispatch(detailsNavigationActions.setActiveSeasonNumber(seasonNumber)),
+    [dispatch]
   );
+
+  // Scrolling near the end of the loaded seasons loads the next one.
+  const { loadedSections } = showSeasons;
+  const loadNextSeason = useCallback(() => {
+    const lastLoaded = loadedSections[loadedSections.length - 1]?.seasonNumber;
+    const next = seasons[seasons.findIndex(item => item.seasonNumber === lastLoaded) + 1];
+    if (lastLoaded !== undefined && next) requestSeason(next.seasonNumber);
+  }, [loadedSections, requestSeason, seasons]);
 
   const handleAction = useCallback((action: HomeAction): NavigationOutcome => {
     if (action === 'back') return { type: 'escape', direction: 'left' };
@@ -1095,7 +900,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                         dispatch(detailsNavigationActions.setFocusedArea('season'));
                         dispatch(detailsNavigationActions.setFocusedSeasonIndex(index));
                         for (const adjacent of seasons.slice(Math.max(0, index - 1), index + 2))
-                          void loadSeasonData(adjacent.seasonNumber);
+                          requestSeason(adjacent.seasonNumber);
                       }}
                       id={`season-${media.mediaId}-${item.seasonNumber}`}
                       key={item.id}
@@ -1116,92 +921,20 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
             )}
           </Content>
           {media._type === 'tvshow' && showDetails && (
-            <EpisodePane>
-              <SectionLabel>Episodes</SectionLabel>
-              <EpisodeList
-                ref={episodeListRef}
-                aria-label="Episodes"
-                onScroll={handleEpisodeScroll}
-              >
-                {loadedSections.map(section => (
-                  <SeasonSection
-                    key={section.seasonNumber}
-                    ref={node => {
-                      if (node) sectionRefs.current.set(section.seasonNumber, node);
-                      else sectionRefs.current.delete(section.seasonNumber);
-                    }}
-                  >
-                    <EpisodeHeading>{section.name}</EpisodeHeading>
-                    {section.episodes.map(episode => {
-                      const key = episodeKey(section.seasonNumber, episode.episodeNumber);
-                      const selected =
-                        selectedEpisode?.seasonNumber === section.seasonNumber &&
-                        selectedEpisode.episodeNumber === episode.episodeNumber;
-                      const watched = progressForPlayable(progress.data?.progress ?? [], {
-                        kind: 'episode',
-                        showMediaId: media.mediaId,
-                        seasonNumber: section.seasonNumber,
-                        episodeNumber: episode.episodeNumber,
-                      });
-                      return (
-                        <EpisodeRow
-                          onFocus={() => selectEpisode(section.seasonNumber, episode.episodeNumber)}
-                          id={`episode-${media.mediaId}-${key}`}
-                          key={episode.id}
-                          type="button"
-                          $selected={selected}
-                          $image={artworkUrl(episode.still ?? current?.backdrop, 'still', 300)}
-                          onMouseEnter={() =>
-                            selectEpisode(section.seasonNumber, episode.episodeNumber)
-                          }
-                          onClick={() =>
-                            selectEpisode(section.seasonNumber, episode.episodeNumber, true)
-                          }
-                        >
-                          <EpisodeCaption>
-                            E{episode.episodeNumber} · {episode.title}
-                            {watched ? (
-                              <ProgressMark>
-                                {watched.state === 'completed'
-                                  ? 'Watched'
-                                  : `Resume ${Math.round(
-                                      watched.durationSeconds > 0
-                                        ? Math.min(
-                                            100,
-                                            (watched.positionSeconds / watched.durationSeconds) *
-                                              100
-                                          )
-                                        : 0
-                                    )}%`}
-                              </ProgressMark>
-                            ) : null}
-                          </EpisodeCaption>
-                        </EpisodeRow>
-                      );
-                    })}
-                  </SeasonSection>
-                ))}
-                {(openingSeason.isLoading || Object.values(loadingSeasons).some(Boolean)) && (
-                  <Spinner text="Loading more episodes..." />
-                )}
-                {seasons.map((item, index) =>
-                  (seasonErrors[item.seasonNumber] ||
-                    (item.seasonNumber === initialSeason && openingSeason.isError)) &&
-                  !loadedSeasons[item.seasonNumber] ? (
-                    <ErrorState key={`error-${item.seasonNumber}`}>
-                      Failed to load {item.name}.
-                      <PrimaryAction
-                        type="button"
-                        $selected={false}
-                        onClick={() => selectSeason(index)}
-                      >
-                        Retry
-                      </PrimaryAction>
-                    </ErrorState>
-                  ) : null
-                )}
-              </EpisodeList>
-            </EpisodePane>
+            <EpisodesSection
+              showMediaId={media.mediaId}
+              seasons={seasons}
+              sections={loadedSections}
+              loading={showSeasons.loading}
+              failedSeasons={showSeasons.failedSeasons}
+              selectedEpisode={selectedEpisode}
+              progress={progress.data?.progress ?? []}
+              fallbackStill={current?.backdrop}
+              onSelectEpisode={selectEpisode}
+              onRetrySeason={retrySeason}
+              onVisibleSeasonChange={showVisibleSeason}
+              onNearEnd={loadNextSeason}
+            />
           )}
         </Layout>
       </Page>

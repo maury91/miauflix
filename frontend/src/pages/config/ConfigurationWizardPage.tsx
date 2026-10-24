@@ -7,6 +7,7 @@ import {
 import type { ConfigEntryView, ConfigServiceActionResult } from '@miauflix/backend';
 import { SETTINGS_PALETTE } from '@shared/config/constants';
 import { Button as BaseButton, Button } from '@shared/ui';
+import { motion } from 'framer-motion';
 import type { FC } from 'react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
@@ -18,7 +19,12 @@ import { sortServiceGroups } from './config.utils';
 import ChevronLeftIcon from '~icons/line-md/chevron-left';
 import ChevronRightIcon from '~icons/line-md/chevron-right';
 
-const Page = styled.div`
+/** Fades in like the login and setup pages, while the logo moves to the header. */
+const Page = styled(motion.div).attrs({
+  initial: { opacity: 0 },
+  animate: { opacity: 1 },
+  exit: { opacity: 0 },
+})`
   position: fixed;
   inset: 0;
   overflow-y: auto;

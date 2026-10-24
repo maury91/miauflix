@@ -93,7 +93,7 @@ Miauflix session.
 
 ### Lists
 
-- `GET /api/lists` - Get user lists
+- `GET /api/lists?page=&limit=` - Lists to display, paged: page 0 starts with the user's own and fixed lists, every page then carries the next popular lists
 - `GET /api/list/:slug` - Read a projected list page
 - `POST /api/integrations/trakt/authorization` - Start authenticated Trakt association
 - `POST /api/integrations/trakt/authorization/:authorizationId/check` - Poll association

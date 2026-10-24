@@ -33,10 +33,12 @@ const profileSchema = z.object({
 const popularListSchema = z.object({
   list: z.object({
     name: z.string(),
-    description: z.string(),
+    description: z
+      .string()
+      .nullish()
+      .transform(value => value ?? ''),
     item_count: z.number().int().nonnegative(),
-    user: z.object({ ids: z.object({ slug: z.string().min(1) }) }),
-    ids: z.object({ trakt: z.number().int().positive(), slug: z.string().min(1) }),
+    ids: z.object({ trakt: z.number().int().positive() }),
   }),
 });
 

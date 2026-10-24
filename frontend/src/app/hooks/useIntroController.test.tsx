@@ -42,6 +42,11 @@ describe('intro controller', () => {
     expect(store.getState().appState.introPhase).toBe('centering');
     act(() => result.current.handleIntroReady());
     act(() => vi.runAllTimers());
+    // Ready: the loading pulse stops; playback waits until the logo is back at full size.
+    expect(result.current.introReady).toBe(true);
+    expect(store.getState().appState.introPhase).toBe('centering');
+    act(() => result.current.handleLogoSettled());
+    act(() => vi.runAllTimers());
     expect(start).toHaveBeenCalledOnce();
     expect(store.getState().appState.introPhase).toBe('playing');
     const completed = vi.fn();
@@ -84,6 +89,19 @@ describe('intro controller', () => {
     });
     expect(store.getState().appState.introPhase).toBe('centering');
     act(() => result.current.handleLogoCentered());
+    act(() => result.current.handleLogoSettled());
+    act(() => vi.runAllTimers());
+    expect(store.getState().appState.introPhase).toBe('playing');
+  });
+
+  it('ignores a settled logo reported before the intro is ready', () => {
+    const { result, store } = setupTest();
+    act(() => result.current.handleLogoSettled());
+    act(() => result.current.handleHomeHydrated());
+    act(() => result.current.handleIntroReady());
+    act(() => vi.runAllTimers());
+    expect(store.getState().appState.introPhase).toBe('centering');
+    act(() => result.current.handleLogoSettled());
     act(() => vi.runAllTimers());
     expect(store.getState().appState.introPhase).toBe('playing');
   });
@@ -98,6 +116,7 @@ describe('intro controller', () => {
       result.current.handleHomeHydrated();
       result.current.handleIntroReady();
     });
+    act(() => result.current.handleLogoSettled());
     expect(requestIdle).toHaveBeenCalledOnce();
     unmount();
     expect(cancelIdle).toHaveBeenCalledWith(42);

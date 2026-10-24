@@ -2,10 +2,6 @@ import { performance } from 'node:perf_hooks';
 
 import { extractUserCredentialsFromLogs, TestClient, waitForService } from '../utils/test-utils';
 
-type ListDefinition = {
-  slug: string;
-};
-
 type ListPageResponse = {
   results: unknown[];
   total: number;
@@ -29,9 +25,9 @@ describe('List performance', () => {
 
     const listsResponse = await client.get(['api', 'lists']);
     expect(listsResponse).toBeHttpStatus(200);
-    expect(Array.isArray(listsResponse.data)).toBe(true);
+    expect(Array.isArray(listsResponse.data.results)).toBe(true);
 
-    const list = (listsResponse.data as ListDefinition[])[0];
+    const list = listsResponse.data.results[0];
     if (!list?.slug) {
       throw new Error('The lists endpoint did not return a list slug to benchmark');
     }

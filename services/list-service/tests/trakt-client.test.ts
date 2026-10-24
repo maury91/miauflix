@@ -202,7 +202,7 @@ describe('TraktClient', () => {
     });
   });
 
-  it('parses paginated popular community lists', async () => {
+  it('parses paginated popular community lists, including ones from private owners', async () => {
     globalThis.fetch = (async () =>
       new Response(
         JSON.stringify([
@@ -211,7 +211,7 @@ describe('TraktClient', () => {
               name: 'Best science fiction',
               description: 'A public list',
               item_count: 2,
-              user: { ids: { slug: 'example-user' } },
+              user: { ids: { slug: null } },
               ids: { trakt: 42, slug: 'best-science-fiction' },
             },
           },

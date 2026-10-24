@@ -5,8 +5,10 @@ export interface ListDto {
   url: string;
 }
 
-export type ListsResponse = ListDto[];
-
+/**
+ * One page of the lists to display. Page 0 starts with the user's own and fixed lists, then
+ * every page carries the next popular lists.
+ */
 export interface ListsPageResponse {
   results: ListDto[];
   page: number;
