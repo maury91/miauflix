@@ -16,3 +16,16 @@ export function listSchedules(
     runOnStart: true,
   }));
 }
+
+export function tvWatchlistSchedules(): BackgroundJobSchedule[] {
+  return [
+    {
+      job: 'watchlist.tv.scan',
+      id: 'watchlist-tv-scan',
+      intervalSeconds: 15 * 60,
+      payload: {},
+      priority: 55,
+      runOnStart: true,
+    },
+  ];
+}

@@ -2,21 +2,23 @@ import type { EncryptedStorageLayout } from '@entities/storage.entity';
 
 import EncryptedChunkStore from '../../chunk-stores/encrypted-chunk-store/encrypted-chunk-store';
 
-/** Reads a byte range from the existing encrypted torrent chunk files. */
+/** Reads one file's pieces from the existing encrypted torrent chunk files. */
 export class EncryptedFileReader {
   private readonly store: EncryptedChunkStore;
 
-  constructor(location: string, layout: EncryptedStorageLayout, encryptionKey: Buffer | string) {
-    const selectedFile = layout.files.find(file => file.path === layout.video.path);
+  constructor(
+    location: string,
+    layout: EncryptedStorageLayout,
+    filePath: string,
+    encryptionKey: Buffer | string
+  ) {
     if (
       !Number.isSafeInteger(layout.pieceLength) ||
       layout.pieceLength <= 0 ||
       !location ||
       !layout.storeName ||
       !layout.filenameSalt ||
-      !selectedFile ||
-      selectedFile.offset !== layout.video.offset ||
-      selectedFile.length !== layout.video.length ||
+      !layout.files.some(file => file.path === filePath) ||
       layout.files.some(
         file =>
           !file.path ||

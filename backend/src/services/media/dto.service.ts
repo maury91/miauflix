@@ -5,7 +5,7 @@ import {
 } from '@dto/media-source.dto';
 import { AudioCodec, Quality, type VideoCodec } from '@miauflix/source-metadata-extractor';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 import { formatAudioCodec, formatVideoCodec } from '@utils/codec.util';
 
 import { type QualityMetrics, QualityScoringService } from './quality-scoring.service';
@@ -18,16 +18,16 @@ export class DtoService {
   }
 
   /**
-   * Transform internal MovieSource entities to sanitized MediaSource objects
+   * Transform internal ContentSource entities to sanitized MediaSource objects
    */
-  public transformToSanitizedSources(movieSources: MovieSource[]): MediaSource[] {
+  public transformToSanitizedSources(movieSources: ContentSource[]): MediaSource[] {
     return movieSources.map(source => this.transformSingleSource(source));
   }
 
   /**
-   * Transform a single MovieSource to sanitized MediaSource
+   * Transform a single ContentSource to sanitized MediaSource
    */
-  private transformSingleSource(source: MovieSource): MediaSource {
+  private transformSingleSource(source: ContentSource): MediaSource {
     // Create internal representation with sanitized field names
     const internal: MediaSourceInternal = {
       id: source.id,
@@ -70,7 +70,7 @@ export class DtoService {
    * Determine audio format from source data
    * Falls back to AAC if no specific audio codec is available
    */
-  private determineAudioFormat(source: MovieSource): string {
+  private determineAudioFormat(source: ContentSource): string {
     // Try to extract audio codec from quality string or other metadata
     const quality = source.quality?.toLowerCase() || '';
 
@@ -88,7 +88,7 @@ export class DtoService {
    * Calculate availability metrics from broadcasters/watchers data
    * Maps "broadcasters/watchers" to neutral availability metrics
    */
-  private calculateAvailabilityMetrics(source: MovieSource): number {
+  private calculateAvailabilityMetrics(source: ContentSource): number {
     const broadcasters = source.broadcasters || 0;
     const watchers = source.watchers || 0;
 
@@ -103,7 +103,7 @@ export class DtoService {
    */
   public getInternalSourceData(
     sourceId: number,
-    movieSources: MovieSource[]
+    movieSources: ContentSource[]
   ): {
     resourceLink: string;
     resourceIdentifier: string;

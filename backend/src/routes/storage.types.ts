@@ -1,7 +1,7 @@
 export type StorageActivity = 'active' | 'available_offline' | 'inactive' | 'local_only';
 
 export interface StorageItemView {
-  movieSourceId: number;
+  sourceId: number;
   title: string;
   fileName: string | null;
   quality: string | null;

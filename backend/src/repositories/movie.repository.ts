@@ -3,7 +3,6 @@ import { And, In, IsNull, LessThanOrEqual, Not } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { Movie } from '@entities/movie.entity';
-import { type MovieSource } from '@entities/movie-source.entity';
 import { RepositoryError } from '@errors/repository.errors';
 import type { MovieDetail } from '@services/catalog/catalog.types';
 
@@ -209,60 +208,6 @@ export class MovieRepository {
       },
       order: { popularity: 'DESC' },
       take: limit,
-    });
-  }
-
-  async findMoviesWithoutSources(limit: number = 10): Promise<
-    (Omit<Movie, 'sources'> & {
-      sources: MovieSource[];
-      sourcesCount: number;
-      missingCount: number;
-    })[]
-  > {
-    // Get movies that have sources without source files
-    // This query prioritizes movies based on:
-    // - Movie popularity
-    // - Number of sources for the movie
-    // - Number of sources with missing source files
-
-    // First, find movie IDs with their source counts and missing source counts
-    const results = await this.movieRepository
-      .createQueryBuilder('movie')
-      .innerJoin('movie.sources', 'source')
-      .select('movie.id', 'id')
-      .addSelect('movie.popularity', 'popularity')
-      .addSelect('COUNT(source.id)', 'sources')
-      .addSelect('SUM(CASE WHEN source.file IS NULL THEN 1 ELSE 0 END)', 'missing')
-      .groupBy('movie.id')
-      .addGroupBy('movie.popularity')
-      .having('SUM(CASE WHEN source.file IS NULL THEN 1 ELSE 0 END) > 0')
-      .orderBy('"missing"/"sources"', 'DESC')
-      .addOrderBy('movie.popularity', 'DESC')
-      .limit(limit)
-      .getRawMany<{ id: number; popularity: number; sources: number; missing: number }>();
-
-    if (results.length === 0) {
-      return [];
-    }
-
-    // Map the results to Movie entities
-    const movieIds = results.map(result => result.id);
-    const movies = await this.movieRepository.find({
-      where: {
-        id: In(movieIds),
-      },
-      relations: {
-        sources: true,
-      },
-    });
-
-    return movies.map(movie => {
-      const result = results.find(r => r.id === movie.id) || { sources: 0, missing: 0 };
-      return {
-        ...movie,
-        sourcesCount: result.sources,
-        missingCount: result.missing,
-      };
     });
   }
 

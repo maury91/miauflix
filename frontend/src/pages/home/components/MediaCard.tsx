@@ -4,7 +4,7 @@ import type { RootState } from '@store/store';
 import { forwardRef } from 'react';
 import { useSelector } from 'react-redux';
 
-import { getImageUrl, getMediaTitle } from '../media.utils';
+import { artworkUrl, getMediaTitle } from '../media.utils';
 
 interface MediaCardProps {
   media: MediaDto;
@@ -66,8 +66,8 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
   return (
     <ArtworkCard
       ref={ref}
-      backdrop={getImageUrl(selectedArtwork.backdrop)}
-      logo={cardLogo ? getImageUrl(cardLogo) : undefined}
+      backdrop={artworkUrl(selectedArtwork.backdrop, 'card', width)}
+      logo={cardLogo ? artworkUrl(cardLogo, 'logo', width * 0.7) : undefined}
       title={title}
       subtitle={subtitle}
       focused={selected}

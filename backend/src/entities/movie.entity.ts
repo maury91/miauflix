@@ -10,7 +10,7 @@ import {
 
 import type { EncryptionService } from '@services/encryption/encryption.service';
 
-import { MovieSource } from './movie-source.entity';
+import type { MovieSource } from './movie-source.entity';
 
 /**
  * Local index of catalog movies.
@@ -101,7 +101,7 @@ export class Movie {
   })
   nextSourceSearchAt: Date;
 
-  @OneToMany(() => MovieSource, source => source.movie)
+  @OneToMany('MovieSource', 'movie')
   sources: Relation<MovieSource>[];
 
   /** Time */

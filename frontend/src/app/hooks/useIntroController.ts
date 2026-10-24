@@ -99,6 +99,7 @@ export function useIntroController(appState: AppState, homeEligible: boolean) {
   const handleIntroStart = useCallback(() => {
     if (homeEligibleRef.current && introPhaseRef.current === 'playing') {
       setIntroHasStarted(true);
+      window.dispatchEvent(new Event('miauflix:intro:animation:start'));
     }
   }, []);
 

@@ -1,12 +1,15 @@
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { type FC, useEffect, useRef, useState } from 'react';
+import { type FC, type Ref, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import type { HomeAction, NavigationOutcome } from '../homeNavigation';
 
+import NotificationsIcon from '~icons/mdi/bell-outline';
 import SettingsIcon from '~icons/mdi/cog-outline';
 import HomeIcon from '~icons/mdi/home-outline';
+
+type SidebarItem = 'notifications' | 'home' | 'settings';
 
 const Rail = styled.aside<{ $active: boolean }>`
   position: fixed;
@@ -29,7 +32,7 @@ const Rail = styled.aside<{ $active: boolean }>`
 
 const Navigation = styled.nav`
   position: absolute;
-  top: 17vh;
+  top: 5vh;
   bottom: 6vh;
   left: 0.65vw;
   right: 0.65vw;
@@ -88,49 +91,90 @@ const Icon = styled.span`
   }
 `;
 
+const UnreadBadge = styled.span`
+  position: absolute;
+  top: 4px;
+  left: 2.15em;
+  min-width: 17px;
+  height: 17px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: #e60019;
+  color: white;
+  font-size: 0.66rem;
+  line-height: 17px;
+  text-align: center;
+`;
+
 interface HomeSidebarProps {
   active: boolean;
   onAction: (action: HomeAction) => NavigationOutcome;
   onHover: () => void;
   onSettings: () => void;
+  onNotifications: () => void;
+  notificationsRef: Ref<HTMLButtonElement>;
+  unreadCount: number;
 }
 
-/** Render Home and Settings actions, restoring the selected button’s focus when the sidebar becomes active. */
-export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, onSettings }) => {
+/** Render the primary Home actions and restore the selected button when the rail activates. */
+export const HomeSidebar: FC<HomeSidebarProps> = ({
+  active,
+  onAction,
+  onHover,
+  onSettings,
+  onNotifications,
+  notificationsRef,
+  unreadCount,
+}) => {
+  const [selected, setSelected] = useState<SidebarItem>('home');
+  const notificationsButtonRef = useRef<HTMLButtonElement>(null);
   const homeRef = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
-  const [selected, setSelected] = useState<'home' | 'settings'>('home');
+
+  const order: SidebarItem[] = ['notifications', 'home', 'settings'];
+  const focusSelected = (item: SidebarItem) => {
+    if (item === 'notifications') notificationsButtonRef.current?.focus({ preventScroll: true });
+    if (item === 'home') homeRef.current?.focus({ preventScroll: true });
+    if (item === 'settings') settingsRef.current?.focus({ preventScroll: true });
+  };
+  const focus = (item: SidebarItem) => {
+    setSelected(item);
+    onHover();
+    focusSelected(item);
+  };
 
   useEffect(() => {
     if (active) {
-      const target = selected === 'home' ? homeRef.current : settingsRef.current;
-      target?.focus({ preventScroll: true });
+      if (selected === 'notifications')
+        notificationsButtonRef.current?.focus({ preventScroll: true });
+      else if (selected === 'home') homeRef.current?.focus({ preventScroll: true });
+      else settingsRef.current?.focus({ preventScroll: true });
     }
   }, [active, selected]);
 
-  const move = (next: 'home' | 'settings') => {
+  const move = (next: SidebarItem) => {
     setSelected(next);
     onHover();
+  };
+
+  const step = (direction: -1 | 1) => {
+    const index = order.indexOf(selected);
+    const next = order[(index + direction + order.length) % order.length];
+    focus(next);
   };
 
   const navigationRef = useKeyboardNavigation({
     enabled: active,
     onDown: () => {
-      const next = selected === 'home' ? 'settings' : 'home';
-      move(next);
-      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      step(1);
       return true;
     },
     onUp: () => {
-      const next = selected === 'settings' ? 'home' : 'settings';
-      move(next);
-      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      step(-1);
       return true;
     },
     onLeft: () => {
-      const next = selected === 'settings' ? 'home' : 'settings';
-      move(next);
-      (next === 'home' ? homeRef.current : settingsRef.current)?.focus({ preventScroll: true });
+      step(-1);
       return true;
     },
     onRight: () => {
@@ -139,6 +183,7 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
     },
     onConfirm: () => {
       if (selected === 'settings') onSettings();
+      else if (selected === 'notifications') onNotifications();
       else onAction('confirm');
       return true;
     },
@@ -159,6 +204,29 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({ active, onAction, onHover, o
       }}
     >
       <Navigation>
+        <Item
+          ref={element => {
+            notificationsButtonRef.current = element;
+            if (typeof notificationsRef === 'function') notificationsRef(element);
+            else if (notificationsRef) notificationsRef.current = element;
+          }}
+          type="button"
+          $active={active}
+          $selected={selected === 'notifications'}
+          aria-label={`Notifications${unreadCount ? `, ${unreadCount} unread` : ''}`}
+          aria-haspopup="dialog"
+          onFocus={() => move('notifications')}
+          onMouseEnter={() => move('notifications')}
+          onClick={onNotifications}
+        >
+          <Icon aria-hidden="true">
+            <NotificationsIcon />
+          </Icon>
+          {unreadCount > 0 && (
+            <UnreadBadge aria-hidden="true">{unreadCount > 99 ? '99+' : unreadCount}</UnreadBadge>
+          )}
+          {active && <span>Notifications</span>}
+        </Item>
         <Item
           ref={homeRef}
           type="button"

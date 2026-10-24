@@ -8,6 +8,7 @@ import { sb } from 'storybook/test';
 sb.mock(import('../src/features/media/api/lists.api.ts'), { spy: true });
 sb.mock(import('../src/features/media/api/media.api.ts'));
 sb.mock(import('../src/features/media/api/ratings.api.ts'));
+sb.mock(import('../src/features/notifications/api/notifications.api.ts'));
 sb.mock(import('../src/features/preload/api/preload.api.ts'));
 sb.mock(import('../src/features/progress/api/progress.api.ts'));
 

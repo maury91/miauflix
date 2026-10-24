@@ -1,8 +1,8 @@
 import type { EntityTarget, ObjectLiteral, Repository } from 'typeorm';
 
+import type { ContentSource } from '@entities/content-source.entity';
 import type { Episode } from '@entities/episode.entity';
 import type { Movie } from '@entities/movie.entity';
-import type { MovieSource } from '@entities/movie-source.entity';
 import type { RefreshToken } from '@entities/refresh-token.entity';
 import type { Season } from '@entities/season.entity';
 import type { Storage } from '@entities/storage.entity';
@@ -11,9 +11,9 @@ import type { TVShow } from '@entities/tvshow.entity';
 import type { User } from '@entities/user.entity';
 import { UserRole } from '@entities/user.entity';
 import type { AuditLogRepository } from '@repositories/audit-log.repository';
+import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { MovieRepository } from '@repositories/movie.repository';
-import type { MovieSourceRepository } from '@repositories/movie-source.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
 import type { QrLoginRequestRepository } from '@repositories/qr-login-request.repository';
 import type { RefreshTokenRepository } from '@repositories/refresh-token.repository';
@@ -48,7 +48,6 @@ const createMockMovieRepository = (): jest.Mocked<MovieRepository> => {
         Promise.resolve({ id: 1, mediaId: movie.mediaId ?? 1 } as unknown as Movie)
     ),
     findMoviesPendingSourceSearch: jest.fn((): Promise<Movie[]> => Promise.resolve([])),
-    findMoviesWithoutSources: jest.fn((): Promise<Movie[]> => Promise.resolve([])),
     markSourceSearched: jest.fn((): Promise<void> => Promise.resolve()),
     markSourceSearchAttempt: jest.fn((): Promise<void> => Promise.resolve()),
     resetSourceSearchState: jest.fn((): Promise<void> => Promise.resolve()),
@@ -96,20 +95,19 @@ const createMockTVShowRepository = (): jest.Mocked<TVShowRepository> => {
   } as unknown as jest.Mocked<TVShowRepository>;
 };
 
-// Mock MovieSourceRepository
-const createMockMovieSourceRepository = (): jest.Mocked<MovieSourceRepository> => {
+// Mock ContentSourceRepository
+const createMockContentSourceRepository = (): jest.Mocked<ContentSourceRepository> => {
   return {
-    create: jest.fn((source: Partial<MovieSource>) =>
-      Promise.resolve({ id: 1, ...source } as MovieSource)
+    upsertByHash: jest.fn((source: Partial<ContentSource>) =>
+      Promise.resolve({ id: 1, ...source } as ContentSource)
     ),
-    createMany: jest.fn(() => Promise.resolve([])),
+    upsertForMovie: jest.fn(() => Promise.resolve([])),
+    linkMovie: jest.fn(() => Promise.resolve()),
+    isLinkedToMovie: jest.fn(() => Promise.resolve(true)),
     findByMovieId: jest.fn(() => Promise.resolve([])),
-    findByMovieAndHash: jest.fn(() => Promise.resolve(null)),
-    getRepository: jest.fn(() => ({}) as Repository<MovieSource>),
-    findSourcesToProcess: jest.fn(() => Promise.resolve([])),
+    getNextSourcesToProcess: jest.fn(() => Promise.resolve([])),
     updateStats: jest.fn(() => Promise.resolve()),
-    findBestSourceForMovie: jest.fn(() => Promise.resolve(null)),
-  } as unknown as jest.Mocked<MovieSourceRepository>;
+  } as unknown as jest.Mocked<ContentSourceRepository>;
 };
 
 const createMockUser = (overrides: Partial<User> = {}): User => {
@@ -203,14 +201,14 @@ const createMockStreamingKeyRepository = (): jest.Mocked<StreamingKeyRepository>
 const createMockStorageRepository = (): jest.Mocked<StorageRepository> => {
   return {
     findById: jest.fn(() => Promise.resolve(null)),
-    findByMovieSourceId: jest.fn(() => Promise.resolve(null)),
-    findByMovieSourceIdWithRelation: jest.fn(() => Promise.resolve(null)),
+    findBySourceId: jest.fn(() => Promise.resolve(null)),
+    findBySourceIdWithRelation: jest.fn(() => Promise.resolve(null)),
     create: jest.fn((storage: Partial<Storage>) =>
       Promise.resolve({ id: 1, ...storage } as Storage)
     ),
     update: jest.fn(() => Promise.resolve(null)),
     delete: jest.fn(() => Promise.resolve(false)),
-    deleteByMovieSourceId: jest.fn(() => Promise.resolve(false)),
+    deleteBySourceId: jest.fn(() => Promise.resolve(false)),
     updateLastAccess: jest.fn(() => Promise.resolve()),
     updateDownloadProgress: jest.fn(() => Promise.resolve()),
     findOldUnaccessed: jest.fn(() => Promise.resolve([])),
@@ -228,7 +226,7 @@ export class Database {
   private progressRepository: jest.Mocked<ProgressRepository>;
   private seasonRepository: jest.Mocked<Record<string, unknown>>;
   private mediaListRepository: jest.Mocked<MediaListRepository>;
-  private movieSourceRepository: jest.Mocked<MovieSourceRepository>;
+  private contentSourceRepository: jest.Mocked<ContentSourceRepository>;
   private userRepository: jest.Mocked<UserRepository>;
   private refreshTokenRepository: jest.Mocked<RefreshTokenRepository>;
   private auditLogRepository: jest.Mocked<AuditLogRepository>;
@@ -242,7 +240,7 @@ export class Database {
   public getProgressRepository: jest.Mock;
   public getSeasonRepository: jest.Mock;
   public getMediaListRepository: jest.Mock;
-  public getMovieSourceRepository: jest.Mock;
+  public getContentSourceRepository: jest.Mock;
   public getUserRepository: jest.Mock;
   public getRefreshTokenRepository: jest.Mock;
   public getAuditLogRepository: jest.Mock;
@@ -257,7 +255,7 @@ export class Database {
     this.progressRepository = {} as jest.Mocked<ProgressRepository>;
     this.seasonRepository = {} as jest.Mocked<Record<string, unknown>>;
     this.mediaListRepository = {} as jest.Mocked<MediaListRepository>;
-    this.movieSourceRepository = createMockMovieSourceRepository();
+    this.contentSourceRepository = createMockContentSourceRepository();
     this.userRepository = createMockUserRepository();
     this.refreshTokenRepository = createMockRefreshTokenRepository();
     this.auditLogRepository = {} as jest.Mocked<AuditLogRepository>;
@@ -271,7 +269,7 @@ export class Database {
     this.getProgressRepository = jest.fn(() => this.progressRepository);
     this.getSeasonRepository = jest.fn(() => this.seasonRepository);
     this.getMediaListRepository = jest.fn(() => this.mediaListRepository);
-    this.getMovieSourceRepository = jest.fn(() => this.movieSourceRepository);
+    this.getContentSourceRepository = jest.fn(() => this.contentSourceRepository);
     this.getUserRepository = jest.fn(() => this.userRepository);
     this.getRefreshTokenRepository = jest.fn(() => this.refreshTokenRepository);
     this.getAuditLogRepository = jest.fn(() => this.auditLogRepository);

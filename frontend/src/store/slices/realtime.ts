@@ -1,4 +1,7 @@
-import type { RealtimeStatusMessage } from '@features/realtime/realtime.client';
+import type {
+  RealtimePlaybackDelivery,
+  RealtimeStatusMessage,
+} from '@features/realtime/realtime.client';
 import type {
   PlayableRef,
   PreloadPreparationSnapshot,
@@ -9,11 +12,14 @@ import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 interface RealtimeState {
   ready: boolean;
   preparationByMediaId: Record<number, PreloadPreparationSnapshot>;
+  /** Latest background probe result per playback session. */
+  playbackDeliveries: Record<string, RealtimePlaybackDelivery['update']>;
 }
 
 const initialState: RealtimeState = {
   ready: false,
   preparationByMediaId: {},
+  playbackDeliveries: {},
 };
 
 function getPlayable(message: RealtimeStatusMessage): PlayableRef {
@@ -62,6 +68,9 @@ export const realtimeSlice = createSlice({
         };
       }
     },
+    playbackDeliveryReceived(state, action: PayloadAction<RealtimePlaybackDelivery>) {
+      state.playbackDeliveries[action.payload.playbackId] = action.payload.update;
+    },
     resetRealtimeState() {
       return initialState;
     },
@@ -75,3 +84,7 @@ export const selectRealtimeReady = (state: { realtime: RealtimeState }) => state
 export const selectPreparationByMediaId =
   (mediaId: number | undefined) => (state: { realtime: RealtimeState }) =>
     mediaId === undefined ? null : (state.realtime.preparationByMediaId[mediaId] ?? null);
+
+export const selectPlaybackDelivery =
+  (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>
+    playbackId === undefined ? null : (state.realtime.playbackDeliveries[playbackId] ?? null);

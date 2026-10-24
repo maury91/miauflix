@@ -1,4 +1,5 @@
 import { listsApi } from '@features/media/api/lists.api';
+import { notificationsApi } from '@features/notifications/api/notifications.api';
 import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
 import type { ProgressRequest } from '@miauflix/backend';
@@ -132,6 +133,7 @@ describe('realtime middleware', () => {
         'progressApi/resetApiState',
         playbackApi.util.resetApiState.type,
         preloadApi.util.resetApiState.type,
+        notificationsApi.util.resetApiState.type,
       ])
     );
     const second = runtime.clients[1] as typeof first & { session: string };

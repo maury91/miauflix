@@ -1,8 +1,18 @@
 import { type AppRoute, navigate, navigateBack, useRoute } from '@app/router';
 import { getTraktAssociation } from '@features/integrations/api/trakt.api';
 import { useGetListsQuery, useGetPopularListsInfiniteQuery } from '@features/media/api/lists.api';
-import { useGetMovieQuery, useGetShowQuery } from '@features/media/api/media.api';
+import {
+  useGetMovieQuery,
+  useGetSeasonQuery,
+  useGetShowQuery,
+} from '@features/media/api/media.api';
 import { mediaApi } from '@features/media/api/media.api';
+import {
+  notificationsApi,
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
+} from '@features/notifications/api/notifications.api';
+import { mediaSubtitleKey, readMediaSubtitles } from '@features/player/lib/media-subtitles';
 import {
   useRemoveIntentMutation,
   useUpdateIntentMutation,
@@ -38,10 +48,12 @@ import { CategoryRow, type CategoryRowHandle } from './components/CategoryRow';
 import { HomeSidebar } from './components/HomeSidebar';
 import { MediaDetails, type MediaDetailsHandle } from './components/MediaDetails';
 import { MediaHero } from './components/MediaHero';
+import { NotificationsMenu } from './components/NotificationsMenu';
 import { PlayerView } from './components/PlayerView';
 import { TraktModal } from './components/TraktModal';
 import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
 import { unfinishedProgress } from './continue-watching';
+import { firstSeason } from './first-season';
 import { buildHomeRealtimeInterest } from './homeInterest';
 import { type HomeAction, type NavigationOutcome } from './homeNavigation';
 import { getMediaTitle } from './media.utils';
@@ -186,6 +198,26 @@ function mediaFromShow(response: ShowResponse): MediaDto {
   };
 }
 
+function subtitleLanguageForMedia(
+  media: MediaDto | null,
+  entries: ProgressEntry[],
+  userId?: string
+): string {
+  const playable =
+    media?._type === 'movie'
+      ? { kind: 'movie' as const, mediaId: media.mediaId }
+      : entries
+          .filter(
+            entry =>
+              entry.playable.kind === 'episode' && entry.playable.showMediaId === media?.mediaId
+          )
+          .sort((a, b) => Date.parse(b.updatedAt) - Date.parse(a.updatedAt))[0]?.playable;
+  const saved = playable ? readMediaSubtitles(mediaSubtitleKey(userId, playable)) : null;
+  const browser =
+    typeof navigator === 'undefined' ? 'en' : (navigator.language.split('-')[0] ?? 'en');
+  return saved?.language ?? (/^[a-z]{2,3}$/i.test(browser) ? browser : 'en');
+}
+
 interface HomePageProps {
   route?: AppRoute;
   /** Keep browser interaction and focus disabled while Home is preloading behind the intro. */
@@ -194,11 +226,13 @@ interface HomePageProps {
   onHydrated?: () => void;
 }
 
+const FALLBACK_HOME_ROUTE: AppRoute = { type: 'home' };
+
 /** Coordinate browsing, details, and playback with progress refresh, preload interest, and Trakt prompts. */
 const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
   const dispatch = useDispatch<AppDispatch>();
   const currentRoute = useRoute();
-  const activeRoute = route ?? currentRoute;
+  const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
   const view =
     activeRoute.type === 'movieDetails' || activeRoute.type === 'showDetails'
       ? 'details'
@@ -251,8 +285,65 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
       ? routedMovie
       : routedShow;
+  const episodeRoute = activeRoute.type === 'episodePlayer' ? activeRoute : null;
+  const currentSeasonQuery = useGetSeasonQuery(
+    episodeRoute
+      ? { showId: episodeRoute.showMediaId, season: episodeRoute.seasonNumber }
+      : skipToken
+  );
+  // currentData, not data: while a new route loads, data still holds the previous show/season.
+  const nextEpisodeInSeason = currentSeasonQuery.currentData?.episodes
+    .filter(episode => episode.episodeNumber > (episodeRoute?.episodeNumber ?? Infinity))
+    .sort((left, right) => left.episodeNumber - right.episodeNumber)[0];
+  const nextSeasonNumber = (routedShow.currentData?.seasons ?? [])
+    .filter(
+      season =>
+        season.seasonNumber > (episodeRoute?.seasonNumber ?? Infinity) && season.seasonNumber > 0
+    )
+    .sort((left, right) => left.seasonNumber - right.seasonNumber)[0]?.seasonNumber;
+  const nextSeasonQuery = useGetSeasonQuery(
+    episodeRoute &&
+      currentSeasonQuery.currentData &&
+      !nextEpisodeInSeason &&
+      nextSeasonNumber !== undefined
+      ? { showId: episodeRoute.showMediaId, season: nextSeasonNumber }
+      : skipToken
+  );
+  const nextEpisodeAcrossSeason = nextSeasonQuery.currentData?.episodes
+    .filter(episode => episode.episodeNumber > 0)
+    .sort((left, right) => left.episodeNumber - right.episodeNumber)[0];
+  const nextEpisode = episodeRoute
+    ? nextEpisodeInSeason
+      ? {
+          playable: {
+            kind: 'episode' as const,
+            showMediaId: episodeRoute.showMediaId,
+            seasonNumber: episodeRoute.seasonNumber,
+            episodeNumber: nextEpisodeInSeason.episodeNumber,
+          },
+          title: nextEpisodeInSeason.title,
+        }
+      : nextEpisodeAcrossSeason && nextSeasonNumber !== undefined
+        ? {
+            playable: {
+              kind: 'episode' as const,
+              showMediaId: episodeRoute.showMediaId,
+              seasonNumber: nextSeasonNumber,
+              episodeNumber: nextEpisodeAcrossSeason.episodeNumber,
+            },
+            title: nextEpisodeAcrossSeason.title,
+          }
+        : null
+    : null;
   const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
   const currentUser = useSelector((state: RootState) => selectCurrentUser(state));
+  const notificationsButtonRef = useRef<HTMLButtonElement>(null);
+  const [notificationsOpen, setNotificationsOpen] = useState(false);
+  const notificationsQuery = useGetNotificationsQuery(undefined, {
+    skip: !sessionId,
+    pollingInterval: 60_000,
+  });
+  const [markNotificationRead] = useMarkNotificationReadMutation();
   const progressFromStore = useSelector(
     (state: RootState) => progressApi.endpoints.getProgress.select(undefined)(state).data?.progress
   );
@@ -314,15 +405,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth } = useMediaBoxSizes();
   const pageRef = useRef<HTMLElement>(null);
   const [browseSelectedMedia, setBrowseSelectedMedia] = useState<MediaDto | null>(null);
-  const routeMedia = useMemo(
-    () =>
-      routedMovie.data
-        ? mediaFromMovie(routedMovie.data)
-        : routedShow.data
-          ? mediaFromShow(routedShow.data)
-          : null,
-    [routedMovie.data, routedShow.data]
-  );
+  const routeMedia = useMemo(() => {
+    if (activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer') {
+      return routedMovie.data?.mediaId === detailMediaId ? mediaFromMovie(routedMovie.data) : null;
+    }
+    return routedShow.data?.mediaId === detailMediaId ? mediaFromShow(routedShow.data) : null;
+  }, [activeRoute.type, detailMediaId, routedMovie.data, routedShow.data]);
   const routeMatchesBrowseSelection =
     browseSelectedMedia &&
     (activeRoute.type === 'movieDetails' || activeRoute.type === 'moviePlayer'
@@ -375,6 +463,9 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   useEffect(() => {
     if (previousSessionId.current === sessionId) return;
     previousSessionId.current = sessionId;
+    dispatch(progressApi.util.resetApiState());
+    // The mounted notifications query re-subscribes after the reset, so polling continues.
+    dispatch(notificationsApi.util.resetApiState());
     latestIntentSession.current = null;
     lastPreparationSession.current = sessionId;
     lastPreparation.current = null;
@@ -384,7 +475,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     setHeroReadyMediaId(undefined);
     setLoadedMediaRefsByCategory({});
     resetIntentState?.();
-  }, [resetIntentState, sessionId]);
+  }, [dispatch, resetIntentState, sessionId]);
 
   const toRealtimeMedia = useCallback((media: MediaDto | null): RealtimeMediaRef | null => {
     if (!media) return null;
@@ -439,6 +530,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     });
   }, [displayCategories]);
 
+  const selectedSubtitleLanguage = subtitleLanguageForMedia(
+    selectedMedia,
+    progressEntries,
+    currentUser?.id
+  );
+
   /** Publish the bounded navigation window owned by the visible rows. */
   const publishRealtimeInterest = useCallback(() => {
     const rowCount = displayCategories.length;
@@ -465,6 +562,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       realtimeRuntimeActions.publishFocusRequested({
         navigationRevision: navigation,
         ...interest.focus,
+        subtitleLanguage: selectedSubtitleLanguage,
       })
     );
     dispatch(
@@ -473,7 +571,15 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
         ...interest.map,
       })
     );
-  }, [activeCategory, dispatch, displayCategories.length, selectedMedia, toRealtimeMedia, view]);
+  }, [
+    activeCategory,
+    dispatch,
+    displayCategories.length,
+    selectedMedia,
+    selectedSubtitleLanguage,
+    toRealtimeMedia,
+    view,
+  ]);
 
   useEffect(() => {
     if (!interactive || view !== 'browse') {
@@ -485,27 +591,43 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       return;
     }
     let cancelled = false;
+    let eligible = false;
+    let idleTimer: ReturnType<typeof setTimeout>;
+    const schedulePrompt = () => {
+      clearTimeout(idleTimer);
+      idleTimer = setTimeout(() => {
+        if (cancelled || !eligible) return;
+        // Show once per effect run; modal input must not restart the timer or overwrite focus.
+        eligible = false;
+        traktPromptFocus.current = document.activeElement as HTMLElement | null;
+        setShowTraktPrompt(true);
+      }, 5000);
+    };
+    // Capture on window: keyboard navigation stops handled keys at the document capture phase.
+    window.addEventListener('keydown', schedulePrompt, true);
+    window.addEventListener('pointermove', schedulePrompt, true);
     void getTraktAssociation(sessionId).then(result => {
       if (cancelled || !('data' in result) || result.data.connected) return;
       const permanentKey = `miauflix:trakt:dont-ask:${currentUser.id}`;
       const permanentlyDismissed = window.localStorage.getItem(permanentKey) === '1';
       const dismissedForSession = traktDismissedSession.current === sessionId;
       if (!permanentlyDismissed && !dismissedForSession) {
-        traktPromptFocus.current = document.activeElement as HTMLElement | null;
-        setShowTraktPrompt(true);
+        eligible = true;
+        schedulePrompt();
       }
     });
     return () => {
       cancelled = true;
+      clearTimeout(idleTimer);
+      window.removeEventListener('keydown', schedulePrompt, true);
+      window.removeEventListener('pointermove', schedulePrompt, true);
     };
   }, [currentUser, interactive, sessionId, view]);
 
   useEffect(() => {
-    dispatch(progressApi.util.resetApiState());
     if (!sessionId || view !== 'browse') return;
     const subscription = dispatch(
       progressApi.endpoints.getProgress.initiate(undefined, {
-        forceRefetch: true,
         subscriptionOptions: { pollingInterval: 60_000, skipPollingIfUnfocused: true },
       })
     );
@@ -669,6 +791,24 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     );
   }, [dispatch, focusedMediaId, focusedMediaKind, sessionId]);
 
+  const focusedShow = useSelector((state: RootState) =>
+    focusedMediaKind === 'show' && focusedMediaId !== undefined
+      ? mediaApi.endpoints.getShow.select(focusedMediaId)(state).data
+      : undefined
+  );
+  const focusedSeason = focusedShow ? firstSeason(focusedShow, progressEntries) : undefined;
+  const focusedShowId = focusedShow?.mediaId;
+  useEffect(() => {
+    if (!sessionId || focusedShowId === undefined || focusedSeason === undefined) return;
+    dispatch(
+      mediaApi.util.prefetch(
+        'getSeason',
+        { showId: focusedShowId, season: focusedSeason },
+        { ifOlderThan: 30 }
+      )
+    );
+  }, [dispatch, focusedShowId, focusedSeason, sessionId]);
+
   useEffect(() => {
     if (!sessionId || realtimeReady || focusedMediaId === undefined || !focusedMediaKind) return;
     // Catalog updates can recreate card DTOs; only a focus change renews the lease early.
@@ -681,6 +821,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
         clientId: PRELOAD_CLIENT_ID,
         intent: {
           sequence,
+          subtitleLanguage: selectedSubtitleLanguage,
           view: view === 'player' ? 'player' : view === 'details' ? 'details' : 'browse',
           focused: view === 'player' ? null : focused,
           reachable: [],
@@ -690,13 +831,22 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     publish();
     const heartbeat = window.setInterval(publish, 5_000);
     return () => window.clearInterval(heartbeat);
-  }, [focusedMediaId, focusedMediaKind, publishIntent, realtimeReady, sessionId, view]);
+  }, [
+    focusedMediaId,
+    focusedMediaKind,
+    publishIntent,
+    realtimeReady,
+    sessionId,
+    view,
+    selectedSubtitleLanguage,
+  ]);
 
   // Keep the same lease when browsing transitions to details, so discovered
   // source metadata survives the escalation to torrent warmup.
   useEffect(() => {
     if (!sessionId) return;
     return () => {
+      if (lastIntentSequence.current === 0) return;
       void removeIntent({
         clientId: PRELOAD_CLIENT_ID,
         sequence: lastIntentSequence.current,
@@ -975,7 +1125,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   );
 
   const navigationRef = useKeyboardNavigation({
-    enabled: interactive && !showTraktPrompt,
+    enabled: interactive && !showTraktPrompt && !notificationsOpen,
     onLeft: () => handleHomeAction('left').type !== 'ignored',
     onRight: () => handleHomeAction('right').type !== 'ignored',
     onUp: () => handleHomeAction('up').type !== 'ignored',
@@ -983,6 +1133,15 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     onConfirm: () => handleHomeAction('confirm').type !== 'ignored',
     onBack: () => handleHomeAction('back').type !== 'ignored',
   });
+
+  const closeNotifications = useCallback(() => {
+    setNotificationsOpen(false);
+    requestAnimationFrame(() => notificationsButtonRef.current?.focus({ preventScroll: true }));
+  }, []);
+
+  useEffect(() => {
+    if (view !== 'browse') setNotificationsOpen(false);
+  }, [view]);
 
   if (view === 'browse' && isLoading) {
     return (
@@ -1065,10 +1224,18 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
               ))}
             </Content>
             <HomeSidebar
-              active={interactive && !showTraktPrompt && activeRegion === 'sidebar'}
+              active={
+                interactive && !showTraktPrompt && !notificationsOpen && activeRegion === 'sidebar'
+              }
               onAction={handleSidebarAction}
               onHover={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
               onSettings={openSettings}
+              onNotifications={() => {
+                setNotificationsOpen(true);
+                if (sessionId) void notificationsQuery.refetch();
+              }}
+              notificationsRef={notificationsButtonRef}
+              unreadCount={notificationsQuery.data?.unreadCount ?? 0}
             />
           </>
         ) : view === 'details' && selectedMedia ? (
@@ -1100,9 +1267,24 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
             playable={playable}
             title={selectedMedia ? getMediaTitle(selectedMedia) : 'Selected title'}
             onBack={returnToDetails}
+            nextEpisode={nextEpisode}
+            onPlayNext={() => {
+              if (nextEpisode) openPlayer(nextEpisode.playable);
+            }}
           />
         ) : null}
       </div>
+      {view === 'browse' && notificationsOpen && (
+        <NotificationsMenu
+          notifications={notificationsQuery.data?.notifications ?? []}
+          loading={notificationsQuery.isLoading}
+          failed={notificationsQuery.isError}
+          sidebarActive={activeRegion === 'sidebar'}
+          onClose={closeNotifications}
+          onRetry={() => void notificationsQuery.refetch()}
+          onMarkRead={id => void markNotificationRead(id)}
+        />
+      )}
       {interactive && showTraktPrompt && sessionId && (
         <TraktModal
           sessionId={sessionId}

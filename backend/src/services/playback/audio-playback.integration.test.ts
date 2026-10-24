@@ -3,9 +3,10 @@ import { mkdtemp, readFile, rm, writeFile } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 
 import { AudioPlaybackService } from './audio-playback.service';
+import type { PlaybackTarget } from './playback-target';
 
 const hasFfmpeg = spawnSync('ffmpeg', ['-version'], { stdio: 'ignore' }).status === 0;
 const integration = hasFfmpeg ? describe : describe.skip;
@@ -70,7 +71,7 @@ integration('audio conversion with a seekable, delayed range reader', () => {
   const setupTest = (bytes = fixture, convertHevc = false) => {
     const ranges: number[] = [];
     const download = {
-      async streamFile(_source: MovieSource, range?: string) {
+      async streamFile(_target: PlaybackTarget, range?: string) {
         const match = range?.match(/^bytes=(\d+)-(\d*)$/);
         const start = match ? Number(match[1]) : 0;
         const end = match?.[2] ? Math.min(bytes.length - 1, Number(match[2])) : bytes.length - 1;
@@ -89,7 +90,11 @@ integration('audio conversion with a seekable, delayed range reader', () => {
     };
     return {
       service: new AudioPlaybackService(download as never, { get: () => convertHevc } as never),
-      source: { id: 1 } as MovieSource,
+      source: {
+        source: { id: 1 } as ContentSource,
+        filePath: 'movie.mkv',
+        matchKind: 'movie',
+      } as PlaybackTarget,
       ranges,
     };
   };

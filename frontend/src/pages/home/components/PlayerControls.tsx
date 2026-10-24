@@ -2,6 +2,7 @@ import type { SubtitleCandidateDto } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import { Spinner } from '@shared/ui/spinner/Spinner';
 import { type RefObject, useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
@@ -161,7 +162,7 @@ const Row = styled.div`
   gap: 0.75rem;
   font-variant-numeric: tabular-nums;
 `;
-const Time = styled.span`
+const Time = styled.div`
   flex: 1;
   font-size: clamp(0.8rem, 2.5vh, 1.2rem);
 `;
@@ -185,6 +186,7 @@ function formatTime(seconds: number) {
  */
 export function PlayerControls({
   videoRef,
+  preparing = false,
   onBack,
   subtitleSearchPreferences,
   subtitleCues,
@@ -207,6 +209,7 @@ export function PlayerControls({
   onSelectAudioTrack,
 }: {
   videoRef: RefObject<HTMLVideoElement | null>;
+  preparing?: boolean;
   onBack: () => void;
   subtitleSearchPreferences?: { language: string; hearingImpaired: boolean };
   subtitleCues?: SubtitleTimingCue[];
@@ -229,6 +232,8 @@ export function PlayerControls({
   onSelectAudioTrack?: (index: number) => void;
 }) {
   const [paused, setPaused] = useState(true);
+  const [mediaReady, setMediaReady] = useState(false);
+  const loading = preparing || !mediaReady;
   const [nativePosition, setPosition] = useState(0);
   const position = pendingPosition ?? nativePosition;
   const [duration, setDuration] = useState(0);
@@ -256,12 +261,23 @@ export function PlayerControls({
     if (!video) return;
     const sync = () => {
       setPaused(video.paused);
+      setMediaReady(video.readyState >= 2);
       setPosition(video.currentTime);
       setDuration(durationSeconds ?? (Number.isFinite(video.duration) ? video.duration : 0));
       setVolume(video.volume);
       setMuted(video.muted);
     };
-    const events = ['play', 'pause', 'ended', 'timeupdate', 'durationchange', 'volumechange'];
+    const events = [
+      'play',
+      'pause',
+      'ended',
+      'timeupdate',
+      'durationchange',
+      'volumechange',
+      'loadeddata',
+      'canplay',
+      'emptied',
+    ];
     events.forEach(event => video.addEventListener(event, sync));
     sync();
     overlay.current?.focus({ preventScroll: true });
@@ -296,19 +312,37 @@ export function PlayerControls({
     }
     reveal();
   };
+  const moveControl = (delta: number) => {
+    const controls = Array.from(
+      overlay.current?.querySelectorAll<HTMLElement>(
+        'header button:not(:disabled), input[aria-label="Seek"]:not(:disabled), [data-control-row] button:not(:disabled), [data-control-row] input:not(:disabled)'
+      ) ?? []
+    ).filter(control => !control.closest('[aria-label="Subtitle settings"]'));
+    const index = controls.indexOf(document.activeElement as HTMLElement);
+    controls[(index + delta + controls.length) % controls.length]?.focus();
+    reveal();
+    return true;
+  };
+  const focusZone = () => {
+    overlay.current?.focus();
+    reveal();
+    return true;
+  };
   const navigationRef = useKeyboardNavigation({
+    onUp: event => (event.target === overlay.current ? moveControl(1) : focusZone()),
+    onDown: event => (event.target === overlay.current ? moveControl(1) : focusZone()),
     onConfirm: event => {
       if (event.target !== overlay.current) return false;
       toggle();
       return true;
     },
     onLeft: event => {
-      if (event.target !== overlay.current) return false;
+      if (event.target !== overlay.current) return moveControl(-1);
       seek(position - 10);
       return true;
     },
     onRight: event => {
-      if (event.target !== overlay.current) return false;
+      if (event.target !== overlay.current) return moveControl(1);
       seek(position + 10);
       return true;
     },
@@ -333,7 +367,7 @@ export function PlayerControls({
       aria-label="Playback controls"
     >
       <PlayerHeader onBack={onBack} visible={shown} />
-      {paused && (
+      {paused && !loading && (
         <CenterPlay type="button" aria-label="Resume playback" onClick={toggle}>
           <PlayIcon aria-hidden="true" />
         </CenterPlay>
@@ -350,17 +384,32 @@ export function PlayerControls({
             value={position}
             disabled={!duration}
             aria-label="Seek"
+            onKeyDown={event => {
+              if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                event.preventDefault();
+                focusZone();
+              } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                event.preventDefault();
+                moveControl(event.key === 'ArrowLeft' ? -1 : 1);
+              }
+            }}
             aria-valuetext={`${formatTime(position)} of ${formatTime(duration)}`}
             onChange={event => seek(Number(event.target.value))}
           />
           <Paw $percent={percent} aria-hidden="true" />
         </Seek>
-        <Row>
+        <Row data-control-row="true">
           <Button type="button" aria-label={paused ? 'Play' : 'Pause'} onClick={toggle}>
             {paused ? <PlayIcon aria-hidden="true" /> : <PauseIcon aria-hidden="true" />}
           </Button>
           <Time>
-            {formatTime(position)} / {formatTime(duration)}
+            {loading ? (
+              <Spinner text="Preparing playback…" />
+            ) : (
+              <>
+                {formatTime(position)} / {formatTime(duration)}
+              </>
+            )}
           </Time>
           <SubtitleMenu
             searchPreferences={subtitleSearchPreferences}
@@ -398,6 +447,16 @@ export function PlayerControls({
             step={0.05}
             value={muted ? 0 : volume}
             aria-label="Volume"
+            onKeyDown={event => {
+              if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                event.preventDefault();
+                focusZone();
+              }
+              if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                event.preventDefault();
+                moveControl(event.key === 'ArrowLeft' ? -1 : 1);
+              }
+            }}
             onChange={event => {
               if (videoRef.current) {
                 videoRef.current.volume = Number(event.target.value);

@@ -1,6 +1,6 @@
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
-import { type RefObject, useEffect, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import ArrowRightIcon from '~icons/mdi/arrow-right';
@@ -140,13 +140,19 @@ export function SubtitleTiming({
   pendingPosition,
   offset,
   onOffsetChange,
+  onConfirm,
 }: {
   cues: SubtitleTimingCue[];
   videoRef?: RefObject<HTMLVideoElement | null>;
   pendingPosition?: number;
   offset: number;
   onOffsetChange: (offset: number) => void;
+  onConfirm?: () => void;
 }) {
+  const adjustment = useRef<HTMLInputElement>(null);
+  useEffect(() => {
+    adjustment.current?.focus();
+  }, []);
   const [now, setNow] = useState(() => pendingPosition ?? videoRef?.current?.currentTime ?? 0);
   const [bounds, setBounds] = useState(() => ({
     min: Math.min(-5, offset - 5),
@@ -178,7 +184,7 @@ export function SubtitleTiming({
         ))}
         {!cues.length && (
           <Line $distance={0} $active={false}>
-            Loading subtitle preview…
+            No subtitle cues near this position.
           </Line>
         )}
       </Preview>
@@ -192,6 +198,19 @@ export function SubtitleTiming({
           −
         </StepButton>
         <input
+          ref={adjustment}
+          onKeyDown={event => {
+            if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+              event.preventDefault();
+              event.stopPropagation();
+              shift((event.key === 'ArrowLeft' ? -1 : 1) * (event.repeat ? 1 : 0.5));
+            } else if (event.key === 'Enter') {
+              event.preventDefault();
+              onConfirm?.();
+            } else if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+              event.preventDefault();
+            }
+          }}
           type="range"
           min={min}
           max={max}

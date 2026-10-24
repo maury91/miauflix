@@ -1,6 +1,14 @@
 import { fn } from 'storybook/test';
+
+const emptyProgressState = { data: undefined, status: 'uninitialized' };
+
 export const progressApi = {
-  endpoints: { getProgress: { select: () => () => ({ data: undefined }) } },
+  endpoints: {
+    getProgress: {
+      select: () => () => emptyProgressState,
+      initiate: fn().mockReturnValue({ unsubscribe: fn() }),
+    },
+  },
   util: {
     resetApiState: () => ({ type: 'storybook/progress/reset' }),
     invalidateTags: () => ({ type: 'storybook/progress/invalidate' }),

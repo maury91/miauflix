@@ -3,6 +3,7 @@ name: CI Pipeline
 on:
   push:
     branches: [main, master]
+    tags: ['v*']
   pull_request:
     branches: [main, master]
 
@@ -53,7 +54,6 @@ jobs:
 
   e2e-tests:
     runs-on: ubuntu-latest
-    needs: test
 
     steps:
       - name: Checkout code
@@ -180,7 +180,6 @@ jobs:
 
   visual-tests:
     runs-on: ubuntu-latest
-    needs: test
 
     steps:
       - name: Checkout code
@@ -206,58 +205,145 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-  # Disabled until we are ready for production
-  # build-and-push:
-  # runs-on: ubuntu-latest
-  # needs: test
-  # permissions:
-  #   contents: read
-  #   packages: write
+  # Publish multi-arch images to GHCR once every test job has passed. Each
+  # architecture is built natively and pushed by digest, then merged into one
+  # manifest list per image by publish-manifest.
+  publish-build:
+    if: github.event_name == 'push'
+    needs: [test, e2e-tests, visual-tests]
+    runs-on: ${{ matrix.runner }}
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        image: [miauflix, miauflix-services, miauflix-media-catalog, miauflix-list-service]
+        platform: [linux/amd64, linux/arm64]
+        include:
+          - image: miauflix
+            file: Dockerfile
+            target: ''
+          - image: miauflix-services
+            file: services/Dockerfile
+            target: ''
+          - image: miauflix-media-catalog
+            file: services/media-catalog/Dockerfile
+            target: production
+          - image: miauflix-list-service
+            file: services/list-service/Dockerfile
+            target: production
+          - platform: linux/amd64
+            runner: ubuntu-latest
+            arch: amd64
+          - platform: linux/arm64
+            runner: ubuntu-24.04-arm
+            arch: arm64
 
-  # steps:
-  #   - name: Checkout repository
-  #     uses: actions/checkout@v4
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  #   - name: Set up Docker Buildx
-  #     uses: docker/setup-buildx-action@v3
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
 
-  #   - name: Log in to Container Registry
-  #     if: github.event_name != 'pull_request'
-  #     uses: docker/login-action@v3
-  #     with:
-  #       registry: ${{ env.REGISTRY }}
-  #       username: ${{ github.actor }}
-  #       password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-  #   - name: Extract metadata for backend
-  #     id: meta-backend
-  #     uses: docker/metadata-action@v5
-  #     with:
-  #       images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
-  #       tags: |
-  #         type=ref,event=branch
-  #         type=ref,event=pr
-  #         type=semver,pattern={{version}}
-  #         type=semver,pattern={{major}}.{{minor}}
-  #         type=semver,pattern={{major}}
-  #         type=raw,value=latest,enable={{is_default_branch}}
-  #         type=sha,prefix={{branch}}-
+      - name: Compute image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image }}" >> "$GITHUB_ENV"
 
-  #   - name: Build and push backend Docker image
-  #     uses: docker/build-push-action@v5
-  #     with:
-  #       context: .
-  #       file: ./Dockerfile
-  #       platforms: linux/amd64,linux/arm64
-  #       push: ${{ github.event_name != 'pull_request' }}
-  #       tags: ${{ steps.meta-backend.outputs.tags }}
-  #       labels: ${{ steps.meta-backend.outputs.labels }}
-  #       cache-from: type=gha
-  #       cache-to: type=gha,mode=max
+      - name: Build and push by digest
+        id: build
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ${{ matrix.file }}
+          target: ${{ matrix.target }}
+          platforms: ${{ matrix.platform }}
+          labels: |
+            org.opencontainers.image.source=https://github.com/${{ github.repository }}
+          cache-from: type=gha,scope=publish-${{ matrix.image }}-${{ matrix.arch }}
+          cache-to: type=gha,mode=max,scope=publish-${{ matrix.image }}-${{ matrix.arch }}
+          outputs: type=image,name=${{ env.IMAGE }},push-by-digest=true,name-canonical=true,push=true
 
-  #   - name: ✅ Docker image published successfully
-  #     if: github.event_name != 'pull_request'
-  #     run: |
-  #       echo "🐳 Docker image has been built and published to the registry"
-  #       echo "📋 Tags: ${{ steps.meta-backend.outputs.tags }}"
-  #       echo "✅ All tests passed before publishing!"
+      - name: Export digest
+        run: |
+          mkdir -p "${RUNNER_TEMP}/digests"
+          digest="${{ steps.build.outputs.digest }}"
+          touch "${RUNNER_TEMP}/digests/${digest#sha256:}"
+
+      - name: Upload digest
+        uses: actions/upload-artifact@v4
+        with:
+          name: digests-${{ matrix.image }}-${{ matrix.arch }}
+          path: ${{ runner.temp }}/digests/*
+          if-no-files-found: error
+          retention-days: 1
+
+  publish-manifest:
+    needs: publish-build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - image: miauflix
+            description: Miauflix backend, serves the web frontend
+          - image: miauflix-services
+            description: Miauflix bunqueue, media catalog and list service in one container
+          - image: miauflix-media-catalog
+            description: Miauflix media catalog service
+          - image: miauflix-list-service
+            description: Miauflix list service
+
+    steps:
+      - name: Download digests
+        uses: actions/download-artifact@v4
+        with:
+          path: ${{ runner.temp }}/digests
+          pattern: digests-${{ matrix.image }}-*
+          merge-multiple: true
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Compute image name
+        run: echo "IMAGE=ghcr.io/${GITHUB_REPOSITORY_OWNER,,}/${{ matrix.image }}" >> "$GITHUB_ENV"
+
+      - name: Image metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.IMAGE }}
+          flavor: latest=auto
+          tags: |
+            type=edge,branch=main
+            type=sha
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+
+      - name: Create manifest list and push
+        working-directory: ${{ runner.temp }}/digests
+        run: |
+          docker buildx imagetools create \
+            $(jq -cr '.tags | map("-t " + .) | join(" ")' <<< "$DOCKER_METADATA_OUTPUT_JSON") \
+            $(printf "${IMAGE}@sha256:%s " *)
+
+      - name: Inspect image
+        run: docker buildx imagetools inspect "${IMAGE}:${{ steps.meta.outputs.version }}"

@@ -70,7 +70,7 @@ services:
     image: miauflix-e2e-miauflix-services:${E2E_IMAGE_TAG:-local}
     build:
       context: ../../
-      dockerfile: backend-e2e/docker/miauflix-services.Dockerfile
+      dockerfile: services/Dockerfile
     init: true
     environment:
       - TCP_PORT=6789

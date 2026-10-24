@@ -1,6 +1,6 @@
 import { VideoCodec } from '@miauflix/source-metadata-extractor';
 
-import type { MovieSource } from '@entities/movie-source.entity';
+import type { ContentSource } from '@entities/content-source.entity';
 
 /**
  * Filter sources that can be streamed without delay
@@ -8,7 +8,7 @@ import type { MovieSource } from '@entities/movie-source.entity';
  * @param sources - Array of movie sources to filter
  * @returns Filtered sources that can be streamed without delay
  */
-export function filterStreamableSources(sources: MovieSource[]): MovieSource[] {
+export function filterStreamableSources(sources: ContentSource[]): ContentSource[] {
   return sources.filter(source => source.file);
 }
 
@@ -19,7 +19,7 @@ export function filterStreamableSources(sources: MovieSource[]): MovieSource[] {
  * @param allowHevc - Whether to allow HEVC/H.265 codecs (default: true)
  * @returns Filtered sources that are not HEVC/H.265 (if allowHevc is false)
  */
-export function filterHevcSources(sources: MovieSource[], allowHevc = true): MovieSource[] {
+export function filterHevcSources(sources: ContentSource[], allowHevc = true): ContentSource[] {
   if (allowHevc) {
     return sources;
   }
@@ -35,7 +35,7 @@ export function filterHevcSources(sources: MovieSource[], allowHevc = true): Mov
  * @param allowHevc - Whether to allow HEVC/H.265 codecs (default: true)
  * @returns Filtered and sorted sources ready for streaming
  */
-export function filterSources(sources: MovieSource[], allowHevc = true): MovieSource[] {
+export function filterSources(sources: ContentSource[], allowHevc = true): ContentSource[] {
   return (
     filterHevcSources(filterStreamableSources(sources), allowHevc)
       // Sort by streaming score (highest first)

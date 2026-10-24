@@ -15,7 +15,7 @@ export function sortServiceGroups(
         if (
           entries.some(entry => entry.required && !entry.hasValue) ||
           serviceStatuses[name]?.status === 'needs_configuration' ||
-          (serviceStatuses[name]?.missingVars?.length ?? 0) > 0
+          ownMissingVars(name, serviceStatuses[name]?.missingVars, groupedEntries).length > 0
         )
           return 0;
         if (['degraded', 'error'].includes(serviceStatuses[name]?.status ?? '')) return 1;
@@ -49,4 +49,62 @@ export function preserveInitialServiceOrder(
   const newGroups = sortedGroups.filter(([serviceName]) => !originalNames.has(serviceName));
 
   return [...originalGroups, ...newGroups];
+}
+
+type ServiceStatus = ServiceStatuses[string];
+
+/** Missing keys that are edited on this service's own card (or on no card at all). */
+function ownMissingVars(
+  serviceName: string,
+  missingVars: string[] = [],
+  groupedEntries: Record<string, ConfigEntryView[]>
+): string[] {
+  return missingVars.filter(key => {
+    const owner = findOwnerGroup(key, groupedEntries);
+    return !owner || owner === serviceName;
+  });
+}
+
+function findOwnerGroup(
+  key: string,
+  groupedEntries: Record<string, ConfigEntryView[]>
+): string | undefined {
+  return Object.entries(groupedEntries).find(([, entries]) =>
+    entries.some(entry => entry.key === key)
+  )?.[0];
+}
+
+/**
+ * A service can be blocked on keys that belong to another card (for example LIST waiting for the
+ * shared TRAKT credentials). Rewrite the status message so it points at the card that owns them.
+ */
+export function attributeMissingVars(
+  serviceName: string,
+  status: ServiceStatus | undefined,
+  groupedEntries: Record<string, ConfigEntryView[]>
+): ServiceStatus | undefined {
+  if (!status?.missingVars?.length) return status;
+
+  const own = ownMissingVars(serviceName, status.missingVars, groupedEntries);
+  const foreign = new Map<string, string[]>();
+  for (const key of status.missingVars) {
+    if (own.includes(key)) continue;
+    const owner = findOwnerGroup(key, groupedEntries)!;
+    foreign.set(owner, [...(foreign.get(owner) ?? []), key]);
+  }
+  if (foreign.size === 0) return status;
+
+  const parts = [
+    ...(own.length ? [`Missing required configuration: ${own.join(', ')}`] : []),
+    ...[...foreign].map(
+      ([owner, keys]) => `Waiting for ${owner} configuration (${keys.join(', ')})`
+    ),
+  ];
+  const message = parts.join('; ');
+  return {
+    ...status,
+    missingVars: own,
+    ...(status.reason !== undefined ? { reason: message } : {}),
+    ...(status.details !== undefined ? { details: message } : {}),
+  };
 }

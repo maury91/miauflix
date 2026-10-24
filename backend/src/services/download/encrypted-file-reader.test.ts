@@ -44,8 +44,8 @@ describe('EncryptedFileReader', () => {
         filenameSalt,
         pieceLength: 4,
         files,
-        video: { name: 'movie.mkv', path: 'folder/movie.mkv', offset: 3, length: 7 },
       },
+      'folder/movie.mkv',
       key
     );
     try {
@@ -92,6 +92,23 @@ describe('EncryptedFileReader', () => {
     }
   });
 
+  it('rejects a path that is not part of the layout', () => {
+    expect(
+      () =>
+        new EncryptedFileReader(
+          '/tmp/miauflix-reader-missing',
+          {
+            storeName: 'pack - abcdef12',
+            filenameSalt: 'download-pack',
+            pieceLength: 4,
+            files: [{ path: 'Show.S01E01.mkv', length: 4, offset: 0 }],
+          },
+          'Show.S01E02.mkv',
+          'reader-test-key'
+        )
+    ).toThrow('Encrypted media layout is invalid');
+  });
+
   it('reports a clear error when completed local media is missing', async () => {
     const location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-encrypted-reader-'));
     const reader = new EncryptedFileReader(
@@ -101,8 +118,8 @@ describe('EncryptedFileReader', () => {
         filenameSalt: 'download-missing',
         pieceLength: 4,
         files: [{ path: 'movie.mkv', length: 4, offset: 0 }],
-        video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 4 },
       },
+      'movie.mkv',
       'reader-test-key'
     );
     try {
@@ -142,9 +159,8 @@ describe('EncryptedFileReader', () => {
       filenameSalt: `download-${sourceHash.toLowerCase()}`,
       pieceLength: 4,
       files,
-      video: { name: 'movie.mkv', path: 'movie.mkv', offset: 0, length: 4 },
     };
-    const staleReader = new EncryptedFileReader(location, staleLayout, key);
+    const staleReader = new EncryptedFileReader(location, staleLayout, 'movie.mkv', key);
     try {
       await expect(staleReader.readPiece(0)).rejects.toThrow(
         'Unable to read encrypted local media piece 0'
@@ -156,6 +172,7 @@ describe('EncryptedFileReader', () => {
     const repairedReader = new EncryptedFileReader(
       location,
       { ...staleLayout, filenameSalt: `download-${sourceHash}` },
+      'movie.mkv',
       key
     );
     try {

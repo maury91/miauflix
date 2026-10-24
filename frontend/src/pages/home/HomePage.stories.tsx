@@ -4,7 +4,15 @@ import {
   useGetPopularListsInfiniteQuery,
   usePromoteListMediaMutation,
 } from '@features/media/api/lists.api';
-import { useGetMovieQuery, useGetShowQuery } from '@features/media/api/media.api';
+import {
+  useGetMovieQuery,
+  useGetSeasonQuery,
+  useGetShowQuery,
+} from '@features/media/api/media.api';
+import {
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
+} from '@features/notifications/api/notifications.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { artworkSlice } from '@store/slices/artwork';
 import { authSlice } from '@store/slices/auth';
@@ -25,6 +33,7 @@ import HomePage from './HomePage';
 const meta = {
   title: 'Home/Home Page',
   component: HomePage,
+  args: { route: { type: 'home' } },
   parameters: { layout: 'fullscreen' },
   decorators: [
     Story => {
@@ -79,7 +88,10 @@ function setupHomeMocks() {
   const getList = mocked(useGetListQuery);
   const promote = mocked(usePromoteListMediaMutation);
   const getMovie = mocked(useGetMovieQuery);
+  const getSeason = mocked(useGetSeasonQuery);
   const getShow = mocked(useGetShowQuery);
+  const getNotifications = mocked(useGetNotificationsQuery);
+  const markNotificationRead = mocked(useMarkNotificationReadMutation);
 
   getLists.mockReturnValue({
     data: homeCategories.slice(0, 1),
@@ -101,7 +113,16 @@ function setupHomeMocks() {
   });
   promote.mockReturnValue([fn()] as never);
   getMovie.mockReturnValue(emptyQuery);
+  getSeason.mockReturnValue(emptyQuery);
   getShow.mockReturnValue(emptyQuery);
+  getNotifications.mockReturnValue({
+    data: { notifications: [], unreadCount: 0 },
+    isLoading: false,
+    isFetching: false,
+    isError: false,
+    refetch: fn(),
+  } as never);
+  markNotificationRead.mockReturnValue([fn(), { isLoading: false }] as never);
 }
 
 export const Browse: Story = {

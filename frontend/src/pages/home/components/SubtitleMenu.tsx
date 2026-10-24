@@ -1,8 +1,9 @@
 import { audioLanguage } from '@features/player/lib/audio-language';
 import type { CreatePlaybackSessionResponse, SubtitleCandidateDto } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
+import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
-import { type RefObject, useEffect, useState } from 'react';
+import { type RefObject, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { SubtitleTiming, type SubtitleTimingCue } from './SubtitleTiming';
@@ -127,17 +128,17 @@ const Panel = styled.div`
 `;
 
 function candidateLabel(candidate: SubtitleCandidateDto): string {
-  const details = [candidate.languageLabel];
-  if (candidate.provider === 'embedded') details.push('Embedded');
-  else if (candidate.provider === 'torrent') details.push('Torrent file');
-  if (candidate.filenameSimilarity != null)
-    details.push(`Filename match: ${candidate.filenameSimilarity}/100`);
-  details.push(candidate.release);
-  if (candidate.hearingImpaired) details.push('SDH');
-  if (candidate.trusted) details.push('Trusted');
-  if (candidate.match === 'file') details.push('Exact file');
-  else if (candidate.match === 'release') details.push('Release match');
-  return details.join(' · ');
+  return [
+    candidate.languageLabel,
+    candidate.provider === 'embedded'
+      ? 'Embedded'
+      : candidate.provider === 'torrent'
+        ? 'Torrent file'
+        : 'Online',
+    candidate.hearingImpaired ? 'SDH' : null,
+  ]
+    .filter(Boolean)
+    .join(' · ');
 }
 
 export type AudioTrack = NonNullable<
@@ -227,21 +228,101 @@ export function SubtitleMenu({
     setTimingOpen(false);
   }, [selectedId]);
 
+  const trigger = useRef<HTMLButtonElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
+  const [otherLanguages, setOtherLanguages] = useState(false);
+  const close = () => {
+    setOpen(false);
+    trigger.current?.focus();
+  };
+  const backToSettings = () => {
+    setTimingOpen(false);
+    requestAnimationFrame(() =>
+      panel.current?.querySelector<HTMLButtonElement>('[data-timing]')?.focus()
+    );
+  };
+  const move = (delta: number) => {
+    const controls = Array.from(
+      panel.current?.querySelectorAll<HTMLElement>('button:not(:disabled), input:not(:disabled)') ??
+        []
+    );
+    const index = controls.indexOf(document.activeElement as HTMLElement);
+    controls[(index + delta + controls.length) % controls.length]?.focus();
+    return true;
+  };
+  const stepLanguage = (delta: number) => {
+    const index = languages.findIndex(([code]) => code === language);
+    updatePreferences({
+      ...preferences,
+      language: languages[(index + delta + languages.length) % languages.length][0],
+    });
+  };
+  const panelNavigation = useKeyboardNavigation({
+    onUp: () => move(-1),
+    onDown: () => move(1),
+    onLeft: event => {
+      if ((event.target as HTMLElement).dataset['language']) stepLanguage(-1);
+      return true;
+    },
+    onRight: event => {
+      if ((event.target as HTMLElement).dataset['language']) stepLanguage(1);
+      return true;
+    },
+    onBack: () => {
+      if (timingOpen) backToSettings();
+      else close();
+      return true;
+    },
+  });
+  useEffect(() => {
+    if (open && !timingOpen)
+      panel.current?.querySelector<HTMLElement>('button:not(:disabled)')?.focus();
+  }, [open, timingOpen]);
+  const preferred = candidates
+    .filter(candidate => audioLanguage(candidate.language) === audioLanguage(language))
+    .sort((a, b) => Number(a.provider !== 'torrent') - Number(b.provider !== 'torrent'));
+  const others = candidates.filter(
+    candidate => audioLanguage(candidate.language) !== audioLanguage(language)
+  );
+  const trackButton = (candidate: SubtitleCandidateDto) => (
+    <Button
+      key={candidate.id}
+      type="button"
+      aria-pressed={selectedId === candidate.id}
+      onClick={() => onSelect(candidate.id)}
+    >
+      {candidateLabel(candidate)}
+      {candidate.release && candidate.release !== 'root' && (
+        <small style={{ display: 'block', opacity: 0.7 }}>{candidate.release}</small>
+      )}
+    </Button>
+  );
   return (
     <>
       <Button
+        ref={trigger}
         type="button"
         aria-label={audioTracks && audioTracks.length > 1 ? 'Audio and subtitles' : 'Subtitles'}
         aria-expanded={open}
-        onClick={() => setOpen(value => !value)}
+        onClick={() => {
+          if (open) close();
+          else setOpen(true);
+        }}
       >
         {audioTracks && audioTracks.length > 1 ? 'Audio / CC' : 'CC'}
       </Button>
       {open && (
-        <Panel role="group" aria-label="Subtitle settings">
+        <Panel
+          ref={node => {
+            panel.current = node;
+            panelNavigation(node);
+          }}
+          role="group"
+          aria-label="Subtitle settings"
+        >
           {timingOpen && selectedId ? (
             <>
-              <Button type="button" onClick={() => setTimingOpen(false)}>
+              <Button type="button" onClick={backToSettings}>
                 Back to subtitle settings
               </Button>
               <SubtitleTiming
@@ -251,52 +332,42 @@ export function SubtitleMenu({
                 pendingPosition={pendingPosition}
                 offset={offset}
                 onOffsetChange={onOffsetChange}
+                onConfirm={backToSettings}
               />
             </>
           ) : (
             <>
               {audioTracks && audioTracks.length > 1 && onSelectAudioTrack && (
-                <label>
-                  Audio language
-                  <select
-                    value={selectedAudioTrackIndex ?? 0}
-                    onChange={event => onSelectAudioTrack(Number(event.target.value))}
-                  >
-                    {audioTracks.map(track => (
-                      <option key={track.index} value={track.index}>
-                        {audioLabel(track)}
-                      </option>
-                    ))}
-                  </select>
-                </label>
-              )}
-              <label>
-                Language
-                <select
-                  value={language}
-                  onChange={event =>
-                    updatePreferences({ ...preferences, language: event.target.value })
-                  }
-                >
-                  {languages.map(([code, label]) => (
-                    <option key={code} value={code}>
-                      {label}
-                    </option>
+                <div role="group" aria-label="Audio language" style={{ display: 'grid' }}>
+                  {audioTracks.map(track => (
+                    <Button
+                      key={track.index}
+                      type="button"
+                      aria-pressed={track.index === selectedAudioTrackIndex}
+                      onClick={() => onSelectAudioTrack(track.index)}
+                    >
+                      {audioLabel(track)}
+                    </Button>
                   ))}
-                </select>
-              </label>
-              <label>
-                <span>
-                  <input
-                    type="checkbox"
-                    checked={hearingImpaired}
-                    onChange={event =>
-                      updatePreferences({ ...preferences, hearingImpaired: event.target.checked })
-                    }
-                  />{' '}
-                  Hearing impaired
-                </span>
-              </label>
+                </div>
+              )}
+              <Button
+                type="button"
+                data-language="true"
+                aria-label="Subtitle language"
+                onClick={() => stepLanguage(1)}
+              >
+                Language: {languages.find(([code]) => code === language)?.[1]} ◀ ▶
+              </Button>
+              <Button
+                type="button"
+                aria-pressed={hearingImpaired}
+                onClick={() =>
+                  updatePreferences({ ...preferences, hearingImpaired: !hearingImpaired })
+                }
+              >
+                Hearing impaired: {hearingImpaired ? 'On' : 'Off'}
+              </Button>
               <Button
                 type="button"
                 disabled={loading}
@@ -304,23 +375,24 @@ export function SubtitleMenu({
               >
                 {loading ? 'Searching…' : 'Find subtitles'}
               </Button>
-              <label>
-                Subtitles
-                <select
-                  value={selectedId ?? ''}
-                  onChange={event => onSelect(event.target.value || null)}
-                  aria-label="Subtitle track"
-                >
-                  <option value="">Off</option>
-                  {candidates.map(candidate => (
-                    <option key={candidate.id} value={candidate.id}>
-                      {candidateLabel(candidate)}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <div role="group" aria-label="Subtitle tracks" style={{ display: 'grid' }}>
+                <Button type="button" aria-pressed={!selectedId} onClick={() => onSelect(null)}>
+                  Off
+                </Button>
+                {preferred.map(trackButton)}
+                {others.length > 0 && (
+                  <Button
+                    type="button"
+                    aria-expanded={otherLanguages}
+                    onClick={() => setOtherLanguages(value => !value)}
+                  >
+                    Other languages ({others.length})
+                  </Button>
+                )}
+                {otherLanguages && others.map(trackButton)}
+              </div>
               {selectedId && (
-                <Button type="button" onClick={() => setTimingOpen(true)}>
+                <Button data-timing="true" type="button" onClick={() => setTimingOpen(true)}>
                   Adjust subtitle timing ({offset > 0 ? '+' : ''}
                   {Number(offset.toFixed(2))}s)
                 </Button>

@@ -169,6 +169,7 @@ describe('TmdbClient', () => {
       accessToken: 'token',
     });
     const show = await client.getTVShowDetails(100);
+    // URLs use the provider's configured image base, so mocks can serve their own artwork.
     expect(show.logo).toBe(hasLogo ? 'https://image.test/original/arcane.png' : '');
     expect(show.logoCandidates?.map(candidate => candidate.url)).toEqual(
       hasLogo
@@ -267,6 +268,15 @@ describe('TmdbProvider', () => {
     expect(
       provider.getBackdropAnalysisSource('https://untrusted.example/t/p/w1280/abc123.jpg')
     ).toBeNull();
+  });
+
+  it('accepts size-independent paths for server artwork analysis', () => {
+    const provider = new TmdbProvider({} as TmdbClient);
+    expect(provider.getBackdropAnalysisSource('/backdrop.jpg')).toEqual({
+      key: '/backdrop.jpg',
+      url: 'https://image.tmdb.org/t/p/w780/backdrop.jpg',
+    });
+    expect(provider.getBackdropAnalysisSource('//other.example/backdrop.jpg')).toBeNull();
   });
 
   it('returns a supplied TMDB identifier without an IMDb lookup', async () => {

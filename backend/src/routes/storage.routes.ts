@@ -5,12 +5,13 @@ import { z } from 'zod';
 import { UserRole } from '@entities/user.entity';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { isVideoFile } from '@services/download/download.utils';
 
 import type { Deps } from './common.types';
 import type { StorageInventoryResponse } from './storage.types';
 
 const sourceIdSchema = z.object({
-  movieSourceId: z
+  sourceId: z
     .string()
     .regex(/^[1-9]\d*$/)
     .transform(Number)
@@ -42,10 +43,11 @@ export const createStorageRoutes = (
         items: inventory.items.map(storage => {
           const activity = deps.downloadService.getStorageActivity(storage);
           return {
-            movieSourceId: storage.movieSourceId,
-            title: storage.movieSource?.movie?.title ?? `Download ${storage.movieSourceId}`,
-            fileName: storage.encryptedLayout?.video.name ?? null,
-            quality: storage.movieSource?.quality ?? null,
+            sourceId: storage.sourceId,
+            title:
+              storage.contentSource?.movies?.[0]?.movie?.title ?? `Download ${storage.sourceId}`,
+            fileName: storage.requestedFiles.find(isVideoFile)?.split('/').pop() ?? null,
+            quality: storage.contentSource?.quality ?? null,
             physicalBytes: storage.allocatedBytes,
             reservedBytes: storage.reservedBytes,
             progressPercent: storage.downloaded / 100,
@@ -60,13 +62,13 @@ export const createStorageRoutes = (
       return c.json(response);
     })
     .delete(
-      '/:movieSourceId',
+      '/:sourceId',
       rateLimitGuard(5),
       authGuard(UserRole.ADMIN),
       zValidator('param', sourceIdSchema),
       async c => {
-        const { movieSourceId } = c.req.valid('param');
-        const result = await deps.storageService.removeStorageWithResult(movieSourceId);
+        const { sourceId } = c.req.valid('param');
+        const result = await deps.storageService.removeStorageWithResult(sourceId);
         switch (result.status) {
           case 'removed':
             return c.json({ success: true });

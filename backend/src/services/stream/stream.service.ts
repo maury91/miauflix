@@ -2,24 +2,73 @@ import { logger } from '@logger';
 import type { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
-import type { MovieSource } from '@entities/movie-source.entity';
-import type { MovieSourceRepository } from '@repositories/movie-source.repository';
+import type { ContentSource } from '@entities/content-source.entity';
+import type { Movie } from '@entities/movie.entity';
+import type { PlaybackGrant } from '@entities/playback-grant.entity';
+import type { ContentSourceRepository } from '@repositories/content-source.repository';
+import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
+import { playableFromKey } from '@routes/playable.types';
 import type { DownloadService } from '@services/download/download.service';
 import type { MediaService } from '@services/media/media.service';
+import type { PlaybackTarget } from '@services/playback/playback-target';
+import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
 import { traced } from '@utils/tracing.util';
 
+export interface ResolvedPlayback {
+  target: PlaybackTarget;
+  /** Set for movie grants; the source is verified to be linked to this movie. */
+  movie: Movie | null;
+}
+
 export class StreamService {
-  private readonly movieSourceRepository: MovieSourceRepository;
+  private readonly contentSourceRepository: ContentSourceRepository;
+  private readonly episodeSourceRepository: EpisodeSourceRepository;
 
   constructor(
     db: Database,
     private readonly sourceService: SourceService,
     private readonly downloadService: DownloadService,
-    private readonly mediaService: MediaService
+    private readonly mediaService: MediaService,
+    private readonly targets: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>
   ) {
-    this.movieSourceRepository = db.getMovieSourceRepository();
+    this.contentSourceRepository = db.getContentSourceRepository();
+    this.episodeSourceRepository = db.getEpisodeSourceRepository();
+  }
+
+  /**
+   * Resolve a playback grant to the exact file it may read, only when its source is associated
+   * with that playable. Movie grants may attach the torrent once to learn the source's file list.
+   */
+  async resolvePlaybackTarget(
+    grant: Pick<PlaybackGrant, 'playableKey' | 'playableKind' | 'sourceId'>
+  ): Promise<ResolvedPlayback | null> {
+    const source = await this.getSourceById(grant.sourceId);
+    if (!source) return null;
+    const playable = playableFromKey(grant.playableKey);
+    if (!playable || playable.kind !== grant.playableKind) return null;
+
+    if (playable.kind === 'movie') {
+      const movie = await this.mediaService.getLocalMovieByMediaId(playable.mediaId);
+      if (!movie || !(await this.contentSourceRepository.isLinkedToMovie(movie.id, source.id)))
+        return null;
+      return { target: await this.targets.forMovie(movie.id, source), movie };
+    }
+
+    const episodeSource = await this.episodeSourceRepository.findForPlayback(
+      playable.showMediaId,
+      playable.seasonNumber,
+      playable.episodeNumber,
+      source.id
+    );
+    const target = episodeSource && (await this.targets.forEpisode({ ...episodeSource, source }));
+    return target ? { target, movie: null } : null;
+  }
+
+  /** The movie's main video inside a source chosen for it. */
+  movieTarget(movieId: number, source: ContentSource): Promise<PlaybackTarget> {
+    return this.targets.forMovie(movieId, source);
   }
 
   /**
@@ -30,7 +79,7 @@ export class StreamService {
     movieId: number,
     quality: Quality | 'auto',
     allowHevc = true
-  ): Promise<MovieSource | null> {
+  ): Promise<ContentSource | null> {
     // First, get the movie (the caller ensures fresh catalog data beforehand)
     const movie = await this.mediaService.getMovieById(movieId);
     if (!movie) {
@@ -91,9 +140,9 @@ export class StreamService {
    * Select source by specific quality, fallback to closest available
    */
   private selectSourceByQuality(
-    sources: MovieSource[],
+    sources: ContentSource[],
     quality: Quality | '3d' | 'auto'
-  ): MovieSource {
+  ): ContentSource {
     // First, try to find exact quality match
     const exactMatch = sources.find(
       source => source.quality?.toLowerCase() === quality.toLowerCase()
@@ -112,7 +161,7 @@ export class StreamService {
    * Get streaming statistics for a source
    */
   @traced('StreamService')
-  async getStreamingStats(source: MovieSource): Promise<{
+  async getStreamingStats(source: ContentSource): Promise<{
     broadcasters: number;
     watchers: number;
   }> {
@@ -131,9 +180,9 @@ export class StreamService {
    * Get a movie source by ID
    */
   @traced('StreamService')
-  async getSourceById(sourceId: number): Promise<MovieSource | null> {
+  async getSourceById(sourceId: number): Promise<ContentSource | null> {
     try {
-      return await this.movieSourceRepository.findById(sourceId);
+      return await this.contentSourceRepository.findById(sourceId);
     } catch (error) {
       logger.warn('StreamService', `Failed to get source ${sourceId}:`, error);
       return null;

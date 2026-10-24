@@ -1,8 +1,8 @@
 import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
+import type { ContentSource } from '@entities/content-source.entity';
 import type { Movie } from '@entities/movie.entity';
-import type { MovieSource } from '@entities/movie-source.entity';
 import type { Storage } from '@entities/storage.entity';
 
 /**
@@ -37,18 +37,17 @@ export class TestDataFactory {
   /**
    * Create a test movie source with realistic data
    */
-  async createTestMovieSource(
-    movieId: number,
-    overrides: Partial<MovieSource> = {}
-  ): Promise<MovieSource> {
-    const movieSourceRepository = this.database.getMovieSourceRepository();
+  async createTestContentSource(
+    movieId: number | null,
+    overrides: Partial<ContentSource> = {}
+  ): Promise<ContentSource> {
+    const contentSourceRepository = this.database.getContentSourceRepository();
 
     // Generate a unique hash for each movie source
     const hash = overrides.hash ?? this.generateRandomHash();
     const magnetLink = overrides.magnetLink ?? this.generateMagnetLink(hash);
 
-    const defaultMovieSource: Partial<MovieSource> = {
-      movieId,
+    const defaultContentSource = {
       hash,
       magnetLink,
       quality: Quality.FHD,
@@ -58,15 +57,17 @@ export class TestDataFactory {
       broadcasters: 10,
       watchers: 100,
       ...overrides,
-    };
+    } satisfies Partial<ContentSource>;
 
-    return movieSourceRepository.create(defaultMovieSource);
+    if (movieId === null) return contentSourceRepository.upsertByHash(defaultContentSource);
+    const [torrent] = await contentSourceRepository.upsertForMovie(movieId, [defaultContentSource]);
+    return torrent;
   }
 
   /**
    * Create a test storage record
    */
-  createTestStorage(movieSourceId: number, overrides: Partial<Storage> = {}): Partial<Storage> {
+  createTestStorage(sourceId: number, overrides: Partial<Storage> = {}): Partial<Storage> {
     const totalPieces = 1000;
     const downloadedPiecesArray = new Uint8Array(Math.ceil(totalPieces / 8));
 
@@ -76,11 +77,11 @@ export class TestDataFactory {
     }
 
     return {
-      movieSourceId,
+      sourceId,
       downloadedPieces: downloadedPiecesArray,
       size: 2147483648, // 2GB
       downloaded: 1000, // 10% in basis points (10000 = 100%)
-      location: `/tmp/test/movie-${movieSourceId}.mkv`,
+      location: `/tmp/test/movie-${sourceId}.mkv`,
       lastAccessAt: null,
       lastWriteAt: null,
       ...overrides,

@@ -1,6 +1,6 @@
 import { randomBytes } from 'crypto';
 import fs from 'fs';
-import { readdir, readFile, unlink } from 'fs/promises';
+import { readdir, readFile, rm, unlink } from 'fs/promises';
 import path from 'path';
 import { promisify } from 'util';
 
@@ -212,6 +212,114 @@ describe('Encrypted Chunk Store', () => {
         // @ts-expect-error - Intentionally testing missing required parameter
         new EncryptedChunkStore(chunkLength); // No encryption key
       }).toThrow('Encryption key is required for encrypted chunk store');
+    });
+  });
+
+  describe('Removing single files', () => {
+    const files = [
+      { path: 'pack/a.mkv', length: 6 },
+      { path: 'pack/b.mkv', length: 10 },
+    ];
+    const dir = path.join(TMP_DIR, 'remove_single_files');
+
+    const open = () =>
+      new EncryptedChunkStore(4, { path: dir, encryptionKey, files: files.map(f => ({ ...f })) });
+    const put = (store: EncryptedChunkStore, index: number, data: Buffer) =>
+      promisify<void>(cb => store.put(index, data, cb))();
+    const get = (store: EncryptedChunkStore, index: number) =>
+      new Promise<Buffer>((resolve, reject) =>
+        store.get(index, (error, buffer) => (error ? reject(error) : resolve(buffer!)))
+      );
+    const fill = async (store: EncryptedChunkStore) => {
+      const bytes = Buffer.from('AAAAAABBBBBBBBBB');
+      for (let i = 0; i * 4 < bytes.length; i++)
+        await put(store, i, bytes.subarray(i * 4, i * 4 + 4));
+    };
+
+    afterEach(async () => {
+      await rm(dir, { recursive: true, force: true });
+    });
+
+    it('deletes only the named encrypted files and keeps the store usable', async () => {
+      const store = open();
+      try {
+        await fill(store);
+        expect(await readdir(dir)).toHaveLength(2);
+
+        await store.removeFiles(['pack/a.mkv']);
+
+        expect(await readdir(dir)).toHaveLength(1);
+        // b.mkv keeps its fully owned chunks readable.
+        const owned = await get(store, 2);
+        expect(owned.toString()).toBe('BBBB');
+
+        // Writing the shared chunk again recreates the removed file.
+        await put(store, 1, Buffer.from('AABB'));
+        expect(await readdir(dir)).toHaveLength(2);
+        const shared = await get(store, 1);
+        expect(shared.toString()).toBe('AABB');
+      } finally {
+        await promisify(cb => store.close(cb))().catch(() => undefined);
+      }
+    });
+
+    it('keeps writes that race a removal: no error, and data written after it is readable', async () => {
+      const store = open();
+      try {
+        await fill(store);
+
+        // A write already in flight when the removal starts, and writes that arrive during it.
+        const inFlight = put(store, 0, Buffer.from('XXXX'));
+        const removal = store.removeFiles(['pack/a.mkv']);
+        const during = Promise.all([
+          put(store, 0, Buffer.from('ZZZZ')),
+          put(store, 1, Buffer.from('ZZBB')),
+        ]);
+        await expect(Promise.all([inFlight, removal, during])).resolves.toBeDefined();
+
+        // Writes after the removal went to a fresh file, not to a handle on the unlinked one.
+        expect((await get(store, 0)).toString()).toBe('ZZZZ');
+        expect((await get(store, 1)).toString()).toBe('ZZBB');
+        expect(await readdir(dir)).toHaveLength(2);
+        // Nothing was lost to an unlinked inode: a new store reads the same bytes from disk.
+        await promisify(cb => store.close(cb))();
+        const reopened = open();
+        try {
+          expect((await get(reopened, 0)).toString()).toBe('ZZZZ');
+        } finally {
+          await promisify(cb => reopened.close(cb))().catch(() => undefined);
+        }
+      } finally {
+        await promisify(cb => store.close(cb))().catch(() => undefined);
+      }
+    });
+
+    it('removes files that were never written without failing', async () => {
+      const store = open();
+      try {
+        await expect(store.removeFiles(['pack/a.mkv', 'pack/b.mkv'])).resolves.toBeUndefined();
+      } finally {
+        await promisify(cb => store.close(cb))().catch(() => undefined);
+      }
+    });
+
+    it('does not delete a physical file that a kept path shares', async () => {
+      // Two paths with the same base name map to one encrypted file.
+      const twins = new EncryptedChunkStore(4, {
+        path: dir,
+        encryptionKey,
+        files: [
+          { path: 'one/readme.txt', length: 4 },
+          { path: 'two/readme.txt', length: 4 },
+        ],
+      });
+      try {
+        await put(twins, 0, Buffer.from('DATA'));
+        await twins.removeFiles(['one/readme.txt']);
+        expect(await readdir(dir)).toHaveLength(1);
+      } finally {
+        await promisify(cb => twins.close(cb))().catch(() => undefined);
+      }
     });
   });
 

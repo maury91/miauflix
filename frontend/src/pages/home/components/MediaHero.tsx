@@ -17,7 +17,7 @@ import {
   HERO_DETAILS_LEFT_CSS,
   HERO_DETAILS_WIDTH_CSS,
 } from '../hero-backdrop-layout';
-import { getImageUrl, getMediaTitle } from '../media.utils';
+import { artworkUrl, getMediaTitle } from '../media.utils';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
 import StarIcon from '~icons/mdi/star';
@@ -235,7 +235,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       return;
     }
 
-    const url = getImageUrl(selectedBackdrop, 'original');
+    const url = artworkUrl(selectedBackdrop, 'backdrop');
     const key = `${media._type}:${media.mediaId}:${url}`;
     let cancelled = false;
 
@@ -386,7 +386,11 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       )}
       <Details>
         {heroLogo ? (
-          <Logo src={getImageUrl(heroLogo)} alt={getMediaTitle(media)} />
+          <Logo
+            decoding="async"
+            src={artworkUrl(heroLogo, 'logo', 500)}
+            alt={getMediaTitle(media)}
+          />
         ) : (
           <Title>{getMediaTitle(media)}</Title>
         )}

@@ -89,6 +89,8 @@ async function installVotingHarness(page: Page): Promise<void> {
       return json(route, { status: 'pending' });
     if (path === '/api/config' && request.method() === 'GET') return json(route, []);
     if (path === '/api/status' && request.method() === 'GET') return json(route, { services: {} });
+    if (path === '/api/notifications' && request.method() === 'GET')
+      return json(route, { notifications: [], unreadCount: 0 });
     if (path === '/api/integrations/trakt/association' && request.method() === 'GET')
       return json(route, {
         connected: true,

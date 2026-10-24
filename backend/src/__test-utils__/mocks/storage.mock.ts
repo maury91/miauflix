@@ -2,16 +2,16 @@ import { faker } from '@faker-js/faker';
 
 import type { Storage } from '@entities/storage.entity';
 
-import { createMockMovieSource } from './movie.mock';
+import { createMockContentSource } from './movie.mock';
 
 export function createMockStorage(overrides: Partial<Storage> = {}): Storage {
-  const movieSourceId = overrides.movieSourceId ?? faker.number.int({ min: 1, max: 100000 });
-  const movieSource = overrides.movieSource ?? createMockMovieSource({ id: movieSourceId });
+  const sourceId = overrides.sourceId ?? faker.number.int({ min: 1, max: 100000 });
+  const contentSource = overrides.contentSource ?? createMockContentSource({ id: sourceId });
 
   return {
     id: overrides.id ?? faker.number.int({ min: 1, max: 100000 }),
-    movieSource,
-    movieSourceId,
+    contentSource,
+    sourceId,
     downloadedPieces: overrides.downloadedPieces ?? new Uint8Array(0),
     size: overrides.size ?? faker.number.int({ min: 1024 * 1024, max: 10 * 1024 * 1024 * 1024 }), // 1MB to 10GB
     logicalBytes: overrides.logicalBytes ?? overrides.size ?? 0,
@@ -20,9 +20,7 @@ export function createMockStorage(overrides: Partial<Storage> = {}): Storage {
     reservedBytes: overrides.reservedBytes ?? 0,
     totalPieces: overrides.totalPieces ?? 0,
     pieceLength: overrides.pieceLength ?? 0,
-    retentionClass: overrides.retentionClass ?? 'watched',
     lastInterestAt: overrides.lastInterestAt ?? null,
-    speculativeExpiresAt: overrides.speculativeExpiresAt ?? null,
     videoCompletedAt: overrides.videoCompletedAt ?? null,
     localOnly: overrides.localOnly ?? false,
     encryptedLayout: overrides.encryptedLayout ?? null,
@@ -38,38 +36,38 @@ export function createMockStorage(overrides: Partial<Storage> = {}): Storage {
 }
 
 export function createMockStorageWithHash(hash: string, overrides: Partial<Storage> = {}): Storage {
-  const movieSourceId = overrides.movieSourceId ?? faker.number.int({ min: 1, max: 100000 });
-  const movieSource = createMockMovieSource({
-    id: movieSourceId,
+  const sourceId = overrides.sourceId ?? faker.number.int({ min: 1, max: 100000 });
+  const contentSource = createMockContentSource({
+    id: sourceId,
     hash,
-    ...overrides.movieSource,
+    ...overrides.contentSource,
   });
 
   return createMockStorage({
-    movieSourceId,
-    movieSource,
+    sourceId,
+    contentSource,
     ...overrides,
   });
 }
 
-export function createMockStorageWithoutMovieSource(overrides: Partial<Storage> = {}): Storage {
+export function createMockStorageWithoutContentSource(overrides: Partial<Storage> = {}): Storage {
   return createMockStorage({
-    movieSource: undefined,
+    contentSource: undefined,
     ...overrides,
   });
 }
 
 export function createMockStorageWithUndefinedHash(overrides: Partial<Storage> = {}): Storage {
-  const movieSourceId = overrides.movieSourceId ?? faker.number.int({ min: 1, max: 100000 });
-  const movieSource = createMockMovieSource({
-    id: movieSourceId,
+  const sourceId = overrides.sourceId ?? faker.number.int({ min: 1, max: 100000 });
+  const contentSource = createMockContentSource({
+    id: sourceId,
     hash: undefined,
-    ...overrides.movieSource,
+    ...overrides.contentSource,
   });
 
   return createMockStorage({
-    movieSourceId,
-    movieSource,
+    sourceId,
+    contentSource,
     ...overrides,
   });
 }

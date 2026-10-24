@@ -8,6 +8,7 @@ import type { RootState } from '@store/store';
 
 export interface PreloadIntentRequest {
   sequence: number;
+  subtitleLanguage?: string;
   view: 'browse' | 'details' | 'player';
   focused: MediaIntentRef | null;
   reachable: ReachableIntent[];

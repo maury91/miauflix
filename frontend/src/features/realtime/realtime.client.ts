@@ -1,5 +1,5 @@
 import { nextPreloadSequence } from '@features/preload/lib/intent-client';
-import type { ProgressRequest } from '@miauflix/backend';
+import type { CreatePlaybackSessionResponse, ProgressRequest } from '@miauflix/backend';
 import {
   type ArtworkUpdate,
   artworkUpdateSchema,
@@ -40,8 +40,22 @@ export type RealtimeStatusMessage =
       focusSequence: number;
     };
 
+/** A playback's background probe result: switch delivery, or start a new session. */
+export interface RealtimePlaybackDelivery {
+  type: 'playback-delivery';
+  playbackId: string;
+  update:
+    | {
+        type: 'delivery';
+        delivery: NonNullable<CreatePlaybackSessionResponse['delivery']>;
+        streamUrl: string;
+      }
+    | { type: 'recreate'; reason: string };
+}
+
 export interface RealtimeFocus {
   type: 'focus';
+  subtitleLanguage?: string;
   clientSequence: number;
   navigationRevision: number;
   view: 'browse' | 'details' | 'player';
@@ -89,7 +103,8 @@ export class RealtimeClient {
     private readonly clientId: string,
     private readonly onStatus: (message: RealtimeStatusMessage) => void,
     private readonly onConnectionChange?: (ready: boolean) => void,
-    private readonly onArtworkUpdate?: (update: ArtworkUpdate) => void
+    private readonly onArtworkUpdate?: (update: ArtworkUpdate) => void,
+    private readonly onPlaybackDelivery?: (message: RealtimePlaybackDelivery) => void
   ) {}
 
   start(): void {
@@ -208,6 +223,7 @@ export class RealtimeClient {
       )
         this.onStatus(message);
       if (isArtworkUpdate(message)) this.onArtworkUpdate?.(message);
+      if (isPlaybackDelivery(message)) this.onPlaybackDelivery?.(message);
       if (isReady(message)) {
         this.ready = true;
         this.onConnectionChange?.(true);
@@ -316,6 +332,16 @@ function isStatusMessage(value: unknown): value is RealtimeStatusMessage {
   if (typeof value !== 'object' || value === null) return false;
   const type = (value as { type?: unknown }).type;
   return type === 'source-status' || type === 'warmup';
+}
+
+function isPlaybackDelivery(value: unknown): value is RealtimePlaybackDelivery {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Partial<RealtimePlaybackDelivery>;
+  return (
+    candidate.type === 'playback-delivery' &&
+    typeof candidate.playbackId === 'string' &&
+    (candidate.update?.type === 'delivery' || candidate.update?.type === 'recreate')
+  );
 }
 
 function isArtworkUpdate(value: unknown): value is ArtworkUpdate {
