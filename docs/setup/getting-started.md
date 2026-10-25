@@ -19,7 +19,7 @@ The first command clones the repository, the second runs the configuration wizar
 - [Node.js](https://nodejs.org/) (for local development only)
 - [TMDB API Access Token](https://developer.themoviedb.org/docs) (required for media content)
 - [Trakt.tv OAuth application](https://trakt.tv/oauth/applications) (required when the standalone List Service is enabled)
-- VPN subscription (optional)
+- [NordVPN](https://nordvpn.com/) subscription (strongly recommended, required to search sources unless you disable the VPN check)
 
 ## Installation Options
 
@@ -39,18 +39,15 @@ This will run the configuration wizard, which will ask you for the required envi
 
 The default Compose topology starts the standalone List Service. Configure the Trakt OAuth credentials during setup, or disable the service if you do not use lists. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
 
-#### 2. [Optional] Set up VPN
+#### 2. Set up the VPN
 
-If you want to use VPN integration, add your NordVPN private key to `.env`:
+The stack routes all its traffic through NordVPN with [gluetun](https://github.com/qdm12/gluetun), whose firewall also acts as a kill switch. Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then save your private key to `.env`:
 
 ```bash
-# Follow the guide at: https://github.com/bubuntux/nordlynx/pkgs/container/nordlynx#how-to-get-your-private_key
-NORDVPN_PRIVATE_KEY=your-nordvpn-private-key
+scripts/nordvpn-key.sh
 ```
 
-A couple of notes about VPN:
-
-Miauflix currently detects only NordVPN and will automatically disable some features when a VPN is not detected. You can override this behavior by setting `DISABLE_VPN_CHECK=true` in `.env`. This is recommended only if you're willing to accept the privacy risks of not using a VPN, or if you're using a VPN and are certain it's always active (for example, through a Docker service or Pi-hole).
+Miauflix currently detects only NordVPN and refuses to search for sources when no VPN is detected, because torrents would go out from your real IP. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env`, but only do so if you accept that risk; never on a server reachable from the internet. See [Docker Setup](docker-setup.md#nordvpn-setup) for server locations.
 
 #### 3. [Optional] Set up HTTPS and domain name
 

@@ -15,6 +15,8 @@ Open <http://localhost:3000>, create the admin account, then add your [TMDB acce
 
 > **Security:** the quick-start file sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
 
+> **VPN:** Miauflix won't search for sources until it detects a VPN, because peers would see your real IP. Set one up as described in [Using a VPN](#using-a-vpn), or [opt out](#running-without-a-vpn) if you accept the risk.
+
 ### Open it to your local network
 
 To watch from a TV, phone or another computer at home, open Miauflix to your network **after** you have created the admin account:
@@ -49,39 +51,48 @@ All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.
 
 ### Using a VPN
 
-Route Miauflix through a VPN container by merging the services below into `docker-compose.quickstart.yml`, and add your key as `NORDVPN_PRIVATE_KEY` in a `.env` file next to it ([how to get it](https://github.com/bubuntux/nordlynx/pkgs/container/nordlynx#how-to-get-your-private_key)). The VPN container owns the network, so the published port moves to it and the other services use `network_mode`:
+Miauflix finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default Miauflix refuses to search for sources until it detects a NordVPN connection.
 
-```yaml
-services:
-  vpn:
-    image: ghcr.io/bubuntux/nordlynx
-    cap_add: [NET_ADMIN]
-    environment:
-      PRIVATE_KEY: ${NORDVPN_PRIVATE_KEY}
-      NET_LOCAL: 192.168.0.0/16 # your LAN range, so devices on it get replies
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-    ports:
-      - '127.0.0.1:3000:3000'
-    restart: unless-stopped
+[`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes the quick start through NordVPN with [gluetun](https://github.com/qdm12/gluetun). Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP.
 
-  miauflix:
-    network_mode: service:vpn
-    environment:
-      BUNQUEUE_HOST: 127.0.0.1
-      CATALOG_SERVICE_URL: http://127.0.0.1:3001
-      LIST_SERVICE_URL: http://127.0.0.1:3002
-    depends_on:
-      - vpn
-      - miauflix-services
+1. Get a NordVPN access token: sign in at [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard), pick **NordVPN** in the left sidebar, then **Get Access Token** → **Generate New Token**. (It is not under "Manual setup".)
+2. Download the VPN file and the key helper next to `docker-compose.quickstart.yml`:
 
-  miauflix-services:
-    network_mode: service:vpn
-    depends_on:
-      - vpn
+   ```bash
+   curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.vpn.yml
+   curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/scripts/nordvpn-key.sh
+   ```
+
+3. Turn the token into your NordLynx (WireGuard) private key. The script asks for the token without echoing it, fetches the key from NordVPN, and saves it as `NORDVPN_PRIVATE_KEY` in `.env` (readable only by you) without printing either value:
+
+   ```bash
+   bash nordvpn-key.sh
+   ```
+
+4. Add these lines to the same `.env` file, so plain `docker compose` commands use both files:
+
+   ```bash
+   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml
+   NORDVPN_COUNTRIES=Netherlands # optional, comma-separated list of countries to connect to
+   ```
+
+5. Start it:
+
+   ```bash
+   docker compose up -d
+   ```
+
+The `vpn` service owns the network, so Miauflix's port is published from it. To [open it to your local network](#open-it-to-your-local-network), change the `vpn` service's port mapping in `docker-compose.vpn.yml` instead of the `miauflix` one. Gluetun connects to NordVPN's P2P servers and passes Miauflix's VPN check as soon as the tunnel is up; `http://localhost:3000/api/status` reports it under `vpn`.
+
+To check the connection, compare the address the container uses with your own:
+
+```bash
+docker compose exec vpn wget -qO- https://ipinfo.io/ip
 ```
 
-Remove the `ports` and `DISABLE_VPN_CHECK` entries from the `miauflix` service in this layout. To [open it to your local network](#open-it-to-your-local-network), change the `vpn` service's mapping instead. Set `NET_LOCAL` to your local network's range: without it, replies to a TV or phone on your LAN go out through the VPN tunnel and never arrive.
+#### Running without a VPN
+
+If you accept that peers see your real IP (for example while trying Miauflix on a laptop), add `DISABLE_VPN_CHECK=true` to a `.env` file next to `docker-compose.quickstart.yml`. Don't do this on a server.
 
 ## Building From Source
 
@@ -117,7 +128,7 @@ This command starts only the backend service using Docker Compose in production 
 
 - **miauflix**: Node.js API server and static-asset frontend host
 - **nginx**: Reverse proxy with SSL termination and static file serving
-- **nordvpn**: VPN container (optional, for privacy protection)
+- **nordvpn**: [gluetun](https://github.com/qdm12/gluetun) VPN container connected to NordVPN; the other services share its network
 - **flaresolverr**: Cloudflare bypass proxy (optional, for accessing protected content sources)
 - **certbot**: Automatic SSL certificate management via Let's Encrypt
 
@@ -246,31 +257,35 @@ npm run test:backend:e2e:dev
 
 ### NordVPN Setup
 
-Miauflix can integrate with NordVPN for enhanced privacy and content access:
+The full stack routes every service through the `nordvpn` container, which runs [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN's P2P servers. Gluetun's firewall blocks all traffic outside the tunnel, so it doubles as a kill switch.
 
 #### 1. Get NordVPN Private Key
 
-Follow [this guide](https://github.com/bubuntux/nordlynx/pkgs/container/nordlynx#how-to-get-your-private_key) to obtain your NordVPN WireGuard private key.
-
-#### 2. Configure VPN in Environment
-
-Add your private key to `.env`:
+Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then run:
 
 ```bash
-NORDVPN_PRIVATE_KEY=your-private-key-here
+scripts/nordvpn-key.sh
 ```
 
-#### 3. Enable VPN Detection
+The script asks for the token and saves your NordLynx (WireGuard) private key as `NORDVPN_PRIVATE_KEY` in `.env` without printing it.
 
-Miauflix can detect if you're connected to NordVPN and automatically adjust functionality. This ensures optimal privacy protection for content discovery.
+#### 2. Choose Server Locations (Optional)
 
-To disable VPN detection (not recommended):
+The stack connects to the United States by default. To change it, set a comma-separated list in `.env`:
+
+```bash
+NORDVPN_COUNTRIES=Switzerland,Netherlands
+```
+
+#### 3. VPN Detection
+
+Miauflix checks with NordVPN that its traffic is protected and refuses to search for sources when it isn't. Any NordVPN connection passes the check.
+
+To disable VPN detection (not recommended, peers see your real IP):
 
 ```bash
 DISABLE_VPN_CHECK=true
 ```
-
-**Note**: Using a VPN is strongly recommended for privacy protection when accessing content sources.
 
 ## SSL and HTTPS
 
@@ -367,7 +382,7 @@ sudo chown -R $USER:$USER .
 docker compose exec miauflix curl -I https://www.google.com
 
 # Check VPN status (if using VPN)
-docker compose exec nordvpn curl ifconfig.me
+docker compose exec nordvpn wget -qO- https://ipinfo.io/ip
 ```
 
 ### Health Checks
