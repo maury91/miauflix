@@ -6,7 +6,9 @@ services:
   miauflix:
     image: ghcr.io/maury91/miauflix:latest
     ports:
-      - '3000:3000'
+      # Only this computer can connect until you open it to your network, see
+      # docs/setup/docker-setup.md#open-it-to-your-local-network
+      - '127.0.0.1:3000:3000'
     environment:
       DATA_DIR: /usr/src/app/data
       DOWNLOAD_PATH: /usr/src/app/downloads

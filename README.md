@@ -52,11 +52,12 @@ docker compose -f docker-compose.quickstart.yml up -d
 
 **3. Open <http://localhost:3000>**, create your admin account and paste your TMDB token. That's it. 🎉
 
-> [!IMPORTANT]
-> Until the admin account exists, anyone who can reach port 3000 can create it. Finish step 3 right away, and don't expose the port to the internet before you do.
+> [!NOTE]
+> Until you create the admin account, anyone who can reach Miauflix could create it instead, so the quick start only accepts connections from this computer. Once your account exists, [open it to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network) to watch from your TV or phone.
 
 ## Next steps
 
+- 📺 **Watch from your TV or phone**: [Open it to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network)
 - 🔒 **Route traffic through a VPN**: [Using a VPN](docs/setup/docker-setup.md#using-a-vpn)
 - 🌐 **Put it on a domain with HTTPS**: [Getting Started](docs/setup/getting-started.md) and [SSL Certificates](docs/setup/ssl-certificates.md)
 - ⚙️ **Tune every setting**: [Environment Variables](docs/setup/environment-variables.md)

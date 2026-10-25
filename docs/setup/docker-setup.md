@@ -13,7 +13,28 @@ docker compose -f docker-compose.quickstart.yml up -d
 
 Open <http://localhost:3000>, create the admin account, then add your [TMDB access token](https://developer.themoviedb.org/docs) (and optionally Trakt credentials) from the setup screens.
 
-> **Security:** the quick-start file sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. Create the admin right away, and don't expose port 3000 to the internet before you do.
+> **Security:** the quick-start file sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
+
+### Open it to your local network
+
+To watch from a TV, phone or another computer at home, open Miauflix to your network **after** you have created the admin account:
+
+1. In `docker-compose.quickstart.yml`, change the port mapping of the `miauflix` service:
+
+   ```yaml
+   ports:
+     - '3000:3000'
+   ```
+
+2. Apply the change:
+
+   ```bash
+   docker compose -f docker-compose.quickstart.yml up -d
+   ```
+
+3. Find this computer's address on your network (`ipconfig getifaddr en0` on macOS, `hostname -I` on Linux, `ipconfig` on Windows) and open `http://<that address>:3000` on the other device. If it doesn't load, allow port 3000 through the computer's firewall.
+
+The admin setup endpoint closes for good once an admin exists, so this is safe on a home network. Don't forward port 3000 on your router: to reach Miauflix from the internet, put it behind HTTPS with a domain as described in [Getting Started](getting-started.md).
 
 ### Published images
 
@@ -41,7 +62,7 @@ services:
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     ports:
-      - '3000:3000'
+      - '127.0.0.1:3000:3000'
     restart: unless-stopped
 
   miauflix:
@@ -60,7 +81,7 @@ services:
       - vpn
 ```
 
-Remove the `ports` and `DISABLE_VPN_CHECK` entries from the `miauflix` service in this layout. Set `NET_LOCAL` to your local network's range: without it, replies to a TV or phone on your LAN go out through the VPN tunnel and never arrive.
+Remove the `ports` and `DISABLE_VPN_CHECK` entries from the `miauflix` service in this layout. To [open it to your local network](#open-it-to-your-local-network), change the `vpn` service's mapping instead. Set `NET_LOCAL` to your local network's range: without it, replies to a TV or phone on your LAN go out through the VPN tunnel and never arrive.
 
 ## Building From Source
 
