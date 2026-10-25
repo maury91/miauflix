@@ -557,7 +557,7 @@ describe('SourceService', () => {
 
       // And it should update the stats for the source
       expect(mockContentSourceRepository.updateStats).toHaveBeenCalledWith(
-        sourceToUpdate.id,
+        sourceToUpdate,
         newBroadcasters,
         newWatchers,
         expect.any(Date)
@@ -591,7 +591,7 @@ describe('SourceService', () => {
 
       // And it should update the stats for the source
       expect(mockContentSourceRepository.updateStats).toHaveBeenCalledWith(
-        sourceWithoutFile.id,
+        sourceWithoutFile,
         newBroadcasters,
         newWatchers,
         expect.any(Date)

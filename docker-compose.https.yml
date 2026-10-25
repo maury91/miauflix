@@ -3,6 +3,9 @@
 #   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.https.yml
 #   MIAUFLIX_DOMAIN=miauflix.example.com
 #   REVERSE_PROXY_SECRET=<a long random string, e.g. from openssl rand -hex 32>
+# With docker-compose.vpn.yml as well, Miauflix shares the VPN container's network:
+#   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml:docker-compose.https.yml
+#   MIAUFLIX_UPSTREAM=vpn:3000
 # Guide: docs/setup/docker-setup.md#https-with-a-domain
 
 services:
@@ -15,6 +18,7 @@ services:
     environment:
       MIAUFLIX_DOMAIN: ${MIAUFLIX_DOMAIN:?Set MIAUFLIX_DOMAIN in .env}
       REVERSE_PROXY_SECRET: ${REVERSE_PROXY_SECRET:?Set REVERSE_PROXY_SECRET in .env}
+      MIAUFLIX_UPSTREAM: ${MIAUFLIX_UPSTREAM:-miauflix:3000}
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
@@ -27,6 +31,8 @@ services:
     environment:
       ALLOW_CREATE_ADMIN_ON_FIRST_RUN: 'false'
       COOKIE_SECURE: 'true'
+      # The realtime WebSocket only accepts these origins; the default lists localhost only
+      CORS_ORIGIN: https://${MIAUFLIX_DOMAIN:?Set MIAUFLIX_DOMAIN in .env}
       REVERSE_PROXY_SECRET: ${REVERSE_PROXY_SECRET:?Set REVERSE_PROXY_SECRET in .env}
 
 volumes:

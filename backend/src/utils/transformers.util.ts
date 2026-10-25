@@ -1,5 +1,6 @@
 import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import type { ContentSource } from '@entities/content-source.entity';
+import { calculateStreamingScore } from '@utils/streaming-score.util';
 
 /**
  * Utility functions for transforming data between formats
@@ -19,21 +20,23 @@ export const normalizeInfoHash = (hash: string): string => hash.trim().toLowerCa
 export const providerSourceToEntity = (
   providerSource: SourceMetadata,
   providerName: string
-): ProviderSourceRow => ({
-  hash: providerSource.hash,
-  magnetLink: providerSource.magnetLink,
-  quality: providerSource.quality,
-  size: providerSource.size,
-  videoCodec: providerSource.videoCodec,
-  broadcasters: providerSource.broadcasters,
-  watchers: providerSource.watchers,
-  sourceUploadedAt: providerSource.uploadDate,
-  url: providerSource.url,
-  source: providerName,
-  sourceType: providerSource.source,
-  nextStatsCheckAt: new Date(),
-  streamingScore: 0, // TODO: calculate streaming score
-});
+): ProviderSourceRow => {
+  const row = {
+    hash: providerSource.hash,
+    magnetLink: providerSource.magnetLink,
+    quality: providerSource.quality,
+    size: providerSource.size,
+    videoCodec: providerSource.videoCodec,
+    broadcasters: providerSource.broadcasters,
+    watchers: providerSource.watchers,
+    sourceUploadedAt: providerSource.uploadDate,
+    url: providerSource.url,
+    source: providerName,
+    sourceType: providerSource.source,
+    nextStatsCheckAt: new Date(),
+  };
+  return { ...row, streamingScore: calculateStreamingScore(row) };
+};
 
 /**
  * Transform multiple provider sources to database entity format

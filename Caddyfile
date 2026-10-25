@@ -1,6 +1,6 @@
 {$MIAUFLIX_DOMAIN} {
 	encode zstd gzip
-	reverse_proxy miauflix:3000 {
+	reverse_proxy {$MIAUFLIX_UPSTREAM:miauflix:3000} {
 		header_up X-Reverse-Proxy-Secret {$REVERSE_PROXY_SECRET}
 		flush_interval -1
 	}

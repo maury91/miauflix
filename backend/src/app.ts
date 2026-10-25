@@ -6,6 +6,7 @@ import { serve } from '@hono/node-server';
 import { logger } from '@logger';
 
 import { Database } from '@database/database';
+import { MigrationService } from '@database/migrations/migration.service';
 import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/auth.errors';
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
@@ -83,6 +84,8 @@ try {
   // Initialize DB
   const db = new Database(configurationService);
   await db.initialize();
+  // Data migrations finish before any service reads the data; a failure stops startup.
+  await new MigrationService(db).run();
 
   // Create ( and initialize ) all the services
   const cacheService = new CacheService(configurationService);

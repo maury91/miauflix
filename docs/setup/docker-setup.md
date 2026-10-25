@@ -15,7 +15,7 @@ Open <http://localhost:3000>, create the admin account, then add your [TMDB acce
 
 On first boot the `miauflix` logs show `Starting in degraded mode`: that's expected until you complete the setup screens.
 
-> **Image tags:** the quick-start file uses the `edge` tag (the latest `main`) because no release has been published yet. Switch to a version tag once one is available.
+> **Image tags:** the quick-start file uses `latest`, the newest release. Pin a version such as `0.0.1` to upgrade only when you choose, or use `edge` to follow `main`.
 
 > **Security:** the quick-start file sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
 
@@ -46,15 +46,24 @@ The admin setup endpoint closes for good once an admin exists, so this is safe o
 
 To reach Miauflix from the internet (for example on a VPS), add [`docker-compose.https.yml`](../../docker-compose.https.yml) and its [`Caddyfile`](../../Caddyfile). [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain and forwards traffic to Miauflix.
 
-1. Point your domain's DNS at the server and allow ports 80 and 443 through its firewall.
-2. Download both files next to `docker-compose.quickstart.yml`:
+1. Point your domain's DNS at the server and allow ports 80 (TCP), 443 (TCP) and 443 (UDP, for HTTP/3) through its firewall.
+2. On Linux, raise the kernel's UDP buffer limits. Caddy serves HTTP/3 over UDP, and with the default limits (about 200 KB on Debian/Ubuntu) browsers that use HTTP/3 see video stall every so often; Caddy's log then says `failed to sufficiently increase receive buffer size`:
+
+   ```bash
+   printf "net.core.rmem_max=7500000\nnet.core.wmem_max=7500000\n" | sudo tee /etc/sysctl.d/90-quic-udp-buffers.conf
+   sudo sysctl -p /etc/sysctl.d/90-quic-udp-buffers.conf
+   ```
+
+   The file keeps the setting across reboots. If Caddy is already running, restart it afterwards with `docker compose restart caddy`.
+
+3. Download both files next to `docker-compose.quickstart.yml`:
 
    ```bash
    curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.https.yml
    curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/Caddyfile
    ```
 
-3. Create a `.env` file in the same folder:
+4. Create a `.env` file in the same folder:
 
    ```bash
    COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.https.yml
@@ -62,16 +71,21 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
    REVERSE_PROXY_SECRET=<output of: openssl rand -hex 32>
    ```
 
-   `COMPOSE_FILE` lets plain `docker compose` commands use both files. `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches.
+   `COMPOSE_FILE` lets plain `docker compose` commands use both files. `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files and point Caddy at the VPN container, which owns Miauflix's network:
 
-4. Start it and read the generated admin credentials:
+   ```bash
+   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml:docker-compose.https.yml
+   MIAUFLIX_UPSTREAM=vpn:3000
+   ```
+
+5. Start it and read the generated admin credentials:
 
    ```bash
    docker compose up -d
    docker compose logs miauflix --since=15m
    ```
 
-Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauflix prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
+Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauflix prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS, and `CORS_ORIGIN=https://<your domain>`: the realtime connection (live playback updates, notifications, search) only accepts that origin, and the default allows only `localhost`. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
 
 ### Published images
 
@@ -82,7 +96,7 @@ Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE
 | `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                      |
 | `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                       |
 
-All images are built for `linux/amd64` and `linux/arm64`. Tags: `edge` for the latest `main` and `sha-<commit>` for a specific commit. Once releases are published, `latest` and `X.Y.Z` / `X.Y` / `X` will follow them; pin a version tag for stable deployments.
+All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for [releases](https://github.com/maury91/miauflix/releases), `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
 
 ### Using a VPN
 
