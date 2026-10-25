@@ -17,7 +17,7 @@ Miauflix is a streaming service you run yourself. Browse movies with rich artwor
 - ⚡ **Starts fast**: background preloading aims for playback in under 2 seconds
 - 🔎 **Finds sources for you**: searches several content directories and picks the best quality
 - 📺 **Made for the couch**: full remote-control navigation, and sign in on a TV by scanning a QR code
-- 🔐 **Private by design**: invite-only accounts, data encrypted at rest, optional VPN enforcement
+- 🔐 **Private by design**: invite-only accounts, data encrypted at rest, VPN enforcement
 - 🔗 **Trakt sync**: your watchlist and lists, kept in sync
 - 🐳 **One command to run**: prebuilt images for `amd64` and `arm64`, configured from the browser
 
@@ -54,6 +54,9 @@ docker compose -f docker-compose.quickstart.yml up -d
 
 > [!NOTE]
 > Until you create the admin account, anyone who can reach Miauflix could create it instead, so the quick start only accepts connections from this computer. Once your account exists, [open it to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network) to watch from your TV or phone.
+
+> [!IMPORTANT]
+> Miauflix streams over BitTorrent, so it won't search for sources until it detects a VPN: without one, peers see your real IP. [Add NordVPN](docs/setup/docker-setup.md#using-a-vpn) (a must on a server), or [opt out](docs/setup/docker-setup.md#running-without-a-vpn) if you accept the risk.
 
 ## Next steps
 

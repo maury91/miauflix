@@ -17,7 +17,11 @@ services:
       CATALOG_SERVICE_URL: http://miauflix-services:3001
       LIST_SERVICE_URL: http://miauflix-services:3002
       ALLOW_CREATE_ADMIN_ON_FIRST_RUN: 'true' # create the admin from the browser
-      DISABLE_VPN_CHECK: 'true' # remove when routing through a VPN, see docs/setup/docker-setup.md#using-a-vpn
+      # Without a VPN, Miauflix refuses to search for sources: torrents would go out from your real IP.
+      # Add docker-compose.vpn.yml (strongly recommended, required on anything internet-facing), see
+      # docs/setup/docker-setup.md#using-a-vpn. To accept the risk and run without one, put
+      # DISABLE_VPN_CHECK=true in a .env file next to this file.
+      DISABLE_VPN_CHECK: ${DISABLE_VPN_CHECK:-false}
     volumes:
       - miauflix_data:/usr/src/app/data
       - ./downloads:/usr/src/app/downloads
