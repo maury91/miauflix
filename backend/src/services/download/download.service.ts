@@ -97,6 +97,34 @@ const READER_WINDOW_PIECES = 2;
 /** Above every claim priority: a reader is waiting on these bytes right now. */
 const READER_PRIORITY = 100;
 /**
+ * Seconds of video a viewer's stream keeps selected ahead of its read position, so the playhead
+ * is fetched from every peer before the reader blocks on it, not two pieces at a time.
+ */
+const READAHEAD_SECONDS = 90;
+const READAHEAD_MIN_BYTES = 32 * 1024 * 1024;
+const READAHEAD_MAX_BYTES = 512 * 1024 * 1024;
+/** Below a blocked reader, above every claim: the bytes the viewer reaches next. */
+const READAHEAD_PRIORITY = READER_PRIORITY - 1;
+/** Assumed runtime when the caller does not know it, as PlaybackSessionService assumes. */
+const DEFAULT_DURATION_SECONDS = { movie: 7_200, episode: 2_700 } as const;
+
+/**
+ * Pieces a stream keeps selected from its read position: READAHEAD_SECONDS at the file's average
+ * bitrate, clamped so a short or mislabelled file still reads ahead and a huge one cannot select
+ * half the disk.
+ */
+export const readaheadPieceCount = (
+  fileLength: number,
+  durationSeconds: number,
+  pieceLength: number
+): number => {
+  const bytes = Math.min(
+    READAHEAD_MAX_BYTES,
+    Math.max(READAHEAD_MIN_BYTES, (fileLength / durationSeconds) * READAHEAD_SECONDS)
+  );
+  return Math.max(READER_WINDOW_PIECES, Math.ceil(bytes / pieceLength));
+};
+/**
  * Pieces WebTorrent keeps decrypted in memory per torrent (its default is 20, i.e. 40-160 MB per
  * torrent with typical piece sizes). Streams read from disk, so this only serves peers.
  */
@@ -2143,6 +2171,35 @@ export class DownloadService {
           return releasePromise;
         };
 
+        // Viewers keep the next READAHEAD_SECONDS selected; inspection reads only want headers.
+        const streamTorrent = torrent as StreamSelectingTorrent | null;
+        const readaheadPieces = speculative
+          ? 0
+          : readaheadPieceCount(
+              file.length,
+              target.durationSeconds ??
+                (target.matchKind === 'movie'
+                  ? DEFAULT_DURATION_SECONDS.movie
+                  : DEFAULT_DURATION_SECONDS.episode),
+              layout.pieceLength
+            );
+        const fileLastPiece = Math.floor((file.offset + file.length - 1) / layout.pieceLength);
+        let readahead: [number, number] | null = null;
+        const clearReadahead = () => {
+          if (readahead && streamTorrent && !streamTorrent.destroyed)
+            streamTorrent._deselect(readahead[0], readahead[1], true);
+          readahead = null;
+        };
+        const moveReadahead = (pieceIndex: number) => {
+          if (!readaheadPieces || !streamTorrent || streamTorrent.destroyed) return;
+          if (readahead?.[0] === pieceIndex) return;
+          clearReadahead();
+          readahead = [pieceIndex, Math.min(pieceIndex + readaheadPieces - 1, fileLastPiece)];
+          streamTorrent._select(readahead[0], readahead[1], READAHEAD_PRIORITY, undefined, true);
+        };
+        // Reads are 256 KiB slices of one piece; decrypt each piece once, not once per slice.
+        let current: { index: number; piece: Buffer } | null = null;
+
         const webReadableStream = new ReadableStream<Uint8Array>({
           start: async controller => {
             try {
@@ -2159,15 +2216,23 @@ export class DownloadService {
                 const torrentOffset = file.offset + cursor;
                 const pieceIndex = Math.floor(torrentOffset / layout.pieceLength);
                 const pieceOffset = torrentOffset % layout.pieceLength;
-                const piece = await this.readVerifiedPiece(
-                  reader,
-                  torrent,
-                  storage,
-                  pieceIndex,
-                  abortController.signal,
-                  // Inspection reads are not playback; only viewers count toward source health.
-                  !speculative
-                );
+                if (current?.index !== pieceIndex) {
+                  current = null;
+                  moveReadahead(pieceIndex);
+                  current = {
+                    index: pieceIndex,
+                    piece: await this.readVerifiedPiece(
+                      reader,
+                      torrent,
+                      storage,
+                      pieceIndex,
+                      abortController.signal,
+                      // Inspection reads are not playback; only viewers count toward source health.
+                      !speculative
+                    ),
+                  };
+                }
+                const { piece } = current;
                 const bytes = piece.subarray(
                   pieceOffset,
                   Math.min(
@@ -2206,6 +2271,8 @@ export class DownloadService {
             } catch (error) {
               if (!cancelled) controller.error(error);
             } finally {
+              clearReadahead();
+              current = null;
               await reader
                 .close()
                 .catch(error =>

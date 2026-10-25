@@ -11,6 +11,8 @@ export interface PlaybackTarget {
   source: ContentSource;
   filePath: string;
   matchKind: PlaybackMatchKind;
+  /** Runtime of the file when known (probed); sizes the stream's readahead. */
+  durationSeconds?: number;
 }
 
 /** The same source, addressing another file (for example a subtitle sidecar). */
