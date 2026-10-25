@@ -102,6 +102,40 @@ interface TmdbSeason {
 interface TmdbChanges extends TmdbPaged {
   results: Array<{ id: number }>;
 }
+interface TmdbListItem {
+  id: number;
+  media_type?: 'movie' | 'tv' | 'person' | string;
+  title?: string;
+  name?: string;
+  overview?: string;
+  poster_path?: string | null;
+  backdrop_path?: string | null;
+  genre_ids?: number[];
+  release_date?: string;
+  first_air_date?: string;
+  popularity?: number;
+  vote_average?: number;
+}
+interface TmdbListPage extends TmdbPaged {
+  results: TmdbListItem[];
+}
+export interface TmdbMediaSummaryPage {
+  page: number;
+  totalPages: number;
+  totalResults: number;
+  results: Array<{
+    mediaType: 'movie' | 'tv';
+    mediaId: number;
+    title: string;
+    overview: string;
+    poster: string;
+    backdrop: string;
+    genreIds: number[];
+    releaseDate: string;
+    popularity: number;
+    rating: number;
+  }>;
+}
 interface TmdbFindResponse {
   movie_results: Array<{ id: number }>;
   tv_results: Array<{ id: number }>;
@@ -110,6 +144,7 @@ interface TmdbFindResponse {
 const oneHourMs = 36e5;
 const dayMs = 24 * oneHourMs;
 const requestTimeoutMs = 15_000;
+const searchTtlMs = 6 * oneHourMs;
 
 /**
  * TMDB HTTP client — port of the backend's `TMDBApi` (bearer auth, 40 req/s
@@ -359,6 +394,85 @@ export class TmdbClient {
         overview: translation.data.overview,
         tagline: translation.data.tagline,
       })),
+    };
+  }
+
+  /* ------------------------------------------------------------------ search */
+
+  /** Free-text search across movies and tv shows; people are dropped. */
+  async searchMulti(query: string, page: number, language: string): Promise<TmdbMediaSummaryPage> {
+    const params = new URLSearchParams({
+      query,
+      page: String(page),
+      language,
+      include_adult: 'false',
+    });
+    const data = await this.cached<TmdbListPage>(
+      `search:multi:${language}:${page}:${query.toLowerCase()}`,
+      searchTtlMs,
+      `/search/multi?${params}`
+    );
+    return this.summaryPage(data, item =>
+      item.media_type === 'movie' || item.media_type === 'tv' ? item.media_type : null
+    );
+  }
+
+  /** Most popular titles of one kind matching the genre filter. */
+  async discover(
+    mediaType: 'movie' | 'tv',
+    filter: { genreIds: readonly number[]; originalLanguage?: string },
+    page: number,
+    language: string
+  ): Promise<TmdbMediaSummaryPage> {
+    const params = new URLSearchParams({
+      with_genres: filter.genreIds.join('|'),
+      sort_by: 'popularity.desc',
+      include_adult: 'false',
+      page: String(page),
+      language,
+    });
+    if (filter.originalLanguage) params.set('with_original_language', filter.originalLanguage);
+    const data = await this.cached<TmdbListPage>(
+      `discover:${mediaType}:${params}`,
+      searchTtlMs,
+      `/discover/${mediaType}?${params}`
+    );
+    return this.summaryPage(data, () => mediaType);
+  }
+
+  private async summaryPage(
+    data: TmdbListPage,
+    mediaTypeOf: (item: TmdbListItem) => 'movie' | 'tv' | null
+  ): Promise<TmdbMediaSummaryPage> {
+    const items = data.results.flatMap(item => {
+      const mediaType = mediaTypeOf(item);
+      return mediaType ? [{ item, mediaType }] : [];
+    });
+    const results = await Promise.all(
+      items.map(async ({ item, mediaType }) => {
+        const [poster, backdrop] = await Promise.all([
+          this.imageUrl(item.poster_path),
+          this.imageUrl(item.backdrop_path),
+        ]);
+        return {
+          mediaType,
+          mediaId: item.id,
+          title: (mediaType === 'movie' ? item.title : item.name) ?? '',
+          overview: item.overview ?? '',
+          poster,
+          backdrop,
+          genreIds: item.genre_ids ?? [],
+          releaseDate: (mediaType === 'movie' ? item.release_date : item.first_air_date) ?? '',
+          popularity: item.popularity ?? 0,
+          rating: item.vote_average ?? 0,
+        };
+      })
+    );
+    return {
+      page: data.page,
+      totalPages: data.total_pages,
+      totalResults: data.total_results,
+      results,
     };
   }
 

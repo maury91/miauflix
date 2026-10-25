@@ -3,6 +3,7 @@ import { useSyncExternalStore } from 'react';
 
 export type AppRoute =
   | { type: 'home' }
+  | { type: 'search' }
   | { type: 'movieDetails'; mediaId: number }
   | { type: 'showDetails'; mediaId: number }
   | { type: 'moviePlayer'; mediaId: number }
@@ -25,6 +26,7 @@ function positiveId(value: string | undefined): number | null {
 export function parseRoute(pathname: string): AppRoute {
   const path = pathname.split('?')[0]?.replace(/\/+$/, '') || '/';
   if (path === '/') return HOME;
+  if (path === '/search') return { type: 'search' };
   if (path === '/settings') return { type: 'settings' };
   if (path === '/settings/configuration') return { type: 'configuration' };
   if (path === '/settings/storage') return { type: 'storage' };
@@ -67,6 +69,8 @@ export function routePath(route: AppRoute): string {
   switch (route.type) {
     case 'home':
       return '/';
+    case 'search':
+      return '/search';
     case 'movieDetails':
       return `/movies/${route.mediaId}`;
     case 'showDetails':
@@ -178,6 +182,13 @@ export function getRouteFocusSnapshot(): 'configuration' | 'storage' {
 
 export function useRouteFocus(): 'configuration' | 'storage' {
   return useSyncExternalStore(subscribeRoute, getRouteFocusSnapshot, () => 'configuration');
+}
+
+/** The route this history entry was opened from, when the app recorded one. */
+export function getRouteParent(): AppRoute | null {
+  if (typeof window === 'undefined') return null;
+  const parent = (window.history.state?.[HISTORY_KEY] as { parent?: unknown } | undefined)?.parent;
+  return typeof parent === 'string' ? parseRoute(parent) : null;
 }
 
 export function navigateBack(expectedParent: AppRoute, fallbackParent = expectedParent): void {

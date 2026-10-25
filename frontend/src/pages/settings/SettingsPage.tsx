@@ -1,6 +1,8 @@
 import { SETTINGS_PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
-import { ActionRow, Button } from '@shared/ui';
+import { Button } from '@shared/ui';
+import { BackRail } from '@shared/ui/rail/BackRail';
+import { useRailContentLeft } from '@shared/ui/rail/useRailContentLeft';
 import { useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
@@ -57,6 +59,7 @@ export default function SettingsPage({
   const configurationRef = useRef<HTMLButtonElement>(null);
   const storageRef = useRef<HTMLButtonElement>(null);
   const backRef = useRef<HTMLButtonElement>(null);
+  useRailContentLeft();
 
   useEffect(() => {
     const target =
@@ -80,9 +83,21 @@ export default function SettingsPage({
     buttons[nextIndex]?.focus({ preventScroll: true });
     return true;
   };
+  const firstEnabled = () =>
+    [configurationRef.current, storageRef.current].find(button => button && !button.disabled);
   const navigationRef = useKeyboardNavigation({
     onUp: () => moveFocus(-1),
     onDown: () => moveFocus(1),
+    // Back sits on the rail to the left of the page.
+    onLeft: () => {
+      backRef.current?.focus({ preventScroll: true });
+      return true;
+    },
+    onRight: () => {
+      if (document.activeElement === backRef.current)
+        firstEnabled()?.focus({ preventScroll: true });
+      return true;
+    },
     onBack: () => {
       onDismiss();
       return true;
@@ -118,12 +133,8 @@ export default function SettingsPage({
             ? 'Manage services, integrations, server configuration, and downloaded storage.'
             : 'Configuration and storage management are available to administrators.'}
         </Description>
-        <ActionRow>
-          <Button ref={backRef} appearance="settings" color="secondary" onClick={onDismiss}>
-            Back to Home
-          </Button>
-        </ActionRow>
       </Content>
+      <BackRail ref={backRef} label="Back to Home" onBack={onDismiss} />
     </Page>
   );
 }

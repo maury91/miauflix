@@ -7,6 +7,7 @@ import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
 import { progressApi } from '@features/progress/api/progress.api';
 import { realtimeMiddleware } from '@features/realtime/realtime.middleware';
+import { searchMiddleware } from '@features/search/search.middleware';
 import { setupApi } from '@features/setup/api/setup.api';
 import { storageApi } from '@features/storage/api/storage.api';
 import { configureStore } from '@reduxjs/toolkit';
@@ -17,6 +18,7 @@ import { detailsNavigationSlice } from '@store/slices/detailsNavigation';
 import { homeNavigationSlice } from '@store/slices/homeNavigation';
 import { measurementsSlice } from '@store/slices/measurements';
 import { realtimeSlice } from '@store/slices/realtime';
+import { searchSlice } from '@store/slices/search';
 
 export const store = configureStore({
   reducer: {
@@ -37,6 +39,7 @@ export const store = configureStore({
     [homeNavigationSlice.name]: homeNavigationSlice.reducer,
     [measurementsSlice.name]: measurementsSlice.reducer,
     [realtimeSlice.name]: realtimeSlice.reducer,
+    [searchSlice.name]: searchSlice.reducer,
   },
   middleware: getDefaultMiddleware =>
     getDefaultMiddleware().concat(
@@ -50,6 +53,7 @@ export const store = configureStore({
       configApi.middleware,
       setupApi.middleware,
       storageApi.middleware,
+      searchMiddleware,
       realtimeMiddleware
     ),
 });

@@ -14,6 +14,7 @@ export type AppScreen =
   | { kind: 'configuration' }
   | { kind: 'storage' }
   | { kind: 'settings' }
+  | { kind: 'search' }
   | { kind: 'notFound' }
   | { kind: 'media' }
   /** The route is not allowed; replace it without showing the page. */
@@ -56,6 +57,7 @@ export function resolveScreen({
   if (route.type === 'configuration' || route.type === 'storage')
     return isAdmin ? { kind: route.type } : { kind: 'redirect', to: SETTINGS };
   if (route.type === 'settings') return { kind: 'settings' };
+  if (route.type === 'search') return { kind: 'search' };
   if (route.type === 'notFound') return { kind: 'notFound' };
   return { kind: 'media' };
 }

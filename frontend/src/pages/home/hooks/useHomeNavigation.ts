@@ -1,4 +1,4 @@
-import { type AppRoute, navigate, navigateBack } from '@app/router';
+import { type AppRoute, getRouteParent, navigate, navigateBack } from '@app/router';
 import type { MediaDto, PlayableRef } from '@miauflix/backend';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
@@ -143,6 +143,11 @@ export function useHomeNavigation({
       categoryIndex: activeCategory,
       mediaIndex: selectedIndexIn(activeCategory),
     };
+    // Details opened from search return there; everything else returns to Home.
+    if (getRouteParent()?.type === 'search') {
+      navigateBack({ type: 'search' });
+      return;
+    }
     navigateBack({ type: 'home' });
     dispatch(homeNavigationActions.setActiveRegion('carousel'));
   }, [activeCategory, dispatch, selectedIndexIn]);
@@ -177,6 +182,10 @@ export function useHomeNavigation({
     if (sessionId) navigate({ type: 'settings' }, { parent: { type: 'home' } });
   }, [sessionId]);
 
+  const openSearch = useCallback(() => {
+    navigate({ type: 'search' }, { parent: { type: 'home' } });
+  }, []);
+
   // Each screen owns its region; arriving back on browse refocuses the selected card.
   useEffect(() => {
     if (view === 'details') {
@@ -196,10 +205,31 @@ export function useHomeNavigation({
       pending?.mediaIndex ?? (category ? (selectedByCategory[category.slug] ?? 0) : 0);
     onRowFocus(categoryIndex);
     const row = rowRefs.current.get(categoryIndex);
-    if (!row) return;
+    if (!row) {
+      // The categories are still loading (e.g. their cache expired while another page was open),
+      // so Home shows its spinner. Focus the card once the rows arrive.
+      pageRef.current?.focus({ preventScroll: true });
+      pendingBrowseFocus.current = { categoryIndex, mediaIndex };
+      return;
+    }
     row.focusIndex(mediaIndex);
     pendingBrowseFocus.current = null;
   }, [route, dispatch, view]);
+
+  useEffect(() => {
+    const pending = pendingBrowseFocus.current;
+    if (view !== 'browse' || !pending) return;
+    const row = rowRefs.current.get(pending.categoryIndex);
+    if (!row) return;
+    // Only take focus back if nothing else claimed it while the rows loaded.
+    const active = document.activeElement;
+    if (active && active !== document.body && active !== pageRef.current) {
+      pendingBrowseFocus.current = null;
+      return;
+    }
+    row.focusIndex(pending.mediaIndex);
+    pendingBrowseFocus.current = null;
+  }, [categories, view]);
 
   const onSidebarAction = useCallback(
     (action: HomeAction): NavigationOutcome => {
@@ -287,6 +317,7 @@ export function useHomeNavigation({
     openDetails,
     openPlayer,
     openSettings,
+    openSearch,
     returnToBrowse,
     returnToDetails,
     onSidebarAction,

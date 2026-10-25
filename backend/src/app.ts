@@ -10,6 +10,7 @@ import { AuthError, InvalidTokenError, LoginError, RoleError } from '@errors/aut
 import { ServiceNotConfiguredError } from '@errors/service-not-configured.error';
 import type { ServiceInstanceStatus } from '@mytypes/configuration';
 import { MediaRatingRepository } from '@repositories/media-rating.repository';
+import { RecentSearchRepository } from '@repositories/recent-search.repository';
 import { AuthService } from '@services/auth/auth.service';
 import { QrLoginService } from '@services/auth/qr-login.service';
 import { registerBackgroundJobHandlers } from '@services/background-job/background-job.handlers';
@@ -32,7 +33,9 @@ import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
 import { ProgressService } from '@services/progress/progress.service';
 import { RealtimeGateway } from '@services/realtime/realtime.gateway';
+import { RealtimeSearchChannel } from '@services/realtime/realtime.search';
 import { RequestService } from '@services/request/request.service';
+import { SearchService } from '@services/search/search.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
@@ -180,7 +183,8 @@ try {
     preloadIntentService,
     progressService,
     catalogClient,
-    playbackSessionService
+    playbackSessionService,
+    new RealtimeSearchChannel(new SearchService(catalogClient, new RecentSearchRepository(db)))
   );
   const subtitlesService = new SubtitlesService(
     configurationService,

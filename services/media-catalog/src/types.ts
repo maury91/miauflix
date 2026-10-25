@@ -7,6 +7,8 @@ export type {
   MediaSummary,
   MediaType,
   MovieDetail,
+  SearchGenre,
+  SearchGenreKey,
   SeasonDetail,
   SeasonSummary,
   TVShowDetail,
