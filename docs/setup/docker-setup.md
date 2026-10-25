@@ -13,6 +13,10 @@ docker compose -f docker-compose.quickstart.yml up -d
 
 Open <http://localhost:3000>, create the admin account, then add your [TMDB access token](https://developer.themoviedb.org/docs) (and optionally Trakt credentials) from the setup screens.
 
+On first boot the `miauflix` logs show `Starting in degraded mode`: that's expected until you complete the setup screens.
+
+> **Image tags:** the quick-start file uses the `edge` tag (the latest `main`) because no release has been published yet. Switch to a version tag once one is available.
+
 > **Security:** the quick-start file sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
 
 ### Open it to your local network
@@ -34,7 +38,38 @@ To watch from a TV, phone or another computer at home, open Miauflix to your net
 
 3. Find this computer's address on your network (`ipconfig getifaddr en0` on macOS, `hostname -I` on Linux, `ipconfig` on Windows) and open `http://<that address>:3000` on the other device. If it doesn't load, allow port 3000 through the computer's firewall.
 
-The admin setup endpoint closes for good once an admin exists, so this is safe on a home network. Don't forward port 3000 on your router: to reach Miauflix from the internet, put it behind HTTPS with a domain as described in [Getting Started](getting-started.md).
+The admin setup endpoint closes for good once an admin exists, so this is safe on a home network. Don't forward port 3000 on your router: to reach Miauflix from the internet, put it behind HTTPS with a domain as described in [HTTPS with a domain](#https-with-a-domain).
+
+### HTTPS with a domain
+
+To reach Miauflix from the internet (for example on a VPS), add [`docker-compose.https.yml`](../../docker-compose.https.yml) and its [`Caddyfile`](../../Caddyfile). [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain and forwards traffic to Miauflix.
+
+1. Point your domain's DNS at the server and allow ports 80 and 443 through its firewall.
+2. Download both files next to `docker-compose.quickstart.yml`:
+
+   ```bash
+   curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.https.yml
+   curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/Caddyfile
+   ```
+
+3. Create a `.env` file in the same folder:
+
+   ```bash
+   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.https.yml
+   MIAUFLIX_DOMAIN=miauflix.example.com
+   REVERSE_PROXY_SECRET=<output of: openssl rand -hex 32>
+   ```
+
+   `COMPOSE_FILE` lets plain `docker compose` commands use both files. `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches.
+
+4. Start it and read the generated admin credentials:
+
+   ```bash
+   docker compose up -d
+   docker compose logs miauflix --since=15m
+   ```
+
+Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauflix prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
 
 ### Published images
 
@@ -45,7 +80,7 @@ The admin setup endpoint closes for good once an admin exists, so this is safe o
 | `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                      |
 | `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                       |
 
-All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for releases, `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
+All images are built for `linux/amd64` and `linux/arm64`. Tags: `edge` for the latest `main` and `sha-<commit>` for a specific commit. Once releases are published, `latest` and `X.Y.Z` / `X.Y` / `X` will follow them; pin a version tag for stable deployments.
 
 ### Using a VPN
 

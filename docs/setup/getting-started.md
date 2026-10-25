@@ -146,8 +146,10 @@ By default, Miauflix generates an admin account on first startup and prints the 
 
 ```bash
 # Retrieve credentials from the startup logs
-docker compose logs backend --since=15m
+docker compose logs miauflix --since=15m
 ```
+
+Until you finish the setup screens, the logs also show `Starting in degraded mode`; that's expected on first boot.
 
 Change the password after first login. Avoid storing the printed credentials in tickets or log archives.
 

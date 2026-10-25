@@ -10,6 +10,8 @@ launch() {
   local pipe="/tmp/${name}.log"
   shift
 
+  # /tmp survives a container restart, so drop a pipe left by the previous run
+  rm -f "$pipe"
   mkfifo "$pipe"
   log_pipes+=("$pipe")
   (
