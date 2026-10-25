@@ -44,7 +44,6 @@ import {
   isServiceName,
   isValidConfigUpdate,
   resolveVariableInfo,
-  saveToEnvFile,
   validateExistingConfiguration,
 } from './configuration.utils';
 
@@ -61,6 +60,10 @@ type ConfigurationReadView = {
   - JSON file
   - ENV variable
   - Default value
+
+  Generated secrets (function `defaultValue` + `skipUserInteraction`) are the
+  exception: an explicit ENV variable wins over the JSON file, and a generated
+  value is written to the JSON file on first boot so it survives restarts.
  */
 
 export class ConfigurationService {
@@ -73,6 +76,8 @@ export class ConfigurationService {
   private _configStore: ConfigStore | null = null;
   /** Raw string values: env snapshot + auto-generated + file-loaded + runtime set */
   private _rawValues = new Map<VariableName, string>();
+  /** Secrets generated during this boot that are not yet persisted to config.json */
+  private readonly _unsavedGeneratedSecrets = new Set<VariableName>();
   private _variablesInfo = new Map<VariableName, ExtendedVariableInfo>();
   private _variableGroups = new Map<VariableName, string>();
   /** Variables whose values are owned and interpreted by this Backend process. */
@@ -106,9 +111,11 @@ export class ConfigurationService {
   /**
    * Bootstrap the configuration service:
    * 1. Snapshot process.env + auto-generate skipUserInteraction vars → rawValues
-   * 2. Create EncryptionService, create data directory
-   * 3. Load config.json — file values overwrite rawValues
-   * 4. Pre-compute all transforms
+   * 2. Create data directory, adopt generated secrets already persisted in config.json
+   * 3. Create EncryptionService from the (persisted) SOURCE_SECURITY_KEY
+   * 4. Load config.json — file values overwrite rawValues
+   * 5. Persist secrets generated for the first time to config.json
+   * 6. Pre-compute all transforms
    *
    * Must be called once before any services are initialized.
    * After this, get() is a plain map lookup that cannot throw but can return empty values.
@@ -117,15 +124,6 @@ export class ConfigurationService {
     this.autoConfigureDefaults();
 
     // Use rawValues directly for bootstrap — these vars have no transforms
-    const securityKey = this._rawValues.get('SOURCE_SECURITY_KEY');
-    if (!securityKey) {
-      // This should be impossible, this variable has a default value
-      throw new ConfigurationServiceError(
-        'SOURCE_SECURITY_KEY is missing, cannot continue',
-        'missing_required_variable',
-        'SOURCE_SECURITY_KEY'
-      );
-    }
     const dataDir = this._rawValues.get('DATA_DIR');
     if (!dataDir) {
       // This should be impossible, this variable has a default value
@@ -135,13 +133,33 @@ export class ConfigurationService {
         'DATA_DIR'
       );
     }
-    this._encryptionService = new EncryptionService(securityKey);
-
     mkdirSync(dataDir, { recursive: true });
     this._filePath = path.join(dataDir, 'config.json');
     this._configStore = new ConfigStore({ filePath: this._filePath });
 
+    // Secrets generated on a previous boot replace the ones generated in memory just now.
+    // This must happen before the EncryptionService is built, as it needs the persisted key.
+    const storedValues = this._configStore.readAllSync();
+    for (const varName of [...this._unsavedGeneratedSecrets]) {
+      const stored = storedValues[varName];
+      if (!stored) continue;
+      this._unsavedGeneratedSecrets.delete(varName);
+      if (!stored.startsWith(ENC_PREFIX)) this._rawValues.set(varName, stored);
+    }
+
+    const securityKey = this._rawValues.get('SOURCE_SECURITY_KEY');
+    if (!securityKey) {
+      // This should be impossible, this variable has a default value
+      throw new ConfigurationServiceError(
+        'SOURCE_SECURITY_KEY is missing, cannot continue',
+        'missing_required_variable',
+        'SOURCE_SECURITY_KEY'
+      );
+    }
+    this._encryptionService = new EncryptionService(securityKey);
+
     this.loadConfigFile();
+    await this.persistGeneratedSecrets();
     this.precomputeValues();
   }
 
@@ -366,7 +384,6 @@ export class ConfigurationService {
     variableNames: Iterable<VariableName> = this._variablesInfo.keys(),
     persistGeneratedDefaults = true
   ) {
-    const autoConfigured = new Set<VariableName>();
     for (const varName of variableNames) {
       const varInfo = this._variablesInfo.get(varName);
       if (!varInfo || this._rawValues.has(varName)) continue;
@@ -377,18 +394,42 @@ export class ConfigurationService {
         // then we fallback to the defaultValue ( if exists )
       } else if ('defaultValue' in varInfo && varInfo.defaultValue) {
         this._rawValues.set(varName, getDefaultValue(varInfo.defaultValue));
-        // Variables with `skipUserInteraction` must be saved after being created with a default value
-        // these variables are usually random generated passwords or similar, so they must be saved to avoid them changing at every run
-        if (persistGeneratedDefaults && varInfo.skipUserInteraction) {
-          autoConfigured.add(varName);
+        // Generated secrets (random passwords, keys, salts) must be persisted to avoid
+        // them changing at every run; init() saves them to config.json
+        if (persistGeneratedDefaults && this.isGeneratedSecret(varName)) {
+          this._unsavedGeneratedSecrets.add(varName);
         }
       }
     }
-    if (autoConfigured.size > 0) {
-      saveToEnvFile(
-        objectFromEntries([...autoConfigured].map(k => [k, this._rawValues.get(k) ?? '']))
-      );
+  }
+
+  private isGeneratedSecret(varName: VariableName): boolean {
+    const varInfo = this._variablesInfo.get(varName);
+    return (
+      !!varInfo &&
+      'skipUserInteraction' in varInfo &&
+      !!varInfo.skipUserInteraction &&
+      'defaultValue' in varInfo &&
+      typeof varInfo.defaultValue === 'function'
+    );
+  }
+
+  /**
+   * Writes secrets generated during this boot to config.json in plain text: SOURCE_SECURITY_KEY
+   * is needed to build the EncryptionService, so it cannot be stored encrypted with itself.
+   */
+  private async persistGeneratedSecrets(): Promise<void> {
+    if (!this._configStore || this._unsavedGeneratedSecrets.size === 0) return;
+    for (const varName of this._unsavedGeneratedSecrets) {
+      const value = this._rawValues.get(varName);
+      if (value) this._fileData[varName] = value;
     }
+    await this.saveConfigFile();
+    logger.info(
+      'Config',
+      `Generated and saved ${[...this._unsavedGeneratedSecrets].join(', ')} to ${this._filePath}`
+    );
+    this._unsavedGeneratedSecrets.clear();
   }
 
   private loadConfigFile(): void {
@@ -397,6 +438,8 @@ export class ConfigurationService {
     const fileData = this._configStore.readAllSync();
     for (const [key, raw] of Object.entries(fileData)) {
       this._fileData[key as VariableName] = raw;
+      // An explicit environment variable wins over a previously generated secret
+      if (this.isGeneratedSecret(key as VariableName) && process.env[key]) continue;
       let value = raw;
       if (raw.startsWith(ENC_PREFIX)) {
         try {
