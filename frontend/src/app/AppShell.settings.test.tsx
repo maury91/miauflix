@@ -34,6 +34,10 @@ vi.mock('@pages/home/HomePage', async () => {
           onAction={() => ({ type: 'handled' })}
           onHover={() => {}}
           onSettings={() => navigate({ type: 'settings' }, { parent: { type: 'home' } })}
+          onSearch={() => {}}
+          onNotifications={() => {}}
+          notificationsRef={null}
+          unreadCount={0}
         />
       );
     },
@@ -127,7 +131,7 @@ describe('Settings navigation', () => {
       expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument()
     );
     fireEvent.click(screen.getByRole('button', { name: 'Back to Home' }));
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Home' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
 
   it('opens Storage from settings and restores focus when returning', async () => {
@@ -145,7 +149,7 @@ describe('Settings navigation', () => {
 
   it('opens the selected Settings action with a remote and supports back navigation', async () => {
     await renderApp();
-    fireEvent.keyDown(screen.getByRole('button', { name: 'Home' }), { key: 'ArrowDown' });
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Search' }), { key: 'ArrowDown' });
     expect(screen.getByRole('button', { name: 'Settings' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'Enter' });
     expect(screen.getByRole('heading', { name: 'Settings' })).toBeInTheDocument();
@@ -154,7 +158,7 @@ describe('Settings navigation', () => {
     fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
     expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
-    await waitFor(() => expect(screen.getByRole('button', { name: 'Home' })).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
 
   it('allows non-admins to open settings while keeping configuration restricted', async () => {

@@ -8,26 +8,41 @@ Miauflix uses an npm workspace monorepo structure:
 
 ```text
 miauflix/
-├── backend/                     # Node.js TypeScript backend
+├── backend/                        # Node.js TypeScript backend (API, streaming, serves the frontend)
 │   ├── src/
-│   │   ├── services/           # Business logic services
-│   │   ├── routes/             # HTTP route handlers
-│   │   ├── entities/           # TypeORM database entities
-│   │   ├── repositories/       # Data access layer
-│   │   ├── middleware/         # HTTP middleware
-│   │   └── utils/              # Utility functions
-│   └── docs/                   # Backend-specific documentation
-├── frontend/                   # React application
-├── packages/                   # Shared libraries
-│   └── source-metadata-extractor/ # Content metadata processing
-└── docs/                       # Project documentation
+│   │   ├── services/               # Business logic services
+│   │   ├── routes/                 # HTTP route handlers
+│   │   ├── entities/               # TypeORM database entities
+│   │   ├── repositories/           # Data access layer
+│   │   ├── middleware/             # HTTP middleware
+│   │   └── utils/                  # Utility functions
+│   └── docs/                       # Backend-specific documentation
+├── backend-e2e/                    # End-to-end tests and Docker environment for the backend
+├── frontend/                       # React application
+│   ├── .storybook/                 # Storybook configuration
+│   ├── e2e/                        # Playwright end-to-end and visual tests
+│   └── src/                        # Source code
+├── services/                       # Standalone services
+│   ├── media-catalog/              # TMDB-backed media catalog (Bun)
+│   └── list-service/               # Trakt list service
+├── packages/                       # Shared libraries
+│   ├── service-configuration/      # Shared service configuration
+│   ├── service-contracts/          # Typed contracts between services
+│   ├── source-metadata-extractor/  # Content metadata processing
+│   └── *-sanitizer/                # Source metadata sanitizers (used for test fixtures)
+├── test-fixtures/                  # Recorded provider responses and fixture images
+├── nginx/                          # Nginx configuration and certificates
+├── scripts/                        # Support scripts
+├── docs/                           # Project documentation
+└── docker-compose*.yml             # Container orchestration
 ```
 
 ## Development Setup
 
 ### Prerequisites
 
-- Node.js 22 or later
+- Node.js 22 or later (`nvm use` picks the pinned version)
+- [Bun](https://bun.sh/) (runs the media-catalog service)
 - Docker and Docker Compose (for full stack testing)
 - Git
 

@@ -24,17 +24,16 @@ export function navigateDetails(action: HomeAction, controls: Controls): Navigat
   if (active === back) {
     target = action === 'down' || action === 'right' ? (ratings[0] ?? fallback) : back;
   } else if (ratingIndex >= 0) {
-    if (action === 'left' || action === 'right') {
-      target =
-        ratings[
-          Math.max(0, Math.min(ratings.length - 1, ratingIndex + (action === 'left' ? -1 : 1)))
-        ];
+    // Back sits on the rail to the left of the first rating.
+    if (action === 'left' && ratingIndex === 0) target = back ?? active;
+    else if (action === 'left' || action === 'right') {
+      target = ratings[Math.min(ratings.length - 1, ratingIndex + (action === 'left' ? -1 : 1))];
     } else target = action === 'up' ? back : fallback;
   } else if (primaryIndex >= 0) {
     if (action === 'up') target = primary[primaryIndex - 1] ?? ratings[0] ?? back;
     if (action === 'down') target = primary[primaryIndex + 1] ?? active;
     if (action === 'right') target = episodes[0] ?? active;
-    if (action === 'left') target = active;
+    if (action === 'left') target = back ?? active;
   } else if (episodeIndex >= 0) {
     if (action === 'left') target = primary[0] ?? fallback;
     if (action === 'up') target = episodes[episodeIndex - 1] ?? ratings[0] ?? back;

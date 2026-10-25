@@ -1,454 +1,89 @@
-# 🐱 Miauflix
-
 <div align="center">
 
-![Miauflix Logo](./assets/logo.png)
-
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Node.js](https://img.shields.io/badge/Powered%20by-Node.js-green)](https://nodejs.org/)
-[![Docker](https://img.shields.io/badge/Docker-Ready-blue)](https://www.docker.com/)
-[![CI Status](https://github.com/maury91/miauflix/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauflix/actions/workflows/ci.yml)
+![Miauflix](./assets/logo.png)
 
 **The self-hosted streaming service that meows!**
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![CI Status](https://github.com/maury91/miauflix/actions/workflows/ci.yml/badge.svg)](https://github.com/maury91/miauflix/actions/workflows/ci.yml)
+[![Docker](https://img.shields.io/badge/Docker-ready-blue)](docs/setup/docker-setup.md#prebuilt-images)
+
+![Miauflix home screen](./frontend/e2e/home.storybook.spec.ts-snapshots/home-page-browse-1440x900-storybook-chromium-linux.png)
+
 </div>
 
-## 📋 Table of Contents
+Miauflix is a streaming service you run yourself. Browse movies with rich artwork, press **Watch Now**, and it streams peer-to-peer straight to your browser or TV, with no media library to manage.
 
-- [Overview](#overview)
-- [Philosophy](#philosophy)
-- [Features](#features)
-  - [Currently Available](#currently-available)
-  - [In Development](#in-development)
-  - [Planned Features](#planned-features)
-- [Project Architecture](#project-architecture)
-- [Quick Setup](#quick-setup)
-- [Getting Started](#getting-started)
-  - [Prerequisites](#prerequisites)
-  - [Setup](#setup)
-- [Local Development](#local-development)
-- [Documentation](#documentation)
-- [CI/CD](#cicd)
-- [Contributing](#contributing)
-- [License](#license)
+- ⚡ **Starts fast**: background preloading aims for playback in under 2 seconds
+- 🔎 **Finds sources for you**: searches several content directories and picks the best quality
+- 📺 **Made for the couch**: full remote-control navigation, and sign in on a TV by scanning a QR code
+- 🔐 **Private by design**: invite-only accounts, data encrypted at rest, optional VPN enforcement
+- 🔗 **Trakt sync**: your watchlist and lists, kept in sync
+- 🐳 **One command to run**: prebuilt images for `amd64` and `arm64`, configured from the browser
 
-## 🔍 Overview
+## Screenshots
 
-Miauflix is a self-hosted media streaming platform that enables users to discover and stream content from various sources. It provides a modern web interface for accessing media content through peer-to-peer streaming technology. Built with Node.js and designed for personal server deployment, Miauflix offers a customizable streaming solution for your media library.
+<table>
+  <tr>
+    <td width="50%"><img src="./frontend/e2e/details-preparation.e2e.spec.ts-snapshots/details-page-source-ready.png" alt="Movie details page"><br><sub><b>Details</b>: pick a movie, Watch Now</sub></td>
+    <td width="50%"><img src="./frontend/e2e/search.storybook.spec.ts-snapshots/search-page-results-1440x900-storybook-chromium-linux.png" alt="Search page"><br><sub><b>Search</b>: on-screen keyboard, genres and recent searches</sub></td>
+  </tr>
+  <tr>
+    <td width="50%"><img src="./frontend/e2e/login.e2e.spec.ts-snapshots/login-page-complete-chromium-desktop-linux.png" alt="Login page with QR code"><br><sub><b>Sign in</b>: with email, or by scanning the QR code with your phone</sub></td>
+    <td width="50%"><img src="./frontend/e2e/initial-user-setup.e2e.spec.ts-snapshots/configuration-optional-settings-chromium-desktop-linux.png" alt="Setup screen"><br><sub><b>Setup</b>: everything is configured from the browser</sub></td>
+  </tr>
+</table>
 
-## Philosophy
+## Quick start
 
-Miauflix is based on these principles:
+You need [Docker](https://docs.docker.com/get-docker/) and a free [TMDB access token](https://developer.themoviedb.org/docs).
 
-### Simplicity
-
-Starting Miauflix on your machine or VPS must be as easy as possible.
-The setup accommodates both beginners and advanced users.
-
-If you’re a beginner running Miauflix locally, run the wizard and start a single Docker container—you don’t even need to clone this repository.
-
-If you’re an advanced user, everything is ready for you to set up a full website with SSL, custom domain, VPN, and anything else you might need.
-
-### Resilience
-
-Miauflix is designed to work with multiple sources. Many are integrated into the codebase so you can use them without installing anything else (simplicity principle).  
-Others can be added so Miauflix can still work even if those sources are not available anymore.
-
-> Note: This principle is not fully implemented yet; integration with Prowlarr and Jackett is planned.
-
-### Running everywhere
-
-Miauflix is designed so you can run it in a possibly hostile environment, like a VPS that is partially monitored by the provider.
-
-#### First part: obfuscation
-
-Miauflix encrypts sensitive data at rest. The application must access the decryption key at runtime; accordingly, a host with root access could also access it.
-
-When SSL is configured, data in transit is protected via HTTPS (TLS). A VPN is recommended for upstream privacy and ISP/provider exposure reduction, but it is not a substitute for HTTPS.  
-For stronger protection, store encryption keys in an external secrets manager (e.g., HashiCorp Vault, AWS KMS) and inject short‑lived keys at runtime.
-
-![Encryption flow diagram for at-rest key handling and HTTPS in transit](./assets/encryption-flow.png)
-
-#### Second part: authentication
-
-To run outside your local network, Miauflix must support user authentication.
-
-Miauflix provides a closed authentication system: an admin can create users; self‑signup is not available.
-
-The purpose is to let you deploy your instance of Miauflix in a server exposed to the internet, while ensuring only authorized users can access it.
-
-### Speed
-
-Miauflix is designed for fast start times. The tenet is: "When a user clicks Watch Now, streaming should start in under 2 seconds."
-
-To achieve this, Miauflix uses background processing, preloading, and priority queues.
-
-When idle, Miauflix searches for new content and preloads data needed for streaming.
-
-- Periodic synchronization of catalog metadata and Trakt-backed lists
-- Periodic source discovery of recently acquired content and re-discovery of older content
-- Pre-download of content marked as "continue watching" (e.g., new episode of a TV show)
-
-Miauflix prioritizes content the user shows intent to watch (e.g., opening a movie detail). If data isn't present, it's fetched with priority and downloading begins so some content is ready when the user clicks Watch Now.
-
-Miauflix supports streaming while downloading.
-
-## ✨ Features
-
-### 🚀 Currently Available
-
-- **🔐 User Authentication**: Multi-layered authentication system with comprehensive login flows
-- **🎬 Movie Database**: TMDB integration for posters, ratings, and metadata
-- **🔍 Source Discovery**: Automatic search across multiple content directories (YTS and THERARBG with more to come)
-- **📺 Video Streaming**: Complete peer-to-peer streaming with quality selection
-- **🛡️ VPN Integration**: Built-in VPN detection and enforcement (optional)
-- **📊 Background Processing**: Continuous source discovery and quality scoring
-- **🔒 Content Encryption**: All source metadata encrypted at rest with AES-256-GCM
-- **🐳 Docker Support**: Ready-to-run containers with nginx and SSL
-- **🛡️ Cloudflare Bypass**: Automatic Cloudflare protection bypass using FlareSolverr
-
-### 🔧 In Development
-
-- **🔄 Frontend Migration**: Updating the frontend to work with the new backend architecture
-
-### 🎯 Planned Features
-
-- **📺 TV Shows**: Episode navigation and season management
-- **⛩️ Anime**: Anime support
-- **🎯 More Sources**: Additional content directories and indexers (1337x, Nyaa, Jackett & Prowlarr)
-- **📱 Mobile Apps**: Native iOS and Android clients
-
-## 🏗️ Project Architecture
-
-```text
-miauflix/
-├── backend/                        # Node.js TypeScript backend
-│   ├── src/                        # Source code
-│   └── docs/                       # API documentation
-├── frontend/                       # Client application
-│   ├── e2e/                        # End‑to‑end tests (for frontend)
-│   ├── storybook/                  # Storybook documentation
-│   └── src/                        # Source code
-├── packages/                       # Shared libraries
-│   ├── *-sanitizer/                # Source metadata sanitizer ( used for testing )
-│   └── source-metadata-extractor/  # Content metadata processing
-├── docs/                           # Project documentation
-├── nginx/                          # Nginx configuration
-│   ├── conf.d/                     # Server blocks
-│   │   ├── default.conf            # Active configuration (auto-generated)
-│   │   └── default.conf.template   # Configuration template
-│   ├── certbot/                    # Let's Encrypt certificates
-│   └── ssl/                        # SSL certificates (auto-generated)
-├── backend-e2e/                    # End‑to‑end tests (for backend)
-├── scripts/                        # Support scripts
-├── docker-compose.yml              # Container orchestration
-```
-
-## ⚡ Quick Setup
-
-> Just want to try it? No clone, no build: save this as `docker-compose.yml` and start it.
-
-```yaml
-services:
-  miauflix:
-    image: ghcr.io/maury91/miauflix:latest
-    ports:
-      - '3000:3000'
-    environment:
-      DATA_DIR: /usr/src/app/data
-      DOWNLOAD_PATH: /usr/src/app/downloads
-      BUNQUEUE_HOST: miauflix-services
-      BUNQUEUE_PORT: 6789
-      CATALOG_SERVICE_URL: http://miauflix-services:3001
-      LIST_SERVICE_URL: http://miauflix-services:3002
-      ALLOW_CREATE_ADMIN_ON_FIRST_RUN: 'true' # create the admin from the browser
-      DISABLE_VPN_CHECK: 'true' # remove if you route traffic through a VPN, see below
-    volumes:
-      - miauflix_data:/usr/src/app/data
-      - ./downloads:/usr/src/app/downloads
-    depends_on:
-      miauflix-services:
-        condition: service_healthy
-    restart: unless-stopped
-
-  miauflix-services:
-    image: ghcr.io/maury91/miauflix-services:latest
-    init: true
-    volumes:
-      - miauflix_services_data:/app/data
-    restart: unless-stopped
-
-volumes:
-  miauflix_data:
-  miauflix_services_data:
-```
+**1. Download the Compose file**
 
 ```bash
-docker compose up -d
+curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.quickstart.yml
 ```
 
-Open <http://localhost:3000>, create the admin account, then add your [TMDB access token](https://developer.themoviedb.org/docs) (and optionally Trakt credentials) from the app settings.
-
-> **Security:** `ALLOW_CREATE_ADMIN_ON_FIRST_RUN` exposes an unauthenticated setup endpoint until the first admin exists. Create the admin right away, and don't expose port 3000 to the internet before you do.
-
-<details>
-<summary>Using a VPN (NordVPN)</summary>
-
-Route Miauflix through a VPN container and drop `DISABLE_VPN_CHECK`. The VPN container owns the network, so the published port moves to it and the other services use `network_mode`:
-
-```yaml
-services:
-  vpn:
-    image: ghcr.io/bubuntux/nordlynx
-    cap_add: [NET_ADMIN]
-    environment:
-      PRIVATE_KEY: ${NORDVPN_PRIVATE_KEY}
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1
-    ports:
-      - '3000:3000'
-    restart: unless-stopped
-
-  miauflix:
-    network_mode: service:vpn
-    environment:
-      BUNQUEUE_HOST: 127.0.0.1
-      CATALOG_SERVICE_URL: http://127.0.0.1:3001
-      LIST_SERVICE_URL: http://127.0.0.1:3002
-    depends_on:
-      - vpn
-      - miauflix-services
-
-  miauflix-services:
-    network_mode: service:vpn
-    depends_on:
-      - vpn
-```
-
-Remove the `ports` and `DISABLE_VPN_CHECK` entries from the `miauflix` service in this layout.
-
-</details>
-
-### Published images
-
-| Image                                    | Contents                                              |
-| ---------------------------------------- | ----------------------------------------------------- |
-| `ghcr.io/maury91/miauflix`               | Main backend, also serves the web frontend            |
-| `ghcr.io/maury91/miauflix-services`      | Bunqueue, media catalog and list service in one image |
-| `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                      |
-| `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                       |
-
-All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for releases, `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
-- [Node.js](https://nodejs.org/) (for local development)
-- [Bun](https://bun.sh/) (for local development — runs the media-catalog service)
-- VPN subscription (for VPN functionality, currently only NordVPN is supported)
-- [TMDB API Access Token](https://developer.themoviedb.org/docs) (for media content — configured from the app UI/CLI; the media-catalog service consumes it)
-- [Trakt.tv OAuth application](https://trakt.tv/oauth/applications) (optional, for the standalone list service)
-
-### Setup
-
-#### 1. Clone the repository
+**2. Start Miauflix**
 
 ```bash
-git clone https://github.com/maury91/miauflix.git
-cd miauflix
+docker compose -f docker-compose.quickstart.yml up -d
 ```
 
-#### 2. Configure your environment
+**3. Open <http://localhost:3000>**, create your admin account and paste your TMDB token. That's it. 🎉
 
-**Option A: Interactive Configuration Wizard (Recommended)**
+> [!NOTE]
+> Until you create the admin account, anyone who can reach Miauflix could create it instead, so the quick start only accepts connections from this computer. Once your account exists, [open it to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network) to watch from your TV or phone.
 
-Run the configuration wizard directly on your system:
+## Next steps
 
-```bash
-npm run start:backend
-```
+- 📺 **Watch from your TV or phone**: [Open it to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network)
+- 🔒 **Route traffic through a VPN**: [Using a VPN](docs/setup/docker-setup.md#using-a-vpn)
+- 🌐 **Put it on a domain with HTTPS**: [Getting Started](docs/setup/getting-started.md) and [SSL Certificates](docs/setup/ssl-certificates.md)
+- ⚙️ **Tune every setting**: [Environment Variables](docs/setup/environment-variables.md)
+- 🛡️ **Get past Cloudflare-protected sources**: [FlareSolverr](docs/setup/flaresolverr.md)
+- 🐱 **Why it works the way it does**: [Philosophy](docs/philosophy.md)
+- 📚 **Everything else**: [Documentation](docs/README.md)
 
-Or run it in Docker's interactive mode:
+## Roadmap
 
-```bash
-docker compose run --rm miauflix npm run start:backend
-```
+- 📺 TV shows: episode navigation and season management
+- ⛩️ Anime support
+- 🎯 More sources: 1337x, Nyaa, Jackett and Prowlarr
+- 📱 Native iOS and Android apps
 
-<p align="center">
-  <img src="./docs/assets/miauflix%20env%20wizard.gif" alt="Miauflix Environment Setup Wizard" width="800">
-</p>
+## Contributing
 
-<details>
-<summary>What does the configuration wizard do?</summary>
+Contributions are welcome! Read [CONTRIBUTING.md](CONTRIBUTING.md) to get a development environment running.
 
-The application includes a sophisticated configuration system that will:
+## Disclaimer
 
-- ✅ Automatically detect missing required settings
-- 🧙‍♂️ Guide you through an interactive setup process
-- 🔄 Test API credentials in real-time as you enter them
-- 📝 Provide helpful guidance on how to obtain required tokens
-- 🔍 Verify configurations with their consuming services
-- 💾 Store application settings in the backend config store, encrypting secrets at rest
+Miauflix doesn't host or distribute any content. It's a tool for streaming media that you are entitled to access, and you are responsible for complying with the laws of your country.
 
-</details>
+## License
 
-**Option B: Manual Configuration**
-
-Create a `.env` file in the project root directory and configure the required variables:
-
-```bash
-# TMDB and Trakt app settings are configured in Miauflix and stored encrypted
-# by the backend. This key is for service-owned Trakt account data only.
-LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
-```
-
-Set `LIST_SERVICE_ENCRYPTION_KEY` to keep the List Service
-data encryption key in deployment secrets; when set, it is used directly and no
-List Service key file is created. When omitted, the service generates and
-persists a key in its data directory. Keep the same value across restarts and
-backups when using the environment variable.
-
-> **Note**: If running in a non-interactive environment, you'll need to set all required environment variables manually.
-
-#### 3. Set up VPN (Optional)
-
-If you are not planning to use a VPN, you can use the `docker-compose-no-vpn.yml` file (coming soon).
-
-<details>
-<summary><b>🔒 NordVPN Setup Instructions</b></summary>
-
-Currently only NordVPN is officially supported. If you want to contribute and use another VPN provider, contributions are welcome!
-
-**NordVPN Configuration:**
-
-1. Follow the [guide in Bubuntux/NordLynx](https://github.com/bubuntux/nordlynx/pkgs/container/nordlynx#how-to-get-your-private_key) to obtain your private key
-2. Add your private key to the `.env` file:
-
-```bash
-NORDVPN_PRIVATE_KEY=your-nordvpn-private-key
-```
-
-</details>
-
-#### 4. Set up HTTPS
-
-Run the interactive SSL setup wizard:
-
-```bash
-chmod +x setup-ssl.sh
-./setup-ssl.sh -d yourdomain.com
-```
-
-<details>
-<summary><b>🔐 SSL Setup Details</b></summary>
-
-This wizard will:
-
-- 🔍 Guide you through domain verification and troubleshooting
-- 📜 Help set up Let's Encrypt certificates (recommended for production)
-- 🔒 Or create self-signed certificates (for development/testing)
-- 📋 Provide step-by-step assistance with clear prompts
-- ⚙️ Handle validation, certificate requests, and Nginx configuration
-
-For detailed information, see:
-
-- [SSL Certificates Guide](docs/setup/ssl-certificates.md)
-</details>
-
-#### 5. Start the Docker Compose environment
-
-```bash
-docker compose up -d
-```
-
-#### 6. Access the application
-
-- 🌐 App origin: `https://yourdomain.com/`
-- 🧭 API base: `https://yourdomain.com/api`
-- ✅ Health check: `https://yourdomain.com/api/health`
-
-## 💻 Local Development
-
-For local development without Docker:
-
-### Frontend Development
-
-```bash
-# Use correct version of node
-nvm use
-
-# Install dependencies
-npm ci
-
-# Build projects
-npm run build
-
-# Start frontend with hot reload (recommended for development)
-npm run start:frontend
-```
-
-The frontend development server provides:
-
-- ✅ **Hot reload** - Changes appear instantly without manual refresh
-- 🔥 **Fast feedback** - Perfect for UI development and styling
-- 🚀 **Client-side rendering** - No SSR overhead during development
-
-### Frontend SSR Testing
-
-```bash
-# Test with Server-Side Rendering (for production-like behavior)
-npm run start:frontend:ssr
-```
-
-Use SSR mode when:
-
-- 🔍 **Testing SSR functionality** - Debug server-side rendering issues
-- 🎯 **Production verification** - Ensure production-like behavior
-
-> **Note**: SSR mode requires manual rebuild after changes - use regular dev mode for active development.
-
-### Backend Development
-
-```bash
-# Interactive configuration and start
-npm run start:backend
-
-# Development with Docker (includes mock data)
-npm run start:backend:e2e
-```
-
-## 🔄 CI/CD
-
-This project uses GitHub Actions for continuous integration and testing. Tests run automatically in networkless mode using pre-recorded fixtures. For more details, see the [CI/CD Guide](docs/development/ci-cd-guide.md).
-
-## 📚 Documentation
-
-For comprehensive guides and development resources, see our [Documentation](docs/README.md):
-
-- **[Setup Guides](docs/setup/)** - Installation, Docker, and HTTPS setup
-- **[Development](docs/development/)** - Workflow, testing, and coding standards
-- **[Architecture](docs/architecture/)** - System overview and technical details
-- **[AI Assistance](docs/ai/)** - Guidelines for AI development tools
-
-## 🤝 Contributing
-
-Contributions are welcome and appreciated! Here's how you can contribute:
-
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Follow the [Development Workflow](docs/development/workflow.md)
-4. Commit your changes: `git commit -m 'Add amazing feature'`
-5. Push to the branch: `git push origin feature/amazing-feature`
-6. Open a Pull Request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
----
+[MIT](LICENSE)
 
 <div align="center">
-  <p>Built with 😻 by the Miauflix team</p>
+  <sub>Built with 😻 by the Miauflix team</sub>
 </div>
