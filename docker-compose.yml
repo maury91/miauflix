@@ -9,23 +9,19 @@ services:
     restart: unless-stopped
 
   vpn:
-    image: ghcr.io/bubuntux/nordlynx
+    image: qmcgaw/gluetun:v3
     hostname: nordvpn
     container_name: nordvpn
-    env_file:
-      - path: .env
-        required: false
     cap_add:
-      - NET_ADMIN # Required
-      - SYS_MODULE # Maybe required
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
     environment:
-      - PRIVATE_KEY=$NORDVPN_PRIVATE_KEY # Using token from .env file
-      - CONNECT=United_States # Optional - Change to your preferred server location
-      - NET_LOCAL=192.168.0.0/16 # Optional - Your local network
-    sysctls:
-      - net.ipv4.conf.all.src_valid_mark=1 # Maybe required
-      - net.ipv4.conf.all.rp_filter=2 # Set reverse path filter to loose mode
-      - net.ipv6.conf.all.disable_ipv6=1 # Disable IPv6; recommended for IPv4 only
+      - VPN_SERVICE_PROVIDER=nordvpn
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${NORDVPN_PRIVATE_KEY:-} # From .env, see docs/setup/docker-setup.md#using-a-vpn
+      - SERVER_CATEGORIES=P2P
+      - SERVER_COUNTRIES=${NORDVPN_COUNTRIES:-United States} # Comma-separated, change to your preferred locations
     ports:
       - '127.0.0.1:5000:3000' # Expose backend API port locally only
       - '127.0.0.1:16686:16686' # Expose Jaeger UI port locally only
@@ -115,7 +111,7 @@ services:
       - DATA_DIR=/usr/data
       - PUID=${USER_ID:-1000}
       - PGID=${GROUP_ID:-1000}
-      - DISABLE_VPN_CHECK=true
+      - DISABLE_VPN_CHECK=${DISABLE_VPN_CHECK:-false} # Traffic goes through the vpn service
       - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
       - COOKIE_DOMAIN=${DOMAIN}
       - COOKIE_SECURE=true
