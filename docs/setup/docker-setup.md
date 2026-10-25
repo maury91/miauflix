@@ -37,6 +37,7 @@ services:
     cap_add: [NET_ADMIN]
     environment:
       PRIVATE_KEY: ${NORDVPN_PRIVATE_KEY}
+      NET_LOCAL: 192.168.0.0/16 # your LAN range, so devices on it get replies
     sysctls:
       - net.ipv4.conf.all.src_valid_mark=1
     ports:
@@ -59,7 +60,7 @@ services:
       - vpn
 ```
 
-Remove the `ports` and `DISABLE_VPN_CHECK` entries from the `miauflix` service in this layout.
+Remove the `ports` and `DISABLE_VPN_CHECK` entries from the `miauflix` service in this layout. Set `NET_LOCAL` to your local network's range: without it, replies to a TV or phone on your LAN go out through the VPN tunnel and never arrive.
 
 ## Building From Source
 

@@ -16,7 +16,8 @@ test.describe('Search stories - visual regression', () => {
           scroll-behavior: auto !important;
         }
       `;
-      document.head.appendChild(style);
+      // Init scripts can run before <head> exists.
+      (document.head ?? document.documentElement).appendChild(style);
     });
   });
 

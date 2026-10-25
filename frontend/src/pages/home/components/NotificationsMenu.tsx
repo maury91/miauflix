@@ -13,12 +13,14 @@ const Backdrop = styled.div`
 `;
 
 const Panel = styled.section<{ $sidebarActive: boolean }>`
+  --rail-width: ${({ $sidebarActive }) =>
+    $sidebarActive ? RAIL_EXPANDED_WIDTH_CSS : RAIL_COLLAPSED_WIDTH_CSS};
   position: fixed;
   z-index: 20;
   top: 5vh;
-  left: ${({ $sidebarActive }) =>
-    `calc(${$sidebarActive ? RAIL_EXPANDED_WIDTH_CSS : RAIL_COLLAPSED_WIDTH_CSS} + 12px)`};
-  width: min(380px, calc(100vw - 80px));
+  left: calc(var(--rail-width) + 12px);
+  /* Leave the same 12px gap on the right on screens narrower than the panel. */
+  width: min(380px, calc(100vw - var(--rail-width) - 24px));
   max-height: 82vh;
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.14);
