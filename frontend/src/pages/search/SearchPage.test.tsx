@@ -88,6 +88,18 @@ describe('SearchPage', () => {
     expect(results).toContainElement(document.activeElement as HTMLElement);
   });
 
+  it('ignores the Enter that confirms an IME composition', () => {
+    const { store } = setupTest(searchStateFixture);
+    const box = screen.getByRole('searchbox', { name: 'Search' });
+    box.focus();
+    fireEvent.keyDown(box, { key: 'Enter', isComposing: true });
+    expect(store.getState().search.status).toBe('ready');
+    expect(box).toHaveFocus();
+
+    fireEvent.keyDown(box, { key: 'Enter' });
+    expect(store.getState().search.status).toBe('loading');
+  });
+
   it('browses a genre from the popular searches', () => {
     const { store } = setupTest();
     fireEvent.click(screen.getByRole('button', { name: 'Anime' }));

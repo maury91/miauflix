@@ -62,6 +62,8 @@ export const SearchBox = forwardRef<HTMLInputElement, SearchBoxProps>(
   ({ value, focused, onChange, onSubmit, onFocus, onLeave }, ref) => {
     const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
       if (event.key === 'Enter') {
+        // Enter that confirms an IME composition must not submit the half-typed text.
+        if (event.nativeEvent.isComposing) return;
         event.preventDefault();
         onSubmit();
       } else if (event.key === 'ArrowDown') {
