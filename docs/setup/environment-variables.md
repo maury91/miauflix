@@ -78,13 +78,15 @@ LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
 #### NordVPN (Optional)
 
 ```bash
-# NordVPN integration - Optional for starting up the VPN docker container
-NORDVPN_PRIVATE_KEY=your-wireguard-private-key
+# NordVPN integration - used by the gluetun VPN container
+NORDVPN_PRIVATE_KEY=your-nordlynx-private-key
+NORDVPN_COUNTRIES=Switzerland,Netherlands
 ```
 
-- **Description**: WireGuard private key for NordVPN integration
-- **Get from**: [NordVPN WireGuard Setup](https://github.com/bubuntux/nordlynx#how-to-get-your-private_key)
-- **Required for**: Starting up the VPN docker container
+- **NORDVPN_PRIVATE_KEY**: NordLynx (WireGuard) private key, passed to [gluetun](https://github.com/qdm12/gluetun) as `WIREGUARD_PRIVATE_KEY`
+- **Get from**: create an access token at [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then run `scripts/nordvpn-key.sh`, which saves the key to `.env` without printing it
+- **Required for**: Starting the VPN container (`docker-compose.yml`, or `docker-compose.vpn.yml` with the quick start)
+- **NORDVPN_COUNTRIES**: Optional comma-separated list of server countries. Unset, the quick start picks any P2P server and the full stack connects to the United States
 
 #### FlareSolverr (Optional)
 
@@ -164,7 +166,7 @@ DISABLE_VPN_CHECK=false
 - **REVERSE_PROXY_SECRET**: Shared secret between reverse proxy and backend
 - **MAXIMUM_CACHE_EMPTY_SPACE**: Maximum SQLite empty space before cleanup
 - **DISABLE_BACKGROUND_TASKS**: Disable background processing for testing
-- **DISABLE_VPN_CHECK**: Skip VPN detection checks
+- **DISABLE_VPN_CHECK**: Skip VPN detection. When `false` (the default), Miauflix refuses to search for sources unless NordVPN reports its traffic as protected. Setting it to `true` lets torrents go out from your real IP; don't do this on a server reachable from the internet
 - **ALLOW_CREATE_ADMIN_ON_FIRST_RUN**: When `true`, skips automatic admin creation at startup and exposes an unauthenticated `POST /api/auth/setup` endpoint to create the first admin user. The endpoint accepts `{ email, password }` and is permanently disabled once any admin account exists. See [Initial User](#initial-user) for details.
 
 ### Content & Streaming
@@ -278,8 +280,10 @@ WWW_DOMAIN=www.yourdomain.com
 
 **VPN docker container not starting**
 
-- Verify NordVPN private key format (starts with base64-encoded data)
-- Check that the key is associated with an active NordVPN subscription
+- Check the logs with `docker compose logs vpn` (`nordvpn` in the full stack)
+- Make sure `NORDVPN_PRIVATE_KEY` is set: re-run `scripts/nordvpn-key.sh` if in doubt
+- Check that your NordVPN subscription is active
+- The host must provide `/dev/net/tun` (most VPS do; on some container-based VPS it must be enabled in the provider's panel)
 
 ### Getting Help
 
