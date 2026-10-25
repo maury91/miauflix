@@ -1,6 +1,6 @@
 # Getting Started with Miauflix
 
-> **Fastest path:** use the prebuilt images, no clone needed. See the [Quick Setup in the README](../../README.md#-quick-setup).
+> **Fastest path:** use the prebuilt images, no clone needed. See [Prebuilt Images](docker-setup.md#prebuilt-images).
 
 > **Build from source**: Just want to try it? Run these commands and you're done in 5 minutes!
 
@@ -80,7 +80,8 @@ The first option starts all services (backend, nginx, VPN, etc.) in the backgrou
 #### 5. Access Application
 
 - Frontend: `https://yourdomain.com/`
-- API Health: `https://yourdomain.com/health`
+- API base: `https://yourdomain.com/api`
+- Health check: `https://yourdomain.com/api/health`
 
 ### Option 2: Local Development
 
@@ -116,6 +117,10 @@ npm run start:backend:e2e
 ```
 
 ## Configuration System
+
+<p align="center">
+  <img src="../assets/miauflix%20env%20wizard.gif" alt="Miauflix Environment Setup Wizard" width="800">
+</p>
 
 Miauflix includes an intelligent configuration wizard that:
 

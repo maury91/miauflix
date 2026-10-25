@@ -127,6 +127,32 @@ export class ProviderError extends Error {
   }
 }
 
+export interface ProviderMediaSummary {
+  mediaType: MediaType;
+  mediaId: number;
+  title: string;
+  overview: string;
+  poster: string;
+  backdrop: string;
+  genreIds: number[];
+  releaseDate: string;
+  popularity: number;
+  rating: number;
+}
+
+export interface ProviderSearchPage {
+  page: number;
+  totalPages: number;
+  totalResults: number;
+  results: ProviderMediaSummary[];
+}
+
+export interface ProviderGenreFilter {
+  movieGenreIds: readonly number[];
+  tvGenreIds: readonly number[];
+  originalLanguage?: string;
+}
+
 export interface CatalogProvider {
   /** Identifier announced in /status (e.g. 'tmdb'). */
   readonly name: string;
@@ -147,6 +173,16 @@ export interface CatalogProvider {
     mediaType: MediaType;
     ids: { tmdb?: number; imdb?: string };
   }): Promise<number | null>;
+
+  /** Free-text search over movies and tv shows. */
+  search(query: string, page: number, language: string): Promise<ProviderSearchPage>;
+
+  /** Popular movies and tv shows matching the genre filter, interleaved by popularity. */
+  discover(
+    filter: ProviderGenreFilter,
+    page: number,
+    language: string
+  ): Promise<ProviderSearchPage>;
 
   /** Merged genre set for the language (movie + tv). */
   getGenres(language: string): Promise<ProviderGenre[]>;

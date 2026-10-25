@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
+  getRouteParent,
   getRouteSnapshot,
   navigate,
   navigateBack,
@@ -17,6 +18,7 @@ describe('application routes', () => {
 
   it.each([
     [{ type: 'home' }, '/'],
+    [{ type: 'search' }, '/search'],
     [{ type: 'movieDetails', mediaId: 123 }, '/movies/123'],
     [{ type: 'showDetails', mediaId: 456 }, '/shows/456'],
     [{ type: 'moviePlayer', mediaId: 123 }, '/movies/123/watch'],
@@ -39,6 +41,12 @@ describe('application routes', () => {
       expect(parseRoute(path).type).toBe('notFound');
     }
   );
+
+  it('remembers that details were opened from search', () => {
+    navigate({ type: 'search' });
+    navigate({ type: 'movieDetails', mediaId: 7 }, { parent: { type: 'search' } });
+    expect(getRouteParent()).toEqual({ type: 'search' });
+  });
 
   it('uses browser history for player Back and falls back to details on direct entry', async () => {
     const unsubscribe = subscribeRoute(vi.fn());

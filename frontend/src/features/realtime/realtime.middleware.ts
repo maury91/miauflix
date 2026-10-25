@@ -5,12 +5,13 @@ import { preloadApi } from '@features/preload/api/preload.api';
 import { PRELOAD_CLIENT_ID } from '@features/preload/lib/intent-client';
 import { applyProgressUpdate, progressApi } from '@features/progress/api/progress.api';
 import { RealtimeClient } from '@features/realtime/realtime.client';
-import type { ProgressRequest } from '@miauflix/backend';
+import type { ProgressRequest, SearchClientMessage } from '@miauflix/backend';
 import type { MediaRef } from '@miauflix/service-contracts/catalog/v1';
 import { createAction, type Middleware } from '@reduxjs/toolkit';
 import { artworkActions } from '@store/slices/artwork';
 import { selectCurrentSessionId } from '@store/slices/auth';
 import { realtimeActions } from '@store/slices/realtime';
+import { searchActions } from '@store/slices/search';
 import type { AppDispatch, RootState } from '@store/store';
 
 import type { RealtimeFocus, RealtimeMap } from './realtime.client';
@@ -25,6 +26,7 @@ export const realtimeRuntimeActions = {
   artworkSubscriptionsChanged: createAction<MediaRef[]>(
     'realtimeRuntime/artworkSubscriptionsChanged'
   ),
+  searchRequested: createAction<SearchClientMessage>('realtimeRuntime/searchRequested'),
 };
 
 let activeClient: RealtimeClient | null = null;
@@ -75,6 +77,9 @@ export const realtimeMiddleware: Middleware = api => next => action => {
         },
         message => {
           if (isCurrentClient()) api.dispatch(realtimeActions.playbackDeliveryReceived(message));
+        },
+        message => {
+          if (isCurrentClient()) api.dispatch(searchActions.serverMessage(message));
         }
       );
       activeClient = client;
@@ -93,6 +98,8 @@ export const realtimeMiddleware: Middleware = api => next => action => {
   } else if (realtimeRuntimeActions.artworkSubscriptionsChanged.match(action)) {
     artworkSubscriptions = action.payload;
     activeClient?.setArtworkSubscriptions(artworkSubscriptions);
+  } else if (realtimeRuntimeActions.searchRequested.match(action)) {
+    activeClient?.sendSearch(action.payload);
   }
 
   return result;

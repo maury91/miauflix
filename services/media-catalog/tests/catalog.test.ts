@@ -14,7 +14,7 @@ import { SYNC_STATE_MOVIES, SYNC_STATE_TV_SHOWS } from '../src/db/catalog-db.typ
 import { CatalogDatabase } from '../src/db/database';
 import { LocalizationRepository } from '../src/db/localization.repo';
 import { MovieRepository } from '../src/db/movie.repo';
-import { episodes, movies, tvShows } from '../src/db/schema';
+import { episodes, mediaGenres, movies, tvShows } from '../src/db/schema';
 import { SyncStateRepository } from '../src/db/sync-state.repo';
 import { TVShowRepository } from '../src/db/tv-show.repo';
 import { HttpError } from '../src/errors';
@@ -24,7 +24,9 @@ import type {
   ProviderBackdropSource,
   ProviderChangesPage,
   ProviderGenre,
+  ProviderGenreFilter,
   ProviderMovie,
+  ProviderSearchPage,
   ProviderSeason,
   ProviderTVShow,
 } from '../src/provider/provider';
@@ -130,6 +132,17 @@ class FakeProvider implements CatalogProvider {
   async getSeason(tvMediaId: number, seasonNumber: number): Promise<ProviderSeason | null> {
     this.seasonCalls++;
     return this.seasons.get(`${tvMediaId}:${seasonNumber}`) ?? null;
+  }
+
+  async search(): Promise<ProviderSearchPage> {
+    return { page: 1, totalPages: 0, totalResults: 0, results: [] };
+  }
+
+  discoverFilters: ProviderGenreFilter[] = [];
+
+  async discover(filter: ProviderGenreFilter): Promise<ProviderSearchPage> {
+    this.discoverFilters.push(filter);
+    return { page: 1, totalPages: 0, totalResults: 0, results: [] };
   }
 
   async getGenres(language: string): Promise<ProviderGenre[]> {
@@ -631,6 +644,58 @@ describe('CatalogService', () => {
       expect(await service.getGenres('it')).toEqual([{ id: 28, name: 'Azione' }]);
       expect(await service.getGenres('it')).toEqual([{ id: 28, name: 'Azione' }]);
       expect(provider.genreCalls).toBe(1);
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('ranks search genres by catalog titles and appends the shortcuts', async () => {
+    const { db, repo, service, cleanup } = setup();
+    try {
+      repo.localization.upsertGenres(
+        [
+          { id: 28, name: 'Action' },
+          { id: 18, name: 'Drama' },
+          { id: 27, name: 'Horror' },
+        ],
+        'en'
+      );
+      db.db
+        .insert(mediaGenres)
+        .values([
+          { mediaType: 'movie', mediaId: 1, genreId: 18 },
+          { mediaType: 'tv', mediaId: 2, genreId: 18 },
+          { mediaType: 'movie', mediaId: 3, genreId: 28 },
+        ])
+        .run();
+
+      const genres = await service.searchGenres('en');
+
+      expect(genres.map(genre => [genre.key, genre.name, genre.titles, genre.shortcut])).toEqual([
+        ['18', 'Drama', 2, false],
+        ['28', 'Action', 1, false],
+        ['27', 'Horror', 0, false],
+        ['anime', 'Anime', 0, true],
+      ]);
+    } finally {
+      cleanup();
+    }
+  });
+
+  it('discovers a genre only for the media types its titles have', async () => {
+    const { db, provider, service, cleanup } = setup();
+    try {
+      db.db.insert(mediaGenres).values({ mediaType: 'movie', mediaId: 1, genreId: 27 }).run();
+
+      await service.discover('27', 1, 'en');
+      await service.discover('99', 1, 'en');
+      await service.discover('anime', 1, 'en');
+
+      expect(provider.discoverFilters).toEqual([
+        { movieGenreIds: [27], tvGenreIds: [] },
+        { movieGenreIds: [99], tvGenreIds: [99] },
+        { movieGenreIds: [16], tvGenreIds: [16], originalLanguage: 'ja' },
+      ]);
     } finally {
       cleanup();
     }
