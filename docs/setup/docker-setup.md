@@ -46,24 +46,15 @@ The admin setup endpoint closes for good once an admin exists, so this is safe o
 
 To reach Miauflix from the internet (for example on a VPS), add [`docker-compose.https.yml`](../../docker-compose.https.yml) and its [`Caddyfile`](../../Caddyfile). [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain and forwards traffic to Miauflix.
 
-1. Point your domain's DNS at the server and allow ports 80 (TCP), 443 (TCP) and 443 (UDP, for HTTP/3) through its firewall.
-2. On Linux, raise the kernel's UDP buffer limits. Caddy serves HTTP/3 over UDP, and with the default limits (about 200 KB on Debian/Ubuntu) browsers that use HTTP/3 see video stall every so often; Caddy's log then says `failed to sufficiently increase receive buffer size`:
-
-   ```bash
-   printf "net.core.rmem_max=7500000\nnet.core.wmem_max=7500000\n" | sudo tee /etc/sysctl.d/90-quic-udp-buffers.conf
-   sudo sysctl -p /etc/sysctl.d/90-quic-udp-buffers.conf
-   ```
-
-   The file keeps the setting across reboots. If Caddy is already running, restart it afterwards with `docker compose restart caddy`.
-
-3. Download both files next to `docker-compose.quickstart.yml`:
+1. Point your domain's DNS at the server and allow ports 80 and 443 (TCP) through its firewall.
+2. Download both files next to `docker-compose.quickstart.yml`:
 
    ```bash
    curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.https.yml
    curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/Caddyfile
    ```
 
-4. Create a `.env` file in the same folder:
+3. Create a `.env` file in the same folder:
 
    ```bash
    COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.https.yml
@@ -78,7 +69,7 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
    MIAUFLIX_UPSTREAM=vpn:3000
    ```
 
-5. Start it and read the generated admin credentials:
+4. Start it and read the generated admin credentials:
 
    ```bash
    docker compose up -d
@@ -86,6 +77,8 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
    ```
 
 Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauflix prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS, and `CORS_ORIGIN=https://<your domain>`: the realtime connection (live playback updates, notifications, search) only accepts that origin, and the default allows only `localhost`. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
+
+The `Caddyfile` serves HTTP/1.1 and HTTP/2 only. HTTP/3 runs over UDP, and for a viewer whose own connection goes through a VPN it delivered video at about 4 Mbit/s, while HTTP/2 over the same path did about 150 Mbit/s. To turn HTTP/3 back on, remove the `servers` block at the top of the `Caddyfile`, add `- '443:443/udp'` to the `caddy` ports, and on Linux raise the kernel's UDP buffers (`net.core.rmem_max` and `net.core.wmem_max` to `7500000`), or Caddy's HTTP/3 stalls as well.
 
 ### Published images
 

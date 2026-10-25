@@ -1,3 +1,11 @@
+{
+	# HTTP/1.1 and HTTP/2 only. Over HTTP/3 (QUIC, UDP) video stalled at ~4 Mbit/s for a viewer
+	# behind a VPN, while HTTP/2 on the same path did ~150 Mbit/s.
+	servers {
+		protocols h1 h2
+	}
+}
+
 {$MIAUFLIX_DOMAIN} {
 	encode zstd gzip
 	reverse_proxy {$MIAUFLIX_UPSTREAM:miauflix:3000} {

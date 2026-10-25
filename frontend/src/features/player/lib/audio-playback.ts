@@ -66,6 +66,65 @@ function waitForConsumption(signal: AbortSignal) {
   });
 }
 
+/** Seconds kept buffered behind the playhead; older media is evicted to make room. */
+const KEEP_BEHIND_SECONDS = 30;
+/** Seconds read ahead of the playhead before the network read pauses. */
+export const MAX_AHEAD_SECONDS = 60;
+/** The ahead limit never shrinks below this, even on high-bitrate files. */
+export const MIN_AHEAD_SECONDS = 10;
+
+function isQuotaExceeded(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'QuotaExceededError';
+}
+
+function secondsAhead(buffer: SourceBuffer, video: HTMLVideoElement): number {
+  return buffer.buffered.length
+    ? buffer.buffered.end(buffer.buffered.length - 1) - video.currentTime
+    : 0;
+}
+
+/** Shared between appends: the ahead limit shrinks when the browser's byte quota is hit. */
+export interface BufferBudget {
+  maxAheadSeconds: number;
+}
+
+/**
+ * Append a chunk, making room when the browser's media buffer is full. The buffer limit is in
+ * bytes (about 150 MB of video in Chrome) while reading ahead is limited in seconds, so on a
+ * high-bitrate file even MAX_AHEAD_SECONDS can overflow it. On QuotaExceededError: evict what
+ * is behind the playhead, lower the ahead limit to what fit, wait for playback to consume, and
+ * retry. Before playback starts there is nothing to consume, so the error stands.
+ */
+export async function appendWithinQuota(
+  buffer: SourceBuffer,
+  video: HTMLVideoElement,
+  bytes: ArrayBuffer,
+  signal: AbortSignal,
+  budget: BufferBudget,
+  playing: boolean
+): Promise<void> {
+  for (;;) {
+    try {
+      await updateBuffer(buffer, signal, () => buffer.appendBuffer(bytes));
+      return;
+    } catch (error) {
+      if (!playing || !isQuotaExceeded(error)) throw error;
+    }
+    const behind = video.currentTime - 1;
+    if (buffer.buffered.length && buffer.buffered.start(0) < behind) {
+      await updateBuffer(buffer, signal, () => buffer.remove(0, behind));
+    }
+    budget.maxAheadSeconds = Math.max(
+      MIN_AHEAD_SECONDS,
+      Math.min(budget.maxAheadSeconds, secondsAhead(buffer, video)) * 0.75
+    );
+    // Always let playback move on once, so a retry has something new to evict.
+    do {
+      await waitForConsumption(signal);
+    } while (secondsAhead(buffer, video) > budget.maxAheadSeconds);
+  }
+}
+
 /** Native MSE keeps a sparse, full-movie timeline while FFmpeg restarts on each seek. */
 export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
   const { video, mimeType, durationSeconds, startSeconds, autoplay, onReady, onError } = options;
@@ -124,27 +183,26 @@ export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
     buffer.timestampOffset = offset;
     reader = response.body.getReader();
     let positioned = false;
+    const budget: BufferBudget = { maxAheadSeconds: MAX_AHEAD_SECONDS };
     while (!signal.aborted) {
       // Limit media-buffer memory and stop pulling the network when paused with a full buffer.
-      while (
-        positioned &&
-        buffer.buffered.length &&
-        buffer.buffered.end(buffer.buffered.length - 1) - video.currentTime > 60
-      ) {
+      while (positioned && secondsAhead(buffer, video) > budget.maxAheadSeconds) {
         await waitForConsumption(signal);
       }
       const next = await reader.read();
       if (next.done) break;
       if (
         positioned &&
-        video.currentTime > 30 &&
+        video.currentTime > KEEP_BEHIND_SECONDS &&
         buffer.buffered.length &&
-        buffer.buffered.start(0) < video.currentTime - 30
+        buffer.buffered.start(0) < video.currentTime - KEEP_BEHIND_SECONDS
       ) {
-        await updateBuffer(buffer, signal, () => buffer.remove(0, video.currentTime - 30));
+        await updateBuffer(buffer, signal, () =>
+          buffer.remove(0, video.currentTime - KEEP_BEHIND_SECONDS)
+        );
       }
       const bytes = new Uint8Array(next.value).buffer;
-      await updateBuffer(buffer, signal, () => buffer.appendBuffer(bytes));
+      await appendWithinQuota(buffer, video, bytes, signal, budget, positioned);
       if (!positioned) {
         for (let range = 0; range < buffer.buffered.length; range++) {
           const beginning = buffer.buffered.start(range);

@@ -13,8 +13,8 @@ services:
     image: caddy:2
     ports:
       - '80:80'
+      # TCP only: the Caddyfile turns HTTP/3 (UDP) off
       - '443:443'
-      - '443:443/udp'
     environment:
       MIAUFLIX_DOMAIN: ${MIAUFLIX_DOMAIN:?Set MIAUFLIX_DOMAIN in .env}
       REVERSE_PROXY_SECRET: ${REVERSE_PROXY_SECRET:?Set REVERSE_PROXY_SECRET in .env}
