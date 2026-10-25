@@ -1,9 +1,10 @@
 # Miauflix Changelog
 
-## 2026-10-25 Smoother streaming and version display
+## 2026-10-25 v0.0.1 Smoother streaming and version display
 
 ### Features
 
+- Miauflix is versioned with semver, starting at 0.0.1; the root `package.json` version is the source of truth
 - The final user can see the running Miauflix version in the bottom right corner of every screen except Home, Details and Player
 
 ### Bug fix

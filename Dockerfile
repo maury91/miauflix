@@ -50,12 +50,10 @@ COPY frontend/ ./frontend/
 # The frontend TypeScript build includes Storybook fixtures under src/. Those
 # fixtures intentionally reuse the repository-level provider recordings.
 COPY test-fixtures/ ./test-fixtures/
-# Shown in the app next to the version; .git is not in the build context.
-ARG MIAUFLIX_COMMIT=""
 RUN --mount=type=cache,target=/usr/src/app/.turbo \
     --mount=type=cache,target=/usr/src/app/node_modules/.vite \
     npm run build:backend && \
-    VITE_API_URL=/ MIAUFLIX_COMMIT="$MIAUFLIX_COMMIT" npm run build:frontend
+    VITE_API_URL=/ npm run build:frontend
 
 # Create empty .env file for runtime stage
 RUN touch .env

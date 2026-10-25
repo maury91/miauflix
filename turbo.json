@@ -50,11 +50,12 @@
         "build-ssr.ts",
         "tsconfig*.json",
         "package.json",
+        "$TURBO_ROOT$/package.json",
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],
       "outputs": ["../dist/frontend/**", "../dist/frontend-ssr/**"],
-      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN", "MIAUFLIX_COMMIT"],
+      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"],
       "cache": true
     },
     "@miauflix/frontend#check:ts": {
