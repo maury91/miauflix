@@ -382,6 +382,31 @@ describe('AppShell intro sequence', () => {
     }
   });
 
+  it('shows the version outside Home, Details and Player', async () => {
+    try {
+      appPage.value = 'login';
+      const view = renderAppShell();
+      expect(screen.queryByTestId('app-version')).not.toBeInTheDocument();
+      await finishBoot();
+      expect(screen.getByTestId('app-version')).toHaveTextContent(/^Miauflix v\d+\.\d+\.\d+/);
+
+      appPage.value = 'home';
+      act(() => navigate({ type: 'movieDetails', mediaId: 7 }));
+      act(() => view.rerender(<AppShell />));
+      expect(screen.getByTestId('home-page')).toBeInTheDocument();
+      expect(screen.queryByTestId('app-version')).not.toBeInTheDocument();
+
+      act(() => navigate({ type: 'moviePlayer', mediaId: 7 }));
+      expect(screen.queryByTestId('app-version')).not.toBeInTheDocument();
+
+      act(() => navigate({ type: 'search' }));
+      expect(screen.getByTestId('search-page')).toBeInTheDocument();
+      expect(screen.getByTestId('app-version')).toBeInTheDocument();
+    } finally {
+      navigate({ type: 'home' }, { replace: true });
+    }
+  });
+
   it('stops the loading pulse when the logged-in intro takes over', () => {
     appPage.value = 'home';
     renderAppShell(true);

@@ -72,6 +72,14 @@ function proxyCookieRewriteConfigure(
   });
 }
 
+/** The version shown in the app: the root package.json semver is the source of truth. */
+function appVersion(): string {
+  const rootPackage = JSON.parse(
+    readFileSync(path.resolve(__dirname, '../package.json'), 'utf8')
+  ) as { version: string };
+  return rootPackage.version;
+}
+
 const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 const devCertificateRootOverride = process.env.MIAUFLIX_DEV_CERT_DIR;
@@ -124,6 +132,7 @@ export default defineConfig({
         : undefined,
   },
   define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion()),
     // Build-time configuration for access token storage
     __ACCESS_TOKEN_STORAGE_MODE__: JSON.stringify(
       process.env.TOKEN_STORAGE_MODE === 'session' ? 'session' : 'memory'

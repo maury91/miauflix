@@ -11,6 +11,7 @@ import {
 } from '@app/router';
 import { resolveScreen } from '@app/screens';
 import { IntroAnimation } from '@app/shell/IntroAnimation';
+import { VersionBadge } from '@app/shell/VersionBadge';
 import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
@@ -203,6 +204,8 @@ export function AppShell() {
           {renderPage()}
         </AnimatePresence>
       </MotionConfig>
+      {/* Home, details and player (`media`) stay chrome-free; the intro and redirects show nothing. */}
+      {!['media', 'loading', 'redirect'].includes(screen.kind) && <VersionBadge />}
       {homeEligible && introPhase !== 'complete' && (
         <IntroAnimation
           ref={logoRef}

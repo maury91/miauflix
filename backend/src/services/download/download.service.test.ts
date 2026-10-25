@@ -29,7 +29,8 @@ import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 
 import { mockedTorrentInstance } from '../../__mocks__/webtorrent';
-import { DownloadService } from './download.service';
+import { DownloadService, readaheadPieceCount } from './download.service';
+import { EncryptedFileReader } from './encrypted-file-reader';
 
 // Mock all external dependencies
 jest.mock('bittorrent-tracker');
@@ -738,6 +739,8 @@ describe('DownloadService', () => {
         files: [file],
         bitfield: { get: () => true },
         destroyed: false,
+        _select: jest.fn(),
+        _deselect: jest.fn(),
       } as unknown as Torrent;
       webtorrent.torrents = [torrent];
       webtorrent.remove.mockResolvedValue(undefined);
@@ -803,6 +806,8 @@ describe('DownloadService', () => {
         files: [file],
         bitfield: { get: () => true },
         destroyed: false,
+        _select: jest.fn(),
+        _deselect: jest.fn(),
       } as unknown as Torrent;
       webtorrent.torrents = [torrent];
       webtorrent.remove.mockResolvedValue(undefined);
@@ -988,6 +993,124 @@ describe('DownloadService', () => {
       const delivered = await service.getPlaybackHealth(storage.sourceId, 'movie.mkv');
       expect(delivered?.blockedSince).toBeNull();
       expect(delivered?.lastDeliveryAt).toEqual(expect.any(Number));
+    });
+
+    it('sizes readahead to 90 seconds of average bitrate, within its bounds', () => {
+      const MiB = 1024 * 1024;
+      // 14.5 GB over 2h25: ~150 MB for 90 s, in 16 MiB pieces.
+      expect(readaheadPieceCount(14_466_000_000, 8_700, 16 * MiB)).toBe(9);
+      // A small episode still reads 32 MiB ahead.
+      expect(readaheadPieceCount(300 * MiB, 2_700, 4 * MiB)).toBe(8);
+      // A remux cannot select more than 512 MiB.
+      expect(readaheadPieceCount(80_000 * MiB, 3_600, 16 * MiB)).toBe(32);
+      // Huge pieces keep at least the reader window.
+      expect(readaheadPieceCount(MiB, 3_600, 64 * MiB)).toBe(2);
+    });
+
+    it('keeps the readahead window ahead of a viewer and decrypts each piece once', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as { ready: boolean; torrents: Torrent[] };
+      webtorrent.ready = true;
+      const MiB = 1024 * 1024;
+      const pieceLength = MiB;
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength,
+        files: [{ path: 'movie.mkv', offset: 0, length: 3 * MiB }],
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/movie',
+        size: 3 * MiB,
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      const readPiece = jest.fn().mockResolvedValue(Buffer.alloc(pieceLength));
+      jest.mocked(EncryptedFileReader).mockImplementationOnce(
+        () =>
+          ({
+            readPiece,
+            close: jest.fn().mockResolvedValue(undefined),
+          }) as unknown as EncryptedFileReader
+      );
+      const streamSelection = { _select: jest.fn(), _deselect: jest.fn(), critical: jest.fn() };
+      const torrent = Object.assign(new EventEmitter(), {
+        path: storage.location,
+        files: [],
+        pieces: new Array(3),
+        bitfield: { get: () => true },
+        destroyed: false,
+        ...streamSelection,
+      }) as unknown as Torrent;
+      webtorrent.torrents = [torrent];
+      jest.spyOn(service, 'startDownload').mockResolvedValue({
+        sourceId: storage.sourceId,
+        torrent,
+        storage,
+        layout,
+        startTime: new Date(),
+      });
+      mockStorageService.withSourceLock.mockImplementation(async (_id, operation) => operation());
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+
+      const response = await service.streamFile(
+        { ...target({ id: storage.sourceId, size: 3 * MiB }), durationSeconds: 3_600 },
+        'bytes=0-'
+      );
+      expect((await response.arrayBuffer()).byteLength).toBe(3 * MiB);
+
+      // Four 256 KiB slices per piece, but every piece is read and decrypted once.
+      expect(readPiece.mock.calls).toEqual([[0], [1], [2]]);
+      // The window (32 MiB minimum, clamped to the file) moves with the read position.
+      expect(streamSelection._select.mock.calls).toEqual([
+        [0, 2, 99, undefined, true],
+        [1, 2, 99, undefined, true],
+        [2, 2, 99, undefined, true],
+      ]);
+      expect(streamSelection._deselect.mock.calls).toEqual([
+        [0, 2, true],
+        [1, 2, true],
+        [2, 2, true],
+      ]);
+      // Every piece was already verified, so nothing was marked critical.
+      expect(streamSelection.critical).not.toHaveBeenCalled();
+    });
+
+    it('does not read ahead for inspection reads', async () => {
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as { ready: boolean; torrents: Torrent[] };
+      webtorrent.ready = true;
+      const layout: EncryptedStorageLayout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 8 }],
+      };
+      const storage = createMockStorage({
+        location: '/tmp/test-downloads/movie',
+        size: 8,
+        localOnly: false,
+        encryptedLayout: layout,
+      });
+      const streamSelection = { _select: jest.fn(), _deselect: jest.fn(), critical: jest.fn() };
+      const torrent = Object.assign(new EventEmitter(), {
+        path: storage.location,
+        files: [],
+        pieces: new Array(2),
+        bitfield: { get: () => true },
+        destroyed: false,
+        ...streamSelection,
+      }) as unknown as Torrent;
+      webtorrent.torrents = [torrent];
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
+
+      const response = await service.streamFile(
+        target({ id: storage.sourceId, size: 8 }),
+        undefined,
+        true
+      );
+      await response.arrayBuffer();
+      expect(streamSelection._select).not.toHaveBeenCalled();
     });
 
     it('plays a detached encrypted source without adding it back to WebTorrent', async () => {

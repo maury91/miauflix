@@ -1,6 +1,6 @@
 {
   "name": "miauflix",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "packageManager": "npm@10.8.1",
   "cache": true,
   "scripts": {
