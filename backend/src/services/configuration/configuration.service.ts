@@ -78,6 +78,8 @@ export class ConfigurationService {
   private _rawValues = new Map<VariableName, string>();
   /** Secrets generated during this boot that are not yet persisted to config.json */
   private readonly _unsavedGeneratedSecrets = new Set<VariableName>();
+  /** Generated secrets that process.env provided when autoConfigureDefaults() ran */
+  private readonly _environmentGeneratedSecrets = new Set<VariableName>();
   private _variablesInfo = new Map<VariableName, ExtendedVariableInfo>();
   private _variableGroups = new Map<VariableName, string>();
   /** Variables whose values are owned and interpreted by this Backend process. */
@@ -391,6 +393,7 @@ export class ConfigurationService {
       // Coming from process.env, maximum precedence in this stage
       if (process.env[varName]) {
         this._rawValues.set(varName, process.env[varName]!);
+        if (this.isGeneratedSecret(varName)) this._environmentGeneratedSecrets.add(varName);
         // then we fallback to the defaultValue ( if exists )
       } else if ('defaultValue' in varInfo && varInfo.defaultValue) {
         this._rawValues.set(varName, getDefaultValue(varInfo.defaultValue));
@@ -439,7 +442,7 @@ export class ConfigurationService {
     for (const [key, raw] of Object.entries(fileData)) {
       this._fileData[key as VariableName] = raw;
       // An explicit environment variable wins over a previously generated secret
-      if (this.isGeneratedSecret(key as VariableName) && process.env[key]) continue;
+      if (this._environmentGeneratedSecrets.has(key as VariableName)) continue;
       let value = raw;
       if (raw.startsWith(ENC_PREFIX)) {
         try {

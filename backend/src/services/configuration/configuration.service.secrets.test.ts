@@ -1,3 +1,4 @@
+import { ConfigStore } from '@miauflix/service-contracts';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import path from 'path';
@@ -93,6 +94,27 @@ describe('ConfigurationService generated secrets', () => {
     expect(configuration.get('STREAM_KEY_SALT')).toBe(persisted.STREAM_KEY_SALT);
     // The persisted value is kept for when the environment variable is removed
     expect(readConfigFile().JWT_SECRET).toBe(persisted.JWT_SECRET);
+  });
+
+  it('keeps the bootstrap-time environment precedence if process.env changes during init()', async () => {
+    const persisted = readSecrets(await setupTest());
+    process.env.JWT_SECRET = 'jwt-from-environment';
+    const originalReadAllSync = ConfigStore.prototype.readAllSync;
+    const readAllSync = jest
+      .spyOn(ConfigStore.prototype, 'readAllSync')
+      .mockImplementation(function (this: ConfigStore) {
+        delete process.env.JWT_SECRET;
+        return originalReadAllSync.call(this);
+      });
+
+    try {
+      const configuration = await setupTest();
+
+      expect(configuration.get('JWT_SECRET')).toBe('jwt-from-environment');
+      expect(readConfigFile().JWT_SECRET).toBe(persisted.JWT_SECRET);
+    } finally {
+      readAllSync.mockRestore();
+    }
   });
 
   it('does not persist secrets provided through the environment', async () => {
