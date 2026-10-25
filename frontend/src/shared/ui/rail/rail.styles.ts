@@ -42,7 +42,7 @@ export const RailItem = styled.button<{ $active: boolean; $selected: boolean }>`
     $selected ? 'linear-gradient(115deg, #e60019 0%, #870d1a 100%)' : 'transparent'};
   color: ${PALETTE.text.primary};
   font:
-    500 clamp(0.8rem, 1.8vw, 1.5rem) 'Poppins',
+    500 clamp(0.8rem, 1.8vw, 1.3rem) 'Poppins',
     sans-serif;
   letter-spacing: 0;
   white-space: nowrap;
