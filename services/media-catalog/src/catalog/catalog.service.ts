@@ -6,7 +6,11 @@ import { SyncStateRepository } from '../db/sync-state.repo';
 import { TVShowRepository } from '../db/tv-show.repo';
 import { HttpError } from '../errors';
 import { logger } from '../logger';
-import type { CatalogProvider } from '../provider/provider';
+import type {
+  CatalogProvider,
+  ProviderGenreFilter,
+  ProviderSearchPage,
+} from '../provider/provider';
 import { ArtworkSelectionService, type ArtworkUpdate } from '../services/artwork-selection.service';
 import {
   BackdropFocusService,
@@ -216,6 +220,21 @@ export class CatalogService {
   }): Promise<MediaRef | null> {
     const mediaId = await this.provider.resolveExternal(ref);
     return mediaId === null ? null : { mediaType: ref.mediaType, mediaId };
+  }
+
+  /* -------------------------------------------------------------------- search */
+
+  /** Uncached-by-repo pass-through: search pages are TTL-cached by the provider. */
+  search(query: string, page: number, language: string): Promise<ProviderSearchPage> {
+    return this.provider.search(query, page, language);
+  }
+
+  discover(
+    filter: ProviderGenreFilter,
+    page: number,
+    language: string
+  ): Promise<ProviderSearchPage> {
+    return this.provider.discover(filter, page, language);
   }
 
   /* -------------------------------------------------------------------- genres */

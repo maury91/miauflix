@@ -16,6 +16,9 @@ import {
   type MovieDetail,
   movieDetailSchema,
   okResponseSchema,
+  type SearchGenreKey,
+  type SearchResponse,
+  searchResponseSchema,
   type SeasonDetail,
   seasonDetailSchema,
   type ServiceConfigTestResult,
@@ -117,6 +120,18 @@ export class CatalogClientService implements ConfigurableService {
       { language },
       () => null
     );
+  }
+
+  async search(query: string, page: number, language: string): Promise<SearchResponse> {
+    return this.get(searchResponseSchema, '/search', {
+      query,
+      page: String(page),
+      language,
+    });
+  }
+
+  async discover(genre: SearchGenreKey, page: number, language: string): Promise<SearchResponse> {
+    return this.get(searchResponseSchema, '/discover', { genre, page: String(page), language });
   }
 
   async batch(

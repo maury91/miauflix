@@ -21,13 +21,22 @@ import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import { BackRail } from '@shared/ui/rail/BackRail';
 import {
   detailsNavigationActions,
   selectDetailsNavigationForMedia,
 } from '@store/slices/detailsNavigation';
 import type { RootState } from '@store/store';
 import { forwardRef } from 'react';
-import { useCallback, useEffect, useImperativeHandle, useMemo, useRef, useState } from 'react';
+import {
+  Fragment,
+  useCallback,
+  useEffect,
+  useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -38,11 +47,12 @@ import { firstSeason } from '../first-season';
 import { type HomeAction, type NavigationOutcome } from '../homeNavigation';
 import { useShowSeasons } from '../hooks/useShowSeasons';
 import { imagePreloader, URGENT } from '../image-preloader';
-import { artworkUrl, getMediaTitle } from '../media.utils';
+import { artworkUrl, formatRuntime, getMediaTitle } from '../media.utils';
 import { ErrorState, PrimaryAction, SectionLabel } from './details.styles';
 import { navigateDetails } from './detailsNavigation';
 import { episodeElementId } from './episodes.utils';
 import { EpisodesSection } from './EpisodesSection';
+import { MetadataDot, MetadataRating } from './metadata.styles';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
 import BookmarkIcon from '~icons/mdi/bookmark-outline';
@@ -56,7 +66,8 @@ const Page = styled.main<{ $backdrop: string; $position: string; $size: string }
   inset: 0;
   z-index: 3;
   overflow: hidden;
-  padding: 15vh 5vw 5vh;
+  /* Clear the back rail on the left. */
+  padding: 15vh 5vw 5vh calc(max(5vw, 56px) + 3vw);
   background: #000;
   outline: none;
 
@@ -89,49 +100,13 @@ const Page = styled.main<{ $backdrop: string; $position: string; $size: string }
 
   @media (max-width: 860px) {
     overflow: hidden auto;
-    padding: 13vh 6vw 7vh;
+    padding: 13vh 6vw 7vh calc(56px + 4vw);
 
     &::after {
       background:
         linear-gradient(90deg, rgba(0, 0, 0, 0.96), rgba(0, 0, 0, 0.56) 80%, rgba(0, 0, 0, 0.92)),
         linear-gradient(0deg, #000 0%, transparent 35%);
     }
-  }
-`;
-
-const Header = styled.header`
-  position: fixed;
-  top: 3vh;
-  left: 2vw;
-  z-index: 4;
-
-  @media (max-width: 860px) {
-    top: 3vh;
-    left: 6vw;
-  }
-`;
-
-// eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
-const BackButton = styled(BaseButton)`
-  min-width: 0;
-  min-height: 0;
-  min-height: 4.5vh;
-  padding: 0.8vh 1.2vw;
-  border: 0.2vh solid ${PALETTE.background.border};
-  border-radius: 0.6vh;
-  background: rgba(17, 23, 25, 0.92);
-  color: ${PALETTE.text.primary};
-  box-shadow: none;
-  font:
-    600 clamp(0.8rem, 1.8vh, 1rem) 'Poppins',
-    sans-serif;
-  cursor: pointer;
-
-  &:hover,
-  &:focus-visible {
-    border-color: ${PALETTE.color.interactive};
-    background: ${PALETTE.color.interactiveSubtle};
-    outline: none;
   }
 `;
 
@@ -184,26 +159,13 @@ const MetadataLine = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 0.55rem;
+  gap: 0.9rem;
 
   > ${Metadata} {
+    display: flex;
+    align-items: center;
     margin-bottom: 0;
-  }
-`;
-
-const MetadataSeparator = styled.span`
-  margin: 0 0.2rem;
-  color: ${PALETTE.text.secondary};
-`;
-
-const MetadataRating = styled.span`
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25em;
-
-  svg {
-    width: 1em;
-    height: 1em;
+    color: ${PALETTE.text.primary};
   }
 `;
 
@@ -604,8 +566,8 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     if (!current) return [];
     if (current.type === 'movie') {
       return [
+        current.runtime ? formatRuntime(current.runtime) : '',
         formatYear(current.releaseDate),
-        current.runtime ? `${current.runtime} min` : '',
       ].filter(Boolean);
     }
     return [
@@ -733,11 +695,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
 
   return (
     <>
-      <Header>
-        <BackButton ref={backRef} type="button" onClick={onBack} aria-label="Back to browse">
-          Back
-        </BackButton>
-      </Header>
+      <BackRail ref={backRef} label="Back to browse" onBack={onBack} />
       <Page
         ref={pageRef}
         tabIndex={-1}
@@ -758,30 +716,27 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                 <MetadataLine>
                   <Metadata>
                     {metadata.map((item, index) => (
-                      <span key={item}>
-                        {index > 0 && <MetadataSeparator aria-hidden="true">·</MetadataSeparator>}
-                        {item}
-                      </span>
+                      <Fragment key={item}>
+                        {index > 0 && <MetadataDot />}
+                        <span>{item}</span>
+                      </Fragment>
                     ))}
                     {rating && (
-                      <MetadataRating>
-                        {metadata.length > 0 && (
-                          <MetadataSeparator aria-hidden="true">·</MetadataSeparator>
-                        )}
-                        <StarIcon aria-hidden="true" />
-                        {rating}
-                      </MetadataRating>
+                      <>
+                        {metadata.length > 0 && <MetadataDot />}
+                        <MetadataRating>
+                          <StarIcon aria-hidden="true" />
+                          {rating}
+                        </MetadataRating>
+                      </>
                     )}
                   </Metadata>
                   {media._type === 'movie' && (
-                    <>
-                      <MetadataSeparator aria-hidden="true">·</MetadataSeparator>
-                      <SourcePreparationStatus
-                        mediaKind={media._type}
-                        mode="details"
-                        preparation={preparation}
-                      />
-                    </>
+                    <SourcePreparationStatus
+                      mediaKind={media._type}
+                      mode="details"
+                      preparation={preparation}
+                    />
                   )}
                 </MetadataLine>
                 {current?.genres?.length ? <Metadata>{current.genres.join(' · ')}</Metadata> : null}

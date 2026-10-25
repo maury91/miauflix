@@ -148,3 +148,54 @@ describe('RealtimeGateway playback delivery', () => {
     expect(unsubscribe).toHaveBeenCalled();
   });
 });
+
+describe('RealtimeGateway search routing', () => {
+  it('routes search messages to the search channel and reports malformed ones', async () => {
+    const search = {
+      handles: jest.fn((type: string) => type.startsWith('search')),
+      handle: jest.fn((_client: unknown, message: { query?: string }) => !!message.query),
+    };
+    const gateway = new RealtimeGateway(
+      { verifyAccessToken: jest.fn().mockResolvedValue({ userId: 'user' }) } as never,
+      { get: jest.fn().mockReturnValue('__at') } as never,
+      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
+      {} as never,
+      {
+        onArtwork: jest.fn(() => jest.fn()),
+        onArtworkStreamReady: jest.fn(() => jest.fn()),
+      } as never,
+      null,
+      search as never
+    );
+    const socket = Object.assign(new EventEmitter(), {
+      readyState: 1,
+      send: jest.fn(),
+      close: jest.fn(),
+    });
+    const server = (gateway as unknown as { server: EventEmitter }).server;
+    server.emit('connection', socket, { headers: { cookie: '__at_session=fixture-token' } });
+    socket.emit(
+      'message',
+      JSON.stringify({ type: 'authenticate', session: 'session', clientId: 'client' })
+    );
+    await Promise.resolve();
+    try {
+      socket.emit('message', JSON.stringify({ type: 'search', query: 'Dune' }));
+      expect(search.handle).toHaveBeenCalledWith(
+        expect.objectContaining({ userId: 'user' }),
+        expect.objectContaining({ query: 'Dune' })
+      );
+      socket.emit('message', JSON.stringify({ type: 'search' }));
+      expect(socket.send).toHaveBeenLastCalledWith(
+        JSON.stringify({ type: 'error', v: 1, message: 'Invalid search' })
+      );
+      const [client] = search.handle.mock.calls[0] as unknown as [{ send(message: object): void }];
+      client.send({ type: 'search-recents', items: [] });
+      expect(socket.send).toHaveBeenLastCalledWith(
+        JSON.stringify({ type: 'search-recents', items: [] })
+      );
+    } finally {
+      gateway.close();
+    }
+  });
+});

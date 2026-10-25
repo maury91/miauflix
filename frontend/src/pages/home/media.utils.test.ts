@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { artworkUrl, getImageUrl } from './media.utils';
+import { artworkUrl, formatRuntime, getImageUrl } from './media.utils';
 
 afterEach(() => vi.unstubAllGlobals());
 
@@ -28,5 +28,13 @@ describe('artwork sizing', () => {
     expect(artworkUrl('/image.jpg', 'card', 253)).toContain('/w780/');
     expect(artworkUrl('/image.jpg', 'logo', 280)).toContain('/w500/');
     expect(artworkUrl('/image.jpg', 'backdrop', 1280)).toContain('/original/');
+  });
+});
+
+describe('runtime formatting', () => {
+  it('shows hours and minutes, dropping empty parts', () => {
+    expect(formatRuntime(131)).toBe('2h 11m');
+    expect(formatRuntime(120)).toBe('2h');
+    expect(formatRuntime(45)).toBe('45m');
   });
 });

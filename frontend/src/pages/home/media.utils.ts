@@ -4,6 +4,14 @@ export function getMediaTitle(media: MediaDto): string {
   return media._type === 'movie' ? media.title : media.name;
 }
 
+/** Runtime in minutes as `2h 11m`, `2h` or `45m`. */
+export function formatRuntime(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const rest = Math.round(minutes % 60);
+  if (!hours) return `${rest}m`;
+  return rest ? `${hours}h ${rest}m` : `${hours}h`;
+}
+
 export function getImageUrl(path: string | null | undefined, size = 'w500'): string {
   if (!path) return '';
   const isBundledAsset =

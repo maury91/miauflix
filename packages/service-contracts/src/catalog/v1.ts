@@ -134,6 +134,46 @@ export const mediaSummarySchema = z.object({
   popularity: z.number(),
   rating: z.number(),
 });
+/**
+ * Genre shortcuts offered by search. Movie and TV genre ids differ on TMDB, so each
+ * key lists both sides (TV has no thriller/horror genre, so those stay movie-only);
+ * `originalLanguage` narrows the result (anime is Japanese animation).
+ */
+export const SEARCH_GENRES = {
+  action: { movieGenreIds: [28], tvGenreIds: [10759] },
+  comedy: { movieGenreIds: [35], tvGenreIds: [35] },
+  drama: { movieGenreIds: [18], tvGenreIds: [18] },
+  thriller: { movieGenreIds: [53], tvGenreIds: [] },
+  scifi: { movieGenreIds: [878], tvGenreIds: [10765] },
+  horror: { movieGenreIds: [27], tvGenreIds: [] },
+  animation: { movieGenreIds: [16], tvGenreIds: [16] },
+  anime: { movieGenreIds: [16], tvGenreIds: [16], originalLanguage: 'ja' },
+  documentary: { movieGenreIds: [99], tvGenreIds: [99] },
+  fantasy: { movieGenreIds: [14], tvGenreIds: [10765] },
+} as const satisfies Record<
+  string,
+  { movieGenreIds: readonly number[]; tvGenreIds: readonly number[]; originalLanguage?: string }
+>;
+export const searchGenreKeySchema = z.enum(
+  Object.keys(SEARCH_GENRES) as [keyof typeof SEARCH_GENRES, ...(keyof typeof SEARCH_GENRES)[]]
+);
+export const searchPageSchema = z.coerce.number().int().min(1).max(500).default(1);
+export const searchQueryRequestSchema = z.object({
+  query: z.string().trim().min(1).max(100),
+  page: searchPageSchema,
+  language: z.string().default('en'),
+});
+export const discoverRequestSchema = z.object({
+  genre: searchGenreKeySchema,
+  page: searchPageSchema,
+  language: z.string().default('en'),
+});
+export const searchResponseSchema = z.object({
+  results: z.array(mediaSummarySchema),
+  page: z.number().int().positive(),
+  totalPages: z.number().int().nonnegative(),
+  totalResults: z.number().int().nonnegative(),
+});
 export const externalMediaLookupSchema = z.object({
   mediaType: mediaTypeSchema,
   ids: z
@@ -201,6 +241,10 @@ export type TVShowDetail = z.infer<typeof tvShowDetailSchema>;
 export type EpisodeDetail = z.infer<typeof episodeDetailSchema>;
 export type SeasonDetail = z.infer<typeof seasonDetailSchema>;
 export type MediaSummary = z.infer<typeof mediaSummarySchema>;
+export type SearchGenreKey = z.infer<typeof searchGenreKeySchema>;
+export type SearchQueryRequest = z.infer<typeof searchQueryRequestSchema>;
+export type DiscoverRequest = z.infer<typeof discoverRequestSchema>;
+export type SearchResponse = z.infer<typeof searchResponseSchema>;
 export type ExternalMediaLookup = z.infer<typeof externalMediaLookupSchema>;
 export type ExternalMediaResolveRequest = z.infer<typeof externalMediaResolveRequestSchema>;
 export type ExternalMediaResolveResponse = z.infer<typeof externalMediaResolveResponseSchema>;

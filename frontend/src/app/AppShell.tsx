@@ -1,6 +1,14 @@
 import { useAppState } from '@app/hooks/useAppState';
 import { useIntroController } from '@app/hooks/useIntroController';
-import { type AppRoute, navigate, navigateBack, useRoute, useRouteFocus } from '@app/router';
+import {
+  type AppRoute,
+  getRouteParent,
+  getRouteSnapshot,
+  navigate,
+  navigateBack,
+  useRoute,
+  useRouteFocus,
+} from '@app/router';
 import { resolveScreen } from '@app/screens';
 import { IntroAnimation } from '@app/shell/IntroAnimation';
 import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
@@ -8,6 +16,7 @@ import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
 import QrApprovalPage from '@pages/qr/QrApprovalPage';
+import SearchPage from '@pages/search/SearchPage';
 import SettingsPage from '@pages/settings/SettingsPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
@@ -19,6 +28,8 @@ import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
+
+const TIZEN_SEARCH_KEY_CODE = 10225;
 
 /** Replace a route that is not allowed, without mounting its page. */
 function Redirect({ to }: { to: AppRoute }) {
@@ -64,6 +75,18 @@ export function AppShell() {
     dispatch(dismissConfigWizard());
   }, [dispatch]);
   const backTo = (parent: AppRoute) => () => navigateBack(parent);
+
+  // The remote's Search key (registered at Tizen startup) opens search from anywhere signed in.
+  useEffect(() => {
+    if (appState !== 'home') return;
+    const openSearch = (event: KeyboardEvent) => {
+      if (event.key !== 'Search' && event.keyCode !== TIZEN_SEARCH_KEY_CODE) return;
+      event.preventDefault();
+      if (getRouteSnapshot().type !== 'search') navigate({ type: 'search' });
+    };
+    document.addEventListener('keydown', openSearch);
+    return () => document.removeEventListener('keydown', openSearch);
+  }, [appState]);
 
   useEffect(() => {
     if (appState === 'config_wizard' && isAuthenticated && isAdmin) {
@@ -129,9 +152,13 @@ export function AppShell() {
             canManageStorage={isAdmin}
             onStorage={() => navigate({ type: 'storage' })}
             initialFocus={settingsFocus}
-            onDismiss={backTo({ type: 'home' })}
+            onDismiss={backTo(
+              getRouteParent()?.type === 'search' ? { type: 'search' } : { type: 'home' }
+            )}
           />
         );
+      case 'search':
+        return <SearchPage key="search" onDismiss={backTo({ type: 'home' })} />;
       case 'redirect':
         return <Redirect key="redirect" to={screen.to} />;
       case 'notFound':

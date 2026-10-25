@@ -17,6 +17,8 @@ import type { PreloadIntentService } from '@services/preload/preload-intent.serv
 import type { ProgressService } from '@services/progress/progress.service';
 import { isAllowedOrigin } from '@utils/origin.util';
 
+import type { RealtimeSearchChannel, SearchClient } from './realtime.search';
+
 const MAX_MAP_SIDE = 11;
 const MAX_MAP_CELLS = MAX_MAP_SIDE * MAX_MAP_SIDE;
 const AUTH_TIMEOUT_MS = 5_000;
@@ -69,6 +71,7 @@ interface ClientState {
   progressChain: Promise<void>;
   authTimer: ReturnType<typeof setTimeout>;
   artworkRefs: Set<string>;
+  searchClient: SearchClient;
 }
 
 interface RealtimeEvent {
@@ -103,7 +106,8 @@ export class RealtimeGateway {
     private readonly preload: PreloadIntentService,
     private readonly progress: ProgressService,
     private readonly catalog: CatalogClientService,
-    playback?: Pick<PlaybackSessionService, 'onDeliveryUpdate'>
+    playback?: Pick<PlaybackSessionService, 'onDeliveryUpdate'> | null,
+    private readonly search?: RealtimeSearchChannel
   ) {
     this.removeDeliveryListener =
       playback?.onDeliveryUpdate(event => this.deliverPlayback(event)) ?? null;
@@ -154,7 +158,7 @@ export class RealtimeGateway {
   private removeArtworkStreamReadyListener: (() => void) | null = null;
 
   private accept(socket: WebSocket, request: IncomingMessage): void {
-    const state = {
+    const state: ClientState = {
       socket,
       request,
       userId: '',
@@ -168,7 +172,13 @@ export class RealtimeGateway {
       progressChain: Promise.resolve(),
       authTimer: setTimeout(() => socket.close(1008, 'Authentication required'), AUTH_TIMEOUT_MS),
       artworkRefs: new Set<string>(),
-    } satisfies ClientState;
+      searchClient: {
+        get userId() {
+          return state.userId;
+        },
+        send: message => this.send(state, message),
+      },
+    };
     this.clients.add(state);
     socket.on('message', data => this.handleMessage(state, data.toString()));
     socket.on('close', () => this.remove(state));
@@ -275,6 +285,10 @@ export class RealtimeGateway {
             });
           })
           .catch(() => state.socket.close(1011, 'Progress update failed'));
+        return;
+      }
+      if (this.search?.handles(message.type)) {
+        if (!this.search.handle(state.searchClient, message)) this.invalid(state, 'Invalid search');
         return;
       }
       this.invalid(state, 'Unsupported message');
@@ -455,7 +469,7 @@ export class RealtimeGateway {
     this.send(state, { type: 'error', v: 1, message: reason });
   }
 
-  private send(state: ClientState, message: Record<string, unknown>): void {
+  private send(state: ClientState, message: object): void {
     if (state.socket.readyState === WebSocket.OPEN) state.socket.send(JSON.stringify(message));
   }
 

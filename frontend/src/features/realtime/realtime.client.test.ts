@@ -207,4 +207,61 @@ describe('RealtimeClient', () => {
     expect(replayed.map(frame => frame.items.length)).toEqual([50, 10]);
     client.stop();
   });
+
+  it('queues search messages until ready, delivers replies and replays the latest search', () => {
+    const onSearch = vi.fn();
+    const client = new RealtimeClient(
+      'session-1',
+      'tab-1',
+      vi.fn(),
+      undefined,
+      undefined,
+      undefined,
+      onSearch
+    );
+    client.start();
+    const socket = FakeWebSocket.instances[0]!;
+    client.sendSearch({ type: 'search', requestId: 1, query: 'du', page: 1 });
+    client.sendSearch({ type: 'search', requestId: 2, query: 'dune', page: 1, commit: true });
+    client.sendSearch({ type: 'search-recents' });
+    socket.open();
+    socket.sent = [];
+
+    socket.message({ type: 'ready' });
+
+    expect(socket.sent.map(data => JSON.parse(data))).toEqual(
+      expect.arrayContaining([
+        { type: 'search', requestId: 2, query: 'dune', page: 1, commit: true },
+        { type: 'search-recents' },
+      ])
+    );
+    expect(socket.sent.filter(data => data.includes('"requestId":1'))).toEqual([]);
+
+    socket.message({
+      type: 'search-results',
+      requestId: 2,
+      page: 1,
+      totalPages: 1,
+      totalResults: 0,
+      results: [],
+    });
+    socket.message({ type: 'search-recents', items: [] });
+    socket.message({ type: 'search-results' });
+    expect(onSearch).toHaveBeenCalledTimes(2);
+
+    socket.close();
+    vi.advanceTimersByTime(1_000);
+    const reconnected = FakeWebSocket.instances[1]!;
+    reconnected.open();
+    reconnected.sent = [];
+    reconnected.message({ type: 'ready' });
+    expect(reconnected.sent.map(data => JSON.parse(data))).toContainEqual({
+      type: 'search',
+      requestId: 2,
+      query: 'dune',
+      page: 1,
+      commit: false,
+    });
+    client.stop();
+  });
 });

@@ -76,6 +76,32 @@ const setupReadyMediaRouter = () => {
         },
       ],
       queueArtwork: () => 1,
+      search: async (query: string, page: number) => ({
+        page,
+        totalPages: 1,
+        totalResults: 1,
+        results: [
+          {
+            mediaType: 'movie' as const,
+            mediaId: 7,
+            title: query,
+            overview: '',
+            poster: '',
+            backdrop: '',
+            genreIds: [],
+            releaseDate: '',
+            popularity: 1,
+            rating: 1,
+          },
+        ],
+      }),
+      discover: async (filter: unknown, page: number) => ({
+        page,
+        totalPages: 0,
+        totalResults: 0,
+        results: [],
+        filter,
+      }),
       onArtworkUpdate: (listener: (update: Record<string, unknown>) => void) => {
         artworkListeners.add(listener);
         return () => artworkListeners.delete(listener);
@@ -131,6 +157,29 @@ describe('media-catalog management contract', () => {
 
     expect(response.status).toBe(400);
     expect(serviceErrorSchema.parse(await response.json()).code).toBe('invalid_request');
+  });
+
+  it('searches by query and discovers by a known genre key', async () => {
+    const router = setupReadyMediaRouter();
+
+    const search = await router.handle(
+      new Request('http://catalog/v1/catalog/search?query=%20Dune%20&page=2')
+    );
+    expect(search.status).toBe(200);
+    expect(await search.json()).toMatchObject({ page: 2, results: [{ title: 'Dune' }] });
+
+    const discover = await router.handle(
+      new Request('http://catalog/v1/catalog/discover?genre=anime')
+    );
+    expect(discover.status).toBe(200);
+    expect(await discover.json()).toEqual({ page: 1, totalPages: 0, totalResults: 0, results: [] });
+
+    const blank = await router.handle(new Request('http://catalog/v1/catalog/search?query=%20'));
+    expect(blank.status).toBe(400);
+    const unknownGenre = await router.handle(
+      new Request('http://catalog/v1/catalog/discover?genre=western')
+    );
+    expect(unknownGenre.status).toBe(400);
   });
 
   it('returns a cache-only artwork snapshot and accepts a bounded priority queue request', async () => {

@@ -25,6 +25,7 @@ import type {
   ProviderChangesPage,
   ProviderGenre,
   ProviderMovie,
+  ProviderSearchPage,
   ProviderSeason,
   ProviderTVShow,
 } from '../src/provider/provider';
@@ -130,6 +131,14 @@ class FakeProvider implements CatalogProvider {
   async getSeason(tvMediaId: number, seasonNumber: number): Promise<ProviderSeason | null> {
     this.seasonCalls++;
     return this.seasons.get(`${tvMediaId}:${seasonNumber}`) ?? null;
+  }
+
+  async search(): Promise<ProviderSearchPage> {
+    return { page: 1, totalPages: 0, totalResults: 0, results: [] };
+  }
+
+  async discover(): Promise<ProviderSearchPage> {
+    return { page: 1, totalPages: 0, totalResults: 0, results: [] };
   }
 
   async getGenres(language: string): Promise<ProviderGenre[]> {

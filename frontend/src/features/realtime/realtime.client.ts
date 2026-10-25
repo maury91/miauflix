@@ -1,5 +1,10 @@
 import { nextPreloadSequence } from '@features/preload/lib/intent-client';
-import type { CreatePlaybackSessionResponse, ProgressRequest } from '@miauflix/backend';
+import type {
+  CreatePlaybackSessionResponse,
+  ProgressRequest,
+  SearchClientMessage,
+  SearchServerMessage,
+} from '@miauflix/backend';
 import {
   type ArtworkUpdate,
   artworkUpdateSchema,
@@ -97,6 +102,10 @@ export class RealtimeClient {
   private mapTimer: number | null = null;
   private artworkRefs = new Map<string, MediaRef>();
   private sentArtworkRefs = new Map<string, MediaRef>();
+  /** Search messages waiting for the socket, at most one per message type. */
+  private pendingSearch = new Map<SearchClientMessage['type'], SearchClientMessage>();
+  /** The search to replay after a reconnect, since its answer may have been lost. */
+  private latestSearch: Extract<SearchClientMessage, { type: 'search' }> | null = null;
 
   constructor(
     private readonly session: string,
@@ -104,7 +113,8 @@ export class RealtimeClient {
     private readonly onStatus: (message: RealtimeStatusMessage) => void,
     private readonly onConnectionChange?: (ready: boolean) => void,
     private readonly onArtworkUpdate?: (update: ArtworkUpdate) => void,
-    private readonly onPlaybackDelivery?: (message: RealtimePlaybackDelivery) => void
+    private readonly onPlaybackDelivery?: (message: RealtimePlaybackDelivery) => void,
+    private readonly onSearch?: (message: SearchServerMessage) => void
   ) {}
 
   start(): void {
@@ -179,6 +189,17 @@ export class RealtimeClient {
     this.syncArtworkRefs();
   }
 
+  /** Send a search request; messages sent while disconnected go out once the socket is ready. */
+  sendSearch(message: SearchClientMessage): void {
+    // Replays must not record the search as a recent again.
+    if (message.type === 'search') this.latestSearch = { ...message, commit: false };
+    if (this.ready && this.socket) {
+      this.socket.send(JSON.stringify(message));
+      return;
+    }
+    this.pendingSearch.set(message.type, message);
+  }
+
   /** Send durable playback progress through the authenticated socket when it is available. */
   publishProgress(progress: ProgressRequest): boolean {
     if (!this.ready || !this.socket || !this.visible) return false;
@@ -224,12 +245,14 @@ export class RealtimeClient {
         this.onStatus(message);
       if (isArtworkUpdate(message)) this.onArtworkUpdate?.(message);
       if (isPlaybackDelivery(message)) this.onPlaybackDelivery?.(message);
+      if (isSearchMessage(message)) this.onSearch?.(message);
       if (isReady(message)) {
         this.ready = true;
         this.onConnectionChange?.(true);
         this.refreshLatestSequences();
         this.sendLatest();
         this.syncArtworkRefs();
+        this.flushSearch();
       }
     };
     socket.onclose = () => {
@@ -240,6 +263,14 @@ export class RealtimeClient {
       if (!this.stopped) this.scheduleRetry();
     };
     socket.onerror = () => socket.close();
+  }
+
+  private flushSearch(): void {
+    if (this.latestSearch && !this.pendingSearch.has('search'))
+      this.pendingSearch.set('search', this.latestSearch);
+    const pending = [...this.pendingSearch.values()];
+    this.pendingSearch.clear();
+    for (const message of pending) this.socket?.send(JSON.stringify(message));
   }
 
   private scheduleRetry(): void {
@@ -342,6 +373,22 @@ function isPlaybackDelivery(value: unknown): value is RealtimePlaybackDelivery {
     typeof candidate.playbackId === 'string' &&
     (candidate.update?.type === 'delivery' || candidate.update?.type === 'recreate')
   );
+}
+
+const SEARCH_MESSAGE_TYPES = new Set([
+  'search-results',
+  'search-details',
+  'search-error',
+  'search-recents',
+]);
+
+function isSearchMessage(value: unknown): value is SearchServerMessage {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Record<string, unknown>;
+  if (!SEARCH_MESSAGE_TYPES.has(candidate['type'] as string)) return false;
+  return candidate['type'] === 'search-recents'
+    ? Array.isArray(candidate['items'])
+    : typeof candidate['requestId'] === 'number';
 }
 
 function isArtworkUpdate(value: unknown): value is ArtworkUpdate {

@@ -988,6 +988,35 @@ describe('HomePage focus transitions', () => {
     expect(screen.queryByTestId('details')).not.toBeInTheDocument();
   });
 
+  it('focuses the selected card once the categories finish loading', () => {
+    // Returning from another page after the list cache expired: Home first shows its spinner.
+    useGetListsInfiniteQuery.mockReturnValue({
+      data: undefined,
+      fetchNextPage: vi.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: true,
+      isError: false,
+    });
+    const first = makeHandle(true, false);
+    rowHandles.set(0, first);
+    const { rerender } = render(<HomePage />);
+    expect(screen.queryByTestId('card-0')).not.toBeInTheDocument();
+    expect(first.focusIndex).not.toHaveBeenCalled();
+
+    useGetListsInfiniteQuery.mockReturnValue({
+      data: { pages: [{ results: categories, totalPages: 1 }] },
+      fetchNextPage: vi.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+    });
+    rerender(<HomePage />);
+
+    expect(first.focusIndex).toHaveBeenCalledWith(0);
+  });
+
   it('makes the newly reached rows visible after four ArrowDown transitions', () => {
     for (let index = 0; index < categories.length; index += 1) {
       const handle = makeHandle(true, false);

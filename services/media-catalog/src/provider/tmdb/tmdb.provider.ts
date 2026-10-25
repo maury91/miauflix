@@ -6,7 +6,9 @@ import type {
   ProviderChangesPage,
   ProviderEpisode,
   ProviderGenre,
+  ProviderGenreFilter,
   ProviderMovie,
+  ProviderSearchPage,
   ProviderSeason,
   ProviderTVShow,
 } from '../provider';
@@ -88,6 +90,37 @@ export class TmdbProvider implements CatalogProvider {
       airDate: data.air_date,
       poster: data.poster_path ?? '',
       episodes,
+    };
+  }
+
+  search(query: string, page: number, language: string): Promise<ProviderSearchPage> {
+    return this.client.searchMulti(query, page, language);
+  }
+
+  async discover(
+    filter: ProviderGenreFilter,
+    page: number,
+    language: string
+  ): Promise<ProviderSearchPage> {
+    const empty: ProviderSearchPage = { page, totalPages: 0, totalResults: 0, results: [] };
+    const fetchKind = (mediaType: 'movie' | 'tv', genreIds: readonly number[]) =>
+      genreIds.length
+        ? this.client.discover(
+            mediaType,
+            { genreIds, originalLanguage: filter.originalLanguage },
+            page,
+            language
+          )
+        : Promise.resolve(empty);
+    const [movies, shows] = await Promise.all([
+      fetchKind('movie', filter.movieGenreIds),
+      fetchKind('tv', filter.tvGenreIds),
+    ]);
+    return {
+      page,
+      totalPages: Math.max(movies.totalPages, shows.totalPages),
+      totalResults: movies.totalResults + shows.totalResults,
+      results: [...movies.results, ...shows.results].sort((a, b) => b.popularity - a.popularity),
     };
   }
 

@@ -9,11 +9,15 @@ import {
   backdropFocusResponseSchema,
   batchRequestSchema,
   batchResponseSchema,
+  discoverRequestSchema,
   externalMediaResolveRequestSchema,
   externalMediaResolveResponseSchema,
   localizedGenreSchema,
   movieDetailSchema,
   okResponseSchema,
+  SEARCH_GENRES,
+  searchQueryRequestSchema,
+  searchResponseSchema,
   seasonDetailSchema,
   tvShowDetailSchema,
   watchingRequestSchema,
@@ -159,6 +163,24 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
       }))
     );
     return json(externalMediaResolveResponseSchema.parse({ items }));
+  });
+
+  router.add('GET', `${BASE_PATH}/search`, async ({ url, json }) => {
+    const { query, page, language } = searchQueryRequestSchema.parse(
+      Object.fromEntries(url.searchParams)
+    );
+    const catalog = dataPlane();
+    return json(searchResponseSchema.parse(await catalog.search(query, page, language)));
+  });
+
+  router.add('GET', `${BASE_PATH}/discover`, async ({ url, json }) => {
+    const { genre, page, language } = discoverRequestSchema.parse(
+      Object.fromEntries(url.searchParams)
+    );
+    const catalog = dataPlane();
+    return json(
+      searchResponseSchema.parse(await catalog.discover(SEARCH_GENRES[genre], page, language))
+    );
   });
 
   router.add('GET', `${BASE_PATH}/genres`, async ({ url, json }) => {
