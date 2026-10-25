@@ -4,7 +4,7 @@ import { In, LessThan, type Repository } from 'typeorm';
 import type { Database } from '@database/database';
 import { ContentSource, QUALITIES } from '@entities/content-source.entity';
 import { MovieSource } from '@entities/movie-source.entity';
-import { calculateStreamingScore, type StreamingScoreInput } from '@utils/streaming-score.util';
+import { calculateStreamingScore } from '@utils/streaming-score.util';
 
 const THREED_QUALITY_INDEX = QUALITIES.indexOf('3D');
 
@@ -30,6 +30,16 @@ const PROVIDER_FIELDS = [
   'sourceType',
   'sourceUploadedAt',
 ] as const satisfies ReadonlyArray<keyof ContentSource>;
+
+/** Columns the streaming score is computed from. */
+const SCORE_FIELDS: Array<keyof ContentSource> = [
+  'id',
+  'broadcasters',
+  'watchers',
+  'quality',
+  'videoCodec',
+  'sourceUploadedAt',
+];
 
 export type ContentSourceInput = Partial<ContentSource> & Pick<ContentSource, 'hash'>;
 
@@ -74,14 +84,19 @@ export class ContentSourceRepository {
         .orIgnore()
         .execute()
     );
-    // The `ih` transformer normalizes the hash, so any casing finds the canonical row.
-    const existing = await this.repository.findOne({ where: { hash: source.hash } });
-    if (!existing) throw new Error('Content source could not be stored');
-    const changes = this.providerMetadataChanges(existing, source);
-    if (!changes) return existing;
-    changes.streamingScore = calculateStreamingScore({ ...existing, ...changes });
-    await this.repository.update(existing.id, changes);
-    return Object.assign(existing, changes);
+    // Read, score and write in one transaction so a concurrent stats update can't interleave
+    // and leave a score computed from stale counts.
+    return this.db.transaction(async manager => {
+      const repository = manager.getRepository(ContentSource);
+      // The `ih` transformer normalizes the hash, so any casing finds the canonical row.
+      const existing = await repository.findOne({ where: { hash: source.hash } });
+      if (!existing) throw new Error('Content source could not be stored');
+      const changes = this.providerMetadataChanges(existing, source);
+      if (!changes) return existing;
+      changes.streamingScore = calculateStreamingScore({ ...existing, ...changes });
+      await repository.update(existing.id, changes);
+      return Object.assign(existing, changes);
+    });
   }
 
   /** Upsert provider sources and link each one to the movie. */
@@ -165,19 +180,31 @@ export class ContentSourceRepository {
     });
   }
 
-  /** Store fresh seed/peer counts and the streaming score they produce. */
+  /**
+   * Store fresh seed/peer counts and the streaming score they produce. The score is computed
+   * from the row as stored inside the transaction, so provider metadata refreshed since the
+   * caller read the source is not overwritten with a stale score.
+   */
   updateStats(
-    source: Omit<StreamingScoreInput, 'broadcasters' | 'watchers'> & Pick<ContentSource, 'id'>,
+    source: Pick<ContentSource, 'id'>,
     broadcasters: number,
     watchers: number,
     nextStatsCheckAt: Date
   ) {
-    return this.repository.update(source.id, {
-      broadcasters,
-      watchers,
-      streamingScore: calculateStreamingScore({ ...source, broadcasters, watchers }),
-      lastStatsCheck: new Date(),
-      nextStatsCheckAt,
+    return this.db.transaction(async manager => {
+      const repository = manager.getRepository(ContentSource);
+      const current = await repository.findOne({
+        select: SCORE_FIELDS,
+        where: { id: source.id },
+      });
+      if (!current) return;
+      await repository.update(source.id, {
+        broadcasters,
+        watchers,
+        streamingScore: calculateStreamingScore({ ...current, broadcasters, watchers }),
+        lastStatsCheck: new Date(),
+        nextStatsCheckAt,
+      });
     });
   }
 
@@ -320,23 +347,27 @@ LIMIT ?
    * wired in); later stats checks keep them current.
    */
   async backfillStreamingScores(batchSize = 500): Promise<number> {
-    let updated = 0;
-    for (;;) {
-      const sources = await this.repository.find({
-        select: ['id', 'broadcasters', 'watchers', 'quality', 'videoCodec', 'sourceUploadedAt'],
-        where: { streamingScore: 0 },
-        order: { id: 'ASC' },
-        take: batchSize,
-      });
-      const scored = sources
-        .map(source => ({ id: source.id, streamingScore: calculateStreamingScore(source) }))
-        .filter(source => source.streamingScore > 0);
-      for (const { id, streamingScore } of scored) {
-        await this.repository.update(id, { streamingScore });
+    // One transaction: a commit per row would make startup crawl on a large library.
+    return this.db.transaction(async manager => {
+      const repository = manager.getRepository(ContentSource);
+      let updated = 0;
+      for (;;) {
+        const sources = await repository.find({
+          select: SCORE_FIELDS,
+          where: { streamingScore: 0 },
+          order: { id: 'ASC' },
+          take: batchSize,
+        });
+        const scored = sources
+          .map(source => ({ id: source.id, streamingScore: calculateStreamingScore(source) }))
+          .filter(source => source.streamingScore > 0);
+        for (const { id, streamingScore } of scored) {
+          await repository.update(id, { streamingScore });
+        }
+        updated += scored.length;
+        // Rows that still score 0 (no seeds, unknown everything) would be fetched forever.
+        if (sources.length < batchSize || scored.length === 0) return updated;
       }
-      updated += scored.length;
-      // Rows that still score 0 (no seeds, unknown everything) would be fetched forever.
-      if (sources.length < batchSize || scored.length === 0) return updated;
-    }
+    });
   }
 }

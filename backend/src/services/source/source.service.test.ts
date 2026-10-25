@@ -162,7 +162,7 @@ describe('SourceService', () => {
       mockContentSource2,
     ]);
     mockContentSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValue([]);
-    mockContentSourceRepository.updateStats.mockResolvedValue({} as UpdateResult);
+    mockContentSourceRepository.updateStats.mockResolvedValue(undefined);
     mockContentSourceRepository.getNextSourcesToProcess.mockResolvedValue([]);
     mockContentSourceRepository.updateSourceFile.mockResolvedValue({} as UpdateResult);
     mockContentSourceRepository.updateSourceMetadata.mockResolvedValue({} as UpdateResult);

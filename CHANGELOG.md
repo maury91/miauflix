@@ -4,7 +4,7 @@
 
 ### Bug fix
 
-- Sources are ranked by their streaming score again: it was never calculated (every source scored 0), so playback could pick a weakly seeded 25 GB 4K release over a well-seeded 1080p one. Scores are now computed when a source is stored, when its provider details change and on every seed/peer update, and existing sources are scored once by the first data migration
+- Sources are ranked by their streaming score again: it was never calculated (every source scored 0), so playback could pick a weakly seeded 25 GB 4K release over a well-seeded 1080p one. Scores are now computed when a source is stored, when its provider details change and on every seed/peer update, and existing sources are scored once by the first data migration (in a single transaction). Each score is computed from the stored row inside the same transaction as its write, so a stats check and a provider refresh running together can't leave a stale score
 - The realtime connection (live playback updates, notifications, search) works behind HTTPS: `docker-compose.https.yml` sets `CORS_ORIGIN` to the domain, since the default only allows `localhost`
 - HTTPS and the VPN can be combined: the `Caddyfile` forwards to `MIAUFLIX_UPSTREAM` (`vpn:3000` with `docker-compose.vpn.yml`)
 - The player no longer shows a blue rectangle when its controls overlay takes focus; the volume slider uses the same white focus ring as the buttons
@@ -16,7 +16,7 @@
 ### Documentation
 
 - `docs/ai/gotchas.md` explains how to add a data migration
-- HTTPS setup: raise the kernel's UDP buffer limits for Caddy's HTTP/3, open 443/UDP, and combine HTTPS with the VPN
+- HTTPS setup: raise the kernel's UDP buffer limits for Caddy's HTTP/3, open 443/UDP, and combine HTTPS with the VPN (the VPN steps keep the HTTPS file); `COMPOSE_FILE` uses `;` on Windows
 - The quick start uses the `latest` release images; image tag documentation covers releases
 
 ## 2026-10-25 v0.0.1 Smoother streaming and version display

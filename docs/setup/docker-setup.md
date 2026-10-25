@@ -71,7 +71,7 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
    REVERSE_PROXY_SECRET=<output of: openssl rand -hex 32>
    ```
 
-   `COMPOSE_FILE` lets plain `docker compose` commands use both files. `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files and point Caddy at the VPN container, which owns Miauflix's network:
+   `COMPOSE_FILE` lets plain `docker compose` commands use both files (on Windows, separate them with `;` instead of `:`). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files and point Caddy at the VPN container, which owns Miauflix's network:
 
    ```bash
    COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml:docker-compose.https.yml
@@ -118,12 +118,14 @@ Miauflix finds and streams content over BitTorrent, so every peer sees the IP ad
    bash nordvpn-key.sh
    ```
 
-4. Add these lines to the same `.env` file, so plain `docker compose` commands use both files:
+4. Add these lines to the same `.env` file, so plain `docker compose` commands use both files (on Windows, separate them with `;` instead of `:`):
 
    ```bash
    COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml
    NORDVPN_COUNTRIES=Netherlands # optional, comma-separated list of countries to connect to
    ```
+
+   If you [set up HTTPS](#https-with-a-domain), keep all three files and `MIAUFLIX_UPSTREAM=vpn:3000` from that section instead, or Caddy drops out of your `docker compose` commands.
 
 5. Start it:
 
