@@ -1,6 +1,10 @@
 # SSL Certificates Setup Guide
 
-This guide explains how to set up HTTPS for your Miauflix deployment. Two options are available:
+This guide explains how to set up HTTPS for your Miauflix deployment.
+
+> **Using the prebuilt images?** Add `docker-compose.https.yml` and the `Caddyfile` instead: Caddy obtains and renews Let's Encrypt certificates on its own, with no scripts to run. See [HTTPS with a domain](docker-setup.md#https-with-a-domain).
+
+When building from source with the bundled Nginx, two options are available:
 
 1. **Let's Encrypt certificates** - Free, automated certificates (recommended for production)
 2. **Self-signed certificates** - For development and testing environments

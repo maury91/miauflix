@@ -1,0 +1,34 @@
+# HTTPS for the prebuilt-image quick start: Caddy gets a Let's Encrypt certificate for your domain.
+# Usage: put these in a .env file next to the compose files, then run docker compose up -d
+#   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.https.yml
+#   MIAUFLIX_DOMAIN=miauflix.example.com
+#   REVERSE_PROXY_SECRET=<a long random string, e.g. from openssl rand -hex 32>
+# Guide: docs/setup/docker-setup.md#https-with-a-domain
+
+services:
+  caddy:
+    image: caddy:2
+    ports:
+      - '80:80'
+      - '443:443'
+      - '443:443/udp'
+    environment:
+      MIAUFLIX_DOMAIN: ${MIAUFLIX_DOMAIN:?Set MIAUFLIX_DOMAIN in .env}
+      REVERSE_PROXY_SECRET: ${REVERSE_PROXY_SECRET:?Set REVERSE_PROXY_SECRET in .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - miauflix
+    restart: unless-stopped
+
+  miauflix:
+    environment:
+      ALLOW_CREATE_ADMIN_ON_FIRST_RUN: 'false'
+      COOKIE_SECURE: 'true'
+      REVERSE_PROXY_SECRET: ${REVERSE_PROXY_SECRET:?Set REVERSE_PROXY_SECRET in .env}
+
+volumes:
+  caddy_data:
+  caddy_config:
