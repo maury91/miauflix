@@ -54,7 +54,7 @@
         "!src/{__test-utils__,__mocks__}/**"
       ],
       "outputs": ["../dist/frontend/**", "../dist/frontend-ssr/**"],
-      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"],
+      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN", "MIAUFLIX_COMMIT"],
       "cache": true
     },
     "@miauflix/frontend#check:ts": {

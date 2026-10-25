@@ -1,5 +1,74 @@
 # Miauflix Changelog
 
+## 2026-10-25 Smoother streaming and version display
+
+### Features
+
+- The final user can see the running Miauflix version in the bottom right corner of every screen except Home, Details and Player
+
+### Bug fix
+
+- Playback no longer buffers on high-bitrate sources: a viewer's stream keeps the next 90 seconds of video (32 MB to 512 MB, sized by the file's bitrate) requested from every peer, instead of two pieces at a time
+- Streams decrypt each stored piece once instead of once per 256 KB chunk, which cut the backend's CPU use while streaming and the speed limit it put on already-downloaded data
+
+## 2026-10-25 VPN with gluetun
+
+### Features
+
+- The VPN container is now gluetun (NordVPN over WireGuard, P2P servers), whose firewall acts as a kill switch; it replaces the unmaintained nordlynx image
+- `docker-compose.vpn.yml` routes the quick start through the VPN, and `scripts/nordvpn-key.sh` turns a NordVPN access token into the WireGuard key without printing either
+
+### Bug fix
+
+- The quick start no longer disables the VPN check by default
+
+## 2026-10-25 Quick start deployment fixes
+
+### Features
+
+- `docker-compose.https.yml` and a `Caddyfile` put the prebuilt images behind HTTPS with automatic certificates
+
+### Bug fix
+
+- The services container no longer crash-loops after a restart (`mkfifo: File exists`)
+- The quick start uses the published `edge` images until the first release
+- Documentation fixes for the initial user logs and the first-boot "degraded mode" message
+
+## 2026-10-25 Search
+
+### Features
+
+- The final user can search titles with an on-screen keyboard, browse popular genres (with an Anime shortcut) and revisit or remove recent searches
+- The final user can open search with the remote's Search key or from the home sidebar
+
+### Improvements
+
+- Navigation and focus across search, title details and settings
+- Title metadata formatting, including movie runtimes
+
+## 2026-10-24 Frontend refactoring
+
+### Features
+
+- Home combines fixed and popular categories in a paginated feed, with Continue Watching when there is progress
+- Show details list seasons and episodes with viewing progress, loading states and retries
+- The opening animation pulses the logo and respects reduced-motion preferences
+
+### Improvements
+
+- Home rows load progressively, with smoother scrolling and image preloading
+- Community lists work even when their owner's profile is private
+
+## 2026-10-24 TV Show discovery
+
+### Features
+
+- The final user can watch TV episodes, including multi-episode releases, with per-file downloads
+- Episodes of watchlisted shows are acquired automatically, the next episode is prefetched and the player counts down to it
+- A notifications menu shows available episodes and movie quality upgrades
+- Episode-aware subtitles and audio, with subtitle language preferences
+- Standalone Docker setup with published images and optional VPN routing
+
 ## 2026-10-11 Separate data and UI layers in frontend
 
 ### Bug fix

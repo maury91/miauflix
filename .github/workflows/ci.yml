@@ -265,6 +265,9 @@ jobs:
           file: ${{ matrix.file }}
           target: ${{ matrix.target }}
           platforms: ${{ matrix.platform }}
+          # Shown in the app next to the version (only the miauflix image uses it).
+          build-args: |
+            MIAUFLIX_COMMIT=${{ github.sha }}
           labels: |
             org.opencontainers.image.source=https://github.com/${{ github.repository }}
           cache-from: type=gha,scope=publish-${{ matrix.image }}-${{ matrix.arch }}

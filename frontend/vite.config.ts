@@ -3,6 +3,7 @@
 // import { AssetGlob } from '@nx/js/src/utils/assets/assets';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
+import { execFileSync } from 'child_process';
 import { existsSync, readFileSync } from 'fs';
 import path from 'path';
 // Phase 0 Bootstrap: Comment out NX-specific imports for now
@@ -72,6 +73,29 @@ function proxyCookieRewriteConfigure(
   });
 }
 
+/**
+ * The version shown in the app: the root package version plus the short commit. Image builds
+ * pass MIAUFLIX_COMMIT (the Docker context has no .git); local builds ask git.
+ */
+function appVersion(): string {
+  const rootPackage = JSON.parse(
+    readFileSync(path.resolve(__dirname, '../package.json'), 'utf8')
+  ) as { version: string };
+  let commit = process.env.MIAUFLIX_COMMIT ?? '';
+  if (!commit) {
+    try {
+      commit = execFileSync('git', ['rev-parse', 'HEAD'], {
+        cwd: __dirname,
+        encoding: 'utf8',
+        stdio: ['ignore', 'pipe', 'ignore'],
+      }).trim();
+    } catch {
+      // No git (or not a checkout): the package version alone.
+    }
+  }
+  return commit ? `${rootPackage.version} (${commit.slice(0, 7)})` : rootPackage.version;
+}
+
 const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 const devCertificateRootOverride = process.env.MIAUFLIX_DEV_CERT_DIR;
@@ -124,6 +148,7 @@ export default defineConfig({
         : undefined,
   },
   define: {
+    'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion()),
     // Build-time configuration for access token storage
     __ACCESS_TOKEN_STORAGE_MODE__: JSON.stringify(
       process.env.TOKEN_STORAGE_MODE === 'session' ? 'session' : 'memory'

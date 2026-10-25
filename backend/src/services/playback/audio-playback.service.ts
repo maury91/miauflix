@@ -562,7 +562,10 @@ export class AudioPlaybackService {
       if (this.closed || this.jobs.size > 2 || this.processes.size >= 4) {
         throw new AudioPlaybackError('Audio conversion is busy. Retry shortly.');
       }
-      input = await openTorrentInput(this.downloadService, target);
+      input = await openTorrentInput(this.downloadService, {
+        ...target,
+        durationSeconds: delivery.durationSeconds,
+      });
       if (controller.signal.aborted)
         throw new AudioPlaybackError('Audio preparation was cancelled.');
       const spawnStartedAt = performance.now();
