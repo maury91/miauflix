@@ -50,6 +50,7 @@
         "build-ssr.ts",
         "tsconfig*.json",
         "package.json",
+        "$TURBO_ROOT$/package.json",
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],
