@@ -95,6 +95,48 @@ export class LocalizationRepository {
     });
   }
 
+  /**
+   * Every genre with its name in `language` (falling back to `defaultLanguage`, then any name),
+   * how many catalog titles carry it, and the media types those titles are. Most titles first.
+   */
+  rankedGenres(
+    language: string,
+    defaultLanguage: string
+  ): Array<{ id: number; name: string; titles: number; mediaTypes: Array<'movie' | 'tv'> }> {
+    const rows = this.db
+      .select({
+        id: genres.id,
+        name: sql<string>`coalesce((select t.title from translations t where t.entity_type = 'genre' and t.entity_id = ${genres.id} and t.language = ${language}), (select t.title from translations t where t.entity_type = 'genre' and t.entity_id = ${genres.id} and t.language = ${defaultLanguage}), (select t.title from translations t where t.entity_type = 'genre' and t.entity_id = ${genres.id} limit 1), '')`,
+        titles: sql<number>`count(${mediaGenres.mediaId})`,
+        mediaTypes: sql<string | null>`group_concat(distinct ${mediaGenres.mediaType})`,
+      })
+      .from(genres)
+      .leftJoin(mediaGenres, eq(mediaGenres.genreId, genres.id))
+      .groupBy(genres.id)
+      .all();
+    return rows
+      .map(row => ({
+        id: row.id,
+        name: row.name || `Genre ${row.id}`,
+        titles: row.titles,
+        mediaTypes: (row.mediaTypes?.split(',') ?? []).filter(
+          (type): type is 'movie' | 'tv' => type === 'movie' || type === 'tv'
+        ),
+      }))
+      .sort((a, b) => b.titles - a.titles || a.name.localeCompare(b.name));
+  }
+
+  /** Media types of the catalog titles carrying the genre; empty when none do yet. */
+  genreMediaTypes(genreId: number): Array<'movie' | 'tv'> {
+    return this.db
+      .selectDistinct({ mediaType: mediaGenres.mediaType })
+      .from(mediaGenres)
+      .where(eq(mediaGenres.genreId, genreId))
+      .all()
+      .map(row => row.mediaType)
+      .filter((type): type is 'movie' | 'tv' => type === 'movie' || type === 'tv');
+  }
+
   getTranslations(entityType: 'movie' | 'tv', entityId: number): TranslationRow[] {
     return this.db
       .select({

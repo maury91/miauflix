@@ -64,6 +64,15 @@ describe('hero backdrop framing', () => {
     expect(screenX / 3840).toBeCloseTo(0.665875);
   });
 
+  it('starts from a supplied left edge so the hero can line up with the rows', () => {
+    const layout = getHeroBackdropLayout(1920, 167)!;
+    const detailsWidth = Math.min(1920 * 0.44, 720);
+    expect(layout.left).toBeCloseTo(167 + (detailsWidth * 25) / 44);
+    const screenX = layout.left + layout.width * layout.targetX;
+    const textRight = 167 + detailsWidth;
+    expect(screenX).toBeCloseTo(textRight + (1920 - textRight) * 0.55);
+  });
+
   it('bounds zoom and keeps finite placement for an edge focus', () => {
     const result = renderedFocus(1920, 1080, { x: 0, y: 1 });
     expect(Number.isFinite(result.x)).toBe(true);

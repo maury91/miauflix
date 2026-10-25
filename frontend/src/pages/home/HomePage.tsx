@@ -5,7 +5,7 @@ import { PALETTE } from '@shared/config/constants';
 import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
-import { type FC, useCallback, useMemo, useState } from 'react';
+import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -34,8 +34,10 @@ import { homeMountedRows, homeRowLoadState } from './home-layout';
 import { getMediaTitle } from './media.utils';
 import { subtitleLanguageForMedia } from './subtitle-language';
 
+// Absolute, not fixed: a fixed element is its own stacking context, which would keep the rail
+// below the app logo. Nothing above Home scrolls, so both fill the viewport.
 const PageContainer = styled.main`
-  position: fixed;
+  position: absolute;
   inset: 0;
   overflow: hidden;
   background: #000;
@@ -111,6 +113,13 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     userId: currentUser?.id,
   });
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth, rowHeight } = useMediaBoxSizes();
+  // The hero and the fixed app logo line up with the rows' left edge.
+  useEffect(() => {
+    document.body.style.setProperty('--home-content-left', `${margin}px`);
+    return () => {
+      document.body.style.removeProperty('--home-content-left');
+    };
+  }, [margin]);
   // Rows are a fixed height, so the first row in view follows from the scroll position alone.
   const [firstShownRow, setFirstShownRow] = useState(activeCategory);
   const feed = useHomeFeed({
@@ -271,6 +280,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
               onAction={navigation.onSidebarAction}
               onHover={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
               onSettings={navigation.openSettings}
+              onSearch={navigation.openSearch}
               onNotifications={notifications.openNotifications}
               notificationsRef={notifications.buttonRef}
               unreadCount={notifications.query.data?.unreadCount ?? 0}

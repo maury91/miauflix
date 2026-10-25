@@ -746,12 +746,12 @@ describe('HomePage focus transitions', () => {
     const sidebar = screen.getByRole('complementary', { name: 'Home navigation' });
     for (let visit = 0; visit < 2; visit += 1) {
       fireEvent.mouseEnter(sidebar);
-      expect(screen.getByText('Home', { selector: 'span' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Home' })).toHaveFocus();
+      expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
       expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'false');
 
       fireEvent.mouseLeave(sidebar);
-      expect(screen.queryByText('Home', { selector: 'span' })).not.toBeInTheDocument();
+      expect(screen.queryByText('Search', { selector: 'span' })).not.toBeInTheDocument();
       expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'true');
       expect(row.focusIndex).toHaveBeenLastCalledWith(4);
     }
@@ -764,11 +764,11 @@ describe('HomePage focus transitions', () => {
     render(<HomePage />);
 
     fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowLeft' });
-    const home = screen.getByRole('button', { name: 'Home' });
-    expect(home).toHaveFocus();
-    expect(screen.getByText('Home', { selector: 'span' })).toBeInTheDocument();
-    fireEvent.keyDown(home, { key: 'Escape' });
-    expect(screen.queryByText('Home', { selector: 'span' })).not.toBeInTheDocument();
+    const search = screen.getByRole('button', { name: 'Search' });
+    expect(search).toHaveFocus();
+    expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
+    fireEvent.keyDown(search, { key: 'Escape' });
+    expect(screen.queryByText('Search', { selector: 'span' })).not.toBeInTheDocument();
     expect(row.focusIndex).toHaveBeenCalledWith(0);
   });
 
@@ -986,6 +986,35 @@ describe('HomePage focus transitions', () => {
 
     await waitFor(() => expect(first.focusIndex).toHaveBeenCalledWith(4));
     expect(screen.queryByTestId('details')).not.toBeInTheDocument();
+  });
+
+  it('focuses the selected card once the categories finish loading', () => {
+    // Returning from another page after the list cache expired: Home first shows its spinner.
+    useGetListsInfiniteQuery.mockReturnValue({
+      data: undefined,
+      fetchNextPage: vi.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: true,
+      isError: false,
+    });
+    const first = makeHandle(true, false);
+    rowHandles.set(0, first);
+    const { rerender } = render(<HomePage />);
+    expect(screen.queryByTestId('card-0')).not.toBeInTheDocument();
+    expect(first.focusIndex).not.toHaveBeenCalled();
+
+    useGetListsInfiniteQuery.mockReturnValue({
+      data: { pages: [{ results: categories, totalPages: 1 }] },
+      fetchNextPage: vi.fn(),
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      isLoading: false,
+      isError: false,
+    });
+    rerender(<HomePage />);
+
+    expect(first.focusIndex).toHaveBeenCalledWith(0);
   });
 
   it('makes the newly reached rows visible after four ArrowDown transitions', () => {

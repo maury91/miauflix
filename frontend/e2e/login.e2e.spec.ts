@@ -17,8 +17,30 @@ test.describe('Login flow', () => {
     await expect(page.getByRole('button', { name: 'Continue' })).toBeDisabled();
   });
 
-  test('should display complete login page and take screenshot', async ({ page }) => {
+  test('should display complete login page and take screenshot', async ({ page, isMobile }) => {
+    // QR content and the countdown are generated per login request, so serve a fixed QR
+    // request and freeze the clock to keep the screenshot stable. An absolute approval URL
+    // keeps the QR independent of the origin the backend runs on.
+    const now = new Date('2026-01-01T12:00:00.000Z');
+    await page.clock.setFixedTime(now);
+    await page.route('**/api/auth/qr', route =>
+      route.fulfill({
+        json: {
+          requestId: 'readme-qr-request',
+          claimToken: 'readme-qr-claim',
+          approvalPath: 'https://miauflix.example/auth/qr/readme-qr-approval',
+          expiresAt: new Date(now.getTime() + 4 * 60_000 + 32_000).toISOString(),
+          pollInterval: 5,
+        },
+      })
+    );
+    await page.route('**/api/auth/qr/*/claim', route =>
+      route.fulfill({ status: 202, json: { state: 'pending' } })
+    );
     await page.emulateMedia({ reducedMotion: 'reduce' });
+    await navigateToLogin(page);
+    // Phones hide the QR section, so only wait for the countdown where it is shown.
+    if (!isMobile) await expect(page.getByText('Expires in')).toBeVisible();
 
     // The login page fades in via a framer-motion opacity animation (JS-driven, not a
     // CSS transition/animation), so Playwright's `animations: 'disabled'` option cannot
@@ -34,12 +56,9 @@ test.describe('Login flow', () => {
       return true;
     });
 
-    const qrStatus = page.getByText(/Expires in|Code expired/).locator('..');
     await expect(page).toHaveScreenshot('login-page-complete.png', {
       fullPage: true,
       animations: 'disabled',
-      // QR content and the countdown are generated per login request.
-      mask: [page.getByLabel('Login QR code'), qrStatus],
     });
 
     const title = await page.title();

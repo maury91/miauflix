@@ -9,11 +9,15 @@ import {
   backdropFocusResponseSchema,
   batchRequestSchema,
   batchResponseSchema,
+  discoverRequestSchema,
   externalMediaResolveRequestSchema,
   externalMediaResolveResponseSchema,
   localizedGenreSchema,
   movieDetailSchema,
   okResponseSchema,
+  searchGenresResponseSchema,
+  searchQueryRequestSchema,
+  searchResponseSchema,
   seasonDetailSchema,
   tvShowDetailSchema,
   watchingRequestSchema,
@@ -159,6 +163,29 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
       }))
     );
     return json(externalMediaResolveResponseSchema.parse({ items }));
+  });
+
+  router.add('GET', `${BASE_PATH}/search`, async ({ url, json }) => {
+    const { query, page, language } = searchQueryRequestSchema.parse(
+      Object.fromEntries(url.searchParams)
+    );
+    const catalog = dataPlane();
+    return json(searchResponseSchema.parse(await catalog.search(query, page, language)));
+  });
+
+  router.add('GET', `${BASE_PATH}/discover`, async ({ url, json }) => {
+    const { genre, page, language } = discoverRequestSchema.parse(
+      Object.fromEntries(url.searchParams)
+    );
+    const catalog = dataPlane();
+    return json(searchResponseSchema.parse(await catalog.discover(genre, page, language)));
+  });
+
+  router.add('GET', `${BASE_PATH}/search/genres`, async ({ url, json }) => {
+    const catalog = dataPlane();
+    return json(
+      searchGenresResponseSchema.parse({ genres: await catalog.searchGenres(parseLanguage(url)) })
+    );
   });
 
   router.add('GET', `${BASE_PATH}/genres`, async ({ url, json }) => {

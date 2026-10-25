@@ -24,6 +24,7 @@ import { Notification } from '@entities/notification.entity';
 import { PlaybackGrant } from '@entities/playback-grant.entity';
 import { Progress } from '@entities/progress.entity';
 import { QrLoginRequest } from '@entities/qr-login-request.entity';
+import { RecentSearch } from '@entities/recent-search.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { Season } from '@entities/season.entity';
 import { Storage } from '@entities/storage.entity';
@@ -172,6 +173,7 @@ export class Database {
         Progress,
         PlaybackGrant,
         MediaProbe,
+        RecentSearch,
       ],
       synchronize: false,
       logger: new DatabaseLogger('all'),

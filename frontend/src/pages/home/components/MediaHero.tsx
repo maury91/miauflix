@@ -23,8 +23,10 @@ import {
   HERO_DETAILS_LEFT_CSS,
   HERO_DETAILS_WIDTH_CSS,
 } from '../hero-backdrop-layout';
+import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
 import { imagePreloader, URGENT } from '../image-preloader';
-import { artworkUrl, getMediaTitle } from '../media.utils';
+import { artworkUrl, formatRuntime, getMediaTitle } from '../media.utils';
+import { MetadataDot, MetadataRating } from './metadata.styles';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
 import StarIcon from '~icons/mdi/star';
@@ -139,18 +141,11 @@ const Metadata = styled.div`
   font-size: clamp(0.85rem, 2.1vh, 1.2rem);
   font-weight: 500;
   display: flex;
-  column-gap: 12px;
-  justify-content: space-between;
   align-items: center;
-  span {
-    display: flex;
-    align-items: center;
-    gap: 0.25em;
-    svg {
-      width: 1em;
-      height: 1em;
-    }
-  }
+`;
+
+const BadgeGap = styled.span`
+  width: 0.9em;
 `;
 
 const MetadataRow = styled.div`
@@ -167,11 +162,6 @@ const MetadataRow = styled.div`
 
 const MetadataBlock = styled.div`
   min-width: 0;
-`;
-
-const MetadataSeparator = styled.span`
-  border-right: 1px solid ${PALETTE.text.primary};
-  height: 1.2em;
 `;
 
 const Overview = styled.p`
@@ -206,6 +196,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
     artwork && artwork.artworkRevision >= (media?.artworkRevision ?? 0) ? artwork : media;
   const selectedBackdrop = selectedArtwork?.backdrop;
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
+  const { margin } = useMediaBoxSizes();
   const heroRef = useRef<HTMLElement>(null);
   const [heroSize, setHeroSize] = useState({ width: 0, height: 0 });
   const [layers, setLayersState] = useState<StackedBackdrop<BackdropLayerState>[]>([]);
@@ -334,7 +325,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
     media?.mediaId,
   ]);
 
-  const layout = getHeroBackdropLayout(heroSize.width);
+  const layout = getHeroBackdropLayout(heroSize.width, margin);
   const placementFor = (layer: BackdropLayerState) => {
     const context: BackdropPositionContext = {
       imageWidth: layer.imageWidth,
@@ -352,7 +343,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   if (!media) return <Hero ref={heroRef} aria-hidden="true" />;
   const date = media._type === 'movie' ? media.releaseDate : media.firstAirDate;
   const metadata = [
-    media._type === 'movie' && media.runtime ? `${media.runtime} min` : '',
+    media._type === 'movie' && media.runtime ? formatRuntime(media.runtime) : '',
     date?.slice(0, 4),
   ].filter(Boolean);
   const rating = media.rating ? media.rating.toFixed(1) : null;
@@ -388,19 +379,20 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
             <Metadata>
               {metadata.map((text, index) => (
                 <Fragment key={index}>
+                  {index > 0 && <MetadataDot />}
                   <span>{text}</span>
-                  <MetadataSeparator />
                 </Fragment>
               ))}
               {rating && (
-                <Fragment>
-                  <span>
+                <>
+                  {metadata.length > 0 && <MetadataDot />}
+                  <MetadataRating>
                     <StarIcon aria-hidden="true" />
                     {rating}
-                  </span>
-                  <MetadataSeparator />
-                </Fragment>
+                  </MetadataRating>
+                </>
               )}
+              <BadgeGap />
               <SourcePreparationStatus
                 mediaKind={media._type}
                 mode="browse"

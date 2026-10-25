@@ -37,6 +37,18 @@ describe('Details navigation', () => {
     expect(document.activeElement).toBe(controls.ratings[0]);
   });
 
+  it('reaches the rail Back button by moving left from the leftmost controls', () => {
+    const controls = setupTest();
+    controls.primary[1].focus();
+    navigateDetails('left', controls);
+    expect(document.activeElement).toBe(controls.back);
+    controls.ratings[0].focus();
+    navigateDetails('left', controls);
+    expect(document.activeElement).toBe(controls.back);
+    navigateDetails('right', controls);
+    expect(document.activeElement).toBe(controls.ratings[0]);
+  });
+
   it('moves between seasons and episodes and keeps focus at list boundaries', () => {
     const controls = setupTest();
     controls.primary[0].focus();

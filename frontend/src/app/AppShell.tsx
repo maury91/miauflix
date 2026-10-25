@@ -1,6 +1,14 @@
 import { useAppState } from '@app/hooks/useAppState';
 import { useIntroController } from '@app/hooks/useIntroController';
-import { type AppRoute, navigate, navigateBack, useRoute, useRouteFocus } from '@app/router';
+import {
+  type AppRoute,
+  getRouteParent,
+  getRouteSnapshot,
+  navigate,
+  navigateBack,
+  useRoute,
+  useRouteFocus,
+} from '@app/router';
 import { resolveScreen } from '@app/screens';
 import { IntroAnimation } from '@app/shell/IntroAnimation';
 import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
@@ -8,10 +16,12 @@ import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
 import QrApprovalPage from '@pages/qr/QrApprovalPage';
+import SearchPage from '@pages/search/SearchPage';
 import SettingsPage from '@pages/settings/SettingsPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
+import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { Logo } from '@shared/ui/logo/Logo';
 import { useAppDispatch, useAppSelector } from '@store';
 import { dismissConfigWizard } from '@store/slices/appState';
@@ -64,6 +74,15 @@ export function AppShell() {
     dispatch(dismissConfigWizard());
   }, [dispatch]);
   const backTo = (parent: AppRoute) => () => navigateBack(parent);
+
+  // The remote's Search key opens search from anywhere once signed in.
+  useKeyboard({
+    enabled: appState === 'home',
+    onSearch: () => {
+      if (getRouteSnapshot().type !== 'search') navigate({ type: 'search' });
+      return true;
+    },
+  });
 
   useEffect(() => {
     if (appState === 'config_wizard' && isAuthenticated && isAdmin) {
@@ -129,9 +148,13 @@ export function AppShell() {
             canManageStorage={isAdmin}
             onStorage={() => navigate({ type: 'storage' })}
             initialFocus={settingsFocus}
-            onDismiss={backTo({ type: 'home' })}
+            onDismiss={backTo(
+              getRouteParent()?.type === 'search' ? { type: 'search' } : { type: 'home' }
+            )}
           />
         );
+      case 'search':
+        return <SearchPage key="search" onDismiss={backTo({ type: 'home' })} />;
       case 'redirect':
         return <Redirect key="redirect" to={screen.to} />;
       case 'notFound':

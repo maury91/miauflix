@@ -253,6 +253,108 @@ describe('TmdbClient', () => {
 
     expect(requests).toBe(2);
   });
+
+  it('searches movies and shows, drops people and completes image URLs', async () => {
+    const urls: string[] = [];
+    const cacheKeys: string[] = [];
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
+      const url = String(input);
+      urls.push(url);
+      if (url.endsWith('/configuration'))
+        return Response.json({ images: { secure_base_url: 'https://image.test/' } });
+      return Response.json({
+        page: 1,
+        total_pages: 2,
+        total_results: 24,
+        results: [
+          {
+            id: 438631,
+            media_type: 'movie',
+            title: 'Dune',
+            release_date: '2021-09-15',
+            poster_path: '/dune.jpg',
+            backdrop_path: null,
+            genre_ids: [878],
+            popularity: 90,
+            vote_average: 7.8,
+          },
+          { id: 1, media_type: 'person', name: 'Frank Herbert' },
+          {
+            id: 90228,
+            media_type: 'tv',
+            name: 'Dune: Prophecy',
+            first_air_date: '2024-11-17',
+            poster_path: '/prophecy.jpg',
+          },
+        ],
+      });
+    }) as unknown as typeof fetch;
+    const client = new TmdbClient(makeCache(cacheKeys), {
+      apiUrl: 'https://tmdb.example/3',
+      accessToken: 'token',
+    });
+
+    const page = await client.searchMulti('Dune', 1, 'en');
+
+    expect(urls[0]).toContain('/search/multi?query=Dune&page=1&language=en&include_adult=false');
+    expect(cacheKeys).toContain('tmdb:v1:search:multi:en:1:dune');
+    expect(page).toEqual({
+      page: 1,
+      totalPages: 2,
+      totalResults: 24,
+      results: [
+        {
+          mediaType: 'movie',
+          mediaId: 438631,
+          title: 'Dune',
+          overview: '',
+          poster: 'https://image.test/original/dune.jpg',
+          backdrop: '',
+          genreIds: [878],
+          releaseDate: '2021-09-15',
+          popularity: 90,
+          rating: 7.8,
+        },
+        {
+          mediaType: 'tv',
+          mediaId: 90228,
+          title: 'Dune: Prophecy',
+          overview: '',
+          poster: 'https://image.test/original/prophecy.jpg',
+          backdrop: '',
+          genreIds: [],
+          releaseDate: '2024-11-17',
+          popularity: 0,
+          rating: 0,
+        },
+      ],
+    });
+  });
+
+  it('discovers by genre with an optional original language', async () => {
+    const urls: string[] = [];
+    globalThis.fetch = (async (input: Parameters<typeof fetch>[0]) => {
+      const url = String(input);
+      urls.push(url);
+      if (url.endsWith('/configuration'))
+        return Response.json({ images: { secure_base_url: 'https://image.test/' } });
+      return Response.json({ page: 1, total_pages: 1, total_results: 0, results: [] });
+    }) as unknown as typeof fetch;
+    const client = new TmdbClient(makeCache([]), {
+      apiUrl: 'https://tmdb.example/3',
+      accessToken: 'token',
+    });
+
+    await client.discover('tv', { genreIds: [16], originalLanguage: 'ja' }, 2, 'it');
+
+    const url = new URL(urls[0]);
+    expect(url.pathname).toBe('/3/discover/tv');
+    expect(url.searchParams.get('with_genres')).toBe('16');
+    expect(url.searchParams.get('with_original_language')).toBe('ja');
+    expect(url.searchParams.get('sort_by')).toBe('popularity.desc');
+    expect(url.searchParams.get('page')).toBe('2');
+    expect(url.searchParams.get('language')).toBe('it');
+  });
 });
 
 describe('TmdbProvider', () => {
@@ -368,5 +470,42 @@ describe('TmdbProvider', () => {
     await expect(provider.seasonChanges(100)).resolves.toEqual([]);
     expect(requestedPages).toHaveLength(100);
     expect(requestedPages.at(-1)).toBe(100);
+  });
+  it('interleaves movie and tv discover pages by popularity and skips empty genre sides', async () => {
+    const summary = (mediaType: 'movie' | 'tv', mediaId: number, popularity: number) => ({
+      mediaType,
+      mediaId,
+      title: String(mediaId),
+      overview: '',
+      poster: '',
+      backdrop: '',
+      genreIds: [],
+      releaseDate: '',
+      popularity,
+      rating: 0,
+    });
+    const calls: string[] = [];
+    const discover = async (mediaType: 'movie' | 'tv') => {
+      calls.push(mediaType);
+      return mediaType === 'movie'
+        ? {
+            page: 1,
+            totalPages: 3,
+            totalResults: 50,
+            results: [summary('movie', 1, 5), summary('movie', 2, 1)],
+          }
+        : { page: 1, totalPages: 5, totalResults: 90, results: [summary('tv', 3, 3)] };
+    };
+    const provider = new TmdbProvider({ discover } as unknown as TmdbClient);
+
+    const page = await provider.discover({ movieGenreIds: [16], tvGenreIds: [16] }, 1, 'en');
+    expect(page.results.map(result => result.mediaId)).toEqual([1, 3, 2]);
+    expect(page.totalPages).toBe(5);
+    expect(page.totalResults).toBe(140);
+
+    calls.length = 0;
+    const moviesOnly = await provider.discover({ movieGenreIds: [27], tvGenreIds: [] }, 1, 'en');
+    expect(calls).toEqual(['movie']);
+    expect(moviesOnly.totalResults).toBe(50);
   });
 });

@@ -12,6 +12,8 @@ export type { MediaCardProps } from './media-card/MediaCard';
 export { MediaCard } from './media-card/MediaCard';
 export type { ModalProps } from './modal/Modal';
 export { Modal } from './modal/Modal';
+export type { PosterCardProps } from './poster-card/PosterCard';
+export { PosterCard } from './poster-card/PosterCard';
 export type { SpinnerProps } from './spinner/Spinner';
 export { Spinner } from './spinner/Spinner';
 export type { SwitchProps } from './switch/Switch';

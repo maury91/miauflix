@@ -134,6 +134,37 @@ export const mediaSummarySchema = z.object({
   popularity: z.number(),
   rating: z.number(),
 });
+/**
+ * A search genre: a catalog genre id ("28") or a curated shortcut that is not a genre of its own
+ * ("anime", until anime comes from MyAnimeList).
+ */
+export const searchGenreKeySchema = z.string().regex(/^(?:[1-9]\d{0,9}|anime)$/u);
+export const searchGenreSchema = z.object({
+  key: searchGenreKeySchema,
+  name: z.string(),
+  /** Catalog titles with this genre; shortcuts report 0. */
+  titles: z.number().int().nonnegative(),
+  shortcut: z.boolean(),
+});
+/** Every catalog genre, most titles first, followed by the shortcuts. */
+export const searchGenresResponseSchema = z.object({ genres: z.array(searchGenreSchema) });
+export const searchPageSchema = z.coerce.number().int().min(1).max(500).default(1);
+export const searchQueryRequestSchema = z.object({
+  query: z.string().trim().min(1).max(100),
+  page: searchPageSchema,
+  language: z.string().default('en'),
+});
+export const discoverRequestSchema = z.object({
+  genre: searchGenreKeySchema,
+  page: searchPageSchema,
+  language: z.string().default('en'),
+});
+export const searchResponseSchema = z.object({
+  results: z.array(mediaSummarySchema),
+  page: z.number().int().positive(),
+  totalPages: z.number().int().nonnegative(),
+  totalResults: z.number().int().nonnegative(),
+});
 export const externalMediaLookupSchema = z.object({
   mediaType: mediaTypeSchema,
   ids: z
@@ -201,6 +232,12 @@ export type TVShowDetail = z.infer<typeof tvShowDetailSchema>;
 export type EpisodeDetail = z.infer<typeof episodeDetailSchema>;
 export type SeasonDetail = z.infer<typeof seasonDetailSchema>;
 export type MediaSummary = z.infer<typeof mediaSummarySchema>;
+export type SearchGenreKey = z.infer<typeof searchGenreKeySchema>;
+export type SearchGenre = z.infer<typeof searchGenreSchema>;
+export type SearchGenresResponse = z.infer<typeof searchGenresResponseSchema>;
+export type SearchQueryRequest = z.infer<typeof searchQueryRequestSchema>;
+export type DiscoverRequest = z.infer<typeof discoverRequestSchema>;
+export type SearchResponse = z.infer<typeof searchResponseSchema>;
 export type ExternalMediaLookup = z.infer<typeof externalMediaLookupSchema>;
 export type ExternalMediaResolveRequest = z.infer<typeof externalMediaResolveRequestSchema>;
 export type ExternalMediaResolveResponse = z.infer<typeof externalMediaResolveResponseSchema>;

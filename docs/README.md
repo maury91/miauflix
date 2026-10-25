@@ -6,7 +6,9 @@ Welcome to the Miauflix documentation! This guide helps you find the right infor
 
 ### 🚀 Getting Started
 
+- **Just want to try it?** Use the [prebuilt images](setup/docker-setup.md#prebuilt-images)
 - **New to Miauflix?** Start with [Getting Started](setup/getting-started.md)
+- **Why it works the way it does?** Read the [Philosophy](philosophy.md)
 - **Docker deployment?** See [Docker Setup](setup/docker-setup.md)
 - **HTTPS configuration?** Check [SSL Certificates](setup/ssl-certificates.md)
 - **Cloudflare bypass?** See [FlareSolverr Configuration](setup/flaresolverr.md)

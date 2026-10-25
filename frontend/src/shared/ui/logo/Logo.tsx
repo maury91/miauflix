@@ -51,7 +51,7 @@ const LogoImage = styled.img<{
 
   transform: ${({ $home, $intro }) =>
     $home ? 'none' : $intro ? 'translate(-50%, -50%)' : 'translate(-50%, 0%)'};
-  left: ${({ $home }) => ($home ? '5vw' : '50%')};
+  left: ${({ $home }) => ($home ? 'var(--home-content-left, 5vw)' : '50%')};
 
   body[data-miauflix-details='true'] & {
     left: 8vw;
