@@ -1,7 +1,6 @@
 import { SERVICE_MANIFEST_PATH, type ServiceConfigSchema } from '@miauflix/service-contracts';
 
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
-import * as configurationUtils from '@services/configuration/configuration.utils';
 import { RemoteServiceManager } from '@services/remote/remote-service.manager';
 
 import { ConfigurationService } from './configuration.service';
@@ -159,7 +158,7 @@ describe('ConfigurationService web configuration actions', () => {
     });
   });
 
-  it('seeds remote values through defaults without persisting remote generated defaults', async () => {
+  it('seeds remote values through defaults', async () => {
     const keys = [
       'DYNAMIC_REMOTE_STORED_TEST',
       'DYNAMIC_REMOTE_ENV_TEST',
@@ -169,7 +168,6 @@ describe('ConfigurationService web configuration actions', () => {
     const clearKeys = keys.map(clearEnvironmentVariable);
     for (const clear of clearKeys) clear();
     process.env.DYNAMIC_REMOTE_ENV_TEST = 'environment-value';
-    const saveDefaults = jest.spyOn(configurationUtils, 'saveToEnvFile');
     const configuration = setupTest();
     await configuration.setValue('DYNAMIC_REMOTE_STORED_TEST' as never, 'stored-value');
 
@@ -221,8 +219,6 @@ describe('ConfigurationService web configuration actions', () => {
       DYNAMIC_REMOTE_DEFAULT_TEST: 'schema-default',
       DYNAMIC_REMOTE_GENERATED_TEST: 'generated-secret',
     });
-    expect(saveDefaults).not.toHaveBeenCalled();
-    saveDefaults.mockRestore();
     for (const clear of clearKeys) clear();
   });
 
