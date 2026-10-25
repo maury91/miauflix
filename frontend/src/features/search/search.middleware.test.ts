@@ -59,7 +59,7 @@ describe('searchMiddleware', () => {
     const { store, sent } = setupTest();
     store.dispatch(searchActions.queryChanged('dune'));
     store.dispatch(searchActions.submitted());
-    store.dispatch(searchActions.genreSelected('anime'));
+    store.dispatch(searchActions.genreSelected({ key: 'anime', name: 'Anime' }));
     vi.advanceTimersByTime(SEARCH_DEBOUNCE_MS);
 
     expect(sent).toEqual([
@@ -95,7 +95,7 @@ describe('searchMiddleware', () => {
 
   it('records the search behind an opened result and manages recents', () => {
     const { store, sent } = setupTest();
-    store.dispatch(searchActions.genreSelected('horror'));
+    store.dispatch(searchActions.genreSelected({ key: '27', name: 'Horror' }));
     sent.length = 0;
     store.dispatch(
       searchActions.resultOpened({
@@ -110,11 +110,15 @@ describe('searchMiddleware', () => {
       })
     );
     store.dispatch(searchActions.recentsRequested());
-    store.dispatch(searchActions.recentRemoved({ kind: 'query', query: 'Dune', searchedAt: '' }));
+    store.dispatch(searchActions.genresRequested());
+    store.dispatch(
+      searchActions.recentRemoved({ kind: 'query', query: 'Dune', label: 'Dune', searchedAt: '' })
+    );
 
     expect(sent).toEqual([
-      { type: 'search-recent-add', kind: 'genre', query: 'horror' },
+      { type: 'search-recent-add', kind: 'genre', query: '27' },
       { type: 'search-recents' },
+      { type: 'search-genres' },
       { type: 'search-recent-remove', kind: 'query', query: 'Dune' },
     ]);
   });

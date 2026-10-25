@@ -100,10 +100,25 @@ describe('SearchPage', () => {
     expect(store.getState().search.status).toBe('loading');
   });
 
-  it('browses a genre from the popular searches', () => {
-    const { store } = setupTest();
+  it('shows the catalog genres as chips and browses one', () => {
+    const { store } = setupTest(searchStateFixture);
+    expect(
+      screen
+        .getAllByRole('button')
+        .filter(button => button.closest('[aria-label="Popular searches"]'))
+    ).toHaveLength(searchStateFixture.genres.length);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Horror' }));
+    expect(store.getState().search).toMatchObject({ genre: '27', query: 'Horror' });
+    expect(screen.getByRole('heading', { name: 'Popular in “Horror”' })).toBeInTheDocument();
+
     fireEvent.click(screen.getByRole('button', { name: 'Anime' }));
     expect(store.getState().search).toMatchObject({ genre: 'anime', query: 'Anime' });
+  });
+
+  it('shows no genre chips until the backend sends them', () => {
+    setupTest();
+    expect(screen.queryByRole('region', { name: 'Popular searches' })).not.toBeInTheDocument();
   });
 
   it('shows results with their metadata and opens details with search as the parent', () => {

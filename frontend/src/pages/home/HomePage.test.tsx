@@ -746,12 +746,12 @@ describe('HomePage focus transitions', () => {
     const sidebar = screen.getByRole('complementary', { name: 'Home navigation' });
     for (let visit = 0; visit < 2; visit += 1) {
       fireEvent.mouseEnter(sidebar);
-      expect(screen.getByText('Home', { selector: 'span' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Home' })).toHaveFocus();
+      expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
+      expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
       expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'false');
 
       fireEvent.mouseLeave(sidebar);
-      expect(screen.queryByText('Home', { selector: 'span' })).not.toBeInTheDocument();
+      expect(screen.queryByText('Search', { selector: 'span' })).not.toBeInTheDocument();
       expect(screen.getByTestId('card-0')).toHaveAttribute('data-active', 'true');
       expect(row.focusIndex).toHaveBeenLastCalledWith(4);
     }
@@ -764,11 +764,11 @@ describe('HomePage focus transitions', () => {
     render(<HomePage />);
 
     fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowLeft' });
-    const home = screen.getByRole('button', { name: 'Home' });
-    expect(home).toHaveFocus();
-    expect(screen.getByText('Home', { selector: 'span' })).toBeInTheDocument();
-    fireEvent.keyDown(home, { key: 'Escape' });
-    expect(screen.queryByText('Home', { selector: 'span' })).not.toBeInTheDocument();
+    const search = screen.getByRole('button', { name: 'Search' });
+    expect(search).toHaveFocus();
+    expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
+    fireEvent.keyDown(search, { key: 'Escape' });
+    expect(screen.queryByText('Search', { selector: 'span' })).not.toBeInTheDocument();
     expect(row.focusIndex).toHaveBeenCalledWith(0);
   });
 

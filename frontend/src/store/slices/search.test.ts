@@ -75,7 +75,10 @@ describe('search slice', () => {
   });
 
   it('switches between genres and typed queries', () => {
-    const genre = reduce(initialSearchState, searchActions.genreSelected('anime'));
+    const genre = reduce(
+      initialSearchState,
+      searchActions.genreSelected({ key: 'anime', name: 'Anime' })
+    );
     expect(genre).toMatchObject({ genre: 'anime', query: 'Anime' });
     expect(reduce(genre, searchActions.queryChanged('x'))).toMatchObject({
       genre: null,
@@ -84,9 +87,14 @@ describe('search slice', () => {
     expect(
       reduce(
         initialSearchState,
-        searchActions.recentSelected({ kind: 'genre', query: 'scifi', searchedAt: '' })
+        searchActions.recentSelected({
+          kind: 'genre',
+          query: '878',
+          label: 'Science Fiction',
+          searchedAt: '',
+        })
       )
-    ).toMatchObject({ genre: 'scifi', query: 'Sci-Fi' });
+    ).toMatchObject({ genre: '878', query: 'Science Fiction' });
   });
 
   it('marks a failed first page as an error and keeps recents up to date', () => {
@@ -97,10 +105,14 @@ describe('search slice', () => {
       searchActions.serverMessage({ type: 'search-error', requestId: 4, message: 'search-failed' }),
       searchActions.serverMessage({
         type: 'search-recents',
-        items: [{ kind: 'query', query: 'Dune', searchedAt: '2026-01-01T00:00:00Z' }],
-      })
+        items: [
+          { kind: 'query', query: 'Dune', label: 'Dune', searchedAt: '2026-01-01T00:00:00Z' },
+        ],
+      }),
+      searchActions.serverMessage({ type: 'search-genres', items: [{ key: '18', name: 'Drama' }] })
     );
     expect(state.status).toBe('error');
     expect(state.recents).toHaveLength(1);
+    expect(state.genres).toEqual([{ key: '18', name: 'Drama' }]);
   });
 });

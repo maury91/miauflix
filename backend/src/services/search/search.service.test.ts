@@ -41,6 +41,12 @@ const setupTest = () => {
     search: jest.fn().mockResolvedValue(page),
     discover: jest.fn().mockResolvedValue(page),
     batch: jest.fn(),
+    searchGenres: jest.fn().mockResolvedValue([
+      { key: '18', name: 'Drama', titles: 40, shortcut: false },
+      { key: '28', name: 'Action', titles: 30, shortcut: false },
+      { key: '27', name: 'Horror', titles: 10, shortcut: false },
+      { key: 'anime', name: 'Anime', titles: 0, shortcut: true },
+    ]),
   };
   const recents = {
     list: jest
@@ -51,8 +57,20 @@ const setupTest = () => {
     record: jest.fn().mockResolvedValue(undefined),
     remove: jest.fn().mockResolvedValue(undefined),
   };
-  const service = new SearchService(catalog, recents as unknown as RecentSearchRepository);
-  return { service, catalog, recents };
+  let now = 0;
+  const service = new SearchService(
+    catalog,
+    recents as unknown as RecentSearchRepository,
+    () => now
+  );
+  return {
+    service,
+    catalog,
+    recents,
+    advance: (ms: number) => {
+      now += ms;
+    },
+  };
 };
 
 describe('SearchService', () => {
@@ -72,9 +90,9 @@ describe('SearchService', () => {
   it('uses discover for genre searches', async () => {
     const { service, catalog } = setupTest();
 
-    await service.run({ genre: 'anime', page: 2, language: 'it' });
+    await service.run({ genre: '16', page: 2, language: 'it' });
 
-    expect(catalog.discover).toHaveBeenCalledWith('anime', 2, 'it');
+    expect(catalog.discover).toHaveBeenCalledWith('16', 2, 'it');
     expect(catalog.search).not.toHaveBeenCalled();
   });
 
@@ -113,10 +131,48 @@ describe('SearchService', () => {
     expect(catalog.batch).not.toHaveBeenCalled();
   });
 
-  it('serializes recent searches', async () => {
-    const { service } = setupTest();
-    expect(await service.listRecents('user')).toEqual([
-      { kind: 'query', query: 'Dune', searchedAt: '2026-01-01T00:00:00.000Z' },
+  it('serializes recent searches, labelling genres with their names', async () => {
+    const { service, recents } = setupTest();
+    recents.list.mockResolvedValueOnce([
+      { kind: 'query', query: 'Dune', searchedAt: new Date('2026-01-01T00:00:00Z') },
+      { kind: 'genre', query: '27', searchedAt: new Date('2026-01-01T00:00:00Z') },
+      { kind: 'genre', query: '9999', searchedAt: new Date('2026-01-01T00:00:00Z') },
     ]);
+
+    expect((await service.listRecents('user')).map(entry => [entry.query, entry.label])).toEqual([
+      ['Dune', 'Dune'],
+      ['27', 'Horror'],
+      ['9999', '9999'],
+    ]);
+  });
+
+  it('skips the genre lookup when there are no genre recents', async () => {
+    const { service, catalog } = setupTest();
+    expect(await service.listRecents('user')).toEqual([
+      { kind: 'query', query: 'Dune', label: 'Dune', searchedAt: '2026-01-01T00:00:00.000Z' },
+    ]);
+    expect(catalog.searchGenres).not.toHaveBeenCalled();
+  });
+
+  it('lists the top genres followed by the shortcuts', async () => {
+    const { service } = setupTest();
+    expect(await service.listGenres('en', 3)).toEqual([
+      { key: '18', name: 'Drama' },
+      { key: '28', name: 'Action' },
+      { key: 'anime', name: 'Anime' },
+    ]);
+  });
+
+  it('reuses the genre ranking for a while and retries after a failure', async () => {
+    const { service, catalog, advance } = setupTest();
+    await service.listGenres('en');
+    await service.listGenres('en');
+    expect(catalog.searchGenres).toHaveBeenCalledTimes(1);
+
+    advance(10 * 60_000);
+    catalog.searchGenres.mockRejectedValueOnce(new Error('catalog down'));
+    await expect(service.listGenres('en')).rejects.toThrow('catalog down');
+    await service.listGenres('en');
+    expect(catalog.searchGenres).toHaveBeenCalledTimes(3);
   });
 });

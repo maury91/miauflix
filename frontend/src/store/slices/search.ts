@@ -1,6 +1,6 @@
 import { authApi } from '@features/auth/api/auth.api';
-import { searchGenreLabel } from '@features/search/search-genres';
 import type {
+  SearchGenreDto,
   SearchGenreKey,
   SearchRecentDto,
   SearchResultDetailDto,
@@ -19,7 +19,7 @@ export interface SearchFocus {
 }
 
 export interface SearchState {
-  /** Text shown in the search box; a genre shortcut shows its label. */
+  /** Text shown in the search box; a selected genre shows its name. */
   query: string;
   genre: SearchGenreKey | null;
   status: 'error' | 'idle' | 'loading' | 'ready';
@@ -34,6 +34,8 @@ export interface SearchState {
   /** Runtime / season count by `${_type}:${mediaId}`, filled in after the results. */
   details: Record<string, SearchResultDetailDto>;
   recents: SearchRecentDto[];
+  /** Genre chips from the catalog, most titles first, then shortcuts such as Anime. */
+  genres: SearchGenreDto[];
   focus: SearchFocus;
   /** Last character key on the on-screen keyboard that had focus, to return to it. */
   lastKey: number;
@@ -51,6 +53,7 @@ export const initialSearchState: SearchState = {
   totalResults: 0,
   details: {},
   recents: [],
+  genres: [],
   focus: { zone: 'keyboard', index: 0 },
   lastKey: 0,
 };
@@ -78,14 +81,14 @@ export const searchSlice = createSlice({
       state.genre = null;
       if (!state.query.trim()) clearResults(state);
     },
-    genreSelected(state, action: PayloadAction<SearchGenreKey>) {
-      state.genre = action.payload;
-      state.query = searchGenreLabel(action.payload);
+    genreSelected(state, action: PayloadAction<SearchGenreDto>) {
+      state.genre = action.payload.key;
+      state.query = action.payload.name;
     },
     recentSelected(state, action: PayloadAction<SearchRecentDto>) {
       if (action.payload.kind === 'genre') {
         state.genre = action.payload.query as SearchGenreKey;
-        state.query = searchGenreLabel(action.payload.query);
+        state.query = action.payload.label;
       } else {
         state.genre = null;
         state.query = action.payload.query;
@@ -96,6 +99,7 @@ export const searchSlice = createSlice({
     nextPageRequested() {},
     resultOpened(_state, _action: PayloadAction<SearchResultDto>) {},
     recentsRequested() {},
+    genresRequested() {},
     recentRemoved(state, action: PayloadAction<SearchRecentDto>) {
       state.recents = state.recents.filter(
         recent => recent.kind !== action.payload.kind || recent.query !== action.payload.query
@@ -114,6 +118,10 @@ export const searchSlice = createSlice({
       const message = action.payload;
       if (message.type === 'search-recents') {
         state.recents = message.items;
+        return;
+      }
+      if (message.type === 'search-genres') {
+        state.genres = message.items;
         return;
       }
       // Ids grow monotonically, so anything older than the active search's first page is stale.

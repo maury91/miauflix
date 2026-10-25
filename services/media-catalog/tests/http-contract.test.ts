@@ -95,13 +95,17 @@ const setupReadyMediaRouter = () => {
           },
         ],
       }),
-      discover: async (filter: unknown, page: number) => ({
+      discover: async (genre: string, page: number) => ({
         page,
         totalPages: 0,
         totalResults: 0,
         results: [],
-        filter,
+        genre,
       }),
+      searchGenres: async () => [
+        { key: '18', name: 'Drama', titles: 2, shortcut: false },
+        { key: 'anime', name: 'Anime', titles: 0, shortcut: true },
+      ],
       onArtworkUpdate: (listener: (update: Record<string, unknown>) => void) => {
         artworkListeners.add(listener);
         return () => artworkListeners.delete(listener);
@@ -176,10 +180,21 @@ describe('media-catalog management contract', () => {
 
     const blank = await router.handle(new Request('http://catalog/v1/catalog/search?query=%20'));
     expect(blank.status).toBe(400);
+    const byId = await router.handle(new Request('http://catalog/v1/catalog/discover?genre=18'));
+    expect(byId.status).toBe(200);
     const unknownGenre = await router.handle(
       new Request('http://catalog/v1/catalog/discover?genre=western')
     );
     expect(unknownGenre.status).toBe(400);
+
+    const genres = await router.handle(new Request('http://catalog/v1/catalog/search/genres'));
+    expect(genres.status).toBe(200);
+    expect(await genres.json()).toEqual({
+      genres: [
+        { key: '18', name: 'Drama', titles: 2, shortcut: false },
+        { key: 'anime', name: 'Anime', titles: 0, shortcut: true },
+      ],
+    });
   });
 
   it('returns a cache-only artwork snapshot and accepts a bounded priority queue request', async () => {

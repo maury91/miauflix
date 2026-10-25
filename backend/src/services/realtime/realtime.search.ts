@@ -57,6 +57,7 @@ export class RealtimeSearchChannel {
   handles(type: string): boolean {
     return (
       type === 'search' ||
+      type === 'search-genres' ||
       type === 'search-recents' ||
       type === 'search-recent-add' ||
       type === 'search-recent-remove'
@@ -67,6 +68,10 @@ export class RealtimeSearchChannel {
   handle(client: SearchClient, message: Record<string, unknown>): boolean {
     if (message.type === 'search-recents') {
       void this.sendRecents(client);
+      return true;
+    }
+    if (message.type === 'search-genres') {
+      void this.sendGenres(client);
       return true;
     }
     if (message.type === 'search-recent-add' || message.type === 'search-recent-remove') {
@@ -129,6 +134,14 @@ export class RealtimeSearchChannel {
       await this.sendRecents(client);
     } catch (error) {
       logger.warn('RealtimeSearch', 'Failed to record recent search', error);
+    }
+  }
+
+  private async sendGenres(client: SearchClient): Promise<void> {
+    try {
+      client.send({ type: 'search-genres', items: await this.search.listGenres('en') });
+    } catch (error) {
+      logger.warn('RealtimeSearch', 'Failed to load search genres', error);
     }
   }
 

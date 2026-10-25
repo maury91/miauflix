@@ -135,28 +135,19 @@ export const mediaSummarySchema = z.object({
   rating: z.number(),
 });
 /**
- * Genre shortcuts offered by search. Movie and TV genre ids differ on TMDB, so each
- * key lists both sides (TV has no thriller/horror genre, so those stay movie-only);
- * `originalLanguage` narrows the result (anime is Japanese animation).
+ * A search genre: a catalog genre id ("28") or a curated shortcut that is not a genre of its own
+ * ("anime", until anime comes from MyAnimeList).
  */
-export const SEARCH_GENRES = {
-  action: { movieGenreIds: [28], tvGenreIds: [10759] },
-  comedy: { movieGenreIds: [35], tvGenreIds: [35] },
-  drama: { movieGenreIds: [18], tvGenreIds: [18] },
-  thriller: { movieGenreIds: [53], tvGenreIds: [] },
-  scifi: { movieGenreIds: [878], tvGenreIds: [10765] },
-  horror: { movieGenreIds: [27], tvGenreIds: [] },
-  animation: { movieGenreIds: [16], tvGenreIds: [16] },
-  anime: { movieGenreIds: [16], tvGenreIds: [16], originalLanguage: 'ja' },
-  documentary: { movieGenreIds: [99], tvGenreIds: [99] },
-  fantasy: { movieGenreIds: [14], tvGenreIds: [10765] },
-} as const satisfies Record<
-  string,
-  { movieGenreIds: readonly number[]; tvGenreIds: readonly number[]; originalLanguage?: string }
->;
-export const searchGenreKeySchema = z.enum(
-  Object.keys(SEARCH_GENRES) as [keyof typeof SEARCH_GENRES, ...(keyof typeof SEARCH_GENRES)[]]
-);
+export const searchGenreKeySchema = z.string().regex(/^(?:[1-9]\d{0,9}|anime)$/u);
+export const searchGenreSchema = z.object({
+  key: searchGenreKeySchema,
+  name: z.string(),
+  /** Catalog titles with this genre; shortcuts report 0. */
+  titles: z.number().int().nonnegative(),
+  shortcut: z.boolean(),
+});
+/** Every catalog genre, most titles first, followed by the shortcuts. */
+export const searchGenresResponseSchema = z.object({ genres: z.array(searchGenreSchema) });
 export const searchPageSchema = z.coerce.number().int().min(1).max(500).default(1);
 export const searchQueryRequestSchema = z.object({
   query: z.string().trim().min(1).max(100),
@@ -242,6 +233,8 @@ export type EpisodeDetail = z.infer<typeof episodeDetailSchema>;
 export type SeasonDetail = z.infer<typeof seasonDetailSchema>;
 export type MediaSummary = z.infer<typeof mediaSummarySchema>;
 export type SearchGenreKey = z.infer<typeof searchGenreKeySchema>;
+export type SearchGenre = z.infer<typeof searchGenreSchema>;
+export type SearchGenresResponse = z.infer<typeof searchGenresResponseSchema>;
 export type SearchQueryRequest = z.infer<typeof searchQueryRequestSchema>;
 export type DiscoverRequest = z.infer<typeof discoverRequestSchema>;
 export type SearchResponse = z.infer<typeof searchResponseSchema>;

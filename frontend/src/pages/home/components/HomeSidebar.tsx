@@ -12,10 +12,9 @@ import type { HomeAction, NavigationOutcome } from '../homeNavigation';
 
 import NotificationsIcon from '~icons/mdi/bell-outline';
 import SettingsIcon from '~icons/mdi/cog-outline';
-import HomeIcon from '~icons/mdi/home-outline';
 import SearchIcon from '~icons/mdi/magnify';
 
-type SidebarItem = 'notifications' | 'search' | 'home' | 'settings';
+type SidebarItem = 'notifications' | 'search' | 'settings';
 
 const UnreadBadge = styled.span`
   position: absolute;
@@ -54,17 +53,15 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
   notificationsRef,
   unreadCount,
 }) => {
-  const [selected, setSelected] = useState<SidebarItem>('home');
+  const [selected, setSelected] = useState<SidebarItem>('search');
   const notificationsButtonRef = useRef<HTMLButtonElement>(null);
   const searchRef = useRef<HTMLButtonElement>(null);
-  const homeRef = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
 
-  const order: SidebarItem[] = ['notifications', 'search', 'home', 'settings'];
+  const order: SidebarItem[] = ['notifications', 'search', 'settings'];
   const focusSelected = (item: SidebarItem) => {
     if (item === 'notifications') notificationsButtonRef.current?.focus({ preventScroll: true });
     if (item === 'search') searchRef.current?.focus({ preventScroll: true });
-    if (item === 'home') homeRef.current?.focus({ preventScroll: true });
     if (item === 'settings') settingsRef.current?.focus({ preventScroll: true });
   };
   const focus = (item: SidebarItem) => {
@@ -110,8 +107,7 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
     onConfirm: () => {
       if (selected === 'settings') onSettings();
       else if (selected === 'notifications') onNotifications();
-      else if (selected === 'search') onSearch();
-      else onAction('confirm');
+      else onSearch();
       return true;
     },
     onBack: () => {
@@ -168,22 +164,6 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
             <SearchIcon />
           </Icon>
           {active && <span>Search</span>}
-        </Item>
-        <Item
-          ref={homeRef}
-          type="button"
-          $active={active}
-          $selected={selected === 'home'}
-          aria-label="Home"
-          aria-current="page"
-          onFocus={() => move('home')}
-          onMouseEnter={() => move('home')}
-          onClick={() => onAction('confirm')}
-        >
-          <Icon aria-hidden="true">
-            <HomeIcon />
-          </Icon>
-          {active && <span>Home</span>}
         </Item>
         <Item
           ref={settingsRef}

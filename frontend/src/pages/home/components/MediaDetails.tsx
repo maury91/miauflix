@@ -22,6 +22,7 @@ import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { BackRail } from '@shared/ui/rail/BackRail';
+import { RAIL_COLLAPSED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
 import {
   detailsNavigationActions,
   selectDetailsNavigationForMedia,
@@ -67,7 +68,7 @@ const Page = styled.main<{ $backdrop: string; $position: string; $size: string }
   z-index: 3;
   overflow: hidden;
   /* Clear the back rail on the left. */
-  padding: 15vh 5vw 5vh calc(max(5vw, 56px) + 3vw);
+  padding: 15vh 5vw 5vh calc(${RAIL_COLLAPSED_WIDTH_CSS} + 3vw);
   background: #000;
   outline: none;
 
@@ -100,7 +101,7 @@ const Page = styled.main<{ $backdrop: string; $position: string; $size: string }
 
   @media (max-width: 860px) {
     overflow: hidden auto;
-    padding: 13vh 6vw 7vh calc(56px + 4vw);
+    padding: 13vh 6vw 7vh calc(${RAIL_COLLAPSED_WIDTH_CSS} + 4vw);
 
     &::after {
       background:

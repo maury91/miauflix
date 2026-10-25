@@ -1,5 +1,4 @@
 import { navigate } from '@app/router';
-import { SEARCH_GENRE_CHIPS, searchGenreLabel } from '@features/search/search-genres';
 import { IS_TV, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { BackRail } from '@shared/ui/rail/BackRail';
@@ -70,22 +69,27 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
   const backRef = useRef<HTMLButtonElement>(null);
   const elements = useRef(new Map<string, HTMLElement>());
 
+  const genres = search.genres;
+  const genreChips = useMemo(
+    () => genres.map(genre => ({ key: genre.key, label: genre.name })),
+    [genres]
+  );
   const recents = useMemo(
     () =>
       search.recents.slice(0, MAX_RECENT_CHIPS).map(recent => ({
         key: `${recent.kind}:${recent.query}`,
-        label: recent.kind === 'genre' ? searchGenreLabel(recent.query) : recent.query,
+        label: recent.label,
         recent,
       })),
     [search.recents]
   );
   const counts = useMemo(
     () => ({
-      popular: SEARCH_GENRE_CHIPS.length,
+      popular: genres.length,
       recents: recents.length,
       results: search.results.length,
     }),
-    [recents.length, search.results.length]
+    [genres.length, recents.length, search.results.length]
   );
   const focus = search.focus;
 
@@ -109,6 +113,7 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
 
   useEffect(() => {
     dispatch(searchActions.recentsRequested());
+    dispatch(searchActions.genresRequested());
   }, [dispatch]);
 
   useRailContentLeft();
@@ -181,10 +186,10 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
     );
   };
   const selectGenre = (index: number) => {
-    const chip = SEARCH_GENRE_CHIPS[index];
-    if (!chip) return;
+    const genre = genres[index];
+    if (!genre) return;
     setFocus({ zone: 'popular', index });
-    dispatch(searchActions.genreSelected(chip.key));
+    dispatch(searchActions.genreSelected(genre));
   };
   const selectRecent = (index: number) => {
     const entry = recents[index];
@@ -234,7 +239,7 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
   };
 
   const heading = search.genre
-    ? `Popular in “${searchGenreLabel(search.genre)}”`
+    ? `Popular in “${search.query}”`
     : `Results for “${search.query.trim()}”`;
   const showResults = search.status !== 'idle' || search.results.length > 0;
 
@@ -257,16 +262,18 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
           registerKey={register('keyboard')}
         />
         <RightColumn>
-          <SearchChips
-            title="Popular searches"
-            items={SEARCH_GENRE_CHIPS}
-            icon={<SearchIcon aria-hidden="true" />}
-            columns={POPULAR_COLUMNS}
-            focusedIndex={focus.zone === 'popular' ? focus.index : null}
-            onSelect={selectGenre}
-            onFocusChip={index => setFocus({ zone: 'popular', index })}
-            registerChip={register('popular')}
-          />
+          {genreChips.length > 0 && (
+            <SearchChips
+              title="Popular searches"
+              items={genreChips}
+              icon={<SearchIcon aria-hidden="true" />}
+              columns={POPULAR_COLUMNS}
+              focusedIndex={focus.zone === 'popular' ? focus.index : null}
+              onSelect={selectGenre}
+              onFocusChip={index => setFocus({ zone: 'popular', index })}
+              registerChip={register('popular')}
+            />
+          )}
           {recents.length > 0 && (
             <SearchChips
               title="Recent searches"

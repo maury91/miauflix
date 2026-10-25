@@ -15,7 +15,7 @@ import {
   localizedGenreSchema,
   movieDetailSchema,
   okResponseSchema,
-  SEARCH_GENRES,
+  searchGenresResponseSchema,
   searchQueryRequestSchema,
   searchResponseSchema,
   seasonDetailSchema,
@@ -178,8 +178,13 @@ export const registerMediaRoutes = (router: Router, ctx: ServiceContext): void =
       Object.fromEntries(url.searchParams)
     );
     const catalog = dataPlane();
+    return json(searchResponseSchema.parse(await catalog.discover(genre, page, language)));
+  });
+
+  router.add('GET', `${BASE_PATH}/search/genres`, async ({ url, json }) => {
+    const catalog = dataPlane();
     return json(
-      searchResponseSchema.parse(await catalog.discover(SEARCH_GENRES[genre], page, language))
+      searchGenresResponseSchema.parse({ genres: await catalog.searchGenres(parseLanguage(url)) })
     );
   });
 

@@ -2,13 +2,72 @@
 
 This guide covers Docker-based deployment and development setup for Miauflix.
 
-## Quick Docker Setup
+## Prebuilt Images
 
-The fastest way to get Miauflix running with Docker:
+The quickest way to run Miauflix needs no clone and no build. Download [`docker-compose.quickstart.yml`](../../docker-compose.quickstart.yml) and start it:
+
+```bash
+curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.quickstart.yml
+docker compose -f docker-compose.quickstart.yml up -d
+```
+
+Open <http://localhost:3000>, create the admin account, then add your [TMDB access token](https://developer.themoviedb.org/docs) (and optionally Trakt credentials) from the setup screens.
+
+> **Security:** the quick-start file sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. Create the admin right away, and don't expose port 3000 to the internet before you do.
+
+### Published images
+
+| Image                                    | Contents                                              |
+| ---------------------------------------- | ----------------------------------------------------- |
+| `ghcr.io/maury91/miauflix`               | Main backend, also serves the web frontend            |
+| `ghcr.io/maury91/miauflix-services`      | Bunqueue, media catalog and list service in one image |
+| `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                      |
+| `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                       |
+
+All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for releases, `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
+
+### Using a VPN
+
+Route Miauflix through a VPN container by merging the services below into `docker-compose.quickstart.yml`, and add your key as `NORDVPN_PRIVATE_KEY` in a `.env` file next to it ([how to get it](https://github.com/bubuntux/nordlynx/pkgs/container/nordlynx#how-to-get-your-private_key)). The VPN container owns the network, so the published port moves to it and the other services use `network_mode`:
+
+```yaml
+services:
+  vpn:
+    image: ghcr.io/bubuntux/nordlynx
+    cap_add: [NET_ADMIN]
+    environment:
+      PRIVATE_KEY: ${NORDVPN_PRIVATE_KEY}
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    ports:
+      - '3000:3000'
+    restart: unless-stopped
+
+  miauflix:
+    network_mode: service:vpn
+    environment:
+      BUNQUEUE_HOST: 127.0.0.1
+      CATALOG_SERVICE_URL: http://127.0.0.1:3001
+      LIST_SERVICE_URL: http://127.0.0.1:3002
+    depends_on:
+      - vpn
+      - miauflix-services
+
+  miauflix-services:
+    network_mode: service:vpn
+    depends_on:
+      - vpn
+```
+
+Remove the `ports` and `DISABLE_VPN_CHECK` entries from the `miauflix` service in this layout.
+
+## Building From Source
+
+To build the images yourself from a clone of the repository:
 
 ```bash
 # 1. Clone repository
-git clone <repository-url> && cd miauflix
+git clone https://github.com/maury91/miauflix.git && cd miauflix
 
 # 2. Interactive configuration wizard
 docker compose run --rm miauflix npm run config-only

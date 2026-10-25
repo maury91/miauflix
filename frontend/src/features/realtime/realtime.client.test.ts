@@ -246,8 +246,14 @@ describe('RealtimeClient', () => {
       results: [],
     });
     socket.message({ type: 'search-recents', items: [] });
+    socket.message({ type: 'search-genres', items: [{ key: '18', name: 'Drama' }] });
     socket.message({ type: 'search-results' });
-    expect(onSearch).toHaveBeenCalledTimes(2);
+    socket.message({ type: 'search-genres' });
+    expect(onSearch).toHaveBeenCalledTimes(3);
+    expect(onSearch).toHaveBeenCalledWith({
+      type: 'search-genres',
+      items: [{ key: '18', name: 'Drama' }],
+    });
 
     socket.close();
     vi.advanceTimersByTime(1_000);

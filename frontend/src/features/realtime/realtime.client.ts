@@ -379,6 +379,7 @@ const SEARCH_MESSAGE_TYPES = new Set([
   'search-results',
   'search-details',
   'search-error',
+  'search-genres',
   'search-recents',
 ]);
 
@@ -386,7 +387,7 @@ function isSearchMessage(value: unknown): value is SearchServerMessage {
   if (typeof value !== 'object' || value === null) return false;
   const candidate = value as Record<string, unknown>;
   if (!SEARCH_MESSAGE_TYPES.has(candidate['type'] as string)) return false;
-  return candidate['type'] === 'search-recents'
+  return candidate['type'] === 'search-recents' || candidate['type'] === 'search-genres'
     ? Array.isArray(candidate['items'])
     : typeof candidate['requestId'] === 'number';
 }

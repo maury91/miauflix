@@ -6,21 +6,18 @@ import { SyncStateRepository } from '../db/sync-state.repo';
 import { TVShowRepository } from '../db/tv-show.repo';
 import { HttpError } from '../errors';
 import { logger } from '../logger';
-import type {
-  CatalogProvider,
-  ProviderGenreFilter,
-  ProviderSearchPage,
-} from '../provider/provider';
+import type { CatalogProvider, ProviderSearchPage } from '../provider/provider';
 import { ArtworkSelectionService, type ArtworkUpdate } from '../services/artwork-selection.service';
 import {
   BackdropFocusService,
   DEFAULT_BACKDROP_FOCUS_CONCURRENCY,
 } from '../services/backdrop-focus.service';
 import type { BatchResponse, MediaRef, MovieDetail, SeasonDetail, TVShowDetail } from '../types';
-import type { BackdropFocus, MediaType } from '../types';
+import type { BackdropFocus, MediaType, SearchGenre, SearchGenreKey } from '../types';
 import { CatalogHydrator } from './catalog.hydrator';
 import { CatalogLocalizer } from './catalog.localizer';
 import { CatalogSynchronizer } from './catalog.syncer';
+import { DEFAULT_GENRE_LANGUAGE, SEARCH_SHORTCUTS } from './search-shortcuts';
 
 const SCOPE = 'CatalogService';
 const BACKDROP_FOCUS_SCAN_PAGE_SIZE = 32;
@@ -229,12 +226,45 @@ export class CatalogService {
     return this.provider.search(query, page, language);
   }
 
-  discover(
-    filter: ProviderGenreFilter,
-    page: number,
-    language: string
-  ): Promise<ProviderSearchPage> {
-    return this.provider.discover(filter, page, language);
+  /**
+   * Genres to search by: every catalog genre, most titles first, then the curated shortcuts.
+   * Genre names are fetched for the language first; a failed fetch falls back to stored names.
+   */
+  async searchGenres(language: string): Promise<SearchGenre[]> {
+    await this.getGenres(language).catch(error =>
+      logger.warn(SCOPE, `Genre names for '${language}' unavailable`, error)
+    );
+    const genres: SearchGenre[] = this.localization
+      .rankedGenres(language, DEFAULT_GENRE_LANGUAGE)
+      .map(genre => ({
+        key: String(genre.id),
+        name: genre.name,
+        titles: genre.titles,
+        shortcut: false,
+      }));
+    for (const [key, shortcut] of Object.entries(SEARCH_SHORTCUTS))
+      genres.push({ key, name: shortcut.name, titles: 0, shortcut: true });
+    return genres;
+  }
+
+  /**
+   * Popular titles for a search genre. A catalog genre only queries the media types its titles
+   * have (TV has no Horror genre, for example), or both while no title carries it yet.
+   */
+  discover(genre: SearchGenreKey, page: number, language: string): Promise<ProviderSearchPage> {
+    const shortcut = SEARCH_SHORTCUTS[genre as keyof typeof SEARCH_SHORTCUTS];
+    if (shortcut) return this.provider.discover(shortcut.filter, page, language);
+    const genreId = Number(genre);
+    const mediaTypes = this.localization.genreMediaTypes(genreId);
+    const includes = (type: 'movie' | 'tv') => !mediaTypes.length || mediaTypes.includes(type);
+    return this.provider.discover(
+      {
+        movieGenreIds: includes('movie') ? [genreId] : [],
+        tvGenreIds: includes('tv') ? [genreId] : [],
+      },
+      page,
+      language
+    );
   }
 
   /* -------------------------------------------------------------------- genres */

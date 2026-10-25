@@ -38,6 +38,7 @@ const setupTest = () => {
       .mockImplementation(async (input: { query?: string }) => resultPage(input.query ?? 'genre')),
     enrich: jest.fn().mockResolvedValue([{ _type: 'movie', mediaId: 1, runtime: 120 }]),
     listRecents: jest.fn().mockResolvedValue([]),
+    listGenres: jest.fn().mockResolvedValue([{ key: '18', name: 'Drama' }]),
     recordRecent: jest.fn().mockResolvedValue(undefined),
     removeRecent: jest.fn().mockResolvedValue(undefined),
   };
@@ -101,12 +102,30 @@ describe('RealtimeSearchChannel', () => {
   it('records committed searches and pushes the updated recents', async () => {
     const { channel, search, client, sent } = setupTest();
 
-    channel.handle(client, { type: 'search', requestId: 1, genre: 'anime', page: 1, commit: true });
+    channel.handle(client, { type: 'search', requestId: 1, genre: '18', page: 1, commit: true });
     await flush();
 
-    expect(search.run).toHaveBeenCalledWith({ genre: 'anime', page: 1, language: 'en' });
-    expect(search.recordRecent).toHaveBeenCalledWith('user', 'genre', 'anime');
+    expect(search.run).toHaveBeenCalledWith({ genre: '18', page: 1, language: 'en' });
+    expect(search.recordRecent).toHaveBeenCalledWith('user', 'genre', '18');
     expect(sent.some(message => message.type === 'search-recents')).toBe(true);
+  });
+
+  it('sends the genre chips on request', async () => {
+    const { channel, client, sent } = setupTest();
+
+    channel.handle(client, { type: 'search-genres' });
+    await flush();
+
+    expect(sent).toEqual([{ type: 'search-genres', items: [{ key: '18', name: 'Drama' }] }]);
+  });
+
+  it('accepts the anime shortcut as a genre', async () => {
+    const { channel, client, search } = setupTest();
+    expect(channel.handle(client, { type: 'search', requestId: 1, genre: 'anime', page: 1 })).toBe(
+      true
+    );
+    await flush();
+    expect(search.run).toHaveBeenCalledWith({ genre: 'anime', page: 1, language: 'en' });
   });
 
   it('adds recents without running a search', async () => {
@@ -133,9 +152,10 @@ describe('RealtimeSearchChannel', () => {
 
   it.each([
     { type: 'search', requestId: 1, page: 1 },
-    { type: 'search', requestId: 1, page: 1, query: 'Dune', genre: 'anime' },
+    { type: 'search', requestId: 1, page: 1, query: 'Dune', genre: '18' },
     { type: 'search', requestId: 1, page: 1, query: '   ' },
     { type: 'search', requestId: 1, page: 1, genre: 'western' },
+    { type: 'search', requestId: 1, page: 1, genre: '0' },
     { type: 'search', requestId: 1, page: 0, query: 'Dune' },
     { type: 'search', requestId: 1, page: 1, query: 'Dune', language: '../en' },
     { type: 'search-recent-remove', kind: 'person', query: 'Dune' },

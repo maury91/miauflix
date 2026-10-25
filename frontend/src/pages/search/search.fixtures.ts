@@ -1,4 +1,4 @@
-import type { SearchResultDto } from '@miauflix/backend';
+import type { SearchGenreDto, SearchResultDto } from '@miauflix/backend';
 import { initialSearchState, type SearchState } from '@store/slices/search';
 
 import { homeFixtureAssets } from '../home/home.assets';
@@ -21,6 +21,20 @@ export const searchResultsFixture: SearchResultDto[] = [
   backdrop: '',
 }));
 
+/** Catalog genres as the backend sends them: most titles first, then the Anime shortcut. */
+export const searchGenresFixture: SearchGenreDto[] = [
+  { key: '28', name: 'Action' },
+  { key: '35', name: 'Comedy' },
+  { key: '18', name: 'Drama' },
+  { key: '53', name: 'Thriller' },
+  { key: '878', name: 'Science Fiction' },
+  { key: '27', name: 'Horror' },
+  { key: '16', name: 'Animation' },
+  { key: '99', name: 'Documentary' },
+  { key: '14', name: 'Fantasy' },
+  { key: 'anime', name: 'Anime' },
+];
+
 export const searchStateFixture: SearchState = {
   ...initialSearchState,
   query: 'Dune',
@@ -39,6 +53,8 @@ export const searchStateFixture: SearchState = {
   recents: ['Dune', 'The Last of Us', 'Spider-Man', 'Silo', 'Rick and Morty'].map(query => ({
     kind: 'query' as const,
     query,
+    label: query,
     searchedAt: '2026-10-01T00:00:00.000Z',
   })),
+  genres: searchGenresFixture,
 };

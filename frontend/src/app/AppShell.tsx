@@ -21,6 +21,7 @@ import SettingsPage from '@pages/settings/SettingsPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
+import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { Logo } from '@shared/ui/logo/Logo';
 import { useAppDispatch, useAppSelector } from '@store';
 import { dismissConfigWizard } from '@store/slices/appState';
@@ -28,8 +29,6 @@ import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
-
-const TIZEN_SEARCH_KEY_CODE = 10225;
 
 /** Replace a route that is not allowed, without mounting its page. */
 function Redirect({ to }: { to: AppRoute }) {
@@ -76,17 +75,14 @@ export function AppShell() {
   }, [dispatch]);
   const backTo = (parent: AppRoute) => () => navigateBack(parent);
 
-  // The remote's Search key (registered at Tizen startup) opens search from anywhere signed in.
-  useEffect(() => {
-    if (appState !== 'home') return;
-    const openSearch = (event: KeyboardEvent) => {
-      if (event.key !== 'Search' && event.keyCode !== TIZEN_SEARCH_KEY_CODE) return;
-      event.preventDefault();
+  // The remote's Search key opens search from anywhere once signed in.
+  useKeyboard({
+    enabled: appState === 'home',
+    onSearch: () => {
       if (getRouteSnapshot().type !== 'search') navigate({ type: 'search' });
-    };
-    document.addEventListener('keydown', openSearch);
-    return () => document.removeEventListener('keydown', openSearch);
-  }, [appState]);
+      return true;
+    },
+  });
 
   useEffect(() => {
     if (appState === 'config_wizard' && isAuthenticated && isAdmin) {

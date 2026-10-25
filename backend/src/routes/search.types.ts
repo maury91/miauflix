@@ -8,7 +8,15 @@ export type SearchRecentKind = 'genre' | 'query';
 export interface SearchRecentDto {
   kind: SearchRecentKind;
   query: string;
+  /** What to show: the query itself, or the genre's name. */
+  label: string;
   searchedAt: string;
+}
+
+/** A genre chip: a catalog genre ("28") or a shortcut such as "anime". */
+export interface SearchGenreDto {
+  key: SearchGenreKey;
+  name: string;
 }
 
 /** Card data available as soon as the catalog answers the search. */
@@ -51,6 +59,7 @@ export type SearchClientMessage =
       /** Record the search as a recent (explicit submit, chip, or opened result). */
       commit?: boolean;
     }
+  | { type: 'search-genres' }
   | { type: 'search-recent-add'; kind: SearchRecentKind; query: string }
   | { type: 'search-recent-remove'; kind: SearchRecentKind; query: string }
   | { type: 'search-recents' };
@@ -59,5 +68,6 @@ export type SearchClientMessage =
 export type SearchServerMessage =
   | { type: 'search-details'; requestId: number; items: SearchResultDetailDto[] }
   | { type: 'search-error'; requestId: number; message: string }
+  | { type: 'search-genres'; items: SearchGenreDto[] }
   | { type: 'search-recents'; items: SearchRecentDto[] }
   | (SearchPageDto & { type: 'search-results'; requestId: number });

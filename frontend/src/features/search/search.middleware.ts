@@ -63,6 +63,8 @@ export const searchMiddleware: Middleware = api => {
         send({ type: 'search-recent-add', kind: 'query', query: query.trim() });
     } else if (searchActions.recentsRequested.match(action)) {
       send({ type: 'search-recents' });
+    } else if (searchActions.genresRequested.match(action)) {
+      send({ type: 'search-genres' });
     } else if (searchActions.recentRemoved.match(action)) {
       send({
         type: 'search-recent-remove',

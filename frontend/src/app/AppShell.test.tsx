@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { act, render as rtlRender, screen } from '@testing-library/react';
+import { act, fireEvent, render as rtlRender, screen } from '@testing-library/react';
 import type { ReactNode } from 'react';
 import { Provider } from 'react-redux';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
@@ -125,6 +125,7 @@ vi.mock('@pages/home/HomePage', () => ({
     );
   },
 }));
+vi.mock('@pages/search/SearchPage', () => ({ default: () => <main data-testid="search-page" /> }));
 vi.mock('@pages/login/LoginPage', () => ({ default: () => <main data-testid="login-page" /> }));
 vi.mock('@pages/setup/SetupPage', () => ({ default: () => <main data-testid="setup-page" /> }));
 vi.mock('@pages/config/ConfigWizardPage', () => ({
@@ -358,6 +359,24 @@ describe('AppShell intro sequence', () => {
         JSON.stringify({ type: 'movieDetails', mediaId: 7 })
       );
       expect(window.location.pathname).toBe('/movies/7');
+    } finally {
+      navigate({ type: 'home' }, { replace: true });
+    }
+  });
+
+  it('opens search with the remote Search key only once signed in', async () => {
+    try {
+      appPage.value = 'login';
+      const view = renderAppShell();
+      await finishBoot();
+      fireEvent.keyDown(document.body, { key: 'Unidentified', keyCode: 10225 });
+      expect(window.location.pathname).toBe('/');
+
+      appPage.value = 'home';
+      act(() => view.rerender(<AppShell />));
+      fireEvent.keyDown(document.body, { key: 'Unidentified', keyCode: 10225 });
+      expect(window.location.pathname).toBe('/search');
+      expect(screen.getByTestId('search-page')).toBeInTheDocument();
     } finally {
       navigate({ type: 'home' }, { replace: true });
     }

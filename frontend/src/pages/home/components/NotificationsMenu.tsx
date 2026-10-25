@@ -1,6 +1,7 @@
 import type { NotificationItem } from '@features/notifications/api/notifications.api';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
+import { RAIL_COLLAPSED_WIDTH_CSS, RAIL_EXPANDED_WIDTH_CSS } from '@shared/ui/rail/rail.styles';
 import { type FC, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 
@@ -15,7 +16,8 @@ const Panel = styled.section<{ $sidebarActive: boolean }>`
   position: fixed;
   z-index: 20;
   top: 5vh;
-  left: ${({ $sidebarActive }) => ($sidebarActive ? 'calc(15vw + 12px)' : 'calc(5vw + 12px)')};
+  left: ${({ $sidebarActive }) =>
+    `calc(${$sidebarActive ? RAIL_EXPANDED_WIDTH_CSS : RAIL_COLLAPSED_WIDTH_CSS} + 12px)`};
   width: min(380px, calc(100vw - 80px));
   max-height: 82vh;
   overflow: hidden;
