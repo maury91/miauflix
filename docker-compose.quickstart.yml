@@ -4,7 +4,7 @@
 
 services:
   miauflix:
-    image: ghcr.io/maury91/miauflix:latest
+    image: ghcr.io/maury91/miauflix:edge
     ports:
       # Only this computer can connect until you open it to your network, see
       # docs/setup/docker-setup.md#open-it-to-your-local-network
@@ -27,7 +27,7 @@ services:
     restart: unless-stopped
 
   miauflix-services:
-    image: ghcr.io/maury91/miauflix-services:latest
+    image: ghcr.io/maury91/miauflix-services:edge
     init: true
     volumes:
       - miauflix_services_data:/app/data
