@@ -6,6 +6,9 @@ on:
     tags: ['v*']
   pull_request:
     branches: [main, master]
+  # Run from the Actions tab to publish images of any branch, tagged with the branch name.
+  # Only collaborators with write access can start it; pull requests from forks cannot.
+  workflow_dispatch:
 
 jobs:
   test:
@@ -205,11 +208,12 @@ jobs:
           if-no-files-found: ignore
           retention-days: 7
 
-  # Publish multi-arch images to GHCR once every test job has passed. Each
+  # Publish multi-arch images to GHCR once every test job has passed, on pushes and manual
+  # runs (never on pull requests, whose token cannot write packages from forks anyway). Each
   # architecture is built natively and pushed by digest, then merged into one
   # manifest list per image by publish-manifest.
   publish-build:
-    if: github.event_name == 'push'
+    if: github.event_name == 'push' || github.event_name == 'workflow_dispatch'
     needs: [test, e2e-tests, visual-tests]
     runs-on: ${{ matrix.runner }}
     permissions:
@@ -331,8 +335,10 @@ jobs:
         with:
           images: ${{ env.IMAGE }}
           flavor: latest=auto
+          # A manual run tags the branch name (e.g. fix-buffer) and its commit, never latest or edge.
           tags: |
-            type=edge,branch=main
+            type=edge,branch=main,enable=${{ github.event_name == 'push' }}
+            type=ref,event=branch,enable=${{ github.event_name == 'workflow_dispatch' }}
             type=sha
             type=semver,pattern={{version}}
             type=semver,pattern={{major}}.{{minor}}
