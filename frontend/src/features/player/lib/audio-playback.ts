@@ -83,8 +83,8 @@ function secondsAhead(buffer: SourceBuffer, video: HTMLVideoElement): number {
     : 0;
 }
 
-/** Waits in a row, with neither the playhead nor the buffer start moving, before giving up. */
-export const MAX_STALLED_RETRIES = 8;
+/** Waits in a row (about 10 s), with neither the playhead nor the buffer start moving, before giving up. */
+export const MAX_STALLED_RETRIES = 40;
 
 function bufferStart(buffer: SourceBuffer): number {
   return buffer.buffered.length ? buffer.buffered.start(0) : 0;
@@ -98,11 +98,14 @@ export interface BufferBudget {
 /**
  * Append a chunk, making room when the browser's media buffer is full. The buffer limit is in
  * bytes (about 150 MB of video in Chrome) while reading ahead is limited in seconds, so on a
- * high-bitrate file even MAX_AHEAD_SECONDS can overflow it. On QuotaExceededError: evict what
- * is behind the playhead, lower the ahead limit to what fit, wait for playback to consume, and
- * retry. Before playback starts there is nothing to consume, so the error stands. While paused it
- * waits for playback to resume; if playback runs but neither the playhead nor eviction moves for
- * MAX_STALLED_RETRIES waits in a row, the buffer will never drain and the error is reported.
+ * high-bitrate file even MAX_AHEAD_SECONDS can overflow it. On QuotaExceededError: lower the
+ * ahead limit to what fit, wait for playback to consume, and retry; the browser evicts what is
+ * behind the playhead on each append. Nothing is removed here: SourceBuffer.remove() extends the
+ * removal to the next keyframe, so removing up to just behind the playhead also deletes the frames
+ * being played and stalls playback for good. Before playback starts there is nothing to consume,
+ * so the error stands. While paused it waits for playback to resume; if playback runs but neither
+ * the playhead nor the buffer start moves for MAX_STALLED_RETRIES waits in a row, the buffer will
+ * never drain and the error is reported.
  */
 export async function appendWithinQuota(
   buffer: SourceBuffer,
@@ -121,10 +124,6 @@ export async function appendWithinQuota(
       return;
     } catch (error) {
       if (!playing || !isQuotaExceeded(error)) throw error;
-    }
-    const behind = video.currentTime - 1;
-    if (buffer.buffered.length && buffer.buffered.start(0) < behind) {
-      await updateBuffer(buffer, signal, () => buffer.remove(0, behind));
     }
     budget.maxAheadSeconds = Math.max(
       MIN_AHEAD_SECONDS,
