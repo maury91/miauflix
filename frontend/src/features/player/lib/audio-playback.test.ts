@@ -74,14 +74,16 @@ describe('appendWithinQuota', () => {
     expect(budget.maxAheadSeconds).toBe(MAX_AHEAD_SECONDS);
   });
 
-  it('on a full buffer evicts behind the playhead, lowers the ahead limit and retries', async () => {
+  it('on a full buffer lowers the ahead limit and retries without removing media', async () => {
     // 70 s buffered ahead of the playhead when Chrome's byte quota is hit.
     const { buffer, video, budget, append } = setupTest({ buffered: [0, 120], currentTime: 50 });
     buffer.quotaFailures = 1;
 
     const done = append();
     await vi.advanceTimersByTimeAsync(0);
-    expect(buffer.removed).toEqual([[0, 49]]);
+    // remove() extends to the next keyframe, so evicting near the playhead would delete the
+    // frames being played; the browser evicts what is behind the playhead on its own.
+    expect(buffer.removed).toEqual([]);
     // min(60, 70) * 0.75: read no further ahead than what fit, with some margin.
     expect(budget.maxAheadSeconds).toBe(45);
     expect(buffer.appends).toBe(0);
@@ -131,7 +133,7 @@ describe('appendWithinQuota', () => {
   });
 
   it('reports the error when the playhead stalls while the buffer is over the ahead limit', async () => {
-    // 70 s ahead after eviction, above the lowered 45 s limit, and the playhead never moves.
+    // 70 s ahead, above the lowered 45 s limit, and the playhead never moves.
     const { buffer, append } = setupTest({ buffered: [0, 120], currentTime: 50 });
     buffer.quotaFailures = 1;
 
