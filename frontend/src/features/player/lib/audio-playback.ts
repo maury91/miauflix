@@ -90,6 +90,124 @@ function bufferStart(buffer: SourceBuffer): number {
   return buffer.buffered.length ? buffer.buffered.start(0) : 0;
 }
 
+/** How often the stall watchdog checks the playhead. */
+export const STALL_CHECK_MS = 250;
+/** Checks in a row without progress before the watchdog intervenes (about 1 s). */
+export const STALL_CHECKS = 4;
+/** Media needed past the playhead before a nudge is worth it; less is ordinary buffering. */
+const NUDGE_MIN_AHEAD_SECONDS = 0.5;
+/** How far a nudge moves the playhead. */
+const NUDGE_SECONDS = 0.1;
+/** Gaps up to this long are jumped before the playhead reaches them. */
+export const MAX_GAP_SECONDS = 1;
+/** How close to a gap the playhead must be before the jump is scheduled. */
+const GAP_LOOKAHEAD_SECONDS = 0.5;
+/** The jump happens this long before the gap, so no frame is shown from its edge. */
+const GAP_LEAD_SECONDS = 0.05;
+
+/**
+ * Where to move a stalled playhead, or undefined when it is waiting for media that has not
+ * arrived. In a gap: jump to the next buffered range. Inside a range with media ahead: nudge
+ * forward. At the end of the buffer: nothing to do.
+ */
+export function stallRecoveryTime(buffered: TimeRanges, currentTime: number): number | undefined {
+  for (let range = 0; range < buffered.length; range++) {
+    const start = buffered.start(range);
+    const end = buffered.end(range);
+    if (currentTime < start) return start + 0.01;
+    // Stuck just before a gap: the next range (if any) is the target.
+    if (currentTime < end && end - currentTime > NUDGE_MIN_AHEAD_SECONDS) {
+      return currentTime + NUDGE_SECONDS;
+    }
+  }
+  return undefined;
+}
+
+/** A small gap just ahead of the playhead: where it starts and where to jump to. */
+export function upcomingGap(
+  buffered: TimeRanges,
+  currentTime: number
+): { at: number; to: number } | undefined {
+  for (let range = 0; range < buffered.length - 1; range++) {
+    const end = buffered.end(range);
+    if (currentTime < buffered.start(range) || currentTime >= end) continue;
+    const next = buffered.start(range + 1);
+    if (end - currentTime > GAP_LOOKAHEAD_SECONDS || next - end > MAX_GAP_SECONDS) return undefined;
+    return { at: end, to: next + 0.01 };
+  }
+  return undefined;
+}
+
+/**
+ * Keeps playback going over small gaps in the buffered video. Open-GOP encodes (x265's default)
+ * have 2-3 leading frames per keyframe that are shown before it but decoded after it; Chrome
+ * starts the keyframe's buffered range at the keyframe, so those frames often appear as a gap
+ * just before it. Chrome's video freezes there while audio plays on, then the whole element
+ * stalls a few seconds later; only a seek recovers it. So the
+ * watchdog jumps a small gap just before the playhead reaches it, and as a fallback re-seeks
+ * when the playhead stops with media buffered ahead (see stallRecoveryTime) or when it moves
+ * but no video frame has been decoded for about 1 s.
+ */
+export function watchForStalls(video: HTMLVideoElement, signal: AbortSignal): void {
+  const frames = () => video.getVideoPlaybackQuality?.().totalVideoFrames;
+  let lastTime = video.currentTime;
+  let lastFrames = frames();
+  let stalled = 0;
+  let frozen = 0;
+  let jump: ReturnType<typeof setTimeout> | undefined;
+  const seek = (time: number) => {
+    stalled = 0;
+    frozen = 0;
+    video.currentTime = time;
+  };
+  const timer = setInterval(() => {
+    const time = video.currentTime;
+    const decoded = frames();
+    const idle = video.paused || video.seeking || video.ended;
+    const moved = time !== lastTime;
+    const decodedMore = decoded === undefined || decoded !== lastFrames;
+    lastTime = time;
+    lastFrames = decoded;
+    if (idle) {
+      stalled = 0;
+      frozen = 0;
+      return;
+    }
+
+    const gap = jump === undefined ? upcomingGap(video.buffered, time) : undefined;
+    if (gap) {
+      const delay = Math.max(0, (gap.at - time - GAP_LEAD_SECONDS) / (video.playbackRate || 1));
+      jump = setTimeout(() => {
+        jump = undefined;
+        // Skip only if nothing (a seek, a pause, new media filling the gap) changed the plan.
+        const still = upcomingGap(video.buffered, video.currentTime);
+        if (!video.paused && !video.seeking && still?.to === gap.to) seek(gap.to);
+      }, delay * 1000);
+    }
+
+    stalled = moved ? 0 : stalled + 1;
+    // A hidden tab may stop decoding video while audio plays on; that is not a frozen picture.
+    const hidden = typeof document !== 'undefined' && document.hidden;
+    frozen = moved && !decodedMore && !hidden ? frozen + 1 : 0;
+    if (stalled >= STALL_CHECKS) {
+      stalled = 0;
+      const target = stallRecoveryTime(video.buffered, time);
+      if (target !== undefined) seek(target);
+    } else if (frozen >= STALL_CHECKS) {
+      // Audio is playing but the picture is not: seeking in place restarts the video decoder.
+      seek(time);
+    }
+  }, STALL_CHECK_MS);
+  signal.addEventListener(
+    'abort',
+    () => {
+      clearInterval(timer);
+      clearTimeout(jump);
+    },
+    { once: true }
+  );
+}
+
 /** Shared between appends: the ahead limit shrinks when the browser's byte quota is hit. */
 export interface BufferBudget {
   maxAheadSeconds: number;
@@ -232,6 +350,7 @@ export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
           if (beginning <= startSeconds + 0.15 && end > position) {
             video.currentTime = position;
             positioned = true;
+            watchForStalls(video, signal);
             onReady();
             if (autoplay) void video.play().catch(() => undefined);
             break;

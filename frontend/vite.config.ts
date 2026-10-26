@@ -70,6 +70,27 @@ function proxyCookieRewriteConfigure(
     const list = Array.isArray(setCookie) ? setCookie : [setCookie];
     proxyRes.headers['set-cookie'] = list.map((cookie: string) => rewriteSetCookieForDev(cookie));
   });
+  // A remote backend (BACKEND_URL) only accepts its own origin (CORS_ORIGIN), including for the
+  // realtime WebSocket, so present requests from this dev/preview server's own pages as coming
+  // from it. Any other origin is forwarded unchanged so the backend still rejects cross-site use.
+  if (!process.env.BACKEND_URL) return;
+  const backendOrigin = new URL(process.env.BACKEND_URL).origin;
+  const rewriteOrigin = (
+    proxyReq: { getHeader(name: string): unknown; setHeader(name: string, value: string): void },
+    req: { headers: { host?: string } }
+  ) => {
+    const origin = proxyReq.getHeader('origin');
+    if (typeof origin !== 'string' || !req.headers.host) return;
+    let originHost: string;
+    try {
+      originHost = new URL(origin).host;
+    } catch {
+      return;
+    }
+    if (originHost === req.headers.host) proxyReq.setHeader('origin', backendOrigin);
+  };
+  proxy.on('proxyReq', rewriteOrigin);
+  proxy.on('proxyReqWs', rewriteOrigin);
 }
 
 /** The version shown in the app: the root package.json semver is the source of truth. */
