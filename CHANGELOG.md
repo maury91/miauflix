@@ -9,7 +9,7 @@
 - HTTPS and the VPN can be combined: the `Caddyfile` forwards to `MIAUFLIX_UPSTREAM` (`vpn:3000` with `docker-compose.vpn.yml`)
 - The player no longer shows a blue rectangle when its controls overlay takes focus; the volume slider uses the same white focus ring as the buttons
 - Video no longer buffers constantly behind HTTPS for viewers on a VPN: the `Caddyfile` serves HTTP/1.1 and HTTP/2 only and `docker-compose.https.yml` no longer publishes 443/UDP. Over HTTP/3 both the direct and the audio-converting stream reached the browser at 4–5 Mbit/s; over HTTP/2 they reach about 150 Mbit/s
-- Playback no longer fails with "The SourceBuffer is full" when the audio-converting stream arrives faster than it plays: the player limits read-ahead in seconds, but the browser's media buffer is limited in bytes (about 150 MB in Chrome), so 60 s of a high-bitrate file could overflow it. On a full buffer the player now evicts what is behind the playhead, lowers its read-ahead limit (to no less than 10 s), waits for playback and retries, instead of stopping
+- Playback no longer fails with "The SourceBuffer is full" when the audio-converting stream arrives faster than it plays: the player limits read-ahead in seconds, but the browser's media buffer is limited in bytes (about 150 MB in Chrome), so 60 s of a high-bitrate file could overflow it. On a full buffer the player now evicts what is behind the playhead, lowers its read-ahead limit (to no less than 10 s), waits for playback and retries, instead of stopping. While paused it waits for playback to resume; if playback runs but neither the playhead nor eviction moves for 8 retries in a row, it reports the error instead of retrying forever
 
 ### Technical debt
 

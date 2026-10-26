@@ -4,6 +4,7 @@ import {
   appendWithinQuota,
   type BufferBudget,
   MAX_AHEAD_SECONDS,
+  MAX_STALLED_RETRIES,
   MIN_AHEAD_SECONDS,
 } from './audio-playback';
 
@@ -114,6 +115,45 @@ describe('appendWithinQuota', () => {
     await vi.advanceTimersByTimeAsync(250);
     expect(buffer.quotaFailures).toBe(1);
     await vi.advanceTimersByTimeAsync(1_000);
+    await done;
+    expect(buffer.appends).toBe(1);
+  });
+
+  it('reports the error when retries free nothing and the playhead does not move', async () => {
+    const { buffer, append } = setupTest({ buffered: [49, 52], currentTime: 50 });
+    buffer.quotaFailures = Infinity;
+
+    const done = append();
+    const failure = expect(done).rejects.toThrow('playback is not advancing');
+    await vi.advanceTimersByTimeAsync(250 * (MAX_STALLED_RETRIES + 1));
+    await failure;
+    expect(buffer.appends).toBe(0);
+  });
+
+  it('keeps retrying while the playhead advances', async () => {
+    const { buffer, video, append } = setupTest({ buffered: [49, 52], currentTime: 50 });
+    buffer.quotaFailures = MAX_STALLED_RETRIES * 2;
+
+    const done = append();
+    for (let step = 0; step <= MAX_STALLED_RETRIES * 2; step++) {
+      video.currentTime += 0.25;
+      await vi.advanceTimersByTimeAsync(250);
+    }
+    await done;
+    expect(buffer.appends).toBe(1);
+  });
+
+  it('waits without giving up while playback is paused', async () => {
+    const { buffer, video, append } = setupTest({ buffered: [49, 52], currentTime: 50 });
+    buffer.quotaFailures = 1;
+    (video as { paused: boolean }).paused = true;
+
+    const done = append();
+    await vi.advanceTimersByTimeAsync(250 * MAX_STALLED_RETRIES * 2);
+    expect(buffer.appends).toBe(0);
+
+    (video as { paused: boolean }).paused = false;
+    await vi.advanceTimersByTimeAsync(250);
     await done;
     expect(buffer.appends).toBe(1);
   });
