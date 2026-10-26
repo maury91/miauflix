@@ -130,6 +130,18 @@ describe('appendWithinQuota', () => {
     expect(buffer.appends).toBe(0);
   });
 
+  it('reports the error when the playhead stalls while the buffer is over the ahead limit', async () => {
+    // 70 s ahead after eviction, above the lowered 45 s limit, and the playhead never moves.
+    const { buffer, append } = setupTest({ buffered: [0, 120], currentTime: 50 });
+    buffer.quotaFailures = 1;
+
+    const done = append();
+    const failure = expect(done).rejects.toThrow('playback is not advancing');
+    await vi.advanceTimersByTimeAsync(250 * (MAX_STALLED_RETRIES + 1));
+    await failure;
+    expect(buffer.appends).toBe(0);
+  });
+
   it('keeps retrying while the playhead advances', async () => {
     const { buffer, video, append } = setupTest({ buffered: [49, 52], currentTime: 50 });
     buffer.quotaFailures = MAX_STALLED_RETRIES * 2;

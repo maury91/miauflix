@@ -83,7 +83,7 @@ function secondsAhead(buffer: SourceBuffer, video: HTMLVideoElement): number {
     : 0;
 }
 
-/** Failed retries in a row, with neither the playhead nor the buffer start moving, before giving up. */
+/** Waits in a row, with neither the playhead nor the buffer start moving, before giving up. */
 export const MAX_STALLED_RETRIES = 8;
 
 function bufferStart(buffer: SourceBuffer): number {
@@ -102,7 +102,7 @@ export interface BufferBudget {
  * is behind the playhead, lower the ahead limit to what fit, wait for playback to consume, and
  * retry. Before playback starts there is nothing to consume, so the error stands. While paused it
  * waits for playback to resume; if playback runs but neither the playhead nor eviction moves for
- * MAX_STALLED_RETRIES retries, the buffer will never drain and the error is reported.
+ * MAX_STALLED_RETRIES waits in a row, the buffer will never drain and the error is reported.
  */
 export async function appendWithinQuota(
   buffer: SourceBuffer,
@@ -133,15 +133,16 @@ export async function appendWithinQuota(
     // Always let playback move on once, so a retry has something new to evict.
     do {
       await waitForConsumption(signal);
+      if (video.paused) continue;
+      // A seek also counts as progress: it moves the playhead and frees what is behind it.
+      const progressed = video.currentTime !== lastTime || bufferStart(buffer) !== lastStart;
+      stalled = progressed ? 0 : stalled + 1;
+      if (stalled >= MAX_STALLED_RETRIES) {
+        throw new Error('The media buffer is full and playback is not advancing. Retry playback.');
+      }
+      lastTime = video.currentTime;
+      lastStart = bufferStart(buffer);
     } while (video.paused || secondsAhead(buffer, video) > budget.maxAheadSeconds);
-    // A seek also counts as progress: it moves the playhead and frees what is behind it.
-    const progressed = video.currentTime !== lastTime || bufferStart(buffer) !== lastStart;
-    stalled = progressed ? 0 : stalled + 1;
-    if (stalled >= MAX_STALLED_RETRIES) {
-      throw new Error('The media buffer is full and playback is not advancing. Retry playback.');
-    }
-    lastTime = video.currentTime;
-    lastStart = bufferStart(buffer);
   }
 }
 
