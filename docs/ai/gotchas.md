@@ -130,8 +130,16 @@ afterEach(() => {
 ### ⚠️ **Database uses TypeORM synchronize mode**
 
 - Database schema automatically syncs with entity changes (`synchronize: true`)
-- No migrations system - TypeORM handles schema updates automatically
+- No schema migrations - TypeORM handles schema updates automatically
 - Changes to entities immediately affect database structure
+
+### 🔁 **Data migrations**
+
+When existing rows must be rewritten (backfills, recomputed values), add a data migration instead of running it at boot:
+
+- Write a `Migration` in `backend/src/database/migrations/` and append it to the `migrations` array in `index.ts`. Never edit, reorder or remove a released entry: a database's version (`migration_version` table) is its index into that array.
+- `MigrationService.run()` runs every migration after the stored version, in order, right after the database is initialized and before any service starts. The version is saved after each step, and a failure stops startup.
+- Each migration must be a no-op on an empty database (new installs run them all) and safe to run twice (a crash between finishing and saving the version reruns it).
 
 ### ✅ **Safe entity modifications**
 
