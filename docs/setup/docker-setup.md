@@ -15,7 +15,7 @@ Open <http://localhost:3000>, create the admin account, then add your [TMDB acce
 
 On first boot the `miauflix` logs show `Starting in degraded mode`: that's expected until you complete the setup screens.
 
-> **Image tags:** the quick-start file uses the `edge` tag (the latest `main`) because no release has been published yet. Switch to a version tag once one is available.
+> **Image tags:** the quick-start file uses `latest`, the newest release. Pin a version such as `0.0.1` to upgrade only when you choose, or use `edge` to follow `main`.
 
 > **Security:** the quick-start file sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
 
@@ -46,7 +46,7 @@ The admin setup endpoint closes for good once an admin exists, so this is safe o
 
 To reach Miauflix from the internet (for example on a VPS), add [`docker-compose.https.yml`](../../docker-compose.https.yml) and its [`Caddyfile`](../../Caddyfile). [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain and forwards traffic to Miauflix.
 
-1. Point your domain's DNS at the server and allow ports 80 and 443 through its firewall.
+1. Point your domain's DNS at the server and allow ports 80 and 443 (TCP) through its firewall.
 2. Download both files next to `docker-compose.quickstart.yml`:
 
    ```bash
@@ -62,7 +62,12 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
    REVERSE_PROXY_SECRET=<output of: openssl rand -hex 32>
    ```
 
-   `COMPOSE_FILE` lets plain `docker compose` commands use both files. `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches.
+   `COMPOSE_FILE` lets plain `docker compose` commands use both files (on Windows, separate them with `;` instead of `:`). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files and point Caddy at the VPN container, which owns Miauflix's network:
+
+   ```bash
+   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml:docker-compose.https.yml
+   MIAUFLIX_UPSTREAM=vpn:3000
+   ```
 
 4. Start it and read the generated admin credentials:
 
@@ -71,7 +76,9 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
    docker compose logs miauflix --since=15m
    ```
 
-Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauflix prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
+Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, since the setup endpoint would otherwise be open to the internet, so Miauflix prints a generated admin account to the logs instead (see [Initial User](getting-started.md#initial-user)). It also sets `COOKIE_SECURE=true` so session cookies are only sent over HTTPS, and `CORS_ORIGIN=https://<your domain>`: the realtime connection (live playback updates, notifications, search) only accepts that origin, and the default allows only `localhost`. Port 3000 stays bound to `127.0.0.1`: all outside traffic goes through Caddy.
+
+The `Caddyfile` serves HTTP/1.1 and HTTP/2 only. HTTP/3 runs over UDP, and for a viewer whose own connection goes through a VPN it delivered video at about 4 Mbit/s, while HTTP/2 over the same path did about 150 Mbit/s. To turn HTTP/3 back on, remove the `servers` block at the top of the `Caddyfile`, add `- '443:443/udp'` to the `caddy` ports, and on Linux raise the kernel's UDP buffers (`net.core.rmem_max` and `net.core.wmem_max` to `7500000`), or Caddy's HTTP/3 stalls as well.
 
 ### Published images
 
@@ -82,7 +89,7 @@ Open `https://<your domain>` and sign in. The HTTPS file turns off `ALLOW_CREATE
 | `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                      |
 | `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                       |
 
-All images are built for `linux/amd64` and `linux/arm64`. Tags: `edge` for the latest `main` and `sha-<commit>` for a specific commit. Once releases are published, `latest` and `X.Y.Z` / `X.Y` / `X` will follow them; pin a version tag for stable deployments.
+All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for [releases](https://github.com/maury91/miauflix/releases), `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
 
 ### Using a VPN
 
@@ -104,12 +111,14 @@ Miauflix finds and streams content over BitTorrent, so every peer sees the IP ad
    bash nordvpn-key.sh
    ```
 
-4. Add these lines to the same `.env` file, so plain `docker compose` commands use both files:
+4. Add these lines to the same `.env` file, so plain `docker compose` commands use both files (on Windows, separate them with `;` instead of `:`):
 
    ```bash
    COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml
    NORDVPN_COUNTRIES=Netherlands # optional, comma-separated list of countries to connect to
    ```
+
+   If you [set up HTTPS](#https-with-a-domain), keep all three files and `MIAUFLIX_UPSTREAM=vpn:3000` from that section instead, or Caddy drops out of your `docker compose` commands.
 
 5. Start it:
 
