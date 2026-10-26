@@ -335,4 +335,18 @@ describe('watchForStalls', () => {
     }
     expect(seeks).toEqual([179]);
   });
+
+  it('does not re-seek while the tab is hidden and video decoding is paused', () => {
+    const hidden = vi.spyOn(document, 'hidden', 'get').mockReturnValue(true);
+    try {
+      const { video } = setupVideo(178);
+      for (let check = 0; check <= STALL_CHECKS * 2; check++) {
+        video.currentTime += 0.25;
+        vi.advanceTimersByTime(STALL_CHECK_MS);
+      }
+      expect(video.currentTime).toBe(178 + 0.25 * (STALL_CHECKS * 2 + 1));
+    } finally {
+      hidden.mockRestore();
+    }
+  });
 });

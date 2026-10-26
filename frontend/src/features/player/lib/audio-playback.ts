@@ -186,7 +186,9 @@ export function watchForStalls(video: HTMLVideoElement, signal: AbortSignal): vo
     }
 
     stalled = moved ? 0 : stalled + 1;
-    frozen = moved && !decodedMore ? frozen + 1 : 0;
+    // A hidden tab may stop decoding video while audio plays on; that is not a frozen picture.
+    const hidden = typeof document !== 'undefined' && document.hidden;
+    frozen = moved && !decodedMore && !hidden ? frozen + 1 : 0;
     if (stalled >= STALL_CHECKS) {
       stalled = 0;
       const target = stallRecoveryTime(video.buffered, time);
