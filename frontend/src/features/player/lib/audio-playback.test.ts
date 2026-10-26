@@ -6,6 +6,11 @@ import {
   MAX_AHEAD_SECONDS,
   MAX_STALLED_RETRIES,
   MIN_AHEAD_SECONDS,
+  STALL_CHECK_MS,
+  STALL_CHECKS,
+  stallRecoveryTime,
+  upcomingGap,
+  watchForStalls,
 } from './audio-playback';
 
 /** A SourceBuffer over one buffered range, whose appends can fail with a quota error. */
@@ -187,5 +192,147 @@ describe('appendWithinQuota', () => {
     await vi.advanceTimersByTimeAsync(0);
     controller.abort();
     await failure;
+  });
+});
+
+const ranges = (...list: Array<[number, number]>) =>
+  ({
+    length: list.length,
+    start: (index: number) => list[index][0],
+    end: (index: number) => list[index][1],
+  }) as unknown as TimeRanges;
+
+describe('stallRecoveryTime', () => {
+  it('nudges forward when stuck inside a range with media ahead', () => {
+    expect(stallRecoveryTime(ranges([177.26, 208.48]), 180.05)).toBeCloseTo(180.15);
+  });
+
+  it('jumps a gap to the next range', () => {
+    expect(stallRecoveryTime(ranges([166.83, 177.18], [177.26, 208.48]), 177.18)).toBeCloseTo(
+      177.27
+    );
+  });
+
+  it('jumps to the next range when stuck just before a gap', () => {
+    expect(stallRecoveryTime(ranges([166.83, 177.18], [177.26, 208.48]), 177.1)).toBeCloseTo(
+      177.27
+    );
+  });
+
+  it('leaves ordinary buffering at the end of the buffer alone', () => {
+    expect(stallRecoveryTime(ranges([166.83, 177.18]), 177.18)).toBeUndefined();
+    expect(stallRecoveryTime(ranges([166.83, 177.18]), 177)).toBeUndefined();
+    expect(stallRecoveryTime(ranges(), 10)).toBeUndefined();
+  });
+});
+
+describe('upcomingGap', () => {
+  const gapped = ranges([166.83, 177.18], [177.26, 208.48]);
+
+  it('finds a small gap just ahead of the playhead', () => {
+    const gap = upcomingGap(gapped, 177);
+    expect(gap?.at).toBe(177.18);
+    expect(gap?.to).toBeCloseTo(177.27);
+  });
+
+  it('ignores a gap that is still far ahead', () => {
+    expect(upcomingGap(gapped, 170)).toBeUndefined();
+  });
+
+  it('ignores a gap too long to skip and the end of the buffer', () => {
+    expect(upcomingGap(ranges([166.83, 177.18], [180, 208.48]), 177)).toBeUndefined();
+    expect(upcomingGap(gapped, 208.2)).toBeUndefined();
+  });
+});
+
+describe('watchForStalls', () => {
+  beforeEach(() => {
+    vi.useFakeTimers();
+  });
+
+  afterEach(() => {
+    vi.useRealTimers();
+  });
+
+  const setupVideo = (currentTime: number, buffered = ranges([177.26, 208.48])) => {
+    const quality = { totalVideoFrames: 0 };
+    const video = {
+      currentTime,
+      paused: false,
+      seeking: false,
+      ended: false,
+      playbackRate: 1,
+      buffered,
+      getVideoPlaybackQuality: () => quality,
+    } as unknown as HTMLVideoElement;
+    const controller = new AbortController();
+    watchForStalls(video, controller.signal);
+    return { video, controller, quality };
+  };
+
+  it('nudges a playhead that stops with media buffered ahead', () => {
+    const { video } = setupVideo(180.05);
+    vi.advanceTimersByTime(STALL_CHECK_MS * STALL_CHECKS);
+    expect(video.currentTime).toBeCloseTo(180.15);
+  });
+
+  it('leaves a moving playhead alone', () => {
+    const { video, quality } = setupVideo(180);
+    for (let check = 0; check < STALL_CHECKS * 3; check++) {
+      video.currentTime += 0.5;
+      quality.totalVideoFrames += 6;
+      vi.advanceTimersByTime(STALL_CHECK_MS);
+    }
+    expect(video.currentTime).toBe(180 + 0.5 * STALL_CHECKS * 3);
+  });
+
+  it('leaves paused playback alone', () => {
+    const { video } = setupVideo(180);
+    (video as { paused: boolean }).paused = true;
+    vi.advanceTimersByTime(STALL_CHECK_MS * STALL_CHECKS * 3);
+    expect(video.currentTime).toBe(180);
+  });
+
+  it('stops watching when playback is cancelled', () => {
+    const { video, controller } = setupVideo(180);
+    controller.abort();
+    vi.advanceTimersByTime(STALL_CHECK_MS * STALL_CHECKS * 3);
+    expect(video.currentTime).toBe(180);
+  });
+
+  it('jumps a small gap just before the playhead reaches it', () => {
+    const { video, quality } = setupVideo(177, ranges([166.83, 177.18], [177.26, 208.48]));
+    vi.advanceTimersByTime(STALL_CHECK_MS);
+    // Scheduled for 0.05 s before the gap: 177.13 - 177 = 130 ms after the check.
+    video.currentTime = 177.13;
+    quality.totalVideoFrames += 3;
+    vi.advanceTimersByTime(130);
+    expect(video.currentTime).toBeCloseTo(177.27);
+  });
+
+  it('does not jump when a seek moved the playhead elsewhere', () => {
+    const { video } = setupVideo(177, ranges([166.83, 177.18], [177.26, 208.48]));
+    vi.advanceTimersByTime(STALL_CHECK_MS);
+    video.currentTime = 170;
+    vi.advanceTimersByTime(130);
+    expect(video.currentTime).toBe(170);
+  });
+
+  it('re-seeks in place when the playhead moves but no frame is decoded', () => {
+    const { video } = setupVideo(178);
+    const seeks: number[] = [];
+    let time = 178;
+    Object.defineProperty(video, 'currentTime', {
+      get: () => time,
+      set: (value: number) => {
+        seeks.push(value);
+        time = value;
+      },
+    });
+    for (let check = 0; check <= STALL_CHECKS; check++) {
+      time += 0.25;
+      vi.advanceTimersByTime(STALL_CHECK_MS);
+    }
+    expect(seeks).toEqual([179]);
   });
 });
