@@ -10,6 +10,8 @@ import {
   Unique,
 } from 'typeorm';
 
+import { encryptedText } from '@utils/encrypted-column.util';
+
 import { User } from './user.entity';
 
 export type NotificationType = 'movie_quality_upgrade' | 'tv_episode_available';
@@ -41,10 +43,10 @@ export class Notification {
   @Column({ type: 'integer' })
   mediaId: number;
 
-  @Column()
+  @Column({ name: 'a', transformer: encryptedText({ deterministic: false }) })
   title: string;
 
-  @Column()
+  @Column({ name: 'b', transformer: encryptedText({ deterministic: false }) })
   message: string;
 
   @Column({ type: 'integer', nullable: true })
