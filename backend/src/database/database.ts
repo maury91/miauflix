@@ -18,6 +18,7 @@ import { EpisodeSource } from '@entities/episode-source.entity';
 import { MediaList, MediaListItem } from '@entities/list.entity';
 import { MediaProbe } from '@entities/media-probe.entity';
 import { MediaRating } from '@entities/media-rating.entity';
+import { MigrationVersion } from '@entities/migration-version.entity';
 import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
 import { Notification } from '@entities/notification.entity';
@@ -174,6 +175,7 @@ export class Database {
         PlaybackGrant,
         MediaProbe,
         RecentSearch,
+        MigrationVersion,
       ],
       synchronize: false,
       logger: new DatabaseLogger('all'),

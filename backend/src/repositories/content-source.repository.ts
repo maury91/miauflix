@@ -4,6 +4,7 @@ import { In, LessThan, type Repository } from 'typeorm';
 import type { Database } from '@database/database';
 import { ContentSource, QUALITIES } from '@entities/content-source.entity';
 import { MovieSource } from '@entities/movie-source.entity';
+import { calculateStreamingScore } from '@utils/streaming-score.util';
 
 const THREED_QUALITY_INDEX = QUALITIES.indexOf('3D');
 
@@ -29,6 +30,16 @@ const PROVIDER_FIELDS = [
   'sourceType',
   'sourceUploadedAt',
 ] as const satisfies ReadonlyArray<keyof ContentSource>;
+
+/** Columns the streaming score is computed from. */
+const SCORE_FIELDS: Array<keyof ContentSource> = [
+  'id',
+  'broadcasters',
+  'watchers',
+  'quality',
+  'videoCodec',
+  'sourceUploadedAt',
+];
 
 export type ContentSourceInput = Partial<ContentSource> & Pick<ContentSource, 'hash'>;
 
@@ -73,13 +84,19 @@ export class ContentSourceRepository {
         .orIgnore()
         .execute()
     );
-    // The `ih` transformer normalizes the hash, so any casing finds the canonical row.
-    const existing = await this.repository.findOne({ where: { hash: source.hash } });
-    if (!existing) throw new Error('Content source could not be stored');
-    const changes = this.providerMetadataChanges(existing, source);
-    if (!changes) return existing;
-    await this.repository.update(existing.id, changes);
-    return Object.assign(existing, changes);
+    // Read, score and write in one transaction so a concurrent stats update can't interleave
+    // and leave a score computed from stale counts.
+    return this.db.transaction(async manager => {
+      const repository = manager.getRepository(ContentSource);
+      // The `ih` transformer normalizes the hash, so any casing finds the canonical row.
+      const existing = await repository.findOne({ where: { hash: source.hash } });
+      if (!existing) throw new Error('Content source could not be stored');
+      const changes = this.providerMetadataChanges(existing, source);
+      if (!changes) return existing;
+      changes.streamingScore = calculateStreamingScore({ ...existing, ...changes });
+      await repository.update(existing.id, changes);
+      return Object.assign(existing, changes);
+    });
   }
 
   /** Upsert provider sources and link each one to the movie. */
@@ -163,12 +180,31 @@ export class ContentSourceRepository {
     });
   }
 
-  updateStats(sourceId: number, broadcasters: number, watchers: number, nextStatsCheckAt: Date) {
-    return this.repository.update(sourceId, {
-      broadcasters,
-      watchers,
-      lastStatsCheck: new Date(),
-      nextStatsCheckAt,
+  /**
+   * Store fresh seed/peer counts and the streaming score they produce. The score is computed
+   * from the row as stored inside the transaction, so provider metadata refreshed since the
+   * caller read the source is not overwritten with a stale score.
+   */
+  updateStats(
+    source: Pick<ContentSource, 'id'>,
+    broadcasters: number,
+    watchers: number,
+    nextStatsCheckAt: Date
+  ) {
+    return this.db.transaction(async manager => {
+      const repository = manager.getRepository(ContentSource);
+      const current = await repository.findOne({
+        select: SCORE_FIELDS,
+        where: { id: source.id },
+      });
+      if (!current) return;
+      await repository.update(source.id, {
+        broadcasters,
+        watchers,
+        streamingScore: calculateStreamingScore({ ...current, broadcasters, watchers }),
+        lastStatsCheck: new Date(),
+        nextStatsCheckAt,
+      });
     });
   }
 
@@ -307,72 +343,31 @@ LIMIT ?
   }
 
   /**
-   * Calculate streaming score for a movie source (0-10,000 scale)
-   * Components: Availability (4000) + Quality (3000) + Codec (2000) + Activity (1000) * AgePenalty
+   * Recompute streaming scores that were never calculated (rows stored before scoring was
+   * wired in); later stats checks keep them current.
    */
-  calculateStreamingScore(source: ContentSource): number {
-    // Availability Score (4000 points max)
-    let availabilityScore = 0;
-    if (source.broadcasters && source.broadcasters > 0) {
-      if (!source.watchers || source.watchers === 0) {
-        availabilityScore = Math.min(4000, source.broadcasters * 40); // Cap at 4000
-      } else {
-        const ratio = source.broadcasters / source.watchers;
-        availabilityScore = Math.min(4000, (source.broadcasters * 30 + ratio * 100) * 1.33);
+  async backfillStreamingScores(batchSize = 500): Promise<number> {
+    // One transaction: a commit per row would make startup crawl on a large library.
+    return this.db.transaction(async manager => {
+      const repository = manager.getRepository(ContentSource);
+      let updated = 0;
+      for (;;) {
+        const sources = await repository.find({
+          select: SCORE_FIELDS,
+          where: { streamingScore: 0 },
+          order: { id: 'ASC' },
+          take: batchSize,
+        });
+        const scored = sources
+          .map(source => ({ id: source.id, streamingScore: calculateStreamingScore(source) }))
+          .filter(source => source.streamingScore > 0);
+        for (const { id, streamingScore } of scored) {
+          await repository.update(id, { streamingScore });
+        }
+        updated += scored.length;
+        // Rows that still score 0 (no seeds, unknown everything) would be fetched forever.
+        if (sources.length < batchSize || scored.length === 0) return updated;
       }
-    }
-
-    // Quality Score (3000 points max)
-    const qualityScores: Record<number, number> = {
-      0: 500, // SD = 500 points
-      1: 1500, // HD = 1500 points
-      2: 2500, // FHD = 2500 points
-      3: 3000, // 2K = 3000 points
-      4: 3500, // 4K = 3500 points (will be capped)
-      5: 4000, // 8K = 4000 points (will be capped)
-      6: 0, // 3D = 0 points
-      // Note: 3D (index 6) is filtered out in queries
-    };
-    const qualityIndex = source.quality !== null ? Number(source.quality) : -1;
-    const qualityScore = Math.min(3000, qualityScores[qualityIndex] || 1000);
-
-    // Codec Efficiency Score (2000 points max)
-    const codecScores: Record<number, number> = {
-      0: 200, // VC1 = 200 points
-      1: 400, // MPEG2 = 400 points
-      2: 800, // MPEG4 = 800 points
-      3: 600, // XVID = 600 points
-      4: 1200, // VP8 = 1200 points
-      5: 1500, // VP9 = 1500 points
-      6: 1800, // X264 = 1800 points
-      7: 2200, // X265 = 2200 points (will be capped)
-      8: 2500, // AV1 = 2500 points (will be capped)
-      9: 2000, // X264_10BIT = 2000 points
-      10: 2800, // X265_10BIT = 2800 points (will be capped)
-      11: 3000, // AV1_10BIT = 3000 points (will be capped)
-    };
-    const codecIndex = source.videoCodec !== null ? Number(source.videoCodec) : -1;
-    const codecScore = Math.min(2000, codecScores[codecIndex] || 1000);
-
-    // Activity Score (1000 points max)
-    const totalActivity = (source.broadcasters || 0) + (source.watchers || 0);
-    const activityScore = Math.min(1000, totalActivity * 10); // 1 point per peer
-
-    // Age Penalty Multiplier
-    let agePenalty = 0.9; // Default for unknown age
-    if (source.sourceUploadedAt) {
-      const now = new Date();
-      const uploadDate = new Date(source.sourceUploadedAt);
-      const yearsOld = (now.getTime() - uploadDate.getTime()) / (1000 * 60 * 60 * 24 * 365);
-
-      if (yearsOld < 1)
-        agePenalty = 1.0; // Recent = full score
-      else if (yearsOld < 2)
-        agePenalty = 0.85; // 1-2 years = 85%
-      else agePenalty = 0.7; // 2+ years = 70%
-    }
-
-    const totalScore = (availabilityScore + qualityScore + codecScore + activityScore) * agePenalty;
-    return Math.round(totalScore);
+    });
   }
 }

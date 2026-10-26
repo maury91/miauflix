@@ -66,6 +66,86 @@ function waitForConsumption(signal: AbortSignal) {
   });
 }
 
+/** Seconds kept buffered behind the playhead; older media is evicted to make room. */
+const KEEP_BEHIND_SECONDS = 30;
+/** Seconds read ahead of the playhead before the network read pauses. */
+export const MAX_AHEAD_SECONDS = 60;
+/** The ahead limit never shrinks below this, even on high-bitrate files. */
+export const MIN_AHEAD_SECONDS = 10;
+
+function isQuotaExceeded(error: unknown): boolean {
+  return error instanceof DOMException && error.name === 'QuotaExceededError';
+}
+
+function secondsAhead(buffer: SourceBuffer, video: HTMLVideoElement): number {
+  return buffer.buffered.length
+    ? buffer.buffered.end(buffer.buffered.length - 1) - video.currentTime
+    : 0;
+}
+
+/** Waits in a row, with neither the playhead nor the buffer start moving, before giving up. */
+export const MAX_STALLED_RETRIES = 8;
+
+function bufferStart(buffer: SourceBuffer): number {
+  return buffer.buffered.length ? buffer.buffered.start(0) : 0;
+}
+
+/** Shared between appends: the ahead limit shrinks when the browser's byte quota is hit. */
+export interface BufferBudget {
+  maxAheadSeconds: number;
+}
+
+/**
+ * Append a chunk, making room when the browser's media buffer is full. The buffer limit is in
+ * bytes (about 150 MB of video in Chrome) while reading ahead is limited in seconds, so on a
+ * high-bitrate file even MAX_AHEAD_SECONDS can overflow it. On QuotaExceededError: evict what
+ * is behind the playhead, lower the ahead limit to what fit, wait for playback to consume, and
+ * retry. Before playback starts there is nothing to consume, so the error stands. While paused it
+ * waits for playback to resume; if playback runs but neither the playhead nor eviction moves for
+ * MAX_STALLED_RETRIES waits in a row, the buffer will never drain and the error is reported.
+ */
+export async function appendWithinQuota(
+  buffer: SourceBuffer,
+  video: HTMLVideoElement,
+  bytes: ArrayBuffer,
+  signal: AbortSignal,
+  budget: BufferBudget,
+  playing: boolean
+): Promise<void> {
+  let stalled = 0;
+  let lastTime = video.currentTime;
+  let lastStart = bufferStart(buffer);
+  for (;;) {
+    try {
+      await updateBuffer(buffer, signal, () => buffer.appendBuffer(bytes));
+      return;
+    } catch (error) {
+      if (!playing || !isQuotaExceeded(error)) throw error;
+    }
+    const behind = video.currentTime - 1;
+    if (buffer.buffered.length && buffer.buffered.start(0) < behind) {
+      await updateBuffer(buffer, signal, () => buffer.remove(0, behind));
+    }
+    budget.maxAheadSeconds = Math.max(
+      MIN_AHEAD_SECONDS,
+      Math.min(budget.maxAheadSeconds, secondsAhead(buffer, video)) * 0.75
+    );
+    // Always let playback move on once, so a retry has something new to evict.
+    do {
+      await waitForConsumption(signal);
+      if (video.paused) continue;
+      // A seek also counts as progress: it moves the playhead and frees what is behind it.
+      const progressed = video.currentTime !== lastTime || bufferStart(buffer) !== lastStart;
+      stalled = progressed ? 0 : stalled + 1;
+      if (stalled >= MAX_STALLED_RETRIES) {
+        throw new Error('The media buffer is full and playback is not advancing. Retry playback.');
+      }
+      lastTime = video.currentTime;
+      lastStart = bufferStart(buffer);
+    } while (video.paused || secondsAhead(buffer, video) > budget.maxAheadSeconds);
+  }
+}
+
 /** Native MSE keeps a sparse, full-movie timeline while FFmpeg restarts on each seek. */
 export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
   const { video, mimeType, durationSeconds, startSeconds, autoplay, onReady, onError } = options;
@@ -124,27 +204,26 @@ export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
     buffer.timestampOffset = offset;
     reader = response.body.getReader();
     let positioned = false;
+    const budget: BufferBudget = { maxAheadSeconds: MAX_AHEAD_SECONDS };
     while (!signal.aborted) {
       // Limit media-buffer memory and stop pulling the network when paused with a full buffer.
-      while (
-        positioned &&
-        buffer.buffered.length &&
-        buffer.buffered.end(buffer.buffered.length - 1) - video.currentTime > 60
-      ) {
+      while (positioned && secondsAhead(buffer, video) > budget.maxAheadSeconds) {
         await waitForConsumption(signal);
       }
       const next = await reader.read();
       if (next.done) break;
       if (
         positioned &&
-        video.currentTime > 30 &&
+        video.currentTime > KEEP_BEHIND_SECONDS &&
         buffer.buffered.length &&
-        buffer.buffered.start(0) < video.currentTime - 30
+        buffer.buffered.start(0) < video.currentTime - KEEP_BEHIND_SECONDS
       ) {
-        await updateBuffer(buffer, signal, () => buffer.remove(0, video.currentTime - 30));
+        await updateBuffer(buffer, signal, () =>
+          buffer.remove(0, video.currentTime - KEEP_BEHIND_SECONDS)
+        );
       }
       const bytes = new Uint8Array(next.value).buffer;
-      await updateBuffer(buffer, signal, () => buffer.appendBuffer(bytes));
+      await appendWithinQuota(buffer, video, bytes, signal, budget, positioned);
       if (!positioned) {
         for (let range = 0; range < buffer.buffered.length; range++) {
           const beginning = buffer.buffered.start(range);

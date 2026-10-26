@@ -630,12 +630,7 @@ export class SourceService {
       { old: source.broadcasters ?? 0, new: broadcasters },
       { old: source.watchers ?? 0, new: watchers }
     );
-    await this.contentSourceRepository.updateStats(
-      source.id,
-      broadcasters,
-      watchers,
-      nextCheckTime
-    );
+    await this.contentSourceRepository.updateStats(source, broadcasters, watchers, nextCheckTime);
     return nextCheckTime;
   }
 
@@ -758,7 +753,7 @@ export class SourceService {
           );
 
           await this.contentSourceRepository.updateStats(
-            source.id,
+            source,
             broadcasters,
             watchers,
             nextCheckTime
