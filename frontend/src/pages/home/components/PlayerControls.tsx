@@ -23,6 +23,7 @@ const Overlay = styled.div<{ $visible: boolean; $paused: boolean }>`
   color: ${PALETTE.text.primary};
   background: ${({ $paused }) => ($paused ? 'rgba(0, 0, 0, 0.5)' : 'transparent')};
   cursor: ${({ $visible }) => ($visible ? 'default' : 'none')};
+  outline: none;
 `;
 const Controls = styled.div<{ $visible: boolean }>`
   position: absolute;
@@ -169,6 +170,11 @@ const Time = styled.div`
 const Volume = styled.input`
   width: clamp(50px, 8vw, 110px);
   accent-color: ${PALETTE.color.brand};
+  outline: none;
+  &:focus-visible {
+    outline: 2px solid white;
+    outline-offset: 3px;
+  }
 `;
 
 function formatTime(seconds: number) {

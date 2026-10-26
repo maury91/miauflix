@@ -162,7 +162,7 @@ describe('SourceService', () => {
       mockContentSource2,
     ]);
     mockContentSourceRepository.findSourceThatNeedsStatsUpdate.mockResolvedValue([]);
-    mockContentSourceRepository.updateStats.mockResolvedValue({} as UpdateResult);
+    mockContentSourceRepository.updateStats.mockResolvedValue(undefined);
     mockContentSourceRepository.getNextSourcesToProcess.mockResolvedValue([]);
     mockContentSourceRepository.updateSourceFile.mockResolvedValue({} as UpdateResult);
     mockContentSourceRepository.updateSourceMetadata.mockResolvedValue({} as UpdateResult);
@@ -557,7 +557,7 @@ describe('SourceService', () => {
 
       // And it should update the stats for the source
       expect(mockContentSourceRepository.updateStats).toHaveBeenCalledWith(
-        sourceToUpdate.id,
+        sourceToUpdate,
         newBroadcasters,
         newWatchers,
         expect.any(Date)
@@ -591,7 +591,7 @@ describe('SourceService', () => {
 
       // And it should update the stats for the source
       expect(mockContentSourceRepository.updateStats).toHaveBeenCalledWith(
-        sourceWithoutFile.id,
+        sourceWithoutFile,
         newBroadcasters,
         newWatchers,
         expect.any(Date)
