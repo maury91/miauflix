@@ -5,6 +5,7 @@
 ### Bug fix
 
 - Playback no longer stops with "The media buffer is full and playback is not advancing" on high-bitrate files using the audio-converting stream. On a full buffer the player removed media up to 1 s behind the playhead, but the browser extends a removal to the next keyframe, so this also removed the frames being played and froze playback. The player now only lowers its read-ahead limit and waits, and lets the browser evict what is behind the playhead. It reports a stall after about 10 s without progress instead of 2 s
+- Playback on the audio-converting stream no longer freezes at small gaps in the media: in open-GOP encodes (x265's default) the 2–3 frames shown just before each keyframe are decoded after it, and Chrome often reports them as a gap in the buffered video. Chrome froze the picture there while audio played on, then stalled the whole player a few seconds later until a seek. A watchdog now jumps gaps of up to 1 s just before the playhead reaches them, and as a fallback re-seeks when the playhead stops for about 1 s with media buffered ahead, or keeps moving while no video frame is decoded
 
 ### Technical debt
 
