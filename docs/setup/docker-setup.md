@@ -91,6 +91,8 @@ The `Caddyfile` serves HTTP/1.1 and HTTP/2 only. HTTP/3 runs over UDP, and for a
 
 All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for [releases](https://github.com/maury91/miauflix/releases), `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
 
+To test a branch before merging, open **Actions → CI Pipeline → Run workflow**, pick the branch and run it. After the tests pass it publishes every image tagged with the branch name (`/` becomes `-`, so `fix/buffer` is `fix-buffer`) and `sha-<commit>`; `latest` and `edge` are left alone. Only collaborators with write access to the repository can start a run.
+
 ### Using a VPN
 
 Miauflix finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default Miauflix refuses to search for sources until it detects a NordVPN connection.
