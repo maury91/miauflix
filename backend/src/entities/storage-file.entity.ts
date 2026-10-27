@@ -1,5 +1,7 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, type Relation, Unique } from 'typeorm';
 
+import { encryptedText } from '@utils/encrypted-column.util';
+
 import { Storage } from './storage.entity';
 
 /** One file of a stored source, with its own completion state. */
@@ -15,7 +17,7 @@ export class StorageFile {
   @Column()
   storageId: number;
 
-  @Column('text')
+  @Column({ type: 'text', name: 'k', transformer: encryptedText({ deterministic: true }) })
   path: string;
 
   @Column('integer')

@@ -1,15 +1,19 @@
 import 'reflect-metadata';
 
+import { randomBytes } from 'crypto';
 import { DataSource } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { RecentSearch } from '@entities/recent-search.entity';
 import { RefreshToken } from '@entities/refresh-token.entity';
 import { User } from '@entities/user.entity';
+import { EncryptionService } from '@services/encryption/encryption.service';
+import { EncryptedColumns } from '@utils/encrypted-column.util';
 
 import { MAX_RECENT_SEARCHES, RecentSearchRepository } from './recent-search.repository';
 
 const setupTest = async () => {
+  EncryptedColumns.configure(new EncryptionService(randomBytes(32).toString('base64')));
   const dataSource = await new DataSource({
     type: 'sqlite',
     database: ':memory:',

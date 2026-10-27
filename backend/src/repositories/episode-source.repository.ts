@@ -2,6 +2,7 @@ import type { Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { EpisodeSource } from '@entities/episode-source.entity';
+import { EncryptedColumns } from '@utils/encrypted-column.util';
 
 export class EpisodeSourceRepository {
   private readonly repository: Repository<EpisodeSource>;
@@ -63,11 +64,13 @@ export class EpisodeSourceRepository {
     canonicalPath: string
   ): Promise<string> {
     // An already-associated canonical row can win while this provider-relative row exists.
+    // Raw SQL: `k` is the encrypted videoFilePath column, and parameters are stored values.
     await this.database.write(() =>
-      this.repository.query(
-        'UPDATE OR IGNORE episode_source SET videoFilePath = ? WHERE id = ? AND videoFilePath = ?',
-        [canonicalPath, id, previousPath]
-      )
+      this.repository.query('UPDATE OR IGNORE episode_source SET k = ? WHERE id = ? AND k = ?', [
+        EncryptedColumns.encrypt(canonicalPath, true),
+        id,
+        EncryptedColumns.encrypt(previousPath, true),
+      ])
     );
     const stored = await this.repository.findOneBy({ id });
     if (!stored) return canonicalPath; // A concurrent resolver already merged this stale row.
@@ -117,12 +120,17 @@ export class EpisodeSourceRepository {
       .where('episodeSource.episodeId = :episodeId', { episodeId })
       .andWhere('episodeSource.sourceId = :sourceId', { sourceId });
     if (videoFilePath === null) query.andWhere('episodeSource.videoFilePath IS NULL');
-    else query.andWhere('episodeSource.videoFilePath = :videoFilePath', { videoFilePath });
+    // Query-builder parameters skip column transformers, so pass the stored (encrypted) value.
+    else
+      query.andWhere('episodeSource.videoFilePath = :videoFilePath', {
+        videoFilePath: EncryptedColumns.encrypt(videoFilePath, true),
+      });
     // SQLite UNIQUE constraints allow multiple NULLs; use one atomic statement for that case.
     if (videoFilePath === null) {
       await this.database.write(() =>
         this.repository.query(
-          'INSERT INTO episode_source (episodeId, sourceId, videoFilePath, matchKind) SELECT ?, ?, NULL, ? WHERE NOT EXISTS (SELECT 1 FROM episode_source WHERE episodeId = ? AND sourceId = ? AND videoFilePath IS NULL)',
+          // `k` is the videoFilePath column.
+          'INSERT INTO episode_source (episodeId, sourceId, k, matchKind) SELECT ?, ?, NULL, ? WHERE NOT EXISTS (SELECT 1 FROM episode_source WHERE episodeId = ? AND sourceId = ? AND k IS NULL)',
           [episodeId, sourceId, matchKind, episodeId, sourceId]
         )
       );

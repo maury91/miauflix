@@ -10,6 +10,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { encryptedText } from '@utils/encrypted-column.util';
+
 import { Storage } from './storage.entity';
 
 /** Why a file of a stored source is wanted. */
@@ -57,7 +59,7 @@ export class StorageFileClaim {
   @Column()
   storageId: number;
 
-  @Column('text')
+  @Column({ type: 'text', name: 'k', transformer: encryptedText({ deterministic: true }) })
   path: string;
 
   @Column({ length: 16 })
