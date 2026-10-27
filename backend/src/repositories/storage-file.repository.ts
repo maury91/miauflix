@@ -85,7 +85,8 @@ export class StorageFileRepository {
         })
         .orUpdate(
           ['rangeStart', 'rangeEnd', 'expiresAt', 'updatedAt'],
-          ['storageId', 'path', 'kind', 'ownerKey']
+          // orUpdate expects database column names: `k` is the (encrypted) path column.
+          ['storageId', 'k', 'kind', 'ownerKey']
         )
         .execute()
     );

@@ -51,6 +51,9 @@ import { TVShowRepository } from '@repositories/tvshow.repository';
 import { UserRepository } from '@repositories/user.repository';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import { EncryptionService } from '@services/encryption/encryption.service';
+import { EncryptedColumns } from '@utils/encrypted-column.util';
+
+import { renameColumns } from './migrations/column-renames';
 
 class DatabaseLogger extends AbstractLogger {
   protected writeLog(level: LogLevel, logMessage: LogMessage | LogMessage[]) {
@@ -144,6 +147,7 @@ export class Database {
     Movie.encryptionService = encryptionService;
     ContentSource.encryptionService = encryptionService;
     Storage.encryptionService = encryptionService;
+    EncryptedColumns.configure(encryptionService);
 
     logger.debug('DATABASE', `Initializing database ${databasePath}`);
 
@@ -185,6 +189,7 @@ export class Database {
 
   public async initialize() {
     await this.dataSource.initialize();
+    await renameColumns(this.dataSource);
     await this.dataSource.synchronize();
     this.mediaListRepository = new MediaListRepository(this);
     this.contentSourceRepository = new ContentSourceRepository(this);
