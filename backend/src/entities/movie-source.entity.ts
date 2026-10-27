@@ -9,6 +9,8 @@ import {
   Unique,
 } from 'typeorm';
 
+import { encryptedText } from '@utils/encrypted-column.util';
+
 import { ContentSource } from './content-source.entity';
 import { Movie } from './movie.entity';
 
@@ -33,7 +35,12 @@ export class MovieSource {
   sourceId: number;
 
   /** Main video inside the source; null until the source's file list is known. */
-  @Column({ type: 'text', nullable: true })
+  @Column({
+    type: 'text',
+    nullable: true,
+    name: 'k',
+    transformer: encryptedText({ deterministic: true }),
+  })
   videoFilePath: string | null;
 
   @CreateDateColumn()
