@@ -10,6 +10,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+import { encryptedText } from '@utils/encrypted-column.util';
+
 import { ContentSource } from './content-source.entity';
 import { Episode } from './episode.entity';
 
@@ -34,7 +36,12 @@ export class EpisodeSource {
   sourceId: number;
 
   /** Null only for the single video in a release whose provider omitted file names. */
-  @Column({ type: 'text', nullable: true })
+  @Column({
+    type: 'text',
+    nullable: true,
+    name: 'k',
+    transformer: encryptedText({ deterministic: true }),
+  })
   videoFilePath: string | null;
 
   /** Combined episode videos are only used as a fallback and have no known boundaries. */

@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+### Security
+
+- The database no longer names what is stored or watched in plain text: file paths inside sources (movie and episode files, stored files and download claims), ffprobe output, recent searches and notification titles and messages are encrypted at rest with the existing source key, in columns renamed to names that do not describe them (`k`, `v`, `a`, `b`). Existing databases are converted by data migrations at the first start (renamed in place before the schema sync, then encrypted, safe to rerun), and the file is rewritten with `VACUUM` so the replaced plain text does not stay readable in freed pages. Links between tables (which movie a source belongs to, which source is stored, playback progress) are still readable to someone who knows the schema
+
 ### Bug fix
 
 - Playback no longer stops with "The media buffer is full and playback is not advancing" on high-bitrate files using the audio-converting stream. On a full buffer the player removed media up to 1 s behind the playhead, but the browser extends a removal to the next keyframe, so this also removed the frames being played and froze playback. The player now only lowers its read-ahead limit and waits, and lets the browser evict what is behind the playhead. It reports a stall after about 10 s without progress instead of 2 s

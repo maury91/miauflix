@@ -130,7 +130,8 @@ export class ContentSourceRepository {
         .createQueryBuilder()
         .update(MovieSource)
         .set({ videoFilePath })
-        .where('movieId = :movieId AND sourceId = :sourceId AND videoFilePath IS NULL', {
+        // `k` is the (encrypted) videoFilePath column.
+        .where('movieId = :movieId AND sourceId = :sourceId AND k IS NULL', {
           movieId,
           sourceId,
         })

@@ -141,10 +141,18 @@ When existing rows must be rewritten (backfills, recomputed values), add a data 
 - `MigrationService.run()` runs every migration after the stored version, in order, right after the database is initialized and before any service starts. The version is saved after each step, and a failure stops startup.
 - Each migration must be a no-op on an empty database (new installs run them all) and safe to run twice (a crash between finishing and saving the version reruns it).
 
+### 🔒 **Encrypted columns**
+
+Text that would reveal what is stored or watched (file paths, ffprobe output, searches, notification titles) is encrypted with `encryptedText()` from `@utils/encrypted-column.util` and stored under a short name that does not describe it (`k`, `v`, `a`, `b`):
+
+- Use `deterministic: true` only for columns that are looked up, compared with `In()` or part of a unique index; everything else uses a random IV.
+- Repository `find`/`update`/`delete` conditions and inserts are encrypted for you. Raw SQL and query-builder parameters are not: pass `EncryptedColumns.encrypt(value, true)` and write the stored column name (`k`), since raw SQL and `orUpdate()` conflict lists use column names.
+- A new encrypted column on existing data needs a `COLUMN_RENAMES` entry, a row in `ENCRYPTED_COLUMNS` and a migration that encrypts the old values, then rewrites the file (`VACUUM`): replaced plain text otherwise stays readable in freed pages.
+
 ### ✅ **Safe entity modifications**
 
 - Adding new optional fields: Safe
-- Renaming fields: Will lose existing data
+- Renaming fields: Will lose existing data, unless the rename is listed in `COLUMN_RENAMES` (`backend/src/database/migrations/column-renames.ts`), which renames the column in place before `synchronize()`
 - Removing fields: Will lose existing data
 - Changing field types: May cause data loss
 
