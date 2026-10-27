@@ -12,9 +12,14 @@ import type { CatalogClientService } from '@services/catalog/catalog-client.serv
 import type {
   PlaybackDeliveryUpdate,
   PlaybackSessionService,
+  PlaybackSourceAttempt,
 } from '@services/playback/playback-session.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProgressService } from '@services/progress/progress.service';
+import type {
+  SourceAvailabilityChange,
+  SourceAvailabilityService,
+} from '@services/source/source-availability.service';
 import { isAllowedOrigin } from '@utils/origin.util';
 
 import type { RealtimeSearchChannel, SearchClient } from './realtime.search';
@@ -106,11 +111,19 @@ export class RealtimeGateway {
     private readonly preload: PreloadIntentService,
     private readonly progress: ProgressService,
     private readonly catalog: CatalogClientService,
-    playback?: Pick<PlaybackSessionService, 'onDeliveryUpdate'> | null,
-    private readonly search?: RealtimeSearchChannel
+    playback?:
+      | (Partial<Pick<PlaybackSessionService, 'onSourceAttempt'>> &
+          Pick<PlaybackSessionService, 'onDeliveryUpdate'>)
+      | null,
+    private readonly search?: RealtimeSearchChannel,
+    availability?: Pick<SourceAvailabilityService, 'onChange'>
   ) {
     this.removeDeliveryListener =
       playback?.onDeliveryUpdate(event => this.deliverPlayback(event)) ?? null;
+    this.removeAttemptListener =
+      playback?.onSourceAttempt?.(event => this.deliverSourceAttempt(event)) ?? null;
+    this.removeAvailabilityListener =
+      availability?.onChange(change => this.deliverAvailability(change)) ?? null;
     this.server.on('connection', (socket: WebSocket, request: IncomingMessage) => {
       this.accept(socket, request);
     });
@@ -151,9 +164,13 @@ export class RealtimeGateway {
     this.removeArtworkListener?.();
     this.removeArtworkStreamReadyListener?.();
     this.removeDeliveryListener?.();
+    this.removeAttemptListener?.();
+    this.removeAvailabilityListener?.();
   }
 
   private readonly removeDeliveryListener: (() => void) | null;
+  private readonly removeAttemptListener: (() => void) | null;
+  private readonly removeAvailabilityListener: (() => void) | null;
   private removeArtworkListener: (() => void) | null = null;
   private removeArtworkStreamReadyListener: (() => void) | null = null;
 
@@ -356,6 +373,38 @@ export class RealtimeGateway {
           update: event.update,
         });
       }
+    }
+  }
+
+  /** Which candidate source a viewer's starting playback is trying, for that session only. */
+  private deliverSourceAttempt(event: PlaybackSourceAttempt): void {
+    for (const client of this.clients) {
+      if (
+        client.userId === event.userId &&
+        (!event.sessionId || client.sessionId === event.sessionId)
+      ) {
+        this.send(client, {
+          type: 'source-attempt',
+          v: 1,
+          playable: event.playable,
+          position: event.attempt.position,
+          total: event.attempt.total,
+        });
+      }
+    }
+  }
+
+  /** Availability is the same for everyone: every signed-in client hears about it. */
+  private deliverAvailability(change: SourceAvailabilityChange): void {
+    for (const client of this.clients) {
+      if (!client.userId) continue;
+      this.send(client, {
+        type: 'source-availability',
+        v: 1,
+        playable: change.playable,
+        mediaId: this.mediaIdFor(change.playable),
+        availability: change.availability,
+      });
     }
   }
 

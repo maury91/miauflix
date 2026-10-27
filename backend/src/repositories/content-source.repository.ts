@@ -170,6 +170,20 @@ export class ContentSourceRepository {
     return Object.keys(changes).length ? (changes as Partial<ContentSource>) : null;
   }
 
+  /** Store whether a source holds a real video; returns whether the stored verdict changed. */
+  async setHasVideo(sourceId: number, hasVideo: boolean): Promise<boolean> {
+    const result = await this.db.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(ContentSource)
+        .set({ hasVideo })
+        .where('id = :sourceId', { sourceId })
+        .andWhere('(hasVideo IS NULL OR hasVideo != :hasVideo)', { hasVideo })
+        .execute()
+    );
+    return Boolean(result.affected);
+  }
+
   /**
    * Update a movie source with source file data
    */

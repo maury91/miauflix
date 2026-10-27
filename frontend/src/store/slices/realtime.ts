@@ -1,5 +1,8 @@
 import type {
+  RealtimeMediaRef,
   RealtimePlaybackDelivery,
+  RealtimeSourceAvailability,
+  RealtimeSourceMessage,
   RealtimeStatusMessage,
 } from '@features/realtime/realtime.client';
 import type {
@@ -14,13 +17,26 @@ interface RealtimeState {
   preparationByMediaId: Record<number, PreloadPreparationSnapshot>;
   /** Latest background probe result per playback session. */
   playbackDeliveries: Record<string, RealtimePlaybackDelivery['update']>;
+  /** Pushed source availability per playable key, newer than any details response. */
+  availabilityByPlayable: Record<string, RealtimeSourceAvailability>;
+  /** The candidate a starting playback is trying, per playable key. */
+  sourceAttempts: Record<string, { position: number; total: number }>;
 }
 
 const initialState: RealtimeState = {
   ready: false,
   preparationByMediaId: {},
   playbackDeliveries: {},
+  availabilityByPlayable: {},
+  sourceAttempts: {},
 };
+
+/** Same identity as the backend's playableKey(): `m:<id>` or `e:<show>:<season>:<episode>`. */
+export function realtimePlayableKey(playable: RealtimeMediaRef | PlayableRef): string {
+  if (playable.kind === 'episode')
+    return `e:${playable.showMediaId}:${playable.seasonNumber}:${playable.episodeNumber}`;
+  return `${playable.kind === 'movie' ? 'm' : 's'}:${playable.mediaId}`;
+}
 
 function getPlayable(message: RealtimeStatusMessage): PlayableRef {
   return (message.type === 'warmup' ? message.playable : message.media) as PlayableRef;
@@ -68,6 +84,18 @@ export const realtimeSlice = createSlice({
         };
       }
     },
+    sourceReceived(state, action: PayloadAction<RealtimeSourceMessage>) {
+      const message = action.payload;
+      const key = realtimePlayableKey(message.playable);
+      if (message.type === 'source-attempt') {
+        state.sourceAttempts[key] = { position: message.position, total: message.total };
+      } else {
+        state.availabilityByPlayable[key] = message.availability;
+      }
+    },
+    sourceAttemptCleared(state, action: PayloadAction<PlayableRef>) {
+      delete state.sourceAttempts[realtimePlayableKey(action.payload)];
+    },
     playbackDeliveryReceived(state, action: PayloadAction<RealtimePlaybackDelivery>) {
       state.playbackDeliveries[action.payload.playbackId] = action.payload.update;
     },
@@ -88,3 +116,19 @@ export const selectPreparationByMediaId =
 export const selectPlaybackDelivery =
   (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>
     playbackId === undefined ? null : (state.realtime.playbackDeliveries[playbackId] ?? null);
+
+export const selectSourceAvailability =
+  (playable: RealtimeMediaRef | PlayableRef | null | undefined) =>
+  (state: { realtime: RealtimeState }) =>
+    playable
+      ? (state.realtime?.availabilityByPlayable?.[realtimePlayableKey(playable)] ?? null)
+      : null;
+
+export const selectSourceAttempt =
+  (playable: PlayableRef | null | undefined) => (state: { realtime: RealtimeState }) =>
+    playable ? (state.realtime?.sourceAttempts?.[realtimePlayableKey(playable)] ?? null) : null;
+
+const NO_AVAILABILITY: Record<string, RealtimeSourceAvailability> = {};
+
+export const selectPushedAvailability = (state: { realtime: RealtimeState }) =>
+  state.realtime?.availabilityByPlayable ?? NO_AVAILABILITY;

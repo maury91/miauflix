@@ -272,6 +272,86 @@ describe('SourceService', () => {
     });
   });
 
+  describe('new episode notifications', () => {
+    const setupEpisodeTest = (hasVideo: boolean | null) => {
+      const mocks = setupTest();
+      const association = {
+        episodeId: 5,
+        sourceId: 11,
+        matchKind: 'single',
+        source: { id: 11, hasVideo },
+      };
+      const episodeSources = {
+        findByEpisodeId: jest.fn().mockResolvedValueOnce([]).mockResolvedValue([association]),
+        associate: jest.fn(),
+      };
+      Object.assign(mocks.mockDatabase, {
+        getEpisodeSourceRepository: jest.fn().mockReturnValue(episodeSources),
+      });
+      const notifications = { episodeAvailable: jest.fn() };
+      const backgroundJobs = { bulkBestEffort: jest.fn(), enqueueBestEffort: jest.fn() };
+      const service = new SourceService(
+        mocks.mockDatabase,
+        mocks.mockVpnService,
+        mocks.mockContentDirectoryService,
+        mocks.mockSourceMetadataFileService,
+        mocks.mockRequestService,
+        mocks.mockConfigService,
+        backgroundJobs as never,
+        notifications as never
+      );
+      jest.spyOn(service as never, 'checkForVpnConnection').mockResolvedValue(true as never);
+      jest.spyOn(service as never, 'getTVReleases').mockResolvedValue([
+        {
+          metadata: { season: 1, episode: 8, files: ['Show.S01E08.mkv'] },
+          source: { id: 11, hasVideo },
+        },
+      ] as never);
+      const search = () =>
+        service.getSourcesForEpisodeWithOnDemandSearch({
+          episodeId: 5,
+          showMediaId: 9001,
+          showTitle: 'Example Show',
+          showImdbId: 'tt1234567',
+          seasonNumber: 1,
+          episodeNumber: 8,
+          airDate: '2020-01-01',
+        });
+      return { search, notifications, backgroundJobs };
+    };
+
+    it('announces an episode once a source matched to it is verified', async () => {
+      const { search, notifications, backgroundJobs } = setupEpisodeTest(true);
+
+      await search();
+
+      expect(notifications.episodeAvailable).toHaveBeenCalledWith(
+        expect.objectContaining({ showMediaId: 9001, seasonNumber: 1, episodeNumber: 8 })
+      );
+      expect(backgroundJobs.bulkBestEffort).not.toHaveBeenCalled();
+    });
+
+    it('waits for verification instead of announcing an unverified match', async () => {
+      const { search, notifications, backgroundJobs } = setupEpisodeTest(null);
+
+      await search();
+
+      expect(notifications.episodeAvailable).not.toHaveBeenCalled();
+      expect(backgroundJobs.bulkBestEffort).toHaveBeenCalledWith([
+        expect.objectContaining({ type: 'source.verify', payload: { sourceId: 11 } }),
+      ]);
+    });
+
+    it('never announces an episode whose only match is fake', async () => {
+      const { search, notifications, backgroundJobs } = setupEpisodeTest(false);
+
+      await search();
+
+      expect(notifications.episodeAvailable).not.toHaveBeenCalled();
+      expect(backgroundJobs.bulkBestEffort).not.toHaveBeenCalled();
+    });
+  });
+
   describe('searchSourcesForMovies', () => {
     it('should process movies without sources', async () => {
       const {

@@ -15,6 +15,7 @@ export const createMovieRoutes = ({
   mediaService,
   configurationService,
   sourceService,
+  sourceAvailabilityService,
   streamService,
 }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
@@ -86,6 +87,8 @@ export const createMovieRoutes = ({
             popularity: detail.popularity,
             rating: detail.rating,
           };
+          if (sourceAvailabilityService)
+            response.sourceAvailability = await sourceAvailabilityService.forMovie(movie);
 
           // Include sources if requested
           if (includeSources) {

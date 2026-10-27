@@ -22,6 +22,8 @@ describe('NotificationService', () => {
     };
     const repository = {
       createQueryBuilder: jest.fn().mockReturnValue(query),
+      find: jest.fn().mockResolvedValue([]),
+      delete: jest.fn(),
     };
     const database = {
       getRepository: jest.fn().mockReturnValue(repository),
@@ -35,6 +37,7 @@ describe('NotificationService', () => {
       watchlists,
       progress,
       query,
+      repository,
     };
   };
 
@@ -99,5 +102,49 @@ describe('NotificationService', () => {
     });
 
     expect(query.values).not.toHaveBeenCalled();
+  });
+
+  it('tells everyone who asked once a movie gets a real source, then forgets the requests', async () => {
+    const { service, query, repository } = setupTest();
+    repository.find.mockResolvedValue([{ userId: 'alice' }, { userId: 'bob' }]);
+
+    await service.playableAvailable({ kind: 'movie', mediaId: 1400940 }, 'Clayface');
+
+    expect(query.values).toHaveBeenCalledWith([
+      expect.objectContaining({
+        userId: 'alice',
+        type: 'source_available',
+        dedupeKey: 'available:m:1400940',
+        message: 'Clayface is now available to watch.',
+      }),
+      expect.objectContaining({ userId: 'bob', dedupeKey: 'available:m:1400940' }),
+    ]);
+    expect(repository.delete).toHaveBeenCalledWith({ playableKey: 'm:1400940' });
+  });
+
+  it('sends nothing when nobody asked about the playable', async () => {
+    const { service, query, repository } = setupTest();
+
+    await service.playableAvailable(
+      { kind: 'episode', showMediaId: 9001, seasonNumber: 1, episodeNumber: 8 },
+      'Example Show'
+    );
+
+    expect(query.values).not.toHaveBeenCalled();
+    expect(repository.delete).not.toHaveBeenCalled();
+  });
+
+  it('stores a "notify me" request once per user and playable', async () => {
+    const { service, query } = setupTest();
+
+    await service.requestAvailability('alice', {
+      kind: 'episode',
+      showMediaId: 9001,
+      seasonNumber: 1,
+      episodeNumber: 8,
+    });
+
+    expect(query.values).toHaveBeenCalledWith({ userId: 'alice', playableKey: 'e:9001:1:8' });
+    expect(query.orIgnore).toHaveBeenCalled();
   });
 });

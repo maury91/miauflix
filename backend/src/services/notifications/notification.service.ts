@@ -1,9 +1,12 @@
 import { IsNull, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
+import { AvailabilityRequest } from '@entities/availability-request.entity';
 import { Notification, type NotificationType } from '@entities/notification.entity';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
+import { playableKey, type PlayableRef } from '@routes/playable.types';
+import { EncryptedColumns } from '@utils/encrypted-column.util';
 
 export interface NotificationDto {
   id: number;
@@ -20,11 +23,13 @@ export interface NotificationDto {
 
 export class NotificationService {
   private readonly repository: Repository<Notification>;
+  private readonly availabilityRequests: Repository<AvailabilityRequest>;
   private readonly watchlists: MediaListRepository;
   private readonly progress: ProgressRepository;
 
   constructor(private readonly database: Database) {
     this.repository = database.getRepository(Notification);
+    this.availabilityRequests = database.getRepository(AvailabilityRequest);
     this.watchlists = database.getMediaListRepository();
     this.progress = database.getProgressRepository();
   }
@@ -102,6 +107,66 @@ export class NotificationService {
       seasonNumber: input.seasonNumber,
       episodeNumber: input.episodeNumber,
     });
+  }
+
+  /** "Notify me": remember that the user wants to hear when the playable gets a real source. */
+  async requestAvailability(userId: string, playable: PlayableRef): Promise<void> {
+    await this.database.write(() =>
+      this.availabilityRequests
+        .createQueryBuilder()
+        .insert()
+        .into(AvailabilityRequest)
+        .values({ userId, playableKey: playableKey(playable) })
+        .orIgnore()
+        .execute()
+        .then(() => undefined)
+    );
+  }
+
+  async hasRequestedAvailability(userId: string, playable: PlayableRef): Promise<boolean> {
+    return this.availabilityRequests.exists({
+      where: { userId, playableKey: playableKey(playable) },
+    });
+  }
+
+  /** Tell everyone who asked that the playable now has a real source, once. */
+  async playableAvailable(playable: PlayableRef, title: string): Promise<void> {
+    const key = playableKey(playable);
+    const requests = await this.availabilityRequests.find({ where: { playableKey: key } });
+    if (!requests.length) return;
+    const episode =
+      playable.kind === 'episode'
+        ? `S${String(playable.seasonNumber).padStart(2, '0')}E${String(playable.episodeNumber).padStart(2, '0')}`
+        : null;
+    await this.insertForUsers(
+      requests.map(request => request.userId),
+      {
+        dedupeKey: `available:${key}`,
+        type: 'source_available',
+        mediaType: playable.kind === 'movie' ? 'movie' : 'tv',
+        mediaId: playable.kind === 'movie' ? playable.mediaId : playable.showMediaId,
+        title,
+        message: episode
+          ? `${episode} is now available to watch.`
+          : `${title} is now available to watch.`,
+        seasonNumber: playable.kind === 'episode' ? playable.seasonNumber : null,
+        episodeNumber: playable.kind === 'episode' ? playable.episodeNumber : null,
+      }
+    );
+    await this.availabilityRequests.delete({ playableKey: key });
+  }
+
+  /** Playables someone is waiting on, so background checks can look for their sources. */
+  async requestedPlayableKeys(limit = 50): Promise<string[]> {
+    const rows = await this.availabilityRequests
+      .createQueryBuilder('request')
+      .select('request.playableKey', 'playableKey')
+      .groupBy('request.playableKey')
+      .orderBy('MIN(request.createdAt)', 'ASC')
+      .limit(limit)
+      .getRawMany<{ playableKey: string }>();
+    // Raw rows skip the column transformer.
+    return rows.map(row => EncryptedColumns.decrypt(row.playableKey));
   }
 
   private async insertForUsers(

@@ -29,7 +29,11 @@ import { validateContentFileResponse } from '@utils/validation.util';
 
 import { ErrorWithStatus } from './services/error-with-status.util';
 import { matchEpisodeFile } from './episode-file-matcher';
+import type { SourceAvailabilityService } from './source-availability.service';
 import type { SourceMetadataFileService } from './source-metadata-file.service';
+
+/** How long a source whose file list could not be fetched waits before another try. */
+const UNRESOLVED_RETRY_MS = 60 * 60_000;
 
 interface TVRelease {
   metadata: SourceMetadata;
@@ -99,6 +103,8 @@ export class SourceService {
     { expiresAt: number; promise: Promise<TVRelease[]> }
   >();
   private readonly sourceRateLimiters = new Map<string, RateLimiter>();
+  /** Sources whose file list could not be fetched, and when they may be tried again. */
+  private readonly unresolvedUntil = new Map<number, number>();
 
   private vpnConnected = false;
   private searchOnlyBehindVpn: boolean;
@@ -120,7 +126,8 @@ export class SourceService {
     private readonly requestService: RequestService,
     config: ConfigService,
     backgroundJobs?: BackgroundJobService,
-    private readonly notifications?: NotificationService
+    private readonly notifications?: NotificationService,
+    private readonly availability?: SourceAvailabilityService
   ) {
     this.config = config;
     this.vpnService = vpnService;
@@ -489,6 +496,8 @@ export class SourceService {
             await this.contentSourceRepository.updateSourceFile(source.id, torrentFile);
             source.file = torrentFile;
           }
+          source.hasVideo =
+            (await this.availability?.recordTorrentFile(source.id, torrentFile)) ?? source.hasVideo;
           candidate.source = source;
           candidate.metadata.files = files;
         } catch (error) {
@@ -512,7 +521,11 @@ export class SourceService {
       );
     }
     const associations = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
-    if (associations.length && episode.showMediaId && episode.showTitle) {
+    // Announce the episode only once a source is verified to hold real video; unverified
+    // matches are checked in the background, which announces it when one proves real.
+    const verified = associations.some(association => association.source?.hasVideo === true);
+    if (!verified) this.requestSourceVerification(associations.map(({ source }) => source));
+    if (verified && episode.showMediaId && episode.showTitle) {
       try {
         await this.notifications?.episodeAvailable({
           showMediaId: episode.showMediaId,
@@ -711,6 +724,82 @@ export class SourceService {
     return [];
   }
 
+  /** Queue background checks of whether unverified sources hold real video. */
+  public requestSourceVerification(
+    sources: ReadonlyArray<Pick<ContentSource, 'hasVideo' | 'id'> | undefined>,
+    priority = 30
+  ): void {
+    const unverified = sources.filter(
+      (source): source is Pick<ContentSource, 'hasVideo' | 'id'> =>
+        !!source && source.hasVideo === null
+    );
+    if (!unverified.length) return;
+    this.backgroundJobs?.bulkBestEffort(
+      unverified.map(source => ({
+        type: 'source.verify' as const,
+        dedupeKey: `source:${source.id}`,
+        payload: { sourceId: source.id },
+        options: { priority },
+      }))
+    );
+  }
+
+  /** Queue a check of a movie's candidates until one proves real or all prove fake. */
+  public requestMovieVerification(movieId: number, priority = 30): void {
+    this.backgroundJobs?.enqueueBestEffort({
+      type: 'source.verify',
+      dedupeKey: `movie:${movieId}`,
+      payload: { movieId },
+      options: { priority },
+    });
+  }
+
+  /**
+   * Learn whether a source holds real video by fetching its file list, without downloading
+   * any payload. Uses the bounded playback metadata lane (one torrent at a time, with a
+   * timeout), so background checks never pile up peer-discovery state.
+   */
+  public async verifySource(sourceId: number): Promise<boolean | null> {
+    const source = await this.contentSourceRepository.findById(sourceId);
+    if (!source) return null;
+    if (source.hasVideo !== null) return source.hasVideo;
+    let file = source.file ?? null;
+    if (!file && source.magnetLink) {
+      file = await this.magnetService
+        .getPlaybackTorrentMetadataFile(source.magnetLink, source.hash)
+        .catch(error => {
+          logger.debug('SourceService', `File list of source ${sourceId} unavailable`, error);
+          return null;
+        });
+      if (file) await this.contentSourceRepository.updateSourceFile(sourceId, file);
+    }
+    if (!file) return null;
+    return (await this.availability?.recordTorrentFile(sourceId, file)) ?? null;
+  }
+
+  /**
+   * Verify a movie's candidates, best first, until one proves real. Each check is bounded by
+   * the metadata timeout, so a run touches at most a handful of sources.
+   */
+  public async verifyMovieSources(movieId: number, maxChecks = 6): Promise<void> {
+    for (let check = 0; check < maxChecks; check++) {
+      const sources = await this.contentSourceRepository.findByMovieId(movieId);
+      if (sources.some(source => source.hasVideo === true)) return;
+      const now = Date.now();
+      const next = sources
+        .filter(
+          source => source.hasVideo === null && (this.unresolvedUntil.get(source.id) ?? 0) <= now
+        )
+        .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
+      if (!next) return;
+      const verdict = await this.verifySource(next.id);
+      // A file list that could not be fetched (no peers yet) is retried later, after the rest.
+      if (verdict === null) this.unresolvedUntil.set(next.id, now + UNRESOLVED_RETRY_MS);
+      else this.unresolvedUntil.delete(next.id);
+      if (verdict === true) return;
+    }
+  }
+
   /** Whether an on-demand source search is still running after its caller timed out. */
   public isOnDemandSearchPending(movieId: number): boolean {
     return this.pendingOnDemandSearches.has(movieId);
@@ -895,6 +984,7 @@ export class SourceService {
 
       // Save the source file to the database
       await this.contentSourceRepository.updateSourceFile(source.id, file);
+      await this.availability?.recordTorrentFile(source.id, file);
 
       logger.debug(
         'SourceService',

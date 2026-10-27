@@ -5,8 +5,10 @@ import { z } from 'zod';
 import { authGuard } from '@middleware/auth.middleware';
 
 import type { Deps } from './common.types';
+import { playableRefSchema } from './playable.types';
 
 const notificationIdSchema = z.object({ id: z.coerce.number().int().positive() });
+const availabilityRequestSchema = z.object({ playable: playableRefSchema }).strict();
 
 export const createNotificationRoutes = ({
   notificationService,
@@ -20,4 +22,10 @@ export const createNotificationRoutes = ({
       const { user } = c.get('sessionInfo');
       const { id } = c.req.valid('param');
       return c.json({ read: await notificationService.markRead(user.id, id) });
+    })
+    // "Notify me": hear about it once the playable gets a real source.
+    .post('/availability', authGuard(), zValidator('json', availabilityRequestSchema), async c => {
+      const { user } = c.get('sessionInfo');
+      await notificationService.requestAvailability(user.id, c.req.valid('json').playable);
+      return c.json({ requested: true }, 201);
     });

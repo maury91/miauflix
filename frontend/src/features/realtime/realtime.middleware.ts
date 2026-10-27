@@ -80,6 +80,9 @@ export const realtimeMiddleware: Middleware = api => next => action => {
         },
         message => {
           if (isCurrentClient()) api.dispatch(searchActions.serverMessage(message));
+        },
+        message => {
+          if (isCurrentClient()) api.dispatch(realtimeActions.sourceReceived(message));
         }
       );
       activeClient = client;

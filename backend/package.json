@@ -62,7 +62,7 @@
     "thunky": "1.1.0",
     "typeorm": "0.3.27",
     "uuid": "13.0.0",
-    "webtorrent": "2.8.4",
+    "webtorrent": "3.0.21",
     "whatwg-url": "14.2.0",
     "ws": "8.18.3",
     "zod": "4.1.12"

@@ -27,6 +27,7 @@ import {
   detailsNavigationActions,
   selectDetailsNavigationForMedia,
 } from '@store/slices/detailsNavigation';
+import { selectPushedAvailability, selectSourceAvailability } from '@store/slices/realtime';
 import type { RootState } from '@store/store';
 import { forwardRef } from 'react';
 import {
@@ -420,6 +421,13 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   };
 
   const movie = useGetMovieQuery(media._type === 'movie' ? media.mediaId : skipToken);
+  const pushedAvailability = useSelector(
+    selectSourceAvailability(
+      media._type === 'movie' ? { kind: 'movie', mediaId: media.mediaId } : null
+    )
+  );
+  const movieAvailability = pushedAvailability ?? movie.data?.sourceAvailability ?? null;
+  const pushedEpisodeAvailability = useSelector(selectPushedAvailability);
   const show = useGetShowQuery(media._type === 'tvshow' ? media.mediaId : skipToken);
   const showDetails = show.data;
   const movieProgress =
@@ -737,6 +745,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                       mediaKind={media._type}
                       mode="details"
                       preparation={preparation}
+                      availability={movieAvailability}
                     />
                   )}
                 </MetadataLine>
@@ -890,6 +899,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
               onRetrySeason={retrySeason}
               onVisibleSeasonChange={showVisibleSeason}
               onNearEnd={loadNextSeason}
+              pushedAvailability={pushedEpisodeAvailability}
             />
           )}
         </Layout>

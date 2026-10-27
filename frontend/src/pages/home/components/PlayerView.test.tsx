@@ -12,7 +12,9 @@ const {
   startAudioPlayback,
   stopAudioPlayback,
   searchSubtitles,
+  requestAvailability,
 } = vi.hoisted(() => ({
+  requestAvailability: vi.fn(),
   searchSubtitles: vi.fn(),
   createSession: vi.fn(),
   updateProgress: vi.fn(),
@@ -50,6 +52,23 @@ vi.mock('@features/player/api/playback.api', async () => {
       return [trigger, { ...result, reset }] as const;
     },
     useSearchSubtitlesMutation: () => [searchSubtitles],
+  };
+});
+vi.mock('@features/notifications/api/notifications.api', async () => {
+  const React = await import('react');
+  return {
+    useRequestAvailabilityMutation: () => {
+      const [state, setState] = React.useState({
+        isLoading: false,
+        isSuccess: false,
+        isError: false,
+      });
+      const trigger = React.useCallback((playable: unknown) => {
+        requestAvailability(playable);
+        setState({ isLoading: false, isSuccess: true, isError: false });
+      }, []);
+      return [trigger, state] as const;
+    },
   };
 });
 vi.mock('@features/player/lib/audio-playback', () => ({ startAudioPlayback }));
@@ -199,18 +218,43 @@ describe('PlayerView', () => {
     );
   });
 
-  it('explains an unavailable source with the title and a recovery action', async () => {
+  it('offers to notify once a source is out when no source is left', async () => {
     createSession.mockReturnValue({
-      unwrap: () => Promise.reject({ status: 404, data: 'No playable source available' }),
+      unwrap: () =>
+        Promise.reject({
+          status: 404,
+          data: { error: 'Every source found for this title is fake', reason: 'exhausted' },
+        }),
     });
 
-    render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
 
-    expect(screen.getByText('Preparing “Toy Story 5” for playback…')).toBeInTheDocument();
+    expect(screen.getByText('Preparing “Clayface” for playback…')).toBeInTheDocument();
     expect(
-      await screen.findByText(/No playable source is available for “Toy Story 5” yet/)
+      await screen.findByText(
+        "There is no source for “Clayface”. Press “Notify me” to receive a notification once it's out."
+      )
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Retry' })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Notify me' }));
+
+    expect(requestAvailability).toHaveBeenCalledWith(playable);
+    expect(
+      await screen.findByText("We'll notify you as soon as “Clayface” is out.")
+    ).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Notify me' })).not.toBeInTheDocument();
+  });
+
+  it('shows which source is being tried while the session is prepared', async () => {
+    createSession.mockReturnValue({ unwrap: () => new Promise(() => undefined) });
+    const { store } = render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
+
+    act(() => {
+      store.dispatch(
+        realtimeActions.sourceReceived({ type: 'source-attempt', playable, position: 2, total: 4 })
+      );
+    });
+
+    expect(await screen.findByText('Trying source 2 of 4 for “Clayface”…')).toBeInTheDocument();
   });
 
   it('retries source preparation and reports when the selected source is ready', async () => {
@@ -395,20 +439,27 @@ describe('PlayerView', () => {
     });
   });
 
-  it('retries a failed stream once with a new session before reporting the failure', async () => {
-    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+  it('moves to the next source after each failed stream until none is new', async () => {
+    const withSource = (id: number, position: number) => ({
+      ...session,
+      source: { ...session.source, id },
+      sourceAttempt: { position, total: 3 },
+    });
+    createSession
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(withSource(9, 1)) })
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(withSource(10, 2)) })
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(withSource(11, 3)) })
+      .mockReturnValue({ unwrap: () => Promise.resolve(withSource(11, 3)) });
     render(<PlayerView playable={playable} title="Failing fixture" onBack={vi.fn()} />);
-    let video = (await screen.findByLabelText('Failing fixture')) as HTMLVideoElement;
-    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(1));
 
-    fireEvent.error(video);
-    await waitFor(() => expect(createSession).toHaveBeenCalledTimes(2));
-    expect(screen.queryByText(/could not load the selected source/)).not.toBeInTheDocument();
+    for (const expectedCalls of [2, 3, 4]) {
+      const video = (await screen.findByLabelText('Failing fixture')) as HTMLVideoElement;
+      fireEvent.error(video);
+      await waitFor(() => expect(createSession).toHaveBeenCalledTimes(expectedCalls));
+    }
 
-    video = (await screen.findByLabelText('Failing fixture')) as HTMLVideoElement;
-    fireEvent.error(video);
-    expect(await screen.findByText(/could not load the selected source/)).toBeInTheDocument();
-    expect(createSession).toHaveBeenCalledTimes(2);
+    expect(await screen.findByText(/could not load any of its sources/)).toBeInTheDocument();
+    expect(createSession).toHaveBeenCalledTimes(4);
   });
 
   it('requests a new session when the optimistic source cannot play here', async () => {

@@ -14,6 +14,7 @@ import type { PlaybackTarget } from '@services/playback/playback-target';
 import type {
   PlayablePreparationService,
   PlaybackPreferences,
+  SourceAttempt,
 } from '@services/preload/playable-preparation.service';
 import type { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
 import { findResumeFraction } from '@services/progress/resume-fraction';
@@ -62,6 +63,25 @@ export interface PlaybackDeliveryUpdate {
     | { type: 'recreate'; reason: string };
 }
 
+/** A candidate source being checked while a viewer waits for playback to start. */
+export interface PlaybackSourceAttempt {
+  userId: string;
+  sessionId?: string;
+  playable: PlayableRef;
+  attempt: SourceAttempt;
+}
+
+/** No session could be created: no source exists, or every source proved fake. */
+export class PlaybackUnavailableError extends Error {
+  constructor(readonly reason: 'exhausted' | 'not_found') {
+    super(
+      reason === 'exhausted'
+        ? 'Every source found for this title is fake'
+        : 'No playable source available'
+    );
+  }
+}
+
 interface LiveSession {
   sourceId: number;
   userId: string;
@@ -88,6 +108,8 @@ export interface PlaybackSession {
   deliveryPending?: boolean;
   episodeMatchKind?: 'combined' | 'single';
   source: PlaybackSessionSource;
+  /** Which of the compatible sources this session plays. */
+  sourceAttempt?: { position: number; total: number };
   preparation: {
     state: 'cold' | 'warm' | 'warming';
     verifiedBytes: number;
@@ -99,6 +121,7 @@ export interface PlaybackSession {
 export class PlaybackSessionService {
   private readonly grants: PlaybackGrantRepository;
   private readonly deliveryListeners = new Set<(event: PlaybackDeliveryUpdate) => void>();
+  private readonly attemptListeners = new Set<(event: PlaybackSourceAttempt) => void>();
   /** Sessions that may still be streaming, so a failed source can move them elsewhere. */
   private readonly liveSessions = new Map<string, LiveSession>();
   private healthTimer: ReturnType<typeof setInterval> | undefined;
@@ -134,6 +157,7 @@ export class PlaybackSessionService {
     const resumeFraction = options.deferDownload
       ? undefined
       : await findResumeFraction(this.progress, userId, playable);
+    let lastAttempt: SourceAttempt | undefined;
     const prepare = (allowHevc: boolean) =>
       this.preparation.prepare(playable, {
         through: options.deferDownload ? 'sources' : 'warm',
@@ -141,12 +165,19 @@ export class PlaybackSessionService {
         preferences: { ...preferences, allowHevc },
         workClass: 'interactive',
         ownerKey: this.playableKey(playable),
+        onSourceAttempt: attempt => {
+          lastAttempt = attempt;
+          if (options.deferDownload) return;
+          for (const listener of this.attemptListeners)
+            listener({ userId, sessionId: options.sessionId, playable, attempt });
+        },
       });
     let allowHevc =
       preferences.allowHevc ||
       preferences.supportedMseVideoCodecs?.includes('hevc') === true ||
       (this.audioPlaybackService?.canConvertHevc?.() ?? false);
     let prepared = await prepare(allowHevc);
+    if (prepared.exhausted) throw new PlaybackUnavailableError('exhausted');
     if (!prepared.source) return null;
     // Each viewer keeps what they started watching; another viewer's claim is independent.
     const ownerKey = `user:${userId}:${this.playableKey(playable)}`;
@@ -240,6 +271,9 @@ export class PlaybackSessionService {
         prepared.target && prepared.target.matchKind !== 'movie'
           ? prepared.target.matchKind
           : undefined,
+      ...(lastAttempt?.sourceId === prepared.source.id
+        ? { sourceAttempt: { position: lastAttempt.position, total: lastAttempt.total } }
+        : {}),
       source: {
         id: prepared.source.id,
         quality: prepared.source.quality,
@@ -397,6 +431,12 @@ export class PlaybackSessionService {
         });
       }
     }
+  }
+
+  /** Subscribe to the candidates tried while sessions are created; returns the unsubscribe. */
+  onSourceAttempt(listener: (event: PlaybackSourceAttempt) => void): () => void {
+    this.attemptListeners.add(listener);
+    return () => this.attemptListeners.delete(listener);
   }
 
   /** Subscribe to background probe results; returns the unsubscribe function. */

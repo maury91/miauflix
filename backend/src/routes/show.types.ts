@@ -1,6 +1,8 @@
 import type { BackdropFocus } from '@miauflix/service-contracts';
 import type { Source } from '@miauflix/source-metadata-extractor';
 
+import type { SourceAvailability } from '@services/source/source-availability.service';
+
 export interface ShowResponse {
   type: 'show';
   id: number;
@@ -43,4 +45,6 @@ export interface EpisodeResponse {
   overview: string | null;
   airDate: string | null;
   still: string | null;
+  /** `unavailable` once every source matched to the episode proved fake. */
+  sourceAvailability?: SourceAvailability;
 }

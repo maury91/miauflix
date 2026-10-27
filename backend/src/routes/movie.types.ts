@@ -2,6 +2,8 @@ import type { BackdropFocus } from '@miauflix/service-contracts';
 import type { Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 import type { Quality } from '@miauflix/source-metadata-extractor';
 
+import type { SourceAvailability } from '@services/source/source-availability.service';
+
 export interface MovieSourceDto {
   id: number;
   quality: Quality | '3D' | null;
@@ -34,6 +36,8 @@ export interface MovieResponse {
   genres: string[];
   popularity: number;
   rating: number;
+  /** `unavailable` once every source found proved fake, or the finished search found none. */
+  sourceAvailability?: SourceAvailability;
   sources?: MovieSourceDto[];
 }
 

@@ -40,6 +40,7 @@ import { SearchService } from '@services/search/search.service';
 import { AuditLogService } from '@services/security/audit-log.service';
 import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
+import { SourceAvailabilityService } from '@services/source/source-availability.service';
 import { SourceHealthService } from '@services/source/source-health.service';
 import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
 import { StatsService } from '@services/stats/stats.service';
@@ -111,6 +112,13 @@ try {
     statsService,
     configurationService
   );
+  const sourceAvailabilityService = new SourceAvailabilityService(db, notificationService, () =>
+    contentDirectoryService.getMovieDirectoryNames()
+  );
+  // Every file list that becomes known decides whether its source is real.
+  storageService.onLayout((sourceId, layout) => {
+    void sourceAvailabilityService.recordFiles(sourceId, layout.files);
+  });
   const magnetService = new SourceMetadataFileService(
     downloadService,
     requestService,
@@ -125,9 +133,15 @@ try {
     requestService,
     configurationService,
     backgroundJobs,
-    notificationService
+    notificationService,
+    sourceAvailabilityService
   );
-  const playbackTargetService = new PlaybackTargetService(db, downloadService, sourceHealthService);
+  const playbackTargetService = new PlaybackTargetService(
+    db,
+    downloadService,
+    sourceHealthService,
+    sourceAvailabilityService
+  );
   const streamService = new StreamService(
     db,
     sourceService,
@@ -187,7 +201,8 @@ try {
     progressService,
     catalogClient,
     playbackSessionService,
-    new RealtimeSearchChannel(new SearchService(catalogClient, new RecentSearchRepository(db)))
+    new RealtimeSearchChannel(new SearchService(catalogClient, new RecentSearchRepository(db))),
+    sourceAvailabilityService
   );
   const subtitlesService = new SubtitlesService(
     configurationService,
@@ -253,6 +268,7 @@ try {
       listClient,
       magnetService,
       mediaService,
+      notificationService,
       sourceService,
       downloadService,
       progressService,
@@ -309,6 +325,7 @@ try {
     configurationService,
     mediaService,
     sourceService,
+    sourceAvailabilityService,
     listService,
     listClient,
     vpnDetectionService,

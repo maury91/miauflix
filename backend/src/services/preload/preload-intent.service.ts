@@ -191,7 +191,9 @@ export class PreloadIntentService {
       previousPreparation?.state === 'complete' &&
       samePlayable &&
       this.levelRank(previousPreparation.level) >= this.levelRank(requestedLevel) &&
-      (previousPreparation.outcome === 'no_source' || previousPreparation.outcome === 'error')
+      (previousPreparation.outcome === 'no_source' ||
+        previousPreparation.outcome === 'unavailable' ||
+        previousPreparation.outcome === 'error')
         ? this.snapshotForEntry(previousPreparation)
         : null;
 
@@ -408,7 +410,11 @@ export class PreloadIntentService {
                   state: 'complete',
                   level,
                   playable: target.playable,
-                  outcome: result?.source ? 'source_found' : 'no_source',
+                  outcome: result?.source
+                    ? 'source_found'
+                    : result?.exhausted
+                      ? 'unavailable'
+                      : 'no_source',
                   details: {
                     source,
                     warmup: result?.warmup ?? emptyWarmup(),

@@ -3,7 +3,7 @@ import { VideoCodec } from '@miauflix/source-metadata-extractor';
 import type { Database } from '@database/database';
 
 import { AudioConversionRequiredError, AudioPlaybackError } from './audio-playback.service';
-import { PlaybackSessionService } from './playback-session.service';
+import { PlaybackSessionService, PlaybackUnavailableError } from './playback-session.service';
 
 const movie = <T>(source: T) => ({ source, filePath: 'movie.mkv', matchKind: 'movie' as const });
 
@@ -39,6 +39,58 @@ describe('PlaybackSessionService', () => {
       expect(listener).not.toHaveBeenCalled();
     }
   );
+
+  it('shares each candidate it tries with the viewer and returns the one it plays', async () => {
+    type Attempt = { sourceId: number; position: number; total: number };
+    const prepare = jest.fn(
+      async (_playable: unknown, options: { onSourceAttempt: (attempt: Attempt) => void }) => {
+        options.onSourceAttempt({ sourceId: 1, position: 1, total: 3 });
+        options.onSourceAttempt({ sourceId: 2, position: 2, total: 3 });
+        return { source: { id: 2 }, target: movie({ id: 2 }), state: 'cold' };
+      }
+    );
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      { prepare } as never,
+      { getOrThrow: () => 60000 } as never,
+      undefined,
+      undefined,
+      { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) } as never
+    );
+    const attempts = jest.fn();
+    service.onSourceAttempt(attempts);
+
+    const session = await service.create(
+      'user',
+      { kind: 'movie', mediaId: 1 },
+      { quality: 'auto', allowHevc: false },
+      { sessionId: 'tab' }
+    );
+
+    expect(attempts.mock.calls.map(([event]) => event.attempt.position)).toEqual([1, 2]);
+    expect(attempts).toHaveBeenCalledWith(
+      expect.objectContaining({
+        userId: 'user',
+        sessionId: 'tab',
+        playable: { kind: 'movie', mediaId: 1 },
+      })
+    );
+    expect(session?.sourceAttempt).toEqual({ position: 2, total: 3 });
+  });
+
+  it('reports exhaustion when every source proved fake', async () => {
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      {
+        prepare: async () => ({ source: null, target: null, state: 'cold', exhausted: true }),
+      } as never,
+      { getOrThrow: () => 60000 } as never
+    );
+
+    await expect(
+      service.create('user', { kind: 'movie', mediaId: 1 }, { quality: 'auto', allowHevc: false })
+    ).rejects.toEqual(new PlaybackUnavailableError('exhausted'));
+  });
 
   it('warms the file where the viewer will resume', async () => {
     const prepare = jest.fn(async () => ({

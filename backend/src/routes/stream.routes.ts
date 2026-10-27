@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { AudioPlaybackError } from '@services/playback/audio-playback.service';
+import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 
 import type { Deps, ErrorResponse } from './common.types';
 
@@ -151,6 +152,10 @@ export const createStreamRoutes = ({
           const target = await streamService.movieTarget(movieId, source);
           return await downloadService.streamFile(target, context.req.header('range'));
         } catch (error: unknown) {
+          if (error instanceof ErrorWithStatus && error.status === 'source_file_unavailable') {
+            // A fake source: the player moves on to the next one.
+            return context.json({ error: error.message } satisfies ErrorResponse, 404);
+          }
           console.error('Failed to stream content:', error);
 
           if (error && typeof error === 'object' && 'message' in error) {

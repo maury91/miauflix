@@ -8,6 +8,7 @@ import type { MediaService } from '@services/media/media.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
+import { isUsableSource } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
 import type { StorageService } from '@services/storage/storage.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
@@ -27,6 +28,15 @@ export interface PreparedPlayable {
   target: PlaybackTarget | null;
   state: 'cold' | 'metadata' | 'ready' | 'warming';
   warmup: PreloadWarmupSnapshot;
+  /** Sources were found, but every one is known to hold no playable video. */
+  exhausted?: boolean;
+}
+
+/** Which candidate is being tried: `position` of `total` compatible sources. */
+export interface SourceAttempt {
+  sourceId: number;
+  position: number;
+  total: number;
 }
 
 export interface PreparationOptions {
@@ -36,6 +46,8 @@ export interface PreparationOptions {
   ownerKey?: string;
   signal?: AbortSignal;
   onSourceSelected?: (source: ContentSource) => void;
+  /** Called before each candidate's file list is checked, so viewers can follow along. */
+  onSourceAttempt?: (attempt: SourceAttempt) => void;
   /** Sources to leave out, e.g. the one a backup is being prepared for. */
   avoidSourceIds?: readonly number[];
   /** With `warm`: resolve the file to play but leave warming to the caller. */
@@ -44,8 +56,8 @@ export interface PreparationOptions {
   resumeFraction?: number;
 }
 
-/** Sources tried for one movie preparation before reporting the last result. */
-const MAX_MOVIE_SOURCE_ATTEMPTS = 3;
+/** Sources tried for one preparation before reporting the last result. */
+const MAX_SOURCE_ATTEMPTS = 8;
 
 /** Shared inline preparation seam for focus, details, and Watch. */
 export class PlayablePreparationService {
@@ -99,6 +111,11 @@ export class PlayablePreparationService {
     if (!sources.length) {
       return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
     }
+    if (!sources.some(isUsableSource)) return exhausted(playable);
+    if (!sources.some(source => source.hasVideo === true)) {
+      // Nothing verified yet: check the candidates in the background, well before Watch.
+      this.sourceService.requestMovieVerification(media.local.id, 10);
+    }
     const completedSources = this.storageService
       ? await Promise.all(
           filterHevcSources(sources, options.preferences.allowHevc).map(async source => {
@@ -131,17 +148,22 @@ export class PlayablePreparationService {
     const movieTarget = (source: ContentSource) => this.resolveMovieTarget(media.local.id, source);
     // A source can turn out to hold no video (a fake torrent); try the next candidates.
     const finishMovie = async (first: ContentSource): Promise<PreparedPlayable> => {
+      const tried = new Set<number>();
       let source = first;
-      for (let attempt = 1; ; attempt++) {
+      for (;;) {
+        tried.add(source.id);
+        this.reportAttempt(sources, source, options);
         const result = await this.finish(playable, source, options, movieTarget);
-        if (
-          result.target ||
-          attempt >= MAX_MOVIE_SOURCE_ATTEMPTS ||
-          !this.sourceHealth?.hasFailed(source.id)
-        )
-          return result;
-        const next = this.select(sources, options.preferences, false);
-        if (!next || this.sourceHealth.hasFailed(next.id)) return result;
+        const rejected = source.hasVideo === false || this.sourceHealth?.hasFailed(source.id);
+        if (result.target || !rejected) return result;
+        if (!sources.some(isUsableSource)) return exhausted(playable);
+        if (tried.size >= MAX_SOURCE_ATTEMPTS) return result;
+        const next = this.select(
+          sources.filter(candidate => !tried.has(candidate.id)),
+          options.preferences,
+          false
+        );
+        if (!next || this.sourceHealth?.hasFailed(next.id)) return result;
         source = next;
       }
     };
@@ -212,33 +234,73 @@ export class PlayablePreparationService {
       airDate: episode.airDate,
     });
     this.throwIfAborted(options.signal);
-    const candidates = matches.filter(
+    const compatible = matches.filter(
       match =>
         match.videoFilePath &&
         !options.avoidSourceIds?.includes(match.source.id) &&
         filterHevcSources([match.source], options.preferences.allowHevc).length
     );
-    const exactCandidates = candidates.filter(match => match.matchKind === 'single');
-    const usableCandidates = exactCandidates.length ? exactCandidates : candidates;
-    const selected = this.select(
-      usableCandidates.map(match => match.source),
-      options.preferences,
-      false
-    );
-    const match = usableCandidates.find(candidate => candidate.source.id === selected?.id);
-    if (!selected || !match)
-      return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
-    const target: PlaybackTarget = {
-      source: selected,
-      filePath: match.videoFilePath!,
-      matchKind: match.matchKind,
-    };
-    options.onSourceSelected?.(selected);
-    if (options.through === 'sources')
-      return { playable, source: selected, target, state: 'metadata', warmup: emptyWarmup() };
-    return this.finish(playable, selected, options, async () =>
-      this.targets ? this.targets.forEpisode(match) : target
-    );
+    if (compatible.length && !compatible.some(match => isUsableSource(match.source)))
+      return exhausted(playable);
+    const tried = new Set<number>();
+    for (;;) {
+      const candidates = compatible.filter(
+        match => !tried.has(match.source.id) && isUsableSource(match.source)
+      );
+      const exactCandidates = candidates.filter(match => match.matchKind === 'single');
+      const usableCandidates = exactCandidates.length ? exactCandidates : candidates;
+      const selected = this.select(
+        usableCandidates.map(match => match.source),
+        options.preferences,
+        false
+      );
+      const match = usableCandidates.find(candidate => candidate.source.id === selected?.id);
+      if (!selected || !match) {
+        if (tried.size && !compatible.some(item => isUsableSource(item.source)))
+          return exhausted(playable);
+        return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
+      }
+      tried.add(selected.id);
+      const target: PlaybackTarget = {
+        source: selected,
+        filePath: match.videoFilePath!,
+        matchKind: match.matchKind,
+      };
+      options.onSourceSelected?.(selected);
+      if (options.through === 'sources')
+        return { playable, source: selected, target, state: 'metadata', warmup: emptyWarmup() };
+      this.reportAttempt(
+        compatible.map(item => item.source),
+        selected,
+        options
+      );
+      const result = await this.finish(playable, selected, options, async () =>
+        this.targets ? this.targets.forEpisode(match) : target
+      );
+      const rejected = selected.hasVideo === false || this.sourceHealth?.hasFailed(selected.id);
+      if (result.target || !rejected || tried.size >= MAX_SOURCE_ATTEMPTS) {
+        if (!result.target && !compatible.some(item => isUsableSource(item.source)))
+          return exhausted(playable);
+        return result;
+      }
+    }
+  }
+
+  /** Tell the caller which candidate is tried, counting the ones already ruled out. */
+  private reportAttempt(
+    sources: ContentSource[],
+    source: ContentSource,
+    options: PreparationOptions
+  ): void {
+    if (!options.onSourceAttempt) return;
+    const compatible = filterHevcSources([...sources], options.preferences.allowHevc);
+    const ruledOut = compatible.filter(
+      candidate =>
+        candidate.id !== source.id &&
+        (!isUsableSource(candidate) || this.sourceHealth?.hasFailed(candidate.id))
+    ).length;
+    const total = Math.max(compatible.length, ruledOut + 1);
+    options.onSourceAttempt({ sourceId: source.id, position: ruledOut + 1, total });
   }
 
   /** Movie targets need the source's file list; a missing resolver or file list leaves it unknown. */
@@ -390,14 +452,28 @@ export class PlayablePreparationService {
       : filterHevcSources([...sources], preferences.allowHevc).sort(
           (a, b) => (b.streamingScore || 0) - (a.streamingScore || 0)
         );
-    // A source that failed during playback is skipped while any other candidate remains.
-    const healthy = compatible.filter(source => !this.sourceHealth?.hasFailed(source.id));
-    return healthy.length ? healthy : compatible;
+    // Known fakes are never picked. A source that failed during playback is skipped while any
+    // other candidate remains.
+    const real = compatible.filter(isUsableSource);
+    const healthy = real.filter(source => !this.sourceHealth?.hasFailed(source.id));
+    return healthy.length ? healthy : real;
   }
 
   private throwIfAborted(signal?: AbortSignal): void {
     if (signal?.aborted) throw new DOMException('Preparation cancelled', 'AbortError');
   }
+}
+
+/** Every source found for the playable proved fake. */
+function exhausted(playable: PlayableRef): PreparedPlayable {
+  return {
+    playable,
+    source: null,
+    target: null,
+    state: 'cold',
+    warmup: emptyWarmup(),
+    exhausted: true,
+  };
 }
 
 /** Create a warmup snapshot with zero measured progress and byte counts. */

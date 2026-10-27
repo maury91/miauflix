@@ -37,6 +37,7 @@ vi.mock('@pages/home/HomePage', async () => {
           onSearch={() => {}}
           onNotifications={() => {}}
           notificationsRef={null}
+          showSettings={true}
           unreadCount={0}
         />
       );

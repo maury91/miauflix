@@ -4,8 +4,9 @@ import type { EpisodeSource } from '@entities/episode-source.entity';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import type { DownloadService } from '@services/download/download.service';
-import { mainVideoPath } from '@services/download/download.utils';
+import { containsPlayableVideo, mainVideoPath } from '@services/download/download.utils';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
+import type { SourceAvailabilityService } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
 
 import type { PlaybackTarget } from './playback-target';
@@ -18,7 +19,8 @@ export class PlaybackTargetService {
   constructor(
     db: Database,
     private readonly downloads: Pick<DownloadService, 'resolveLayout'>,
-    private readonly sourceHealth?: Pick<SourceHealthService, 'markFailed'>
+    private readonly sourceHealth?: Pick<SourceHealthService, 'markFailed'>,
+    private readonly availability?: Pick<SourceAvailabilityService, 'recordFiles'>
   ) {
     this.contentSources = db.getContentSourceRepository();
     this.episodeSources = db.getEpisodeSourceRepository();
@@ -33,10 +35,10 @@ export class PlaybackTargetService {
     const known = await this.contentSources.findMovieVideoFilePath(movieId, source.id);
     if (known) return { source, filePath: known, matchKind: 'movie' };
     const layout = await this.downloads.resolveLayout(source);
-    const videoPath = mainVideoPath(layout.files);
+    const videoPath = containsPlayableVideo(layout.files) ? mainVideoPath(layout.files) : null;
     if (!videoPath) {
-      // Typically a fake or archive-only torrent: never pick it for playback again soon.
-      this.sourceHealth?.markFailed(source.id);
+      // A fake or archive-only torrent: remember it so it is never picked again.
+      await this.rejectFake(source, layout.files);
       throw new ErrorWithStatus('Source does not contain a video file', 'source_file_unavailable');
     }
     const filePath = await this.contentSources.setMovieVideoFilePath(movieId, source.id, videoPath);
@@ -50,6 +52,10 @@ export class PlaybackTargetService {
   ): Promise<PlaybackTarget | null> {
     if (!match.videoFilePath) return null;
     const layout = await this.downloads.resolveLayout(match.source);
+    if (!containsPlayableVideo(layout.files)) {
+      await this.rejectFake(match.source, layout.files);
+      throw new ErrorWithStatus('Source does not contain a video file', 'source_file_unavailable');
+    }
     const exact = layout.files.find(file => file.path === match.videoFilePath);
     const candidates = exact
       ? [exact]
@@ -67,5 +73,14 @@ export class PlaybackTargetService {
         filePath
       );
     return { source: match.source, filePath, matchKind: match.matchKind };
+  }
+
+  private async rejectFake(
+    source: ContentSource,
+    files: ReadonlyArray<{ path: string; length: number }>
+  ): Promise<void> {
+    source.hasVideo = false;
+    this.sourceHealth?.markFailed(source.id);
+    await this.availability?.recordFiles(source.id, files);
   }
 }

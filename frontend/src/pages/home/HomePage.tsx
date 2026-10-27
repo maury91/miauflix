@@ -2,7 +2,8 @@ import { type AppRoute, useRoute } from '@app/router';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
-import { selectCurrentSessionId, selectCurrentUser } from '@store/slices/auth';
+import { useAppSelector } from '@store';
+import { selectCurrentSessionId, selectCurrentUser, selectIsAdmin } from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
 import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
@@ -96,8 +97,9 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const dispatch = useDispatch<AppDispatch>();
   const currentRoute = useRoute();
   const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
-  const sessionId = useSelector((state: RootState) => selectCurrentSessionId(state));
-  const currentUser = useSelector((state: RootState) => selectCurrentUser(state));
+  const sessionId = useSelector(selectCurrentSessionId);
+  const currentUser = useSelector(selectCurrentUser);
+  const isAdmin = useAppSelector(selectIsAdmin);
   const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
 
   const { view, playable, routeQuery, routeMedia, nextEpisode } = useMediaRoute(activeRoute);
@@ -277,6 +279,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
               active={
                 interactive && !trakt.open && !notifications.open && activeRegion === 'sidebar'
               }
+              showSettings={isAdmin}
               onAction={navigation.onSidebarAction}
               onHover={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
               onSettings={navigation.openSettings}

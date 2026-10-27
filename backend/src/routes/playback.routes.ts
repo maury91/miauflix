@@ -4,9 +4,10 @@ import { Hono } from 'hono';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { AudioPlaybackError } from '@services/playback/audio-playback.service';
+import { PlaybackUnavailableError } from '@services/playback/playback-session.service';
 
-import type { Deps, ErrorResponse } from './common.types';
-import type { CreatePlaybackSessionResponse } from './playback.types';
+import type { Deps } from './common.types';
+import type { CreatePlaybackSessionResponse, PlaybackUnavailableResponse } from './playback.types';
 import { createPlaybackSessionRequestSchema } from './playback.types';
 
 export const createPlaybackRoutes = ({
@@ -37,10 +38,21 @@ export const createPlaybackRoutes = ({
       } catch (error) {
         if (error instanceof AudioPlaybackError)
           return c.json({ error: error.message }, error.status);
+        if (error instanceof PlaybackUnavailableError)
+          return c.json(
+            { error: error.message, reason: error.reason } satisfies PlaybackUnavailableResponse,
+            404
+          );
         throw error;
       }
       if (!result) {
-        return c.json({ error: 'No playable source available' } satisfies ErrorResponse, 404);
+        return c.json(
+          {
+            error: 'No playable source available',
+            reason: 'not_found',
+          } satisfies PlaybackUnavailableResponse,
+          404
+        );
       }
       return c.json(result satisfies CreatePlaybackSessionResponse, 201);
     }

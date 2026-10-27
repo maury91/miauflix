@@ -2,14 +2,28 @@
 
 ## Unreleased
 
+### Features
+
+- Fake sources are remembered: as soon as a source's file list is known (a downloaded torrent file, a resolved layout, or a playback attempt) it is judged by whether video makes up most of its bytes, and a fake (an `.exe`, an archive, or a small sample beside one) is stored as such and never picked again. Sources are checked ahead of Watch: browsing or opening a title with no verified source queues a background check of its candidates, one torrent at a time with a timeout, without downloading any payload. A data migration judges every source whose file list is already known
+- Movies and episodes report whether a playable source exists: movie details and season episodes include `sourceAvailability` (`available`, `pending` or `unavailable`), and changes are pushed live over the realtime connection (`source-availability`). The details and browse badges show a "No source" icon instead of the quality, and episodes are marked "No source available", once every source found proved fake
+- The player moves on by itself when a source fails and shows "Trying source N of M" while it works through the candidates (pushed live as `source-attempt` while a session is created). Once every source is exhausted it says there is no source for the title and offers **Notify me**, which sends a notification as soon as a real source is found. Requests are re-checked in the background every 6 hours
+
+### Improvements
+
+- Minor cosmetic changes to the sidebar: Settings is now at the bottom, elements are highlighted only when sidebar is open.
+
 ### Security
 
 - The database no longer names what is stored or watched in plain text: file paths inside sources (movie and episode files, stored files and download claims), ffprobe output, recent searches and notification titles and messages are encrypted at rest with the existing source key, in columns renamed to names that do not describe them (`k`, `v`, `a`, `b`). Existing databases are converted by data migrations at the first start (renamed in place before the schema sync, then encrypted, safe to rerun), and the file is rewritten with `VACUUM` so the replaced plain text does not stay readable in freed pages. Links between tables (which movie a source belongs to, which source is stored, playback progress) are still readable to someone who knows the schema
 
 ### Bug fix
 
+- The server no longer becomes slow (pages taking 20 s or more, health checks timing out) after running for a few hours. WebTorrent 2.8 opened a new UDP socket with its own buffers for every outgoing uTP peer attempt, and did not count those attempts against the connection limit, so with tens of thousands of discovered peers the backend spent most of its CPU allocating buffers and collecting garbage, and grew to about 3 GB of buffer memory. WebTorrent is upgraded to 3.0.21, which sends all uTP connections through the single listening socket and keeps attempts within the connection limit (2000 unreachable peers: 6000 sockets and 540 MB of buffers before, 1 socket and 15 MB after). WebTorrent 3 also accepts encrypted peer connections by default
+- A movie whose sources were all fake (for example releases that only contain an `.exe`) failed with a generic 500 and retried the same fake source on every attempt. The stream route now answers 404 for a source without video, and session creation answers 404 with `reason: "exhausted"`
+- New-episode notifications are sent only once a source matched to the episode is verified to hold a real video, not as soon as a release is matched by name
 - Playback no longer stops with "The media buffer is full and playback is not advancing" on high-bitrate files using the audio-converting stream. On a full buffer the player removed media up to 1 s behind the playhead, but the browser extends a removal to the next keyframe, so this also removed the frames being played and froze playback. The player now only lowers its read-ahead limit and waits, and lets the browser evict what is behind the playhead. It reports a stall after about 10 s without progress instead of 2 s
 - Playback on the audio-converting stream no longer freezes at small gaps in the media: in open-GOP encodes (x265's default) the 2–3 frames shown just before each keyframe are decoded after it, and Chrome often reports them as a gap in the buffered video. Chrome froze the picture there while audio played on, then stalled the whole player a few seconds later until a seek. A watchdog now jumps gaps of up to 1 s just before the playhead reaches them, and as a fallback re-seeks when the playhead stops for about 1 s with media buffered ahead, or keeps moving while no video frame is decoded
+- Show Settings in the sidebar only to admin users
 
 ### Technical debt
 

@@ -1,4 +1,5 @@
 import { authApi } from '@features/auth/api/auth.api';
+import type { PlayableRef } from '@miauflix/backend';
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
@@ -7,7 +8,7 @@ import type { RootState } from '@store/store';
 
 export interface NotificationItem {
   id: number;
-  type: 'movie_quality_upgrade' | 'tv_episode_available';
+  type: 'movie_quality_upgrade' | 'source_available' | 'tv_episode_available';
   mediaType: 'movie' | 'tv';
   mediaId: number;
   title: string;
@@ -64,7 +65,28 @@ export const notificationsApi = createApi({
       },
       invalidatesTags: ['Notifications'],
     }),
+    /** "Notify me": be told once the playable gets a real source. */
+    requestAvailability: builder.mutation<{ requested: boolean }, PlayableRef>({
+      async queryFn(playable, { getState, dispatch }) {
+        const sessionId = selectCurrentSessionId(getState() as RootState);
+        const headers: Record<string, string> = sessionId ? { 'X-Session-Id': sessionId } : {};
+        return authenticatedRequest<{ requested: boolean }>({
+          requestFn: () =>
+            backendClient.api.notifications.availability.$post({ json: { playable } }, { headers }),
+          session: sessionId,
+          errorContext: 'Failed to request an availability notification',
+          onInvalidSession: () => {
+            dispatch({ type: 'auth/clearAuth' });
+            dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
+          },
+        });
+      },
+    }),
   }),
 });
 
-export const { useGetNotificationsQuery, useMarkNotificationReadMutation } = notificationsApi;
+export const {
+  useGetNotificationsQuery,
+  useMarkNotificationReadMutation,
+  useRequestAvailabilityMutation,
+} = notificationsApi;

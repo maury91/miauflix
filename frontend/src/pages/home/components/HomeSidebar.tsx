@@ -31,8 +31,13 @@ const UnreadBadge = styled.span`
   text-align: center;
 `;
 
+const EmptySpace = styled.div`
+  flex: 1;
+`;
+
 interface HomeSidebarProps {
   active: boolean;
+  showSettings: boolean;
   onAction: (action: HomeAction) => NavigationOutcome;
   onHover: () => void;
   onSettings: () => void;
@@ -45,6 +50,7 @@ interface HomeSidebarProps {
 /** Render the primary Home actions and restore the selected button when the rail activates. */
 export const HomeSidebar: FC<HomeSidebarProps> = ({
   active,
+  showSettings,
   onAction,
   onHover,
   onSettings,
@@ -165,21 +171,26 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
           </Icon>
           {active && <span>Search</span>}
         </Item>
-        <Item
-          ref={settingsRef}
-          type="button"
-          $active={active}
-          $selected={selected === 'settings'}
-          aria-label="Settings"
-          onFocus={() => move('settings')}
-          onMouseEnter={() => move('settings')}
-          onClick={onSettings}
-        >
-          <Icon aria-hidden="true">
-            <SettingsIcon />
-          </Icon>
-          {active && <span>Settings</span>}
-        </Item>
+        {showSettings && (
+          <>
+            <EmptySpace />
+            <Item
+              ref={settingsRef}
+              type="button"
+              $active={active}
+              $selected={selected === 'settings'}
+              aria-label="Settings"
+              onFocus={() => move('settings')}
+              onMouseEnter={() => move('settings')}
+              onClick={onSettings}
+            >
+              <Icon aria-hidden="true">
+                <SettingsIcon />
+              </Icon>
+              {active && <span>Settings</span>}
+            </Item>
+          </>
+        )}
       </Navigation>
     </Rail>
   );

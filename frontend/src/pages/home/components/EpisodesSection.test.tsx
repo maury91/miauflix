@@ -85,4 +85,18 @@ describe('EpisodesSection', () => {
     renderSection({ loading: true });
     expect(screen.getByText('Loading more episodes...')).toBeInTheDocument();
   });
+
+  it('marks episodes without any real source, preferring pushed availability', () => {
+    const first = season(1, [1, 2]);
+    first.episodes[0]!.sourceAvailability = 'unavailable';
+    first.episodes[1]!.sourceAvailability = 'pending';
+    renderSection({
+      sections: [first],
+      pushedAvailability: { 'e:7:1:1': 'available', 'e:7:1:2': 'unavailable' },
+    });
+
+    const rows = screen.getAllByRole('button', { name: /Episode title/ });
+    expect(rows[0]).not.toHaveTextContent('No source available');
+    expect(rows[1]).toHaveTextContent('No source available');
+  });
 });

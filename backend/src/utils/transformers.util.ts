@@ -8,7 +8,8 @@ import { calculateStreamingScore } from '@utils/streaming-score.util';
 
 type ProviderSourceRow = Omit<
   ContentSource,
-  'createdAt' | 'episodes' | 'id' | 'movies' | 'updatedAt'
+  // hasVideo is learned from the file list, never reported by a provider.
+  'createdAt' | 'episodes' | 'hasVideo' | 'id' | 'movies' | 'updatedAt'
 >;
 
 /** Info hashes are case-insensitive hex; the `ih` column stores this canonical form. */
