@@ -7,7 +7,7 @@ import type { MediaRef } from '@miauflix/service-contracts/catalog/v1';
 import { configureStore, type Middleware } from '@reduxjs/toolkit';
 import { artworkSlice } from '@store/slices/artwork';
 import { authSlice, clearAuth, setSession } from '@store/slices/auth';
-import { realtimeSlice } from '@store/slices/realtime';
+import { realtimeActions, realtimeSlice } from '@store/slices/realtime';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 const runtime = vi.hoisted(() => ({
@@ -93,6 +93,29 @@ describe('realtime middleware', () => {
     runtime.applyProgressUpdate.mockReset();
     runtime.fallbackProgress.mockReset();
     runtime.initiateProgress.mockReset();
+  });
+
+  it('drops pushed availability and refetches details after a reconnect', () => {
+    const { store, seenActions } = makeStore();
+    store.dispatch(setSession('reconnect-session'));
+    const client = runtime.clients[0] as { onReady: (ready: boolean) => void };
+    const pushed = () => store.getState().realtime.availabilityByPlayable;
+    client.onReady(true);
+    store.dispatch(
+      realtimeActions.sourceReceived({
+        type: 'source-availability',
+        playable: { kind: 'movie', mediaId: 7 },
+        availability: 'unavailable',
+      } as never)
+    );
+    expect(pushed()).toEqual({ 'm:7': 'unavailable' });
+    expect(seenActions).not.toContain('mediaApi/invalidateTags');
+
+    client.onReady(false);
+    expect(pushed()).toEqual({ 'm:7': 'unavailable' });
+    client.onReady(true);
+    expect(pushed()).toEqual({});
+    expect(seenActions).toContain('mediaApi/invalidateTags');
   });
 
   it('owns one socket per session, reapplies subscriptions, rejects stale events, and routes progress', async () => {

@@ -9,6 +9,8 @@ export type PreloadPreparationState =
   | 'error'
   | 'no_source'
   | 'source_found'
+  /** Sources were found, but every one is known to be fake. */
+  | 'unavailable'
   | 'unknown';
 
 export type PreloadWarmupState = 'failed' | 'not_requested' | 'paused' | 'ready' | 'warming';

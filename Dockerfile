@@ -102,9 +102,10 @@ RUN mkdir -p /usr/src/app/data
 EXPOSE 3000
 EXPOSE 6499
 
-# Healthcheck
-HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
-  CMD curl -f http://localhost:3000/health || exit 1
+# Healthcheck. Docker only marks the container unhealthy; the compose files run autoheal to
+# restart it. The long start period covers data migrations at the first start after an upgrade.
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5m --retries=3 \
+  CMD curl -fsS -o /dev/null --max-time 8 "http://localhost:${PORT:-3000}/api/health" || exit 1
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["node", "--env-file-if-exists", ".env", "./backend/app.js"]

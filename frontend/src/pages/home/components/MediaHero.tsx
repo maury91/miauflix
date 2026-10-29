@@ -1,6 +1,7 @@
 import { useEnsureBackdropFocusMutation } from '@features/media/api/media.api';
 import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
+import { selectSourceAvailability } from '@store/slices/realtime';
 import type { RootState } from '@store/store';
 import { type FC, Fragment, useCallback, useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
@@ -189,6 +190,11 @@ interface MediaHeroProps {
 /** Show the selected title, source status, and a backdrop that transitions after loading. */
 export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onReady }) => {
   const mediaType = media?._type === 'movie' ? 'movie' : 'tv';
+  const availability = useSelector(
+    selectSourceAvailability(
+      media?._type === 'movie' ? { kind: 'movie', mediaId: media.mediaId } : null
+    )
+  );
   const artwork = useSelector((state: RootState) =>
     media ? state.artwork.byMedia[`${mediaType}:${media.mediaId}`] : undefined
   );
@@ -397,6 +403,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
                 mediaKind={media._type}
                 mode="browse"
                 preparation={preparation}
+                availability={availability}
               />
             </Metadata>
             {media.genres.length > 0 && <Metadata>{media.genres.join(' · ')}</Metadata>}

@@ -1,4 +1,5 @@
 import { listsApi } from '@features/media/api/lists.api';
+import { mediaApi } from '@features/media/api/media.api';
 import { notificationsApi } from '@features/notifications/api/notifications.api';
 import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
@@ -63,6 +64,7 @@ export const realtimeMiddleware: Middleware = api => next => action => {
     api.dispatch(notificationsApi.util.resetApiState());
     if (session && typeof window !== 'undefined') {
       const isCurrentClient = () => activeGeneration === generation && activeSession === session;
+      let connectedBefore = false;
       const client = new RealtimeClient(
         session,
         PRELOAD_CLIENT_ID,
@@ -70,7 +72,16 @@ export const realtimeMiddleware: Middleware = api => next => action => {
           if (isCurrentClient()) api.dispatch(realtimeActions.statusReceived(message));
         },
         ready => {
-          if (isCurrentClient()) api.dispatch(realtimeActions.connectionChanged(ready));
+          if (!isCurrentClient()) return;
+          api.dispatch(realtimeActions.connectionChanged(ready));
+          if (!ready) return;
+          // The gateway does not replay availability changes missed while disconnected, so
+          // pushed values may be stale: drop them and refetch the details that carry them.
+          if (connectedBefore) {
+            api.dispatch(realtimeActions.availabilityCleared());
+            api.dispatch(mediaApi.util.invalidateTags(['Movie', 'Season']));
+          }
+          connectedBefore = true;
         },
         update => {
           if (isCurrentClient()) api.dispatch(artworkActions.received(update));
@@ -80,6 +91,9 @@ export const realtimeMiddleware: Middleware = api => next => action => {
         },
         message => {
           if (isCurrentClient()) api.dispatch(searchActions.serverMessage(message));
+        },
+        message => {
+          if (isCurrentClient()) api.dispatch(realtimeActions.sourceReceived(message));
         }
       );
       activeClient = client;

@@ -36,6 +36,9 @@ vi.mock('@features/media/api/media.api', () => ({
   useGetSeasonQuery: () => ({}),
   useLazyGetSeasonQuery: () => [vi.fn()],
 }));
+vi.mock('@features/notifications/api/notifications.api', () => ({
+  useRequestAvailabilityMutation: () => [vi.fn(), {}],
+}));
 vi.mock('@features/progress/api/progress.api', () => ({
   progressForPlayable: () => undefined,
   useGetProgressQuery: () => ({ data: { progress: [] } }),

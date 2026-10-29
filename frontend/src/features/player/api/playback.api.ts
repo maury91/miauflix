@@ -17,6 +17,8 @@ export interface CreatePlaybackSessionRequest {
   playable: PlayableRef;
   preferences: PlaybackPreferences;
   deferDownload?: boolean;
+  /** Sources this browser failed to play, so the backend picks another one. */
+  avoidSourceIds?: number[];
 }
 
 export const playbackApi = createApi({
@@ -48,13 +50,21 @@ export const playbackApi = createApi({
       },
     }),
     createSession: builder.mutation<CreatePlaybackSessionResponse, CreatePlaybackSessionRequest>({
-      async queryFn({ playable, preferences, deferDownload }, api) {
+      async queryFn({ playable, preferences, deferDownload, avoidSourceIds }, api) {
         const session = selectCurrentSessionId(api.getState() as RootState);
         const headers: Record<string, string> = session ? { 'X-Session-Id': session } : {};
         return authenticatedRequest<CreatePlaybackSessionResponse>({
           requestFn: () =>
             backendClient.api.playback.sessions.$post(
-              { json: { playable, preferences, ...(deferDownload ? { deferDownload } : {}) } },
+              {
+                json: {
+                  playable,
+                  preferences,
+                  ...(deferDownload ? { deferDownload } : {}),
+                  // Sources this browser failed to play, so the backend picks another one.
+                  ...(avoidSourceIds?.length ? { avoidSourceIds } : {}),
+                },
+              },
               { headers }
             ),
           session,

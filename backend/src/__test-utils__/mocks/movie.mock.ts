@@ -232,6 +232,7 @@ export function createMockContentSource(overrides: Partial<ContentSource> = {}):
       overrides.sourceType ??
       faker.helpers.arrayElement([Source.BLURAY, Source.WEB, Source.HDTV, Source.CAM]),
     file: overrides.file ?? undefined,
+    hasVideo: overrides.hasVideo ?? null,
     sourceUploadedAt: overrides.sourceUploadedAt ?? sourceMetadata.uploadDate,
     lastStatsCheck: overrides.lastStatsCheck ?? undefined,
     nextStatsCheckAt: overrides.nextStatsCheckAt ?? faker.date.future(),

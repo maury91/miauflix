@@ -59,8 +59,10 @@ const sessionRequest = <T>(
 export const mediaApi = createApi({
   reducerPath: 'mediaApi',
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
+  tagTypes: ['Movie', 'Season'],
   endpoints: builder => ({
     getMovie: builder.query<MovieResponse, number>({
+      providesTags: (_result, _error, mediaId) => [{ type: 'Movie', id: mediaId }],
       async queryFn(mediaId, api) {
         return {
           ...(await scheduleMediaDetailRequest('movie', () =>
@@ -97,6 +99,9 @@ export const mediaApi = createApi({
       },
     }),
     getSeason: builder.query<SeasonResponse, { showId: number; season: number }>({
+      providesTags: (_result, _error, { showId, season }) => [
+        { type: 'Season', id: `${showId}:${season}` },
+      ],
       async queryFn({ showId, season }, api) {
         return {
           ...(await sessionRequest<SeasonResponse>(

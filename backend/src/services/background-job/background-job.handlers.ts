@@ -1,9 +1,12 @@
+import { logger } from '@logger';
+
 import { playableFromKey } from '@routes/playable.types';
 import type { CacheService } from '@services/cache/cache.service';
 import type { DownloadService } from '@services/download/download.service';
 import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
+import type { NotificationService } from '@services/notifications/notification.service';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { ProgressService } from '@services/progress/progress.service';
 import type { SourceMetadataFileService } from '@services/source';
@@ -11,6 +14,8 @@ import type { SourceService } from '@services/source/source.service';
 
 import type { BackgroundJobService } from './background-job.service';
 import type { BackgroundJobWorker } from './background-job.worker';
+
+const AVAILABILITY_CHECK_PAGE_SIZE = 50;
 
 /**
  * Handler registration for the backend-owned queues. Catalog maintenance
@@ -25,6 +30,7 @@ export function registerBackgroundJobHandlers({
   listClient,
   magnetService,
   mediaService,
+  notificationService,
   sourceService,
   downloadService,
   progressService,
@@ -37,6 +43,7 @@ export function registerBackgroundJobHandlers({
   listClient: ListClientService;
   magnetService: SourceMetadataFileService;
   mediaService: MediaService;
+  notificationService: Pick<NotificationService, 'requestedPlayableKeys'>;
   sourceService: SourceService;
   downloadService: DownloadService;
   progressService: ProgressService;
@@ -127,6 +134,76 @@ export function registerBackgroundJobHandlers({
       else await sourceService.seedSourceStatsJobs();
     },
   });
+  worker.register('source.verify', {
+    concurrency: 1,
+    leaseMs: 5 * 60 * 1000,
+    run: async ({ sourceId, movieId }) => {
+      if (!(await sourceService.canRunSourceJobs())) return;
+      if (movieId) await sourceService.verifyMovieSources(movieId);
+      else if (sourceId) await sourceService.verifySource(sourceId);
+    },
+  });
+  worker.register('availability.check', {
+    concurrency: 1,
+    leaseMs: 10 * 60 * 1000,
+    run: async () => {
+      if (!notificationService || !(await sourceService.canRunSourceJobs())) return;
+      // Collect every pending key first: fulfilled requests are deleted while checking.
+      const keys: string[] = [];
+      for (let page: string[]; ; ) {
+        page = await notificationService.requestedPlayableKeys(
+          AVAILABILITY_CHECK_PAGE_SIZE,
+          keys.length
+        );
+        keys.push(...page);
+        if (page.length < AVAILABILITY_CHECK_PAGE_SIZE) break;
+      }
+      const checkAvailability = async (key: string): Promise<void> => {
+        const playable = playableFromKey(key);
+        if (!playable) return;
+        if (playable.kind === 'movie') {
+          const media = await mediaService.getMovieByMediaId(playable.mediaId);
+          if (!media) return;
+          await sourceService.processSourceDiscovery(media.local.id);
+          sourceService.requestMovieVerification(media.local.id);
+          return;
+        }
+        const show = await mediaService.getTVShowByMediaId(playable.showMediaId);
+        const season = show
+          ? await mediaService.getSeason(playable.showMediaId, playable.seasonNumber)
+          : null;
+        const episode = season?.episodes.find(
+          item => item.episodeNumber === playable.episodeNumber
+        );
+        if (!show || !episode) return;
+        // A real match notifies. Matching skips verification when a single-file match already
+        // exists, so queue unverified matches here as well (already-verified ones are ignored).
+        const associations = await sourceService.getSourcesForEpisodeWithOnDemandSearch({
+          episodeId: episode.id,
+          showMediaId: show.local.mediaId,
+          showTitle: show.local.name,
+          showImdbId: show.local.imdbId ?? null,
+          seasonNumber: playable.seasonNumber,
+          episodeNumber: playable.episodeNumber,
+          airDate: episode.airDate,
+        });
+        sourceService.requestSourceVerification(associations.map(({ source }) => source));
+      };
+      // One failing key must not skip the rest; rethrow afterwards so the broker retries.
+      let firstError: unknown;
+      let failed = false;
+      for (const key of keys) {
+        try {
+          await checkAvailability(key);
+        } catch (error) {
+          if (!failed) firstError = error;
+          failed = true;
+          logger.error('BackgroundJobHandlers', `Availability check failed for ${key}`, error);
+        }
+      }
+      if (failed) throw firstError;
+    },
+  });
   worker.register('watchlist.movie.download', {
     concurrency: 1,
     leaseMs: 10 * 60 * 1000,
@@ -143,13 +220,14 @@ export function registerBackgroundJobHandlers({
         },
         3000
       );
+      // Known fakes never become background downloads.
       let source = sources
-        .filter(candidate => candidate.file)
+        .filter(candidate => candidate.file && candidate.hasVideo !== false)
         .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
       if (!source && sources[0]) {
         await sourceService.processSourceMetadata(sources[0].id);
         source = (await sourceService.getSourcesForMovie(media.local.id))
-          .filter(candidate => candidate.file)
+          .filter(candidate => candidate.file && candidate.hasVideo !== false)
           .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
       }
       if (!source) {

@@ -3,13 +3,14 @@ import { VideoCodec } from '@miauflix/source-metadata-extractor';
 import type { ContentSource } from '@entities/content-source.entity';
 
 /**
- * Filter sources that can be streamed without delay
+ * Filter sources that can be streamed without delay: their file list is known and holds a
+ * real video.
  *
  * @param sources - Array of movie sources to filter
  * @returns Filtered sources that can be streamed without delay
  */
 export function filterStreamableSources(sources: ContentSource[]): ContentSource[] {
-  return sources.filter(source => source.file);
+  return sources.filter(source => source.file && source.hasVideo !== false);
 }
 
 /**

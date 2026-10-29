@@ -17,7 +17,8 @@ export interface BackRailProps {
  */
 export const BackRail = forwardRef<HTMLButtonElement, BackRailProps>(
   ({ label, onBack, onFocus }, ref) => {
-    // Like the sidebar, the focused item is drawn selected.
+    // Tracked like the sidebar's selection, but the rail never opens, so it is not highlighted:
+    // items are only highlighted while a rail is open.
     const [focused, setFocused] = useState(false);
     return (
       <Rail $active={false} aria-label="Page navigation">

@@ -1,186 +1,116 @@
+# Miauflix: prebuilt images, set up from the browser.
+# Usage: docker compose up -d, then open http://localhost:3000
+# Guide: docs/setup/docker-setup.md#prebuilt-images
+#
+# This is the base of every deployment. Add features by listing more files in COMPOSE_FILE (in a
+# .env file next to the compose files; on Windows separate them with ; instead of :), any order:
+#   docker-compose.vpn.yml           route everything through NordVPN (gluetun)
+#   docker-compose.https.yml         HTTPS for a domain with Caddy
+#   docker-compose.flaresolverr.yml  FlareSolverr for Cloudflare-protected sources
+#   docker-compose.tracing.yml       OpenTelemetry tracing to Jaeger
+#   docker-compose.build.yml         build the images from a clone of the repository
+# e.g. COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml
+
 services:
-  bunqueue:
-    image: ghcr.io/egeominotti/bunqueue:2.8.61
-    network_mode: service:vpn
-    depends_on:
-      - vpn
-    volumes:
-      - bunqueue_data:/app/data
-    restart: unless-stopped
-
-  vpn:
-    image: qmcgaw/gluetun:v3
-    hostname: nordvpn
-    container_name: nordvpn
-    cap_add:
-      - NET_ADMIN
-    devices:
-      - /dev/net/tun:/dev/net/tun
-    environment:
-      - VPN_SERVICE_PROVIDER=nordvpn
-      - VPN_TYPE=wireguard
-      - WIREGUARD_PRIVATE_KEY=${NORDVPN_PRIVATE_KEY:-} # From .env, see docs/setup/docker-setup.md#using-a-vpn
-      - SERVER_CATEGORIES=P2P
-      - SERVER_COUNTRIES=${NORDVPN_COUNTRIES:-United States} # Comma-separated, change to your preferred locations
+  miauflix:
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix:${MIAUFLIX_VERSION:-latest}
     ports:
-      - '127.0.0.1:5000:3000' # Expose backend API port locally only
-      - '127.0.0.1:16686:16686' # Expose Jaeger UI port locally only
-    restart: unless-stopped
-
-  jaeger:
-    image: jaegertracing/all-in-one:latest
-    container_name: miauflix-jaeger
-    network_mode: service:vpn # Route traffic through NordVPN
+      # Only this computer can connect until you open it to your network, see
+      # docs/setup/docker-setup.md#open-it-to-your-local-network
+      - '127.0.0.1:3000:3000'
     environment:
-      - COLLECTOR_OTLP_ENABLED=true
+      DATA_DIR: /usr/src/app/data
+      DOWNLOAD_PATH: /usr/src/app/downloads
+      BUNQUEUE_HOST: miauflix-services
+      BUNQUEUE_PORT: 6789
+      CATALOG_SERVICE_URL: http://miauflix-services:3001
+      LIST_SERVICE_URL: http://miauflix-services:3002
+      ALLOW_CREATE_ADMIN_ON_FIRST_RUN: ${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-true} # create the admin from the browser
+      # Without a VPN, Miauflix refuses to search for sources: torrents would go out from your real IP.
+      # Add docker-compose.vpn.yml (strongly recommended, required on anything internet-facing), see
+      # docs/setup/docker-setup.md#using-a-vpn. To accept the risk and run without one, put
+      # DISABLE_VPN_CHECK=true in a .env file next to this file.
+      DISABLE_VPN_CHECK: ${DISABLE_VPN_CHECK:-false}
+      # Only used once docker-compose.flaresolverr.yml / docker-compose.tracing.yml turn them on;
+      # docker-compose.vpn.yml points them at 127.0.0.1, since they then share the VPN's network.
+      FLARESOLVERR_URL: http://flaresolverr:8191
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
+      DEBUG: ${DEBUG:-}
+    volumes:
+      - miauflix_data:/usr/src/app/data
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
+    depends_on:
+      miauflix-services:
+        condition: service_healthy
     restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
+      autoheal: 'true'
 
+  # Bunqueue, media catalog and list service in one container.
+  miauflix-services:
+    image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-services:${MIAUFLIX_VERSION:-latest}
+    init: true
+    environment:
+      LIST_SERVICE_ENCRYPTION_KEY: ${LIST_SERVICE_ENCRYPTION_KEY:-}
+      CATALOG_DISABLE_BACKGROUND_TASKS: ${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
+    volumes:
+      - miauflix_services_data:/app/data
+    restart: unless-stopped
+    labels:
+      com.centurylinklabs.watchtower.enable: 'true'
+
+  # Off until docker-compose.flaresolverr.yml turns it on. Defined here so that
+  # docker-compose.vpn.yml can move it into the VPN's network whatever the file order.
   flaresolverr:
     image: ghcr.io/flaresolverr/flaresolverr:latest
-    container_name: miauflix-flaresolverr
-    depends_on:
-      vpn:
-        condition: service_healthy
+    profiles: [flaresolverr]
     environment:
-      - LOG_LEVEL=info
-      - LOG_HTML=false
-      - CAPTCHA_SOLVER=none
-      - TZ=${TZ:-UTC}
-    network_mode: service:vpn # Route traffic through NordVPN
+      LOG_LEVEL: info
+      LOG_HTML: 'false'
+      CAPTCHA_SOLVER: none
+      TZ: ${TZ:-UTC}
     volumes:
-      - flaresolver_config:/config
+      - flaresolverr_config:/config
     restart: unless-stopped
 
-  media-catalog:
-    build:
-      context: .
-      dockerfile: services/media-catalog/Dockerfile
-    image: miauflix-media-catalog
-    container_name: miauflix-media-catalog
-    depends_on:
-      vpn:
-        condition: service_healthy
+  # Off until docker-compose.tracing.yml turns it on, see flaresolverr above.
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    profiles: [tracing]
     environment:
-      - DATA_DIR=/app/data
-      - BUNQUEUE_HOST=127.0.0.1
-      - BUNQUEUE_PORT=6789
-      - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-false}
-    volumes:
-      - ./data:/app/data/
-    network_mode: service:vpn # Reach the catalog provider through NordVPN
-    restart: unless-stopped
-
-  list-service:
-    build:
-      context: .
-      dockerfile: services/list-service/Dockerfile
-    image: miauflix-list-service
-    container_name: miauflix-list-service
-    depends_on:
-      vpn:
-        condition: service_healthy
-    environment:
-      - LIST_SERVICE_DATA_DIR=/app/data
-      - LIST_SERVICE_PORT=3002
-      - LIST_SERVICE_ENCRYPTION_KEY=${LIST_SERVICE_ENCRYPTION_KEY:-}
-    volumes:
-      - ./data/list-service:/app/data
-    network_mode: service:vpn
-    restart: unless-stopped
-
-  miauflix:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: miauflix
-    container_name: miauflix
-    depends_on:
-      vpn:
-        condition: service_healthy
-      bunqueue:
-        condition: service_healthy
-      flaresolverr:
-        condition: service_started
-      jaeger:
-        condition: service_started
-      media-catalog:
-        condition: service_started
-      list-service:
-        condition: service_started
-    environment:
-      - DATA_DIR=/usr/data
-      - PUID=${USER_ID:-1000}
-      - PGID=${GROUP_ID:-1000}
-      - DISABLE_VPN_CHECK=${DISABLE_VPN_CHECK:-false} # Traffic goes through the vpn service
-      - ALLOW_CREATE_ADMIN_ON_FIRST_RUN=${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-false}
-      - COOKIE_DOMAIN=${DOMAIN}
-      - COOKIE_SECURE=true
-      - ENABLE_TRACING=true
-      - OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4318
-      - ENABLE_FRONTEND=false # Frontend is served by nginx
-      - DEBUG=SourceService,DataResolver,DownloadService
-      - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://localhost:8191}
-      - ENABLE_FLARESOLVERR=${ENABLE_FLARESOLVERR:-true}
-      - BUNQUEUE_HOST=127.0.0.1
-      - BUNQUEUE_PORT=6789
-      - CATALOG_SERVICE_URL=http://localhost:3001 # Same network namespace as media-catalog
-      - LIST_SERVICE_URL=http://localhost:3002 # Same network namespace as list-service
-    healthcheck:
-      test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
-      interval: 30s
-      timeout: 2s
-      retries: 3
-      start_period: 10s
-    volumes:
-      - ./.env:/usr/src/app/.env
-      - ./data:/usr/data/
-      - ./traces:/tmp:rw
-      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
-      - frontend_static:/usr/src/app/public_volume
-    network_mode: service:vpn # Route traffic through NordVPN
-    # No ports section here as they're defined in the nordvpn service
-    restart: unless-stopped
-
-  nginx:
-    image: nginx:alpine
-    container_name: miauflix-nginx
+      COLLECTOR_OTLP_ENABLED: 'true'
     ports:
-      - '80:80' # Expose HTTP port
-      - '443:443' # Expose HTTPS port
-    volumes:
-      - ./nginx/ssl:/etc/nginx/ssl
-      - ./nginx/templates:/etc/nginx/templates
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
-      - frontend_static:/usr/share/nginx/html:ro
-    env_file:
-      - path: .env
-        required: false
-    environment:
-      - REVERSE_PROXY_SECRET=${REVERSE_PROXY_SECRET}
-      - DOMAIN=${DOMAIN}
-      - WWW_DOMAIN=${WWW_DOMAIN}
-      - SSL_CERTIFICATE=${SSL_CERTIFICATE}
-      - SSL_CERTIFICATE_KEY=${SSL_CERTIFICATE_KEY}
-      - SSL_DHPARAM=${SSL_DHPARAM}
-    depends_on:
-      - miauflix
+      - '127.0.0.1:16686:16686' # Jaeger UI, this computer only
     restart: unless-stopped
 
-  certbot:
-    image: certbot/certbot
-    container_name: miauflix-certbot
+  # Docker only marks a container unhealthy, it never restarts it (restart: only covers exits).
+  # autoheal restarts the containers labelled autoheal=true once their healthcheck fails.
+  autoheal:
+    image: willfarrell/autoheal:1.2.0
+    environment:
+      AUTOHEAL_INTERVAL: 30
+    network_mode: none # Talks to Docker through the socket only
     volumes:
-      - ./nginx/certbot/conf:/etc/letsencrypt
-      - ./nginx/certbot/www:/var/www/certbot
-    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew --webroot -w /var/www/certbot --quiet; sleep 12h & wait $${!}; done;'"
-    depends_on:
-      - nginx
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+  # Updates the Miauflix containers (labelled com.centurylinklabs.watchtower.enable=true) when a
+  # new image is published, by default every day at 4:00 (WATCHTOWER_SCHEDULE: seconds first, TZ).
+  # Fork of containrrr/watchtower, which is archived and no longer works with current Docker.
+  watchtower:
+    image: nickfedor/watchtower:1
+    environment:
+      WATCHTOWER_LABEL_ENABLE: 'true'
+      WATCHTOWER_SCHEDULE: ${WATCHTOWER_SCHEDULE:-0 0 4 * * *}
+      WATCHTOWER_CLEANUP: 'true' # Remove the replaced images
+      WATCHTOWER_TIMEOUT: 30s # Time to shut down gracefully before being killed
+      TZ: ${TZ:-UTC}
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
     restart: unless-stopped
 
 volumes:
-  bunqueue_data:
-  frontend_static:
-    name: frontend_static
-  flaresolver_config:
-    name: flaresolver_config
+  miauflix_data:
+  miauflix_services_data:
+  flaresolverr_config:

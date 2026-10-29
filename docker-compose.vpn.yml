@@ -1,6 +1,6 @@
-# Route the prebuilt-image quick start through NordVPN with gluetun (https://github.com/qdm12/gluetun).
+# Route Miauflix through NordVPN with gluetun (https://github.com/qdm12/gluetun).
 # Usage: put these in a .env file next to the compose files, then run docker compose up -d
-#   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml
 #   NORDVPN_PRIVATE_KEY=<your NordLynx key, scripts/nordvpn-key.sh writes it for you>
 #   NORDVPN_COUNTRIES=<optional, comma-separated, e.g. Switzerland,Netherlands>
 # Guide: docs/setup/docker-setup.md#using-a-vpn
@@ -22,9 +22,10 @@ services:
       SERVER_CATEGORIES: P2P
       SERVER_COUNTRIES: ${NORDVPN_COUNTRIES:-}
     ports:
-      # The services share the VPN container's network, so their port is published here.
+      # The services share the VPN container's network, so their ports are published here.
       # See docs/setup/docker-setup.md#open-it-to-your-local-network
       - '127.0.0.1:3000:3000'
+      - '127.0.0.1:16686:16686' # Jaeger UI, with docker-compose.tracing.yml
     restart: unless-stopped
 
   miauflix:
@@ -34,6 +35,8 @@ services:
       BUNQUEUE_HOST: 127.0.0.1
       CATALOG_SERVICE_URL: http://127.0.0.1:3001
       LIST_SERVICE_URL: http://127.0.0.1:3002
+      FLARESOLVERR_URL: http://127.0.0.1:8191
+      OTEL_EXPORTER_OTLP_ENDPOINT: http://127.0.0.1:4318
       DISABLE_VPN_CHECK: 'false'
     depends_on:
       vpn:
@@ -41,6 +44,20 @@ services:
 
   miauflix-services:
     network_mode: service:vpn
+    depends_on:
+      vpn:
+        condition: service_healthy
+
+  # Only started with docker-compose.flaresolverr.yml / docker-compose.tracing.yml
+  flaresolverr:
+    network_mode: service:vpn
+    depends_on:
+      vpn:
+        condition: service_healthy
+
+  jaeger:
+    network_mode: service:vpn
+    ports: !reset []
     depends_on:
       vpn:
         condition: service_healthy

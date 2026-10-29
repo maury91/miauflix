@@ -52,9 +52,11 @@ export const Rail = styled.aside<{ $active: boolean }>`
 export const RailNavigation = styled.nav`
   position: absolute;
   top: 6vh;
+  bottom: 3vh;
   left: ${INSET_EM}em;
   right: ${INSET_EM}em;
-  display: grid;
+  display: flex;
+  flex-direction: column;
   align-content: start;
   row-gap: 0.75em;
 `;
@@ -71,8 +73,8 @@ export const RailItem = styled.button<{ $active: boolean; $selected: boolean }>`
   padding: 0 ${ICON_PADDING_EM}em;
   border: 0;
   border-radius: 0.4em;
-  background: ${({ $selected }) =>
-    $selected ? 'linear-gradient(115deg, #e60019 0%, #870d1a 100%)' : 'transparent'};
+  background: ${({ $active, $selected }) =>
+    $active && $selected ? 'linear-gradient(115deg, #e60019 0%, #870d1a 100%)' : 'transparent'};
   color: ${PALETTE.text.primary};
   font:
     500 1em 'Poppins',

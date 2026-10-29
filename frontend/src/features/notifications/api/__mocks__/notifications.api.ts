@@ -17,3 +17,7 @@ const emptyNotifications = {
 
 export const useGetNotificationsQuery = fn().mockReturnValue(emptyNotifications);
 export const useMarkNotificationReadMutation = fn().mockReturnValue([fn(), { isLoading: false }]);
+export const useRequestAvailabilityMutation = fn().mockReturnValue([
+  fn().mockReturnValue({ unwrap: fn().mockResolvedValue({ requested: true }) }),
+  { isLoading: false, isSuccess: false },
+]);

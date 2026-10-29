@@ -15,6 +15,7 @@ export const createMovieRoutes = ({
   mediaService,
   configurationService,
   sourceService,
+  sourceAvailabilityService,
   streamService,
 }: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
@@ -85,6 +86,7 @@ export const createMovieRoutes = ({
             genres: detail.genres.map(genre => genre.name),
             popularity: detail.popularity,
             rating: detail.rating,
+            sourceAvailability: 'pending',
           };
 
           // Include sources if requested
@@ -110,6 +112,9 @@ export const createMovieRoutes = ({
               hasDataFile: !!source.file,
             }));
           }
+          // After the search above, which can mark more providers as searched.
+          const searched = includeSources ? await mediaService.getMovieById(movie.id) : movie;
+          response.sourceAvailability = await sourceAvailabilityService.forMovie(searched ?? movie);
 
           return context.json(response satisfies MovieResponse);
         } catch (error: unknown) {

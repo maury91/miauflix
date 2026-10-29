@@ -42,6 +42,7 @@ export const useLazyGetSeasonQuery = () =>
             overview: null,
             airDate: null,
             still: null,
+            sourceAvailability: 'available',
           },
         ],
       }),

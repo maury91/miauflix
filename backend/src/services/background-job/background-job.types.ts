@@ -14,6 +14,10 @@ export interface BackgroundJobPayloads {
   'source.discover': { movieId?: number; movieMediaId?: number; priority?: number };
   'source.metadata': { sourceId?: number };
   'source.stats': { sourceId?: number };
+  /** Check whether a source, or a movie's candidates, hold real video. */
+  'source.verify': { sourceId?: number; movieId?: number };
+  /** Look again for sources of what users asked to be notified about. */
+  'availability.check': Record<string, never>;
   'watchlist.movie.download': { movieMediaId: number };
   'watchlist.tv.scan': Record<string, never>;
   'watchlist.tv.acquire': { showMediaId: number };
@@ -51,6 +55,8 @@ export const BACKGROUND_JOB_QUEUES: Record<BackgroundJobName, string> = {
   'source.discover': 'miauflix-source-discovery',
   'source.metadata': 'miauflix-source-metadata',
   'source.stats': 'miauflix-source-stats',
+  'source.verify': 'miauflix-source-verify',
+  'availability.check': 'miauflix-source-verify',
   'watchlist.movie.download': 'miauflix-watchlist-downloads',
   'watchlist.tv.scan': 'miauflix-watchlist-downloads',
   'watchlist.tv.acquire': 'miauflix-watchlist-downloads',

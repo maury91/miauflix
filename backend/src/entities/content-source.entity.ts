@@ -165,6 +165,14 @@ export class ContentSource {
   })
   file?: Buffer;
 
+  /**
+   * Whether the source's file list holds a playable video: null until the list is known,
+   * false for fakes (an `.exe`, an archive, or a small sample beside other payload). Selection
+   * never picks a source known to be false.
+   */
+  @Column({ type: 'boolean', nullable: true })
+  hasVideo: boolean | null;
+
   @Column({ type: 'datetime', nullable: true })
   sourceUploadedAt?: Date;
 

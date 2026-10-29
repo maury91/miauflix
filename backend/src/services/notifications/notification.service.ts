@@ -1,9 +1,12 @@
-import { IsNull, type Repository } from 'typeorm';
+import { In, IsNull, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
+import { AvailabilityRequest } from '@entities/availability-request.entity';
 import { Notification, type NotificationType } from '@entities/notification.entity';
 import type { MediaListRepository } from '@repositories/mediaList.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
+import { playableKey, type PlayableRef } from '@routes/playable.types';
+import { EncryptedColumns } from '@utils/encrypted-column.util';
 
 export interface NotificationDto {
   id: number;
@@ -18,13 +21,18 @@ export interface NotificationDto {
   readAt: string | null;
 }
 
+/** Pending "Notify me" requests one user may have at a time. */
+export const MAX_PENDING_AVAILABILITY_REQUESTS = 200;
+
 export class NotificationService {
   private readonly repository: Repository<Notification>;
+  private readonly availabilityRequests: Repository<AvailabilityRequest>;
   private readonly watchlists: MediaListRepository;
   private readonly progress: ProgressRepository;
 
   constructor(private readonly database: Database) {
     this.repository = database.getRepository(Notification);
+    this.availabilityRequests = database.getRepository(AvailabilityRequest);
     this.watchlists = database.getMediaListRepository();
     this.progress = database.getProgressRepository();
   }
@@ -102,6 +110,78 @@ export class NotificationService {
       seasonNumber: input.seasonNumber,
       episodeNumber: input.episodeNumber,
     });
+  }
+
+  /**
+   * "Notify me": remember that the user wants to hear when the playable gets a real source.
+   * Asking again for the same playable always succeeds; a new one is refused once the user has
+   * `MAX_PENDING_AVAILABILITY_REQUESTS` pending.
+   */
+  async requestAvailability(
+    userId: string,
+    playable: PlayableRef
+  ): Promise<'limited' | 'requested'> {
+    const key = playableKey(playable);
+    return this.database.write(async () => {
+      if (await this.availabilityRequests.exists({ where: { userId, playableKey: key } }))
+        return 'requested';
+      const pending = await this.availabilityRequests.count({ where: { userId } });
+      if (pending >= MAX_PENDING_AVAILABILITY_REQUESTS) return 'limited';
+      await this.availabilityRequests
+        .createQueryBuilder()
+        .insert()
+        .into(AvailabilityRequest)
+        .values({ userId, playableKey: key })
+        .orIgnore()
+        .execute();
+      return 'requested';
+    });
+  }
+
+  async hasRequestedAvailability(userId: string, playable: PlayableRef): Promise<boolean> {
+    return this.availabilityRequests.exists({
+      where: { userId, playableKey: playableKey(playable) },
+    });
+  }
+
+  /** Tell everyone who asked that the playable now has a real source, once. */
+  async playableAvailable(playable: PlayableRef, title: string): Promise<void> {
+    const key = playableKey(playable);
+    const requests = await this.availabilityRequests.find({ where: { playableKey: key } });
+    if (!requests.length) return;
+    const episode =
+      playable.kind === 'episode'
+        ? `S${String(playable.seasonNumber).padStart(2, '0')}E${String(playable.episodeNumber).padStart(2, '0')}`
+        : null;
+    const userIds = requests.map(request => request.userId);
+    await this.insertForUsers(userIds, {
+      dedupeKey: `available:${key}`,
+      type: 'source_available',
+      mediaType: playable.kind === 'movie' ? 'movie' : 'tv',
+      mediaId: playable.kind === 'movie' ? playable.mediaId : playable.showMediaId,
+      title,
+      message: episode
+        ? `${episode} is now available to watch.`
+        : `${title} is now available to watch.`,
+      seasonNumber: playable.kind === 'episode' ? playable.seasonNumber : null,
+      episodeNumber: playable.kind === 'episode' ? playable.episodeNumber : null,
+    });
+    // Only the requests just notified: one made meanwhile waits for the next check.
+    await this.availabilityRequests.delete({ playableKey: key, userId: In(userIds) });
+  }
+
+  /** Playables someone is waiting on, so background checks can look for their sources. */
+  async requestedPlayableKeys(limit = 50, offset = 0): Promise<string[]> {
+    const rows = await this.availabilityRequests
+      .createQueryBuilder('request')
+      .select('request.playableKey', 'playableKey')
+      .groupBy('request.playableKey')
+      .orderBy('MIN(request.createdAt)', 'ASC')
+      .limit(limit)
+      .offset(offset)
+      .getRawMany<{ playableKey: string }>();
+    // Raw rows skip the column transformer.
+    return rows.map(row => EncryptedColumns.decrypt(row.playableKey));
   }
 
   private async insertForUsers(

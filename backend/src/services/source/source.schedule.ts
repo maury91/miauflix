@@ -20,6 +20,14 @@ export function sourceSchedules(config: ConfigService): BackgroundJobSchedule[] 
       runOnStart: true,
     },
     {
+      job: 'availability.check',
+      id: 'availability-check-seed',
+      intervalSeconds: 6 * 60 * 60,
+      payload: {},
+      priority: 5,
+      runOnStart: false,
+    },
+    {
       job: 'source.stats',
       id: 'source-stats-seed',
       intervalSeconds: Number(config.getOrThrow('SOURCE_STATS_INTERVAL')),

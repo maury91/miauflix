@@ -1,4 +1,10 @@
-import { clearPiecesInBitfield, isVideoFile, mainVideoPath, pieceRangeOf } from './download.utils';
+import {
+  clearPiecesInBitfield,
+  containsPlayableVideo,
+  isVideoFile,
+  mainVideoPath,
+  pieceRangeOf,
+} from './download.utils';
 
 describe('video file helpers', () => {
   beforeEach(() => {
@@ -44,5 +50,39 @@ describe('piece range helpers', () => {
     ]);
     expect([...cleared]).toEqual([0b10011111, 0b10110000]);
     expect([...bitfield]).toEqual([0b11111111, 0b11110000]);
+  });
+});
+
+describe('containsPlayableVideo', () => {
+  it('rejects a lone executable named like a release', () => {
+    expect(containsPlayableVideo([{ path: 'Clayface (2026) 1080p WEB-DL.exe', length: 1e9 }])).toBe(
+      false
+    );
+  });
+
+  it('rejects a small video sample beside an archive', () => {
+    expect(
+      containsPlayableVideo([
+        { path: 'Movie/Sample.mkv', length: 20e6 },
+        { path: 'Movie/Movie.rar', length: 1.4e9 },
+      ])
+    ).toBe(false);
+  });
+
+  it('accepts a movie with extras and an episode pack', () => {
+    expect(
+      containsPlayableVideo([
+        { path: 'Movie/Movie.mkv', length: 2e9 },
+        { path: 'Movie/Movie.en.srt', length: 1e5 },
+      ])
+    ).toBe(true);
+    expect(
+      containsPlayableVideo(
+        Array.from({ length: 24 }, (_, index) => ({
+          path: `Show/Show.S01E${String(index + 1).padStart(2, '0')}.mkv`,
+          length: 150e6,
+        }))
+      )
+    ).toBe(true);
   });
 });

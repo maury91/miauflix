@@ -37,6 +37,7 @@ export const createPlaybackSessionRequestSchema = z
     playable: playableRefSchema,
     preferences: playbackPreferencesSchema,
     deferDownload: z.boolean().optional(),
+    avoidSourceIds: z.array(z.number().int().positive()).max(50).optional(),
   })
   .strict();
 
@@ -44,6 +45,8 @@ export interface CreatePlaybackSessionRequest {
   playable: PlayableRef;
   preferences: z.infer<typeof playbackPreferencesSchema>;
   deferDownload?: boolean;
+  /** Sources this player already failed to play, so selection moves on to another one. */
+  avoidSourceIds?: number[];
 }
 
 export interface CreatePlaybackSessionResponse {
@@ -54,6 +57,8 @@ export interface CreatePlaybackSessionResponse {
   /** The file is probed in the background; its delivery arrives as `playback-delivery`. */
   deliveryPending?: boolean;
   episodeMatchKind?: 'combined' | 'single';
+  /** Which of the compatible sources this session plays ("source 2 of 4"). */
+  sourceAttempt?: { position: number; total: number };
   source: {
     id: number;
     quality: Quality | '3D' | null;
@@ -68,4 +73,10 @@ export interface CreatePlaybackSessionResponse {
     allocatedBytes: number;
   };
   expiresAt: string;
+}
+
+/** 404 from session creation: `exhausted` when every source found proved fake. */
+export interface PlaybackUnavailableResponse {
+  error: string;
+  reason: 'exhausted' | 'not_found';
 }
