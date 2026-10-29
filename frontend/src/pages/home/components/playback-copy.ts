@@ -1,4 +1,10 @@
-export type PlaybackStatus = 'checking' | 'preparing' | 'ready' | 'unavailable' | 'error';
+export type PlaybackStatus =
+  | 'checking'
+  | 'preparing'
+  | 'ready'
+  | 'unavailable'
+  | 'exhausted'
+  | 'error';
 
 interface PlaybackFailure {
   status?: number;
@@ -12,6 +18,19 @@ function getFailureDetails(reason: unknown): PlaybackFailure {
 
 export function isUnavailablePlaybackFailure(reason: unknown): boolean {
   return getFailureDetails(reason).status === 404;
+}
+
+/** Shown while the player works through the candidates. */
+export function getSourceAttemptMessage(
+  attempt: { position: number; total: number },
+  title: string
+): string {
+  return `Trying source ${attempt.position} of ${attempt.total} for “${title}”…`;
+}
+
+/** Every source was tried (or none exists): offer to notify once one is out. */
+export function getNoSourceMessage(title: string): string {
+  return `There is no source for “${title}”. Press “Notify me” to receive a notification once it's out.`;
 }
 
 export function describePlaybackFailure(reason: unknown, title: string): string {
@@ -50,6 +69,8 @@ export function getPlaybackStatusMessage(status: PlaybackStatus, title: string):
       return `Ready to play ${quotedTitle}.`;
     case 'unavailable':
       return `No playable source is available for ${quotedTitle} yet.`;
+    case 'exhausted':
+      return getNoSourceMessage(title);
     case 'error':
       return `Playback for ${quotedTitle} could not start.`;
   }

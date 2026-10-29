@@ -85,8 +85,8 @@ NORDVPN_COUNTRIES=Switzerland,Netherlands
 
 - **NORDVPN_PRIVATE_KEY**: NordLynx (WireGuard) private key, passed to [gluetun](https://github.com/qdm12/gluetun) as `WIREGUARD_PRIVATE_KEY`
 - **Get from**: create an access token at [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then run `scripts/nordvpn-key.sh`, which saves the key to `.env` without printing it
-- **Required for**: Starting the VPN container (`docker-compose.yml`, or `docker-compose.vpn.yml` with the quick start)
-- **NORDVPN_COUNTRIES**: Optional comma-separated list of server countries. Unset, the quick start picks any P2P server and the full stack connects to the United States
+- **Required for**: Starting the VPN container (`docker-compose.vpn.yml`)
+- **NORDVPN_COUNTRIES**: Optional comma-separated list of server countries. Unset, gluetun picks any P2P server
 
 #### FlareSolverr (Optional)
 
@@ -280,7 +280,7 @@ WWW_DOMAIN=www.yourdomain.com
 
 **VPN docker container not starting**
 
-- Check the logs with `docker compose logs vpn` (`nordvpn` in the full stack)
+- Check the logs with `docker compose logs vpn`
 - Make sure `NORDVPN_PRIVATE_KEY` is set: re-run `scripts/nordvpn-key.sh` if in doubt
 - Check that your NordVPN subscription is active
 - The host must provide `/dev/net/tun` (most VPS do; on some container-based VPS it must be enabled in the provider's panel)

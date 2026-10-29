@@ -81,6 +81,9 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
   private readonly config: ConfigService;
   private admissionTail: Promise<void> = Promise.resolve();
   private allocationMode: AllocationMode = 'unknown';
+  private readonly layoutListeners = new Set<
+    (sourceId: number, layout: EncryptedStorageLayout) => void
+  >();
   private readonly deleteHandlers: Array<(storage: Storage) => Promise<void> | void> = [];
   private reclaimHandler: ReclaimHandler | null = null;
   private readonly sourceTails = new Map<number, Promise<void>>();
@@ -349,6 +352,15 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
       ? { ...storage.encryptedLayout, filenameSalt: encryptedLayout.filenameSalt }
       : encryptedLayout;
     await this.storageRepository.update(storage.id, { encryptedLayout: next });
+    if (!storage.encryptedLayout) {
+      for (const listener of this.layoutListeners) listener(sourceId, next);
+    }
+  }
+
+  /** Hear each source whose file list becomes known; returns the unsubscribe function. */
+  onLayout(listener: (sourceId: number, layout: EncryptedStorageLayout) => void): () => void {
+    this.layoutListeners.add(listener);
+    return () => this.layoutListeners.delete(listener);
   }
 
   /** Record a source's file table once its layout is known. */

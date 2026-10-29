@@ -41,13 +41,13 @@ You need [Docker](https://docs.docker.com/get-docker/) and a free [TMDB access t
 **1. Download the Compose file**
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.quickstart.yml
+curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.yml
 ```
 
 **2. Start Miauflix**
 
 ```bash
-docker compose -f docker-compose.quickstart.yml up -d
+docker compose up -d
 ```
 
 **3. Open <http://localhost:3000>**, create your admin account and paste your TMDB token. That's it. 🎉
@@ -62,7 +62,7 @@ docker compose -f docker-compose.quickstart.yml up -d
 
 - 📺 **Watch from your TV or phone**: [Open it to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network)
 - 🔒 **Route traffic through a VPN**: [Using a VPN](docs/setup/docker-setup.md#using-a-vpn)
-- 🌐 **Put it on a domain with HTTPS**: [Getting Started](docs/setup/getting-started.md) and [SSL Certificates](docs/setup/ssl-certificates.md)
+- 🌐 **Put it on a domain with HTTPS**: [Getting Started](docs/setup/getting-started.md) and [HTTPS with a domain](docs/setup/docker-setup.md#https-with-a-domain)
 - ⚙️ **Tune every setting**: [Environment Variables](docs/setup/environment-variables.md)
 - 🛡️ **Get past Cloudflare-protected sources**: [FlareSolverr](docs/setup/flaresolverr.md)
 - 🐱 **Why it works the way it does**: [Philosophy](docs/philosophy.md)

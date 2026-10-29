@@ -61,6 +61,20 @@ function rewriteSetCookieForDev(cookie: string): string {
   return cookie.replace(/\s*;\s*Domain=[^;]*/gi, '');
 }
 
+/** Compose service names that can serve the backend (see docker-compose*.yml). */
+const DOCKER_BACKEND_HOSTS = new Set(['backend', 'miauflix', 'vpn']);
+
+function isLocalBackend(url: string): boolean {
+  const { hostname } = new URL(url);
+  return (
+    hostname === 'localhost' ||
+    hostname.endsWith('.localhost') ||
+    hostname === '[::1]' ||
+    /^127(?:\.(?:25[0-5]|2[0-4]\d|1?\d?\d)){3}$/.test(hostname) ||
+    DOCKER_BACKEND_HOSTS.has(hostname)
+  );
+}
+
 function proxyCookieRewriteConfigure(
   proxy: Parameters<NonNullable<ProxyOptions['configure']>>[0]
 ): void {
@@ -73,7 +87,7 @@ function proxyCookieRewriteConfigure(
   // A remote backend (BACKEND_URL) only accepts its own origin (CORS_ORIGIN), including for the
   // realtime WebSocket, so present requests from this dev/preview server's own pages as coming
   // from it. Any other origin is forwarded unchanged so the backend still rejects cross-site use.
-  if (!process.env.BACKEND_URL) return;
+  if (!process.env.BACKEND_URL || isLocalBackend(process.env.BACKEND_URL)) return;
   const backendOrigin = new URL(process.env.BACKEND_URL).origin;
   const rewriteOrigin = (
     proxyReq: { getHeader(name: string): unknown; setHeader(name: string, value: string): void },
@@ -103,6 +117,9 @@ function appVersion(): string {
 
 const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+// Local backends use self-signed development certificates; remote ones must present a valid one.
+const verifyDevBackendCertificate = !isLocalBackend(devBackendUrl);
+const verifyPreviewBackendCertificate = !isLocalBackend(previewBackendUrl);
 const devCertificateRootOverride = process.env.MIAUFLIX_DEV_CERT_DIR;
 const devCertificateRoot = devCertificateRootOverride
   ? path.resolve(__dirname, '..', devCertificateRootOverride)
@@ -130,7 +147,7 @@ export default defineConfig({
       '/api': {
         target: devBackendUrl,
         changeOrigin: true,
-        secure: false,
+        secure: verifyDevBackendCertificate,
         ws: true,
         configure: proxyCookieRewriteConfigure,
       },
@@ -145,7 +162,7 @@ export default defineConfig({
             '/api': {
               target: previewBackendUrl,
               changeOrigin: true,
-              secure: false,
+              secure: verifyPreviewBackendCertificate,
               ws: true,
               configure: proxyCookieRewriteConfigure,
             },

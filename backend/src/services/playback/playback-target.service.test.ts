@@ -38,9 +38,18 @@ describe('PlaybackTargetService', () => {
       getEpisodeSourceRepository: () => episodeRepository,
     } as unknown as Database;
     const sourceHealth = { markFailed: jest.fn() };
-    const service = new PlaybackTargetService(database, downloads, sourceHealth);
+    const availability = { recordFiles: jest.fn().mockResolvedValue(false) };
+    const service = new PlaybackTargetService(database, downloads, sourceHealth, availability);
     const source = createMockContentSource({ id: 5 });
-    return { service, repository, episodeRepository, downloads, source, sourceHealth };
+    return {
+      service,
+      repository,
+      episodeRepository,
+      downloads,
+      source,
+      sourceHealth,
+      availability,
+    };
   };
 
   beforeAll(() => {
@@ -94,6 +103,21 @@ describe('PlaybackTargetService', () => {
     );
     expect(repository.setMovieVideoFilePath).not.toHaveBeenCalled();
     expect(sourceHealth.markFailed).toHaveBeenCalledWith(5);
+  });
+
+  it('remembers a fake whose only video is a sample beside an executable', async () => {
+    const { service, downloads, source, availability } = setupTest();
+    const files = layout([
+      ['Clayface/Sample.mkv', 20],
+      ['Clayface/Clayface.2026.1080p.exe', 1_000],
+    ]);
+    downloads.resolveLayout.mockResolvedValue(files);
+
+    await expect(service.forMovie(7, source)).rejects.toThrow(
+      'Source does not contain a video file'
+    );
+    expect(availability.recordFiles).toHaveBeenCalledWith(5, files.files);
+    expect(source.hasVideo).toBe(false);
   });
 
   it('resolves a unique episode suffix and persists its canonical path', async () => {

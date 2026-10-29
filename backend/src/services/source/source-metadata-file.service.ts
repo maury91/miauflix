@@ -217,14 +217,6 @@ export class SourceMetadataFileService {
     return this.downloadService.getStats(hash);
   }
 
-  /**
-   * Check if there are any idle services available
-   * @returns True if there are any idle services available
-   */
-  public isIdle(): boolean {
-    return this.getIdleServices().length > 0;
-  }
-
   public getAvailableConcurrency(): number {
     return this.concurrency - this.activeWorkers;
   }

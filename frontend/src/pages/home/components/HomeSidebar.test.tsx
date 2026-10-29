@@ -9,6 +9,7 @@ describe('HomeSidebar', () => {
     render(
       <HomeSidebar
         active={false}
+        showSettings={true}
         onAction={() => ({ type: 'handled' })}
         onHover={vi.fn()}
         onSettings={onSettings}
@@ -20,11 +21,28 @@ describe('HomeSidebar', () => {
     );
 
     expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Home' })).not.toBeInTheDocument();
     const settings = screen.getByRole('button', { name: 'Settings' });
     expect(settings).toBeInTheDocument();
 
     fireEvent.click(settings);
     expect(onSettings).toHaveBeenCalledTimes(1);
+  });
+
+  it('should hide Settings, when showSettings is false', () => {
+    render(
+      <HomeSidebar
+        active={false}
+        showSettings={false}
+        onAction={() => ({ type: 'handled' })}
+        onHover={vi.fn()}
+        onSettings={vi.fn()}
+        onSearch={vi.fn()}
+        onNotifications={vi.fn()}
+        notificationsRef={null}
+        unreadCount={0}
+      />
+    );
+
+    expect(screen.queryByRole('button', { name: 'Settings' })).not.toBeInTheDocument();
   });
 });
