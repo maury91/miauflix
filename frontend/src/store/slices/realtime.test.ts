@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 
-import { realtimeActions, realtimeSlice } from './realtime';
+import {
+  realtimeActions,
+  realtimeSlice,
+  selectSourceAttempt,
+  selectSourceAvailability,
+} from './realtime';
 
 describe('realtime state', () => {
   it('stores socket preparation updates for subscribed views', () => {
@@ -43,6 +48,41 @@ describe('realtime state', () => {
     });
 
     state = realtimeSlice.reducer(state, realtimeActions.resetRealtimeState());
-    expect(state).toEqual({ ready: false, preparationByMediaId: {}, playbackDeliveries: {} });
+    expect(state).toEqual({
+      ready: false,
+      preparationByMediaId: {},
+      playbackDeliveries: {},
+      availabilityByPlayable: {},
+      sourceAttempts: {},
+    });
+  });
+
+  it('keeps pushed availability and the current source attempt per playable', () => {
+    const episode = { kind: 'episode' as const, showMediaId: 9, seasonNumber: 1, episodeNumber: 2 };
+    let state = realtimeSlice.reducer(undefined, { type: '@@test/init' });
+    state = realtimeSlice.reducer(
+      state,
+      realtimeActions.sourceReceived({
+        type: 'source-availability',
+        playable: episode,
+        mediaId: 9,
+        availability: 'unavailable',
+      })
+    );
+    state = realtimeSlice.reducer(
+      state,
+      realtimeActions.sourceReceived({
+        type: 'source-attempt',
+        playable: episode,
+        position: 2,
+        total: 3,
+      })
+    );
+
+    expect(selectSourceAvailability(episode)({ realtime: state })).toBe('unavailable');
+    expect(selectSourceAttempt(episode)({ realtime: state })).toEqual({ position: 2, total: 3 });
+
+    state = realtimeSlice.reducer(state, realtimeActions.sourceAttemptCleared(episode));
+    expect(selectSourceAttempt(episode)({ realtime: state })).toBeNull();
   });
 });

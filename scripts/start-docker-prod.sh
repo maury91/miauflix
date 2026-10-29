@@ -4,7 +4,7 @@ set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/utils.sh"
 
-ensure_data_dir "${SCRIPT_DIR}/.."
+cd "${SCRIPT_DIR}/.."
 
 # Ensure .env exists on the host so Docker can bind-mount it as a file.
 # The config wizard will populate it interactively.
@@ -18,15 +18,5 @@ if [ ! -e .env ]; then
   touch .env
 fi
 
-# Try to read NORDVPN_PRIVATE_KEY from .env if not already set in environment
-if [ -z "$NORDVPN_PRIVATE_KEY" ] && [ -f .env ]; then
-  NORDVPN_PRIVATE_KEY=$(grep -E '^NORDVPN_PRIVATE_KEY=' .env | cut -d= -f2- | tr -d '"' | tr -d "'")
-fi
-
-if [ -n "$NORDVPN_PRIVATE_KEY" ]; then
-  echo "Starting with VPN..."
-  docker compose "$@"
-else
-  echo "NORDVPN_PRIVATE_KEY not set, starting without VPN..."
-  docker compose -f docker-compose.novpn.yml "$@"
-fi
+use_source_compose_files .env
+docker compose "$@"

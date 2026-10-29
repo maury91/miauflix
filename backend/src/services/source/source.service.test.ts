@@ -35,6 +35,25 @@ import { ContentDirectoryService } from '@services/source-metadata/content-direc
 import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 
+/** Stubs for the dependencies the tests don't exercise; `null` keeps the source's verdict. */
+const createSourceServiceDependencies = () => ({
+  backgroundJobs: {
+    bulkBestEffort: jest.fn(),
+    enqueueBestEffort: jest.fn(),
+    enqueueBulk: jest.fn().mockResolvedValue(undefined),
+  },
+  notifications: {
+    episodeAvailable: jest.fn().mockResolvedValue(undefined),
+    movieQualityUpgrade: jest.fn().mockResolvedValue(undefined),
+  },
+  availability: { recordTorrentFile: jest.fn().mockResolvedValue(null) },
+});
+
+const sourceServiceDependencies = () => {
+  const { backgroundJobs, notifications, availability } = createSourceServiceDependencies();
+  return [backgroundJobs as never, notifications as never, availability as never] as const;
+};
+
 describe('SourceService', () => {
   // Helper functions to reduce duplication
   const createServiceWithDisconnectedVpn = () => {
@@ -63,7 +82,8 @@ describe('SourceService', () => {
         mockContentDirectoryService,
         mockSourceMetadataFileService,
         mockRequestService,
-        mockConfigService
+        mockConfigService,
+        ...sourceServiceDependencies()
       ),
     };
   };
@@ -186,7 +206,6 @@ describe('SourceService', () => {
     mockSourceMetadataFileService.getServiceStatistics.mockReturnValue({});
     mockSourceMetadataFileService.getStats.mockResolvedValue({ broadcasters: 100, watchers: 10 });
     mockSourceMetadataFileService.getAvailableConcurrency.mockReturnValue(2);
-    mockSourceMetadataFileService.isIdle.mockReturnValue(true);
 
     mockDatabase.getMovieRepository.mockReturnValue(mockMovieRepository);
     mockDatabase.getContentSourceRepository.mockReturnValue(mockContentSourceRepository);
@@ -203,7 +222,8 @@ describe('SourceService', () => {
       mockContentDirectoryService,
       mockSourceMetadataFileService,
       mockRequestService,
-      mockConfigService
+      mockConfigService,
+      ...sourceServiceDependencies()
     );
 
     return {
@@ -269,6 +289,87 @@ describe('SourceService', () => {
         })
       ).toEqual([]);
       expect(findByEpisodeId).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('new episode notifications', () => {
+    const setupEpisodeTest = (hasVideo: boolean | null) => {
+      const mocks = setupTest();
+      const association = {
+        episodeId: 5,
+        sourceId: 11,
+        matchKind: 'single',
+        source: { id: 11, hasVideo },
+      };
+      const episodeSources = {
+        findByEpisodeId: jest.fn().mockResolvedValueOnce([]).mockResolvedValue([association]),
+        associate: jest.fn(),
+      };
+      Object.assign(mocks.mockDatabase, {
+        getEpisodeSourceRepository: jest.fn().mockReturnValue(episodeSources),
+      });
+      const notifications = { episodeAvailable: jest.fn() };
+      const backgroundJobs = { bulkBestEffort: jest.fn(), enqueueBestEffort: jest.fn() };
+      const service = new SourceService(
+        mocks.mockDatabase,
+        mocks.mockVpnService,
+        mocks.mockContentDirectoryService,
+        mocks.mockSourceMetadataFileService,
+        mocks.mockRequestService,
+        mocks.mockConfigService,
+        backgroundJobs as never,
+        notifications as never,
+        createSourceServiceDependencies().availability as never
+      );
+      jest.spyOn(service as never, 'checkForVpnConnection').mockResolvedValue(true as never);
+      jest.spyOn(service as never, 'getTVReleases').mockResolvedValue([
+        {
+          metadata: { season: 1, episode: 8, files: ['Show.S01E08.mkv'] },
+          source: { id: 11, hasVideo },
+        },
+      ] as never);
+      const search = () =>
+        service.getSourcesForEpisodeWithOnDemandSearch({
+          episodeId: 5,
+          showMediaId: 9001,
+          showTitle: 'Example Show',
+          showImdbId: 'tt1234567',
+          seasonNumber: 1,
+          episodeNumber: 8,
+          airDate: '2020-01-01',
+        });
+      return { search, notifications, backgroundJobs };
+    };
+
+    it('announces an episode once a source matched to it is verified', async () => {
+      const { search, notifications, backgroundJobs } = setupEpisodeTest(true);
+
+      await search();
+
+      expect(notifications.episodeAvailable).toHaveBeenCalledWith(
+        expect.objectContaining({ showMediaId: 9001, seasonNumber: 1, episodeNumber: 8 })
+      );
+      expect(backgroundJobs.bulkBestEffort).not.toHaveBeenCalled();
+    });
+
+    it('waits for verification instead of announcing an unverified match', async () => {
+      const { search, notifications, backgroundJobs } = setupEpisodeTest(null);
+
+      await search();
+
+      expect(notifications.episodeAvailable).not.toHaveBeenCalled();
+      expect(backgroundJobs.bulkBestEffort).toHaveBeenCalledWith([
+        expect.objectContaining({ type: 'source.verify', payload: { sourceId: 11 } }),
+      ]);
+    });
+
+    it('never announces an episode whose only match is fake', async () => {
+      const { search, notifications, backgroundJobs } = setupEpisodeTest(false);
+
+      await search();
+
+      expect(notifications.episodeAvailable).not.toHaveBeenCalled();
+      expect(backgroundJobs.bulkBestEffort).not.toHaveBeenCalled();
     });
   });
 

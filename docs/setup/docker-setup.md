@@ -4,28 +4,51 @@ This guide covers Docker-based deployment and development setup for Miauflix.
 
 ## Prebuilt Images
 
-The quickest way to run Miauflix needs no clone and no build. Download [`docker-compose.quickstart.yml`](../../docker-compose.quickstart.yml) and start it:
+The quickest way to run Miauflix needs no clone and no build. Download [`docker-compose.yml`](../../docker-compose.yml) into an empty folder and start it:
 
 ```bash
-curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.quickstart.yml
-docker compose -f docker-compose.quickstart.yml up -d
+curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.yml
+docker compose up -d
 ```
 
 Open <http://localhost:3000>, create the admin account, then add your [TMDB access token](https://developer.themoviedb.org/docs) (and optionally Trakt credentials) from the setup screens.
 
 On first boot the `miauflix` logs show `Starting in degraded mode`: that's expected until you complete the setup screens.
 
-> **Image tags:** the quick-start file uses `latest`, the newest release. Pin a version such as `0.0.1` to upgrade only when you choose, or use `edge` to follow `main`.
+> **Image tags:** `docker-compose.yml` uses `latest`, the newest release. Set `MIAUFLIX_VERSION` in `.env` to a version such as `0.0.1` to upgrade only when you choose, or to `edge` to follow `main`.
 
-> **Security:** the quick-start file sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
+> **Automatic updates:** `docker-compose.yml` runs [Watchtower](https://watchtower.nickfedor.com/), which pulls the image tag you chose every day at 4:00 (UTC unless you set `TZ`) and recreates the Miauflix containers when it changed. Set `WATCHTOWER_SCHEDULE` in `.env` to change the time (a cron expression with seconds first, e.g. `0 30 3 * * *`), or remove the `watchtower` service to update by hand with `docker compose pull && docker compose up -d`. With a pinned version tag it only picks up rebuilds of that tag.
+
+> **Security:** `docker-compose.yml` sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
 
 > **VPN:** Miauflix won't search for sources until it detects a VPN, because peers would see your real IP. Set one up as described in [Using a VPN](#using-a-vpn), or [opt out](#running-without-a-vpn) if you accept the risk.
+
+### Combining compose files
+
+Every deployment starts from `docker-compose.yml`, and each feature is one more file on top of it. Download the ones you want next to `docker-compose.yml` and list them all in `COMPOSE_FILE` in a `.env` file in the same folder, so plain `docker compose` commands use them together (on Windows, separate them with `;` instead of `:`). `docker-compose.yml` must come first, because later files override earlier ones (listed after `docker-compose.https.yml`, it would turn the unauthenticated admin setup back on); the feature files can follow in any order.
+
+| File                                                                       | Adds                                                                              |
+| -------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| [`docker-compose.vpn.yml`](../../docker-compose.vpn.yml)                   | NordVPN for all traffic, see [Using a VPN](#using-a-vpn)                          |
+| [`docker-compose.https.yml`](../../docker-compose.https.yml)               | HTTPS for your domain with Caddy, see [HTTPS with a domain](#https-with-a-domain) |
+| [`docker-compose.flaresolverr.yml`](../../docker-compose.flaresolverr.yml) | [FlareSolverr](flaresolverr.md) for sources behind Cloudflare                     |
+| [`docker-compose.tracing.yml`](../../docker-compose.tracing.yml)           | [Tracing](../development/tracing.md) to Jaeger, UI on `localhost:16686`           |
+| [`docker-compose.build.yml`](../../docker-compose.build.yml)               | Builds the images from a clone, see [Building from source](#building-from-source) |
+
+For example, a VPS behind HTTPS and the VPN, with FlareSolverr:
+
+```bash
+COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml:docker-compose.flaresolverr.yml
+MIAUFLIX_UPSTREAM=vpn:3000 # with the VPN, Caddy reaches Miauflix through the VPN container
+```
+
+`docker compose config --services` lists the services the combination runs. FlareSolverr and Jaeger are defined, switched off, in `docker-compose.yml`: that way the VPN file can move them into the VPN's network whichever files you list.
 
 ### Open it to your local network
 
 To watch from a TV, phone or another computer at home, open Miauflix to your network **after** you have created the admin account:
 
-1. In `docker-compose.quickstart.yml`, change the port mapping of the `miauflix` service:
+1. In `docker-compose.yml`, change the port mapping of the `miauflix` service:
 
    ```yaml
    ports:
@@ -35,7 +58,7 @@ To watch from a TV, phone or another computer at home, open Miauflix to your net
 2. Apply the change:
 
    ```bash
-   docker compose -f docker-compose.quickstart.yml up -d
+   docker compose up -d
    ```
 
 3. Find this computer's address on your network (`ipconfig getifaddr en0` on macOS, `hostname -I` on Linux, `ipconfig` on Windows) and open `http://<that address>:3000` on the other device. If it doesn't load, allow port 3000 through the computer's firewall.
@@ -47,7 +70,7 @@ The admin setup endpoint closes for good once an admin exists, so this is safe o
 To reach Miauflix from the internet (for example on a VPS), add [`docker-compose.https.yml`](../../docker-compose.https.yml) and its [`Caddyfile`](../../Caddyfile). [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain and forwards traffic to Miauflix.
 
 1. Point your domain's DNS at the server and allow ports 80 and 443 (TCP) through its firewall.
-2. Download both files next to `docker-compose.quickstart.yml`:
+2. Download both files next to `docker-compose.yml`:
 
    ```bash
    curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.https.yml
@@ -57,15 +80,15 @@ To reach Miauflix from the internet (for example on a VPS), add [`docker-compose
 3. Create a `.env` file in the same folder:
 
    ```bash
-   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.https.yml
+   COMPOSE_FILE=docker-compose.yml:docker-compose.https.yml
    MIAUFLIX_DOMAIN=miauflix.example.com
    REVERSE_PROXY_SECRET=<output of: openssl rand -hex 32>
    ```
 
-   `COMPOSE_FILE` lets plain `docker compose` commands use both files (on Windows, separate them with `;` instead of `:`). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files and point Caddy at the VPN container, which owns Miauflix's network:
+   `COMPOSE_FILE` lets plain `docker compose` commands use both files (see [Combining compose files](#combining-compose-files)). `REVERSE_PROXY_SECRET` is sent by Caddy on every request: Miauflix only trusts the forwarded client IP when it matches. If you also [use the VPN](#using-a-vpn), list all three files and point Caddy at the VPN container, which owns Miauflix's network:
 
    ```bash
-   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml:docker-compose.https.yml
+   COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml
    MIAUFLIX_UPSTREAM=vpn:3000
    ```
 
@@ -97,10 +120,10 @@ To test a branch before merging, open **Actions → CI Pipeline → Run workflow
 
 Miauflix finds and streams content over BitTorrent, so every peer sees the IP address it connects from. **Use a VPN for anything reachable from the internet**, such as a VPS: without one, torrents go out from the server's real IP. By default Miauflix refuses to search for sources until it detects a NordVPN connection.
 
-[`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes the quick start through NordVPN with [gluetun](https://github.com/qdm12/gluetun). Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP.
+[`docker-compose.vpn.yml`](../../docker-compose.vpn.yml) routes Miauflix and its services through NordVPN with [gluetun](https://github.com/qdm12/gluetun). Gluetun's firewall blocks all traffic outside the tunnel, so it also works as a kill switch: if the VPN drops, nothing leaks from your real IP.
 
 1. Get a NordVPN access token: sign in at [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard), pick **NordVPN** in the left sidebar, then **Get Access Token** → **Generate New Token**. (It is not under "Manual setup".)
-2. Download the VPN file and the key helper next to `docker-compose.quickstart.yml`:
+2. Download the VPN file and the key helper next to `docker-compose.yml`:
 
    ```bash
    curl -fsSLO https://raw.githubusercontent.com/maury91/miauflix/main/docker-compose.vpn.yml
@@ -116,11 +139,11 @@ Miauflix finds and streams content over BitTorrent, so every peer sees the IP ad
 4. Add these lines to the same `.env` file, so plain `docker compose` commands use both files (on Windows, separate them with `;` instead of `:`):
 
    ```bash
-   COMPOSE_FILE=docker-compose.quickstart.yml:docker-compose.vpn.yml
-   NORDVPN_COUNTRIES=Netherlands # optional, comma-separated list of countries to connect to
+   COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml
+   NORDVPN_COUNTRIES=Netherlands # optional, comma-separated list of countries to connect to (default: any)
    ```
 
-   If you [set up HTTPS](#https-with-a-domain), keep all three files and `MIAUFLIX_UPSTREAM=vpn:3000` from that section instead, or Caddy drops out of your `docker compose` commands.
+   If you [set up HTTPS](#https-with-a-domain) or use other files, keep them in the list too, and with HTTPS and `MIAUFLIX_UPSTREAM=vpn:3000` from that section instead, or Caddy drops out of your `docker compose` commands.
 
 5. Start it:
 
@@ -128,7 +151,7 @@ Miauflix finds and streams content over BitTorrent, so every peer sees the IP ad
    docker compose up -d
    ```
 
-The `vpn` service owns the network, so Miauflix's port is published from it. To [open it to your local network](#open-it-to-your-local-network), change the `vpn` service's port mapping in `docker-compose.vpn.yml` instead of the `miauflix` one. Gluetun connects to NordVPN's P2P servers and passes Miauflix's VPN check as soon as the tunnel is up; `http://localhost:3000/api/status` reports it under `vpn`.
+The `vpn` service owns the network, so Miauflix's port is published from it. To [open it to your local network](#open-it-to-your-local-network), change the `vpn` service's port mapping in `docker-compose.vpn.yml` instead of the `miauflix` one. FlareSolverr and Jaeger, when their files are listed, share the VPN's network too. Gluetun connects to NordVPN's P2P servers and passes Miauflix's VPN check as soon as the tunnel is up; `http://localhost:3000/api/status` reports it under `vpn`.
 
 To check the connection, compare the address the container uses with your own:
 
@@ -138,135 +161,72 @@ docker compose exec vpn wget -qO- https://ipinfo.io/ip
 
 #### Running without a VPN
 
-If you accept that peers see your real IP (for example while trying Miauflix on a laptop), add `DISABLE_VPN_CHECK=true` to a `.env` file next to `docker-compose.quickstart.yml`. Don't do this on a server.
+If you accept that peers see your real IP (for example while trying Miauflix on a laptop), add `DISABLE_VPN_CHECK=true` to a `.env` file next to `docker-compose.yml`. Don't do this on a server.
 
 ## Building From Source
 
-To build the images yourself from a clone of the repository:
+`docker-compose.build.yml` builds the `miauflix` and `miauflix-services` images from a clone of the repository instead of pulling them. Everything else works as with the prebuilt images, including the other files in [Combining compose files](#combining-compose-files).
 
 ```bash
-# 1. Clone repository
 git clone https://github.com/maury91/miauflix.git && cd miauflix
-
-# 2. Interactive configuration wizard
-docker compose run --rm miauflix npm run config-only
-
-# 3. Start all services in background
-docker compose up -d
-```
-
-This will run the configuration wizard, then start the complete Miauflix stack with all required services.
-
-### Alternative: Backend-Only Production Deployment
-
-For backend-only deployment with Docker:
-
-```bash
-# Start backend in production mode (builds automatically)
 npm run start:backend:docker:prod
 ```
 
-This command starts only the backend service using Docker Compose in production mode with automatic building. Use this when you only need the API server without nginx, VPN, or other services.
+`npm run start:backend:docker:prod` (and `stop:` / `restart:`) use the `COMPOSE_FILE` from `.env` when it's set. Otherwise they pick `docker-compose.yml`, `docker-compose.build.yml`, `docker-compose.flaresolverr.yml` and `docker-compose.tracing.yml`, plus `docker-compose.vpn.yml` once `NORDVPN_PRIVATE_KEY` is in `.env`. With your own `COMPOSE_FILE`, run `docker compose up -d --build` after a `git pull` to rebuild.
+
+The build file also mounts `.env` into the `miauflix` container, so settings from the configuration wizard (`npm run config-only:docker`) apply. It runs Miauflix as `USER_ID` / `GROUP_ID`, which the scripts set to your user so the container can read a `.env` only you can read; set them in `.env` when you run `docker compose` directly. You can also skip the wizard and set Miauflix up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
+
+### Moving from the old source-built stack
+
+The `docker-compose.yml` that built from source before (and `docker-compose.novpn.yml` / `docker-compose.prod.yml`) ran the catalog, list service and Bunqueue as separate containers, put an nginx container with certbot in front, and kept data in `./data`. The stack now keeps data in Docker volumes, uses one `miauflix-services` container, and replaces nginx with [Caddy](#https-with-a-domain). Copy the data over once, with everything stopped (`-f docker-compose.yml` leaves out the VPN, which isn't needed for this):
+
+```bash
+docker compose down --remove-orphans
+# Backend database and settings
+docker compose -f docker-compose.yml run --rm --no-deps --entrypoint sh -v ./data:/old:ro miauflix \
+  -c 'cp -a /old/. /usr/src/app/data/'
+# List service (Trakt) and media catalog. The VPN variant kept the catalog in ./data itself.
+docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint sh -v ./data:/old:ro miauflix-services \
+  -c 'set -e; mkdir -p /app/data/list-service /app/data/catalog
+      cp -a /old/list-service/. /app/data/list-service/
+      if [ -d /old/media-catalog ]; then cp -a /old/media-catalog/. /app/data/catalog/; else cp -a /old/catalog.db* /app/data/catalog/; fi
+      chown -R bunqueue:bunqueue /app/data'
+```
+
+Keep `LIST_SERVICE_ENCRYPTION_KEY` in `.env` if you had set it: the list service needs it to read its data. The backend now listens on `localhost:3000` instead of `5000`. Leave `./data` in place until you've checked everything works.
 
 ## Docker Services
 
 ### Main Services
 
 - **miauflix**: Node.js API server and static-asset frontend host
-- **nginx**: Reverse proxy with SSL termination and static file serving
-- **nordvpn**: [gluetun](https://github.com/qdm12/gluetun) VPN container connected to NordVPN; the other services share its network
-- **flaresolverr**: Cloudflare bypass proxy (optional, for accessing protected content sources)
-- **certbot**: Automatic SSL certificate management via Let's Encrypt
+- **miauflix-services**: Bunqueue, media catalog and list service in one container
+- **autoheal**: Restarts the backend when its healthcheck fails (see [Health checks and automatic restarts](#health-checks-and-automatic-restarts))
+- **watchtower**: Updates the Miauflix containers when a new image is published (not with `docker-compose.build.yml`)
+- **vpn** (`docker-compose.vpn.yml`): [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN; the other services share its network
+- **caddy** (`docker-compose.https.yml`): HTTPS reverse proxy with automatic Let's Encrypt certificates
+- **flaresolverr** (`docker-compose.flaresolverr.yml`): Cloudflare bypass proxy for protected content sources, see the [FlareSolverr Configuration Guide](flaresolverr.md)
+- **jaeger** (`docker-compose.tracing.yml`): Collects OpenTelemetry traces, see [Tracing](../development/tracing.md)
 
-### Service Configuration
+### Health checks and automatic restarts
 
-#### Backend Service
+The image's healthcheck calls `GET /api/health` every 30 s and marks the container unhealthy after 3 failures in a row (each request may take up to 8 s). Failures in the first 5 minutes don't count, so data migrations after an upgrade can finish.
 
-```yaml
-miauflix:
-  build: .
-  ports:
-    - '${PORT:-3000}:${PORT:-3000}' # App port (API under /api and static frontend)
-  environment:
-    - NODE_ENV=production
-    - PORT=${PORT:-3000} # Server listening port
-  restart: unless-stopped
-  healthcheck:
-    test: ['CMD-SHELL', 'curl -fsS http://localhost:${PORT:-3000}/api/health || exit 1']
-    interval: 10s
-    timeout: 3s
-    retries: 5
-  volumes:
-    - .:/app
-    - /app/node_modules
+Docker only marks a container unhealthy: `restart: unless-stopped` restarts it when the process exits, not when it hangs. `docker-compose.yml` therefore runs [autoheal](https://github.com/willfarrell/docker-autoheal), which restarts the containers labelled `autoheal=true` (the backend) once they turn unhealthy. It needs the Docker socket, mounted at `/var/run/docker.sock`, and has no network. Check the state with:
+
+```bash
+docker compose ps miauflix
+docker compose logs autoheal
 ```
-
-#### Nginx Service
-
-```yaml
-nginx:
-  image: nginx:alpine
-  ports:
-    - '80:80'
-    - '443:443'
-  volumes:
-    - ./nginx/conf.d:/etc/nginx/conf.d
-    - ./nginx/certbot/conf:/etc/letsencrypt
-    - ./nginx/certbot/www:/var/www/certbot
-```
-
-#### FlareSolverr Service
-
-```yaml
-flaresolverr:
-  image: ghcr.io/flaresolverr/flaresolverr:latest
-  container_name: miauflix-flaresolverr
-  depends_on:
-    vpn:
-      condition: service_healthy
-  environment:
-    - LOG_LEVEL=info
-    - LOG_HTML=false
-    - CAPTCHA_SOLVER=none
-    - TZ=${TZ:-UTC}
-  network_mode: service:vpn # Route traffic through NordVPN
-  volumes:
-    - /var/lib/flaresolver:/config
-  restart: unless-stopped
-```
-
-**Key Features:**
-
-- **VPN Integration**: Traffic is routed through the NordVPN service for privacy (`network_mode: service:vpn`)
-- **Persistent Storage**: Configuration stored in `/var/lib/flaresolver` volume
-- **Auto-restart**: Automatically restarts if the container stops
-- **Cloudflare Bypass**: Automatically solves Cloudflare challenges for protected content sources
-
-**Configuration:**
-
-FlareSolverr is configured via environment variables in the `miauflix` service:
-
-```yaml
-environment:
-  - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://localhost:8191}
-  - ENABLE_FLARESOLVERR=${ENABLE_FLARESOLVERR:-true}
-```
-
-For detailed FlareSolverr setup and troubleshooting, see the [FlareSolverr Configuration Guide](flaresolverr.md).
 
 ## Development with Docker
 
 ### Hot Reload Development
 
 ```bash
-# Start with development overrides
-docker compose -f docker-compose.yml -f docker-compose.dev.yml up
-
-# Backend with hot reload
-docker compose exec miauflix npm run dev
-
-# Frontend development (separate terminal)
-docker compose exec miauflix npm run start:frontend
+# Backend and frontend with hot reload (docker-compose.dev.yml, separate from the files above)
+npm run start:backend:docker:dev
+npm run stop:backend:docker:dev
 ```
 
 ### Trusted Local HTTPS
@@ -299,70 +259,9 @@ npm run start:backend:e2e
 npm run test:backend:e2e:dev
 ```
 
-## VPN Configuration (Optional)
+## VPN and HTTPS
 
-### NordVPN Setup
-
-The full stack routes every service through the `nordvpn` container, which runs [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN's P2P servers. Gluetun's firewall blocks all traffic outside the tunnel, so it doubles as a kill switch.
-
-#### 1. Get NordVPN Private Key
-
-Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then run:
-
-```bash
-scripts/nordvpn-key.sh
-```
-
-The script asks for the token and saves your NordLynx (WireGuard) private key as `NORDVPN_PRIVATE_KEY` in `.env` without printing it.
-
-#### 2. Choose Server Locations (Optional)
-
-The stack connects to the United States by default. To change it, set a comma-separated list in `.env`:
-
-```bash
-NORDVPN_COUNTRIES=Switzerland,Netherlands
-```
-
-#### 3. VPN Detection
-
-Miauflix checks with NordVPN that its traffic is protected and refuses to search for sources when it isn't. Any NordVPN connection passes the check.
-
-To disable VPN detection (not recommended, peers see your real IP):
-
-```bash
-DISABLE_VPN_CHECK=true
-```
-
-## SSL and HTTPS
-
-### Automatic SSL Setup
-
-Miauflix includes an automated SSL setup script for easy HTTPS configuration:
-
-```bash
-chmod +x setup-ssl.sh
-./setup-ssl.sh -d yourdomain.com
-```
-
-This script automatically handles:
-
-- Domain DNS verification
-- Let's Encrypt certificate generation
-- Nginx HTTPS configuration
-- Automatic certificate renewal setup
-
-The script will guide you through the process and verify that your domain is properly configured before issuing certificates.
-
-### Manual Certificate Configuration
-
-For custom certificates, place them in:
-
-```plaintext
-nginx/ssl/
-├── cert.pem
-├── privkey.pem
-└── chain.pem
-```
+Both are files you add to the stack: see [Using a VPN](#using-a-vpn) and [HTTPS with a domain](#https-with-a-domain). Caddy renews its certificates on its own. To disable VPN detection instead (not recommended, peers see your real IP), set `DISABLE_VPN_CHECK=true` in `.env`.
 
 ## Environment Variables
 
@@ -371,7 +270,7 @@ Docker deployments use the same environment variables as other installation meth
 **Recommended Setup**: Use the interactive configuration wizard to set up all required variables:
 
 ```bash
-docker compose run --rm miauflix npm run config-only
+npm run config-only:docker
 ```
 
 This will guide you through configuring:
@@ -386,19 +285,26 @@ For a complete reference of all available environment variables, see the [Enviro
 
 ### Important Volumes
 
-- **Application data**: `./data` → Persistent storage for database and cache
-- **SSL certificates**: `./nginx/certbot/conf` → Let's Encrypt certificates
-- **Logs**: `./logs` → Application and nginx logs
+- **`miauflix_data`**: Backend database and settings
+- **`miauflix_services_data`**: Media catalog, list service (Trakt) and Bunqueue data
+- **`./downloads`** (or `DOWNLOADS_HOST_PATH`): Downloaded content
+- **`caddy_data`** (`docker-compose.https.yml`): Certificates
+
+Docker prefixes volume names with the project name, by default the folder name: `docker volume ls` shows them.
 
 ### Backup Strategy
 
 ```bash
-# Backup essential data
-tar -czf miauflix-backup.tar.gz data/ nginx/certbot/conf/ .env
-
-# Restore from backup
-tar -xzf miauflix-backup.tar.gz
+# Backup essential data (with Miauflix stopped)
+docker compose stop miauflix miauflix-services
+docker compose run --rm --no-deps --entrypoint tar -v "$PWD":/backup miauflix \
+  -czf /backup/miauflix-data.tar.gz -C /usr/src/app/data .
+docker compose run --rm --no-deps --user root --entrypoint tar -v "$PWD":/backup miauflix-services \
+  -czf /backup/miauflix-services-data.tar.gz -C /app/data .
+docker compose start miauflix-services miauflix
 ```
+
+Keep `.env` with the backups: it holds your secrets and `COMPOSE_FILE`. This leaves out `./downloads` (copy it like any folder if you want to keep downloaded content; Miauflix can download it again) and `caddy_data` (Caddy requests new certificates when it starts without them).
 
 ## Troubleshooting
 
@@ -428,7 +334,7 @@ sudo chown -R $USER:$USER .
 docker compose exec miauflix curl -I https://www.google.com
 
 # Check VPN status (if using VPN)
-docker compose exec nordvpn wget -qO- https://ipinfo.io/ip
+docker compose exec vpn wget -qO- https://ipinfo.io/ip
 ```
 
 ### Health Checks
@@ -442,13 +348,13 @@ curl http://localhost:${PORT:-3000}/api/health
 **Frontend access**:
 
 ```bash
-curl -I http://localhost/
+curl -I http://localhost:3000/
 ```
 
-**SSL certificate status**:
+**HTTPS certificate status** (`docker-compose.https.yml`):
 
 ```bash
-docker compose exec certbot certbot certificates
+docker compose logs caddy
 ```
 
 ## Performance Optimization
@@ -532,20 +438,16 @@ docker compose top miauflix
 
 ### Updating Miauflix
 
-```bash
-# Pull latest changes
-git pull
+With the prebuilt images, Watchtower updates them every night. To update right away:
 
-# Rebuild and restart
-docker compose build --no-cache
+```bash
+docker compose pull
 docker compose up -d
 ```
 
-### Certificate Renewal
-
-Let's Encrypt certificates renew automatically. Manual renewal:
+To get newer compose files, download them again. When building from source, rebuild with the same files the stack was started with (`npm run start:backend:docker:prod` picks them as described in [Building from source](#building-from-source)):
 
 ```bash
-docker compose exec certbot certbot renew
-docker compose restart nginx
+git pull
+npm run start:backend:docker:prod
 ```

@@ -35,7 +35,7 @@ Background job handlers should use the same `@traced` and `withSpan` helpers as 
 To view traces in Jaeger:
 
 **Option A – Docker Compose (recommended)**  
-Jaeger is defined in `docker-compose.yml`. When you run `docker compose up`, the backend is configured with `OTEL_EXPORTER_OTLP_ENDPOINT=http://jaeger:4318` and sends traces to Jaeger automatically. The Jaeger UI port (16686) is bound to **localhost only** so it is not exposed to the internet. From your machine, open the UI at **http://localhost:16686** when running Compose locally, or use an SSH tunnel on a remote server: `ssh -L 16686:localhost:16686 user@your-server` then open http://localhost:16686. Select the service `@miauflix/backend`.
+Add [`docker-compose.tracing.yml`](../../docker-compose.tracing.yml) to `COMPOSE_FILE` in `.env` (see [Combining compose files](../setup/docker-setup.md#combining-compose-files)); `npm run start:backend:docker:prod` includes it unless you set your own `COMPOSE_FILE`. It starts Jaeger and sets `ENABLE_TRACING=true`, and the backend sends traces to `OTEL_EXPORTER_OTLP_ENDPOINT` (`http://jaeger:4318`, or `http://127.0.0.1:4318` with the VPN, where both share its network). The Jaeger UI port (16686) is bound to **localhost only** so it is not exposed to the internet. From your machine, open the UI at **http://localhost:16686** when running Compose locally, or use an SSH tunnel on a remote server: `ssh -L 16686:localhost:16686 user@your-server` then open http://localhost:16686. Select the service `@miauflix/backend`.
 
 **Option B – Standalone Jaeger**
 

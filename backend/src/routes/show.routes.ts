@@ -8,7 +8,12 @@ import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middlew
 import type { Deps, ErrorResponse } from './common.types';
 import type { SeasonResponse, ShowResponse } from './show.types';
 
-export const createShowRoutes = ({ auditLogService, mediaService, configurationService }: Deps) => {
+export const createShowRoutes = ({
+  auditLogService,
+  mediaService,
+  configurationService,
+  sourceAvailabilityService,
+}: Deps) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(auditLogService, configurationService);
 
   return new Hono()
@@ -141,6 +146,9 @@ export const createShowRoutes = ({ auditLogService, mediaService, configurationS
           if (!hydrated) {
             return context.json({ error: 'Season not found' } satisfies ErrorResponse, 404);
           }
+          const availability = await sourceAvailabilityService.forEpisodes(
+            (hydrated.episodes ?? []).map(episode => episode.id)
+          );
           return context.json({
             id: hydrated.mediaId,
             seasonNumber: hydrated.seasonNumber,
@@ -155,6 +163,7 @@ export const createShowRoutes = ({ auditLogService, mediaService, configurationS
               overview: episode.overview || null,
               airDate: episode.airDate,
               still: episode.stillPath || null,
+              sourceAvailability: availability.get(episode.id) ?? 'pending',
             })),
           } satisfies SeasonResponse);
         } catch (error: unknown) {

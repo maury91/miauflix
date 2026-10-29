@@ -1,0 +1,15 @@
+# Send OpenTelemetry traces from Miauflix to Jaeger, UI at http://localhost:16686 (this computer only).
+# Usage: add it to COMPOSE_FILE in .env, e.g.
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.tracing.yml
+# Guide: docs/development/tracing.md
+
+services:
+  jaeger:
+    profiles: !reset [] # Defined, but off, in docker-compose.yml
+
+  miauflix:
+    environment:
+      ENABLE_TRACING: 'true'
+    depends_on:
+      jaeger:
+        condition: service_started

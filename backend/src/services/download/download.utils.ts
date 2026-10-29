@@ -79,6 +79,24 @@ export const mainVideoPath = (files: ReadonlyArray<{ path: string; length: numbe
   return best?.path ?? null;
 };
 
+/** Share of a source's bytes that must be video for it to count as real. */
+const MIN_VIDEO_SHARE = 0.5;
+
+/**
+ * Whether a file list is a real release: video makes up most of the payload. Fakes ship an
+ * executable or archive, sometimes beside a small video sample; episode packs still pass
+ * because every episode counts toward the video share.
+ */
+export const containsPlayableVideo = (files: ReadonlyArray<{ path: string; length: number }>) => {
+  let total = 0;
+  let video = 0;
+  for (const file of files) {
+    total += file.length;
+    if (isVideoFile(file.path)) video += file.length;
+  }
+  return video > 0 && video >= total * MIN_VIDEO_SHARE;
+};
+
 /** Read one piece's bit from a BitTorrent bitfield (most significant bit first). */
 export const isPieceInBitfield = (
   bitfield: Uint8Array | null | undefined,

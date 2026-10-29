@@ -143,7 +143,7 @@ When existing rows must be rewritten (backfills, recomputed values), add a data 
 
 ### 🔒 **Encrypted columns**
 
-Text that would reveal what is stored or watched (file paths, ffprobe output, searches, notification titles) is encrypted with `encryptedText()` from `@utils/encrypted-column.util` and stored under a short name that does not describe it (`k`, `v`, `a`, `b`):
+Text that would reveal what is stored or watched (file paths, ffprobe output, searches, notification titles, "Notify me" requests) is encrypted with `encryptedText()` from `@utils/encrypted-column.util` and stored under a short name that does not describe it (`k`, `v`, `a`, `b`):
 
 - Use `deterministic: true` only for columns that are looked up, compared with `In()` or part of a unique index; everything else uses a random IV.
 - Repository `find`/`update`/`delete` conditions and inserts are encrypted for you. Raw SQL and query-builder parameters are not: pass `EncryptedColumns.encrypt(value, true)` and write the stored column name (`k`), since raw SQL and `orUpdate()` conflict lists use column names.

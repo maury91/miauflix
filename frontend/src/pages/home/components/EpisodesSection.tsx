@@ -3,12 +3,15 @@ import type { ProgressEntry, SeasonResponse } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
+import { realtimePlayableKey } from '@store/slices/realtime';
 import { type UIEvent, useCallback, useRef } from 'react';
 import styled from 'styled-components';
 
 import { artworkUrl } from '../media.utils';
 import { ErrorState, PrimaryAction, SectionLabel } from './details.styles';
 import { episodeElementId, episodeProgressLabel } from './episodes.utils';
+
+import NoSourceIcon from '~icons/mdi/video-off-outline';
 
 const EpisodePane = styled.section`
   min-width: 0;
@@ -92,6 +95,22 @@ const ProgressMark = styled.span`
   font-weight: 400;
 `;
 
+const NoSourceMark = styled.span`
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.5rem;
+  color: ${PALETTE.text.disabled};
+  font-size: 0.78em;
+  font-weight: 500;
+
+  svg {
+    flex: 0 0 auto;
+    width: 1.1em;
+    height: 1.1em;
+  }
+`;
+
 /** Seasons further down than this many screens of scrolling start loading. */
 const LOAD_NEXT_WITHIN_SCREENS = 1.5;
 
@@ -114,6 +133,8 @@ interface EpisodesSectionProps {
   onVisibleSeasonChange: (seasonNumber: number) => void;
   /** Scrolled close to the end of the loaded seasons. */
   onNearEnd: () => void;
+  /** Availability pushed over realtime by playable key; newer than the season response. */
+  pushedAvailability?: Readonly<Record<string, 'available' | 'pending' | 'unavailable'>>;
 }
 
 /** The scrolling list of a show's loaded seasons and their episodes. */
@@ -130,6 +151,7 @@ export function EpisodesSection({
   onRetrySeason,
   onVisibleSeasonChange,
   onNearEnd,
+  pushedAvailability = {},
 }: EpisodesSectionProps) {
   const sectionRefs = useRef(new Map<number, HTMLElement>());
 
@@ -168,14 +190,16 @@ export function EpisodesSection({
               const selected =
                 selectedEpisode?.seasonNumber === section.seasonNumber &&
                 selectedEpisode.episodeNumber === episode.episodeNumber;
-              const label = episodeProgressLabel(
-                progressForPlayable(progress, {
-                  kind: 'episode',
-                  showMediaId,
-                  seasonNumber: section.seasonNumber,
-                  episodeNumber: episode.episodeNumber,
-                })
-              );
+              const playable = {
+                kind: 'episode' as const,
+                showMediaId,
+                seasonNumber: section.seasonNumber,
+                episodeNumber: episode.episodeNumber,
+              };
+              const label = episodeProgressLabel(progressForPlayable(progress, playable));
+              const unavailable =
+                (pushedAvailability[realtimePlayableKey(playable)] ??
+                  episode.sourceAvailability) === 'unavailable';
               return (
                 <EpisodeRow
                   onFocus={() => onSelectEpisode(section.seasonNumber, episode.episodeNumber)}
@@ -190,6 +214,12 @@ export function EpisodesSection({
                   <EpisodeCaption>
                     E{episode.episodeNumber} · {episode.title}
                     {label ? <ProgressMark>{label}</ProgressMark> : null}
+                    {unavailable ? (
+                      <NoSourceMark>
+                        <NoSourceIcon aria-hidden="true" />
+                        No source available
+                      </NoSourceMark>
+                    ) : null}
                   </EpisodeCaption>
                 </EpisodeRow>
               );

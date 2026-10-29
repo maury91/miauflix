@@ -1,3 +1,4 @@
+import { useRequestAvailabilityMutation } from '@features/notifications/api/notifications.api';
 import {
   useCreateSessionMutation,
   useSearchSubtitlesMutation,
@@ -22,7 +23,11 @@ import { API_URL, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { selectCurrentUser } from '@store/slices/auth';
-import { selectPlaybackDelivery } from '@store/slices/realtime';
+import {
+  realtimeActions,
+  selectPlaybackDelivery,
+  selectSourceAttempt,
+} from '@store/slices/realtime';
 import type { AppDispatch } from '@store/store';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
@@ -30,12 +35,16 @@ import styled from 'styled-components';
 
 import {
   describePlaybackFailure,
+  getNoSourceMessage,
   getPlaybackStatusMessage,
+  getSourceAttemptMessage,
   isUnavailablePlaybackFailure,
   type PlaybackStatus,
 } from './playback-copy';
 import { PlayerControls, PlayerHeader } from './PlayerControls';
 import type { SubtitleTimingCue } from './SubtitleTiming';
+
+import BellIcon from '~icons/mdi/bell-ring-outline';
 
 const Page = styled.main`
   position: absolute;
@@ -106,6 +115,17 @@ const RetryButton = styled(BackButton)`
   background: ${PALETTE.color.interactive};
 `;
 
+const NotifyButton = styled(RetryButton)`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  svg {
+    width: 1.2em;
+    height: 1.2em;
+  }
+`;
+
 const NextEpisodePrompt = styled.div`
   position: fixed;
   z-index: 6;
@@ -162,8 +182,13 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   );
   /** The direct stream failed before the probe said how this file must be delivered. */
   const directFailedWhilePending = useRef(false);
-  /** The playable that already got its automatic retry after a stream failure. */
-  const sourceRetriedFor = useRef<string | null>(null);
+  /**
+   * Sources whose stream failed for this playable. The backend rules out fakes and stalled
+   * swarms, so each new session normally brings the next candidate; a repeat ends the walk.
+   */
+  const failedSources = useRef<{ key: string; ids: Set<number> }>({ key: '', ids: new Set() });
+  const pushedAttempt = useSelector(selectSourceAttempt(playable));
+  const [requestAvailability, availabilityRequest] = useRequestAvailabilityMutation();
   const [prefetchedNextSession, setPrefetchedNextSession] =
     useState<CreatePlaybackSessionResponse | null>(null);
   const prefetchedNextRef = useRef<CreatePlaybackSessionResponse | null>(null);
@@ -682,9 +707,11 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
 
   const failSource = useCallback(() => {
     const key = JSON.stringify(playable);
-    if (sourceRetriedFor.current !== key) {
-      // The backend records a source that cannot play, so a new session picks another one.
-      sourceRetriedFor.current = key;
+    if (failedSources.current.key !== key) failedSources.current = { key, ids: new Set() };
+    const sourceId = sessionRequest.data?.source.id;
+    if (sourceId !== undefined && !failedSources.current.ids.has(sourceId)) {
+      // The backend records a source that cannot play, so a new session picks the next one.
+      failedSources.current.ids.add(sourceId);
       setAttempt(value => value + 1);
       return;
     }
@@ -693,7 +720,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     setError(
       `Playback for “${title}” could not load the selected source. Retry to try source preparation again.`
     );
-  }, [playable, resetSessionRequest, title]);
+  }, [playable, resetSessionRequest, sessionRequest.data, title]);
 
   useEffect(() => {
     if (!deliveryUpdate) return;
@@ -724,18 +751,25 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     directFailedWhilePending.current = false;
     sessionSubtitleStorageKey.current = null;
     const sessionKey = JSON.stringify([playable, attempt]);
-    if (sessionInFlight.current?.key !== sessionKey) resetSessionRequest();
+    if (sessionInFlight.current?.key !== sessionKey) {
+      resetSessionRequest();
+      dispatch(realtimeActions.sourceAttemptCleared(playable));
+    }
     setError(null);
     setStatus('preparing');
     resumeApplied.current = false;
     completedRef.current = false;
     latestProgress.current = null;
 
+    // Sources this player already failed to play: the backend cannot see a browser rejection.
+    const avoidSourceIds =
+      failedSources.current.key === JSON.stringify(playable) ? [...failedSources.current.ids] : [];
     if (sessionInFlight.current?.key !== sessionKey)
       sessionInFlight.current = {
         key: sessionKey,
         promise: createSession({
           playable,
+          ...(avoidSourceIds.length ? { avoidSourceIds } : {}),
           preferences: {
             quality: 'auto',
             ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
@@ -745,6 +779,16 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     void sessionInFlight.current.promise
       .then(result => {
         if (currentRequest !== requestId.current) return;
+        const failed = failedSources.current;
+        if (failed.key === JSON.stringify(playable) && failed.ids.has(result.source.id)) {
+          // Nothing new to try: the only sources left already failed here.
+          resetSessionRequest();
+          setStatus('error');
+          setError(
+            `Playback for “${title}” could not load any of its sources. Retry to try source preparation again.`
+          );
+          return;
+        }
         setStatus(result.preparation.state === 'warm' ? 'ready' : 'preparing');
         setAudioSeek({ position: 0, autoplay: true, revision: 0 });
         setPendingPosition(undefined);
@@ -755,8 +799,20 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       })
       .catch((reason: unknown) => {
         if (currentRequest !== requestId.current) return;
-        const unavailable = isUnavailablePlaybackFailure(reason);
-        setStatus(unavailable ? 'unavailable' : 'error');
+        if (isUnavailablePlaybackFailure(reason) && avoidSourceIds.length) {
+          // Only sources that already failed here are left.
+          setStatus('error');
+          setError(
+            `Playback for “${title}” could not load any of its sources. Retry to try source preparation again.`
+          );
+          return;
+        }
+        if (isUnavailablePlaybackFailure(reason)) {
+          // No source exists, or every one proved fake: offer to notify once one is out.
+          setStatus('exhausted');
+          return;
+        }
+        setStatus('error');
         setError(describePlaybackFailure(reason, title));
       });
 
@@ -829,6 +885,12 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       return true;
     },
   });
+
+  const sourceAttempt = pushedAttempt ?? session?.sourceAttempt ?? null;
+  const statusMessage =
+    sourceAttempt && (status === 'checking' || status === 'preparing')
+      ? getSourceAttemptMessage(sourceAttempt, title)
+      : getPlaybackStatusMessage(status, title);
 
   return (
     <Page ref={navigationRef} tabIndex={-1} aria-label="Player">
@@ -1014,17 +1076,41 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             }
           />
           <VideoStatus $ready={status === 'ready'} role="status" aria-live="polite">
-            {getPlaybackStatusMessage(status, title)}
+            {statusMessage}
           </VideoStatus>
         </>
       ) : (
         <Message role={error ? 'alert' : 'status'} aria-live={error ? 'assertive' : 'polite'}>
           <Title>{title}</Title>
-          <span>{error ?? getPlaybackStatusMessage(status, title)}</span>
+          {status === 'exhausted' ? (
+            <>
+              <span>
+                {availabilityRequest.isSuccess
+                  ? `We'll notify you as soon as “${title}” is out.`
+                  : getNoSourceMessage(title)}
+              </span>
+              {!availabilityRequest.isSuccess && (
+                <NotifyButton
+                  type="button"
+                  disabled={availabilityRequest.isLoading}
+                  onClick={() => void requestAvailability(playable)}
+                >
+                  <BellIcon aria-hidden="true" />
+                  Notify me
+                </NotifyButton>
+              )}
+              {availabilityRequest.isError && (
+                <span role="alert">The notification could not be saved. Try again.</span>
+              )}
+            </>
+          ) : (
+            <span>{error ?? statusMessage}</span>
+          )}
           {error && (
             <RetryButton
               type="button"
               onClick={() => {
+                failedSources.current = { key: '', ids: new Set() };
                 setError(null);
                 setStatus('checking');
                 setAttempt(value => value + 1);

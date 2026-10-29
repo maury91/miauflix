@@ -24,6 +24,30 @@ describe('SourcePreparationStatus', () => {
     expect(screen.getByText('WEB')).toBeInTheDocument();
   });
 
+  it('replaces the quality with a no-source badge once every source proved fake', () => {
+    render(
+      <SourcePreparationStatus
+        mediaKind="movie"
+        mode="details"
+        preparation={baseSnapshot({ source: { id: 1, quality: 'FHD', sourceType: 'WEB' } })}
+        availability="unavailable"
+      />
+    );
+    expect(screen.getByRole('img', { name: 'No source available' })).toBeInTheDocument();
+    expect(screen.queryByText('1080p')).not.toBeInTheDocument();
+  });
+
+  it('shows the no-source badge for an exhausted preparation', () => {
+    render(
+      <SourcePreparationStatus
+        mediaKind="movie"
+        mode="browse"
+        preparation={baseSnapshot({ state: 'unavailable', source: null })}
+      />
+    );
+    expect(screen.getByText('No source')).toBeInTheDocument();
+  });
+
   it('does not invent a resolution when no source exists', () => {
     render(
       <SourcePreparationStatus

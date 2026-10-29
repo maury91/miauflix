@@ -6,11 +6,10 @@
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
-docker compose run --rm miauflix npm run config-only
-docker compose up -d
+./scripts/start-docker-prod.sh up -d --build
 ```
 
-The first command clones the repository, the second runs the configuration wizard, and the third starts the full stack. No local Node.js installation needed!
+The first command clones the repository, the second builds and starts the full stack. Then open <http://localhost:3000>, create the admin account and add your TMDB access token from the setup screens. No local Node.js installation needed!
 
 ## Prerequisites
 
@@ -31,11 +30,11 @@ The first command clones the repository, the second runs the configuration wizar
 git clone https://github.com/maury91/miauflix.git
 cd miauflix
 
-# Interactive configuration wizard
-docker compose run --rm miauflix npm run config-only
+# Optional: interactive configuration wizard (builds the image from this checkout)
+npm run config-only:docker
 ```
 
-This will run the configuration wizard, which will ask you for the required environment variables, and guide you on how to obtain them.
+The wizard asks for the required environment variables and guides you on how to obtain them. You can skip it and enter the same settings from the browser setup screens after the first start. With the [prebuilt images](docker-setup.md#prebuilt-images) (`docker-compose.yml` alone), use the browser setup: that file doesn't mount `.env`, so the wizard's settings would not reach Miauflix.
 
 The default Compose topology starts the standalone List Service. Configure the Trakt OAuth credentials during setup, or disable the service if you do not use lists. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
 
@@ -47,32 +46,19 @@ The stack routes all its traffic through NordVPN with [gluetun](https://github.c
 scripts/nordvpn-key.sh
 ```
 
-Miauflix currently detects only NordVPN and refuses to search for sources when no VPN is detected, because torrents would go out from your real IP. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env`, but only do so if you accept that risk; never on a server reachable from the internet. See [Docker Setup](docker-setup.md#nordvpn-setup) for server locations.
+Miauflix currently detects only NordVPN and refuses to search for sources when no VPN is detected, because torrents would go out from your real IP. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env`, but only do so if you accept that risk; never on a server reachable from the internet. See [Using a VPN](docker-setup.md#using-a-vpn) for server locations.
 
 #### 3. [Optional] Set up HTTPS and domain name
 
-If you want to use HTTPS, you can set up an SSL certificate.
-
-```bash
-chmod +x setup-ssl.sh
-./setup-ssl.sh -d yourdomain.com
-```
-
-This will generate an SSL certificate and key, and configure Nginx accordingly.
-
-More details on how to set up HTTPS can be found in the [SSL Certificates](ssl-certificates.md) guide.
+Add `docker-compose.https.yml` and the `Caddyfile`: [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain on its own. Follow [HTTPS with a domain](docker-setup.md#https-with-a-domain).
 
 #### 4. Start Services
 
 ```bash
-# Option 1: Start all services
-docker compose up -d
-
-# Option 2: Start backend only in production mode
 npm run start:backend:docker:prod
 ```
 
-The first option starts all services (backend, nginx, VPN, etc.) in the background. The second option starts only the backend service in production mode with automatic building.
+This builds the images from the checkout and starts the backend with its services (and the VPN once `NORDVPN_PRIVATE_KEY` is set) in the background, using the `COMPOSE_FILE` from `.env` when it's set. See [Building from source](docker-setup.md#building-from-source).
 
 #### 5. Access Application
 

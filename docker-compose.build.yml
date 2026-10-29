@@ -1,0 +1,29 @@
+# Build the Miauflix images from this clone of the repository instead of pulling the published ones.
+# Usage: put this in a .env file in the repository root, then run docker compose up -d --build
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.build.yml
+# npm run start:backend:docker:prod does this for you. Guide: docs/setup/docker-setup.md#building-from-source
+
+services:
+  miauflix:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: miauflix
+    environment:
+      # Run as the owner of the checkout, so the mounted .env (readable only by its owner) works.
+      # The start scripts set USER_ID / GROUP_ID to your user.
+      PUID: ${USER_ID:-1000}
+      PGID: ${GROUP_ID:-1000}
+    volumes:
+      # Settings written by the configuration wizard (npm run config-only:docker)
+      - ./.env:/usr/src/app/.env
+
+  miauflix-services:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+    image: miauflix-services
+
+  # Locally built images have nothing to pull: keep Watchtower off
+  watchtower:
+    profiles: [autoupdate]

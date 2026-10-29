@@ -22,7 +22,10 @@ const setupTest = async () => {
     { get: jest.fn().mockReturnValue('__at') } as never,
     preload as never,
     {} as never,
-    catalog as never
+    catalog as never,
+    null,
+    { handles: () => false } as never,
+    { onChange: () => () => undefined } as never
   );
   const socket = Object.assign(new EventEmitter(), {
     readyState: 1,
@@ -110,7 +113,9 @@ describe('RealtimeGateway playback delivery', () => {
           deliver = listener;
           return unsubscribe;
         },
-      }
+      },
+      { handles: () => false } as never,
+      { onChange: () => () => undefined } as never
     );
     const connect = async (session: string) => {
       const socket = Object.assign(new EventEmitter(), {
@@ -165,7 +170,8 @@ describe('RealtimeGateway search routing', () => {
         onArtworkStreamReady: jest.fn(() => jest.fn()),
       } as never,
       null,
-      search as never
+      search as never,
+      { onChange: () => () => undefined } as never
     );
     const socket = Object.assign(new EventEmitter(), {
       readyState: 1,

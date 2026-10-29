@@ -20,6 +20,7 @@ import type {
   SourceMetadataFileService,
   SourceService,
 } from '@services/source';
+import type { SourceAvailabilityService } from '@services/source/source-availability.service';
 import type { StatsService } from '@services/stats/stats.service';
 import type { StorageService } from '@services/storage/storage.service';
 import type { StreamService } from '@services/stream/stream.service';
@@ -40,6 +41,7 @@ export interface Deps {
   mediaService: MediaService;
   requestService: RequestService;
   sourceService: SourceService;
+  sourceAvailabilityService: SourceAvailabilityService;
   statsService: StatsService;
   streamService: StreamService;
   qrLoginService: QrLoginService;
