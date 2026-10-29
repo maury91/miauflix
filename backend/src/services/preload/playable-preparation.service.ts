@@ -12,6 +12,7 @@ import { isUsableSource } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
 import type { StorageService } from '@services/storage/storage.service';
 import { filterHevcSources, filterSources } from '@services/stream/stream.util';
+import { byPlaybackRank } from '@utils/streaming-score.util';
 
 import type { TorrentWarmupController } from './torrent-warmup.controller';
 
@@ -449,9 +450,7 @@ export class PlayablePreparationService {
   ): ContentSource[] {
     const compatible = requireFile
       ? filterSources([...sources], preferences.allowHevc)
-      : filterHevcSources([...sources], preferences.allowHevc).sort(
-          (a, b) => (b.streamingScore || 0) - (a.streamingScore || 0)
-        );
+      : filterHevcSources([...sources], preferences.allowHevc).sort(byPlaybackRank());
     // Known fakes are never picked. A source that failed during playback is skipped while any
     // other candidate remains.
     const real = compatible.filter(isUsableSource);

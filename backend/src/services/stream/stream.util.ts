@@ -1,6 +1,7 @@
 import { VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { ContentSource } from '@entities/content-source.entity';
+import { byPlaybackRank } from '@utils/streaming-score.util';
 
 /**
  * Filter sources that can be streamed without delay: their file list is known and holds a
@@ -39,7 +40,7 @@ export function filterHevcSources(sources: ContentSource[], allowHevc = true): C
 export function filterSources(sources: ContentSource[], allowHevc = true): ContentSource[] {
   return (
     filterHevcSources(filterStreamableSources(sources), allowHevc)
-      // Sort by streaming score (highest first)
-      .sort((a, b) => (b.streamingScore || 0) - (a.streamingScore || 0))
+      // Best first: streaming score, boosted by a recent proven playback
+      .sort(byPlaybackRank())
   );
 }

@@ -184,6 +184,12 @@ export class ContentSourceRepository {
     return Boolean(result.affected);
   }
 
+  /** Record that the source played well today; only the UTC day is kept (see `lastPlayedOn`). */
+  async recordPlayed(sourceId: number, now = Date.now()): Promise<void> {
+    const lastPlayedOn = new Date(now).toISOString().slice(0, 10);
+    await this.repository.update(sourceId, { lastPlayedOn });
+  }
+
   /**
    * Update a movie source with source file data
    */

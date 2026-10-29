@@ -12,6 +12,7 @@ import {
 } from 'typeorm';
 
 import type { EncryptionService } from '@services/encryption/encryption.service';
+import { encryptedText } from '@utils/encrypted-column.util';
 import { normalizeInfoHash } from '@utils/transformers.util';
 
 import type { EpisodeSource } from './episode-source.entity';
@@ -172,6 +173,20 @@ export class ContentSource {
    */
   @Column({ type: 'boolean', nullable: true })
   hasVideo: boolean | null;
+
+  /**
+   * The UTC day (`YYYY-MM-DD`) the backend last saw this source stream for minutes without
+   * starving: real content and a live swarm, a ranking boost that fades with time. It says
+   * nothing about which clients can decode the file, and is separate from `hasVideo`. Only the
+   * day is kept, encrypted, so the database doesn't reveal when a title was watched.
+   */
+  @Column({
+    type: 'text',
+    nullable: true,
+    name: 'pd',
+    transformer: encryptedText({ deterministic: false }),
+  })
+  lastPlayedOn?: string | null;
 
   @Column({ type: 'datetime', nullable: true })
   sourceUploadedAt?: Date;

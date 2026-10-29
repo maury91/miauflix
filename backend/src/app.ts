@@ -194,7 +194,8 @@ try {
     audioPlaybackService,
     sourceHealthService,
     downloadService,
-    db.getProgressRepository()
+    db.getProgressRepository(),
+    db.getContentSourceRepository()
   );
   const realtimeGateway = new RealtimeGateway(
     authService,

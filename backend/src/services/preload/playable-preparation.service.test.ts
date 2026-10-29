@@ -439,6 +439,23 @@ describe('PlayablePreparationService', () => {
     expect(onSourceAttempt).toHaveBeenCalledWith({ sourceId: 2, position: 2, total: 2 });
   });
 
+  it('prefers a recently played source among close candidates, but never over the asked quality', async () => {
+    const today = new Date().toISOString().slice(0, 10);
+    const seeded = { ...candidate(1, 3_100), quality: Quality.FHD };
+    const played = { ...candidate(2, 3_000), quality: Quality.HD, lastPlayedOn: today };
+    const prepare = (quality: Quality | 'auto') =>
+      new PlayablePreparationService(
+        { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
+        movieService([seeded, played]) as never
+      ).prepare(
+        { kind: 'movie', mediaId: 42 },
+        { ...warmOptions(), through: 'sources', preferences: { quality, allowHevc: true } }
+      );
+
+    expect((await prepare('auto')).source).toBe(played);
+    expect((await prepare(Quality.FHD)).source).toBe(seeded);
+  });
+
   it('is exhausted without trying anything when every source is known fake', async () => {
     const targets = fakeAwareTargets([]);
     const sourceService = movieService([candidate(1, 9, false), candidate(2, 1, false)]);
