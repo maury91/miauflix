@@ -111,19 +111,20 @@ export class RealtimeGateway {
     private readonly preload: PreloadIntentService,
     private readonly progress: ProgressService,
     private readonly catalog: CatalogClientService,
-    playback?:
+    playback:
       | (Partial<Pick<PlaybackSessionService, 'onSourceAttempt'>> &
           Pick<PlaybackSessionService, 'onDeliveryUpdate'>)
       | null,
-    private readonly search?: RealtimeSearchChannel,
-    availability?: Pick<SourceAvailabilityService, 'onChange'>
+    private readonly search: RealtimeSearchChannel,
+    availability: Pick<SourceAvailabilityService, 'onChange'>
   ) {
     this.removeDeliveryListener =
       playback?.onDeliveryUpdate(event => this.deliverPlayback(event)) ?? null;
     this.removeAttemptListener =
       playback?.onSourceAttempt?.(event => this.deliverSourceAttempt(event)) ?? null;
-    this.removeAvailabilityListener =
-      availability?.onChange(change => this.deliverAvailability(change)) ?? null;
+    this.removeAvailabilityListener = availability.onChange(change =>
+      this.deliverAvailability(change)
+    );
     this.server.on('connection', (socket: WebSocket, request: IncomingMessage) => {
       this.accept(socket, request);
     });
@@ -170,7 +171,7 @@ export class RealtimeGateway {
 
   private readonly removeDeliveryListener: (() => void) | null;
   private readonly removeAttemptListener: (() => void) | null;
-  private readonly removeAvailabilityListener: (() => void) | null;
+  private readonly removeAvailabilityListener: () => void;
   private removeArtworkListener: (() => void) | null = null;
   private removeArtworkStreamReadyListener: (() => void) | null = null;
 
@@ -304,7 +305,7 @@ export class RealtimeGateway {
           .catch(() => state.socket.close(1011, 'Progress update failed'));
         return;
       }
-      if (this.search?.handles(message.type)) {
+      if (this.search.handles(message.type)) {
         if (!this.search.handle(state.searchClient, message)) this.invalid(state, 'Invalid search');
         return;
       }

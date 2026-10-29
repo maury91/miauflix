@@ -21,8 +21,8 @@ export class PlaybackTargetService {
   constructor(
     db: Database,
     private readonly downloads: Pick<DownloadService, 'resolveLayout'>,
-    private readonly sourceHealth?: Pick<SourceHealthService, 'markFailed'>,
-    private readonly availability?: Pick<SourceAvailabilityService, 'recordFiles'>
+    private readonly sourceHealth: Pick<SourceHealthService, 'markFailed'>,
+    private readonly availability: Pick<SourceAvailabilityService, 'recordFiles'>
   ) {
     this.contentSources = db.getContentSourceRepository();
     this.episodeSources = db.getEpisodeSourceRepository();
@@ -82,10 +82,10 @@ export class PlaybackTargetService {
     files: ReadonlyArray<{ path: string; length: number }>
   ): Promise<void> {
     source.hasVideo = false;
-    this.sourceHealth?.markFailed(source.id);
+    this.sourceHealth.markFailed(source.id);
     // Recording the verdict is best effort: callers rely on the typed error that follows.
     try {
-      await this.availability?.recordFiles(source.id, files);
+      await this.availability.recordFiles(source.id, files);
     } catch (error) {
       logger.warn(
         'PlaybackTargetService',

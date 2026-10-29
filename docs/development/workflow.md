@@ -138,7 +138,7 @@ When the backend runs in Docker via the **miauflix** container (not miauflix-dev
    BACKEND_URL=http://localhost:3000 npm run start:frontend
    ```
 
-3. **Open** [http://localhost:4173](http://localhost:4173). The Vite dev server proxies `/api` to `BACKEND_URL` (`http://localhost:5000`, the `miauflix-dev` backend, by default), so the app talks to the miauflix container.
+3. **Open** [https://localhost:4173](https://localhost:4173). The Vite dev server proxies `/api` to `BACKEND_URL` (`http://localhost:5000`, the `miauflix-dev` backend, by default), so the app talks to the miauflix container.
 
 To use a different backend URL (e.g. another host or port), set `BACKEND_URL` in the workspace-root `.env` (the single source of truth for this repo), not in a frontend-local `.env`; frontend-local `.env` files are ignored by the rest of the stack and can cause confusion (see [Environment Variables](../setup/environment-variables.md)).
 

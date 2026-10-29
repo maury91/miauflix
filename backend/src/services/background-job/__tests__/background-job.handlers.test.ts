@@ -1,3 +1,7 @@
+jest.mock('@logger', () => ({
+  logger: { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() },
+}));
+
 import { configureFakerSeed } from '@__test-utils__/utils';
 
 import { PlaybackTargetService } from '@services/playback/playback-target.service';
@@ -22,6 +26,7 @@ const setupTest = () => {
     hasAnyTVWatchlistInterest: jest.fn().mockResolvedValue(true),
   };
   const mediaService = {
+    getMovieByMediaId: jest.fn((mediaId: number) => Promise.resolve({ local: { id: mediaId } })),
     getTVShowByMediaId: jest.fn().mockResolvedValue({
       local: { name: 'Show', imdbId: 'tt1234567' },
       detail: { seasons: [{ seasonNumber: 1 }] },
@@ -45,6 +50,10 @@ const setupTest = () => {
     ]),
   };
   const sourceService = {
+    canRunSourceJobs: jest.fn().mockResolvedValue(true),
+    processSourceDiscovery: jest.fn().mockResolvedValue(undefined),
+    requestMovieVerification: jest.fn(),
+    requestSourceVerification: jest.fn(),
     getSourcesForEpisodeWithOnDemandSearch: jest.fn().mockResolvedValue([episodeSource]),
     isEpisodeWithinLeakTolerance: jest.fn(
       (airDate: string | null, now: number) => !airDate || Date.parse(airDate) <= now
@@ -59,8 +68,14 @@ const setupTest = () => {
   };
   const playbackTargets = new PlaybackTargetService(
     { getContentSourceRepository: () => ({}), getEpisodeSourceRepository: () => ({}) } as never,
-    downloadService as never
+    downloadService as never,
+    { markFailed: jest.fn() },
+    { recordFiles: jest.fn().mockResolvedValue(true) }
   );
+
+  const notificationService = {
+    requestedPlayableKeys: jest.fn().mockResolvedValue([]),
+  };
 
   registerBackgroundJobHandlers({
     backgroundJobs: { enqueueBulk: jest.fn() } as never,
@@ -73,6 +88,7 @@ const setupTest = () => {
     downloadService: downloadService as never,
     progressService: progressService as never,
     playbackTargets,
+    notificationService,
     worker,
   });
 
@@ -83,9 +99,26 @@ const setupTest = () => {
     progressService,
     sourceService,
     downloadService,
+    notificationService,
     episodeSource,
   };
 };
+
+describe('availability check', () => {
+  it('checks every key when one fails, then rethrows the first error', async () => {
+    const { handlers, notificationService, sourceService } = setupTest();
+    notificationService.requestedPlayableKeys.mockResolvedValueOnce(['m:1', 'm:2', 'm:3']);
+    const failure = new Error('discovery failed');
+    sourceService.processSourceDiscovery
+      .mockRejectedValueOnce(failure)
+      .mockRejectedValueOnce(new Error('second failure'));
+
+    await expect(handlers.get('availability.check')!.run({})).rejects.toBe(failure);
+
+    expect(sourceService.processSourceDiscovery.mock.calls).toEqual([[1], [2], [3]]);
+    expect(sourceService.requestMovieVerification).toHaveBeenCalledWith(3);
+  });
+});
 
 describe('watchlist TV acquisition', () => {
   beforeAll(() => configureFakerSeed());

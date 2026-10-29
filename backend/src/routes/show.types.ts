@@ -46,5 +46,5 @@ export interface EpisodeResponse {
   airDate: string | null;
   still: string | null;
   /** `unavailable` once every source matched to the episode proved fake. */
-  sourceAvailability?: SourceAvailability;
+  sourceAvailability: SourceAvailability;
 }

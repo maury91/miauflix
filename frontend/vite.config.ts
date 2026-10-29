@@ -61,6 +61,9 @@ function rewriteSetCookieForDev(cookie: string): string {
   return cookie.replace(/\s*;\s*Domain=[^;]*/gi, '');
 }
 
+/** Compose service names that can serve the backend (see docker-compose*.yml). */
+const DOCKER_BACKEND_HOSTS = new Set(['backend', 'miauflix', 'vpn']);
+
 function isLocalBackend(url: string): boolean {
   const { hostname } = new URL(url);
   return (
@@ -68,7 +71,7 @@ function isLocalBackend(url: string): boolean {
     hostname.endsWith('.localhost') ||
     hostname === '[::1]' ||
     hostname.startsWith('127.') ||
-    !hostname.includes('.')
+    DOCKER_BACKEND_HOSTS.has(hostname)
   );
 }
 
@@ -114,6 +117,9 @@ function appVersion(): string {
 
 const devBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
 const previewBackendUrl = process.env.BACKEND_URL || 'http://localhost:5000';
+// Local backends use self-signed development certificates; remote ones must present a valid one.
+const verifyDevBackendCertificate = !isLocalBackend(devBackendUrl);
+const verifyPreviewBackendCertificate = !isLocalBackend(previewBackendUrl);
 const devCertificateRootOverride = process.env.MIAUFLIX_DEV_CERT_DIR;
 const devCertificateRoot = devCertificateRootOverride
   ? path.resolve(__dirname, '..', devCertificateRootOverride)
@@ -141,7 +147,7 @@ export default defineConfig({
       '/api': {
         target: devBackendUrl,
         changeOrigin: true,
-        secure: false,
+        secure: verifyDevBackendCertificate,
         ws: true,
         configure: proxyCookieRewriteConfigure,
       },
@@ -156,7 +162,7 @@ export default defineConfig({
             '/api': {
               target: previewBackendUrl,
               changeOrigin: true,
-              secure: false,
+              secure: verifyPreviewBackendCertificate,
               ws: true,
               configure: proxyCookieRewriteConfigure,
             },

@@ -18,7 +18,6 @@ import type { NotificationService } from '@services/notifications/notification.s
 import type { RequestService } from '@services/request/request.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
-import { adaptiveLog } from '@utils/adaptive-logging.util';
 import { RateLimiter } from '@utils/rateLimiter';
 import { scheduleNextCheck } from '@utils/scheduling.util';
 import { SingleFlight } from '@utils/singleflight.util';
@@ -113,29 +112,23 @@ export class SourceService {
   private startResolved = false;
   private startStartedAt = 0;
   private vpnProbeVersion = 0;
-  private readonly config: ConfigService;
-  private readonly vpnService: VpnDetectionService;
-  private readonly backgroundJobs?: BackgroundJobService;
   private vpnUnsubscribers: Array<() => void> = [];
 
   constructor(
     db: Database,
-    vpnService: VpnDetectionService,
+    private readonly vpnService: VpnDetectionService,
     private readonly contentDirectoryService: ContentDirectoryService,
     private readonly magnetService: SourceMetadataFileService,
     private readonly requestService: RequestService,
-    config: ConfigService,
-    backgroundJobs?: BackgroundJobService,
-    private readonly notifications?: NotificationService,
-    private readonly availability?: SourceAvailabilityService
+    private readonly config: ConfigService,
+    private readonly backgroundJobs: BackgroundJobService,
+    private readonly notifications: NotificationService,
+    private readonly availability: SourceAvailabilityService
   ) {
-    this.config = config;
-    this.vpnService = vpnService;
     this.searchOnlyBehindVpn = !config.getOrThrow('DISABLE_VPN_CHECK');
     this.movieRepository = db.getMovieRepository();
     this.contentSourceRepository = db.getContentSourceRepository();
     this.episodeSourceRepository = db.getEpisodeSourceRepository();
-    this.backgroundJobs = backgroundJobs;
     config.registerService('SOURCE', this);
     if (this.searchOnlyBehindVpn) {
       this.startPromise = this.trackStartPromise(this.refreshVpnState());
@@ -355,7 +348,7 @@ export class SourceService {
         const previousQualityName = releaseQualityName(previousQuality);
         const nextQualityName = releaseQualityName(nextQualitySource.rank);
         try {
-          await this.notifications?.movieQualityUpgrade({
+          await this.notifications.movieQualityUpgrade({
             mediaId,
             title: movie.title,
             qualityKey: nextQualityName.toLowerCase(),
@@ -366,7 +359,7 @@ export class SourceService {
           logger.warn('SourceService', 'Movie quality notification could not be stored', error);
         }
       }
-      this.backgroundJobs?.bulkBestEffort(
+      this.backgroundJobs.bulkBestEffort(
         createdSources.flatMap(source => [
           {
             type: 'source.metadata' as const,
@@ -497,7 +490,7 @@ export class SourceService {
             source.file = torrentFile;
           }
           source.hasVideo =
-            (await this.availability?.recordTorrentFile(source.id, torrentFile)) ?? source.hasVideo;
+            (await this.availability.recordTorrentFile(source.id, torrentFile)) ?? source.hasVideo;
           candidate.source = source;
           candidate.metadata.files = files;
         } catch (error) {
@@ -527,7 +520,7 @@ export class SourceService {
     if (!verified) this.requestSourceVerification(associations.map(({ source }) => source));
     if (verified && episode.showMediaId && episode.showTitle) {
       try {
-        await this.notifications?.episodeAvailable({
+        await this.notifications.episodeAvailable({
           showMediaId: episode.showMediaId,
           showTitle: episode.showTitle,
           seasonNumber: episode.seasonNumber,
@@ -561,7 +554,7 @@ export class SourceService {
         const row = providerSourcesToEntities([metadata], result.source)[0];
         const source = await this.contentSourceRepository.upsertByHash(row);
         releases.push({ metadata, source });
-        this.backgroundJobs?.enqueueBestEffort({
+        this.backgroundJobs.enqueueBestEffort({
           type: 'source.stats',
           dedupeKey: String(source.id),
           payload: { sourceId: source.id },
@@ -586,7 +579,7 @@ export class SourceService {
 
   public async seedSourceDiscoveryJobs(limit = 25): Promise<void> {
     const movies = await this.movieRepository.findMoviesPendingSourceSearch(limit);
-    await this.backgroundJobs?.enqueueBulk(
+    await this.backgroundJobs.enqueueBulk(
       movies.map(movie => ({
         type: 'source.discover',
         dedupeKey: String(movie.id),
@@ -600,7 +593,7 @@ export class SourceService {
     const sources = await this.contentSourceRepository.getNextSourcesToProcess(
       Math.max(2, this.magnetService.getAvailableConcurrency())
     );
-    await this.backgroundJobs?.enqueueBulk(
+    await this.backgroundJobs.enqueueBulk(
       sources.map(source => ({
         type: 'source.metadata',
         dedupeKey: String(source.id),
@@ -612,7 +605,7 @@ export class SourceService {
 
   public async seedSourceStatsJobs(limit = 25): Promise<void> {
     const sources = await this.contentSourceRepository.findSourceThatNeedsStatsUpdate(limit);
-    await this.backgroundJobs?.enqueueBulk(
+    await this.backgroundJobs.enqueueBulk(
       sources.map(source => ({
         type: 'source.stats',
         dedupeKey: String(source.id),
@@ -734,7 +727,7 @@ export class SourceService {
         !!source && source.hasVideo === null
     );
     if (!unverified.length) return;
-    this.backgroundJobs?.bulkBestEffort(
+    this.backgroundJobs.bulkBestEffort(
       unverified.map(source => ({
         type: 'source.verify' as const,
         dedupeKey: `source:${source.id}`,
@@ -746,7 +739,7 @@ export class SourceService {
 
   /** Queue a check of a movie's candidates until one proves real or all prove fake. */
   public requestMovieVerification(movieId: number, priority = 30): void {
-    this.backgroundJobs?.enqueueBestEffort({
+    this.backgroundJobs.enqueueBestEffort({
       type: 'source.verify',
       dedupeKey: `movie:${movieId}`,
       payload: { movieId },
@@ -774,7 +767,7 @@ export class SourceService {
       if (file) await this.contentSourceRepository.updateSourceFile(sourceId, file);
     }
     if (!file) return null;
-    return (await this.availability?.recordTorrentFile(sourceId, file)) ?? null;
+    return await this.availability.recordTorrentFile(sourceId, file);
   }
 
   /**
@@ -870,73 +863,6 @@ export class SourceService {
   }
 
   /**
-   * Find and download data files for sources that don't have them yet
-   * This method prioritizes by movie popularity and ensures fair distribution
-   */
-  @traced('SourceService')
-  public async syncMissingSourceFiles(): Promise<void> {
-    await this.startPromise;
-
-    if (!this.magnetService.isEnabled()) {
-      adaptiveLog('SourceService', 'Background source metadata resolution is disabled');
-      return;
-    }
-
-    if (!this.vpnConnected && this.searchOnlyBehindVpn) {
-      logger.warn('SourceService', 'VPN is not connected, skipping data file search');
-      await sleep(2000);
-      return;
-    }
-
-    // 1. Find movies without sources ordered by popularity
-    // 2. Count how many sources each movie has
-    // 3. Prioritize by movie popularity and ensure fair distribution
-    // 4. Get a group of 50 sources that need data files
-
-    const batchSize = Math.max(2, this.magnetService.getAvailableConcurrency());
-    const sourcesToProcess = await this.contentSourceRepository.getNextSourcesToProcess(batchSize);
-
-    // Early exit if no movies need processing - avoid log spam with exponential backoff
-    if (sourcesToProcess.length === 0) {
-      adaptiveLog('SourceService', 'No sources requiring source files found');
-      return;
-    }
-
-    if (this.backgroundJobs) {
-      for (const source of sourcesToProcess) {
-        await this.backgroundJobs.enqueue('source.metadata', String(source.id), {
-          sourceId: source.id,
-        });
-      }
-      return;
-    }
-
-    logger.debug('SourceService', 'Searching source files for sources without them');
-
-    const processSource = async (source: SourceProcessingResult) => {
-      logger.debug(
-        'SourceService',
-        `Processing source ${source.id} with quality ${source.quality}`
-      );
-      await this.downloadSourceFileForSource(source);
-      const potentialNextSource = sourcesToProcess[0];
-      if (
-        potentialNextSource &&
-        ((potentialNextSource.url && this.canMakeSourceRequest(potentialNextSource.source)) ||
-          this.magnetService.isIdle())
-      ) {
-        // If the magnet service is idle, we can process the next batch
-        const nextSource = sourcesToProcess.shift();
-        if (nextSource) {
-          processSource(nextSource);
-        }
-      }
-    };
-
-    await Promise.all(sourcesToProcess.splice(0, batchSize).map(processSource));
-  }
-
-  /**
    * Search and save source file for a specific source
    */
   private async downloadSourceFileForSource(source: SourceProcessingResult): Promise<void> {
@@ -984,7 +910,7 @@ export class SourceService {
 
       // Save the source file to the database
       await this.contentSourceRepository.updateSourceFile(source.id, file);
-      await this.availability?.recordTorrentFile(source.id, file);
+      await this.availability.recordTorrentFile(source.id, file);
 
       logger.debug(
         'SourceService',

@@ -42,7 +42,16 @@ describe('RealtimeGateway artwork subscriptions', () => {
       offChange: () => undefined,
     } as unknown as PreloadIntentService;
     const progress = {} as ProgressService;
-    const gateway = new RealtimeGateway(auth, config, preload, progress, catalog);
+    const gateway = new RealtimeGateway(
+      auth,
+      config,
+      preload,
+      progress,
+      catalog,
+      null,
+      { handles: () => false } as never,
+      { onChange: () => () => undefined } as never
+    );
     const sendMovie = jest.fn();
     const sendShow = jest.fn();
     const movieState = clientState(sendMovie);

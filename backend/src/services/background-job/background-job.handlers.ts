@@ -1,3 +1,5 @@
+import { logger } from '@logger';
+
 import { playableFromKey } from '@routes/playable.types';
 import type { CacheService } from '@services/cache/cache.service';
 import type { DownloadService } from '@services/download/download.service';
@@ -41,7 +43,7 @@ export function registerBackgroundJobHandlers({
   listClient: ListClientService;
   magnetService: SourceMetadataFileService;
   mediaService: MediaService;
-  notificationService?: Pick<NotificationService, 'requestedPlayableKeys'>;
+  notificationService: Pick<NotificationService, 'requestedPlayableKeys'>;
   sourceService: SourceService;
   downloadService: DownloadService;
   progressService: ProgressService;
@@ -156,15 +158,15 @@ export function registerBackgroundJobHandlers({
         keys.push(...page);
         if (page.length < AVAILABILITY_CHECK_PAGE_SIZE) break;
       }
-      for (const key of keys) {
+      const checkAvailability = async (key: string): Promise<void> => {
         const playable = playableFromKey(key);
-        if (!playable) continue;
+        if (!playable) return;
         if (playable.kind === 'movie') {
           const media = await mediaService.getMovieByMediaId(playable.mediaId);
-          if (!media) continue;
+          if (!media) return;
           await sourceService.processSourceDiscovery(media.local.id);
           sourceService.requestMovieVerification(media.local.id);
-          continue;
+          return;
         }
         const show = await mediaService.getTVShowByMediaId(playable.showMediaId);
         const season = show
@@ -173,7 +175,7 @@ export function registerBackgroundJobHandlers({
         const episode = season?.episodes.find(
           item => item.episodeNumber === playable.episodeNumber
         );
-        if (!show || !episode) continue;
+        if (!show || !episode) return;
         // A real match notifies. Matching skips verification when a single-file match already
         // exists, so queue unverified matches here as well (already-verified ones are ignored).
         const associations = await sourceService.getSourcesForEpisodeWithOnDemandSearch({
@@ -186,7 +188,20 @@ export function registerBackgroundJobHandlers({
           airDate: episode.airDate,
         });
         sourceService.requestSourceVerification(associations.map(({ source }) => source));
+      };
+      // One failing key must not skip the rest; rethrow afterwards so the broker retries.
+      let firstError: unknown;
+      let failed = false;
+      for (const key of keys) {
+        try {
+          await checkAvailability(key);
+        } catch (error) {
+          if (!failed) firstError = error;
+          failed = true;
+          logger.error('BackgroundJobHandlers', `Availability check failed for ${key}`, error);
+        }
       }
+      if (failed) throw firstError;
     },
   });
   worker.register('watchlist.movie.download', {

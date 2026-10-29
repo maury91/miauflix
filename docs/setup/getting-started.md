@@ -6,11 +6,10 @@
 
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
-docker compose run --rm miauflix npm run config-only
-docker compose up -d
+./scripts/start-docker-prod.sh up -d --build
 ```
 
-The first command clones the repository, the second runs the configuration wizard, and the third starts the full stack. No local Node.js installation needed!
+The first command clones the repository, the second builds and starts the full stack. Then open <http://localhost:3000>, create the admin account and add your TMDB access token from the setup screens. No local Node.js installation needed!
 
 ## Prerequisites
 
@@ -31,11 +30,11 @@ The first command clones the repository, the second runs the configuration wizar
 git clone https://github.com/maury91/miauflix.git
 cd miauflix
 
-# Interactive configuration wizard
-docker compose run --rm miauflix npm run config-only
+# Optional: interactive configuration wizard (builds the image from this checkout)
+npm run config-only:docker
 ```
 
-This will run the configuration wizard, which will ask you for the required environment variables, and guide you on how to obtain them.
+The wizard asks for the required environment variables and guides you on how to obtain them. You can skip it and enter the same settings from the browser setup screens after the first start. With the [prebuilt images](docker-setup.md#prebuilt-images) (`docker-compose.yml` alone), use the browser setup: that file doesn't mount `.env`, so the wizard's settings would not reach Miauflix.
 
 The default Compose topology starts the standalone List Service. Configure the Trakt OAuth credentials during setup, or disable the service if you do not use lists. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
 
@@ -56,14 +55,10 @@ Add `docker-compose.https.yml` and the `Caddyfile`: [Caddy](https://caddyserver.
 #### 4. Start Services
 
 ```bash
-# Option 1: Start all services
-docker compose up -d
-
-# Option 2: Start backend only in production mode
 npm run start:backend:docker:prod
 ```
 
-The first option starts all services (backend, nginx, VPN, etc.) in the background. The second option starts only the backend service in production mode with automatic building.
+This builds the images from the checkout and starts the backend with its services (and the VPN once `NORDVPN_PRIVATE_KEY` is set) in the background, using the `COMPOSE_FILE` from `.env` when it's set. See [Building from source](docker-setup.md#building-from-source).
 
 #### 5. Access Application
 

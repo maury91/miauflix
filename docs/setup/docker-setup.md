@@ -25,7 +25,7 @@ On first boot the `miauflix` logs show `Starting in degraded mode`: that's expec
 
 ### Combining compose files
 
-Every deployment starts from `docker-compose.yml`, and each feature is one more file on top of it. Download the ones you want next to `docker-compose.yml` and list them all in `COMPOSE_FILE` in a `.env` file in the same folder, so plain `docker compose` commands use them together (on Windows, separate them with `;` instead of `:`). The order doesn't matter.
+Every deployment starts from `docker-compose.yml`, and each feature is one more file on top of it. Download the ones you want next to `docker-compose.yml` and list them all in `COMPOSE_FILE` in a `.env` file in the same folder, so plain `docker compose` commands use them together (on Windows, separate them with `;` instead of `:`). `docker-compose.yml` must come first, because later files override earlier ones (listed after `docker-compose.https.yml`, it would turn the unauthenticated admin setup back on); the feature files can follow in any order.
 
 | File                                                                       | Adds                                                                              |
 | -------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
@@ -186,7 +186,10 @@ docker compose -f docker-compose.yml run --rm --no-deps --entrypoint sh -v ./dat
   -c 'cp -a /old/. /usr/src/app/data/'
 # List service (Trakt) and media catalog. The VPN variant kept the catalog in ./data itself.
 docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint sh -v ./data:/old:ro miauflix-services \
-  -c 'cp -a /old/list-service/. /app/data/list-service/; cp -a /old/media-catalog/. /app/data/catalog/; chown -R bunqueue:bunqueue /app/data'
+  -c 'set -e; mkdir -p /app/data/list-service /app/data/catalog
+      cp -a /old/list-service/. /app/data/list-service/
+      if [ -d /old/media-catalog ]; then cp -a /old/media-catalog/. /app/data/catalog/; else cp -a /old/catalog.db* /app/data/catalog/; fi
+      chown -R bunqueue:bunqueue /app/data'
 ```
 
 Keep `LIST_SERVICE_ENCRYPTION_KEY` in `.env` if you had set it: the list service needs it to read its data. The backend now listens on `localhost:3000` instead of `5000`. Leave `./data` in place until you've checked everything works.
@@ -441,9 +444,9 @@ docker compose pull
 docker compose up -d
 ```
 
-To get newer compose files, download them again. When building from source:
+To get newer compose files, download them again. When building from source, rebuild with the same files the stack was started with (`npm run start:backend:docker:prod` picks them as described in [Building from source](#building-from-source)):
 
 ```bash
 git pull
-docker compose up -d --build
+npm run start:backend:docker:prod
 ```
