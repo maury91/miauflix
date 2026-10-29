@@ -1,4 +1,4 @@
-import { IsNull, type Repository } from 'typeorm';
+import { In, IsNull, type Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { AvailabilityRequest } from '@entities/availability-request.entity';
@@ -20,6 +20,9 @@ export interface NotificationDto {
   createdAt: string;
   readAt: string | null;
 }
+
+/** Pending "Notify me" requests one user may have at a time. */
+export const MAX_PENDING_AVAILABILITY_REQUESTS = 200;
 
 export class NotificationService {
   private readonly repository: Repository<Notification>;
@@ -109,18 +112,30 @@ export class NotificationService {
     });
   }
 
-  /** "Notify me": remember that the user wants to hear when the playable gets a real source. */
-  async requestAvailability(userId: string, playable: PlayableRef): Promise<void> {
-    await this.database.write(() =>
-      this.availabilityRequests
+  /**
+   * "Notify me": remember that the user wants to hear when the playable gets a real source.
+   * Asking again for the same playable always succeeds; a new one is refused once the user has
+   * `MAX_PENDING_AVAILABILITY_REQUESTS` pending.
+   */
+  async requestAvailability(
+    userId: string,
+    playable: PlayableRef
+  ): Promise<'limited' | 'requested'> {
+    const key = playableKey(playable);
+    return this.database.write(async () => {
+      if (await this.availabilityRequests.exists({ where: { userId, playableKey: key } }))
+        return 'requested';
+      const pending = await this.availabilityRequests.count({ where: { userId } });
+      if (pending >= MAX_PENDING_AVAILABILITY_REQUESTS) return 'limited';
+      await this.availabilityRequests
         .createQueryBuilder()
         .insert()
         .into(AvailabilityRequest)
-        .values({ userId, playableKey: playableKey(playable) })
+        .values({ userId, playableKey: key })
         .orIgnore()
-        .execute()
-        .then(() => undefined)
-    );
+        .execute();
+      return 'requested';
+    });
   }
 
   async hasRequestedAvailability(userId: string, playable: PlayableRef): Promise<boolean> {
@@ -138,22 +153,21 @@ export class NotificationService {
       playable.kind === 'episode'
         ? `S${String(playable.seasonNumber).padStart(2, '0')}E${String(playable.episodeNumber).padStart(2, '0')}`
         : null;
-    await this.insertForUsers(
-      requests.map(request => request.userId),
-      {
-        dedupeKey: `available:${key}`,
-        type: 'source_available',
-        mediaType: playable.kind === 'movie' ? 'movie' : 'tv',
-        mediaId: playable.kind === 'movie' ? playable.mediaId : playable.showMediaId,
-        title,
-        message: episode
-          ? `${episode} is now available to watch.`
-          : `${title} is now available to watch.`,
-        seasonNumber: playable.kind === 'episode' ? playable.seasonNumber : null,
-        episodeNumber: playable.kind === 'episode' ? playable.episodeNumber : null,
-      }
-    );
-    await this.availabilityRequests.delete({ playableKey: key });
+    const userIds = requests.map(request => request.userId);
+    await this.insertForUsers(userIds, {
+      dedupeKey: `available:${key}`,
+      type: 'source_available',
+      mediaType: playable.kind === 'movie' ? 'movie' : 'tv',
+      mediaId: playable.kind === 'movie' ? playable.mediaId : playable.showMediaId,
+      title,
+      message: episode
+        ? `${episode} is now available to watch.`
+        : `${title} is now available to watch.`,
+      seasonNumber: playable.kind === 'episode' ? playable.seasonNumber : null,
+      episodeNumber: playable.kind === 'episode' ? playable.episodeNumber : null,
+    });
+    // Only the requests just notified: one made meanwhile waits for the next check.
+    await this.availabilityRequests.delete({ playableKey: key, userId: In(userIds) });
   }
 
   /** Playables someone is waiting on, so background checks can look for their sources. */

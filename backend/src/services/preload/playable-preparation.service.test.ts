@@ -741,4 +741,46 @@ describe('PlayablePreparationService', () => {
     expect(prepared.warmup.state).toBe('failed');
     expect(warmup.warm).not.toHaveBeenCalled();
   });
+
+  it('keeps the episode source it tried when no other candidate remains', async () => {
+    const source = { id: 31, quality: Quality.FHD, streamingScore: 10, hasVideo: null };
+    const mediaService = {
+      getTVShowByMediaId: jest
+        .fn()
+        .mockResolvedValue({ local: { id: 3, mediaId: 900, name: 'Show', imdbId: 'tt1' } }),
+      markShowAsWatching: jest.fn(),
+      getSeason: jest
+        .fn()
+        .mockResolvedValue({ episodes: [{ id: 81, episodeNumber: 2, airDate: null }] }),
+    };
+    const sourceService = {
+      getSourcesForEpisodeWithOnDemandSearch: jest
+        .fn()
+        .mockResolvedValue([{ source, videoFilePath: 'S01E02.mkv', matchKind: 'single' }]),
+    };
+    const targets = { forEpisode: jest.fn().mockRejectedValue(new Error('no peers')) };
+    const health = new SourceHealthService();
+    health.markFailed(source.id);
+    const service = new PlayablePreparationService(
+      mediaService as never,
+      sourceService as never,
+      { warm: jest.fn() } as never,
+      undefined,
+      targets as never,
+      health
+    );
+
+    const result = await service.prepare(
+      { kind: 'episode', showMediaId: 900, seasonNumber: 1, episodeNumber: 2 },
+      {
+        through: 'warm',
+        preferences: { quality: 'auto', allowHevc: true },
+        workClass: 'interactive',
+      }
+    );
+
+    expect(targets.forEpisode).toHaveBeenCalledTimes(1);
+    expect(result).toMatchObject({ source, target: null, state: 'cold' });
+    expect(result.warmup.state).toBe('failed');
+  });
 });

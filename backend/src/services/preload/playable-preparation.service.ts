@@ -243,6 +243,8 @@ export class PlayablePreparationService {
     if (compatible.length && !compatible.some(match => isUsableSource(match.source)))
       return exhausted(playable);
     const tried = new Set<number>();
+    // The last attempt's result, so running out of candidates still reports the source tried.
+    let lastResult: PreparedPlayable | null = null;
     for (;;) {
       const candidates = compatible.filter(
         match => !tried.has(match.source.id) && isUsableSource(match.source)
@@ -258,7 +260,15 @@ export class PlayablePreparationService {
       if (!selected || !match) {
         if (tried.size && !compatible.some(item => isUsableSource(item.source)))
           return exhausted(playable);
-        return { playable, source: null, target: null, state: 'cold', warmup: emptyWarmup() };
+        return (
+          lastResult ?? {
+            playable,
+            source: null,
+            target: null,
+            state: 'cold',
+            warmup: emptyWarmup(),
+          }
+        );
       }
       tried.add(selected.id);
       const target: PlaybackTarget = {
@@ -277,6 +287,7 @@ export class PlayablePreparationService {
       const result = await this.finish(playable, selected, options, async () =>
         this.targets ? this.targets.forEpisode(match) : target
       );
+      lastResult = result;
       const rejected = selected.hasVideo === false || this.sourceHealth?.hasFailed(selected.id);
       if (result.target || !rejected || tried.size >= MAX_SOURCE_ATTEMPTS) {
         if (!result.target && !compatible.some(item => isUsableSource(item.source)))

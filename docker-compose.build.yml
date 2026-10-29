@@ -9,6 +9,11 @@ services:
       context: .
       dockerfile: Dockerfile
     image: miauflix
+    environment:
+      # Run as the owner of the checkout, so the mounted .env (readable only by its owner) works.
+      # The start scripts set USER_ID / GROUP_ID to your user.
+      PUID: ${USER_ID:-1000}
+      PGID: ${GROUP_ID:-1000}
     volumes:
       # Settings written by the configuration wizard (npm run config-only:docker)
       - ./.env:/usr/src/app/.env

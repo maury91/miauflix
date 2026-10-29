@@ -39,6 +39,7 @@ For example, a VPS behind HTTPS and the VPN, with FlareSolverr:
 
 ```bash
 COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml:docker-compose.flaresolverr.yml
+MIAUFLIX_UPSTREAM=vpn:3000 # with the VPN, Caddy reaches Miauflix through the VPN container
 ```
 
 `docker compose config --services` lists the services the combination runs. FlareSolverr and Jaeger are defined, switched off, in `docker-compose.yml`: that way the VPN file can move them into the VPN's network whichever files you list.
@@ -173,7 +174,7 @@ npm run start:backend:docker:prod
 
 `npm run start:backend:docker:prod` (and `stop:` / `restart:`) use the `COMPOSE_FILE` from `.env` when it's set. Otherwise they pick `docker-compose.yml`, `docker-compose.build.yml`, `docker-compose.flaresolverr.yml` and `docker-compose.tracing.yml`, plus `docker-compose.vpn.yml` once `NORDVPN_PRIVATE_KEY` is in `.env`. With your own `COMPOSE_FILE`, run `docker compose up -d --build` after a `git pull` to rebuild.
 
-The build file also mounts `.env` into the `miauflix` container, so settings from the configuration wizard (`npm run config-only:docker`) apply. You can also skip the wizard and set Miauflix up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
+The build file also mounts `.env` into the `miauflix` container, so settings from the configuration wizard (`npm run config-only:docker`) apply. It runs Miauflix as `USER_ID` / `GROUP_ID`, which the scripts set to your user so the container can read a `.env` only you can read; set them in `.env` when you run `docker compose` directly. You can also skip the wizard and set Miauflix up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
 
 ### Moving from the old source-built stack
 
@@ -303,7 +304,7 @@ docker compose run --rm --no-deps --user root --entrypoint tar -v "$PWD":/backup
 docker compose start miauflix-services miauflix
 ```
 
-Keep `.env` with the backups: it holds your secrets and `COMPOSE_FILE`.
+Keep `.env` with the backups: it holds your secrets and `COMPOSE_FILE`. This leaves out `./downloads` (copy it like any folder if you want to keep downloaded content; Miauflix can download it again) and `caddy_data` (Caddy requests new certificates when it starts without them).
 
 ## Troubleshooting
 

@@ -395,10 +395,17 @@ export class RealtimeGateway {
     }
   }
 
-  /** Availability is the same for everyone: every signed-in client hears about it. */
+  /**
+   * Availability goes only to clients showing the title (its artwork is subscribed by their loaded
+   * lists and details, or it is focused), so nobody learns which titles others browse or play.
+   */
   private deliverAvailability(change: SourceAvailabilityChange): void {
+    const ref = this.catalogRef(change.playable);
+    const key = this.artworkKey(ref);
     for (const client of this.clients) {
       if (!client.userId) continue;
+      const focused = client.focused && this.artworkKey(this.catalogRef(client.focused)) === key;
+      if (!focused && !client.artworkRefs.has(key)) continue;
       this.send(client, {
         type: 'source-availability',
         v: 1,

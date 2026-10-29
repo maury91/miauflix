@@ -94,6 +94,8 @@ Add [`docker-compose.flaresolverr.yml`](../../docker-compose.flaresolverr.yml) t
 COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.flaresolverr.yml
 ```
 
+In a clone of the repository, add `docker-compose.build.yml` to the list as well, or `npm run start:backend:docker:prod` runs the prebuilt images instead of building the checkout (and without the `.env` mount the configuration wizard writes to).
+
 It starts the `flaresolverr` service, which `docker-compose.yml` defines but leaves off, and sets `ENABLE_FLARESOLVERR=true` on `miauflix`. Its settings live in the `flaresolverr_config` volume.
 
 - **Without the VPN**, Miauflix reaches it at `http://flaresolverr:8191`.

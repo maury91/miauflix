@@ -8,6 +8,7 @@ import type { AuthService } from '@services/auth/auth.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { PreloadIntentService } from '@services/preload/preload-intent.service';
 import type { ProgressService } from '@services/progress/progress.service';
+import type { SourceAvailabilityChange } from '@services/source/source-availability.service';
 
 import { RealtimeGateway } from './realtime.gateway';
 
@@ -95,6 +96,47 @@ describe('RealtimeGateway artwork subscriptions', () => {
     expect(sendShow).not.toHaveBeenCalled();
     clearTimeout(movieState.authTimer);
     clearTimeout(showState.authTimer);
+    gateway.close();
+  });
+
+  it('pushes availability only to clients showing or focusing the title', () => {
+    let publish: ((change: SourceAvailabilityChange) => void) | undefined;
+    const catalog = {
+      onArtwork: () => () => undefined,
+      onArtworkStreamReady: () => () => undefined,
+    } as unknown as CatalogClientService;
+    const gateway = new RealtimeGateway(
+      {} as AuthService,
+      { get: () => undefined } as unknown as ConfigService,
+      { onChange: () => undefined, offChange: () => undefined } as unknown as PreloadIntentService,
+      {} as ProgressService,
+      catalog,
+      null,
+      { handles: () => false } as never,
+      {
+        onChange: (listener: (change: SourceAvailabilityChange) => void) => {
+          publish = listener;
+          return () => undefined;
+        },
+      }
+    );
+    const showing = clientState(jest.fn());
+    showing.artworkRefs.add('tv:22');
+    const focusing = { ...clientState(jest.fn()), focused: { kind: 'show' as const, mediaId: 22 } };
+    const elsewhere = clientState(jest.fn());
+    elsewhere.artworkRefs.add('movie:11');
+    const clients = (gateway as unknown as { clients: Set<unknown> }).clients;
+    for (const state of [showing, focusing, elsewhere]) clients.add(state);
+
+    publish?.({
+      playable: { kind: 'episode', showMediaId: 22, seasonNumber: 1, episodeNumber: 3 },
+      availability: 'available',
+    });
+
+    expect(showing.socket.send).toHaveBeenCalledTimes(1);
+    expect(focusing.socket.send).toHaveBeenCalledTimes(1);
+    expect(elsewhere.socket.send).not.toHaveBeenCalled();
+    for (const state of [showing, focusing, elsewhere]) clearTimeout(state.authTimer);
     gateway.close();
   });
 });

@@ -70,7 +70,7 @@ function isLocalBackend(url: string): boolean {
     hostname === 'localhost' ||
     hostname.endsWith('.localhost') ||
     hostname === '[::1]' ||
-    hostname.startsWith('127.') ||
+    /^127(?:\.(?:25[0-5]|2[0-4]\d|1?\d?\d)){3}$/.test(hostname) ||
     DOCKER_BACKEND_HOSTS.has(hostname)
   );
 }

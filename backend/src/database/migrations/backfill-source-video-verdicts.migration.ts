@@ -34,16 +34,19 @@ export const backfillSourceVideoVerdicts: Migration = async ({ db, logger }) => 
   });
   for (const source of withFiles) {
     if (judged.has(source.id) || !source.file) continue;
+    let files: Array<{ path: string; length: number }>;
     try {
-      const files = (await parseTorrent(source.file)).files ?? [];
-      if (!files.length) continue;
-      const hasVideo = containsPlayableVideo(files);
-      await repository.setHasVideo(source.id, hasVideo);
-      judged.add(source.id);
-      if (!hasVideo) fakes++;
+      files = (await parseTorrent(source.file)).files ?? [];
     } catch {
       // An unreadable torrent file stays unjudged; playback judges the source later.
+      continue;
     }
+    if (!files.length) continue;
+    // A failed write fails the migration, so it runs again at the next start.
+    const hasVideo = containsPlayableVideo(files);
+    await repository.setHasVideo(source.id, hasVideo);
+    judged.add(source.id);
+    if (!hasVideo) fakes++;
   }
 
   if (judged.size)

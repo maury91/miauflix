@@ -1,8 +1,9 @@
 import { configureFakerSeed } from '@__test-utils__/utils';
+import { In } from 'typeorm';
 
 import type { Database } from '@database/database';
 
-import { NotificationService } from '../notification.service';
+import { MAX_PENDING_AVAILABILITY_REQUESTS, NotificationService } from '../notification.service';
 
 describe('NotificationService', () => {
   const setupTest = () => {
@@ -23,6 +24,8 @@ describe('NotificationService', () => {
     const repository = {
       createQueryBuilder: jest.fn().mockReturnValue(query),
       find: jest.fn().mockResolvedValue([]),
+      exists: jest.fn().mockResolvedValue(false),
+      count: jest.fn().mockResolvedValue(0),
       delete: jest.fn(),
     };
     const database = {
@@ -119,7 +122,11 @@ describe('NotificationService', () => {
       }),
       expect.objectContaining({ userId: 'bob', dedupeKey: 'available:m:1400940' }),
     ]);
-    expect(repository.delete).toHaveBeenCalledWith({ playableKey: 'm:1400940' });
+    // A request made while notifying is kept for the next check.
+    expect(repository.delete).toHaveBeenCalledWith({
+      playableKey: 'm:1400940',
+      userId: In(['alice', 'bob']),
+    });
   });
 
   it('sends nothing when nobody asked about the playable', async () => {
@@ -146,5 +153,26 @@ describe('NotificationService', () => {
 
     expect(query.values).toHaveBeenCalledWith({ userId: 'alice', playableKey: 'e:9001:1:8' });
     expect(query.orIgnore).toHaveBeenCalled();
+  });
+
+  it('refuses a new request once the user has the maximum pending', async () => {
+    const { service, query, repository } = setupTest();
+    repository.count.mockResolvedValue(MAX_PENDING_AVAILABILITY_REQUESTS);
+
+    await expect(service.requestAvailability('alice', { kind: 'movie', mediaId: 1 })).resolves.toBe(
+      'limited'
+    );
+    expect(query.values).not.toHaveBeenCalled();
+  });
+
+  it('accepts asking again for a pending playable even at the maximum', async () => {
+    const { service, query, repository } = setupTest();
+    repository.count.mockResolvedValue(MAX_PENDING_AVAILABILITY_REQUESTS);
+    repository.exists.mockResolvedValue(true);
+
+    await expect(service.requestAvailability('alice', { kind: 'movie', mediaId: 1 })).resolves.toBe(
+      'requested'
+    );
+    expect(query.values).not.toHaveBeenCalled();
   });
 });
