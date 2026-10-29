@@ -31,9 +31,11 @@ export const createPlaybackRoutes = ({
           session.user.id,
           request.playable,
           request.preferences,
-          request.deferDownload
-            ? { deferDownload: true, sessionId: session.sessionId }
-            : { sessionId: session.sessionId }
+          {
+            ...(request.deferDownload ? { deferDownload: true } : {}),
+            ...(request.avoidSourceIds?.length ? { avoidSourceIds: request.avoidSourceIds } : {}),
+            sessionId: session.sessionId,
+          }
         );
       } catch (error) {
         if (error instanceof AudioPlaybackError)

@@ -93,6 +93,10 @@ export const realtimeSlice = createSlice({
         state.availabilityByPlayable[key] = message.availability;
       }
     },
+    /** Drop pushed availability so fresh details responses decide again. */
+    availabilityCleared(state) {
+      state.availabilityByPlayable = {};
+    },
     sourceAttemptCleared(state, action: PayloadAction<PlayableRef>) {
       delete state.sourceAttempts[realtimePlayableKey(action.payload)];
     },

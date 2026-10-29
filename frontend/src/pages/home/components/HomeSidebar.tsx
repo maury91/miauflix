@@ -64,7 +64,9 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
   const searchRef = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
 
-  const order: SidebarItem[] = ['notifications', 'search', 'settings'];
+  const order: SidebarItem[] = showSettings
+    ? ['notifications', 'search', 'settings']
+    : ['notifications', 'search'];
   const focusSelected = (item: SidebarItem) => {
     if (item === 'notifications') notificationsButtonRef.current?.focus({ preventScroll: true });
     if (item === 'search') searchRef.current?.focus({ preventScroll: true });
@@ -75,6 +77,11 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
     onHover();
     focusSelected(item);
   };
+
+  // Settings can disappear (e.g. admin rights change); never keep a hidden item selected.
+  useEffect(() => {
+    if (!showSettings && selected === 'settings') setSelected('search');
+  }, [showSettings, selected]);
 
   useEffect(() => {
     if (active) focusSelected(selected);
@@ -111,7 +118,7 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
       return true;
     },
     onConfirm: () => {
-      if (selected === 'settings') onSettings();
+      if (selected === 'settings' && showSettings) onSettings();
       else if (selected === 'notifications') onNotifications();
       else onSearch();
       return true;

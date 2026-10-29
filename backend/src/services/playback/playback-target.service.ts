@@ -1,3 +1,5 @@
+import { logger } from '@logger';
+
 import type { Database } from '@database/database';
 import type { ContentSource } from '@entities/content-source.entity';
 import type { EpisodeSource } from '@entities/episode-source.entity';
@@ -81,6 +83,15 @@ export class PlaybackTargetService {
   ): Promise<void> {
     source.hasVideo = false;
     this.sourceHealth?.markFailed(source.id);
-    await this.availability?.recordFiles(source.id, files);
+    // Recording the verdict is best effort: callers rely on the typed error that follows.
+    try {
+      await this.availability?.recordFiles(source.id, files);
+    } catch (error) {
+      logger.warn(
+        'PlaybackTargetService',
+        `Unable to record the verdict of source ${source.id}`,
+        error
+      );
+    }
   }
 }

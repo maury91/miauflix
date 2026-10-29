@@ -92,6 +92,34 @@ describe('PlaybackSessionService', () => {
     ).rejects.toEqual(new PlaybackUnavailableError('exhausted'));
   });
 
+  it('leaves out the sources the player already failed to play', async () => {
+    const prepare = jest.fn(async () => ({
+      source: { id: 2 },
+      target: movie({ id: 2 }),
+      state: 'cold',
+    }));
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      { prepare } as never,
+      { getOrThrow: () => 60000 } as never,
+      undefined,
+      undefined,
+      { knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct' }) } as never
+    );
+
+    await service.create(
+      'user',
+      { kind: 'movie', mediaId: 1 },
+      { quality: 'auto', allowHevc: false },
+      { avoidSourceIds: [1] }
+    );
+
+    expect(prepare).toHaveBeenCalledWith(
+      { kind: 'movie', mediaId: 1 },
+      expect.objectContaining({ avoidSourceIds: [1] })
+    );
+  });
+
   it('warms the file where the viewer will resume', async () => {
     const prepare = jest.fn(async () => ({
       source: { id: 1 },

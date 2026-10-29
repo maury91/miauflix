@@ -13,6 +13,8 @@ import type { SourceService } from '@services/source/source.service';
 import type { BackgroundJobService } from './background-job.service';
 import type { BackgroundJobWorker } from './background-job.worker';
 
+const AVAILABILITY_CHECK_PAGE_SIZE = 50;
+
 /**
  * Handler registration for the backend-owned queues. Catalog maintenance
  * (hydration, change scans, season sync) is consumed by the media-catalog
@@ -144,7 +146,17 @@ export function registerBackgroundJobHandlers({
     leaseMs: 10 * 60 * 1000,
     run: async () => {
       if (!notificationService || !(await sourceService.canRunSourceJobs())) return;
-      for (const key of await notificationService.requestedPlayableKeys()) {
+      // Collect every pending key first: fulfilled requests are deleted while checking.
+      const keys: string[] = [];
+      for (let page: string[]; ; ) {
+        page = await notificationService.requestedPlayableKeys(
+          AVAILABILITY_CHECK_PAGE_SIZE,
+          keys.length
+        );
+        keys.push(...page);
+        if (page.length < AVAILABILITY_CHECK_PAGE_SIZE) break;
+      }
+      for (const key of keys) {
         const playable = playableFromKey(key);
         if (!playable) continue;
         if (playable.kind === 'movie') {
@@ -162,8 +174,9 @@ export function registerBackgroundJobHandlers({
           item => item.episodeNumber === playable.episodeNumber
         );
         if (!show || !episode) continue;
-        // Matching queues verification of unverified matches; a real one notifies.
-        await sourceService.getSourcesForEpisodeWithOnDemandSearch({
+        // A real match notifies. Matching skips verification when a single-file match already
+        // exists, so queue unverified matches here as well (already-verified ones are ignored).
+        const associations = await sourceService.getSourcesForEpisodeWithOnDemandSearch({
           episodeId: episode.id,
           showMediaId: show.local.mediaId,
           showTitle: show.local.name,
@@ -172,6 +185,7 @@ export function registerBackgroundJobHandlers({
           episodeNumber: playable.episodeNumber,
           airDate: episode.airDate,
         });
+        sourceService.requestSourceVerification(associations.map(({ source }) => source));
       }
     },
   });

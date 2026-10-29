@@ -41,7 +41,7 @@ export interface Deps {
   mediaService: MediaService;
   requestService: RequestService;
   sourceService: SourceService;
-  sourceAvailabilityService?: SourceAvailabilityService;
+  sourceAvailabilityService: SourceAvailabilityService;
   statsService: StatsService;
   streamService: StreamService;
   qrLoginService: QrLoginService;

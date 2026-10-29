@@ -761,11 +761,15 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     completedRef.current = false;
     latestProgress.current = null;
 
+    // Sources this player already failed to play: the backend cannot see a browser rejection.
+    const avoidSourceIds =
+      failedSources.current.key === JSON.stringify(playable) ? [...failedSources.current.ids] : [];
     if (sessionInFlight.current?.key !== sessionKey)
       sessionInFlight.current = {
         key: sessionKey,
         promise: createSession({
           playable,
+          ...(avoidSourceIds.length ? { avoidSourceIds } : {}),
           preferences: {
             quality: 'auto',
             ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
@@ -795,6 +799,14 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       })
       .catch((reason: unknown) => {
         if (currentRequest !== requestId.current) return;
+        if (isUnavailablePlaybackFailure(reason) && avoidSourceIds.length) {
+          // Only sources that already failed here are left.
+          setStatus('error');
+          setError(
+            `Playback for “${title}” could not load any of its sources. Retry to try source preparation again.`
+          );
+          return;
+        }
         if (isUnavailablePlaybackFailure(reason)) {
           // No source exists, or every one proved fake: offer to notify once one is out.
           setStatus('exhausted');

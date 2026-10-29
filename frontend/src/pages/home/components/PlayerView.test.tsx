@@ -449,7 +449,13 @@ describe('PlayerView', () => {
       .mockReturnValueOnce({ unwrap: () => Promise.resolve(withSource(9, 1)) })
       .mockReturnValueOnce({ unwrap: () => Promise.resolve(withSource(10, 2)) })
       .mockReturnValueOnce({ unwrap: () => Promise.resolve(withSource(11, 3)) })
-      .mockReturnValue({ unwrap: () => Promise.resolve(withSource(11, 3)) });
+      .mockReturnValue({
+        unwrap: () =>
+          Promise.reject({
+            status: 404,
+            data: { error: 'No playable source available', reason: 'not_found' },
+          }),
+      });
     render(<PlayerView playable={playable} title="Failing fixture" onBack={vi.fn()} />);
 
     for (const expectedCalls of [2, 3, 4]) {
@@ -460,6 +466,26 @@ describe('PlayerView', () => {
 
     expect(await screen.findByText(/could not load any of its sources/)).toBeInTheDocument();
     expect(createSession).toHaveBeenCalledTimes(4);
+    // Each retry tells the backend which sources already failed in this browser.
+    expect(createSession.mock.calls.map(([request]) => request.avoidSourceIds)).toEqual([
+      undefined,
+      [9],
+      [9, 10],
+      [9, 10, 11],
+    ]);
+  });
+
+  it('keeps the repeat guard when the backend returns a source that already failed', async () => {
+    const withSource = (id: number) => ({ ...session, source: { ...session.source, id } });
+    createSession
+      .mockReturnValueOnce({ unwrap: () => Promise.resolve(withSource(9)) })
+      .mockReturnValue({ unwrap: () => Promise.resolve(withSource(9)) });
+    render(<PlayerView playable={playable} title="Repeat fixture" onBack={vi.fn()} />);
+
+    fireEvent.error(await screen.findByLabelText('Repeat fixture'));
+
+    expect(await screen.findByText(/could not load any of its sources/)).toBeInTheDocument();
+    expect(createSession).toHaveBeenCalledTimes(2);
   });
 
   it('requests a new session when the optimistic source cannot play here', async () => {

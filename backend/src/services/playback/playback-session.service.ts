@@ -151,7 +151,11 @@ export class PlaybackSessionService {
     userId: string,
     playable: PlayableRef,
     preferences: AudioPlaybackPreferences & PlaybackPreferences,
-    options: { deferDownload?: boolean; sessionId?: string } = {}
+    options: {
+      avoidSourceIds?: readonly number[];
+      deferDownload?: boolean;
+      sessionId?: string;
+    } = {}
   ): Promise<PlaybackSession | null> {
     // Warm where the player will resume, as the details warmup did, not over it from the start.
     const resumeFraction = options.deferDownload
@@ -162,6 +166,7 @@ export class PlaybackSessionService {
       this.preparation.prepare(playable, {
         through: options.deferDownload ? 'sources' : 'warm',
         ...(resumeFraction ? { resumeFraction } : {}),
+        ...(options.avoidSourceIds ? { avoidSourceIds: options.avoidSourceIds } : {}),
         preferences: { ...preferences, allowHevc },
         workClass: 'interactive',
         ownerKey: this.playableKey(playable),

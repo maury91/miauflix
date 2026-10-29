@@ -1,0 +1,16 @@
+# FlareSolverr (https://github.com/FlareSolverr/FlareSolverr) fetches pages of sources behind
+# Cloudflare's bot protection for Miauflix. With docker-compose.vpn.yml it goes through the VPN too.
+# Usage: add it to COMPOSE_FILE in .env, e.g.
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.flaresolverr.yml
+# Guide: docs/setup/flaresolverr.md
+
+services:
+  flaresolverr:
+    profiles: !reset [] # Defined, but off, in docker-compose.yml
+
+  miauflix:
+    environment:
+      ENABLE_FLARESOLVERR: 'true'
+    depends_on:
+      flaresolverr:
+        condition: service_started

@@ -86,9 +86,8 @@ export const createMovieRoutes = ({
             genres: detail.genres.map(genre => genre.name),
             popularity: detail.popularity,
             rating: detail.rating,
+            sourceAvailability: await sourceAvailabilityService.forMovie(movie),
           };
-          if (sourceAvailabilityService)
-            response.sourceAvailability = await sourceAvailabilityService.forMovie(movie);
 
           // Include sources if requested
           if (includeSources) {

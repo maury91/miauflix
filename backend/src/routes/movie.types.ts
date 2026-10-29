@@ -37,7 +37,7 @@ export interface MovieResponse {
   popularity: number;
   rating: number;
   /** `unavailable` once every source found proved fake, or the finished search found none. */
-  sourceAvailability?: SourceAvailability;
+  sourceAvailability: SourceAvailability;
   sources?: MovieSourceDto[];
 }
 

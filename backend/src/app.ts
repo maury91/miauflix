@@ -117,7 +117,9 @@ try {
   );
   // Every file list that becomes known decides whether its source is real.
   storageService.onLayout((sourceId, layout) => {
-    void sourceAvailabilityService.recordFiles(sourceId, layout.files);
+    sourceAvailabilityService.recordFiles(sourceId, layout.files).catch(error => {
+      logger.warn('App', `Unable to record the file list of source ${sourceId}`, error);
+    });
   });
   const magnetService = new SourceMetadataFileService(
     downloadService,

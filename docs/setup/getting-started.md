@@ -47,20 +47,11 @@ The stack routes all its traffic through NordVPN with [gluetun](https://github.c
 scripts/nordvpn-key.sh
 ```
 
-Miauflix currently detects only NordVPN and refuses to search for sources when no VPN is detected, because torrents would go out from your real IP. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env`, but only do so if you accept that risk; never on a server reachable from the internet. See [Docker Setup](docker-setup.md#nordvpn-setup) for server locations.
+Miauflix currently detects only NordVPN and refuses to search for sources when no VPN is detected, because torrents would go out from your real IP. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env`, but only do so if you accept that risk; never on a server reachable from the internet. See [Using a VPN](docker-setup.md#using-a-vpn) for server locations.
 
 #### 3. [Optional] Set up HTTPS and domain name
 
-If you want to use HTTPS, you can set up an SSL certificate.
-
-```bash
-chmod +x setup-ssl.sh
-./setup-ssl.sh -d yourdomain.com
-```
-
-This will generate an SSL certificate and key, and configure Nginx accordingly.
-
-More details on how to set up HTTPS can be found in the [SSL Certificates](ssl-certificates.md) guide.
+Add `docker-compose.https.yml` and the `Caddyfile`: [Caddy](https://caddyserver.com/) gets and renews a Let's Encrypt certificate for your domain on its own. Follow [HTTPS with a domain](docker-setup.md#https-with-a-domain).
 
 #### 4. Start Services
 

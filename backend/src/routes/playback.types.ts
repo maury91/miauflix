@@ -37,6 +37,7 @@ export const createPlaybackSessionRequestSchema = z
     playable: playableRefSchema,
     preferences: playbackPreferencesSchema,
     deferDownload: z.boolean().optional(),
+    avoidSourceIds: z.array(z.number().int().positive()).max(50).optional(),
   })
   .strict();
 
@@ -44,6 +45,8 @@ export interface CreatePlaybackSessionRequest {
   playable: PlayableRef;
   preferences: z.infer<typeof playbackPreferencesSchema>;
   deferDownload?: boolean;
+  /** Sources this player already failed to play, so selection moves on to another one. */
+  avoidSourceIds?: number[];
 }
 
 export interface CreatePlaybackSessionResponse {

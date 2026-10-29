@@ -157,13 +157,14 @@ export class NotificationService {
   }
 
   /** Playables someone is waiting on, so background checks can look for their sources. */
-  async requestedPlayableKeys(limit = 50): Promise<string[]> {
+  async requestedPlayableKeys(limit = 50, offset = 0): Promise<string[]> {
     const rows = await this.availabilityRequests
       .createQueryBuilder('request')
       .select('request.playableKey', 'playableKey')
       .groupBy('request.playableKey')
       .orderBy('MIN(request.createdAt)', 'ASC')
       .limit(limit)
+      .offset(offset)
       .getRawMany<{ playableKey: string }>();
     // Raw rows skip the column transformer.
     return rows.map(row => EncryptedColumns.decrypt(row.playableKey));

@@ -74,7 +74,7 @@ FlareSolverr is configured through two environment variables:
 #### `ENABLE_FLARESOLVERR`
 
 - **Type**: Boolean (`true` or `false`)
-- **Default**: `true` (when `FLARESOLVERR_URL` is set)
+- **Default**: `false`
 - **Description**: Enable or disable FlareSolverr integration
 - **Example**: `ENABLE_FLARESOLVERR=true`
 
@@ -88,47 +88,18 @@ FlareSolverr is configured through two environment variables:
 
 ### Docker Setup
 
-FlareSolverr is included in the Docker Compose configuration and runs automatically when using Docker deployment.
+Add [`docker-compose.flaresolverr.yml`](../../docker-compose.flaresolverr.yml) to `COMPOSE_FILE` in `.env` (see [Combining compose files](docker-setup.md#combining-compose-files)), e.g.:
 
-#### Service Configuration
-
-The FlareSolverr service in `docker-compose.yml`:
-
-```yaml
-flaresolverr:
-  image: ghcr.io/flaresolverr/flaresolverr:latest
-  container_name: miauflix-flaresolverr
-  depends_on:
-    vpn:
-      condition: service_healthy
-  environment:
-    - LOG_LEVEL=info
-    - LOG_HTML=false
-    - CAPTCHA_SOLVER=none
-    - TZ=${TZ:-UTC}
-  network_mode: service:vpn # Route traffic through NordVPN
-  volumes:
-    - /var/lib/flaresolver:/config
-  restart: unless-stopped
+```bash
+COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.flaresolverr.yml
 ```
 
-**Key Features:**
+It starts the `flaresolverr` service, which `docker-compose.yml` defines but leaves off, and sets `ENABLE_FLARESOLVERR=true` on `miauflix`. Its settings live in the `flaresolverr_config` volume.
 
-- **VPN Integration**: Traffic is routed through the NordVPN service for privacy (`network_mode: service:vpn`)
-- **Persistent Storage**: Configuration stored in `/var/lib/flaresolver` volume
-- **Auto-restart**: Automatically restarts if the container stops
+- **Without the VPN**, Miauflix reaches it at `http://flaresolverr:8191`.
+- **With `docker-compose.vpn.yml`**, FlareSolverr shares the VPN container's network like Miauflix, so its requests also go through the VPN, and Miauflix reaches it at `http://127.0.0.1:8191`.
 
-#### Docker Environment Variables
-
-In the `miauflix` service, FlareSolverr is configured via:
-
-```yaml
-environment:
-  - FLARESOLVERR_URL=${FLARESOLVERR_URL:-http://localhost:8191}
-  - ENABLE_FLARESOLVERR=${ENABLE_FLARESOLVERR:-true}
-```
-
-**Note**: When running in Docker, the `FLARESOLVERR_URL` should reference the service name. However, since both services share the VPN network, `localhost` works because they're in the same network namespace.
+The source-build scripts (`npm run start:backend:docker:prod`) include it unless you set your own `COMPOSE_FILE`.
 
 ### Manual Setup
 
@@ -341,4 +312,4 @@ FlareSolverr: Stored user agent for example.com
 - **FlareSolverr GitHub**: https://github.com/FlareSolverr/FlareSolverr
 - **Implementation**: `backend/src/services/request/request.service.ts`
 - **Type Definitions**: `backend/src/types/flaresolverr.types.ts`
-- **Docker Configuration**: `docker-compose.yml` (flaresolverr service)
+- **Docker Configuration**: `docker-compose.flaresolverr.yml` (and the `flaresolverr` service in `docker-compose.yml`)

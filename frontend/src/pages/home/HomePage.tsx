@@ -2,7 +2,7 @@ import { type AppRoute, useRoute } from '@app/router';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
-import { useAppSelector } from '@store';
+import { useAppSelector } from '@store/hooks';
 import { selectCurrentSessionId, selectCurrentUser, selectIsAdmin } from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';

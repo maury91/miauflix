@@ -146,7 +146,7 @@ export const createShowRoutes = ({
           if (!hydrated) {
             return context.json({ error: 'Season not found' } satisfies ErrorResponse, 404);
           }
-          const availability = await sourceAvailabilityService?.forEpisodes(
+          const availability = await sourceAvailabilityService.forEpisodes(
             (hydrated.episodes ?? []).map(episode => episode.id)
           );
           return context.json({
@@ -163,9 +163,7 @@ export const createShowRoutes = ({
               overview: episode.overview || null,
               airDate: episode.airDate,
               still: episode.stillPath || null,
-              ...(availability
-                ? { sourceAvailability: availability.get(episode.id) ?? 'pending' }
-                : {}),
+              sourceAvailability: availability.get(episode.id) ?? 'pending',
             })),
           } satisfies SeasonResponse);
         } catch (error: unknown) {

@@ -117,120 +117,35 @@ ensure_development_data_dir() {
 # development compose stack shares the parent directory with the backend. Do
 # not chown the whole tree to the catalog user; make the directory boundaries
 # writable and scope catalog ownership to its own subdirectory.
-ensure_data_dir() {
-  local project_dir="${1:-$(pwd)}"
-  local data_dir="${project_dir}/data"
-  local catalog_data_dir="${project_dir}/data/media-catalog"
-  local list_service_data_dir="${project_dir}/data/list-service"
+# Pick the compose files for a deployment built from this checkout, unless COMPOSE_FILE is
+# already set (in the environment or in .env), and export them as COMPOSE_FILE.
+# Adds docker-compose.vpn.yml when NORDVPN_PRIVATE_KEY is set.
+use_source_compose_files() {
+  local env_file="${1:-.env}"
 
-  if ! mkdir -p "$catalog_data_dir" 2>/dev/null; then
-    if ! command_exists sudo || ! sudo mkdir -p "$catalog_data_dir"; then
-      print_error "Cannot create ${catalog_data_dir}."
-      return 1
-    fi
+  if [ -z "${COMPOSE_FILE:-}" ] && [ -f "$env_file" ]; then
+    COMPOSE_FILE=$(grep -E '^COMPOSE_FILE=' "$env_file" | tail -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'")
   fi
 
-  if ! mkdir -p "$list_service_data_dir" 2>/dev/null; then
-    if ! command_exists sudo || ! sudo mkdir -p "$list_service_data_dir"; then
-      print_error "Cannot create ${list_service_data_dir}."
-      return 1
-    fi
+  if [ -n "${COMPOSE_FILE:-}" ]; then
+    print_status "Using COMPOSE_FILE=${COMPOSE_FILE}"
+    export COMPOSE_FILE
+    return 0
   fi
 
-  local catalog_owner
-  catalog_owner=$(get_owner_group "$catalog_data_dir") || catalog_owner=""
-
-  if [ "$catalog_owner" != "911:911" ]; then
-    if ! chown -R 911:911 "$catalog_data_dir" 2>/dev/null; then
-      if ! command_exists sudo || ! sudo chown -R 911:911 "$catalog_data_dir"; then
-        print_warning "Could not assign ${catalog_data_dir} to catalog UID/GID 911:911; continuing with shared directory permissions."
-      fi
-    fi
+  if [ -z "${NORDVPN_PRIVATE_KEY:-}" ] && [ -f "$env_file" ]; then
+    NORDVPN_PRIVATE_KEY=$(grep -E '^NORDVPN_PRIVATE_KEY=' "$env_file" | tail -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'")
   fi
 
-  local list_service_owner
-  list_service_owner=$(get_owner_group "$list_service_data_dir") || list_service_owner=""
-
-  if [ "$list_service_owner" != "1000:1000" ]; then
-    if ! chown -R 1000:1000 "$list_service_data_dir" 2>/dev/null; then
-      if ! command_exists sudo || ! sudo chown -R 1000:1000 "$list_service_data_dir"; then
-        print_error "Cannot assign ${list_service_data_dir} to List Service UID/GID 1000:1000."
-        return 1
-      fi
-    fi
+  COMPOSE_FILE="docker-compose.yml:docker-compose.build.yml:docker-compose.flaresolverr.yml:docker-compose.tracing.yml"
+  if [ -n "${NORDVPN_PRIVATE_KEY:-}" ]; then
+    COMPOSE_FILE="${COMPOSE_FILE}:docker-compose.vpn.yml"
+  else
+    print_warning "NORDVPN_PRIVATE_KEY not set, starting without VPN..."
   fi
 
-  local list_service_mode
-  list_service_mode=$(get_mode "$list_service_data_dir") || list_service_mode=""
-
-  if [ "$list_service_mode" != "770" ]; then
-    if ! chmod 0770 "$list_service_data_dir" 2>/dev/null; then
-      if ! command_exists sudo || ! sudo chmod 0770 "$list_service_data_dir"; then
-        print_error "Cannot make ${list_service_data_dir} writable for the List Service."
-        return 1
-      fi
-    fi
-  fi
-
-  # Keep the host owner for the backend and share the directory with the
-  # catalog's fixed UID/GID without granting access to every local account.
-  local service_access_ready=false
-  local data_owner data_mode catalog_mode required_data_mode
-  data_owner=$(get_owner_group "$data_dir") || data_owner=""
-  data_mode=$(get_mode "$data_dir") || data_mode=""
-  catalog_owner=$(get_owner_group "$catalog_data_dir") || catalog_owner=""
-  catalog_mode=$(get_mode "$catalog_data_dir") || catalog_mode=""
-  required_data_mode=2770
-
-  # Docker Desktop does not preserve the setgid bit on macOS bind-mount
-  # sources. Group access is sufficient there; Linux keeps setgid so files
-  # created below data/ inherit the service group.
-  if [ "$(uname -s)" = "Darwin" ]; then
-    required_data_mode=0770
-  fi
-
-  if [ "${data_owner##*:}" = "911" ] && [ "$data_mode" = "${required_data_mode#0}" ] && \
-    [ "${catalog_owner##*:}" = "911" ] && [ "$catalog_mode" = "770" ]; then
-    service_access_ready=true
-  elif chgrp 911 "$data_dir" "$catalog_data_dir" 2>/dev/null && \
-    chmod "$required_data_mode" "$data_dir" 2>/dev/null && chmod 0770 "$catalog_data_dir" 2>/dev/null; then
-    service_access_ready=true
-  elif command_exists sudo && \
-    sudo chgrp 911 "$data_dir" "$catalog_data_dir" && \
-    sudo chmod "$required_data_mode" "$data_dir" && sudo chmod 0770 "$catalog_data_dir"; then
-    service_access_ready=true
-  fi
-
-  if [ "$service_access_ready" != "true" ]; then
-    # Some host systems do not expose the catalog GID to the invoking user.
-    # Grant only UID 911 access through the host ACL instead of opening the
-    # directories to every local account.
-    chmod 0700 "$data_dir" "$catalog_data_dir" 2>/dev/null || true
-    if command_exists setfacl && \
-      setfacl -m u:911:rwx,u:1000:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
-      setfacl -d -m u:911:rwx,u:1000:rwx "$data_dir" "$catalog_data_dir" 2>/dev/null && \
-      { [ ! -f "$data_dir/config.json" ] || setfacl -m u:911:rw,u:1000:rw "$data_dir/config.json" 2>/dev/null; }; then
-      service_access_ready=true
-    elif [ "$(uname -s)" = "Darwin" ] && \
-      chmod +a "user:911 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null && \
-      chmod +a "user:1000 allow read,write,execute,delete,add_file,add_subdirectory,file_inherit,directory_inherit" "$data_dir" "$catalog_data_dir" 2>/dev/null && \
-      { [ ! -f "$data_dir/config.json" ] || { \
-        chmod +a "user:911 allow read,write" "$data_dir/config.json" 2>/dev/null && \
-        chmod +a "user:1000 allow read,write" "$data_dir/config.json" 2>/dev/null; \
-      }; }; then
-      service_access_ready=true
-    fi
-  fi
-
-  if [ "$service_access_ready" != "true" ]; then
-    print_error "Cannot make ${data_dir} writable for the Docker services."
-    print_status "Run: sudo chgrp 911 ${data_dir} ${catalog_data_dir} && sudo chmod ${required_data_mode} ${data_dir} && sudo chmod 0770 ${catalog_data_dir}"
-    return 1
-  fi
-
-  ensure_docker_desktop_access "$data_dir" && \
-    ensure_docker_desktop_access "$catalog_data_dir" && \
-    ensure_docker_desktop_access "$list_service_data_dir"
+  print_status "Using COMPOSE_FILE=${COMPOSE_FILE}"
+  export COMPOSE_FILE
 }
 
 # Function to get the appropriate docker compose command
