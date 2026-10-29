@@ -268,6 +268,7 @@ describe('PlaybackSessionService', () => {
         getWarmupTargetBytes: () => 1024,
       };
       const sourceHealth = { onFailed: jest.fn(() => () => undefined), markFailed: jest.fn() };
+      const playedSources = { recordPlayed: jest.fn().mockResolvedValue(undefined) };
       const service = new PlaybackSessionService(
         { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
         preparation as never,
@@ -278,7 +279,9 @@ describe('PlaybackSessionService', () => {
           knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct', durationSeconds: 3_600 }),
         } as never,
         sourceHealth,
-        downloads
+        downloads,
+        undefined,
+        playedSources
       );
       const start = () =>
         service.create(
@@ -291,7 +294,23 @@ describe('PlaybackSessionService', () => {
         await service.checkHealth();
         await jest.advanceTimersByTimeAsync(0);
       };
-      return { service, health, preparation, downloads, sourceHealth, start, tick };
+      /** Stream healthily: bytes delivered past startup, no read waiting on a piece. */
+      const deliver = () => {
+        health.lastDeliveryAt = Date.now() + 1_000;
+        health.downloadSpeed = 2 * 1024 * 1024;
+        health.blockedSince = null;
+      };
+      return {
+        service,
+        health,
+        preparation,
+        downloads,
+        sourceHealth,
+        playedSources,
+        start,
+        tick,
+        deliver,
+      };
     };
 
     afterEach(() => jest.useRealTimers());
@@ -353,6 +372,56 @@ describe('PlaybackSessionService', () => {
         `hedge:${session?.playbackId}`,
         'warmup'
       );
+    });
+
+    it('records a source as played once it streams for minutes without starving', async () => {
+      const { playedSources, start, tick, deliver } = setupMonitor();
+      await start();
+      deliver();
+      for (let second = 0; second < 179; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+      await tick(1_000);
+      expect(playedSources.recordPlayed).toHaveBeenCalledWith(1, Date.now());
+      // Once per session.
+      for (let second = 0; second < 300; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+    });
+
+    it('starts the count over when the stream starves', async () => {
+      const { health, playedSources, start, tick, deliver } = setupMonitor();
+      await start();
+      deliver();
+      for (let second = 0; second < 150; second++) await tick(1_000);
+      health.blockedSince = Date.now();
+      await tick(1_000);
+      deliver();
+      for (let second = 0; second < 150; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+      for (let second = 0; second < 30; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+    });
+
+    it('never records a stream that has not delivered past startup, or a local file', async () => {
+      const { health, playedSources, start, tick } = setupMonitor();
+      health.downloadSpeed = 2 * 1024 * 1024;
+      health.peers = 50;
+      health.local = true;
+      await start();
+      for (let second = 0; second < 200; second++) await tick(1_000);
+      health.local = false;
+      health.lastDeliveryAt = 0;
+      for (let second = 0; second < 200; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+    });
+
+    it('keeps playing when the played record cannot be written', async () => {
+      const { playedSources, sourceHealth, start, tick, deliver } = setupMonitor();
+      playedSources.recordPlayed.mockRejectedValue(new Error('database is locked'));
+      await start();
+      deliver();
+      for (let second = 0; second < 200; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+      expect(sourceHealth.markFailed).not.toHaveBeenCalled();
     });
 
     it('ignores sessions whose stream never opened once the file list is known', async () => {
