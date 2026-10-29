@@ -261,4 +261,18 @@ describe('ContentSourceRepository', () => {
     ).resolves.toBe('Movie/Movie.mkv');
     expect(await repository.findMovieVideoFilePath(movie.id, source.id)).toBe('Movie/Movie.mkv');
   });
+
+  it('records a proven play as an encrypted UTC day, never the exact time', async () => {
+    const { database, repository } = await setupTest();
+    const source = await repository.upsertByHash(sourceInput());
+
+    await repository.recordPlayed(source.id, Date.parse('2026-10-29T23:41:17Z'));
+
+    const stored = await database.getRepository(ContentSource).findOneByOrFail({ id: source.id });
+    expect(stored.lastPlayedOn).toBe('2026-10-29');
+    const [raw] = await database
+      .getRepository(ContentSource)
+      .query('SELECT pd FROM content_source WHERE id = ?', [source.id]);
+    expect(raw.pd).not.toContain('2026');
+  });
 });

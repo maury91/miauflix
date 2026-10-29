@@ -128,6 +128,37 @@ describe('stream.util', () => {
       expect(result).toEqual(expected);
     });
 
+    it('ranks a recently played source above an equal one, and an old play below a better one', () => {
+      jest.useFakeTimers({ now: new Date('2026-10-29T12:00:00Z') });
+      try {
+        const unproven = createMockContentSource({
+          file: Buffer.from('a'),
+          streamingScore: 3_000,
+          lastPlayedOn: null,
+        });
+        const proven = createMockContentSource({
+          file: Buffer.from('b'),
+          streamingScore: 3_000,
+          lastPlayedOn: '2026-10-28',
+        });
+        const better = createMockContentSource({
+          file: Buffer.from('c'),
+          streamingScore: 3_100,
+          lastPlayedOn: null,
+        });
+        const playedLongAgo = createMockContentSource({
+          file: Buffer.from('d'),
+          streamingScore: 3_000,
+          lastPlayedOn: '2026-04-01',
+        });
+
+        expect(filterSources([unproven, proven])).toEqual([proven, unproven]);
+        expect(filterSources([playedLongAgo, better])).toEqual([better, playedLongAgo]);
+      } finally {
+        jest.useRealTimers();
+      }
+    });
+
     it('should default allowHevc to true', () => {
       const sources = [streamableH264Source, streamableHevcSource];
       const result = filterSources(sources);

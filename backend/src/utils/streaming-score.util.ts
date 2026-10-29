@@ -63,3 +63,40 @@ export function calculateStreamingScore(source: StreamingScoreInput, now = Date.
 
   return Math.round((availabilityScore + qualityScore + codecScore + activityScore) * agePenalty);
 }
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+/** Ranking points for a source that played well today: below the smallest quality step (500). */
+const PROVEN_PLAY_BOOST = 400;
+/** The boost halves every this many days; swarms that once played well die out. */
+const PROVEN_PLAY_HALF_LIFE_DAYS = 30;
+
+/**
+ * Ranking points for a source the backend saw play well on `lastPlayedOn` (`YYYY-MM-DD`),
+ * fading with a 30-day half-life. A verified playback beats a tracker's seeder claim between
+ * otherwise close candidates, but never lifts a source a whole quality step.
+ */
+export function provenPlayBoost(lastPlayedOn: string | null | undefined, now = Date.now()): number {
+  if (!lastPlayedOn) return 0;
+  const playedAt = Date.parse(`${lastPlayedOn}T00:00:00Z`);
+  if (Number.isNaN(playedAt)) return 0;
+  const ageDays = Math.max(0, (now - playedAt) / DAY_MS);
+  return Math.round(PROVEN_PLAY_BOOST * 0.5 ** (ageDays / PROVEN_PLAY_HALF_LIFE_DAYS));
+}
+
+/** The score sources are ranked by for playback: the streaming score plus a proven-play boost. */
+export function playbackRank(
+  source: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>,
+  now = Date.now()
+): number {
+  return (source.streamingScore || 0) + provenPlayBoost(source.lastPlayedOn, now);
+}
+
+/** Order sources best first by `playbackRank`. */
+export function byPlaybackRank(
+  now = Date.now()
+): (
+  left: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>,
+  right: Pick<ContentSource, 'lastPlayedOn' | 'streamingScore'>
+) => number {
+  return (left, right) => playbackRank(right, now) - playbackRank(left, now);
+}

@@ -9,6 +9,7 @@ import type { PlaybackTargetService } from '@services/playback/playback-target.s
 import type { ProgressService } from '@services/progress/progress.service';
 import type { SourceMetadataFileService } from '@services/source';
 import type { SourceService } from '@services/source/source.service';
+import { byPlaybackRank } from '@utils/streaming-score.util';
 
 import type { BackgroundJobService } from './background-job.service';
 import type { BackgroundJobWorker } from './background-job.worker';
@@ -208,12 +209,12 @@ export function registerBackgroundJobHandlers({
       // Known fakes never become background downloads.
       let source = sources
         .filter(candidate => candidate.file && candidate.hasVideo !== false)
-        .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
+        .sort(byPlaybackRank())[0];
       if (!source && sources[0]) {
         await sourceService.processSourceMetadata(sources[0].id);
         source = (await sourceService.getSourcesForMovie(media.local.id))
           .filter(candidate => candidate.file && candidate.hasVideo !== false)
-          .sort((left, right) => (right.streamingScore ?? 0) - (left.streamingScore ?? 0))[0];
+          .sort(byPlaybackRank())[0];
       }
       if (!source) {
         if (sourceService.isOnDemandSearchPending(media.local.id))
@@ -334,11 +335,10 @@ export function registerBackgroundJobHandlers({
           episodeNumber: episode.episodeNumber,
           airDate: episode.airDate,
         });
+        const rank = byPlaybackRank(now);
         const allUsable = matches
           .filter(match => match.videoFilePath)
-          .sort(
-            (left, right) => (right.source.streamingScore ?? 0) - (left.source.streamingScore ?? 0)
-          );
+          .sort((left, right) => rank(left.source, right.source));
         const exactMatches = allUsable.filter(match => match.matchKind === 'single');
         const usable = exactMatches.length ? exactMatches : allUsable;
         if (!usable.length) return;

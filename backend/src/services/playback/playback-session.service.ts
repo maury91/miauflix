@@ -6,6 +6,7 @@ import { type Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
 import type { Database } from '@database/database';
 import type { PlaybackGrant } from '@entities/playback-grant.entity';
 import type { ConfigService } from '@mytypes/configuration';
+import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
 import type { PlayableRef } from '@routes/playable.types';
@@ -35,6 +36,11 @@ const HEALTH_SAMPLE_MS = 1_000;
 const SAMPLE_HISTORY = 15;
 /** A session whose stream has not opened yet is watched this long (it may be waiting on metadata). */
 const STARTUP_WINDOW_MS = 60_000;
+/**
+ * Healthy samples in a row (one per HEALTH_SAMPLE_MS, so about three minutes of streaming without
+ * starving) that prove a source plays; it is then recorded once per session as a ranking signal.
+ */
+const PROVEN_PLAY_SAMPLES = 180;
 /** The primary must deliver this long before its backup torrent is released. */
 const HEDGE_RELEASE_MS = 10_000;
 /** Bitrate assumed before a file's size is known. */
@@ -95,6 +101,10 @@ interface LiveSession {
   durationSeconds?: number;
   samples: SwarmSample[];
   healthySince?: number;
+  /** Healthy samples since the last starvation, counted while the stream is open. */
+  healthySamples: number;
+  /** The source was recorded as proven playable for this session. */
+  provenRecorded?: boolean;
   /** A second source warming in case this one fails; `sourceId` once its claim exists. */
   hedge?: { ownerKey: string; sourceId?: number };
 }
@@ -140,7 +150,8 @@ export class PlaybackSessionService {
       DownloadService,
       'getPlaybackHealth' | 'getWarmupTargetBytes' | 'releaseClaims' | 'warmSource'
     >,
-    private readonly progress?: Pick<ProgressRepository, 'findByKey'>
+    private readonly progress?: Pick<ProgressRepository, 'findByKey'>,
+    private readonly playedSources?: Pick<ContentSourceRepository, 'recordPlayed'>
   ) {
     this.grants = db.getPlaybackGrantRepository();
     this.ttlMs = config.getOrThrow('STREAM_TOKEN_EXPIRATION');
@@ -256,6 +267,7 @@ export class PlaybackSessionService {
       filePath: prepared.target?.filePath,
       durationSeconds: delivery?.durationSeconds,
       samples: [],
+      healthySamples: 0,
     });
     if (pendingTarget) {
       this.deliverWhenProbed(pendingTarget, preferences, {
@@ -338,10 +350,14 @@ export class PlaybackSessionService {
         const starvedSince = startup ? live.createdAt : health.blockedSince;
         if (starvedSince === null) {
           live.healthySince ??= now;
+          live.healthySamples++;
+          if (!live.provenRecorded && live.healthySamples >= PROVEN_PLAY_SAMPLES)
+            this.recordProvenPlay(live, now);
           if (live.hedge && now - live.healthySince >= HEDGE_RELEASE_MS) this.releaseHedge(live);
           continue;
         }
         live.healthySince = undefined;
+        live.healthySamples = 0;
         const verdict = assessSwarm({
           samples: live.samples,
           starvedForMs: now - starvedSince,
@@ -359,6 +375,24 @@ export class PlaybackSessionService {
         this.healthTimer = undefined;
       }
     }
+  }
+
+  /**
+   * Remember that the source streamed well, as a ranking boost for later selections. Best effort:
+   * a failed write is logged and never reaches playback.
+   */
+  private recordProvenPlay(live: LiveSession, now: number): void {
+    live.provenRecorded = true;
+    if (!this.playedSources) return;
+    Promise.resolve()
+      .then(() => this.playedSources!.recordPlayed(live.sourceId, now))
+      .catch(error =>
+        logger.warn(
+          'PlaybackSessionService',
+          `Could not record source ${live.sourceId} as played`,
+          error
+        )
+      );
   }
 
   private requiredRate(live: LiveSession, fileLength: number | null): number {
