@@ -37,6 +37,7 @@ vi.mock('@pages/home/HomePage', async () => {
           onSearch={() => {}}
           onNotifications={() => {}}
           notificationsRef={null}
+          showSettings={state.admin}
           unreadCount={0}
         />
       );
@@ -161,11 +162,23 @@ describe('Settings navigation', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
 
+  it('skips the hidden Settings action when navigating the sidebar as a non-admin', async () => {
+    state.admin = false;
+    store = createTestStore();
+    await renderApp();
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Search' }), { key: 'ArrowDown' });
+    expect(screen.getByRole('button', { name: 'Notifications' })).toHaveFocus();
+    fireEvent.keyDown(document.activeElement!, { key: 'Enter' });
+    expect(screen.queryByRole('heading', { name: 'Settings' })).not.toBeInTheDocument();
+  });
+
   it('allows non-admins to open settings while keeping configuration restricted', async () => {
     state.admin = false;
     store = createTestStore();
     await renderApp();
-    fireEvent.click(screen.getByRole('button', { name: 'Settings' }));
+    // The sidebar hides Settings from non-admins, so open the route directly.
+    expect(screen.queryByRole('button', { name: 'Settings' })).not.toBeInTheDocument();
+    act(() => navigate({ type: 'settings' }, { parent: { type: 'home' } }));
     expect(screen.getByRole('button', { name: 'Configuration' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Storage' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();

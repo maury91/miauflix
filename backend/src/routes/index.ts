@@ -32,43 +32,46 @@ function createApiRoutes(deps: Deps) {
     deps.configurationService
   );
 
-  return new Hono()
-    .use(httpInstrumentationMiddleware({}))
-    .use(traceContextMiddleware)
-    .use(
-      createAuthMiddleware(
-        deps.authService,
-        () => deps.configurationService.get('ACCESS_TOKEN_COOKIE_NAME') ?? '__at'
+  return (
+    new Hono()
+      .use(httpInstrumentationMiddleware({}))
+      .use(traceContextMiddleware)
+      .use(
+        createAuthMiddleware(
+          deps.authService,
+          () => deps.configurationService.get('ACCESS_TOKEN_COOKIE_NAME') ?? '__at'
+        )
       )
-    )
-    .use(createAuditLogMiddleware(deps.auditLogService))
-    .get('/health', rateLimitGuard(10), c => {
-      return c.json({ status: 'ok' });
-    })
-    .get('/stats', rateLimitGuard(10), authGuard(), c => {
-      return c.json(deps.statsService.report());
-    })
-    .get('/status', rateLimitGuard(10), c => {
-      return c.json({
-        vpn: deps.vpnDetectionService.status(),
-        services: deps.configurationService.getServiceStatuses(),
-      });
-    })
-    .route('/auth', createAuthRoutes(deps))
-    .route('/config', createConfigRoutes(deps))
-    .route('/integrations', createIntegrationRoutes(deps))
-    .route('/movies', createMovieRoutes(deps))
-    .route('/shows', createShowRoutes(deps))
-    .route('/media', createMediaRoutes(deps))
-    .route('/stream', createStreamRoutes(deps))
-    .route('/ratings', createRatingRoutes(deps))
-    .route('/progress', createProgressRoutes(deps))
-    .route('/notifications', createNotificationRoutes(deps))
-    .route('/preload', createPreloadRoutes(deps))
-    .route('/playback', createPlaybackRoutes(deps))
-    .route('/subtitles', createSubtitleRoutes(deps))
-    .route('/storage', createStorageRoutes(deps))
-    .route('/', createListRoutes(deps));
+      .use(createAuditLogMiddleware(deps.auditLogService))
+      // This endpoint is not rate limited because a flood attack would mark the container as unhealthy and trigger the restart
+      .get('/health', c => {
+        return c.json({ status: 'ok' });
+      })
+      .get('/stats', rateLimitGuard(10), authGuard(), c => {
+        return c.json(deps.statsService.report());
+      })
+      .get('/status', rateLimitGuard(10), c => {
+        return c.json({
+          vpn: deps.vpnDetectionService.status(),
+          services: deps.configurationService.getServiceStatuses(),
+        });
+      })
+      .route('/auth', createAuthRoutes(deps))
+      .route('/config', createConfigRoutes(deps))
+      .route('/integrations', createIntegrationRoutes(deps))
+      .route('/movies', createMovieRoutes(deps))
+      .route('/shows', createShowRoutes(deps))
+      .route('/media', createMediaRoutes(deps))
+      .route('/stream', createStreamRoutes(deps))
+      .route('/ratings', createRatingRoutes(deps))
+      .route('/progress', createProgressRoutes(deps))
+      .route('/notifications', createNotificationRoutes(deps))
+      .route('/preload', createPreloadRoutes(deps))
+      .route('/playback', createPlaybackRoutes(deps))
+      .route('/subtitles', createSubtitleRoutes(deps))
+      .route('/storage', createStorageRoutes(deps))
+      .route('/', createListRoutes(deps))
+  );
 }
 
 export function createRoutes(deps: Deps) {

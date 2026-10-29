@@ -11,3 +11,19 @@ See [TV source support plan](docs/architecture/tv-source-support-plan.md).
 ## VPN
 
 - [ ] Add an option in settings (gluetun service) to check the VPN tunnel's bandwidth, and to choose the country or exit node. Miauflix shares gluetun's network, so it can reach gluetun's control server at `127.0.0.1:8000` (`/v1/vpn/status`, `/v1/publicip/ip`; changing settings needs an entry in gluetun's `/gluetun/auth/config.toml`). Measure the tunnel apart from the torrents: latency and failure rate of the VPN IP checks plus a small download test, so a bad exit server can be told apart from a weak swarm.
+
+## Language
+
+- [ ] Add support for i18n
+- [ ] Translate into Italian
+- [ ] Translate into Lithuanian
+- [ ] Allow users to choose a language for the interface (and default language for subs and audio)
+- [ ] Allow users to choose if they want subs auto-enabled and which language
+
+## Auto-translation
+
+- [ ] Add support for translating subtitles with the use of LLMs
+
+## Language learning
+
+- [ ] Add support for partial translation of subtitles (translate everything except few words so the user has to learn them (or the opposite in case the target translation is the language the user wants to learn))

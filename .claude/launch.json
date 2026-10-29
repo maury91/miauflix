@@ -14,6 +14,16 @@
       "url": "https://localhost:4173"
     },
     {
+      "name": "frontend (my.miauflix.cat)",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:frontend", "--", "--", "--port", "4175", "--strictPort"],
+      "env": {
+        "BACKEND_URL": "https://my.miauflix.cat"
+      },
+      "port": 4175,
+      "url": "https://localhost:4175"
+    },
+    {
       "name": "backend",
       "runtimeExecutable": "npm",
       "runtimeArgs": ["run", "start:backend"],

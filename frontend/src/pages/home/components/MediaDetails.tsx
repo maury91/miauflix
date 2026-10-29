@@ -9,6 +9,7 @@ import {
   useGetShowQuery,
 } from '@features/media/api/media.api';
 import { useGetMediaRatingQuery, useSetMediaRatingMutation } from '@features/media/api/ratings.api';
+import { useRequestAvailabilityMutation } from '@features/notifications/api/notifications.api';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
 import type {
   MediaDto,
@@ -27,6 +28,7 @@ import {
   detailsNavigationActions,
   selectDetailsNavigationForMedia,
 } from '@store/slices/detailsNavigation';
+import { selectPushedAvailability, selectSourceAvailability } from '@store/slices/realtime';
 import type { RootState } from '@store/store';
 import { forwardRef } from 'react';
 import {
@@ -56,6 +58,7 @@ import { EpisodesSection } from './EpisodesSection';
 import { MetadataDot, MetadataRating } from './metadata.styles';
 import { SourcePreparationStatus } from './SourcePreparationStatus';
 
+import BellIcon from '~icons/mdi/bell-ring-outline';
 import BookmarkIcon from '~icons/mdi/bookmark-outline';
 import CardsHeartIcon from '~icons/mdi/cards-heart-outline';
 import StarIcon from '~icons/mdi/star';
@@ -244,6 +247,14 @@ const SeasonButton = styled(BaseButton)<{ $selected: boolean; $focused: boolean 
 
 const WatchAction = styled(PrimaryAction)`
   border-color: transparent;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5em;
+
+  svg {
+    width: 1.2em;
+    height: 1.2em;
+  }
 `;
 
 type WarmupState = PreloadPreparationSnapshot['warmup']['state'];
@@ -420,6 +431,18 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
   };
 
   const movie = useGetMovieQuery(media._type === 'movie' ? media.mediaId : skipToken);
+  const pushedAvailability = useSelector(
+    selectSourceAvailability(
+      media._type === 'movie' ? { kind: 'movie', mediaId: media.mediaId } : null
+    )
+  );
+  const movieAvailability = pushedAvailability ?? movie.data?.sourceAvailability ?? null;
+  const [requestAvailability, availabilityRequest] = useRequestAvailabilityMutation();
+  const notifyRequestedHere =
+    availabilityRequest.originalArgs?.kind === 'movie' &&
+    availabilityRequest.originalArgs.mediaId === media.mediaId;
+  const notifyRequested = notifyRequestedHere && availabilityRequest.isSuccess;
+  const pushedEpisodeAvailability = useSelector(selectPushedAvailability);
   const show = useGetShowQuery(media._type === 'tvshow' ? media.mediaId : skipToken);
   const showDetails = show.data;
   const movieProgress =
@@ -737,6 +760,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                       mediaKind={media._type}
                       mode="details"
                       preparation={preparation}
+                      availability={movieAvailability}
                     />
                   )}
                 </MetadataLine>
@@ -828,23 +852,54 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                 data-warmup-state={warmupState}
                 data-warmup-progress={warmupPercent}
               >
-                <WatchAction
-                  data-details-primary
-                  type="button"
-                  $selected={focusedArea === 'action'}
-                  aria-describedby={`warmup-status-${media.mediaId}`}
-                  onMouseEnter={() => dispatch(detailsNavigationActions.setFocusedArea('action'))}
-                  onClick={() => onWatch({ kind: 'movie', mediaId: media.mediaId })}
-                >
-                  {movieProgress && movieProgress.state !== 'completed'
-                    ? 'Resume Watching'
-                    : 'Watch Now'}
-                </WatchAction>
+                {movieAvailability === 'unavailable' ? (
+                  <WatchAction
+                    data-details-primary
+                    type="button"
+                    $selected={focusedArea === 'action'}
+                    aria-describedby={`warmup-status-${media.mediaId}`}
+                    // Stays focusable for remote navigation once the request is saved.
+                    aria-disabled={notifyRequested || availabilityRequest.isLoading}
+                    onMouseEnter={() => dispatch(detailsNavigationActions.setFocusedArea('action'))}
+                    onClick={() => {
+                      if (notifyRequested || availabilityRequest.isLoading) return;
+                      void requestAvailability({ kind: 'movie', mediaId: media.mediaId });
+                    }}
+                  >
+                    <BellIcon aria-hidden="true" />
+                    {notifyRequested ? 'Notification Set' : 'Notify Me'}
+                  </WatchAction>
+                ) : (
+                  <WatchAction
+                    data-details-primary
+                    type="button"
+                    $selected={focusedArea === 'action'}
+                    aria-describedby={`warmup-status-${media.mediaId}`}
+                    onMouseEnter={() => dispatch(detailsNavigationActions.setFocusedArea('action'))}
+                    onClick={() => onWatch({ kind: 'movie', mediaId: media.mediaId })}
+                  >
+                    {movieProgress && movieProgress.state !== 'completed'
+                      ? 'Resume Watching'
+                      : 'Watch Now'}
+                  </WatchAction>
+                )}
                 <WarmupDescription id={`warmup-status-${media.mediaId}`}>
-                  {warmupDescription(warmupState, warmupDisplayPercent)}
+                  {movieAvailability === 'unavailable'
+                    ? notifyRequested
+                      ? `We'll notify you as soon as a source for this movie is out`
+                      : 'No source available yet'
+                    : warmupDescription(warmupState, warmupDisplayPercent)}
                 </WarmupDescription>
               </WarmupBorder>
             )}
+            {media._type === 'movie' &&
+              movieAvailability === 'unavailable' &&
+              notifyRequestedHere &&
+              availabilityRequest.isError && (
+                <ErrorState role="alert">
+                  The notification could not be saved. Try again.
+                </ErrorState>
+              )}
             {media._type === 'tvshow' && showDetails && (
               <>
                 <SectionLabel>Seasons</SectionLabel>
@@ -890,6 +945,7 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
               onRetrySeason={retrySeason}
               onVisibleSeasonChange={showVisibleSeason}
               onNearEnd={loadNextSeason}
+              pushedAvailability={pushedEpisodeAvailability}
             />
           )}
         </Layout>

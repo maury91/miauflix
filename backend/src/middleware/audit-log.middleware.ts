@@ -12,7 +12,7 @@ export function createAuditLogMiddleware(auditLogService: AuditLogService): Midd
       async () => {
         // Skip logging for certain paths (like health checks)
         const path = new URL(context.req.url).pathname;
-        if (path === '/health') {
+        if (path === '/api/health') {
           return await next();
         }
 

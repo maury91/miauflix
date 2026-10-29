@@ -14,7 +14,10 @@ import { encryptedText } from '@utils/encrypted-column.util';
 
 import { User } from './user.entity';
 
-export type NotificationType = 'movie_quality_upgrade' | 'tv_episode_available';
+export type NotificationType =
+  | 'movie_quality_upgrade'
+  | 'source_available'
+  | 'tv_episode_available';
 
 @Entity()
 @Unique(['userId', 'dedupeKey'])

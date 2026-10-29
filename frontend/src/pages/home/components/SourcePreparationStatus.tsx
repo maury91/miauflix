@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import SparklesIcon from '~icons/ion/sparkles';
 import AlertIcon from '~icons/line-md/alert';
 import LoadingIcon from '~icons/mdi/loading';
+import NoSourceIcon from '~icons/mdi/video-off-outline';
 
 type MediaKind = 'movie' | 'tvshow';
 export type SourcePreparationMode = 'browse' | 'details';
@@ -14,6 +15,8 @@ export interface SourcePreparationStatusProps {
   mediaKind: MediaKind;
   mode: SourcePreparationMode;
   preparation: PreloadPreparationSnapshot | null;
+  /** Pushed or fetched availability; `unavailable` replaces the quality with a no-source badge. */
+  availability?: 'available' | 'pending' | 'unavailable' | null;
 }
 
 const Status = styled.div`
@@ -70,6 +73,27 @@ const QualityBadge = styled.span<{ $state: 'clean' | 'warning' | 'unknown' }>`
   font-weight: 650;
   letter-spacing: 0.025em;
   white-space: nowrap;
+`;
+
+const NoSourceBadge = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 0.38rem;
+  min-height: 1.65rem;
+  padding: 0.15rem 0.58rem;
+  border: 1px solid ${PALETTE.background.border};
+  border-radius: 0.35rem;
+  background: rgba(17, 23, 25, 0.86);
+  color: ${PALETTE.text.disabled};
+  font-size: 1em;
+  font-weight: 650;
+  letter-spacing: 0.025em;
+  white-space: nowrap;
+
+  svg {
+    width: 1.15em;
+    height: 1.15em;
+  }
 `;
 
 const Sparkles = styled.span`
@@ -185,9 +209,24 @@ function sourceQualityState(sourceType: SourceType): 'clean' | 'warning' | 'unkn
 export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
   mediaKind,
   preparation,
+  availability,
 }) => {
   if (mediaKind !== 'movie') return null;
   if (preparation && !matchesMedia(preparation, mediaKind)) return null;
+
+  const unavailable =
+    availability === 'unavailable' ||
+    (availability !== 'available' && preparation?.state === 'unavailable');
+  if (unavailable) {
+    return (
+      <Status aria-live="polite">
+        <NoSourceBadge role="img" aria-label="No source available" title="No source available">
+          <NoSourceIcon aria-hidden="true" />
+          No source
+        </NoSourceBadge>
+      </Status>
+    );
+  }
 
   const source = preparation?.source;
   // Unknown resolution gets a display-only fallback once a source is available.

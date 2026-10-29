@@ -1,3 +1,4 @@
+import { backfillSourceVideoVerdicts } from './backfill-source-video-verdicts.migration';
 import { backfillStreamingScores } from './backfill-streaming-scores.migration';
 import { encryptSensitiveColumns } from './encrypt-sensitive-columns.migration';
 import type { Migration } from './migration.types';
@@ -11,4 +12,5 @@ export const migrations: readonly Migration[] = [
   backfillStreamingScores,
   encryptSensitiveColumns,
   vacuumPlaintext,
+  backfillSourceVideoVerdicts,
 ];

@@ -45,6 +45,26 @@ export type RealtimeStatusMessage =
       focusSequence: number;
     };
 
+export type RealtimeSourceAvailability = 'available' | 'pending' | 'unavailable';
+
+/**
+ * Source news for a movie or episode: which candidate a starting playback is trying, or
+ * whether any real source is left (`unavailable` once every one proved fake).
+ */
+export type RealtimeSourceMessage =
+  | {
+      type: 'source-attempt';
+      playable: RealtimeMediaRef;
+      position: number;
+      total: number;
+    }
+  | {
+      type: 'source-availability';
+      playable: RealtimeMediaRef;
+      mediaId: number;
+      availability: RealtimeSourceAvailability;
+    };
+
 /** A playback's background probe result: switch delivery, or start a new session. */
 export interface RealtimePlaybackDelivery {
   type: 'playback-delivery';
@@ -114,7 +134,8 @@ export class RealtimeClient {
     private readonly onConnectionChange?: (ready: boolean) => void,
     private readonly onArtworkUpdate?: (update: ArtworkUpdate) => void,
     private readonly onPlaybackDelivery?: (message: RealtimePlaybackDelivery) => void,
-    private readonly onSearch?: (message: SearchServerMessage) => void
+    private readonly onSearch?: (message: SearchServerMessage) => void,
+    private readonly onSource?: (message: RealtimeSourceMessage) => void
   ) {}
 
   start(): void {
@@ -246,6 +267,7 @@ export class RealtimeClient {
       if (isArtworkUpdate(message)) this.onArtworkUpdate?.(message);
       if (isPlaybackDelivery(message)) this.onPlaybackDelivery?.(message);
       if (isSearchMessage(message)) this.onSearch?.(message);
+      if (isSourceMessage(message)) this.onSource?.(message);
       if (isReady(message)) {
         this.ready = true;
         this.onConnectionChange?.(true);
@@ -363,6 +385,21 @@ function isStatusMessage(value: unknown): value is RealtimeStatusMessage {
   if (typeof value !== 'object' || value === null) return false;
   const type = (value as { type?: unknown }).type;
   return type === 'source-status' || type === 'warmup';
+}
+
+function isSourceMessage(value: unknown): value is RealtimeSourceMessage {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Record<string, unknown>;
+  const playable = candidate['playable'] as { kind?: unknown } | undefined;
+  if (playable?.kind !== 'movie' && playable?.kind !== 'episode') return false;
+  if (candidate['type'] === 'source-attempt')
+    return typeof candidate['position'] === 'number' && typeof candidate['total'] === 'number';
+  return (
+    candidate['type'] === 'source-availability' &&
+    (candidate['availability'] === 'available' ||
+      candidate['availability'] === 'pending' ||
+      candidate['availability'] === 'unavailable')
+  );
 }
 
 function isPlaybackDelivery(value: unknown): value is RealtimePlaybackDelivery {

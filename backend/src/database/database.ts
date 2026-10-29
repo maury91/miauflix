@@ -11,6 +11,7 @@ import type {
 import { AbstractLogger, DataSource } from 'typeorm';
 
 import { AuditLog } from '@entities/audit-log.entity';
+import { AvailabilityRequest } from '@entities/availability-request.entity';
 import { BackgroundJob } from '@entities/background-job.entity';
 import { ContentSource } from '@entities/content-source.entity';
 import { Episode } from '@entities/episode.entity';
@@ -159,6 +160,7 @@ export class Database {
         ContentSource,
         MovieSource,
         Notification,
+        AvailabilityRequest,
         TVShow,
         Season,
         Episode,

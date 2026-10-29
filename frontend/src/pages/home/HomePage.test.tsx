@@ -26,6 +26,7 @@ const {
   getAssociation,
   currentSession,
   currentUser,
+  currentUserIsAdmin,
   mockedClearAuth,
   mockedSetSession,
   homeNavigationState,
@@ -54,6 +55,7 @@ const {
   getAssociation: vi.fn(),
   currentSession: vi.fn(),
   currentUser: vi.fn(),
+  currentUserIsAdmin: vi.fn(),
   mockedClearAuth: Object.assign(() => ({ type: 'auth/clearAuth' }), {
     type: 'auth/clearAuth',
   }),
@@ -111,6 +113,7 @@ vi.mock('@shared/components', () => ({ Spinner: () => null }));
 vi.mock('@store/slices/auth', () => ({
   selectCurrentSessionId: currentSession,
   selectCurrentUser: currentUser,
+  selectIsAdmin: currentUserIsAdmin,
   clearAuth: mockedClearAuth,
   setSession: mockedSetSession,
 }));
@@ -345,6 +348,7 @@ describe('HomePage focus transitions', () => {
     selectSession.mockReset().mockImplementation(selector => selector(baseState));
     currentSession.mockReset().mockReturnValue(null);
     currentUser.mockReset().mockReturnValue(null);
+    currentUserIsAdmin.mockReset().mockReturnValue(false);
     getAssociation.mockReset().mockResolvedValue({ data: { connected: true } });
     window.localStorage.clear();
     window.sessionStorage.clear();
@@ -508,6 +512,7 @@ describe('HomePage focus transitions', () => {
       const emptyProgress: never[] = [];
       currentSession.mockReturnValue('test-session');
       currentUser.mockReturnValue({ id: 'test-user' });
+      currentUserIsAdmin.mockReturnValue(true);
       selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
       getAssociation.mockResolvedValue({ data: { connected: false } });
       const progressSelector = vi
@@ -562,6 +567,7 @@ describe('HomePage focus transitions', () => {
     const emptyProgress: never[] = [];
     currentSession.mockReturnValue('test-session');
     currentUser.mockReturnValue({ id: 'test-user' });
+    currentUserIsAdmin.mockReturnValue(true);
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     getAssociation.mockResolvedValue({ data: { connected: false } });
     const row = makeHandle(true, false);
@@ -599,6 +605,7 @@ describe('HomePage focus transitions', () => {
       const emptyProgress: never[] = [];
       currentSession.mockReturnValue('test-session');
       currentUser.mockReturnValue({ id: 'test-user' });
+      currentUserIsAdmin.mockReturnValue(true);
       selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
       getAssociation.mockResolvedValue({ data: { connected: false } });
       const row = makeHandle(true, false);

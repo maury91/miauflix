@@ -31,8 +31,13 @@ const UnreadBadge = styled.span`
   text-align: center;
 `;
 
+const EmptySpace = styled.div`
+  flex: 1;
+`;
+
 interface HomeSidebarProps {
   active: boolean;
+  showSettings: boolean;
   onAction: (action: HomeAction) => NavigationOutcome;
   onHover: () => void;
   onSettings: () => void;
@@ -45,6 +50,7 @@ interface HomeSidebarProps {
 /** Render the primary Home actions and restore the selected button when the rail activates. */
 export const HomeSidebar: FC<HomeSidebarProps> = ({
   active,
+  showSettings,
   onAction,
   onHover,
   onSettings,
@@ -58,7 +64,9 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
   const searchRef = useRef<HTMLButtonElement>(null);
   const settingsRef = useRef<HTMLButtonElement>(null);
 
-  const order: SidebarItem[] = ['notifications', 'search', 'settings'];
+  const order: SidebarItem[] = showSettings
+    ? ['notifications', 'search', 'settings']
+    : ['notifications', 'search'];
   const focusSelected = (item: SidebarItem) => {
     if (item === 'notifications') notificationsButtonRef.current?.focus({ preventScroll: true });
     if (item === 'search') searchRef.current?.focus({ preventScroll: true });
@@ -69,6 +77,11 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
     onHover();
     focusSelected(item);
   };
+
+  // Settings can disappear (e.g. admin rights change); never keep a hidden item selected.
+  useEffect(() => {
+    if (!showSettings && selected === 'settings') setSelected('search');
+  }, [showSettings, selected]);
 
   useEffect(() => {
     if (active) focusSelected(selected);
@@ -105,7 +118,7 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
       return true;
     },
     onConfirm: () => {
-      if (selected === 'settings') onSettings();
+      if (selected === 'settings' && showSettings) onSettings();
       else if (selected === 'notifications') onNotifications();
       else onSearch();
       return true;
@@ -165,21 +178,26 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
           </Icon>
           {active && <span>Search</span>}
         </Item>
-        <Item
-          ref={settingsRef}
-          type="button"
-          $active={active}
-          $selected={selected === 'settings'}
-          aria-label="Settings"
-          onFocus={() => move('settings')}
-          onMouseEnter={() => move('settings')}
-          onClick={onSettings}
-        >
-          <Icon aria-hidden="true">
-            <SettingsIcon />
-          </Icon>
-          {active && <span>Settings</span>}
-        </Item>
+        {showSettings && (
+          <>
+            <EmptySpace />
+            <Item
+              ref={settingsRef}
+              type="button"
+              $active={active}
+              $selected={selected === 'settings'}
+              aria-label="Settings"
+              onFocus={() => move('settings')}
+              onMouseEnter={() => move('settings')}
+              onClick={onSettings}
+            >
+              <Icon aria-hidden="true">
+                <SettingsIcon />
+              </Icon>
+              {active && <span>Settings</span>}
+            </Item>
+          </>
+        )}
       </Navigation>
     </Rail>
   );
