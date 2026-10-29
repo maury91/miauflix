@@ -112,11 +112,6 @@ ensure_development_data_dir() {
   done
 }
 
-# Prepare the host-visible data directories used by production Docker services.
-# The catalog image runs as linuxserver (UID/GID 911) in production, while the
-# development compose stack shares the parent directory with the backend. Do
-# not chown the whole tree to the catalog user; make the directory boundaries
-# writable and scope catalog ownership to its own subdirectory.
 # Pick the compose files for a deployment built from this checkout, unless COMPOSE_FILE is
 # already set (in the environment or in .env), and export them as COMPOSE_FILE.
 # Adds docker-compose.vpn.yml when NORDVPN_PRIVATE_KEY is set.
@@ -128,7 +123,7 @@ use_source_compose_files() {
   export GROUP_ID="${GROUP_ID:-$(id -g)}"
 
   if [ -z "${COMPOSE_FILE:-}" ] && [ -f "$env_file" ]; then
-    COMPOSE_FILE=$(grep -E '^COMPOSE_FILE=' "$env_file" | tail -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'")
+    COMPOSE_FILE=$(grep -E '^COMPOSE_FILE=' "$env_file" | tail -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)
   fi
 
   if [ -n "${COMPOSE_FILE:-}" ]; then
@@ -138,7 +133,7 @@ use_source_compose_files() {
   fi
 
   if [ -z "${NORDVPN_PRIVATE_KEY:-}" ] && [ -f "$env_file" ]; then
-    NORDVPN_PRIVATE_KEY=$(grep -E '^NORDVPN_PRIVATE_KEY=' "$env_file" | tail -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'")
+    NORDVPN_PRIVATE_KEY=$(grep -E '^NORDVPN_PRIVATE_KEY=' "$env_file" | tail -n 1 | cut -d= -f2- | tr -d '"' | tr -d "'" || true)
   fi
 
   COMPOSE_FILE="docker-compose.yml:docker-compose.build.yml:docker-compose.flaresolverr.yml:docker-compose.tracing.yml"
