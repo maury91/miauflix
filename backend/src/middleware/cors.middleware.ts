@@ -6,19 +6,17 @@ import {
   REFRESH_TOKEN_HEADER,
   REFRESH_TOKENS_HEADER,
 } from '@utils/auth-transport.util';
-import { isTvAppOrigin } from '@utils/origin.util';
 
 const allowMethods = ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'];
 
 /**
- * CORS for the configured browser origins (with credentials, for the session cookies) and, while
- * `allowTvApp()` holds, for the Samsung TV app's local origin. The TV app authenticates with
- * headers, so it is allowed without credentials: a page that only shares its opaque origin gets
- * no cookies and no tokens out of this.
+ * CORS for the configured browser origins (with credentials, for the session cookies) and for the
+ * Samsung TV app's local origin, as `isTvApp` decides. The TV app authenticates with headers, so
+ * it is allowed without credentials: a page sharing its origin gets no cookies out of this.
  */
 export const createCorsMiddleware = (
   origins: string[],
-  allowTvApp: () => boolean | undefined
+  isTvApp: (origin: string | undefined) => boolean
 ): MiddlewareHandler => {
   const browserCors = cors({
     origin: origins,
@@ -41,7 +39,5 @@ export const createCorsMiddleware = (
   });
 
   return (context, next) =>
-    allowTvApp() && isTvAppOrigin(context.req.header('origin'))
-      ? tvAppCors(context, next)
-      : browserCors(context, next);
+    isTvApp(context.req.header('origin')) ? tvAppCors(context, next) : browserCors(context, next);
 };

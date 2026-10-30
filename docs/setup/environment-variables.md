@@ -149,7 +149,8 @@ ENABLE_FRONTEND=true
 
 - **PORT**: Server listening port (default: 3000)
 - **CORS_ORIGIN**: Comma-separated list of allowed origins (or `*` for all)
-- **ALLOW_TV_APP**: Accept the [Samsung TV app](samsung-tv.md), which runs from local files (origin `file://` or `null`) and signs in with bearer tokens instead of cookies (default: `true`). Its origin is allowed without credentials, so other pages sharing it get no cookies. Set `false` if you don't use the TV app
+- **ALLOW_TV_APP**: Accept the [Samsung TV app](samsung-tv.md), which runs from local files (origin `file://`, which web pages cannot send) and signs in with bearer tokens instead of cookies (default: `true`). Its origin is allowed without credentials. Set `false` if you don't use the TV app
+- **ALLOW_TV_APP_NULL_ORIGIN**: Also accept the TV app from the opaque origin `null`, for a TV that reports local files that way (default: `false`, needs `ALLOW_TV_APP`). Any web page can send `null` (from a sandboxed iframe or a `data:` URL), so with this on, a page you visit can read Miauflix's unauthenticated responses and, while first-run setup is open (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN` with no admin yet), create the admin account. Turn it on only if the TV app can't connect otherwise
 - **DATA_DIR**: Directory for storing application data
 - **FRONTEND_DIR**: Path to static frontend files (for production)
 - **ENABLE_FRONTEND**: Whether to serve the frontend interface

@@ -207,13 +207,19 @@ describe('RealtimeGateway search routing', () => {
 });
 
 describe('RealtimeGateway TV app authentication', () => {
-  const setupGateway = (allowTvApp: boolean) => {
+  const setupGateway = (allowTvApp: boolean, allowNullOrigin = false) => {
     const verifyAccessToken = jest.fn().mockResolvedValue({ userId: 'user' });
     const gateway = new RealtimeGateway(
       { verifyAccessToken } as never,
       {
         get: jest.fn((key: string) =>
-          key === 'ALLOW_TV_APP' ? allowTvApp : key === 'CORS_ORIGIN' ? ['https://app'] : '__at'
+          key === 'ALLOW_TV_APP'
+            ? allowTvApp
+            : key === 'ALLOW_TV_APP_NULL_ORIGIN'
+              ? allowNullOrigin
+              : key === 'CORS_ORIGIN'
+                ? ['https://app']
+                : '__at'
         ),
       } as never,
       { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn(), update: jest.fn() } as never,
@@ -259,20 +265,24 @@ describe('RealtimeGateway TV app authentication', () => {
   });
 
   it.each([
-    [true, 'file://', true],
-    [true, 'null', true],
-    [false, 'file://', false],
-    [true, 'https://evil', false],
-    [true, 'https://app', true],
-  ])('with ALLOW_TV_APP=%s accepts origin %s: %s', (allowTvApp, origin, accepted) => {
-    const { gateway } = setupGateway(allowTvApp);
-    try {
-      const isAllowedOrigin = (
-        gateway as unknown as { isAllowedOrigin(origin: string): boolean }
-      ).isAllowedOrigin.bind(gateway);
-      expect(isAllowedOrigin(origin)).toBe(accepted);
-    } finally {
-      gateway.close();
+    [true, false, 'file://', true],
+    [true, false, 'null', false],
+    [true, true, 'null', true],
+    [false, true, 'file://', false],
+    [true, false, 'https://evil', false],
+    [true, false, 'https://app', true],
+  ])(
+    'with ALLOW_TV_APP=%s and ALLOW_TV_APP_NULL_ORIGIN=%s accepts origin %s: %s',
+    (allowTvApp, allowNullOrigin, origin, accepted) => {
+      const { gateway } = setupGateway(allowTvApp, allowNullOrigin);
+      try {
+        const isAllowedOrigin = (
+          gateway as unknown as { isAllowedOrigin(origin: string): boolean }
+        ).isAllowedOrigin.bind(gateway);
+        expect(isAllowedOrigin(origin)).toBe(accepted);
+      } finally {
+        gateway.close();
+      }
     }
-  });
+  );
 });

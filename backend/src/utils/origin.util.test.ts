@@ -24,11 +24,22 @@ describe('isAllowedOrigin', () => {
 });
 
 describe('isTvAppOrigin', () => {
-  it('matches only the local-file origins the TV app sends', () => {
-    expect(isTvAppOrigin('file://')).toBe(true);
-    expect(isTvAppOrigin('null')).toBe(true);
-    expect(isTvAppOrigin(undefined)).toBe(false);
-    expect(isTvAppOrigin('https://miauflix.example')).toBe(false);
-    expect(isTvAppOrigin('file://host')).toBe(false);
+  it('accepts only file:// while the TV app is allowed', () => {
+    const settings = { allowTvApp: true };
+    expect(isTvAppOrigin('file://', settings)).toBe(true);
+    expect(isTvAppOrigin('null', settings)).toBe(false);
+    expect(isTvAppOrigin(undefined, settings)).toBe(false);
+    expect(isTvAppOrigin('https://miauflix.example', settings)).toBe(false);
+    expect(isTvAppOrigin('file://host', settings)).toBe(false);
+  });
+
+  it('accepts null only with its own opt-in', () => {
+    expect(isTvAppOrigin('null', { allowTvApp: true, allowNullOrigin: true })).toBe(true);
+    expect(isTvAppOrigin('file://', { allowTvApp: true, allowNullOrigin: true })).toBe(true);
+  });
+
+  it('accepts nothing while the TV app is not allowed', () => {
+    expect(isTvAppOrigin('file://', { allowTvApp: false, allowNullOrigin: true })).toBe(false);
+    expect(isTvAppOrigin('null', { allowNullOrigin: true })).toBe(false);
   });
 });

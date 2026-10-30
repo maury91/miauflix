@@ -7,7 +7,7 @@ import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
 import { createCorsMiddleware } from '@middleware/cors.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { traceContextMiddleware } from '@middleware/trace-context.middleware';
-import { expandEquivalentOrigins } from '@utils/origin.util';
+import { expandEquivalentOrigins, isTvAppOrigin } from '@utils/origin.util';
 
 import { createAuthRoutes } from './auth.routes';
 import type { Deps } from './common.types';
@@ -84,7 +84,14 @@ export function createRoutes(deps: Deps) {
   );
 
   const app = new Hono()
-    .use(createCorsMiddleware(origins, () => deps.configurationService.get('ALLOW_TV_APP')))
+    .use(
+      createCorsMiddleware(origins, origin =>
+        isTvAppOrigin(origin, {
+          allowTvApp: deps.configurationService.get('ALLOW_TV_APP'),
+          allowNullOrigin: deps.configurationService.get('ALLOW_TV_APP_NULL_ORIGIN'),
+        })
+      )
+    )
     .route('/api', createApiRoutes(deps));
 
   // Optionally serve the frontend as static files from FRONTEND_DIR
@@ -92,6 +99,7 @@ export function createRoutes(deps: Deps) {
   if (frontendEnabled && frontendDir) {
     app.get('/assets/*', serveStatic({ root: frontendDir }));
     app.get('/favicon.png', serveStatic({ root: frontendDir }));
+    app.get('/favicon.ico', serveStatic({ root: frontendDir }));
     app.get('/robots.txt', serveStatic({ root: frontendDir }));
     // SPA fallback - after all API routes
     app.get('*', serveStatic({ root: frontendDir, rewriteRequestPath: () => '/index.html' }));

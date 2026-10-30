@@ -23,7 +23,7 @@ if [[ ! "${API_URL}" =~ ^https?://[^/]+$ ]]; then
   exit 1
 fi
 if [[ "${API_URL}" == http://* ]]; then
-  print_warning "${API_URL} is not HTTPS: login cookies need a secure backend to reach the TV app."
+  print_warning "${API_URL} is not HTTPS: the TV app sends its access and refresh tokens unencrypted."
 fi
 
 if ! command_exists zip; then
@@ -39,6 +39,8 @@ VITE_TIZEN=true VITE_API_URL="${API_URL}" npx turbo run build:tizen --filter='./
 
 sed "s/version=\"[^\"]*\" viewmodes/version=\"${VERSION}\" viewmodes/" \
   "${PROJECT_ROOT}/frontend/tizen/config.xml" > "${BUILD_DIR}/config.xml"
+# The launcher icon (512x423, from npm run generate:icons)
+cp "${PROJECT_ROOT}/frontend/tizen/icon.png" "${BUILD_DIR}/icon.png"
 
 rm -f "${WGT_PATH}"
 (cd "${BUILD_DIR}" && zip -qr "${WGT_PATH}" . -x '.*')

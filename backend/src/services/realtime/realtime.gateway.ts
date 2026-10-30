@@ -540,7 +540,13 @@ export class RealtimeGateway {
   }
 
   private isAllowedOrigin(origin: string | undefined): boolean {
-    if (this.config.get('ALLOW_TV_APP') && isTvAppOrigin(origin)) return true;
+    if (
+      isTvAppOrigin(origin, {
+        allowTvApp: this.config.get('ALLOW_TV_APP') as boolean | undefined,
+        allowNullOrigin: this.config.get('ALLOW_TV_APP_NULL_ORIGIN') as boolean | undefined,
+      })
+    )
+      return true;
     const configured = this.config.get('CORS_ORIGIN') as unknown;
     if (!configured || configured === '*') return true;
     const allowed = Array.isArray(configured) ? configured : [String(configured)];
