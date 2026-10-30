@@ -1,20 +1,18 @@
+import { serve } from '@miauflix/contract';
+
 import { CatalogRuntime } from './catalog/bootstrap';
 import { CatalogConfigService } from './config/config.service';
 import { CatalogDatabase } from './db/database';
-import { createArtworkEventsTransport } from './http/artwork-events';
-import { registerConfigurationRoutes } from './http/handlers/configuration';
-import { registerMediaRoutes } from './http/handlers/media';
-import { registerSystemRoutes } from './http/handlers/system';
-import { Router } from './http/router';
 import { loadEnv } from './env';
 import { logger } from './logger';
+import { createCatalogService } from './service';
 import type { ServiceContext } from './service-context';
 
 const SCOPE = 'MediaCatalog';
 
 /**
- * Boot sequence. The HTTP server binds immediately so /health, /status and
- * /configuration* are reachable in every lifecycle state — the main app configures
+ * Boot sequence. The server binds immediately so /health and the management
+ * control plane (`/_c`) are reachable in every lifecycle state — the main app configures
  * this service through them, possibly before anything else is up. The catalog data
  * plane attaches after a successful main-app configuration apply or a local
  * env/file configuration reload (standalone mode). Workers are broker-optional and
@@ -34,16 +32,8 @@ const context: ServiceContext = {
 
 const runtime = new CatalogRuntime(context, config);
 
-const router = new Router();
-registerSystemRoutes(router, context);
-registerConfigurationRoutes(router, context);
-registerMediaRoutes(router, context);
-
-const server = Bun.serve({
-  hostname: env.host,
-  port: env.port,
-  ...createArtworkEventsTransport(context, router),
-});
+const service = createCatalogService(context);
+const server = await serve(service, { hostname: env.host, port: env.port });
 
 logger.info(SCOPE, `Media catalog service listening on http://${env.host}:${env.port}`);
 
@@ -54,7 +44,7 @@ const shutdown = (signal: string, code = 0): Promise<void> => {
   shutdownPromise ??= (async () => {
     logger.info(SCOPE, `Received ${signal}, shutting down...`);
     try {
-      await server.stop(true);
+      await server.stop();
       await runtime.stop();
       db.close();
     } catch (error) {

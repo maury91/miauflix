@@ -1,3 +1,4 @@
+export { ConfigStore, ServiceSecretCodec } from './config-store.js';
 export {
   type ConfigurationProbe,
   type ConfigurationProbeResult,

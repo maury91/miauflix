@@ -11,8 +11,9 @@
     "test": "bun test --pass-with-no-tests"
   },
   "dependencies": {
-    "@miauflix/service-configuration": "*",
+    "@miauflix/contract": "*",
     "@miauflix/service-contracts": "*",
+    "@miauflix/service-configuration": "*",
     "zod": "4.1.12"
   },
   "devDependencies": {

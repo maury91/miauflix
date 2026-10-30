@@ -54,9 +54,9 @@ flowchart LR
   Lists --> Trakt
 ```
 
-The browser talks only to the public Miauflix edge. The catalog and list capabilities are internal
-HTTP services discovered through `/.well-known/miauflix-service` and validated with
-`@miauflix/service-contracts`.
+The browser talks only to the public Miauflix edge. The catalog and list services are internal:
+the backend keeps one WebSocket open to each and calls the typed contracts from
+`@miauflix/service-contracts` over it (see `service-contract-v2.md`).
 
 ## 2. Storage and credential ownership
 
@@ -104,12 +104,12 @@ sequenceDiagram
   User->>API: Request list page
   API->>Projection: getListPage(slug, subjectId)
   Projection->>ListClient: getDefinitions(subjectId)
-  ListClient->>Lists: GET /v1/lists?subjectId
+  ListClient->>Lists: lists.definitions({ subjectId })
   Lists-->>ListClient: Definitions allowed for subject
   Note over Projection,Lists: This revalidation removes access to cached personal lists after disconnect
 
   alt no active local generation
-    Projection->>Lists: GET /v1/lists/:id?page=1&subjectId
+    Projection->>Lists: lists.page({ listId, page: 1, subjectId })
     Lists->>Trakt: Fetch provider page
     Trakt-->>Lists: Items and pagination headers
     Lists-->>Projection: External media references and page metadata

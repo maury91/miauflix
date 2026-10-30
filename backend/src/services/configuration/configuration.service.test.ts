@@ -1,7 +1,8 @@
-import { SERVICE_MANIFEST_PATH, type ServiceConfigSchema } from '@miauflix/service-contracts';
+import { defineService, type Impl, serve, type ServiceConfigSchema } from '@miauflix/contract';
+import { catalog } from '@miauflix/service-contracts';
 
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
-import { RemoteServiceManager } from '@services/remote/remote-service.manager';
+import { RemoteService } from '@services/remote/remote-service';
 
 import { ConfigurationService } from './configuration.service';
 
@@ -395,84 +396,85 @@ describe('ConfigurationService web configuration actions', () => {
   });
 
   it('tests a draft remote endpoint with its stored provider snapshot without saving either draft', async () => {
-    const configuration = setupTest();
-    await configuration.setValue('CATALOG_SERVICE_URL', 'http://catalog-original:3001');
-    await configuration.setValue('CATALOG_SERVICE_TIMEOUT_MS', '1000');
-    await configuration.setValue('DYNAMIC_CATALOG_TOKEN_TEST' as never, 'stored-provider-token');
-    const testRequests: Array<{ url: string; body: unknown }> = [];
-    jest.spyOn(global, 'fetch').mockImplementation(async (input, init) => {
-      const url = new URL(String(input));
-      if (url.pathname === SERVICE_MANIFEST_PATH) {
-        return Response.json({
-          id: 'media-catalog',
-          name: 'Media Catalog',
-          description: 'Catalog',
-          version: '1.0.0',
-          managementProtocolVersion: 2,
-          capabilities: { catalog: { version: 1, basePath: '/v1/catalog' } },
-          management: {
-            statusPath: '/status',
-            configurationSchemaPath: '/configuration/schema',
-            configurationTestPath: '/configuration/test',
-            configurationApplyPath: '/configuration',
-          },
-        });
-      }
-      if (url.pathname === '/configuration/schema') {
-        return Response.json({
-          groups: [
+    const schema: ServiceConfigSchema = {
+      groups: [
+        {
+          id: 'TMDB',
+          name: 'TMDB',
+          description: 'Provider',
+          variables: [
             {
-              id: 'TMDB',
-              name: 'TMDB',
-              description: 'Provider',
-              variables: [
-                {
-                  key: 'DYNAMIC_CATALOG_TOKEN_TEST',
-                  description: 'Provider token',
-                  required: true,
-                  inputType: 'password',
-                  secret: true,
-                },
-              ],
+              key: 'DYNAMIC_CATALOG_TOKEN_TEST',
+              description: 'Provider token',
+              required: true,
+              inputType: 'password',
+              secret: true,
             },
           ],
-        });
-      }
-      if (url.pathname === '/configuration')
-        return Response.json({ success: true, activated: true });
-      if (url.pathname === '/status') return Response.json({ state: 'ready' });
-      if (url.pathname === '/configuration/test') {
-        testRequests.push({ url: url.origin, body: JSON.parse(String(init?.body)) });
-        return Response.json({ success: true, mode: 'live', message: 'provider valid' });
-      }
-      throw new Error(`Unexpected request ${url.pathname}`);
-    });
+        },
+      ],
+    };
+    const testRequests: Array<{ server: string; values: Record<string, string> }> = [];
+    const startCatalog = (name: string) =>
+      serve(
+        defineService({
+          info: {
+            id: 'media-catalog',
+            name: 'Media Catalog',
+            description: 'Catalog',
+            version: '1.0.0',
+          },
+          configuration: {
+            getSchema: () => schema,
+            ready: true,
+            test: async values => {
+              testRequests.push({ server: name, values });
+              return { success: true, mode: 'live', message: 'provider valid' };
+            },
+            applyRemote: async () => ({ success: true, activated: true }),
+            clearRemote: async () => ({ success: true, activated: false }),
+            subscribe: () => () => undefined,
+          },
+        }).implement(
+          catalog,
+          new Proxy({}, { get: () => () => undefined }) as Impl<typeof catalog>
+        ),
+        { hostname: '127.0.0.1', port: 0 }
+      );
+    const original = await startCatalog('original');
+    const candidate = await startCatalog('candidate');
+    const originalUrl = `http://127.0.0.1:${original.port}`;
+    const configuration = setupTest();
+    await configuration.setValue('CATALOG_SERVICE_URL', originalUrl);
+    await configuration.setValue('CATALOG_SERVICE_TIMEOUT_MS', '1000');
+    await configuration.setValue('DYNAMIC_CATALOG_TOKEN_TEST' as never, 'stored-provider-token');
 
-    const manager = new RemoteServiceManager(configuration, {
+    const remote = new RemoteService(configuration, {
       serviceName: 'CATALOG',
       urlKey: 'CATALOG_SERVICE_URL',
       timeoutKey: 'CATALOG_SERVICE_TIMEOUT_MS',
-      capability: 'catalog',
-      capabilityVersion: 1,
+      contract: catalog,
     });
-    configuration.registerService('CATALOG', manager);
-    await manager.initialize();
-    const result = await configuration.testServiceConfigs('CATALOG', [
-      { key: 'CATALOG_SERVICE_URL', value: 'http://catalog-candidate:3001' },
-      { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '2000' },
-    ]);
-    manager.stop();
+    try {
+      configuration.registerService('CATALOG', remote);
+      await remote.initialize();
+      const result = await configuration.testServiceConfigs('CATALOG', [
+        { key: 'CATALOG_SERVICE_URL', value: `http://127.0.0.1:${candidate.port}` },
+        { key: 'CATALOG_SERVICE_TIMEOUT_MS', value: '2000' },
+      ]);
 
-    expect(result.success).toBe(true);
-    expect(testRequests).toEqual([
-      {
-        url: 'http://catalog-candidate:3001',
-        body: { values: { DYNAMIC_CATALOG_TOKEN_TEST: 'stored-provider-token' } },
-      },
-    ]);
-    expect(configuration.get('CATALOG_SERVICE_URL')).toBe('http://catalog-original:3001');
-    expect(configuration.get('CATALOG_SERVICE_TIMEOUT_MS')).toBe(1000);
-    expect(configuration.getDynamic('DYNAMIC_CATALOG_TOKEN_TEST')).toBe('stored-provider-token');
+      expect(result.success).toBe(true);
+      expect(testRequests).toEqual([
+        { server: 'candidate', values: { DYNAMIC_CATALOG_TOKEN_TEST: 'stored-provider-token' } },
+      ]);
+      expect(configuration.get('CATALOG_SERVICE_URL')).toBe(originalUrl);
+      expect(configuration.get('CATALOG_SERVICE_TIMEOUT_MS')).toBe(1000);
+      expect(configuration.getDynamic('DYNAMIC_CATALOG_TOKEN_TEST')).toBe('stored-provider-token');
+    } finally {
+      remote.stop();
+      await original.stop();
+      await candidate.stop();
+    }
   });
 
   it('rejects a conflicting duplicate key instead of replacing the first declaration', async () => {

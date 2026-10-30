@@ -1,4 +1,4 @@
-import { ConfigStore } from '@miauflix/service-contracts';
+import { ConfigStore } from '@miauflix/service-configuration';
 import { mkdtempSync, readFileSync, rmSync, writeFileSync } from 'fs';
 import { tmpdir } from 'os';
 import path from 'path';

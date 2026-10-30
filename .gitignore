@@ -47,6 +47,7 @@ dhparam.pem
 # Nginx configuration
 nginx/conf.d/default.conf
 nginx/conf.d/*.conf.bak
+backend-e2e/.env.test.bak
 
 # Certbot - ignore sensitive directories but keep config files
 nginx/certbot/conf/live/
