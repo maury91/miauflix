@@ -58,6 +58,27 @@
       "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"],
       "cache": true
     },
+    "@miauflix/frontend#build:tizen": {
+      "dependsOn": ["@miauflix/backend#build:client", "^build"],
+      "inputs": [
+        "src/**/*.ts",
+        "src/**/*.tsx",
+        "src/**/*.css",
+        "src/**/*.scss",
+        "public/**",
+        "index.html",
+        "global.d.ts",
+        "vite.config.ts",
+        "tsconfig*.json",
+        "package.json",
+        "$TURBO_ROOT$/package.json",
+        "!src/**/*.{test,spec}.{ts,tsx}",
+        "!src/{__test-utils__,__mocks__}/**"
+      ],
+      "outputs": ["../dist/frontend-tizen/**"],
+      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"],
+      "cache": true
+    },
     "@miauflix/frontend#check:ts": {
       "dependsOn": ["@miauflix/backend#build:client"]
     },

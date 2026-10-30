@@ -20,7 +20,7 @@ import type {
   SourceAvailabilityChange,
   SourceAvailabilityService,
 } from '@services/source/source-availability.service';
-import { isAllowedOrigin } from '@utils/origin.util';
+import { isAllowedOrigin, isTvAppOrigin } from '@utils/origin.util';
 
 import type { RealtimeSearchChannel, SearchClient } from './realtime.search';
 
@@ -325,7 +325,10 @@ export class RealtimeGateway {
       return;
     }
     const cookieName = `${this.config.get('ACCESS_TOKEN_COOKIE_NAME') ?? '__at'}_${message.session}`;
-    const token = this.cookies(state.request.headers.cookie ?? '')[cookieName];
+    // The TV app has no cookies for the backend and sends its access token in the message
+    const token =
+      this.cookies(state.request.headers.cookie ?? '')[cookieName] ??
+      (typeof message.accessToken === 'string' ? message.accessToken : undefined);
     if (!token) {
       state.socket.close(1008, 'Authentication failed');
       return;
@@ -537,6 +540,13 @@ export class RealtimeGateway {
   }
 
   private isAllowedOrigin(origin: string | undefined): boolean {
+    if (
+      isTvAppOrigin(origin, {
+        allowTvApp: this.config.get('ALLOW_TV_APP') as boolean | undefined,
+        allowNullOrigin: this.config.get('ALLOW_TV_APP_NULL_ORIGIN') as boolean | undefined,
+      })
+    )
+      return true;
     const configured = this.config.get('CORS_ORIGIN') as unknown;
     if (!configured || configured === '*') return true;
     const allowed = Array.isArray(configured) ? configured : [String(configured)];

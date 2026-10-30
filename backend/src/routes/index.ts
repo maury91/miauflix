@@ -1,13 +1,13 @@
 import { serveStatic } from '@hono/node-server/serve-static';
 import { httpInstrumentationMiddleware } from '@hono/otel';
 import { Hono } from 'hono';
-import { cors } from 'hono/cors';
 
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
+import { createCorsMiddleware } from '@middleware/cors.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { traceContextMiddleware } from '@middleware/trace-context.middleware';
-import { expandEquivalentOrigins } from '@utils/origin.util';
+import { expandEquivalentOrigins, isTvAppOrigin } from '@utils/origin.util';
 
 import { createAuthRoutes } from './auth.routes';
 import type { Deps } from './common.types';
@@ -85,12 +85,12 @@ export function createRoutes(deps: Deps) {
 
   const app = new Hono()
     .use(
-      cors({
-        origin: origins,
-        allowHeaders: ['Content-Type', 'Authorization', 'X-Session-Id'],
-        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        credentials: origins.length !== 1 || origins[0] !== '*',
-      })
+      createCorsMiddleware(origins, origin =>
+        isTvAppOrigin(origin, {
+          allowTvApp: deps.configurationService.get('ALLOW_TV_APP'),
+          allowNullOrigin: deps.configurationService.get('ALLOW_TV_APP_NULL_ORIGIN'),
+        })
+      )
     )
     .route('/api', createApiRoutes(deps));
 
@@ -99,6 +99,7 @@ export function createRoutes(deps: Deps) {
   if (frontendEnabled && frontendDir) {
     app.get('/assets/*', serveStatic({ root: frontendDir }));
     app.get('/favicon.png', serveStatic({ root: frontendDir }));
+    app.get('/favicon.ico', serveStatic({ root: frontendDir }));
     app.get('/robots.txt', serveStatic({ root: frontendDir }));
     // SPA fallback - after all API routes
     app.get('*', serveStatic({ root: frontendDir, rewriteRequestPath: () => '/index.html' }));

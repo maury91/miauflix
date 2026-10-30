@@ -61,6 +61,7 @@ docker compose up -d
 ## Next steps
 
 - 📺 **Watch from your TV or phone**: [Open it to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network)
+- 📺 **Install it on a Samsung TV** (work in progress): [Samsung TV app](docs/setup/samsung-tv.md)
 - 🔒 **Route traffic through a VPN**: [Using a VPN](docs/setup/docker-setup.md#using-a-vpn)
 - 🌐 **Put it on a domain with HTTPS**: [Getting Started](docs/setup/getting-started.md) and [HTTPS with a domain](docs/setup/docker-setup.md#https-with-a-domain)
 - ⚙️ **Tune every setting**: [Environment Variables](docs/setup/environment-variables.md)

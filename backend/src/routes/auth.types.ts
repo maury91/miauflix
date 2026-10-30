@@ -1,4 +1,6 @@
-export type { AuthTokens } from '@services/auth/auth.types';
+import type { AuthTokens } from '@services/auth/auth.types';
+
+export type { AuthTokens };
 
 export interface LoginRequest {
   email: string;
@@ -8,6 +10,8 @@ export interface LoginRequest {
 export interface LoginResponse {
   session: string;
   user: UserDto;
+  /** Only for clients that asked for token transport (`X-Auth-Transport: token`). */
+  tokens?: AuthTokens;
 }
 
 export interface QrLoginResponse {
@@ -28,6 +32,8 @@ export interface QrLoginClaimResponse extends LoginResponse {
 
 export interface RefreshResponse {
   user: UserDto;
+  /** Only for clients that asked for token transport (`X-Auth-Transport: token`). */
+  tokens?: AuthTokens;
 }
 
 export interface LogoutResponse {
