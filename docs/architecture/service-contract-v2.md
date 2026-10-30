@@ -1,8 +1,8 @@
 # Service contract v2
 
-Status: steps 1–3 and 6 of the migration path (§12) are implemented: `@miauflix/contract`,
-`@miauflix/contracts`, the list service and the media catalog run on it, and
-`@miauflix/service-contracts` and `RemoteServiceManager` are gone. Streaming and sources (steps
+Status: steps 1–3 and 6 of the migration path (§12) are implemented: `@miauflix/contract` and
+the contracts in `@miauflix/service-contracts`; the list service and the media catalog run on
+them, the Zod schemas and `RemoteServiceManager` are gone. Streaming and sources (steps
 4–5) are still in-process in the backend. §1 describes the system as it was before.
 
 ## 1. How it works today
@@ -59,13 +59,13 @@ Two packages:
 - `packages/contract` (`@miauflix/contract`): the runtime. Contract builders, the typed client,
   the service runtime, the local and WebSocket transports, `serve()` for Bun and Node, signed
   `bytes` tickets and the management contract. No dependencies (`ws` only on Node, loaded lazily).
-- `packages/contracts` (`@miauflix/contracts`): every service contract (`catalog`, `lists`, …)
+- `packages/service-contracts` (`@miauflix/service-contracts`): every service contract (`catalog`, `lists`, …)
   with its payload types as plain interfaces, plus shared constants (`MAX_BATCH_ITEMS`,
   `SEARCH_GENRE_KEY_PATTERN`, the catalog job names). One package rather than one per contract,
   until a contract is published on its own.
 
 ```ts
-// packages/contracts/src/catalog.ts (excerpt)
+// packages/service-contracts/src/catalog.ts (excerpt)
 import { call, contract, event } from '@miauflix/contract';
 
 export interface MediaRef {
@@ -500,8 +500,8 @@ is the same in both cases.
 4. Extract **streaming** behind the `streaming` contract while still mounted in-process. That
    validates the boundary before any network is involved. Then add the `X-Accel` path.
 5. Extract **sources** the same way, using `peers.use(streaming)`.
-6. ✅ Remove `@miauflix/service-contracts` and `RemoteServiceManager` (the config store moved to
-   `@miauflix/service-configuration`).
+6. ✅ Replace the Zod schemas in `@miauflix/service-contracts` with contract definitions and
+   remove `RemoteServiceManager` (the config store moved to `@miauflix/service-configuration`).
 7. Move the backend to Bun, with streaming running as a separate Node process. Move streaming
    to Bun once WebTorrent runs on it.
 

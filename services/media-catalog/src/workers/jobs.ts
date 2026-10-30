@@ -7,5 +7,5 @@
  * by this service.
  */
 
-export type { CatalogJobName, CatalogJobPayloads } from '@miauflix/contracts';
-export { CATALOG_JOB_QUEUES } from '@miauflix/contracts';
+export type { CatalogJobName, CatalogJobPayloads } from '@miauflix/service-contracts';
+export { CATALOG_JOB_QUEUES } from '@miauflix/service-contracts';

@@ -1,6 +1,6 @@
 import { zValidator } from '@hono/zod-validator';
 import { isContractError } from '@miauflix/contract';
-import { MAX_BATCH_ITEMS } from '@miauflix/contracts';
+import { MAX_BATCH_ITEMS } from '@miauflix/service-contracts';
 import { Hono } from 'hono';
 import { z } from 'zod';
 

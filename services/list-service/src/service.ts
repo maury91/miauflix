@@ -11,7 +11,7 @@ import {
   MAX_POPULAR_PAGE_SIZE,
   type ProviderAssociation,
   type ProviderAuthorization,
-} from '@miauflix/contracts';
+} from '@miauflix/service-contracts';
 import { ServiceSecretCodec } from '@miauflix/service-configuration';
 import { Database } from 'bun:sqlite';
 

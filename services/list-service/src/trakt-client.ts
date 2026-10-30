@@ -1,4 +1,4 @@
-import type { PlaybackEntry, PlaybackProgress } from '@miauflix/contracts';
+import type { PlaybackEntry, PlaybackProgress } from '@miauflix/service-contracts';
 import { z } from 'zod';
 
 import { retryAfterMs, withTraktRequestSlot } from './trakt-rate-limit';

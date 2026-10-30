@@ -6,7 +6,7 @@ import {
   type RunningServer,
   serve,
 } from '@miauflix/contract';
-import { type ArtworkUpdate, catalog, type MovieDetail } from '@miauflix/contracts';
+import { type ArtworkUpdate, catalog, type MovieDetail } from '@miauflix/service-contracts';
 
 import { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ConfigurationService } from '@services/configuration/configuration.service';

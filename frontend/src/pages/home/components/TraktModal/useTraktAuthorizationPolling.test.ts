@@ -1,4 +1,4 @@
-import type { ProviderAuthorization } from '@miauflix/contracts';
+import type { ProviderAuthorization } from '@miauflix/service-contracts';
 import { act, renderHook } from '@testing-library/react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 

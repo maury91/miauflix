@@ -7,7 +7,7 @@ import { PRELOAD_CLIENT_ID } from '@features/preload/lib/intent-client';
 import { applyProgressUpdate, progressApi } from '@features/progress/api/progress.api';
 import { RealtimeClient } from '@features/realtime/realtime.client';
 import type { ProgressRequest, SearchClientMessage } from '@miauflix/backend';
-import type { MediaRef } from '@miauflix/contracts';
+import type { MediaRef } from '@miauflix/service-contracts/catalog/v1';
 import { createAction, type Middleware } from '@reduxjs/toolkit';
 import { artworkActions } from '@store/slices/artwork';
 import { selectCurrentSessionId } from '@store/slices/auth';

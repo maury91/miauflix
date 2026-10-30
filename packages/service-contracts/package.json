@@ -1,5 +1,5 @@
 {
-  "name": "@miauflix/contracts",
+  "name": "@miauflix/service-contracts",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -9,6 +9,10 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
+    },
+    "./catalog/v1": {
+      "types": "./dist/catalog.d.ts",
+      "default": "./dist/catalog.js"
     }
   },
   "scripts": {

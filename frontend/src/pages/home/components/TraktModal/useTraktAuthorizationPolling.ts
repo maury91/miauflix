@@ -1,5 +1,5 @@
 import { pollTraktAssociation } from '@features/integrations/api/trakt.api';
-import type { ProviderAuthorization } from '@miauflix/contracts';
+import type { ProviderAuthorization } from '@miauflix/service-contracts';
 import { useEffect, useRef } from 'react';
 
 interface TraktAuthorizationPollingOptions {

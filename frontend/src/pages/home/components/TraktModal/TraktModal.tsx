@@ -1,5 +1,5 @@
 import { beginTraktAssociation } from '@features/integrations/api/trakt.api';
-import type { ProviderAuthorization } from '@miauflix/contracts';
+import type { ProviderAuthorization } from '@miauflix/service-contracts';
 import { Modal } from '@shared/ui/modal/Modal';
 import { useState } from 'react';
 import styled from 'styled-components';

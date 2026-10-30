@@ -1,4 +1,4 @@
-import type { BackdropFocus } from '@miauflix/contracts';
+import type { BackdropFocus } from '@miauflix/service-contracts';
 import { and, eq } from 'drizzle-orm';
 
 import type { CatalogDatabase } from './database';

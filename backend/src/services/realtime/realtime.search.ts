@@ -1,5 +1,5 @@
 import { logger } from '@logger';
-import { SEARCH_GENRE_KEY_PATTERN } from '@miauflix/contracts';
+import { SEARCH_GENRE_KEY_PATTERN } from '@miauflix/service-contracts';
 import { z } from 'zod';
 
 const searchGenreKeySchema = z.string().regex(SEARCH_GENRE_KEY_PATTERN);

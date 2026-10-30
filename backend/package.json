@@ -31,7 +31,7 @@
     "@inquirer/prompts": "7.8.2",
     "@keyv/sqlite": "4.0.6",
     "@miauflix/contract": "*",
-    "@miauflix/contracts": "*",
+    "@miauflix/service-contracts": "*",
     "@miauflix/service-configuration": "*",
     "@miauflix/source-metadata-extractor": "*",
     "@miauflix/therarbg-sanitizer": "*",

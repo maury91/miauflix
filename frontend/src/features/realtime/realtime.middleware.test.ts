@@ -3,7 +3,7 @@ import { notificationsApi } from '@features/notifications/api/notifications.api'
 import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
 import type { ProgressRequest } from '@miauflix/backend';
-import type { MediaRef } from '@miauflix/contracts';
+import type { MediaRef } from '@miauflix/service-contracts/catalog/v1';
 import { configureStore, type Middleware } from '@reduxjs/toolkit';
 import { artworkSlice } from '@store/slices/artwork';
 import { authSlice, clearAuth, setSession } from '@store/slices/auth';

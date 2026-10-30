@@ -1,5 +1,5 @@
 import { defineService, type Impl, serve, type ServiceConfigSchema } from '@miauflix/contract';
-import { catalog } from '@miauflix/contracts';
+import { catalog } from '@miauflix/service-contracts';
 
 import type { ConfigurableService, ServiceInstanceStatus } from '@mytypes/configuration';
 import { RemoteService } from '@services/remote/remote-service';

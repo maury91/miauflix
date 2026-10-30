@@ -17,7 +17,7 @@ export type {
   SeasonDetail,
   SeasonSummary,
   TVShowDetail,
-} from '@miauflix/contracts';
+} from '@miauflix/service-contracts';
 
 export class CatalogUnavailableError extends Error {
   constructor(message = 'Media catalog service is unreachable') {

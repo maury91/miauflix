@@ -56,7 +56,7 @@ flowchart LR
 
 The browser talks only to the public Miauflix edge. The catalog and list services are internal:
 the backend keeps one WebSocket open to each and calls the typed contracts from
-`@miauflix/contracts` over it (see `service-contract-v2.md`).
+`@miauflix/service-contracts` over it (see `service-contract-v2.md`).
 
 ## 2. Storage and credential ownership
 

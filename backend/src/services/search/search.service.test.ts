@@ -1,4 +1,4 @@
-import type { BatchResponse, SearchResponse } from '@miauflix/contracts';
+import type { BatchResponse, SearchResponse } from '@miauflix/service-contracts';
 
 import type { RecentSearchRepository } from '@repositories/recent-search.repository';
 

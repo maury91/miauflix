@@ -1,5 +1,5 @@
 import { createClient, isContractError, localTransport } from '@miauflix/contract';
-import { catalog as catalogContract, MAX_BATCH_ITEMS } from '@miauflix/contracts';
+import { catalog as catalogContract, MAX_BATCH_ITEMS } from '@miauflix/service-contracts';
 import { describe, expect, it } from 'bun:test';
 
 import { CatalogConfigService } from '../src/config/config.service';

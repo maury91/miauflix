@@ -5,7 +5,7 @@ import type {
   SearchClientMessage,
   SearchServerMessage,
 } from '@miauflix/backend';
-import type { ArtworkUpdate, MediaRef } from '@miauflix/contracts';
+import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
 import { API_URL } from '@shared/config/constants';
 import { z } from 'zod';
 

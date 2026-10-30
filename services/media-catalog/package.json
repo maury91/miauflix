@@ -15,7 +15,7 @@
   },
   "dependencies": {
     "@miauflix/contract": "*",
-    "@miauflix/contracts": "*",
+    "@miauflix/service-contracts": "*",
     "@miauflix/service-configuration": "*",
     "@tensorflow/tfjs-backend-wasm": "^4.22.0",
     "@tensorflow/tfjs-converter": "^4.22.0",

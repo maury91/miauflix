@@ -19,4 +19,4 @@ export type {
   SeasonDetail,
   SeasonSummary,
   TVShowDetail,
-} from '@miauflix/contracts';
+} from '@miauflix/service-contracts';

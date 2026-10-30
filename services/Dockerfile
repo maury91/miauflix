@@ -15,21 +15,23 @@ COPY packages/source-metadata-extractor/package.json packages/source-metadata-ex
 COPY packages/yts-sanitizer/package.json packages/yts-sanitizer/package.json
 COPY packages/therarbg-sanitizer/package.json packages/therarbg-sanitizer/package.json
 COPY packages/contract/package.json packages/contract/package.json
-COPY packages/contracts/package.json packages/contracts/package.json
+COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 COPY services/list-service/package.json services/list-service/package.json
 
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
-RUN npm ci --ignore-scripts
+# The base image sets NODE_ENV=production; the build needs dev dependencies (TypeScript types),
+# which the `npm prune --omit=dev` below removes again.
+RUN npm ci --ignore-scripts --include=dev
 
 COPY packages/contract packages/contract
-COPY packages/contracts packages/contracts
+COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
 COPY services/media-catalog services/media-catalog
 COPY services/list-service services/list-service
 RUN npm run build --workspace @miauflix/contract && \
-    npm run build --workspace @miauflix/contracts && \
+    npm run build --workspace @miauflix/service-contracts && \
     npm run build --workspace @miauflix/service-configuration && \
     npm prune --omit=dev --ignore-scripts
 
@@ -43,7 +45,7 @@ RUN apk add --no-cache bash && \
 WORKDIR /workspace
 COPY --from=builder --chown=1001:1001 /workspace/node_modules ./node_modules
 COPY --from=builder --chown=1001:1001 /workspace/packages/contract ./packages/contract
-COPY --from=builder --chown=1001:1001 /workspace/packages/contracts ./packages/contracts
+COPY --from=builder --chown=1001:1001 /workspace/packages/service-contracts ./packages/service-contracts
 COPY --from=builder --chown=1001:1001 /workspace/packages/service-configuration ./packages/service-configuration
 COPY --from=builder --chown=1001:1001 /workspace/services/media-catalog ./services/media-catalog
 COPY --from=builder --chown=1001:1001 /workspace/services/list-service ./services/list-service

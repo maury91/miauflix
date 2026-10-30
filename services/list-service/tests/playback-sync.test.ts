@@ -1,4 +1,4 @@
-import type { PlaybackProgress } from '@miauflix/contracts';
+import type { PlaybackProgress } from '@miauflix/service-contracts';
 import { Database } from 'bun:sqlite';
 import { describe, expect, it } from 'bun:test';
 

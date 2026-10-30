@@ -1,6 +1,6 @@
 import type { IncomingMessage, Server as HttpServer } from 'node:http';
 
-import type { ArtworkUpdate, MediaRef } from '@miauflix/contracts';
+import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts';
 import WebSocket, { WebSocketServer } from 'ws';
 
 import type { ConfigService } from '@mytypes/configuration';

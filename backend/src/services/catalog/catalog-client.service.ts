@@ -12,7 +12,7 @@ import {
   type SearchResponse,
   type SeasonDetail,
   type TVShowDetail,
-} from '@miauflix/contracts';
+} from '@miauflix/service-contracts';
 
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import { RemoteService } from '@services/remote/remote-service';

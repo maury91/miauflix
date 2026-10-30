@@ -3,7 +3,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
-import { lists } from '@miauflix/contracts';
+import { lists } from '@miauflix/service-contracts';
 import { afterEach, describe, expect, it } from 'bun:test';
 
 import { createListService } from '../src/service';

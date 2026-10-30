@@ -8,7 +8,7 @@ import {
   type PlaybackProgress,
   type ProviderAssociation,
   type ProviderAuthorization,
-} from '@miauflix/contracts';
+} from '@miauflix/service-contracts';
 
 import type { ConfigurationService } from '@services/configuration/configuration.service';
 import { RemoteService } from '@services/remote/remote-service';

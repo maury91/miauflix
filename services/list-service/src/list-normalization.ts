@@ -1,4 +1,4 @@
-import type { ExternalMediaIds, ExternalMediaRef } from '@miauflix/contracts';
+import type { ExternalMediaIds, ExternalMediaRef } from '@miauflix/service-contracts';
 import { z } from 'zod';
 
 export type TraktIds = { trakt?: number | null; tmdb?: number | null; imdb?: string | null };

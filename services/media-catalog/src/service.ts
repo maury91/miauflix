@@ -4,7 +4,7 @@ import {
   type CatalogStatusDetails,
   MAX_BATCH_ITEMS,
   SEARCH_GENRE_KEY_PATTERN,
-} from '@miauflix/contracts';
+} from '@miauflix/service-contracts';
 import { sql } from 'drizzle-orm';
 
 import type { CatalogDatabase } from './db/database';

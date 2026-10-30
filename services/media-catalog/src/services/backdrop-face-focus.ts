@@ -1,7 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import type { BackdropFocus } from '@miauflix/contracts';
+import type { BackdropFocus } from '@miauflix/service-contracts';
 import sharp from 'sharp';
 
 // The package's export map does not expose the WASM Node entry to TypeScript,

@@ -1,4 +1,4 @@
-import type { PlaybackEntry, PlaybackProgress } from '@miauflix/contracts';
+import type { PlaybackEntry, PlaybackProgress } from '@miauflix/service-contracts';
 import type { Database } from 'bun:sqlite';
 
 import type { TraktClient } from './trakt-client';
