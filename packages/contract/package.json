@@ -1,0 +1,34 @@
+{
+  "name": "@miauflix/contract",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "check:ts": "tsc --noEmit -p tsconfig.json",
+    "lint": "eslint src/",
+    "test": "npm run build && node --test dist/*.test.js && bun test dist/",
+    "clean": "rm -rf dist"
+  },
+  "peerDependencies": {
+    "ws": "^8.18.0"
+  },
+  "peerDependenciesMeta": {
+    "ws": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/ws": "^8.18.1",
+    "typescript": "^5.9.3",
+    "ws": "8.18.3"
+  }
+}

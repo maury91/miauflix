@@ -13,12 +13,13 @@ COPY tsconfig.json ./
 COPY turbo.json ./
 
 # Create package directories and copy ONLY their package.json files for dependency resolution
-RUN mkdir -p packages/source-metadata-extractor packages/yts-sanitizer packages/therarbg-sanitizer packages/service-contracts backend frontend services/media-catalog services/list-service
+RUN mkdir -p packages/source-metadata-extractor packages/yts-sanitizer packages/therarbg-sanitizer packages/contract packages/service-contracts packages/service-configuration backend frontend services/media-catalog services/list-service
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
 COPY packages/yts-sanitizer/package.json ./packages/yts-sanitizer/
 COPY packages/therarbg-sanitizer/package.json ./packages/therarbg-sanitizer/
+COPY packages/contract/package.json ./packages/contract/
 COPY packages/service-contracts/package.json ./packages/service-contracts/
 COPY packages/service-configuration/package.json ./packages/service-configuration/
 COPY services/media-catalog/package.json ./services/media-catalog/
@@ -76,8 +77,12 @@ COPY --from=builder /usr/src/app/packages/yts-sanitizer/dist /usr/src/app/packag
 COPY --from=builder /usr/src/app/packages/yts-sanitizer/package.json /usr/src/app/packages/yts-sanitizer/package.json
 COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/dist /usr/src/app/packages/therarbg-sanitizer/dist
 COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/package.json /usr/src/app/packages/therarbg-sanitizer/package.json
+COPY --from=builder /usr/src/app/packages/contract/dist /usr/src/app/packages/contract/dist
+COPY --from=builder /usr/src/app/packages/contract/package.json /usr/src/app/packages/contract/package.json
 COPY --from=builder /usr/src/app/packages/service-contracts/dist /usr/src/app/packages/service-contracts/dist
 COPY --from=builder /usr/src/app/packages/service-contracts/package.json /usr/src/app/packages/service-contracts/package.json
+COPY --from=builder /usr/src/app/packages/service-configuration/dist /usr/src/app/packages/service-configuration/dist
+COPY --from=builder /usr/src/app/packages/service-configuration/package.json /usr/src/app/packages/service-configuration/package.json
 # Copy production-only node_modules (workspace dependencies)
 COPY --from=prod-deps /usr/src/app/node_modules /usr/src/app/node_modules
 COPY --from=prod-deps /usr/src/app/backend/node_modules /usr/src/app/backend/node_modules
