@@ -4,11 +4,17 @@ import { z } from 'zod';
 
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import { NOTIFICATIONS_PAGE_LIMIT } from '@services/notifications/notification.service';
 
 import type { Deps, ErrorResponse } from './common.types';
 import { type PlayableRef, playableRefSchema } from './playable.types';
 
 const notificationIdSchema = z.object({ id: z.coerce.number().int().positive() });
+const notificationListSchema = z.object({
+  status: z.enum(['unread', 'read']).default('unread'),
+  cursor: z.coerce.number().int().positive().optional(),
+  limit: z.coerce.number().int().min(1).max(NOTIFICATIONS_PAGE_LIMIT).default(20),
+});
 const availabilityRequestSchema = z.object({ playable: playableRefSchema }).strict();
 
 export const createNotificationRoutes = ({
@@ -32,9 +38,17 @@ export const createNotificationRoutes = ({
 
   return (
     new Hono()
-      .get('/', authGuard(), async c => {
+      .get('/', authGuard(), zValidator('query', notificationListSchema), async c => {
         const { user } = c.get('sessionInfo');
-        return c.json(await notificationService.list(user.id));
+        return c.json(await notificationService.list(user.id, c.req.valid('query')));
+      })
+      .get('/unread-count', authGuard(), async c => {
+        const { user } = c.get('sessionInfo');
+        return c.json(await notificationService.counts(user.id));
+      })
+      .post('/read-all', authGuard(), async c => {
+        const { user } = c.get('sessionInfo');
+        return c.json({ read: await notificationService.markAllRead(user.id) });
       })
       .post('/:id/read', authGuard(), zValidator('param', notificationIdSchema), async c => {
         const { user } = c.get('sessionInfo');
