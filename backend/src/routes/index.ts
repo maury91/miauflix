@@ -1,10 +1,10 @@
 import { serveStatic } from '@hono/node-server/serve-static';
 import { httpInstrumentationMiddleware } from '@hono/otel';
 import { Hono } from 'hono';
-import { cors } from 'hono/cors';
 
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
 import { authGuard, createAuthMiddleware } from '@middleware/auth.middleware';
+import { createCorsMiddleware } from '@middleware/cors.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import { traceContextMiddleware } from '@middleware/trace-context.middleware';
 import { expandEquivalentOrigins } from '@utils/origin.util';
@@ -84,14 +84,7 @@ export function createRoutes(deps: Deps) {
   );
 
   const app = new Hono()
-    .use(
-      cors({
-        origin: origins,
-        allowHeaders: ['Content-Type', 'Authorization', 'X-Session-Id'],
-        allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-        credentials: origins.length !== 1 || origins[0] !== '*',
-      })
-    )
+    .use(createCorsMiddleware(origins, () => deps.configurationService.get('ALLOW_TV_APP')))
     .route('/api', createApiRoutes(deps));
 
   // Optionally serve the frontend as static files from FRONTEND_DIR

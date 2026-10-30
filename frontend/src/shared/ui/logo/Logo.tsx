@@ -9,7 +9,7 @@ import {
   NARROW_MAX_WIDTH_PX,
 } from './logoGeometry';
 
-const logoSvgUrl = '/assets/images/logo.svg';
+const logoSvgUrl = `${import.meta.env.BASE_URL}assets/images/logo.svg`;
 
 /**
  * The centred logo breathes while the app loads. It animates `scale`, not `transform`, so the

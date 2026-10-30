@@ -86,7 +86,7 @@ const useIntroAnimationAudio = () => {
 
   useEffect(() => {
     if (typeof window === 'undefined') return;
-    const audio = new Audio('/assets/pam-pam-meow.mp3');
+    const audio = new Audio(`${import.meta.env.BASE_URL}assets/pam-pam-meow.mp3`);
     audioRef.current = audio;
     audio.preload = 'auto';
     const handleError = (event: Event) => {

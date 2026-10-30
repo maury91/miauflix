@@ -149,6 +149,7 @@ ENABLE_FRONTEND=true
 
 - **PORT**: Server listening port (default: 3000)
 - **CORS_ORIGIN**: Comma-separated list of allowed origins (or `*` for all)
+- **ALLOW_TV_APP**: Accept the [Samsung TV app](samsung-tv.md), which runs from local files (origin `file://` or `null`) and signs in with bearer tokens instead of cookies (default: `true`). Its origin is allowed without credentials, so other pages sharing it get no cookies. Set `false` if you don't use the TV app
 - **DATA_DIR**: Directory for storing application data
 - **FRONTEND_DIR**: Path to static frontend files (for production)
 - **ENABLE_FRONTEND**: Whether to serve the frontend interface

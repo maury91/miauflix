@@ -205,3 +205,74 @@ describe('RealtimeGateway search routing', () => {
     }
   });
 });
+
+describe('RealtimeGateway TV app authentication', () => {
+  const setupGateway = (allowTvApp: boolean) => {
+    const verifyAccessToken = jest.fn().mockResolvedValue({ userId: 'user' });
+    const gateway = new RealtimeGateway(
+      { verifyAccessToken } as never,
+      {
+        get: jest.fn((key: string) =>
+          key === 'ALLOW_TV_APP' ? allowTvApp : key === 'CORS_ORIGIN' ? ['https://app'] : '__at'
+        ),
+      } as never,
+      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn(), update: jest.fn() } as never,
+      {} as never,
+      {
+        onArtwork: jest.fn(() => jest.fn()),
+        onArtworkStreamReady: jest.fn(() => jest.fn()),
+        queueArtwork: jest.fn(),
+      } as never,
+      null,
+      { handles: () => false } as never,
+      { onChange: () => () => undefined } as never
+    );
+    return { gateway, verifyAccessToken };
+  };
+
+  it('authenticates with the access token sent in the message', async () => {
+    const { gateway, verifyAccessToken } = setupGateway(true);
+    const socket = Object.assign(new EventEmitter(), {
+      readyState: 1,
+      send: jest.fn(),
+      close: jest.fn(),
+    });
+    try {
+      const server = (gateway as unknown as { server: EventEmitter }).server;
+      server.emit('connection', socket, { headers: {} });
+      socket.emit(
+        'message',
+        JSON.stringify({
+          type: 'authenticate',
+          session: 'session',
+          clientId: 'client',
+          accessToken: 'tv-token',
+        })
+      );
+      await new Promise(resolve => setImmediate(resolve));
+      expect(verifyAccessToken).toHaveBeenCalledWith('tv-token');
+      expect(socket.close).not.toHaveBeenCalled();
+      expect(socket.send).toHaveBeenCalledWith(JSON.stringify({ type: 'ready', v: 1 }));
+    } finally {
+      gateway.close();
+    }
+  });
+
+  it.each([
+    [true, 'file://', true],
+    [true, 'null', true],
+    [false, 'file://', false],
+    [true, 'https://evil', false],
+    [true, 'https://app', true],
+  ])('with ALLOW_TV_APP=%s accepts origin %s: %s', (allowTvApp, origin, accepted) => {
+    const { gateway } = setupGateway(allowTvApp);
+    try {
+      const isAllowedOrigin = (
+        gateway as unknown as { isAllowedOrigin(origin: string): boolean }
+      ).isAllowedOrigin.bind(gateway);
+      expect(isAllowedOrigin(origin)).toBe(accepted);
+    } finally {
+      gateway.close();
+    }
+  });
+});

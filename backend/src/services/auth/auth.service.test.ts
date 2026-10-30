@@ -437,6 +437,44 @@ describe('AuthService', () => {
   });
 
   describe('getSessionsFromCookies', () => {
+    it('lists the sessions of the refresh tokens a TV app sends in X-Refresh-Tokens', async () => {
+      const context = {
+        req: {
+          raw: { headers: new Headers({ 'X-Refresh-Tokens': 'tv-session:tv-token' }) },
+        },
+      } as unknown as Context;
+      const user = {
+        id: 'user-123',
+        email: 'test@example.com',
+        displayName: 'Test User',
+        role: UserRole.USER,
+      } as User;
+      mockRefreshTokenRepository.findByToken.mockImplementation(async (token, session) =>
+        token === 'tv-token' && session === 'tv-session'
+          ? ({
+              userId: user.id,
+              session,
+              expiresAt: new Date(Date.now() + 86400000),
+              user,
+            } as RefreshToken)
+          : null
+      );
+      mockRefreshTokenRepository.isChainExpired.mockResolvedValue(false);
+      mockUserRepository.findById.mockResolvedValue(user);
+
+      await expect(authService.getSessionsFromCookies(context)).resolves.toEqual([
+        {
+          session: 'tv-session',
+          user: {
+            id: user.id,
+            email: user.email,
+            displayName: user.displayName,
+            role: user.role,
+          },
+        },
+      ]);
+    });
+
     it('clears invalid cookies and still returns a valid session after them', async () => {
       const invalidSessions = Array.from({ length: 6 }, (_, index) => `invalid-${index}`);
       const validSession = 'valid-session';

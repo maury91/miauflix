@@ -15,6 +15,19 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: 'http://localhost:3000,https://myapp.com',
       transform: transforms.stringArray(),
     }),
+    ALLOW_TV_APP: variable({
+      description:
+        'Accept requests from the Samsung TV app, which runs from local files (origin file:// or null) and signs in with bearer tokens instead of cookies',
+      booleanStateDescriptions: {
+        true: 'TV app allowed',
+        false: 'TV app blocked',
+      },
+      required: false,
+      advanced: true,
+      defaultValue: 'true',
+      example: 'false',
+      transform: transforms.boolean(),
+    }),
     PORT: variable({
       description: 'Port for the server to listen on',
       required: false,

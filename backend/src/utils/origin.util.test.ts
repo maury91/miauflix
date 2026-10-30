@@ -1,4 +1,4 @@
-import { isAllowedOrigin } from './origin.util';
+import { isAllowedOrigin, isTvAppOrigin } from './origin.util';
 
 describe('isAllowedOrigin', () => {
   it('treats a sole wildcard as unrestricted but keeps mixed lists restricted', () => {
@@ -20,5 +20,15 @@ describe('isAllowedOrigin', () => {
     expect(isAllowedOrigin('https://app.example.com:8080', ['http://*.example.com:8080'])).toBe(
       false
     );
+  });
+});
+
+describe('isTvAppOrigin', () => {
+  it('matches only the local-file origins the TV app sends', () => {
+    expect(isTvAppOrigin('file://')).toBe(true);
+    expect(isTvAppOrigin('null')).toBe(true);
+    expect(isTvAppOrigin(undefined)).toBe(false);
+    expect(isTvAppOrigin('https://miauflix.example')).toBe(false);
+    expect(isTvAppOrigin('file://host')).toBe(false);
   });
 });
