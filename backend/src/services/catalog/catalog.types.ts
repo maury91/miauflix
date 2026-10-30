@@ -1,4 +1,11 @@
 export type {
+  ServiceConfigSchema as CatalogConfigSchema,
+  ServiceConfigTestResult as CatalogConfigTestResult,
+  ConfigVariable as CatalogConfigVariableSchema,
+  ServiceConfigApplyResult as CatalogConfigWriteResult,
+  ServiceStatus as CatalogStatus,
+} from '@miauflix/contract';
+export type {
   BatchResponse,
   EpisodeDetail,
   ExternalMediaLookup,
@@ -10,13 +17,6 @@ export type {
   SeasonDetail,
   SeasonSummary,
   TVShowDetail,
-} from '@miauflix/service-contracts';
-export type {
-  ServiceConfigSchema as CatalogConfigSchema,
-  ServiceConfigTestResult as CatalogConfigTestResult,
-  ConfigVariable as CatalogConfigVariableSchema,
-  ServiceConfigApplyResult as CatalogConfigWriteResult,
-  ServiceStatus as CatalogStatus,
 } from '@miauflix/service-contracts';
 
 export class CatalogUnavailableError extends Error {

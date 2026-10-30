@@ -39,7 +39,7 @@ deployment topology, see [Miauflix Architecture Diagrams](diagrams.md).
 
 #### Media Services
 
-- **Media Catalog Service** - A standalone **Bun service** (`services/media-catalog`) that owns the media catalog: it talks to the catalog provider (TMDB today), stores full catalog data in its own SQLite database, enforces freshness, and publishes the versioned `catalog` capability. The backend discovers its manifest through `/.well-known/miauflix-service`; both processes validate requests and responses with `@miauflix/service-contracts`.
+- **Media Catalog Service** - A standalone **Bun service** (`services/media-catalog`) that owns the media catalog: it talks to the catalog provider (TMDB today), stores full catalog data in its own SQLite database, enforces freshness, and implements the versioned `catalog` contract from `@miauflix/service-contracts`. The backend keeps one WebSocket open to it (`@miauflix/contract`) for calls, artwork events, status and configuration; payloads are typed at build time and not re-validated at runtime.
 - **Local Media Index** - The backend keeps a slim mirror of catalog data (identity, imdbId, popularity, posters) in its own database, written through the catalog service responses, so source-discovery and streaming SQL joins keep working locally.
 - **Remote Service Management** - Named service URLs such as `CATALOG_SERVICE_URL` feed a generic discovery manager. Service-owned configuration is namespaced, rendered by the existing wizard/admin UI, pushed with explicit set/unset semantics, and continuously monitored with retrying discovery and status polling.
 - **Source Discovery** - Multi-provider content aggregation
