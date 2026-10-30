@@ -1,3 +1,4 @@
+import type { Source } from '@miauflix/source-metadata-extractor';
 import {
   Column,
   CreateDateColumn,
@@ -12,6 +13,7 @@ import {
 
 import { encryptedText } from '@utils/encrypted-column.util';
 
+import type { SourceQuality } from './content-source.entity';
 import { User } from './user.entity';
 
 export type NotificationType =
@@ -57,6 +59,18 @@ export class Notification {
 
   @Column({ type: 'integer', nullable: true })
   episodeNumber: number | null;
+
+  /** Resolution of the source the notification announces, when known. */
+  @Column({ type: 'varchar', length: 8, nullable: true })
+  quality: SourceQuality | null;
+
+  /** Release type of the source the notification announces, when known. */
+  @Column({ type: 'varchar', length: 8, nullable: true })
+  sourceType: Source | null;
+
+  /** Best release type before a quality upgrade. */
+  @Column({ type: 'varchar', length: 8, nullable: true })
+  previousSourceType: Source | null;
 
   @Column({ type: 'datetime', nullable: true })
   readAt: Date | null;

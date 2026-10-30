@@ -9,7 +9,10 @@ import { Movie } from '@entities/movie.entity';
 import { MovieSource } from '@entities/movie-source.entity';
 import type { PlayableRef } from '@routes/playable.types';
 import { containsPlayableVideo } from '@services/download/download.utils';
-import type { NotificationService } from '@services/notifications/notification.service';
+import type {
+  NotificationService,
+  NotifiedSource,
+} from '@services/notifications/notification.service';
 
 /**
  * Whether a movie or episode can be played:
@@ -135,12 +138,24 @@ export class SourceAvailabilityService {
         .innerJoin(MovieSource, 'link', 'link.movieId = movie.id')
         .where('link.sourceId = :sourceId', { sourceId })
         .getMany();
+      // The source that just proved real is what the notifications announce.
+      let notified: NotifiedSource | undefined;
+      const notifiedSource = async (): Promise<NotifiedSource | undefined> => {
+        if (notified) return notified;
+        const source = await this.db.getContentSourceRepository().findQuality(sourceId);
+        notified = source ? { quality: source.quality, sourceType: source.sourceType } : undefined;
+        return notified;
+      };
       for (const movie of movies) {
         const availability = await this.forMovie(movie);
         const playable: PlayableRef = { kind: 'movie', mediaId: movie.mediaId };
         this.emit({ playable, availability });
         if (availability === 'available' && hasVideo)
-          await this.notifications?.playableAvailable(playable, movie.title);
+          await this.notifications?.playableAvailable(
+            playable,
+            movie.title,
+            await notifiedSource()
+          );
       }
 
       const episodeLinks = await this.db.getRepository(EpisodeSource).find({
@@ -161,13 +176,15 @@ export class SourceAvailabilityService {
         const state = availability.get(episodeId) ?? 'pending';
         this.emit({ playable, availability: state });
         if (state !== 'available' || !hasVideo) continue;
-        await this.notifications?.playableAvailable(playable, show.name);
+        const source = await notifiedSource();
+        await this.notifications?.playableAvailable(playable, show.name, source);
         await this.notifications?.episodeAvailable({
           showMediaId: show.mediaId,
           showTitle: show.name,
           seasonNumber: episode.season.seasonNumber,
           episodeNumber: episode.episodeNumber,
           airDate: episode.airDate,
+          source,
         });
       }
     } catch (error) {

@@ -9,7 +9,9 @@ import {
   useGetShowQuery,
 } from '@features/media/api/media.api';
 import {
-  useGetNotificationsQuery,
+  useGetNotificationCountsQuery,
+  useGetNotificationsInfiniteQuery,
+  useMarkAllNotificationsReadMutation,
   useMarkNotificationReadMutation,
 } from '@features/notifications/api/notifications.api';
 import { configureStore } from '@reduxjs/toolkit';
@@ -29,6 +31,7 @@ import {
   popularCategories,
 } from './home.fixtures';
 import HomePage from './HomePage';
+import { notificationReadItems, notificationUnreadItems } from './notifications.fixtures';
 
 const meta = {
   title: 'Home/Home Page',
@@ -96,7 +99,8 @@ function setupHomeMocks() {
   const getMovie = mocked(useGetMovieQuery);
   const getSeason = mocked(useGetSeasonQuery);
   const getShow = mocked(useGetShowQuery);
-  const getNotifications = mocked(useGetNotificationsQuery);
+  const getNotifications = mocked(useGetNotificationsInfiniteQuery);
+  const getNotificationCounts = mocked(useGetNotificationCountsQuery);
   const markNotificationRead = mocked(useMarkNotificationReadMutation);
 
   getLists.mockReturnValue({
@@ -126,13 +130,26 @@ function setupHomeMocks() {
   getSeason.mockReturnValue(emptyQuery);
   getShow.mockReturnValue(emptyQuery);
   getNotifications.mockReturnValue({
-    data: { notifications: [], unreadCount: 0 },
+    data: { pages: [{ notifications: [], nextCursor: null }], pageParams: [null] },
     isLoading: false,
     isFetching: false,
+    isError: false,
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    fetchNextPage: fn(),
+    refetch: fn(),
+  } as never);
+  getNotificationCounts.mockReturnValue({
+    data: { unreadCount: 0, hasRead: false },
+    isLoading: false,
     isError: false,
     refetch: fn(),
   } as never);
   markNotificationRead.mockReturnValue([fn(), { isLoading: false }] as never);
+  mocked(useMarkAllNotificationsReadMutation).mockReturnValue([
+    fn(),
+    { isLoading: false },
+  ] as never);
 }
 
 export const Browse: Story = {
@@ -155,4 +172,36 @@ export const Browse: Story = {
 
 export const BrowseVisual: Story = {
   beforeEach: setupHomeMocks,
+};
+
+/** Browse with notifications waiting; the visual test highlights the bell to open the panel. */
+export const NotificationsVisual: Story = {
+  beforeEach: () => {
+    setupHomeMocks();
+    mocked(useGetNotificationCountsQuery).mockReturnValue({
+      data: { unreadCount: notificationUnreadItems.length, hasRead: true },
+      isLoading: false,
+      isError: false,
+      refetch: fn(),
+    } as never);
+    mocked(useGetNotificationsInfiniteQuery).mockImplementation(((arg: { status: string }) => ({
+      data: {
+        pages: [
+          {
+            notifications:
+              arg.status === 'unread' ? notificationUnreadItems : notificationReadItems,
+            nextCursor: null,
+          },
+        ],
+        pageParams: [null],
+      },
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+      hasNextPage: false,
+      isFetchingNextPage: false,
+      fetchNextPage: fn(),
+      refetch: fn(),
+    })) as never);
+  },
 };
