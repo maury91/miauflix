@@ -19,7 +19,7 @@ import type {
   ProgressRequest,
   SubtitleCandidateDto,
 } from '@miauflix/backend';
-import { API_URL, PALETTE } from '@shared/config/constants';
+import { API_URL, builtForTizen, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { selectCurrentUser } from '@store/slices/auth';
@@ -900,6 +900,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
           <Video
             ref={videoRef}
             src={audioDelivery ? undefined : session.streamUrl}
+            // The TV app's backend is cross-origin, and subtitle tracks only load across origins with CORS
+            crossOrigin={builtForTizen ? 'anonymous' : undefined}
             aria-label={title}
             autoPlay={!audioDelivery}
             playsInline

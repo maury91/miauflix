@@ -57,3 +57,23 @@ export function expandEquivalentOrigins(origins: string[]): string[] {
   }
   return [...expanded];
 }
+
+export interface TvAppOriginSettings {
+  /** `ALLOW_TV_APP`: accept `file://`, which web pages cannot send. */
+  allowTvApp?: boolean;
+  /** `ALLOW_TV_APP_NULL_ORIGIN`: also accept `null`, which any sandboxed or `data:` page can send. */
+  allowNullOrigin?: boolean;
+}
+
+/**
+ * Whether a request comes from the Samsung TV app, which runs from local files and signs in with
+ * bearer tokens, never cookies. Its origin is `file://`; a platform that reports local files as
+ * the opaque origin `null` needs the separate opt-in, since web pages can send `null` too.
+ */
+export function isTvAppOrigin(
+  origin: string | undefined,
+  { allowTvApp, allowNullOrigin }: TvAppOriginSettings
+): boolean {
+  if (!allowTvApp) return false;
+  return origin === 'file://' || (allowNullOrigin === true && origin === 'null');
+}

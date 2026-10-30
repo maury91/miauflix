@@ -24,6 +24,7 @@ import type { UserRepository } from '@repositories/user.repository';
 import type { UserDto } from '@routes/auth.types';
 import type { StreamingToken } from '@services/auth/auth.types';
 import type { AuditLogService } from '@services/security/audit-log.service';
+import { readRefreshTokenPairs } from '@utils/auth-transport.util';
 import { InMemoryCache } from '@utils/in-memory-cache';
 import { generateSecurePassword } from '@utils/password.util';
 import { getRealClientIp } from '@utils/proxy.util';
@@ -527,12 +528,14 @@ export class AuthService {
   @traced('AuthService')
   async getSessionsFromCookies(context: Context): Promise<UserSession[]> {
     const cookieHeader = context.req.raw.headers.get('cookie');
-    if (!cookieHeader) {
+    // Token-transport clients (the TV app) send their refresh tokens instead of cookies
+    const headerTokens = readRefreshTokenPairs(context);
+    if (!cookieHeader && !headerTokens.length) {
       return [];
     }
 
     // Parse all cookies using Hono's parse function
-    const cookies = parse(cookieHeader);
+    const cookies = parse(cookieHeader ?? '');
 
     // Filter cookies that start with refresh token prefix and extract sessions
     const refreshTokenPrefix = `${this.cookieName}_`;
@@ -556,7 +559,7 @@ export class AuthService {
     // Validate each refresh token and collect valid sessions
     const verifiedSessions = await Promise.all(
       // Keep validation work bounded while prioritizing the currently active browser sessions.
-      refreshTokenCookies.slice(0, 5).map(async ({ session, token }) => {
+      [...refreshTokenCookies, ...headerTokens].slice(0, 5).map(async ({ session, token }) => {
         try {
           const refreshToken = await this.verifyOpaqueRefreshToken(token, session);
           const user = await this.userRepository.findById(refreshToken.userId);

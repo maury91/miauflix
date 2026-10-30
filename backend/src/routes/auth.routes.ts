@@ -1,15 +1,18 @@
 import { zValidator } from '@hono/zod-validator';
+import type { Context } from 'hono';
 import { Hono } from 'hono';
-import { getCookie } from 'hono/cookie';
 import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
 import { InvalidTokenError } from '@errors/auth.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
+import type { AuthResult, AuthService } from '@services/auth/auth.service';
+import { readRefreshToken, wantsTokenTransport } from '@utils/auth-transport.util';
 import { setCookies } from '@utils/setCookies.util';
 
 import type {
+  AuthTokens,
   CreateUserResponse,
   LoginResponse,
   LogoutResponse,
@@ -17,6 +20,17 @@ import type {
   SessionResponse,
 } from './auth.types';
 import type { Deps, ErrorResponse } from './common.types';
+
+/** Set the session cookies, or hand the tokens to a client that asked for token transport. */
+function deliverTokens(
+  context: Context,
+  authService: AuthService,
+  { accessToken, refreshToken, ...authResult }: AuthResult
+): { tokens?: AuthTokens } {
+  if (wantsTokenTransport(context)) return { tokens: { accessToken, refreshToken } };
+  setCookies(context, authService.getCookies({ accessToken, refreshToken, ...authResult }));
+  return {};
+}
 
 export const createAuthRoutes = ({
   authService,
@@ -50,11 +64,12 @@ export const createAuthRoutes = ({
           }
           // Auto-login: generate tokens so the frontend gets a session immediately
           const authResult = await authService.generateTokens(user, context);
-          setCookies(context, authService.getCookies(authResult));
+          const delivered = deliverTokens(context, authService, authResult);
           return context.json(
             {
               session: authResult.session,
               user: authResult.user,
+              ...delivered,
             } satisfies LoginResponse,
             201
           );
@@ -93,8 +108,8 @@ export const createAuthRoutes = ({
         // Generate tokens
         const authResult = await authService.generateTokens(user, context);
 
-        // Set authentication cookies
-        setCookies(context, authService.getCookies(authResult));
+        // Set authentication cookies (or return the tokens to a token-transport client)
+        const delivered = deliverTokens(context, authService, authResult);
 
         await auditLogService.logLoginAttempt({
           success: true,
@@ -102,10 +117,11 @@ export const createAuthRoutes = ({
           context,
         });
 
-        // Return session and user info (tokens are in cookies)
+        // Return session and user info (tokens are in cookies unless token transport was asked)
         return context.json({
           session: authResult.session,
           user: authResult.user,
+          ...delivered,
         } satisfies LoginResponse);
       }
     )
@@ -114,9 +130,9 @@ export const createAuthRoutes = ({
       rateLimitGuard(0.2), // 1 attempt every 5 seconds
       async context => {
         const { session } = context.req.param();
-        // Get refresh token from session-scoped HttpOnly cookie
+        // Get refresh token from session-scoped HttpOnly cookie (or X-Refresh-Token)
         const { name: cookieName } = authService.getCookieConfig(session);
-        const refreshToken = getCookie(context, cookieName);
+        const refreshToken = readRefreshToken(context, cookieName);
 
         if (!refreshToken) {
           throw new InvalidTokenError();
@@ -131,17 +147,18 @@ export const createAuthRoutes = ({
           throw new InvalidTokenError();
         }
 
-        // Set authentication cookies
-        setCookies(context, authService.getCookies(authResult));
+        // Set authentication cookies (or return the tokens to a token-transport client)
+        const delivered = deliverTokens(context, authService, authResult);
 
         await auditLogService.logTokenRefresh({
           userEmail: authResult.user.email,
           context,
         });
 
-        // Return user info (tokens are in cookies)
+        // Return user info (tokens are in cookies unless token transport was asked)
         return context.json({
           user: authResult.user,
+          ...delivered,
         } satisfies RefreshResponse);
       }
     )
@@ -150,9 +167,9 @@ export const createAuthRoutes = ({
       rateLimitGuard(1), // 1 attempt per second
       async context => {
         const { session } = context.req.param();
-        // Get refresh token from session-scoped HttpOnly cookie
+        // Get refresh token from session-scoped HttpOnly cookie (or X-Refresh-Token)
         const { name: cookieName } = authService.getCookieConfig(session);
-        const refreshToken = getCookie(context, cookieName);
+        const refreshToken = readRefreshToken(context, cookieName);
 
         if (refreshToken) {
           const user = await authService.logout(refreshToken, session);
@@ -265,10 +282,11 @@ export const createAuthRoutes = ({
           }
           throw error;
         }
-        setCookies(context, authService.getCookies(authResult));
+        const delivered = deliverTokens(context, authService, authResult);
         return context.json({
           session: authResult.session,
           user: authResult.user,
+          ...delivered,
         } satisfies LoginResponse);
       }
     )

@@ -8,6 +8,7 @@
     "dev:ssr": "dotenvx run --env-file=../.env -- npm run build:ssr && dotenvx run --env-file=../.env -- vite preview",
     "build": "tsc --project tsconfig.app.json && npm run build:ssr",
     "build:ssr": "npm run clear && tsx build-ssr.ts",
+    "build:tizen": "tsc --project tsconfig.app.json && vite build",
     "clear": "rimraf ../dist/frontend/* ../dist/frontend-ssr/* node_modules/.vite node_modules/.cache .vite tsconfig.tsbuildinfo",
     "check:ts": "tsc --project tsconfig.app.json --noEmit",
     "lint": "eslint . --report-unused-disable-directives --max-warnings 0",
