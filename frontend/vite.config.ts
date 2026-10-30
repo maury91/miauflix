@@ -22,32 +22,23 @@ if (tizenBuild) {
   console.log('executing tizen build');
 }
 
-// Phase 0 Bootstrap: Comment out complex asset and plugin configurations
-// TODO: Re-enable in future phases
-// const assets: (string | AssetGlob)[] = tizenBuild
-//   ? [
-//       {
-//         input: '../../tizen/',
-//         output: './',
-//         glob: 'config.xml',
-//       },
-//     ]
-//   : [];
-
-// const tizenPlugins = [
-//   publicTypescript({
-//     inputDir: 'src/startup',
-//   }),
-//   injectScripts(manifest => [
-//     {
-//       attrs: {
-//         // The file name in the directory, for example, test.ts --> manifest.test
-//         src: manifest.tizen,
-//       },
-//       injectTo: 'body',
-//     },
-//   ]),
-// ];
+/**
+ * Make the built page load from the TV's local files (file://): Tizen 5.5 and older block
+ * module scripts from file:// and the absolute <base href="/"> points at the filesystem root,
+ * so the bundle is a single classic script with paths relative to index.html.
+ */
+const tizenHtml = {
+  name: 'tizen-html',
+  apply: 'build' as const,
+  transformIndexHtml: {
+    order: 'post' as const,
+    handler: (html: string) =>
+      html
+        .replace(/\s*<base href="\/"\s*\/?>/, '')
+        .replace(/<script type="module" crossorigin/g, '<script defer')
+        .replace(/(<link rel="stylesheet") crossorigin/g, '$1'),
+  },
+};
 
 /**
  * Rewrite Set-Cookie headers from the backend proxy to host-only cookies.
@@ -138,6 +129,8 @@ const trustedDevHttps =
 
 export default defineConfig({
   root: __dirname,
+  // The TV loads index.html from its local files, so asset URLs must be relative to it.
+  base: tizenBuild ? './' : '/',
   cacheDir: '../node_modules/.vite/frontend',
   server: {
     port: 4173,
@@ -193,8 +186,8 @@ export default defineConfig({
       transformIndexHtml: {
         order: 'post',
         handler: async (html, context) => {
-          // Only run during build (not dev)
-          if (context.bundle) {
+          // Only run during build (not dev); the Tizen build ships without server-rendered markup
+          if (context.bundle && !tizenBuild) {
             try {
               // Import the SSR server module
               const ssrOutDir = path.resolve(__dirname, '../dist/frontend-ssr');
@@ -258,7 +251,7 @@ export default defineConfig({
     webfontDownload(),
     // nxViteTsPaths(),
     // nxCopyAssetsPlugin(assets),
-    // ...(tizenBuild ? tizenPlugins : []),
+    ...(tizenBuild ? [tizenHtml] : []),
     ...(trustedDevHttps || testHttp
       ? []
       : [
@@ -278,11 +271,14 @@ export default defineConfig({
     emptyOutDir: true,
     reportCompressedSize: true,
     target: tizenBuild ? 'es2019' : 'esnext',
+    // Tizen loads one classic script, so there are no module chunks to preload.
+    modulePreload: tizenBuild ? false : undefined,
     commonjsOptions: {
       transformMixedEsModules: true,
     },
     rollupOptions: {
       input: path.resolve(__dirname, 'index.html'), // Use HTML as entry point to trigger transformIndexHtml
+      output: tizenBuild ? { format: 'iife', inlineDynamicImports: true } : undefined,
     },
   },
   // Phase 0 Bootstrap: Add comprehensive resolve configuration
