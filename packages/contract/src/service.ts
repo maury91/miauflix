@@ -43,9 +43,15 @@ export interface ManagedConfiguration {
 export interface ServiceOptions {
   info: ServiceInfo;
   configuration: ManagedConfiguration;
-  /** Defaults to `ready`/`standby` from the configuration. */
+  /**
+   * Defaults to `ready`/`standby` from the configuration. A `ready` state is reported as
+   * `configuring` while `ready()` is false, so `ready` always means the data plane serves calls.
+   */
   status?: () => ServiceStatus | Promise<ServiceStatus>;
-  /** Whether data-plane methods may run. Defaults to `configuration.ready`. */
+  /**
+   * Whether data-plane methods may run. Defaults to `configuration.ready`. When it can change
+   * without a configuration transition, call `notifyStatus()` after it does.
+   */
   ready?: () => boolean;
   /** Shared secret a connection must present before anything else. Unset: no check. */
   token?: string;
@@ -146,8 +152,16 @@ export class Service {
   }
 
   async status(): Promise<ServiceStatus> {
-    if (this.options.status) return this.options.status();
-    return { state: this.options.configuration.ready ? 'ready' : 'standby' };
+    const status = this.options.status
+      ? await this.options.status()
+      : { state: this.options.configuration.ready ? ('ready' as const) : ('standby' as const) };
+    // Hosts attach subscriptions on `ready`: never announce it while data calls are still rejected.
+    if (status.state !== 'ready' || this.isReady()) return status;
+    return {
+      ...status,
+      state: 'configuring',
+      message: status.message ?? `${this.info.name} is starting`,
+    };
   }
 
   /** Pushes the current status to subscribers when it changed. */

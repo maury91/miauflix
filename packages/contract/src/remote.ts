@@ -64,7 +64,12 @@ type Subscription = {
   options?: SubscribeOptions<unknown>;
   wireId: number | null;
   attachedBefore: boolean;
+  /** Pending re-attach after a `not_configured` rejection while the service reported ready. */
+  retry?: { timer: ReturnType<typeof setTimeout> | null; delayMs: number };
 };
+
+const SUBSCRIBE_RETRY_MS = 1_000;
+const SUBSCRIBE_RETRY_MAX_MS = 30_000;
 
 const unavailable = () => new ContractError('unavailable', 'Service is not connected');
 
@@ -115,6 +120,26 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
     subscription.attachedBefore = true;
   };
 
+  const cancelRetry = (subscription: Subscription) => {
+    if (subscription.retry?.timer) clearTimeout(subscription.retry.timer);
+    subscription.retry = undefined;
+  };
+
+  // Backstop for a service whose `ready` status ran ahead of its data plane: without it the
+  // subscription would wait for a status change that may never come.
+  const retryAttach = (subscription: Subscription) => {
+    const delayMs = subscription.retry?.delayMs ?? SUBSCRIBE_RETRY_MS;
+    const timer = setTimeout(() => {
+      subscription.retry = {
+        timer: null,
+        delayMs: Math.min(SUBSCRIBE_RETRY_MAX_MS, delayMs * 2),
+      };
+      if (subscriptions.has(subscription) && status?.state === 'ready') attach(subscription);
+    }, delayMs);
+    (timer as { unref?: () => void }).unref?.();
+    subscription.retry = { timer, delayMs };
+  };
+
   const detach = (subscription: Subscription, notify: boolean) => {
     if (subscription.wireId === null) return;
     subscriptionsByWireId.delete(subscription.wireId);
@@ -129,9 +154,11 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
       status = payload as ServiceStatus;
       for (const listener of statusListeners) listener(status);
       // Leaving `ready` drops the data plane: detach, so `ready` re-attaches with a resync.
-      for (const subscription of subscriptions)
+      for (const subscription of subscriptions) {
+        cancelRetry(subscription);
         if (status.state === 'ready') attach(subscription);
         else detach(subscription, true);
+      }
     },
     wireId: null,
     attachedBefore: false,
@@ -198,11 +225,12 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
           stream.wake?.();
           return;
         }
-        // A rejected subscription waits for the next `ready` status.
+        // A rejected subscription waits for the next `ready` status, or retries if already ready.
         const subscription = subscriptionsByWireId.get(id);
         if (subscription) {
           subscriptionsByWireId.delete(id);
           subscription.wireId = null;
+          if (a === 'not_configured' && status?.state === 'ready') retryAttach(subscription);
         }
         return;
       }
@@ -380,6 +408,7 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
       subscription.attachedBefore = true;
       return () => {
         subscriptions.delete(subscription);
+        cancelRetry(subscription);
         detach(subscription, true);
       };
     },
@@ -454,6 +483,7 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
     close() {
       closedByUser = true;
       if (retryTimer) clearTimeout(retryTimer);
+      for (const subscription of subscriptions) cancelRetry(subscription);
       if (heartbeat) clearInterval(heartbeat);
       const current = socket;
       socket = null;

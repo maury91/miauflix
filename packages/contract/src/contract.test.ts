@@ -6,6 +6,7 @@ import {
   call,
   connect,
   contract,
+  ContractError,
   createClient,
   defineService,
   event,
@@ -389,6 +390,51 @@ test('a service implements each major once; since cannot exceed the minor', () =
 });
 
 describe('remote connection lifecycle', () => {
+  test('status never says ready while the data plane rejects calls', async () => {
+    let attached = false;
+    const service = defineService({
+      info: { id: 'gap', name: 'Gap', description: '', version: '0' },
+      configuration: setupConfig(),
+      status: () => ({ state: 'ready' }),
+      ready: () => attached,
+    });
+    assert.equal((await service.status()).state, 'configuring');
+    attached = true;
+    assert.equal((await service.status()).state, 'ready');
+  });
+
+  test('retries a subscription rejected as not_configured while the service reports ready', async () => {
+    const gapEvents = contract('gap', '1.0', { ticks: event<number>() });
+    const emitters = new Set<(value: number) => void>();
+    let rejections = 1;
+    const service = defineService({
+      info: { id: 'gap', name: 'Gap', description: '', version: '0' },
+      configuration: setupConfig(),
+    }).implement(gapEvents, {
+      ticks: emit => {
+        // A data plane that lags the `ready` status once, then attaches.
+        if (rejections-- > 0) throw new ContractError('not_configured', 'Not attached yet');
+        emitters.add(emit);
+        return () => emitters.delete(emit);
+      },
+    });
+    const server = await serve(service, { hostname: '127.0.0.1', port: 0 });
+    const connection = connect({ url: `http://127.0.0.1:${server.port}`, timeoutMs: 1_000 });
+    try {
+      await connection.ready();
+      await until(() => connection.status?.state === 'ready');
+      const received: number[] = [];
+      createClient(gapEvents, connection.transport).ticks.on(value => received.push(value));
+      await until(() => emitters.size === 1, 3_000);
+      for (const emit of emitters) emit(7);
+      await until(() => received.length === 1);
+      assert.deepEqual(received, [7]);
+    } finally {
+      connection.close();
+      await server.stop();
+    }
+  });
+
   test('reconnects after the service restarts and resyncs subscriptions', async () => {
     const fixture = setup();
     let server = await serve(fixture.service, { hostname: '127.0.0.1', port: 0 });

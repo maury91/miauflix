@@ -214,36 +214,48 @@ The backend opens a WebSocket to `ws://service/_c` and keeps it open. Every call
 and management message is multiplexed on it. There is no per-call connection, header parsing or
 routing table, and the HTTP router disappears.
 
-Frames are compact JSON arrays (`[type, id, a, b]`):
+Frames are compact JSON arrays (`[type, id, a, b]`), defined in
+`packages/contract/src/protocol.ts`:
 
-| type | name   | direction | payload                                                              |
-| ---- | ------ | --------- | -------------------------------------------------------------------- |
-| 0    | hello  | S→B       | `{ protocol: 3, service, version, contracts: { catalog: ['2.0'] } }` |
-| 1    | auth   | B→S       | `{ token }` (shared secret; first frame, otherwise close 4401)       |
-| 2    | call   | B→S       | `[2, id, "catalog@2.getMovie", input]`                               |
-| 3    | ok     | S→B       | `[3, id, output]`                                                    |
-| 4    | err    | S→B       | `[4, id, code, message]`                                             |
-| 5    | item   | S→B       | `[5, id, item]` (stream item)                                        |
-| 6    | end    | S→B       | `[6, id]`                                                            |
-| 7    | cancel | B→S       | `[7, id]` (AbortSignal fired, or the stream consumer broke the loop) |
-| 8    | credit | B→S       | `[8, id, n]` (stream backpressure: the server may send n more items) |
-| 9    | sub    | B→S       | `[9, id, "catalog@2.artwork", filter]`                               |
-| 10   | event  | S→B       | `[10, id, payload]`                                                  |
-| 11   | unsub  | B→S       | `[11, id]`                                                           |
-| 12   | status | S→B       | `ServiceStatus` (pushed on change, replaces polling and SSE)         |
+| type | name   | direction | frame                                                                      |
+| ---- | ------ | --------- | -------------------------------------------------------------------------- |
+| 0    | hello  | S→C       | `[0, 0, { protocol: 3, id, name, description, version, contracts }]`       |
+| 1    | init   | C→S       | `[1, 0, { token?, ticketKey? }]` (first frame; a wrong token closes 4401)  |
+| 2    | call   | C→S       | `[2, id, "catalog@2.getMovie", input]`                                     |
+| 3    | ok     | S→C       | `[3, id, output]`                                                          |
+| 4    | err    | S→C       | `[4, id, code, message]` (a call, a stream or a rejected subscription)     |
+| 5    | item   | S→C       | `[5, id, item]` (stream item)                                              |
+| 6    | end    | S→C       | `[6, id]`                                                                  |
+| 7    | cancel | C→S       | `[7, id]` aborts a call or stream, or ends a subscription                  |
+| 8    | credit | C→S       | `[8, id, n]` (stream backpressure: the service may send n more items)      |
+| 9    | sub    | C→S       | `[9, id, "catalog@2.artwork", filter]`                                     |
+| 10   | event  | S→C       | `[10, id, payload]`                                                        |
+| 11   | ready  | S→C       | `[11, 0]` the connection is authorized; calls and subscriptions may follow |
+| 12   | ping   | both      | `[12]`                                                                     |
+| 13   | pong   | both      | `[13]`                                                                     |
 
-- **Ids** are per-connection incrementing integers. Calls and subscriptions share the id space.
+`contracts` maps each contract name to the versions implemented, for example
+`{ catalog: ['2.0'] }`. Status is not a frame type: the host subscribes to the management event
+`$@1.statusChanged` (frame 9) and receives every change as an `event` frame.
+
+- **Ids** are per-connection incrementing integers. Calls, streams and subscriptions share the
+  id space.
 - **Binary results** (`Uint8Array` outputs such as a `.torrent` file) travel as one binary
-  frame `[u32 id][bytes]` instead of base64 inside JSON.
-- **Reconnect** is built into the host. It uses exponential backoff with jitter, re-sends
-  `auth`, then the config snapshot when the service reports `standby`, then re-subscribes every
-  live subscription. Each subscription can pass `onResync`, which replaces today's
-  `onArtworkStreamReady` + snapshot dance.
-- **Liveness** relies on WebSocket ping/pong. A dead socket rejects in-flight calls with
-  `unavailable` and marks the service `error`. No HTTP polling.
-- **Codec:** JSON by default. In JS, `JSON.parse`/`stringify` are native and hard to beat for
-  object-heavy payloads. The codec is negotiated in `hello`, so msgpackr can be benchmarked and
-  enabled later without touching contracts.
+  message `[u8 type][u32 id, big endian][bytes]` instead of base64 inside JSON.
+- **Handshake:** the service sends `hello`, the host answers `init` with the shared token (if
+  any) and the key for signed `bytes` URLs, and the service confirms with `ready`.
+- **Reconnect** is built into the host. It uses exponential backoff with jitter, then repeats the
+  handshake, delivers the config snapshot when the service reports `standby`, and re-subscribes
+  every live subscription. Each subscription can pass `onResync`, which replaces the old
+  `onArtworkStreamReady` + snapshot dance. A subscription rejected with `not_configured` waits
+  for the next `ready` status, and retries with backoff if the service already reported ready.
+- **Liveness** uses application-level `ping`/`pong` frames every 20 s, sent by both sides (the
+  same on Node and Bun, and visible through proxies). A side that hears nothing for 60 s closes
+  with 4408. A closed connection rejects in-flight calls with `unavailable` and marks the
+  service `error`. No HTTP polling.
+- **Codec:** JSON. In JS, `JSON.parse`/`stringify` are native and hard to beat for
+  object-heavy payloads. A binary codec such as msgpackr would be a protocol version bump,
+  without touching contracts.
 - **Method names** are strings. Interning them to integer ids at handshake would save a few
   bytes per frame. That is not worth it until measurements say otherwise.
 
