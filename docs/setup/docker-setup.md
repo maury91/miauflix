@@ -195,6 +195,28 @@ docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint
 
 Keep `LIST_SERVICE_ENCRYPTION_KEY` in `.env` if you had set it: the list service needs it to read its data. The backend now listens on `localhost:3000` instead of `5000`. Leave `./data` in place until you've checked everything works.
 
+### Secrets set in `.env`
+
+Miauflix generates `JWT_SECRET`, `STREAM_TOKEN_SECRET`, `STREAM_KEY_SALT` and `SOURCE_SECURITY_KEY` on first start and saves them in its `config.json`. When one is set as an environment variable instead, Miauflix uses it and deliberately doesn't save it, so it's only known for as long as the variable is passed in.
+
+The compose files don't pass these variables, except `docker-compose.build.yml`, which mounts `.env`. If an older setup passed them (the old `docker-compose.https.yml` did, so did the source-built stack through `.env`), check whether they are in `config.json`:
+
+```bash
+docker compose exec miauflix node -e 'console.log(Object.keys(require("/usr/src/app/data/config.json")))'
+```
+
+If they are missing, pass them in before you recreate the containers. Otherwise Miauflix generates new ones: data encrypted with the old `SOURCE_SECURITY_KEY` can no longer be read, and every user is signed out. Keep the values in `.env` and add a file such as `docker-compose.secrets.yml` at the end of `COMPOSE_FILE`:
+
+```yaml
+services:
+  miauflix:
+    environment:
+      JWT_SECRET: ${JWT_SECRET:?}
+      STREAM_TOKEN_SECRET: ${STREAM_TOKEN_SECRET:?}
+      STREAM_KEY_SALT: ${STREAM_KEY_SALT:?}
+      SOURCE_SECURITY_KEY: ${SOURCE_SECURITY_KEY:?}
+```
+
 ## Docker Services
 
 ### Main Services

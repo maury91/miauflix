@@ -33,6 +33,7 @@ describe('SourceAvailabilityService', () => {
     const contentSources = {
       setHasVideo: jest.fn().mockResolvedValue(changed),
       findByMovieId: jest.fn().mockResolvedValue(linkedSources),
+      findQuality: jest.fn().mockResolvedValue({ quality: 'FHD', sourceType: 'BLURAY' }),
     };
     const movieQuery = {
       innerJoin: jest.fn().mockReturnThis(),
@@ -89,9 +90,11 @@ describe('SourceAvailabilityService', () => {
       playable: { kind: 'movie', mediaId: 1400940 },
       availability: 'available',
     });
+    expect(contentSources.findQuality).toHaveBeenCalledWith(1);
     expect(notifications.playableAvailable).toHaveBeenCalledWith(
       { kind: 'movie', mediaId: 1400940 },
-      'Clayface'
+      'Clayface',
+      { quality: 'FHD', sourceType: 'BLURAY' }
     );
   });
 
@@ -118,13 +121,15 @@ describe('SourceAvailabilityService', () => {
 
     const playable = { kind: 'episode', showMediaId: 9001, seasonNumber: 1, episodeNumber: 8 };
     expect(changes).toHaveBeenCalledWith({ playable, availability: 'available' });
-    expect(notifications.playableAvailable).toHaveBeenCalledWith(playable, 'Example Show');
+    const source = { quality: 'FHD', sourceType: 'BLURAY' };
+    expect(notifications.playableAvailable).toHaveBeenCalledWith(playable, 'Example Show', source);
     expect(notifications.episodeAvailable).toHaveBeenCalledWith({
       showMediaId: 9001,
       showTitle: 'Example Show',
       seasonNumber: 1,
       episodeNumber: 8,
       airDate: '2026-10-20',
+      source,
     });
   });
 

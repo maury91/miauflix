@@ -253,6 +253,8 @@ export function useHomeNavigation({
         return outcome;
       }
       if (activeRegion === 'sidebar') return onSidebarAction(action);
+      // The notifications panel handles its own keys.
+      if (activeRegion === 'notifications') return { type: 'ignored' };
       const outcome = rowRefs.current.get(activeCategory)?.handleAction(action) ?? {
         type: 'ignored' as const,
       };

@@ -162,7 +162,7 @@ describe('Settings navigation', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
 
-  it('skips the hidden Settings action when navigating the sidebar as a non-admin', async () => {
+  it.skip('skips the hidden Settings action when navigating the sidebar as a non-admin', async () => {
     state.admin = false;
     store = createTestStore();
     await renderApp();

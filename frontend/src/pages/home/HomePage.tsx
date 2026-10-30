@@ -1,4 +1,4 @@
-import { type AppRoute, useRoute } from '@app/router';
+import { type AppRoute, navigate, useRoute } from '@app/router';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
 import { CategoryRow } from './components/CategoryRow';
-import { HomeSidebar } from './components/HomeSidebar';
+import { HomeSidebar, type SidebarItem } from './components/HomeSidebar';
 import { MediaDetails } from './components/MediaDetails';
 import { MediaHero } from './components/MediaHero';
 import { NotificationsMenu } from './components/NotificationsMenu';
@@ -33,6 +33,7 @@ import { useTraktPrompt } from './hooks/useTraktPrompt';
 import { CONTINUE_CATEGORY } from './home-feed';
 import { homeMountedRows, homeRowLoadState } from './home-layout';
 import { getMediaTitle } from './media.utils';
+import { notificationPlayable } from './notification-copy';
 import { subtitleLanguageForMedia } from './subtitle-language';
 
 // Absolute, not fixed: a fixed element is its own stacking context, which would keep the rail
@@ -108,12 +109,19 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   useSessionChange(sessionId, () => setBrowseSelection(null));
   const selectedMedia = selectedMediaFor(activeRoute, routeMedia, browseSelection);
 
-  const notifications = useHomeNotifications(sessionId, browsing);
   const trakt = useTraktPrompt({
     enabled: interactive && browsing,
     sessionId,
     userId: currentUser?.id,
   });
+  // The notifications panel shows while the rail's bell is highlighted or the panel is in use.
+  const region = useSelector((state: RootState) => state.homeNavigation.activeRegion);
+  const [sidebarItem, setSidebarItem] = useState<SidebarItem>('search');
+  const sidebarActive = interactive && !trakt.open && region === 'sidebar';
+  const notificationsFocused = interactive && !trakt.open && region === 'notifications';
+  const notificationsVisible =
+    browsing && ((sidebarActive && sidebarItem === 'notifications') || notificationsFocused);
+  const notifications = useHomeNotifications(sessionId, notificationsVisible);
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth, rowHeight } = useMediaBoxSizes();
   // The hero and the fixed app logo line up with the rows' left edge.
   useEffect(() => {
@@ -145,7 +153,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     route: activeRoute,
     view,
     playable,
-    enabled: interactive && !trakt.open && !notifications.open,
+    enabled: interactive && !trakt.open,
     sessionId,
     categories: displayCategories,
     requestNextPage: feed.requestNextPage,
@@ -276,17 +284,18 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
               </Rows>
             </Content>
             <HomeSidebar
-              active={
-                interactive && !trakt.open && !notifications.open && activeRegion === 'sidebar'
-              }
+              active={sidebarActive}
+              expanded={notificationsVisible}
               showSettings={isAdmin}
               onAction={navigation.onSidebarAction}
               onHover={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
               onSettings={navigation.openSettings}
               onSearch={navigation.openSearch}
-              onNotifications={notifications.openNotifications}
-              notificationsRef={notifications.buttonRef}
-              unreadCount={notifications.query.data?.unreadCount ?? 0}
+              onEnterNotifications={() =>
+                dispatch(homeNavigationActions.setActiveRegion('notifications'))
+              }
+              onSelectedChange={setSidebarItem}
+              unreadCount={notifications.unreadCount}
             />
           </>
         ) : view === 'details' && selectedMedia ? (
@@ -325,15 +334,30 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
           />
         ) : null}
       </div>
-      {view === 'browse' && notifications.open && (
+      {notificationsVisible && (
         <NotificationsMenu
-          notifications={notifications.query.data?.notifications ?? []}
-          loading={notifications.query.isLoading}
-          failed={notifications.query.isError}
-          sidebarActive={activeRegion === 'sidebar'}
-          onClose={notifications.closeNotifications}
-          onRetry={() => void notifications.query.refetch()}
-          onMarkRead={id => void notifications.markRead(id)}
+          unread={notifications.unread}
+          read={notifications.read}
+          unreadCount={notifications.unreadCount}
+          hasRead={notifications.hasRead}
+          showRead={notifications.showRead}
+          focused={notificationsFocused}
+          railExpanded
+          onToggleShowRead={notifications.toggleShowRead}
+          onMarkAllRead={notifications.markAllRead}
+          onOpen={notification => {
+            if (!notification.readAt) notifications.markRead(notification.id);
+            const target = notificationPlayable(notification);
+            if (target) navigation.openPlayer(target);
+            else
+              navigate(
+                { type: 'showDetails', mediaId: notification.mediaId },
+                { parent: { type: 'home' } }
+              );
+          }}
+          onExit={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
+          onPointerEnter={() => dispatch(homeNavigationActions.setActiveRegion('notifications'))}
+          onPointerLeave={() => navigation.onSidebarAction('right')}
         />
       )}
       {interactive && trakt.open && sessionId && (
