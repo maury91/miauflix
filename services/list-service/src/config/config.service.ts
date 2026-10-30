@@ -1,5 +1,5 @@
+import type { ServiceConfigSchema } from '@miauflix/contract';
 import { ServiceConfiguration } from '@miauflix/service-configuration';
-import type { ServiceConfigSchema } from '@miauflix/service-contracts';
 
 import { createListConfigSchema } from './schema';
 
