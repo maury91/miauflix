@@ -1,5 +1,5 @@
 {
-  "name": "@miauflix/service-contracts",
+  "name": "@miauflix/contracts",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -9,29 +9,16 @@
     ".": {
       "types": "./dist/index.d.ts",
       "default": "./dist/index.js"
-    },
-    "./management/v1": {
-      "types": "./src/management/v1.ts",
-      "default": "./dist/management/v1.js"
-    },
-    "./catalog/v1": {
-      "types": "./src/catalog/v1.ts",
-      "default": "./dist/catalog/v1.js"
-    },
-    "./list/v1": {
-      "types": "./src/list/v1.ts",
-      "default": "./dist/list/v1.js"
     }
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "check:ts": "tsc --noEmit -p tsconfig.json",
     "lint": "eslint src/",
-    "test": "npm run build && node --test dist/*.test.js",
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "zod": "4.1.12"
+    "@miauflix/contract": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3"

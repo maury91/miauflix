@@ -1,4 +1,4 @@
-import type { BackdropFocus } from '@miauflix/service-contracts';
+import type { BackdropFocus } from '@miauflix/contracts';
 import type { Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 import type { Quality } from '@miauflix/source-metadata-extractor';
 

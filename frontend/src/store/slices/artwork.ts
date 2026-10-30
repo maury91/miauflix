@@ -1,4 +1,4 @@
-import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
+import type { ArtworkUpdate, MediaRef } from '@miauflix/contracts';
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
 
 const mediaKey = (mediaType: MediaRef['mediaType'], mediaId: number) => `${mediaType}:${mediaId}`;

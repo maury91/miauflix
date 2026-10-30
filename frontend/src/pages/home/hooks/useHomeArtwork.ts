@@ -1,6 +1,6 @@
 import { realtimeRuntimeActions } from '@features/realtime/realtime.middleware';
 import type { MediaDto } from '@miauflix/backend';
-import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
+import type { ArtworkUpdate, MediaRef } from '@miauflix/contracts';
 import { artworkActions } from '@store/slices/artwork';
 import type { AppDispatch } from '@store/store';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';

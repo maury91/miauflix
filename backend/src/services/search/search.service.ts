@@ -5,7 +5,7 @@ import type {
   SearchGenre,
   SearchGenreKey,
   SearchResponse,
-} from '@miauflix/service-contracts';
+} from '@miauflix/contracts';
 
 import type { RecentSearchRepository } from '@repositories/recent-search.repository';
 import type {

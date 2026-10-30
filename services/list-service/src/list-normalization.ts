@@ -1,4 +1,4 @@
-import { externalMediaRefSchema } from '@miauflix/service-contracts';
+import type { ExternalMediaIds, ExternalMediaRef } from '@miauflix/contracts';
 import { z } from 'zod';
 
 export type TraktIds = { trakt?: number | null; tmdb?: number | null; imdb?: string | null };
@@ -41,12 +41,13 @@ export const mapItems = (items: TraktItem[], mediaType: 'movie' | 'tv') =>
       const ids = media.ids;
       const normalizedIds = Object.fromEntries(
         Object.entries(ids).filter(([, value]) => value !== null && value !== undefined)
-      );
+      ) as ExternalMediaIds;
+      if (!Object.keys(normalizedIds).length) return [];
       return [
         {
           key: `trakt:${mediaType}:${ids.trakt ?? index}`,
           rank: index,
-          media: externalMediaRefSchema.parse({ mediaType, ids: normalizedIds }),
+          media: { mediaType, ids: normalizedIds } satisfies ExternalMediaRef,
         },
       ];
     })
@@ -64,12 +65,13 @@ export const mapMixedItems = (items: TraktItem[]) =>
       const ids = media.ids;
       const normalizedIds = Object.fromEntries(
         Object.entries(ids).filter(([, value]) => value !== null && value !== undefined)
-      );
+      ) as ExternalMediaIds;
+      if (!Object.keys(normalizedIds).length) return [];
       return [
         {
           key: `trakt:${mediaType}:${ids.trakt ?? index}`,
           rank: index,
-          media: externalMediaRefSchema.parse({ mediaType, ids: normalizedIds }),
+          media: { mediaType, ids: normalizedIds } satisfies ExternalMediaRef,
         },
       ];
     })
@@ -78,7 +80,7 @@ export const mapMixedItems = (items: TraktItem[]) =>
 type MappedListItem = {
   key: string;
   rank: number;
-  media: ReturnType<typeof externalMediaRefSchema.parse>;
+  media: ExternalMediaRef;
 };
 
 /** Keep the first provider item for each media identity and compact its rank. */

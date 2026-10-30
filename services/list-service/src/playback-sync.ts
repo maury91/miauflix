@@ -1,8 +1,10 @@
-import type { PlaybackEntry, PlaybackProgress } from '@miauflix/service-contracts';
-import { playbackSnapshotSchema, playbackSyncSchema } from '@miauflix/service-contracts';
+import type { PlaybackEntry, PlaybackProgress } from '@miauflix/contracts';
 import type { Database } from 'bun:sqlite';
 
 import type { TraktClient } from './trakt-client';
+
+type QueuedProgress = PlaybackProgress & { subjectId: string };
+type Snapshot = { progress: PlaybackEntry[] };
 
 type Pending = { id: string; subject_id: string; connection_id: string; payload: string };
 
@@ -33,7 +35,7 @@ export class PlaybackSync {
   /**
    * Read the current connection’s cached playback, excluding playables with pending local exports.
    * Return an empty list without a connection or snapshot. Database, decryption, JSON, and schema
-   * validation errors propagate; this method does not contact Trakt.
+   * errors propagate; this method does not contact Trakt.
    */
   read(subjectId: string): PlaybackEntry[] {
     const connectionId = this.association(subjectId)?.connection_id;
@@ -46,14 +48,14 @@ export class PlaybackSync {
       .all(subjectId, connectionId) as Array<{ payload: string }>;
     const pendingKeys = new Set(
       pending.map(item =>
-        JSON.stringify(playbackSyncSchema.parse(JSON.parse(this.open(item.payload))).playable)
+        JSON.stringify((JSON.parse(this.open(item.payload)) as QueuedProgress).playable)
       )
     );
     // A delayed provider timestamp must never hide a newer local update awaiting export.
     return row
-      ? playbackSnapshotSchema
-          .parse(JSON.parse(this.open(row.payload)))
-          .progress.filter(entry => !pendingKeys.has(JSON.stringify(entry.playable)))
+      ? (JSON.parse(this.open(row.payload)) as Snapshot).progress.filter(
+          entry => !pendingKeys.has(JSON.stringify(entry.playable))
+        )
       : [];
   }
 
@@ -107,7 +109,7 @@ export class PlaybackSync {
         }
         const accountKey = `${row.subject_id}:${row.connection_id}`;
         if ((this.retries.get(accountKey) ?? 0) > Date.now()) continue;
-        const update = playbackSyncSchema.parse(JSON.parse(this.open(row.payload)));
+        const update = JSON.parse(this.open(row.payload)) as QueuedProgress;
         const key = JSON.stringify(update.playable);
         const last = this.lastWrites.get(accountKey);
         if (
@@ -156,9 +158,9 @@ export class PlaybackSync {
             )
             .get(account.subject_id, account.connection_id) as { payload: string } | null;
           const previous = snapshot
-            ? playbackSnapshotSchema
-                .parse(JSON.parse(this.open(snapshot.payload)))
-                .progress.filter(entry => entry.state === 'completed')
+            ? (JSON.parse(this.open(snapshot.payload)) as Snapshot).progress.filter(
+                entry => entry.state === 'completed'
+              )
             : [];
           const since = previous.reduce<string | undefined>(
             (latest, entry) =>

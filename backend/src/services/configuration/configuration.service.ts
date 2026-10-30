@@ -1,8 +1,8 @@
 import { AsyncLocalStorage } from 'node:async_hooks';
 
 import { logger } from '@logger';
-import type { ConfigVariable, ServiceConfigSchema } from '@miauflix/service-contracts';
-import { ConfigStore } from '@miauflix/service-contracts';
+import type { ConfigVariable, ServiceConfigSchema } from '@miauflix/contract';
+import { ConfigStore } from '@miauflix/service-configuration';
 import chalk from 'chalk';
 import { mkdirSync } from 'fs';
 import path from 'path';

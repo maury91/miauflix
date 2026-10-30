@@ -1,6 +1,8 @@
 import { logger } from '@logger';
-import { searchGenreKeySchema } from '@miauflix/service-contracts';
+import { SEARCH_GENRE_KEY_PATTERN } from '@miauflix/contracts';
 import { z } from 'zod';
+
+const searchGenreKeySchema = z.string().regex(SEARCH_GENRE_KEY_PATTERN);
 
 import type { SearchServerMessage } from '@routes/search.types';
 import type { SearchInput, SearchService } from '@services/search/search.service';

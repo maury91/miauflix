@@ -14,8 +14,9 @@
     "clean": "rm -rf node_modules"
   },
   "dependencies": {
+    "@miauflix/contract": "*",
+    "@miauflix/contracts": "*",
     "@miauflix/service-configuration": "*",
-    "@miauflix/service-contracts": "*",
     "@tensorflow/tfjs-backend-wasm": "^4.22.0",
     "@tensorflow/tfjs-converter": "^4.22.0",
     "@tensorflow/tfjs-core": "^4.22.0",

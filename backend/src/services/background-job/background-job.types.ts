@@ -1,4 +1,4 @@
-import type { CatalogJobPayloads } from '@miauflix/service-contracts';
+import type { CatalogJobPayloads } from '@miauflix/contracts';
 
 export interface BackgroundJobPayloads {
   'list.refresh.plan': { slug: string; maxPages: number; subjectId: string };

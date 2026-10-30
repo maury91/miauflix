@@ -1,4 +1,4 @@
-import type { BackdropFocus } from '@miauflix/service-contracts';
+import type { BackdropFocus } from '@miauflix/contracts';
 import sharp, { type Sharp } from 'sharp';
 import smartcrop from 'smartcrop';
 

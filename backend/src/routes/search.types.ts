@@ -1,4 +1,4 @@
-import type { SearchGenreKey } from '@miauflix/service-contracts';
+import type { SearchGenreKey } from '@miauflix/contracts';
 
 export type { SearchGenreKey };
 

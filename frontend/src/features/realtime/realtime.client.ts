@@ -5,12 +5,22 @@ import type {
   SearchClientMessage,
   SearchServerMessage,
 } from '@miauflix/backend';
-import {
-  type ArtworkUpdate,
-  artworkUpdateSchema,
-  type MediaRef,
-} from '@miauflix/service-contracts/catalog/v1';
+import type { ArtworkUpdate, MediaRef } from '@miauflix/contracts';
 import { API_URL } from '@shared/config/constants';
+import { z } from 'zod';
+
+const artworkStatusSchema = z.enum(['pending', 'ready', 'failed']);
+/** Shape check for pushed artwork updates (the realtime connection is an untrusted edge). */
+const artworkUpdateSchema = z.object({
+  mediaType: z.enum(['movie', 'tv']),
+  mediaId: z.number().int().positive(),
+  backdrop: z.string(),
+  logo: z.string(),
+  heroLogo: z.string(),
+  artworkRevision: z.number().int().nonnegative(),
+  cardLogoStatus: artworkStatusSchema,
+  heroLogoStatus: artworkStatusSchema,
+}) satisfies z.ZodType<ArtworkUpdate>;
 
 const MAP_COALESCE_MS = 50;
 const ARTWORK_BATCH_SIZE = 50;

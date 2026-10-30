@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'bun:test';
+
 import { retryAfterMs } from '../src/trakt-rate-limit';
 
 describe('Trakt Retry-After', () => {

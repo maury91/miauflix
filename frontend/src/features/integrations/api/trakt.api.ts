@@ -2,7 +2,7 @@ import type {
   ConnectionResult,
   ProviderAssociation,
   ProviderAuthorization,
-} from '@miauflix/service-contracts';
+} from '@miauflix/contracts';
 import { authenticatedRequest } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 

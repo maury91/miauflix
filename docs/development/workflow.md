@@ -26,8 +26,9 @@ miauflix/
 │   ├── media-catalog/              # TMDB-backed media catalog (Bun)
 │   └── list-service/               # Trakt list service
 ├── packages/                       # Shared libraries
-│   ├── service-configuration/      # Shared service configuration
-│   ├── service-contracts/          # Typed contracts between services
+│   ├── contract/                   # Contract runtime: typed clients, transports, serve()
+│   ├── contracts/                  # The service contracts (catalog, lists) and their types
+│   ├── service-configuration/      # Shared service configuration and the config store
 │   ├── source-metadata-extractor/  # Content metadata processing
 │   └── *-sanitizer/                # Source metadata sanitizers (used for test fixtures)
 ├── test-fixtures/                  # Recorded provider responses and fixture images

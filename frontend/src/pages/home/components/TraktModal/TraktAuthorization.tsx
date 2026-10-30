@@ -1,5 +1,5 @@
 import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
-import type { ProviderAuthorization } from '@miauflix/service-contracts';
+import type { ProviderAuthorization } from '@miauflix/contracts';
 import { Button } from '@shared/ui/button/Button';
 import { useEffect, useState } from 'react';
 import QRCode from 'react-qr-code';

@@ -1,4 +1,4 @@
-import type { ServiceConfigSchema } from '@miauflix/service-contracts';
+import type { ServiceConfigSchema } from '@miauflix/contract';
 
 export const createListConfigSchema = (): ServiceConfigSchema => ({
   groups: [
