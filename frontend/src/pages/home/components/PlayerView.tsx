@@ -1,16 +1,23 @@
 import { useRequestAvailabilityMutation } from '@features/notifications/api/notifications.api';
 import {
+  type PlaybackPreferences,
   useCreateSessionMutation,
   useSearchSubtitlesMutation,
 } from '@features/player/api/playback.api';
 import { playbackAudioCapabilities } from '@features/player/lib/audio-language';
 import { startAudioPlayback } from '@features/player/lib/audio-playback';
 import {
+  AVPLAY_CAPABILITIES,
+  getAvplay,
+  type PlayerMedia,
+} from '@features/player/lib/avplay-media';
+import {
   mediaSubtitleKey,
   type MediaSubtitles,
   readMediaSubtitles,
   saveMediaSubtitles,
 } from '@features/player/lib/media-subtitles';
+import { parseVtt, type SubtitleCue } from '@features/player/lib/vtt';
 import { progressForPlayable, useGetProgressQuery } from '@features/progress/api/progress.api';
 import { saveProgressWithRealtime } from '@features/realtime/realtime.middleware';
 import type {
@@ -19,7 +26,7 @@ import type {
   ProgressRequest,
   SubtitleCandidateDto,
 } from '@miauflix/backend';
-import { API_URL, builtForTizen, PALETTE } from '@shared/config/constants';
+import { API_CREDENTIALS, API_URL, builtForTizen, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { selectCurrentUser } from '@store/slices/auth';
@@ -33,6 +40,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
+import { AvplayVideo, type PlayerMediaEvents } from './AvplayVideo';
 import {
   describePlaybackFailure,
   getNoSourceMessage,
@@ -144,6 +152,20 @@ const NextEpisodeButton = styled(BackButton)`
   background: ${PALETTE.color.interactive};
 `;
 
+/** Backend paths as URLs in the TV app: its page is a local file, so relative paths miss the backend. */
+function backendUrl(path: string): string {
+  return builtForTizen && path.startsWith('/') ? `${API_URL.replace(/\/+$/, '')}${path}` : path;
+}
+
+/** What this client can decode, so the backend can choose how to deliver the file. */
+function playbackPreferences(avplay: boolean): PlaybackPreferences {
+  return {
+    quality: 'auto',
+    ...playbackAudioCapabilities(document.createElement('video')),
+    ...(avplay ? AVPLAY_CAPABILITIES : {}),
+  };
+}
+
 interface PlayerViewProps {
   playable: PlayableRef;
   title: string;
@@ -174,12 +196,14 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
         ? {
             ...createdSession,
             delivery: deliveryUpdate.delivery,
-            streamUrl: deliveryUpdate.streamUrl,
+            streamUrl: backendUrl(deliveryUpdate.streamUrl),
             deliveryPending: false,
           }
-        : createdSession,
+        : createdSession && { ...createdSession, streamUrl: backendUrl(createdSession.streamUrl) },
     [createdSession, deliveryUpdate]
   );
+  /** Samsung TVs play through AVPlay, which decodes far more than their browser does. */
+  const [avplay] = useState(() => (builtForTizen ? getAvplay() : undefined));
   /** The direct stream failed before the probe said how this file must be delivered. */
   const directFailedWhilePending = useRef(false);
   /**
@@ -240,7 +264,10 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   } | null>(null);
 
   const sessionSubtitleStorageKey = useRef<string | null>(null);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const videoRef = useRef<PlayerMedia | null>(null);
+  const setMedia = useCallback((media: PlayerMedia | null) => {
+    videoRef.current = media;
+  }, []);
   const resumeApplied = useRef(false);
   const latestProgress = useRef<{
     positionSeconds: number;
@@ -273,10 +300,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       const request = createNextSession({
         playable: target.playable,
         deferDownload: true,
-        preferences: {
-          quality: 'auto',
-          ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
-        },
+        preferences: playbackPreferences(!!avplay),
       })
         .unwrap()
         .then(result => {
@@ -293,7 +317,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       nextRequestInFlight.current = request;
       return request;
     },
-    [createNextSession]
+    [avplay, createNextSession]
   );
 
   const startNextEpisodeDownload = useCallback(() => {
@@ -304,7 +328,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     )
       return;
     nextDownloadStarted.current = nextEpisodeKey;
-    const streamUrl = prefetchedNextRef.current.streamUrl.replace(/\/audio$/, '');
+    const streamUrl = backendUrl(prefetchedNextRef.current.streamUrl.replace(/\/audio$/, ''));
     void fetch(`${streamUrl}/prefetch`, {
       method: 'POST',
       cache: 'no-store',
@@ -594,6 +618,10 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const selectedSubtitle = subtitleCandidates.find(
     candidate => candidate.id === selectedSubtitleId
   );
+  const subtitleUrl =
+    selectedSubtitle && session
+      ? `${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}?streamingKey=${encodeURIComponent(session.streamingKey)}${selectedSubtitle.provider === 'embedded' ? `&start=${subtitleWindow}` : ''}`
+      : null;
   const hasProgress = !!progress.data;
   const selectedAudio = session?.delivery?.audioTracks?.find(
     track => track.index === audioTrackIndex
@@ -609,10 +637,32 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     session?.delivery?.mode === 'audio-transcode' || needsSelectedTrack || audioRemux
       ? session?.delivery
       : undefined;
+  // Converted audio is fed to a <video> element through Media Source Extensions
+  const playsInAvplay = !!avplay && !audioDelivery;
+  /** The selected subtitle's cues, drawn over AVPlay, which has no `<track>`. */
+  const [avplayCues, setAvplayCues] = useState<SubtitleCue[]>([]);
+
+  useEffect(() => {
+    setAvplayCues([]);
+    if (!playsInAvplay || !subtitleUrl) return;
+    const controller = new AbortController();
+    fetch(subtitleUrl, { credentials: API_CREDENTIALS, signal: controller.signal })
+      .then(async (response: Response) => {
+        if (!response.ok) throw new Error(`Subtitle request failed: ${response.status}`);
+        const cues = parseVtt(await response.text());
+        setAvplayCues(cues);
+        setSubtitleCues(cues);
+      })
+      .catch(() => {
+        if (!controller.signal.aborted)
+          setSubtitleMessage('The selected subtitle could not be loaded.');
+      });
+    return () => controller.abort();
+  }, [playsInAvplay, subtitleUrl]);
 
   useEffect(() => {
     const video = videoRef.current as
-      | (HTMLVideoElement & {
+      | (PlayerMedia & {
           audioTracks?: { length: number; [index: number]: { enabled: boolean } };
         })
       | null;
@@ -645,8 +695,9 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
         );
       }
     }
+    // Converted audio plays through Media Source Extensions, in the <video> element
     const video = videoRef.current;
-    if (!video) return;
+    if (!(video instanceof HTMLVideoElement)) return;
     audioPreparing.current = true;
     setStatus('preparing');
     setPendingPosition(position);
@@ -770,10 +821,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
         promise: createSession({
           playable,
           ...(avoidSourceIds.length ? { avoidSourceIds } : {}),
-          preferences: {
-            quality: 'auto',
-            ...playbackAudioCapabilities(videoRef.current ?? document.createElement('video')),
-          },
+          preferences: playbackPreferences(!!avplay),
         }).unwrap(),
       };
     void sessionInFlight.current.promise
@@ -835,6 +883,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     };
   }, [
     attempt,
+    avplay,
     createSession,
     playable,
     resetSessionRequest,
@@ -879,6 +928,79 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     };
   }, []);
 
+  const mediaEvents: Required<PlayerMediaEvents> = {
+    onLoadedMetadata: (event: { currentTarget: PlayerMedia }) => {
+      if (audioDelivery) return;
+      if (!resumeApplied.current && progress.data) {
+        resumeApplied.current = true;
+        if (resume && resume.state !== 'completed' && resume.positionSeconds > 5) {
+          event.currentTarget.currentTime = Math.min(
+            (resume.positionSeconds / resume.durationSeconds) * event.currentTarget.duration,
+            Math.max(0, event.currentTarget.duration - 1)
+          );
+        }
+      }
+      readProgressSnapshot();
+    },
+    onSeeked: (event: { currentTarget: PlayerMedia }) => {
+      if (audioPreparing.current) return;
+      const creditsStart = session?.delivery?.creditsStartSeconds;
+      suppressCreditAfterSeek.current =
+        creditsStart !== undefined && event.currentTarget.currentTime >= creditsStart;
+      setSubtitleWindow(
+        Math.floor(Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60) *
+          60
+      );
+      updateNextCountdown();
+    },
+    onTimeUpdate: (event: { currentTarget: PlayerMedia }) => {
+      if (audioPreparing.current) return;
+      const duration = session?.delivery?.durationSeconds ?? event.currentTarget.duration;
+      if (
+        nextEpisode &&
+        Number.isFinite(duration) &&
+        duration > 0 &&
+        event.currentTarget.currentTime / duration >= 0.7
+      ) {
+        if (!nextSearchReached) setNextSearchReached(true);
+        void prepareNextEpisode(true);
+        startNextEpisodeDownload();
+      }
+      setSubtitleWindow(
+        Math.floor(Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60) *
+          60
+      );
+      readProgressSnapshot();
+      updateNextCountdown();
+    },
+    onCanPlay: () => {
+      if (!audioPreparing.current) setStatus('ready');
+    },
+    onPlaying: () => {
+      if (!audioPreparing.current) {
+        setStatus('ready');
+        saveProgress('playing');
+      }
+    },
+    onPause: () => {
+      if (!audioPreparing.current && !completedRef.current) saveProgress('paused');
+    },
+    onEnded: () => {
+      completedRef.current = true;
+      saveProgress('completed');
+      updateNextCountdown();
+    },
+    onError: () => {
+      // The browser may reject an unprobed file whose audio needs transcoding;
+      // the pending delivery decides whether that is a real failure.
+      if (session?.deliveryPending) {
+        directFailedWhilePending.current = true;
+        return;
+      }
+      failSource();
+    },
+  };
+
   const navigationRef = useKeyboardNavigation({
     onBack: () => {
       onBack();
@@ -897,103 +1019,44 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       {!session && <PlayerHeader onBack={onBack} />}
       {session ? (
         <>
-          <Video
-            ref={videoRef}
-            src={audioDelivery ? undefined : session.streamUrl}
-            // The TV app's backend is cross-origin, and subtitle tracks only load across origins with CORS
-            crossOrigin={builtForTizen ? 'anonymous' : undefined}
-            aria-label={title}
-            autoPlay={!audioDelivery}
-            playsInline
-            onLoadedMetadata={event => {
-              if (audioDelivery) return;
-              if (!resumeApplied.current && progress.data) {
-                resumeApplied.current = true;
-                if (resume && resume.state !== 'completed' && resume.positionSeconds > 5) {
-                  event.currentTarget.currentTime = Math.min(
-                    (resume.positionSeconds / resume.durationSeconds) *
-                      event.currentTarget.duration,
-                    Math.max(0, event.currentTarget.duration - 1)
-                  );
-                }
-              }
-              readProgressSnapshot();
-            }}
-            onSeeked={event => {
-              if (audioPreparing.current) return;
-              const creditsStart = session.delivery?.creditsStartSeconds;
-              suppressCreditAfterSeek.current =
-                creditsStart !== undefined && event.currentTarget.currentTime >= creditsStart;
-              setSubtitleWindow(
-                Math.floor(
-                  Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60
-                ) * 60
-              );
-              updateNextCountdown();
-            }}
-            onTimeUpdate={event => {
-              if (audioPreparing.current) return;
-              const duration = session.delivery?.durationSeconds ?? event.currentTarget.duration;
-              if (
-                nextEpisode &&
-                Number.isFinite(duration) &&
-                duration > 0 &&
-                event.currentTarget.currentTime / duration >= 0.7
-              ) {
-                if (!nextSearchReached) setNextSearchReached(true);
-                void prepareNextEpisode(true);
-                startNextEpisodeDownload();
-              }
-              setSubtitleWindow(
-                Math.floor(
-                  Math.max(0, event.currentTarget.currentTime - subtitleOffsetRef.current) / 60
-                ) * 60
-              );
-              readProgressSnapshot();
-              updateNextCountdown();
-            }}
-            onCanPlay={() => {
-              if (!audioPreparing.current) setStatus('ready');
-            }}
-            onPlaying={() => {
-              if (!audioPreparing.current) {
-                setStatus('ready');
-                saveProgress('playing');
-              }
-            }}
-            onPause={() => {
-              if (!audioPreparing.current && !completedRef.current) saveProgress('paused');
-            }}
-            onEnded={() => {
-              completedRef.current = true;
-              saveProgress('completed');
-              updateNextCountdown();
-            }}
-            onError={() => {
-              // The browser may reject an unprobed file whose audio needs transcoding;
-              // the pending delivery decides whether that is a real failure.
-              if (session?.deliveryPending) {
-                directFailedWhilePending.current = true;
-                return;
-              }
-              failSource();
-            }}
-          >
-            {selectedSubtitle && (
-              <track
-                key={`${selectedSubtitle.id}:${selectedSubtitle.provider === 'embedded' ? subtitleWindow : 0}`}
-                ref={node => {
-                  subtitleTrackRef.current = node;
-                  if (node) node.track.mode = 'showing';
-                }}
-                kind="subtitles"
-                srcLang={selectedSubtitle.language}
-                label={`${selectedSubtitle.languageLabel}${selectedSubtitle.hearingImpaired ? ' (SDH)' : ''}`}
-                src={`${API_URL.replace(/\/+$/, '')}/api/subtitles/tracks/${encodeURIComponent(selectedSubtitle.id)}?streamingKey=${encodeURIComponent(session?.streamingKey ?? '')}${selectedSubtitle.provider === 'embedded' ? `&start=${subtitleWindow}` : ''}`}
-                default
-              />
-            )}
-          </Video>
+          {avplay && playsInAvplay ? (
+            <AvplayVideo
+              avplay={avplay}
+              mediaRef={setMedia}
+              src={session.streamUrl}
+              aria-label={title}
+              autoPlay
+              subtitleCues={selectedSubtitle ? avplayCues : []}
+              subtitleOffset={subtitleOffset}
+              {...mediaEvents}
+            />
+          ) : (
+            <Video
+              ref={setMedia}
+              src={audioDelivery ? undefined : session.streamUrl}
+              // The TV app's backend is cross-origin, and subtitle tracks only load across origins with CORS
+              crossOrigin={builtForTizen ? 'anonymous' : undefined}
+              aria-label={title}
+              autoPlay={!audioDelivery}
+              playsInline
+              {...mediaEvents}
+            >
+              {selectedSubtitle && subtitleUrl && (
+                <track
+                  key={`${selectedSubtitle.id}:${selectedSubtitle.provider === 'embedded' ? subtitleWindow : 0}`}
+                  ref={node => {
+                    subtitleTrackRef.current = node;
+                    if (node) node.track.mode = 'showing';
+                  }}
+                  kind="subtitles"
+                  srcLang={selectedSubtitle.language}
+                  label={`${selectedSubtitle.languageLabel}${selectedSubtitle.hearingImpaired ? ' (SDH)' : ''}`}
+                  src={subtitleUrl}
+                  default
+                />
+              )}
+            </Video>
+          )}
           {nextEpisode && nextCountdown !== null && (
             <NextEpisodePrompt role="group" aria-label="Next episode">
               <NextEpisodeButton type="button" onClick={playNextEpisode}>
@@ -1011,6 +1074,8 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             </NextEpisodePrompt>
           )}
           <PlayerControls
+            // The controls listen to one media element; a switch to converted audio replaces it
+            key={playsInAvplay ? 'avplay' : 'video'}
             videoRef={videoRef}
             preparing={status !== 'ready'}
             onBack={onBack}

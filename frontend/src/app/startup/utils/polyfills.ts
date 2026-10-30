@@ -8,10 +8,10 @@ if (typeof globalThis === 'undefined') {
 }
 
 if (typeof window.queueMicrotask !== 'function') {
-  window.queueMicrotask = callback => {
+  window.queueMicrotask = (callback: VoidFunction): void => {
     Promise.resolve()
       .then(callback)
-      .catch(error =>
+      .catch((error: unknown) =>
         setTimeout(() => {
           throw error;
         })
@@ -22,7 +22,15 @@ if (typeof window.queueMicrotask !== 'function') {
 if (typeof Object.fromEntries !== 'function') {
   Object.fromEntries = <T>(entries: Iterable<readonly [PropertyKey, T]>) => {
     const result: Record<PropertyKey, T> = {};
-    for (const [key, value] of entries) result[key] = value;
+    // Own properties, like the native method: assigning `__proto__` would set the prototype
+    for (const [key, value] of entries) {
+      Object.defineProperty(result, key, {
+        value,
+        enumerable: true,
+        writable: true,
+        configurable: true,
+      });
+    }
     return result;
   };
 }
@@ -34,7 +42,11 @@ const stringPrototype = String.prototype as {
 };
 
 if (typeof stringPrototype.replaceAll !== 'function') {
-  stringPrototype.replaceAll = function (search, replacement) {
+  stringPrototype.replaceAll = function (
+    this: string,
+    search: string | RegExp,
+    replacement: Replacement
+  ): string {
     const replace = this.replace.bind(this) as (pattern: RegExp, with_: Replacement) => string;
     if (search instanceof RegExp) {
       if (!search.global) throw new TypeError('replaceAll must be called with a global RegExp');

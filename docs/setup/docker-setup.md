@@ -461,14 +461,19 @@ docker compose top miauflix
 
 ### Updating Miauflix
 
-With the prebuilt images, Watchtower updates them every night. To update right away:
+With the prebuilt images, Watchtower updates them every night. To update right away, download [`scripts/update.sh`](../../scripts/update.sh) next to `docker-compose.yml` once:
 
 ```bash
-docker compose pull
-docker compose up -d
+curl -fsSLo update.sh https://raw.githubusercontent.com/maury91/miauflix/main/scripts/update.sh && chmod +x update.sh
 ```
 
-To get newer compose files, download them again. When building from source, rebuild with the same files the stack was started with (`npm run start:backend:docker:prod` picks them as described in [Building from source](#building-from-source)):
+Then run it whenever you want the newest images of your tag:
+
+```bash
+./update.sh
+```
+
+It pulls the images of the files in `COMPOSE_FILE`, recreates the containers that changed (removing ones no longer in the files), deletes the replaced images and waits until every container with a healthcheck is healthy, failing after 6 minutes (`HEALTH_TIMEOUT`, in seconds). `./update.sh --files` first downloads the newest version of the compose files and `Caddyfile` you already have from `main` (`MIAUFLIX_FILES_REF` picks another branch or tag), keeping the previous ones as `.bak`; files of your own, such as an extra override, are left alone. Without the script, `docker compose pull && docker compose up -d` does the same update. When building from source, rebuild with the same files the stack was started with (`npm run start:backend:docker:prod` picks them as described in [Building from source](#building-from-source)):
 
 ```bash
 git pull

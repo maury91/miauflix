@@ -9,6 +9,14 @@ export const IS_SLOW_DEVICE = IS_TV;
 export const API_CREDENTIALS: RequestCredentials = builtForTizen ? 'omit' : 'include';
 export const DISABLE_STREAMING = false;
 
+/**
+ * Where the web app is served: this page's origin, or for the TV app, whose page is a local file,
+ * the backend's (which serves the web app).
+ */
+export function webAppOrigin(): string {
+  return builtForTizen ? new URL(API_URL).origin : window.location.origin;
+}
+
 // Re-export computed environment properties
 export const { DEV, PROD } = computedEnv;
 

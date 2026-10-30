@@ -98,11 +98,14 @@ export function AppShell() {
       ? introPhase === 'playing' && introHasStarted
         ? 'home'
         : 'intro'
-      : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
-        ? 'intro'
-        : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
-          ? 'config_wizard'
-          : appState;
+      : // Where the login screen has it, whether or not this browser is signed in
+        route.type === 'qrApproval'
+        ? 'login'
+        : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
+          ? 'intro'
+          : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
+            ? 'config_wizard'
+            : appState;
   const logoMotionDisabled =
     (!booted && !homeEligible) || !hasShownScreen || (homeEligible && introPhase === 'playing');
   const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);

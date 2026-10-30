@@ -2,7 +2,7 @@ import './utils/polyfills';
 
 import { IS_TIZEN } from '@shared/config/constants';
 
-import type { TVInputDeviceKeyName } from '@/types/tizen';
+import type { TVInputDeviceKey, TVInputDeviceKeyName } from '@/types/tizen';
 
 /**
  * Remote keys the TV keeps for itself unless the app registers them. Exit and the colour keys
@@ -21,10 +21,12 @@ const appSupportedKeys: TVInputDeviceKeyName[] = [
 ];
 
 function registerRemoteKeys(): void {
-  const supported = new Set(window.tizen.tvinputdevice.getSupportedKeys().map(key => key.name));
+  const supported = new Set(
+    window.tizen.tvinputdevice.getSupportedKeys().map((key: TVInputDeviceKey) => key.name)
+  );
   appSupportedKeys
-    .filter(name => supported.has(name))
-    .forEach(name => window.tizen.tvinputdevice.registerKey(name));
+    .filter((name: TVInputDeviceKeyName) => supported.has(name))
+    .forEach((name: TVInputDeviceKeyName) => window.tizen.tvinputdevice.registerKey(name));
 }
 
 if (IS_TIZEN) {
