@@ -21,6 +21,7 @@
   - `GET /api/notifications` is now paged by cursor (`status=unread|read`, `cursor`, `limit`), and the panel loads more as it scrolls. `GET /api/notifications/unread-count` feeds the rail badge, and `POST /api/notifications/read-all` marks everything read.
   - Notifications store the quality and release type of the source they announce. Notifications created before this change show without a quality badge.
   - Visual regression tests (`e2e/notifications.storybook.spec.ts`) capture the panel alone (unread, read shown, all caught up) and beside the rail on Home at 1440×900 and 1920×1080 (bell highlighted, first notification focused, read shown).
+  - The offline E2E harnesses (details, voting, smooth core flows) answer `GET /api/notifications/unread-count` and the realtime websocket themselves, so Vite no longer logs a proxy error for every socket it can't reach.
 - Minor cosmetic changes to the sidebar: Settings is now at the bottom, elements are highlighted only when sidebar is open.
 
 ### Security

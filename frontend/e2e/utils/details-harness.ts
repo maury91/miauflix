@@ -89,6 +89,9 @@ export async function installOfflineHarness(page: Page): Promise<Harness> {
     return route.fulfill({ path: asset });
   });
 
+  // page.route doesn't see websockets; answer the realtime socket here so Vite
+  // doesn't try to proxy it to a backend these tests don't run.
+  await page.routeWebSocket('**/api/realtime', () => {});
   await page.route('**/api/**', async route => {
     const request = route.request();
     const url = new URL(request.url());
