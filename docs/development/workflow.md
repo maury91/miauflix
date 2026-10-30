@@ -27,7 +27,7 @@ miauflix/
 │   └── list-service/               # Trakt list service
 ├── packages/                       # Shared libraries
 │   ├── contract/                   # Contract runtime: typed clients, transports, serve()
-│   ├── contracts/                  # The service contracts (catalog, lists) and their types
+│   ├── service-contracts/          # The service contracts (catalog, lists) and their types
 │   ├── service-configuration/      # Shared service configuration and the config store
 │   ├── source-metadata-extractor/  # Content metadata processing
 │   └── *-sanitizer/                # Source metadata sanitizers (used for test fixtures)

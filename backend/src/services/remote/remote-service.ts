@@ -44,6 +44,8 @@ export interface RemoteServiceDescriptor<C extends Contract> {
 type ConfigurationResult = { success: boolean; message?: string; invalidKeys?: string[] };
 
 const DEFAULT_TIMEOUT_MS = 120_000;
+/** Longest boot waits for a service to connect; later connections are picked up in the background. */
+const BOOT_CONNECT_WAIT_MS = 5_000;
 
 /**
  * A remote service the backend configures and calls: one control-plane connection, the
@@ -121,9 +123,14 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
     return () => this.statusListeners.delete(listener);
   }
 
-  /** Waits for the first connection attempt so boot logs report the service state. */
+  /**
+   * Gives the service a short window to connect so boot logs report its state. An unreachable
+   * service does not hold up boot for the request timeout: reconnects continue in the background.
+   */
   async initialize(): Promise<void> {
-    await this.connection.ready(this.timeoutMs()).catch(() => undefined);
+    await this.connection
+      .ready(Math.min(this.timeoutMs(), BOOT_CONNECT_WAIT_MS))
+      .catch(() => undefined);
     await this.discovery?.catch(() => undefined);
   }
 

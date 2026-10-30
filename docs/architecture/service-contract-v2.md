@@ -266,7 +266,9 @@ the browser `<video>` element and by ffmpeg, and they must not block the control
 2 GB transfer (head-of-line blocking).
 
 A `bytes<In>()` procedure is served at `GET /_b/<method>?t=<ticket>` with full Range support.
-The **ticket** is `base64url(JSON(input)) + "." + exp + "." + HMAC-SHA256(secret, method|input|exp)`.
+The **ticket** is `payload + "." + exp + "." + sig`, where `payload` is
+`base64url(JSON(input))`, `exp` is a Unix time in seconds, and `sig` is the base64url
+`HMAC-SHA256(secret, method + "\n" + payload + "\n" + exp)` (see `tickets.ts`).
 
 - The backend **mints tickets locally**, because it holds the per-service secret it sent in the
   config snapshot. Producing a URL takes zero round-trips.
@@ -393,13 +395,15 @@ for await (const candidate of sources.search({ media }, { signal: AbortSignal.ti
 `defineService()` returns a plain object, so the same package works in both modes:
 
 - **Standalone:** `serve(service, { port })` provides the WebSocket control plane plus `/_b/*`.
-- **Embedded:** `host.mount(service)` calls `start(ctx)` in-process and wires the client
-  straight to the returned implementation. No serialization, no sockets, and events are direct
-  callbacks. One rule protects this: **inputs and outputs are treated as immutable** (the remote
-  path copies, the local one does not). The dev wrapper can `Object.freeze` deeply to catch
+- **Embedded (implemented):** `createClient(contract, localTransport(service))` calls the
+  implementation in-process. No serialization, no sockets, and events are direct callbacks.
+  One rule protects this: **inputs and outputs are treated as immutable** (the remote path
+  copies, the local one does not). The dev wrapper can `Object.freeze` deeply to catch
   violations.
+- **Embedded host (planned, not implemented):** a `host.mount(service)` that calls a service's
+  `start(ctx)` and wires its clients, so the backend can run every service in one image.
 
-`ctx` is the whole surface a service gets from its host: `config`, `dataDir`, `log`, `fail`,
+The planned `ctx` is the whole surface a service gets from its host: `config`, `dataDir`, `log`, `fail`,
 `jobs` (queue access) and `peers`, typed clients of other contracts. The sources service asks
 for `peers.use(streaming)` to fetch torrent metadata. In a single image that is an in-process
 call. Split across containers, it is a direct service-to-service socket that skips the backend.

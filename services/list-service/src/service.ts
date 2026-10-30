@@ -47,6 +47,19 @@ const personalDefinitions = [
 ] as const;
 
 // Trakt serves a list by its numeric id alone; owner slugs can be null for private accounts.
+/**
+ * Trakt device-token responses that are outcomes, not failures: 400 and 429 mean keep polling
+ * (429 also slows down), the rest end the authorization.
+ */
+const DEVICE_TOKEN_STATES: Record<number, Exclude<ConnectionResult['state'], 'connected'>> = {
+  400: 'pending',
+  429: 'pending',
+  404: 'invalid',
+  409: 'invalid',
+  410: 'expired',
+  418: 'denied',
+};
+
 const communitySlug = (listId: number) => `trakt-community-${listId}`;
 
 const isPositiveSafeInteger = (value: unknown): value is number =>
@@ -413,8 +426,11 @@ export const createListService = (
           },
         };
       } catch (error) {
-        if ((error as { status?: number }).status === 400) return { state: 'pending' };
-        throw error;
+        const state = DEVICE_TOKEN_STATES[(error as { status?: number }).status ?? 0];
+        if (!state) throw error;
+        if (state !== 'pending')
+          database.query('DELETE FROM authorizations WHERE id = ?1').run(authorizationId);
+        return { state };
       }
     },
 

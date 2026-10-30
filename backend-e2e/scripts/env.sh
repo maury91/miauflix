@@ -214,8 +214,11 @@ export VERBOSE
 # Backup .env.test before test run so container writes don't persist
 ENV_TEST_FILE="$backend_e2e_dir/.env.test"
 ENV_TEST_BACKUP="$backend_e2e_dir/.env.test.bak"
+# Restore only a backup this run made: a stale one would overwrite a customized .env.test.
+ENV_TEST_BACKED_UP=false
 if [[ "$MODE" == "test" && -f "$ENV_TEST_FILE" ]]; then
     cp "$ENV_TEST_FILE" "$ENV_TEST_BACKUP"
+    ENV_TEST_BACKED_UP=true
 fi
 
 # Function to cleanup artifacts
@@ -259,7 +262,7 @@ cleanup() {
     fi
     
     # Restore .env.test from backup if one was made
-    if [[ -f "$ENV_TEST_BACKUP" ]]; then
+    if [[ "$ENV_TEST_BACKED_UP" == "true" && -f "$ENV_TEST_BACKUP" ]]; then
         cp "$ENV_TEST_BACKUP" "$ENV_TEST_FILE"
         rm -f "$ENV_TEST_BACKUP"
     fi

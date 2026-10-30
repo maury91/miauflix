@@ -18,6 +18,7 @@ import {
   serve,
   type Service,
   signedBytesPath,
+  STATUS_CHANGED,
   stream,
   type Transport,
 } from './index.js';
@@ -228,6 +229,25 @@ for (const [mode, create] of Object.entries(harnesses)) {
       }
     });
 
+    test('a signal aborted before the request rejects without running it', async () => {
+      const { client, harness, stats } = await start();
+      try {
+        const signal = AbortSignal.abort();
+        await assert.rejects(client.get({ id: 1 }, { signal }), error =>
+          isContractError(error, 'cancelled')
+        );
+        assert.equal(stats.getCalls, 0);
+        await assert.rejects(
+          (async () => {
+            for await (const _ of client.count({ to: 3 }, { signal })) void _;
+          })(),
+          error => isContractError(error, 'cancelled')
+        );
+      } finally {
+        await harness.close();
+      }
+    });
+
     test('timeouts reject and cancel the implementation', async () => {
       const { client, harness, stats } = await start();
       try {
@@ -401,6 +421,28 @@ describe('remote connection lifecycle', () => {
     assert.equal((await service.status()).state, 'configuring');
     attached = true;
     assert.equal((await service.status()).state, 'ready');
+  });
+
+  test('a failing status callback is reported, not left as an unhandled rejection', async () => {
+    const errors: unknown[] = [];
+    const service = defineService({
+      info: { id: 'bad', name: 'Bad', description: '', version: '0' },
+      configuration: setupConfig(),
+      status: () => Promise.reject(new Error('status broke')),
+      onError: (_, error) => errors.push(error),
+    });
+    const unhandled: unknown[] = [];
+    const onUnhandled = (reason: unknown) => unhandled.push(reason);
+    process.on('unhandledRejection', onUnhandled);
+    try {
+      const stop = service.subscribe(STATUS_CHANGED, undefined, () => undefined);
+      await until(() => errors.length === 1);
+      await new Promise(resolve => setTimeout(resolve, 10));
+      stop();
+      assert.deepEqual(unhandled, []);
+    } finally {
+      process.off('unhandledRejection', onUnhandled);
+    }
   });
 
   test('retries a subscription rejected as not_configured while the service reports ready', async () => {

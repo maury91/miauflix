@@ -9,6 +9,7 @@ import {
   type ServiceConfigTestResult,
   type ServiceHello,
   type ServiceStatus,
+  STATUS_CHANGED,
 } from './management.js';
 import {
   BYTES_PATH,
@@ -100,7 +101,12 @@ export class Service {
       status: () => this.status(),
       statusChanged: emit => {
         this.statusListeners.add(emit);
-        void this.status().then(status => this.statusListeners.has(emit) && emit(status));
+        // `status` may come from a service callback: a failure must not become an unhandled rejection.
+        void this.status()
+          .then(status => {
+            if (this.statusListeners.has(emit)) emit(status);
+          })
+          .catch(error => this.options.onError?.(STATUS_CHANGED, error));
         return () => this.statusListeners.delete(emit);
       },
       configSchema: () => config.getSchema(),

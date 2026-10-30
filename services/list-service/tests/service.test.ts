@@ -114,6 +114,35 @@ describe('list service', () => {
     expect(isContractError(pageError, 'bad_request')).toBe(true);
   });
 
+  it('maps Trakt device-token outcomes to connection states', async () => {
+    const { client, admin } = setup();
+    await makeReady(admin);
+    const realFetch = globalThis.fetch;
+    let tokenStatus = 400;
+    globalThis.fetch = (async (url: string | URL) =>
+      String(url).endsWith('/oauth/device/code')
+        ? Response.json({
+            device_code: 'device',
+            user_code: 'USER',
+            verification_url: 'https://trakt.tv/activate',
+            expires_in: 600,
+            interval: 5,
+          })
+        : new Response('{}', { status: tokenStatus })) as unknown as typeof fetch;
+    try {
+      const { authorizationId } = await client.beginTraktConnection({ subjectId: 'user' });
+      const check = () => client.checkTraktConnection({ subjectId: 'user', authorizationId });
+      expect(await check()).toEqual({ state: 'pending' });
+      tokenStatus = 418;
+      expect(await check()).toEqual({ state: 'denied' });
+      // A terminal outcome ends the authorization.
+      tokenStatus = 400;
+      expect(await check()).toEqual({ state: 'expired' });
+    } finally {
+      globalThis.fetch = realFetch;
+    }
+  });
+
   it('returns false from syncWatchlist without an association', async () => {
     const { client, admin } = setup();
     await makeReady(admin);

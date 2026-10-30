@@ -30,6 +30,8 @@ export const localTransport = (
 
   return {
     async call(method, input, requestOptions) {
+      // An abort listener added below would never fire for a signal aborted before the call.
+      if (requestOptions?.signal?.aborted) throw new ContractError('cancelled', 'Request aborted');
       const request = requestSignal(requestOptions?.signal, requestOptions?.timeoutMs);
       try {
         const result = service.invoke(method, input, request.signal);
@@ -56,6 +58,8 @@ export const localTransport = (
 
     stream(method, input, streamOptions) {
       return (async function* () {
+        if (streamOptions?.signal?.aborted)
+          throw new ContractError('cancelled', 'Stream cancelled');
         const controller = new AbortController();
         const onAbort = () => controller.abort();
         streamOptions?.signal?.addEventListener('abort', onAbort, { once: true });

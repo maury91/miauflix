@@ -324,6 +324,8 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
 
   const transport: Transport = {
     call(method, input, requestOptions) {
+      if (requestOptions?.signal?.aborted)
+        return Promise.reject(new ContractError('cancelled', `${method} was cancelled`));
       if (state !== 'ready') return Promise.reject(unavailable());
       const id = nextId++;
       const request = requestSignal(
@@ -361,6 +363,8 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
 
     stream(method, input, streamOptions) {
       return (async function* () {
+        if (streamOptions?.signal?.aborted)
+          throw new ContractError('cancelled', `${method} was cancelled`);
         if (state !== 'ready') throw unavailable();
         const id = nextId++;
         const stream: StreamState = { queue: [], done: false, error: null, wake: null };
