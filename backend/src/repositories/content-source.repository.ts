@@ -170,6 +170,16 @@ export class ContentSourceRepository {
     return Object.keys(changes).length ? (changes as Partial<ContentSource>) : null;
   }
 
+  /** Resolution and release type of a source, as shown on its quality badge. */
+  async findQuality(
+    sourceId: number
+  ): Promise<Pick<ContentSource, 'quality' | 'sourceType'> | null> {
+    return this.repository.findOne({
+      where: { id: sourceId },
+      select: { id: true, quality: true, sourceType: true },
+    });
+  }
+
   /** Store whether a source holds a real video; returns whether the stored verdict changed. */
   async setHasVideo(sourceId: number, hasVideo: boolean): Promise<boolean> {
     const result = await this.db.write(() =>

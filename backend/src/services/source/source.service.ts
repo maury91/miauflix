@@ -296,10 +296,10 @@ export class SourceService {
 
     try {
       const previousSources = await this.contentSourceRepository.findByMovieId(movie.id);
-      const previousQuality = previousSources.reduce(
-        (best, source) => Math.max(best, releaseQualityRank(source.sourceType)),
-        0
-      );
+      const previousBest = previousSources
+        .map(source => ({ source, rank: releaseQualityRank(source.sourceType) }))
+        .sort((left, right) => right.rank - left.rank)[0];
+      const previousQuality = previousBest?.rank ?? 0;
       // Search for sources using the content directory service
       const movieWithSources = await this.contentDirectoryService.searchSourcesForMovie(
         movie.imdbId,
@@ -354,6 +354,11 @@ export class SourceService {
             qualityKey: nextQualityName.toLowerCase(),
             previousQuality: previousQualityName,
             nextQuality: nextQualityName,
+            source: {
+              quality: nextQualitySource.source.quality,
+              sourceType: nextQualitySource.source.sourceType,
+            },
+            previousSourceType: previousBest?.source.sourceType ?? null,
           });
         } catch (error) {
           logger.warn('SourceService', 'Movie quality notification could not be stored', error);
@@ -516,7 +521,9 @@ export class SourceService {
     const associations = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
     // Announce the episode only once a source is verified to hold real video; unverified
     // matches are checked in the background, which announces it when one proves real.
-    const verified = associations.some(association => association.source?.hasVideo === true);
+    const verified = associations.find(
+      association => association.source?.hasVideo === true
+    )?.source;
     if (!verified) this.requestSourceVerification(associations.map(({ source }) => source));
     if (verified && episode.showMediaId && episode.showTitle) {
       try {
@@ -526,6 +533,7 @@ export class SourceService {
           seasonNumber: episode.seasonNumber,
           episodeNumber: episode.episodeNumber,
           airDate: episode.airDate ?? null,
+          source: { quality: verified.quality, sourceType: verified.sourceType },
         });
       } catch (error) {
         logger.warn('SourceService', 'TV episode notification could not be stored', error);

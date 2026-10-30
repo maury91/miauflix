@@ -8,8 +8,10 @@ const {
   useGetMovieQuery,
   useGetShowQuery,
   useGetSeasonQuery,
-  useGetNotificationsQuery,
+  useGetNotificationsInfiniteQuery,
+  useGetNotificationCountsQuery,
   useMarkNotificationReadMutation,
+  useMarkAllNotificationsReadMutation,
   markNotificationRead,
   resetNotificationsApi,
   rowHandles,
@@ -37,8 +39,10 @@ const {
   useGetMovieQuery: vi.fn(),
   useGetShowQuery: vi.fn(),
   useGetSeasonQuery: vi.fn(),
-  useGetNotificationsQuery: vi.fn(),
+  useGetNotificationsInfiniteQuery: vi.fn(),
+  useGetNotificationCountsQuery: vi.fn(),
   useMarkNotificationReadMutation: vi.fn(),
+  useMarkAllNotificationsReadMutation: vi.fn(),
   markNotificationRead: vi.fn(),
   resetNotificationsApi: vi.fn(() => ({ type: 'notificationsApi/resetApiState' })),
   rowHandles: new Map<number, Record<string, unknown>>(),
@@ -105,9 +109,16 @@ vi.mock('@features/preload/api/preload.api', () => ({
   useRemoveIntentMutation: () => [removeIntent],
 }));
 vi.mock('@features/notifications/api/notifications.api', () => ({
-  notificationsApi: { util: { resetApiState: resetNotificationsApi } },
-  useGetNotificationsQuery,
+  notificationsApi: {
+    util: {
+      resetApiState: resetNotificationsApi,
+      invalidateTags: () => ({ type: 'notificationsApi/invalidateTags' }),
+    },
+  },
+  useGetNotificationsInfiniteQuery,
+  useGetNotificationCountsQuery,
   useMarkNotificationReadMutation,
+  useMarkAllNotificationsReadMutation,
 }));
 vi.mock('@shared/components', () => ({ Spinner: () => null }));
 vi.mock('@store/slices/auth', () => ({
@@ -324,6 +335,18 @@ const makeHandle = (focusResult: boolean, empty: boolean) => ({
   getNavigationContext: vi.fn(() => ({ selected: null, left: null, right: null })),
 });
 
+function notificationPages(notifications: unknown[]) {
+  return {
+    data: { pages: [{ notifications, nextCursor: null }], pageParams: [null] },
+    isLoading: false,
+    isError: false,
+    hasNextPage: false,
+    isFetchingNextPage: false,
+    fetchNextPage: vi.fn(),
+    refetch: vi.fn(),
+  };
+}
+
 describe('HomePage focus transitions', () => {
   beforeEach(() => {
     navigate({ type: 'home' }, { replace: true });
@@ -383,50 +406,93 @@ describe('HomePage focus transitions', () => {
       isError: false,
       isSuccess: false,
     });
-    useGetNotificationsQuery.mockReset().mockReturnValue({
-      data: { notifications: [], unreadCount: 0 },
-      isLoading: false,
-      isError: false,
-      refetch: vi.fn(),
+    useGetNotificationsInfiniteQuery.mockReset().mockReturnValue(notificationPages([]));
+    useGetNotificationCountsQuery.mockReset().mockReturnValue({
+      data: { unreadCount: 0, hasRead: false },
     });
     useMarkNotificationReadMutation.mockReset().mockReturnValue([markNotificationRead]);
+    useMarkAllNotificationsReadMutation.mockReset().mockReturnValue([vi.fn()]);
     markNotificationRead.mockReset();
     detailsHandleAction.mockReset().mockReturnValue({ type: 'escape', direction: 'left' });
   });
 
-  it('opens the sidebar notification overlay, marks items read, and restores focus', async () => {
-    useGetNotificationsQuery.mockReturnValue({
-      data: {
-        unreadCount: 1,
-        notifications: [
-          {
-            id: 5,
-            type: 'tv_episode_available',
-            mediaType: 'tv',
-            mediaId: 9001,
-            title: 'Show',
-            message: 'S01E08 is ready to watch.',
-            seasonNumber: 1,
-            episodeNumber: 8,
-            createdAt: '2026-10-12T00:00:00.000Z',
-            readAt: null,
-          },
-        ],
-      },
-      isLoading: false,
-      isError: false,
-      refetch: vi.fn(),
-    });
-
+  it('shows notifications while the bell is highlighted and keeps them open from the panel', () => {
+    const row = makeHandle(true, false);
+    row.handleAction.mockReturnValue({ type: 'escape', direction: 'left' });
+    rowHandles.set(0, row);
+    useGetNotificationCountsQuery.mockReturnValue({ data: { unreadCount: 1, hasRead: false } });
+    useGetNotificationsInfiniteQuery.mockReturnValue(
+      notificationPages([
+        {
+          id: 5,
+          type: 'source_available',
+          mediaType: 'movie',
+          mediaId: 100,
+          title: 'Movie',
+          message: 'Movie is now available to watch.',
+          seasonNumber: null,
+          episodeNumber: null,
+          quality: 'FHD',
+          sourceType: 'WEB',
+          previousSourceType: null,
+          poster: null,
+          createdAt: '2026-10-12T00:00:00.000Z',
+          readAt: null,
+        },
+      ])
+    );
     render(<HomePage />);
-    const notificationButton = screen.getByRole('button', { name: 'Notifications, 1 unread' });
-    fireEvent.click(notificationButton);
 
-    expect(screen.getByRole('dialog', { name: 'Notifications' })).toBeInTheDocument();
-    fireEvent.click(screen.getByRole('button', { name: /Show.*S01E08 is ready to watch/ }));
-    expect(markNotificationRead).toHaveBeenCalledWith(5);
-    fireEvent.click(screen.getByRole('button', { name: 'Close notifications' }));
-    await waitFor(() => expect(notificationButton).toHaveFocus());
+    fireEvent.keyDown(screen.getByRole('main'), { key: 'ArrowLeft' });
+    expect(screen.queryByRole('region', { name: 'Notifications' })).not.toBeInTheDocument();
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Search' }), { key: 'ArrowUp' });
+    const bell = screen.getByRole('button', { name: 'Notifications, 1 unread' });
+    expect(bell).toHaveFocus();
+    expect(screen.getByRole('region', { name: 'Notifications' })).toBeInTheDocument();
+
+    fireEvent.keyDown(bell, { key: 'ArrowRight' });
+    const notification = screen.getByRole('button', {
+      name: /Just added\. Movie\..*1080p.*unread/,
+    });
+    expect(notification).toHaveFocus();
+
+    fireEvent.keyDown(notification, { key: 'ArrowLeft' });
+    expect(bell).toHaveFocus();
+    expect(screen.getByRole('region', { name: 'Notifications' })).toBeInTheDocument();
+
+    fireEvent.keyDown(bell, { key: 'ArrowDown' });
+    expect(screen.queryByRole('region', { name: 'Notifications' })).not.toBeInTheDocument();
+  });
+
+  it('marks a notification read and plays it when clicked', () => {
+    useGetNotificationCountsQuery.mockReturnValue({ data: { unreadCount: 1, hasRead: false } });
+    useGetNotificationsInfiniteQuery.mockReturnValue(
+      notificationPages([
+        {
+          id: 7,
+          type: 'source_available',
+          mediaType: 'movie',
+          mediaId: 100,
+          title: 'Movie',
+          message: 'Movie is now available to watch.',
+          seasonNumber: null,
+          episodeNumber: null,
+          quality: null,
+          sourceType: null,
+          previousSourceType: null,
+          poster: null,
+          createdAt: '2026-10-12T00:00:00.000Z',
+          readAt: null,
+        },
+      ])
+    );
+    render(<HomePage />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Notifications, 1 unread' }));
+    fireEvent.click(screen.getByRole('button', { name: /Just added\. Movie/ }));
+
+    expect(markNotificationRead).toHaveBeenCalledWith(7);
+    expect(screen.getByTestId('player')).toHaveAttribute('data-playable-kind', 'movie');
   });
 
   it('waits for the current row and hero artwork before releasing the intro', async () => {
