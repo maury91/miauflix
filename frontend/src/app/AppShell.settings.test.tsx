@@ -36,6 +36,7 @@ vi.mock('@pages/home/HomePage', async () => {
           onSettings={() => navigate({ type: 'settings' }, { parent: { type: 'home' } })}
           onSearch={() => {}}
           onNotifications={() => {}}
+          onEnterNotifications={() => {}}
           notificationsRef={null}
           showSettings={state.admin}
           unreadCount={0}
@@ -162,7 +163,7 @@ describe('Settings navigation', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
   });
 
-  it.skip('skips the hidden Settings action when navigating the sidebar as a non-admin', async () => {
+  it('skips the hidden Settings action when navigating the sidebar as a non-admin', async () => {
     state.admin = false;
     store = createTestStore();
     await renderApp();
