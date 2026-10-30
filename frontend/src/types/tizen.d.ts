@@ -180,8 +180,6 @@ export interface Tizen {
 declare global {
   interface Window {
     tizen: Tizen;
-    REMOTE_KEY_MAP: Record<string, number>;
-    INVERTED_REMOTE_KEY_MAP: Record<string, TVInputDeviceKeyName>;
   }
 }
 

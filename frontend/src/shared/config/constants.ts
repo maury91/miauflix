@@ -5,6 +5,8 @@ export const builtForTizen = env.TIZEN;
 export const IS_TIZEN = typeof window !== 'undefined' && 'tizen' in window;
 export const IS_TV = builtForTizen || IS_TIZEN;
 export const IS_SLOW_DEVICE = IS_TV;
+/** The TV app authenticates with headers; the backend allows its origin without credentials. */
+export const API_CREDENTIALS: RequestCredentials = builtForTizen ? 'omit' : 'include';
 export const DISABLE_STREAMING = false;
 
 // Re-export computed environment properties

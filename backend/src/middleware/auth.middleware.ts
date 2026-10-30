@@ -1,10 +1,10 @@
-import { getCookie } from 'hono/cookie';
 import { createMiddleware } from 'hono/factory';
 
 import type { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
 import type { UserDto } from '@routes/auth.types';
 import type { AuthService } from '@services/auth/auth.service';
+import { readAccessToken } from '@utils/auth-transport.util';
 import { withSpan } from '@utils/tracing.util';
 
 export interface SessionInfo {
@@ -32,7 +32,8 @@ export const createAuthMiddleware = (
 
       if (sessionId) {
         const cookieName = `${accessTokenCookieName()}_${sessionId}`;
-        const token = getCookie(c, cookieName);
+        // The session cookie, or `Authorization: Bearer` from token-transport clients (the TV app)
+        const token = readAccessToken(c, cookieName);
 
         if (token) {
           try {

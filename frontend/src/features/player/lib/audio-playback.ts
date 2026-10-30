@@ -1,3 +1,5 @@
+import { API_CREDENTIALS } from '@shared/config/constants';
+
 interface AudioPlaybackOptions {
   video: HTMLVideoElement;
   url: string;
@@ -305,7 +307,7 @@ export function startAudioPlayback(options: AudioPlaybackOptions): () => void {
       url.searchParams.set('audioTrack', String(options.audioTrackIndex));
     url.searchParams.set('audioCopy', String(options.copyAudio === true));
     if (options.transcodeVideo) url.searchParams.set('transcodeVideo', 'true');
-    const response = await fetch(url, { signal, credentials: 'include' });
+    const response = await fetch(url, { signal, credentials: API_CREDENTIALS });
     if (!response.ok || !response.body) {
       const failure = (await response.json().catch(() => null)) as { error?: unknown } | null;
       throw new Error(

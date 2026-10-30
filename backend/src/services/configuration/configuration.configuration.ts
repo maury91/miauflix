@@ -15,6 +15,32 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: 'http://localhost:3000,https://myapp.com',
       transform: transforms.stringArray(),
     }),
+    ALLOW_TV_APP: variable({
+      description:
+        'Accept requests from the Samsung TV app, which runs from local files (origin file://, which web pages cannot send) and signs in with bearer tokens instead of cookies',
+      booleanStateDescriptions: {
+        true: 'TV app allowed',
+        false: 'TV app blocked',
+      },
+      required: false,
+      advanced: true,
+      defaultValue: 'true',
+      example: 'false',
+      transform: transforms.boolean(),
+    }),
+    ALLOW_TV_APP_NULL_ORIGIN: variable({
+      description:
+        'Also accept the TV app from the opaque origin null, for TVs that report local files that way. Any web page can send null (from a sandboxed iframe or a data: URL), so with this on a page you visit can read unauthenticated responses and, while first-run setup is open, create the admin account. Needs ALLOW_TV_APP',
+      booleanStateDescriptions: {
+        true: 'Origin null accepted as the TV app',
+        false: 'Origin null rejected',
+      },
+      required: false,
+      advanced: true,
+      defaultValue: 'false',
+      example: 'true',
+      transform: transforms.boolean(),
+    }),
     PORT: variable({
       description: 'Port for the server to listen on',
       required: false,

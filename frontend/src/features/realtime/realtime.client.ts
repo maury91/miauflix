@@ -6,7 +6,8 @@ import type {
   SearchServerMessage,
 } from '@miauflix/backend';
 import type { ArtworkUpdate, MediaRef } from '@miauflix/service-contracts/catalog/v1';
-import { API_URL } from '@shared/config/constants';
+import { getTvAccessToken } from '@shared/api/tv-auth';
+import { API_URL, builtForTizen } from '@shared/config/constants';
 import { z } from 'zod';
 
 const artworkStatusSchema = z.enum(['pending', 'ready', 'failed']);
@@ -259,7 +260,13 @@ export class RealtimeClient {
     socket.onopen = () => {
       this.retryMs = 500;
       socket.send(
-        JSON.stringify({ type: 'authenticate', session: this.session, clientId: this.clientId })
+        JSON.stringify({
+          type: 'authenticate',
+          session: this.session,
+          clientId: this.clientId,
+          // The TV app has no cookies for the backend, so it sends its access token here
+          accessToken: builtForTizen ? getTvAccessToken(this.session) : undefined,
+        })
       );
     };
     socket.onmessage = event => {

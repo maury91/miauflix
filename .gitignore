@@ -81,3 +81,4 @@ pids
 *storybook.log
 storybook-static
 .idea
+.codex-attachments/

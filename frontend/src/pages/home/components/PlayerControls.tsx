@@ -79,7 +79,7 @@ export function PlayerHeader({
       <HeaderButton type="button" icon={<ArrowLeftIcon aria-hidden="true" />} onClick={onBack}>
         Back to details
       </HeaderButton>
-      <img src="/assets/images/logo.svg" alt="Miauflix logo" />
+      <img src={`${import.meta.env.BASE_URL}assets/images/logo.svg`} alt="Miauflix logo" />
     </Header>
   );
 }
