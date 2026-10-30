@@ -348,7 +348,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
           onOpen={notification => {
             if (!notification.readAt) notifications.markRead(notification.id);
             const target = notificationPlayable(notification);
-            if (target) navigation.openPlayer(target);
+            if (target) navigation.openPlayer(target, { type: 'home' });
             else
               navigate(
                 { type: 'showDetails', mediaId: notification.mediaId },

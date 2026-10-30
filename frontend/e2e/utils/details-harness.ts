@@ -135,7 +135,10 @@ export async function installOfflineHarness(page: Page): Promise<Harness> {
     if (path === '/api/config' && request.method() === 'GET') return json(route, []);
     if (path === '/api/status' && request.method() === 'GET') return json(route, { services: {} });
     if (path === '/api/notifications' && request.method() === 'GET') {
-      return json(route, { notifications: [], unreadCount: 0 });
+      return json(route, { notifications: [], nextCursor: null });
+    }
+    if (path === '/api/notifications/unread-count' && request.method() === 'GET') {
+      return json(route, { unreadCount: 0, hasRead: false });
     }
     if (path === '/api/integrations/trakt/association' && request.method() === 'GET') {
       return json(route, {

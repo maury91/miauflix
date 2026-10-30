@@ -17,7 +17,7 @@
   - The panel opens beside the rail while the bell is highlighted, and the rail stays expanded while it is open. Right/Enter moves into the panel, and Left/Back returns to the rail without closing it. The pointer can move from the bell onto the panel.
   - Each notification shows the title's poster, a heading ("New episode available", "Just added", "Better quality available"), the quality it is available in (the same quality badge as the details page), how long ago it arrived, and a red dot while unread.
   - Unread notifications come first. Read ones stay hidden behind **Show read notifications**, and **Mark all as read** clears the badge.
-  - Clicking a notification marks it read and starts playing the movie or episode.
+  - Clicking a notification marks it read and starts playing the movie or episode. Back from that player returns to Home.
   - `GET /api/notifications` is now paged by cursor (`status=unread|read`, `cursor`, `limit`), and the panel loads more as it scrolls. `GET /api/notifications/unread-count` feeds the rail badge, and `POST /api/notifications/read-all` marks everything read.
   - Notifications store the quality and release type of the source they announce. Notifications created before this change show without a quality badge.
   - Visual regression tests (`e2e/notifications.storybook.spec.ts`) capture the panel alone (unread, read shown, all caught up) and beside the rail on Home at 1440×900 and 1920×1080 (bell highlighted, first notification focused, read shown).

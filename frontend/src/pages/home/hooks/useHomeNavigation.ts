@@ -153,6 +153,12 @@ export function useHomeNavigation({
   }, [activeCategory, dispatch, selectedIndexIn]);
 
   const returnToDetails = useCallback(() => {
+    // A player opened from a Home notification goes back to Home, not to details.
+    if (getRouteParent()?.type === 'home') {
+      navigateBack({ type: 'home' });
+      dispatch(homeNavigationActions.setActiveRegion('carousel'));
+      return;
+    }
     const parent =
       playable?.kind === 'movie'
         ? { type: 'movieDetails' as const, mediaId: playable.mediaId }
@@ -164,13 +170,15 @@ export function useHomeNavigation({
   }, [dispatch, playable]);
 
   const openPlayer = useCallback(
-    (next: PlayableRef) => {
+    (next: PlayableRef, parent?: AppRoute) => {
       navigate(
         next.kind === 'movie'
           ? { type: 'moviePlayer', mediaId: next.mediaId }
           : { type: 'episodePlayer', ...next },
         {
-          parent: route.type === 'movieDetails' || route.type === 'showDetails' ? route : undefined,
+          parent:
+            parent ??
+            (route.type === 'movieDetails' || route.type === 'showDetails' ? route : undefined),
         }
       );
       dispatch(homeNavigationActions.setActiveRegion('player'));

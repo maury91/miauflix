@@ -199,13 +199,14 @@ Keep `LIST_SERVICE_ENCRYPTION_KEY` in `.env` if you had set it: the list service
 
 Miauflix generates `JWT_SECRET`, `STREAM_TOKEN_SECRET`, `STREAM_KEY_SALT` and `SOURCE_SECURITY_KEY` on first start and saves them in its `config.json`. When one is set as an environment variable instead, Miauflix uses it and deliberately doesn't save it, so it's only known for as long as the variable is passed in.
 
-The compose files don't pass these variables, except `docker-compose.build.yml`, which mounts `.env`. If an older setup passed them (the old `docker-compose.https.yml` did, so did the source-built stack through `.env`), check whether they are in `config.json`:
+The compose files don't pass these variables, except `docker-compose.build.yml`, which mounts `.env`. If an older setup passed them (the old `docker-compose.https.yml` did, so did the source-built stack through `.env`), check which ones are in `config.json`:
 
 ```bash
-docker compose exec miauflix node -e 'console.log(Object.keys(require("/usr/src/app/data/config.json")))'
+docker compose run --rm --no-deps --entrypoint node miauflix \
+  -e 'console.log(Object.keys(require("/usr/src/app/data/config.json")))'
 ```
 
-If they are missing, pass them in before you recreate the containers. Otherwise Miauflix generates new ones: data encrypted with the old `SOURCE_SECURITY_KEY` can no longer be read, and every user is signed out. Keep the values in `.env` and add a file such as `docker-compose.secrets.yml` at the end of `COMPOSE_FILE`:
+Keep passing every value the old setup set in `.env`, with the same value, even when `config.json` has the same key: the saved one may be an older generated value. A value missing from both is generated anew: data encrypted with the old `SOURCE_SECURITY_KEY` can no longer be read, and every user is signed out. Keep the values in `.env` and add a file such as `docker-compose.secrets.yml` at the end of `COMPOSE_FILE`:
 
 ```yaml
 services:
