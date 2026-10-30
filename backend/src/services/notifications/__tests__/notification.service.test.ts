@@ -1,7 +1,10 @@
 import { configureFakerSeed } from '@__test-utils__/utils';
-import { In } from 'typeorm';
+import { Quality, Source } from '@miauflix/source-metadata-extractor';
+import { In, IsNull, LessThan, Not } from 'typeorm';
 
 import type { Database } from '@database/database';
+import { Movie } from '@entities/movie.entity';
+import { TVShow } from '@entities/tvshow.entity';
 
 import { MAX_PENDING_AVAILABILITY_REQUESTS, NotificationService } from '../notification.service';
 
@@ -27,9 +30,14 @@ describe('NotificationService', () => {
       exists: jest.fn().mockResolvedValue(false),
       count: jest.fn().mockResolvedValue(0),
       delete: jest.fn(),
+      update: jest.fn().mockResolvedValue({ affected: 0 }),
     };
+    const movies = { find: jest.fn().mockResolvedValue([]) };
+    const shows = { find: jest.fn().mockResolvedValue([]) };
     const database = {
-      getRepository: jest.fn().mockReturnValue(repository),
+      getRepository: jest.fn((entity: unknown) =>
+        entity === Movie ? movies : entity === TVShow ? shows : repository
+      ),
       getMediaListRepository: jest.fn().mockReturnValue(watchlists),
       getProgressRepository: jest.fn().mockReturnValue(progress),
       write: jest.fn((operation: () => Promise<unknown>) => operation()),
@@ -41,8 +49,28 @@ describe('NotificationService', () => {
       progress,
       query,
       repository,
+      movies,
+      shows,
     };
   };
+
+  const row = (id: number, overrides: Record<string, unknown> = {}) => ({
+    id,
+    userId: 'alice',
+    type: 'source_available',
+    mediaType: 'movie',
+    mediaId: 100 + id,
+    title: `Title ${id}`,
+    message: 'available',
+    seasonNumber: null,
+    episodeNumber: null,
+    quality: null,
+    sourceType: null,
+    previousSourceType: null,
+    readAt: null,
+    createdAt: new Date('2026-10-01T00:00:00Z'),
+    ...overrides,
+  });
 
   beforeAll(() => {
     configureFakerSeed();
@@ -174,5 +202,99 @@ describe('NotificationService', () => {
       'requested'
     );
     expect(query.values).not.toHaveBeenCalled();
+  });
+
+  it('pages unread notifications newest first with a cursor', async () => {
+    const { service, repository } = setupTest();
+    repository.find.mockResolvedValue([row(9), row(8), row(7)]);
+
+    const page = await service.list('alice', { status: 'unread', limit: 2 });
+
+    expect(repository.find).toHaveBeenCalledWith({
+      where: { userId: 'alice', readAt: IsNull() },
+      order: { id: 'DESC' },
+      take: 3,
+    });
+    expect(page.notifications.map(notification => notification.id)).toEqual([9, 8]);
+    expect(page.nextCursor).toBe(8);
+  });
+
+  it('continues the read stream after the cursor and ends it on the last page', async () => {
+    const { service, repository } = setupTest();
+    repository.find.mockResolvedValue([row(3, { readAt: new Date() })]);
+
+    const page = await service.list('alice', { status: 'read', cursor: 4, limit: 2 });
+
+    expect(repository.find).toHaveBeenCalledWith({
+      where: { userId: 'alice', readAt: Not(IsNull()), id: LessThan(4) },
+      order: { id: 'DESC' },
+      take: 3,
+    });
+    expect(page.nextCursor).toBeNull();
+  });
+
+  it('adds movie and show posters, and quality, to listed notifications', async () => {
+    const { service, repository, movies, shows } = setupTest();
+    repository.find.mockResolvedValue([
+      row(3, { mediaId: 7, quality: 'FHD', sourceType: 'BLURAY' }),
+      row(2, { mediaType: 'tv', mediaId: 9, seasonNumber: 1, episodeNumber: 2 }),
+      row(1, { mediaId: 404 }),
+    ]);
+    movies.find.mockResolvedValue([{ mediaId: 7, poster: '/movie.jpg' }]);
+    shows.find.mockResolvedValue([{ mediaId: 9, poster: '/show.jpg' }]);
+
+    const { notifications } = await service.list('alice', { status: 'unread' });
+
+    expect(movies.find).toHaveBeenCalledWith({
+      where: { mediaId: In([7, 404]) },
+      select: { mediaId: true, poster: true },
+    });
+    expect(notifications.map(({ poster }) => poster)).toEqual(['/movie.jpg', '/show.jpg', null]);
+    expect(notifications[0]).toMatchObject({ quality: 'FHD', sourceType: 'BLURAY' });
+  });
+
+  it('stores the announced source quality', async () => {
+    const { service, watchlists, progress, query, repository } = setupTest();
+    watchlists.findLocalWatchlistOwners.mockResolvedValue(['alice']);
+    progress.findUserIdsForMovie.mockResolvedValue([]);
+
+    await service.movieQualityUpgrade({
+      mediaId: 42,
+      title: 'Example Film',
+      qualityKey: 'blu-ray',
+      previousQuality: 'CAM',
+      nextQuality: 'Blu-ray',
+      source: { quality: Quality.FHD, sourceType: Source.BLURAY },
+      previousSourceType: Source.CAM,
+    });
+    expect(query.values).toHaveBeenCalledWith([
+      expect.objectContaining({ quality: 'FHD', sourceType: 'BLURAY', previousSourceType: 'CAM' }),
+    ]);
+
+    query.values.mockClear();
+    repository.find.mockResolvedValue([{ userId: 'alice' }]);
+    await service.playableAvailable({ kind: 'movie', mediaId: 1 }, 'Film', {
+      quality: Quality['4K'],
+      sourceType: Source.WEB,
+    });
+    expect(query.values).toHaveBeenCalledWith([
+      expect.objectContaining({ quality: '4K', sourceType: 'WEB', previousSourceType: null }),
+    ]);
+  });
+
+  it('counts unread notifications and marks all of them read for one user', async () => {
+    const { service, repository } = setupTest();
+    repository.count.mockResolvedValue(3);
+    repository.exists.mockResolvedValue(true);
+    repository.update.mockResolvedValue({ affected: 3 });
+
+    await expect(service.counts('alice')).resolves.toEqual({ unreadCount: 3, hasRead: true });
+    expect(repository.count).toHaveBeenCalledWith({ where: { userId: 'alice', readAt: IsNull() } });
+
+    await expect(service.markAllRead('alice')).resolves.toBe(3);
+    expect(repository.update).toHaveBeenCalledWith(
+      { userId: 'alice', readAt: IsNull() },
+      { readAt: expect.any(Date) }
+    );
   });
 });

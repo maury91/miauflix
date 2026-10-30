@@ -40,6 +40,9 @@ async function installVotingHarness(page: Page): Promise<void> {
     return route.fulfill({ path: asset });
   });
 
+  // page.route doesn't see websockets; answer the realtime socket here so Vite
+  // doesn't try to proxy it to a backend these tests don't run.
+  await page.routeWebSocket('**/api/realtime', () => {});
   await page.route('**/api/**', async route => {
     const request = route.request();
     const path = new URL(request.url()).pathname;
@@ -90,7 +93,9 @@ async function installVotingHarness(page: Page): Promise<void> {
     if (path === '/api/config' && request.method() === 'GET') return json(route, []);
     if (path === '/api/status' && request.method() === 'GET') return json(route, { services: {} });
     if (path === '/api/notifications' && request.method() === 'GET')
-      return json(route, { notifications: [], unreadCount: 0 });
+      return json(route, { notifications: [], nextCursor: null });
+    if (path === '/api/notifications/unread-count' && request.method() === 'GET')
+      return json(route, { unreadCount: 0, hasRead: false });
     if (path === '/api/integrations/trakt/association' && request.method() === 'GET')
       return json(route, {
         connected: true,

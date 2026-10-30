@@ -36,6 +36,7 @@ vi.mock('@pages/home/HomePage', async () => {
           onSettings={() => navigate({ type: 'settings' }, { parent: { type: 'home' } })}
           onSearch={() => {}}
           onNotifications={() => {}}
+          onEnterNotifications={() => {}}
           notificationsRef={null}
           showSettings={state.admin}
           unreadCount={0}
