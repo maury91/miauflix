@@ -3,7 +3,7 @@ import { useQueueBackdropFocusMutation } from '@features/media/api/media.api';
 import type { ListDto, MediaDto, ProgressEntry } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { Spinner } from '@shared/components';
-import { IS_TV, PALETTE } from '@shared/config/constants';
+import { builtForTizen, IS_TV, PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import {
   forwardRef,
@@ -23,7 +23,7 @@ import styled from 'styled-components';
 import { ROW_GAP_VH, ROW_HEIGHT_VH } from '../home-layout';
 import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '../homeNavigation';
 import { useSmoothScroller } from '../hooks/useSmoothScroller';
-import { imagePreloader, NEARBY } from '../image-preloader';
+import { IDLE, imagePreloader, NEARBY } from '../image-preloader';
 import { artworkUrl } from '../media.utils';
 import { ROW_PAGE_SIZE, rowPagesFor, rowRenderRadius } from '../row-pages';
 import { MediaCard } from './MediaCard';
@@ -65,6 +65,8 @@ const ScrollContainer = styled.div<{ $gap: number; $peekWidth: number }>`
   gap: ${({ $gap }) => $gap}px;
   overflow-x: auto;
   overflow-y: visible;
+  /* Its own layer on the TV, so a scroll doesn't repaint the row on every frame. */
+  ${builtForTizen ? 'will-change: transform;' : ''}
   padding: 0.8vh ${({ $peekWidth }) => `calc(${$peekWidth}px + 0.5vh)`} 1.4vh;
   scrollbar-width: none;
 
@@ -485,6 +487,34 @@ export const CategoryRow = memo(
       void imagePreloader.prepare(preloadOwner, urls, NEARBY);
     }, [mediaByIndex, mediaPerPage, preloadOwner, selectedIndex, total, visible]);
     useEffect(() => () => imagePreloader.clear(preloadOwner), [preloadOwner]);
+
+    // While the user isn't moving, fetch every loaded card and its hero backdrop, nearest the
+    // selection first, as the legacy app did, so later moves find them in the cache. Rebuilt when
+    // the row's pages change, not on every move.
+    const idleOwner = `${preloadOwner}:idle`;
+    const idleSelection = useRef(selectedIndex);
+    idleSelection.current = selectedIndex;
+    useEffect(() => {
+      const selected = idleSelection.current;
+      if (effectiveLoadIntent === 'dormant' || !mediaByIndex.size) {
+        imagePreloader.clear(idleOwner);
+        return;
+      }
+      const distance = (index: number) =>
+        index >= selected ? index - selected : (selected - index) * 2;
+      const urls = [...mediaByIndex.entries()]
+        .sort(([left], [right]) => distance(left) - distance(right))
+        .flatMap(([, media]) =>
+          media.backdrop
+            ? [
+                artworkUrl(media.backdrop, 'card', mediaWidth),
+                artworkUrl(media.backdrop, 'backdrop'),
+              ]
+            : []
+        );
+      void imagePreloader.prepare(idleOwner, urls, IDLE);
+    }, [effectiveLoadIntent, idleOwner, mediaByIndex, mediaWidth]);
+    useEffect(() => () => imagePreloader.clear(idleOwner), [idleOwner]);
 
     const queuedBackdropMedia = useRef(new Set<string>());
     useEffect(() => {

@@ -11,6 +11,9 @@ const interfaces = (() => ({
   wan: [{ family: 'IPv4', address: '203.0.113.5', internal: false }],
 })) as unknown as typeof networkInterfaces;
 
+/** A browser on the same network as the server. */
+const LAN_PEER = '192.168.1.30';
+
 const setupTest = (settings: Record<string, unknown> = {}, inContainer = false) => {
   let time = 1_000_000;
   const config: Record<string, unknown> = {
@@ -52,7 +55,8 @@ describe('TvPairingService', () => {
   it('announces its private addresses, then again when the service asks', async () => {
     const { service, fetchMock, sentBody } = setupTest();
 
-    await service.announce();
+    service.start();
+    await jest.advanceTimersByTimeAsync(0);
 
     expect(fetchMock).toHaveBeenCalledWith(
       'https://pair.test/v1/discovery',
@@ -79,21 +83,62 @@ describe('TvPairingService', () => {
 
   it('in a container, announces the private addresses it was reached at', async () => {
     const { service, fetchMock, sentBody } = setupTest({}, true);
-    await service.announce();
+    service.start();
+    await jest.advanceTimersByTimeAsync(0);
     expect(fetchMock).not.toHaveBeenCalled();
 
-    service.noteHost('miauflix.example.com');
-    service.noteHost('127.0.0.1:3000');
-    service.noteHost('192.168.1.20:3000');
-    await service.announce();
+    service.noteHost('miauflix.example.com', LAN_PEER);
+    service.noteHost('127.0.0.1:3000', LAN_PEER);
+    service.noteHost('192.168.1.20:3000', LAN_PEER);
+    await jest.advanceTimersByTimeAsync(0);
 
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     expect(sentBody()).toMatchObject({ urls: ['http://192.168.1.20:3000'] });
+    service.stop();
+  });
+
+  it('ignores the Host of requests from outside the network', async () => {
+    const { service, fetchMock } = setupTest({}, true);
+    service.start();
+
+    service.noteHost('192.168.1.20:3000', '203.0.113.9');
+    service.noteHost('192.168.1.21:3000', undefined);
+    await jest.advanceTimersByTimeAsync(0);
+
+    expect(service.addresses()).toEqual([]);
+    expect(fetchMock).not.toHaveBeenCalled();
+    service.stop();
+  });
+
+  it('keeps only the most recent addresses it was reached at', () => {
+    const { service, advance } = setupTest({}, true);
+    for (let i = 0; i < 40; i++) {
+      service.noteHost(`10.0.0.${i}:3000`, '::ffff:10.0.0.99');
+      advance(1);
+    }
+    service.noteHost('10.0.0.0:3000', LAN_PEER);
+
+    const addresses = service.addresses();
+    expect(addresses[0]).toBe('http://10.0.0.0:3000');
+    expect(addresses.slice(1)).toEqual(
+      [39, 38, 37, 36, 35, 34, 33].map(i => `http://10.0.0.${i}:3000`)
+    );
+    expect((service as unknown as { reachedAt: Map<string, number> }).reachedAt.size).toBe(32);
+  });
+
+  it('joins an announcement under way instead of sending another', async () => {
+    const { service, fetchMock } = setupTest();
+    service.start();
+    service.noteHost('192.168.1.20:3000', LAN_PEER);
+    await jest.advanceTimersByTimeAsync(0);
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
     service.stop();
   });
 
   it('forgets addresses it was not reached at for a day', () => {
     const { service, advance } = setupTest({}, true);
-    service.noteHost('192.168.1.20:3000');
+    service.noteHost('192.168.1.20:3000', LAN_PEER);
 
     advance(24 * 60 * 60_000 + 1);
     expect(service.addresses()).toEqual([]);
@@ -103,7 +148,7 @@ describe('TvPairingService', () => {
     const { service } = setupTest({
       TV_PAIRING_ADDRESSES: ['http://192.168.1.50:8080/', ' '],
     });
-    service.noteHost('192.168.1.20:3000');
+    service.noteHost('192.168.1.20:3000', LAN_PEER);
 
     expect(service.addresses()).toEqual(['http://192.168.1.50:8080']);
   });
@@ -111,7 +156,8 @@ describe('TvPairingService', () => {
   it('sends nothing while turned off', async () => {
     const { service, fetchMock } = setupTest({ TV_PAIRING_ENABLED: false });
 
-    await service.announce();
+    service.start();
+    await jest.advanceTimersByTimeAsync(0);
     expect(fetchMock).not.toHaveBeenCalled();
     service.stop();
   });

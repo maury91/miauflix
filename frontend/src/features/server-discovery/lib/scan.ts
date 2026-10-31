@@ -6,20 +6,29 @@ export function getTvIpAddress(): Promise<string | null> {
   const systeminfo = typeof window !== 'undefined' ? window.tizen?.systeminfo : undefined;
   if (!systeminfo) return Promise.resolve(null);
   return new Promise(resolve => {
+    const fail = () => resolve(null);
     try {
-      systeminfo.getPropertyValue('NETWORK', ({ networkType }) => {
-        const property =
-          networkType === 'ETHERNET'
-            ? 'ETHERNET_NETWORK'
-            : networkType === 'WIFI'
-              ? 'WIFI_NETWORK'
-              : null;
-        if (!property) {
-          resolve(null);
-          return;
-        }
-        systeminfo.getPropertyValue(property, ({ ipAddress }) => resolve(ipAddress || null));
-      });
+      systeminfo.getPropertyValue(
+        'NETWORK',
+        ({ networkType }) => {
+          const property =
+            networkType === 'ETHERNET'
+              ? 'ETHERNET_NETWORK'
+              : networkType === 'WIFI'
+                ? 'WIFI_NETWORK'
+                : null;
+          if (!property) {
+            resolve(null);
+            return;
+          }
+          systeminfo.getPropertyValue(
+            property,
+            ({ ipAddress }) => resolve(ipAddress || null),
+            fail
+          );
+        },
+        fail
+      );
     } catch {
       resolve(null);
     }

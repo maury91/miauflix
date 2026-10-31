@@ -84,8 +84,9 @@ echo "==> Waiting for the containers to be healthy (up to ${HEALTH_TIMEOUT}s)"
 deadline=$((SECONDS + HEALTH_TIMEOUT))
 while true; do
   # Containers of the active services that are not running (-a lists a crashed one too),
-  # or whose healthcheck is not "healthy" yet
-  pending="$(docker compose ps -a "${services[@]}" --format '{{.Service}} {{.State}} {{.Health}}' | awk '$2 != "running" { print $1 " (" $2 ")"; next } $3 != "" && $3 != "healthy" { print $1 " (" $3 ")" }')"
+  # or whose healthcheck is not "healthy" yet. -a lists one-off `docker compose run` containers
+  # too: those are skipped.
+  pending="$(docker compose ps -a "${services[@]}" --format '{{.Label "com.docker.compose.oneoff"}} {{.Service}} {{.State}} {{.Health}}' | awk '$1 == "True" { next } $3 != "running" { print $2 " (" $3 ")"; next } $4 != "" && $4 != "healthy" { print $2 " (" $4 ")" }')"
   [ -z "$pending" ] && break
   if [ "$SECONDS" -ge "$deadline" ]; then
     echo "Still not healthy: ${pending//$'\n'/, }" >&2

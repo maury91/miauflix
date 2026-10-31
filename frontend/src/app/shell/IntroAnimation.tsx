@@ -172,6 +172,16 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       computeConstants();
     }, [computeConstants]);
 
+    // A TV rasterizes in software: a pulse without a layer of its own repaints the whole screen
+    // every frame, and a layer GSAP creates as the pulse starts costs a full-screen raster (about
+    // 250 ms) that swallowed the 50 ms swell. Created ahead, before the audio, the layer is painted
+    // once and the compositor scales it. It stays for the expansion: dropping it cost another
+    // full-screen raster, and inside it the letters repaint only where they move, as without it.
+    const preparePulseLayer = useCallback(() => {
+      if (lowResourceAnimation && containerRef.current)
+        containerRef.current.style.willChange = 'transform';
+    }, [lowResourceAnimation]);
+
     const introAnimation = useMemo(() => {
       const letters = logoRef.current;
 
@@ -190,6 +200,9 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           margin: 0,
           transformOrigin: 'center center',
           force3D: true, // Hardware acceleration
+          // Give each letter its layer now, not as the expansion starts: on a TV painting eight
+          // new layers at once stalled the "meow" for about 250 ms
+          ...(lowResourceAnimation ? { z: 0.01 } : {}),
         });
       });
 
@@ -291,10 +304,11 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       }
 
       timelineRef.current = animation;
+      preparePulseLayer();
       animation.pause();
 
       return animation;
-    }, [constants, delay, duration, lowResourceAnimation, onReady]);
+    }, [constants, delay, duration, lowResourceAnimation, onReady, preparePulseLayer]);
 
     useEffect(() => {
       if (introAnimation && onStart) {
@@ -448,6 +462,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       preRollRef.current?.kill();
       preRollRef.current = null;
       if (containerRef.current) gsap.set(containerRef.current, { clearProps: 'transform' });
+      preparePulseLayer();
       // Kill timeline cleanly
       if (introAnimation) {
         introAnimation.kill();
@@ -484,7 +499,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           introAnimation?.pause();
         }, 200);
       }
-    }, [introAnimation, computeConstants, audioRef]);
+    }, [introAnimation, computeConstants, audioRef, preparePulseLayer]);
 
     const getProgress = useCallback(() => introAnimation?.progress() ?? 0, [introAnimation]);
     const isAnimating = useCallback(() => introAnimation?.isActive() ?? false, [introAnimation]);

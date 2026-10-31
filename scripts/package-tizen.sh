@@ -23,6 +23,7 @@ WGT_PATH="${PROJECT_ROOT}/dist/miauflix.wgt"
 
 API_URL="${MIAUFLIX_TV_API_URL}"
 PAIRING_URL="${MIAUFLIX_TV_PAIRING_URL:-https://pair.miauflix.cat}"
+PAIRING_URL="${PAIRING_URL%/}"
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --no-pairing)
@@ -61,6 +62,9 @@ VERSION="$(node -p "require('${PROJECT_ROOT}/package.json').version")"
 
 print_status "Building the Tizen frontend ${VERSION} for ${API_URL:-the server picked on the TV} (pairing: ${PAIRING_URL})..."
 cd "${PROJECT_ROOT}"
+# A Turbo cache hit restores its files over whatever the last build left, so a build for another
+# server would otherwise end up in the package too
+rm -rf "${BUILD_DIR}"
 # Without a server the build gets "/", which the TV app reads as none (an empty value would fall
 # back to the development default)
 VITE_TIZEN=true VITE_API_URL="${API_URL:-/}" VITE_TV_PAIRING_URL="${PAIRING_URL}" \
@@ -68,8 +72,8 @@ VITE_TIZEN=true VITE_API_URL="${API_URL:-/}" VITE_TV_PAIRING_URL="${PAIRING_URL}
 
 sed "s/version=\"[^\"]*\" viewmodes/version=\"${VERSION}\" viewmodes/" \
   "${PROJECT_ROOT}/frontend/tizen/config.xml" > "${BUILD_DIR}/config.xml"
-# The launcher icon (512x423, from npm run generate:icons)
-cp "${PROJECT_ROOT}/frontend/tizen/icon.png" "${BUILD_DIR}/icon.png"
+# The launcher icon, generated from assets/tv-logo.png
+node "${SCRIPT_DIR}/generate-tv-icons.mjs" "${BUILD_DIR}"
 
 rm -f "${WGT_PATH}"
 (cd "${BUILD_DIR}" && zip -qr "${WGT_PATH}" . -x '.*')

@@ -1,5 +1,7 @@
+import { getConnInfo } from '@hono/node-server/conninfo';
 import { serveStatic } from '@hono/node-server/serve-static';
 import { httpInstrumentationMiddleware } from '@hono/otel';
+import type { Context } from 'hono';
 import { Hono } from 'hono';
 
 import { createAuditLogMiddleware } from '@middleware/audit-log.middleware';
@@ -75,6 +77,16 @@ function createApiRoutes(deps: Deps) {
   );
 }
 
+/** The address of the client the request came from (not a proxy's claim of it), when known. */
+function peerAddress(c: Context): string | undefined {
+  try {
+    return getConnInfo(c).remote.address;
+  } catch {
+    // Not served by the Node server (e.g. app.request in tests)
+    return undefined;
+  }
+}
+
 export function createRoutes(deps: Deps) {
   const frontendDir = deps.configurationService.get('FRONTEND_DIR');
   const frontendEnabled = deps.configurationService.get('ENABLE_FRONTEND');
@@ -87,7 +99,7 @@ export function createRoutes(deps: Deps) {
   const app = new Hono()
     .use(async (c, next) => {
       // The address a browser reached the server at is one a TV on the network can use too
-      deps.tvPairingService?.noteHost(c.req.header('host'));
+      deps.tvPairingService?.noteHost(c.req.header('host'), peerAddress(c));
       await next();
     })
     .use(

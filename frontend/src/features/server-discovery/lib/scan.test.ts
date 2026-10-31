@@ -1,7 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { probeServer } from './probe';
-import { scanSubnet } from './scan';
+import { getTvIpAddress, scanSubnet } from './scan';
 
 const health = (body: unknown) =>
   new Response(JSON.stringify(body), { headers: { 'Content-Type': 'application/json' } });
@@ -80,5 +80,31 @@ describe('scanSubnet', () => {
 
     await scanSubnet('10.0.0.5', { concurrency: 1, signal: controller.signal });
     expect(fetchMock).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe('getTvIpAddress', () => {
+  it('reads the address of the connected network', async () => {
+    vi.stubGlobal('tizen', {
+      systeminfo: {
+        getPropertyValue: (key: string, callback: (value: unknown) => void) =>
+          callback(key === 'NETWORK' ? { networkType: 'WIFI' } : { ipAddress: '192.168.1.40' }),
+      },
+    });
+    await expect(getTvIpAddress()).resolves.toBe('192.168.1.40');
+  });
+
+  it('resolves null when the TV reports an error', async () => {
+    vi.stubGlobal('tizen', {
+      systeminfo: {
+        getPropertyValue: (
+          key: string,
+          callback: (value: unknown) => void,
+          onError: (error: Error) => void
+        ) =>
+          key === 'NETWORK' ? callback({ networkType: 'ETHERNET' }) : onError(new Error('busy')),
+      },
+    });
+    await expect(getTvIpAddress()).resolves.toBeNull();
   });
 });

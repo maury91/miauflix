@@ -60,6 +60,7 @@ export function AppShell() {
     introPhase,
     introHasStarted,
     introReady,
+    logoSettled,
     booted,
     hasShownScreen,
     logoRef,
@@ -216,7 +217,9 @@ export function AppShell() {
           autoStart={false}
           // No blur or layer hints on the TV, as the legacy app did
           lowResourceAnimation={builtForTizen}
-          logoVisible={introPhase === 'playing'}
+          // On the TV the letters show, under the identical settled logo, before the audio starts:
+          // painting them on the first beat stalled it for about 250 ms
+          logoVisible={introPhase === 'playing' || (builtForTizen && logoSettled)}
           onStart={handleIntroStart}
           onReady={handleIntroReady}
           onComplete={handleIntroComplete}

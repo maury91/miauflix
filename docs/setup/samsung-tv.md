@@ -25,13 +25,13 @@ starts on it. `--no-pairing` leaves the pairing service out, `--pairing-url <ori
 own. The script builds the frontend with `VITE_TIZEN=true`
 into `dist/frontend-tizen` (one classic script with relative paths, hash routing, polyfills for
 Chromium 69), adds `frontend/tizen/config.xml` with the version from the root `package.json`
-and the 512x423 launcher icon `frontend/tizen/icon.png`, and zips it into `dist/miauflix.wgt`.
+and the 512x423 launcher icon, and zips it into `dist/miauflix.wgt`.
 Chromium 69 ignores newer CSS (flex `gap`, `inset`, `aspect-ratio`, `clamp()`, `:focus-visible`
 and more), so in this build a styled-components plugin
 (`frontend/src/shared/styles/legacy-chromium.ts`) rewrites those styles as they are generated.
 Plain CSS files don't go through it: keep them to what Chromium 69 supports. The package is
-unsigned. The icon (like the website's favicons) is generated from
-`assets/favicon.png` by `npm run generate:icons`.
+unsigned. The launcher icon is generated on every build from `assets/tv-logo.png`, the only
+copy of the TV icons, by `scripts/generate-tv-icons.mjs`: replace that image to change it.
 
 ## How the TV finds your server
 

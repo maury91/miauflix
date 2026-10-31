@@ -117,10 +117,10 @@ test.describe('Login flow', () => {
     await expect(emailInput).toBeVisible();
   });
 
-  // ToDo: fix before merge
-  test.skip('should handle keyboard navigation and accessibility', async ({ page }) => {
+  test('should handle keyboard navigation and accessibility', async ({ page }) => {
     const emailInput = page.locator('#email').first();
     const passwordInput = page.locator('#password').first();
+    const passwordToggle = page.getByRole('button', { name: 'Show password' });
     const submitButton = page.locator('button[type="submit"]').first();
 
     await expect(emailInput).toHaveAttribute('required');
@@ -133,6 +133,13 @@ test.describe('Login flow', () => {
     await page.keyboard.press('Tab');
     await page.keyboard.type('keyboardpassword');
     await expect(passwordInput).toHaveValue('keyboardpassword');
+
+    // The show-password toggle sits between the password and the submit button
+    await page.keyboard.press('Tab');
+    await expect(passwordToggle).toBeFocused();
+    await page.keyboard.press('Enter');
+    await expect(passwordInput).toHaveAttribute('type', 'text');
+    await expect(page.getByRole('button', { name: 'Hide password' })).toBeFocused();
 
     await page.keyboard.press('Tab');
     await expect(submitButton).toBeFocused();

@@ -11,6 +11,8 @@ const ANNOUNCE_TIMEOUT_MS = 10_000;
 const MAX_ADDRESSES = 8;
 /** Addresses the server was reached at are announced for this long after the last request. */
 const REACHED_AT_TTL_MS = 24 * 60 * 60_000;
+/** At most this many addresses the server was reached at are kept; the least recent goes first. */
+const MAX_REACHED_AT = 32;
 
 /** An IPv4 address of a private network (RFC 1918), as a TV on the same network would use. */
 const PRIVATE_IPV4 =
@@ -41,6 +43,7 @@ export class TvPairingService {
   private timer: ReturnType<typeof setTimeout> | undefined;
   private stopped = true;
   private lastAnnounced = '';
+  private inFlight: Promise<void> | undefined;
 
   constructor(
     private readonly configurationService: ConfigurationService,
@@ -61,12 +64,21 @@ export class TvPairingService {
     clearTimeout(this.timer);
   }
 
-  /** Note the Host a request reached the server at; a new private address is announced now. */
-  noteHost(host: string | undefined): void {
+  /**
+   * Note the Host a request reached the server at; a new private address is announced now.
+   * Only requests from a private peer count: the Host header is the client's to choose, and a
+   * client outside the network must not decide what is announced.
+   */
+  noteHost(host: string | undefined, peer: string | undefined): void {
+    if (!PRIVATE_IPV4.test((peer ?? '').replace(/^::ffff:/i, ''))) return;
     const match = /^(\d{1,3}(?:\.\d{1,3}){3})(?::(\d{1,5}))?$/.exec(host ?? '');
     if (!match || !PRIVATE_IPV4.test(match[1])) return;
     const origin = `http://${match[1]}${match[2] && match[2] !== '80' ? `:${match[2]}` : ''}`;
-    const known = this.reachedAt.has(origin);
+    const known = this.reachedAt.delete(origin);
+    if (!known && this.reachedAt.size >= MAX_REACHED_AT) {
+      // The map is in order of the last request, so the first is the least recent
+      this.reachedAt.delete(this.reachedAt.keys().next().value!);
+    }
     this.reachedAt.set(origin, this.now());
     if (!known && !this.stopped && !this.configuredAddresses()) void this.announce();
   }
@@ -104,8 +116,22 @@ export class TvPairingService {
     return configured.length ? configured : null;
   }
 
-  /** Announce now, then again when the pairing service asks (it forgets silent servers). */
-  async announce(): Promise<void> {
+  /**
+   * Announce now, then again when the pairing service asks (it forgets silent servers).
+   * A call while an announcement is under way joins it.
+   */
+  announce(): Promise<void> {
+    if (this.stopped) return Promise.resolve();
+    if (!this.inFlight) {
+      const current = this.announceOnce().finally(() => {
+        if (this.inFlight === current) this.inFlight = undefined;
+      });
+      this.inFlight = current;
+    }
+    return this.inFlight;
+  }
+
+  private async announceOnce(): Promise<void> {
     clearTimeout(this.timer);
     let nextMs = DEFAULT_ANNOUNCE_INTERVAL_MS;
     const enabled = this.configurationService.get('TV_PAIRING_ENABLED') !== false;

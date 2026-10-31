@@ -156,7 +156,8 @@ export interface Tizen {
   systeminfo: {
     getPropertyValue: <K extends keyof Properties>(
       key: K,
-      callback: (value: Properties[K]) => void
+      callback: (value: Properties[K]) => void,
+      errorCallback?: (error: Error) => void
     ) => void;
   };
   tvinputdevice: {

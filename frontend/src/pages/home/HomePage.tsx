@@ -1,7 +1,7 @@
 import { type AppRoute, navigate, useRoute } from '@app/router';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
-import { PALETTE } from '@shared/config/constants';
+import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { useAppSelector } from '@store/hooks';
 import { selectCurrentSessionId, selectCurrentUser, selectIsAdmin } from '@store/slices/auth';
@@ -53,6 +53,9 @@ const Content = styled.div<{ $margin: number }>`
   inset: 42vh 0 0;
   z-index: 2;
   overflow: hidden auto;
+  /* Its own layer on the TV, which rasterizes in software and repaints a scroller that isn't one
+     on every frame of a scroll. */
+  ${builtForTizen ? 'will-change: transform;' : ''}
   padding: 6vh ${({ $margin }) => $margin}px 8vh;
   mask-image: linear-gradient(180deg, transparent 5vh, #000 8vh);
   scrollbar-width: none;
