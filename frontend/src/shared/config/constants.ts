@@ -9,7 +9,7 @@ export const builtForTizen = env.TIZEN;
 export const API_URL = builtForTizen
   ? (readTvServer() ?? (/^https?:\/\//.test(env.API_URL) ? env.API_URL : ''))
   : env.API_URL;
-/** The TV app's pairing service, '' when the package was built without pairing codes ('off'). */
+/** The pairing service the TV app looks servers up at, '' when packaged without it ('off'). */
 export const TV_PAIRING_URL =
   env.TV_PAIRING_URL === 'off' ? '' : env.TV_PAIRING_URL.replace(/\/+$/, '');
 export const IS_TIZEN = typeof window !== 'undefined' && 'tizen' in window;

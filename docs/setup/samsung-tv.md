@@ -21,8 +21,8 @@ npm run package:tizen
 The package works with any server: the TV finds yours on first start (see
 [How the TV finds your server](#how-the-tv-finds-your-server)). To skip that, pass your backend's
 origin (no path), e.g. `npm run package:tizen -- https://miauflix.example.com`, and the TV
-starts on it. `--no-pairing` leaves pairing codes out, `--pairing-url <origin>` uses your own
-pairing service. The script builds the frontend with `VITE_TIZEN=true`
+starts on it. `--no-pairing` leaves the pairing service out, `--pairing-url <origin>` uses your
+own. The script builds the frontend with `VITE_TIZEN=true`
 into `dist/frontend-tizen` (one classic script with relative paths, hash routing, polyfills for
 Chromium 69), adds `frontend/tizen/config.xml` with the version from the root `package.json`
 and the 512x423 launcher icon `frontend/tizen/icon.png`, and zips it into `dist/miauflix.wgt`.
@@ -39,18 +39,21 @@ The TV keeps the server it connected to and checks it at every start. When it ha
 that server doesn't answer, it shows a picker (and reconnects by itself when the last server is
 back):
 
-- **Pair with a code.** The TV shows an 8-character code. On a phone or computer, open
-  Miauflix, go to **Settings → Pair a TV**, enter the code and check the address the TV will
-  use: it is the address the page is open at, so change it if you opened Miauflix as
-  `localhost`. Your server sends that address to the pairing service at `pair.miauflix.cat`
-  (`tv-pairing`), which hands it to the TV once. Codes expire after 10 minutes; the
-  service keeps nothing in storage, but it sees the TV's and the server's public IP. To keep
-  away from it, set `TV_PAIRING_ENABLED=false` on the server and package the app with
-  `--no-pairing`: the TV then never contacts it.
-- **On your network.** The TV checks every address of its local network (the /24 it is on) on
-  port 3000 and lists the Miauflix servers that answer. The server must be reachable from the
-  network: with Docker, see
+- **On your network.** Two searches, whose servers are listed as they answer:
+  - Your server announces the addresses it can be reached at to the pairing service at
+    `pair.miauflix.cat` (`tv-pairing/`) every two minutes, and the TV asks it for the servers
+    announced from its own public IP, so from behind the same router. In Docker the server
+    can't see its network address: it announces the private address you opened it at in a
+    browser (so open it once from another device, e.g. `http://192.168.1.10:3000`), or set
+    `TV_PAIRING_ADDRESSES`. The service keeps nothing in storage and forgets a server 5 minutes
+    after its last announcement, but it sees your public IP and your server's local addresses.
+    To keep away from it, set `TV_PAIRING_ENABLED=false` on the server and package the app with
+    `--no-pairing`: the TV then never contacts it.
+  - The TV checks every address of its local network (the /24 it is on) on port 3000.
+
+  The server must be reachable from the network: with Docker, see
   [open it to your local network](docker-setup.md#open-it-to-your-local-network).
+
 - **Or type its address**, like `192.168.1.10` (port 3000 and `http://` are added) or
   `https://miauflix.example.com`.
 

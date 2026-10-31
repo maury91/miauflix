@@ -1022,10 +1022,15 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     if (!document.activeElement || document.activeElement === document.body)
       pageRef.current?.focus({ preventScroll: true });
   }, []);
-  // A remote needs something focused: the failure's action, else the player (for Back)
+  // A remote needs something focused: the failure's action, else the player (for Back).
+  // Retry unmounts its own button, dropping the focus on the body: hand it back to the player.
   useEffect(() => {
-    if (!error && status !== 'exhausted') return;
-    (retryRef.current ?? notifyRef.current ?? pageRef.current)?.focus({ preventScroll: true });
+    if (error || status === 'exhausted') {
+      (retryRef.current ?? notifyRef.current ?? pageRef.current)?.focus({ preventScroll: true });
+      return;
+    }
+    if (!document.activeElement || document.activeElement === document.body)
+      pageRef.current?.focus({ preventScroll: true });
   }, [error, status, availabilityRequest.isSuccess]);
 
   const sourceAttempt = pushedAttempt ?? session?.sourceAttempt ?? null;

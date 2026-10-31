@@ -3,9 +3,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import SettingsPage from './SettingsPage';
 
-// Pairing asks the backend whether it is on; covered by its own tests
-vi.mock('@features/server-discovery/ui/PairTvSection', () => ({ PairTvSection: () => null }));
-
 afterEach(cleanup);
 describe('settings keyboard navigation', () => {
   it('moves backward with Up and forward with Down, wrapping enabled actions', () => {

@@ -43,10 +43,10 @@ export const serverConfigurationDefinition = serviceConfiguration({
     }),
     TV_PAIRING_ENABLED: variable({
       description:
-        'Let signed-in users pair a TV app by entering the code it shows: the server sends the address the TV should use to the pairing service (TV_PAIRING_URL), which hands it to the TV. Off, TVs find the server by scanning the local network or by typing its address',
+        'Announce this server to the pairing service (TV_PAIRING_URL) every two minutes, so the Samsung TV app on the same network (behind the same public IP) finds it. Off, the TV finds the server by scanning the local network or by typing its address',
       booleanStateDescriptions: {
-        true: 'TV pairing codes accepted',
-        false: 'TV pairing off',
+        true: 'Announced to TV apps',
+        false: 'Not announced',
       },
       required: false,
       advanced: true,
@@ -56,12 +56,21 @@ export const serverConfigurationDefinition = serviceConfiguration({
     }),
     TV_PAIRING_URL: variable({
       description:
-        'Pairing service that relays the server address to TV apps (tv-pairing). Must match the one the TV app was packaged with',
+        'Pairing service the server announces itself to and TV apps look servers up at (tv-pairing). Must match the one the TV app was packaged with',
       required: false,
       advanced: true,
       defaultValue: 'https://pair.miauflix.cat',
       example: 'https://pair.example.com',
       transform: transforms.url(),
+    }),
+    TV_PAIRING_ADDRESSES: variable({
+      description:
+        "Addresses a TV on your network reaches this server at, announced instead of the detected ones (comma-separated origins). By default: the server's private IPv4 addresses, and, in Docker, the private addresses a browser opened it at",
+      required: false,
+      advanced: true,
+      defaultValue: '',
+      example: 'http://192.168.1.10:3000',
+      transform: transforms.optional(transforms.stringArray()),
     }),
     PORT: variable({
       description: 'Port for the server to listen on',

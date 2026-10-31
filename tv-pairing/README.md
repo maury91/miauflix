@@ -1,26 +1,36 @@
 # TV pairing service
 
-Hands a Miauflix server's address to a Samsung TV app that can't find it on its own. It is
-hosted for everyone at `https://pair.miauflix.cat`; it is **not** part of a Miauflix install.
-Run your own and point both sides at it (`TV_PAIRING_URL` on the server,
+Lets the Miauflix Samsung TV app find the Miauflix servers on its network. It is hosted for
+everyone at `https://pair.miauflix.cat`; it is **not** part of a Miauflix install. Run your own
+and point both sides at it (`TV_PAIRING_URL` on the server,
 `npm run package:tizen -- --pairing-url <origin>` for the TV app) to keep away from the hosted one.
 
-## How pairing works
+## How it works
 
-1. The TV creates a pairing and shows its code, keeping the secret:
-   `POST /v1/pairings` → `201 { code, secret, expiresAt, pollInterval }`.
-2. Someone signed in to their server enters the code in **Settings → Pair a TV**; the server
-   stores the address the TV should use: `PUT /v1/pairings/:code` with `{ "url": "http://192.168.1.10:3000" }`
-   (an `http(s)` origin, optional `name`) → `204`, `404` unknown or expired, `409` already used.
-3. The TV polls with its secret: `GET /v1/pairings/:code` with `Authorization: Bearer <secret>`
-   → `202 { status: "pending" }`, then `200 { status: "paired", server: { url, name? } }` once,
-   which deletes the pairing. A wrong secret gets the same `404` as an unknown code.
+One endpoint, `POST /v1/discovery`, with a JSON body:
 
-Codes are 8 symbols from 32 (no `0`/`O`, `1`/`I`), so 2^40 of them, and expire after 10 minutes.
-Spaces, dashes and lower case are ignored. Each client IP may create 10 pairings, try 10 codes and
-poll 120 times a minute (`429` beyond); at most 10,000 pairings are open at once (`503`). Pairings
-live in memory only: a restart drops the open ones, and nothing is kept once the TV has its
-address. CORS allows any origin without credentials (the TV app runs from local files).
+- **A server announces itself**: `{ "role": "server", "id": "…", "urls": ["http://192.168.1.10:3000"], "name": "…" }`
+  → `200 { "announceInterval": 120 }`. `id` (8 to 64 letters, digits, `_`, `-`) identifies the
+  server, so a new announcement replaces its previous one; `urls` are 1 to 8 `http(s)` origins the
+  server can be reached at on its network; `name` is optional. Servers announce again every
+  `announceInterval` seconds.
+- **A TV looks servers up**: `{ "role": "client" }` → `200 { "servers": [{ "id", "urls", "name"?, "lastSeen" }] }`,
+  latest first. The TV probes the addresses and lists the servers that answer.
+
+Servers and TVs are matched by the public IP the requests come from: behind the same router, they
+share it. An IPv6 client is matched by its /64. A server and a TV that reach the service over
+different IP versions don't match, so serve it over IPv4 only (an `A` record, no `AAAA`) unless
+every network you care about is IPv6 end to end.
+
+An announcement is dropped 5 minutes after it was made. At most 16 servers are kept per network
+(the one silent the longest goes first) and 100,000 networks at once (`503` beyond); each network
+may send 30 requests a minute (`429` beyond). Everything lives in memory: a restart forgets every
+server until it announces again, within two minutes. CORS allows any origin without credentials
+(the TV app runs from local files).
+
+Anyone behind the same public IP can announce a server, or read the announced addresses: that
+includes the other customers of a carrier-grade NAT. The addresses are private ones, and the TV
+only lists the servers that answer as Miauflix servers.
 
 `GET /health` → `{ "status": "ok" }`.
 
@@ -30,13 +40,15 @@ address. CORS allows any origin without credentials (the TV app runs from local 
 docker run -d -p 3003:3003 ghcr.io/maury91/miauflix-tv-pairing:latest
 ```
 
-A standalone Bun service, not one of the Miauflix workspaces: it has no dependencies and shares no code with Miauflix. From a checkout: `cd tv-pairing && bun run src/index.ts`; tests: `bun test`; types: `npx tsc --noEmit`.
+A standalone Bun service, not one of the Miauflix workspaces: it has no dependencies and shares no
+code with Miauflix. From a checkout: `cd tv-pairing && bun run src/index.ts`; tests: `bun test`;
+types: `npx tsc --noEmit`.
 
-| Variable                      | Default   | Meaning                                                                                                                                                                    |
-| ----------------------------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `TV_PAIRING_PORT`             | `3003`    | Port to listen on                                                                                                                                                          |
-| `TV_PAIRING_HOST`             | `0.0.0.0` | Address to listen on                                                                                                                                                       |
-| `TV_PAIRING_TTL_SECONDS`      | `600`     | How long a code is valid                                                                                                                                                   |
-| `TV_PAIRING_CLIENT_IP_HEADER` | unset     | Header a reverse proxy puts the client IP in (`cf-connecting-ip`, `x-real-ip`, `x-forwarded-for`: last entry), for the rate limits. Only behind a proxy that overwrites it |
+| Variable                      | Default   | Meaning                                                                                                                                                                                                           |
+| ----------------------------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `TV_PAIRING_PORT`             | `3003`    | Port to listen on                                                                                                                                                                                                 |
+| `TV_PAIRING_HOST`             | `0.0.0.0` | Address to listen on                                                                                                                                                                                              |
+| `TV_PAIRING_TTL_SECONDS`      | `300`     | How long an announcement counts                                                                                                                                                                                   |
+| `TV_PAIRING_CLIENT_IP_HEADER` | unset     | Header a reverse proxy puts the client IP in (`cf-connecting-ip`, `x-real-ip`, `x-forwarded-for`: last entry). Required behind a proxy, or every client shares its IP; only behind one that overwrites the header |
 
-Serve it over HTTPS (a reverse proxy in front): the TV gets the server's address from it.
+Serve it over HTTPS (a reverse proxy in front).

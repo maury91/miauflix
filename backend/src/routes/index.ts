@@ -25,7 +25,6 @@ import { createShowRoutes } from './show.routes';
 import { createStorageRoutes } from './storage.routes';
 import { createStreamRoutes } from './stream.routes';
 import { createSubtitleRoutes } from './subtitles.routes';
-import { createTvRoutes } from './tv.routes';
 
 function createApiRoutes(deps: Deps) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(
@@ -72,7 +71,6 @@ function createApiRoutes(deps: Deps) {
       .route('/playback', createPlaybackRoutes(deps))
       .route('/subtitles', createSubtitleRoutes(deps))
       .route('/storage', createStorageRoutes(deps))
-      .route('/tv', createTvRoutes(deps))
       .route('/', createListRoutes(deps))
   );
 }
@@ -87,6 +85,11 @@ export function createRoutes(deps: Deps) {
   );
 
   const app = new Hono()
+    .use(async (c, next) => {
+      // The address a browser reached the server at is one a TV on the network can use too
+      deps.tvPairingService?.noteHost(c.req.header('host'));
+      await next();
+    })
     .use(
       createCorsMiddleware(origins, origin =>
         isTvAppOrigin(origin, {

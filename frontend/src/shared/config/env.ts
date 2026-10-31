@@ -33,7 +33,7 @@ const envSchema = z.object({
     .string()
     .transform(val => val === 'true')
     .default(false),
-  /** The TV app's pairing service; empty turns pairing codes off. */
+  /** The pairing service the TV app looks servers up at; 'off' leaves it out. */
   TV_PAIRING_URL: z.string().default('https://pair.miauflix.cat'),
 });
 

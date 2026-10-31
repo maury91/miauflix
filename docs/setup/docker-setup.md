@@ -48,12 +48,13 @@ MIAUFLIX_UPSTREAM=vpn:3000 # with the VPN, Caddy reaches Miauflix through the VP
 
 To watch from a TV, phone or another computer at home, open Miauflix to your network **after** you have created the admin account:
 
-1. In `docker-compose.yml`, change the port mapping of the `miauflix` service:
+1. In the `.env` next to `docker-compose.yml`, publish the port on every network interface instead of this computer only:
 
-   ```yaml
-   ports:
-     - '3000:3000'
+   ```bash
+   MIAUFLIX_LISTEN_ADDRESS=0.0.0.0
    ```
+
+   Setting it in `.env` rather than editing the port mapping keeps the change when `./update.sh --files` replaces the compose files (see [Updating Miauflix](#updating-miauflix)).
 
 2. Apply the change:
 
@@ -151,7 +152,7 @@ Miauflix finds and streams content over BitTorrent, so every peer sees the IP ad
    docker compose up -d
    ```
 
-The `vpn` service owns the network, so Miauflix's port is published from it. To [open it to your local network](#open-it-to-your-local-network), change the `vpn` service's port mapping in `docker-compose.vpn.yml` instead of the `miauflix` one. FlareSolverr and Jaeger, when their files are listed, share the VPN's network too. Gluetun connects to NordVPN's P2P servers and passes Miauflix's VPN check as soon as the tunnel is up; `http://localhost:3000/api/status` reports it under `vpn`.
+The `vpn` service owns the network, so Miauflix's port is published from it. `MIAUFLIX_LISTEN_ADDRESS` (see [Open it to your local network](#open-it-to-your-local-network)) applies to the `vpn` service's port mapping instead. FlareSolverr and Jaeger, when their files are listed, share the VPN's network too. Gluetun connects to NordVPN's P2P servers and passes Miauflix's VPN check as soon as the tunnel is up; `http://localhost:3000/api/status` reports it under `vpn`.
 
 To check the connection, compare the address the container uses with your own:
 
@@ -473,7 +474,7 @@ Then run it whenever you want the newest images of your tag:
 ./update.sh
 ```
 
-It pulls the images of the files in `COMPOSE_FILE`, recreates the containers that changed (removing ones no longer in the files), deletes the replaced images and waits until every container with a healthcheck is healthy, failing after 6 minutes (`HEALTH_TIMEOUT`, in seconds). `./update.sh --files` first downloads the newest version of the compose files and `Caddyfile` you already have from `main` (`MIAUFLIX_FILES_REF` picks another branch or tag), keeping the previous ones as `.bak`; files of your own, such as an extra override, are left alone. Without the script, `docker compose pull && docker compose up -d` does the same update. When building from source, rebuild with the same files the stack was started with (`npm run start:backend:docker:prod` picks them as described in [Building from source](#building-from-source)):
+It pulls the images of the files in `COMPOSE_FILE`, recreates the containers that changed (removing ones no longer in the files), deletes the replaced images and waits until every container is running and every one with a healthcheck is healthy, failing after 6 minutes (`HEALTH_TIMEOUT`, in seconds). `./update.sh --files` first downloads the newest version of the compose files and `Caddyfile` you already have from `main` (`MIAUFLIX_FILES_REF` picks another branch or tag), keeping each replaced one as `<file>.<date>-<time>.bak`; files of your own, such as an extra override, are left alone, so put your changes there or in `.env` rather than in the downloaded files. If any download fails, it stops without changing any file. When the `Caddyfile` changed, it also recreates Caddy so that it reads the new one. Without the script, `docker compose pull && docker compose up -d` does the same update. When building from source, rebuild with the same files the stack was started with (`npm run start:backend:docker:prod` picks them as described in [Building from source](#building-from-source)):
 
 ```bash
 git pull

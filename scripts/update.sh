@@ -39,24 +39,29 @@ if grep -q 'docker-compose.build.yml' .env 2>/dev/null; then
   exit 1
 fi
 
+caddyfile_changed=false
 if $update_files; then
   echo "==> Downloading compose files from ${FILES_REF}"
+  # Download every file before replacing any, so a failure never mixes revisions
+  tmpdir="$(mktemp -d)"
+  trap 'rm -rf "$tmpdir"' EXIT
   for file in $UPSTREAM_FILES; do
     [ -f "$file" ] || continue
-    tmp="$(mktemp)"
-    if curl -fsSL "${REPO_RAW}/${FILES_REF}/${file}" -o "$tmp"; then
-      if cmp -s "$tmp" "$file"; then
-        rm -f "$tmp"
-      else
-        cp "$file" "${file}.bak"
-        mv "$tmp" "$file"
-        chmod 644 "$file"
-        echo "    updated ${file} (previous one in ${file}.bak)"
-      fi
-    else
-      rm -f "$tmp"
-      echo "    could not download ${file}, keeping the current one" >&2
+    if ! curl -fsSL "${REPO_RAW}/${FILES_REF}/${file}" -o "${tmpdir}/${file}"; then
+      echo "Could not download ${file} from ${FILES_REF}: nothing was changed" >&2
+      exit 1
     fi
+  done
+  backup_suffix="$(date +%Y%m%d-%H%M%S).bak"
+  for file in $UPSTREAM_FILES; do
+    [ -f "${tmpdir}/${file}" ] || continue
+    cmp -s "${tmpdir}/${file}" "$file" && continue
+    # Timestamped, so a later run never overwrites the copy holding your own edits
+    cp "$file" "${file}.${backup_suffix}"
+    mv "${tmpdir}/${file}" "$file"
+    chmod 644 "$file"
+    echo "    updated ${file} (previous one in ${file}.${backup_suffix}, carry over any edits of yours)"
+    [ "$file" = Caddyfile ] && caddyfile_changed=true
   done
 fi
 
@@ -65,6 +70,12 @@ docker compose pull
 
 echo "==> Recreating changed containers"
 docker compose up -d --remove-orphans
+# shellcheck disable=SC2207 # service names never contain spaces
+services=($(docker compose config --services))
+# Caddy keeps reading the replaced Caddyfile until its container is recreated
+if $caddyfile_changed && printf '%s\n' "${services[@]}" | grep -qx caddy; then
+  docker compose up -d --force-recreate --no-deps caddy
+fi
 
 echo "==> Removing unused images"
 docker image prune -f >/dev/null
@@ -72,8 +83,9 @@ docker image prune -f >/dev/null
 echo "==> Waiting for the containers to be healthy (up to ${HEALTH_TIMEOUT}s)"
 deadline=$((SECONDS + HEALTH_TIMEOUT))
 while true; do
-  # Containers with a healthcheck that is not "healthy" yet
-  pending="$(docker compose ps --format '{{.Service}} {{.Health}}' | awk '$2 != "" && $2 != "healthy" { print $1 " (" $2 ")" }')"
+  # Containers of the active services that are not running (-a lists a crashed one too),
+  # or whose healthcheck is not "healthy" yet
+  pending="$(docker compose ps -a "${services[@]}" --format '{{.Service}} {{.State}} {{.Health}}' | awk '$2 != "running" { print $1 " (" $2 ")"; next } $3 != "" && $3 != "healthy" { print $1 " (" $3 ")" }')"
   [ -z "$pending" ] && break
   if [ "$SECONDS" -ge "$deadline" ]; then
     echo "Still not healthy: ${pending//$'\n'/, }" >&2

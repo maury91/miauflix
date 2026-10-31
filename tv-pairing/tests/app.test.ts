@@ -1,151 +1,155 @@
 import { describe, expect, it } from 'bun:test';
 
-import { createPairingApp, normalizeCode, normalizeServerUrl } from '../src/app';
+import {
+  type AnnouncedServer,
+  createDiscoveryApp,
+  networkKey,
+  normalizeServerUrl,
+} from '../src/app';
 
-const BASE = 'https://pair.test';
+const HOME = '203.0.113.1';
+const NEIGHBOUR = '198.51.100.7';
 
-const setupTest = (options: Parameters<typeof createPairingApp>[0] = {}) => {
+const setupTest = (options: Parameters<typeof createDiscoveryApp>[0] = {}) => {
   let time = 1_000_000;
-  const app = createPairingApp({ now: () => time, ...options });
-  const call = (method: string, path: string, init: RequestInit = {}, ip = '203.0.113.1') =>
-    app.fetch(new Request(`${BASE}${path}`, { method, ...init }), ip);
-  const createPairing = async () => {
-    const response = await call('POST', '/v1/pairings');
-    return (await response.json()) as {
-      code: string;
-      secret: string;
-      expiresAt: string;
-      pollInterval: number;
-    };
-  };
-  const complete = (code: string, body: unknown, ip?: string) =>
-    call(
-      'PUT',
-      `/v1/pairings/${code}`,
-      { body: JSON.stringify(body), headers: { 'Content-Type': 'application/json' } },
+  const app = createDiscoveryApp({ now: () => time, ...options });
+  const post = (body: unknown, ip = HOME) =>
+    app.fetch(
+      new Request('https://pair.test/v1/discovery', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body),
+      }),
       ip
     );
-  const poll = (code: string, secret: string) =>
-    call('GET', `/v1/pairings/${code}`, { headers: { Authorization: `Bearer ${secret}` } });
+  const announce = (body: Record<string, unknown>, ip?: string) =>
+    post({ role: 'server', id: 'server-one', urls: ['http://192.168.1.10:3000'], ...body }, ip);
+  const lookup = async (ip?: string) =>
+    ((await (await post({ role: 'client' }, ip)).json()) as { servers: AnnouncedServer[] }).servers;
   return {
     app,
-    call,
-    createPairing,
-    complete,
-    poll,
+    post,
+    announce,
+    lookup,
     advance: (ms: number) => {
       time += ms;
     },
   };
 };
 
-describe('tv pairing', () => {
-  it('hands the address a server stored to the TV once', async () => {
-    const { createPairing, complete, poll, app } = setupTest();
-    const { code, secret, pollInterval } = await createPairing();
-    expect(code).toMatch(/^[2-9A-HJ-NP-Z]{8}$/);
-    expect(pollInterval).toBe(3);
+describe('tv discovery', () => {
+  it('gives a TV the servers announced from its public IP', async () => {
+    const { announce, lookup } = setupTest();
 
-    const pending = await poll(code, secret);
-    expect(pending.status).toBe(202);
+    const response = await announce({ name: 'Home', urls: ['http://192.168.1.10:3000/'] });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ announceInterval: 120 });
 
-    const completed = await complete(code, { url: 'http://192.168.1.10:3000/', name: 'Home' });
-    expect(completed.status).toBe(204);
-
-    const paired = await poll(code, secret);
-    expect(paired.status).toBe(200);
-    expect(await paired.json()).toEqual({
-      status: 'paired',
-      server: { url: 'http://192.168.1.10:3000', name: 'Home' },
-    });
-    expect(app.size).toBe(0);
-    expect((await poll(code, secret)).status).toBe(404);
+    expect(await lookup()).toEqual([
+      {
+        id: 'server-one',
+        name: 'Home',
+        urls: ['http://192.168.1.10:3000'],
+        lastSeen: new Date(1_000_000).toISOString(),
+      },
+    ]);
+    expect(await lookup(NEIGHBOUR)).toEqual([]);
   });
 
-  it('accepts the code as people type it', async () => {
-    const { createPairing, complete } = setupTest();
-    const { code } = await createPairing();
-    const typed = `${code.slice(0, 4).toLowerCase()} ${code.slice(4)}`;
+  it('forgets a server that stops announcing', async () => {
+    const { announce, lookup, advance, app } = setupTest();
+    await announce({});
 
-    expect((await complete(encodeURIComponent(typed), { url: 'https://m.example' })).status).toBe(
-      204
-    );
-  });
+    advance(4 * 60_000);
+    await announce({});
+    advance(4 * 60_000);
+    expect(await lookup()).toHaveLength(1);
 
-  it('answers a wrong secret like an unknown code', async () => {
-    const { createPairing, poll } = setupTest();
-    const { code } = await createPairing();
-
-    const response = await poll(code, 'wrong');
-    expect(response.status).toBe(404);
-  });
-
-  it('refuses a second address for the same code', async () => {
-    const { createPairing, complete } = setupTest();
-    const { code } = await createPairing();
-    await complete(code, { url: 'http://192.168.1.10:3000' });
-
-    expect((await complete(code, { url: 'http://evil.example' })).status).toBe(409);
-  });
-
-  it('expires codes', async () => {
-    const { createPairing, complete, advance } = setupTest({ ttlMs: 60_000 });
-    const { code } = await createPairing();
     advance(60_000);
-
-    expect((await complete(code, { url: 'http://192.168.1.10:3000' })).status).toBe(404);
+    expect(await lookup()).toEqual([]);
+    expect(app.networks).toBe(0);
   });
 
-  it('rejects addresses that are not plain http(s) origins', async () => {
-    const { createPairing, complete } = setupTest();
-    const { code } = await createPairing();
+  it('replaces a server announcement and lists the latest first', async () => {
+    const { announce, lookup, advance } = setupTest();
+    await announce({ id: 'server-one' });
+    advance(1000);
+    await announce({ id: 'server-two' });
+    advance(1000);
+    await announce({ id: 'server-one', urls: ['http://192.168.1.11:3000'] });
 
-    for (const url of ['ftp://x.example', 'http://u:p@x.example', 'http://x.example/path', 7]) {
-      expect((await complete(code, { url })).status).toBe(400);
-    }
+    const servers = await lookup();
+    expect(servers.map(server => server.id)).toEqual(['server-one', 'server-two']);
+    expect(servers[0]).toMatchObject({ urls: ['http://192.168.1.11:3000'] });
   });
 
-  it('limits code attempts per client', async () => {
-    const { complete, advance } = setupTest({ limits: { complete: 2 } });
+  it('keeps a bounded number of servers per network', async () => {
+    const { announce, lookup } = setupTest({ maxServersPerNetwork: 2 });
+    await announce({ id: 'server-one' });
+    await announce({ id: 'server-two' });
+    await announce({ id: 'server-three' });
 
-    expect((await complete('AAAAAAAA', { url: 'http://x.example' })).status).toBe(404);
-    expect((await complete('AAAAAAAB', { url: 'http://x.example' })).status).toBe(404);
-    expect((await complete('AAAAAAAC', { url: 'http://x.example' })).status).toBe(429);
-    expect((await complete('AAAAAAAC', { url: 'http://x.example' }, '198.51.100.7')).status).toBe(
-      404
-    );
-    advance(60_000);
-    expect((await complete('AAAAAAAC', { url: 'http://x.example' })).status).toBe(404);
+    expect((await lookup()).map(server => server.id)).toEqual(['server-three', 'server-two']);
   });
 
-  it('caps open pairings', async () => {
-    const { call } = setupTest({ maxPairings: 1 });
-    await call('POST', '/v1/pairings');
+  it('matches IPv6 clients by their /64', async () => {
+    const { announce, lookup } = setupTest();
+    await announce({}, '2001:db8:1:2::10');
 
-    expect((await call('POST', '/v1/pairings', {}, '198.51.100.7')).status).toBe(503);
+    expect(await lookup('2001:0db8:0001:0002:aaaa::1')).toHaveLength(1);
+    expect(await lookup('2001:db8:1:3::10')).toEqual([]);
+  });
+
+  it('rejects malformed announcements', async () => {
+    const { announce, post } = setupTest();
+
+    expect((await announce({ id: 'short' })).status).toBe(400);
+    expect((await announce({ urls: [] })).status).toBe(400);
+    expect((await announce({ urls: ['http://x.example/path'] })).status).toBe(400);
+    expect((await announce({ urls: ['ftp://x.example'] })).status).toBe(400);
+    expect((await post({ role: 'admin' })).status).toBe(400);
+  });
+
+  it('rate limits each network', async () => {
+    const { lookup, post } = setupTest({ requestsPerMinute: 2 });
+    await lookup();
+    await lookup();
+
+    expect((await post({ role: 'client' })).status).toBe(429);
+    expect((await post({ role: 'client' }, NEIGHBOUR)).status).toBe(200);
+  });
+
+  it('caps the networks it keeps', async () => {
+    const { announce } = setupTest({ maxNetworks: 1 });
+    await announce({});
+
+    expect((await announce({}, NEIGHBOUR)).status).toBe(503);
   });
 
   it('allows any origin without credentials', async () => {
-    const { call } = setupTest();
-    const response = await call('OPTIONS', '/v1/pairings');
+    const { app } = setupTest();
+    const response = await app.fetch(
+      new Request('https://pair.test/v1/discovery', { method: 'OPTIONS' }),
+      HOME
+    );
 
-    expect(response.status).toBe(204);
     expect(response.headers.get('Access-Control-Allow-Origin')).toBe('*');
     expect(response.headers.get('Access-Control-Allow-Credentials')).toBeNull();
   });
 });
 
-describe('normalizeCode', () => {
-  it('rejects ambiguous symbols and wrong lengths', () => {
-    expect(normalizeCode('ABCD-EFGH')).toBe('ABCDEFGH');
-    expect(normalizeCode('ABCDEFG0')).toBeNull();
-    expect(normalizeCode('ABCDEFG')).toBeNull();
+describe('networkKey', () => {
+  it('keeps IPv4 addresses and the /64 of IPv6 ones', () => {
+    expect(networkKey('203.0.113.1')).toBe('203.0.113.1');
+    expect(networkKey('::ffff:203.0.113.1')).toBe('203.0.113.1');
+    expect(networkKey('2001:db8::1')).toBe('2001:db8:0:0::/64');
+    expect(networkKey('fe80::1%eth0')).toBe('fe80:0:0:0::/64');
   });
 });
 
 describe('normalizeServerUrl', () => {
   it('keeps the origin', () => {
     expect(normalizeServerUrl('http://192.168.1.10:3000/')).toBe('http://192.168.1.10:3000');
-    expect(normalizeServerUrl('https://miauflix.example')).toBe('https://miauflix.example');
+    expect(normalizeServerUrl('http://u:p@x.example')).toBeNull();
   });
 });

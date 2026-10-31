@@ -1,6 +1,5 @@
 import { changeTvServer } from '@features/server-discovery/lib/connect';
 import { displayServerAddress } from '@features/server-discovery/lib/server-address';
-import { PairTvSection } from '@features/server-discovery/ui/PairTvSection';
 import { API_URL, builtForTizen, SETTINGS_PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button } from '@shared/ui';
@@ -133,12 +132,10 @@ export default function SettingsPage({
         >
           Storage
         </Button>
-        {builtForTizen ? (
+        {builtForTizen && (
           <Button appearance="settings" color="secondary" fullWidth onClick={changeTvServer}>
             Change server ({displayServerAddress(API_URL)})
           </Button>
-        ) : (
-          <PairTvSection />
         )}
         <Description>
           {canConfigure

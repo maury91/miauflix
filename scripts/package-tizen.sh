@@ -7,8 +7,9 @@
 # Usage: scripts/package-tizen.sh [server] [--no-pairing | --pairing-url <url>]
 #   server         the backend's origin, e.g. https://miauflix.example.com (or set
 #                  MIAUFLIX_TV_API_URL). Without it, the TV finds its server on first start:
-#                  by pairing code, by scanning the local network, or by typing the address.
-#   --no-pairing   leave pairing codes out: the TV never contacts the pairing service
+#                  among the servers announced to the pairing service from its network or
+#                  found by scanning it, or by typing the address.
+#   --no-pairing   leave the pairing service out: the TV never contacts it
 #   --pairing-url  use another pairing service (tv-pairing) than pair.miauflix.cat
 
 set -e

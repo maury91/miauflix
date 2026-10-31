@@ -8,7 +8,6 @@ import { preloadApi } from '@features/preload/api/preload.api';
 import { progressApi } from '@features/progress/api/progress.api';
 import { realtimeMiddleware } from '@features/realtime/realtime.middleware';
 import { searchMiddleware } from '@features/search/search.middleware';
-import { tvPairingApi } from '@features/server-discovery/api/tv-pairing.api';
 import { setupApi } from '@features/setup/api/setup.api';
 import { storageApi } from '@features/storage/api/storage.api';
 import { configureStore } from '@reduxjs/toolkit';
@@ -33,7 +32,6 @@ export const store = configureStore({
     [configApi.reducerPath]: configApi.reducer,
     [setupApi.reducerPath]: setupApi.reducer,
     [storageApi.reducerPath]: storageApi.reducer,
-    [tvPairingApi.reducerPath]: tvPairingApi.reducer,
     [authSlice.name]: authSlice.reducer,
     [artworkSlice.name]: artworkSlice.reducer,
     [detailsNavigationSlice.name]: detailsNavigationSlice.reducer,
@@ -55,7 +53,6 @@ export const store = configureStore({
       configApi.middleware,
       setupApi.middleware,
       storageApi.middleware,
-      tvPairingApi.middleware,
       searchMiddleware,
       realtimeMiddleware
     ),

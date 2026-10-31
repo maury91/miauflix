@@ -1,5 +1,3 @@
-import { formatCode } from '@features/auth/lib/formatCode';
-import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
 import { TV_PAIRING_URL } from '@shared/config/constants';
 import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { Button, FieldLabel, Input } from '@shared/ui';
@@ -8,13 +6,15 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { connectTvServer } from '../lib/connect';
-import { createTvPairing, pollTvPairing, type TvPairing } from '../lib/pairing';
+import { lookupAnnouncedServers } from '../lib/lookup';
 import { probeServer } from '../lib/probe';
 import { getTvIpAddress, scanSubnet } from '../lib/scan';
 import { displayServerAddress, normalizeServerAddress } from '../lib/server-address';
 
 /** Tizen's on-screen keyboard reports its Done key with this key code. */
 const TIZEN_IME_DONE = 65376;
+/** How long an announced address gets to answer: a stale or container-only one shouldn't hold up the list. */
+const ANNOUNCED_PROBE_TIMEOUT_MS = 2000;
 /** How often an unreachable last server is tried again; it reconnects once it answers. */
 const LAST_SERVER_RETRY_MS = 10_000;
 
@@ -33,35 +33,29 @@ const Page = styled.main`
   box-sizing: border-box;
 `;
 
+// Sized for a TV seen from the couch: the page only shows on the TV app
 const Title = styled.h1`
-  margin: 0 0 8px;
-  font-size: 32px;
+  margin: 0 0 12px;
+  font-size: 44px;
   font-weight: 400;
   text-align: center;
 `;
 
 const Subtitle = styled.p`
-  margin: 0 0 32px;
+  margin: 0 0 40px;
   color: #9aa3ab;
-  font-size: 16px;
+  font-size: 22px;
   text-align: center;
 `;
 
-const Columns = styled.div`
-  display: flex;
-  align-items: stretch;
-  width: 100%;
-  max-width: 960px;
-`;
-
 const Section = styled.section`
-  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
+  max-width: 880px;
   min-height: 280px;
-  margin: 0 12px;
-  padding: 24px;
+  padding: 32px;
   background-color: #0c1214;
   border: 1px solid #191e23;
   border-radius: 16px;
@@ -69,27 +63,21 @@ const Section = styled.section`
 `;
 
 const SectionTitle = styled.h2`
-  margin: 0 0 16px;
-  font-size: 22px;
+  margin: 0 0 24px;
+  font-size: 30px;
   font-weight: 400;
 `;
 
 const Hint = styled.p`
-  margin: 0 0 16px;
+  margin: 0 0 20px;
   color: #9aa3ab;
-  font-size: 15px;
+  font-size: 20px;
   line-height: 1.5;
   text-align: center;
 `;
 
-const Code = styled.div`
-  margin: 8px 0 16px;
-  font-family: 'Courier New', monospace;
-  font-size: 48px;
-  letter-spacing: 6px;
-  white-space: nowrap;
-`;
-
+// Every button is secondary: a red one looks the same focused or not, and on a TV the focus has
+// to be the one thing that stands out
 const ServerList = styled.ul`
   list-style: none;
   margin: 0 0 16px;
@@ -97,7 +85,7 @@ const ServerList = styled.ul`
   width: 100%;
 
   li + li {
-    margin-top: 8px;
+    margin-top: 12px;
   }
 `;
 
@@ -105,124 +93,96 @@ const ManualForm = styled.form`
   display: flex;
   align-items: flex-end;
   width: 100%;
-  max-width: 936px;
-  margin-top: 24px;
+  max-width: 880px;
+  margin-top: 32px;
 
   > div {
     flex: 1;
-    margin-right: 12px;
+    margin-right: 16px;
+  }
+
+  label {
+    margin-bottom: 10px;
+    font-size: 20px;
+  }
+
+  input {
+    height: 64px;
+    font-size: 24px;
+  }
+
+  /* As visible as the buttons' focus, for a remote */
+  input:focus {
+    border-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.35);
   }
 `;
 
 const ErrorText = styled.p`
-  min-height: 22px;
-  margin: 12px 0 0;
+  min-height: 30px;
+  margin: 16px 0 0;
   color: #ff6b7f;
-  font-size: 15px;
+  font-size: 20px;
   text-align: center;
 `;
 
-/** The pairing code, renewed as it expires; `onPaired` gets the address someone entered. */
-function usePairingCode(onPaired: (url: string) => void) {
-  const [pairing, setPairing] = useState<TvPairing | null>(null);
-  const [failed, setFailed] = useState(false);
-  const [secondsLeft, setSecondsLeft] = useState(0);
-  const [generation, setGeneration] = useState(0);
-  const onPairedRef = useRef(onPaired);
-  onPairedRef.current = onPaired;
-
-  useEffect(() => {
-    if (!TV_PAIRING_URL) return undefined;
-    let cancelled = false;
-    let timer: ReturnType<typeof setTimeout> | undefined;
-    setFailed(false);
-    createTvPairing(TV_PAIRING_URL)
-      .then(created => {
-        if (cancelled) return;
-        setPairing(created);
-        const poll = async () => {
-          try {
-            const result = await pollTvPairing(TV_PAIRING_URL, created);
-            if (cancelled) return;
-            if (result.status === 'paired') {
-              onPairedRef.current(result.server.url);
-              return;
-            }
-            if (result.status === 'expired') {
-              setGeneration(value => value + 1);
-              return;
-            }
-          } catch {
-            // Offline for a moment: keep polling until the code expires
-          }
-          if (!cancelled) timer = setTimeout(poll, created.pollInterval * 1000);
-        };
-        timer = setTimeout(poll, created.pollInterval * 1000);
-      })
-      .catch(() => {
-        if (!cancelled) setFailed(true);
-      });
-    return () => {
-      cancelled = true;
-      clearTimeout(timer);
-    };
-  }, [generation]);
-
-  useEffect(() => {
-    if (!pairing) return undefined;
-    const tick = () => {
-      const left = Math.max(
-        0,
-        Math.floor((new Date(pairing.expiresAt).getTime() - Date.now()) / 1000)
-      );
-      setSecondsLeft(left);
-      if (left === 0) {
-        clearInterval(interval);
-        setGeneration(value => value + 1);
+/** The addresses of the servers announced from the TV's network that answer. */
+async function findAnnouncedServers(
+  signal: AbortSignal,
+  onFound: (url: string) => void
+): Promise<void> {
+  if (!TV_PAIRING_URL) return;
+  const servers = await lookupAnnouncedServers(TV_PAIRING_URL).catch(() => []);
+  // A server announces every address it may be reached at: list the first that answers
+  await Promise.all(
+    servers.map(async server => {
+      for (const url of server.urls) {
+        if (signal.aborted) return;
+        if (await probeServer(url, { signal, timeoutMs: ANNOUNCED_PROBE_TIMEOUT_MS })) {
+          onFound(url);
+          return;
+        }
       }
-    };
-    const interval = setInterval(tick, 1000);
-    tick();
-    return () => clearInterval(interval);
-  }, [pairing]);
-
-  const renew = useCallback(() => setGeneration(value => value + 1), []);
-  return { pairing, failed, secondsLeft, renew };
+    })
+  );
 }
 
-/** The servers on the TV's network, found as they answer; `rescan` starts over. */
-function useNetworkScan() {
+/**
+ * The servers on the TV's network, found as they answer: the ones that announced themselves to
+ * the pairing service (when the package has one), and the ones a scan of the /24 finds.
+ * `rescan` starts over.
+ */
+function useServerSearch() {
   const [found, setFound] = useState<string[]>([]);
-  const [scanning, setScanning] = useState(true);
-  const [noNetwork, setNoNetwork] = useState(false);
+  const [searching, setSearching] = useState(true);
   const [generation, setGeneration] = useState(0);
 
   useEffect(() => {
     const controller = new AbortController();
-    setScanning(true);
-    setNoNetwork(false);
+    const onFound = (url: string) => {
+      if (controller.signal.aborted) return;
+      setFound(current => (current.includes(url) ? current : [...current, url]));
+    };
+    setSearching(true);
     setFound([]);
-    getTvIpAddress()
-      .then(ip => {
-        if (!ip) {
-          setNoNetwork(true);
-          return [];
-        }
-        return scanSubnet(ip, {
-          signal: controller.signal,
-          onFound: url => {
-            if (!controller.signal.aborted) setFound(current => [...current, url]);
-          },
-        });
-      })
-      .finally(() => {
-        if (!controller.signal.aborted) setScanning(false);
-      });
+    void Promise.all([
+      findAnnouncedServers(controller.signal, onFound),
+      getTvIpAddress().then(ip =>
+        ip ? scanSubnet(ip, { signal: controller.signal, onFound }) : []
+      ),
+    ]).finally(() => {
+      if (!controller.signal.aborted) setSearching(false);
+    });
     return () => controller.abort();
   }, [generation]);
 
-  const rescan = useCallback(() => setGeneration(value => value + 1), []);
-  return { found, scanning, noNetwork, rescan };
+  const searchingRef = useRef(true);
+  searchingRef.current = searching;
+  // Ignored while a search runs: the button stays enabled, so a remote doesn't lose its focus
+  const rescan = useCallback(() => {
+    if (!searchingRef.current) setGeneration(value => value + 1);
+  }, []);
+  return { found, searching, rescan };
 }
 
 /** Move the focus through the page's controls for a remote's D-pad, in page order. */
@@ -242,36 +202,32 @@ export interface ServerPickerProps {
 }
 
 /**
- * Shown on the TV until it has a server: by pairing code (when packaged with a pairing service),
- * among the servers a scan of the local network finds, or by typing the address.
+ * Shown on the TV until it has a server: among the servers found on its network, or by typing
+ * the address.
  */
 export function ServerPicker({ lastServer }: ServerPickerProps) {
-  const pageRef = useRef<HTMLElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [address, setAddress] = useState('');
   const [connecting, setConnecting] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const { found, searching, rescan } = useServerSearch();
 
+  const connectingRef = useRef(false);
+  // Buttons stay enabled while connecting (a disabled one would drop the remote's focus), so a
+  // second press is ignored here instead
   const connect = useCallback(async (url: string) => {
+    if (connectingRef.current) return;
+    connectingRef.current = true;
     setConnecting(url);
     setError(null);
     if (await probeServer(url)) {
       connectTvServer(url);
       return;
     }
+    connectingRef.current = false;
     setConnecting(null);
     setError(`No Miauflix server answers at ${displayServerAddress(url)}`);
   }, []);
-
-  const {
-    pairing,
-    failed: pairingFailed,
-    secondsLeft,
-    renew,
-  } = usePairingCode(url => {
-    void connect(url).then(() => renew());
-  });
-  const { found, scanning, noNetwork, rescan } = useNetworkScan();
 
   // The last server may only be restarting: connect as soon as it is back
   useEffect(() => {
@@ -338,7 +294,7 @@ export function ServerPicker({ lastServer }: ServerPickerProps) {
   const servers = lastServer && !found.includes(lastServer) ? [lastServer, ...found] : found;
 
   return (
-    <Page ref={pageRef} onKeyDown={handleKeyDown} aria-labelledby="server-picker-title">
+    <Page onKeyDown={handleKeyDown} aria-labelledby="server-picker-title">
       <Title id="server-picker-title">Connect to your Miauflix server</Title>
       <Subtitle>
         {lastServer
@@ -346,68 +302,38 @@ export function ServerPicker({ lastServer }: ServerPickerProps) {
           : 'The TV needs to know where your Miauflix server is.'}
       </Subtitle>
 
-      <Columns>
-        {TV_PAIRING_URL && (
-          <Section aria-labelledby="pairing-title">
-            <SectionTitle id="pairing-title">Pair with a code</SectionTitle>
-            <Hint>
-              On your phone or computer, open Miauflix, go to Settings, choose Pair a TV and enter
-            </Hint>
-            {pairing ? (
-              <>
-                <Code aria-label={`Pairing code ${pairing.code.split('').join(' ')}`}>
-                  {formatCode(pairing.code)}
-                </Code>
-                <Hint>The code changes in {formatTimeRemaining(secondsLeft)}</Hint>
-              </>
-            ) : pairingFailed ? (
-              <>
-                <Hint>The pairing service can&apos;t be reached.</Hint>
-                <Button size="medium" color="secondary" onClick={renew}>
-                  Try again
+      <Section aria-labelledby="network-title">
+        <SectionTitle id="network-title">On your network</SectionTitle>
+        {servers.length > 0 && (
+          <ServerList>
+            {servers.map(url => (
+              <li key={url}>
+                <Button
+                  ref={url === firstFound ? firstFoundRef : undefined}
+                  size="large"
+                  fullWidth
+                  color="secondary"
+                  aria-busy={connecting === url}
+                  onClick={() => void connect(url)}
+                >
+                  {connecting === url ? 'Connecting…' : displayServerAddress(url)}
+                  {url === lastServer ? ' (last used)' : ''}
                 </Button>
-              </>
-            ) : (
-              <Hint>Getting a code…</Hint>
-            )}
-          </Section>
+              </li>
+            ))}
+          </ServerList>
         )}
-
-        <Section aria-labelledby="network-title">
-          <SectionTitle id="network-title">On your network</SectionTitle>
-          {servers.length > 0 && (
-            <ServerList>
-              {servers.map((url, index) => (
-                <li key={url}>
-                  <Button
-                    ref={url === firstFound ? firstFoundRef : undefined}
-                    size="medium"
-                    fullWidth
-                    color={index === 0 ? 'primary' : 'secondary'}
-                    disabled={connecting !== null}
-                    onClick={() => void connect(url)}
-                  >
-                    {connecting === url ? 'Connecting…' : displayServerAddress(url)}
-                    {url === lastServer ? ' (last used)' : ''}
-                  </Button>
-                </li>
-              ))}
-            </ServerList>
-          )}
-          <Hint>
-            {scanning
-              ? 'Looking for servers…'
-              : noNetwork
-                ? "The TV can't tell which network it is on: type the address below."
-                : found.length === 0
-                  ? 'No server found. It has to be on the same network, reachable on port 3000.'
-                  : 'Pick your server.'}
-          </Hint>
-          <Button size="medium" color="secondary" disabled={scanning} onClick={rescan}>
-            Search again
-          </Button>
-        </Section>
-      </Columns>
+        <Hint>
+          {searching
+            ? 'Looking for servers…'
+            : found.length === 0
+              ? 'No server found. It has to be on the same network as the TV.'
+              : 'Pick your server.'}
+        </Hint>
+        <Button size="large" color="secondary" aria-busy={searching} onClick={rescan}>
+          {searching ? 'Searching…' : 'Search again'}
+        </Button>
+      </Section>
 
       <ManualForm onSubmit={submitAddress}>
         <div>
@@ -427,7 +353,7 @@ export function ServerPicker({ lastServer }: ServerPickerProps) {
             }}
           />
         </div>
-        <Button type="submit" size="medium" disabled={connecting !== null || !address.trim()}>
+        <Button type="submit" size="large" color="secondary" aria-busy={connecting !== null}>
           {connecting && connecting === normalizeServerAddress(address) ? 'Connecting…' : 'Connect'}
         </Button>
       </ManualForm>

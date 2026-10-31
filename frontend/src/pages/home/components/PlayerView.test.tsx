@@ -255,6 +255,25 @@ describe('PlayerView', () => {
     expect(await screen.findByRole('button', { name: 'Retry' })).toHaveFocus();
   });
 
+  it('gives the focus back to the player when Retry removes its button', async () => {
+    createSession
+      .mockReturnValueOnce({
+        unwrap: () => Promise.reject({ status: 500, data: 'Internal server error' }),
+      })
+      .mockReturnValueOnce({ unwrap: () => new Promise(() => undefined) });
+
+    render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
+
+    const retry = await screen.findByRole('button', { name: 'Retry' });
+    retry.focus();
+    fireEvent.click(retry);
+
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: 'Retry' })).not.toBeInTheDocument()
+    );
+    expect(screen.getByRole('main', { name: 'Player' })).toHaveFocus();
+  });
+
   it('shows which source is being tried while the session is prepared', async () => {
     createSession.mockReturnValue({ unwrap: () => new Promise(() => undefined) });
     const { store } = render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
