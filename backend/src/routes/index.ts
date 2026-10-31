@@ -45,7 +45,8 @@ function createApiRoutes(deps: Deps) {
       .use(createAuditLogMiddleware(deps.auditLogService))
       // This endpoint is not rate limited because a flood attack would mark the container as unhealthy and trigger the restart
       .get('/health', c => {
-        return c.json({ status: 'ok' });
+        // `service` lets the TV app tell a Miauflix server apart when it scans the network
+        return c.json({ status: 'ok', service: 'miauflix' });
       })
       .get('/stats', rateLimitGuard(10), authGuard(), c => {
         return c.json(deps.statsService.report());
@@ -84,6 +85,11 @@ export function createRoutes(deps: Deps) {
   );
 
   const app = new Hono()
+    .use(async (c, next) => {
+      // The address a browser reached the server at is one a TV on the network can use too
+      deps.tvPairingService?.noteHost(c.req.header('host'));
+      await next();
+    })
     .use(
       createCorsMiddleware(origins, origin =>
         isTvAppOrigin(origin, {

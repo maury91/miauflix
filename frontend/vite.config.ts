@@ -36,7 +36,12 @@ const tizenHtml = {
       html
         .replace(/\s*<base href="\/"\s*\/?>/, '')
         .replace(/<script type="module" crossorigin/g, '<script defer')
-        .replace(/(<link rel="stylesheet") crossorigin/g, '$1'),
+        .replace(/(<link rel="stylesheet") crossorigin/g, '$1')
+        // Samsung's TV APIs (AVPlay); the TV resolves $WEBAPIS. Loads before the deferred app script
+        .replace(
+          '</head>',
+          () => '  <script src="$WEBAPIS/webapis/webapis.js"></script>\n  </head>'
+        ),
   },
 };
 

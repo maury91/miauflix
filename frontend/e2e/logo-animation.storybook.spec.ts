@@ -113,6 +113,11 @@ test.describe('Logo Animation - Storybook Visual Tests', () => {
 
           await page.goto(url);
           await page.waitForLoadState('networkidle');
+          // networkidle can fire before Storybook renders the story (cold Vite load)
+          await page.waitForFunction(
+            // @ts-expect-error - this is a custom property for testing
+            () => typeof window.seek === 'function'
+          );
         },
         async render(point) {
           const percentage = Math.round(point * 100);

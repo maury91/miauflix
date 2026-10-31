@@ -48,6 +48,7 @@ import { StorageService } from '@services/storage/storage.service';
 import { StreamService } from '@services/stream/stream.service';
 import { SubtitlesService } from '@services/subtitles/subtitles.service';
 import { TorrentSubtitlesService } from '@services/subtitles/torrent-subtitles.service';
+import { TvPairingService } from '@services/tv-pairing/tv-pairing.service';
 
 import { initializeInstrumentation } from './instrumentation';
 import { createRoutes } from './routes';
@@ -93,6 +94,7 @@ try {
   const statsService = new StatsService();
   const requestService = new RequestService(statsService, configurationService);
   const vpnDetectionService = new VpnDetectionService(configurationService);
+  const tvPairingService = new TvPairingService(configurationService);
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db);
@@ -297,6 +299,7 @@ try {
         drained = new Promise<void>(resolve => httpServer.current!.close(() => resolve()));
       }
       realtimeGateway.close();
+      tvPairingService.stop();
       await scheduleCoordinator.stop();
       catalogClient.stop();
       listClient.stop();
@@ -345,6 +348,7 @@ try {
     notificationService,
     subtitlesService,
     storageService,
+    tvPairingService,
   });
 
   // Error handling middleware - must be added first
@@ -400,6 +404,7 @@ try {
   runningServer.on('listening', () => {
     logger.info('App', `Server is listening on http://localhost:${port}`);
     serverService._status = { status: 'ready' };
+    tvPairingService.start();
   });
 } catch (error) {
   logger.error('App', `Error during application startup: `, error);

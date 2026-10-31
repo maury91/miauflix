@@ -1,4 +1,5 @@
 import { audioLanguage } from '@features/player/lib/audio-language';
+import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import type { CreatePlaybackSessionResponse, SubtitleCandidateDto } from '@miauflix/backend';
 import { PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
@@ -188,7 +189,7 @@ export function SubtitleMenu({
   preferencesKey,
 }: {
   searchPreferences?: { language: string; hearingImpaired: boolean };
-  videoRef?: RefObject<HTMLVideoElement | null>;
+  videoRef?: RefObject<PlayerMedia | null>;
   subtitleCues?: SubtitleTimingCue[];
   pendingPosition?: number;
   audioTracks?: AudioTrack[];

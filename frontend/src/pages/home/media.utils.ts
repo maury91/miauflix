@@ -1,4 +1,5 @@
 import type { MediaDto } from '@miauflix/backend';
+import { builtForTizen } from '@shared/config/constants';
 
 export function getMediaTitle(media: MediaDto): string {
   return media._type === 'movie' ? media.title : media.name;
@@ -45,7 +46,8 @@ export function artworkUrl(
           ? pixels <= 300
             ? 'w300'
             : 'w780'
-          : pixels <= 1280
+          : // A TV takes about half a second to decode an original (often 4K) backdrop
+            pixels <= 1280 || builtForTizen
             ? 'w1280'
             : 'original';
   return getImageUrl(path, size);

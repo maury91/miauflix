@@ -1,23 +1,64 @@
 # Samsung TV (Tizen) app
 
-> **Work in progress.** Signing in is implemented, but not yet tried on a real TV, and some
-> layouts still use CSS that Chromium 69 lacks.
+> **Work in progress.** The app is checked against a Chromium 69 build, but not yet tried on a
+> real TV.
 
 The frontend can be packaged as a Tizen app (`.wgt`) that runs from the TV's storage and talks
 to your Miauflix backend over HTTPS. It targets 2020 TVs (Tizen 5.5, Chromium 69) and newer.
 
 ## Build the package
 
+The package is built from a checkout of the repository, even if your server runs the prebuilt
+Docker images. You need Node.js 22 or newer (`.nvmrc` pins the tested version) and `zip`
+(preinstalled on macOS; `sudo apt install zip` on Debian and Ubuntu). From the repository root:
+
 ```bash
-npm run package:tizen -- https://miauflix.example.com
+git clone https://github.com/maury91/miauflix.git && cd miauflix
+npm install
+npm run package:tizen
 ```
 
-Pass your backend's origin (no path). The script builds the frontend with `VITE_TIZEN=true`
+The package works with any server: the TV finds yours on first start (see
+[How the TV finds your server](#how-the-tv-finds-your-server)). To skip that, pass your backend's
+origin (no path), e.g. `npm run package:tizen -- https://miauflix.example.com`, and the TV
+starts on it. `--no-pairing` leaves the pairing service out, `--pairing-url <origin>` uses your
+own. The script builds the frontend with `VITE_TIZEN=true`
 into `dist/frontend-tizen` (one classic script with relative paths, hash routing, polyfills for
 Chromium 69), adds `frontend/tizen/config.xml` with the version from the root `package.json`
 and the 512x423 launcher icon `frontend/tizen/icon.png`, and zips it into `dist/miauflix.wgt`.
-The package is unsigned. The icon (like the website's favicons) is generated from
+Chromium 69 ignores newer CSS (flex `gap`, `inset`, `aspect-ratio`, `clamp()`, `:focus-visible`
+and more), so in this build a styled-components plugin
+(`frontend/src/shared/styles/legacy-chromium.ts`) rewrites those styles as they are generated.
+Plain CSS files don't go through it: keep them to what Chromium 69 supports. The package is
+unsigned. The icon (like the website's favicons) is generated from
 `assets/favicon.png` by `npm run generate:icons`.
+
+## How the TV finds your server
+
+The TV keeps the server it connected to and checks it at every start. When it has none yet, or
+that server doesn't answer, it shows a picker (and reconnects by itself when the last server is
+back):
+
+- **On your network.** Two searches, whose servers are listed as they answer:
+  - Your server announces the addresses it can be reached at to the pairing service at
+    `pair.miauflix.cat` (`tv-pairing/`) every two minutes, and the TV asks it for the servers
+    announced from its own public IP, so from behind the same router. In Docker the server
+    can't see its network address: it announces the private address you opened it at in a
+    browser (so open it once from another device, e.g. `http://192.168.1.10:3000`), or set
+    `TV_PAIRING_ADDRESSES`. The service keeps nothing in storage and forgets a server 5 minutes
+    after its last announcement, but it sees your public IP and your server's local addresses.
+    To keep away from it, set `TV_PAIRING_ENABLED=false` on the server and package the app with
+    `--no-pairing`: the TV then never contacts it.
+  - The TV checks every address of its local network (the /24 it is on) on port 3000.
+
+  The server must be reachable from the network: with Docker, see
+  [open it to your local network](docker-setup.md#open-it-to-your-local-network).
+
+- **Or type its address**, like `192.168.1.10` (port 3000 and `http://` are added) or
+  `https://miauflix.example.com`.
+
+**Settings → Change server** on the TV signs out and opens the picker again. Over plain
+`http://`, the TV sends its tokens unencrypted on your network.
 
 ## How the TV app signs in
 
@@ -41,10 +82,27 @@ before the TV app can sign in.
 
 1. On the TV, open **Apps**, type `1 2 3 4 5` on the remote, turn **Developer mode** on, enter
    the IP of the computer you install from, and restart the TV.
-2. Install [Apps2Samsung](https://github.com/Let-Me-Fix-It/Apps2Samsung) on that computer,
-   enable **Force Samsung Certificate** (and **Partner Signing** on desktop) in its settings, so
-   it signs the package for your TV.
-3. Pick the TV (or enter its IP), choose **Custom WGT File**, select `dist/miauflix.wgt`, and
-   install. Miauflix appears in the TV's apps.
+2. On that computer, put `apps2samsung-cli` (the command-line version of
+   [Apps2Samsung](https://github.com/Let-Me-Fix-It/Apps2Samsung)) on your `PATH`, e.g. in
+   `/usr/local/bin`. `apps2samsung-cli scan` lists the TVs it finds; `apps2samsung-cli tv <ip>`
+   checks one (Developer Mode, the computer it points to, Tizen version).
+3. From the repository root:
+
+   ```bash
+   npm run package:tizen
+   npm run install:tizen -- 192.168.1.50
+   ```
+
+   `install:tizen` (`scripts/install-tizen.sh`, or set `MIAUFLIX_TV_IP`) checks the TV,
+   installs `dist/miauflix.wgt` signed with a Samsung certificate, and opens it. The first
+   install for a TV opens a Samsung account sign-in in the browser to create that certificate;
+   later installs reuse it (as does the Apps2Samsung desktop app on the same computer) for the
+   year it is valid; `apps2samsung-cli cert --tv <ip>` shows until when. Extra
+   options go to `apps2samsung-cli install`, e.g. `--no-browser` to print the sign-in address
+   instead.
+
+The desktop app works too: enable **Force Samsung Certificate** (and **Partner Signing** on
+desktop) in its settings, pick the TV, choose **Custom WGT File** and select
+`dist/miauflix.wgt`.
 
 Rebuild and reinstall the package for every frontend update.

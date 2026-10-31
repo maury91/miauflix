@@ -1,3 +1,4 @@
+import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import { PALETTE } from '@shared/config/constants';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { type RefObject, useEffect, useRef, useState } from 'react';
@@ -143,7 +144,7 @@ export function SubtitleTiming({
   onConfirm,
 }: {
   cues: SubtitleTimingCue[];
-  videoRef?: RefObject<HTMLVideoElement | null>;
+  videoRef?: RefObject<PlayerMedia | null>;
   pendingPosition?: number;
   offset: number;
   onOffsetChange: (offset: number) => void;

@@ -25,8 +25,11 @@ import type { StatsService } from '@services/stats/stats.service';
 import type { StorageService } from '@services/storage/storage.service';
 import type { StreamService } from '@services/stream/stream.service';
 import type { SubtitlesService } from '@services/subtitles/subtitles.service';
+import type { TvPairingService } from '@services/tv-pairing/tv-pairing.service';
 
 export interface Deps {
+  /** Learns the addresses the server is reached at, for TV apps; absent in tests. */
+  tvPairingService?: TvPairingService;
   mediaRatingRepository: MediaRatingRepository;
   notificationService: NotificationService;
   auditLogService: AuditLogService;

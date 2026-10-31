@@ -22,6 +22,7 @@ import SettingsPage from '@pages/settings/SettingsPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
+import { builtForTizen } from '@shared/config/constants';
 import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { Logo } from '@shared/ui/logo/Logo';
 import { useAppDispatch, useAppSelector } from '@store';
@@ -98,11 +99,14 @@ export function AppShell() {
       ? introPhase === 'playing' && introHasStarted
         ? 'home'
         : 'intro'
-      : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
-        ? 'intro'
-        : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
-          ? 'config_wizard'
-          : appState;
+      : // Where the login screen has it, whether or not this browser is signed in
+        route.type === 'qrApproval'
+        ? 'login'
+        : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
+          ? 'intro'
+          : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
+            ? 'config_wizard'
+            : appState;
   const logoMotionDisabled =
     (!booted && !homeEligible) || !hasShownScreen || (homeEligible && introPhase === 'playing');
   const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);
@@ -210,6 +214,8 @@ export function AppShell() {
         <IntroAnimation
           ref={logoRef}
           autoStart={false}
+          // No blur or layer hints on the TV, as the legacy app did
+          lowResourceAnimation={builtForTizen}
           logoVisible={introPhase === 'playing'}
           onStart={handleIntroStart}
           onReady={handleIntroReady}

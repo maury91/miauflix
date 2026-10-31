@@ -102,7 +102,7 @@ export interface AVPlayListeners {
   onstreamcompleted?: () => void;
   onerror?: (eventType: string) => void;
   onerrormsg?: (eventType: string, eventMsg: string) => void;
-  onsubtitlechange?: (duration: number, text: string, type, attriCount, attributes) => void;
+  onsubtitlechange?: (duration: number, text: string) => void;
   ondrmevent?: (drmEvent: string, drmData: string) => void;
 }
 
@@ -177,9 +177,47 @@ export interface Tizen {
   };
 }
 
+/** Results are `'success'` or throw a WebAPIException; time is in milliseconds. */
+export interface AVPlay {
+  open: (url: string) => void;
+  close: () => void;
+  prepareAsync: (onSuccess?: () => void, onError?: (error: unknown) => void) => void;
+  play: () => void;
+  pause: () => void;
+  stop: () => void;
+  seekTo: (
+    milliseconds: number,
+    onSuccess?: () => void,
+    onError?: (error: unknown) => void
+  ) => void;
+  getState: () => PlayerState;
+  getDuration: () => number;
+  getCurrentTime: () => number;
+  setDisplayRect: (x: number, y: number, width: number, height: number) => void;
+  setDisplayMethod: (
+    method:
+      | 'PLAYER_DISPLAY_MODE_LETTER_BOX'
+      | 'PLAYER_DISPLAY_MODE_FULL_SCREEN'
+      | 'PLAYER_DISPLAY_MODE_AUTO_ASPECT_RATIO'
+  ) => void;
+  setListener: (listener: AVPlayListeners) => void;
+  setStreamingProperty: (property: 'SET_MODE_4K', value: 'TRUE' | 'FALSE') => void;
+  getTotalTrackInfo: () => TrackInfo[];
+  setSelectTrack: (type: 'AUDIO' | 'TEXT', index: number) => void;
+  suspend: () => void;
+  restore: () => void;
+}
+
+export interface WebApis {
+  avplay: AVPlay;
+  productinfo?: { isUdPanelSupported: () => boolean };
+}
+
 declare global {
   interface Window {
     tizen: Tizen;
+    /** Samsung's TV APIs, loaded from `$WEBAPIS/webapis/webapis.js` in the TV build. */
+    webapis?: WebApis;
   }
 }
 

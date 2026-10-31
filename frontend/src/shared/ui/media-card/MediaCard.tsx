@@ -1,6 +1,8 @@
 import { type ButtonHTMLAttributes, forwardRef, useState } from 'react';
 import styled from 'styled-components';
 
+import { builtForTizen } from '../../config/constants';
+
 export type MediaCardProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'title'> & {
   backdrop: string;
   logo?: string | null;
@@ -103,7 +105,8 @@ const Logo = styled.img`
   max-width: 80%;
   max-height: 65%;
   object-fit: contain;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.65));
+  /* Repainted with every card on a TV, where filters are costly */
+  ${builtForTizen ? '' : 'filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.65));'}
 `;
 
 const Info = styled.span<{ $width: number }>`

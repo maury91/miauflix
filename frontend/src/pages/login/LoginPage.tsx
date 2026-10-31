@@ -1,9 +1,10 @@
 import { LoginWithEmail } from '@features/auth/ui/login/LoginWithEmail';
 import { LoginWithQR } from '@features/auth/ui/login/LoginWithQR';
+import { IS_TIZEN } from '@shared/config/constants';
 import { selectWindowSize } from '@store/slices/measurements';
 import { motion } from 'framer-motion';
 import type { FC } from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -49,6 +50,15 @@ const LoginPage: FC = () => {
   // Email login state
   const [showQR, setShowQR] = useState(false);
   const { width: windowWidth } = useSelector(selectWindowSize);
+  // A remote moves right from the show-password toggle to the QR's new-code button, and back
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const refreshRef = useRef<HTMLButtonElement>(null);
+  const focusRefresh = () => {
+    if (!refreshRef.current) return false;
+    refreshRef.current.focus();
+    return true;
+  };
+  const focusToggle = () => toggleRef.current?.focus();
 
   useEffect(() => {
     setShowQR(windowWidth > 720);
@@ -63,8 +73,13 @@ const LoginPage: FC = () => {
     >
       <LoginContent>
         {/* Email Login Section */}
-        <LoginWithEmail showTitle={showQR} />
-        {showQR && <LoginWithQR />}
+        <LoginWithEmail
+          showTitle={showQR}
+          autoFocus={IS_TIZEN}
+          toggleRef={toggleRef}
+          onRightFromToggle={focusRefresh}
+        />
+        {showQR && <LoginWithQR refreshRef={refreshRef} onLeaveRefresh={focusToggle} />}
       </LoginContent>
 
       <BottomInstructions>
