@@ -52,7 +52,7 @@ before the TV app can sign in.
 1. On the TV, open **Apps**, type `1 2 3 4 5` on the remote, turn **Developer mode** on, enter
    the IP of the computer you install from, and restart the TV.
 2. On that computer, put `apps2samsung-cli` (the command-line version of
-   [Apps2Samsung](https://github.com/Apps2Samsung/Apps2Samsung)) on your `PATH`, e.g. in
+   [Apps2Samsung](https://github.com/Let-Me-Fix-It/Apps2Samsung)) on your `PATH`, e.g. in
    `/usr/local/bin`. `apps2samsung-cli scan` lists the TVs it finds; `apps2samsung-cli tv <ip>`
    checks one (Developer Mode, the computer it points to, Tizen version).
 3. From the repository root:
@@ -70,7 +70,8 @@ before the TV app can sign in.
    options go to `apps2samsung-cli install`, e.g. `--no-browser` to print the sign-in address
    instead.
 
-The desktop app works too: pick the TV, choose **Install a file…** and select
+The desktop app works too: enable **Force Samsung Certificate** (and **Partner Signing** on
+desktop) in its settings, pick the TV, choose **Custom WGT File** and select
 `dist/miauflix.wgt`.
 
 Rebuild and reinstall the package for every frontend update.
