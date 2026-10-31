@@ -1,6 +1,7 @@
 /// <reference types="vitest/config" />
 /// <reference types='vitest' />
 // import { AssetGlob } from '@nx/js/src/utils/assets/assets';
+import { vanillaExtractPlugin } from '@vanilla-extract/vite-plugin';
 import basicSsl from '@vitejs/plugin-basic-ssl';
 import react from '@vitejs/plugin-react';
 import { existsSync, readFileSync } from 'fs';
@@ -14,6 +15,8 @@ import Icons from 'unplugin-icons/vite';
 import type { ProxyOptions } from 'vite';
 import { defineConfig } from 'vite';
 import webfontDownload from 'vite-plugin-webfont-dl';
+
+import { legacyChromiumPostcss } from './src/shared/styles/legacy-chromium-postcss';
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 
@@ -167,6 +170,8 @@ export default defineConfig({
           }
         : undefined,
   },
+  // 2020 Samsung TVs run Chromium 69: rewrite the extracted CSS it lacks (see legacy-chromium-postcss.ts)
+  css: tizenBuild ? { postcss: { plugins: [legacyChromiumPostcss()] } } : undefined,
   define: {
     'import.meta.env.VITE_APP_VERSION': JSON.stringify(appVersion()),
     // Build-time configuration for access token storage
@@ -185,6 +190,9 @@ export default defineConfig({
       defaultClass: '',
     }),
     react(),
+    // Zero-runtime styles: `*.css.ts` files compile to a static stylesheet at build time
+    // (docs/development/css-architecture.md)
+    vanillaExtractPlugin(),
     // SSR plugin that injects server-rendered content after Vite processes HTML
     {
       name: 'ssr-inject',
@@ -276,6 +284,10 @@ export default defineConfig({
     emptyOutDir: true,
     reportCompressedSize: true,
     target: tizenBuild ? 'es2019' : 'esnext',
+    // Keep the minifier from folding CSS back into what Chromium 69 lacks (`inset` and the like),
+    // and emit one stylesheet the page links, parsed before the script runs
+    cssTarget: tizenBuild ? 'chrome69' : undefined,
+    cssCodeSplit: tizenBuild ? false : undefined,
     // Tizen loads one classic script, so there are no module chunks to preload.
     modulePreload: tizenBuild ? false : undefined,
     commonjsOptions: {
