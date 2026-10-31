@@ -103,7 +103,7 @@ test('intro, ten row moves, and cached movie/show details', async ({ page }, tes
   });
   await page.goto('/');
   await page.getByLabel('Email').fill('test@example.com');
-  await page.getByLabel('Password').fill('testpassword123');
+  await page.getByRole('textbox', { name: 'Password' }).fill('testpassword123');
   const loginResponse = page.waitForResponse(response =>
     response.url().includes('/api/auth/login')
   );

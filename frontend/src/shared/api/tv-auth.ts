@@ -38,6 +38,12 @@ function forgetSession(session: string): void {
   writeRefreshTokens(refreshTokens);
 }
 
+/** Forget every session, for a switch to another server, which would reject their tokens. */
+export function forgetAllTvSessions(): void {
+  accessTokens.clear();
+  window.localStorage.removeItem(REFRESH_TOKENS_KEY);
+}
+
 /** The access token of a session, for the realtime socket, which cannot send headers. */
 export function getTvAccessToken(session: string): string | undefined {
   return accessTokens.get(session);

@@ -15,10 +15,14 @@ Docker images. You need Node.js 22 or newer (`.nvmrc` pins the tested version) a
 ```bash
 git clone https://github.com/maury91/miauflix.git && cd miauflix
 npm install
-npm run package:tizen -- https://miauflix.example.com
+npm run package:tizen
 ```
 
-Pass your backend's origin (no path). The script builds the frontend with `VITE_TIZEN=true`
+The package works with any server: the TV finds yours on first start (see
+[How the TV finds your server](#how-the-tv-finds-your-server)). To skip that, pass your backend's
+origin (no path), e.g. `npm run package:tizen -- https://miauflix.example.com`, and the TV
+starts on it. `--no-pairing` leaves pairing codes out, `--pairing-url <origin>` uses your own
+pairing service. The script builds the frontend with `VITE_TIZEN=true`
 into `dist/frontend-tizen` (one classic script with relative paths, hash routing, polyfills for
 Chromium 69), adds `frontend/tizen/config.xml` with the version from the root `package.json`
 and the 512x423 launcher icon `frontend/tizen/icon.png`, and zips it into `dist/miauflix.wgt`.
@@ -28,6 +32,30 @@ and more), so in this build a styled-components plugin
 Plain CSS files don't go through it: keep them to what Chromium 69 supports. The package is
 unsigned. The icon (like the website's favicons) is generated from
 `assets/favicon.png` by `npm run generate:icons`.
+
+## How the TV finds your server
+
+The TV keeps the server it connected to and checks it at every start. When it has none yet, or
+that server doesn't answer, it shows a picker (and reconnects by itself when the last server is
+back):
+
+- **Pair with a code.** The TV shows an 8-character code. On a phone or computer, open
+  Miauflix, go to **Settings → Pair a TV**, enter the code and check the address the TV will
+  use: it is the address the page is open at, so change it if you opened Miauflix as
+  `localhost`. Your server sends that address to the pairing service at `pair.miauflix.cat`
+  (`tv-pairing`), which hands it to the TV once. Codes expire after 10 minutes; the
+  service keeps nothing in storage, but it sees the TV's and the server's public IP. To keep
+  away from it, set `TV_PAIRING_ENABLED=false` on the server and package the app with
+  `--no-pairing`: the TV then never contacts it.
+- **On your network.** The TV checks every address of its local network (the /24 it is on) on
+  port 3000 and lists the Miauflix servers that answer. The server must be reachable from the
+  network: with Docker, see
+  [open it to your local network](docker-setup.md#open-it-to-your-local-network).
+- **Or type its address**, like `192.168.1.10` (port 3000 and `http://` are added) or
+  `https://miauflix.example.com`.
+
+**Settings → Change server** on the TV signs out and opens the picker again. Over plain
+`http://`, the TV sends its tokens unencrypted on your network.
 
 ## How the TV app signs in
 
@@ -58,7 +86,7 @@ before the TV app can sign in.
 3. From the repository root:
 
    ```bash
-   npm run package:tizen -- https://miauflix.example.com
+   npm run package:tizen
    npm run install:tizen -- 192.168.1.50
    ```
 

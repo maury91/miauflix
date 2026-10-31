@@ -151,6 +151,8 @@ ENABLE_FRONTEND=true
 - **CORS_ORIGIN**: Comma-separated list of allowed origins (or `*` for all)
 - **ALLOW_TV_APP**: Accept the [Samsung TV app](samsung-tv.md), which runs from local files (origin `file://`, which web pages cannot send) and signs in with bearer tokens instead of cookies (default: `true`). Its origin is allowed without credentials. Set `false` if you don't use the TV app
 - **ALLOW_TV_APP_NULL_ORIGIN**: Also accept the TV app from the opaque origin `null`, for a TV that reports local files that way (default: `false`, needs `ALLOW_TV_APP`). Any web page can send `null` (from a sandboxed iframe or a `data:` URL), so with this on, a page you visit can read Miauflix's unauthenticated responses and, while first-run setup is open (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN` with no admin yet), create the admin account. Turn it on only if the TV app can't connect otherwise
+- **TV_PAIRING_ENABLED**: Let signed-in users pair a TV app from **Settings → Pair a TV**, by entering the code the TV shows (default: `true`). The server sends the address the TV should use to the pairing service, which hands it to the TV once. Off, the TV finds the server by scanning the local network or by typing its address
+- **TV_PAIRING_URL**: The pairing service (default: `https://pair.miauflix.cat`). Point it at your own [`tv-pairing`](../../tv-pairing/README.md) instance, and package the TV app with the same one (`--pairing-url`)
 - **DATA_DIR**: Directory for storing application data
 - **FRONTEND_DIR**: Path to static frontend files (for production)
 - **ENABLE_FRONTEND**: Whether to serve the frontend interface

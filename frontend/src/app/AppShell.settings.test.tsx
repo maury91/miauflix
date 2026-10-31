@@ -11,6 +11,8 @@ const state = vi.hoisted(() => ({
   page: 'home' as AppState,
 }));
 
+// Pairing asks the backend whether it is on; covered by its own tests
+vi.mock('@features/server-discovery/ui/PairTvSection', () => ({ PairTvSection: () => null }));
 vi.mock('@app/hooks/useAppState', () => ({ useAppState: () => state.page }));
 vi.mock('@app/shell/IntroAnimation', () => ({ IntroAnimation: () => null }));
 vi.mock('@shared/ui/logo/Logo', () => ({ Logo: () => null }));

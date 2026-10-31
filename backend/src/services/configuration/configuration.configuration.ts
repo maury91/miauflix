@@ -41,6 +41,28 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: 'true',
       transform: transforms.boolean(),
     }),
+    TV_PAIRING_ENABLED: variable({
+      description:
+        'Let signed-in users pair a TV app by entering the code it shows: the server sends the address the TV should use to the pairing service (TV_PAIRING_URL), which hands it to the TV. Off, TVs find the server by scanning the local network or by typing its address',
+      booleanStateDescriptions: {
+        true: 'TV pairing codes accepted',
+        false: 'TV pairing off',
+      },
+      required: false,
+      advanced: true,
+      defaultValue: 'true',
+      example: 'false',
+      transform: transforms.boolean(),
+    }),
+    TV_PAIRING_URL: variable({
+      description:
+        'Pairing service that relays the server address to TV apps (tv-pairing). Must match the one the TV app was packaged with',
+      required: false,
+      advanced: true,
+      defaultValue: 'https://pair.miauflix.cat',
+      example: 'https://pair.example.com',
+      transform: transforms.url(),
+    }),
     PORT: variable({
       description: 'Port for the server to listen on',
       required: false,

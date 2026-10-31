@@ -1,4 +1,7 @@
-import { SETTINGS_PALETTE } from '@shared/config/constants';
+import { changeTvServer } from '@features/server-discovery/lib/connect';
+import { displayServerAddress } from '@features/server-discovery/lib/server-address';
+import { PairTvSection } from '@features/server-discovery/ui/PairTvSection';
+import { API_URL, builtForTizen, SETTINGS_PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button } from '@shared/ui';
 import { BackRail } from '@shared/ui/rail/BackRail';
@@ -59,6 +62,7 @@ export default function SettingsPage({
   const configurationRef = useRef<HTMLButtonElement>(null);
   const storageRef = useRef<HTMLButtonElement>(null);
   const backRef = useRef<HTMLButtonElement>(null);
+  const contentRef = useRef<HTMLDivElement>(null);
   useRailContentLeft();
 
   useEffect(() => {
@@ -74,9 +78,10 @@ export default function SettingsPage({
   }, [canConfigure, canManageStorage, initialFocus]);
 
   const moveFocus = (direction: -1 | 1) => {
-    const buttons = [configurationRef.current, storageRef.current, backRef.current].filter(
-      (button): button is HTMLButtonElement => Boolean(button && !button.disabled)
-    );
+    const buttons = [
+      ...Array.from(contentRef.current?.querySelectorAll('button') ?? []),
+      backRef.current,
+    ].filter((button): button is HTMLButtonElement => Boolean(button && !button.disabled));
     const currentIndex = buttons.indexOf(document.activeElement as HTMLButtonElement);
     const nextIndex =
       currentIndex < 0 ? 0 : (currentIndex + direction + buttons.length) % buttons.length;
@@ -106,7 +111,7 @@ export default function SettingsPage({
 
   return (
     <Page ref={navigationRef} aria-labelledby="settings-title">
-      <Content>
+      <Content ref={contentRef}>
         <Title id="settings-title">Settings</Title>
         <Button
           ref={configurationRef}
@@ -128,6 +133,13 @@ export default function SettingsPage({
         >
           Storage
         </Button>
+        {builtForTizen ? (
+          <Button appearance="settings" color="secondary" fullWidth onClick={changeTvServer}>
+            Change server ({displayServerAddress(API_URL)})
+          </Button>
+        ) : (
+          <PairTvSection />
+        )}
         <Description>
           {canConfigure
             ? 'Manage services, integrations, server configuration, and downloaded storage.'

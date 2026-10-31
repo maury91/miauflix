@@ -140,6 +140,10 @@ export async function installOfflineHarness(page: Page): Promise<Harness> {
     if (path === '/api/notifications' && request.method() === 'GET') {
       return json(route, { notifications: [], nextCursor: null });
     }
+    // Settings asks whether TV pairing is on; off keeps its screenshots without the section
+    if (path === '/api/tv/pairing' && request.method() === 'GET') {
+      return json(route, { enabled: false });
+    }
     if (path === '/api/notifications/unread-count' && request.method() === 'GET') {
       return json(route, { unreadCount: 0, hasRead: false });
     }
@@ -264,7 +268,7 @@ export async function installOfflineHarness(page: Page): Promise<Harness> {
 export async function login(page: Page): Promise<void> {
   await page.goto('/');
   await page.getByLabel('Email').fill('test@example.com');
-  await page.getByLabel('Password').fill('testpassword123');
+  await page.getByRole('textbox', { name: 'Password' }).fill('testpassword123');
   await page.getByRole('button', { name: 'Continue' }).click();
   await waitForHomeReady(page);
 }

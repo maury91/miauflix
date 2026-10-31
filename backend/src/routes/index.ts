@@ -25,6 +25,7 @@ import { createShowRoutes } from './show.routes';
 import { createStorageRoutes } from './storage.routes';
 import { createStreamRoutes } from './stream.routes';
 import { createSubtitleRoutes } from './subtitles.routes';
+import { createTvRoutes } from './tv.routes';
 
 function createApiRoutes(deps: Deps) {
   const rateLimitGuard = createRateLimitMiddlewareFactory(
@@ -45,7 +46,8 @@ function createApiRoutes(deps: Deps) {
       .use(createAuditLogMiddleware(deps.auditLogService))
       // This endpoint is not rate limited because a flood attack would mark the container as unhealthy and trigger the restart
       .get('/health', c => {
-        return c.json({ status: 'ok' });
+        // `service` lets the TV app tell a Miauflix server apart when it scans the network
+        return c.json({ status: 'ok', service: 'miauflix' });
       })
       .get('/stats', rateLimitGuard(10), authGuard(), c => {
         return c.json(deps.statsService.report());
@@ -70,6 +72,7 @@ function createApiRoutes(deps: Deps) {
       .route('/playback', createPlaybackRoutes(deps))
       .route('/subtitles', createSubtitleRoutes(deps))
       .route('/storage', createStorageRoutes(deps))
+      .route('/tv', createTvRoutes(deps))
       .route('/', createListRoutes(deps))
   );
 }

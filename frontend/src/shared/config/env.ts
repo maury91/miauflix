@@ -33,6 +33,8 @@ const envSchema = z.object({
     .string()
     .transform(val => val === 'true')
     .default(false),
+  /** The TV app's pairing service; empty turns pairing codes off. */
+  TV_PAIRING_URL: z.string().default('https://pair.miauflix.cat'),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
@@ -63,6 +65,7 @@ function parseEnv(): EnvConfig {
     API_URL: rawEnv['VITE_API_URL'] || rawEnv['API_URL'] || defaultApiUrl,
     NODE_ENV: rawEnv['NODE_ENV'],
     TIZEN: rawEnv['VITE_TIZEN'] || rawEnv['TIZEN'],
+    TV_PAIRING_URL: rawEnv['VITE_TV_PAIRING_URL'] ?? rawEnv['TV_PAIRING_URL'],
   };
 
   try {
@@ -76,6 +79,7 @@ function parseEnv(): EnvConfig {
       API_URL: defaultApiUrl,
       NODE_ENV: 'development',
       TIZEN: false,
+      TV_PAIRING_URL: '',
     };
   }
 }

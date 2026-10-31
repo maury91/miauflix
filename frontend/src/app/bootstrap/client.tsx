@@ -4,7 +4,9 @@ import '@shared/styles/global.css';
 
 import { AppShell } from '@app/AppShell';
 import { installBrowserMeasurements } from '@app/browserMeasurements';
-import { builtForTizen, IS_SLOW_DEVICE } from '@shared/config/constants';
+import { probeServer } from '@features/server-discovery/lib/probe';
+import { ServerPicker } from '@features/server-discovery/ui/ServerPicker';
+import { API_URL, builtForTizen, IS_SLOW_DEVICE } from '@shared/config/constants';
 import { legacyChromiumPlugin } from '@shared/styles/legacy-chromium';
 import { store } from '@store';
 import { gsap } from 'gsap';
@@ -36,12 +38,34 @@ export function ClientApp() {
   );
 }
 
-// Hydrate when SSR markup exists; otherwise render
+/** The TV app's server picker, until the TV has a server that answers. */
+function ServerPickerApp({ lastServer }: { lastServer?: string }) {
+  return (
+    <StrictMode>
+      <StyleSheetManager stylisPlugins={stylisPlugins}>
+        <ServerPicker lastServer={lastServer} />
+      </StyleSheetManager>
+    </StrictMode>
+  );
+}
+
+async function start(appElement: HTMLElement) {
+  // The TV app checks its server first: it may have none yet, or the server may be off
+  if (builtForTizen && !(API_URL && (await probeServer(API_URL)))) {
+    ReactDOM.createRoot(appElement).render(<ServerPickerApp lastServer={API_URL || undefined} />);
+    return;
+  }
+  // Hydrate when SSR markup exists; otherwise render
+  if (appElement.hasChildNodes()) {
+    ReactDOM.hydrateRoot(appElement, <ClientApp />);
+  } else {
+    ReactDOM.createRoot(appElement).render(<ClientApp />);
+  }
+}
+
 const appElement = document.getElementById('app');
-if (appElement?.hasChildNodes()) {
-  ReactDOM.hydrateRoot(appElement, <ClientApp />);
-} else if (appElement) {
-  ReactDOM.createRoot(appElement).render(<ClientApp />);
+if (appElement) {
+  void start(appElement);
 } else {
   // Helps debug unexpected container changes
   console.error('App root element #app not found.');
