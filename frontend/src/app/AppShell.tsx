@@ -22,6 +22,7 @@ import SettingsPage from '@pages/settings/SettingsPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
+import { builtForTizen } from '@shared/config/constants';
 import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { Logo } from '@shared/ui/logo/Logo';
 import { useAppDispatch, useAppSelector } from '@store';
@@ -213,6 +214,8 @@ export function AppShell() {
         <IntroAnimation
           ref={logoRef}
           autoStart={false}
+          // No blur or layer hints on the TV, as the legacy app did
+          lowResourceAnimation={builtForTizen}
           logoVisible={introPhase === 'playing'}
           onStart={handleIntroStart}
           onReady={handleIntroReady}

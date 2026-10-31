@@ -2,15 +2,16 @@ import { type AppRoute, navigate, useRoute } from '@app/router';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { PALETTE } from '@shared/config/constants';
+import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { useAppSelector } from '@store/hooks';
 import { selectCurrentSessionId, selectCurrentUser, selectIsAdmin } from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
-import { type FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
-import { CategoryRow } from './components/CategoryRow';
+import { CategoryRow, type CategoryRowHandle } from './components/CategoryRow';
 import { HomeSidebar, type SidebarItem } from './components/HomeSidebar';
 import { MediaDetails } from './components/MediaDetails';
 import { MediaHero } from './components/MediaHero';
@@ -202,6 +203,37 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     setFirstShownRow(Math.floor(scrollTop / rowHeight));
   }, [content, publishInterest, rowHeight]);
   const mountedRows = homeMountedRows(activeCategory, firstShownRow, displayCategories.length);
+  // Rows are memoized; stable callbacks keep a move in one row from re-rendering the others
+  const onRowActive = useStableCallback(navigation.onCardActive);
+  const onRowSelect = useStableCallback(navigation.openDetails);
+  const onRowInterest = useStableCallback(() => publishInterest());
+  const onRowMediaLoaded = useStableCallback(onMediaLoaded);
+  const onRowReady = useStableCallback((slug: string) => onRowDataReady(slug));
+  const rowCallbacks = useRef(
+    new Map<
+      string,
+      {
+        ref: (handle: CategoryRowHandle | null) => void;
+        onSelectionChange: (index: number) => void;
+      }
+    >()
+  );
+  const callbacksForRow = (slug: string, index: number) => {
+    const key = `${slug}:${index}`;
+    let callbacks = rowCallbacks.current.get(key);
+    if (!callbacks) {
+      callbacks = {
+        ref: (handle: CategoryRowHandle | null) => {
+          if (handle) rowRefs.current.set(index, handle);
+          else rowRefs.current.delete(index);
+        },
+        onSelectionChange: (mediaIndex: number) =>
+          dispatch(homeNavigationActions.setCategorySelection({ slug, index: mediaIndex })),
+      };
+      rowCallbacks.current.set(key, callbacks);
+    }
+    return callbacks;
+  };
 
   if (view === 'browse' && isLoading) {
     return (
@@ -233,22 +265,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                   return (
                     <RowSlot key={category.slug} style={{ top: index * rowHeight }}>
                       <CategoryRow
-                        ref={handle => {
-                          if (handle) rowRefs.current.set(index, handle);
-                          else rowRefs.current.delete(index);
-                        }}
+                        ref={callbacksForRow(category.slug, index).ref}
                         category={category}
                         categoryIndex={index}
                         initialIndex={selectedByCategory[category.slug] ?? 0}
                         selectedIndex={selectedByCategory[category.slug] ?? 0}
-                        onSelectionChange={mediaIndex =>
-                          dispatch(
-                            homeNavigationActions.setCategorySelection({
-                              slug: category.slug,
-                              index: mediaIndex,
-                            })
-                          )
-                        }
+                        onSelectionChange={callbacksForRow(category.slug, index).onSelectionChange}
                         loadIntent={
                           rowLoadState.visible.has(index)
                             ? 'visible'
@@ -262,21 +284,21 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                         gap={gap}
                         peekWidth={peekWidth}
                         isCurrentRow={activeCategory === index}
-                        onDataReady={onRowDataReady}
+                        onDataReady={onRowReady}
                         active={
                           interactive &&
                           !trakt.open &&
                           activeRegion === 'carousel' &&
                           activeCategory === index
                         }
-                        onActive={navigation.onCardActive}
-                        onInterest={publishInterest}
-                        onMediaLoaded={onMediaLoaded}
+                        onActive={onRowActive}
+                        onInterest={onRowInterest}
+                        onMediaLoaded={onRowMediaLoaded}
                         progress={progressEntries}
                         mediaOverride={
                           category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
                         }
-                        onSelect={navigation.openDetails}
+                        onSelect={onRowSelect}
                       />
                     </RowSlot>
                   );

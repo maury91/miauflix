@@ -1007,6 +1007,26 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       return true;
     },
   });
+  const pageRef = useRef<HTMLElement | null>(null);
+  const retryRef = useRef<HTMLButtonElement>(null);
+  const notifyRef = useRef<HTMLButtonElement>(null);
+  const setPage = useCallback(
+    (element: HTMLElement | null) => {
+      pageRef.current = element;
+      navigationRef(element);
+    },
+    [navigationRef]
+  );
+  // While preparing, the player itself takes the focus, so a remote's Back works
+  useEffect(() => {
+    if (!document.activeElement || document.activeElement === document.body)
+      pageRef.current?.focus({ preventScroll: true });
+  }, []);
+  // A remote needs something focused: the failure's action, else the player (for Back)
+  useEffect(() => {
+    if (!error && status !== 'exhausted') return;
+    (retryRef.current ?? notifyRef.current ?? pageRef.current)?.focus({ preventScroll: true });
+  }, [error, status, availabilityRequest.isSuccess]);
 
   const sourceAttempt = pushedAttempt ?? session?.sourceAttempt ?? null;
   const statusMessage =
@@ -1015,7 +1035,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
       : getPlaybackStatusMessage(status, title);
 
   return (
-    <Page ref={navigationRef} tabIndex={-1} aria-label="Player">
+    <Page ref={setPage} tabIndex={-1} aria-label="Player">
       {!session && <PlayerHeader onBack={onBack} />}
       {session ? (
         <>
@@ -1158,6 +1178,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
               </span>
               {!availabilityRequest.isSuccess && (
                 <NotifyButton
+                  ref={notifyRef}
                   type="button"
                   disabled={availabilityRequest.isLoading}
                   onClick={() => void requestAvailability(playable)}
@@ -1175,6 +1196,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
           )}
           {error && (
             <RetryButton
+              ref={retryRef}
               type="button"
               onClick={() => {
                 failedSources.current = { key: '', ids: new Set() };
