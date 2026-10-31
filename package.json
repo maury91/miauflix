@@ -110,7 +110,10 @@
   "overrides": {
     "react": "19.2.0",
     "react-dom": "19.2.0",
-    "sass": "1.90.0"
+    "sass": "1.90.0",
+    "@vanilla-extract/compiler": {
+      "vite-node": "5.2.0"
+    }
   },
   "workspaces": [
     "frontend",
