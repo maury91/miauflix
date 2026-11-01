@@ -18,7 +18,9 @@ export type KeyboardNavigationOptions = KeyboardOptions;
 /** Map a key name to a D-pad navigation action, or null when it is not one. */
 export function getKeyboardNavigationAction(key: string): KeyboardNavigationAction | null {
   const action = getKeyAction(key);
-  return action === 'search' ? null : action;
+  return action === 'search' || action === 'playPause' || action === 'play' || action === 'pause'
+    ? null
+    : action;
 }
 
 /**
