@@ -473,6 +473,11 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
               onEnterNotifications={onEnterNotifications}
               onSelectedChange={setSidebarItem}
               unreadCount={notifications.unreadCount}
+              hasNotifications={
+                notifications.unreadCount > 0 ||
+                notifications.hasRead ||
+                notifications.unread.items.length > 0
+              }
             />
           </>
         ) : view === 'details' && selectedMedia ? (

@@ -1,0 +1,153 @@
+name: Release
+
+# Run from the Actions tab on main. Moves the changelog's Unreleased section under the new
+# version, bumps the root package.json, commits and tags `v<version>` on main, publishes the
+# GitHub release (marked latest unless it is a prerelease) and runs the CI Pipeline on the tag,
+# which tests it and publishes the images tagged with the version and `latest`.
+#
+# Pushes made with the default GITHUB_TOKEN start no other workflow, so the CI Pipeline is
+# started explicitly on the tag. An optional `RELEASE_TOKEN` secret (a token that can push to
+# main, needed when branch protection blocks the Actions bot) is used instead; its pushes start
+# the CI Pipeline by themselves.
+on:
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump (ignored when a version is given)
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+      version:
+        description: Exact version instead of a bump (e.g. 1.2.0 or 1.2.0-rc.1)
+        type: string
+        required: false
+      title:
+        description: Release title, after the version in the changelog (e.g. "Search and TV fixes")
+        type: string
+        required: true
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          token: ${{ secrets.RELEASE_TOKEN || github.token }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+
+      - name: Compute version
+        id: version
+        env:
+          BUMP: ${{ inputs.bump }}
+          EXPLICIT: ${{ inputs.version }}
+        run: |
+          version=$(node -e '
+            const current = require("./package.json").version;
+            const explicit = process.env.EXPLICIT.trim().replace(/^v/, "");
+            const semver = /^(\d+)\.(\d+)\.(\d+)(-[0-9A-Za-z.-]+)?$/;
+            if (explicit) {
+              if (!semver.test(explicit)) throw new Error(`Not a semantic version: ${explicit}`);
+              console.log(explicit);
+            } else {
+              const [, major, minor, patch] = current.match(semver).map(Number);
+              const next = { major: [major + 1, 0, 0], minor: [major, minor + 1, 0], patch: [major, minor, patch + 1] };
+              console.log(next[process.env.BUMP].join("."));
+            }
+          ')
+          if git rev-parse -q --verify "refs/tags/v$version" >/dev/null; then
+            echo "::error::Tag v$version already exists"
+            exit 1
+          fi
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+          if [[ "$version" == *-* ]]; then echo "prerelease=true" >> "$GITHUB_OUTPUT"; else echo "prerelease=false" >> "$GITHUB_OUTPUT"; fi
+          echo "Releasing v$version"
+
+      - name: Update changelog and package.json
+        env:
+          VERSION: ${{ steps.version.outputs.version }}
+          TITLE: ${{ inputs.title }}
+        run: |
+          node -e '
+            const fs = require("fs");
+            const { VERSION, TITLE } = process.env;
+            const date = new Date().toISOString().slice(0, 10);
+
+            const changelog = fs.readFileSync("CHANGELOG.md", "utf8");
+            const unreleased = /^## Unreleased[ \t]*$/m;
+            const match = changelog.match(unreleased);
+            if (!match) throw new Error("CHANGELOG.md has no \"## Unreleased\" section");
+            const start = match.index + match[0].length;
+            const nextHeading = changelog.slice(start).search(/^## /m);
+            const notes = changelog.slice(start, nextHeading === -1 ? undefined : start + nextHeading).trim();
+            if (!notes) throw new Error("The Unreleased section of CHANGELOG.md is empty");
+            const heading = `## ${date} v${VERSION} ${TITLE.trim()}`.trim();
+            fs.writeFileSync("CHANGELOG.md", changelog.replace(unreleased, heading));
+            fs.writeFileSync(`${process.env.RUNNER_TEMP}/release-notes.md`, notes + "\n");
+
+            // The root version is the app version (the version badge and the images read it).
+            const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
+            pkg.version = VERSION;
+            fs.writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
+            const lock = JSON.parse(fs.readFileSync("package-lock.json", "utf8"));
+            lock.version = VERSION;
+            lock.packages[""].version = VERSION;
+            fs.writeFileSync("package-lock.json", JSON.stringify(lock, null, 2) + "\n");
+          '
+          git diff --stat
+
+      - name: Commit and tag
+        env:
+          TAG: ${{ steps.version.outputs.tag }}
+          TITLE: ${{ inputs.title }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add CHANGELOG.md package.json package-lock.json
+          git commit -m "chore(release): $TAG"
+          git tag -a "$TAG" -m "$TAG $TITLE"
+          git push --atomic origin HEAD:main "refs/tags/$TAG"
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          TITLE: ${{ inputs.title }}
+          PRERELEASE: ${{ steps.version.outputs.prerelease }}
+        run: |
+          flags=(--latest)
+          if [ "$PRERELEASE" = true ]; then flags=(--prerelease --latest=false); fi
+          gh release create "$TAG" \
+            --verify-tag \
+            --title "$TAG $TITLE" \
+            --notes-file "$RUNNER_TEMP/release-notes.md" \
+            "${flags[@]}"
+
+      - name: Run the CI Pipeline on the tag
+        # A push with RELEASE_TOKEN already started it.
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ steps.version.outputs.tag }}
+          HAS_RELEASE_TOKEN: ${{ secrets.RELEASE_TOKEN != '' }}
+        run: |
+          if [ "$HAS_RELEASE_TOKEN" = true ]; then
+            echo "The tag push started the CI Pipeline"
+          else
+            gh workflow run ci.yml --ref "$TAG"
+          fi

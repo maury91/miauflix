@@ -354,7 +354,9 @@ jobs:
         with:
           images: ${{ env.IMAGE }}
           flavor: latest=auto
-          # A manual run tags the branch name (e.g. fix-buffer) and its commit, never latest or edge.
+          # A manual run on a branch tags the branch name (e.g. fix-buffer) and its commit, never
+          # latest or edge. On a release tag (started by the Release workflow) it tags the version
+          # and latest, as a tag push does.
           tags: |
             type=edge,branch=main,enable=${{ github.event_name == 'push' }}
             type=ref,event=branch,enable=${{ github.event_name == 'workflow_dispatch' }}

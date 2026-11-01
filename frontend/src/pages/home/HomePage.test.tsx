@@ -856,6 +856,17 @@ describe('HomePage focus transitions', () => {
     expect(row.focusIndex).toHaveBeenCalledWith(0);
   });
 
+  it.each(['Escape', 'GoBack'])('opens the sidebar on %s while browsing the rows', key => {
+    const row = makeHandle(true, false);
+    rowHandles.set(0, row);
+    render(<HomePage />);
+
+    fireEvent.keyDown(screen.getByRole('main'), { key });
+    expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
+    expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
+    expect(row.handleAction).not.toHaveBeenCalledWith('back');
+  });
+
   it('shows the preparation result for the selected movie', () => {
     currentSession.mockReturnValue('test-session');
     useUpdateIntentMutation.mockReturnValue([

@@ -16,6 +16,7 @@ describe('HomeSidebar', () => {
         onSearch={vi.fn()}
         onEnterNotifications={vi.fn()}
         unreadCount={0}
+        hasNotifications={false}
       />
     );
 
@@ -38,6 +39,7 @@ describe('HomeSidebar', () => {
         onSearch={vi.fn()}
         onEnterNotifications={vi.fn()}
         unreadCount={0}
+        hasNotifications={false}
       />
     );
 
@@ -57,6 +59,7 @@ describe('HomeSidebar', () => {
           onSearch={vi.fn()}
           onEnterNotifications={vi.fn()}
           unreadCount={3}
+          hasNotifications
         />
         <div data-notifications-panel="" data-testid="panel" />
       </>
@@ -82,6 +85,7 @@ describe('HomeSidebar', () => {
         onSearch={vi.fn()}
         onEnterNotifications={onEnterNotifications}
         unreadCount={120}
+        hasNotifications
       />
     );
 
@@ -89,4 +93,38 @@ describe('HomeSidebar', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Notifications, 120 unread' }));
     expect(onEnterNotifications).toHaveBeenCalledTimes(1);
   });
+
+  it.each([
+    { hasNotifications: false, entered: 0 },
+    { hasNotifications: true, entered: 1 },
+  ])(
+    'moves Right from the bell into the panel only when there are notifications ($hasNotifications)',
+    ({ hasNotifications, entered }) => {
+      const onEnterNotifications = vi.fn();
+      const onAction = vi.fn(() => ({ type: 'handled' as const }));
+      render(
+        <HomeSidebar
+          active
+          showSettings={false}
+          onAction={onAction}
+          onHover={vi.fn()}
+          onSettings={vi.fn()}
+          onSearch={vi.fn()}
+          onEnterNotifications={onEnterNotifications}
+          unreadCount={0}
+          hasNotifications={hasNotifications}
+        />
+      );
+
+      const search = screen.getByRole('button', { name: 'Search' });
+      fireEvent.keyDown(search, { key: 'ArrowUp' });
+      const bell = screen.getByRole('button', { name: 'Notifications' });
+      expect(bell).toHaveFocus();
+      fireEvent.keyDown(bell, { key: 'ArrowRight' });
+
+      expect(onEnterNotifications).toHaveBeenCalledTimes(entered);
+      expect(onAction).not.toHaveBeenCalled();
+      expect(bell).toHaveFocus();
+    }
+  );
 });

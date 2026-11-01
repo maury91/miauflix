@@ -265,6 +265,11 @@ export function useHomeNavigation({
       if (activeRegion === 'sidebar') return onSidebarAction(action);
       // The notifications panel handles its own keys.
       if (activeRegion === 'notifications') return { type: 'ignored' };
+      // Back (the remote's Return, or Esc) while browsing the rows opens the sidebar.
+      if (action === 'back') {
+        dispatch(homeNavigationActions.setActiveRegion('sidebar'));
+        return { type: 'handled' };
+      }
       const outcome = rowRefs.current.get(activeCategory)?.handleAction(action) ?? {
         type: 'ignored' as const,
       };

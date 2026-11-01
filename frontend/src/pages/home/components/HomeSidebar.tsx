@@ -51,6 +51,8 @@ interface HomeSidebarProps {
   /** Keep the rail expanded (e.g. while the notifications panel beside it is in use). */
   expanded?: boolean;
   unreadCount: number;
+  /** Whether there is anything, unread or read, to show in the notifications panel. */
+  hasNotifications: boolean;
 }
 
 /**
@@ -68,6 +70,7 @@ export const HomeSidebar = memo(function HomeSidebar({
   onSelectedChange,
   expanded = false,
   unreadCount,
+  hasNotifications,
 }: HomeSidebarProps) {
   const open = active || expanded;
   const [selected, setSelected] = useState<SidebarItem>('search');
@@ -129,8 +132,10 @@ export const HomeSidebar = memo(function HomeSidebar({
       return true;
     },
     onRight: () => {
-      if (selected === 'notifications') onEnterNotifications();
-      else onAction('right');
+      // With no notifications the panel has nothing to move to, so Right stays on the bell.
+      if (selected === 'notifications') {
+        if (hasNotifications) onEnterNotifications();
+      } else onAction('right');
       return true;
     },
     onConfirm: () => {
