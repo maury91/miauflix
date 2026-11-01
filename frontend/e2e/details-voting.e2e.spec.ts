@@ -161,7 +161,7 @@ async function installVotingHarness(page: Page): Promise<void> {
 async function login(page: Page): Promise<void> {
   await page.goto('/');
   await page.getByLabel('Email').fill('voting@example.com');
-  await page.getByLabel('Password').fill('testpassword123');
+  await page.getByRole('textbox', { name: 'Password' }).fill('testpassword123');
   await page.getByRole('button', { name: 'Continue' }).click();
   await waitForHomeReady(page);
 }

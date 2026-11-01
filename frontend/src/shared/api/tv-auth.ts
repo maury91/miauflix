@@ -9,6 +9,8 @@ import type { AuthTokens } from '@miauflix/backend';
  */
 
 const REFRESH_TOKENS_KEY = 'miauflix.tv.refreshTokens';
+/** `GET /api/auth/sessions` checks at most this many refresh tokens (see AuthService). */
+const MAX_LISTED_SESSIONS = 5;
 const accessTokens = new Map<string, string>();
 
 function readRefreshTokens(): Record<string, string> {
@@ -36,9 +38,40 @@ function forgetSession(session: string): void {
   writeRefreshTokens(refreshTokens);
 }
 
+/** Forget every session, for a switch to another server, which would reject their tokens. */
+export function forgetAllTvSessions(): void {
+  accessTokens.clear();
+  window.localStorage.removeItem(REFRESH_TOKENS_KEY);
+}
+
 /** The access token of a session, for the realtime socket, which cannot send headers. */
 export function getTvAccessToken(session: string): string | undefined {
   return accessTokens.get(session);
+}
+
+/**
+ * Forget the sent sessions the backend did not list: their refresh token is invalid or their user
+ * is gone. Left in place they would keep taking the slots the backend checks, hiding valid ones.
+ * A session whose token was replaced while the request was in flight (a refresh) is kept.
+ */
+async function forgetUnlistedSessions(
+  response: Response,
+  sentPairs: [string, string][]
+): Promise<void> {
+  const body: unknown = await response
+    .clone()
+    .json()
+    .catch(() => null);
+  if (!Array.isArray(body)) return;
+  const listed = new Set(
+    body.map((entry: { session?: unknown }) => entry?.session).filter(Boolean)
+  );
+  const stored = readRefreshTokens();
+  sentPairs
+    .filter(
+      ([session, token]: [string, string]) => !listed.has(session) && stored[session] === token
+    )
+    .forEach(([session]: [string, string]) => forgetSession(session));
 }
 
 function requestUrl(input: RequestInfo | URL): URL {
@@ -62,12 +95,23 @@ export const tvAuthFetch: typeof fetch = async (input, init) => {
     const refreshToken = readRefreshTokens()[actionSession];
     if (refreshToken) headers.set('X-Refresh-Token', refreshToken);
   }
-  if (pathname.endsWith('/api/auth/sessions')) {
-    const pairs = Object.entries(readRefreshTokens()).map(([key, token]) => `${key}:${token}`);
-    if (pairs.length) headers.set('X-Refresh-Tokens', pairs.join(','));
+  const listsSessions = pathname.endsWith('/api/auth/sessions');
+  // The pairs as sent, so the ones the backend rejects can be dropped afterwards
+  const sentPairs = listsSessions
+    ? Object.entries(readRefreshTokens()).slice(0, MAX_LISTED_SESSIONS)
+    : [];
+  if (sentPairs.length) {
+    headers.set(
+      'X-Refresh-Tokens',
+      sentPairs.map(([key, token]: [string, string]) => `${key}:${token}`).join(',')
+    );
   }
 
   const response = await fetch(input, { ...init, headers, credentials: 'omit' });
+
+  if (sentPairs.length && response.ok) {
+    await forgetUnlistedSessions(response, sentPairs);
+  }
 
   if (sessionAction?.[1] === 'logout' || (sessionAction && response.status === 401)) {
     forgetSession(actionSession!);

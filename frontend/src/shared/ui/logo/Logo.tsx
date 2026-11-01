@@ -17,11 +17,33 @@ const logoSvgUrl = `${import.meta.env.BASE_URL}assets/images/logo.svg`;
  * origin is the box's top-left corner, which `translate(-50%, -50%)` puts at the logo's centre.
  */
 const PULSE_FRAME = { transformOrigin: '0 0' };
-const PULSE_KEYFRAMES: Keyframe[] = [
-  { ...PULSE_FRAME, scale: '1', opacity: 1 },
-  { ...PULSE_FRAME, scale: '1.1', opacity: 0.8 },
-  { ...PULSE_FRAME, scale: '1', opacity: 1 },
-];
+/**
+ * Browsers without the `scale` property (the Samsung TV's Chromium 69) pulse `transform` instead,
+ * repeating the centred position: scaling before the translate draws the same thing.
+ */
+const supportsScaleProperty = () =>
+  typeof CSS !== 'undefined' && typeof CSS.supports === 'function' && CSS.supports('scale', '1');
+const pulseFrame = (scale: number, opacity: number): Keyframe =>
+  supportsScaleProperty()
+    ? { ...PULSE_FRAME, scale: String(scale), opacity }
+    : { ...PULSE_FRAME, transform: `scale(${scale}) translate(-50%, -50%)`, opacity };
+/** The pulse's current scale, from whichever property it animates. */
+const currentScale = (style: CSSStyleDeclaration) => {
+  if (supportsScaleProperty()) return Number.parseFloat(style.scale);
+  const matrix = /^matrix\(([^,]+),/.exec(style.transform);
+  return matrix ? Number.parseFloat(matrix[1]!) : 1;
+};
+/** Settles when `animation` finishes or is cancelled; Chromium 69 has no `finished` promise. */
+const animationDone = (animation: Animation): Promise<unknown> => {
+  if (animation.finished) return animation.finished.catch(() => undefined);
+  if (animation.playState === 'finished' || animation.playState === 'idle')
+    return Promise.resolve();
+  return new Promise(resolve => {
+    animation.onfinish = resolve;
+    animation.oncancel = resolve;
+  });
+};
+const pulseKeyframes = (): Keyframe[] => [pulseFrame(1, 1), pulseFrame(1.1, 0.8), pulseFrame(1, 1)];
 const PULSE_MS = 1400;
 /** How long a stopped pulse takes to ease back to full size before the intro takes over. */
 const PULSE_SETTLE_MS = 150;
@@ -145,13 +167,11 @@ export const Logo = ({
         return undefined;
       }
       let cancelled = false;
-      settling.finished
-        .catch(() => undefined)
-        .then(() => {
-          if (cancelled) return;
-          settlingRef.current = null;
-          settledRef.current?.();
-        });
+      void animationDone(settling).then(() => {
+        if (cancelled) return;
+        settlingRef.current = null;
+        settledRef.current?.();
+      });
       return () => {
         cancelled = true;
       };
@@ -159,7 +179,7 @@ export const Logo = ({
     if (!image || typeof image.animate !== 'function' || prefersReducedMotion()) return undefined;
     settlingRef.current?.cancel();
     settlingRef.current = null;
-    const pulse = image.animate(PULSE_KEYFRAMES, {
+    const pulse = image.animate(pulseKeyframes(), {
       duration: PULSE_MS,
       easing: 'ease-in-out',
       iterations: Infinity,
@@ -167,15 +187,12 @@ export const Logo = ({
     return () => {
       // Read where the pulse is while it still runs, then ease from there to full size.
       const computed = getComputedStyle(image);
-      const scale = Number.parseFloat(computed.scale);
+      const scale = currentScale(computed);
       const opacity = Number.parseFloat(computed.opacity);
       pulse.cancel();
       if (!Number.isFinite(scale) || Math.abs(scale - 1) < 0.001) return;
       settlingRef.current = image.animate(
-        [
-          { ...PULSE_FRAME, scale: String(scale), opacity: Number.isFinite(opacity) ? opacity : 1 },
-          { ...PULSE_FRAME, scale: '1', opacity: 1 },
-        ],
+        [pulseFrame(scale, Number.isFinite(opacity) ? opacity : 1), pulseFrame(1, 1)],
         { duration: PULSE_SETTLE_MS, easing: 'ease-out' }
       );
     };

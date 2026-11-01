@@ -1,18 +1,17 @@
 #!/usr/bin/env node
 
-// Generate the website and Samsung TV icons from one square source image.
+// Generate the website icons from one square source image (the TV icons come from
+// assets/tv-logo.png, see generate-tv-icons.mjs).
 //
 // Usage: npm run generate:icons [-- path/to/source.png]   (default: assets/favicon.png)
 //
-// Writes, under frontend/:
-// Website icons keep the source's transparency; the TV icon is on black.
+// Writes, under frontend/ (keeping the source's transparency):
 //
 //   public/favicon.ico                    16, 32 and 48 px, for browsers that ask for /favicon.ico
 //   public/favicon.png                    512 px
 //   public/assets/icons/favicon-16.png    <link rel="icon">
 //   public/assets/icons/favicon-32.png    <link rel="icon">
 //   public/assets/icons/apple-touch-icon.png  180 px, iOS home screen
-//   tizen/icon.png                        512x423 px Samsung TV launcher icon, on black
 
 import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -24,11 +23,6 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const source = path.resolve(root, process.argv[2] ?? 'assets/favicon.png');
 const publicDir = path.join(root, 'frontend/public');
 const iconsDir = path.join(publicDir, 'assets/icons');
-const tizenDir = path.join(root, 'frontend/tizen');
-
-/** Samsung TV apps show a 512x423 launcher icon. */
-const TIZEN_ICON = { width: 512, height: 423 };
-const BLACK = { r: 0, g: 0, b: 0, alpha: 1 };
 
 /** A transparent square icon (32-bit, which ICO readers also expect). */
 async function squarePng(size) {
@@ -74,7 +68,6 @@ async function main() {
   }
 
   await mkdir(iconsDir, { recursive: true });
-  await mkdir(tizenDir, { recursive: true });
 
   const outputs = {
     [path.join(iconsDir, 'favicon-16.png')]: await squarePng(16),
@@ -84,15 +77,6 @@ async function main() {
     [path.join(publicDir, 'favicon.ico')]: ico(
       await Promise.all([16, 32, 48].map(async size => ({ size, data: await squarePng(size) })))
     ),
-    [path.join(tizenDir, 'icon.png')]: await sharp(source)
-      .resize(TIZEN_ICON.width, TIZEN_ICON.height, {
-        fit: 'contain',
-        background: BLACK,
-        kernel: 'lanczos3',
-      })
-      .flatten({ background: BLACK })
-      .png({ compressionLevel: 9 })
-      .toBuffer(),
   };
 
   for (const [file, data] of Object.entries(outputs)) {

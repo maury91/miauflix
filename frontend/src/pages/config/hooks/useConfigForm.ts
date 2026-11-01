@@ -1,4 +1,5 @@
 import type { ConfigEntryView } from '@miauflix/backend';
+import { webAppOrigin } from '@shared/config/constants';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 interface FormValues {
@@ -8,7 +9,7 @@ interface FormValues {
 function suggestedValue(entry: ConfigEntryView): string {
   if (entry.value) return entry.value;
   if (entry.defaultValueSource === 'browser-origin' && typeof window !== 'undefined') {
-    return window.location.origin;
+    return webAppOrigin();
   }
   return entry.isSecret ? '' : entry.value;
 }

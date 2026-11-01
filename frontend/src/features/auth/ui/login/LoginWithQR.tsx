@@ -1,12 +1,17 @@
 import { useClaimQrLoginMutation, useCreateQrLoginMutation } from '@features/auth/api/auth.api';
-import type { FC } from 'react';
+import { qrApprovalUrl } from '@features/auth/lib/qrApprovalUrl';
+import type { FC, RefObject } from 'react';
 import { useEffect, useRef, useState } from 'react';
 
 import { ErrorMessage } from './ErrorMessage';
 import { QRDisplay } from './QRDisplay';
 import { LoginSection, SectionTitle } from './Sections';
 
-export const LoginWithQR: FC = () => {
+export const LoginWithQR: FC<{
+  refreshRef?: RefObject<HTMLButtonElement | null>;
+  /** Left from the new-code button, and after asking for a new code (its button goes away). */
+  onLeaveRefresh?: () => void;
+}> = ({ refreshRef, onLeaveRefresh }) => {
   const [createQrLogin, { data: qrData, isLoading: isQrLoading, isError: isQrError }] =
     useCreateQrLoginMutation();
   const [claimQrLogin] = useClaimQrLoginMutation();
@@ -19,6 +24,10 @@ export const LoginWithQR: FC = () => {
 
   useEffect(() => {
     if (qrData) {
+      // Not 0 (shown as expired) until the first tick
+      setTimeRemaining(
+        Math.max(0, Math.floor((new Date(qrData.expiresAt).getTime() - Date.now()) / 1000))
+      );
       const interval = setInterval(async () => {
         const remainingTime = qrData
           ? Math.max(0, Math.floor((new Date(qrData.expiresAt).getTime() - Date.now()) / 1000))
@@ -60,9 +69,15 @@ export const LoginWithQR: FC = () => {
         <ErrorMessage>Failed to generate QR code</ErrorMessage>
       ) : (
         <QRDisplay
-          codeUrl={qrData ? new URL(qrData.approvalPath, window.location.origin).toString() : ''}
+          codeUrl={qrData ? qrApprovalUrl(qrData.approvalPath) : ''}
           isLoading={isQrLoading}
           timeRemaining={timeRemaining}
+          onRefresh={() => {
+            createQrLogin();
+            onLeaveRefresh?.();
+          }}
+          refreshRef={refreshRef}
+          onRefreshLeft={onLeaveRefresh}
         />
       )}
     </LoginSection>

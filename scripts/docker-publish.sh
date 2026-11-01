@@ -49,6 +49,13 @@ build_images() {
                  -f services/list-service/Dockerfile .
 
     print_status "List service image built successfully!"
+
+    print_status "Building TV pairing service image..."
+    docker build -t "${REGISTRY}/${REPOSITORY}-tv-pairing:${VERSION}" \
+                 -t "${REGISTRY}/${REPOSITORY}-tv-pairing:latest" \
+                 -f tv-pairing/Dockerfile .
+
+    print_status "TV pairing service image built successfully!"
 }
 
 # Push images
@@ -70,6 +77,11 @@ push_images() {
     docker push "${REGISTRY}/${REPOSITORY}-list-service:${VERSION}"
     if [ "$VERSION" != "latest" ]; then
         docker push "${REGISTRY}/${REPOSITORY}-list-service:latest"
+    fi
+
+    docker push "${REGISTRY}/${REPOSITORY}-tv-pairing:${VERSION}"
+    if [ "$VERSION" != "latest" ]; then
+        docker push "${REGISTRY}/${REPOSITORY}-tv-pairing:latest"
     fi
 }
 

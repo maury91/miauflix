@@ -1,5 +1,6 @@
+import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import type { SubtitleCandidateDto } from '@miauflix/backend';
-import { PALETTE } from '@shared/config/constants';
+import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { Spinner } from '@shared/ui/spinner/Spinner';
@@ -214,7 +215,7 @@ export function PlayerControls({
   selectedAudioTrackIndex,
   onSelectAudioTrack,
 }: {
-  videoRef: RefObject<HTMLVideoElement | null>;
+  videoRef: RefObject<PlayerMedia | null>;
   preparing?: boolean;
   onBack: () => void;
   subtitleSearchPreferences?: { language: string; hearingImpaired: boolean };
@@ -437,51 +438,58 @@ export function PlayerControls({
             onOffsetChange={onSubtitleOffsetChange}
             preferencesKey={subtitlePreferencesKey}
           />
-          <Button
-            type="button"
-            aria-label={muted ? 'Unmute' : 'Mute'}
-            onClick={() => {
-              if (videoRef.current) videoRef.current.muted = !muted;
-            }}
-          >
-            {muted ? <MutedIcon aria-hidden="true" /> : <VolumeIcon aria-hidden="true" />}
-          </Button>
-          <Volume
-            type="range"
-            min={0}
-            max={1}
-            step={0.05}
-            value={muted ? 0 : volume}
-            aria-label="Volume"
-            onKeyDown={event => {
-              if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
-                event.preventDefault();
-                focusZone();
-              }
-              if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
-                event.preventDefault();
-                moveControl(event.key === 'ArrowLeft' ? -1 : 1);
-              }
-            }}
-            onChange={event => {
-              if (videoRef.current) {
-                videoRef.current.volume = Number(event.target.value);
-                videoRef.current.muted = false;
-              }
-            }}
-          />
-          <Button
-            type="button"
-            aria-label="Toggle fullscreen"
-            onClick={() => {
-              const request = document.fullscreenElement
-                ? document.exitFullscreen()
-                : videoRef.current?.parentElement?.requestFullscreen();
-              void request?.catch(() => setNotice('Fullscreen is unavailable in this browser.'));
-            }}
-          >
-            <FullscreenIcon aria-hidden="true" />
-          </Button>
+          {/* The remote sets the TV's volume, and the TV app is always full screen */}
+          {!builtForTizen && (
+            <>
+              <Button
+                type="button"
+                aria-label={muted ? 'Unmute' : 'Mute'}
+                onClick={() => {
+                  if (videoRef.current) videoRef.current.muted = !muted;
+                }}
+              >
+                {muted ? <MutedIcon aria-hidden="true" /> : <VolumeIcon aria-hidden="true" />}
+              </Button>
+              <Volume
+                type="range"
+                min={0}
+                max={1}
+                step={0.05}
+                value={muted ? 0 : volume}
+                aria-label="Volume"
+                onKeyDown={event => {
+                  if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
+                    event.preventDefault();
+                    focusZone();
+                  }
+                  if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
+                    event.preventDefault();
+                    moveControl(event.key === 'ArrowLeft' ? -1 : 1);
+                  }
+                }}
+                onChange={event => {
+                  if (videoRef.current) {
+                    videoRef.current.volume = Number(event.target.value);
+                    videoRef.current.muted = false;
+                  }
+                }}
+              />
+              <Button
+                type="button"
+                aria-label="Toggle fullscreen"
+                onClick={() => {
+                  const request = document.fullscreenElement
+                    ? document.exitFullscreen()
+                    : videoRef.current?.parentElement?.requestFullscreen();
+                  void request?.catch(() =>
+                    setNotice('Fullscreen is unavailable in this browser.')
+                  );
+                }}
+              >
+                <FullscreenIcon aria-hidden="true" />
+              </Button>
+            </>
+          )}
         </Row>
       </Controls>
     </Overlay>

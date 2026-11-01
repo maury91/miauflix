@@ -10,14 +10,23 @@ export const HERO_DETAILS_WIDTH_CSS = `min(${DETAILS_WIDTH_RATIO * 100}vw, ${DET
 export const HERO_DETAILS_LEFT_CSS = `var(--home-content-left, ${DETAILS_LEFT_RATIO * 100}vw)`;
 export const HERO_BACKDROP_LEFT_CSS = `calc(${HERO_DETAILS_LEFT_CSS} + min(25vw, ${DETAILS_MAX_WIDTH * BACKDROP_OVERLAP_RATIO}px))`;
 
+/** The hero text's left edge, capped width and right edge, and the width left beside it (px). */
+export function getHeroTextGeometry(
+  heroWidth: number,
+  detailsLeft = heroWidth * DETAILS_LEFT_RATIO
+) {
+  const detailsWidth = Math.min(heroWidth * DETAILS_WIDTH_RATIO, DETAILS_MAX_WIDTH);
+  const textRight = detailsLeft + detailsWidth;
+  return { detailsLeft, detailsWidth, textRight, freeWidth: heroWidth - textRight };
+}
+
 /** Place the focus just right of the midpoint of the space beyond the capped text. */
 export function getHeroBackdropLayout(
   heroWidth: number,
   detailsLeft = heroWidth * DETAILS_LEFT_RATIO
 ) {
   if (!Number.isFinite(heroWidth) || heroWidth <= 0) return null;
-  const detailsWidth = Math.min(heroWidth * DETAILS_WIDTH_RATIO, DETAILS_MAX_WIDTH);
-  const textRight = detailsLeft + detailsWidth;
+  const { detailsWidth, textRight } = getHeroTextGeometry(heroWidth, detailsLeft);
   const left = detailsLeft + detailsWidth * BACKDROP_OVERLAP_RATIO;
   const width = heroWidth - left;
   const screenX = textRight + (heroWidth - textRight) * FOCUS_FREE_SPACE_RATIO;

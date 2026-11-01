@@ -62,7 +62,7 @@ const PULSE_SCALE = 1.25;
 const PULSE_ATTACK_S = 0.05;
 const PULSE_RELEASE_S = 0.22;
 
-const AnimationContainer = styled.div`
+const AnimationContainer = styled.div<{ $lowResource: boolean }>`
   position: fixed;
   left: 0;
   top: 0;
@@ -73,10 +73,14 @@ const AnimationContainer = styled.div`
   justify-content: center;
   align-items: center;
 
-  will-change: transform, opacity, filter;
-  backface-visibility: hidden;
-  perspective: 1000px;
-  contain: layout style paint;
+  ${({ $lowResource }) =>
+    !$lowResource &&
+    `
+      will-change: transform, opacity, filter;
+      backface-visibility: hidden;
+      perspective: 1000px;
+      contain: layout style paint;
+    `}
   font: 7vw/1 sans-serif;
   z-index: 1002;
 `;
@@ -151,21 +155,32 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
         })
       );
 
-      // Apply performance optimizations
-      Object.values(letters).forEach(letter => {
-        Object.assign(letter.style, {
-          willChange: 'transform, opacity, filter',
-          backfaceVisibility: 'hidden' as const,
-          perspective: '1000px',
+      // Layer hints help a desktop GPU; on a TV every extra layer costs frames
+      if (!lowResourceAnimation)
+        Object.values(letters).forEach(letter => {
+          Object.assign(letter.style, {
+            willChange: 'transform, opacity, filter',
+            backfaceVisibility: 'hidden' as const,
+            perspective: '1000px',
+          });
         });
-      });
 
       setConstants(precomputedData);
-    }, []);
+    }, [lowResourceAnimation]);
 
     useEffect(() => {
       computeConstants();
     }, [computeConstants]);
+
+    // A TV rasterizes in software: a pulse without a layer of its own repaints the whole screen
+    // every frame, and a layer GSAP creates as the pulse starts costs a full-screen raster (about
+    // 250 ms) that swallowed the 50 ms swell. Created ahead, before the audio, the layer is painted
+    // once and the compositor scales it. It stays for the expansion: dropping it cost another
+    // full-screen raster, and inside it the letters repaint only where they move, as without it.
+    const preparePulseLayer = useCallback(() => {
+      if (lowResourceAnimation && containerRef.current)
+        containerRef.current.style.willChange = 'transform';
+    }, [lowResourceAnimation]);
 
     const introAnimation = useMemo(() => {
       const letters = logoRef.current;
@@ -185,6 +200,9 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           margin: 0,
           transformOrigin: 'center center',
           force3D: true, // Hardware acceleration
+          // Give each letter its layer now, not as the expansion starts: on a TV painting eight
+          // new layers at once stalled the "meow" for about 250 ms
+          ...(lowResourceAnimation ? { z: 0.01 } : {}),
         });
       });
 
@@ -286,10 +304,11 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       }
 
       timelineRef.current = animation;
+      preparePulseLayer();
       animation.pause();
 
       return animation;
-    }, [constants, delay, duration, lowResourceAnimation, onReady]);
+    }, [constants, delay, duration, lowResourceAnimation, onReady, preparePulseLayer]);
 
     useEffect(() => {
       if (introAnimation && onStart) {
@@ -443,6 +462,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       preRollRef.current?.kill();
       preRollRef.current = null;
       if (containerRef.current) gsap.set(containerRef.current, { clearProps: 'transform' });
+      preparePulseLayer();
       // Kill timeline cleanly
       if (introAnimation) {
         introAnimation.kill();
@@ -479,7 +499,7 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           introAnimation?.pause();
         }, 200);
       }
-    }, [introAnimation, computeConstants, audioRef]);
+    }, [introAnimation, computeConstants, audioRef, preparePulseLayer]);
 
     const getProgress = useCallback(() => introAnimation?.progress() ?? 0, [introAnimation]);
     const isAnimating = useCallback(() => introAnimation?.isActive() ?? false, [introAnimation]);
@@ -513,13 +533,22 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
     }, [autoStart, introAnimation]);
 
     return (
-      <AnimationContainer ref={containerRef} className={className} style={style}>
+      <AnimationContainer
+        ref={containerRef}
+        className={className}
+        style={style}
+        $lowResource={lowResourceAnimation}
+      >
         <div
           ref={backgroundRef}
           aria-hidden="true"
           style={{
             position: 'absolute',
-            inset: 0,
+            // Not `inset`: the TV's Chromium 69 doesn't know it, and Home showed through
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
             zIndex: -1,
             background: 'black',
             willChange: 'opacity',
