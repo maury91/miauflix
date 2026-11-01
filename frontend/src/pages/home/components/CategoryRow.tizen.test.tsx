@@ -145,6 +145,21 @@ describe('CategoryRow on the Samsung TV', () => {
     expect(renderedCards()).toEqual([4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
   });
 
+  it('shows no spinner while loading off screen', () => {
+    useGetListQuery.mockImplementation(() => ({
+      data: undefined,
+      currentData: undefined,
+      isLoading: true,
+      isFetching: true,
+      isError: false,
+    }));
+    const view = render(<CategoryRow {...props(false)} />);
+    expect(screen.queryByText('Loading...')).toBeNull();
+
+    view.rerender(<CategoryRow {...props(true)} />);
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+  });
+
   it('marks the selection with one ring over the leading slot instead of on the card', () => {
     const view = render(<CategoryRow {...props(true)} />);
     const ring = screen.getByTestId('category-row-focus-ring');

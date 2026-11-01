@@ -281,6 +281,25 @@ Next:
   unchanged within the noise (held: 44–67 compositor fps, p90 24–28 ms): they are bound by the
   row's own render and the layer updates of each frame (`UpdateLayerTree` 10–14 ms per frame
   during a slide), not by Home.
+- **Layers and off-screen animation.** Home has about 136 compositing layers on the TV, about
+  ten per mounted row: each row's `translate3d` track is a layer, and the ring, edge fades and
+  slot painted after it are layered too (assumed overlap, then a layer for their ancestor clip).
+  Making each row slot a stacking context and raising only the focused row took it to 29 layers
+  in an in-page experiment, but saved only 5–8 ms per held key: the per-frame layer update
+  (`UpdateLayerTree`, about 5 ms a main frame) scales with the paint layers of all mounted cards
+  (removing the other rows' cards halved it), not with composited layers. Not pursued. The same
+  traces showed some runs with a main-thread frame on every refresh for seconds: an SVG spinner
+  (`Spinner`, a SMIL loop plus a CSS spin) in a row loading far below the screen, which Chromium
+  69 animates on the main thread even out of view. Fixed: the TV spins an HTML element on the
+  compositor and rows loading off screen show none. Afterwards no animation runs at rest, idle
+  main frames cost about 1 ms, and held keys along a row stay at 48–49 compositor fps (p90
+  26–27 ms).
+- **Rows black for a moment in quick vertical runs** (accepted). In both directions, rows show
+  black for a moment during a quick run of moves; short enough to leave. During the measured
+  run all rows near the focus were mounted, so it is more likely tiles not rasterized in time
+  (software raster) than rows mounting after the slide; `Page.captureScreenshot` is not
+  available on the TV to tell them apart. Quick upward runs drew 25–46 compositor fps (p90
+  30–120 ms).
 
 Once Phase 1 has removed the needless renders, what's left is the cost of the renders that are
 needed: the cards whose selection changes, the hero, and the rows mounted as you move down.

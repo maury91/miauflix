@@ -688,9 +688,8 @@ export const CategoryRow = memo(
       return (
         <RowContainer>
           {title}
-          <State>
-            <Spinner text="Loading..." />
-          </State>
+          {/* Off screen on the TV, no spinner: Chromium 69 keeps animating it out of view. */}
+          <State>{builtForTizen && !visible ? null : <Spinner text="Loading..." />}</State>
         </RowContainer>
       );
     }

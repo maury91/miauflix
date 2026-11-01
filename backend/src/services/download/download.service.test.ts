@@ -1431,6 +1431,64 @@ describe('DownloadService', () => {
       expect(files[0].deselect).toHaveBeenCalled();
       expect(files[0].select).not.toHaveBeenCalled();
     });
+
+    it('detaches the torrent, keeping its files, once its last claim expires', async () => {
+      const { service, mockStorageService, torrent } = setupSelection();
+      mockStorageService.deleteClaims.mockResolvedValue([7]);
+
+      await service.sweepExpiredClaims();
+
+      expect(service.client.remove).toHaveBeenCalledWith(torrent, { destroyStore: false });
+    });
+
+    it('detaches the torrent when a paused warmup leaves no claim', async () => {
+      const { service, torrent } = setupSelection();
+
+      await service.pauseSource(7);
+
+      expect(service.client.remove).toHaveBeenCalledWith(torrent, { destroyStore: false });
+    });
+
+    it('keeps the torrent attached while another claim is live', async () => {
+      const { service, mockStorageService } = setupSelection();
+      mockStorageService.getLiveClaims.mockResolvedValue([
+        claim('Show.S01E01.mkv', 'watched', 'user:1'),
+      ]);
+
+      await service.pauseSource(7);
+
+      expect(service.client.remove).not.toHaveBeenCalled();
+    });
+
+    it('keeps the torrent attached while the source is streaming', async () => {
+      const { service, mockStorageService } = setupSelection();
+      mockStorageService.deleteClaims.mockResolvedValue([7]);
+      (service as unknown as { activeSourceCounts: Map<number, number> }).activeSourceCounts.set(
+        7,
+        1
+      );
+
+      await service.sweepExpiredClaims();
+
+      expect(service.client.remove).not.toHaveBeenCalled();
+    });
+
+    it('keeps a completed torrent attached for its seed window', async () => {
+      const { service, mockStorageService } = setupSelection();
+      mockStorageService.deleteClaims.mockResolvedValue([7]);
+      mockStorageService.getStorageBySource.mockResolvedValue(
+        createMockStorage({
+          sourceId: 7,
+          location: '/tmp/test-downloads/pack',
+          videoCompletedAt: new Date(),
+          localOnly: false,
+        })
+      );
+
+      await service.sweepExpiredClaims();
+
+      expect(service.client.remove).not.toHaveBeenCalled();
+    });
   });
 
   describe('download tracking and allocation reconciliation', () => {

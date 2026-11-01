@@ -614,6 +614,49 @@ export class DownloadService {
     const torrent = storage && this.client.torrents.find(item => item.path === storage.location);
     if (torrent?.ready && storage?.encryptedLayout)
       await this.recordCompletion(torrent, sourceId, storage.encryptedLayout);
+    await this.detachUnclaimedTorrent(sourceId);
+  }
+
+  /**
+   * Take a torrent nobody needs off the client: no live claim, open stream, pending start or
+   * seed window. A deselected torrent still holds its peers and buffers, so leaving it attached
+   * costs CPU and memory indefinitely. Encrypted files stay on disk; a new claim attaches it again.
+   */
+  private async detachUnclaimedTorrent(sourceId: number): Promise<void> {
+    await this.storageService.withSourceLock(sourceId, async () => {
+      const storage = await this.storageService.getStorageBySource(sourceId);
+      if (!storage) return;
+      const torrent = this.client.torrents.find(item => item.path === storage.location);
+      if (!torrent || torrent.destroyed) return;
+      if (torrent.infoHash && this.torrentStartPromises.has(torrent.infoHash.toLowerCase())) return;
+      if (
+        storage.videoCompletedAt &&
+        !storage.localOnly &&
+        Date.now() < storage.videoCompletedAt.getTime() + this.getSeedDurationMs()
+      ) {
+        return;
+      }
+      // Sources sharing a hash share the torrent; every one of them must be done with it.
+      const sourceIds = new Set([sourceId, ...(this.bitfieldTrackedTorrents.get(torrent) ?? [])]);
+      for (const id of sourceIds) {
+        if (this.isPlaybackActive(id)) return;
+        if ((await this.storageService.getLiveClaims(id)).length) return;
+      }
+      if (torrent.bitfield?.buffer) {
+        await this.storageService.updateDownloadProgress({
+          sourceId,
+          downloadedPieces: new Uint8Array(torrent.bitfield.buffer),
+          totalPieces: this.getTorrentPieceCount(torrent),
+          size: torrent.length,
+        });
+      }
+      await this.client.remove(torrent, { destroyStore: false });
+      for (const id of sourceIds) {
+        this.pausedSources.delete(id);
+        this.pausedForPlayback.delete(id);
+      }
+      logger.info('DownloadService', `Detached unclaimed torrent for source ${sourceId}`);
+    });
   }
 
   /** Drop expired claims and stop downloading what nobody wants any more. */
@@ -1441,6 +1484,7 @@ export class DownloadService {
     if (!storage) return false;
     await this.storageService.releaseClaims(sourceId, { kind: 'warmup' });
     await this.reconcileSelection(sourceId);
+    await this.detachUnclaimedTorrent(sourceId);
     return true;
   }
 

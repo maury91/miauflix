@@ -1,5 +1,6 @@
 import type { PreloadPreparationSnapshot } from '@miauflix/backend';
-import { PALETTE } from '@shared/config/constants';
+import { builtForTizen, PALETTE } from '@shared/config/constants';
+import { LoadingIndicator } from '@shared/ui/loading-indicator/LoadingIndicator';
 import { qualityLabel } from '@shared/ui/quality-badge/quality';
 import { QualityBadge } from '@shared/ui/quality-badge/QualityBadge';
 import { type FC } from 'react';
@@ -133,7 +134,13 @@ export const SourcePreparationStatus: FC<SourcePreparationStatusProps> = ({
     <Status aria-live="polite">
       {showDiscovery && (
         <Discovery>
-          {loading && <Loading width="1.1em" height="1.1em" aria-hidden="true" />}
+          {loading &&
+            (builtForTizen ? (
+              // The SVG spin would run on the TV's main thread (see Spinner).
+              <LoadingIndicator style={{ fontSize: '1.1em' }} />
+            ) : (
+              <Loading width="1.1em" height="1.1em" aria-hidden="true" />
+            ))}
           {loading && <VisuallyHidden>Checking sources</VisuallyHidden>}
           {preparation?.state === 'error' && (
             <VisuallyHidden>Could not check sources.</VisuallyHidden>
