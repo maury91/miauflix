@@ -1,6 +1,15 @@
 import type { ProgressEntry } from '@miauflix/backend';
 
 /**
+ * Whether Continue watching offers `entry`: not completed, and past the first five seconds and
+ * short of the last one (next-episode suggestions bypass the position limits).
+ */
+export const isUnfinished = (entry: ProgressEntry) =>
+  entry.state !== 'completed' &&
+  (Boolean(entry.nextEpisode) ||
+    (entry.positionSeconds > 5 && entry.positionSeconds < entry.durationSeconds - 1));
+
+/**
  * Return one unfinished entry per movie or show, newest first.
  * Exclude completed entries and playback at or before five seconds or within one second of
  * the end. Next-episode suggestions bypass position limits, but actual playback takes
@@ -9,12 +18,7 @@ import type { ProgressEntry } from '@miauflix/backend';
 export function unfinishedProgress(entries: ProgressEntry[]): ProgressEntry[] {
   const latest = new Map<string, ProgressEntry>();
   for (const entry of entries) {
-    if (
-      entry.state === 'completed' ||
-      (!entry.nextEpisode && entry.positionSeconds <= 5) ||
-      (!entry.nextEpisode && entry.positionSeconds >= entry.durationSeconds - 1)
-    )
-      continue;
+    if (!isUnfinished(entry)) continue;
     const key =
       entry.playable.kind === 'movie'
         ? `movie:${entry.playable.mediaId}`

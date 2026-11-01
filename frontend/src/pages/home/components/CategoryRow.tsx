@@ -1,4 +1,5 @@
-import { useGetListQuery, usePromoteListMediaMutation } from '@features/media/api/lists.api';
+import { listPageArgs, useListPage } from '@features/home-feed/listPages';
+import { usePromoteListMediaMutation } from '@features/media/api/lists.api';
 import { useQueueBackdropFocusMutation } from '@features/media/api/media.api';
 import type { ListDto, MediaDto, ProgressEntry } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -213,8 +214,6 @@ interface CategoryRowProps {
   active: boolean;
   onActive: (categoryIndex: number, mediaIndex: number, media: MediaDto) => void;
   onDataReady?: (slug: string) => void;
-  /** The row's list loaded with nothing in it (rows given `mediaOverride` never report this). */
-  onEmpty?: (slug: string) => void;
   onInterest?: () => void;
   onSelect: (media: MediaDto) => void;
   progress?: ProgressEntry[];
@@ -299,7 +298,6 @@ export const CategoryRow = memo(
       contentWidth = mediaWidth * mediaPerPage + gap * (mediaPerPage - 1),
       onActive,
       onDataReady,
-      onEmpty,
       onInterest,
       onSelect,
       progress,
@@ -318,19 +316,19 @@ export const CategoryRow = memo(
     const effectiveLoadIntent = loadIntent ?? (nearby ? 'visible' : 'dormant');
     const fetching = !mediaOverride && effectiveLoadIntent !== 'dormant';
 
-    // Data: the selection's page, and the neighbouring page once the selection nears it.
+    // Data: the selection's page, and the neighbouring page once the selection nears it, read
+    // from the cache: homeFeedMiddleware loads the pages of the rows Home wants.
     const pageQuery = (index: number | null) =>
       fetching && index !== null
-        ? {
-            category: category.slug,
-            page: index,
-            limit: ROW_PAGE_SIZE,
-            priority: effectiveLoadIntent,
-          }
+        ? listPageArgs(
+            category.slug,
+            index,
+            effectiveLoadIntent === 'visible' ? 'visible' : 'prefetch'
+          )
         : skipToken;
-    const current = useGetListQuery(pageQuery(Math.floor(selectedIndex / ROW_PAGE_SIZE)));
+    const current = useListPage(pageQuery(Math.floor(selectedIndex / ROW_PAGE_SIZE)));
     const total = mediaOverride?.length ?? current.currentData?.total ?? current.data?.total ?? 0;
-    const adjacent = useGetListQuery(pageQuery(rowPagesFor(selectedIndex, total).neighbour));
+    const adjacent = useListPage(pageQuery(rowPagesFor(selectedIndex, total).neighbour));
 
     const mediaByIndex = useMemo(() => {
       if (mediaOverride) return new Map(mediaOverride.map((media, index) => [index, media]));
@@ -348,11 +346,19 @@ export const CategoryRow = memo(
     // On the TV, a row off screen keeps only the cards in view, and gets the rest shortly after
     // it comes into view rather than during the move that brings it there.
     const [expanded, setExpanded] = useState(!builtForTizen || visible);
+    // A row that leaves view (and is not kept warm) goes back to the cards in view, so rows
+    // passed on the way stay small off screen.
+    const wantsExpansion = visible || warm;
     useEffect(() => {
-      if (expanded || !(visible || warm)) return;
+      if (!builtForTizen) return;
+      if (!wantsExpansion) {
+        setExpanded(false);
+        return;
+      }
+      if (expanded) return;
       const timeout = window.setTimeout(() => setExpanded(true), CARD_WINDOW_EXPAND_MS);
       return () => window.clearTimeout(timeout);
-    }, [expanded, visible, warm]);
+    }, [expanded, wantsExpansion]);
     const [promoteListMedia] = usePromoteListMediaMutation();
     const [queueBackdropFocus] = useQueueBackdropFocusMutation();
     const step = mediaWidth + gap;
@@ -530,10 +536,6 @@ export const CategoryRow = memo(
       onDataReady,
     ]);
 
-    useEffect(() => {
-      if (!mediaOverride && current.currentData?.total === 0) onEmpty?.(category.slug);
-    }, [category.slug, current.currentData, mediaOverride, onEmpty]);
-
     // Ask the backend to prepare what is on screen: the visible page, then the cards in view.
     useEffect(() => {
       if (mediaOverride || !visible || !current.currentData?.results.length) return;
@@ -698,12 +700,7 @@ export const CategoryRow = memo(
       return (
         <RowContainer>
           {title}
-          {/* A row that reports itself empty is about to leave Home: no text for that moment. */}
-          {onEmpty && !mediaOverride ? (
-            <State aria-hidden="true" />
-          ) : (
-            <State>Nothing here yet.</State>
-          )}
+          <State>Nothing here yet.</State>
         </RowContainer>
       );
     }

@@ -21,10 +21,12 @@
 
 ### Improvements
 
+- Home loads its lists from the store instead of from each row: Home names the rows it wants, a middleware keeps the list pages they need (the selected page and the pages beside it) subscribed and releases the rest, and rows only read the cache. Empty lists are left out before their row renders, so no row mounts just to find out it is empty.
 - Home on the TV readies the rows below while you're idle: from a second after the last key press, one more row every half second, up to 10 rows below the visible ones. A ready row is fetched, mounted and rendered in full off screen, so moving down finds it ready; it isn't promoted to the backend until it is on screen. Home also scrolls between rows with a CSS transition that the compositor runs, and the rows around the focused one mount, unmount and load once the slide to it has ended, not during it or on every move of a quick run.
 
 ### Bug fixes
 
+- A Continue watching card shows the same episode its row selected: the card's progress now skips the playback the row skips (the first five seconds and the last second), so a show's card no longer shows a newer episode stopped within five seconds. On the TV, a row that leaves view goes back to rendering only the cards in view, unless Home keeps it ready below.
 - A Home row whose list has nothing in it (an empty watchlist, for example) is removed instead of showing "Nothing here yet". Rows load ahead of the selection, so it usually goes before you reach it; if a row above the focused one goes, the focus stays on the same row.
 
 - Holding a key along a Home row on the TV no longer drops frames on cards not shown before: 46–49 fps, up from 30–35. Each row draws one focus ring over its leading slot, so the cards no longer scale on focus (`MediaCard` takes `externalFocus` for this). A held run of moves updates Home and the hero once it pauses for 150 ms (a single press still updates them at once). Rows slide with a CSS transition that the compositor runs, instead of a transform written from JavaScript every frame. Untouched rows no longer re-render with Home. Details in `docs/development/tv-performance-plan.md`.

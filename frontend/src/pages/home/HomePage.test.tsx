@@ -92,6 +92,7 @@ vi.mock('@features/integrations/api/trakt.api', () => ({
 vi.mock('@features/media/api/lists.api', () => ({
   useGetListsInfiniteQuery,
 }));
+vi.mock('@features/home-feed/listPages', () => ({ selectEmptyListSlugs: () => emptyRows.value }));
 vi.mock('@features/media/api/media.api', () => ({
   useGetMovieQuery,
   useGetShowQuery,
@@ -174,7 +175,7 @@ vi.mock('./hooks/useMediaBoxSizes', () => ({
     rowHeight: 300,
   }),
 }));
-const emptyRowSlugs = vi.hoisted(() => new Set<string>());
+const emptyRows = vi.hoisted(() => ({ value: new Set<string>() as ReadonlySet<string> }));
 vi.mock('./components/CategoryRow', async () => {
   const React = await import('react');
   return {
@@ -190,7 +191,6 @@ vi.mock('./components/CategoryRow', async () => {
           visible?: boolean;
           onActive: (categoryIndex: number, mediaIndex: number, media: unknown) => void;
           onDataReady: (slug: string) => void;
-          onEmpty?: (slug: string) => void;
           onSelectionChange: (mediaIndex: number) => void;
           onSelect: (media: unknown) => void;
         },
@@ -232,10 +232,6 @@ vi.mock('./components/CategoryRow', async () => {
           loadIntent,
           onDataReady,
         ]);
-        const { onEmpty } = props;
-        React.useEffect(() => {
-          if (emptyRowSlugs.has(category.slug)) onEmpty?.(category.slug);
-        }, [category.slug, onEmpty]);
         const handle = rowHandles.get(props.categoryIndex);
         React.useImperativeHandle(ref, () => handle, [handle]);
         return React.createElement(
@@ -372,7 +368,7 @@ describe('HomePage focus transitions', () => {
       return action;
     });
     homeNavigationState.value = { ...initialHomeNavigationState, selectedByCategory: {} };
-    emptyRowSlugs.clear();
+    emptyRows.value = new Set();
     homeNavigationState.revision = 0;
     homeNavigationState.listeners.clear();
     realtimeState.ready = false;
@@ -1196,7 +1192,7 @@ describe('HomePage focus transitions', () => {
   });
 
   it('drops rows whose list loaded empty', () => {
-    emptyRowSlugs.add('second');
+    emptyRows.value = new Set(['second']);
     render(<HomePage />);
     const slugs = screen.getAllByTestId(/^card-/).map(button => button.dataset.slug);
     expect(slugs).not.toContain('second');
@@ -1208,8 +1204,12 @@ describe('HomePage focus transitions', () => {
       homeNavigationState.value,
       homeNavigationSlice.actions.setActiveCategory(2)
     );
-    emptyRowSlugs.add('first');
     render(<HomePage />);
+    // The first list turns out empty once Home shows: every row below it moves up one.
+    act(() => {
+      emptyRows.value = new Set(['first']);
+      homeNavigationState.listeners.forEach(listener => listener());
+    });
     expect(homeNavigationState.value.activeCategory).toBe(1);
     const active = screen.getAllByTestId(/^card-/).find(button => button.dataset.active === 'true');
     expect(active?.dataset.slug).toBe('third');

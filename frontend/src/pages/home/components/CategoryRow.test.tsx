@@ -12,7 +12,17 @@ const { useGetListQuery, usePromoteListMediaMutation, useQueueBackdropFocusMutat
   })
 );
 
-vi.mock('@features/media/api/lists.api', () => ({ useGetListQuery, usePromoteListMediaMutation }));
+vi.mock('@features/media/api/lists.api', () => ({ usePromoteListMediaMutation }));
+// Rows read pages from the cache (the home feed loads them): the reader stands in for the cache.
+vi.mock('@features/home-feed/listPages', () => ({
+  useListPage: useGetListQuery,
+  listPageArgs: (category: string, page: number, priority = 'visible') => ({
+    category,
+    page,
+    limit: 20,
+    priority,
+  }),
+}));
 vi.mock('@features/media/api/media.api', () => ({ useQueueBackdropFocusMutation }));
 // jsdom has no layout to animate; land every scroll immediately (the spring has its own tests).
 vi.mock('../smooth-scroll', () => ({
@@ -461,18 +471,5 @@ describe('CategoryRow page window', () => {
     retry.rerender(<CategoryRow {...props} visible={false} />);
     retry.rerender(<CategoryRow {...props} />);
     await waitFor(() => expect(viewportCalls(failing)).toBe(2));
-  });
-
-  it('reports a list that loaded empty, without the empty text', () => {
-    const onEmpty = vi.fn();
-    render(<CategoryRow {...makeProps(0, true, { total: 0 })} onEmpty={onEmpty} />);
-    expect(onEmpty).toHaveBeenCalledWith('popular');
-    expect(screen.queryByText('Nothing here yet.')).not.toBeInTheDocument();
-  });
-
-  it('does not report a list with items', () => {
-    const onEmpty = vi.fn();
-    render(<CategoryRow {...makeProps(0)} onEmpty={onEmpty} />);
-    expect(onEmpty).not.toHaveBeenCalled();
   });
 });

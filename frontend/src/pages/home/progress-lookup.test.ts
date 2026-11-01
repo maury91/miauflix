@@ -40,4 +40,17 @@ describe('progressByMedia', () => {
     expect(progressByMedia([completed, suggestion, older, latest]).get('show:7')).toBe(latest);
     expect(progressByMedia([completed, suggestion]).get('show:7')).toBe(suggestion);
   });
+
+  it('passes over playback Continue watching skips, as its row does', () => {
+    const episode = (episodeNumber: number, overrides: Partial<ProgressEntry>) =>
+      entry({
+        playable: { kind: 'episode', showMediaId: 7, seasonNumber: 1, episodeNumber },
+        ...overrides,
+      });
+    const watching = episode(3, { positionSeconds: 60, updatedAt: '2026-10-01T00:00:00Z' });
+    const barelyStarted = episode(4, { positionSeconds: 4, updatedAt: '2026-10-02T00:00:00Z' });
+
+    const lookup = progressByMedia([watching, barelyStarted]);
+    expect(lookup.get(progressKey({ _type: 'tvshow', mediaId: 7 } as MediaDto))).toBe(watching);
+  });
 });

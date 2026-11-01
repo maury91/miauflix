@@ -255,10 +255,13 @@ Third follow-up, moving between rows:
 
 Next:
 
-- **Moving list loading into the store:** each row runs about ten effects per render to fetch its
-  pages, detect emptiness, promote and preload. A store-level feed (middleware and selectors)
-  would decide which lists load, drop empty ones before any row renders, and schedule idle
-  readying without re-rendering Home; rows would only render their slice.
+- **Moving list loading into the store**, in stages. Stage 1 (done, not yet measured on the TV):
+  Home says which rows it wants (`homeFeedActions.rowsWanted`) and `homeFeedMiddleware` keeps
+  one cache subscription per list page they need (the selection's page, and its neighbours once
+  the size is known); rows read pages with `useListPage` and never fetch; empty lists are
+  dropped by `selectEmptyListSlugs` before their row renders. Stage 2: promotion, backdrop focus
+  queueing and image preloading in the middleware. Stage 3: idle readying and the rested row in
+  the store, so neither re-renders Home.
 - **Hero details:** still render on every reported move. A single press costs about 50 ms of Home
   and hero render on the TV.
 

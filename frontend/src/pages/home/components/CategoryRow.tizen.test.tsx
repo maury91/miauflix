@@ -16,7 +16,17 @@ vi.mock('@shared/config/constants', async importOriginal => ({
   builtForTizen: true,
   IS_TV: true,
 }));
-vi.mock('@features/media/api/lists.api', () => ({ useGetListQuery, usePromoteListMediaMutation }));
+vi.mock('@features/media/api/lists.api', () => ({ usePromoteListMediaMutation }));
+// Rows read pages from the cache (the home feed loads them): the reader stands in for the cache.
+vi.mock('@features/home-feed/listPages', () => ({
+  useListPage: useGetListQuery,
+  listPageArgs: (category: string, page: number, priority = 'visible') => ({
+    category,
+    page,
+    limit: 20,
+    priority,
+  }),
+}));
 vi.mock('@features/media/api/media.api', () => ({ useQueueBackdropFocusMutation }));
 // jsdom has no layout to animate; land every scroll immediately (the spring has its own tests).
 vi.mock('../smooth-scroll', () => ({
@@ -202,5 +212,17 @@ describe('CategoryRow on the Samsung TV', () => {
 
     view.rerender(row(false));
     expect(onSelectionChange).toHaveBeenLastCalledWith(12);
+  });
+
+  it('goes back to the cards in view when it leaves view, unless kept warm', () => {
+    const view = render(<CategoryRow {...props(true)} />);
+    act(() => vi.advanceTimersByTime(400));
+    expect(renderedCards()).toHaveLength(13);
+
+    view.rerender(<CategoryRow {...props(false)} warm />);
+    expect(renderedCards()).toHaveLength(13);
+
+    view.rerender(<CategoryRow {...props(false)} />);
+    expect(renderedCards()).toEqual([9, 10, 11, 12, 13, 14]);
   });
 });

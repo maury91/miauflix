@@ -1,4 +1,6 @@
 import { type AppRoute, navigate, useRoute } from '@app/router';
+import { homeFeedActions, type RowIntent } from '@features/home-feed/homeFeed.slice';
+import { selectEmptyListSlugs } from '@features/home-feed/listPages';
 import type { MediaDto } from '@miauflix/backend';
 import { Spinner } from '@shared/components';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
@@ -183,10 +185,9 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     furthestShownRow: Math.max(activeCategory, firstShownRow + 1),
   });
   const { continueMedia, progressEntries, isLoading, isError } = feed;
-  // Rows whose list loaded empty leave Home instead of showing "Nothing here yet"; rows load
-  // ahead of the selection, so they usually go before they are reached.
-  const [emptySlugs, setEmptySlugs] = useState<ReadonlySet<string>>(() => new Set());
-  useSessionChange(sessionId, () => setEmptySlugs(new Set()));
+  // Rows whose list loaded empty leave Home, in the same update that brings the empty list, so
+  // they never show "Nothing here yet".
+  const emptySlugs = useSelector(selectEmptyListSlugs);
   const displayCategories = useMemo(
     () =>
       emptySlugs.size
@@ -279,21 +280,49 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     activeCategory,
     displayCategories.length
   );
+  // A row above the focused one leaving Home moves the rows below it up: follow the focused row.
+  const followedRow = useRef({
+    categories: displayCategories,
+    slug: displayCategories[activeCategory]?.slug,
+  });
+  useEffect(() => {
+    const previous = followedRow.current;
+    if (previous.categories !== displayCategories && previous.slug) {
+      const index = displayCategories.findIndex(category => category.slug === previous.slug);
+      if (index >= 0 && index < activeCategory) {
+        followedRow.current = { categories: displayCategories, slug: previous.slug };
+        dispatch(homeNavigationActions.setActiveCategory(index));
+        content.scrollTo(index * rowHeight, { instant: true });
+        return;
+      }
+    }
+    followedRow.current = {
+      categories: displayCategories,
+      slug: displayCategories[activeCategory]?.slug,
+    };
+  }, [activeCategory, content, dispatch, displayCategories, rowHeight]);
+  // Which lists load is the store's (homeFeedMiddleware): Home says which rows it wants.
+  useEffect(() => {
+    const wanted: Record<string, RowIntent> = {};
+    if (browsing) {
+      const want = (indexes: Iterable<number>, intent: RowIntent) => {
+        for (const index of indexes) {
+          const slug = displayCategories[index]?.slug;
+          if (slug && slug !== CONTINUE_CATEGORY.slug && !wanted[slug]) wanted[slug] = intent;
+        }
+      };
+      want(rowLoadState.visible, 'visible');
+      want(rowLoadState.prefetch, 'prefetch');
+      want(rowLoadState.warm, 'prefetch');
+    }
+    dispatch(homeFeedActions.rowsWanted(wanted));
+  }, [browsing, dispatch, displayCategories, rowLoadState]);
+  useEffect(() => () => void dispatch(homeFeedActions.rowsWanted({})), [dispatch]);
   // Rows are memoized; stable callbacks keep a move in one row from re-rendering the others
   const onRowActive = useStableCallback(navigation.onCardActive);
   const onRowSelect = useStableCallback(navigation.openDetails);
   const onRowMediaLoaded = useStableCallback(onMediaLoaded);
   const onRowReady = useStableCallback((slug: string) => onRowDataReady(slug));
-  const onRowEmpty = useStableCallback((slug: string) => {
-    const index = displayCategories.findIndex(category => category.slug === slug);
-    if (index < 0) return;
-    // A row above the focused one leaving moves every row below it up: follow the focused row.
-    if (index < activeCategory) {
-      dispatch(homeNavigationActions.setActiveCategory(activeCategory - 1));
-      content.scrollTo((activeCategory - 1) * rowHeight, { instant: true });
-    }
-    setEmptySlugs(current => new Set(current).add(slug));
-  });
   // The sidebar is memoized: stable callbacks keep row moves from re-rendering it.
   const onSidebarAction = useStableCallback(navigation.onSidebarAction);
   const onSidebarSettings = useStableCallback(navigation.openSettings);
@@ -389,7 +418,6 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                       peekWidth={peekWidth}
                       isCurrentRow={activeCategory === index}
                       onDataReady={onRowReady}
-                      onEmpty={onRowEmpty}
                       active={
                         interactive &&
                         !trakt.open &&
