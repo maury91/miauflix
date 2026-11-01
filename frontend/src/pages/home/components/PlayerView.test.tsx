@@ -324,7 +324,11 @@ describe('PlayerView', () => {
     const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
     Object.defineProperty(video, 'duration', { configurable: true, value: 120 });
     fireEvent.durationChange(video);
-    fireEvent.change(screen.getByRole('slider', { name: 'Seek' }), { target: { value: '45' } });
+    // The session resolves outside act, so the controls may start listening to the video only
+    // after it is found; they read its duration when they do.
+    const seek = screen.getByRole('slider', { name: 'Seek' });
+    await waitFor(() => expect(seek).toBeEnabled());
+    fireEvent.change(seek, { target: { value: '45' } });
     expect(video.currentTime).toBe(45);
     expect(screen.getByText('Preparing playback…')).toBeInTheDocument();
     Object.defineProperty(video, 'readyState', { configurable: true, value: 2 });
@@ -335,6 +339,60 @@ describe('PlayerView', () => {
     expect(video.muted).toBe(true);
     fireEvent.volumeChange(video);
     expect(screen.getByRole('button', { name: 'Unmute' })).toBeInTheDocument();
+  });
+
+  it('moves through the controls with the remote, one level at a time', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    Object.defineProperty(video, 'duration', { configurable: true, value: 120 });
+    fireEvent.durationChange(video);
+    const seek = screen.getByRole('slider', { name: 'Seek' });
+    await waitFor(() => expect(seek).toBeEnabled());
+    const controls = screen.getByLabelText('Playback controls');
+    const press = (key: string) =>
+      fireEvent.keyDown(document.activeElement ?? document.body, { key });
+    act(() => controls.focus());
+
+    // Up from the video reaches Back; Down comes back to the video
+    press('ArrowUp');
+    expect(screen.getByRole('button', { name: /Back to details/ })).toHaveFocus();
+    press('ArrowDown');
+    expect(controls).toHaveFocus();
+    // Down goes to the seek bar, then to the buttons, and Left/Right move along them
+    press('ArrowDown');
+    expect(seek).toHaveFocus();
+    press('ArrowDown');
+    expect(screen.getByRole('button', { name: 'Play' })).toHaveFocus();
+    press('ArrowRight');
+    expect(screen.getByRole('button', { name: 'Play' })).not.toHaveFocus();
+    press('ArrowUp');
+    expect(seek).toHaveFocus();
+    // On the seek bar Left and Right seek, as on the video
+    press('ArrowRight');
+    expect(video.currentTime).toBe(10);
+    expect(seek).toHaveFocus();
+  });
+
+  it('plays and pauses with the remote media keys', async () => {
+    createSession.mockReturnValue({ unwrap: () => Promise.resolve(session) });
+    render(<PlayerView playable={playable} title="Toy Story 5" onBack={vi.fn()} />);
+    const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
+    const play = vi.fn(() => Promise.resolve());
+    const pause = vi.fn();
+    Object.assign(video, { play, pause });
+
+    fireEvent.keyDown(document.body, { key: 'MediaPlayPause' });
+    expect(play).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(document.body, { key: 'MediaPause' });
+    expect(pause).not.toHaveBeenCalled();
+
+    Object.defineProperty(video, 'paused', { configurable: true, value: false });
+    // Tizen reports its media keys by key code
+    fireEvent.keyDown(document.body, { key: 'Unidentified', keyCode: 10252 });
+    expect(pause).toHaveBeenCalledTimes(1);
+    fireEvent.keyDown(document.body, { key: 'MediaPlay' });
+    expect(play).toHaveBeenCalledTimes(1);
   });
 
   it('hides the header with the controls and reveals both on pointer movement', async () => {
@@ -349,7 +407,14 @@ describe('PlayerView', () => {
       expect(screen.getByRole('banner', { hidden: true })).not.toBeVisible();
       expect(screen.getByAltText('Miauflix logo')).not.toBeVisible();
       expect(screen.queryByRole('slider', { name: 'Seek' })).not.toBeInTheDocument();
-      fireEvent.pointerMove(screen.getByLabelText('Playback controls'));
+      // With the controls hidden, a remote's Up or Down only shows them
+      const controls = screen.getByLabelText('Playback controls');
+      act(() => controls.focus());
+      fireEvent.keyDown(controls, { key: 'ArrowDown' });
+      expect(screen.getByRole('slider', { name: 'Seek' })).toBeInTheDocument();
+      expect(controls).toHaveFocus();
+      act(() => vi.advanceTimersByTime(3000));
+      fireEvent.pointerMove(controls);
       expect(screen.getByRole('button', { name: /Back to details/ })).toBeVisible();
       expect(screen.getByAltText('Miauflix logo')).toBeVisible();
       expect(screen.getByRole('slider', { name: 'Seek' })).toBeInTheDocument();

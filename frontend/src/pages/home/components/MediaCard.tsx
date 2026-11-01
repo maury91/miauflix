@@ -14,35 +14,25 @@ interface MediaCardProps {
   onFocus: () => void;
   onHover: () => void;
   onSelect: () => void;
-  progress?: ProgressEntry[];
-}
-
-/**
- * Select progress for a movie or any episode of a show, or undefined when none matches.
- * Prefer unfinished entries, then actual playback over next-episode suggestions, then recency.
- */
-function progressForMedia(progress: ProgressEntry[] | undefined, media: MediaDto) {
-  if (!progress?.length) return undefined;
-  const matching = progress.filter(entry => {
-    if (media._type === 'movie') {
-      return entry.playable.kind === 'movie' && entry.playable.mediaId === media.mediaId;
-    }
-    return entry.playable.kind === 'episode' && entry.playable.showMediaId === media.mediaId;
-  });
-  return matching.sort((left, right) => {
-    const completionOrder =
-      Number(left.state === 'completed') - Number(right.state === 'completed');
-    return (
-      completionOrder ||
-      Number(Boolean(left.nextEpisode)) - Number(Boolean(right.nextEpisode)) ||
-      Date.parse(right.updatedAt) - Date.parse(left.updatedAt)
-    );
-  })[0];
+  /** This title's progress (see progressByMedia). */
+  progress?: ProgressEntry;
+  /** Draw the focus treatment on the card itself; off when the row draws a ring for it. */
+  showFocus?: boolean;
 }
 
 /** Render a focusable media card with playback progress and the selected episode’s label when available. */
 export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function MediaCard(
-  { media, onFocus, onHover, onSelect, progress, selected, tabIndex, width },
+  {
+    media,
+    onFocus,
+    onHover,
+    onSelect,
+    progress: playback,
+    selected,
+    showFocus = true,
+    tabIndex,
+    width,
+  },
   ref
 ) {
   const title = getMediaTitle(media);
@@ -53,7 +43,6 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
   const currentRevision = media.artworkRevision ?? 0;
   const selectedArtwork = artwork && artwork.artworkRevision >= currentRevision ? artwork : media;
   const cardLogo = selectedArtwork.logo;
-  const playback = progressForMedia(progress, media);
   const percent = playback
     ? playback.state === 'completed'
       ? 100
@@ -71,6 +60,7 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
       title={title}
       subtitle={subtitle}
       focused={selected}
+      externalFocus={!showFocus}
       width={width}
       progress={playback ? percent : undefined}
       aria-current={selected ? 'true' : undefined}

@@ -63,7 +63,28 @@ describe('homeRowLoadState', () => {
   });
 });
 
+describe('homeRowLoadState warm rows', () => {
+  it('readies the rows below the visible ones up to the warmed row, at most ten', () => {
+    expect([...homeRowLoadState(5, 100).warm]).toEqual([]);
+    expect([...homeRowLoadState(5, 100, 9).warm]).toEqual([7, 8, 9]);
+    expect([...homeRowLoadState(5, 100, 40).warm]).toEqual([7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+    expect([...homeRowLoadState(5, 9, 40).warm]).toEqual([7, 8]);
+  });
+
+  it('keeps the warmed rows, and no more, after moving down', () => {
+    expect([...homeRowLoadState(7, 100, 9).warm]).toEqual([9]);
+    expect([...homeRowLoadState(8, 100, 9).warm]).toEqual([]);
+  });
+});
+
 describe('homeMountedRows', () => {
+  it('mounts the warmed rows too', () => {
+    expect(homeMountedRows(5, 5, 100, 16)).toEqual([
+      1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
+    ]);
+    expect(homeMountedRows(5, 5, 100, 30)).toEqual(homeMountedRows(5, 5, 100, 16));
+  });
+
   it('mounts the rows around the focused row, covering every row that loads', () => {
     const rows = homeMountedRows(5, 5, 100);
     expect(rows).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);

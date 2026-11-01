@@ -1,6 +1,7 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
 import type { SubtitleCandidateDto } from '@miauflix/backend';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
+import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { useKeyboardNavigation } from '@shared/hooks/useKeyboardNavigation';
 import { Button as BaseButton } from '@shared/ui/button/Button';
 import { Spinner } from '@shared/ui/spinner/Spinner';
@@ -17,6 +18,9 @@ import PawIcon from '~icons/mdi/paw';
 import VolumeIcon from '~icons/mdi/volume-high';
 import MutedIcon from '~icons/mdi/volume-off';
 import PlayIcon from '~icons/octicon/play-16';
+
+/** How far Left and Right seek on the video and the seek bar. */
+const SEEK_STEP_SECONDS = 10;
 
 const Overlay = styled.div<{ $visible: boolean; $paused: boolean }>`
   position: absolute;
@@ -65,6 +69,11 @@ const HeaderButton = styled(BaseButton)`
   color: ${PALETTE.text.primary};
   font-size: 1rem;
   box-shadow: none;
+  /* Over video, from across the room: a heavier ring than the default keyline. */
+  &:focus-visible {
+    outline: 3px solid white;
+    outline-offset: 3px;
+  }
 `;
 
 /** Render the playback header with an action returning to details. */
@@ -102,7 +111,7 @@ const Button = styled(BaseButton)`
     background: rgba(255, 255, 255, 0.12);
   }
   &:focus-visible {
-    outline: 2px solid white;
+    outline: 3px solid white;
     outline-offset: 3px;
   }
 `;
@@ -319,38 +328,83 @@ export function PlayerControls({
     }
     reveal();
   };
-  const moveControl = (delta: number) => {
-    const controls = Array.from(
-      overlay.current?.querySelectorAll<HTMLElement>(
-        'header button:not(:disabled), input[aria-label="Seek"]:not(:disabled), [data-control-row] button:not(:disabled), [data-control-row] input:not(:disabled)'
-      ) ?? []
-    ).filter(control => !control.closest('[aria-label="Subtitle settings"]'));
-    const index = controls.indexOf(document.activeElement as HTMLElement);
-    controls[(index + delta + controls.length) % controls.length]?.focus();
+  const play = () => {
+    if (videoRef.current?.paused) toggle();
+    else reveal();
+  };
+  const pause = () => {
+    if (videoRef.current && !videoRef.current.paused) toggle();
+    else reveal();
+  };
+  const seekBy = (delta: number) => {
+    seek(position + delta);
+    return true;
+  };
+
+  /**
+   * What a remote moves through, top to bottom: the header (Back), the video itself (the
+   * overlay, where Left and Right seek), the seek bar and the row of buttons.
+   */
+  const controlsIn = (selector: string) =>
+    Array.from(overlay.current?.querySelectorAll<HTMLElement>(selector) ?? []).filter(
+      control => !control.closest('[aria-label="Subtitle settings"]')
+    );
+  const levels = () =>
+    [
+      controlsIn('header button:not(:disabled)'),
+      overlay.current ? [overlay.current] : [],
+      controlsIn('input[aria-label="Seek"]:not(:disabled)'),
+      controlsIn(
+        '[data-control-row] button:not(:disabled), [data-control-row] input:not(:disabled)'
+      ),
+    ].filter(level => level.length);
+  /** Move up (-1) or down (1) a level. Hidden controls can't take the focus: show them first. */
+  const moveLevel = (delta: -1 | 1) => {
+    if (!visible && !paused) {
+      reveal();
+      return true;
+    }
+    const all = levels();
+    const current = all.findIndex(level => level.includes(document.activeElement as HTMLElement));
+    const from = current < 0 ? all.findIndex(level => level[0] === overlay.current) : current;
+    all[Math.max(0, Math.min(all.length - 1, from + delta))]?.[0]?.focus({ preventScroll: true });
     reveal();
     return true;
   };
-  const focusZone = () => {
-    overlay.current?.focus();
+  /** Move left (-1) or right (1) along the focused level; only the button row has several. */
+  const moveAlong = (delta: -1 | 1) => {
+    const active = document.activeElement as HTMLElement;
+    const level = levels().find(candidate => candidate.includes(active));
+    const index = level?.indexOf(active) ?? -1;
+    if (level && index >= 0)
+      level[Math.max(0, Math.min(level.length - 1, index + delta))]?.focus({ preventScroll: true });
     reveal();
     return true;
   };
   const navigationRef = useKeyboardNavigation({
-    onUp: event => (event.target === overlay.current ? moveControl(1) : focusZone()),
-    onDown: event => (event.target === overlay.current ? moveControl(1) : focusZone()),
+    onUp: () => moveLevel(-1),
+    onDown: () => moveLevel(1),
     onConfirm: event => {
       if (event.target !== overlay.current) return false;
       toggle();
       return true;
     },
-    onLeft: event => {
-      if (event.target !== overlay.current) return moveControl(-1);
-      seek(position - 10);
+    onLeft: event =>
+      event.target === overlay.current ? seekBy(-SEEK_STEP_SECONDS) : moveAlong(-1),
+    onRight: event => (event.target === overlay.current ? seekBy(SEEK_STEP_SECONDS) : moveAlong(1)),
+  });
+  // The remote's media keys work wherever the focus is while the player is open.
+  useKeyboard({
+    onPlayPause: () => {
+      toggle();
       return true;
     },
-    onRight: event => {
-      if (event.target !== overlay.current) return moveControl(1);
-      seek(position + 10);
+    onPlay: () => {
+      play();
+      return true;
+    },
+    onPause: () => {
+      pause();
       return true;
     },
   });
@@ -394,10 +448,10 @@ export function PlayerControls({
             onKeyDown={event => {
               if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
                 event.preventDefault();
-                focusZone();
+                moveLevel(event.key === 'ArrowUp' ? -1 : 1);
               } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
                 event.preventDefault();
-                moveControl(event.key === 'ArrowLeft' ? -1 : 1);
+                seekBy(event.key === 'ArrowLeft' ? -SEEK_STEP_SECONDS : SEEK_STEP_SECONDS);
               }
             }}
             aria-valuetext={`${formatTime(position)} of ${formatTime(duration)}`}
@@ -460,11 +514,11 @@ export function PlayerControls({
                 onKeyDown={event => {
                   if (event.key === 'ArrowUp' || event.key === 'ArrowDown') {
                     event.preventDefault();
-                    focusZone();
+                    moveLevel(event.key === 'ArrowUp' ? -1 : 1);
                   }
                   if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
                     event.preventDefault();
-                    moveControl(event.key === 'ArrowLeft' ? -1 : 1);
+                    moveAlong(event.key === 'ArrowLeft' ? -1 : 1);
                   }
                 }}
                 onChange={event => {

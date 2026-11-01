@@ -1,11 +1,11 @@
 import type { ProgressEntry, ShowResponse } from '@miauflix/backend';
 
-import { latestEpisodeProgress } from './episode-rules';
+import { resumeEpisodeProgress } from './episode-rules';
 
-/** Open the most recently watched regular season, or the first regular season. */
+/** Open the season of the episode details resume, or the first regular season. */
 export function firstSeason(show: ShowResponse, progress: ProgressEntry[]): number | undefined {
   const seasons = show.seasons.filter(season => season.seasonNumber > 0);
-  const resume = latestEpisodeProgress(progress, show.mediaId);
+  const resume = resumeEpisodeProgress(progress, show.mediaId);
   if (resume && seasons.some(season => season.seasonNumber === resume.playable.seasonNumber)) {
     return resume.playable.seasonNumber;
   }

@@ -1,4 +1,5 @@
-import { useGetListQuery, usePromoteListMediaMutation } from '@features/media/api/lists.api';
+import { listPageArgs, useListPage } from '@features/home-feed/listPages';
+import { usePromoteListMediaMutation } from '@features/media/api/lists.api';
 import { useQueueBackdropFocusMutation } from '@features/media/api/media.api';
 import type { ListDto, MediaDto, ProgressEntry } from '@miauflix/backend';
 import { skipToken } from '@reduxjs/toolkit/query';
@@ -22,9 +23,11 @@ import styled from 'styled-components';
 
 import { ROW_GAP_VH, ROW_HEIGHT_VH } from '../home-layout';
 import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '../homeNavigation';
+import { useCoalescedValue } from '../hooks/useCoalescedValue';
 import { useSmoothScroller } from '../hooks/useSmoothScroller';
 import { IDLE, imagePreloader, NEARBY } from '../image-preloader';
 import { artworkUrl } from '../media.utils';
+import { progressByMedia, progressKey } from '../progress-lookup';
 import { ROW_PAGE_SIZE, rowPagesFor, rowRenderRadius } from '../row-pages';
 import { MediaCard } from './MediaCard';
 
@@ -32,6 +35,20 @@ import ChevronLeftIcon from '~icons/line-md/chevron-left';
 import ChevronRightIcon from '~icons/line-md/chevron-right';
 
 const VIEWPORT_PROMOTION_DEBOUNCE_MS = 300;
+/**
+ * On the TV, how long the selection must pause before Home hears of the moves after the first:
+ * each report re-renders Home and the hero (~50 ms there), longer than a held key's repeat.
+ */
+const SELECTION_REPORT_MS = 150;
+/**
+ * The row fires its promotion and backdrop requests and never reads their state: selecting none
+ * of it keeps each request's pending and fulfilled updates from re-rendering the row.
+ */
+const IGNORE_RESULT = { selectFromResult: () => NO_RESULT };
+const NO_RESULT = {};
+
+/** How long a row that came into view waits before rendering its cards out of view (TV). */
+const CARD_WINDOW_EXPAND_MS = 400;
 
 /** Fixed height, whatever the row shows, so Home can place rows without measuring them. */
 const RowContainer = styled.section`
@@ -63,15 +80,37 @@ const CarouselViewport = styled.div<{ $contentWidth: number; $peekWidth: number 
 const ScrollContainer = styled.div<{ $gap: number; $peekWidth: number }>`
   display: flex;
   gap: ${({ $gap }) => $gap}px;
-  overflow-x: auto;
+  /* On the TV the track is as wide as its cards and moves on its own layer, clipped by the
+     viewport: no layout or repaint per frame (see SmoothScrollerOptions). */
+  ${builtForTizen ? 'width: max-content; will-change: transform;' : 'overflow-x: auto;'}
   overflow-y: visible;
-  /* Its own layer on the TV, so a scroll doesn't repaint the row on every frame. */
-  ${builtForTizen ? 'will-change: transform;' : ''}
   padding: 0.8vh ${({ $peekWidth }) => `calc(${$peekWidth}px + 0.5vh)`} 1.4vh;
   scrollbar-width: none;
 
   &::-webkit-scrollbar {
     display: none;
+  }
+`;
+
+/**
+ * The TV's focus ring: one per row, over the leading slot, where the row always brings the
+ * selected card, so it never moves. Scaling the cards instead lifts the two cards that change
+ * onto layers of their own while they animate, then repaints the row's track under them, some
+ * 60 ms of raster per move on a TV.
+ */
+const FocusRing = styled.div<{ $peekWidth: number }>`
+  position: absolute;
+  z-index: 1;
+  top: 0.8vh;
+  left: calc(${({ $peekWidth }) => $peekWidth}px + 0.5vh);
+  margin: -3px;
+  border: 3px solid #fff;
+  border-radius: 9px;
+  pointer-events: none;
+  transition: opacity 150ms ease-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 `;
 
@@ -169,6 +208,8 @@ interface CategoryRowProps {
   nearby?: boolean;
   loadIntent?: 'visible' | 'prefetch' | 'dormant';
   visible?: boolean;
+  /** Rendered in full off screen too: Home readies it while idle (see RowLoadState.warm). */
+  warm?: boolean;
   mediaWidth: number;
   mediaPerPage: number;
   gap: number;
@@ -210,7 +251,7 @@ const RowCard = memo(function RowCard({
   media: MediaDto;
   width: number;
   selected: boolean;
-  progress?: ProgressEntry[];
+  progress?: ProgressEntry;
   handlers: MutableRefObject<RowCardHandlers>;
 }) {
   return (
@@ -219,6 +260,7 @@ const RowCard = memo(function RowCard({
       media={media}
       width={width}
       selected={selected}
+      showFocus={!builtForTizen}
       tabIndex={selected ? 0 : -1}
       onFocus={() => handlers.current.activate(index, media)}
       onHover={() => handlers.current.hover(index, media)}
@@ -255,6 +297,7 @@ export const CategoryRow = memo(
       nearby,
       loadIntent,
       visible = false,
+      warm = false,
       mediaPerPage,
       mediaWidth,
       peekWidth,
@@ -270,23 +313,28 @@ export const CategoryRow = memo(
     forwardedRef
   ) {
     const [uncontrolledIndex, setUncontrolledIndex] = useState(initialIndex);
-    const selectedIndex = controlledIndex ?? uncontrolledIndex;
+    // On the TV the row moves its own selection and reports it coalesced (see
+    // SELECTION_REPORT_MS): `ownIndex` leads the reported index until Home catches up.
+    const [ownIndex, setOwnIndex] = useState<number | null>(null);
+    const selectedIndex = ownIndex ?? controlledIndex ?? uncontrolledIndex;
+    const reportedIndex = useCoalescedValue(selectedIndex, builtForTizen ? SELECTION_REPORT_MS : 0);
+    const lastReported = useRef<number | undefined>(undefined);
     const effectiveLoadIntent = loadIntent ?? (nearby ? 'visible' : 'dormant');
     const fetching = !mediaOverride && effectiveLoadIntent !== 'dormant';
 
-    // Data: the selection's page, and the neighbouring page once the selection nears it.
+    // Data: the selection's page, and the neighbouring page once the selection nears it, read
+    // from the cache: homeFeedMiddleware loads the pages of the rows Home wants.
     const pageQuery = (index: number | null) =>
       fetching && index !== null
-        ? {
-            category: category.slug,
-            page: index,
-            limit: ROW_PAGE_SIZE,
-            priority: effectiveLoadIntent,
-          }
+        ? listPageArgs(
+            category.slug,
+            index,
+            effectiveLoadIntent === 'visible' ? 'visible' : 'prefetch'
+          )
         : skipToken;
-    const current = useGetListQuery(pageQuery(Math.floor(selectedIndex / ROW_PAGE_SIZE)));
+    const current = useListPage(pageQuery(Math.floor(selectedIndex / ROW_PAGE_SIZE)));
     const total = mediaOverride?.length ?? current.currentData?.total ?? current.data?.total ?? 0;
-    const adjacent = useGetListQuery(pageQuery(rowPagesFor(selectedIndex, total).neighbour));
+    const adjacent = useListPage(pageQuery(rowPagesFor(selectedIndex, total).neighbour));
 
     const mediaByIndex = useMemo(() => {
       if (mediaOverride) return new Map(mediaOverride.map((media, index) => [index, media]));
@@ -300,11 +348,34 @@ export const CategoryRow = memo(
       return result;
     }, [adjacent.currentData, current.currentData, mediaOverride]);
 
-    const [promoteListMedia] = usePromoteListMediaMutation();
-    const [queueBackdropFocus] = useQueueBackdropFocusMutation();
+    const progressLookup = useMemo(() => progressByMedia(progress), [progress]);
+    // On the TV, a row off screen keeps only the cards in view, and gets the rest shortly after
+    // it comes into view rather than during the move that brings it there.
+    const [expanded, setExpanded] = useState(!builtForTizen || visible);
+    // A row that leaves view (and is not kept warm) goes back to the cards in view, so rows
+    // passed on the way stay small off screen.
+    const wantsExpansion = visible || warm;
+    useEffect(() => {
+      if (!builtForTizen) return;
+      if (!wantsExpansion) {
+        setExpanded(false);
+        return;
+      }
+      if (expanded) return;
+      const timeout = window.setTimeout(() => setExpanded(true), CARD_WINDOW_EXPAND_MS);
+      return () => window.clearTimeout(timeout);
+    }, [expanded, wantsExpansion]);
+    const [promoteListMedia] = usePromoteListMediaMutation(IGNORE_RESULT);
+    const [queueBackdropFocus] = useQueueBackdropFocusMutation(IGNORE_RESULT);
     const step = mediaWidth + gap;
     const cardRefs = useRef(new Map<number, HTMLButtonElement>());
-    const scroller = useSmoothScroller('x');
+    // On the TV the row moves on a transform (see SmoothScrollerOptions), which has no scroll
+    // events: report the cards in view when it settles instead.
+    const scroller = useSmoothScroller('x', {
+      transform: builtForTizen,
+      onRest: builtForTizen ? onInterest : undefined,
+    });
+    const { element: scrollElement, position: scrollPosition } = scroller;
     /** Set by keyboard and arrow moves: focus the selected card once it is rendered. */
     const wantsFocus = useRef(isCurrentRow);
     /** Bumped to scroll the selection into the leading slot; hover selects without scrolling. */
@@ -312,11 +383,53 @@ export const CategoryRow = memo(
 
     const updateSelectedIndex = useCallback(
       (index: number) => {
+        if (builtForTizen) {
+          setOwnIndex(index);
+          return;
+        }
         if (controlledIndex === undefined) setUncontrolledIndex(index);
         onSelectionChange?.(index);
       },
       [controlledIndex, onSelectionChange]
     );
+
+    const reportSelection = useCallback(
+      (index: number) => {
+        if (index === lastReported.current) return;
+        lastReported.current = index;
+        onSelectionChange?.(index);
+      },
+      [onSelectionChange]
+    );
+    useEffect(() => {
+      if (builtForTizen && ownIndex !== null) reportSelection(reportedIndex);
+      // Only a new coalesced index reports.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reportedIndex]);
+    // Leaving the row reports its selection at once: Home reads it to come back to this row.
+    useEffect(() => {
+      if (!active && ownIndex !== null) reportSelection(ownIndex);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [active]);
+    /**
+     * Open a card's details. On the TV the selection is reported at once, not coalesced: Home
+     * stores it now, so Back returns to this card even right after a move.
+     */
+    const openCard = useCallback(
+      (index: number, media: MediaDto) => {
+        if (builtForTizen) {
+          reportSelection(index);
+          onActive(categoryIndex, index, media);
+        }
+        onSelect(media);
+      },
+      [categoryIndex, onActive, onSelect, reportSelection]
+    );
+    // A selection Home sets itself (not one this row reported) replaces the row's own.
+    useEffect(() => {
+      if (controlledIndex !== undefined && controlledIndex !== lastReported.current)
+        setOwnIndex(null);
+    }, [controlledIndex]);
 
     /** Select `index` (bounded once the row's size is known) and scroll it into the leading slot. */
     const moveTo = useCallback(
@@ -335,16 +448,19 @@ export const CategoryRow = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alignRequest, total, step]);
 
+    // The hero follows the reported selection (coalesced on the TV).
     useEffect(() => {
-      const media = mediaByIndex.get(selectedIndex);
-      if (!media) return;
-      if (isCurrentRow) onActive(categoryIndex, selectedIndex, media);
+      const media = mediaByIndex.get(reportedIndex);
+      if (media && isCurrentRow) onActive(categoryIndex, reportedIndex, media);
+    }, [active, categoryIndex, isCurrentRow, mediaByIndex, onActive, reportedIndex]);
+
+    useEffect(() => {
       if (!active || !wantsFocus.current) return;
       const card = cardRefs.current.get(selectedIndex);
       if (!card) return;
       wantsFocus.current = false;
       card.focus({ preventScroll: true });
-    }, [active, alignRequest, categoryIndex, isCurrentRow, mediaByIndex, onActive, selectedIndex]);
+    }, [active, alignRequest, mediaByIndex, selectedIndex]);
 
     const handleAction = useCallback(
       (action: HomeAction): NavigationOutcome => {
@@ -355,10 +471,10 @@ export const CategoryRow = memo(
           mediaByIndex.get(selectedIndex) ?? null
         );
         if (command.nextIndex !== undefined) moveTo(command.nextIndex);
-        if (command.activation) onSelect(command.activation);
+        if (command.activation) openCard(selectedIndex, command.activation);
         return command.outcome;
       },
-      [mediaByIndex, moveTo, onSelect, selectedIndex, total]
+      [mediaByIndex, moveTo, openCard, selectedIndex, total]
     );
 
     /** The browser arrows move like the keyboard, and make this the active row. */
@@ -387,7 +503,7 @@ export const CategoryRow = memo(
           if (!total) return { media: [], center: null, visible: [] };
           const start = Math.max(0, Math.min(selectedIndex - 5, total - 11));
           const length = Math.min(11, total - start);
-          const left = scroller.element.current?.scrollLeft ?? selectedIndex * step;
+          const left = scrollElement.current ? scrollPosition() : selectedIndex * step;
           return {
             media: Array.from({ length }, (_, offset) => mediaByIndex.get(start + offset) ?? null),
             center: selectedIndex - start,
@@ -406,7 +522,8 @@ export const CategoryRow = memo(
         handleAction,
         mediaByIndex,
         moveTo,
-        scroller.element,
+        scrollElement,
+        scrollPosition,
         selectedIndex,
         step,
         total,
@@ -449,6 +566,7 @@ export const CategoryRow = memo(
       void promoteListMedia({ items });
     }, [current.currentData, mediaOverride, promoteListMedia, visible]);
 
+    const promotedViewport = useRef('');
     useEffect(() => {
       if (mediaOverride || !visible || !current.currentData?.results.length) return;
       const timeout = window.setTimeout(() => {
@@ -457,7 +575,18 @@ export const CategoryRow = memo(
         )
           .filter((media): media is MediaDto => Boolean(media))
           .map(media => ({ ...mediaRef(media), tier: 'viewport' as const }));
-        if (items.length) void promoteListMedia({ items });
+        const key = items.map(item => `${item.mediaType}:${item.mediaId}`).join(',');
+        if (!items.length || key === promotedViewport.current) return;
+        promotedViewport.current = key;
+        // A failed promotion is retried the next time these cards are in view.
+        const forget = () => {
+          if (promotedViewport.current === key) promotedViewport.current = '';
+        };
+        try {
+          void promoteListMedia({ items }).unwrap().catch(forget);
+        } catch {
+          forget();
+        }
       }, VIEWPORT_PROMOTION_DEBOUNCE_MS);
       return () => window.clearTimeout(timeout);
     }, [
@@ -538,7 +667,8 @@ export const CategoryRow = memo(
 
     const activateCard = (index: number, media: MediaDto) => {
       updateSelectedIndex(index);
-      onActive(categoryIndex, index, media);
+      // On the TV the reported selection reaches the hero (coalesced, see SELECTION_REPORT_MS).
+      if (!builtForTizen) onActive(categoryIndex, index, media);
     };
     const cardHandlers = useRef<RowCardHandlers>(null!);
     cardHandlers.current = {
@@ -555,7 +685,7 @@ export const CategoryRow = memo(
         // Clicking a card must update the logical selection before opening details;
         // otherwise Back returns to the row's previous keyboard selection.
         activateCard(index, media);
-        onSelect(media);
+        openCard(index, media);
       },
     };
 
@@ -568,13 +698,13 @@ export const CategoryRow = memo(
         </RowContainer>
       );
     }
-    if (!mediaOverride && (current.isLoading || current.isFetching) && !current.currentData) {
+    // Not requested yet counts as loading: the store starts the request after the row mounts.
+    if (!mediaOverride && !current.currentData && !current.isError) {
       return (
         <RowContainer>
           {title}
-          <State>
-            <Spinner text="Loading..." />
-          </State>
+          {/* Off screen on the TV, no spinner: Chromium 69 keeps animating it out of view. */}
+          <State>{builtForTizen && !visible ? null : <Spinner text="Loading..." />}</State>
         </RowContainer>
       );
     }
@@ -595,9 +725,10 @@ export const CategoryRow = memo(
       );
     }
 
-    const radius = rowRenderRadius(mediaPerPage);
-    const first = Math.max(0, selectedIndex - radius);
-    const last = Math.min(total - 1, selectedIndex + radius);
+    const radius = rowRenderRadius(mediaPerPage, ROW_PAGE_SIZE, builtForTizen);
+    // Until it expands, a row renders only the cards in view: the peeking one and a page.
+    const first = Math.max(0, selectedIndex - (expanded ? radius : 1));
+    const last = Math.min(total - 1, selectedIndex + (expanded ? radius : mediaPerPage));
     const canMoveLeft = selectedIndex > 0;
     const canMoveRight = selectedIndex < total - 1;
     // Room after the last card, so it too can scroll into the leading slot.
@@ -629,6 +760,18 @@ export const CategoryRow = memo(
               <ChevronRightIcon aria-hidden="true" />
             </ArrowButton>
           )}
+          {builtForTizen && (
+            <FocusRing
+              $peekWidth={peekWidth}
+              aria-hidden="true"
+              data-testid="category-row-focus-ring"
+              style={{
+                width: `${mediaWidth}px`,
+                height: `${Math.round((mediaWidth * 9) / 16)}px`,
+                opacity: active ? 1 : 0,
+              }}
+            />
+          )}
           <ScrollContainer
             ref={scroller.ref}
             $gap={gap}
@@ -650,7 +793,7 @@ export const CategoryRow = memo(
                   media={media}
                   width={mediaWidth}
                   selected={active && index === selectedIndex}
-                  progress={progress}
+                  progress={progressLookup.get(progressKey(media))}
                   handlers={cardHandlers}
                 />
               );

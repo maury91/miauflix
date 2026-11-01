@@ -73,7 +73,9 @@ export function useHomeNavigation({
 
   const onCardActive = useCallback(
     (categoryIndex: number, _mediaIndex: number, media: MediaDto) => {
-      dispatch(homeNavigationActions.setActiveCategory(categoryIndex));
+      // Every move in a row reports it; an unchanged row would still notify every subscriber.
+      if (browseFocusState.current.activeCategory !== categoryIndex)
+        dispatch(homeNavigationActions.setActiveCategory(categoryIndex));
       onBrowseSelection(media);
     },
     [dispatch, onBrowseSelection]
@@ -263,6 +265,11 @@ export function useHomeNavigation({
       if (activeRegion === 'sidebar') return onSidebarAction(action);
       // The notifications panel handles its own keys.
       if (activeRegion === 'notifications') return { type: 'ignored' };
+      // Back (the remote's Return, or Esc) while browsing the rows opens the sidebar.
+      if (action === 'back') {
+        dispatch(homeNavigationActions.setActiveRegion('sidebar'));
+        return { type: 'handled' };
+      }
       const outcome = rowRefs.current.get(activeCategory)?.handleAction(action) ?? {
         type: 'ignored' as const,
       };

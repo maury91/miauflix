@@ -102,6 +102,12 @@ describe('media mappers', () => {
     expect(mediaFromProgress(state, entry)).toMatchObject({ _type: type, mediaId });
   });
 
+  it('returns the same card while the cached response is unchanged', async () => {
+    const state = (await storeWith({ movie })).getState();
+    const entry = progress({ kind: 'movie', mediaId: 101 });
+    expect(mediaFromProgress(state, entry)).toBe(mediaFromProgress(state, { ...entry }));
+  });
+
   it('returns null when the title is not cached yet', async () => {
     const state = (await storeWith({})).getState();
     expect(mediaFromProgress(state, progress({ kind: 'movie', mediaId: 101 }))).toBeNull();

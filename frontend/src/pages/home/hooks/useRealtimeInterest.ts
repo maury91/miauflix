@@ -9,6 +9,9 @@ import type { CategoryRowHandle } from '../components/CategoryRow';
 import { buildHomeRealtimeInterest } from '../homeInterest';
 import type { HomeView } from './useMediaRoute';
 
+/** Quiet time after the last scroll event before the cards in view are published again. */
+const SCROLL_SETTLE_MS = 150;
+
 const toRealtimeMedia = (media: MediaDto | null): RealtimeMediaRef | null =>
   media ? { kind: media._type === 'movie' ? 'movie' : 'show', mediaId: media.mediaId } : null;
 
@@ -16,7 +19,10 @@ const toRealtimeMedia = (media: MediaDto | null): RealtimeMediaRef | null =>
  * Publish what the viewer is looking at (the focused title and the cards around it in the
  * mounted rows) over realtime, so the backend prepares what is likely to be opened next.
  *
- * @returns `publish`, for rows to call when their window moves; it also runs on every change.
+ * Nothing is sent while the interest is unchanged.
+ *
+ * @returns `publishAfterScroll`, for rows to call as they scroll: it publishes once the
+ *   scrolling settles, not on every frame. Changes to the inputs publish at once.
  */
 export function useRealtimeInterest({
   rowRefs,
@@ -25,6 +31,7 @@ export function useRealtimeInterest({
   selectedMedia,
   subtitleLanguage,
   view,
+  sessionId,
 }: {
   rowRefs: MutableRefObject<Map<number, CategoryRowHandle>>;
   rowCount: number;
@@ -32,9 +39,13 @@ export function useRealtimeInterest({
   selectedMedia: MediaDto | null;
   subtitleLanguage: string;
   view: HomeView;
+  /** A new session opens a new socket, which needs the interest even if it is unchanged. */
+  sessionId: string | null;
 }) {
   const dispatch = useDispatch<AppDispatch>();
   const revision = useRef(0);
+  const lastPublished = useRef('');
+  const scrollTimer = useRef<number | undefined>(undefined);
 
   const publish = useCallback(() => {
     const rowWindows = Array.from({ length: rowCount }, (_, rowIndex) => {
@@ -54,20 +65,35 @@ export function useRealtimeInterest({
       selectedMedia: toRealtimeMedia(selectedMedia),
       view,
     });
+    const focus = { ...interest.focus, subtitleLanguage };
+    const key = JSON.stringify([sessionId, focus, interest.map]);
+    if (key === lastPublished.current) return;
+    lastPublished.current = key;
     const navigationRevision = ++revision.current;
-    dispatch(
-      realtimeRuntimeActions.publishFocusRequested({
-        navigationRevision,
-        ...interest.focus,
-        subtitleLanguage,
-      })
-    );
+    dispatch(realtimeRuntimeActions.publishFocusRequested({ navigationRevision, ...focus }));
     dispatch(realtimeRuntimeActions.publishMapRequested({ navigationRevision, ...interest.map }));
-  }, [activeCategory, dispatch, rowCount, rowRefs, selectedMedia, subtitleLanguage, view]);
+  }, [
+    activeCategory,
+    dispatch,
+    rowCount,
+    rowRefs,
+    selectedMedia,
+    sessionId,
+    subtitleLanguage,
+    view,
+  ]);
 
   useEffect(() => {
     publish();
   }, [publish]);
 
-  return publish;
+  const latestPublish = useRef(publish);
+  latestPublish.current = publish;
+  const publishAfterScroll = useCallback(() => {
+    window.clearTimeout(scrollTimer.current);
+    scrollTimer.current = window.setTimeout(() => latestPublish.current(), SCROLL_SETTLE_MS);
+  }, []);
+  useEffect(() => () => window.clearTimeout(scrollTimer.current), []);
+
+  return publishAfterScroll;
 }

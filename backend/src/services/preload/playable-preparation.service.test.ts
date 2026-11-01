@@ -241,6 +241,78 @@ describe('PlayablePreparationService', () => {
     expect(prepared.warmup).toEqual({ state: 'warming' });
   });
 
+  describe('with a bitrate cap', () => {
+    const GB = 2 ** 30;
+    /** A 100-minute movie: 1 GB is about 1.4 Mbit/s. */
+    const setupCapped = (sources: object[], downloadedIds: number[] = []) => {
+      const mediaService = {
+        getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7, runtime: 100 } }),
+      };
+      const sourceService = {
+        requestMovieVerification: jest.fn(),
+        getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue(sources),
+        processSourceMetadata: jest.fn(),
+      };
+      const storageService = {
+        getStorageBySource: jest.fn(async (id: number) =>
+          downloadedIds.includes(id) ? { videoCompletedAt: new Date(), downloaded: 10000 } : null
+        ),
+      };
+      const warmup = { warm: jest.fn().mockResolvedValue({ state: 'ready' }) };
+      const service = new PlayablePreparationService(
+        mediaService as never,
+        sourceService as never,
+        warmup as never,
+        storageService as never,
+        movieTargets as never
+      );
+      const prepare = (through: 'sources' | 'warm') =>
+        service.prepare(
+          { kind: 'movie', mediaId: 42 },
+          {
+            through,
+            preferences: { quality: 'auto', allowHevc: true, maxBitrateKbps: 8_000 },
+            workClass: 'interactive',
+          }
+        );
+      return { prepare };
+    };
+    const source = (id: number, sizeGb: number, streamingScore: number) => ({
+      id,
+      quality: Quality['4K'],
+      size: sizeGb * GB,
+      streamingScore,
+      file: Buffer.from(`torrent ${id}`),
+    });
+
+    it('passes over a finished download above the cap for a leaner source', async () => {
+      const remux = source(1, 24, 7_000);
+      const heavy = source(2, 17, 10_000);
+      const lean = source(3, 4.5, 9_000);
+      const { prepare } = setupCapped([remux, heavy, lean], [remux.id]);
+
+      for (const through of ['sources', 'warm'] as const) {
+        expect((await prepare(through)).source).toBe(lean);
+      }
+    });
+
+    it('keeps a finished download that fits the cap', async () => {
+      const downloaded = source(1, 4, 5_000);
+      const fresh = source(2, 4.5, 9_000);
+      const { prepare } = setupCapped([fresh, downloaded], [downloaded.id]);
+
+      expect((await prepare('warm')).source).toBe(downloaded);
+    });
+
+    it('falls back to the leanest source when none fits', async () => {
+      const heavier = source(1, 24, 10_000);
+      const lighter = source(2, 17, 5_000);
+      const { prepare } = setupCapped([heavier, lighter]);
+
+      expect((await prepare('warm')).source).toBe(lighter);
+    });
+  });
+
   it('prefers an existing metadata-backed source over an earlier database row', async () => {
     const pending = {
       id: 7,
