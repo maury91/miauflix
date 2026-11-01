@@ -1,3 +1,8 @@
+// A test torrent file is its file list as JSON
+jest.mock('parse-torrent', () =>
+  jest.fn(async (file: Buffer) => ({ files: JSON.parse(file.toString()) }))
+);
+
 import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { PlayableRef } from '@routes/playable.types';
@@ -812,6 +817,71 @@ describe('PlayablePreparationService', () => {
     expect(prepared).toMatchObject({ source, target: null, state: 'cold' });
     expect(prepared.warmup.state).toBe('failed');
     expect(warmup.warm).not.toHaveBeenCalled();
+  });
+
+  describe('episodes under a bitrate cap', () => {
+    const GB = 1024 ** 3;
+    const torrent = (files: Array<{ path: string; length: number }>) =>
+      Buffer.from(JSON.stringify(files));
+    // A 2160p episode release: 6 GB for one 45-minute episode, about 19 Mbit/s
+    const heavy = {
+      id: 41,
+      quality: Quality['4K'],
+      streamingScore: 90,
+      size: 6 * GB,
+      hasVideo: true,
+      file: torrent([{ path: 'Show.S01E02.2160p.mkv', length: 6 * GB }]),
+    };
+    // A season pack: 10 GB in all, but its episode file is 1.2 GB, about 3.8 Mbit/s
+    const pack = {
+      id: 42,
+      quality: Quality.FHD,
+      streamingScore: 50,
+      size: 10 * GB,
+      hasVideo: true,
+      file: torrent([
+        { path: 'Show S01/Show.S01E01.mkv', length: 1.2 * GB },
+        { path: 'Show S01/Show.S01E02.mkv', length: 1.2 * GB },
+      ]),
+    };
+    const setup = (episodeRuntime: number | null) => {
+      const service = new PlayablePreparationService(
+        {
+          getTVShowByMediaId: jest.fn().mockResolvedValue({
+            local: { id: 3, mediaId: 900, name: 'Show', imdbId: 'tt1', episodeRuntime },
+          }),
+          markShowAsWatching: jest.fn(),
+          getSeason: jest
+            .fn()
+            .mockResolvedValue({ episodes: [{ id: 81, episodeNumber: 2, airDate: null }] }),
+        } as never,
+        {
+          getSourcesForEpisodeWithOnDemandSearch: jest.fn().mockResolvedValue([
+            { source: heavy, videoFilePath: 'Show.S01E02.2160p.mkv', matchKind: 'single' },
+            { source: pack, videoFilePath: 'Show S01/Show.S01E02.mkv', matchKind: 'single' },
+          ]),
+        } as never
+      );
+      return (maxBitrateKbps?: number) =>
+        service.prepare(
+          { kind: 'episode', showMediaId: 900, seasonNumber: 1, episodeNumber: 2 },
+          {
+            through: 'sources',
+            preferences: { quality: 'auto', allowHevc: true, maxBitrateKbps },
+            workClass: 'interactive',
+          }
+        );
+    };
+
+    it('ranks a season pack by its episode file, against the show episode length', async () => {
+      const prepare = setup(45);
+      await expect(prepare(8_000)).resolves.toMatchObject({ source: pack });
+      await expect(prepare()).resolves.toMatchObject({ source: heavy });
+    });
+
+    it('keeps the order when the show episode length is unknown', async () => {
+      await expect(setup(null)(8_000)).resolves.toMatchObject({ source: heavy });
+    });
   });
 
   it('keeps the episode source it tried when no other candidate remains', async () => {

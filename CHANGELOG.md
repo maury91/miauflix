@@ -17,7 +17,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 ### Improvements
 
 - Much smoother Home on the TV: faster moves along and between rows, rows ready before you reach them
-- On slow connections (and on the TV) Miauflix picks lighter sources, so playback starts instead of freezing
+- On slow connections (and on the TV) Miauflix picks lighter sources for movies and episodes, so playback starts instead of freezing
 - Sharper backdrops on the TV's Home: newer TVs get larger ones, and resting on a title swaps in a sharper backdrop
 - TV remote: Back opens the sidebar on Home, and the player's controls and Play/Pause keys work
 - Empty rows (like an empty watchlist) are hidden

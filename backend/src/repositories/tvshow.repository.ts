@@ -13,6 +13,12 @@ import type { SeasonDetail, TVShowDetail } from '@services/catalog/catalog.types
  * Full catalog data lives in the media-catalog service; this maintains only the
  * mirror needed for local SQL (watching flags, playback joins, source search).
  */
+/** The shortest of the catalog's episode lengths (minutes), so bitrate estimates err high. */
+function typicalEpisodeRuntime(runtimes: readonly number[] | undefined): number | null {
+  const known = (runtimes ?? []).filter(minutes => minutes > 0);
+  return known.length ? Math.min(...known) : null;
+}
+
 export class TVShowRepository {
   private readonly tvShowRepository: Repository<TVShow>;
   private readonly seasonRepository: Repository<Season>;
@@ -72,6 +78,7 @@ export class TVShowRepository {
         backdrop: detail.backdrop,
         imdbId: detail.imdbId ?? '',
         status: detail.status,
+        episodeRuntime: typicalEpisodeRuntime(detail.episodeRunTime),
         popularity: detail.popularity,
         rating: detail.rating,
       };
@@ -114,6 +121,7 @@ export class TVShowRepository {
               backdrop: detail.backdrop,
               imdbId: detail.imdbId ?? '',
               status: detail.status,
+              episodeRuntime: typicalEpisodeRuntime(detail.episodeRunTime),
               popularity: detail.popularity,
               rating: detail.rating,
             }))
@@ -127,6 +135,7 @@ export class TVShowRepository {
               'backdrop',
               'imdbId',
               'status',
+              'episodeRuntime',
               'popularity',
               'rating',
             ],
