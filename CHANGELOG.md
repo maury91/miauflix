@@ -81,6 +81,7 @@
 
 ### Documentation
 
+- `docs/development/tv-performance-plan.md` plans the TV performance work for every component, starting with Home movement. Measured on the TV, four moves along a row cause 461 store notifications: 351 `artwork/received` dispatches (one per title, sent again even when unchanged, because the whole `mediaApi` slice feeds Continue watching) and two realtime interest dispatches per scroll frame. The plan orders the fixes and how to measure each one
 - `docs/architecture/service-contract-v2.md` describes the new backend ↔ service contract (types-only contracts, one WebSocket per service for calls, streams and events, signed URLs for byte streams, services that run in-process or remote on Bun or Node, and which data the backend keeps once streaming and sources become services), and what is left to move
 
 ### Technical debt
