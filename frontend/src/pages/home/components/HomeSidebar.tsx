@@ -5,7 +5,7 @@ import {
   RailItem as Item,
   RailNavigation as Navigation,
 } from '@shared/ui/rail/rail.styles';
-import { type FC, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import type { HomeAction, NavigationOutcome } from '../homeNavigation';
@@ -51,10 +51,15 @@ interface HomeSidebarProps {
   /** Keep the rail expanded (e.g. while the notifications panel beside it is in use). */
   expanded?: boolean;
   unreadCount: number;
+  /** Whether there is anything, unread or read, to show in the notifications panel. */
+  hasNotifications: boolean;
 }
 
-/** Render the primary Home actions and restore the selected button when the rail activates. */
-export const HomeSidebar: FC<HomeSidebarProps> = ({
+/**
+ * Render the primary Home actions and restore the selected button when the rail activates.
+ * Memoized: Home re-renders on every move, and the rail does not change with it.
+ */
+export const HomeSidebar = memo(function HomeSidebar({
   active,
   showSettings,
   onAction,
@@ -65,7 +70,8 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
   onSelectedChange,
   expanded = false,
   unreadCount,
-}) => {
+  hasNotifications,
+}: HomeSidebarProps) {
   const open = active || expanded;
   const [selected, setSelected] = useState<SidebarItem>('search');
   const notificationsButtonRef = useRef<HTMLButtonElement>(null);
@@ -126,8 +132,10 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
       return true;
     },
     onRight: () => {
-      if (selected === 'notifications') onEnterNotifications();
-      else onAction('right');
+      // With no notifications the panel has nothing to move to, so Right stays on the bell.
+      if (selected === 'notifications') {
+        if (hasNotifications) onEnterNotifications();
+      } else onAction('right');
       return true;
     },
     onConfirm: () => {
@@ -215,4 +223,4 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
       </Navigation>
     </Rail>
   );
-};
+});

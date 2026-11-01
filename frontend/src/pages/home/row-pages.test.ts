@@ -28,5 +28,6 @@ describe('rowRenderRadius', () => {
   it('renders a few cards past the viewport, capped at half a page', () => {
     expect(rowRenderRadius(4)).toBe(8);
     expect(rowRenderRadius(9)).toBe(10);
+    expect(rowRenderRadius(4, 20, true)).toBe(6);
   });
 });

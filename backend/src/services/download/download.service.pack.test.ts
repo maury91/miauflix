@@ -168,8 +168,10 @@ describe('DownloadService with a shared season pack', () => {
       );
     expect(storageService.updateEncryptedLayout).not.toHaveBeenCalled();
     expect(add).not.toHaveBeenCalled();
-    // Each stream releases playback after closing its reader, just after the body ends.
-    for (let tick = 0; tick < 20 && service.hasActivePlayback(); tick += 1)
+    // Each stream releases playback after closing its reader's files, just after the body ends.
+    // Closing is real file I/O, so it takes as many event-loop turns as the machine needs.
+    const deadline = Date.now() + 2_000;
+    while (service.hasActivePlayback() && Date.now() < deadline)
       await new Promise(resolve => setImmediate(resolve));
     expect(service.hasActivePlayback()).toBe(false);
   });

@@ -92,6 +92,7 @@ vi.mock('@features/integrations/api/trakt.api', () => ({
 vi.mock('@features/media/api/lists.api', () => ({
   useGetListsInfiniteQuery,
 }));
+vi.mock('@features/home-feed/listPages', () => ({ selectEmptyListSlugs: () => emptyRows.value }));
 vi.mock('@features/media/api/media.api', () => ({
   useGetMovieQuery,
   useGetShowQuery,
@@ -129,11 +130,16 @@ vi.mock('@store/slices/auth', () => ({
   setSession: mockedSetSession,
 }));
 vi.mock('@store/store', () => ({}));
-vi.mock('react-redux', async () => {
+vi.mock('react-redux', async importOriginal => {
   const React = await import('react');
+  const { shallowEqual } = await importOriginal<typeof import('react-redux')>();
   return {
+    shallowEqual,
     useDispatch: () => dispatch,
-    useSelector: (selector: (state: unknown) => unknown) => {
+    useSelector: (
+      selector: (state: unknown) => unknown,
+      equalityFn: (left: unknown, right: unknown) => boolean = Object.is
+    ) => {
       const selectorRef = React.useRef(selector);
       const snapshot = React.useRef({ initialized: false, value: undefined as unknown });
       selectorRef.current = selector;
@@ -145,7 +151,7 @@ vi.mock('react-redux', async () => {
             realtime: realtimeState,
           })
         );
-        if (!snapshot.current.initialized || !Object.is(snapshot.current.value, nextValue)) {
+        if (!snapshot.current.initialized || !equalityFn(snapshot.current.value, nextValue)) {
           snapshot.current = {
             initialized: true,
             value: nextValue,
@@ -169,6 +175,7 @@ vi.mock('./hooks/useMediaBoxSizes', () => ({
     rowHeight: 300,
   }),
 }));
+const emptyRows = vi.hoisted(() => ({ value: new Set<string>() as ReadonlySet<string> }));
 vi.mock('./components/CategoryRow', async () => {
   const React = await import('react');
   return {
@@ -232,6 +239,7 @@ vi.mock('./components/CategoryRow', async () => {
           {
             type: 'button',
             'data-testid': `card-${props.categoryIndex}`,
+            'data-slug': props.category.slug,
             'data-active': props.active,
             onMouseEnter: () => {
               props.onSelectionChange(mediaIndex);
@@ -360,6 +368,7 @@ describe('HomePage focus transitions', () => {
       return action;
     });
     homeNavigationState.value = { ...initialHomeNavigationState, selectedByCategory: {} };
+    emptyRows.value = new Set();
     homeNavigationState.revision = 0;
     homeNavigationState.listeners.clear();
     realtimeState.ready = false;
@@ -729,7 +738,9 @@ describe('HomePage focus transitions', () => {
     const progressSelector = vi
       .spyOn(progressApi.endpoints.getProgress, 'select')
       .mockReturnValue((() => ({ data: { progress } })) as never);
-    selectMovie.mockReturnValue(() => ({ data: { id: 1, mediaId: 100, title: 'Saved movie' } }));
+    // The query cache keeps a response object until its data changes.
+    const savedMovie = { id: 1, mediaId: 100, title: 'Saved movie' };
+    selectMovie.mockReturnValue(() => ({ data: savedMovie }));
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     try {
       // Only the rows around the focused one are mounted.
@@ -843,6 +854,17 @@ describe('HomePage focus transitions', () => {
     fireEvent.keyDown(search, { key: 'Escape' });
     expect(screen.queryByText('Search', { selector: 'span' })).not.toBeInTheDocument();
     expect(row.focusIndex).toHaveBeenCalledWith(0);
+  });
+
+  it.each(['Escape', 'GoBack'])('opens the sidebar on %s while browsing the rows', key => {
+    const row = makeHandle(true, false);
+    rowHandles.set(0, row);
+    render(<HomePage />);
+
+    fireEvent.keyDown(screen.getByRole('main'), { key });
+    expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
+    expect(screen.getByText('Search', { selector: 'span' })).toBeInTheDocument();
+    expect(row.handleAction).not.toHaveBeenCalledWith('back');
   });
 
   it('shows the preparation result for the selected movie', () => {
@@ -1178,5 +1200,63 @@ describe('HomePage focus transitions', () => {
 
     expect(screen.getByTestId('player').dataset.nextEpisode).toBe('');
     expect(useGetSeasonQuery).not.toHaveBeenCalledWith({ showId: 2, season: 2 });
+  });
+
+  it('drops rows whose list loaded empty', () => {
+    emptyRows.value = new Set(['second']);
+    render(<HomePage />);
+    const slugs = screen.getAllByTestId(/^card-/).map(button => button.dataset.slug);
+    expect(slugs).not.toContain('second');
+    expect(slugs.slice(0, 2)).toEqual(['first', 'third']);
+  });
+
+  it('keeps empty lists wanted while Home is mounted, so their page stays cached', () => {
+    emptyRows.value = new Set(['second']);
+    const lastWanted = () =>
+      dispatch.mock.calls
+        .map(([action]) => action as { type: string; payload?: Record<string, string> })
+        .filter(action => action.type === 'homeFeed/rowsWanted')
+        .at(-1)?.payload;
+
+    const { rerender, unmount } = render(<HomePage />);
+    expect(lastWanted()).toMatchObject({ second: 'prefetch' });
+
+    rerender(<HomePage route={{ type: 'movieDetails', mediaId: 42 }} />);
+    expect(lastWanted()).toEqual({ second: 'prefetch' });
+
+    unmount();
+    expect(lastWanted()).toEqual({});
+  });
+
+  it('keeps the focused row when a row above it drops out', () => {
+    homeNavigationState.value = homeNavigationSlice.reducer(
+      homeNavigationState.value,
+      homeNavigationSlice.actions.setActiveCategory(2)
+    );
+    render(<HomePage />);
+    // The first list turns out empty once Home shows: every row below it moves up one.
+    act(() => {
+      emptyRows.value = new Set(['first']);
+      homeNavigationState.listeners.forEach(listener => listener());
+    });
+    expect(homeNavigationState.value.activeCategory).toBe(1);
+    const active = screen.getAllByTestId(/^card-/).find(button => button.dataset.active === 'true');
+    expect(active?.dataset.slug).toBe('third');
+  });
+
+  it('moves to the row above when the focused last row drops out', () => {
+    homeNavigationState.value = homeNavigationSlice.reducer(
+      homeNavigationState.value,
+      homeNavigationSlice.actions.setActiveCategory(6)
+    );
+    render(<HomePage />);
+    // The focused list, the last one, turns out empty.
+    act(() => {
+      emptyRows.value = new Set(['seventh']);
+      homeNavigationState.listeners.forEach(listener => listener());
+    });
+    expect(homeNavigationState.value.activeCategory).toBe(5);
+    const active = screen.getAllByTestId(/^card-/).find(button => button.dataset.active === 'true');
+    expect(active?.dataset.slug).toBe('sixth');
   });
 });

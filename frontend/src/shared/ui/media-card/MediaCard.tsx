@@ -12,6 +12,8 @@ export type MediaCardProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'chil
   /** Percentage watched, from 0 to 100. Null omits the track. */
   progress?: number | null;
   focused?: boolean;
+  /** Something else draws the focus (a row's ring): no outline or scale on focus. */
+  externalFocus?: boolean;
   hovered?: boolean;
   width?: number;
   /** Optional contrast gradient over the backdrop. */
@@ -27,6 +29,7 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
     subtitle,
     progress,
     focused = false,
+    externalFocus = false,
     hovered = false,
     width = 320,
     overlay = true,
@@ -52,7 +55,8 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
       // (rows position cards by it, and `18em` can be off by a fraction of a pixel) and the font
       // size every inner length scales with
       style={{ ...style, width: `${width}px`, fontSize: `${width / styles.CARD_WIDTH_EM}px` }}
-      data-focused={focused || undefined}
+      data-focused={(!externalFocus && focused) || undefined}
+      data-external-focus={externalFocus || undefined}
       data-hovered={hovered || undefined}
       aria-label={buttonProps['aria-label'] ?? (subtitle ? `${title} · ${subtitle}` : title)}
     >

@@ -42,16 +42,32 @@ const heroCases: HeroCase[] = [
   { listSlug: 'trakt-movies-trending', rowName: 'Trending Movies', mediaId: 299534 },
 ];
 
+/**
+ * Each list's results so far, from every page fetched: Home loads a list's next page as soon as
+ * it knows the size, so the last response is not the first page.
+ */
 function captureListResponses(page: Page): Map<string, MediaListResponse> {
   const listBodies = new Map<string, MediaListResponse>();
+  const pagesBySlug = new Map<string, Map<number, MediaListResponse>>();
   page.on('response', response => {
     const url = new URL(response.url());
     if (response.request().method() !== 'GET' || response.status() !== 200) return;
     const match = /^\/api\/list\/([^/]+)$/.exec(url.pathname);
     if (!match) return;
+    const slug = decodeURIComponent(match[1]);
+    const pageNumber = Number(url.searchParams.get('page') ?? 0);
     void response
       .json()
-      .then(body => listBodies.set(decodeURIComponent(match[1]), body as MediaListResponse))
+      .then(body => {
+        const pages = pagesBySlug.get(slug) ?? new Map<number, MediaListResponse>();
+        pages.set(pageNumber, body as MediaListResponse);
+        pagesBySlug.set(slug, pages);
+        // Only whole pages from the first: an index into them is a position in the row.
+        const results: NonNullable<MediaListResponse['results']> = [];
+        for (let index = 0; pages.has(index); index++)
+          results.push(...(pages.get(index)!.results ?? []));
+        if (pages.has(0)) listBodies.set(slug, { results });
+      })
       .catch(() => undefined);
   });
   return listBodies;

@@ -1,4 +1,5 @@
-import { useGetListQuery, usePromoteListMediaMutation } from '@features/media/api/lists.api';
+import { useListPage } from '@features/home-feed/listPages';
+import { usePromoteListMediaMutation } from '@features/media/api/lists.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { skipToken } from '@reduxjs/toolkit/query';
 import { artworkSlice } from '@store/slices/artwork';
@@ -41,7 +42,7 @@ type Story = StoryObj<typeof meta>;
 const category = homeCategories[0];
 
 function setupListMock(state: 'loaded' | 'loading' | 'error' | 'empty' | 'dormant') {
-  const getList = mocked(useGetListQuery);
+  const getList = mocked(useListPage);
   const promote = mocked(usePromoteListMediaMutation);
   const promoteSpy = fn();
 

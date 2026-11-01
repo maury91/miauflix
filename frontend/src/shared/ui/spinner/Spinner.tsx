@@ -1,6 +1,9 @@
 import type { FC } from 'react';
 import styled from 'styled-components';
 
+import { builtForTizen } from '../../config/constants';
+import { LoadingIndicator } from '../loading-indicator/LoadingIndicator';
+
 import LineMdLoadingTwotoneLoop from '~icons/line-md/loading-twotone-loop';
 
 const SpinnerContainer = styled.div`
@@ -37,7 +40,14 @@ export interface SpinnerProps {
 export const Spinner: FC<SpinnerProps> = ({ text, size = 20 }) => {
   return (
     <SpinnerContainer role="status" aria-label={text ? undefined : 'Loading'}>
-      <SpinnerIcon width={size} height={size} aria-hidden="true" />
+      {builtForTizen ? (
+        // Chromium 69 animates SVG (this icon's SMIL loop and its CSS spin) on the main thread,
+        // a full frame on every display refresh, even out of view; it rotates an HTML element
+        // on the compositor.
+        <LoadingIndicator style={{ fontSize: `${size}px` }} />
+      ) : (
+        <SpinnerIcon width={size} height={size} aria-hidden="true" />
+      )}
       {text && <span>{text}</span>}
     </SpinnerContainer>
   );

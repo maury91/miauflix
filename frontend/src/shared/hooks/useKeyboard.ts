@@ -2,7 +2,17 @@ import type { MutableRefObject } from 'react';
 import { useEffect, useRef } from 'react';
 
 /** What a key means to the app, whether it came from a keyboard or a TV remote. */
-export type KeyboardAction = 'left' | 'right' | 'up' | 'down' | 'confirm' | 'back' | 'search';
+export type KeyboardAction =
+  | 'left'
+  | 'right'
+  | 'up'
+  | 'down'
+  | 'confirm'
+  | 'back'
+  | 'search'
+  | 'playPause'
+  | 'play'
+  | 'pause';
 
 export type KeyboardHandler = (event: KeyboardEvent) => boolean;
 
@@ -15,6 +25,10 @@ export type KeyboardHandlers = {
   onBack?: KeyboardHandler;
   /** The remote's Search key. */
   onSearch?: KeyboardHandler;
+  /** The media keys: Play/Pause, Play and Pause. */
+  onPlayPause?: KeyboardHandler;
+  onPlay?: KeyboardHandler;
+  onPause?: KeyboardHandler;
 };
 
 export type KeyboardOptions = KeyboardHandlers & {
@@ -37,15 +51,21 @@ const HANDLERS: Record<KeyboardAction, keyof KeyboardHandlers> = {
   confirm: 'onConfirm',
   back: 'onBack',
   search: 'onSearch',
+  playPause: 'onPlayPause',
+  play: 'onPlay',
+  pause: 'onPause',
 };
 
 /**
- * TV remote keys that some platforms report as `Unidentified`, by key code: Tizen Return and
- * Search (registered at Tizen startup), and webOS Back.
+ * TV remote keys that some platforms report as `Unidentified`, by key code: Tizen Return,
+ * Search and the media keys (registered at Tizen startup), and webOS Back.
  */
 const TV_KEY_CODES: Readonly<Record<number, KeyboardAction>> = {
   10009: 'back',
   10225: 'search',
+  10252: 'playPause',
+  415: 'play',
+  19: 'pause',
   461: 'back',
 };
 
@@ -72,6 +92,12 @@ export function getKeyAction(key: string): KeyboardAction | null {
     case 'Search':
     case 'BrowserSearch':
       return 'search';
+    case 'MediaPlayPause':
+      return 'playPause';
+    case 'MediaPlay':
+      return 'play';
+    case 'MediaPause':
+      return 'pause';
     default:
       return null;
   }
@@ -99,7 +125,8 @@ function isNativeEditingTarget(target: EventTarget | null): boolean {
 /**
  * Route keys through enabled scopes, prioritizing exclusive scopes and nested elements.
  * Skip prevented/composing events and Alt/Ctrl/Meta combinations. Editing targets keep their
- * typing keys; remote-only actions (Search, and back other than Backspace) still reach the app.
+ * typing keys; remote-only actions (Search, the media keys, and back other than Backspace) still
+ * reach the app.
  * The first true result consumes the event.
  */
 function dispatch(event: KeyboardEvent): void {
@@ -108,7 +135,12 @@ function dispatch(event: KeyboardEvent): void {
 
   const action = getKeyboardAction(event);
   if (!action) return;
-  const remoteOnly = action === 'search' || (action === 'back' && event.key !== 'Backspace');
+  const remoteOnly =
+    action === 'search' ||
+    action === 'playPause' ||
+    action === 'play' ||
+    action === 'pause' ||
+    (action === 'back' && event.key !== 'Backspace');
   if (isNativeEditingTarget(event.target) && !remoteOnly) return;
 
   const target = event.target instanceof Node ? event.target : document.activeElement;
