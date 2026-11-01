@@ -1,9 +1,10 @@
 name: Release
 
-# Run from the Actions tab on main. Moves the changelog's Unreleased section under the new
-# version, bumps the root package.json, commits and tags `v<version>` on main, publishes the
-# GitHub release (marked latest unless it is a prerelease) and runs the CI Pipeline on the tag,
-# which tests it and publishes the images tagged with the version and `latest`.
+# Run from the Actions tab on main. Moves the Unreleased section of both changelogs under the
+# new version, bumps the root package.json, commits and tags `v<version>` on main, publishes the
+# GitHub release with the short CHANGELOG.md section as its notes (marked latest unless it is a
+# prerelease) and runs the CI Pipeline on the tag, which tests it and publishes the images
+# tagged with the version and `latest`.
 #
 # Pushes made with the default GITHUB_TOKEN start no other workflow, so the CI Pipeline is
 # started explicitly on the tag. An optional `RELEASE_TOKEN` secret (a token that can push to
@@ -101,6 +102,10 @@ jobs:
             fs.writeFileSync("CHANGELOG.md", changelog.replace(unreleased, heading));
             fs.writeFileSync(`${process.env.RUNNER_TEMP}/release-notes.md`, notes + "\n");
 
+            // The detailed changelog gets the same heading; it is never the release notes.
+            const detailed = fs.readFileSync("DETAILED_CHANGELOG.md", "utf8");
+            fs.writeFileSync("DETAILED_CHANGELOG.md", detailed.replace(unreleased, heading));
+
             // The root version is the app version (the version badge and the images read it).
             const pkg = JSON.parse(fs.readFileSync("package.json", "utf8"));
             pkg.version = VERSION;
@@ -119,7 +124,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add CHANGELOG.md package.json package-lock.json
+          git add CHANGELOG.md DETAILED_CHANGELOG.md package.json package-lock.json
           git commit -m "chore(release): $TAG"
           git tag -a "$TAG" -m "$TAG $TITLE"
           git push --atomic origin HEAD:main "refs/tags/$TAG"
