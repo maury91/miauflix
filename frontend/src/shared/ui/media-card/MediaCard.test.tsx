@@ -21,6 +21,13 @@ const setupTest = (props: Partial<React.ComponentProps<typeof MediaCard>> = {}) 
 };
 
 describe('MediaCard', () => {
+  it('leaves the focus treatment to whatever draws it externally', () => {
+    setupTest({ focused: true, externalFocus: true });
+    const card = screen.getByRole('button', { name: 'Orbital' });
+    expect(card).not.toHaveAttribute('data-focused');
+    expect(card).toHaveAttribute('data-external-focus');
+  });
+
   it('renders separate decorative images, an accessible title and a visible episode label', () => {
     const { container, ref, onClick } = setupTest({ subtitle: 'S2 E6' });
     const card = screen.getByRole('button', { name: 'Orbital · S2 E6' });

@@ -62,18 +62,31 @@ export const selectMediaBoxSizes = createSelector([selectWindowSize], mediaBoxSi
 /** Rows, beyond the visible ones, whose first page is fetched ahead of navigation. */
 export const PREFETCH_ROWS = 4;
 
+/** Rows below the visible ones that Home readies while the user is idle (see useIdleRowWarmup). */
+export const WARM_ROWS = 10;
+
 export interface RowLoadState {
   /** The focused row and the one below it: on screen, fully loaded and promoted. */
   visible: Set<number>;
   /** The nearest other rows, fetched at prefetch priority. */
   prefetch: Set<number>;
+  /**
+   * The rows below the visible ones up to `warmUntil` (at most WARM_ROWS of them): fetched at
+   * prefetch priority, mounted and rendered in full off screen, so moving down finds them ready.
+   * Not promoted to the backend.
+   */
+  warm: Set<number>;
 }
 
 /**
  * Which Home rows load, from the focused row. The nearest rows are prefetched, the row below
  * before the row above at the same distance; every other row stays dormant.
  */
-export function homeRowLoadState(activeCategory: number, categoryCount: number): RowLoadState {
+export function homeRowLoadState(
+  activeCategory: number,
+  categoryCount: number,
+  warmUntil = -1
+): RowLoadState {
   const inRange = (index: number) => index >= 0 && index < categoryCount;
   const visible = new Set([activeCategory, activeCategory + 1].filter(inRange));
   const prefetch = new Set<number>();
@@ -82,7 +95,12 @@ export function homeRowLoadState(activeCategory: number, categoryCount: number):
       if (inRange(index) && prefetch.size < PREFETCH_ROWS) prefetch.add(index);
     }
   }
-  return { visible, prefetch };
+  const warm = new Set<number>();
+  const lastWarm = Math.min(warmUntil, activeCategory + 1 + WARM_ROWS);
+  for (let index = activeCategory + 2; index <= lastWarm; index++) {
+    if (inRange(index)) warm.add(index);
+  }
+  return { visible, prefetch, warm };
 }
 
 /** Rows kept mounted above and below the shown ones; further rows are empty space. */
@@ -91,16 +109,19 @@ const MOUNTED_ROWS_BELOW = 4;
 
 /**
  * The rows Home mounts, ascending: those around the focused row and those around the rows
- * scrolled into view, covering every row `homeRowLoadState` loads. Every other row is empty space.
+ * scrolled into view, covering every row `homeRowLoadState` loads (`warmUntil` as there). Every
+ * other row is empty space.
  */
 export function homeMountedRows(
   activeCategory: number,
   firstShownRow: number,
-  categoryCount: number
+  categoryCount: number,
+  warmUntil = -1
 ) {
   const rows = new Set<number>();
+  const lastWarm = Math.min(warmUntil, activeCategory + 1 + WARM_ROWS);
   for (const anchor of [activeCategory, firstShownRow]) {
-    const end = Math.min(categoryCount - 1, anchor + 1 + MOUNTED_ROWS_BELOW);
+    const end = Math.min(categoryCount - 1, Math.max(anchor + 1 + MOUNTED_ROWS_BELOW, lastWarm));
     for (let row = Math.max(0, anchor - MOUNTED_ROWS_ABOVE); row <= end; row++) rows.add(row);
   }
   return [...rows].sort((left, right) => left - right);

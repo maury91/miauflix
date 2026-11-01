@@ -16,11 +16,23 @@ interface MediaCardProps {
   onSelect: () => void;
   /** This title's progress (see progressByMedia). */
   progress?: ProgressEntry;
+  /** Draw the focus treatment on the card itself; off when the row draws a ring for it. */
+  showFocus?: boolean;
 }
 
 /** Render a focusable media card with playback progress and the selected episode’s label when available. */
 export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function MediaCard(
-  { media, onFocus, onHover, onSelect, progress: playback, selected, tabIndex, width },
+  {
+    media,
+    onFocus,
+    onHover,
+    onSelect,
+    progress: playback,
+    selected,
+    showFocus = true,
+    tabIndex,
+    width,
+  },
   ref
 ) {
   const title = getMediaTitle(media);
@@ -48,6 +60,7 @@ export const MediaCard = forwardRef<HTMLButtonElement, MediaCardProps>(function 
       title={title}
       subtitle={subtitle}
       focused={selected}
+      externalFocus={!showFocus}
       width={width}
       progress={playback ? percent : undefined}
       aria-current={selected ? 'true' : undefined}

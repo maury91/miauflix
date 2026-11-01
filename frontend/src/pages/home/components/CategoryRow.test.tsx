@@ -462,4 +462,17 @@ describe('CategoryRow page window', () => {
     retry.rerender(<CategoryRow {...props} />);
     await waitFor(() => expect(viewportCalls(failing)).toBe(2));
   });
+
+  it('reports a list that loaded empty, without the empty text', () => {
+    const onEmpty = vi.fn();
+    render(<CategoryRow {...makeProps(0, true, { total: 0 })} onEmpty={onEmpty} />);
+    expect(onEmpty).toHaveBeenCalledWith('popular');
+    expect(screen.queryByText('Nothing here yet.')).not.toBeInTheDocument();
+  });
+
+  it('does not report a list with items', () => {
+    const onEmpty = vi.fn();
+    render(<CategoryRow {...makeProps(0)} onEmpty={onEmpty} />);
+    expect(onEmpty).not.toHaveBeenCalled();
+  });
 });

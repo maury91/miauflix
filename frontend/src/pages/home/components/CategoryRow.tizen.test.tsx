@@ -37,6 +37,7 @@ vi.mock('./MediaCard', async () => {
         props: {
           media: { id: number };
           selected: boolean;
+          showFocus?: boolean;
           tabIndex: number;
           onFocus: () => void;
           onHover: () => void;
@@ -47,6 +48,7 @@ vi.mock('./MediaCard', async () => {
         <button
           ref={ref}
           aria-current={props.selected ? 'true' : undefined}
+          data-focused={props.showFocus === false ? undefined : props.selected || undefined}
           data-testid={`media-${props.media.id}`}
           tabIndex={props.tabIndex}
           type="button"
@@ -61,10 +63,16 @@ vi.mock('./MediaCard', async () => {
   };
 });
 
-import { CategoryRow } from './CategoryRow';
+import { createRef } from 'react';
 
-const response = (page: number): ListResponse =>
-  ({
+import { CategoryRow, type CategoryRowHandle } from './CategoryRow';
+
+const responses = new Map<number, ListResponse>();
+/** One response object per page, as the query cache returns. */
+const response = (page: number): ListResponse => {
+  const cached = responses.get(page);
+  if (cached) return cached;
+  const created = {
     page,
     pageSize: 20,
     total: 40,
@@ -73,7 +81,10 @@ const response = (page: number): ListResponse =>
       mediaId: page * 20 + offset + 1000,
       _type: 'movie',
     })),
-  }) as ListResponse;
+  } as ListResponse;
+  responses.set(page, created);
+  return created;
+};
 
 const props = (visible: boolean) => ({
   category: { id: 1, name: 'Popular', slug: 'popular' } as never,
@@ -122,5 +133,74 @@ describe('CategoryRow on the Samsung TV', () => {
 
     act(() => vi.advanceTimersByTime(400));
     expect(renderedCards()).toEqual([4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]);
+  });
+
+  it('marks the selection with one ring over the leading slot instead of on the card', () => {
+    const view = render(<CategoryRow {...props(true)} />);
+    const ring = screen.getByTestId('category-row-focus-ring');
+    expect(ring.style.opacity).toBe('0');
+
+    view.rerender(<CategoryRow {...props(true)} active />);
+    expect(ring.style.opacity).toBe('1');
+    expect(screen.getByTestId('media-10').getAttribute('aria-current')).toBe('true');
+    expect(screen.getByTestId('media-10').hasAttribute('data-focused')).toBe(false);
+  });
+
+  it('moves at once but reports a held run of moves once it pauses', () => {
+    const ref = createRef<CategoryRowHandle>();
+    const onSelectionChange = vi.fn();
+    const onActive = vi.fn();
+    const row = (selectedIndex: number, active = true) => (
+      <CategoryRow
+        {...props(true)}
+        ref={ref}
+        active={active}
+        isCurrentRow
+        selectedIndex={selectedIndex}
+        onSelectionChange={onSelectionChange}
+        onActive={onActive}
+      />
+    );
+    const view = render(row(10));
+    act(() => vi.advanceTimersByTime(400));
+    onActive.mockClear();
+
+    act(() => void ref.current?.handleAction('right'));
+    expect(onSelectionChange.mock.calls).toEqual([[11]]);
+    expect(onActive).toHaveBeenLastCalledWith(0, 11, expect.objectContaining({ id: 11 }));
+    view.rerender(row(11));
+
+    for (let move = 0; move < 3; move += 1) {
+      act(() => vi.advanceTimersByTime(50));
+      act(() => void ref.current?.handleAction('right'));
+    }
+    expect(screen.getByTestId('media-14').getAttribute('aria-current')).toBe('true');
+    expect(onSelectionChange).toHaveBeenCalledTimes(1);
+    expect(onActive).toHaveBeenCalledTimes(1);
+
+    act(() => vi.advanceTimersByTime(150));
+    expect(onSelectionChange).toHaveBeenLastCalledWith(14);
+    expect(onActive).toHaveBeenLastCalledWith(0, 14, expect.objectContaining({ id: 14 }));
+  });
+
+  it('reports a pending selection at once when the row is left', () => {
+    const ref = createRef<CategoryRowHandle>();
+    const onSelectionChange = vi.fn();
+    const row = (active: boolean) => (
+      <CategoryRow
+        {...props(true)}
+        ref={ref}
+        active={active}
+        selectedIndex={10}
+        onSelectionChange={onSelectionChange}
+      />
+    );
+    const view = render(row(true));
+    act(() => void ref.current?.handleAction('right'));
+    act(() => void ref.current?.handleAction('right'));
+    expect(onSelectionChange.mock.calls).toEqual([[11]]);
+
+    view.rerender(row(false));
+    expect(onSelectionChange).toHaveBeenLastCalledWith(12);
   });
 });

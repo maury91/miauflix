@@ -22,6 +22,7 @@ import styled from 'styled-components';
 
 import { ROW_GAP_VH, ROW_HEIGHT_VH } from '../home-layout';
 import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '../homeNavigation';
+import { useCoalescedValue } from '../hooks/useCoalescedValue';
 import { useSmoothScroller } from '../hooks/useSmoothScroller';
 import { IDLE, imagePreloader, NEARBY } from '../image-preloader';
 import { artworkUrl } from '../media.utils';
@@ -33,6 +34,12 @@ import ChevronLeftIcon from '~icons/line-md/chevron-left';
 import ChevronRightIcon from '~icons/line-md/chevron-right';
 
 const VIEWPORT_PROMOTION_DEBOUNCE_MS = 300;
+/**
+ * On the TV, how long the selection must pause before Home hears of the moves after the first:
+ * each report re-renders Home and the hero (~50 ms there), longer than a held key's repeat.
+ */
+const SELECTION_REPORT_MS = 150;
+
 /** How long a row that came into view waits before rendering its cards out of view (TV). */
 const CARD_WINDOW_EXPAND_MS = 400;
 
@@ -75,6 +82,28 @@ const ScrollContainer = styled.div<{ $gap: number; $peekWidth: number }>`
 
   &::-webkit-scrollbar {
     display: none;
+  }
+`;
+
+/**
+ * The TV's focus ring: one per row, over the leading slot, where the row always brings the
+ * selected card, so it never moves. Scaling the cards instead lifts the two cards that change
+ * onto layers of their own while they animate, then repaints the row's track under them, some
+ * 60 ms of raster per move on a TV.
+ */
+const FocusRing = styled.div<{ $peekWidth: number }>`
+  position: absolute;
+  z-index: 1;
+  top: 0.8vh;
+  left: calc(${({ $peekWidth }) => $peekWidth}px + 0.5vh);
+  margin: -3px;
+  border: 3px solid #fff;
+  border-radius: 9px;
+  pointer-events: none;
+  transition: opacity 150ms ease-out;
+
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
   }
 `;
 
@@ -172,6 +201,8 @@ interface CategoryRowProps {
   nearby?: boolean;
   loadIntent?: 'visible' | 'prefetch' | 'dormant';
   visible?: boolean;
+  /** Rendered in full off screen too: Home readies it while idle (see RowLoadState.warm). */
+  warm?: boolean;
   mediaWidth: number;
   mediaPerPage: number;
   gap: number;
@@ -182,6 +213,8 @@ interface CategoryRowProps {
   active: boolean;
   onActive: (categoryIndex: number, mediaIndex: number, media: MediaDto) => void;
   onDataReady?: (slug: string) => void;
+  /** The row's list loaded with nothing in it (rows given `mediaOverride` never report this). */
+  onEmpty?: (slug: string) => void;
   onInterest?: () => void;
   onSelect: (media: MediaDto) => void;
   progress?: ProgressEntry[];
@@ -222,6 +255,7 @@ const RowCard = memo(function RowCard({
       media={media}
       width={width}
       selected={selected}
+      showFocus={!builtForTizen}
       tabIndex={selected ? 0 : -1}
       onFocus={() => handlers.current.activate(index, media)}
       onHover={() => handlers.current.hover(index, media)}
@@ -258,12 +292,14 @@ export const CategoryRow = memo(
       nearby,
       loadIntent,
       visible = false,
+      warm = false,
       mediaPerPage,
       mediaWidth,
       peekWidth,
       contentWidth = mediaWidth * mediaPerPage + gap * (mediaPerPage - 1),
       onActive,
       onDataReady,
+      onEmpty,
       onInterest,
       onSelect,
       progress,
@@ -273,7 +309,12 @@ export const CategoryRow = memo(
     forwardedRef
   ) {
     const [uncontrolledIndex, setUncontrolledIndex] = useState(initialIndex);
-    const selectedIndex = controlledIndex ?? uncontrolledIndex;
+    // On the TV the row moves its own selection and reports it coalesced (see
+    // SELECTION_REPORT_MS): `ownIndex` leads the reported index until Home catches up.
+    const [ownIndex, setOwnIndex] = useState<number | null>(null);
+    const selectedIndex = ownIndex ?? controlledIndex ?? uncontrolledIndex;
+    const reportedIndex = useCoalescedValue(selectedIndex, builtForTizen ? SELECTION_REPORT_MS : 0);
+    const lastReported = useRef<number | undefined>(undefined);
     const effectiveLoadIntent = loadIntent ?? (nearby ? 'visible' : 'dormant');
     const fetching = !mediaOverride && effectiveLoadIntent !== 'dormant';
 
@@ -308,10 +349,10 @@ export const CategoryRow = memo(
     // it comes into view rather than during the move that brings it there.
     const [expanded, setExpanded] = useState(!builtForTizen || visible);
     useEffect(() => {
-      if (expanded || !visible) return;
+      if (expanded || !(visible || warm)) return;
       const timeout = window.setTimeout(() => setExpanded(true), CARD_WINDOW_EXPAND_MS);
       return () => window.clearTimeout(timeout);
-    }, [expanded, visible]);
+    }, [expanded, visible, warm]);
     const [promoteListMedia] = usePromoteListMediaMutation();
     const [queueBackdropFocus] = useQueueBackdropFocusMutation();
     const step = mediaWidth + gap;
@@ -330,11 +371,39 @@ export const CategoryRow = memo(
 
     const updateSelectedIndex = useCallback(
       (index: number) => {
+        if (builtForTizen) {
+          setOwnIndex(index);
+          return;
+        }
         if (controlledIndex === undefined) setUncontrolledIndex(index);
         onSelectionChange?.(index);
       },
       [controlledIndex, onSelectionChange]
     );
+
+    const reportSelection = useCallback(
+      (index: number) => {
+        if (index === lastReported.current) return;
+        lastReported.current = index;
+        onSelectionChange?.(index);
+      },
+      [onSelectionChange]
+    );
+    useEffect(() => {
+      if (builtForTizen && ownIndex !== null) reportSelection(reportedIndex);
+      // Only a new coalesced index reports.
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [reportedIndex]);
+    // Leaving the row reports its selection at once: Home reads it to come back to this row.
+    useEffect(() => {
+      if (!active && ownIndex !== null) reportSelection(ownIndex);
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [active]);
+    // A selection Home sets itself (not one this row reported) replaces the row's own.
+    useEffect(() => {
+      if (controlledIndex !== undefined && controlledIndex !== lastReported.current)
+        setOwnIndex(null);
+    }, [controlledIndex]);
 
     /** Select `index` (bounded once the row's size is known) and scroll it into the leading slot. */
     const moveTo = useCallback(
@@ -353,16 +422,19 @@ export const CategoryRow = memo(
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [alignRequest, total, step]);
 
+    // The hero follows the reported selection (coalesced on the TV).
     useEffect(() => {
-      const media = mediaByIndex.get(selectedIndex);
-      if (!media) return;
-      if (isCurrentRow) onActive(categoryIndex, selectedIndex, media);
+      const media = mediaByIndex.get(reportedIndex);
+      if (media && isCurrentRow) onActive(categoryIndex, reportedIndex, media);
+    }, [active, categoryIndex, isCurrentRow, mediaByIndex, onActive, reportedIndex]);
+
+    useEffect(() => {
       if (!active || !wantsFocus.current) return;
       const card = cardRefs.current.get(selectedIndex);
       if (!card) return;
       wantsFocus.current = false;
       card.focus({ preventScroll: true });
-    }, [active, alignRequest, categoryIndex, isCurrentRow, mediaByIndex, onActive, selectedIndex]);
+    }, [active, alignRequest, mediaByIndex, selectedIndex]);
 
     const handleAction = useCallback(
       (action: HomeAction): NavigationOutcome => {
@@ -457,6 +529,10 @@ export const CategoryRow = memo(
       mediaOverride,
       onDataReady,
     ]);
+
+    useEffect(() => {
+      if (!mediaOverride && current.currentData?.total === 0) onEmpty?.(category.slug);
+    }, [category.slug, current.currentData, mediaOverride, onEmpty]);
 
     // Ask the backend to prepare what is on screen: the visible page, then the cards in view.
     useEffect(() => {
@@ -569,7 +645,8 @@ export const CategoryRow = memo(
 
     const activateCard = (index: number, media: MediaDto) => {
       updateSelectedIndex(index);
-      onActive(categoryIndex, index, media);
+      // On the TV the reported selection reaches the hero (coalesced, see SELECTION_REPORT_MS).
+      if (!builtForTizen) onActive(categoryIndex, index, media);
     };
     const cardHandlers = useRef<RowCardHandlers>(null!);
     cardHandlers.current = {
@@ -621,7 +698,12 @@ export const CategoryRow = memo(
       return (
         <RowContainer>
           {title}
-          <State>Nothing here yet.</State>
+          {/* A row that reports itself empty is about to leave Home: no text for that moment. */}
+          {onEmpty && !mediaOverride ? (
+            <State aria-hidden="true" />
+          ) : (
+            <State>Nothing here yet.</State>
+          )}
         </RowContainer>
       );
     }
@@ -660,6 +742,18 @@ export const CategoryRow = memo(
             >
               <ChevronRightIcon aria-hidden="true" />
             </ArrowButton>
+          )}
+          {builtForTizen && (
+            <FocusRing
+              $peekWidth={peekWidth}
+              aria-hidden="true"
+              data-testid="category-row-focus-ring"
+              style={{
+                width: `${mediaWidth}px`,
+                height: `${Math.round((mediaWidth * 9) / 16)}px`,
+                opacity: active ? 1 : 0,
+              }}
+            />
           )}
           <ScrollContainer
             ref={scroller.ref}

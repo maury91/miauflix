@@ -174,6 +174,7 @@ vi.mock('./hooks/useMediaBoxSizes', () => ({
     rowHeight: 300,
   }),
 }));
+const emptyRowSlugs = vi.hoisted(() => new Set<string>());
 vi.mock('./components/CategoryRow', async () => {
   const React = await import('react');
   return {
@@ -189,6 +190,7 @@ vi.mock('./components/CategoryRow', async () => {
           visible?: boolean;
           onActive: (categoryIndex: number, mediaIndex: number, media: unknown) => void;
           onDataReady: (slug: string) => void;
+          onEmpty?: (slug: string) => void;
           onSelectionChange: (mediaIndex: number) => void;
           onSelect: (media: unknown) => void;
         },
@@ -230,6 +232,10 @@ vi.mock('./components/CategoryRow', async () => {
           loadIntent,
           onDataReady,
         ]);
+        const { onEmpty } = props;
+        React.useEffect(() => {
+          if (emptyRowSlugs.has(category.slug)) onEmpty?.(category.slug);
+        }, [category.slug, onEmpty]);
         const handle = rowHandles.get(props.categoryIndex);
         React.useImperativeHandle(ref, () => handle, [handle]);
         return React.createElement(
@@ -237,6 +243,7 @@ vi.mock('./components/CategoryRow', async () => {
           {
             type: 'button',
             'data-testid': `card-${props.categoryIndex}`,
+            'data-slug': props.category.slug,
             'data-active': props.active,
             onMouseEnter: () => {
               props.onSelectionChange(mediaIndex);
@@ -365,6 +372,7 @@ describe('HomePage focus transitions', () => {
       return action;
     });
     homeNavigationState.value = { ...initialHomeNavigationState, selectedByCategory: {} };
+    emptyRowSlugs.clear();
     homeNavigationState.revision = 0;
     homeNavigationState.listeners.clear();
     realtimeState.ready = false;
@@ -1185,5 +1193,25 @@ describe('HomePage focus transitions', () => {
 
     expect(screen.getByTestId('player').dataset.nextEpisode).toBe('');
     expect(useGetSeasonQuery).not.toHaveBeenCalledWith({ showId: 2, season: 2 });
+  });
+
+  it('drops rows whose list loaded empty', () => {
+    emptyRowSlugs.add('second');
+    render(<HomePage />);
+    const slugs = screen.getAllByTestId(/^card-/).map(button => button.dataset.slug);
+    expect(slugs).not.toContain('second');
+    expect(slugs.slice(0, 2)).toEqual(['first', 'third']);
+  });
+
+  it('keeps the focused row when a row above it drops out', () => {
+    homeNavigationState.value = homeNavigationSlice.reducer(
+      homeNavigationState.value,
+      homeNavigationSlice.actions.setActiveCategory(2)
+    );
+    emptyRowSlugs.add('first');
+    render(<HomePage />);
+    expect(homeNavigationState.value.activeCategory).toBe(1);
+    const active = screen.getAllByTestId(/^card-/).find(button => button.dataset.active === 'true');
+    expect(active?.dataset.slug).toBe('third');
   });
 });

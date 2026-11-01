@@ -40,7 +40,7 @@ export const card = style({
     // Separate rules: Chromium 69 drops a whole selector list over one unknown pseudo-class
     '&:hover:not(:disabled)': { outlineColor: '#ffffff40', transform: 'scale(1.015)' },
     '&[data-hovered]:not(:disabled)': { outlineColor: '#ffffff40', transform: 'scale(1.015)' },
-    '&:focus-visible:not(:disabled)': {
+    '&:focus-visible:not(:disabled):not([data-external-focus])': {
       outline: '3px solid #fff',
       transform: 'scale(1.03)',
       zIndex: 1,

@@ -87,47 +87,52 @@ describe('createSmoothScroller', () => {
 });
 
 describe('createSmoothScroller in transform mode', () => {
-  afterEach(() => vi.unstubAllGlobals());
-
   const setup = () => {
-    const frames: FrameRequestCallback[] = [];
-    vi.stubGlobal('requestAnimationFrame', (callback: FrameRequestCallback) =>
-      frames.push(callback)
-    );
-    vi.stubGlobal('cancelAnimationFrame', () => {});
-    const viewport = document.createElement('div');
     const track = document.createElement('div');
-    viewport.append(track);
-    Object.defineProperty(viewport, 'clientWidth', { value: 1000 });
-    Object.defineProperties(track, {
-      scrollWidth: { value: 5000 },
-      clientWidth: { value: 5000 },
+    // Reading the track's size would lay out the page on each move.
+    Object.defineProperty(track, 'scrollWidth', {
+      get: () => {
+        throw new Error('measured the track');
+      },
     });
     const onRest = vi.fn();
     const scroller = createSmoothScroller(track, 'x', { transform: true, onRest });
-    const settle = () => {
-      for (let time = 0; frames.length; time += 16) frames.shift()?.(time);
-    };
-    return { track, scroller, onRest, settle, frames };
+    const land = (propertyName = 'transform') =>
+      track.dispatchEvent(Object.assign(new Event('transitionend'), { propertyName }));
+    return { track, scroller, onRest, land };
   };
 
-  it('translates the track instead of scrolling it, within its viewport', () => {
-    const { track, scroller, onRest, settle } = setup();
-    scroller.scrollTo(99_999);
-    expect(onRest).not.toHaveBeenCalled();
-    settle();
+  it('transitions the track to the target instead of scrolling it, without measuring it', () => {
+    const { track, scroller, onRest, land } = setup();
+    scroller.scrollTo(4000);
 
     expect(track.style.transform).toBe('translate3d(-4000px, 0, 0)');
+    expect(track.style.transition).toContain('transform 300ms');
     expect(track.scrollLeft).toBe(0);
     expect(scroller.position()).toBe(4000);
+    expect(onRest).not.toHaveBeenCalled();
+
+    land('opacity');
+    expect(onRest).not.toHaveBeenCalled();
+    land();
     expect(onRest).toHaveBeenCalledOnce();
   });
 
-  it('reports rest after an instant jump too', () => {
-    const { track, scroller, onRest, frames } = setup();
-    scroller.scrollTo(400, { instant: true });
-    expect(frames).toHaveLength(0);
-    expect(track.style.transform).toBe('translate3d(-400px, 0, 0)');
+  it('jumps without a transition, reporting rest, and never past the start', () => {
+    const { track, scroller, onRest } = setup();
+    scroller.scrollTo(-50, { instant: true });
+    expect(track.style.transition).toBe('none');
+    expect(scroller.position()).toBe(0);
     expect(onRest).toHaveBeenCalledOnce();
+
+    scroller.scrollTo(400, { instant: true });
+    expect(track.style.transform).toBe('translate3d(-400px, 0, 0)');
+    expect(onRest).toHaveBeenCalledTimes(2);
+  });
+
+  it('ignores a target it is already at', () => {
+    const { track, scroller } = setup();
+    scroller.scrollTo(0);
+    expect(track.style.transform).toBe('');
   });
 });

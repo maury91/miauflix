@@ -211,11 +211,56 @@ Follow-up, measured on the TV:
   whatever the interval asked for. Fast-move measurements have to dispatch the keys from
   inside the page.
 
+Second follow-up, new cards (held key, ten moves at 120 ms, keys fired from inside the page):
+
+- **Decoding was not the cost: about 7 image decodes per pass, under 100 ms.** Raster was. The
+  card focus scale lifted the old and new card onto layers of their own while they animated, then
+  repainted the row's track under them: one row of full-width tiles at about 8 ms each.
+- **One focus ring per row on the TV.** It sits over the leading slot, where the row always brings
+  the selected card, so it never moves. The card's own outline and scale are off on the TV
+  (`externalFocus`; the legacy build turns `:focus-visible` into `:focus`, so DOM focus applied
+  them too).
+- **The row tells Home about a held run of moves once it pauses** (150 ms; a single press still
+  reports at once). Each report re-rendered Home and the hero twice, once from the selection and
+  once from the card's focus event, about 50 ms on the TV, longer than the key repeat. The row
+  reports its pending selection at once when it is left.
+- **Rows move with a CSS transition on the TV,** which the compositor runs. A transform written
+  from JavaScript every frame still cost about 12 ms of style, layout and layer updates per frame.
+  The scroller also no longer measures the track's width on each move.
+- **Untouched row slots no longer re-render** with Home (`HomeRow`).
+- **Result: 46–49 fps on new cards** (30–35 before), p90 29–34 ms, 2–4 frames over 50 ms; 49 fps
+  going left. Main thread: 54 ms of work per key (101 ms before). Moving down: 49 fps, up: 52 fps.
+
+Third follow-up, moving between rows:
+
+- **Each move between rows was one synchronous update of 86–195 ms** in the key handler: the
+  rows whose active, visible, prefetch and mounted state shift with the focused row re-render,
+  and a row coming into the mounted window creates its cards.
+- **Rows below are readied while idle** (`useIdleRowWarmup`): one more row every 500 ms after a
+  second without keys, up to 10 below the visible ones, counted in rows so moving down uses them.
+- **Home scrolls between rows with a compositor transition.** With 12 rows of cards mounted,
+  setting `scrollTop` every frame laid them all out each frame (down: 40 fps).
+- **The rows around the focused one mount, unmount and load once the slide has ended**
+  (`useRestedRow`, the content scroller's `onRest`). With a fixed 150 ms delay that work landed
+  mid-slide: one 209 ms gap moving up, where the rows above are not readied. Afterwards, quick
+  runs of four moves 150 ms apart: 46 compositor fps down and 48 up, p90 28–31 ms, 2–3 gaps
+  over 50 ms; longest main-thread task per run 78–90 ms (up to 163 before). With moves 500 ms
+  apart, the long draw gaps are the pauses between slides (300 ms each), not dropped frames: the
+  compositor has nothing to draw then. Judge spaced moves by p90, not by the longest gap.
+- **Rows whose list loads empty leave Home.**
+- **Measuring:** `tv-perf.mjs` and `inpage-keys.js` count main-thread animation frames. Since the
+  rows move on compositor transitions, the screen can be smoother than that count: count
+  `ProxyImpl::ScheduledActionDraw` in a trace instead. Moving down with idle rows ready: 48
+  compositor fps, p90 27 ms, 3 gaps over 50 ms in four moves (the main-thread count said 33).
+
 Next:
 
-- **New cards:** each card decodes two images (backdrop and logo) as it scrolls in. Make sure the
-  idle preloader has decoded them before the selection gets there, and look at drawing the logo
-  over the backdrop in a single image.
+- **Moving list loading into the store:** each row runs about ten effects per render to fetch its
+  pages, detect emptiness, promote and preload. A store-level feed (middleware and selectors)
+  would decide which lists load, drop empty ones before any row renders, and schedule idle
+  readying without re-rendering Home; rows would only render their slice.
+- **Hero details:** still render on every reported move. A single press costs about 50 ms of Home
+  and hero render on the TV.
 
 Once Phase 1 has removed the needless renders, what's left is the cost of the renders that are
 needed: the cards whose selection changes, the hero, and the rows mounted as you move down.

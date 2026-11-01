@@ -7,7 +7,17 @@ import { useAppSelector } from '@store/hooks';
 import { selectCurrentSessionId, selectCurrentUser, selectIsAdmin } from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
-import { type FC, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  type ComponentProps,
+  type FC,
+  memo,
+  type Ref,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -24,15 +34,17 @@ import { useHomeFeed } from './hooks/useHomeFeed';
 import { useHomeNavigation } from './hooks/useHomeNavigation';
 import { useHomeNotifications } from './hooks/useHomeNotifications';
 import { useHomePreparation } from './hooks/useHomePreparation';
+import { useIdleRowWarmup } from './hooks/useIdleRowWarmup';
 import { useIntroReadiness } from './hooks/useIntroReadiness';
 import { useMediaBoxSizes } from './hooks/useMediaBoxSizes';
 import { selectedMediaFor, useMediaRoute } from './hooks/useMediaRoute';
 import { useRealtimeInterest } from './hooks/useRealtimeInterest';
+import { useRestedRow } from './hooks/useRestedRow';
 import { useSessionChange } from './hooks/useSessionChange';
 import { useSmoothScroller } from './hooks/useSmoothScroller';
 import { useTraktPrompt } from './hooks/useTraktPrompt';
 import { CONTINUE_CATEGORY } from './home-feed';
-import { homeMountedRows, homeRowLoadState } from './home-layout';
+import { homeMountedRows, homeRowLoadState, WARM_ROWS } from './home-layout';
 import { getMediaTitle } from './media.utils';
 import { notificationPlayable } from './notification-copy';
 import { subtitleLanguageForMedia } from './subtitle-language';
@@ -52,9 +64,9 @@ const Content = styled.div<{ $margin: number }>`
   position: absolute;
   inset: 42vh 0 0;
   z-index: 2;
-  overflow: hidden auto;
-  /* Its own layer on the TV, which rasterizes in software and repaints a scroller that isn't one
-     on every frame of a scroll. */
+  /* On the TV the rows move on a transform transition inside it (see SmoothScrollerOptions):
+     scrolling lays out every mounted row on every frame. */
+  overflow: ${builtForTizen ? 'hidden' : 'hidden auto'};
   ${builtForTizen ? 'will-change: transform;' : ''}
   padding: 6vh ${({ $margin }) => $margin}px 8vh;
   mask-image: linear-gradient(180deg, transparent 5vh, #000 8vh);
@@ -71,12 +83,33 @@ const Content = styled.div<{ $margin: number }>`
  */
 const Rows = styled.div`
   position: relative;
+  ${builtForTizen ? 'will-change: transform;' : ''}
 `;
 
 const RowSlot = styled.div`
   position: absolute;
   inset-inline: 0;
 `;
+
+/**
+ * A row in its slot. Memoized whole: a move re-renders Home, and every slot's wrapper re-renders
+ * with it (a new `style` each time) even though only the moved row changed; on a TV each styled
+ * wrapper costs about a millisecond.
+ */
+const HomeRow = memo(function HomeRow({
+  top,
+  rowRef,
+  ...row
+}: Omit<ComponentProps<typeof CategoryRow>, 'ref'> & {
+  top: number;
+  rowRef: Ref<CategoryRowHandle>;
+}) {
+  return (
+    <RowSlot style={{ top }}>
+      <CategoryRow ref={rowRef} {...row} />
+    </RowSlot>
+  );
+});
 
 const FullPageState = styled.div`
   position: absolute;
@@ -98,6 +131,14 @@ interface HomePageProps {
 const FALLBACK_HOME_ROUTE: AppRoute = { type: 'home' };
 
 /** Browse, details and player screens; each concern lives in its own hook. */
+/** `rows` plus the focused row and its neighbours, ascending. */
+const withRowsAround = (rows: number[], activeCategory: number, categoryCount: number) => {
+  const around = [activeCategory - 1, activeCategory, activeCategory + 1].filter(
+    row => row >= 0 && row < categoryCount && !rows.includes(row)
+  );
+  return around.length ? [...rows, ...around].sort((left, right) => left - right) : rows;
+};
+
 const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) => {
   const dispatch = useDispatch<AppDispatch>();
   const currentRoute = useRoute();
@@ -141,14 +182,29 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     sessionId,
     furthestShownRow: Math.max(activeCategory, firstShownRow + 1),
   });
-  const { displayCategories, continueMedia, progressEntries, isLoading, isError } = feed;
+  const { continueMedia, progressEntries, isLoading, isError } = feed;
+  // Rows whose list loaded empty leave Home instead of showing "Nothing here yet"; rows load
+  // ahead of the selection, so they usually go before they are reached.
+  const [emptySlugs, setEmptySlugs] = useState<ReadonlySet<string>>(() => new Set());
+  useSessionChange(sessionId, () => setEmptySlugs(new Set()));
+  const displayCategories = useMemo(
+    () =>
+      emptySlugs.size
+        ? feed.displayCategories.filter(category => !emptySlugs.has(category.slug))
+        : feed.displayCategories,
+    [emptySlugs, feed.displayCategories]
+  );
   const subtitleLanguage = subtitleLanguageForMedia(
     selectedMedia,
     progressEntries,
     currentUser?.id
   );
 
-  const content = useSmoothScroller('y');
+  const contentRest = useRef(() => {});
+  const content = useSmoothScroller('y', {
+    transform: builtForTizen,
+    onRest: builtForTizen ? () => contentRest.current() : undefined,
+  });
   const scrollToRow = useCallback(
     (categoryIndex: number) => content.scrollTo(categoryIndex * rowHeight),
     [content, rowHeight]
@@ -187,9 +243,18 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   useFocusPrefetch(selectedMedia, sessionId, progressEntries);
   const preparation = useHomePreparation({ sessionId, selectedMedia, view, subtitleLanguage });
 
+  // On the TV, rows below are readied while idle, so moving down does not mount them.
+  const warmUntil = useIdleRowWarmup(
+    builtForTizen && browsing && interactive,
+    activeCategory,
+    WARM_ROWS
+  );
+  // On the TV the rows around the focused one mount, unmount and load once the slide between
+  // rows has ended (the content's onRest), not during it or on every move of a quick run.
+  const { restedRow: loadAnchor, rested: rowsRested } = useRestedRow(activeCategory, builtForTizen);
   const rowLoadState = useMemo(
-    () => homeRowLoadState(activeCategory, displayCategories.length),
-    [activeCategory, displayCategories.length]
+    () => homeRowLoadState(loadAnchor, displayCategories.length, warmUntil),
+    [loadAnchor, displayCategories.length, warmUntil]
   );
   const { onRowDataReady, onHeroReady } = useIntroReadiness({
     onHydrated,
@@ -203,15 +268,32 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   });
   const handleContentScroll = useCallback(() => {
     publishInterestAfterScroll();
-    const scrollTop = content.element.current?.scrollTop ?? 0;
-    setFirstShownRow(Math.floor(scrollTop / rowHeight));
+    setFirstShownRow(Math.floor(content.position() / rowHeight));
   }, [content, publishInterestAfterScroll, rowHeight]);
-  const mountedRows = homeMountedRows(activeCategory, firstShownRow, displayCategories.length);
+  contentRest.current = () => {
+    handleContentScroll();
+    rowsRested();
+  };
+  const mountedRows = withRowsAround(
+    homeMountedRows(loadAnchor, firstShownRow, displayCategories.length, warmUntil),
+    activeCategory,
+    displayCategories.length
+  );
   // Rows are memoized; stable callbacks keep a move in one row from re-rendering the others
   const onRowActive = useStableCallback(navigation.onCardActive);
   const onRowSelect = useStableCallback(navigation.openDetails);
   const onRowMediaLoaded = useStableCallback(onMediaLoaded);
   const onRowReady = useStableCallback((slug: string) => onRowDataReady(slug));
+  const onRowEmpty = useStableCallback((slug: string) => {
+    const index = displayCategories.findIndex(category => category.slug === slug);
+    if (index < 0) return;
+    // A row above the focused one leaving moves every row below it up: follow the focused row.
+    if (index < activeCategory) {
+      dispatch(homeNavigationActions.setActiveCategory(activeCategory - 1));
+      content.scrollTo((activeCategory - 1) * rowHeight, { instant: true });
+    }
+    setEmptySlugs(current => new Set(current).add(slug));
+  });
   // The sidebar is memoized: stable callbacks keep row moves from re-rendering it.
   const onSidebarAction = useStableCallback(navigation.onSidebarAction);
   const onSidebarSettings = useStableCallback(navigation.openSettings);
@@ -271,49 +353,58 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
         {view === 'browse' ? (
           <>
             <MediaHero media={selectedMedia} preparation={preparation} onReady={onHeroReady} />
-            <Content ref={content.ref} $margin={margin} onScroll={handleContentScroll}>
-              <Rows style={{ height: displayCategories.length * rowHeight }}>
+            <Content
+              ref={builtForTizen ? undefined : content.ref}
+              $margin={margin}
+              onScroll={builtForTizen ? undefined : handleContentScroll}
+            >
+              <Rows
+                ref={builtForTizen ? content.ref : undefined}
+                style={{ height: displayCategories.length * rowHeight }}
+              >
                 {mountedRows.map(index => {
                   const category = displayCategories[index];
                   return (
-                    <RowSlot key={category.slug} style={{ top: index * rowHeight }}>
-                      <CategoryRow
-                        ref={callbacksForRow(category.slug, index).ref}
-                        category={category}
-                        categoryIndex={index}
-                        initialIndex={selectedByCategory[category.slug] ?? 0}
-                        selectedIndex={selectedByCategory[category.slug] ?? 0}
-                        onSelectionChange={callbacksForRow(category.slug, index).onSelectionChange}
-                        loadIntent={
-                          rowLoadState.visible.has(index)
-                            ? 'visible'
-                            : rowLoadState.prefetch.has(index)
-                              ? 'prefetch'
-                              : 'dormant'
-                        }
-                        visible={rowLoadState.visible.has(index)}
-                        mediaWidth={mediaWidth}
-                        mediaPerPage={mediaPerPage}
-                        gap={gap}
-                        peekWidth={peekWidth}
-                        isCurrentRow={activeCategory === index}
-                        onDataReady={onRowReady}
-                        active={
-                          interactive &&
-                          !trakt.open &&
-                          activeRegion === 'carousel' &&
-                          activeCategory === index
-                        }
-                        onActive={onRowActive}
-                        onInterest={publishInterestAfterScroll}
-                        onMediaLoaded={onRowMediaLoaded}
-                        progress={progressEntries}
-                        mediaOverride={
-                          category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
-                        }
-                        onSelect={onRowSelect}
-                      />
-                    </RowSlot>
+                    <HomeRow
+                      key={category.slug}
+                      top={index * rowHeight}
+                      rowRef={callbacksForRow(category.slug, index).ref}
+                      category={category}
+                      categoryIndex={index}
+                      initialIndex={selectedByCategory[category.slug] ?? 0}
+                      selectedIndex={selectedByCategory[category.slug] ?? 0}
+                      onSelectionChange={callbacksForRow(category.slug, index).onSelectionChange}
+                      loadIntent={
+                        rowLoadState.visible.has(index)
+                          ? 'visible'
+                          : rowLoadState.prefetch.has(index) || rowLoadState.warm.has(index)
+                            ? 'prefetch'
+                            : 'dormant'
+                      }
+                      visible={rowLoadState.visible.has(index)}
+                      warm={rowLoadState.warm.has(index)}
+                      mediaWidth={mediaWidth}
+                      mediaPerPage={mediaPerPage}
+                      gap={gap}
+                      peekWidth={peekWidth}
+                      isCurrentRow={activeCategory === index}
+                      onDataReady={onRowReady}
+                      onEmpty={onRowEmpty}
+                      active={
+                        interactive &&
+                        !trakt.open &&
+                        activeRegion === 'carousel' &&
+                        activeCategory === index
+                      }
+                      onActive={onRowActive}
+                      onInterest={publishInterestAfterScroll}
+                      onMediaLoaded={onRowMediaLoaded}
+                      progress={progressEntries}
+                      mediaOverride={
+                        category.slug === CONTINUE_CATEGORY.slug ? continueMedia : undefined
+                      }
+                      onSelect={onRowSelect}
+                    />
                   );
                 })}
               </Rows>

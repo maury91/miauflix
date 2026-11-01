@@ -37,7 +37,10 @@ export function isAtRest(state: SpringState, target: number): boolean {
 }
 
 export interface SmoothScroller {
-  /** Animate to `target` (clamped to the scrollable range); `instant` jumps there. */
+  /**
+   * Animate to `target` (clamped to the scrollable range; in `transform` mode only to 0 and up);
+   * `instant` jumps there.
+   */
   scrollTo: (target: number, options?: { instant?: boolean }) => void;
   /** Stop animating where the scroll position is now. */
   stop: () => void;
@@ -49,14 +52,20 @@ export interface SmoothScroller {
 
 export interface SmoothScrollerOptions {
   /**
-   * Move the element with `translate3d` instead of scrolling it; its parent clips it. Setting a
-   * scroll offset makes Chromium lay out the page synchronously, every frame; a transform on the
-   * element's own layer only moves that layer (the TV: ~25 ms per frame saved on rows).
+   * Move the element with a `translate3d` transition instead of scrolling it; its parent clips
+   * it. Setting a scroll offset makes Chromium lay out the page synchronously, every frame, and
+   * even a transform written each frame costs the TV ~12 ms of style, layout and layer updates
+   * per frame; a CSS transition runs on the compositor and leaves the main thread free. The
+   * caller keeps targets within the element: measuring its width would lay out the page on each
+   * move, just after the move's render changed it.
    */
   transform?: boolean;
   /** Called whenever the position comes to rest (`transform` mode has no scroll events). */
   onRest?: () => void;
 }
+
+/** The `transform` mode's transition: about as long as the spring takes, decelerating. */
+const TRANSITION = 'transform 300ms cubic-bezier(0.25, 0.8, 0.3, 1)';
 
 const prefersReducedMotion = () =>
   typeof window.matchMedia === 'function' &&
@@ -71,17 +80,11 @@ export function createSmoothScroller(
   axis: 'x' | 'y',
   { transform = false, onRest }: SmoothScrollerOptions = {}
 ): SmoothScroller {
+  if (transform) return createTransitionScroller(element, axis, onRest);
   const property = axis === 'x' ? 'scrollLeft' : 'scrollTop';
-  let translation = 0;
-  const read = () => (transform ? translation : element[property]);
+  const read = () => element[property];
   const write = (position: number) => {
-    if (!transform) {
-      element[property] = position;
-      return;
-    }
-    translation = position;
-    element.style.transform =
-      axis === 'x' ? `translate3d(${-position}px, 0, 0)` : `translate3d(0, ${-position}px, 0)`;
+    element[property] = position;
   };
   let state: SpringState | null = null;
   let target = 0;
@@ -89,11 +92,10 @@ export function createSmoothScroller(
   /** Time of the previous animation frame; null until the animation's first frame. */
   let lastTime: number | null = null;
 
-  const viewport = () => (transform ? (element.parentElement ?? element) : element);
   const maxScroll = () =>
     axis === 'x'
-      ? element.scrollWidth - viewport().clientWidth
-      : element.scrollHeight - viewport().clientHeight;
+      ? element.scrollWidth - element.clientWidth
+      : element.scrollHeight - element.clientHeight;
 
   const stop = () => {
     cancelAnimationFrame(frame);
@@ -115,7 +117,6 @@ export function createSmoothScroller(
     if (isAtRest(state, target)) {
       write(target);
       stop();
-      onRest?.();
       return;
     }
     write(state.position);
@@ -131,7 +132,6 @@ export function createSmoothScroller(
       if (instant || prefersReducedMotion() || typeof requestAnimationFrame !== 'function') {
         stop();
         write(target);
-        onRest?.();
         return;
       }
       if (state) return; // Already animating: the running spring heads for the new target.
@@ -148,5 +148,44 @@ export function createSmoothScroller(
       userScrollEvents.forEach(event => element.removeEventListener(event, stop));
     },
     position: read,
+  };
+}
+
+/** `transform` mode (see SmoothScrollerOptions): the compositor animates a CSS transition. */
+function createTransitionScroller(
+  element: HTMLElement,
+  axis: 'x' | 'y',
+  onRest: (() => void) | undefined
+): SmoothScroller {
+  let translation = 0;
+  const write = (position: number, transition: string) => {
+    element.style.transition = transition;
+    element.style.transform =
+      axis === 'x' ? `translate3d(${-position}px, 0, 0)` : `translate3d(0, ${-position}px, 0)`;
+  };
+  const landed = (event: TransitionEvent) => {
+    if (event.target === element && event.propertyName === 'transform') onRest?.();
+  };
+  element.addEventListener('transitionend', landed);
+
+  return {
+    scrollTo(next, { instant = false } = {}) {
+      const target = Math.max(0, next);
+      if (target === translation && !instant) return;
+      translation = target;
+      if (instant || prefersReducedMotion()) {
+        write(target, 'none');
+        onRest?.();
+        return;
+      }
+      // A new target mid-transition starts from where the running one has got to.
+      write(target, TRANSITION);
+    },
+    stop() {},
+    dispose() {
+      element.removeEventListener('transitionend', landed);
+    },
+    // Where the element is heading: it is there, or will be within the transition.
+    position: () => translation,
   };
 }
