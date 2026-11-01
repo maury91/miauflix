@@ -1,5 +1,7 @@
 import { authApi } from '@features/auth/api/auth.api';
 import { configApi } from '@features/config/api/config.api';
+import { homeFeedMiddleware } from '@features/home-feed/homeFeed.middleware';
+import { homeFeedSlice } from '@features/home-feed/homeFeed.slice';
 import { listsApi } from '@features/media/api/lists.api';
 import { mediaApi } from '@features/media/api/media.api';
 import { notificationsApi } from '@features/notifications/api/notifications.api';
@@ -36,6 +38,7 @@ export const store = configureStore({
     [artworkSlice.name]: artworkSlice.reducer,
     [detailsNavigationSlice.name]: detailsNavigationSlice.reducer,
     [appStateSlice.name]: appStateSlice.reducer,
+    [homeFeedSlice.name]: homeFeedSlice.reducer,
     [homeNavigationSlice.name]: homeNavigationSlice.reducer,
     [measurementsSlice.name]: measurementsSlice.reducer,
     [realtimeSlice.name]: realtimeSlice.reducer,
@@ -54,7 +57,8 @@ export const store = configureStore({
       setupApi.middleware,
       storageApi.middleware,
       searchMiddleware,
-      realtimeMiddleware
+      realtimeMiddleware,
+      homeFeedMiddleware
     ),
 });
 

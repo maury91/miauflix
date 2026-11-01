@@ -6,11 +6,16 @@ test('selects subtitles and shifts cues with remote keys only', async ({ page })
   );
   const overlay = page.getByLabel('Playback controls', { exact: true });
   await expect(overlay).toBeFocused({ timeout: 30000 });
+  const back = page.getByRole('button', { name: 'Back to details' });
+  const seek = page.getByRole('slider', { name: 'Seek', exact: true });
+  // Up and Down move between the header, the overlay, the seek bar and the control row.
+  await page.keyboard.press('ArrowUp');
+  await expect(back).toBeFocused();
   await page.keyboard.press('ArrowDown');
-  await expect(page.getByRole('button', { name: 'Back to details' })).toBeFocused();
-  await page.keyboard.press('ArrowRight');
-  await expect(page.getByRole('slider', { name: 'Seek', exact: true })).toBeFocused();
-  await page.keyboard.press('ArrowRight');
+  await expect(overlay).toBeFocused();
+  await page.keyboard.press('ArrowDown');
+  await expect(seek).toBeFocused();
+  await page.keyboard.press('ArrowDown');
   await expect(page.getByRole('button', { name: 'Play', exact: true })).toBeFocused();
   await page.keyboard.press('ArrowRight');
   const cc = page.getByRole('button', { name: 'Subtitles', exact: true });
@@ -59,6 +64,8 @@ test('selects subtitles and shifts cues with remote keys only', async ({ page })
   await page.keyboard.press('Escape');
   await expect(cc).toBeFocused();
   await expect(page.getByRole('group', { name: 'Subtitle settings', exact: true })).toHaveCount(0);
+  await page.keyboard.press('ArrowUp');
+  await expect(seek).toBeFocused();
   await page.keyboard.press('ArrowUp');
   await expect(overlay).toBeFocused();
 });

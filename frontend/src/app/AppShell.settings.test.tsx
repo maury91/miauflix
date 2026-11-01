@@ -40,6 +40,7 @@ vi.mock('@pages/home/HomePage', async () => {
           notificationsRef={null}
           showSettings={state.admin}
           unreadCount={0}
+          hasNotifications={false}
         />
       );
     },

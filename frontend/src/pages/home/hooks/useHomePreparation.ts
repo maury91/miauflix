@@ -8,8 +8,12 @@ import type {
   PreloadPreparationSnapshot,
   PreloadPreparationSource,
 } from '@miauflix/backend';
-import { selectPreparationByMediaId, selectRealtimeReady } from '@store/slices/realtime';
-import { useCallback, useEffect, useRef } from 'react';
+import {
+  realtimePlayableKey,
+  selectPreparationByMediaId,
+  selectRealtimeReady,
+} from '@store/slices/realtime';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useSelector } from 'react-redux';
 
 import type { HomeView } from './useMediaRoute';
@@ -63,9 +67,26 @@ export function resolvePreparation({
 }
 
 /**
- * Tell the backend which title is focused so it can find and warm its sources, and report what
- * it found. Realtime pushes preparation updates; without it, a heartbeat renews the lease.
- * The lease survives moving from browse to details, so warmup builds on what browsing found.
+ * What Home knows about preparation besides realtime pushes: the intent response (without
+ * realtime), the movie whose intent failed, and the sources remembered for an instant hero.
+ * usePreparation combines it with realtime in the hero and details.
+ */
+export interface PreparationInputs {
+  /** The intent response; undefined while none applies. */
+  fallback: PreloadPreparationSnapshot | null | undefined;
+  intentFailedForMovieId: number | null;
+  /** Last source found per movie, shared by the hero and details. */
+  sourceCache: Map<number, PreloadPreparationSource>;
+}
+
+/**
+ * Tell the backend which title is focused so it can find and warm its sources. Realtime pushes
+ * preparation updates; without it, a heartbeat renews the lease. The lease survives moving from
+ * browse to details, so warmup builds on what browsing found.
+ *
+ * Home does not subscribe to the pushed preparation itself: the backend pushes warmup progress
+ * every few hundred milliseconds, and each push re-rendered Home. The hero and details read it
+ * with usePreparation.
  */
 export function useHomePreparation({
   sessionId,
@@ -77,11 +98,10 @@ export function useHomePreparation({
   selectedMedia: MediaDto | null;
   view: HomeView;
   subtitleLanguage: string;
-}): PreloadPreparationSnapshot | null {
+}): PreparationInputs {
   const [updateIntent, intentState] = useUpdateIntentMutation();
   const [removeIntent] = useRemoveIntentMutation();
   const realtimeReady = useSelector(selectRealtimeReady);
-  const realtimePreparation = useSelector(selectPreparationByMediaId(selectedMedia?.mediaId));
   const lastIntentSequence = useRef(0);
   const latestIntentSession = useRef<string | null>(sessionId);
   const lastPreparation = useRef<PreloadPreparationSnapshot | null>(null);
@@ -159,35 +179,70 @@ export function useHomePreparation({
     lastPreparation.current = intentData.preparation ?? null;
     lastPreparationSession.current = sessionId;
   }
-  const response =
-    realtimePreparation ??
-    (intentData
-      ? intentData.preparation
-      : current && intentState.isLoading && lastPreparationSession.current === sessionId
-        ? lastPreparation.current
-        : undefined);
+  const fallback = intentData
+    ? intentData.preparation
+    : current && intentState.isLoading && lastPreparationSession.current === sessionId
+      ? lastPreparation.current
+      : undefined;
+  const failedFocus =
+    current && intentState.error ? intentState.originalArgs?.intent.focused : null;
+  const intentFailedForMovieId = failedFocus?.kind === 'movie' ? failedFocus.mediaId : null;
+  const cache = sourceCache.current;
+  return useMemo(
+    () => ({ fallback, intentFailedForMovieId, sourceCache: cache }),
+    [cache, fallback, intentFailedForMovieId]
+  );
+}
+
+/** Same as far as browsing shows: the state and source, not the warmup progress. */
+const sameBrowsePreparation = (
+  left: PreloadPreparationSnapshot | null,
+  right: PreloadPreparationSnapshot | null
+) =>
+  left === right ||
+  (!!left &&
+    !!right &&
+    left.state === right.state &&
+    realtimePlayableKey(left.playable) === realtimePlayableKey(right.playable) &&
+    left.source?.id === right.source?.id &&
+    left.source?.quality === right.source?.quality &&
+    left.source?.sourceType === right.source?.sourceType);
+
+/**
+ * The preparation to show for `selectedMedia`: realtime pushes, else the intent response, with
+ * a remembered source while the server is still checking. With `ignoreWarmup` (the hero, which
+ * does not show it) warmup progress alone does not re-render.
+ */
+export function usePreparation(
+  selectedMedia: MediaDto | null,
+  { fallback, intentFailedForMovieId, sourceCache }: PreparationInputs,
+  { ignoreWarmup = false }: { ignoreWarmup?: boolean } = {}
+): PreloadPreparationSnapshot | null {
+  const realtimePreparation = useSelector(
+    selectPreparationByMediaId(selectedMedia?.mediaId),
+    ignoreWarmup ? sameBrowsePreparation : undefined
+  );
+  const response = realtimePreparation ?? fallback;
 
   useEffect(() => {
     if (response?.playable.kind !== 'movie') return;
     const mediaId = response.playable.mediaId;
     if (response.source) {
-      sourceCache.current.delete(mediaId);
-      sourceCache.current.set(mediaId, response.source);
-      if (sourceCache.current.size > SOURCE_CACHE_LIMIT) {
-        sourceCache.current.delete(sourceCache.current.keys().next().value!);
+      sourceCache.delete(mediaId);
+      sourceCache.set(mediaId, response.source);
+      if (sourceCache.size > SOURCE_CACHE_LIMIT) {
+        sourceCache.delete(sourceCache.keys().next().value!);
       }
     } else if (response.state === 'no_source') {
-      sourceCache.current.delete(mediaId);
+      sourceCache.delete(mediaId);
     }
-  }, [response]);
+  }, [response, sourceCache]);
 
-  const failedFocus =
-    current && intentState.error ? intentState.originalArgs?.intent.focused : null;
   return resolvePreparation({
     selectedMedia,
     response,
     cachedSource:
-      selectedMedia?._type === 'movie' ? sourceCache.current.get(selectedMedia.mediaId) : undefined,
-    intentFailedForMovieId: failedFocus?.kind === 'movie' ? failedFocus.mediaId : null,
+      selectedMedia?._type === 'movie' ? sourceCache.get(selectedMedia.mediaId) : undefined,
+    intentFailedForMovieId,
   });
 }

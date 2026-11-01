@@ -43,3 +43,38 @@ export function filterSources(sources: ContentSource[], allowHevc = true): Conte
       .sort((a, b) => (b.streamingScore || 0) - (a.streamingScore || 0))
   );
 }
+
+/**
+ * A source's average bitrate in kbit/s, from its size and the movie's runtime, or null when
+ * either is unknown. Extras in the source count too, so this errs on the high side.
+ */
+export function estimatedBitrateKbps(source: ContentSource, runtimeSeconds: number): number | null {
+  if (!source.size || !(runtimeSeconds > 0)) return null;
+  return (source.size * 8) / runtimeSeconds / 1000;
+}
+
+/** Whether a source fits the client's bitrate cap; a source of unknown bitrate fits. */
+export function fitsBitrate(
+  source: ContentSource,
+  maxBitrateKbps: number,
+  runtimeSeconds: number
+): boolean {
+  const bitrate = estimatedBitrateKbps(source, runtimeSeconds);
+  return bitrate === null || bitrate <= maxBitrateKbps;
+}
+
+/**
+ * Order sources for a client that cannot sustain more than `maxBitrateKbps`: the ones that fit
+ * keep their order, then the rest from the leanest, so a source over the cap is still a fallback.
+ */
+export function preferWithinBitrate(
+  sources: ContentSource[],
+  maxBitrateKbps: number,
+  runtimeSeconds: number
+): ContentSource[] {
+  const fitting = sources.filter(source => fitsBitrate(source, maxBitrateKbps, runtimeSeconds));
+  const over = sources
+    .filter(source => !fitsBitrate(source, maxBitrateKbps, runtimeSeconds))
+    .sort((a, b) => a.size - b.size);
+  return [...fitting, ...over];
+}

@@ -85,4 +85,26 @@ describe('realtime state', () => {
     state = realtimeSlice.reducer(state, realtimeActions.sourceAttemptCleared(episode));
     expect(selectSourceAttempt(episode)({ realtime: state })).toBeNull();
   });
+
+  it('keeps the state unchanged when the backend repeats a status', () => {
+    const status = {
+      type: 'warmup' as const,
+      mediaId: 7,
+      media: { kind: 'movie' as const, mediaId: 7 },
+      playable: { kind: 'movie' as const, mediaId: 7 },
+      status: 'warming',
+      loaded: 50,
+      verifiedBytes: 40,
+      targetBytes: 100,
+      statusDescription: 'Warming',
+      focusSequence: 3,
+    };
+    const state = realtimeSlice.reducer(undefined, realtimeActions.statusReceived(status));
+
+    expect(realtimeSlice.reducer(state, realtimeActions.statusReceived({ ...status }))).toBe(state);
+    expect(
+      realtimeSlice.reducer(state, realtimeActions.statusReceived({ ...status, loaded: 60 }))
+        .preparationByMediaId[7]?.warmup.progress
+    ).toBe(60);
+  });
 });

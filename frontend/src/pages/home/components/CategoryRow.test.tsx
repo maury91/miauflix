@@ -12,7 +12,17 @@ const { useGetListQuery, usePromoteListMediaMutation, useQueueBackdropFocusMutat
   })
 );
 
-vi.mock('@features/media/api/lists.api', () => ({ useGetListQuery, usePromoteListMediaMutation }));
+vi.mock('@features/media/api/lists.api', () => ({ usePromoteListMediaMutation }));
+// Rows read pages from the cache (the home feed loads them): the reader stands in for the cache.
+vi.mock('@features/home-feed/listPages', () => ({
+  useListPage: useGetListQuery,
+  listPageArgs: (category: string, page: number, priority = 'visible') => ({
+    category,
+    page,
+    limit: 20,
+    priority,
+  }),
+}));
 vi.mock('@features/media/api/media.api', () => ({ useQueueBackdropFocusMutation }));
 // jsdom has no layout to animate; land every scroll immediately (the spring has its own tests).
 vi.mock('../smooth-scroll', () => ({
@@ -22,6 +32,7 @@ vi.mock('../smooth-scroll', () => ({
     },
     stop: () => {},
     dispose: () => {},
+    position: () => element.scrollLeft,
   }),
 }));
 vi.mock('./MediaCard', async () => {
@@ -294,6 +305,21 @@ describe('CategoryRow page window', () => {
     expect(ref.current?.isEmpty()).toBe(false);
   });
 
+  it('shows loading, not an empty row, before its page is requested', () => {
+    useGetListQuery.mockImplementation(() => ({
+      data: undefined,
+      currentData: undefined,
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+    }));
+
+    render(<CategoryRow {...makeProps(0, true)} />);
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.queryByText('Nothing here yet.')).not.toBeInTheDocument();
+  });
+
   it('restores focus when the requested card is already selected', () => {
     const ref = createRef<CategoryRowHandle>();
     render(
@@ -436,5 +462,29 @@ describe('CategoryRow page window', () => {
         items: [{ mediaType: 'movie', mediaId: 1000, tier: 'viewport' }],
       })
     );
+  });
+
+  it('promotes the same viewport again only after a failed promotion', async () => {
+    const viewportCalls = (promote: ReturnType<typeof vi.fn>) =>
+      promote.mock.calls.filter(([arg]) => arg.items[0]?.tier === 'viewport').length;
+    const props = makeProps(0, true, { active: true, visible: true, total: 3 });
+
+    const succeeding = vi.fn(() => ({ unwrap: () => Promise.resolve({ accepted: 1 }) }));
+    usePromoteListMediaMutation.mockReturnValue([succeeding]);
+    const view = render(<CategoryRow {...props} />);
+    await waitFor(() => expect(viewportCalls(succeeding)).toBe(1));
+    view.rerender(<CategoryRow {...props} visible={false} />);
+    view.rerender(<CategoryRow {...props} />);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    expect(viewportCalls(succeeding)).toBe(1);
+    view.unmount();
+
+    const failing = vi.fn(() => ({ unwrap: () => Promise.reject(new Error('offline')) }));
+    usePromoteListMediaMutation.mockReturnValue([failing]);
+    const retry = render(<CategoryRow {...props} />);
+    await waitFor(() => expect(viewportCalls(failing)).toBe(1));
+    retry.rerender(<CategoryRow {...props} visible={false} />);
+    retry.rerender(<CategoryRow {...props} />);
+    await waitFor(() => expect(viewportCalls(failing)).toBe(2));
   });
 });

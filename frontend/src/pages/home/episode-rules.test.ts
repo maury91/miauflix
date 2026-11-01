@@ -8,7 +8,9 @@ import {
   nextEpisode,
   nextEpisodeInSeason,
   nextSeasonNumber,
+  resumeEpisodeProgress,
 } from './episode-rules';
+import { progressByMedia } from './progress-lookup';
 
 const NOW = Date.parse('2026-10-24T12:00:00Z');
 const AIRED = '2026-01-01';
@@ -66,6 +68,19 @@ describe('latestEpisodeProgress', () => {
   });
 });
 
+describe('resumeEpisodeProgress', () => {
+  it('prefers unfinished playback over a newer entry that is not, within the season', () => {
+    const progress = [
+      watched(2, 1, '2026-10-22T10:00:00Z'),
+      watched(1, 3, '2026-10-20T10:00:00Z'),
+      { ...watched(1, 4, '2026-10-21T10:00:00Z'), state: 'completed' as const },
+    ];
+    expect(resumeEpisodeProgress(progress, 42)?.playable).toMatchObject({ seasonNumber: 2 });
+    expect(resumeEpisodeProgress(progress, 42, 1)?.playable).toMatchObject({ episodeNumber: 3 });
+    expect(resumeEpisodeProgress(progress, 42, 5)).toBeUndefined();
+  });
+});
+
 describe('isEpisodeUpcoming', () => {
   it.each([
     [FUTURE, true],
@@ -92,6 +107,23 @@ describe('episodeForSeason', () => {
     ['does not resume onto an unaired episode', [watched(1, 4, '2026-10-20T10:00:00Z')], 1],
   ])('%s', (_name, progress, expected) => {
     expect(episodeForSeason(regular, 42, progress, NOW)?.episodeNumber).toBe(expected);
+  });
+
+  it('opens the episode the show card shows', () => {
+    // Episode 4 is newer, but four seconds in is not watched yet: the card shows episode 3.
+    const progress = [
+      watched(1, 3, '2026-10-20T10:00:00Z'),
+      { ...watched(1, 4, '2026-10-21T10:00:00Z'), positionSeconds: 4 },
+    ];
+    const card = progressByMedia(progress).get('show:42');
+    const opened = episodeForSeason(
+      season(1, ...[1, 2, 3, 4].map(n => episode(n))),
+      42,
+      progress,
+      NOW
+    );
+    expect(card?.playable).toMatchObject({ episodeNumber: 3 });
+    expect(opened?.episodeNumber).toBe(3);
   });
 
   it('opens on the first aired episode when earlier ones are unaired', () => {

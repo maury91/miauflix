@@ -1,0 +1,562 @@
+# Miauflix Detailed Changelog
+
+Every change in full, for developers and self-hosters. The short version for users is in [CHANGELOG.md](CHANGELOG.md).
+
+## Unreleased
+
+### Features
+
+- The compose files combine: `docker-compose.yml` (the former `docker-compose.quickstart.yml`, prebuilt images) is the base of every deployment, and each feature is a file listed after it in `COMPOSE_FILE` (the base must come first, the features in any order): `docker-compose.vpn.yml` (NordVPN), `docker-compose.https.yml` (Caddy), `docker-compose.flaresolverr.yml`, `docker-compose.tracing.yml` (Jaeger) and `docker-compose.build.yml` (build the images from the checkout, running Miauflix as your user so it can read the mounted `.env`). FlareSolverr and Jaeger move into the VPN's network when the VPN file is listed. Image tags follow `MIAUFLIX_VERSION` and `MIAUFLIX_IMAGE_NAMESPACE`. `npm run start:backend:docker:prod` and `npm run config-only:docker` use the `COMPOSE_FILE` from `.env`, or build from source with FlareSolverr, tracing and (with `NORDVPN_PRIVATE_KEY`) the VPN. **Breaking for source-built deployments:** `docker-compose.novpn.yml`, `docker-compose.prod.yml` and the nginx/certbot services are gone (Caddy replaces them), the catalog, list service and Bunqueue run in one `miauflix-services` container, data lives in Docker volumes instead of `./data`, and the backend listens on port 3000 instead of 5000. `docs/setup/docker-setup.md#moving-from-the-old-source-built-stack` copies the data over. The compose files no longer pass `JWT_SECRET`, `STREAM_TOKEN_SECRET`, `STREAM_KEY_SALT` and `SOURCE_SECURITY_KEY` (the old `docker-compose.https.yml` did). Secrets given through the environment are never saved to `config.json`, so a deployment that set them in `.env` must keep passing them, or Miauflix generates new ones and can no longer read its encrypted data, see `docs/setup/docker-setup.md#secrets-set-in-env`. `docs/setup/ssl-certificates.md` is gone: HTTPS is covered in `docs/setup/docker-setup.md#https-with-a-domain`
+
+- The prebuilt-image deployments (`docker-compose.yml` without `docker-compose.build.yml`) update themselves: they run [Watchtower](https://watchtower.nickfedor.com/) (the maintained fork, the original `containrrr/watchtower` is archived), which checks every day at 4:00 for a new image of the tag in use and recreates only the Miauflix containers, removing the replaced images. `WATCHTOWER_SCHEDULE` changes the time. It needs the Docker socket
+- `scripts/update.sh` updates a prebuilt-image deployment right away: it pulls the images, recreates the containers that changed and waits until every container is running and the health-checked ones are healthy (`HEALTH_TIMEOUT`, 6 minutes by default, counted from when the containers start being recreated). It then removes only the images it replaced, leaving other projects' unused images alone. `--files` first downloads the newest compose files and `Caddyfile` the deployment already has (from `MIAUFLIX_FILES_REF`, `main` by default): it changes nothing if any download fails, keeps each replaced file as `<file>.<date>-<time>.bak`, and recreates Caddy when the `Caddyfile` changed (on the next run too, if this one fails before Caddy is recreated). `MIAUFLIX_LISTEN_ADDRESS` in `.env` (for example `0.0.0.0`) opens Miauflix to the local network, so it no longer takes an edit to `docker-compose.yml` or `docker-compose.vpn.yml` that `--files` would replace, see `docs/setup/docker-setup.md#updating-miauflix`
+- Fake sources are remembered: as soon as a source's file list is known (a downloaded torrent file, a resolved layout, or a playback attempt) it is judged by whether video makes up most of its bytes, and a fake (an `.exe`, an archive, or a small sample beside one) is stored as such and never picked again. Sources are checked ahead of Watch: browsing or opening a title with no verified source queues a background check of its candidates, one torrent at a time with a timeout, without downloading any payload. A data migration judges every source whose file list is already known
+- Movies and episodes report whether a playable source exists: movie details and season episodes include `sourceAvailability` (`available`, `pending` or `unavailable`), and changes are pushed live over the realtime connection (`source-availability`), only to the clients showing or focusing that title. Changes missed while the connection is down are not replayed, so after a reconnect the pushed values are dropped and the details are fetched again. The details and browse badges show a "No source" icon instead of the quality, and episodes are marked "No source available", once every source found proved fake
+- The player moves on by itself when a source fails and shows "Trying source N of M" while it works through the candidates (pushed live as `source-attempt` while a session is created). Each retry sends the sources that already failed in this browser (`avoidSourceIds`), so the backend picks a different one. When a movie has no source at all (none found, or every one proved fake), the **Watch Now** button on its details becomes **Notify Me**, and turns back once a real source is found. Once every source is exhausted during playback, the player says there is no source for the title and offers **Notify me**, which sends a notification as soon as a real source is found. A user can have up to 200 pending requests, for titles the catalog knows. Requests are re-checked in the background every 6 hours (every pending request, not only the 50 oldest, and a title whose check fails doesn't stop the others), and an episode's matches that are not verified yet are queued for a check
+- The frontend can be packaged as a Samsung TV (Tizen) app: `npm run package:tizen -- https://your-domain` builds `dist/miauflix.wgt`, which runs from the TV's storage against your backend. Install it with Apps2Samsung (`docs/setup/samsung-tv.md`). The Tizen build is a single classic script with relative paths, so it loads from `file://`, and polyfills `globalThis`, `queueMicrotask`, `Object.fromEntries` and `String.prototype.replaceAll` for 2020 TVs (Chromium 69). It registers the remote's media and Search keys, and no longer scans the local network for the backend. The TV app signs in with bearer tokens: with `X-Auth-Transport: token`, `POST /api/auth/login`, `/setup`, `/refresh/:session` and `/qr/:requestId/claim` return `tokens` in the body instead of setting cookies, the API accepts `Authorization: Bearer` (with `X-Session-Id`), refresh and logout accept `X-Refresh-Token`, `GET /api/auth/sessions` accepts `X-Refresh-Tokens` (`session:token` pairs, the first five are checked, and the TV app forgets the ones the backend no longer lists), and the realtime `authenticate` message accepts `accessToken`. The new `ALLOW_TV_APP` setting (on by default) allows the app's local origin `file://`, which web pages cannot send, in CORS (without credentials) and on the realtime socket. `ALLOW_TV_APP_NULL_ORIGIN` (off by default) also accepts the opaque origin `null`, for a TV that reports local files that way; any web page can send `null`, so with it on a page you visit can read unauthenticated responses and, while first-run setup is open, create the admin account. In the Tizen build a styled-components plugin rewrites the CSS Chromium 69 lacks as the styles are generated: `:focus-visible` becomes `:focus`, `inset` and the logical `*-inline`/`*-block` shorthands become physical sides, `dvh` becomes `vh`, `clamp()`/`min()`/`max()` are resolved against the TV's screen, flex `gap` becomes margins between the children, `aspect-ratio` becomes a height, and masks get the `-webkit-` prefix; browsers get the styles unchanged. On the TV, playback uses AVPlay, Samsung's native player: the app tells the backend it decodes Matroska and MP4, H.264 and H.265, and AAC, MP3, AC3, E-AC3 and FLAC audio, so those files are streamed as they are, without conversion, and audio tracks switch in place. Files with other audio (DTS, TrueHD) still play converted audio in a `<video>` element. Subtitles are drawn over the video by the app, so timing adjustment works as in the browser; volume and fullscreen controls are hidden on the TV. The TV build loads `webapis.js` and asks for the `productinfo` privilege, to play 4K sources in 4K on UHD panels, and requests the stream and prefetch URLs from the backend origin instead of the app's local page. Its QR login code, and the public URL the configuration form suggests, point at the backend's origin too, where the web app is served. `npm run install:tizen -- <tv-ip>` installs `dist/miauflix.wgt` on a TV in Developer Mode with `apps2samsung-cli`, signed with a Samsung certificate, and opens it
+- The Samsung TV app finds its server at runtime, so one package works for any server: `npm run package:tizen` no longer needs the backend's origin (passing one makes it the default). The server the TV connects to is kept on the TV, and checked at every start. When the TV has none, or it doesn't answer, the TV shows a server picker (it reconnects by itself once the last server is back):
+  - **On your network**: the TV lists the servers that answer among the ones announced to the pairing service from its own public IP, and among every host of its /24 network on port 3000 (`GET /api/health`, which now also answers `service: "miauflix"`)
+  - **Or type its address**: an IP gets port 3000 and `http://` when they are missing
+  - **Settings → Change server** on the TV signs out and opens the picker again
+  - The backend announces itself to the pairing service every two minutes (`POST /v1/discovery`, straight from the server) with the addresses a TV on the network can reach it at: `TV_PAIRING_ADDRESSES` when set, otherwise its private IPv4 addresses (outside a container) and the private IPv4 addresses it was opened at (the `Host` header, which is how it learns its LAN address in Docker; only from requests that come from a private IPv4 address; it keeps the 32 most recent and announces at most 8 addresses). On by default: turn it off on the server with `TV_PAIRING_ENABLED=false`, and leave the lookup out of the TV package with `npm run package:tizen -- --no-pairing`; `TV_PAIRING_URL` and `--pairing-url` point both at your own instance
+- New standalone service in `tv-pairing/` (outside the Miauflix workspaces), hosted at `pair.miauflix.cat` and published as the `miauflix-tv-pairing` image: one endpoint, `POST /v1/discovery`, where a server announces its local addresses (`role: "server"`) and a TV gets the servers announced from its own public IP (`role: "client"`, an IPv6 client matched by its /64). Announcements older than 5 minutes are dropped; it keeps them in memory only and rate-limits each network. It is not part of a Miauflix install, see `tv-pairing/README.md`
+
+### Improvements
+
+- Home on the TV: Back on the remote (or Esc) while browsing the rows opens the sidebar, and pressing it again returns to the selected card. Right on the sidebar's bell no longer opens an empty notifications panel when there are no notifications, read or unread
+- Playback can be capped by bitrate: a playback session's `preferences.maxBitrateKbps` (500 to 1,000,000) is the highest average bitrate the client's connection sustains. A movie's sources are estimated from their size and the movie's runtime: the ones within the cap keep their ranking and are tried first, then the rest from the leanest, so a movie with nothing under the cap still plays. A finished download over the cap no longer wins over a leaner torrent. Episodes are not capped yet (season packs and the missing episode runtimes make their estimate unreliable). The TV app asks for 8 Mbit/s at most: it fetches a stream at about 11 Mbit/s, and a 4K remux (~35 Mbit/s) froze on its first frame for 18 seconds, then played at a third of real time without audio
+- On the TV, loading spinners no longer keep the main thread busy: Chromium 69 animates SVG (the spinner icon's own SMIL loop and its CSS spin) on the main thread, a full frame on every display refresh even out of view, so a row still loading far below the screen cost about 10 ms per frame for as long as it loaded. The TV build spins an HTML element instead, which the compositor animates, including the hero's "checking sources" indicator, and a row loading off screen shows no spinner.
+- Home no longer re-renders when the backend pushes the focused title's source status or warmup progress (every few hundred milliseconds while a title warms up): the hero and details read it themselves, and the hero ignores warmup progress, which it doesn't show. Rows and the hero no longer re-render when their own promotion and backdrop requests start and finish, and the set of empty lists keeps its identity while it doesn't change, so loading pages no longer re-renders Home. On the TV a single move along a row now takes 42–44 ms of main thread, down from 47–66.
+- Home loads its lists from the store instead of from each row: Home names the rows it wants, a middleware keeps the list pages they need (the selected page and the pages beside it) subscribed and releases the rest, and rows only read the cache. Empty lists are left out before their row renders, so no row mounts just to find out it is empty.
+- Home on the TV readies the rows below while you're idle: from a second after the last key press, one more row every half second, up to 10 rows below the visible ones. A ready row is fetched, mounted and rendered in full off screen, so moving down finds it ready; it isn't promoted to the backend until it is on screen. Home also scrolls between rows with a CSS transition that the compositor runs, and the rows around the focused one mount, unmount and load once the slide to it has ended, not during it or on every move of a quick run.
+
+### Bug fixes
+
+- The player works with a TV remote: the Play/Pause, Play and Pause keys play and pause from anywhere in the player (they were registered with the TV but nothing handled them). Up and Down move one level at a time through the controls, top to bottom: **Back to details**, the video (where Left and Right seek), the seek bar (where Left and Right seek too) and the row of buttons (where Left and Right move along it). Before, Up and Down both jumped from the video to **Back to details** and straight back, so the buttons could not be reached. While the controls are hidden, Up or Down shows them first. The player's focused controls get a 3-pixel ring, easier to see over video
+- A torrent nobody wants any more is taken off the torrent client: when its last claim expires or is released (a warmup moving to another title, an expired prefetch) and it isn't streaming, starting or seeding a completed download, it is detached, keeping its encrypted files and downloaded pieces, and a new claim attaches it again. Before, it stayed attached with nothing selected, still connected to its peers and holding its buffers. These piled up over time until the server ran at 300% CPU with 3 GB of buffers, and every request, `GET /api/auth/sessions` included, took seconds. A source that fails while its expired claims are swept no longer stops the sweep, so the other sources are still detached
+- A Continue watching card shows the same episode its row selected: the card's progress now skips the playback the row skips (the first five seconds and the last second), so a show's card no longer shows a newer episode stopped within five seconds. A show's details open the season and episode its card shows, by the same rule (before, they opened the newest episode watched, even one stopped within five seconds or finished). On the TV, a row that leaves view goes back to rendering only the cards in view, unless Home keeps it ready below. Opening a card on the TV right after moving to it stores that card at once, so Back returns to it rather than to the card before.
+- A Home row whose list has nothing in it (an empty watchlist, for example) is removed instead of showing "Nothing here yet". Rows load ahead of the selection, so it usually goes before you reach it; if a row above the focused one goes, the focus stays on the same row. An empty list stays cached while Home is open, so its row no longer comes back a minute later, and a row shows "Loading..." until its list is fetched, instead of "Nothing here yet" before the request starts. If the focused row itself turns out empty, the focus moves to the row now in its place, or to the row above when it was the last one (before, no row had the focus and the keys did nothing).
+
+- Holding a key along a Home row on the TV no longer drops frames on cards not shown before: 46–49 fps, up from 30–35. Each row draws one focus ring over its leading slot, so the cards no longer scale on focus (`MediaCard` takes `externalFocus` for this). A held run of moves updates Home and the hero once it pauses for 150 ms (a single press still updates them at once). Rows slide with a CSS transition that the compositor runs, instead of a transform written from JavaScript every frame. Untouched rows no longer re-render with Home. Details in `docs/development/tv-performance-plan.md`.
+- Home on the TV does less per move (Phase 2 of `docs/development/tv-performance-plan.md`). Rows move on a `translate3d` track inside their clipped viewport instead of scrolling, so Chromium 69 no longer lays out the page on every animation frame. The web build keeps native scrolling. Rows off screen render only the cards in view, and a row that comes into view gets the rest 400 ms later, after the move. Expanded rows keep two cards of margin past a page instead of four. Each card receives its own progress entry from a lookup built once per progress change, instead of scanning every entry. Artwork URLs are cached. The hero's title, metadata and overview no longer re-render when its backdrop layers change, and the sidebar no longer re-renders with Home. On the TV, the hero changes its backdrop only once the selection has rested for 250 ms, so a run of moves rasterizes one full-width backdrop instead of one per move. The title and details still change at once
+- Moving along a Home row no longer floods the store (Phase 1 of `docs/development/tv-performance-plan.md`). Artwork that arrives again unchanged leaves the state as it is, and Home and realtime pushes store a row's artwork in one update instead of one per title. Continue watching reads only its own titles from the query cache, so loading the hero's details no longer rebuilds that row. The realtime interest is published once scrolling settles, and only when it changed, instead of twice per scroll frame. Moves within a row no longer re-send the active row, and the viewport promotion skips an unchanged set of titles. The realtime middleware hands the interest and artwork subscriptions straight to the socket without running them through the reducers and subscribers. A preparation status the backend repeats unchanged (several times a second) is dropped before it reaches the store, so it no longer notifies every subscriber or re-renders the hero. On the TV, four moves along a row went from 461 store notifications, 21 fps and a 180 ms p90 frame to 33–42 notifications, about 49 fps and a 25 ms p90, and main-thread work per key from about 640 ms to 213 ms
+- Frontend styles start moving to CSS compiled at build time, so the TV no longer generates and inserts CSS while it runs (each insertion makes Chromium 69 restyle the whole page). `docs/development/css-architecture.md` sets the rules: no values computed in style definitions, variants as `data-*`/ARIA attributes, per-instance values as inline styles, geometry in `vh`/`rem` or `em` of one inline font size, and no `var()`/`calc()` in gradients and other paint properties. It also compares the options (vanilla-extract is the choice), classifies the 108 prop interpolations left in 30 files, and orders the migration. The shared `MediaCard` is the first component on [vanilla-extract](https://vanilla-extract.style/): its classes no longer change with its width, focus, hover or progress. The Tizen build rewrites the extracted CSS for Chromium 69 at build time with a PostCSS pass, which shares the declaration rewrites of the styled-components plugin. It links one stylesheet instead of injecting CSS from the script, and minifies CSS for Chromium 69, so the minifier no longer folds sides back into `inset`. It fails on `clamp()`/`min()`/`max()`, which need the viewport. ESLint keeps migrated folders off styled-components
+- New paw icon for the website, generated from `assets/favicon.png` by `npm run generate:icons`: `favicon.ico` (16, 32 and 48 px, now also served by the backend at `/favicon.ico`), 16 and 32 px PNG favicons, a 180 px Apple touch icon and a 512 px `favicon.png`, keeping the source's transparency. Rerun the script after changing the source image
+- New Samsung TV launcher icon, generated from `assets/tv-logo.png` (the only copy of the TV icons) by `scripts/generate-tv-icons.mjs` on every `npm run package:tizen`: the 512x423 `icon.png` shows the logo at full height, with its background extended to the sides. Nothing generated is committed, so replacing `assets/tv-logo.png` is all a new TV icon takes
+- Redesigned notifications panel:
+  - The panel opens beside the rail while the bell is highlighted, and the rail stays expanded while it is open. Right/Enter moves into the panel, and Left/Back returns to the rail without closing it. The pointer can move from the bell onto the panel.
+  - Each notification shows the title's poster, a heading ("New episode available", "Just added", "Better quality available"), the quality it is available in (the same quality badge as the details page), how long ago it arrived, and a red dot while unread.
+  - Unread notifications come first. Read ones stay hidden behind **Show read notifications**, and **Mark all as read** clears the badge.
+  - Clicking a notification marks it read and starts playing the movie or episode. Back from that player returns to Home.
+  - `GET /api/notifications` is now paged by cursor (`status=unread|read`, `cursor`, `limit`), and the panel loads more as it scrolls. `GET /api/notifications/unread-count` feeds the rail badge, and `POST /api/notifications/read-all` marks everything read.
+  - Notifications store the quality and release type of the source they announce. Notifications created before this change show without a quality badge.
+  - Visual regression tests (`e2e/notifications.storybook.spec.ts`) capture the panel alone (unread, read shown, all caught up) and beside the rail on Home at 1440×900 and 1920×1080 (bell highlighted, first notification focused, read shown).
+  - The offline E2E harnesses (details, voting, smooth core flows) answer `GET /api/notifications/unread-count` and the realtime websocket themselves, so Vite no longer logs a proxy error for every socket it can't reach.
+- Minor cosmetic changes to the sidebar: Settings is now at the bottom, elements are highlighted only when sidebar is open.
+
+### Security
+
+- The database no longer names what is stored or watched in plain text: file paths inside sources (movie and episode files, stored files and download claims), ffprobe output, recent searches and notification titles and messages are encrypted at rest with the existing source key, in columns renamed to names that do not describe them (`k`, `v`, `a`, `b`). Existing databases are converted by data migrations at the first start (renamed in place before the schema sync, then encrypted, safe to rerun), and the file is rewritten with `VACUUM` so the replaced plain text does not stay readable in freed pages. Links between tables (which movie a source belongs to, which source is stored, playback progress) are still readable to someone who knows the schema
+
+- The frontend dev and preview servers (Vite) check the certificate of the backend they proxy `/api` to, unless `BACKEND_URL` is local (`localhost`, a `127.x.x.x` or `[::1]` address, or one of the compose service names `backend`, `miauflix` and `vpn`). Pointing `BACKEND_URL` at a remote HTTPS backend accepted any certificate before
+
+### Bug fix
+
+- Home sends the focused title and the cards in view to the new socket after switching sessions, instead of waiting for the next move. Artwork pushed just before Home closes no longer comes back after Home removed it. A viewport promotion that failed is retried the next time the same cards are in view
+- Home no longer stays hidden behind the logo for tens of seconds on a slow device (seen on the 4K e2e run): the intro started only once the browser had an idle moment, which a device busy drawing every frame may not have for a long time. It now waits at most 0.5 s for an idle moment once it is ready. On the TV it also waits for the page's images to load and for frames to run smoothly, at most 5 s
+- The logo animation visual test (`e2e/logo-animation.storybook.spec.ts`) no longer fails with `window.seek is not a function` on a cold Storybook load: it waits for the story to expose `window.seek` instead of relying on `networkidle`, which could fire before the story rendered
+- A backend that stops responding is now restarted. Docker only marks an unhealthy container and never restarts it, so when the backend hung it stayed down until restarted by hand. Every compose file now runs [autoheal](https://github.com/willfarrell/docker-autoheal) (it needs the Docker socket), which restarts the backend once its healthcheck fails 3 times in a row. The image's healthcheck called `/health` instead of `/api/health`, which the frontend fallback answered with `index.html` even while the API was down; it now calls `/api/health`, allows 8 s per request and ignores failures in the first 5 minutes so data migrations can finish. `/api/health` is no longer rate limited, so a flood of requests can't get the backend restarted, and it is no longer written to the audit log on every probe
+- The server no longer becomes slow (pages taking 20 s or more, health checks timing out) after running for a few hours. WebTorrent 2.8 opened a new UDP socket with its own buffers for every outgoing uTP peer attempt, and did not count those attempts against the connection limit, so with tens of thousands of discovered peers the backend spent most of its CPU allocating buffers and collecting garbage, and grew to about 3 GB of buffer memory. WebTorrent is upgraded to 3.0.21, which sends all uTP connections through the single listening socket and keeps attempts within the connection limit (2000 unreachable peers: 6000 sockets and 540 MB of buffers before, 1 socket and 15 MB after). WebTorrent 3 also accepts encrypted peer connections by default
+- A movie whose sources were all fake (for example releases that only contain an `.exe`) failed with a generic 500 and retried the same fake source on every attempt. The stream route now answers 404 for a source without video (also when saving that verdict fails), and session creation answers 404 with `reason: "exhausted"`
+- New-episode notifications are sent only once a source matched to the episode is verified to hold a real video, not as soon as a release is matched by name
+- Playback no longer stops with "The media buffer is full and playback is not advancing" on high-bitrate files using the audio-converting stream. On a full buffer the player removed media up to 1 s behind the playhead, but the browser extends a removal to the next keyframe, so this also removed the frames being played and froze playback. The player now only lowers its read-ahead limit and waits, and lets the browser evict what is behind the playhead. It reports a stall after about 10 s without progress instead of 2 s
+- Playback on the audio-converting stream no longer freezes at small gaps in the media: in open-GOP encodes (x265's default) the 2–3 frames shown just before each keyframe are decoded after it, and Chrome often reports them as a gap in the buffered video. Chrome froze the picture there while audio played on, then stalled the whole player a few seconds later until a seek. A watchdog now jumps gaps of up to 1 s just before the playhead reaches them, and as a fallback re-seeks when the playhead stops for about 1 s with media buffered ahead, or keeps moving while no video frame is decoded
+- Show Settings in the sidebar only to admin users. Keyboard and remote navigation skip it as well, so a non-admin can no longer select the hidden button with ArrowDown and open it with Enter
+
+- Connecting a Trakt account now ends cleanly when the user denies access, the code expires or was already used: the dialog stops with that outcome instead of a server error. Trakt asking the app to poll more slowly no longer fails the connection either
+- A backend e2e run no longer overwrites a customized `backend-e2e/.env.test` with a leftover backup; it restores only the backup it made itself, and the backup file is ignored by git
+- The login screen on the Samsung TV ignored the remote: nothing had focus and the arrow keys didn't move it, so only the QR code could be used. Now:
+  - The email field has focus when the screen opens on the TV. Up and Down move between the email and password fields and Continue (inside a field they used to only move the caret), and the TV keyboard's Done key moves to the next field.
+  - After a failed sign-in the focus goes back to the password field. Continue is disabled while signing in, which used to leave nothing focused. If a remote key finds nothing focused, the email field takes the focus.
+  - An eye button at the end of the password field shows or hides the password (on every device). On the TV, Right from the password field reaches it, and Left goes back.
+  - An expired QR code now offers a **Get a new code** button instead of only saying "Code expired". On the TV, Right from the eye reaches it, and focus returns to the eye once the new code is requested. The QR panel no longer shows "Code expired" for its first second, before the countdown started
+- Files whose default audio a player can't decode, but which carry a decodable track in the same language, now play as they are on players that switch tracks themselves (the Samsung TV), instead of converting the audio. For example a 4K release with an English TrueHD default and an English AC-3 track used to be converted, which on a large source could time out ("Audio conversion timed out"); it now plays the AC-3 track directly. Without a decodable track in that language the audio is still converted, rather than switching to another language
+- The player on the Samsung TV kept nothing focused, so the remote did nothing: while preparing, Back didn't work, and after a failure Retry couldn't be reached. The player now takes the focus when it opens, and a failure focuses **Retry** (or **Notify me** when there is no source), and pressing **Retry**, which removes the button, hands the focus back to the player so Back keeps working
+- On the Samsung TV, Home showed through before the intro instead of a black screen: the intro's backdrop used `inset`, which the TV's Chromium 69 doesn't support
+- Home and its intro lagged on the Samsung TV. Measured on the TV, each move along a row froze it for about 0.7 s (about 4 frames per second), mostly spent re-rendering every row and card and decoding images:
+  - Rows and their cards are memoized, so a move re-renders only the row it happens in and the cards whose selection changes.
+  - The TV asks for backdrops up to 1280 px wide instead of the original size (often 4K), which took the TV about half a second to decode each time the hero changed.
+  - Card logos have no drop shadow on the TV.
+  - The intro runs without its blur and layer hints on the TV, as the legacy app did.
+  - On the TV the hero's gradients and backdrops, the row list and each row are on layers of their own. The TV rasterizes in software, and repainted the whole hero with every title change and every frame of a backdrop crossfade or a scroll. Row moves went from about 6–10 to about 30 frames per second, and moves between rows from about 15 to about 30.
+  - On the TV the hero's shade is drawn with fixed pixel positions instead of `var()` and `calc()`. Chromium 69 resolved those into new values on every restyle, and every CSS rule styled-components inserts restyles the page, so the whole shade was repainted (about 480 ms) each time: ten times while the app started, including on the intro's first beat and as its expansion started.
+  - The hero's backdrop image and fade are inline styles instead of a CSS class per backdrop: every class styled-components inserted made the TV restyle the whole page, about 650 ms over a first pass along a row.
+  - The TV loads smaller images, as the legacy app did: 300 px cards and 780 px hero backdrops, since it decodes every image it paints (a 780 px card took about 95 ms).
+  - Images load ahead while the user isn't moving: every row with data queues its cards and hero backdrops, nearest the selection first. These idle loads start after the intro (as the legacy app preloaded), run one at a time, only when nothing else is loading and no key was pressed in the last second, and aren't decoded.
+  - The intro's two "pam" pulses play on the TV. The logo they scale now gets a layer of its own before the audio starts, so the compositor scales it; until then each pulse repainted the whole screen, and the layer GSAP created as it started took about 250 ms to paint, longer than the 50 ms swell. The layer stays for the expansion, as dropping it cost another full-screen repaint. The intro's letters also show (under the identical settled logo) and get their layers before the audio starts: painting them on the first beat, and eight new letter layers as the expansion started, each stalled the TV for about 250 ms.
+  - On the TV the intro waits, after Home is ready, until every image on the page has loaded and then for six smooth frames in a row (at most 5 s in all). Images arriving under the intro, and the TV still painting Home, made it repaint large layers (about 250 ms each) during the first beats.
+  - The centred logo pulses on the TV while the app loads. The pulse animated the CSS `scale` property, which the TV's Chromium 69 doesn't have, so only its opacity changed; browsers without it now pulse `transform` instead.
+- Approving a QR login (from the TV app or any device) on the `/auth/qr/:token` page always failed with 401: the approve and decline calls didn't send the browser's session (`X-Session-Id`). They now do, and an expired session sends the user back to sign in. A request approved, declined or expired meanwhile (409) now shows its current state
+- Redesigned the QR approval page: a centered card below the logo, which now stays where the login screen has it on every step (it used to jump to the top-left corner once signed in and cover the heading), the device named in plain words ("Samsung TV", "Chrome on macOS") instead of its raw user agent, a countdown until the code expires, Approve and Decline buttons, and clear screens for approved, declined and expired codes. When the browser isn't signed in, the same card shows which device is waiting and the sign-in form
+
+### Documentation
+
+- `docs/development/tv-performance-plan.md` plans the TV performance work for every component, starting with Home movement. Measured on the TV, four moves along a row cause 461 store notifications: 351 `artwork/received` dispatches (one per title, sent again even when unchanged, because the whole `mediaApi` slice feeds Continue watching) and two realtime interest dispatches per scroll frame. The plan orders the fixes and how to measure each one
+- `docs/architecture/service-contract-v2.md` describes the new backend ↔ service contract (types-only contracts, one WebSocket per service for calls, streams and events, signed URLs for byte streams, services that run in-process or remote on Bun or Node, and which data the backend keeps once streaming and sources become services), and what is left to move
+
+### Technical debt
+
+- Releases are cut by the **Release** workflow (Actions tab, on `main`): given a patch/minor/major bump or an exact version and a title, it renames the changelog's Unreleased section to `<date> v<version> <title>`, sets the version in the root `package.json` and `package-lock.json`, commits and tags `v<version>` on `main`, publishes a GitHub release with that section as its notes (marked latest, unless the version is a prerelease such as `1.2.0-rc.1`) and runs the CI Pipeline on the tag, which publishes the images tagged with the version and `latest`. Pushing to a protected `main` needs a `RELEASE_TOKEN` secret holding a token allowed to push to it; the tag pushed with that token starts the CI Pipeline by itself
+- The backend talks to the media catalog and the list service over one WebSocket each instead of an HTTP request per call, an SSE status stream, a separate artwork WebSocket and polling every 15 seconds. Contracts in `@miauflix/service-contracts` are TypeScript types, run by the new `@miauflix/contract` (typed clients, reconnect with re-subscription, status pushed on change, Bun and Node servers); payloads are no longer validated with Zod on both ends of every call. `RemoteServiceManager` is gone, and the config store moved to `@miauflix/service-configuration`. The services' HTTP API (`/v1/...`, `/status`, `/configuration*`, the manifest) is replaced by the WebSocket at `/_c`; only `GET /health` remains. Contracts are versioned `major.minor`: minors only add (new methods marked `since`, which fail with `unsupported` on an older service so callers can degrade), and a breaking change goes into a new major that the service implements next to the previous one while the backend adapts to a service one major behind, so the backend and a service one major apart keep working whichever is deployed first. This release is the one exception: the switch from HTTP to WebSocket has no bridge, so deploy the backend and the services of this release together. A service reports `ready` only once it can serve data calls, and the backend retries, with backoff, a live-update subscription the service rejected while it reported ready, so artwork updates cannot stop for good after a configuration change. The services image installs dev dependencies while it builds the shared packages, since its base image sets `NODE_ENV=production`. At boot the backend waits at most 5 seconds for each service to connect, so an unreachable service no longer holds up startup for its request timeout; it is picked up as soon as it comes online. A call or stream whose signal is already aborted is rejected as `cancelled` without reaching the service, and a failing service status callback is reported instead of crashing the service. Minor behaviour changes: syncing a watchlist for a user without a Trakt account is skipped instead of failing and retrying, a list item without any id is skipped instead of failing the page, and the catalog's unused `/v1/catalog/genres` endpoint is gone
+
+- `SourceService`, `PlaybackTargetService` and `RealtimeGateway` take the background jobs, notifications, source availability, source health and search channel they always get as required dependencies, so the code no longer checks for them on every call. This also removes `SourceService.syncMissingSourceFiles`: nothing called it, the `source.metadata` jobs had replaced it, and its own fallback could not run because background jobs are always present
+- CI can publish images for any branch: **Run workflow** on the CI Pipeline in the Actions tab tests the chosen branch and pushes all images tagged with the branch name and `sha-<commit>`, leaving `latest` and `edge` untouched. Only collaborators with write access can start it
+- Two flaky unit tests are fixed. The season pack streaming test gave up waiting for playback to be released after 20 event-loop turns, while closing the reader's files is real I/O that can take longer on a busy CI runner; it now waits up to two seconds. The player seek test moved the seek slider before the controls had started listening to the video (the session resolves outside `act`), so the slider was still disabled; it now waits for the slider to be enabled
+
+## 2026-10-26 v0.0.2 Streaming reliability and HTTPS fixes
+
+### Bug fix
+
+- Sources are ranked by their streaming score again: it was never calculated (every source scored 0), so playback could pick a weakly seeded 25 GB 4K release over a well-seeded 1080p one. Scores are now computed when a source is stored, when its provider details change and on every seed/peer update, and existing sources are scored once by the first data migration (in a single transaction). Each score is computed from the stored row inside the same transaction as its write, so a stats check and a provider refresh running together can't leave a stale score
+- The realtime connection (live playback updates, notifications, search) works behind HTTPS: `docker-compose.https.yml` sets `CORS_ORIGIN` to the domain, since the default only allows `localhost`
+- HTTPS and the VPN can be combined: the `Caddyfile` forwards to `MIAUFLIX_UPSTREAM` (`vpn:3000` with `docker-compose.vpn.yml`)
+- The player no longer shows a blue rectangle when its controls overlay takes focus; the volume slider uses the same white focus ring as the buttons
+- Video no longer buffers constantly behind HTTPS for viewers on a VPN: the `Caddyfile` serves HTTP/1.1 and HTTP/2 only and `docker-compose.https.yml` no longer publishes 443/UDP. Over HTTP/3 both the direct and the audio-converting stream reached the browser at 4–5 Mbit/s; over HTTP/2 they reach about 150 Mbit/s
+- Playback no longer fails with "The SourceBuffer is full" when the audio-converting stream arrives faster than it plays: the player limits read-ahead in seconds, but the browser's media buffer is limited in bytes (about 150 MB in Chrome), so 60 s of a high-bitrate file could overflow it. On a full buffer the player now evicts what is behind the playhead, lowers its read-ahead limit (to no less than 10 s), waits for playback and retries, instead of stopping. While paused it waits for playback to resume; if playback runs but neither the playhead nor eviction moves for 8 checks in a row (about 2 s), it reports the error instead of retrying forever
+
+### Technical debt
+
+- Data migrations: a `migration_version` table and `MigrationService` run the append-only list in `backend/src/database/migrations/` once per database, in order, at startup before any service; the streaming score backfill is the first migration
+
+### Documentation
+
+- `docs/ai/gotchas.md` explains how to add a data migration
+- HTTPS setup: combine HTTPS with the VPN (the VPN steps keep the HTTPS file), why HTTP/3 is off and how to turn it back on; `COMPOSE_FILE` uses `;` on Windows
+- The quick start uses the `latest` release images; image tag documentation covers releases
+
+## 2026-10-25 v0.0.1 Smoother streaming and version display
+
+### Features
+
+- Miauflix is versioned with semver, starting at 0.0.1; the root `package.json` version is the source of truth
+- The final user can see the running Miauflix version in the bottom right corner of every screen except Home, Details and Player
+
+### Bug fix
+
+- Playback no longer buffers on high-bitrate sources: a viewer's stream keeps the next 90 seconds of video (32 MB to 512 MB, sized by the file's bitrate) requested from every peer, instead of two pieces at a time
+- Streams decrypt each stored piece once instead of once per 256 KB chunk, which cut the backend's CPU use while streaming and the speed limit it put on already-downloaded data
+
+## 2026-10-25 VPN with gluetun
+
+### Features
+
+- The VPN container is now gluetun (NordVPN over WireGuard, P2P servers), whose firewall acts as a kill switch; it replaces the unmaintained nordlynx image
+- `docker-compose.vpn.yml` routes the quick start through the VPN, and `scripts/nordvpn-key.sh` turns a NordVPN access token into the WireGuard key without printing either
+
+### Bug fix
+
+- The quick start no longer disables the VPN check by default
+
+## 2026-10-25 Quick start deployment fixes
+
+### Features
+
+- `docker-compose.https.yml` and a `Caddyfile` put the prebuilt images behind HTTPS with automatic certificates
+
+### Bug fix
+
+- The services container no longer crash-loops after a restart (`mkfifo: File exists`)
+- The quick start uses the published `edge` images until the first release
+- Documentation fixes for the initial user logs and the first-boot "degraded mode" message
+
+## 2026-10-25 Search
+
+### Features
+
+- The final user can search titles with an on-screen keyboard, browse popular genres (with an Anime shortcut) and revisit or remove recent searches
+- The final user can open search with the remote's Search key or from the home sidebar
+
+### Improvements
+
+- Navigation and focus across search, title details and settings
+- Title metadata formatting, including movie runtimes
+
+## 2026-10-24 Frontend refactoring
+
+### Features
+
+- Home combines fixed and popular categories in a paginated feed, with Continue Watching when there is progress
+- Show details list seasons and episodes with viewing progress, loading states and retries
+- The opening animation pulses the logo and respects reduced-motion preferences
+
+### Improvements
+
+- Home rows load progressively, with smoother scrolling and image preloading
+- Community lists work even when their owner's profile is private
+
+## 2026-10-24 TV Show discovery
+
+### Features
+
+- The final user can watch TV episodes, including multi-episode releases, with per-file downloads
+- Episodes of watchlisted shows are acquired automatically, the next episode is prefetched and the player counts down to it
+- A notifications menu shows available episodes and movie quality upgrades
+- Episode-aware subtitles and audio, with subtitle language preferences
+- Standalone Docker setup with published images and optional VPN routing
+
+## 2026-10-11 Separate data and UI layers in frontend
+
+### Bug fix
+
+- Show 720p when a source without resolution is found
+
+### Technical debt
+
+- Separate data and UI layers in frontend
+
+## 2026-10-11 Subtitles and audio transcoding
+
+### Features
+
+**Ratings**
+
+- The final user can rate movies and TV shows from the media details screen, options are: like, love, dislike, or clear a rating.
+
+**Subtitles**
+
+- The final user can choose the subtitle track through the CC menu in the player screen
+- The final user can synchronize the subtitle track through the CC menu in the player screen
+- The final user can search for subtitles through the CC menu in the player screen
+- Subtitles search through opensubtitles
+- Automatically pick up subtitles file present in the same source
+- Automatically pick up subtitles embedded in the media file
+- Display subtitles natively
+
+**Audio**
+
+- The final user can now choose an audio track through the Audio menu in the player screen
+- Incompatible audio codecs are automatically transcoded to a compatible one
+
+**Video**
+
+- The streaming endpoint can automatically search a source with a supported video codec
+- The streaming endpoint can automatically transcode the video to a compatible codec (must be eneabled through config)
+
+**Storage**
+
+- The final user can navigate to the storage screen through the navbar
+- The final user can free space by deleting media files through the storage screen
+- P2P downloads that have been completed for more than 1 hour (configurable) are automatically moved to storage only (they stop contributing to P2P)
+
+**Configuration**
+
+- Configuration screens now highlight missing required settings and service-reported configuration gaps.
+
+### Bug fix
+
+- `127.0.0.1` and `localhost` are now threaded at the same origin
+
+## 2026-10-10 Improved artworks
+
+### Features
+
+- Media-catalog service scans logos and backdrops to find high contrast combinations
+- Media-catalog service scans logos to find one with high contrast against a black background (for the hero)
+
+### Bug fix
+
+- TV Shows media card in "Continue watching" now uses the logo image when available
+
+### Technical debt
+
+- Refactored media card to be its own UI component
+
+## 2026-10-10 Trakt recommendations and playback progress
+
+### Features
+
+- Connect Trakt to sync watchlist changes and playback progress, then resume movies and episodes from the home screen
+- Add and remove titles from the watchlist and rate them from their details pages
+- Show video warmup progress while a source is prepared for playback
+- Make Trakt prompts and dialogs keyboard accessible and dismissible
+- Prioritize configuration needs and prepare media backdrops in the background
+
+## 2026-10-03 Details and in-app player
+
+### Features
+
+- Browse movie details, TV seasons, and episodes, with watched indicators and source preparation status
+- Play media in-app with playback controls, resume support, and progress tracking
+- Add Home and Settings navigation and recognize DCP release sources
+- Clarify playback preparation status and errors, and improve setup wizard organization and password visibility controls
+- Preserve development data-directory permissions and report startup errors more clearly
+
+### Bug fix
+
+- Handle incomplete playback preparation, invalid download progress, and empty successful API responses more reliably
+
+## 2026-10-01 Face-aware backdrop framing
+
+### Features
+
+- Analyze and save backdrop focus so home-page movie and TV images keep key content in view
+
+### Bug fix
+
+- Adapt backdrop framing to image and screen dimensions, limit zoom, respect reduced-motion preferences, and fall back to default positioning when analysis fails
+
+## 2026-09-30 Community lists and browsing
+
+### Features
+
+- Add popular community lists to the home page, with more categories loading as you browse
+- Browse mixed movie and TV community lists, with improved carousel navigation and prioritized loading for nearby content
+
+### Bug fix
+
+- Clean up invalid sessions and cookies and remove duplicate community-list entries
+
+### Technical debt
+
+- Document how to manage and validate provider test fixtures
+
+## 2026-09-25 Playback preparation and storage
+
+### Features
+
+- Add playback sessions with stream links, preferences, source details, and preparation status
+- Prepare focused and nearby titles ahead of playback, and track movie and episode progress
+- Track allocated and reserved storage, protect active streams from removal, and report source warmup readiness
+
+## 2026-09-24 Configuration and local HTTPS
+
+### Features
+
+- Configure shared TMDB and Trakt settings in setup, with encrypted storage and redirect URI suggestions based on the current site
+- Keep cached catalog and list content available during temporary provider outages
+- Support optional HTTPS in local development with trusted or generated certificates and configurable certificate locations
+
+### Bug fix
+
+- Improve configuration validation and save feedback, prevent overlapping database updates, and handle Trakt rate limits more reliably
+
+### Technical debt
+
+- Document application configuration and trusted local HTTPS setup
+
+## 2026-09-21 Trakt-backed list service
+
+### Features
+
+- Add QR-code login and a standalone service for public and personal Trakt-backed lists, synchronization, account associations, and encrypted credentials
+- Manage Trakt connections and resolve external media through the media catalog
+
+### Technical debt
+
+- Use Miauflix QR login for authentication while retaining Trakt for list integrations
+
+### Bug fix
+
+- Improve resilience when optional service status updates are unavailable
+
+## 2026-09-19 Catalog setup and service integration
+
+### Features
+
+- Include required Catalog setup in first-run configuration, with URL validation and clear test/save status
+- Move catalog data and background synchronization into a standalone service, with guided configuration, TV season and episode browsing, and generation-based list refreshes
+- Keep cached catalog and list data usable during provider outages and improve provider fallback, metadata refresh, and stream selection
+- Refresh the configuration experience with clearer status and failure feedback
+
+### Technical debt
+
+- Update setup, environment, and architecture guidance for the catalog service
+
+## 2026-08-27 Initial account setup
+
+### Features
+
+- Add first-administrator setup with validation, password-strength feedback, and automatic sign-in
+- Add a guided configuration wizard and keyboard-accessible, paginated media browsing
+
+### Bug fix
+
+- Improve session refresh and development cookies, and allow startup without an `.env` file
+
+## 2026-08-16 Setup flow test fixes
+
+### Bug fix
+
+- Fix the login end-to-end test flow for the new account setup experience
+
+## 2026-04-19 Runtime configuration
+
+### Features
+
+- Add persistent runtime configuration APIs and selective service restarts
+- Add a Docker Compose option to run without a VPN
+- Show service readiness and configuration requirements, and improve startup and tracing initialization
+
+## 2026-04-10 Admin setup and home browsing
+
+### Features
+
+- Add one-time administrator setup through the API, a home page with category rows and media cards, and localized streaming requests
+- Add optional tracing and Jaeger support
+
+## 2026-02-14 Test database mocks
+
+### Technical debt
+
+- Provide a reusable mock database and update service tests to use isolated repositories
+
+## 2026-01-12 Centralized service metrics
+
+### Features
+
+- Centralize backend service metrics and expose a consolidated authenticated stats report
+
+## 2025-12-28 Network resilience and statistics
+
+### Features
+
+- Add FlareSolverr retry support for Cloudflare challenges, dynamic YTS mirror discovery, and time-windowed statistics
+
+### Technical debt
+
+- Document FlareSolverr configuration and update setup and architecture guidance
+
+## 2025-12-26 Intro audio
+
+### Features
+
+- Add audio feedback to the intro animation and improve its playback controls
+
+### Bug fix
+
+- Fix session loading during server-side rendering
+
+## 2025-11-28 Frontend performance and test coverage
+
+### Features
+
+- Add Lighthouse performance audits, SEO metadata, and improved font loading
+- Use pooled users for authentication tests and expand end-to-end coverage
+
+## 2025-11-20 Dependency and package improvements
+
+### Features
+
+- Update build and test dependencies, align workspace packages, and refine linting and imports
+- Expand the sanitizer package's public options and type exports
+
+## 2025-11-17 Frontend asset deployment
+
+### Features
+
+- Add a frontend deployment command and synchronize built assets into runtime storage
+
+## 2025-11-15 Monorepo build workflow
+
+### Features
+
+- Add Turbo task orchestration, BuildKit caching, and a dedicated end-to-end workspace
+- Consolidate the generated backend client into the backend package and simplify build scripts
+
+## 2025-11-10 Session authentication updates
+
+### Features
+
+- Add multi-session listing and switching, display names, and frontend session management APIs
+
+### Bug fix
+
+- Use HttpOnly cookie-backed sessions and improve refresh and error handling
+
+## 2025-10-31 Repository and container hygiene
+
+### Features
+
+- Add AI-tool secret protections and expand Docker ignore patterns to reduce build context and exclude generated files
+
+## 2025-10-28 Frontend refactor
+
+### Technical debt
+
+- Refactor frontend structure for improved maintainability
+
+## 2025-09-01 Project documentation and setup guides
+
+### Technical debt
+
+- Clarify quick setup, local development, project structure, and architecture, and update Docker and health-check examples
+
+## 2025-08-30 Frontend components and styles
+
+### Features
+
+- Simplify QR login and avatar components, modernize shared styles, and tighten TypeScript and dependency configuration
+
+## 2025-08-17 Frontend and backend integration
+
+### Features
+
+- Serve the frontend from the backend with client-side routing and integrate cookie-based sign-in, including QR/device login
+- Integrate frontend build output into Docker and configure the reverse proxy for the app and API
+
+## 2025-08-10 Server rendering and browser testing
+
+### Features
+
+- Add server-side rendering and Playwright end-to-end and visual testing
+- Build the animated logo intro as reusable React components with Storybook examples
+
+## 2025-08-09 Miauflix project identity
+
+### Technical debt
+
+- Update project naming and documentation to reflect the implemented backend and clarify remaining frontend integration work
+
+## 2025-08-06 Test fixture cleanup
+
+### Features
+
+- Simplify provider test fixtures and their supporting setup
+
+## 2025-08-05 Toolchain updates
+
+### Features
+
+- Update Node.js and frontend/backend tooling, strengthen audit reporting, and improve typed Redux hooks
+
+## 2025-08-03 Streaming, tracing, and episode synchronization
+
+### Features
+
+- Add OpenTelemetry tracing and request IDs, configurable GREEDY and ON_DEMAND episode synchronization, and tracker and bandwidth settings
+- Improve torrent handling, health checks, Docker service configuration, and metadata normalization
+
+## 2025-07-27 Project guidance
+
+### Technical debt
+
+- Add repository guidance for AI agents and development workflows
+
+## 2025-07-25 Storage service foundation
+
+### Features
+
+- Add the initial storage service for managing downloaded media
+
+## 2025-07-21 Frontend backend-client integration
+
+### Features
+
+- Connect the frontend to the generated backend client and add response transformers for the existing UI types
+
+## 2025-07-09 API route types and test timing
+
+### Features
+
+- Add typed request and response DTOs to API routes and export them through the backend client
+- Use fake timers in the backend sleep test for deterministic results

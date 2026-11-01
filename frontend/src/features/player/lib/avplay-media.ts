@@ -27,6 +27,13 @@ export function getAvplay(): AVPlay | undefined {
 }
 
 /**
+ * The average bitrate the TV is sent at most. The TV fetches a stream at about 11 Mbit/s, so a
+ * 4K remux (~35 Mbit/s) froze on start and then played at a third of real time; this leaves room
+ * for the peaks of variable-bitrate files.
+ */
+const TV_MAX_BITRATE_KBPS = 8_000;
+
+/**
  * What AVPlay decodes itself on 2020 and newer TVs, so the backend sends those files as they are
  * (Matroska and MP4, H.264 and H.265, every audio track) instead of converting them. Files with
  * other audio (DTS, TrueHD) still get converted audio, played in a `<video>` element.
@@ -36,6 +43,7 @@ export const AVPLAY_CAPABILITIES = {
   nativeHevcContainers: ['mp4', 'matroska'],
   supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'flac'],
   nativeAudioTracks: true,
+  maxBitrateKbps: TV_MAX_BITRATE_KBPS,
 } satisfies Partial<PlaybackPreferences>;
 
 /** AVPlay places the video in a 1920x1080 space, whatever the app's resolution. */

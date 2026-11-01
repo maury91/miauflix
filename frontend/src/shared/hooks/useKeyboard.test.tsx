@@ -28,6 +28,18 @@ describe('getKeyboardAction', () => {
     const tizenBack = key({ key: 'Unidentified' });
     Object.defineProperty(tizenBack, 'keyCode', { value: 10009 });
     expect(getKeyboardAction(tizenBack)).toBe('back');
+    expect(getKeyboardAction(key({ key: 'MediaPlayPause' }))).toBe('playPause');
+    expect(getKeyboardAction(key({ key: 'MediaPlay' }))).toBe('play');
+    expect(getKeyboardAction(key({ key: 'MediaPause' }))).toBe('pause');
+    for (const [code, action] of [
+      [10252, 'playPause'],
+      [415, 'play'],
+      [19, 'pause'],
+    ] as const) {
+      const tizenMedia = key({ key: 'Unidentified' });
+      Object.defineProperty(tizenMedia, 'keyCode', { value: code });
+      expect(getKeyboardAction(tizenMedia)).toBe(action);
+    }
     expect(getKeyboardAction(key({ key: 'Tab' }))).toBeNull();
   });
 });
