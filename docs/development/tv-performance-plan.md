@@ -255,15 +255,32 @@ Third follow-up, moving between rows:
 
 Next:
 
-- **Moving list loading into the store**, in stages. Stage 1 (done, not yet measured on the TV):
-  Home says which rows it wants (`homeFeedActions.rowsWanted`) and `homeFeedMiddleware` keeps
-  one cache subscription per list page they need (the selection's page, and its neighbours once
-  the size is known); rows read pages with `useListPage` and never fetch; empty lists are
-  dropped by `selectEmptyListSlugs` before their row renders. Stage 2: promotion, backdrop focus
-  queueing and image preloading in the middleware. Stage 3: idle readying and the rested row in
-  the store, so neither re-renders Home.
-- **Hero details:** still render on every reported move. A single press costs about 50 ms of Home
-  and hero render on the TV.
+- **Moving list loading into the store**, in stages. Stage 1 (done): Home says which rows it
+  wants (`homeFeedActions.rowsWanted`) and `homeFeedMiddleware` keeps one cache subscription per
+  list page they need (the selection's page, and its neighbours once the size is known); rows
+  read pages with `useListPage` and never fetch; empty lists are dropped by
+  `selectEmptyListSlugs` before their row renders. On the TV it did not change the frame rate,
+  within the run-to-run noise: quick runs of four moves 150 ms apart drew 39–71 compositor fps
+  down (p90 22–29 ms) and 35–45 up (p90 29–57 ms), longest main-thread task per run 52–111 ms; a
+  held key along a row drew 48–49 fps (p90 27–29 ms). It removes per-row effect work, not the
+  renders that dominate a move. Stage 2: promotion, backdrop focus queueing and image preloading
+  in the middleware. Stage 3: idle readying and the rested row in the store, so neither
+  re-renders Home.
+- **Renders besides the move itself** (done). Logging every React commit on the TV with what
+  triggered it (a DevTools hook injected before the app, plus keys, websocket messages and
+  fetches) showed about ten commits per move along a row: the row and its cards on the key, Home
+  and the hero on the report, then Home again for each pushed `source-status` and `warmup`
+  (warmup progress arrives every few hundred milliseconds, idle or not), and the row twice for
+  its own promotion request. Home now only publishes the focus intent; the hero and details read
+  the pushed preparation (`usePreparation`), the hero ignoring warmup-only changes; rows and the
+  hero select nothing from their fire-and-forget mutations (`selectFromResult`); and
+  `selectEmptyListSlugs` keeps its identity while the set is equal (it re-rendered Home whenever
+  any page loaded). After: a move is the row, then Home and the hero once; pushes re-render only
+  the hero, and only when the source changes. Spaced single moves take 42–44 ms of main thread
+  (47–66 before); the hero updates 48–54 ms after the key. Held keys and vertical bursts are
+  unchanged within the noise (held: 44–67 compositor fps, p90 24–28 ms): they are bound by the
+  row's own render and the layer updates of each frame (`UpdateLayerTree` 10–14 ms per frame
+  during a slide), not by Home.
 
 Once Phase 1 has removed the needless renders, what's left is the cost of the renders that are
 needed: the cards whose selection changes, the hero, and the rows mounted as you move down.

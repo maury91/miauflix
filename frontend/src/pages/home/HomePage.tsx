@@ -25,10 +25,9 @@ import styled from 'styled-components';
 
 import { CategoryRow, type CategoryRowHandle } from './components/CategoryRow';
 import { HomeSidebar, type SidebarItem } from './components/HomeSidebar';
-import { MediaDetails } from './components/MediaDetails';
-import { MediaHero } from './components/MediaHero';
 import { NotificationsMenu } from './components/NotificationsMenu';
 import { PlayerView } from './components/PlayerView';
+import { PreparedMediaDetails, PreparedMediaHero } from './components/PreparedViews';
 import { TraktModal } from './components/TraktModal';
 import { useFocusPrefetch } from './hooks/useFocusPrefetch';
 import { useHomeArtwork } from './hooks/useHomeArtwork';
@@ -242,7 +241,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     sessionId,
   });
   useFocusPrefetch(selectedMedia, sessionId, progressEntries);
-  const preparation = useHomePreparation({ sessionId, selectedMedia, view, subtitleLanguage });
+  const preparationInputs = useHomePreparation({
+    sessionId,
+    selectedMedia,
+    view,
+    subtitleLanguage,
+  });
 
   // On the TV, rows below are readied while idle, so moving down does not mount them.
   const warmUntil = useIdleRowWarmup(
@@ -381,7 +385,11 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       <div inert={trakt.open} style={{ display: 'contents' }}>
         {view === 'browse' ? (
           <>
-            <MediaHero media={selectedMedia} preparation={preparation} onReady={onHeroReady} />
+            <PreparedMediaHero
+              media={selectedMedia}
+              preparationInputs={preparationInputs}
+              onReady={onHeroReady}
+            />
             <Content
               ref={builtForTizen ? undefined : content.ref}
               $margin={margin}
@@ -451,12 +459,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
             />
           </>
         ) : view === 'details' && selectedMedia ? (
-          <MediaDetails
+          <PreparedMediaDetails
             ref={navigation.detailsRef}
             media={selectedMedia}
             onBack={navigation.returnToBrowse}
             onWatch={navigation.openPlayer}
-            preparation={preparation}
+            preparationInputs={preparationInputs}
           />
         ) : view === 'details' ? (
           <FullPageState role="status">

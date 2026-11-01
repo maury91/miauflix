@@ -40,6 +40,12 @@ const VIEWPORT_PROMOTION_DEBOUNCE_MS = 300;
  * each report re-renders Home and the hero (~50 ms there), longer than a held key's repeat.
  */
 const SELECTION_REPORT_MS = 150;
+/**
+ * The row fires its promotion and backdrop requests and never reads their state: selecting none
+ * of it keeps each request's pending and fulfilled updates from re-rendering the row.
+ */
+const IGNORE_RESULT = { selectFromResult: () => NO_RESULT };
+const NO_RESULT = {};
 
 /** How long a row that came into view waits before rendering its cards out of view (TV). */
 const CARD_WINDOW_EXPAND_MS = 400;
@@ -359,8 +365,8 @@ export const CategoryRow = memo(
       const timeout = window.setTimeout(() => setExpanded(true), CARD_WINDOW_EXPAND_MS);
       return () => window.clearTimeout(timeout);
     }, [expanded, wantsExpansion]);
-    const [promoteListMedia] = usePromoteListMediaMutation();
-    const [queueBackdropFocus] = useQueueBackdropFocusMutation();
+    const [promoteListMedia] = usePromoteListMediaMutation(IGNORE_RESULT);
+    const [queueBackdropFocus] = useQueueBackdropFocusMutation(IGNORE_RESULT);
     const step = mediaWidth + gap;
     const cardRefs = useRef(new Map<number, HTMLButtonElement>());
     // On the TV the row moves on a transform (see SmoothScrollerOptions), which has no scroll

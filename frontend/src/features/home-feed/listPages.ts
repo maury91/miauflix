@@ -79,7 +79,13 @@ export function useListPage(args: ListPageArgs | typeof skipToken): ListPageView
   return useSelector(select, shallowEqual);
 }
 
-/** The lists that loaded with nothing in them: Home leaves them out. */
+const sameSlugs = (left: ReadonlySet<string>, right: ReadonlySet<string>) =>
+  left.size === right.size && [...left].every(slug => right.has(slug));
+
+/**
+ * The lists that loaded with nothing in them: Home leaves them out. The same set while its
+ * slugs stay the same, so a page loading elsewhere does not re-render Home.
+ */
 export const selectEmptyListSlugs = createSelector(
   [(state: RootState) => state[listsApi.reducerPath].queries],
   (queries): ReadonlySet<string> => {
@@ -90,5 +96,6 @@ export const selectEmptyListSlugs = createSelector(
       if (data?.total === 0) empty.add((entry.originalArgs as unknown as ListPageArgs).category);
     }
     return empty;
-  }
+  },
+  { memoizeOptions: { resultEqualityCheck: sameSlugs } }
 );

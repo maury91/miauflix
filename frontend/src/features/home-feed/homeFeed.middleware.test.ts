@@ -154,3 +154,23 @@ describe('list page selectors', () => {
     });
   });
 });
+
+describe('selectEmptyListSlugs', () => {
+  it('keeps the same set while the empty lists stay the same', async () => {
+    const { store, state, settle } = setupTest({ popular: 3, watchlist: 0, trending: 5 });
+    store.dispatch(homeFeedActions.rowsWanted({ popular: 'visible', watchlist: 'prefetch' }));
+    await settle();
+    const before = selectEmptyListSlugs(state());
+
+    store.dispatch(
+      homeFeedActions.rowsWanted({
+        popular: 'visible',
+        watchlist: 'prefetch',
+        trending: 'prefetch',
+      })
+    );
+    await settle();
+
+    expect(selectEmptyListSlugs(state())).toBe(before);
+  });
+});

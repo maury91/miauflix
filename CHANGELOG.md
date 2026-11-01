@@ -21,6 +21,7 @@
 
 ### Improvements
 
+- Home no longer re-renders when the backend pushes the focused title's source status or warmup progress (every few hundred milliseconds while a title warms up): the hero and details read it themselves, and the hero ignores warmup progress, which it doesn't show. Rows and the hero no longer re-render when their own promotion and backdrop requests start and finish, and the set of empty lists keeps its identity while it doesn't change, so loading pages no longer re-renders Home. On the TV a single move along a row now takes 42–44 ms of main thread, down from 47–66.
 - Home loads its lists from the store instead of from each row: Home names the rows it wants, a middleware keeps the list pages they need (the selected page and the pages beside it) subscribed and releases the rest, and rows only read the cache. Empty lists are left out before their row renders, so no row mounts just to find out it is empty.
 - Home on the TV readies the rows below while you're idle: from a second after the last key press, one more row every half second, up to 10 rows below the visible ones. A ready row is fetched, mounted and rendered in full off screen, so moving down finds it ready; it isn't promoted to the backend until it is on screen. Home also scrolls between rows with a CSS transition that the compositor runs, and the rows around the focused one mount, unmount and load once the slide to it has ended, not during it or on every move of a quick run.
 

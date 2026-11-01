@@ -228,6 +228,10 @@ interface MediaHeroProps {
   onReady?: (mediaId: number | null) => void;
 }
 
+/** The hero only awaits its backdrop focus requests: their state never re-renders it. */
+const NO_RESULT = {};
+const IGNORE_RESULT = { selectFromResult: () => NO_RESULT };
+
 /** How long the selection rests before the TV swaps the hero backdrop. */
 const BACKDROP_REST_MS = 250;
 
@@ -255,7 +259,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   // The effect below restarts on the title's identity, not on every new media object.
   const backdropMediaRef = useRef(backdropMedia);
   backdropMediaRef.current = backdropMedia;
-  const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
+  const [ensureBackdropFocus] = useEnsureBackdropFocusMutation(IGNORE_RESULT);
   const { margin } = useMediaBoxSizes();
   const heroRef = useRef<HTMLElement>(null);
   const [heroSize, setHeroSize] = useState({ width: 0, height: 0 });
