@@ -11,7 +11,12 @@ import type { SourceService } from '@services/source/source.service';
 import { isUsableSource } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
 import type { StorageService } from '@services/storage/storage.service';
-import { filterHevcSources, filterSources } from '@services/stream/stream.util';
+import {
+  filterHevcSources,
+  filterSources,
+  fitsBitrate,
+  preferWithinBitrate,
+} from '@services/stream/stream.util';
 
 import type { TorrentWarmupController } from './torrent-warmup.controller';
 
@@ -19,6 +24,8 @@ export interface PlaybackPreferences {
   subtitleLanguage?: string;
   quality: Quality | 'auto';
   allowHevc: boolean;
+  /** The highest average bitrate the client's connection sustains; leaner movie sources win. */
+  maxBitrateKbps?: number;
 }
 
 export interface PreparedPlayable {
@@ -73,8 +80,9 @@ export class PlayablePreparationService {
   /**
    * Prepare a playable through catalog lookup, source discovery, metadata resolution, or payload warmup.
    * Missing catalog data and empty source lists return a cold result with no source.
-   * Completed local downloads take priority over fresh torrents. Quality ranks copies within
-   * that group; HEVC compatibility still applies. workClass sets the discovery wait budget.
+   * Completed local downloads take priority over fresh torrents, unless they exceed the client's
+   * bitrate cap. Quality ranks copies within that group; HEVC compatibility still applies. With
+   * a bitrate cap, movie copies within it rank first and the rest follow from the leanest. workClass sets the discovery wait budget.
    * Metadata-resolution failures permit fallback selection, and warmup failures retain the source.
    * Lookup and source-selection callback errors propagate; observed cancellation rejects with
    * AbortError, or with an in-flight error if cancellation coincides with a failure.
@@ -128,14 +136,26 @@ export class PlayablePreparationService {
         )
       : [];
     this.throwIfAborted(options.signal);
+    const runtimeSeconds = media.local.runtime > 0 ? media.local.runtime * 60 : undefined;
+    const { maxBitrateKbps } = options.preferences;
+    // A finished download over the client's bitrate cap would stall it; fetch a leaner one.
     const localSource = this.select(
-      completedSources.filter((source): source is ContentSource => source !== null),
+      completedSources.filter(
+        (source): source is ContentSource =>
+          source !== null &&
+          (!maxBitrateKbps ||
+            !runtimeSeconds ||
+            fitsBitrate(source, maxBitrateKbps, runtimeSeconds))
+      ),
       options.preferences,
-      false
+      false,
+      runtimeSeconds
     );
-    const usableSource = localSource ?? this.select(sources, options.preferences);
+    const usableSource =
+      localSource ?? this.select(sources, options.preferences, true, runtimeSeconds);
     if (options.through === 'sources') {
-      const source = usableSource ?? this.select(sources, options.preferences, false);
+      const source =
+        usableSource ?? this.select(sources, options.preferences, false, runtimeSeconds);
       if (source) options.onSourceSelected?.(source);
       return {
         playable,
@@ -161,7 +181,8 @@ export class PlayablePreparationService {
         const next = this.select(
           sources.filter(candidate => !tried.has(candidate.id)),
           options.preferences,
-          false
+          false,
+          runtimeSeconds
         );
         if (!next || this.sourceHealth?.hasFailed(next.id)) return result;
         source = next;
@@ -171,8 +192,13 @@ export class PlayablePreparationService {
       return finishMovie(usableSource);
     }
 
-    let fallbackSource = this.select(sources, options.preferences, false);
-    const metadataCandidates = this.sortCandidates(sources, options.preferences, false)
+    let fallbackSource = this.select(sources, options.preferences, false, runtimeSeconds);
+    const metadataCandidates = this.sortCandidates(
+      sources,
+      options.preferences,
+      false,
+      runtimeSeconds
+    )
       .filter(source => !source.file)
       .slice(0, 2);
     for (const source of metadataCandidates) {
@@ -188,11 +214,11 @@ export class PlayablePreparationService {
         this.throwIfAborted(options.signal);
       }
       sources = avoid(await this.sourceService.getSourcesForMovie(media.local.id));
-      const selected = this.select(sources, options.preferences);
+      const selected = this.select(sources, options.preferences, true, runtimeSeconds);
       if (selected) {
         return finishMovie(selected);
       }
-      fallbackSource = this.select(sources, options.preferences, false);
+      fallbackSource = this.select(sources, options.preferences, false, runtimeSeconds);
     }
 
     if (fallbackSource && options.through === 'warm') {
@@ -438,12 +464,14 @@ export class PlayablePreparationService {
     };
   }
 
+  /** `runtimeSeconds` (movies) lets the client's bitrate cap rank the candidates. */
   private select(
     sources: ContentSource[],
     preferences: PlaybackPreferences,
-    requireFile = true
+    requireFile = true,
+    runtimeSeconds?: number
   ): ContentSource | null {
-    const compatible = this.sortCandidates(sources, preferences, requireFile);
+    const compatible = this.sortCandidates(sources, preferences, requireFile, runtimeSeconds);
     if (!compatible.length) return null;
     if (preferences.quality === 'auto') return compatible[0];
     return (
@@ -456,7 +484,8 @@ export class PlayablePreparationService {
   private sortCandidates(
     sources: ContentSource[],
     preferences: PlaybackPreferences,
-    requireFile: boolean
+    requireFile: boolean,
+    runtimeSeconds?: number
   ): ContentSource[] {
     const compatible = requireFile
       ? filterSources([...sources], preferences.allowHevc)
@@ -467,7 +496,10 @@ export class PlayablePreparationService {
     // other candidate remains.
     const real = compatible.filter(isUsableSource);
     const healthy = real.filter(source => !this.sourceHealth?.hasFailed(source.id));
-    return healthy.length ? healthy : real;
+    const ranked = healthy.length ? healthy : real;
+    return preferences.maxBitrateKbps && runtimeSeconds
+      ? preferWithinBitrate(ranked, preferences.maxBitrateKbps, runtimeSeconds)
+      : ranked;
   }
 
   private throwIfAborted(signal?: AbortSignal): void {

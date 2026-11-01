@@ -2,7 +2,13 @@ import { createMockContentSource } from '@__test-utils__/mocks/movie.mock';
 import { configureFakerSeed } from '@__test-utils__/utils';
 import { Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
 
-import { filterHevcSources, filterSources, filterStreamableSources } from './stream.util';
+import {
+  estimatedBitrateKbps,
+  filterHevcSources,
+  filterSources,
+  filterStreamableSources,
+  preferWithinBitrate,
+} from './stream.util';
 
 describe('stream.util', () => {
   beforeAll(() => {
@@ -132,6 +138,35 @@ describe('stream.util', () => {
       const sources = [streamableH264Source, streamableHevcSource];
       const result = filterSources(sources);
       expect(result).toEqual([streamableHevcSource, streamableH264Source]);
+    });
+  });
+
+  describe('bitrate cap', () => {
+    const HOUR = 3600;
+    const sized = (id: number, size: number) => createMockContentSource({ id, size });
+
+    it('estimates the average bitrate from size and runtime', () => {
+      // 4.5 GB over an hour is 10 Mbit/s
+      expect(estimatedBitrateKbps(sized(1, 4.5e9), HOUR)).toBe(10_000);
+      expect(estimatedBitrateKbps(sized(1, 0), HOUR)).toBeNull();
+      expect(estimatedBitrateKbps(sized(1, 4.5e9), 0)).toBeNull();
+    });
+
+    it('keeps sources within the cap in order, then the rest from the leanest', () => {
+      const fitsA = sized(1, 3e9);
+      const overHeavy = sized(2, 20e9);
+      const fitsB = sized(3, 1e9);
+      const overLight = sized(4, 9e9);
+      // Cap at 8 Mbit/s over an hour: 3.6 GB
+      expect(
+        preferWithinBitrate([fitsA, overHeavy, fitsB, overLight], 8_000, HOUR).map(s => s.id)
+      ).toEqual([1, 3, 4, 2]);
+    });
+
+    it('treats a source of unknown size as fitting', () => {
+      const unknown = sized(1, 0);
+      const over = sized(2, 20e9);
+      expect(preferWithinBitrate([over, unknown], 8_000, HOUR)).toEqual([unknown, over]);
     });
   });
 });
