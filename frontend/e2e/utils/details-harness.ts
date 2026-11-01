@@ -264,7 +264,7 @@ export async function installOfflineHarness(page: Page): Promise<Harness> {
 export async function login(page: Page): Promise<void> {
   await page.goto('/');
   await page.getByLabel('Email').fill('test@example.com');
-  await page.getByLabel('Password').fill('testpassword123');
+  await page.getByRole('textbox', { name: 'Password' }).fill('testpassword123');
   await page.getByRole('button', { name: 'Continue' }).click();
   await waitForHomeReady(page);
 }

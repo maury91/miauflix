@@ -1,4 +1,5 @@
 import type { MediaDto } from '@miauflix/backend';
+import { builtForTizen } from '@shared/config/constants';
 
 export function getMediaTitle(media: MediaDto): string {
   return media._type === 'movie' ? media.title : media.name;
@@ -41,12 +42,16 @@ export function artworkUrl(
         ? pixels <= 300
           ? 'w300'
           : 'w500'
-        : kind === 'card'
-          ? pixels <= 300
+        : // The TV rasterizes in software and decodes every image it paints: the smallest sizes
+          // that still look right from the sofa keep its moves smooth (a w780 card took ~95 ms).
+          kind === 'card'
+          ? pixels <= 300 || builtForTizen
             ? 'w300'
             : 'w780'
-          : pixels <= 1280
-            ? 'w1280'
-            : 'original';
+          : builtForTizen
+            ? 'w780'
+            : pixels <= 1280
+              ? 'w1280'
+              : 'original';
   return getImageUrl(path, size);
 }

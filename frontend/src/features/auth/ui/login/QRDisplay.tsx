@@ -1,6 +1,6 @@
 import { formatCode } from '@features/auth/lib/formatCode';
 import { formatTimeRemaining } from '@features/auth/lib/formatTimeRemaining';
-import type { FC } from 'react';
+import type { FC, KeyboardEvent, RefObject } from 'react';
 import QRCode from 'react-qr-code';
 import styled from 'styled-components';
 
@@ -50,6 +50,34 @@ const UserCode = styled.div<{ $hasCode: boolean }>`
   padding: 8px 16px;
   background-color: #0b1113;
   margin-top: 10px;
+`;
+
+const RefreshButton = styled.button`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  width: 240px;
+  margin-top: 10px;
+  padding: 8px 16px;
+  border: 1px solid #555;
+  border-radius: 8px;
+  background-color: #0b1113;
+  color: #cccccc;
+  font: inherit;
+  font-size: 14px;
+  cursor: pointer;
+
+  strong {
+    color: white;
+    font-weight: 600;
+  }
+
+  &:hover,
+  &:focus-visible {
+    outline: none;
+    border-color: #d81f27;
+  }
 `;
 
 const ExpiryText = styled.div`
@@ -108,6 +136,11 @@ export interface QRDisplayProps {
   timeRemaining?: number;
   /** Instructions text to show below QR code */
   instructions?: string;
+  /** Ask for a new code; once the code has expired it is offered as a button. */
+  onRefresh?: () => void;
+  refreshRef?: RefObject<HTMLButtonElement | null>;
+  /** Left from the new-code button, for a TV remote. */
+  onRefreshLeft?: () => void;
 }
 
 /**
@@ -122,6 +155,9 @@ export const QRDisplay: FC<QRDisplayProps> = props => {
     userCode = '',
     timeRemaining = 0,
     instructions = 'Scan with phone to sign in',
+    onRefresh,
+    refreshRef,
+    onRefreshLeft,
   } = props;
 
   if (isLoading) {
@@ -145,18 +181,34 @@ export const QRDisplay: FC<QRDisplayProps> = props => {
         <QRCode value={codeUrl} size={qrSize} level="M" aria-label="Login QR code" />
       </QRCodeContainer>
       {instructions && <QRInstructions>{instructions}</QRInstructions>}
-      <UserCode $hasCode={Boolean(userCode)}>
-        {userCode ? <UserCodeText>{formatCode(userCode)}</UserCodeText> : null}
-        <ExpiryText>
-          {timeRemaining > 0 ? (
-            <>
-              Expires in <code>{formatTimeRemaining(timeRemaining)}</code>
-            </>
-          ) : (
-            'Code expired'
-          )}
-        </ExpiryText>
-      </UserCode>
+      {timeRemaining <= 0 && onRefresh ? (
+        <RefreshButton
+          ref={refreshRef}
+          type="button"
+          onClick={onRefresh}
+          onKeyDown={(event: KeyboardEvent<HTMLButtonElement>) => {
+            if (event.key !== 'ArrowLeft' || !onRefreshLeft) return;
+            event.preventDefault();
+            onRefreshLeft();
+          }}
+        >
+          Code expired
+          <strong>Get a new code</strong>
+        </RefreshButton>
+      ) : (
+        <UserCode $hasCode={Boolean(userCode)}>
+          {userCode ? <UserCodeText>{formatCode(userCode)}</UserCodeText> : null}
+          <ExpiryText>
+            {timeRemaining > 0 ? (
+              <>
+                Expires in <code>{formatTimeRemaining(timeRemaining)}</code>
+              </>
+            ) : (
+              'Code expired'
+            )}
+          </ExpiryText>
+        </UserCode>
+      )}
     </QRSection>
   );
 };

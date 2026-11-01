@@ -7,6 +7,11 @@ export interface ImageSize {
 export const URGENT = 0;
 /** Likely to be shown next (the backdrops around the selected card). */
 export const NEARBY = 1;
+/**
+ * Worth having before anyone asks (the rest of the loaded rows): downloaded one at a time, only
+ * while nothing else loads and the user isn't moving, and not decoded, so it never competes.
+ */
+export const IDLE = 2;
 
 interface Job {
   url: string;
@@ -30,6 +35,10 @@ interface ImagePreloaderOptions {
   rememberLoaded?: number;
   /** Image constructor; looked up per load so tests can replace it. */
   createImage?: () => HTMLImageElement;
+  /** Whether idle loads may start now (the app's queue: no key pressed for a moment). */
+  isIdle?: () => boolean;
+  /** Call `retry` when idle loads might be allowed again. */
+  whenIdle?: (retry: () => void) => void;
 }
 
 /**
@@ -42,12 +51,15 @@ export function createImagePreloader({
   batchTimeoutMs = 2_500,
   rememberLoaded = 512,
   createImage = () => new Image(),
+  isIdle = () => true,
+  whenIdle = retry => setTimeout(retry, 500),
 }: ImagePreloaderOptions = {}) {
   const jobs = new Map<string, Job>();
   const queue: Job[] = [];
   const owners = new Map<string, Set<string>>();
   const loaded = new Map<string, ImageSize>();
   let active = 0;
+  let idleRetryScheduled = false;
 
   const remember = (url: string, size: ImageSize) => {
     loaded.delete(url);
@@ -76,7 +88,8 @@ export function createImagePreloader({
     const fail = () => settle(job, new Error('image_load_failed'));
     image.onload = () => {
       // Decode off the commit path; a decode failure of a loaded image still counts as loaded.
-      if (typeof image.decode === 'function') void image.decode().then(succeed, succeed);
+      if (job.priority !== IDLE && typeof image.decode === 'function')
+        void image.decode().then(succeed, succeed);
       else succeed();
     };
     image.onerror = fail;
@@ -85,9 +98,23 @@ export function createImagePreloader({
 
   function pump() {
     queue.sort((left, right) => left.priority - right.priority);
-    while (queue.length && (active < maxConcurrent || queue[0]!.priority === URGENT)) {
-      const job = queue.shift()!;
-      if (jobs.get(job.url) === job) start(job);
+    while (queue.length) {
+      const next = queue[0]!;
+      if (next.priority === IDLE) {
+        if (active) break; // pump runs again when the loading image settles
+        if (!isIdle()) {
+          if (!idleRetryScheduled) {
+            idleRetryScheduled = true;
+            whenIdle(() => {
+              idleRetryScheduled = false;
+              pump();
+            });
+          }
+          break;
+        }
+      } else if (active >= maxConcurrent && next.priority !== URGENT) break;
+      queue.shift();
+      if (jobs.get(next.url) === next) start(next);
     }
   }
 
@@ -190,5 +217,33 @@ export function createImagePreloader({
 
 export type ImagePreloader = ReturnType<typeof createImagePreloader>;
 
+/** Idle loads wait this long after the last key press or pointer use (ms). */
+const INPUT_QUIET_MS = 1_000;
+/** Idle loads start once the intro has played (as the legacy app did), or after this long. */
+const INTRO_FALLBACK_MS = 20_000;
+let lastInput = 0;
+let introDone = false;
+if (typeof window !== 'undefined') {
+  for (const type of ['keydown', 'pointerdown', 'wheel'])
+    window.addEventListener(type, () => (lastInput = performance.now()), {
+      capture: true,
+      passive: true,
+    });
+  window.addEventListener('miauflix:intro:animation:complete', () => (introDone = true), {
+    once: true,
+  });
+  setTimeout(() => (introDone = true), INTRO_FALLBACK_MS);
+}
+
 /** The app-wide queue Home's rows, hero and details share. */
-export const imagePreloader = createImagePreloader();
+export const imagePreloader = createImagePreloader({
+  isIdle: () => introDone && performance.now() - lastInput >= INPUT_QUIET_MS,
+  whenIdle: retry => {
+    const wait = introDone ? Math.max(0, lastInput + INPUT_QUIET_MS - performance.now()) : 1_000;
+    setTimeout(() => {
+      if (typeof window.requestIdleCallback === 'function')
+        window.requestIdleCallback(retry, { timeout: 1_000 });
+      else retry();
+    }, wait);
+  },
+});

@@ -208,6 +208,25 @@ export default [
     },
   },
   {
+    // Components migrated to build-time styles (docs/development/css-architecture.md); add each
+    // folder as it migrates, so it can't go back to generating CSS at runtime.
+    files: ['frontend/src/**/*.css.ts', 'frontend/src/shared/ui/media-card/**/*.{ts,tsx}'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: 'styled-components',
+              message:
+                'This component is styled at build time: use a *.css.ts file, data-* attributes for variants and inline styles for continuous values.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: ['**/*.test.{ts,tsx}', '**/__tests__/**/*.ts', '**/*.spec.{ts,tsx}'],
     languageOptions: {
       globals: {

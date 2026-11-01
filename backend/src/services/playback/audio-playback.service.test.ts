@@ -167,6 +167,64 @@ describe('audio playback delivery', () => {
     ).toBe('direct');
   });
 
+  it('plays a decodable track in the same language on a player that switches tracks', () => {
+    const video = setupTest().streams[0];
+    const probe = (tracks: Array<[codec: string, language?: string]>) => ({
+      format: { duration: '120', format_name: 'matroska,webm' },
+      streams: [
+        video,
+        ...tracks.map(([codec, language], index) => ({
+          codec_type: 'audio',
+          codec_name: codec,
+          ...(language ? { tags: { language } } : {}),
+          disposition: { default: index === 0 ? 1 : 0 },
+        })),
+      ],
+    });
+    // What the Samsung TV (AVPlay) reports
+    const tv = {
+      audioLanguages: ['en-GB'],
+      supportedAudioCodecs: ['aac', 'mp3', 'ac3', 'eac3', 'flac'],
+      nativeAudioTracks: true,
+    };
+
+    expect(
+      deliveryFromProbe(
+        probe([
+          ['truehd', 'eng'],
+          ['ac3', 'fre'],
+          ['ac3', 'eng'],
+        ]),
+        tv
+      )
+    ).toMatchObject({ mode: 'direct', defaultAudioTrackIndex: 2, audioCodec: 'ac3' });
+    // No decodable track in the wanted language: convert it rather than switch language
+    expect(
+      deliveryFromProbe(
+        probe([
+          ['truehd', 'eng'],
+          ['ac3', 'fre'],
+        ]),
+        tv
+      )
+    ).toMatchObject({ mode: 'audio-transcode', defaultAudioTrackIndex: 0 });
+    // Tracks without a language: any decodable one
+    expect(deliveryFromProbe(probe([['dts'], ['ac3']]), tv)).toMatchObject({
+      mode: 'direct',
+      defaultAudioTrackIndex: 1,
+    });
+    // A browser that can't switch tracks keeps converting the default
+    expect(
+      deliveryFromProbe(
+        probe([
+          ['truehd', 'eng'],
+          ['ac3', 'eng'],
+        ]),
+        { ...tv, nativeAudioTracks: false }
+      ).mode
+    ).toBe('audio-transcode');
+  });
+
   it('selects a preferred language and only converts its unsupported codec', () => {
     const video = setupTest().streams[0];
     const probe = {
