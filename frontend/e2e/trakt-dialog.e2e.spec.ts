@@ -18,7 +18,9 @@ async function login(page: Page, beforeSubmit?: () => void): Promise<string> {
   );
   await navigateToLogin(page);
   await page.getByLabel('Email').fill(process.env['E2E_ADMIN_EMAIL'] ?? 'test@example.com');
-  await page.getByLabel('Password').fill(process.env['E2E_ADMIN_PASSWORD'] ?? 'testpassword123');
+  await page
+    .getByRole('textbox', { name: 'Password' })
+    .fill(process.env['E2E_ADMIN_PASSWORD'] ?? 'testpassword123');
   beforeSubmit?.();
   const response = page.waitForResponse(response => response.url().endsWith('/api/auth/login'));
   await page.getByRole('button', { name: 'Continue' }).click();

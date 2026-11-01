@@ -1,5 +1,5 @@
-import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { describe, expect, it, vi } from 'vitest';
 
 import { QRDisplay } from './QRDisplay';
 
@@ -93,5 +93,29 @@ describe('QRDisplay', () => {
 
     // Should not have QR code when loading
     expect(screen.queryByLabelText('Login QR code')).not.toBeInTheDocument();
+  });
+
+  it('offers a new code once the code has expired', () => {
+    const onRefresh = vi.fn();
+    const onRefreshLeft = vi.fn();
+    render(
+      <QRDisplay
+        codeUrl="https://example.com/auth/qr/token"
+        timeRemaining={0}
+        onRefresh={onRefresh}
+        onRefreshLeft={onRefreshLeft}
+      />
+    );
+    const button = screen.getByRole('button', { name: /code expired.*get a new code/i });
+
+    fireEvent.click(button);
+    expect(onRefresh).toHaveBeenCalled();
+    fireEvent.keyDown(button, { key: 'ArrowLeft' });
+    expect(onRefreshLeft).toHaveBeenCalled();
+  });
+
+  it('shows no new-code button while the code is valid', () => {
+    render(<QRDisplay codeUrl="https://example.com" timeRemaining={60} onRefresh={vi.fn()} />);
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
   });
 });

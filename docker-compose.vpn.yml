@@ -23,8 +23,8 @@ services:
       SERVER_COUNTRIES: ${NORDVPN_COUNTRIES:-}
     ports:
       # The services share the VPN container's network, so their ports are published here.
-      # See docs/setup/docker-setup.md#open-it-to-your-local-network
-      - '127.0.0.1:3000:3000'
+      # See docs/setup/docker-setup.md#open-it-to-your-local-network (MIAUFLIX_LISTEN_ADDRESS)
+      - '${MIAUFLIX_LISTEN_ADDRESS:-127.0.0.1}:3000:3000'
       - '127.0.0.1:16686:16686' # Jaeger UI, with docker-compose.tracing.yml
     restart: unless-stopped
 

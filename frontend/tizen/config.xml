@@ -13,6 +13,8 @@
   <name>Miauflix</name>
   <tizen:privilege name="http://tizen.org/privilege/internet"/>
   <tizen:privilege name="http://tizen.org/privilege/tv.inputdevice"/>
+  <!-- Tells a UHD panel apart, so AVPlay plays 4K sources in 4K -->
+  <tizen:privilege name="http://developer.samsung.com/privilege/productinfo"/>
   <tizen:profile name="tv-samsung"/>
   <tizen:setting screen-orientation="landscape" context-menu="disable" background-support="disable" encryption="disable" install-location="auto" hwkey-event="enable"/>
 </widget>

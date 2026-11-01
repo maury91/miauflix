@@ -149,6 +149,22 @@ export function deliveryFromProbe(
     throw new AudioPlaybackError('The selected source has no usable video duration.', 422);
   }
   const supported = preferences.supportedAudioCodecs ?? ['aac', 'mp3', 'opus', 'vorbis', 'flac'];
+  if (audio && !supported.includes(audio.codec ?? '') && preferences.nativeAudioTracks) {
+    // A player that switches tracks itself plays a decodable track (e.g. the AC-3 beside a
+    // TrueHD default) as it is, preferably in the same language, instead of converting audio.
+    const playable = audioTracks.filter(track => supported.includes(track.codec ?? ''));
+    const replacement =
+      playable.find(
+        track =>
+          !!audio.language &&
+          !!track.language &&
+          normalizeLanguage(track.language) === normalizeLanguage(audio.language)
+      ) ?? (audio.language ? undefined : playable[0]);
+    if (replacement) {
+      defaultAudioTrackIndex = replacement.index;
+      audio = replacement;
+    }
+  }
   let audioCodec = audio?.codec ?? null;
   let compatible = !audio || supported.includes(audioCodec ?? '');
   const avc = video.extradata?.match(/00000000:\s+([\da-f ]+)/i)?.[1].replace(/\s/g, '');

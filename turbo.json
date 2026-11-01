@@ -55,7 +55,7 @@
         "!src/{__test-utils__,__mocks__}/**"
       ],
       "outputs": ["../dist/frontend/**", "../dist/frontend-ssr/**"],
-      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"],
+      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN", "VITE_TV_PAIRING_URL"],
       "cache": true
     },
     "@miauflix/frontend#build:tizen": {
@@ -76,7 +76,7 @@
         "!src/{__test-utils__,__mocks__}/**"
       ],
       "outputs": ["../dist/frontend-tizen/**"],
-      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN"],
+      "env": ["NODE_ENV", "VITE_API_URL", "VITE_TIZEN", "VITE_TV_PAIRING_URL"],
       "cache": true
     },
     "@miauflix/frontend#check:ts": {

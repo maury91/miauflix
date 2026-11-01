@@ -244,6 +244,36 @@ describe('PlayerView', () => {
     expect(screen.queryByRole('button', { name: 'Notify me' })).not.toBeInTheDocument();
   });
 
+  it('keeps a remote working while preparing and after a failure', async () => {
+    createSession.mockReturnValue({
+      unwrap: () => Promise.reject({ status: 500, data: 'Internal server error' }),
+    });
+
+    render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
+
+    expect(screen.getByRole('main', { name: 'Player' })).toHaveFocus();
+    expect(await screen.findByRole('button', { name: 'Retry' })).toHaveFocus();
+  });
+
+  it('gives the focus back to the player when Retry removes its button', async () => {
+    createSession
+      .mockReturnValueOnce({
+        unwrap: () => Promise.reject({ status: 500, data: 'Internal server error' }),
+      })
+      .mockReturnValueOnce({ unwrap: () => new Promise(() => undefined) });
+
+    render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
+
+    const retry = await screen.findByRole('button', { name: 'Retry' });
+    retry.focus();
+    fireEvent.click(retry);
+
+    await waitFor(() =>
+      expect(screen.queryByRole('button', { name: 'Retry' })).not.toBeInTheDocument()
+    );
+    expect(screen.getByRole('main', { name: 'Player' })).toHaveFocus();
+  });
+
   it('shows which source is being tried while the session is prepared', async () => {
     createSession.mockReturnValue({ unwrap: () => new Promise(() => undefined) });
     const { store } = render(<PlayerView playable={playable} title="Clayface" onBack={vi.fn()} />);
