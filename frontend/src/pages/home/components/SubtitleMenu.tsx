@@ -369,10 +369,14 @@ export function SubtitleMenu({
               >
                 Hearing impaired: {hearingImpaired ? 'On' : 'Off'}
               </Button>
+              {/* Not `disabled`: it has the focus when pressed, and a disabled button drops it to
+                  the page, out of reach of the remote */}
               <Button
                 type="button"
-                disabled={loading}
-                onClick={() => onSearch(language, hearingImpaired)}
+                aria-disabled={loading}
+                onClick={() => {
+                  if (!loading) onSearch(language, hearingImpaired);
+                }}
               >
                 {loading ? 'Searching…' : 'Find subtitles'}
               </Button>

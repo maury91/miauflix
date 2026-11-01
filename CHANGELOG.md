@@ -18,6 +18,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 - Much smoother Home on the TV: faster moves along and between rows, rows ready before you reach them
 - On slow connections (and on the TV) Miauflix picks lighter sources, so playback starts instead of freezing
+- Sharper backdrops on the TV's Home: newer TVs get larger ones, and resting on a title swaps in a sharper backdrop
 - TV remote: Back opens the sidebar on Home, and the player's controls and Play/Pause keys work
 - Empty rows (like an empty watchlist) are hidden
 
@@ -27,6 +28,9 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - A server that stops responding is restarted automatically
 - Fewer playback freezes on high-bitrate files
 - TV login works with the remote, and an expired QR code can be renewed
+- The intro on some TVs grows all of the logo's letters again, instead of two, and no longer shows two logos
+- In the player, Find subtitles keeps the remote working while it searches
+- Signing in on the TV with the QR code while its keyboard is open no longer starts the intro too high
 - Approving a QR login from another device works again
 - Continue watching opens the episode its card shows
 - Connecting Trakt ends cleanly when access is denied or the code expires

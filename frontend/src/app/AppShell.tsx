@@ -1,5 +1,6 @@
 import { useAppState } from '@app/hooks/useAppState';
 import { useIntroController } from '@app/hooks/useIntroController';
+import { useKeyboardClosedAppState } from '@app/hooks/useKeyboardClosedAppState';
 import {
   type AppRoute,
   getRouteParent,
@@ -53,7 +54,7 @@ export function AppShell() {
   const settingsFocus = useRouteFocus();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAdmin = useAppSelector(selectIsAdmin);
-  const appState = useAppState();
+  const appState = useKeyboardClosedAppState(useAppState());
   const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
   const homeEligible = appState === 'home' && route.type === 'home' && !configurationWizardActive;
   const {

@@ -542,7 +542,12 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     artwork && artwork.artworkRevision >= currentRevision
       ? artwork.backdrop
       : (current?.backdrop ?? media.backdrop);
-  const backdrop = artworkUrl(selectedBackdrop, 'backdrop');
+  // The hero's resting backdrop when it has loaded; otherwise the one it showed while moving,
+  // so opening details never waits for a larger image. Chosen once, so it never swaps while open.
+  const backdrop = useMemo(() => {
+    const resting = artworkUrl(selectedBackdrop, 'backdrop-resting');
+    return imagePreloader.isLoaded(resting) ? resting : artworkUrl(selectedBackdrop, 'backdrop');
+  }, [selectedBackdrop]);
   const backdropFocus = current?.backdropFocus ?? media.backdropFocus ?? resolvedBackdropFocus;
   const backdropPlacement = getBackdropPlacement(backdropFocus, backdropContext);
   const warmupState: WarmupState = preparation?.warmup?.state ?? 'not_requested';

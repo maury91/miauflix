@@ -21,6 +21,8 @@ interface Job {
   /** Callers awaiting this exact image; their job is never dropped. */
   direct: number;
   state: 'queued' | 'loading';
+  /** An idle image someone will show: decoded too, and loaded before the other idle ones. */
+  shown: boolean;
   promise: Promise<ImageSize>;
   resolve: (size: ImageSize) => void;
   reject: (error: Error) => void;
@@ -88,7 +90,7 @@ export function createImagePreloader({
     const fail = () => settle(job, new Error('image_load_failed'));
     image.onload = () => {
       // Decode off the commit path; a decode failure of a loaded image still counts as loaded.
-      if (job.priority !== IDLE && typeof image.decode === 'function')
+      if ((job.priority !== IDLE || job.shown) && typeof image.decode === 'function')
         void image.decode().then(succeed, succeed);
       else succeed();
     };
@@ -97,7 +99,9 @@ export function createImagePreloader({
   };
 
   function pump() {
-    queue.sort((left, right) => left.priority - right.priority);
+    queue.sort(
+      (left, right) => left.priority - right.priority || Number(right.shown) - Number(left.shown)
+    );
     while (queue.length) {
       const next = queue[0]!;
       if (next.priority === IDLE) {
@@ -141,6 +145,7 @@ export function createImagePreloader({
       owners: new Set(),
       direct: 0,
       state: 'queued',
+      shown: false,
       promise,
       resolve,
       reject,
@@ -203,6 +208,31 @@ export function createImagePreloader({
         });
       });
     },
+
+    /**
+     * Load one image while idle, decoded, ahead of the other idle images, as this owner's batch:
+     * a later call or `clear` drops it unless it has started. Rejects when dropped or failed.
+     */
+    loadWhenIdle(owner: string, url: string): Promise<ImageSize> {
+      for (const wanted of owners.get(owner) ?? []) if (wanted !== url) release(owner, wanted);
+      const known = loaded.get(url);
+      if (known) {
+        owners.delete(owner);
+        remember(url, known);
+        return Promise.resolve(known);
+      }
+      owners.set(owner, new Set([url]));
+      const job = ensureJob(url, IDLE);
+      job.owners.add(owner);
+      if (!job.shown) {
+        job.shown = true;
+        if (job.state === 'queued') pump();
+      }
+      return job.promise;
+    },
+
+    /** Whether this image has loaded (and is remembered). */
+    isLoaded: (url: string): boolean => loaded.has(url),
 
     /** Forget an owner's batch; images only it wanted stop queuing (loading ones finish). */
     clear(owner: string): void {

@@ -211,7 +211,11 @@ export interface AVPlay {
 
 export interface WebApis {
   avplay: AVPlay;
-  productinfo?: { isUdPanelSupported: () => boolean };
+  productinfo?: {
+    isUdPanelSupported: () => boolean;
+    /** Starts with the model year: `23_PTM_QTV_T09` is a 2023 TV. */
+    getModelCode?: () => string;
+  };
 }
 
 declare global {

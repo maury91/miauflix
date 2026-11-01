@@ -35,6 +35,12 @@ const envSchema = z.object({
     .default(false),
   /** The pairing service the TV app looks servers up at; 'off' leaves it out. */
   TV_PAIRING_URL: z.string().default('https://pair.miauflix.cat'),
+  /**
+   * The TV's Home hero backdrop size while the selection moves, and once it rests: an image size
+   * (`w780`, `w1280`, `original`) or `auto`, which picks it for the TV's model year.
+   */
+  TV_HERO_BACKDROP: z.string().default('auto'),
+  TV_HERO_BACKDROP_RESTING: z.string().default('auto'),
 });
 
 export type EnvConfig = z.infer<typeof envSchema>;
@@ -66,6 +72,8 @@ function parseEnv(): EnvConfig {
     NODE_ENV: rawEnv['NODE_ENV'],
     TIZEN: rawEnv['VITE_TIZEN'] || rawEnv['TIZEN'],
     TV_PAIRING_URL: rawEnv['VITE_TV_PAIRING_URL'] ?? rawEnv['TV_PAIRING_URL'],
+    TV_HERO_BACKDROP: rawEnv['VITE_TV_HERO_BACKDROP'] || undefined,
+    TV_HERO_BACKDROP_RESTING: rawEnv['VITE_TV_HERO_BACKDROP_RESTING'] || undefined,
   };
 
   try {
@@ -80,6 +88,8 @@ function parseEnv(): EnvConfig {
       NODE_ENV: 'development',
       TIZEN: false,
       TV_PAIRING_URL: '',
+      TV_HERO_BACKDROP: 'auto',
+      TV_HERO_BACKDROP_RESTING: 'auto',
     };
   }
 }
