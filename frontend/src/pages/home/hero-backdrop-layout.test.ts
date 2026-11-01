@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import { getBackdropPlacement } from './backdrop-focus';
-import { getHeroBackdropLayout } from './hero-backdrop-layout';
+import { getHeroBackdropLayout, getHeroTextGeometry } from './hero-backdrop-layout';
 
 const focus = { x: 0.5009114583333333, y: 0.26180555555555557 };
 
@@ -102,5 +102,17 @@ describe('hero backdrop framing', () => {
     expect(getHeroBackdropLayout(NaN)).toBeNull();
     expect(getBackdropPlacement(null)).toEqual({ position: '100.00% 50.00%', size: 'cover' });
     expect(getBackdropPlacement(focus)).toEqual({ position: '50.09% 26.18%', size: 'cover' });
+  });
+});
+
+describe('hero text geometry', () => {
+  it('caps the text width and measures the space beside it', () => {
+    expect(getHeroTextGeometry(1920, 167.28)).toEqual({
+      detailsLeft: 167.28,
+      detailsWidth: 720,
+      textRight: 887.28,
+      freeWidth: 1032.72,
+    });
+    expect(getHeroTextGeometry(1000).detailsWidth).toBe(440);
   });
 });

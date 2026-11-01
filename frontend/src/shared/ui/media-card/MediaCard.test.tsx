@@ -64,4 +64,39 @@ describe('MediaCard', () => {
     fireEvent.click(card);
     expect(onClick).not.toHaveBeenCalled();
   });
+
+  it('keeps its classes static: size, state and progress are inline styles and attributes', () => {
+    const { container, rerender } = setupTest({ width: 320, progress: 10 });
+    const classesOf = () =>
+      Array.from(container.querySelectorAll('*'), element => element.getAttribute('class'));
+    const card = screen.getByRole('button', { name: 'Orbital' });
+    const before = classesOf();
+    expect(card).toHaveStyle({ width: '320px', fontSize: '17.77777777777778px' });
+    expect(card).not.toHaveAttribute('data-focused');
+
+    rerender(
+      <MediaCard
+        backdrop="backdrop.jpg"
+        logo="logo.png"
+        title="Orbital"
+        width={480}
+        progress={75}
+        focused
+        hovered
+      />
+    );
+    expect(classesOf()).toEqual(before);
+    expect(card).toHaveStyle({ width: '480px', fontSize: '26.666666666666668px' });
+    expect(card).toHaveAttribute('data-focused', 'true');
+    expect(card).toHaveAttribute('data-hovered', 'true');
+    expect(screen.getByLabelText('75% watched').firstElementChild).toHaveStyle({ width: '75%' });
+  });
+
+  it('merges a caller class name and style', () => {
+    setupTest({ className: 'extra', style: { marginLeft: 4 }, width: 360 });
+    const card = screen.getByRole('button', { name: 'Orbital' });
+    expect(card).toHaveClass('extra');
+    expect(card.classList.length).toBe(2);
+    expect(card).toHaveStyle({ marginLeft: '4px', fontSize: '20px' });
+  });
 });

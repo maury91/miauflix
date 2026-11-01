@@ -1,6 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import { createImagePreloader, NEARBY, URGENT } from './image-preloader';
+import { createImagePreloader, IDLE, NEARBY, URGENT } from './image-preloader';
 
 /** An image whose loading the test controls. */
 class FakeImage {
@@ -90,6 +90,30 @@ describe('image preloader', () => {
     image('/hero.jpg').finish();
     await flush();
     expect(started()).toEqual(['/1.jpg', '/2.jpg', '/hero.jpg', '/3.jpg', '/4.jpg']);
+  });
+
+  it('loads idle images one at a time, only when nothing else loads and the app is idle', async () => {
+    let idle = false;
+    let retry: (() => void) | null = null;
+    const preloader = setup({ isIdle: () => idle, whenIdle: next => (retry = next) });
+    void preloader.prepare('rows', ['/idle-1.jpg', '/idle-2.jpg'], IDLE);
+    expect(started()).toEqual([]);
+
+    idle = true;
+    void preloader.prepare('row', ['/nearby.jpg'], NEARBY);
+    expect(started()).toEqual(['/nearby.jpg']);
+    image('/nearby.jpg').finish();
+    await flush();
+    expect(started()).toEqual(['/nearby.jpg', '/idle-1.jpg']);
+    expect(image('/idle-1.jpg').decoded).toBe(false);
+
+    idle = false;
+    image('/idle-1.jpg').finish();
+    await flush();
+    expect(started()).toHaveLength(2);
+    idle = true;
+    retry!();
+    expect(started()).toEqual(['/nearby.jpg', '/idle-1.jpg', '/idle-2.jpg']);
   });
 
   it('drops queued images an owner no longer wants, but finishes ones already loading', async () => {

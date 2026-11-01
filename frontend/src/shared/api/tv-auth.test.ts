@@ -86,4 +86,60 @@ describe('tvAuthFetch', () => {
     await tvAuthFetch(`${API}/api/auth/sessions`);
     expect(sentHeaders().get('X-Refresh-Tokens')).toBeNull();
   });
+
+  it('forgets the sent sessions the backend did not list', async () => {
+    const { tvAuthFetch, fetchMock, sentHeaders } = await setupTest();
+    for (const session of ['s1', 's2']) {
+      fetchMock.mockResolvedValueOnce(
+        jsonResponse(200, {
+          session,
+          user: {},
+          tokens: { accessToken: `access-${session}`, refreshToken: `refresh-${session}` },
+        })
+      );
+      await tvAuthFetch(`${API}/api/auth/login`, { method: 'POST' });
+    }
+
+    fetchMock.mockResolvedValue(jsonResponse(200, [{ session: 's2', user: {} }]));
+    await tvAuthFetch(`${API}/api/auth/sessions`);
+    expect(sentHeaders().get('X-Refresh-Tokens')).toBe('s1:refresh-s1,s2:refresh-s2');
+
+    await tvAuthFetch(`${API}/api/auth/sessions`);
+    expect(sentHeaders().get('X-Refresh-Tokens')).toBe('s2:refresh-s2');
+  });
+
+  it('keeps a session whose token was refreshed while it was being listed', async () => {
+    const { tvAuthFetch, fetchMock, sentHeaders } = await setupTest();
+    fetchMock.mockResolvedValueOnce(jsonResponse(200, { session: 's1', user: {}, tokens }));
+    await tvAuthFetch(`${API}/api/auth/login`, { method: 'POST' });
+
+    // The listing does not include s1, but a refresh rotates its token before the listing returns
+    let answerListing!: (response: Response) => void;
+    fetchMock.mockReturnValueOnce(new Promise<Response>(resolve => (answerListing = resolve)));
+    const listing = tvAuthFetch(`${API}/api/auth/sessions`);
+    fetchMock.mockResolvedValueOnce(
+      jsonResponse(200, {
+        user: {},
+        tokens: { accessToken: 'access-2', refreshToken: 'refresh-2' },
+      })
+    );
+    await tvAuthFetch(`${API}/api/auth/refresh/s1`, { method: 'POST' });
+    answerListing(jsonResponse(200, []));
+    await listing;
+
+    fetchMock.mockResolvedValue(jsonResponse(200, [{ session: 's1', user: {} }]));
+    await tvAuthFetch(`${API}/api/auth/sessions`);
+    expect(sentHeaders().get('X-Refresh-Tokens')).toBe('s1:refresh-2');
+  });
+
+  it('keeps the sessions when listing them fails', async () => {
+    const { tvAuthFetch, fetchMock, sentHeaders } = await setupTest();
+    fetchMock.mockResolvedValueOnce(jsonResponse(200, { session: 's1', user: {}, tokens }));
+    await tvAuthFetch(`${API}/api/auth/login`, { method: 'POST' });
+
+    fetchMock.mockResolvedValue(jsonResponse(500, { error: 'Internal server error' }));
+    await tvAuthFetch(`${API}/api/auth/sessions`);
+    await tvAuthFetch(`${API}/api/auth/sessions`);
+    expect(sentHeaders().get('X-Refresh-Tokens')).toBe('s1:refresh-1');
+  });
 });

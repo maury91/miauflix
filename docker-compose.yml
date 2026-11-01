@@ -15,9 +15,9 @@ services:
   miauflix:
     image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix:${MIAUFLIX_VERSION:-latest}
     ports:
-      # Only this computer can connect until you open it to your network, see
+      # Only this computer can connect until you open it to your network (MIAUFLIX_LISTEN_ADDRESS), see
       # docs/setup/docker-setup.md#open-it-to-your-local-network
-      - '127.0.0.1:3000:3000'
+      - '${MIAUFLIX_LISTEN_ADDRESS:-127.0.0.1}:3000:3000'
     environment:
       DATA_DIR: /usr/src/app/data
       DOWNLOAD_PATH: /usr/src/app/downloads

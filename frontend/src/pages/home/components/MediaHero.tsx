@@ -1,9 +1,9 @@
 import { useEnsureBackdropFocusMutation } from '@features/media/api/media.api';
 import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
-import { PALETTE } from '@shared/config/constants';
+import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { selectSourceAvailability } from '@store/slices/realtime';
 import type { RootState } from '@store/store';
-import { type FC, Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import { type FC, Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -20,6 +20,7 @@ import {
 } from '../backdrop-stack';
 import {
   getHeroBackdropLayout,
+  getHeroTextGeometry,
   HERO_BACKDROP_LEFT_CSS,
   HERO_DETAILS_LEFT_CSS,
   HERO_DETAILS_WIDTH_CSS,
@@ -40,7 +41,22 @@ interface BackdropLayerState {
   imageHeight: number;
 }
 
-const Hero = styled.header`
+// The TV rasterizes in software: on their own layers the gradients and backdrops are painted once,
+// instead of with every title change and every frame of a crossfade.
+const tvLayer = (property: 'opacity' | 'transform') =>
+  builtForTizen ? `will-change: ${property};` : '';
+
+/**
+ * The shade's geometry in pixels, on the TV. Chromium 69 resolves `var()` and `calc()` in a
+ * gradient into new values on every restyle, and every rule styled-components inserts restyles
+ * the page, so it repainted the whole shade (about 480 ms) each time; fixed values compare equal.
+ */
+type HeroShade = ReturnType<typeof getHeroTextGeometry>;
+const px = (value: number) => `${Math.round(value * 100) / 100}px`;
+const shadeAt = (shade: HeroShade | null, css: string, fromText: number, fromFree: number) =>
+  shade ? px(fromText * shade.textRight + fromFree * shade.freeWidth) : css;
+
+const Hero = styled.header<{ $shade: HeroShade | null }>`
   --hero-details-width: ${HERO_DETAILS_WIDTH_CSS};
   --hero-text-right: calc(${HERO_DETAILS_LEFT_CSS} + var(--hero-details-width));
   --hero-free-width: calc(100vw - var(--hero-text-right));
@@ -60,9 +76,13 @@ const Hero = styled.header`
     inset: 0;
     z-index: 2;
     pointer-events: none;
+    ${tvLayer('transform')}
     background:
       radial-gradient(
-        ellipse 72% 115% at calc(var(--hero-text-right) + var(--hero-free-width) * 0.7) 0%,
+        ellipse 72% 115% at
+          ${({ $shade }) =>
+      shadeAt($shade, 'calc(var(--hero-text-right) + var(--hero-free-width) * 0.7)', 1, 0.7)}
+          0%,
         transparent 35%,
         rgba(0, 0, 0, 0.16) 51%,
         rgba(0, 0, 0, 0.78) 75%,
@@ -71,9 +91,17 @@ const Hero = styled.header`
       linear-gradient(
         90deg,
         #03050d 0%,
-        rgba(3, 5, 13, 0.96) calc(${HERO_DETAILS_LEFT_CSS} + var(--hero-details-width) * 0.48),
-        rgba(3, 5, 13, 0.35) calc(var(--hero-text-right) + var(--hero-free-width) * 0.14),
-        transparent calc(var(--hero-text-right) + var(--hero-free-width) * 0.55)
+        rgba(3, 5, 13, 0.96)
+          ${({ $shade }) =>
+      $shade
+        ? px($shade.detailsLeft + $shade.detailsWidth * 0.48)
+        : `calc(${HERO_DETAILS_LEFT_CSS} + var(--hero-details-width) * 0.48)`},
+        rgba(3, 5, 13, 0.35)
+          ${({ $shade }) =>
+      shadeAt($shade, 'calc(var(--hero-text-right) + var(--hero-free-width) * 0.14)', 1, 0.14)},
+        transparent
+          ${({ $shade }) =>
+      shadeAt($shade, 'calc(var(--hero-text-right) + var(--hero-free-width) * 0.55)', 1, 0.55)}
       ),
       linear-gradient(0deg, #000 0%, rgba(0, 0, 0, 0.62) 17%, transparent 48%);
   }
@@ -82,20 +110,23 @@ const Hero = styled.header`
     content: '';
     position: absolute;
     top: 39.5vh;
-    left: calc(var(--hero-text-right) + var(--hero-free-width) * 0.285);
+    left: ${({ $shade }) =>
+      shadeAt($shade, 'calc(var(--hero-text-right) + var(--hero-free-width) * 0.285)', 1, 0.285)};
     right: 0;
     height: 15.5vh;
     z-index: 3;
     pointer-events: none;
+    ${tvLayer('transform')}
     background: linear-gradient(181deg, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0.5) 53%, #000 100%);
   }
 `;
 
-/** Stacked in DOM order: a later layer fades in over the earlier ones. */
-const BackdropLayer = styled.div<{
-  $url: string;
-  $visible: boolean;
-}>`
+/**
+ * Stacked in DOM order: a later layer fades in over the earlier ones. The image and opacity are
+ * inline: as styled-components props every backdrop added a CSS class, and each inserted rule
+ * restyles the whole page (about 60 ms a title on the TV).
+ */
+const BackdropLayer = styled.div`
   position: absolute;
   top: 0;
   left: ${HERO_BACKDROP_LEFT_CSS};
@@ -104,10 +135,9 @@ const BackdropLayer = styled.div<{
   z-index: 1;
   pointer-events: none;
   background-color: #000;
-  background-image: ${({ $url }) => ($url ? `url(${JSON.stringify($url)})` : 'none')};
   background-repeat: no-repeat;
-  opacity: ${({ $visible }) => ($visible ? 1 : 0)};
   transition: opacity 350ms ease;
+  ${tvLayer('opacity')}
 
   @media (prefers-reduced-motion: reduce) {
     transition: none;
@@ -332,6 +362,11 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   ]);
 
   const layout = getHeroBackdropLayout(heroSize.width, margin);
+  // The hero spans the viewport (`100vw` in the CSS version)
+  const shade = useMemo(
+    () => (builtForTizen ? getHeroTextGeometry(window.innerWidth, margin) : null),
+    [margin]
+  );
   const placementFor = (layer: BackdropLayerState) => {
     const context: BackdropPositionContext = {
       imageWidth: layer.imageWidth,
@@ -346,7 +381,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
     return { backgroundPosition: placement.position, backgroundSize: placement.size };
   };
 
-  if (!media) return <Hero ref={heroRef} aria-hidden="true" />;
+  if (!media) return <Hero ref={heroRef} $shade={shade} aria-hidden="true" />;
   const date = media._type === 'movie' ? media.releaseDate : media.firstAirDate;
   const metadata = [
     media._type === 'movie' && media.runtime ? formatRuntime(media.runtime) : '',
@@ -359,13 +394,17 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       ? artwork.heroLogo
       : (media.heroLogo ?? media.logo);
   return (
-    <Hero ref={heroRef} aria-live="polite">
+    <Hero ref={heroRef} $shade={shade} aria-live="polite">
       {layers.map(layer => (
         <BackdropLayer
           key={layer.id}
-          $url={layer.backdrop.url}
-          style={placementFor(layer.backdrop)}
-          $visible={layer.visible}
+          style={{
+            ...placementFor(layer.backdrop),
+            backgroundImage: layer.backdrop.url
+              ? `url(${JSON.stringify(layer.backdrop.url)})`
+              : 'none',
+            opacity: layer.visible ? 1 : 0,
+          }}
           onTransitionEnd={() => settle(layer.id)}
           aria-hidden="true"
         />
