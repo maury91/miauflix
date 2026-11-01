@@ -1,5 +1,5 @@
+import { selectEmptyListSlugs, useListPage } from '@features/home-feed/listPages';
 import {
-  useGetListQuery,
   useGetListsInfiniteQuery,
   usePromoteListMediaMutation,
 } from '@features/media/api/lists.api';
@@ -92,9 +92,12 @@ const listResponses = Object.fromEntries(
   })
 );
 
+const NO_EMPTY_LISTS: ReadonlySet<string> = new Set();
+
 function setupHomeMocks() {
   const getLists = mocked(useGetListsInfiniteQuery);
-  const getList = mocked(useGetListQuery);
+  const getList = mocked(useListPage);
+  const emptyLists = mocked(selectEmptyListSlugs);
   const promote = mocked(usePromoteListMediaMutation);
   const getMovie = mocked(useGetMovieQuery);
   const getSeason = mocked(useGetSeasonQuery);
@@ -125,6 +128,8 @@ function setupHomeMocks() {
     if (typeof query !== 'object' || query === null) return emptyQuery;
     return (listResponses[(query as { category: string }).category] ?? emptyQuery) as never;
   });
+  // The story store has no list cache: no list is empty.
+  emptyLists.mockReturnValue(NO_EMPTY_LISTS);
   promote.mockReturnValue([fn()] as never);
   getMovie.mockReturnValue(emptyQuery);
   getSeason.mockReturnValue(emptyQuery);

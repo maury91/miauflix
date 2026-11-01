@@ -4,12 +4,15 @@ import { progressApi } from '@features/progress/api/progress.api';
 import type { MediaDto } from '@miauflix/backend';
 import type { AppDispatch, RootState } from '@store/store';
 import { useCallback, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { unfinishedProgress } from '../continue-watching';
 import { composeHomeCategories } from '../home-feed';
-import { mediaFromProgress } from '../media-mappers';
+import { cardSelector, progressTitle } from '../media-mappers';
 import { useSessionChange } from './useSessionChange';
+
+const titleKey = ({ kind, mediaId }: { kind: 'movie' | 'show'; mediaId: number }) =>
+  `${kind}:${mediaId}`;
 
 /** Lists per page; the next page is fetched once the rows shown reach the middle of the last. */
 const LISTS_PAGE_SIZE = 20;
@@ -75,11 +78,7 @@ export function useHomeFeed({
   // Progress polling recreates entry objects even when the watched titles are unchanged. Keep
   // the metadata subscriptions keyed by media identity so polling cannot refetch every title.
   const continueHydrationSignature = continueRefs
-    .map(entry =>
-      entry.playable.kind === 'movie'
-        ? `movie:${entry.playable.mediaId}`
-        : `show:${entry.playable.showMediaId}`
-    )
+    .map(entry => titleKey(progressTitle(entry)))
     .sort()
     .join('|');
   const continueHydrationKeys = useMemo(
@@ -97,14 +96,28 @@ export function useHomeFeed({
     return () => subscriptions.forEach(subscription => subscription?.unsubscribe?.());
   }, [continueHydrationKeys, dispatch]);
 
-  const mediaCache = useSelector((state: RootState) => state.mediaApi);
-  const continueMedia = useMemo(
+  // Only the Continue watching titles: selecting the whole query cache would rebuild the row
+  // whenever any title loads, as the hero's does on every move. Cards are cached per response,
+  // so the array compares equal while those titles are unchanged.
+  // One selector per title, built when the titles change rather than on every notification.
+  const cardSelectors = useMemo(
     () =>
-      continueRefs
-        .map(entry => mediaFromProgress({ mediaApi: mediaCache }, entry))
-        .filter((media): media is MediaDto => Boolean(media)),
-    [continueRefs, mediaCache]
+      new Map(
+        continueHydrationKeys.map(key => {
+          const [kind, mediaId] = key.split(':');
+          return [key, cardSelector(kind as 'movie' | 'show', Number(mediaId))] as const;
+        })
+      ),
+    [continueHydrationKeys]
   );
+  const selectContinueMedia = useCallback(
+    (state: RootState) =>
+      continueRefs
+        .map(entry => cardSelectors.get(titleKey(progressTitle(entry)))?.(state) ?? null)
+        .filter((media): media is MediaDto => Boolean(media)),
+    [cardSelectors, continueRefs]
+  );
+  const continueMedia = useSelector(selectContinueMedia, shallowEqual);
   const displayCategories = useMemo(
     () => composeHomeCategories(categories, continueMedia.length > 0),
     [categories, continueMedia.length]

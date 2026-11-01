@@ -38,6 +38,24 @@ export function realtimePlayableKey(playable: RealtimeMediaRef | PlayableRef): s
   return `${playable.kind === 'movie' ? 'm' : 's'}:${playable.mediaId}`;
 }
 
+/** Structural equality for the small plain values of a preparation snapshot. */
+function sameValue(left: unknown, right: unknown): boolean {
+  if (Object.is(left, right)) return true;
+  if (!left || !right || typeof left !== 'object' || typeof right !== 'object') return false;
+  const leftKeys = Object.keys(left).filter(
+    key => (left as Record<string, unknown>)[key] !== undefined
+  );
+  const rightKeys = Object.keys(right).filter(
+    key => (right as Record<string, unknown>)[key] !== undefined
+  );
+  return (
+    leftKeys.length === rightKeys.length &&
+    leftKeys.every(key =>
+      sameValue((left as Record<string, unknown>)[key], (right as Record<string, unknown>)[key])
+    )
+  );
+}
+
 function getPlayable(message: RealtimeStatusMessage): PlayableRef {
   return (message.type === 'warmup' ? message.playable : message.media) as PlayableRef;
 }
@@ -58,8 +76,9 @@ export const realtimeSlice = createSlice({
         source: null,
         warmup: { state: 'not_requested' as const },
       };
+      let next: PreloadPreparationSnapshot;
       if (message.type === 'source-status') {
-        state.preparationByMediaId[message.mediaId] = {
+        next = {
           ...base,
           playable,
           state: message.status as PreloadPreparationSnapshot['state'],
@@ -72,7 +91,7 @@ export const realtimeSlice = createSlice({
             : null,
         };
       } else {
-        state.preparationByMediaId[message.mediaId] = {
+        next = {
           ...base,
           playable,
           warmup: {
@@ -83,6 +102,10 @@ export const realtimeSlice = createSlice({
           },
         };
       }
+      // The backend repeats unchanged statuses; storing a copy would re-render the hero.
+      const current = state.preparationByMediaId[message.mediaId];
+      if (current && sameValue(current, next)) return;
+      state.preparationByMediaId[message.mediaId] = next;
     },
     sourceReceived(state, action: PayloadAction<RealtimeSourceMessage>) {
       const message = action.payload;

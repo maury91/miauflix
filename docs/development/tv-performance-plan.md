@@ -76,6 +76,31 @@ Steps 3–7 are why Home is still lagging. None of them is needed to move the se
 
 ## Phase 1: stop the store storm (Home movement)
 
+Status: done, except the optional parts of 1.4. With all of it installed, four moves along a row
+cause 33–42 store notifications (about 9 per move, from 115), run at about 49 fps with a 25 ms p90
+frame, and take 213 ms of main-thread work per key. The first round (1.1–1.3, 1.5) took
+four moves from 461 store notifications, 21 fps and a 180 ms p90 frame to 68–95 notifications,
+47–50 fps and a 26–34 ms p90, with no `artwork/received` during moves. Most of what was left
+were preparation statuses the backend repeats unchanged (now ignored) and the realtime publish
+actions (now handled by the middleware without reaching the reducers).
+
+After Phase 1, a CPU profile of six moves shows 213–272 ms of main-thread work per key (from about
+640 ms). The largest costs left:
+
+- **The smooth-scroll tick (146 ms over 6 keys, self time).** It writes `scrollLeft` and reads
+  `scrollWidth`, which forces layout every frame. The `translate3d` track in 2.1 targets this.
+- **styled-components rendering (132 ms).** css-architecture.md's migration targets this.
+- **Garbage collection (133 ms).**
+- **The HomePage render (110 ms).** See 2.5.
+- **The hero render (40 ms).** See 2.4.
+
+The backend re-sends each focused title's source and warmup statuses about once a second, even
+when nothing changed. The TV now drops exact repeats (ignoring `focusSequence`), but the backend
+could stop sending them.
+
+Still in the store: the list promotion mutations (`listsApi.mutations`, about 2.5 notifications
+per move). They could use `initiate(…, { track: false })`.
+
 The biggest win for the least code. Do these first, in this order, and measure after each one.
 
 ### 1.1 Artwork: no-op updates must not change state
@@ -151,6 +176,130 @@ settle instead of once per frame for every row.
 - Re-run the CPU profile. The selector, immer and GC rows should fall by at least half.
 
 ## Phase 2: components (render cost per move)
+
+Status: 2.1 (card window and transform track), 2.2 (progress per card), 2.3, the `HeroDetails`
+split from 2.4, and the memoized sidebar from 2.5/2.6 are done. Still to do: the static CSS
+parts, delegated card handlers, and moving `getInterestWindow` off the scroll position.
+
+Measured on the TV afterwards:
+
+- **Main thread:** 168 ms of work per key (213 ms after Phase 1). The smooth-scroll tick no longer
+  lays out the page.
+- **Frame rate unchanged:** 44–49 fps on a first pass along a row, and 53 fps going back over cards
+  just shown.
+- **What limits it now is the compositor, not the main thread.** A trace of four moves has the
+  compositor thread busy about 2.2 s of 2.4 s. It spends its time drawing, waiting on synchronous
+  GL calls, and uploading about 300 freshly rasterized tiles.
+- **Most of those tiles are the hero's.** Every move fades in a new full-width backdrop layer,
+  which has to be rasterized and uploaded. On cold passes with the backdrop hidden: 50–53 fps, a
+  24 ms p90 and 2–7 frames over 50 ms. With it shown: 46 fps, a 34–37 ms p90 and 10–11 frames
+  over 50 ms.
+- **New cards mounting cost the rest.** Layout is 38 ms against 17 ms on a warm pass.
+
+Follow-up, measured on the TV:
+
+- **The hero backdrop now changes once the selection has rested for 250 ms.**
+- **Held key, eight moves at 150 ms (keys fired from inside the page):** one backdrop is loaded
+  instead of eight. Hiding the backdrop no longer changes the frame rate on new cards (34–35
+  fps either way).
+- **What's left is mounting, decoding and rasterizing cards not shown before:** 30–35 fps on
+  new cards against 38–44 going back over cards just shown.
+- **Spaced presses (600 ms apart) don't change:** each one rests, so each still swaps the
+  backdrop. Their cost is unchanged at 45–46 fps, with a 31–34 ms p90.
+- **Main thread: 128 ms of work per key** (168 ms before this change, 640 ms before Phase 1).
+- **Key spacing in measurements:** keys sent over DevTools reach the TV 350–430 ms apart,
+  whatever the interval asked for. Fast-move measurements have to dispatch the keys from
+  inside the page.
+
+Second follow-up, new cards (held key, ten moves at 120 ms, keys fired from inside the page):
+
+- **Decoding was not the cost: about 7 image decodes per pass, under 100 ms.** Raster was. The
+  card focus scale lifted the old and new card onto layers of their own while they animated, then
+  repainted the row's track under them: one row of full-width tiles at about 8 ms each.
+- **One focus ring per row on the TV.** It sits over the leading slot, where the row always brings
+  the selected card, so it never moves. The card's own outline and scale are off on the TV
+  (`externalFocus`; the legacy build turns `:focus-visible` into `:focus`, so DOM focus applied
+  them too).
+- **The row tells Home about a held run of moves once it pauses** (150 ms; a single press still
+  reports at once). Each report re-rendered Home and the hero twice, once from the selection and
+  once from the card's focus event, about 50 ms on the TV, longer than the key repeat. The row
+  reports its pending selection at once when it is left.
+- **Rows move with a CSS transition on the TV,** which the compositor runs. A transform written
+  from JavaScript every frame still cost about 12 ms of style, layout and layer updates per frame.
+  The scroller also no longer measures the track's width on each move.
+- **Untouched row slots no longer re-render** with Home (`HomeRow`).
+- **Result: 46–49 fps on new cards** (30–35 before), p90 29–34 ms, 2–4 frames over 50 ms; 49 fps
+  going left. Main thread: 54 ms of work per key (101 ms before). Moving down: 49 fps, up: 52 fps.
+
+Third follow-up, moving between rows:
+
+- **Each move between rows was one synchronous update of 86–195 ms** in the key handler: the
+  rows whose active, visible, prefetch and mounted state shift with the focused row re-render,
+  and a row coming into the mounted window creates its cards.
+- **Rows below are readied while idle** (`useIdleRowWarmup`): one more row every 500 ms after a
+  second without keys, up to 10 below the visible ones, counted in rows so moving down uses them.
+- **Home scrolls between rows with a compositor transition.** With 12 rows of cards mounted,
+  setting `scrollTop` every frame laid them all out each frame (down: 40 fps).
+- **The rows around the focused one mount, unmount and load once the slide has ended**
+  (`useRestedRow`, the content scroller's `onRest`). With a fixed 150 ms delay that work landed
+  mid-slide: one 209 ms gap moving up, where the rows above are not readied. Afterwards, quick
+  runs of four moves 150 ms apart: 46 compositor fps down and 48 up, p90 28–31 ms, 2–3 gaps
+  over 50 ms; longest main-thread task per run 78–90 ms (up to 163 before). With moves 500 ms
+  apart, the long draw gaps are the pauses between slides (300 ms each), not dropped frames: the
+  compositor has nothing to draw then. Judge spaced moves by p90, not by the longest gap.
+- **Rows whose list loads empty leave Home.**
+- **Measuring:** `tv-perf.mjs` and `inpage-keys.js` count main-thread animation frames. Since the
+  rows move on compositor transitions, the screen can be smoother than that count: count
+  `ProxyImpl::ScheduledActionDraw` in a trace instead. Moving down with idle rows ready: 48
+  compositor fps, p90 27 ms, 3 gaps over 50 ms in four moves (the main-thread count said 33).
+
+Next:
+
+- **Moving list loading into the store**, in stages. Stage 1 (done): Home says which rows it
+  wants (`homeFeedActions.rowsWanted`) and `homeFeedMiddleware` keeps one cache subscription per
+  list page they need (the selection's page, and its neighbours once the size is known); rows
+  read pages with `useListPage` and never fetch; empty lists are dropped by
+  `selectEmptyListSlugs` before their row renders. On the TV it did not change the frame rate,
+  within the run-to-run noise: quick runs of four moves 150 ms apart drew 39–71 compositor fps
+  down (p90 22–29 ms) and 35–45 up (p90 29–57 ms), longest main-thread task per run 52–111 ms; a
+  held key along a row drew 48–49 fps (p90 27–29 ms). It removes per-row effect work, not the
+  renders that dominate a move. Stage 2: promotion, backdrop focus queueing and image preloading
+  in the middleware. Stage 3: idle readying and the rested row in the store, so neither
+  re-renders Home.
+- **Renders besides the move itself** (done). Logging every React commit on the TV with what
+  triggered it (a DevTools hook injected before the app, plus keys, websocket messages and
+  fetches) showed about ten commits per move along a row: the row and its cards on the key, Home
+  and the hero on the report, then Home again for each pushed `source-status` and `warmup`
+  (warmup progress arrives every few hundred milliseconds, idle or not), and the row twice for
+  its own promotion request. Home now only publishes the focus intent; the hero and details read
+  the pushed preparation (`usePreparation`), the hero ignoring warmup-only changes; rows and the
+  hero select nothing from their fire-and-forget mutations (`selectFromResult`); and
+  `selectEmptyListSlugs` keeps its identity while the set is equal (it re-rendered Home whenever
+  any page loaded). After: a move is the row, then Home and the hero once; pushes re-render only
+  the hero, and only when the source changes. Spaced single moves take 42–44 ms of main thread
+  (47–66 before); the hero updates 48–54 ms after the key. Held keys and vertical bursts are
+  unchanged within the noise (held: 44–67 compositor fps, p90 24–28 ms): they are bound by the
+  row's own render and the layer updates of each frame (`UpdateLayerTree` 10–14 ms per frame
+  during a slide), not by Home.
+- **Layers and off-screen animation.** Home has about 136 compositing layers on the TV, about
+  ten per mounted row: each row's `translate3d` track is a layer, and the ring, edge fades and
+  slot painted after it are layered too (assumed overlap, then a layer for their ancestor clip).
+  Making each row slot a stacking context and raising only the focused row took it to 29 layers
+  in an in-page experiment, but saved only 5–8 ms per held key: the per-frame layer update
+  (`UpdateLayerTree`, about 5 ms a main frame) scales with the paint layers of all mounted cards
+  (removing the other rows' cards halved it), not with composited layers. Not pursued. The same
+  traces showed some runs with a main-thread frame on every refresh for seconds: an SVG spinner
+  (`Spinner`, a SMIL loop plus a CSS spin) in a row loading far below the screen, which Chromium
+  69 animates on the main thread even out of view. Fixed: the TV spins an HTML element on the
+  compositor and rows loading off screen show none. Afterwards no animation runs at rest, idle
+  main frames cost about 1 ms, and held keys along a row stay at 48–49 compositor fps (p90
+  26–27 ms).
+- **Rows black for a moment in quick vertical runs** (accepted). In both directions, rows show
+  black for a moment during a quick run of moves; short enough to leave. During the measured
+  run all rows near the focus were mounted, so it is more likely tiles not rasterized in time
+  (software raster) than rows mounting after the slide; `Page.captureScreenshot` is not
+  available on the TV to tell them apart. Quick upward runs drew 25–46 compositor fps (p90
+  30–120 ms).
 
 Once Phase 1 has removed the needless renders, what's left is the cost of the renders that are
 needed: the cards whose selection changes, the hero, and the rows mounted as you move down.

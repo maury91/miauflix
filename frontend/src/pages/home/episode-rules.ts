@@ -1,5 +1,7 @@
 import type { PlayableRef, ProgressEntry } from '@miauflix/backend';
 
+import { preferredProgress } from './continue-watching';
+
 interface EpisodeLike {
   episodeNumber: number;
   title: string;
@@ -41,6 +43,24 @@ export function latestEpisodeProgress(
   return latest;
 }
 
+/**
+ * The episode details resume: the show's entry (in `seasonNumber` when given) that Continue
+ * watching and the show's card pick, so details open the episode the card shows.
+ */
+export function resumeEpisodeProgress(
+  progress: readonly ProgressEntry[],
+  showMediaId: number,
+  seasonNumber?: number
+): EpisodeProgress | undefined {
+  let best: EpisodeProgress | undefined;
+  for (const entry of progress) {
+    if (entry.playable.kind !== 'episode' || entry.playable.showMediaId !== showMediaId) continue;
+    if (seasonNumber !== undefined && entry.playable.seasonNumber !== seasonNumber) continue;
+    if (!best || preferredProgress(entry, best) < 0) best = entry as EpisodeProgress;
+  }
+  return best;
+}
+
 /** True when the episode has an air date in the future; an unknown date is not upcoming. */
 export function isEpisodeUpcoming(airDate: string | null | undefined, now = Date.now()): boolean {
   if (!airDate) return false;
@@ -64,7 +84,7 @@ export function episodeForSeason<E extends EpisodeLike>(
   progress: readonly ProgressEntry[],
   now = Date.now()
 ): E | undefined {
-  const watched = latestEpisodeProgress(progress, showMediaId, season.seasonNumber);
+  const watched = resumeEpisodeProgress(progress, showMediaId, season.seasonNumber);
   if (watched) {
     const matching = season.episodes.find(
       episode =>

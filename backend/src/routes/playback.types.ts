@@ -29,6 +29,8 @@ export const playbackPreferencesSchema = z
       .max(8)
       .optional(),
     nativeAudioTracks: z.boolean().optional(),
+    /** Highest average bitrate (kbit/s) the client's connection sustains. */
+    maxBitrateKbps: z.number().int().min(500).max(1_000_000).optional(),
   })
   .strict();
 

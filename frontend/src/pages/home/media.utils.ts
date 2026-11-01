@@ -27,6 +27,10 @@ export function getImageUrl(path: string | null | undefined, size = 'w500'): str
     : path;
 }
 
+/** Home asks for the same few hundred URLs on every move; building them is regex work. */
+const artworkUrls = new Map<string, string>();
+const MAX_CACHED_ARTWORK_URLS = 5_000;
+
 /** Size artwork for its rendered width; keep provider and bundled asset URLs intact. */
 export function artworkUrl(
   path: string | null | undefined,
@@ -53,5 +57,13 @@ export function artworkUrl(
             : pixels <= 1280
               ? 'w1280'
               : 'original';
-  return getImageUrl(path, size);
+  if (!path) return '';
+  const key = `${size}|${path}`;
+  let url = artworkUrls.get(key);
+  if (url === undefined) {
+    if (artworkUrls.size >= MAX_CACHED_ARTWORK_URLS) artworkUrls.clear();
+    url = getImageUrl(path, size);
+    artworkUrls.set(key, url);
+  }
+  return url;
 }

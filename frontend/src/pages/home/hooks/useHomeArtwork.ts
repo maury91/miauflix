@@ -54,7 +54,7 @@ export function useHomeArtwork({
   const onMediaLoaded = useCallback(
     (slug: string, media: MediaDto[]) => {
       const refs = media.map(mediaRef);
-      for (const item of media) dispatch(artworkActions.received(artworkFromMedia(item)));
+      if (media.length) dispatch(artworkActions.receivedMany(media.map(artworkFromMedia)));
       setLoadedRefsByRow(previous => {
         const current = previous[slug];
         const unchanged =
@@ -105,8 +105,8 @@ export function useHomeArtwork({
 
   // Continue watching and the hero do not come from a row, so record their artwork here.
   useEffect(() => {
-    for (const media of [...continueMedia, ...(selectedMedia ? [selectedMedia] : [])])
-      dispatch(artworkActions.received(artworkFromMedia(media)));
+    const media = [...continueMedia, ...(selectedMedia ? [selectedMedia] : [])];
+    if (media.length) dispatch(artworkActions.receivedMany(media.map(artworkFromMedia)));
   }, [continueMedia, dispatch, selectedMedia]);
 
   return { onMediaLoaded };

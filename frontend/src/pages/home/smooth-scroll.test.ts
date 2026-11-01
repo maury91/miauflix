@@ -85,3 +85,54 @@ describe('createSmoothScroller', () => {
     expect(element.scrollLeft).toBe(4000);
   });
 });
+
+describe('createSmoothScroller in transform mode', () => {
+  const setup = () => {
+    const track = document.createElement('div');
+    // Reading the track's size would lay out the page on each move.
+    Object.defineProperty(track, 'scrollWidth', {
+      get: () => {
+        throw new Error('measured the track');
+      },
+    });
+    const onRest = vi.fn();
+    const scroller = createSmoothScroller(track, 'x', { transform: true, onRest });
+    const land = (propertyName = 'transform') =>
+      track.dispatchEvent(Object.assign(new Event('transitionend'), { propertyName }));
+    return { track, scroller, onRest, land };
+  };
+
+  it('transitions the track to the target instead of scrolling it, without measuring it', () => {
+    const { track, scroller, onRest, land } = setup();
+    scroller.scrollTo(4000);
+
+    expect(track.style.transform).toBe('translate3d(-4000px, 0, 0)');
+    expect(track.style.transition).toContain('transform 300ms');
+    expect(track.scrollLeft).toBe(0);
+    expect(scroller.position()).toBe(4000);
+    expect(onRest).not.toHaveBeenCalled();
+
+    land('opacity');
+    expect(onRest).not.toHaveBeenCalled();
+    land();
+    expect(onRest).toHaveBeenCalledOnce();
+  });
+
+  it('jumps without a transition, reporting rest, and never past the start', () => {
+    const { track, scroller, onRest } = setup();
+    scroller.scrollTo(-50, { instant: true });
+    expect(track.style.transition).toBe('none');
+    expect(scroller.position()).toBe(0);
+    expect(onRest).toHaveBeenCalledOnce();
+
+    scroller.scrollTo(400, { instant: true });
+    expect(track.style.transform).toBe('translate3d(-400px, 0, 0)');
+    expect(onRest).toHaveBeenCalledTimes(2);
+  });
+
+  it('ignores a target it is already at', () => {
+    const { track, scroller } = setup();
+    scroller.scrollTo(0);
+    expect(track.style.transform).toBe('');
+  });
+});
