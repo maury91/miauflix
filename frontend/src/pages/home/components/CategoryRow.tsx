@@ -449,6 +449,7 @@ export const CategoryRow = memo(
       void promoteListMedia({ items });
     }, [current.currentData, mediaOverride, promoteListMedia, visible]);
 
+    const promotedViewport = useRef('');
     useEffect(() => {
       if (mediaOverride || !visible || !current.currentData?.results.length) return;
       const timeout = window.setTimeout(() => {
@@ -457,7 +458,10 @@ export const CategoryRow = memo(
         )
           .filter((media): media is MediaDto => Boolean(media))
           .map(media => ({ ...mediaRef(media), tier: 'viewport' as const }));
-        if (items.length) void promoteListMedia({ items });
+        const key = items.map(item => `${item.mediaType}:${item.mediaId}`).join(',');
+        if (!items.length || key === promotedViewport.current) return;
+        promotedViewport.current = key;
+        void promoteListMedia({ items });
       }, VIEWPORT_PROMOTION_DEBOUNCE_MS);
       return () => window.clearTimeout(timeout);
     }, [

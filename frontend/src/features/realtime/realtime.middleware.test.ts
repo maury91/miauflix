@@ -95,6 +95,124 @@ describe('realtime middleware', () => {
     runtime.initiateProgress.mockReset();
   });
 
+  it('sends interest and subscriptions to the socket without notifying subscribers', () => {
+    const { store, seenActions } = makeStore();
+    store.dispatch(setSession('quiet-session'));
+    const client = runtime.clients[0] as {
+      publishFocus: ReturnType<typeof vi.fn>;
+      publishMap: ReturnType<typeof vi.fn>;
+      setArtworkSubscriptions: ReturnType<typeof vi.fn>;
+    };
+    const listener = vi.fn();
+    store.subscribe(listener);
+
+    store.dispatch(
+      realtimeRuntimeActions.publishFocusRequested({
+        navigationRevision: 1,
+        view: 'browse',
+        media: { kind: 'movie', mediaId: 4 },
+      })
+    );
+    store.dispatch(
+      realtimeRuntimeActions.publishMapRequested({
+        navigationRevision: 1,
+        center: null,
+        mediaIds: [],
+        visible: [],
+      })
+    );
+    store.dispatch(
+      realtimeRuntimeActions.artworkSubscriptionsChanged([{ mediaType: 'movie', mediaId: 4 }])
+    );
+
+    expect(client.publishFocus).toHaveBeenCalledOnce();
+    expect(client.publishMap).toHaveBeenCalledOnce();
+    expect(client.setArtworkSubscriptions).toHaveBeenLastCalledWith([
+      { mediaType: 'movie', mediaId: 4 },
+    ]);
+    expect(listener).not.toHaveBeenCalled();
+    expect(seenActions).toContain(realtimeRuntimeActions.publishFocusRequested.type);
+  });
+
+  it('drops status messages the backend repeats unchanged', () => {
+    const { store } = makeStore();
+    store.dispatch(setSession('status-session'));
+    const client = runtime.clients[0] as { onStatus: (message: never) => void };
+    const listener = vi.fn();
+    store.subscribe(listener);
+    const status = (focusSequence: number, status = 'source_found') =>
+      ({
+        type: 'source-status',
+        mediaId: 4,
+        media: { kind: 'movie', mediaId: 4 },
+        status,
+        sourceId: 12,
+        source: 'YTS',
+        quality: '1080p',
+        focusSequence,
+      }) as never;
+
+    const warmup = {
+      type: 'warmup',
+      mediaId: 4,
+      media: { kind: 'movie', mediaId: 4 },
+      playable: { kind: 'movie', mediaId: 4 },
+      sourceId: 12,
+      status: 'not_requested',
+      loaded: null,
+      verifiedBytes: null,
+      targetBytes: null,
+      statusDescription: 'Checking sources',
+      focusSequence: 1,
+    } as never;
+
+    // The backend interleaves a title's source and warmup statuses.
+    client.onStatus(status(1));
+    client.onStatus(warmup);
+    client.onStatus(status(1));
+    client.onStatus(warmup);
+    client.onStatus(status(2));
+    expect(listener).toHaveBeenCalledTimes(2);
+
+    client.onStatus(status(2, 'checking'));
+    expect(listener).toHaveBeenCalledTimes(3);
+    expect(store.getState().realtime.preparationByMediaId[4]?.state).toBe('checking');
+  });
+
+  it('stores a burst of artwork pushes in one update', () => {
+    vi.useFakeTimers();
+    try {
+      const { store } = makeStore();
+      store.dispatch(setSession('artwork-session'));
+      const client = runtime.clients[0] as { onArtwork: (update: never) => void };
+      const listener = vi.fn();
+      store.subscribe(listener);
+      for (const mediaId of [1, 2, 3]) {
+        client.onArtwork({
+          mediaType: 'movie',
+          mediaId,
+          backdrop: `/b${mediaId}.jpg`,
+          logo: '',
+          heroLogo: '',
+          artworkRevision: 1,
+          cardLogoStatus: 'ready',
+          heroLogoStatus: 'ready',
+        } as never);
+      }
+      expect(listener).not.toHaveBeenCalled();
+
+      vi.advanceTimersByTime(16);
+      expect(listener).toHaveBeenCalledOnce();
+      expect(Object.keys(store.getState().artwork.byMedia)).toEqual([
+        'movie:1',
+        'movie:2',
+        'movie:3',
+      ]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it('drops pushed availability and refetches details after a reconnect', () => {
     const { store, seenActions } = makeStore();
     store.dispatch(setSession('reconnect-session'));

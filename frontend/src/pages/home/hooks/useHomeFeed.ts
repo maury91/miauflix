@@ -4,7 +4,7 @@ import { progressApi } from '@features/progress/api/progress.api';
 import type { MediaDto } from '@miauflix/backend';
 import type { AppDispatch, RootState } from '@store/store';
 import { useCallback, useEffect, useMemo } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 
 import { unfinishedProgress } from '../continue-watching';
 import { composeHomeCategories } from '../home-feed';
@@ -97,14 +97,17 @@ export function useHomeFeed({
     return () => subscriptions.forEach(subscription => subscription?.unsubscribe?.());
   }, [continueHydrationKeys, dispatch]);
 
-  const mediaCache = useSelector((state: RootState) => state.mediaApi);
-  const continueMedia = useMemo(
-    () =>
+  // Only the Continue watching titles: selecting the whole query cache would rebuild the row
+  // whenever any title loads, as the hero's does on every move. Cards are cached per response,
+  // so the array compares equal while those titles are unchanged.
+  const selectContinueMedia = useCallback(
+    (state: RootState) =>
       continueRefs
-        .map(entry => mediaFromProgress({ mediaApi: mediaCache }, entry))
+        .map(entry => mediaFromProgress(state, entry))
         .filter((media): media is MediaDto => Boolean(media)),
-    [continueRefs, mediaCache]
+    [continueRefs]
   );
+  const continueMedia = useSelector(selectContinueMedia, shallowEqual);
   const displayCategories = useMemo(
     () => composeHomeCategories(categories, continueMedia.length > 0),
     [categories, continueMedia.length]

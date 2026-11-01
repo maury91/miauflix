@@ -165,7 +165,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     onRowFocus: scrollToRow,
   });
   const { activeRegion, selectedByCategory, rowRefs } = navigation;
-  const publishInterest = useRealtimeInterest({
+  const publishInterestAfterScroll = useRealtimeInterest({
     rowRefs,
     rowCount: displayCategories.length,
     activeCategory,
@@ -201,15 +201,14 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
     selectedMediaId: selectedMedia?.mediaId ?? null,
   });
   const handleContentScroll = useCallback(() => {
-    publishInterest();
+    publishInterestAfterScroll();
     const scrollTop = content.element.current?.scrollTop ?? 0;
     setFirstShownRow(Math.floor(scrollTop / rowHeight));
-  }, [content, publishInterest, rowHeight]);
+  }, [content, publishInterestAfterScroll, rowHeight]);
   const mountedRows = homeMountedRows(activeCategory, firstShownRow, displayCategories.length);
   // Rows are memoized; stable callbacks keep a move in one row from re-rendering the others
   const onRowActive = useStableCallback(navigation.onCardActive);
   const onRowSelect = useStableCallback(navigation.openDetails);
-  const onRowInterest = useStableCallback(() => publishInterest());
   const onRowMediaLoaded = useStableCallback(onMediaLoaded);
   const onRowReady = useStableCallback((slug: string) => onRowDataReady(slug));
   const rowCallbacks = useRef(
@@ -295,7 +294,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
                           activeCategory === index
                         }
                         onActive={onRowActive}
-                        onInterest={onRowInterest}
+                        onInterest={publishInterestAfterScroll}
                         onMediaLoaded={onRowMediaLoaded}
                         progress={progressEntries}
                         mediaOverride={

@@ -76,6 +76,31 @@ Steps 3–7 are why Home is still lagging. None of them is needed to move the se
 
 ## Phase 1: stop the store storm (Home movement)
 
+Status: done, except the optional parts of 1.4. With all of it installed, four moves along a row
+cause 33–42 store notifications (about 9 per move, from 115), run at about 49 fps with a 25 ms p90
+frame, and take 213 ms of main-thread work per key. The first round (1.1–1.3, 1.5) took
+four moves from 461 store notifications, 21 fps and a 180 ms p90 frame to 68–95 notifications,
+47–50 fps and a 26–34 ms p90, with no `artwork/received` during moves. Most of what was left
+were preparation statuses the backend repeats unchanged (now ignored) and the realtime publish
+actions (now handled by the middleware without reaching the reducers).
+
+After Phase 1, a CPU profile of six moves shows 213–272 ms of main-thread work per key (from about
+640 ms). The largest costs left:
+
+- **The smooth-scroll tick (146 ms over 6 keys, self time).** It writes `scrollLeft` and reads
+  `scrollWidth`, which forces layout every frame. The `translate3d` track in 2.1 targets this.
+- **styled-components rendering (132 ms).** css-architecture.md's migration targets this.
+- **Garbage collection (133 ms).**
+- **The HomePage render (110 ms).** See 2.5.
+- **The hero render (40 ms).** See 2.4.
+
+The backend re-sends each focused title's source and warmup statuses about once a second, even
+when nothing changed. The TV now drops exact repeats (ignoring `focusSequence`), but the backend
+could stop sending them.
+
+Still in the store: the list promotion mutations (`listsApi.mutations`, about 2.5 notifications
+per move). They could use `initiate(…, { track: false })`.
+
 The biggest win for the least code. Do these first, in this order, and measure after each one.
 
 ### 1.1 Artwork: no-op updates must not change state

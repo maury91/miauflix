@@ -129,11 +129,16 @@ vi.mock('@store/slices/auth', () => ({
   setSession: mockedSetSession,
 }));
 vi.mock('@store/store', () => ({}));
-vi.mock('react-redux', async () => {
+vi.mock('react-redux', async importOriginal => {
   const React = await import('react');
+  const { shallowEqual } = await importOriginal<typeof import('react-redux')>();
   return {
+    shallowEqual,
     useDispatch: () => dispatch,
-    useSelector: (selector: (state: unknown) => unknown) => {
+    useSelector: (
+      selector: (state: unknown) => unknown,
+      equalityFn: (left: unknown, right: unknown) => boolean = Object.is
+    ) => {
       const selectorRef = React.useRef(selector);
       const snapshot = React.useRef({ initialized: false, value: undefined as unknown });
       selectorRef.current = selector;
@@ -145,7 +150,7 @@ vi.mock('react-redux', async () => {
             realtime: realtimeState,
           })
         );
-        if (!snapshot.current.initialized || !Object.is(snapshot.current.value, nextValue)) {
+        if (!snapshot.current.initialized || !equalityFn(snapshot.current.value, nextValue)) {
           snapshot.current = {
             initialized: true,
             value: nextValue,
@@ -729,7 +734,9 @@ describe('HomePage focus transitions', () => {
     const progressSelector = vi
       .spyOn(progressApi.endpoints.getProgress, 'select')
       .mockReturnValue((() => ({ data: { progress } })) as never);
-    selectMovie.mockReturnValue(() => ({ data: { id: 1, mediaId: 100, title: 'Saved movie' } }));
+    // The query cache keeps a response object until its data changes.
+    const savedMovie = { id: 1, mediaId: 100, title: 'Saved movie' };
+    selectMovie.mockReturnValue(() => ({ data: savedMovie }));
     selectSession.mockImplementation((selector: (state: unknown) => unknown) => selector(state));
     try {
       // Only the rows around the focused one are mounted.

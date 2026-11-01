@@ -73,7 +73,9 @@ export function useHomeNavigation({
 
   const onCardActive = useCallback(
     (categoryIndex: number, _mediaIndex: number, media: MediaDto) => {
-      dispatch(homeNavigationActions.setActiveCategory(categoryIndex));
+      // Every move in a row reports it; an unchanged row would still notify every subscriber.
+      if (browseFocusState.current.activeCategory !== categoryIndex)
+        dispatch(homeNavigationActions.setActiveCategory(categoryIndex));
       onBrowseSelection(media);
     },
     [dispatch, onBrowseSelection]

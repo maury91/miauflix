@@ -51,15 +51,32 @@ export function mediaFromShow(response: ShowResponse): MediaDto {
   };
 }
 
-/** Build the card for a progress entry from cached catalog data, or null when it is not cached. */
+/**
+ * Cards built from cached responses, so the same response always gives the same card object:
+ * memoized rows then skip titles whose data did not change.
+ */
+const cardByResponse = new WeakMap<object, MediaDto>();
+const cachedCard = <T extends object>(response: T, build: (response: T) => MediaDto) => {
+  let card = cardByResponse.get(response);
+  if (!card) {
+    card = build(response);
+    cardByResponse.set(response, card);
+  }
+  return card;
+};
+
+/**
+ * Build the card for a progress entry from cached catalog data, or null when it is not cached.
+ * Returns the same object while the cached response is unchanged.
+ */
 export function mediaFromProgress(
   state: Pick<RootState, 'mediaApi'>,
   entry: ProgressEntry
 ): MediaDto | null {
   if (entry.playable.kind === 'movie') {
     const response = mediaApi.endpoints.getMovie.select(entry.playable.mediaId)(state).data;
-    return response ? mediaFromMovie(response) : null;
+    return response ? cachedCard(response, mediaFromMovie) : null;
   }
   const response = mediaApi.endpoints.getShow.select(entry.playable.showMediaId)(state).data;
-  return response ? mediaFromShow(response) : null;
+  return response ? cachedCard(response, mediaFromShow) : null;
 }
