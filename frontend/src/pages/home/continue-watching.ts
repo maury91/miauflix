@@ -10,6 +10,15 @@ export const isUnfinished = (entry: ProgressEntry) =>
     (entry.positionSeconds > 5 && entry.positionSeconds < entry.durationSeconds - 1));
 
 /**
+ * Orders a title's entries the way Continue watching picks one: unfinished first, then actual
+ * playback over next-episode suggestions, then recency. Cards and details follow it too.
+ */
+export const preferredProgress = (left: ProgressEntry, right: ProgressEntry) =>
+  Number(!isUnfinished(left)) - Number(!isUnfinished(right)) ||
+  Number(Boolean(left.nextEpisode)) - Number(Boolean(right.nextEpisode)) ||
+  Date.parse(right.updatedAt) - Date.parse(left.updatedAt);
+
+/**
  * Return one unfinished entry per movie or show, newest first.
  * Exclude completed entries and playback at or before five seconds or within one second of
  * the end. Next-episode suggestions bypass position limits, but actual playback takes

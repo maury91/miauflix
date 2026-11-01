@@ -664,7 +664,14 @@ export class DownloadService {
     try {
       await this.renewActivePlaybackClaims();
       const sourceIds = await this.storageService.deleteClaims({ expiredAt: new Date() });
-      for (const sourceId of sourceIds) await this.refreshClaims(sourceId);
+      // Their claims are gone already: one source failing must not leave the rest attached.
+      for (const sourceId of sourceIds) {
+        try {
+          await this.refreshClaims(sourceId);
+        } catch (error) {
+          logger.warn('DownloadService', `Failed to refresh claims for source ${sourceId}`, error);
+        }
+      }
     } catch (error) {
       logger.warn('DownloadService', 'Failed to sweep expired storage claims', error);
     }

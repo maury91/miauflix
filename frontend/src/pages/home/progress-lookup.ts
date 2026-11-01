@@ -1,6 +1,6 @@
 import type { MediaDto, ProgressEntry } from '@miauflix/backend';
 
-import { isUnfinished } from './continue-watching';
+import { preferredProgress } from './continue-watching';
 
 /** The lookup key of a card: a movie, or a show for any of its episodes. */
 export const progressKey = (media: MediaDto) =>
@@ -14,16 +14,7 @@ const entryKey = (entry: ProgressEntry) =>
       : null;
 
 /**
- * Entries Continue watching offers first (the same rule, so a card shows the entry its row
- * selected), then actual playback over next-episode suggestions, then recency.
- */
-const preferred = (left: ProgressEntry, right: ProgressEntry) =>
-  Number(!isUnfinished(left)) - Number(!isUnfinished(right)) ||
-  Number(Boolean(left.nextEpisode)) - Number(Boolean(right.nextEpisode)) ||
-  Date.parse(right.updatedAt) - Date.parse(left.updatedAt);
-
-/**
- * The progress each card shows, by `progressKey`. Built once per progress change, so a card
+ * The progress each card shows, by `progressKey`: the entry Continue watching would pick. Built once per progress change, so a card
  * receives its own entry instead of scanning every entry on each render.
  */
 export function progressByMedia(
@@ -34,7 +25,7 @@ export function progressByMedia(
     const key = entryKey(entry);
     if (!key) continue;
     const current = result.get(key);
-    if (!current || preferred(entry, current) < 0) result.set(key, entry);
+    if (!current || preferredProgress(entry, current) < 0) result.set(key, entry);
   }
   return result;
 }

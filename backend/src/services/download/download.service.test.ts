@@ -1441,6 +1441,20 @@ describe('DownloadService', () => {
       expect(service.client.remove).toHaveBeenCalledWith(torrent, { destroyStore: false });
     });
 
+    it('still detaches the other sources when one fails during a sweep', async () => {
+      const { service, mockStorageService, torrent } = setupSelection();
+      mockStorageService.deleteClaims.mockResolvedValue([3, 7]);
+      const storageBySource = mockStorageService.getStorageBySource.getMockImplementation()!;
+      mockStorageService.getStorageBySource.mockImplementation(async (sourceId: number) => {
+        if (sourceId === 3) throw new Error('storage unavailable');
+        return storageBySource(sourceId);
+      });
+
+      await service.sweepExpiredClaims();
+
+      expect(service.client.remove).toHaveBeenCalledWith(torrent, { destroyStore: false });
+    });
+
     it('detaches the torrent when a paused warmup leaves no claim', async () => {
       const { service, torrent } = setupSelection();
 

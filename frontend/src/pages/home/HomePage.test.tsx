@@ -1199,6 +1199,24 @@ describe('HomePage focus transitions', () => {
     expect(slugs.slice(0, 2)).toEqual(['first', 'third']);
   });
 
+  it('keeps empty lists wanted while Home is mounted, so their page stays cached', () => {
+    emptyRows.value = new Set(['second']);
+    const lastWanted = () =>
+      dispatch.mock.calls
+        .map(([action]) => action as { type: string; payload?: Record<string, string> })
+        .filter(action => action.type === 'homeFeed/rowsWanted')
+        .at(-1)?.payload;
+
+    const { rerender, unmount } = render(<HomePage />);
+    expect(lastWanted()).toMatchObject({ second: 'prefetch' });
+
+    rerender(<HomePage route={{ type: 'movieDetails', mediaId: 42 }} />);
+    expect(lastWanted()).toEqual({ second: 'prefetch' });
+
+    unmount();
+    expect(lastWanted()).toEqual({});
+  });
+
   it('keeps the focused row when a row above it drops out', () => {
     homeNavigationState.value = homeNavigationSlice.reducer(
       homeNavigationState.value,
@@ -1213,5 +1231,21 @@ describe('HomePage focus transitions', () => {
     expect(homeNavigationState.value.activeCategory).toBe(1);
     const active = screen.getAllByTestId(/^card-/).find(button => button.dataset.active === 'true');
     expect(active?.dataset.slug).toBe('third');
+  });
+
+  it('moves to the row above when the focused last row drops out', () => {
+    homeNavigationState.value = homeNavigationSlice.reducer(
+      homeNavigationState.value,
+      homeNavigationSlice.actions.setActiveCategory(6)
+    );
+    render(<HomePage />);
+    // The focused list, the last one, turns out empty.
+    act(() => {
+      emptyRows.value = new Set(['seventh']);
+      homeNavigationState.listeners.forEach(listener => listener());
+    });
+    expect(homeNavigationState.value.activeCategory).toBe(5);
+    const active = screen.getAllByTestId(/^card-/).find(button => button.dataset.active === 'true');
+    expect(active?.dataset.slug).toBe('sixth');
   });
 });

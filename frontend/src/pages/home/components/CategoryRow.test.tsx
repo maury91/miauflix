@@ -305,6 +305,21 @@ describe('CategoryRow page window', () => {
     expect(ref.current?.isEmpty()).toBe(false);
   });
 
+  it('shows loading, not an empty row, before its page is requested', () => {
+    useGetListQuery.mockImplementation(() => ({
+      data: undefined,
+      currentData: undefined,
+      isLoading: false,
+      isFetching: false,
+      isError: false,
+    }));
+
+    render(<CategoryRow {...makeProps(0, true)} />);
+
+    expect(screen.getByText('Loading...')).toBeInTheDocument();
+    expect(screen.queryByText('Nothing here yet.')).not.toBeInTheDocument();
+  });
+
   it('restores focus when the requested card is already selected', () => {
     const ref = createRef<CategoryRowHandle>();
     render(

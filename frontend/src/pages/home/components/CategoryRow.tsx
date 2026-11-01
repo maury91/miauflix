@@ -411,6 +411,20 @@ export const CategoryRow = memo(
       if (!active && ownIndex !== null) reportSelection(ownIndex);
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [active]);
+    /**
+     * Open a card's details. On the TV the selection is reported at once, not coalesced: Home
+     * stores it now, so Back returns to this card even right after a move.
+     */
+    const openCard = useCallback(
+      (index: number, media: MediaDto) => {
+        if (builtForTizen) {
+          reportSelection(index);
+          onActive(categoryIndex, index, media);
+        }
+        onSelect(media);
+      },
+      [categoryIndex, onActive, onSelect, reportSelection]
+    );
     // A selection Home sets itself (not one this row reported) replaces the row's own.
     useEffect(() => {
       if (controlledIndex !== undefined && controlledIndex !== lastReported.current)
@@ -457,10 +471,10 @@ export const CategoryRow = memo(
           mediaByIndex.get(selectedIndex) ?? null
         );
         if (command.nextIndex !== undefined) moveTo(command.nextIndex);
-        if (command.activation) onSelect(command.activation);
+        if (command.activation) openCard(selectedIndex, command.activation);
         return command.outcome;
       },
-      [mediaByIndex, moveTo, onSelect, selectedIndex, total]
+      [mediaByIndex, moveTo, openCard, selectedIndex, total]
     );
 
     /** The browser arrows move like the keyboard, and make this the active row. */
@@ -671,7 +685,7 @@ export const CategoryRow = memo(
         // Clicking a card must update the logical selection before opening details;
         // otherwise Back returns to the row's previous keyboard selection.
         activateCard(index, media);
-        onSelect(media);
+        openCard(index, media);
       },
     };
 
@@ -684,7 +698,8 @@ export const CategoryRow = memo(
         </RowContainer>
       );
     }
-    if (!mediaOverride && (current.isLoading || current.isFetching) && !current.currentData) {
+    // Not requested yet counts as loading: the store starts the request after the row mounts.
+    if (!mediaOverride && !current.currentData && !current.isError) {
       return (
         <RowContainer>
           {title}

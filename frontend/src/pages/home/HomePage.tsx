@@ -299,11 +299,25 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
         content.scrollTo(index * rowHeight, { instant: true });
         return;
       }
+      if (index < 0 && displayCategories.length) {
+        // The focused row itself left: focus the row now in its place, or the last row.
+        const next = Math.min(activeCategory, displayCategories.length - 1);
+        const slug = displayCategories[next]!.slug;
+        followedRow.current = { categories: displayCategories, slug };
+        if (next !== activeCategory) dispatch(homeNavigationActions.setActiveCategory(next));
+        content.scrollTo(next * rowHeight, { instant: true });
+        if (browsing && activeRegion === 'carousel') {
+          rowRefs.current.get(next)?.focusIndex(selectedByCategory[slug] ?? 0);
+        }
+        return;
+      }
     }
     followedRow.current = {
       categories: displayCategories,
       slug: displayCategories[activeCategory]?.slug,
     };
+    // Only a change of rows moves the focus; the region and selections are read as they are.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [activeCategory, content, dispatch, displayCategories, rowHeight]);
   // Which lists load is the store's (homeFeedMiddleware): Home says which rows it wants.
   useEffect(() => {
@@ -319,8 +333,11 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
       want(rowLoadState.prefetch, 'prefetch');
       want(rowLoadState.warm, 'prefetch');
     }
+    // Empty lists stay wanted while Home is mounted: released, their cached page would expire
+    // and the row come back until it loaded empty again.
+    for (const slug of emptySlugs) if (!wanted[slug]) wanted[slug] = 'prefetch';
     dispatch(homeFeedActions.rowsWanted(wanted));
-  }, [browsing, dispatch, displayCategories, rowLoadState]);
+  }, [browsing, dispatch, displayCategories, emptySlugs, rowLoadState]);
   useEffect(() => () => void dispatch(homeFeedActions.rowsWanted({})), [dispatch]);
   // Rows are memoized; stable callbacks keep a move in one row from re-rendering the others
   const onRowActive = useStableCallback(navigation.onCardActive);

@@ -324,7 +324,11 @@ describe('PlayerView', () => {
     const video = (await screen.findByLabelText('Toy Story 5')) as HTMLVideoElement;
     Object.defineProperty(video, 'duration', { configurable: true, value: 120 });
     fireEvent.durationChange(video);
-    fireEvent.change(screen.getByRole('slider', { name: 'Seek' }), { target: { value: '45' } });
+    // The session resolves outside act, so the controls may start listening to the video only
+    // after it is found; they read its duration when they do.
+    const seek = screen.getByRole('slider', { name: 'Seek' });
+    await waitFor(() => expect(seek).toBeEnabled());
+    fireEvent.change(seek, { target: { value: '45' } });
     expect(video.currentTime).toBe(45);
     expect(screen.getByText('Preparing playback…')).toBeInTheDocument();
     Object.defineProperty(video, 'readyState', { configurable: true, value: 2 });

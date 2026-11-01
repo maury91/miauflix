@@ -208,6 +208,32 @@ describe('CategoryRow on the Samsung TV', () => {
     expect(onActive).toHaveBeenLastCalledWith(0, 14, expect.objectContaining({ id: 14 }));
   });
 
+  it('reports the selection at once when a card opens right after a move', () => {
+    const ref = createRef<CategoryRowHandle>();
+    const onSelectionChange = vi.fn();
+    const onSelect = vi.fn();
+    render(
+      <CategoryRow
+        {...props(true)}
+        ref={ref}
+        active
+        isCurrentRow
+        selectedIndex={10}
+        onSelectionChange={onSelectionChange}
+        onSelect={onSelect}
+      />
+    );
+    act(() => void ref.current?.handleAction('right'));
+    act(() => void ref.current?.handleAction('right'));
+    act(() => void ref.current?.handleAction('confirm'));
+
+    expect(onSelectionChange).toHaveBeenLastCalledWith(12);
+    expect(onSelect).toHaveBeenCalledWith(expect.objectContaining({ id: 12 }));
+    expect(onSelectionChange.mock.invocationCallOrder.at(-1)).toBeLessThan(
+      onSelect.mock.invocationCallOrder[0]
+    );
+  });
+
   it('reports a pending selection at once when the row is left', () => {
     const ref = createRef<CategoryRowHandle>();
     const onSelectionChange = vi.fn();
