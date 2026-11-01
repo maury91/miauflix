@@ -11,6 +11,8 @@ FILES_REF="${MIAUFLIX_FILES_REF:-main}"
 # Compose files published in the repository; anything else in COMPOSE_FILE is yours and left alone
 UPSTREAM_FILES="docker-compose.yml docker-compose.vpn.yml docker-compose.https.yml docker-compose.flaresolverr.yml docker-compose.tracing.yml Caddyfile"
 HEALTH_TIMEOUT="${HEALTH_TIMEOUT:-360}"
+# Present while a replaced Caddyfile still waits for Caddy to be recreated, so a failed run retries it
+CADDY_PENDING=".update-caddy-recreate-pending"
 
 update_files=false
 for arg in "$@"; do
@@ -39,7 +41,6 @@ if grep -q 'docker-compose.build.yml' .env 2>/dev/null; then
   exit 1
 fi
 
-caddyfile_changed=false
 if $update_files; then
   echo "==> Downloading compose files from ${FILES_REF}"
   # Download every file before replacing any, so a failure never mixes revisions
@@ -61,27 +62,52 @@ if $update_files; then
     mv "${tmpdir}/${file}" "$file"
     chmod 644 "$file"
     echo "    updated ${file} (previous one in ${file}.${backup_suffix}, carry over any edits of yours)"
-    [ "$file" = Caddyfile ] && caddyfile_changed=true
+    if [ "$file" = Caddyfile ]; then : >"$CADDY_PENDING"; fi
   done
 fi
+
+# The images the containers run now: the ones this update replaces are removed at the end
+old_images="$(docker compose images -q | sort -u)"
 
 echo "==> Pulling images"
 docker compose pull
 
-echo "==> Recreating changed containers"
-docker compose up -d --remove-orphans
+# HEALTH_TIMEOUT covers starting the containers too
+deadline=$((SECONDS + HEALTH_TIMEOUT))
+compose_up() {
+  local remaining=$((deadline - SECONDS))
+  [ "$remaining" -gt 0 ] || remaining=1
+  if command -v timeout >/dev/null; then
+    timeout "$remaining" docker compose up -d "$@" || {
+      local status=$?
+      [ "$status" -eq 124 ] && echo "The containers did not start within ${HEALTH_TIMEOUT}s" >&2
+      return "$status"
+    }
+  else
+    docker compose up -d "$@"
+  fi
+}
+
+echo "==> Recreating changed containers (up to ${HEALTH_TIMEOUT}s until healthy)"
+compose_up --remove-orphans
 # shellcheck disable=SC2207 # service names never contain spaces
 services=($(docker compose config --services))
 # Caddy keeps reading the replaced Caddyfile until its container is recreated
-if $caddyfile_changed && printf '%s\n' "${services[@]}" | grep -qx caddy; then
-  docker compose up -d --force-recreate --no-deps caddy
+if [ -e "$CADDY_PENDING" ]; then
+  if printf '%s\n' "${services[@]}" | grep -qx caddy; then
+    compose_up --force-recreate --no-deps caddy
+  fi
+  rm -f "$CADDY_PENDING"
 fi
 
-echo "==> Removing unused images"
-docker image prune -f >/dev/null
+echo "==> Removing the replaced images"
+# Only this deployment's: other projects' unused images stay
+new_images="$(docker compose images -q | sort -u)"
+for image in $(comm -23 <(printf '%s\n' "$old_images") <(printf '%s\n' "$new_images")); do
+  docker image rm "$image" >/dev/null 2>&1 || true
+done
 
-echo "==> Waiting for the containers to be healthy (up to ${HEALTH_TIMEOUT}s)"
-deadline=$((SECONDS + HEALTH_TIMEOUT))
+echo "==> Waiting for the containers to be healthy"
 while true; do
   # Containers of the active services that are not running (-a lists a crashed one too),
   # or whose healthcheck is not "healthy" yet. -a lists one-off `docker compose run` containers

@@ -81,7 +81,7 @@ them, so a restyle has nothing to re-resolve. Prefer`transform`and`opacity` for 
    match.
 8. **Keyframes and globals are static too.** Use vanilla-extract `keyframes()`/`globalStyle()` or
    `global.css`, never a `@keyframes` produced by a prop.
-9. **Every variant has a story.** The visual regression suite (`npm run test:visual`) screenshots
+9. **Every variant has a story.** The visual regression suite (`npm run test:frontend:visual`) screenshots
    stories. A state with no story isn't covered.
 
 ## Library choice
