@@ -44,6 +44,7 @@ describe('useRealtimeInterest', () => {
       selectedMedia: card(1) as MediaDto | null,
       subtitleLanguage: 'en',
       view: 'browse' as const,
+      sessionId: 's1' as string | null,
     };
     const hook = renderHook(p => useRealtimeInterest(p), { initialProps: props });
     return { ...hook, props, window };
@@ -64,6 +65,13 @@ describe('useRealtimeInterest', () => {
       navigationRevision: 2,
       media: { kind: 'movie', mediaId: 2 },
     });
+  });
+
+  it('publishes the same interest again for a new session', () => {
+    const { rerender, props } = setup();
+    rerender({ ...props, sessionId: 's2' });
+    expect(published('focus')).toHaveLength(2);
+    expect(published('map')).toHaveLength(2);
   });
 
   it('publishes scrolling once it settles, and only if what is in view changed', () => {

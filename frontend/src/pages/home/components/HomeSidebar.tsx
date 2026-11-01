@@ -5,7 +5,7 @@ import {
   RailItem as Item,
   RailNavigation as Navigation,
 } from '@shared/ui/rail/rail.styles';
-import { type FC, useEffect, useRef, useState } from 'react';
+import { memo, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import type { HomeAction, NavigationOutcome } from '../homeNavigation';
@@ -53,8 +53,11 @@ interface HomeSidebarProps {
   unreadCount: number;
 }
 
-/** Render the primary Home actions and restore the selected button when the rail activates. */
-export const HomeSidebar: FC<HomeSidebarProps> = ({
+/**
+ * Render the primary Home actions and restore the selected button when the rail activates.
+ * Memoized: Home re-renders on every move, and the rail does not change with it.
+ */
+export const HomeSidebar = memo(function HomeSidebar({
   active,
   showSettings,
   onAction,
@@ -65,7 +68,7 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
   onSelectedChange,
   expanded = false,
   unreadCount,
-}) => {
+}: HomeSidebarProps) {
   const open = active || expanded;
   const [selected, setSelected] = useState<SidebarItem>('search');
   const notificationsButtonRef = useRef<HTMLButtonElement>(null);
@@ -215,4 +218,4 @@ export const HomeSidebar: FC<HomeSidebarProps> = ({
       </Navigation>
     </Rail>
   );
-};
+});

@@ -25,6 +25,7 @@ import { type HomeAction, type NavigationOutcome, resolveCarouselAction } from '
 import { useSmoothScroller } from '../hooks/useSmoothScroller';
 import { IDLE, imagePreloader, NEARBY } from '../image-preloader';
 import { artworkUrl } from '../media.utils';
+import { progressByMedia, progressKey } from '../progress-lookup';
 import { ROW_PAGE_SIZE, rowPagesFor, rowRenderRadius } from '../row-pages';
 import { MediaCard } from './MediaCard';
 
@@ -32,6 +33,8 @@ import ChevronLeftIcon from '~icons/line-md/chevron-left';
 import ChevronRightIcon from '~icons/line-md/chevron-right';
 
 const VIEWPORT_PROMOTION_DEBOUNCE_MS = 300;
+/** How long a row that came into view waits before rendering its cards out of view (TV). */
+const CARD_WINDOW_EXPAND_MS = 400;
 
 /** Fixed height, whatever the row shows, so Home can place rows without measuring them. */
 const RowContainer = styled.section`
@@ -63,10 +66,10 @@ const CarouselViewport = styled.div<{ $contentWidth: number; $peekWidth: number 
 const ScrollContainer = styled.div<{ $gap: number; $peekWidth: number }>`
   display: flex;
   gap: ${({ $gap }) => $gap}px;
-  overflow-x: auto;
+  /* On the TV the track is as wide as its cards and moves on its own layer, clipped by the
+     viewport: no layout or repaint per frame (see SmoothScrollerOptions). */
+  ${builtForTizen ? 'width: max-content; will-change: transform;' : 'overflow-x: auto;'}
   overflow-y: visible;
-  /* Its own layer on the TV, so a scroll doesn't repaint the row on every frame. */
-  ${builtForTizen ? 'will-change: transform;' : ''}
   padding: 0.8vh ${({ $peekWidth }) => `calc(${$peekWidth}px + 0.5vh)`} 1.4vh;
   scrollbar-width: none;
 
@@ -210,7 +213,7 @@ const RowCard = memo(function RowCard({
   media: MediaDto;
   width: number;
   selected: boolean;
-  progress?: ProgressEntry[];
+  progress?: ProgressEntry;
   handlers: MutableRefObject<RowCardHandlers>;
 }) {
   return (
@@ -300,11 +303,26 @@ export const CategoryRow = memo(
       return result;
     }, [adjacent.currentData, current.currentData, mediaOverride]);
 
+    const progressLookup = useMemo(() => progressByMedia(progress), [progress]);
+    // On the TV, a row off screen keeps only the cards in view, and gets the rest shortly after
+    // it comes into view rather than during the move that brings it there.
+    const [expanded, setExpanded] = useState(!builtForTizen || visible);
+    useEffect(() => {
+      if (expanded || !visible) return;
+      const timeout = window.setTimeout(() => setExpanded(true), CARD_WINDOW_EXPAND_MS);
+      return () => window.clearTimeout(timeout);
+    }, [expanded, visible]);
     const [promoteListMedia] = usePromoteListMediaMutation();
     const [queueBackdropFocus] = useQueueBackdropFocusMutation();
     const step = mediaWidth + gap;
     const cardRefs = useRef(new Map<number, HTMLButtonElement>());
-    const scroller = useSmoothScroller('x');
+    // On the TV the row moves on a transform (see SmoothScrollerOptions), which has no scroll
+    // events: report the cards in view when it settles instead.
+    const scroller = useSmoothScroller('x', {
+      transform: builtForTizen,
+      onRest: builtForTizen ? onInterest : undefined,
+    });
+    const { element: scrollElement, position: scrollPosition } = scroller;
     /** Set by keyboard and arrow moves: focus the selected card once it is rendered. */
     const wantsFocus = useRef(isCurrentRow);
     /** Bumped to scroll the selection into the leading slot; hover selects without scrolling. */
@@ -387,7 +405,7 @@ export const CategoryRow = memo(
           if (!total) return { media: [], center: null, visible: [] };
           const start = Math.max(0, Math.min(selectedIndex - 5, total - 11));
           const length = Math.min(11, total - start);
-          const left = scroller.element.current?.scrollLeft ?? selectedIndex * step;
+          const left = scrollElement.current ? scrollPosition() : selectedIndex * step;
           return {
             media: Array.from({ length }, (_, offset) => mediaByIndex.get(start + offset) ?? null),
             center: selectedIndex - start,
@@ -406,7 +424,8 @@ export const CategoryRow = memo(
         handleAction,
         mediaByIndex,
         moveTo,
-        scroller.element,
+        scrollElement,
+        scrollPosition,
         selectedIndex,
         step,
         total,
@@ -461,7 +480,15 @@ export const CategoryRow = memo(
         const key = items.map(item => `${item.mediaType}:${item.mediaId}`).join(',');
         if (!items.length || key === promotedViewport.current) return;
         promotedViewport.current = key;
-        void promoteListMedia({ items });
+        // A failed promotion is retried the next time these cards are in view.
+        const forget = () => {
+          if (promotedViewport.current === key) promotedViewport.current = '';
+        };
+        try {
+          void promoteListMedia({ items }).unwrap().catch(forget);
+        } catch {
+          forget();
+        }
       }, VIEWPORT_PROMOTION_DEBOUNCE_MS);
       return () => window.clearTimeout(timeout);
     }, [
@@ -599,9 +626,10 @@ export const CategoryRow = memo(
       );
     }
 
-    const radius = rowRenderRadius(mediaPerPage);
-    const first = Math.max(0, selectedIndex - radius);
-    const last = Math.min(total - 1, selectedIndex + radius);
+    const radius = rowRenderRadius(mediaPerPage, ROW_PAGE_SIZE, builtForTizen);
+    // Until it expands, a row renders only the cards in view: the peeking one and a page.
+    const first = Math.max(0, selectedIndex - (expanded ? radius : 1));
+    const last = Math.min(total - 1, selectedIndex + (expanded ? radius : mediaPerPage));
     const canMoveLeft = selectedIndex > 0;
     const canMoveRight = selectedIndex < total - 1;
     // Room after the last card, so it too can scroll into the leading slot.
@@ -654,7 +682,7 @@ export const CategoryRow = memo(
                   media={media}
                   width={mediaWidth}
                   selected={active && index === selectedIndex}
-                  progress={progress}
+                  progress={progressLookup.get(progressKey(media))}
                   handlers={cardHandlers}
                 />
               );

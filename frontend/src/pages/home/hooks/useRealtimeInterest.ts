@@ -31,6 +31,7 @@ export function useRealtimeInterest({
   selectedMedia,
   subtitleLanguage,
   view,
+  sessionId,
 }: {
   rowRefs: MutableRefObject<Map<number, CategoryRowHandle>>;
   rowCount: number;
@@ -38,6 +39,8 @@ export function useRealtimeInterest({
   selectedMedia: MediaDto | null;
   subtitleLanguage: string;
   view: HomeView;
+  /** A new session opens a new socket, which needs the interest even if it is unchanged. */
+  sessionId: string | null;
 }) {
   const dispatch = useDispatch<AppDispatch>();
   const revision = useRef(0);
@@ -63,13 +66,22 @@ export function useRealtimeInterest({
       view,
     });
     const focus = { ...interest.focus, subtitleLanguage };
-    const key = JSON.stringify([focus, interest.map]);
+    const key = JSON.stringify([sessionId, focus, interest.map]);
     if (key === lastPublished.current) return;
     lastPublished.current = key;
     const navigationRevision = ++revision.current;
     dispatch(realtimeRuntimeActions.publishFocusRequested({ navigationRevision, ...focus }));
     dispatch(realtimeRuntimeActions.publishMapRequested({ navigationRevision, ...interest.map }));
-  }, [activeCategory, dispatch, rowCount, rowRefs, selectedMedia, subtitleLanguage, view]);
+  }, [
+    activeCategory,
+    dispatch,
+    rowCount,
+    rowRefs,
+    selectedMedia,
+    sessionId,
+    subtitleLanguage,
+    view,
+  ]);
 
   useEffect(() => {
     publish();

@@ -184,6 +184,11 @@ describe('realtime middleware', () => {
     try {
       const { store } = makeStore();
       store.dispatch(setSession('artwork-session'));
+      store.dispatch(
+        realtimeRuntimeActions.artworkSubscriptionsChanged(
+          [1, 2, 3].map(mediaId => ({ mediaType: 'movie' as const, mediaId }))
+        )
+      );
       const client = runtime.clients[0] as { onArtwork: (update: never) => void };
       const listener = vi.fn();
       store.subscribe(listener);
@@ -208,6 +213,34 @@ describe('realtime middleware', () => {
         'movie:2',
         'movie:3',
       ]);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it('drops queued artwork for titles unsubscribed before the batch is stored', () => {
+    vi.useFakeTimers();
+    try {
+      const { store } = makeStore();
+      store.dispatch(setSession('unsubscribe-session'));
+      store.dispatch(
+        realtimeRuntimeActions.artworkSubscriptionsChanged([{ mediaType: 'movie', mediaId: 1 }])
+      );
+      const client = runtime.clients[0] as { onArtwork: (update: never) => void };
+      client.onArtwork({
+        mediaType: 'movie',
+        mediaId: 1,
+        backdrop: '/b1.jpg',
+        logo: '',
+        heroLogo: '',
+        artworkRevision: 1,
+        cardLogoStatus: 'ready',
+        heroLogoStatus: 'ready',
+      } as never);
+      store.dispatch(realtimeRuntimeActions.artworkSubscriptionsChanged([]));
+
+      vi.advanceTimersByTime(16);
+      expect(store.getState().artwork.byMedia).toEqual({});
     } finally {
       vi.useRealTimers();
     }

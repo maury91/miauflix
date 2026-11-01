@@ -22,6 +22,7 @@ vi.mock('../smooth-scroll', () => ({
     },
     stop: () => {},
     dispose: () => {},
+    position: () => element.scrollLeft,
   }),
 }));
 vi.mock('./MediaCard', async () => {
@@ -436,5 +437,29 @@ describe('CategoryRow page window', () => {
         items: [{ mediaType: 'movie', mediaId: 1000, tier: 'viewport' }],
       })
     );
+  });
+
+  it('promotes the same viewport again only after a failed promotion', async () => {
+    const viewportCalls = (promote: ReturnType<typeof vi.fn>) =>
+      promote.mock.calls.filter(([arg]) => arg.items[0]?.tier === 'viewport').length;
+    const props = makeProps(0, true, { active: true, visible: true, total: 3 });
+
+    const succeeding = vi.fn(() => ({ unwrap: () => Promise.resolve({ accepted: 1 }) }));
+    usePromoteListMediaMutation.mockReturnValue([succeeding]);
+    const view = render(<CategoryRow {...props} />);
+    await waitFor(() => expect(viewportCalls(succeeding)).toBe(1));
+    view.rerender(<CategoryRow {...props} visible={false} />);
+    view.rerender(<CategoryRow {...props} />);
+    await new Promise(resolve => setTimeout(resolve, 400));
+    expect(viewportCalls(succeeding)).toBe(1);
+    view.unmount();
+
+    const failing = vi.fn(() => ({ unwrap: () => Promise.reject(new Error('offline')) }));
+    usePromoteListMediaMutation.mockReturnValue([failing]);
+    const retry = render(<CategoryRow {...props} />);
+    await waitFor(() => expect(viewportCalls(failing)).toBe(1));
+    retry.rerender(<CategoryRow {...props} visible={false} />);
+    retry.rerender(<CategoryRow {...props} />);
+    await waitFor(() => expect(viewportCalls(failing)).toBe(2));
   });
 });

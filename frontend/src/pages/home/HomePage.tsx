@@ -166,6 +166,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   });
   const { activeRegion, selectedByCategory, rowRefs } = navigation;
   const publishInterestAfterScroll = useRealtimeInterest({
+    sessionId,
     rowRefs,
     rowCount: displayCategories.length,
     activeCategory,
@@ -211,6 +212,16 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const onRowSelect = useStableCallback(navigation.openDetails);
   const onRowMediaLoaded = useStableCallback(onMediaLoaded);
   const onRowReady = useStableCallback((slug: string) => onRowDataReady(slug));
+  // The sidebar is memoized: stable callbacks keep row moves from re-rendering it.
+  const onSidebarAction = useStableCallback(navigation.onSidebarAction);
+  const onSidebarSettings = useStableCallback(navigation.openSettings);
+  const onSidebarSearch = useStableCallback(navigation.openSearch);
+  const onSidebarHover = useStableCallback(() =>
+    dispatch(homeNavigationActions.setActiveRegion('sidebar'))
+  );
+  const onEnterNotifications = useStableCallback(() =>
+    dispatch(homeNavigationActions.setActiveRegion('notifications'))
+  );
   const rowCallbacks = useRef(
     new Map<
       string,
@@ -311,13 +322,11 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
               active={sidebarActive}
               expanded={notificationsVisible}
               showSettings={isAdmin}
-              onAction={navigation.onSidebarAction}
-              onHover={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
-              onSettings={navigation.openSettings}
-              onSearch={navigation.openSearch}
-              onEnterNotifications={() =>
-                dispatch(homeNavigationActions.setActiveRegion('notifications'))
-              }
+              onAction={onSidebarAction}
+              onHover={onSidebarHover}
+              onSettings={onSidebarSettings}
+              onSearch={onSidebarSearch}
+              onEnterNotifications={onEnterNotifications}
               onSelectedChange={setSidebarItem}
               unreadCount={notifications.unreadCount}
             />

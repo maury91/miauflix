@@ -3,7 +3,17 @@ import type { MediaDto, PreloadPreparationSnapshot } from '@miauflix/backend';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { selectSourceAvailability } from '@store/slices/realtime';
 import type { RootState } from '@store/store';
-import { type FC, Fragment, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import {
+  type ComponentProps,
+  type FC,
+  Fragment,
+  memo,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import styled from 'styled-components';
 
@@ -26,6 +36,7 @@ import {
   HERO_DETAILS_WIDTH_CSS,
 } from '../hero-backdrop-layout';
 import { useMediaBoxSizes } from '../hooks/useMediaBoxSizes';
+import { useRestingValue } from '../hooks/useRestingValue';
 import { imagePreloader, URGENT } from '../image-preloader';
 import { artworkUrl, formatRuntime, getMediaTitle } from '../media.utils';
 import { MetadataDot, MetadataRating } from './metadata.styles';
@@ -217,6 +228,9 @@ interface MediaHeroProps {
   onReady?: (mediaId: number | null) => void;
 }
 
+/** How long the selection rests before the TV swaps the hero backdrop. */
+const BACKDROP_REST_MS = 250;
+
 /** Show the selected title, source status, and a backdrop that transitions after loading. */
 export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onReady }) => {
   const mediaType = media?._type === 'movie' ? 'movie' : 'tv';
@@ -230,7 +244,17 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   );
   const selectedArtwork =
     artwork && artwork.artworkRevision >= (media?.artworkRevision ?? 0) ? artwork : media;
-  const selectedBackdrop = selectedArtwork?.backdrop;
+  // On the TV each new backdrop is a full-width layer to rasterize and upload, which costs frames
+  // during a move: change it only once the selection rests, so a run of moves loads one backdrop.
+  // The title and details still change at once.
+  const { media: backdropMedia, backdrop: selectedBackdrop } = useRestingValue(
+    { media, backdrop: selectedArtwork?.backdrop },
+    media ? `${media._type}:${media.mediaId}:${selectedArtwork?.backdrop ?? ''}` : '',
+    builtForTizen ? BACKDROP_REST_MS : 0
+  );
+  // The effect below restarts on the title's identity, not on every new media object.
+  const backdropMediaRef = useRef(backdropMedia);
+  backdropMediaRef.current = backdropMedia;
   const [ensureBackdropFocus] = useEnsureBackdropFocusMutation();
   const { margin } = useMediaBoxSizes();
   const heroRef = useRef<HTMLElement>(null);
@@ -282,25 +306,26 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
 
   useEffect(() => {
     const currentRequest = ++requestId.current;
-    if (media?.mediaId === undefined || !selectedBackdrop) {
+    const shown = backdropMediaRef.current;
+    if (shown?.mediaId === undefined || !selectedBackdrop) {
       setLayers(() => []);
-      onReady?.(media?.mediaId ?? null);
+      onReady?.(shown?.mediaId ?? null);
       return;
     }
 
     const url = artworkUrl(selectedBackdrop, 'backdrop');
-    const key = `${media._type}:${media.mediaId}:${url}`;
+    const key = `${shown._type}:${shown.mediaId}:${url}`;
     let cancelled = false;
 
     const prepare = async (): Promise<void> => {
-      if (media.backdropFocus) focusCacheRef.current.set(key, media.backdropFocus);
-      const focusPromise = media.backdropFocus
-        ? Promise.resolve(media.backdropFocus)
+      if (shown.backdropFocus) focusCacheRef.current.set(key, shown.backdropFocus);
+      const focusPromise = shown.backdropFocus
+        ? Promise.resolve(shown.backdropFocus)
         : focusCacheRef.current.has(key)
           ? Promise.resolve(focusCacheRef.current.get(key)!)
           : ensureBackdropFocus({
-              mediaType: media._type === 'movie' ? 'movie' : 'tv',
-              mediaId: media.mediaId,
+              mediaType: shown._type === 'movie' ? 'movie' : 'tv',
+              mediaId: shown.mediaId,
             })
               .unwrap()
               .then(result => {
@@ -317,7 +342,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       } catch {
         if (!cancelled && currentRequest === requestId.current) {
           setLayers(() => []);
-          onReady?.(media.mediaId);
+          onReady?.(shown.mediaId);
         }
         return;
       }
@@ -330,7 +355,7 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
         imageWidth: imageSize.width,
         imageHeight: imageSize.height,
       };
-      onReady?.(media.mediaId);
+      onReady?.(shown.mediaId);
       if (layersRef.current[layersRef.current.length - 1]?.backdrop.key === key) return;
       const id = ++nextLayerId.current;
       setLayers(stack => pushBackdrop(stack, next, id));
@@ -356,9 +381,9 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
     setLayers,
     settle,
     selectedBackdrop,
-    media?.backdropFocus,
-    media?._type,
-    media?.mediaId,
+    backdropMedia?.backdropFocus,
+    backdropMedia?._type,
+    backdropMedia?.mediaId,
   ]);
 
   const layout = getHeroBackdropLayout(heroSize.width, margin);
@@ -382,12 +407,6 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
   };
 
   if (!media) return <Hero ref={heroRef} $shade={shade} aria-hidden="true" />;
-  const date = media._type === 'movie' ? media.releaseDate : media.firstAirDate;
-  const metadata = [
-    media._type === 'movie' && media.runtime ? formatRuntime(media.runtime) : '',
-    date?.slice(0, 4),
-  ].filter(Boolean);
-  const rating = media.rating ? media.rating.toFixed(1) : null;
   const currentRevision = media.artworkRevision ?? 0;
   const heroLogo =
     artwork && artwork.artworkRevision >= currentRevision
@@ -409,47 +428,74 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
           aria-hidden="true"
         />
       ))}
-      <Details>
-        {heroLogo ? (
-          <Logo
-            decoding="async"
-            src={artworkUrl(heroLogo, 'logo', 500)}
-            alt={getMediaTitle(media)}
-          />
-        ) : (
-          <Title>{getMediaTitle(media)}</Title>
-        )}
-        <MetadataRow>
-          <MetadataBlock>
-            <Metadata>
-              {metadata.map((text, index) => (
-                <Fragment key={index}>
-                  {index > 0 && <MetadataDot />}
-                  <span>{text}</span>
-                </Fragment>
-              ))}
-              {rating && (
-                <>
-                  {metadata.length > 0 && <MetadataDot />}
-                  <MetadataRating>
-                    <StarIcon aria-hidden="true" />
-                    {rating}
-                  </MetadataRating>
-                </>
-              )}
-              <BadgeGap />
-              <SourcePreparationStatus
-                mediaKind={media._type}
-                mode="browse"
-                preparation={preparation}
-                availability={availability}
-              />
-            </Metadata>
-            {media.genres.length > 0 && <Metadata>{media.genres.join(' · ')}</Metadata>}
-          </MetadataBlock>
-        </MetadataRow>
-        <Overview>{media.overview}</Overview>
-      </Details>
+      <HeroDetails
+        media={media}
+        heroLogo={heroLogo}
+        preparation={preparation}
+        availability={availability}
+      />
     </Hero>
   );
 };
+
+/**
+ * The title, metadata and overview. Memoized: each move swaps the backdrop layers three times
+ * (added, faded in, settled), and none of those changes the text.
+ */
+const HeroDetails = memo(function HeroDetails({
+  media,
+  heroLogo,
+  preparation,
+  availability,
+}: {
+  media: MediaDto;
+  heroLogo: string | null | undefined;
+  preparation: ComponentProps<typeof SourcePreparationStatus>['preparation'];
+  availability: ComponentProps<typeof SourcePreparationStatus>['availability'];
+}) {
+  const date = media._type === 'movie' ? media.releaseDate : media.firstAirDate;
+  const metadata = [
+    media._type === 'movie' && media.runtime ? formatRuntime(media.runtime) : '',
+    date?.slice(0, 4),
+  ].filter(Boolean);
+  const rating = media.rating ? media.rating.toFixed(1) : null;
+  return (
+    <Details>
+      {heroLogo ? (
+        <Logo decoding="async" src={artworkUrl(heroLogo, 'logo', 500)} alt={getMediaTitle(media)} />
+      ) : (
+        <Title>{getMediaTitle(media)}</Title>
+      )}
+      <MetadataRow>
+        <MetadataBlock>
+          <Metadata>
+            {metadata.map((text, index) => (
+              <Fragment key={index}>
+                {index > 0 && <MetadataDot />}
+                <span>{text}</span>
+              </Fragment>
+            ))}
+            {rating && (
+              <>
+                {metadata.length > 0 && <MetadataDot />}
+                <MetadataRating>
+                  <StarIcon aria-hidden="true" />
+                  {rating}
+                </MetadataRating>
+              </>
+            )}
+            <BadgeGap />
+            <SourcePreparationStatus
+              mediaKind={media._type}
+              mode="browse"
+              preparation={preparation}
+              availability={availability}
+            />
+          </Metadata>
+          {media.genres.length > 0 && <Metadata>{media.genres.join(' · ')}</Metadata>}
+        </MetadataBlock>
+      </MetadataRow>
+      <Overview>{media.overview}</Overview>
+    </Details>
+  );
+});

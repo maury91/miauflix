@@ -35,6 +35,7 @@ let activeSession: string | null = null;
 let activeGeneration = 0;
 let visibilityListener: (() => void) | null = null;
 let artworkSubscriptions: MediaRef[] = [];
+const artworkKey = (ref: MediaRef) => `${ref.mediaType}:${ref.mediaId}`;
 /** About a frame: long enough to gather a burst of pushes, short enough not to show. */
 const ARTWORK_BATCH_MS = 16;
 
@@ -120,7 +121,11 @@ export const realtimeMiddleware: Middleware = api => next => action => {
           pendingArtwork.push(update);
           if (pendingArtwork.length > 1) return;
           setTimeout(() => {
-            const updates = pendingArtwork.splice(0);
+            // Titles unsubscribed meanwhile (Home unmounted) were removed: keep them removed.
+            const subscribed = new Set(artworkSubscriptions.map(artworkKey));
+            const updates = pendingArtwork
+              .splice(0)
+              .filter(item => subscribed.has(artworkKey(item)));
             if (isCurrentClient() && updates.length)
               api.dispatch(artworkActions.receivedMany(updates));
           }, ARTWORK_BATCH_MS);

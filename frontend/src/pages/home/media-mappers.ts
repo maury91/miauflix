@@ -66,17 +66,39 @@ const cachedCard = <T extends object>(response: T, build: (response: T) => Media
 };
 
 /**
- * Build the card for a progress entry from cached catalog data, or null when it is not cached.
- * Returns the same object while the cached response is unchanged.
+ * A selector for a title's card from cached catalog data, or null while it is not cached. It
+ * returns the same object while the cached response is unchanged. Build it once per title and
+ * reuse it: each call to an endpoint's `select` builds a new memoized selector.
  */
+export function cardSelector(
+  kind: 'movie' | 'show',
+  mediaId: number
+): (state: Pick<RootState, 'mediaApi'>) => MediaDto | null {
+  if (kind === 'movie') {
+    const select = mediaApi.endpoints.getMovie.select(mediaId);
+    return state => {
+      const response = select(state).data;
+      return response ? cachedCard(response, mediaFromMovie) : null;
+    };
+  }
+  const select = mediaApi.endpoints.getShow.select(mediaId);
+  return state => {
+    const response = select(state).data;
+    return response ? cachedCard(response, mediaFromShow) : null;
+  };
+}
+
+/** The title a progress entry belongs to: a movie, or the show of an episode. */
+export const progressTitle = (entry: ProgressEntry) =>
+  entry.playable.kind === 'movie'
+    ? { kind: 'movie' as const, mediaId: entry.playable.mediaId }
+    : { kind: 'show' as const, mediaId: entry.playable.showMediaId };
+
+/** Build the card for a progress entry from cached catalog data (see cardSelector). */
 export function mediaFromProgress(
   state: Pick<RootState, 'mediaApi'>,
   entry: ProgressEntry
 ): MediaDto | null {
-  if (entry.playable.kind === 'movie') {
-    const response = mediaApi.endpoints.getMovie.select(entry.playable.mediaId)(state).data;
-    return response ? cachedCard(response, mediaFromMovie) : null;
-  }
-  const response = mediaApi.endpoints.getShow.select(entry.playable.showMediaId)(state).data;
-  return response ? cachedCard(response, mediaFromShow) : null;
+  const { kind, mediaId } = progressTitle(entry);
+  return cardSelector(kind, mediaId)(state);
 }

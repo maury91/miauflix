@@ -43,6 +43,19 @@ export interface SmoothScroller {
   stop: () => void;
   /** Stop and release the element's listeners. */
   dispose: () => void;
+  /** The current position: the scroll offset, or the translation in `transform` mode. */
+  position: () => number;
+}
+
+export interface SmoothScrollerOptions {
+  /**
+   * Move the element with `translate3d` instead of scrolling it; its parent clips it. Setting a
+   * scroll offset makes Chromium lay out the page synchronously, every frame; a transform on the
+   * element's own layer only moves that layer (the TV: ~25 ms per frame saved on rows).
+   */
+  transform?: boolean;
+  /** Called whenever the position comes to rest (`transform` mode has no scroll events). */
+  onRest?: () => void;
 }
 
 const prefersReducedMotion = () =>
@@ -53,18 +66,34 @@ const prefersReducedMotion = () =>
  * Drive `element`'s scroll position on one axis. Scrolling with a wheel, touch or the scrollbar
  * stops the animation, so the user's own scrolling always wins.
  */
-export function createSmoothScroller(element: HTMLElement, axis: 'x' | 'y'): SmoothScroller {
+export function createSmoothScroller(
+  element: HTMLElement,
+  axis: 'x' | 'y',
+  { transform = false, onRest }: SmoothScrollerOptions = {}
+): SmoothScroller {
   const property = axis === 'x' ? 'scrollLeft' : 'scrollTop';
+  let translation = 0;
+  const read = () => (transform ? translation : element[property]);
+  const write = (position: number) => {
+    if (!transform) {
+      element[property] = position;
+      return;
+    }
+    translation = position;
+    element.style.transform =
+      axis === 'x' ? `translate3d(${-position}px, 0, 0)` : `translate3d(0, ${-position}px, 0)`;
+  };
   let state: SpringState | null = null;
   let target = 0;
   let frame = 0;
   /** Time of the previous animation frame; null until the animation's first frame. */
   let lastTime: number | null = null;
 
+  const viewport = () => (transform ? (element.parentElement ?? element) : element);
   const maxScroll = () =>
     axis === 'x'
-      ? element.scrollWidth - element.clientWidth
-      : element.scrollHeight - element.clientHeight;
+      ? element.scrollWidth - viewport().clientWidth
+      : element.scrollHeight - viewport().clientHeight;
 
   const stop = () => {
     cancelAnimationFrame(frame);
@@ -84,11 +113,12 @@ export function createSmoothScroller(element: HTMLElement, axis: 'x' | 'y'): Smo
     lastTime = time;
     state = stepSpring(state, target, seconds);
     if (isAtRest(state, target)) {
-      element[property] = target;
+      write(target);
       stop();
+      onRest?.();
       return;
     }
-    element[property] = state.position;
+    write(state.position);
     frame = requestAnimationFrame(tick);
   };
 
@@ -100,11 +130,12 @@ export function createSmoothScroller(element: HTMLElement, axis: 'x' | 'y'): Smo
       target = Math.max(0, Math.min(next, Math.max(0, maxScroll())));
       if (instant || prefersReducedMotion() || typeof requestAnimationFrame !== 'function') {
         stop();
-        element[property] = target;
+        write(target);
+        onRest?.();
         return;
       }
       if (state) return; // Already animating: the running spring heads for the new target.
-      state = { position: element[property], velocity: 0 };
+      state = { position: read(), velocity: 0 };
       if (isAtRest(state, target)) {
         state = null;
         return;
@@ -116,5 +147,6 @@ export function createSmoothScroller(element: HTMLElement, axis: 'x' | 'y'): Smo
       stop();
       userScrollEvents.forEach(event => element.removeEventListener(event, stop));
     },
+    position: read,
   };
 }

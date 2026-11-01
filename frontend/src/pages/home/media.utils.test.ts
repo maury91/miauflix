@@ -38,3 +38,13 @@ describe('runtime formatting', () => {
     expect(formatRuntime(45)).toBe('45m');
   });
 });
+
+describe('artworkUrl caching', () => {
+  it('returns the same URL for repeated requests and a different one per size', () => {
+    const card = artworkUrl('/cached.jpg', 'card', 253);
+    expect(artworkUrl('/cached.jpg', 'card', 253)).toBe(card);
+    expect(artworkUrl('/cached.jpg', 'still', 253)).toBe(card);
+    expect(artworkUrl('/cached.jpg', 'logo', 600)).toContain('/w500/');
+    expect(artworkUrl('', 'card', 253)).toBe('');
+  });
+});

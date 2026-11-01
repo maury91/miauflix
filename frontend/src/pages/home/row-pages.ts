@@ -15,8 +15,9 @@ export function rowPagesFor(selectedIndex: number, total: number, pageSize = ROW
 
 /**
  * Cards rendered on each side of the selection. Never more than half a page, so every rendered
- * card is on the pages `rowPagesFor` loads.
+ * card is on the pages `rowPagesFor` loads. `lean` (the TV, which styles and rasterizes every
+ * card it keeps) keeps two cards of margin past a page instead of four.
  */
-export function rowRenderRadius(mediaPerPage: number, pageSize = ROW_PAGE_SIZE) {
-  return Math.min(pageSize / 2, mediaPerPage + 4);
+export function rowRenderRadius(mediaPerPage: number, pageSize = ROW_PAGE_SIZE, lean = false) {
+  return Math.min(pageSize / 2, mediaPerPage + (lean ? 2 : 4));
 }

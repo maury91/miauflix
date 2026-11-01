@@ -177,6 +177,46 @@ settle instead of once per frame for every row.
 
 ## Phase 2: components (render cost per move)
 
+Status: 2.1 (card window and transform track), 2.2 (progress per card), 2.3, the `HeroDetails`
+split from 2.4, and the memoized sidebar from 2.5/2.6 are done. Still to do: the static CSS
+parts, delegated card handlers, and moving `getInterestWindow` off the scroll position.
+
+Measured on the TV afterwards:
+
+- **Main thread:** 168 ms of work per key (213 ms after Phase 1). The smooth-scroll tick no longer
+  lays out the page.
+- **Frame rate unchanged:** 44–49 fps on a first pass along a row, and 53 fps going back over cards
+  just shown.
+- **What limits it now is the compositor, not the main thread.** A trace of four moves has the
+  compositor thread busy about 2.2 s of 2.4 s. It spends its time drawing, waiting on synchronous
+  GL calls, and uploading about 300 freshly rasterized tiles.
+- **Most of those tiles are the hero's.** Every move fades in a new full-width backdrop layer,
+  which has to be rasterized and uploaded. On cold passes with the backdrop hidden: 50–53 fps, a
+  24 ms p90 and 2–7 frames over 50 ms. With it shown: 46 fps, a 34–37 ms p90 and 10–11 frames
+  over 50 ms.
+- **New cards mounting cost the rest.** Layout is 38 ms against 17 ms on a warm pass.
+
+Follow-up, measured on the TV:
+
+- **The hero backdrop now changes once the selection has rested for 250 ms.**
+- **Held key, eight moves at 150 ms (keys fired from inside the page):** one backdrop is loaded
+  instead of eight. Hiding the backdrop no longer changes the frame rate on new cards (34–35
+  fps either way).
+- **What's left is mounting, decoding and rasterizing cards not shown before:** 30–35 fps on
+  new cards against 38–44 going back over cards just shown.
+- **Spaced presses (600 ms apart) don't change:** each one rests, so each still swaps the
+  backdrop. Their cost is unchanged at 45–46 fps, with a 31–34 ms p90.
+- **Main thread: 128 ms of work per key** (168 ms before this change, 640 ms before Phase 1).
+- **Key spacing in measurements:** keys sent over DevTools reach the TV 350–430 ms apart,
+  whatever the interval asked for. Fast-move measurements have to dispatch the keys from
+  inside the page.
+
+Next:
+
+- **New cards:** each card decodes two images (backdrop and logo) as it scrolls in. Make sure the
+  idle preloader has decoded them before the selection gets there, and look at drawing the logo
+  over the backdrop in a single image.
+
 Once Phase 1 has removed the needless renders, what's left is the cost of the renders that are
 needed: the cards whose selection changes, the hero, and the rows mounted as you move down.
 
