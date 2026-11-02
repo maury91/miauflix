@@ -259,6 +259,11 @@ export function SubtitleMenu({
     });
   };
   const panelNavigation = useKeyboardNavigation({
+    onRestoreFocus: () => {
+      const first = panel.current?.querySelector<HTMLElement>('button:not(:disabled)');
+      first?.focus();
+      return !!first;
+    },
     onUp: () => move(-1),
     onDown: () => move(1),
     onLeft: event => {
@@ -369,10 +374,14 @@ export function SubtitleMenu({
               >
                 Hearing impaired: {hearingImpaired ? 'On' : 'Off'}
               </Button>
+              {/* Not `disabled`: it has the focus when pressed, and a disabled button drops it to
+                  the page, out of reach of the remote */}
               <Button
                 type="button"
-                disabled={loading}
-                onClick={() => onSearch(language, hearingImpaired)}
+                aria-disabled={loading}
+                onClick={() => {
+                  if (!loading) onSearch(language, hearingImpaired);
+                }}
               >
                 {loading ? 'Searching…' : 'Find subtitles'}
               </Button>

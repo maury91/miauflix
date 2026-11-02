@@ -1,9 +1,12 @@
 import { logger } from '@logger';
 import type { Quality } from '@miauflix/source-metadata-extractor';
+import parseTorrent from 'parse-torrent';
 
 import type { ContentSource } from '@entities/content-source.entity';
+import type { EpisodeSource } from '@entities/episode-source.entity';
 import type { PlayableRef } from '@routes/playable.types';
 import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@routes/preload.types';
+import { isVideoFile } from '@services/download/download.utils';
 import type { MediaService } from '@services/media/media.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
@@ -15,6 +18,7 @@ import {
   filterHevcSources,
   filterSources,
   fitsBitrate,
+  type PlayedSize,
   preferWithinBitrate,
 } from '@services/stream/stream.util';
 
@@ -24,9 +28,19 @@ export interface PlaybackPreferences {
   subtitleLanguage?: string;
   quality: Quality | 'auto';
   allowHevc: boolean;
-  /** The highest average bitrate the client's connection sustains; leaner movie sources win. */
+  /** The highest average bitrate the client's connection sustains; leaner sources win. */
   maxBitrateKbps?: number;
 }
+
+/** What a bitrate cap needs to estimate a candidate's bitrate. */
+interface BitrateBudget {
+  runtimeSeconds: number;
+  /** The bytes a candidate plays; the whole source by default. */
+  sizeOf?: PlayedSize;
+}
+
+/** Torrent files parsed for their episode file sizes, by source and file. */
+const EPISODE_FILE_SIZES_LIMIT = 500;
 
 export interface PreparedPlayable {
   playable: PlayableRef;
@@ -77,12 +91,15 @@ export class PlayablePreparationService {
     private readonly sourceHealth?: Pick<SourceHealthService, 'hasFailed'>
   ) {}
 
+  private readonly episodeFileSizeCache = new Map<string, number | null>();
+
   /**
    * Prepare a playable through catalog lookup, source discovery, metadata resolution, or payload warmup.
    * Missing catalog data and empty source lists return a cold result with no source.
    * Completed local downloads take priority over fresh torrents, unless they exceed the client's
    * bitrate cap. Quality ranks copies within that group; HEVC compatibility still applies. With
-   * a bitrate cap, movie copies within it rank first and the rest follow from the leanest. workClass sets the discovery wait budget.
+   * a bitrate cap, copies within it rank first and the rest follow from the leanest (episodes by
+   * their own file in a pack, against the show's typical episode length). workClass sets the discovery wait budget.
    * Metadata-resolution failures permit fallback selection, and warmup failures retain the source.
    * Lookup and source-selection callback errors propagate; observed cancellation rejects with
    * AbortError, or with an in-flight error if cancellation coincides with a failure.
@@ -137,6 +154,7 @@ export class PlayablePreparationService {
       : [];
     this.throwIfAborted(options.signal);
     const runtimeSeconds = media.local.runtime > 0 ? media.local.runtime * 60 : undefined;
+    const bitrate = runtimeSeconds ? { runtimeSeconds } : undefined;
     const { maxBitrateKbps } = options.preferences;
     // A finished download over the client's bitrate cap would stall it; fetch a leaner one.
     const localSource = this.select(
@@ -149,13 +167,11 @@ export class PlayablePreparationService {
       ),
       options.preferences,
       false,
-      runtimeSeconds
+      bitrate
     );
-    const usableSource =
-      localSource ?? this.select(sources, options.preferences, true, runtimeSeconds);
+    const usableSource = localSource ?? this.select(sources, options.preferences, true, bitrate);
     if (options.through === 'sources') {
-      const source =
-        usableSource ?? this.select(sources, options.preferences, false, runtimeSeconds);
+      const source = usableSource ?? this.select(sources, options.preferences, false, bitrate);
       if (source) options.onSourceSelected?.(source);
       return {
         playable,
@@ -182,7 +198,7 @@ export class PlayablePreparationService {
           sources.filter(candidate => !tried.has(candidate.id)),
           options.preferences,
           false,
-          runtimeSeconds
+          bitrate
         );
         if (!next || this.sourceHealth?.hasFailed(next.id)) return result;
         source = next;
@@ -192,13 +208,8 @@ export class PlayablePreparationService {
       return finishMovie(usableSource);
     }
 
-    let fallbackSource = this.select(sources, options.preferences, false, runtimeSeconds);
-    const metadataCandidates = this.sortCandidates(
-      sources,
-      options.preferences,
-      false,
-      runtimeSeconds
-    )
+    let fallbackSource = this.select(sources, options.preferences, false, bitrate);
+    const metadataCandidates = this.sortCandidates(sources, options.preferences, false, bitrate)
       .filter(source => !source.file)
       .slice(0, 2);
     for (const source of metadataCandidates) {
@@ -214,11 +225,11 @@ export class PlayablePreparationService {
         this.throwIfAborted(options.signal);
       }
       sources = avoid(await this.sourceService.getSourcesForMovie(media.local.id));
-      const selected = this.select(sources, options.preferences, true, runtimeSeconds);
+      const selected = this.select(sources, options.preferences, true, bitrate);
       if (selected) {
         return finishMovie(selected);
       }
-      fallbackSource = this.select(sources, options.preferences, false, runtimeSeconds);
+      fallbackSource = this.select(sources, options.preferences, false, bitrate);
     }
 
     if (fallbackSource && options.through === 'warm') {
@@ -268,6 +279,12 @@ export class PlayablePreparationService {
     );
     if (compatible.length && !compatible.some(match => isUsableSource(match.source)))
       return exhausted(playable);
+    const runtimeMinutes = show.local.episodeRuntime;
+    const bitrate: BitrateBudget | undefined =
+      options.preferences.maxBitrateKbps && runtimeMinutes
+        ? { runtimeSeconds: runtimeMinutes * 60, sizeOf: await this.episodeFileSizes(compatible) }
+        : undefined;
+    this.throwIfAborted(options.signal);
     const tried = new Set<number>();
     // The last attempt's result, so running out of candidates still reports the source tried.
     let lastResult: PreparedPlayable | null = null;
@@ -280,7 +297,8 @@ export class PlayablePreparationService {
       const selected = this.select(
         usableCandidates.map(match => match.source),
         options.preferences,
-        false
+        false,
+        bitrate
       );
       const match = usableCandidates.find(candidate => candidate.source.id === selected?.id);
       if (!selected || !match) {
@@ -464,20 +482,28 @@ export class PlayablePreparationService {
     };
   }
 
-  /** `runtimeSeconds` (movies) lets the client's bitrate cap rank the candidates. */
+  /** `bitrate`, the playable's runtime and size, lets the client's bitrate cap rank them. */
   private select(
     sources: ContentSource[],
     preferences: PlaybackPreferences,
     requireFile = true,
-    runtimeSeconds?: number
+    bitrate?: BitrateBudget
   ): ContentSource | null {
-    const compatible = this.sortCandidates(sources, preferences, requireFile, runtimeSeconds);
+    const compatible = this.sortCandidates(sources, preferences, requireFile, bitrate);
     if (!compatible.length) return null;
     if (preferences.quality === 'auto') return compatible[0];
+    // The bitrate cap outranks the requested quality: an over-cap match would stall playback.
+    const maxBitrateKbps = preferences.maxBitrateKbps;
+    const withinCap =
+      maxBitrateKbps && bitrate
+        ? compatible.filter(source =>
+            fitsBitrate(source, maxBitrateKbps, bitrate.runtimeSeconds, bitrate.sizeOf)
+          )
+        : [];
+    const pool = withinCap.length ? withinCap : compatible;
     return (
-      compatible.find(
-        source => source.quality?.toLowerCase() === preferences.quality.toLowerCase()
-      ) ?? compatible[0]
+      pool.find(source => source.quality?.toLowerCase() === preferences.quality.toLowerCase()) ??
+      compatible[0]
     );
   }
 
@@ -485,7 +511,7 @@ export class PlayablePreparationService {
     sources: ContentSource[],
     preferences: PlaybackPreferences,
     requireFile: boolean,
-    runtimeSeconds?: number
+    bitrate?: BitrateBudget
   ): ContentSource[] {
     const compatible = requireFile
       ? filterSources([...sources], preferences.allowHevc)
@@ -497,9 +523,52 @@ export class PlayablePreparationService {
     const real = compatible.filter(isUsableSource);
     const healthy = real.filter(source => !this.sourceHealth?.hasFailed(source.id));
     const ranked = healthy.length ? healthy : real;
-    return preferences.maxBitrateKbps && runtimeSeconds
-      ? preferWithinBitrate(ranked, preferences.maxBitrateKbps, runtimeSeconds)
+    return preferences.maxBitrateKbps && bitrate
+      ? preferWithinBitrate(
+          ranked,
+          preferences.maxBitrateKbps,
+          bitrate.runtimeSeconds,
+          bitrate.sizeOf
+        )
       : ranked;
+  }
+
+  /**
+   * Each candidate's episode file size, from its torrent file; null while the torrent is unknown.
+   * A season pack's size is the whole season, so it cannot stand for the episode.
+   */
+  private async episodeFileSizes(matches: EpisodeSource[]): Promise<PlayedSize> {
+    const sizes = new Map<number, number | null>();
+    for (const match of matches) {
+      const key = `${match.source.id}:${match.videoFilePath ?? ''}`;
+      let size = this.episodeFileSizeCache.get(key);
+      if (size === undefined && match.source.file) {
+        try {
+          const files = (await parseTorrent(match.source.file)).files ?? [];
+          const videos = files.filter(file => isVideoFile(file.path));
+          const exact = match.videoFilePath
+            ? files.find(item => item.path === match.videoFilePath)
+            : undefined;
+          // A provider-relative path lacks the torrent's root folder; only a unique suffix counts.
+          const suffixed = match.videoFilePath
+            ? files.filter(item => item.path.endsWith('/' + match.videoFilePath))
+            : [];
+          const file = match.videoFilePath
+            ? (exact ?? (suffixed.length === 1 ? suffixed[0] : undefined))
+            : videos.length === 1
+              ? videos[0]
+              : undefined;
+          size = file?.length ?? null;
+        } catch {
+          size = null;
+        }
+        if (this.episodeFileSizeCache.size >= EPISODE_FILE_SIZES_LIMIT)
+          this.episodeFileSizeCache.clear();
+        this.episodeFileSizeCache.set(key, size);
+      }
+      sizes.set(match.source.id, size ?? null);
+    }
+    return source => sizes.get(source.id) ?? null;
   }
 
   private throwIfAborted(signal?: AbortSignal): void {

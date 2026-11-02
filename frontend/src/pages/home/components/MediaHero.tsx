@@ -234,6 +234,8 @@ const IGNORE_RESULT = { selectFromResult: () => NO_RESULT };
 
 /** How long the selection rests before the TV swaps the hero backdrop. */
 const BACKDROP_REST_MS = 250;
+/** The image queue's owner of the resting backdrop the hero waits for. */
+const HERO_RESTING_OWNER = 'hero-resting';
 
 /** Show the selected title, source status, and a backdrop that transitions after loading. */
 export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onReady }) => {
@@ -317,9 +319,32 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       return;
     }
 
-    const url = artworkUrl(selectedBackdrop, 'backdrop');
-    const key = `${shown._type}:${shown.mediaId}:${url}`;
+    // The resting size replaces the moving one once the selection rests, loaded while idle; a
+    // title whose resting backdrop is already loaded shows it at once
+    const restingUrl = artworkUrl(selectedBackdrop, 'backdrop-resting');
+    const url = imagePreloader.isLoaded(restingUrl)
+      ? restingUrl
+      : artworkUrl(selectedBackdrop, 'backdrop');
+    const titleKey = `${shown._type}:${shown.mediaId}`;
+    const key = `${titleKey}:${url}`;
     let cancelled = false;
+    const current = () => !cancelled && currentRequest === requestId.current;
+
+    const show = (next: BackdropLayerState) => {
+      if (layersRef.current[layersRef.current.length - 1]?.backdrop.key === next.key) return;
+      const id = ++nextLayerId.current;
+      setLayers(stack => pushBackdrop(stack, next, id));
+      // Fade in from the next frame; transitionend settles the layer, or this timer if the
+      // fade never runs (reduced motion, a hidden page).
+      requestAnimationFrame(() => {
+        setLayers(stack => revealBackdrop(stack, id));
+        const timer = window.setTimeout(() => {
+          settleTimers.current.delete(timer);
+          settle(id);
+        }, 400);
+        settleTimers.current.add(timer);
+      });
+    };
 
     const prepare = async (): Promise<void> => {
       if (shown.backdropFocus) focusCacheRef.current.set(key, shown.backdropFocus);
@@ -344,40 +369,36 @@ export const MediaHero: FC<MediaHeroProps> = ({ media, preparation = null, onRea
       try {
         imageSize = await imagePromise;
       } catch {
-        if (!cancelled && currentRequest === requestId.current) {
+        if (current()) {
           setLayers(() => []);
           onReady?.(shown.mediaId);
         }
         return;
       }
 
-      if (cancelled || currentRequest !== requestId.current) return;
-      const next: BackdropLayerState = {
-        key,
-        url,
-        focus,
-        imageWidth: imageSize.width,
-        imageHeight: imageSize.height,
-      };
+      if (!current()) return;
       onReady?.(shown.mediaId);
-      if (layersRef.current[layersRef.current.length - 1]?.backdrop.key === key) return;
-      const id = ++nextLayerId.current;
-      setLayers(stack => pushBackdrop(stack, next, id));
-      // Fade in from the next frame; transitionend settles the layer, or this timer if the
-      // fade never runs (reduced motion, a hidden page).
-      requestAnimationFrame(() => {
-        setLayers(stack => revealBackdrop(stack, id));
-        const timer = window.setTimeout(() => {
-          settleTimers.current.delete(timer);
-          settle(id);
-        }, 400);
-        settleTimers.current.add(timer);
-      });
+      show({ key, url, focus, imageWidth: imageSize.width, imageHeight: imageSize.height });
+      if (url === restingUrl) return;
+      imagePreloader.loadWhenIdle(HERO_RESTING_OWNER, restingUrl).then(
+        resting => {
+          if (!current()) return;
+          show({
+            key: `${titleKey}:${restingUrl}`,
+            url: restingUrl,
+            focus,
+            imageWidth: resting.width,
+            imageHeight: resting.height,
+          });
+        },
+        () => undefined
+      );
     };
 
     void prepare();
     return () => {
       cancelled = true;
+      imagePreloader.clear(HERO_RESTING_OWNER);
     };
   }, [
     ensureBackdropFocus,

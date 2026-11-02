@@ -1,3 +1,8 @@
+// A test torrent file is its file list as JSON
+jest.mock('parse-torrent', () =>
+  jest.fn(async (file: Buffer) => ({ files: JSON.parse(file.toString()) }))
+);
+
 import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { PlayableRef } from '@routes/playable.types';
@@ -244,7 +249,11 @@ describe('PlayablePreparationService', () => {
   describe('with a bitrate cap', () => {
     const GB = 2 ** 30;
     /** A 100-minute movie: 1 GB is about 1.4 Mbit/s. */
-    const setupCapped = (sources: object[], downloadedIds: number[] = []) => {
+    const setupCapped = (
+      sources: object[],
+      downloadedIds: number[] = [],
+      quality: Quality | 'auto' = 'auto'
+    ) => {
       const mediaService = {
         getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7, runtime: 100 } }),
       };
@@ -271,7 +280,7 @@ describe('PlayablePreparationService', () => {
           { kind: 'movie', mediaId: 42 },
           {
             through,
-            preferences: { quality: 'auto', allowHevc: true, maxBitrateKbps: 8_000 },
+            preferences: { quality, allowHevc: true, maxBitrateKbps: 8_000 },
             workClass: 'interactive',
           }
         );
@@ -283,6 +292,19 @@ describe('PlayablePreparationService', () => {
       size: sizeGb * GB,
       streamingScore,
       file: Buffer.from(`torrent ${id}`),
+    });
+
+    it('keeps an explicitly requested quality within the cap', async () => {
+      const heavy4k = source(1, 17, 10_000);
+      const fhd = { ...source(2, 3, 8_000), quality: Quality.FHD };
+      const lean4k = source(3, 4.5, 7_000);
+
+      expect(
+        (await setupCapped([heavy4k, fhd, lean4k], [], Quality['4K']).prepare('sources')).source
+      ).toBe(lean4k);
+      expect((await setupCapped([heavy4k, fhd], [], Quality['4K']).prepare('sources')).source).toBe(
+        fhd
+      );
     });
 
     it('passes over a finished download above the cap for a leaner source', async () => {
@@ -812,6 +834,104 @@ describe('PlayablePreparationService', () => {
     expect(prepared).toMatchObject({ source, target: null, state: 'cold' });
     expect(prepared.warmup.state).toBe('failed');
     expect(warmup.warm).not.toHaveBeenCalled();
+  });
+
+  describe('episodes under a bitrate cap', () => {
+    const GB = 1024 ** 3;
+    const torrent = (files: Array<{ path: string; length: number }>) =>
+      Buffer.from(JSON.stringify(files));
+    // A 2160p episode release: 6 GB for one 45-minute episode, about 19 Mbit/s
+    const heavy = {
+      id: 41,
+      quality: Quality['4K'],
+      streamingScore: 90,
+      size: 6 * GB,
+      hasVideo: true,
+      file: torrent([{ path: 'Show.S01E02.2160p.mkv', length: 6 * GB }]),
+    };
+    // A season pack: 10 GB in all, but its episode file is 1.2 GB, about 3.8 Mbit/s
+    const pack = {
+      id: 42,
+      quality: Quality.FHD,
+      streamingScore: 50,
+      size: 10 * GB,
+      hasVideo: true,
+      file: torrent([
+        { path: 'Show S01/Show.S01E01.mkv', length: 1.2 * GB },
+        { path: 'Show S01/Show.S01E02.mkv', length: 1.2 * GB },
+      ]),
+    };
+    const setup = (
+      episodeRuntime: number | null,
+      packMatch: { source: object; videoFilePath: string } = {
+        source: pack,
+        videoFilePath: 'Show S01/Show.S01E02.mkv',
+      }
+    ) => {
+      const service = new PlayablePreparationService(
+        {
+          getTVShowByMediaId: jest.fn().mockResolvedValue({
+            local: { id: 3, mediaId: 900, name: 'Show', imdbId: 'tt1', episodeRuntime },
+          }),
+          markShowAsWatching: jest.fn(),
+          getSeason: jest
+            .fn()
+            .mockResolvedValue({ episodes: [{ id: 81, episodeNumber: 2, airDate: null }] }),
+        } as never,
+        {
+          getSourcesForEpisodeWithOnDemandSearch: jest.fn().mockResolvedValue([
+            { source: heavy, videoFilePath: 'Show.S01E02.2160p.mkv', matchKind: 'single' },
+            { ...packMatch, matchKind: 'single' },
+          ]),
+        } as never
+      );
+      return (maxBitrateKbps?: number) =>
+        service.prepare(
+          { kind: 'episode', showMediaId: 900, seasonNumber: 1, episodeNumber: 2 },
+          {
+            through: 'sources',
+            preferences: { quality: 'auto', allowHevc: true, maxBitrateKbps },
+            workClass: 'interactive',
+          }
+        );
+    };
+
+    it('ranks a season pack by its episode file, against the show episode length', async () => {
+      const prepare = setup(45);
+      await expect(prepare(8_000)).resolves.toMatchObject({ source: pack });
+      await expect(prepare()).resolves.toMatchObject({ source: heavy });
+    });
+
+    it('finds a provider-relative episode path under the torrent folder', async () => {
+      // Its 10 GB episode file is over the cap and heavier than the 6 GB source; left unknown,
+      // the pack would count as fitting and win.
+      const remuxPack = {
+        ...pack,
+        file: torrent([
+          { path: 'Show S01/Show.S01E01.mkv', length: 10 * GB },
+          { path: 'Show S01/Show.S01E02.mkv', length: 10 * GB },
+        ]),
+      };
+      const prepare = setup(45, { source: remuxPack, videoFilePath: 'Show.S01E02.mkv' });
+      await expect(prepare(8_000)).resolves.toMatchObject({ source: heavy });
+    });
+
+    it('leaves the episode file unknown when its relative path matches more than one', async () => {
+      // Resolving either 20 GB file would rank the pack after the lighter 6 GB source.
+      const ambiguous = {
+        ...pack,
+        file: torrent([
+          { path: 'Show S01/A/Show.S01E02.mkv', length: 20 * GB },
+          { path: 'Show S01/B/Show.S01E02.mkv', length: 20 * GB },
+        ]),
+      };
+      const prepare = setup(45, { source: ambiguous, videoFilePath: 'Show.S01E02.mkv' });
+      await expect(prepare(8_000)).resolves.toMatchObject({ source: ambiguous });
+    });
+
+    it('keeps the order when the show episode length is unknown', async () => {
+      await expect(setup(null)(8_000)).resolves.toMatchObject({ source: heavy });
+    });
   });
 
   it('keeps the episode source it tried when no other candidate remains', async () => {
