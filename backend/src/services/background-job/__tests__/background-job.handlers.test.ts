@@ -129,6 +129,51 @@ describe('watchlist TV acquisition', () => {
   });
   afterEach(() => jest.useRealTimers());
 
+  it('does not search or download while backend peer jobs are blocked', async () => {
+    const { handlers, sourceService, downloadService } = setupTest();
+    sourceService.canRunPeerJobs.mockResolvedValue(false);
+
+    await handlers.get('watchlist.tv.acquire')!.run({ showMediaId: 9001 });
+
+    expect(sourceService.getSourcesForEpisodeWithOnDemandSearch).not.toHaveBeenCalled();
+    expect(downloadService.resolveLayout).not.toHaveBeenCalled();
+    expect(downloadService.predownload).not.toHaveBeenCalled();
+  });
+
+  it.each([false, true])(
+    'stops before target resolution if VPN disconnects during discovery (complete=%s)',
+    async complete => {
+      const { handlers, sourceService, downloadService, episodeSource } = setupTest();
+      downloadService.isFileComplete.mockResolvedValue(complete);
+      sourceService.getSourcesForEpisodeWithOnDemandSearch.mockImplementation(async () => {
+        sourceService.canRunPeerJobs.mockResolvedValue(false);
+        return [episodeSource];
+      });
+
+      await handlers.get('watchlist.tv.acquire')!.run({ showMediaId: 9001 });
+
+      expect(downloadService.resolveLayout).not.toHaveBeenCalled();
+      expect(downloadService.predownload).not.toHaveBeenCalled();
+    }
+  );
+
+  it.each([false, true])(
+    'stops before predownload if VPN disconnects during target resolution (complete=%s)',
+    async complete => {
+      const { handlers, sourceService, downloadService } = setupTest();
+      downloadService.isFileComplete.mockResolvedValue(complete);
+      downloadService.resolveLayout.mockImplementation(async () => {
+        sourceService.canRunPeerJobs.mockResolvedValue(false);
+        return { files: [{ path: 'Show.S01E08.mkv', length: 1_000_000 }] };
+      });
+
+      await handlers.get('watchlist.tv.acquire')!.run({ showMediaId: 9001 });
+
+      expect(downloadService.resolveLayout).toHaveBeenCalled();
+      expect(downloadService.predownload).not.toHaveBeenCalled();
+    }
+  );
+
   it('starts at the episode after the latest watched episode', async () => {
     const { handlers, sourceService, downloadService, episodeSource } = setupTest();
     const acquisition = handlers.get('watchlist.tv.acquire');

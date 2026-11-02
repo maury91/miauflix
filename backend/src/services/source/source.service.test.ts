@@ -343,9 +343,13 @@ describe('SourceService', () => {
     );
   });
 
-  it.each(['rejected', 'missing', 'remote', 'stored'] as const)(
-    'resolves TV pack files when Sources metadata is %s',
-    async outcome => {
+  it.each(
+    (['rejected', 'missing', 'remote', 'stored'] as const).flatMap(outcome =>
+      [true, false].map(vpnConnected => ({ outcome, vpnConnected }))
+    )
+  )(
+    'resolves TV metadata safely with Sources=$outcome and VPN=$vpnConnected',
+    async ({ outcome, vpnConnected }) => {
       const {
         service,
         mockContentSource1,
@@ -353,7 +357,7 @@ describe('SourceService', () => {
         mockContentSourceRepository,
         mockSourcesClient,
         mockSourceMetadataFileService,
-      } = setupTest();
+      } = vpnConnected ? setupTest() : createServiceWithDisconnectedVpn();
       const torrentFile = Buffer.from('TV pack metadata');
       const source = {
         ...mockContentSource1,
@@ -386,8 +390,13 @@ describe('SourceService', () => {
         airDate: '2020-01-01',
       });
 
-      expect(associate).toHaveBeenCalledWith(5, source.id, 'Show.S01E08.mkv', 'single');
-      if (outcome === 'rejected' || outcome === 'missing') {
+      const needsPeers = outcome === 'rejected' || outcome === 'missing';
+      if (needsPeers && !vpnConnected) {
+        expect(associate).not.toHaveBeenCalled();
+      } else {
+        expect(associate).toHaveBeenCalledWith(5, source.id, 'Show.S01E08.mkv', 'single');
+      }
+      if (needsPeers && vpnConnected) {
         expect(mockSourceMetadataFileService.getPlaybackTorrentMetadataFile).toHaveBeenCalledWith(
           source.magnetLink,
           source.hash

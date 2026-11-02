@@ -284,6 +284,7 @@ export function registerBackgroundJobHandlers({
     concurrency: 1,
     leaseMs: 10 * 60 * 1000,
     run: async ({ showMediaId }) => {
+      if (!(await sourceService.canRunPeerJobs())) return;
       const owners = await listService.getLocalTVWatchlistOwners(showMediaId);
       if (!owners.length) return;
       const show = await mediaService.getTVShowByMediaId(showMediaId);
@@ -369,7 +370,11 @@ export function registerBackgroundJobHandlers({
         const completeMatch = usable.find((_, index) => completeFlags[index]);
         if (completeMatch) {
           // Renew the claim so storage cleanup does not reclaim the completed file.
-          await downloadService.predownload((await playbackTargets.forEpisode(completeMatch))!, {
+          // Layout resolution may itself fetch metadata from peers.
+          if (!(await sourceService.canRunPeerJobs())) return;
+          const target = (await playbackTargets.forEpisode(completeMatch))!;
+          if (!(await sourceService.canRunPeerJobs())) return;
+          await downloadService.predownload(target, {
             kind: 'watchlist',
             ownerKey: `watchlist:tv:${showMediaId}`,
           });
@@ -379,7 +384,10 @@ export function registerBackgroundJobHandlers({
         const selected = usable[0];
         try {
           // Each scan renews the claim; it lapses once the show leaves every watchlist.
-          await downloadService.predownload((await playbackTargets.forEpisode(selected))!, {
+          if (!(await sourceService.canRunPeerJobs())) return;
+          const target = (await playbackTargets.forEpisode(selected))!;
+          if (!(await sourceService.canRunPeerJobs())) return;
+          await downloadService.predownload(target, {
             kind: 'watchlist',
             ownerKey: `watchlist:tv:${showMediaId}`,
           });

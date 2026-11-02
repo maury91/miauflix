@@ -479,7 +479,7 @@ export class SourceService {
                 return null;
               })) ??
             undefined;
-          if (!torrentFile && source.magnetLink) {
+          if (!torrentFile && source.magnetLink && (await this.canRunPeerJobs())) {
             torrentFile =
               (await this.magnetService.getPlaybackTorrentMetadataFile(
                 source.magnetLink,
