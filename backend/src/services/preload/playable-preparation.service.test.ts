@@ -861,7 +861,13 @@ describe('PlayablePreparationService', () => {
         { path: 'Show S01/Show.S01E02.mkv', length: 1.2 * GB },
       ]),
     };
-    const setup = (episodeRuntime: number | null) => {
+    const setup = (
+      episodeRuntime: number | null,
+      packMatch: { source: object; videoFilePath: string } = {
+        source: pack,
+        videoFilePath: 'Show S01/Show.S01E02.mkv',
+      }
+    ) => {
       const service = new PlayablePreparationService(
         {
           getTVShowByMediaId: jest.fn().mockResolvedValue({
@@ -875,7 +881,7 @@ describe('PlayablePreparationService', () => {
         {
           getSourcesForEpisodeWithOnDemandSearch: jest.fn().mockResolvedValue([
             { source: heavy, videoFilePath: 'Show.S01E02.2160p.mkv', matchKind: 'single' },
-            { source: pack, videoFilePath: 'Show S01/Show.S01E02.mkv', matchKind: 'single' },
+            { ...packMatch, matchKind: 'single' },
           ]),
         } as never
       );
@@ -894,6 +900,33 @@ describe('PlayablePreparationService', () => {
       const prepare = setup(45);
       await expect(prepare(8_000)).resolves.toMatchObject({ source: pack });
       await expect(prepare()).resolves.toMatchObject({ source: heavy });
+    });
+
+    it('finds a provider-relative episode path under the torrent folder', async () => {
+      // Its 10 GB episode file is over the cap and heavier than the 6 GB source; left unknown,
+      // the pack would count as fitting and win.
+      const remuxPack = {
+        ...pack,
+        file: torrent([
+          { path: 'Show S01/Show.S01E01.mkv', length: 10 * GB },
+          { path: 'Show S01/Show.S01E02.mkv', length: 10 * GB },
+        ]),
+      };
+      const prepare = setup(45, { source: remuxPack, videoFilePath: 'Show.S01E02.mkv' });
+      await expect(prepare(8_000)).resolves.toMatchObject({ source: heavy });
+    });
+
+    it('leaves the episode file unknown when its relative path matches more than one', async () => {
+      // Resolving either 20 GB file would rank the pack after the lighter 6 GB source.
+      const ambiguous = {
+        ...pack,
+        file: torrent([
+          { path: 'Show S01/A/Show.S01E02.mkv', length: 20 * GB },
+          { path: 'Show S01/B/Show.S01E02.mkv', length: 20 * GB },
+        ]),
+      };
+      const prepare = setup(45, { source: ambiguous, videoFilePath: 'Show.S01E02.mkv' });
+      await expect(prepare(8_000)).resolves.toMatchObject({ source: ambiguous });
     });
 
     it('keeps the order when the show episode length is unknown', async () => {

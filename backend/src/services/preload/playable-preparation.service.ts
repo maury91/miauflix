@@ -546,8 +546,15 @@ export class PlayablePreparationService {
         try {
           const files = (await parseTorrent(match.source.file)).files ?? [];
           const videos = files.filter(file => isVideoFile(file.path));
-          const file = match.videoFilePath
+          const exact = match.videoFilePath
             ? files.find(item => item.path === match.videoFilePath)
+            : undefined;
+          // A provider-relative path lacks the torrent's root folder; only a unique suffix counts.
+          const suffixed = match.videoFilePath
+            ? files.filter(item => item.path.endsWith('/' + match.videoFilePath))
+            : [];
+          const file = match.videoFilePath
+            ? (exact ?? (suffixed.length === 1 ? suffixed[0] : undefined))
             : videos.length === 1
               ? videos[0]
               : undefined;
