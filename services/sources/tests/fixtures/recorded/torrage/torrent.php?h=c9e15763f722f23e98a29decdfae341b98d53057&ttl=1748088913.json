@@ -1,0 +1,9 @@
+{
+  "status": 200,
+  "statusText": "OK",
+  "headers": {
+    "content-type": "application/javascript; charset=UTF-8"
+  },
+  "body": "getTTL(\"Ktew6ALhD2znM64VTdumH7VdKaZrb171PA2B-hDxKJd1xoR9\"\n);",
+  "bodyIsJson": false
+}
