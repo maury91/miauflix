@@ -101,7 +101,7 @@ describe('Database Encryption E2E Tests', () => {
         );
       }
 
-      // The YTS mock has a checked-in recording for Fight Club (movie 550). Source discovery is
+      // The indexer mock has checked-in data for Fight Club (movie 550). Source discovery is
       // on demand, so allow it to finish even when the first request reaches the API's timeout.
       const deadline = Date.now() + 15000;
       const getMovie = () =>
@@ -126,7 +126,7 @@ describe('Database Encryption E2E Tests', () => {
       expect(movieResponse).toBeHttpStatus(200);
       if ('sources' in movieResponse.data === false || !movieResponse.data.sources?.length) {
         throw new Error(
-          'The checked-in YTS fixture for movie 550 did not produce a source within 15 seconds'
+          'The checked-in indexer fixture for movie 550 did not produce a source within 15 seconds'
         );
       }
 

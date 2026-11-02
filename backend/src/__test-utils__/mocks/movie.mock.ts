@@ -229,7 +229,7 @@ export function createMockContentSource(overrides: Partial<ContentSource> = {}):
       faker.helpers.arrayElement([VideoCodec.X264, VideoCodec.X265, VideoCodec.XVID]),
     broadcasters: overrides.broadcasters ?? sourceMetadata.broadcasters,
     watchers: overrides.watchers ?? sourceMetadata.watchers,
-    source: overrides.source ?? faker.helpers.arrayElement(['YTS', 'THERARBG', 'RARBG']),
+    source: overrides.source ?? faker.helpers.arrayElement(['indexer-a', 'indexer-b', 'indexer-c']),
     sourceType:
       overrides.sourceType ??
       faker.helpers.arrayElement([Source.BLURAY, Source.WEB, Source.HDTV, Source.CAM]),
@@ -253,8 +253,8 @@ export function createMockSourceMetadata(overrides: Partial<SourceMetadata> = {}
     overrides.quality ?? faker.helpers.arrayElement([Quality.FHD, Quality.HD, Quality.SD]);
 
   return {
-    provider: 'yts',
-    providerKind: 'native',
+    provider: 'indexer-a',
+    providerKind: 'cardigann',
     matchedBy: 'imdb',
     accuracy: 'medium',
     releaseName: 'Example movie',

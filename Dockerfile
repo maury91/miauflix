@@ -13,12 +13,10 @@ COPY tsconfig.json ./
 COPY turbo.json ./
 
 # Create package directories and copy ONLY their package.json files for dependency resolution
-RUN mkdir -p packages/source-metadata-extractor packages/yts-sanitizer packages/therarbg-sanitizer packages/contract packages/service-contracts packages/service-configuration backend frontend services/media-catalog services/list-service services/sources
+RUN mkdir -p packages/source-metadata-extractor packages/contract packages/service-contracts packages/service-configuration backend frontend services/media-catalog services/list-service services/sources
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
-COPY packages/yts-sanitizer/package.json ./packages/yts-sanitizer/
-COPY packages/therarbg-sanitizer/package.json ./packages/therarbg-sanitizer/
 COPY packages/contract/package.json ./packages/contract/
 COPY packages/service-contracts/package.json ./packages/service-contracts/
 COPY packages/service-configuration/package.json ./packages/service-configuration/
@@ -74,10 +72,6 @@ COPY --from=builder /usr/src/app/dist/backend /usr/src/app/backend
 # Copy built packages (internal workspace dependencies)
 COPY --from=builder /usr/src/app/packages/source-metadata-extractor/dist /usr/src/app/packages/source-metadata-extractor/dist
 COPY --from=builder /usr/src/app/packages/source-metadata-extractor/package.json /usr/src/app/packages/source-metadata-extractor/package.json
-COPY --from=builder /usr/src/app/packages/yts-sanitizer/dist /usr/src/app/packages/yts-sanitizer/dist
-COPY --from=builder /usr/src/app/packages/yts-sanitizer/package.json /usr/src/app/packages/yts-sanitizer/package.json
-COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/dist /usr/src/app/packages/therarbg-sanitizer/dist
-COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/package.json /usr/src/app/packages/therarbg-sanitizer/package.json
 COPY --from=builder /usr/src/app/packages/contract/dist /usr/src/app/packages/contract/dist
 COPY --from=builder /usr/src/app/packages/contract/package.json /usr/src/app/packages/contract/package.json
 COPY --from=builder /usr/src/app/packages/service-contracts/dist /usr/src/app/packages/service-contracts/dist

@@ -4,14 +4,11 @@ This guide consolidates patterns, workflows, and best practices for AI assistant
 
 ## Essential Context
 
-### Production-Ready Status
+### Implemented systems and remaining work
 
-The Miauflix platform is **100% complete and production-ready**:
+Authentication, source discovery, streaming, subtitles, progress, ratings, and notifications have existing implementations. Reuse those owners. The [Feature Guide](../features.md) describes available behavior and limitations; [ToDo.md](../../ToDo.md) tracks planned work. Neither implementation status nor a past build establishes production readiness or a passing build for the current checkout.
 
-- ✅ **Backend**: All services implemented and functional
-- ✅ **Frontend**: Complete with three-tier authentication (JWT for APIs, HttpOnly cookies for refresh, streaming keys for video)
-- ✅ **Streaming**: WebTorrent infrastructure fully operational
-- ✅ **Integration**: Frontend-backend integration complete
+Browsers use session-scoped HttpOnly access and refresh cookies with `X-Session-Id`. The packaged TV app uses token transport. Streaming uses separate grants. See [authentication transport](../../backend/src/utils/auth-transport.util.ts).
 
 ### What This Means for AI Development
 
@@ -26,8 +23,8 @@ The Miauflix platform is **100% complete and production-ready**:
 
 - Rebuild authentication (complete with JWT + refresh token system)
 - Rebuild streaming infrastructure (WebTorrent fully implemented)
-- Recreate database entities (13 entities already exist)
-- Rebuild background processing (7 tasks already running)
+- Recreate data models without checking the existing entities and repositories
+- Rebuild background processing (Bunqueue schedules and workers already own it)
 
 ## Development Patterns
 
@@ -99,11 +96,11 @@ Use path aliases consistently:
 
 ```typescript
 // ✅ GOOD - Use aliases
-import { UserEntity } from '@entities/user.entity';
+import { User } from '@entities/user.entity';
 import { AuthService } from '@services/auth/auth.service';
 
 // ❌ BAD - Deep relative paths
-import { UserEntity } from '../../../entities/user.entity';
+import { User } from '../../../entities/user.entity';
 ```
 
 See “Backend Path Aliases” and “Frontend Path Aliases” in [docs/development/workflow.md](../development/workflow.md) for the authoritative, toolchain-aligned lists (TS, Vite, Jest).
@@ -164,9 +161,11 @@ backend/src/middleware/       # Request/response middleware
 ### Frontend Components
 
 ```
-frontend/src/app/components/  # Reusable UI components
-frontend/src/app/pages/      # Page-level components
-frontend/src/store/          # Redux state management
+frontend/src/shared/         # Shared components, hooks, API helpers
+frontend/src/features/       # Domain APIs, state, and UI
+frontend/src/pages/          # Route-level screens
+frontend/src/app/            # Shell and startup
+frontend/src/store/          # Redux store
 ```
 
 ### Database Changes
@@ -182,7 +181,8 @@ backend/src/database/        # Database configuration
 ```
 backend/src/services/background-job/  # Bunqueue workers and schedule lifecycle
 backend/src/services/source/     # Content discovery
-backend/src/services/media/      # Metadata processing
+services/media-catalog/src/workers/  # Catalog scan and season-sync consumers
+backend/src/services/media/      # Local indexes and list projections
 ```
 
 ## Development Workflows
@@ -211,9 +211,9 @@ npm run test:backend               # Unit tests
 npm run test:backend:e2e           # E2E tests with Docker
 
 # Frontend testing
-npm run test:frontend              # Unit tests
+npm test --workspace frontend     # Unit tests
 npm run test:frontend:e2e          # E2E tests with backend integration
-npm run test:frontend:visual       # Visual regression tests
+npm run test:visual --workspace frontend  # Visual regression tests
 
 # Full test suite
 npm test
@@ -250,14 +250,14 @@ npm run build
 ### Development Constraints
 
 - **Don't make real API calls during development** - Use mock data
-- **Database uses synchronize: true** - Entity changes immediately affect schema
-- **Background tasks are always running** - Be aware of active processes
+- **Database startup explicitly synchronizes schema** - Entity changes can affect stored data; preserve columns and add ordered data migrations where required
+- **Background work is configuration-dependent** - Check schedule definitions, service readiness, and enabled flags before assuming a worker is active
 - **Frontend-backend integration is complete** - Don't duplicate auth work
 
 ### Production Constraints
 
-- **All services are production-ready** - Don't rebuild existing infrastructure
-- **Authentication uses three systems** - JWT for API access, HttpOnly cookies for refresh only, streaming keys for video
+- **Reuse implemented services** - Verify the behavior and relevant checks before changing them
+- **Authentication has browser and TV transports** - Browser access/refresh cookies, TV token headers, session selection, and separate streaming grants
 - **Streaming endpoint is functional** - `/api/stream/:token` is complete
 - **Database has field-level encryption** - Sensitive data is protected
 
@@ -304,21 +304,11 @@ describe('Service', () => {
 
 ## Development Environment Setup
 
-### Environment Variables
+### Configuration ownership
 
-```bash
-# Optional backend seed values; configure these in the Miauflix UI for normal use
-TMDB_API_ACCESS_TOKEN=your_tmdb_token
-TRAKT_CLIENT_ID=your_trakt_client_id
-TRAKT_CLIENT_SECRET=your_trakt_client_secret
-NORDVPN_PRIVATE_KEY=your_nordvpn_private_key
+Normal configuration is managed through the browser or the existing configuration command. Catalog, list, and source services publish their own schemas; backend services use the injected configuration service. Deployment settings such as VPN credentials belong to the Compose environment.
 
-# Development
-NODE_ENV=development
-LOG_LEVEL=debug
-```
-
-These Trakt values are optional only when the List Service is disabled or unused. The List Service generates and persists its encryption key automatically.
+See [Environment Variables](../setup/environment-variables.md) for supported names and [System Overview](../architecture/system-overview.md) for service ownership. Preserve persistent configuration data and encryption keys across restarts. Do not read `.env` files or copy secrets into logs or documentation.
 
 ### Development Commands
 
@@ -327,7 +317,7 @@ These Trakt values are optional only when the List Service is disabled or unused
 npm run config
 
 # Start development environment
-npm run dev                          # Backend + Frontend
+npm run dev                          # Backend, frontend, catalog, list, and source services
 npm run start:backend               # Backend only
 npm run start:frontend              # Frontend with hot reload
 
@@ -362,10 +352,10 @@ DEBUG=typeorm npm run start:backend
 
 ```bash
 # Check backend health
-curl http://localhost:3001/health
+curl http://localhost:3000/api/health
 
 # Test authentication
-curl -X POST http://localhost:3001/api/auth/login \
+curl -X POST http://localhost:3000/api/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"test@example.com","password":"password"}'
 ```
@@ -390,11 +380,13 @@ curl -X POST http://localhost:3001/api/auth/login \
 
 ### Authentication Security
 
-**Three-Tier Authentication System:**
+**Authentication transports:**
 
-- **Primary API Auth**: JWT tokens in Authorization headers (15min expiration)
-- **Token Refresh Only**: HttpOnly cookies exclusively for `/api/auth/refresh/:session`
-- **Streaming Access**: Non-JWT streaming keys for `/api/stream/:token`
+- **Browser API access**: `X-Session-Id` selects the session; its JWT is read from an HttpOnly access cookie. Refresh cookies are scoped to `/api/auth/`, including refresh and logout.
+- **Packaged TV app**: `X-Auth-Transport: token` requests token responses; the client sends Bearer access tokens, `X-Session-Id`, and refresh-token headers.
+- **Streaming access**: Separate streaming grants authorize media delivery at `/api/stream/:token`.
+
+See [AuthService](../../backend/src/services/auth/auth.service.ts), [authentication middleware](../../backend/src/middleware/auth.middleware.ts), and [TV client transport](../../frontend/src/shared/api/tv-auth.ts).
 
 **Security Measures:**
 
@@ -409,4 +401,4 @@ curl -X POST http://localhost:3001/api/auth/login \
 - Implement audit logging
 - Follow principle of least privilege
 
-This guide provides the essential patterns and workflows for effective AI assistance on the Miauflix codebase while avoiding common pitfalls and maintaining the high quality of the existing implementation.
+Use the [project context](context.md) and [feature documentation](../features.md) alongside the relevant implementation. Verify acceptance conditions with checks appropriate to the task.

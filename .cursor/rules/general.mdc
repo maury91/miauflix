@@ -11,45 +11,29 @@ alwaysApply: true
 - Be blunt and direct - if a proposal is stupid or not ideal, say so. Don't be a yes-man.
 - **ALWAYS start by reading `docs/ai/context.md`** - critical project status specifically for AI assistants
 - **Before making ANY changes, check `docs/ai/gotchas.md`** - constraints that will break the system
-- **Use `docs/ai/file-mapping.md`** for quick reference on where to make changes
-- **Follow `docs/ai/patterns.md`** for code conventions and architectural consistency
-- Check `docs/task-file-mapping.md` for implementation status before starting any task
+- **Use `docs/ai/development-guide.md`** for quick reference on where to make changes
+- **Follow `docs/ai/development-guide.md`** for code conventions and architectural consistency
+- Check `docs/features.md` for implementation status before starting any task
 - If a task appears to be complex, first plan it using the sequential thinking tool, show the plan to the user and after the user confirms the plan is solid proceed with the implementation
 - Use MCP when available (for example Serena), do not use tools for editing files unless explicitly allowed by the user (file edits from MCP do not appear in the interface)
 
-## 📋 Project Context (Updated 2025-06-30)
+## 📋 Project Context
 
-### Implementation Status Overview
+### Implementation Status
 
-- **Backend Infrastructure**: **95% complete and production-ready** ⚡
-- **Frontend**: Basic structure exists, has TypeScript build errors, JWT authentication missing
-- **Timeline**: **2-3 weeks to full functionality** (not months)
-- **Critical Reality**: **Only 2 missing pieces prevent full operation**
+Authentication is integrated in the browser and TV app. Catalog data, source discovery, playback, subtitles, progress, ratings, notifications, and storage management already have implementations. Verify behavior before recreating them.
+
+Use `docs/ai/context.md` for current ownership and limitations, `docs/features.md` for implemented behavior, and `ToDo.md` for planned work. Do not infer completion percentages, timelines, passing builds, or deployment readiness from a historical summary.
 
 ### Key Documentation Files
 
-- **`docs/ai/context.md`** - **START HERE** - Project status for AI assistants
-- **`docs/ai/gotchas.md`** - Critical constraints to avoid breaking things
-- **`docs/ai/file-mapping.md`** - Quick reference for file locations
-- **`docs/ai/patterns.md`** - Code patterns and conventions
-- **`docs/ai/workflows.md`** - Step-by-step task guidance
-- `docs/overview.md` - Documentation roadmap and entry point
-- `docs/task-file-mapping.md` - Task → file mapping with implementation status
-- `docs/miauflix-architecture-analysis.md` - System architecture and background tasks
-
-### ✅ Production-Ready Components (DON'T REBUILD THESE)
-
-- **Source Aggregation**: Multi-provider (YTS + THERARBG) with background processing
-- **WebTorrent Infrastructure**: Complete client with tracker management and stats scraping
-- **Streaming Infrastructure**: Complete `/api/stream/:token` endpoint with quality selection and range requests
-- **Authentication Backend**: Full JWT system with refresh tokens and role-based access
-- **Database Layer**: Complete entity model with AES-256-GCM encryption
-- **Background Tasks**: All 7 scheduled tasks operational
-- **API Infrastructure**: Comprehensive routes with auth/rate limiting
-
-### ❌ **ONLY 1 Critical Missing Component**
-
-- **Frontend JWT Auth**: Login page, token management, interceptors to connect with existing backend auth system
+- **`docs/ai/context.md`** - **START HERE** - Current project context
+- **`docs/ai/gotchas.md`** - Critical constraints
+- **`docs/ai/development-guide.md`** - File locations, patterns, and workflows
+- `docs/README.md` - Documentation entry point
+- `docs/features.md` - Available features and limitations
+- `docs/architecture/system-overview.md` - Current service boundaries
+- `ToDo.md` - Planned work
 
 ## 🚨 **CRITICAL CONSTRAINTS (Will Break System)**
 
@@ -76,17 +60,18 @@ npm install --workspace frontend package-name
 
 ### ❌ **Database Schema Changes Are Immediate**
 
-- Database uses TypeORM `synchronize: true`
+- Startup explicitly synchronizes TypeORM schema after registered column renames
 - Entity changes **immediately affect database schema**
-- No migrations system - changes can cause data loss
+- Ordered data migrations also exist; follow `docs/ai/gotchas.md` to preserve existing data
 - **Test entity changes thoroughly in development**
 
-### ❌ **Frontend Has Build Errors - Fix First**
+### **Verify the Current Frontend Build Before Features**
+
+Resolve current type-check/build failures before adding frontend features. Run from the root:
 
 ```bash
-# Check current errors before adding features:
-cd frontend && npm run type-check
-npm run build  # Must pass before adding features
+npm run check:ts --workspace frontend
+npm run build:frontend
 ```
 
 ## 🧪 **Testing Guidelines (CRITICAL PATTERNS)**
@@ -151,7 +136,9 @@ afterEach(() => {
 - `npm test --workspace backend` - Backend unit tests
 - `npm run test:backend:e2e` - E2E tests (spins up Docker environment)
 - `npm test --workspace=packages/source-metadata-extractor` - Source metadata tests
-- No frontend tests currently exist
+- `npm test --workspace frontend` - Frontend unit tests
+- `npm run test:frontend:e2e` - Frontend E2E tests
+- `npm run test:frontend:visual` - Visual regression tests
 
 ### E2E Testing Methods
 
@@ -163,13 +150,16 @@ afterEach(() => {
 
 ## 🏗️ **Architecture Awareness**
 
-### Key Services (All Implemented - DON'T REBUILD)
+### Key Services (Extend Existing Owners)
 
-- `AuthService` - JWT authentication with refresh tokens (228 lines, 18 methods)
-- `SourceService` - Multi-provider torrent source aggregation (719 lines, 24 methods)
-- `DownloadService` - WebTorrent client management (179 lines)
-- `MediaService` - TMDB integration and movie metadata
-- `TraktService` - Trakt.tv integration for lists
+- `AuthService` - Accounts, JWT access/refresh flow, browser cookies, and TV-token transport
+- `SourceService` - Backend discovery orchestration, persisted candidates, and verification
+- `DownloadService` - WebTorrent, encrypted files, and retention
+- `MediaService` - Local catalog indexes through the catalog client
+- `services/media-catalog` - TMDB-backed metadata and catalog workers
+- `services/list-service` - Trakt lists, watchlists, and playback synchronization
+- `services/sources` - Supported Cardigann/Torznab providers and search planning
+- `backend/src/services/background-job/` - Queue workers and recurring schedules
 
 ### File Structure Patterns
 
@@ -178,32 +168,22 @@ afterEach(() => {
 - Entities: `backend/src/entities/[entity-name].entity.ts`
 - Repositories: `backend/src/repositories/[entity-name].repository.ts`
 
-## 🚀 **Priority Workflows (FOCUS HERE)**
+## 🚀 **Priority Workflows**
 
-### 1. **Implement Frontend JWT Authentication** (ONLY REMAINING TASK)
-
-Frontend needs to integrate with existing backend authentication system.
-
-**Missing Files to Create**:
-
-- `frontend/src/store/api/auth.ts` - API calls
-- `frontend/src/store/slices/auth.ts` - Auth state management
-- `frontend/src/app/pages/login/` - Login UI
-
-**Note**: Backend JWT system is complete - just need frontend integration.
+Follow the user task and current `ToDo.md`. The frontend already has email/password and QR login, session handling, and authenticated API integration. Reuse `frontend/src/features/auth/` and `frontend/src/store/slices/auth.ts` rather than creating a replacement authentication system.
 
 ## 🔍 **Before Starting Any Task**
 
 1. **Read AI-Specific Documentation**
    - **`docs/ai/context.md`** - Current project status for AI assistants
    - **`docs/ai/gotchas.md`** - Critical constraints that will break things
-   - **`docs/ai/file-mapping.md`** - Where to make different types of changes
-   - **`docs/ai/patterns.md`** - Code conventions and patterns
+   - **`docs/ai/development-guide.md`** - Where to make different types of changes
+   - **`docs/ai/development-guide.md`** - Code conventions and patterns
 
 2. **Verify Implementation Status**
    - Don't assume tasks marked as incomplete are actually incomplete
    - Check actual codebase implementation vs todo status
-   - **95% of backend is production-ready** - focus on the 2 missing pieces
+   - Verify current code owners and the remaining backlog instead of relying on historical estimates
 
 3. **Understand Dependencies**
    - Check if required infrastructure already exists (it probably does)
@@ -212,10 +192,10 @@ Frontend needs to integrate with existing backend authentication system.
 
 ## 🚨 **Common Pitfalls to Avoid**
 
-- **Don't rebuild existing infrastructure** - 95% of backend is production-ready
+- **Don't rebuild existing infrastructure** - Verify and extend the existing owner
 - **Don't trust todo status blindly** - Verify against actual implementation
 - **Don't create authentication from scratch** - Backend JWT system is complete
-- **Don't implement source aggregation** - YTS + THERARBG providers are fully functional
+- **Don't implement source aggregation** - the sources service and its indexer definitions are fully functional
 - **Don't assume WebTorrent needs setup** - DownloadService is complete and operational
 - **Don't install dependencies in workspace directories** - Will break npm workspaces
 - **Don't make real API calls in tests** - Use HTTP-VCR fixtures only
@@ -223,8 +203,8 @@ Frontend needs to integrate with existing backend authentication system.
 
 ## 💡 **Development Priorities**
 
-2. **Frontend JWT Integration** - Connect to existing backend auth
-3. **Documentation Updates** - Keep docs synchronized with implementation
+1. **Current task and backlog** - Verify the requested gap against implementation
+2. **Documentation Updates** - Keep docs synchronized with implementation
 
 ## 📁 **Quick File References**
 
@@ -236,17 +216,19 @@ Frontend needs to integrate with existing backend authentication system.
 - `backend/src/services/auth/auth.service.ts` - Authentication (complete)
 - `backend/src/routes/index.ts` - Route definitions
 
-### Missing Implementations
+### Frontend Implementation
 
-- Frontend JWT auth components (needs creation)
+- `frontend/src/features/auth/` - Existing authentication flows
+- `frontend/src/pages/` - Route-level screens
+- `frontend/src/features/player/` - Browser and Samsung playback support
 
 ## 🔒 **Security & Environment**
 
 - **Never hardcode secrets** - Use environment variables only
-- **Follow existing configuration.utils.ts pattern** - Interactive setup system exists
+- **Follow existing configuration services and helpers** - Browser and CLI setup exist
 - **VPN detection is active** - Backend detects VPN status
-- **Encryption is production-ready** - AES-256-GCM for sensitive fields
+- **Encryption is implemented** - Preserve keys and existing encrypted data
 
 ---
 
-**Remember**: This is a **complete, sophisticated streaming platform** that needs **only frontend JWT authentication integration**, not a ground-up rebuild. The backend including streaming is fully functional. Focus surgically on connecting the frontend to existing backend authentication.
+**Remember**: Verify existing code before proposing replacements. Use `docs/ai/context.md`, `docs/features.md`, and `ToDo.md` for the current feature boundaries and backlog.

@@ -1,0 +1,63 @@
+---
+id: movies-api
+name: Movies API (test)
+description: "Test indexer: a movie list API searched by IMDb id or title"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - http://indexer-mock/
+
+caps:
+  categorymappings:
+    - {id: Movies, cat: Movies, desc: "Movies"}
+
+  modes:
+    search: [q]
+    movie-search: [q, imdbid]
+
+search:
+  paths:
+    - path: api/v2/list_movies.json
+      response:
+        type: json
+
+  inputs:
+    limit: 20
+    page: 1
+    query_term: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+
+  rows:
+    selector: data.movies
+    attribute: torrents
+    multiple: true
+    missingAttributeEqualsNoResults: true
+
+  fields:
+    category:
+      text: Movies
+    _title:
+      selector: ..title_long
+    _quality:
+      selector: quality
+    _type:
+      selector: type
+    _codec:
+      selector: video_codec
+    title:
+      text: "{{ .Result._title }} {{ .Result._quality }} {{ .Result._type }} {{ .Result._codec }}"
+    infohash:
+      selector: hash
+    download:
+      selector: url
+    imdbid:
+      selector: ..imdb_code
+    date:
+      selector: date_uploaded_unix
+    size:
+      selector: size_bytes
+    seeders:
+      selector: seeds
+    leechers:
+      selector: peers
+# json

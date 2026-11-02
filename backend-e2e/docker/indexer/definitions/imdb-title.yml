@@ -1,0 +1,49 @@
+---
+id: imdb-title
+name: IMDb title page (test)
+description: "Test indexer: the newest releases of one IMDb title"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - http://indexer-mock/
+
+caps:
+  categorymappings:
+    - {id: Movies, cat: Movies, desc: "Movies"}
+    - {id: TV, cat: TV, desc: "TV"}
+
+  modes:
+    movie-search: [imdbid]
+    tv-search: [imdbid]
+
+search:
+  paths:
+    - path: "imdb-detail/{{ .Query.IMDBID }}/"
+      response:
+        type: json
+
+  inputs:
+    format: json
+
+  rows:
+    selector: trb_posts
+
+  fields:
+    category:
+      selector: category_str
+    title:
+      selector: name
+    infohash:
+      selector: info_hash
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    date:
+      selector: timestamp
+    imdbid:
+      selector: imdb
+# json

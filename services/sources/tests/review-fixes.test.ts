@@ -13,14 +13,15 @@ import { type Fetch, HttpClient } from '../src/http/http-client';
 import { createSourcesService } from '../src/service';
 import { VpnGuard } from '../src/vpn/vpn-guard';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
+import { idTitle, useProviders } from './providers';
 
 const manifest = [
   {
     id: 'external',
     name: 'External',
     version: '1',
-    kind: 'native',
-    native: 'eztv',
+    kind: 'torznab',
+    baseUrl: 'https://indexer.invalid/api',
     defaults: { enabled: true },
   },
 ];
@@ -41,6 +42,15 @@ const setupTest = async (
     values: { SOURCES_DISABLE_VPN_CHECK: 'true', SOURCES_HEDGE_MS: '1' },
   });
   const db = new Database(`${dir}/sources.sqlite`);
+  db.run('DELETE FROM providers');
+  useProviders(
+    db,
+    ['yts', 'therarbg', 'eztv'].map((id, i) => ({
+      id,
+      yaml: idTitle(id, `${id}.invalid`),
+      priority: i + 1,
+    }))
+  );
   return {
     ...made,
     client,
@@ -56,14 +66,14 @@ const setupTest = async (
 it('quarantines unreadable settings while preserving other providers and permits explicit recovery', async () => {
   const s = await setupTest(() => Response.json({ torrents: [], torrents_count: 0 }));
   try {
-    s.db.run("UPDATE providers SET settings='damaged ciphertext' WHERE id='yts'");
+    s.db.run("UPDATE providers SET settings='damaged ciphertext' WHERE id='test-yts'");
     const rows = await s.client.providers();
     expect(rows).toHaveLength(3);
-    expect(rows.find(p => p.id === 'yts')?.health).toMatchObject({
+    expect(rows.find(p => p.id === 'test-yts')?.health).toMatchObject({
       state: 'degraded',
       lastError: expect.stringContaining('unreadable'),
     });
-    expect(rows.find(p => p.id === 'therarbg')?.health.state).toBe('ok');
+    expect(rows.find(p => p.id === 'test-therarbg')?.health.state).toBe('ok');
     const items = [];
     for await (const item of s.client.search({
       media: { kind: 'movie', tmdbId: 1, imdbId: 'tt1234567', title: 'Example' },
@@ -71,13 +81,16 @@ it('quarantines unreadable settings while preserving other providers and permits
     }))
       items.push(item);
     expect(items.at(-1)?.type).toBe('summary');
-    await expect(s.client.updateProvider({ id: 'yts', enabled: true })).rejects.toMatchObject({
+    await expect(s.client.updateProvider({ id: 'test-yts', enabled: true })).rejects.toMatchObject({
       code: 'bad_request',
     });
-    const repaired = await s.client.updateProvider({ id: 'yts', settings: { dailyBudget: '10' } });
+    const repaired = await s.client.updateProvider({
+      id: 'test-yts',
+      settings: { dailyBudget: '10' },
+    });
     expect(repaired.enabled).toBe(false);
     expect(repaired.usage.dailyBudget).toBe(10);
-    expect((await s.client.updateProvider({ id: 'yts', enabled: true })).enabled).toBe(true);
+    expect((await s.client.updateProvider({ id: 'test-yts', enabled: true })).enabled).toBe(true);
   } finally {
     await s.close();
   }
@@ -86,74 +99,31 @@ it('quarantines unreadable settings while preserving other providers and permits
 it('rejects malformed enabled values through the contract without changing provider state', async () => {
   const s = await setupTest(() => Response.json({}));
   try {
-    await s.client.updateProvider({ id: 'yts', enabled: false });
+    await s.client.updateProvider({ id: 'test-yts', enabled: false });
     for (const enabled of ['false', 0, 1, null, {}]) {
-      await expect(s.client.updateProvider({ id: 'yts', enabled } as never)).rejects.toMatchObject({
+      await expect(
+        s.client.updateProvider({ id: 'test-yts', enabled } as never)
+      ).rejects.toMatchObject({
         code: 'bad_request',
       });
     }
-    expect((await s.client.providers()).find(p => p.id === 'yts')?.enabled).toBe(false);
+    expect((await s.client.providers()).find(p => p.id === 'test-yts')?.enabled).toBe(false);
   } finally {
     await s.close();
   }
 });
 
-it('preserves valid EZTV rows and normalizes a malformed date to the epoch', async () => {
-  const s = await setupTest(() =>
-    Response.json({
-      torrents_count: 2,
-      torrents: [
-        {
-          title: 'Example S01E01 1080p',
-          hash: 'a'.repeat(40),
-          seeds: 10,
-          season: '1',
-          episode: '1',
-          date_released_unix: 1,
-        },
-        {
-          title: 'Example S01E01 720p',
-          hash: 'b'.repeat(40),
-          seeds: 10,
-          season: '1',
-          episode: '1',
-          date_released_unix: 'invalid',
-        },
-      ],
-    })
-  );
-  try {
-    s.db.run("UPDATE providers SET enabled=0 WHERE id<>'eztv'");
-    const candidates = [];
-    for await (const item of s.client.search({
-      media: { kind: 'show', tmdbId: 1, imdbId: 'tt1234567', title: 'Example' },
-      season: 1,
-      episode: 1,
-      purpose: 'background',
-    }))
-      if (item.type === 'candidate') candidates.push(item.candidate);
-    expect(candidates.map(c => c.uploadDate)).toEqual([
-      '1970-01-01T00:00:01.000Z',
-      '1970-01-01T00:00:00.000Z',
-    ]);
-  } finally {
-    await s.close();
-  }
-});
-
-it('refuses internal manifests and manifest-configured EZTV endpoints before fetching them', async () => {
+it('refuses internal repository manifests before fetching them', async () => {
   const calls: string[] = [];
   const s = await setupTest(url => {
     calls.push(url.href);
-    return Response.json([{ ...manifest[0], settings: { baseUrl: 'http://127.0.0.1:9999' } }]);
+    return Response.json(manifest);
   });
   try {
     await expect(
       s.client.addRepository({ url: 'http://127.0.0.1/manifest' })
     ).rejects.toMatchObject({ code: 'bad_request' });
-    await s.client.addRepository({ url: 'https://repo.invalid/manifest' });
-    expect(await s.client.testProvider({ id: 'external' })).toMatchObject({ success: false });
-    expect(calls).toEqual(['https://repo.invalid/manifest']);
+    expect(calls).toEqual([]);
   } finally {
     await s.close();
   }
@@ -201,7 +171,7 @@ it('settles an aborted refresh before closing the database', async () => {
 it('cancels a paused search during shutdown without waiting for its consumer', async () => {
   const s = await setupTest(() => Response.json({ torrents: [], torrents_count: 0 }));
   try {
-    s.db.run("UPDATE providers SET enabled=0 WHERE id<>'eztv'");
+    s.db.run("UPDATE providers SET enabled=0 WHERE id<>'test-eztv'");
     const stream = s.client.search({
       media: { kind: 'show', tmdbId: 1, imdbId: 'tt1234567', title: 'Example' },
       season: 1,

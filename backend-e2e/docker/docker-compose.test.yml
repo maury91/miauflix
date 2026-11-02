@@ -50,8 +50,7 @@ services:
       - TRAKT_CLIENT_ID=${E2E_TRAKT_CLIENT_ID-${TRAKT_CLIENT_ID:-mock-trakt-client-id}}
       - TRAKT_CLIENT_SECRET=${E2E_TRAKT_CLIENT_SECRET-${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}}
       - TRAKT_REDIRECT_URI=${E2E_TRAKT_REDIRECT_URI-${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}}
-      - YTS_API_URL=http://yts-mock
-      - THE_RARBG_API_URL=http://therarbg-mock
+      - CARDIGANN_DEFINITION_SOURCES=http://indexer-mock/definitions
       - DISABLE_VPN_CHECK=true
       - DISABLE_DISCOVERY=true
       - STATIC_TRACKERS=udp://tracker-mock:6969/announce
@@ -79,11 +78,9 @@ services:
         condition: service_healthy
       tmdb-mock:
         condition: service_healthy
-      yts-mock:
+      indexer-mock:
         condition: service_healthy
       trakt-mock:
-        condition: service_healthy
-      therarbg-mock:
         condition: service_healthy
       tracker-mock:
         condition: service_healthy
@@ -108,6 +105,7 @@ services:
       - LIST_SERVICE_DATA_DIR=/app/data/list-service
       - SOURCES_PORT=3003
       - SOURCES_DATA_DIR=/app/data/sources
+      - SOURCES_PRELOAD_PROVIDERS=imdb-title@http://indexer-mock/definitions movies-api@http://indexer-mock/definitions
       - BACKDROP_FOCUS_MODEL_DIR=/app/models
       - BACKDROP_FOCUS_WASM_DIR=/app/wasm
       - DEBUG=*
@@ -218,20 +216,16 @@ services:
     networks:
       - test-network
 
-  # YTS Mock Service
-  yts-mock:
-    image: miauflix-e2e-yts-mock:${E2E_IMAGE_TAG:-local}
+  # Indexer mock: fictional release data plus the Cardigann definitions that query it
+  indexer-mock:
+    image: miauflix-e2e-indexer-mock:${E2E_IMAGE_TAG:-local}
     build:
-      context: .
-      dockerfile: mock/yts.Dockerfile
+      context: mock
+      dockerfile: tmdb.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
     environment:
       - DATA_DIR=/app/data
-      - API_BASE_URL=https://yts.mx/api/v2
-      - API_AUTH_HEADER_IS_BEARER=false
-      - API_KEY=none
-      - OWN_URL=http://yts-mock
-      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
+      - DEFINITIONS_DIR=/app/definitions
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s
@@ -239,31 +233,8 @@ services:
       retries: 30
       start_period: 10s
     volumes:
-      - ./yts/data:/app/data
-    networks:
-      - test-network
-
-  # TheRARBG Mock Service
-  therarbg-mock:
-    image: miauflix-e2e-therarbg-mock:${E2E_IMAGE_TAG:-local}
-    build:
-      context: .
-      dockerfile: mock/therarbg.Dockerfile
-    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    environment:
-      - DATA_DIR=/app/data
-      - API_BASE_URL=https://therarbg.to
-      - API_AUTH_HEADER_IS_BEARER=false
-      - API_KEY=none
-      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
-    healthcheck:
-      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
-      interval: 0.5s
-      timeout: 2s
-      retries: 30
-      start_period: 10s
-    volumes:
-      - ./therarbg/data:/app/data
+      - ./indexer/data:/app/data
+      - ./indexer/definitions:/app/definitions:ro
     networks:
       - test-network
 

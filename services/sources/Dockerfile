@@ -9,8 +9,6 @@ COPY backend/package.json backend/package.json
 COPY frontend/package.json frontend/package.json
 COPY backend-e2e/package.json backend-e2e/package.json
 COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
-COPY packages/yts-sanitizer/package.json packages/yts-sanitizer/package.json
-COPY packages/therarbg-sanitizer/package.json packages/therarbg-sanitizer/package.json
 COPY packages/contract/package.json packages/contract/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
@@ -31,6 +29,8 @@ RUN npm run build --workspace @miauflix/source-metadata-extractor && \
     npm run build --workspace @miauflix/service-configuration
 
 FROM runtime AS development
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY --from=runtime /workspace /workspace
 WORKDIR /workspace/services/sources
 CMD ["bun", "--watch", "src/index.ts"]
@@ -40,6 +40,9 @@ RUN npm prune --omit=dev --ignore-scripts
 
 FROM bun-runtime AS production
 WORKDIR /app
+# git downloads Jackett's definitions in one request instead of one per file
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY --from=production-dependencies /workspace/node_modules /app/node_modules
 COPY --from=runtime /workspace/packages/source-metadata-extractor /app/packages/source-metadata-extractor
 COPY --from=runtime /workspace/packages/contract /app/packages/contract

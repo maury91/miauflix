@@ -15,7 +15,7 @@ export function TrackStatus() {
       if (typeof this.requestQueueCount !== 'number') this.requestQueueCount = 0;
       this.requestQueueCount++;
 
-      // Get API name from constructor name (e.g., "TMDBApi" -> "tmdb", "YTSApi" -> "yts", "TheRARBGApi" -> "therarbg")
+      // Get API name from constructor name (e.g., "TMDBApi" -> "tmdb")
       const apiName = this.constructor.name.replace(/Api$/, '').toLowerCase();
 
       const metricName = `api.${apiName}.request`;

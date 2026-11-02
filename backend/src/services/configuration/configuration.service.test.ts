@@ -1150,10 +1150,10 @@ describe('ConfigurationService web configuration actions', () => {
 });
 
 describe('sources service configuration extraction', () => {
-  it('keeps provider endpoints and inherits the backend VPN opt-out only until explicitly configured', async () => {
+  it('keeps definition sources and inherits the backend VPN opt-out only until explicitly configured', async () => {
     const configuration = setupTest();
     await configuration.setValue('DISABLE_VPN_CHECK', 'true');
-    await configuration.setValue('THE_RARBG_API_URL' as never, 'http://provider.test');
+    await configuration.setValue('CARDIGANN_DEFINITION_SOURCES' as never, 'http://provider.test');
     const schema: ServiceConfigSchema = {
       groups: [
         {
@@ -1169,8 +1169,8 @@ describe('sources service configuration extraction', () => {
               defaultValue: 'false',
             },
             {
-              key: 'THE_RARBG_API_URL',
-              description: 'Provider endpoint',
+              key: 'CARDIGANN_DEFINITION_SOURCES',
+              description: 'Definition sources',
               required: false,
               inputType: 'text',
               defaultValue: 'http://default.test',
@@ -1182,7 +1182,7 @@ describe('sources service configuration extraction', () => {
     configuration.registerRemoteConfiguration('SOURCES', schema);
     expect(configuration.getServiceConfigSnapshot('SOURCES')).toEqual({
       SOURCES_DISABLE_VPN_CHECK: 'true',
-      THE_RARBG_API_URL: 'http://provider.test',
+      CARDIGANN_DEFINITION_SOURCES: 'http://provider.test',
     });
     await configuration.setValue('SOURCES_DISABLE_VPN_CHECK' as never, 'false');
     configuration.registerRemoteConfiguration('SOURCES', schema);
