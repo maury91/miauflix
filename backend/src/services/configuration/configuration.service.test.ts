@@ -23,6 +23,7 @@ afterEach(() => {
   // Dynamic schema registration updates a process-wide presentation registry.
   new ConfigurationService().registerRemoteConfiguration('CATALOG', { groups: [] });
   new ConfigurationService().registerRemoteConfiguration('LIST', { groups: [] });
+  new ConfigurationService().registerRemoteConfiguration('SOURCES', { groups: [] });
 });
 
 function setupLiveCatalog() {
@@ -1145,5 +1146,48 @@ describe('ConfigurationService web configuration actions', () => {
     expect(saveConfigFile).toHaveBeenCalledTimes(2);
     expect(clearConfiguration).toHaveBeenCalledTimes(1);
     expect(configuration.getDynamic(key as never)).toBeUndefined();
+  });
+});
+
+describe('sources service configuration extraction', () => {
+  it('keeps provider endpoints and inherits the backend VPN opt-out only until explicitly configured', async () => {
+    const configuration = setupTest();
+    await configuration.setValue('DISABLE_VPN_CHECK', 'true');
+    await configuration.setValue('THE_RARBG_API_URL' as never, 'http://provider.test');
+    const schema: ServiceConfigSchema = {
+      groups: [
+        {
+          id: 'SOURCES',
+          name: 'Sources',
+          description: 'Source search providers and VPN protection.',
+          variables: [
+            {
+              key: 'SOURCES_DISABLE_VPN_CHECK',
+              description: 'VPN check',
+              required: false,
+              inputType: 'boolean',
+              defaultValue: 'false',
+            },
+            {
+              key: 'THE_RARBG_API_URL',
+              description: 'Provider endpoint',
+              required: false,
+              inputType: 'text',
+              defaultValue: 'http://default.test',
+            },
+          ],
+        },
+      ],
+    };
+    configuration.registerRemoteConfiguration('SOURCES', schema);
+    expect(configuration.getServiceConfigSnapshot('SOURCES')).toEqual({
+      SOURCES_DISABLE_VPN_CHECK: 'true',
+      THE_RARBG_API_URL: 'http://provider.test',
+    });
+    await configuration.setValue('SOURCES_DISABLE_VPN_CHECK' as never, 'false');
+    configuration.registerRemoteConfiguration('SOURCES', schema);
+    expect(configuration.getServiceConfigSnapshot('SOURCES')?.SOURCES_DISABLE_VPN_CHECK).toBe(
+      'false'
+    );
   });
 });

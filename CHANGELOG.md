@@ -24,6 +24,9 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- TV episodes now find season packs and older episodes; source search runs in a separate service.
+- **Sources settings**: admins can enable, disable and reorder source providers, test them, set request budgets and add provider repositories from Settings → Sources.
+
 - The server no longer slows down after running for a few hours
 - A server that stops responding is restarted automatically
 - Fewer playback freezes on high-bitrate files

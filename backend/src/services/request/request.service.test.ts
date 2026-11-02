@@ -67,103 +67,12 @@ describe('RequestService response limits', () => {
     ).rejects.toMatchObject({ code: 'response_too_large' });
   });
 
-  it('bounds the original response when a FlareSolverr response is oversized', async () => {
-    const { config, fetchSpy, requestService } = setupTest();
-    const configGet = config.get as unknown as jest.Mock;
-    configGet.mockImplementation((key: string) => {
-      if (key === 'ENABLE_FLARESOLVERR') return true as never;
-      if (key === 'FLARESOLVERR_URL') return 'https://solver.example' as never;
-      return undefined as never;
-    });
-    fetchSpy
-      .mockResolvedValueOnce(new Response('012345678', { status: 403 }))
-      .mockResolvedValueOnce(
-        Response.json({
-          status: 'ok',
-          solution: {
-            status: 200,
-            headers: {},
-            response: '012345678',
-            cookies: [],
-          },
-        })
-      );
-
-    await expect(
-      requestService.request('https://example.com/file', { maxResponseBytes: 8 })
-    ).rejects.toMatchObject({ code: 'response_too_large' });
-  });
-
-  it('bounds the FlareSolverr envelope before parsing it', async () => {
-    const { config, fetchSpy, requestService } = setupTest();
-    const configGet = config.get as unknown as jest.Mock;
-    configGet.mockImplementation((key: string) => {
-      if (key === 'ENABLE_FLARESOLVERR') return true as never;
-      if (key === 'FLARESOLVERR_URL') return 'https://solver.example' as never;
-      return undefined as never;
-    });
-    fetchSpy.mockResolvedValueOnce(new Response('', { status: 403 })).mockResolvedValueOnce(
-      Response.json({
-        status: 'ok',
-        message: 'x'.repeat(70_000),
-        solution: {
-          status: 200,
-          headers: {},
-          response: 'ok',
-          cookies: [],
-        },
-      })
-    );
-
-    await expect(
-      requestService.request('https://example.com/file', { maxResponseBytes: 8 })
-    ).rejects.toMatchObject({ code: 'response_too_large' });
-  });
-
-  it('allows envelope overhead when the solved response is within its limit', async () => {
-    const { config, fetchSpy, requestService } = setupTest();
-    const configGet = config.get as unknown as jest.Mock;
-    configGet.mockImplementation((key: string) => {
-      if (key === 'ENABLE_FLARESOLVERR') return true as never;
-      if (key === 'FLARESOLVERR_URL') return 'https://solver.example' as never;
-      return undefined as never;
-    });
-    const solvedResponse = '"'.repeat(32);
-    fetchSpy.mockResolvedValueOnce(new Response('', { status: 403 })).mockResolvedValueOnce(
-      Response.json({
-        status: 'ok',
-        solution: {
-          status: 200,
-          headers: {},
-          response: solvedResponse,
-          cookies: [],
-        },
-      })
-    );
-
-    const result = await requestService.request('https://example.com/file', {
-      maxResponseBytes: solvedResponse.length,
-    });
-
-    expect(result.body).toBe(solvedResponse);
-  });
-
-  it('clears the request timeout when FlareSolverr returns early', async () => {
-    const { config, fetchSpy, requestService } = setupTest();
-    const configGet = config.get as unknown as jest.Mock;
-    configGet.mockImplementation((key: string) => {
-      if (key === 'ENABLE_FLARESOLVERR') return true as never;
-      if (key === 'FLARESOLVERR_URL') return 'https://solver.example' as never;
-      return undefined as never;
-    });
-    fetchSpy.mockResolvedValueOnce(new Response('', { status: 403 })).mockResolvedValueOnce(
-      Response.json({
-        status: 'ok',
-        solution: { status: 200, headers: {}, response: '{}', cookies: [] },
-      })
-    );
-
-    await requestService.request('https://example.com/file', { timeout: 5000 });
+  it('returns a forbidden response without contacting another host', async () => {
+    const { fetchSpy, requestService } = setupTest();
+    fetchSpy.mockResolvedValue(new Response('blocked', { status: 403 }));
+    const result = await requestService.request('https://example.com/file', { timeout: 5000 });
+    expect(result.status).toBe(403);
+    expect(fetchSpy).toHaveBeenCalledTimes(1);
     expect(jest.getTimerCount()).toBe(0);
   });
 });

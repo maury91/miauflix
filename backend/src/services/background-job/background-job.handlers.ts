@@ -129,7 +129,7 @@ export function registerBackgroundJobHandlers({
     concurrency: 5,
     leaseMs: 60_000,
     run: async ({ sourceId }) => {
-      if (!(await sourceService.canRunSourceJobs())) return;
+      if (!(await sourceService.canRunPeerJobs())) return;
       if (sourceId) await sourceService.processSourceStats(sourceId);
       else await sourceService.seedSourceStatsJobs();
     },
@@ -138,7 +138,7 @@ export function registerBackgroundJobHandlers({
     concurrency: 1,
     leaseMs: 5 * 60 * 1000,
     run: async ({ sourceId, movieId }) => {
-      if (!(await sourceService.canRunSourceJobs())) return;
+      if (!(await sourceService.canRunPeerJobs())) return;
       if (movieId) await sourceService.verifyMovieSources(movieId);
       else if (sourceId) await sourceService.verifySource(sourceId);
     },
@@ -182,6 +182,8 @@ export function registerBackgroundJobHandlers({
           episodeId: episode.id,
           showMediaId: show.local.mediaId,
           showTitle: show.local.name,
+          showTmdbId: show.local.mediaId,
+          showYear: show.local.firstAirDate ? Number(show.local.firstAirDate.slice(0, 4)) : null,
           showImdbId: show.local.imdbId ?? null,
           seasonNumber: playable.seasonNumber,
           episodeNumber: playable.episodeNumber,
@@ -214,6 +216,8 @@ export function registerBackgroundJobHandlers({
       const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
         {
           id: media.local.id,
+          mediaId: media.local.mediaId,
+          releaseDate: media.local.releaseDate,
           imdbId: media.local.imdbId,
           title: media.local.title,
           contentDirectoriesSearched: media.local.contentDirectoriesSearched,
@@ -280,6 +284,7 @@ export function registerBackgroundJobHandlers({
     concurrency: 1,
     leaseMs: 10 * 60 * 1000,
     run: async ({ showMediaId }) => {
+      if (!(await sourceService.canRunPeerJobs())) return;
       const owners = await listService.getLocalTVWatchlistOwners(showMediaId);
       if (!owners.length) return;
       const show = await mediaService.getTVShowByMediaId(showMediaId);
@@ -344,6 +349,8 @@ export function registerBackgroundJobHandlers({
           episodeId: episode.id,
           showMediaId,
           showTitle: show.local.name,
+          showTmdbId: show.local.mediaId,
+          showYear: show.local.firstAirDate ? Number(show.local.firstAirDate.slice(0, 4)) : null,
           showImdbId: show.local.imdbId ?? null,
           seasonNumber: episode.seasonNumber,
           episodeNumber: episode.episodeNumber,
@@ -363,7 +370,11 @@ export function registerBackgroundJobHandlers({
         const completeMatch = usable.find((_, index) => completeFlags[index]);
         if (completeMatch) {
           // Renew the claim so storage cleanup does not reclaim the completed file.
-          await downloadService.predownload((await playbackTargets.forEpisode(completeMatch))!, {
+          // Layout resolution may itself fetch metadata from peers.
+          if (!(await sourceService.canRunPeerJobs())) return;
+          const target = (await playbackTargets.forEpisode(completeMatch))!;
+          if (!(await sourceService.canRunPeerJobs())) return;
+          await downloadService.predownload(target, {
             kind: 'watchlist',
             ownerKey: `watchlist:tv:${showMediaId}`,
           });
@@ -373,7 +384,10 @@ export function registerBackgroundJobHandlers({
         const selected = usable[0];
         try {
           // Each scan renews the claim; it lapses once the show leaves every watchlist.
-          await downloadService.predownload((await playbackTargets.forEpisode(selected))!, {
+          if (!(await sourceService.canRunPeerJobs())) return;
+          const target = (await playbackTargets.forEpisode(selected))!;
+          if (!(await sourceService.canRunPeerJobs())) return;
+          await downloadService.predownload(target, {
             kind: 'watchlist',
             ownerKey: `watchlist:tv:${showMediaId}`,
           });

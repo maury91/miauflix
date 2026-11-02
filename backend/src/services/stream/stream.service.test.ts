@@ -15,7 +15,7 @@ import { StreamService } from './stream.service';
 
 describe('StreamService immediate source readiness', () => {
   const setupTest = () => {
-    const movie = createMockMovie();
+    const movie = createMockMovie({ id: 7, mediaId: 42, releaseDate: '2020-05-01' });
     const pending = createMockContentSource({ file: undefined });
     const ready = createMockContentSource({
       ...pending,
@@ -62,6 +62,10 @@ describe('StreamService immediate source readiness', () => {
     const { movie, pending, ready, service, sourceService } = setupTest();
 
     await expect(service.getBestSourceForStreaming(movie.id, 'auto')).resolves.toEqual(ready);
+    expect(sourceService.getSourcesForMovieWithOnDemandSearch).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 7, mediaId: 42, releaseDate: '2020-05-01' }),
+      3_000
+    );
     expect(sourceService.processSourceMetadata).toHaveBeenCalledWith(pending.id);
   });
 });

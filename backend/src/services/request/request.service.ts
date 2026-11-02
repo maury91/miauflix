@@ -1,18 +1,7 @@
-import { logger } from '@logger';
-
 import { RequestError } from '@errors/request.errors';
 import type { ConfigService } from '@mytypes/configuration';
-import type {
-  CookiePair,
-  FlareSolverrGetRequest,
-  FlareSolverrPostRequest,
-  FlareSolverrRequest,
-  FlareSolverrResponse,
-} from '@mytypes/flaresolverr.types';
 import type { StatsService } from '@services/stats/stats.service';
-import { isHtmlWrappedJson, unwrapJsonFromHtml } from '@utils/html-unwrapper.util';
-import { bodyInitToString, normalizeHeaders, parseResponseBody } from '@utils/http.util';
-import { tryParseJSON } from '@utils/json.util';
+import { normalizeHeaders, parseResponseBody } from '@utils/http.util';
 import { buildUrlWithQuery, extractDomain } from '@utils/url.util';
 
 import { CookieJar } from './cookie-jar';
@@ -99,257 +88,19 @@ async function readResponseWithLimit<T>(
   return text;
 }
 
-const FLARESOLVERR_JSON_EXPANSION_FACTOR = 6;
-const FLARESOLVERR_ENVELOPE_OVERHEAD_BYTES = 64 * 1024;
-
-function getFlareSolverrEnvelopeLimit(maxResponseBytes: number): number {
-  return Math.min(
-    Number.MAX_SAFE_INTEGER,
-    maxResponseBytes * FLARESOLVERR_JSON_EXPANSION_FACTOR + FLARESOLVERR_ENVELOPE_OVERHEAD_BYTES
-  );
-}
-
-/**
- * Service for making HTTP requests with cookie management, user agent rotation,
- * and FlareSolverr integration for bypassing Cloudflare protection.
- */
+/** HTTP requests for non-source backend integrations. */
 export class RequestService {
   private readonly cookieJar: CookieJar;
   private readonly userAgentByDomain: Map<string, string>;
-  private readonly config: ConfigService;
 
   constructor(
     private readonly statsService: StatsService,
-    config: ConfigService
+    _config: ConfigService
   ) {
     this.cookieJar = new CookieJar();
     this.userAgentByDomain = new Map<string, string>();
-    this.config = config;
   }
 
-  private get isFlareSolverrEnabled(): boolean {
-    return this.config.get('ENABLE_FLARESOLVERR') === true && !!this.config.get('FLARESOLVERR_URL');
-  }
-
-  private get flareSolverrUrl(): string {
-    return this.config.get('FLARESOLVERR_URL') ?? '';
-  }
-
-  /**
-   * Build FlareSolverr GET request payload
-   */
-  private buildFlareSolverrGetRequest(url: string, cookies: CookiePair[]): FlareSolverrGetRequest {
-    const payload: FlareSolverrGetRequest = {
-      cmd: 'request.get',
-      url,
-    };
-
-    if (cookies.length > 0) {
-      payload.cookies = cookies;
-    }
-
-    return payload;
-  }
-
-  /**
-   * Build FlareSolverr POST request payload
-   */
-  private buildFlareSolverrPostRequest(
-    url: string,
-    postData: string,
-    cookies: CookiePair[]
-  ): FlareSolverrPostRequest {
-    const payload: FlareSolverrPostRequest = {
-      cmd: 'request.post',
-      url,
-      postData,
-    };
-
-    if (cookies.length > 0) {
-      payload.cookies = cookies;
-    }
-
-    return payload;
-  }
-
-  /**
-   * Make a request through FlareSolverr
-   */
-  private async requestViaFlareSolverr<T>(
-    url: string,
-    options: RequestInit,
-    asBuffer: false,
-    maxResponseBytes?: number
-  ): Promise<RequestServiceResponse<T>>;
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  private async requestViaFlareSolverr<T = ArrayBuffer>(
-    url: string,
-    options: RequestInit,
-    asBuffer: true,
-    maxResponseBytes?: number
-  ): Promise<RequestServiceResponse<ArrayBuffer>>;
-  private async requestViaFlareSolverr<T>(
-    url: string,
-    options: RequestInit = {},
-    asBuffer = false,
-    maxResponseBytes?: number
-  ): Promise<RequestServiceResponse<ArrayBuffer | T>> {
-    const flaresolverrUrl = this.flareSolverrUrl;
-    if (!flaresolverrUrl) {
-      throw new RequestError('FlareSolverr URL is not configured', 'not_configured');
-    }
-
-    const domain = extractDomain(url);
-    const apiUrl = `${flaresolverrUrl}/v1`;
-    const method = options.method?.toUpperCase() || 'GET';
-
-    // Get current cookies to pass to FlareSolverr
-    const cookies = this.cookieJar.getCookiePairs(domain);
-
-    // Build request payload
-    const payload: FlareSolverrRequest =
-      method === 'POST'
-        ? this.buildFlareSolverrPostRequest(url, bodyInitToString(options.body), cookies)
-        : this.buildFlareSolverrGetRequest(url, cookies);
-
-    try {
-      logger.debug('FlareSolverr', `Requesting ${url} via FlareSolverr at ${apiUrl}`);
-
-      const response = await fetch(apiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(payload),
-        signal: options.signal,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text().catch(() => 'Unable to read error response');
-        logger.error(
-          'FlareSolverr',
-          `API error response: ${response.status} ${response.statusText} - ${errorText}`
-        );
-        throw new RequestError(
-          `FlareSolverr API error: ${response.status} ${response.statusText}`,
-          'api_error'
-        );
-      }
-
-      const rawData =
-        maxResponseBytes === undefined
-          ? await response.json()
-          : await readResponseWithLimit<FlareSolverrResponse>(
-              response,
-              getFlareSolverrEnvelopeLimit(maxResponseBytes),
-              false
-            );
-      const data = (
-        typeof rawData === 'string' ? JSON.parse(rawData) : rawData
-      ) as FlareSolverrResponse;
-
-      logger.debug(
-        'FlareSolverr',
-        `Response status: ${data.status}, message: ${data.message || 'none'}`
-      );
-
-      if (data.status !== 'ok') {
-        logger.error(
-          'FlareSolverr',
-          `FlareSolverr returned error status: ${data.status}, message: ${data.message || 'Unknown error'}`
-        );
-        throw new RequestError(
-          `FlareSolverr error: ${data.message || 'Unknown error'}`,
-          'solver_error'
-        );
-      }
-
-      if (!data.solution) {
-        logger.error('FlareSolverr', 'FlareSolverr returned no solution in response');
-        throw new RequestError('FlareSolverr returned no solution', 'no_solution');
-      }
-
-      const solution = data.solution;
-
-      // Store cookies from FlareSolverr solution in cookie jar for reuse in normal requests
-      if (solution.cookies && solution.cookies.length > 0) {
-        const cookieStrings = solution.cookies.map(cookie => `${cookie.name}=${cookie.value}`);
-        this.cookieJar.setCookies(domain, cookieStrings);
-        logger.debug(
-          'FlareSolverr',
-          `Stored ${solution.cookies.length} cookies in cookie jar for ${domain}`
-        );
-      }
-
-      // Store user agent from FlareSolverr solution for reuse in normal requests
-      if (solution.userAgent) {
-        this.userAgentByDomain.set(domain, solution.userAgent);
-        logger.debug('FlareSolverr', `Stored user agent for ${domain}`);
-      }
-
-      // Unwrap JSON from HTML if needed
-      let responseBody = solution.response;
-      if (isHtmlWrappedJson(responseBody)) {
-        logger.debug('FlareSolverr', 'Detected HTML-wrapped JSON, unwrapping...');
-        responseBody = unwrapJsonFromHtml(responseBody);
-      }
-
-      if (
-        maxResponseBytes !== undefined &&
-        new TextEncoder().encode(responseBody).byteLength > maxResponseBytes
-      ) {
-        throw new RequestError(
-          `Response exceeds ${maxResponseBytes} byte limit`,
-          'response_too_large'
-        );
-      }
-
-      solution.headers = normalizeHeaders(solution.headers);
-
-      const result: RequestServiceResponse<ArrayBuffer | T> = {
-        body: responseBody,
-        headers: solution.headers,
-        ok: solution.status >= 200 && solution.status < 300,
-        status: solution.status,
-        statusText: solution.status >= 200 && solution.status < 300 ? 'OK' : 'Error',
-      };
-
-      if (asBuffer) {
-        result.body = new TextEncoder().encode(responseBody).buffer;
-      } else {
-        const parsedBody = tryParseJSON<T>(responseBody);
-        if (parsedBody) {
-          result.body = parsedBody;
-          // Set content-type if not present
-          if (!solution.headers['content-type']) {
-            solution.headers['content-type'] = 'application/json';
-          }
-        } else if (!solution.headers['content-type']) {
-          solution.headers['content-type'] = 'text/html';
-        }
-      }
-
-      logger.info(
-        'FlareSolverr',
-        `Successfully fetched ${url} via FlareSolverr (status: ${solution.status}, response length: ${solution.response.length})`
-      );
-
-      return result;
-    } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : String(error);
-      const errorStack = error instanceof Error ? error.stack : undefined;
-      logger.error(
-        'FlareSolverr',
-        `Failed to fetch ${url} via FlareSolverr: ${errorMessage}`,
-        errorStack
-      );
-      throw error;
-    }
-  }
-
-  /**
-   * Make an HTTP request with cookie management, user agent rotation, and FlareSolverr support
-   */
   async request(
     rawUrl: URL | string,
     options?: RequestOptions<true>
@@ -390,10 +141,6 @@ export class RequestService {
       }
     }
 
-    // Check if we have FlareSolverr solution cookie for this domain
-    const hasFlareSolverrCookies =
-      this.isFlareSolverrEnabled && this.cookieJar.hasCookie(domain, 'cf_clearance');
-
     try {
       // Get stored cookies and userAgent for this domain
       const cookieHeader = this.cookieJar.getCookieHeader(domain);
@@ -417,80 +164,6 @@ export class RequestService {
         signal,
         headers: requestHeaders,
       });
-
-      // If we get a 403 and FlareSolverr is enabled, retry through FlareSolverr
-      if (response.status === 403 && this.isFlareSolverrEnabled) {
-        logger.warn('FlareSolverr', `Received 403 for ${urlString}, retrying through FlareSolverr`);
-        // Track FlareSolverr usage
-        this.statsService.event('request.flaresolverr');
-        try {
-          // FlareSolverr will handle the request and return solved cookies/user agent
-          const flareResponse = options?.asBuffer
-            ? await this.requestViaFlareSolverr(
-                urlString,
-                {
-                  ...fetchOptions,
-                  signal,
-                  headers: requestHeaders,
-                },
-                true,
-                maxResponseBytes
-              )
-            : await this.requestViaFlareSolverr<T>(
-                urlString,
-                {
-                  ...fetchOptions,
-                  signal,
-                  headers: requestHeaders,
-                },
-                false,
-                maxResponseBytes
-              );
-          logger.info(
-            'FlareSolverr',
-            `FlareSolverr retry successful for ${urlString} (status: ${flareResponse.status})`
-          );
-          // Note: This is NOT a "solved" request - we had to call FlareSolverr again
-          this.statsService.metricEnd(successMetricId);
-          this.statsService.metricEnd(requestMetricId);
-          this.statsService.metricCancel(errorMetricId);
-          return flareResponse;
-        } catch (flareError) {
-          const errorMessage =
-            flareError instanceof Error ? flareError.message : String(flareError);
-          const errorStack = flareError instanceof Error ? flareError.stack : undefined;
-          logger.error(
-            'FlareSolverr',
-            `FlareSolverr retry failed for ${urlString}: ${errorMessage}`,
-            errorStack
-          );
-          // FlareSolverr failed, so this is an error
-          this.statsService.metricEnd(errorMetricId);
-          this.statsService.metricEnd(requestMetricId);
-          this.statsService.metricCancel(successMetricId);
-          if (flareError instanceof RequestError && flareError.code === 'response_too_large') {
-            throw flareError;
-          }
-          // Return the original 403 response if FlareSolverr fails
-          return {
-            body: maxResponseBytes
-              ? await readResponseWithLimit<T>(
-                  response,
-                  maxResponseBytes,
-                  options?.asBuffer === true
-                )
-              : await parseResponseBody<T>(response),
-            headers: normalizeHeaders(response.headers),
-            ok: response.ok,
-            status: response.status,
-            statusText: response.statusText,
-          };
-        }
-      }
-
-      if (hasFlareSolverrCookies) {
-        this.statsService.event('request.solved');
-      }
 
       // Obtain the cookies from the response
       const setCookieHeaders = response.headers.getSetCookie();

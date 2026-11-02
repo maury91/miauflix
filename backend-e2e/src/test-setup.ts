@@ -19,6 +19,7 @@ const BACKEND_URL = ensureSlash(
 
 // Make backend URL available globally
 global.BACKEND_URL = BACKEND_URL;
+global.E2E_COMPOSE_PROJECT = process.env.E2E_COMPOSE_PROJECT || 'miauflix-tests';
 
 // Import custom matchers
 import { clearFailedRequests } from './utils/failed-requests-collector';
@@ -37,6 +38,7 @@ beforeAll(() => {
 
 declare global {
   var BACKEND_URL: string;
+  var E2E_COMPOSE_PROJECT: string;
 
   namespace jest {
     interface Matchers<R> {

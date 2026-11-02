@@ -1,5 +1,5 @@
-import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import type { ContentSource } from '@entities/content-source.entity';
+import type { SourceMetadata } from '@services/sources/source-candidate';
 import { calculateStreamingScore } from '@utils/streaming-score.util';
 
 /**
@@ -20,7 +20,7 @@ export const normalizeInfoHash = (hash: string): string => hash.trim().toLowerCa
  */
 export const providerSourceToEntity = (
   providerSource: SourceMetadata,
-  providerName: string
+  providerName?: string
 ): ProviderSourceRow => {
   const row = {
     hash: providerSource.hash,
@@ -31,8 +31,8 @@ export const providerSourceToEntity = (
     broadcasters: providerSource.broadcasters,
     watchers: providerSource.watchers,
     sourceUploadedAt: providerSource.uploadDate,
-    url: providerSource.url,
-    source: providerName,
+    url: providerSource.fileRef ?? null,
+    source: providerSource.provider ?? providerName ?? 'unknown',
     sourceType: providerSource.source,
     nextStatsCheckAt: new Date(),
   };
@@ -44,7 +44,7 @@ export const providerSourceToEntity = (
  */
 export const providerSourcesToEntities = (
   sources: SourceMetadata[],
-  providerName: string
+  providerName?: string
 ): ProviderSourceRow[] => {
   return sources.map(source => providerSourceToEntity(source, providerName));
 };

@@ -470,6 +470,17 @@ split possible.
 
 ### Sources
 
+**Current extraction: search only.** `services/sources` is a standalone Bun service on port 3003. It owns source-provider website traffic, metadata-cache websites and FlareSolverr. The
+`sources.search` stream returns candidates and a final coverage/retry summary;
+`sources.torrentFile` resolves an encrypted file reference or a hash to metadata bytes. The
+backend persists `content_source`, `movie_source` and `episode_source` rows, matches episode
+files, verifies sources, scrapes tracker stats and handles WebTorrent, storage and playback.
+Movie summaries record `sourceSearchComplete` and `nextSourceSearchAt`; an append-only data
+migration resets old search coverage without deleting source associations.
+
+**Future candidate ownership:** the table below describes a further migration, which is not
+part of the search extraction.
+
 | Owned by the sources service                                                               | Kept by the backend                                                                      |
 | ------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------- |
 | Every candidate with its provider data, metadata, verification state, seeders and leechers | `sourceId`, media ref, quality, `availability` (`available` / `pending` / `unavailable`) |
@@ -503,7 +514,9 @@ is the same in both cases.
    status stream and the 15 s polling are gone.
 4. Extract **streaming** behind the `streaming` contract while still mounted in-process. That
    validates the boundary before any network is involved. Then add the `X-Accel` path.
-5. Extract **sources** the same way, using `peers.use(streaming)`.
+5. ✅ Extract **source search** into `services/sources` over the `sources` contract. Provider
+   HTTP traffic and website metadata retrieval run there; existing backend source rows remain.
+   Full candidate ownership from §10 and `peers.use(streaming)` remain pending.
 6. ✅ Replace the Zod schemas in `@miauflix/service-contracts` with contract definitions and
    remove `RemoteServiceManager` (the config store moved to `@miauflix/service-configuration`).
 7. Move the backend to Bun, with streaming running as a separate Node process. Move streaming
@@ -516,7 +529,7 @@ used from 14 files, plus `StorageService` reads (inventory, per-source storage, 
 `ContentSource` entity (including the `.torrent` file buffer), which cannot cross the wire as is,
 and the storage tables cascade from `content_source`.
 
-Steps 4 and 5 both move data. `DownloadService` reads and writes `StorageService`
+The streaming extraction and future full source-ownership extraction both move data. `DownloadService` reads and writes `StorageService`
 and `ContentSource` rows. Following §10, the storage rows, claims and source details move into
 each service's own database, and the backend tables shrink to the mirrored columns. Production
 data moves with **data migrations**: the service imports the rows on its first start, then a
