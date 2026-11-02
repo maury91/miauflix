@@ -3,7 +3,7 @@ import type { Database } from 'bun:sqlite';
 import type { ProviderPage } from '../providers/types';
 export interface ProviderRow {
   id: string;
-  kind: 'native' | 'cardigann' | 'torznab' | 'http';
+  kind: 'cardigann' | 'torznab' | 'http';
   repository_id: string | null;
   name: string;
   version: string | null;
@@ -66,6 +66,13 @@ export class Store {
   repository(id: string): RepositoryRow | undefined {
     return this.repositories().find(r => r.id === id);
   }
+  ensureLocalRepository(): void {
+    this.db
+      .query(
+        "INSERT OR IGNORE INTO repositories (id,url,name,built_in) VALUES ('local:user','local:user','My providers',0)"
+      )
+      .run();
+  }
   insertRepository(id: string, url: string, name: string | null): void {
     this.db
       .query('INSERT INTO repositories (id,url,name,built_in) VALUES (?,?,?,0)')
@@ -87,7 +94,7 @@ export class Store {
     kind: ProviderRow['kind'];
     repositoryId: string;
     name: string;
-    version: string;
+    version: string | null;
     definition: unknown;
     enabled: boolean;
     priority: number;

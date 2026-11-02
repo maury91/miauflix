@@ -147,7 +147,7 @@ describe('realtime middleware', () => {
         media: { kind: 'movie', mediaId: 4 },
         status,
         sourceId: 12,
-        source: 'YTS',
+        source: 'indexer-a',
         quality: '1080p',
         focusSequence,
       }) as never;
@@ -294,7 +294,7 @@ describe('realtime middleware', () => {
       media: { kind: 'movie', mediaId: 4 },
       status: 'source_found',
       sourceId: 12,
-      source: 'YTS',
+      source: 'indexer-a',
       quality: '1080p',
     } as never);
     expect(store.getState().realtime.ready).toBe(true);
@@ -320,7 +320,7 @@ describe('realtime middleware', () => {
       media: { kind: 'movie', mediaId: 9 },
       status: 'source_found',
       sourceId: 13,
-      source: 'YTS',
+      source: 'indexer-a',
       quality: '720p',
     } as never);
     expect(store.getState().realtime.preparationByMediaId[9]).toBeUndefined();

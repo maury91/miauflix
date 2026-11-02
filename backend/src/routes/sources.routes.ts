@@ -15,6 +15,33 @@ const updateSchema = z.object({
   settings: z.record(z.string(), z.union([z.string().max(2000), z.boolean()])).optional(),
 });
 const orderSchema = z.object({ ids: z.array(z.string().max(100)).max(500) });
+const cardigannSchema = z.object({
+  id: z.string().regex(/^[a-z0-9][a-z0-9._-]{0,63}$/),
+  source: z.string().max(300).optional(),
+});
+const flag = z
+  .enum(['true', 'false'])
+  .transform(value => value === 'true')
+  .optional();
+const catalogSchema = z.object({
+  query: z.string().max(100).optional(),
+  source: z.string().max(300).optional(),
+  imdb: flag,
+  tmdb: flag,
+  tvdb: flag,
+  movies: flag,
+  tv: flag,
+  anime: flag,
+  publicOnly: flag,
+  supportedOnly: flag,
+  offset: z.coerce.number().int().min(0).default(0),
+  limit: z.coerce.number().int().min(0).max(100).default(40),
+});
+const torznabSchema = z.object({
+  name: z.string().trim().min(1).max(100),
+  baseUrl: z.string().url().max(2000),
+  apiKey: z.string().max(500).optional(),
+});
 const repositorySchema = z.object({ url: z.string().url().max(2000) });
 
 /** Maps the service's typed errors to HTTP; anything else is left to the global handler. */
@@ -63,6 +90,64 @@ export const createSourcesRoutes = (deps: Deps) => {
         }
       }
     )
+    .get('/definitions', rateLimitGuard(30), admin, zValidator('query', catalogSchema), async c => {
+      try {
+        return c.json(await sources.cardigannDefinitions(c.req.valid('query')));
+      } catch (error) {
+        const mapped = failure(error);
+        if (!mapped) throw error;
+        return c.json({ error: mapped.message }, mapped.status);
+      }
+    })
+    .post('/definitions/sync', rateLimitGuard(5), admin, async c => {
+      try {
+        return c.json(await sources.syncCardigannDefinitions());
+      } catch (error) {
+        const mapped = failure(error);
+        if (!mapped) throw error;
+        return c.json({ error: mapped.message }, mapped.status);
+      }
+    })
+    .post(
+      '/providers/cardigann',
+      rateLimitGuard(3),
+      admin,
+      zValidator('json', cardigannSchema),
+      async c => {
+        try {
+          return c.json(await sources.addCardigannProvider(c.req.valid('json')), 201);
+        } catch (error) {
+          const mapped = failure(error);
+          if (!mapped) throw error;
+          return c.json({ error: mapped.message }, mapped.status);
+        }
+      }
+    )
+    .post(
+      '/providers/torznab',
+      rateLimitGuard(3),
+      admin,
+      zValidator('json', torznabSchema),
+      async c => {
+        try {
+          return c.json(await sources.addTorznabProvider(c.req.valid('json')), 201);
+        } catch (error) {
+          const mapped = failure(error);
+          if (!mapped) throw error;
+          return c.json({ error: mapped.message }, mapped.status);
+        }
+      }
+    )
+    .delete('/providers/:id', rateLimitGuard(5), admin, async c => {
+      try {
+        await sources.removeProvider(c.req.param('id'));
+        return c.body(null, 204);
+      } catch (error) {
+        const mapped = failure(error);
+        if (!mapped) throw error;
+        return c.json({ error: mapped.message }, mapped.status);
+      }
+    })
     .post('/providers/:id/test', rateLimitGuard(5), admin, async c => {
       try {
         return c.json(await sources.testProvider(c.req.param('id')));

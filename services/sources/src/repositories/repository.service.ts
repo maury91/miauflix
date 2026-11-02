@@ -4,7 +4,7 @@ import type { RepositoryView } from '@miauflix/service-contracts';
 
 import type { RepositoryRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';
-import { AdminError } from '../providers/admin';
+import { AdminError, LOCAL_REPOSITORY } from '../providers/admin';
 import type { ProviderDefinition } from '../providers/registry';
 import { type ManifestEntry, manifestSchema } from './manifest';
 
@@ -12,7 +12,6 @@ export const BUILTIN_REPOSITORY = 'builtin:miauflix';
 const MAX_MANIFEST_BYTES = 256 * 1024;
 const REFRESH_AFTER_MS = 24 * 3600_000;
 const definitionOf = (entry: ManifestEntry): ProviderDefinition => ({
-  ...(entry.native ? { native: entry.native } : {}),
   ...(entry.cardigann ? { cardigann: entry.cardigann } : {}),
   ...(entry.baseUrl ? { baseUrl: entry.baseUrl } : {}),
   defaults: {
@@ -41,7 +40,10 @@ export class RepositoryService {
     };
   }
   list(): RepositoryView[] {
-    return this.store.repositories().map(r => this.view(r));
+    return this.store
+      .repositories()
+      .map(r => this.view(r))
+      .filter(r => r.id !== LOCAL_REPOSITORY || r.providerCount > 0);
   }
   private async fetchManifest(url: string, signal: AbortSignal): Promise<ManifestEntry[]> {
     let response: Response;
@@ -146,7 +148,7 @@ export class RepositoryService {
   async refresh(id: string, signal: AbortSignal): Promise<RepositoryView> {
     const row = this.store.repository(id);
     if (!row) throw new AdminError('not_found', `Unknown repository ${id}`);
-    if (row.built_in) return this.view(row);
+    if (row.built_in || row.id === LOCAL_REPOSITORY) return this.view(row);
     try {
       const entries = await this.fetchManifest(row.url, signal);
       signal.throwIfAborted();
@@ -165,7 +167,11 @@ export class RepositoryService {
   /** Refresh every external repository that has not been fetched for a day. */
   async refreshStale(signal: AbortSignal): Promise<void> {
     for (const row of this.store.repositories())
-      if (!row.built_in && (row.last_fetched_at ?? 0) + REFRESH_AFTER_MS <= this.now())
+      if (
+        !row.built_in &&
+        row.id !== LOCAL_REPOSITORY &&
+        (row.last_fetched_at ?? 0) + REFRESH_AFTER_MS <= this.now()
+      )
         await this.refresh(row.id, signal).catch(() => undefined);
   }
   remove(id: string): void {
@@ -173,6 +179,8 @@ export class RepositoryService {
     if (!row) throw new AdminError('not_found', `Unknown repository ${id}`);
     if (row.built_in)
       throw new AdminError('bad_request', 'Built-in repositories cannot be removed');
+    if (id === LOCAL_REPOSITORY && this.store.providers().some(p => p.repository_id === id))
+      throw new AdminError('bad_request', 'Remove the providers you added first');
     this.store.deleteRepository(id);
     this.onChange();
   }

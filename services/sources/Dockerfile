@@ -31,6 +31,8 @@ RUN npm run build --workspace @miauflix/source-metadata-extractor && \
     npm run build --workspace @miauflix/service-configuration
 
 FROM runtime AS development
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY --from=runtime /workspace /workspace
 WORKDIR /workspace/services/sources
 CMD ["bun", "--watch", "src/index.ts"]
@@ -40,6 +42,9 @@ RUN npm prune --omit=dev --ignore-scripts
 
 FROM bun-runtime AS production
 WORKDIR /app
+# git downloads Jackett's definitions in one request instead of one per file
+RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 COPY --from=production-dependencies /workspace/node_modules /app/node_modules
 COPY --from=runtime /workspace/packages/source-metadata-extractor /app/packages/source-metadata-extractor
 COPY --from=runtime /workspace/packages/contract /app/packages/contract

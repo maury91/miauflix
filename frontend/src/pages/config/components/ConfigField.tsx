@@ -176,7 +176,6 @@ const DISPLAY_TOKEN_OVERRIDES: Record<string, string> = {
   NODE: 'Node.js',
   OTEL: 'OTEL',
   OTLP: 'OTLP',
-  RARBG: 'RARBG',
   SSL: 'SSL',
   TCP: 'TCP',
   TMDB: 'TMDB',
@@ -184,7 +183,6 @@ const DISPLAY_TOKEN_OVERRIDES: Record<string, string> = {
   UI: 'UI',
   URL: 'URL',
   VPN: 'VPN',
-  YTS: 'YTS',
 };
 
 function humanizeConfigKey(key: string): string {

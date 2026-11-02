@@ -1,4 +1,7 @@
 import {
+  type CardigannCatalog,
+  type CardigannCatalogQuery,
+  type CardigannSyncStatus,
   type ProviderView,
   type RepositoryView,
   sources,
@@ -64,5 +67,29 @@ export class SourcesClientService extends RemoteService<typeof sources> {
 
   refreshRepository(id: string): Promise<RepositoryView> {
     return this.client.refreshRepository({ id });
+  }
+
+  cardigannDefinitions(query: CardigannCatalogQuery): Promise<CardigannCatalog> {
+    return this.client.cardigannDefinitions(query);
+  }
+
+  syncCardigannDefinitions(): Promise<CardigannSyncStatus> {
+    return this.client.syncCardigannDefinitions();
+  }
+
+  addCardigannProvider(input: { id: string; source?: string }): Promise<ProviderView> {
+    return this.client.addCardigannProvider(input);
+  }
+
+  addTorznabProvider(input: {
+    name: string;
+    baseUrl: string;
+    apiKey?: string;
+  }): Promise<ProviderView> {
+    return this.client.addTorznabProvider(input);
+  }
+
+  removeProvider(id: string): Promise<void> {
+    return this.client.removeProvider({ id });
   }
 }

@@ -1,6 +1,9 @@
 import { authApi } from '@features/auth/api/auth.api';
 import type {
   AddRepositoryRequest,
+  AddTorznabProviderRequest,
+  CardigannCatalog,
+  CardigannSyncStatus,
   ProviderView,
   RepositoryView,
   TestProviderResponse,
@@ -36,10 +39,44 @@ function adminRequest<T>(
   });
 }
 
+export interface CatalogArgs {
+  query?: string;
+  source?: string;
+  imdb?: boolean;
+  tmdb?: boolean;
+  tvdb?: boolean;
+  movies?: boolean;
+  tv?: boolean;
+  anime?: boolean;
+  publicOnly?: boolean;
+  supportedOnly?: boolean;
+  offset: number;
+  limit: number;
+}
+
+/** The backend reads filters from the query string; only the ones that are set are sent. */
+function catalogQuery(args: CatalogArgs): Record<string, string> {
+  const query: Record<string, string> = { offset: String(args.offset), limit: String(args.limit) };
+  if (args.query?.trim()) query['query'] = args.query.trim();
+  if (args.source) query['source'] = args.source;
+  for (const flag of [
+    'imdb',
+    'tmdb',
+    'tvdb',
+    'movies',
+    'tv',
+    'anime',
+    'publicOnly',
+    'supportedOnly',
+  ] as const)
+    if (args[flag]) query[flag] = 'true';
+  return query;
+}
+
 export const sourcesApi = createApi({
   reducerPath: 'sourcesApi',
   baseQuery: async () => ({ error: { status: 501, data: 'Not implemented' } }),
-  tagTypes: ['Providers', 'Repositories'],
+  tagTypes: ['Providers', 'Repositories', 'Definitions'],
   endpoints: builder => ({
     getProviders: builder.query<ProviderView[], void>({
       providesTags: ['Providers'],
@@ -66,6 +103,40 @@ export const sourcesApi = createApi({
       queryFn: (id, api) =>
         adminRequest<TestProviderResponse>(api, 'Failed to test provider', headers =>
           backendClient.api.sources.providers[':id'].test.$post({ param: { id } }, { headers })
+        ),
+    }),
+    /** One page of the synced Jackett list. A mutation so pages are never cached or shared. */
+    loadDefinitions: builder.mutation<CardigannCatalog, CatalogArgs>({
+      queryFn: (args, api) =>
+        adminRequest<CardigannCatalog>(api, 'Failed to load the indexer list', headers =>
+          backendClient.api.sources.definitions.$get({ query: catalogQuery(args) }, { headers })
+        ),
+    }),
+    syncDefinitions: builder.mutation<CardigannSyncStatus, void>({
+      queryFn: (_arg, api) =>
+        adminRequest<CardigannSyncStatus>(api, 'Failed to update the indexer list', headers =>
+          backendClient.api.sources.definitions.sync.$post({}, { headers })
+        ),
+    }),
+    addCardigannProvider: builder.mutation<ProviderView, { id: string; source?: string }>({
+      invalidatesTags: ['Providers', 'Repositories', 'Definitions'],
+      queryFn: (json, api) =>
+        adminRequest<ProviderView>(api, 'Failed to add the indexer', headers =>
+          backendClient.api.sources.providers.cardigann.$post({ json }, { headers })
+        ),
+    }),
+    addTorznabProvider: builder.mutation<ProviderView, AddTorznabProviderRequest>({
+      invalidatesTags: ['Providers', 'Repositories'],
+      queryFn: (json, api) =>
+        adminRequest<ProviderView>(api, 'Failed to add the endpoint', headers =>
+          backendClient.api.sources.providers.torznab.$post({ json }, { headers })
+        ),
+    }),
+    removeProvider: builder.mutation<void, string>({
+      invalidatesTags: ['Providers', 'Repositories', 'Definitions'],
+      queryFn: (id, api) =>
+        adminRequest<void>(api, 'Failed to remove the provider', headers =>
+          backendClient.api.sources.providers[':id'].$delete({ param: { id } }, { headers })
         ),
     }),
     getRepositories: builder.query<RepositoryView[], void>({
@@ -107,6 +178,11 @@ export const {
   useUpdateProviderMutation,
   useReorderProvidersMutation,
   useTestProviderMutation,
+  useLoadDefinitionsMutation,
+  useSyncDefinitionsMutation,
+  useAddCardigannProviderMutation,
+  useAddTorznabProviderMutation,
+  useRemoveProviderMutation,
   useGetRepositoriesQuery,
   useAddRepositoryMutation,
   useRefreshRepositoryMutation,

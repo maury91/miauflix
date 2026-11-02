@@ -6,8 +6,7 @@ const entry = z
     id: z.string().regex(/^[a-z0-9][a-z0-9._-]{1,63}$/),
     name: z.string().trim().min(1).max(100),
     version: z.string().min(1).max(50),
-    kind: z.enum(['native', 'cardigann', 'torznab', 'http']),
-    native: z.string().optional(), // native provider id
+    kind: z.enum(['cardigann', 'torznab', 'http']),
     cardigann: z.string().optional(), // Jackett definition id
     baseUrl: z.string().url().optional(), // torznab/http
     defaults: z
@@ -22,7 +21,6 @@ const entry = z
   })
   .superRefine((value, ctx) => {
     const required = {
-      native: value.native,
       cardigann: value.cardigann,
       torznab: value.baseUrl,
       http: value.baseUrl,
@@ -30,7 +28,7 @@ const entry = z
     if (!required)
       ctx.addIssue({
         code: 'custom',
-        message: `${value.kind} providers need ${value.kind === 'native' || value.kind === 'cardigann' ? value.kind : 'baseUrl'}`,
+        message: `${value.kind} providers need ${value.kind === 'cardigann' ? 'cardigann' : 'baseUrl'}`,
       });
   });
 

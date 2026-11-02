@@ -141,7 +141,7 @@ export class ContentSource {
   watchers?: number;
 
   @Column()
-  source: string; // YTS, TheRARBG, etc.
+  source: string; // id of the provider that found it
 
   @Column({
     type: 'int',
