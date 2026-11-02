@@ -65,7 +65,6 @@ export default [
             // Internal aliases. Matches specific aliases like @entities/, @services/, etc.
             [
               '^@constants',
-              '^@content-directories/',
               '^@database/',
               '^@entities/',
               '^@errors/',
@@ -143,15 +142,6 @@ export default [
                 '../../../../services/*',
               ],
               message: "Use '@services/...' instead of long relative paths.",
-            },
-            {
-              group: [
-                '../content-directories/*',
-                '../../content-directories/*',
-                '../../../content-directories/*',
-                '../../../../content-directories/*',
-              ],
-              message: "Use '@content-directories/...' instead of long relative paths.",
             },
             {
               group: ['../types/*', '../../types/*', '../../../types/*', '../../../../types/*'],

@@ -1,5 +1,5 @@
 import type { Repository } from 'typeorm';
-import { And, In, IsNull, LessThanOrEqual, Not } from 'typeorm';
+import { And, In, IsNull, LessThanOrEqual, Not, Or } from 'typeorm';
 
 import type { Database } from '@database/database';
 import { Movie } from '@entities/movie.entity';
@@ -196,15 +196,13 @@ export class MovieRepository {
   }
 
   /**
-   * Find movies that haven't been searched for sources yet
+   * Find new movies and searches whose planner-supplied retry time has arrived.
    */
   async findMoviesPendingSourceSearch(limit: number = 10): Promise<Movie[]> {
-    // Find movies where no directories have been searched
     return this.movieRepository.find({
       where: {
         imdbId: And(Not(IsNull()), Not('')),
-        contentDirectoriesSearched: '[]',
-        nextSourceSearchAt: LessThanOrEqual(new Date()),
+        nextSourceSearchAt: Or(IsNull(), LessThanOrEqual(new Date())),
       },
       order: { popularity: 'DESC' },
       take: limit,
@@ -238,13 +236,31 @@ export class MovieRepository {
   async markSourceSearchAttempt(movieId: number): Promise<void> {
     const backoffMs = (45 + Math.random() * 30) * 60 * 1000; // 45-75 minutes
     const nextSearch = new Date(Date.now() + backoffMs);
-    await this.movieRepository.update(movieId, { nextSourceSearchAt: nextSearch });
+    await this.movieRepository.update(movieId, {
+      nextSourceSearchAt: nextSearch,
+      sourceSearchComplete: false,
+    });
+  }
+
+  /** Persist a streamed search's final summary without changing any source associations. */
+  async recordSourceSearch(
+    movieId: number,
+    searched: string[],
+    retryAfter: Date | string | null,
+    complete: boolean
+  ): Promise<void> {
+    await this.movieRepository.update(movieId, {
+      contentDirectoriesSearched: searched,
+      nextSourceSearchAt: retryAfter ? new Date(retryAfter) : null,
+      sourceSearchComplete: complete,
+    });
   }
 
   async resetSourceSearchState(movieId: number): Promise<void> {
     await this.movieRepository.update(movieId, {
       contentDirectoriesSearched: [],
       nextSourceSearchAt: new Date(),
+      sourceSearchComplete: false,
     });
   }
 

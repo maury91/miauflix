@@ -50,6 +50,7 @@ const setupTest = () => {
     ]),
   };
   const sourceService = {
+    canRunPeerJobs: jest.fn().mockResolvedValue(true),
     canRunSourceJobs: jest.fn().mockResolvedValue(true),
     processSourceDiscovery: jest.fn().mockResolvedValue(undefined),
     requestMovieVerification: jest.fn(),

@@ -129,7 +129,7 @@ export function registerBackgroundJobHandlers({
     concurrency: 5,
     leaseMs: 60_000,
     run: async ({ sourceId }) => {
-      if (!(await sourceService.canRunSourceJobs())) return;
+      if (!(await sourceService.canRunPeerJobs())) return;
       if (sourceId) await sourceService.processSourceStats(sourceId);
       else await sourceService.seedSourceStatsJobs();
     },
@@ -138,7 +138,7 @@ export function registerBackgroundJobHandlers({
     concurrency: 1,
     leaseMs: 5 * 60 * 1000,
     run: async ({ sourceId, movieId }) => {
-      if (!(await sourceService.canRunSourceJobs())) return;
+      if (!(await sourceService.canRunPeerJobs())) return;
       if (movieId) await sourceService.verifyMovieSources(movieId);
       else if (sourceId) await sourceService.verifySource(sourceId);
     },
@@ -182,6 +182,8 @@ export function registerBackgroundJobHandlers({
           episodeId: episode.id,
           showMediaId: show.local.mediaId,
           showTitle: show.local.name,
+          showTmdbId: show.local.mediaId,
+          showYear: show.local.firstAirDate ? Number(show.local.firstAirDate.slice(0, 4)) : null,
           showImdbId: show.local.imdbId ?? null,
           seasonNumber: playable.seasonNumber,
           episodeNumber: playable.episodeNumber,
@@ -214,6 +216,8 @@ export function registerBackgroundJobHandlers({
       const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
         {
           id: media.local.id,
+          mediaId: media.local.mediaId,
+          releaseDate: media.local.releaseDate,
           imdbId: media.local.imdbId,
           title: media.local.title,
           contentDirectoriesSearched: media.local.contentDirectoriesSearched,
@@ -344,6 +348,8 @@ export function registerBackgroundJobHandlers({
           episodeId: episode.id,
           showMediaId,
           showTitle: show.local.name,
+          showTmdbId: show.local.mediaId,
+          showYear: show.local.firstAirDate ? Number(show.local.firstAirDate.slice(0, 4)) : null,
           showImdbId: show.local.imdbId ?? null,
           seasonNumber: episode.seasonNumber,
           episodeNumber: episode.episodeNumber,

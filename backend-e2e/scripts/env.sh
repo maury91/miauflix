@@ -19,6 +19,12 @@ if [[ -n "${RECORD_PROVIDER_FIXTURES+x}" ]]; then
     record_provider_fixtures_was_set=true
     record_provider_fixtures_requested="$RECORD_PROVIDER_FIXTURES"
 fi
+provider_network_internal_was_set=false
+provider_network_internal_requested=''
+if [[ -n "${E2E_PROVIDER_NETWORK_INTERNAL+x}" ]]; then
+    provider_network_internal_was_set=true
+    provider_network_internal_requested="$E2E_PROVIDER_NETWORK_INTERNAL"
+fi
 home_cross_load_was_set=false
 home_cross_load_requested=''
 if [[ -n "${E2E_HOME_CROSS_LOAD+x}" ]]; then
@@ -184,6 +190,9 @@ fi
 
 if [[ "$record_provider_fixtures_was_set" == "true" ]]; then
     export RECORD_PROVIDER_FIXTURES="$record_provider_fixtures_requested"
+fi
+if [[ "$provider_network_internal_was_set" == "true" ]]; then
+    export E2E_PROVIDER_NETWORK_INTERNAL="$provider_network_internal_requested"
 fi
 if [[ "$home_cross_load_was_set" == "true" ]]; then
     export E2E_HOME_CROSS_LOAD="$home_cross_load_requested"

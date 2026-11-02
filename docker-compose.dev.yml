@@ -40,6 +40,21 @@ services:
       - ./services/list-service/src:/workspace/services/list-service/src
       - ./data/list-service:/app/data
 
+  sources:
+    build:
+      context: .
+      dockerfile: services/sources/Dockerfile
+      target: development
+    environment:
+      SOURCES_DATA_DIR: /app/data
+      SOURCES_ENCRYPTION_KEY: ${SOURCES_ENCRYPTION_KEY:-}
+      SOURCES_PORT: '3003'
+    ports:
+      - '127.0.0.1:3003:3003'
+    volumes:
+      - ./services/sources/src:/workspace/services/sources/src
+      - ./data/sources:/app/data
+
   backend:
     build:
       context: .
@@ -50,7 +65,6 @@ services:
       NODE_ENV: development
       PORT: 3000
       DISABLE_VPN_CHECK: 'true'
-      ENABLE_FLARESOLVERR: 'false'
       ENABLE_FRONTEND: 'false'
       COOKIE_DOMAIN: localhost
       # The frontend is served over Vite HTTPS, so auth cookies must be Secure.
@@ -60,12 +74,16 @@ services:
       BUNQUEUE_PORT: '6789'
       CATALOG_SERVICE_URL: http://media-catalog:3001
       LIST_SERVICE_URL: http://list-service:3002
+      SOURCES_SERVICE_URL: http://sources:3003
+      SOURCES_DISABLE_VPN_CHECK: 'true'
     depends_on:
       bunqueue:
         condition: service_healthy
       media-catalog:
         condition: service_started
       list-service:
+        condition: service_started
+      sources:
         condition: service_started
     ports:
       - '127.0.0.1:5000:3000'

@@ -23,15 +23,15 @@ describe('Database Encryption E2E Tests', () => {
     // Find the running backend container name (docker-compose test env)
     let containerName = '';
     try {
-      const backendPort = new URL(global.BACKEND_URL).port;
+      // The backend sits behind a test gateway that owns the published port, so match by service.
       containerName = execFileSync(
         'docker',
         [
           'ps',
           '--filter',
-          `publish=${backendPort}`,
-          '--filter',
           'label=com.docker.compose.service=backend',
+          '--filter',
+          'name=miauflix-tests-',
           '--format',
           '{{.Names}}',
         ],

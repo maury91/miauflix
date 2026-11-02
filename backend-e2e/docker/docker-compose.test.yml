@@ -1,4 +1,28 @@
 services:
+  # Docker does not publish ports for containers attached only to an internal
+  # network. A fixed TCP proxy exposes the app and image fixtures to host
+  # tests while all application/provider containers remain isolated from egress.
+  test-gateway:
+    image: nginx:alpine
+    ports:
+      - '127.0.0.1:${PORT}:3000'
+      - '127.0.0.1:${TMDB_IMAGE_PORT:-3001}:3001'
+    volumes:
+      - ./mock/test-gateway.conf:/etc/nginx/nginx.conf:ro
+    networks:
+      - test-network
+      - host-network
+    depends_on:
+      backend:
+        condition: service_healthy
+      tmdb-images:
+        condition: service_healthy
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3000/api/health']
+      interval: 2s
+      timeout: 2s
+      retries: 30
+
   # Backend service
   backend:
     image: miauflix-e2e-backend:${E2E_IMAGE_TAG:-local}
@@ -16,6 +40,8 @@ services:
       - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://miauflix-services:3001
       - LIST_SERVICE_URL=http://miauflix-services:3002
+      - SOURCES_SERVICE_URL=http://miauflix-services:3003
+      - SOURCES_DISABLE_VPN_CHECK=true
       - TMDB_API_URL=http://tmdb-mock/3
       # The initial-setup lane overrides E2E_CATALOG_TMDB_TOKEN with an empty
       # value so the browser must complete Catalog configuration through the UI.
@@ -38,8 +64,6 @@ services:
       - ENABLE_TRACING=true
     networks:
       - test-network
-    ports:
-      - '${PORT}:3000'
     volumes:
       - ../.env.test:/usr/src/app/.env
       - test_downloads:/usr/src/app/downloads
@@ -64,7 +88,7 @@ services:
       tracker-mock:
         condition: service_healthy
 
-  # Bunqueue, media catalog, and list service share one runtime image while
+  # Bunqueue, media catalog, lists and source search share one runtime image while
   # retaining their own ports and data directories.
   miauflix-services:
     image: miauflix-e2e-miauflix-services:${E2E_IMAGE_TAG:-local}
@@ -82,15 +106,19 @@ services:
       - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-true}
       - LIST_SERVICE_PORT=3002
       - LIST_SERVICE_DATA_DIR=/app/data/list-service
+      - SOURCES_PORT=3003
+      - SOURCES_DATA_DIR=/app/data/sources
       - BACKDROP_FOCUS_MODEL_DIR=/app/models
       - BACKDROP_FOCUS_WASM_DIR=/app/wasm
       - DEBUG=*
     volumes:
       - test_bunqueue_data:/app/data/bunqueue
       - list_service_data:/app/data/list-service
+      - sources_data:/app/data/sources
     expose:
       - '3001'
       - '3002'
+      - '3003'
       - '6789'
       - '6790'
     networks:
@@ -101,7 +129,7 @@ services:
           'CMD',
           'bun',
           '-e',
-          "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))",
+          "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:3003/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))",
         ]
       interval: 2s
       timeout: 5s
@@ -123,8 +151,6 @@ services:
     environment:
       - ASSET_DIR=/app/data/images
       - IMAGE_PROXY_BASE_URL=https://image.tmdb.org/t/p/
-    ports:
-      - '${TMDB_IMAGE_PORT:-3001}:80'
     volumes:
       - ../../test-fixtures/providers/tmdb:/app/data:ro
     networks:
@@ -261,8 +287,13 @@ services:
       retries: 30
 
 networks:
+  host-network:
+    driver: bridge
   test-network:
     driver: bridge
+    # Replay runs cannot reach live providers, including metadata-cache fallbacks.
+    # Explicit fixture recording may opt out with E2E_PROVIDER_NETWORK_INTERNAL=false.
+    internal: ${E2E_PROVIDER_NETWORK_INTERNAL:-true}
 
 volumes:
   test_bunqueue_data:
@@ -271,3 +302,5 @@ volumes:
     name: miauflix_test_downloads
   list_service_data:
     name: miauflix_test_list_service_data
+  sources_data:
+    name: miauflix_test_sources_data

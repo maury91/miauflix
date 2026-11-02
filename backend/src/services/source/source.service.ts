@@ -1,11 +1,9 @@
 import { logger } from '@logger';
 import parseTorrent from 'parse-torrent';
 
-import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import type { Database } from '@database/database';
 import type { ContentSource } from '@entities/content-source.entity';
 import type { EpisodeSource } from '@entities/episode-source.entity';
-import { SourceError } from '@errors/source.errors';
 import type { ConfigService, ServiceInstanceStatus } from '@mytypes/configuration';
 import type {
   ContentSourceRepository,
@@ -17,14 +15,14 @@ import type { BackgroundJobService } from '@services/background-job/background-j
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { RequestService } from '@services/request/request.service';
 import type { VpnDetectionService } from '@services/security/vpn.service';
-import type { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
-import { RateLimiter } from '@utils/rateLimiter';
+import type { SourceMetadata } from '@services/sources/source-candidate';
+import { fromCandidate } from '@services/sources/source-candidate';
+import type { SourcesClientService } from '@services/sources/sources-client.service';
 import { scheduleNextCheck } from '@utils/scheduling.util';
 import { SingleFlight } from '@utils/singleflight.util';
 import { sleep } from '@utils/time';
 import { traced } from '@utils/tracing.util';
 import { providerSourcesToEntities } from '@utils/transformers.util';
-import { validateContentFileResponse } from '@utils/validation.util';
 
 import { ErrorWithStatus } from './services/error-with-status.util';
 import { matchEpisodeFile } from './episode-file-matcher';
@@ -93,7 +91,7 @@ function releaseQualityName(rank: number): string {
  * Service for searching and managing sources
  */
 export class SourceService {
-  private readonly pendingOnDemandSearches = new Set<number>();
+  private readonly pendingOnDemandSearches = new Map<number, Promise<unknown>>();
   private readonly movieRepository: MovieRepository;
   private readonly contentSourceRepository: ContentSourceRepository;
   private readonly episodeSourceRepository: EpisodeSourceRepository;
@@ -101,7 +99,7 @@ export class SourceService {
     string,
     { expiresAt: number; promise: Promise<TVRelease[]> }
   >();
-  private readonly sourceRateLimiters = new Map<string, RateLimiter>();
+  private readonly searchLifetime = new AbortController();
   /** Sources whose file list could not be fetched, and when they may be tried again. */
   private readonly unresolvedUntil = new Map<number, number>();
 
@@ -117,9 +115,9 @@ export class SourceService {
   constructor(
     db: Database,
     private readonly vpnService: VpnDetectionService,
-    private readonly contentDirectoryService: ContentDirectoryService,
+    private readonly sourcesClient: SourcesClientService,
     private readonly magnetService: SourceMetadataFileService,
-    private readonly requestService: RequestService,
+    _requestService: RequestService,
     private readonly config: ConfigService,
     private readonly backgroundJobs: BackgroundJobService,
     private readonly notifications: NotificationService,
@@ -217,26 +215,22 @@ export class SourceService {
     return { status: 'ready' };
   }
 
-  private async checkForVpnConnection(action: string): Promise<boolean> {
-    if (this.searchOnlyBehindVpn) {
-      await this.startPromise;
-      if (!this.vpnConnected) {
-        logger.warn('SourceService', `VPN is not connected, skipping ${action}`);
-        await sleep(2000);
-        return false;
-      }
-      return this.vpnConnected;
-    }
-    return true;
+  public async canRunSourceJobs(): Promise<boolean> {
+    return this.sourcesClient.isReady();
   }
 
-  public async canRunSourceJobs(): Promise<boolean> {
+  public stop(): void {
+    this.searchLifetime.abort();
+    for (const unsubscribe of this.vpnUnsubscribers) unsubscribe();
+  }
+
+  public async canRunPeerJobs(): Promise<boolean> {
     await this.startPromise;
     return this.vpnConnected || !this.searchOnlyBehindVpn;
   }
 
   public async canRunMetadataJobs(): Promise<boolean> {
-    return this.magnetService.isEnabled() && (await this.canRunSourceJobs());
+    return this.sourcesClient.isReady();
   }
 
   /**
@@ -245,10 +239,6 @@ export class SourceService {
    */
   @traced('SourceService')
   public async searchSourcesForMovies(): Promise<void> {
-    if (!(await this.checkForVpnConnection('searchSourcesForMovies'))) {
-      return;
-    }
-
     // Find movies that haven't been searched at all
     const moviesToSearch = await this.movieRepository.findMoviesPendingSourceSearch(1);
 
@@ -270,6 +260,8 @@ export class SourceService {
     movie: {
       id: number;
       mediaId?: number;
+      year?: number | null;
+      releaseDate?: string | null;
       imdbId: string | null;
       title: string;
       contentDirectoriesSearched?: string[];
@@ -277,64 +269,73 @@ export class SourceService {
     isOnDemand: boolean = false,
     priority = 20
   ): Promise<{ directory: string; sources: ContentSource[] } | void> {
-    if (!(await this.checkForVpnConnection('searchSourcesForMovie'))) {
-      return;
-    }
-
-    if (!movie.imdbId) {
-      logger.warn(
-        'SourceService',
-        `Movie ${movie.id} (${movie.title}) has no IMDb ID, skipping source search`
-      );
-      return;
-    }
-
-    logger.debug(
-      'SourceService',
-      `Searching sources for movie ${movie.id} (${movie.title}) with IMDb ID ${movie.imdbId}`
-    );
-
     try {
       const previousSources = await this.contentSourceRepository.findByMovieId(movie.id);
       const previousBest = previousSources
         .map(source => ({ source, rank: releaseQualityRank(source.sourceType) }))
         .sort((left, right) => right.rank - left.rank)[0];
       const previousQuality = previousBest?.rank ?? 0;
-      // Search for sources using the content directory service
-      const movieWithSources = await this.contentDirectoryService.searchSourcesForMovie(
-        movie.imdbId,
-        isOnDemand,
-        movie.contentDirectoriesSearched || [],
-        true
-      );
-
-      for (const directory of movieWithSources?.searched ?? [movieWithSources?.source ?? '']) {
-        if (!directory) continue;
-        await this.movieRepository.markSourceSearched(movie.id, directory);
+      const createdSources: ContentSource[] = [];
+      let pending: SourceMetadata[] = [];
+      let write = Promise.resolve();
+      let trailerSaved = false;
+      const flush = (): Promise<void> => {
+        const batch = pending;
+        pending = [];
+        if (batch.length) {
+          write = write.then(async () => {
+            const rows = providerSourcesToEntities(batch);
+            createdSources.push(
+              ...(await this.contentSourceRepository.upsertForMovie(movie.id, rows))
+            );
+          });
+        }
+        return write;
+      };
+      // Flush even if the provider pauses before emitting its next candidate.
+      const timer = setInterval(() => {
+        void flush().catch(() => undefined);
+      }, 250);
+      try {
+        for await (const item of this.sourcesClient.search(
+          {
+            media: {
+              kind: 'movie',
+              releaseDate: movie.releaseDate,
+              tmdbId: movie.mediaId ?? movie.id,
+              imdbId: movie.imdbId,
+              title: movie.title,
+              year:
+                movie.year ?? (movie.releaseDate ? Number(movie.releaseDate.slice(0, 4)) : null),
+            },
+            purpose: isOnDemand ? 'interactive' : 'background',
+            skipProviders: movie.contentDirectoriesSearched ?? [],
+          },
+          this.searchLifetime.signal
+        )) {
+          if (item.type === 'candidate') {
+            pending.push(fromCandidate(item.candidate));
+            if (!trailerSaved && item.candidate.trailerCode) {
+              trailerSaved = true;
+              await this.movieRepository.updateMovieTrailerIfDoesntExists(
+                movie.id,
+                item.candidate.trailerCode
+              );
+            }
+          } else {
+            await flush();
+            await this.movieRepository.recordSourceSearch(
+              movie.id,
+              item.providersSearched,
+              item.retryAfter,
+              item.complete
+            );
+          }
+        }
+      } finally {
+        clearInterval(timer);
+        await flush();
       }
-      if (!movieWithSources?.sources?.length) {
-        logger.debug('SourceService', `No sources found for movie ${movie.id} (${movie.title})`);
-        await this.movieRepository.markSourceSearchAttempt(movie.id);
-        return;
-      }
-
-      logger.debug(
-        'SourceService',
-        `Found ${movieWithSources.sources.length} sources for movie ${movie.id} (${movie.title}) using ${movieWithSources.source}`
-      );
-
-      if (movieWithSources.trailerCode) {
-        // If the movie has a trailer, update the movie record
-        await this.movieRepository.updateMovieTrailerIfDoesntExists(
-          movie.id,
-          movieWithSources.trailerCode
-        );
-      }
-
-      // Convert sources to ContentSource objects and save them
-      const sources = providerSourcesToEntities(movieWithSources.sources, movieWithSources.source);
-
-      const createdSources = await this.contentSourceRepository.upsertForMovie(movie.id, sources);
       const nextQualitySource = createdSources
         .map(source => ({ source, rank: releaseQualityRank(source.sourceType) }))
         .sort((left, right) => right.rank - left.rank)[0];
@@ -382,10 +383,11 @@ export class SourceService {
       );
       logger.debug(
         'SourceService',
-        `Saved ${sources.length} sources for movie ${movie.id} (${movie.title})`
+        `Saved ${createdSources.length} sources for movie ${movie.id} (${movie.title})`
       );
-      return { directory: movieWithSources.source, sources: createdSources };
+      return { directory: 'sources', sources: createdSources };
     } catch (error) {
+      await this.movieRepository.markSourceSearchAttempt(movie.id);
       logger.error(
         'SourceService',
         `Error searching sources for movie ${movie.id} (${movie.title}):`,
@@ -398,23 +400,17 @@ export class SourceService {
     movieId: number,
     priority = 20
   ): Promise<{ complete: boolean; sourceCount: number }> {
-    let movie = await this.movieRepository.findById(movieId);
-    if (!movie?.imdbId) return { complete: true, sourceCount: 0 };
-    const providerNames = this.contentDirectoryService.getMovieDirectoryNames();
-    if (providerNames.every(name => movie?.contentDirectoriesSearched.includes(name))) {
-      if (movie.nextSourceSearchAt && movie.nextSourceSearchAt > new Date()) {
-        return { complete: true, sourceCount: 0 };
-      }
-      await this.movieRepository.resetSourceSearchState(movieId);
-      movie = await this.movieRepository.findById(movieId);
-      if (!movie?.imdbId) return { complete: true, sourceCount: 0 };
+    const movie = await this.movieRepository.findById(movieId);
+    if (!movie) return { complete: true, sourceCount: 0 };
+    if (movie.nextSourceSearchAt && movie.nextSourceSearchAt > new Date()) {
+      return { complete: true, sourceCount: 0 };
     }
     const result = await this.searchSourcesForMovie(movie, false, priority);
     const refreshed = await this.movieRepository.findById(movieId);
-    const complete = providerNames.every(name =>
-      refreshed?.contentDirectoriesSearched.includes(name)
-    );
-    return { complete, sourceCount: result?.sources.length ?? 0 };
+    return {
+      complete: refreshed?.sourceSearchComplete ?? false,
+      sourceCount: result?.sources.length ?? 0,
+    };
   }
 
   public async processSourceDiscoveryByMediaId(movieMediaId: number, priority = 20): Promise<void> {
@@ -427,6 +423,8 @@ export class SourceService {
     episodeId: number;
     showMediaId?: number;
     showTitle?: string;
+    showTmdbId?: number;
+    showYear?: number | null;
     showImdbId: string | null;
     seasonNumber: number;
     episodeNumber: number;
@@ -435,10 +433,7 @@ export class SourceService {
     if (!this.isEpisodeWithinLeakTolerance(episode.airDate)) return [];
     const existing = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
     if (existing.some(association => association.matchKind === 'single')) return existing;
-    if (!episode.showImdbId || !(await this.checkForVpnConnection('TV source search')))
-      return existing;
-
-    const releases = await this.getTVReleases(episode.showImdbId);
+    const releases = await this.getTVReleases(episode);
     const associate = (allowCombined: boolean) =>
       releases.flatMap(release => {
         const match = matchEpisodeFile(
@@ -471,7 +466,10 @@ export class SourceService {
         try {
           const source =
             (await this.contentSourceRepository.findById(candidate.source.id)) ?? candidate.source;
-          let torrentFile = source.file;
+          let torrentFile: Buffer | undefined =
+            source.file ??
+            (await this.sourcesClient.torrentFile(source.hash, source.url ?? undefined)) ??
+            undefined;
           if (!torrentFile && source.magnetLink) {
             torrentFile =
               (await this.magnetService.getPlaybackTorrentMetadataFile(
@@ -550,18 +548,41 @@ export class SourceService {
     return airTime <= now + (this.config.get('LEAK_TOLERANCE') ?? 0);
   }
 
-  private async getTVReleases(imdbId: string): Promise<TVRelease[]> {
-    const cached = this.tvReleaseSearches.get(imdbId);
+  private async getTVReleases(episode: {
+    showImdbId: string | null;
+    showTmdbId?: number;
+    showTitle?: string;
+    showYear?: number | null;
+    seasonNumber: number;
+    episodeNumber: number;
+    airDate?: string | null;
+  }): Promise<TVRelease[]> {
+    const key = `${episode.showImdbId ?? episode.showTmdbId}:${episode.seasonNumber}:${episode.episodeNumber}`;
+    const cached = this.tvReleaseSearches.get(key);
     if (cached && cached.expiresAt > Date.now()) return cached.promise;
-
     const promise = (async () => {
-      const result = await this.contentDirectoryService.searchSourcesForTVShow(imdbId, true);
-      if (!result?.sources.length) return [];
-      const releases: TVRelease[] = [];
-      for (const metadata of result.sources) {
-        const row = providerSourcesToEntities([metadata], result.source)[0];
+      const releases = new Map<string, TVRelease>();
+      for await (const item of this.sourcesClient.search(
+        {
+          media: {
+            kind: 'show',
+            tmdbId: episode.showTmdbId ?? 0,
+            imdbId: episode.showImdbId,
+            title: episode.showTitle ?? '',
+            year: episode.showYear,
+          },
+          season: episode.seasonNumber,
+          episode: episode.episodeNumber,
+          airDate: episode.airDate,
+          purpose: 'interactive',
+        },
+        AbortSignal.any([this.searchLifetime.signal, AbortSignal.timeout(20_000)])
+      )) {
+        if (item.type !== 'candidate') continue;
+        const metadata = fromCandidate(item.candidate);
+        const row = providerSourcesToEntities([metadata])[0];
         const source = await this.contentSourceRepository.upsertByHash(row);
-        releases.push({ metadata, source });
+        releases.set(source.hash, { metadata, source });
         this.backgroundJobs.enqueueBestEffort({
           type: 'source.stats',
           dedupeKey: String(source.id),
@@ -569,18 +590,14 @@ export class SourceService {
           options: { priority: 20 },
         });
       }
-      return releases;
+      return [...releases.values()];
     })();
     const cache = { expiresAt: Date.now() + 5 * 60_000, promise };
-    this.tvReleaseSearches.set(imdbId, cache);
+    this.tvReleaseSearches.set(key, cache);
     try {
       return await promise;
     } catch (error) {
-      if (this.tvReleaseSearches.get(imdbId) === cache)
-        this.tvReleaseSearches.set(imdbId, {
-          expiresAt: Date.now() + 30_000,
-          promise: Promise.resolve([]),
-        });
+      if (this.tvReleaseSearches.get(key) === cache) this.tvReleaseSearches.delete(key);
       throw error;
     }
   }
@@ -664,6 +681,8 @@ export class SourceService {
   public async getSourcesForMovieWithOnDemandSearch(
     movie: {
       id: number;
+      mediaId?: number;
+      releaseDate?: string | null;
       imdbId: string | null;
       title: string;
       contentDirectoriesSearched: string[];
@@ -676,53 +695,27 @@ export class SourceService {
       return existingSources;
     }
 
-    // ImdbId is required for searching sources
-    if (movie.imdbId) {
-      logger.info(
-        'SourceService',
-        `On-demand source search triggered for movie ${movie.id} (${movie.title})`
-      );
-      let status: 'pending' | 'success' | 'timeout' = 'pending';
-      const searchPromise = (async () => {
-        const sources = await this.searchSourcesForMovie(movie, true);
-        if (sources) {
-          if (status === 'pending') {
-            status = 'success';
-          } else {
-            logger.debug(
-              'SourceService',
-              `Background search completed for movie ${movie.id} (${movie.title})`
-            );
-          }
-          return sources.sources;
-        }
-        return [];
-      })();
-      this.pendingOnDemandSearches.add(movie.id);
-      void searchPromise.then(
-        () => this.pendingOnDemandSearches.delete(movie.id),
-        () => this.pendingOnDemandSearches.delete(movie.id)
-      );
-      const timeoutPromise = (async () => {
-        await sleep(timeoutMs);
-        if (status === 'pending') {
-          status = 'timeout';
-          logger.debug(
-            'SourceService',
-            `On-demand search timed out for movie ${movie.id}, continuing in background`
-          );
-        }
-      })();
-      try {
-        // Wait for search with timeout
-        return (await Promise.race([searchPromise, timeoutPromise])) || [];
-      } catch (error) {
-        logger.error('SourceService', `On-demand search failed for movie ${movie.id}:`, error);
-      }
+    // Concurrent callers join the in-flight search instead of returning before it has results.
+    let search = this.pendingOnDemandSearches.get(movie.id);
+    if (!search) {
+      search = this.searchSourcesForMovie(movie, true).finally(() => {
+        this.pendingOnDemandSearches.delete(movie.id);
+      });
+      this.pendingOnDemandSearches.set(movie.id, search);
     }
-
-    // Movie has been searched but no sources found, or no IMDb ID
-    return [];
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      await Promise.race([
+        search,
+        new Promise<void>(resolve => {
+          timer = setTimeout(resolve, timeoutMs);
+        }),
+      ]);
+      // The stream continues to drain after the caller's deadline; each batch remains usable.
+      return await this.getSourcesForMovie(movie.id);
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   /** Queue background checks of whether unverified sources hold real video. */
@@ -880,30 +873,7 @@ export class SourceService {
     );
 
     try {
-      let file: Buffer | null = null;
-
-      if (source.url && this.canMakeSourceRequest(source.source)) {
-        file = await this.downloadSourceMetadataFileFromUrl(source.url, source.source);
-
-        if (file) {
-          logger.debug(
-            'SourceService',
-            `Successfully downloaded source file via direct URL for source ${source.id}`
-          );
-        } else {
-          logger.debug(
-            'SourceService',
-            `Direct URL download failed for source ${source.id}, falling back to magnet service`
-          );
-        }
-      } else if (source.url) {
-        logger.debug(
-          'SourceService',
-          `Rate limit reached for ${source.source}, using magnet service for source ${source.id}`
-        );
-      }
-
-      // Fall back to magnet service if direct download failed or wasn't available
+      let file = await this.sourcesClient.torrentFile(source.hash, source.url ?? undefined);
       if (!file) {
         file = await this.magnetService.getSourceMetadataFile(source.magnetLink, source.hash);
       }
@@ -912,6 +882,16 @@ export class SourceService {
         logger.warn(
           'SourceService',
           `No file found for source ${source.id} (quality: ${source.quality})`
+        );
+        return;
+      }
+
+      // The source service resolves untrusted files; identity verification stays here.
+      const parsed = await parseTorrent(file);
+      if (parsed.infoHash?.toLowerCase() !== source.hash.toLowerCase()) {
+        logger.warn(
+          'SourceService',
+          `Ignoring metadata with a mismatched hash for source ${source.id}`
         );
         return;
       }
@@ -930,64 +910,6 @@ export class SourceService {
         `Error searching file for source ${source.id} (quality: ${source.quality}):`,
         error
       );
-    }
-  }
-
-  /**
-   * Get or create a rate limiter for a specific source
-   */
-  private getSourceRateLimiter(source: string): RateLimiter {
-    if (!this.sourceRateLimiters.has(source)) {
-      // Set rate limits per source (requests per second)
-      const rateLimit = source === 'YTS' ? 0.5 : 0.2; // YTS: 30 req/min, others: 12 req/min
-      this.sourceRateLimiters.set(source, new RateLimiter(rateLimit, `SourceService:${source}`));
-    }
-    return this.sourceRateLimiters.get(source)!;
-  }
-
-  /**
-   * Check if we can make a request to a source without rate limiting
-   */
-  private canMakeSourceRequest(source: string): boolean {
-    const rateLimiter = this.getSourceRateLimiter(source);
-    return !rateLimiter.shouldReject();
-  }
-
-  /**
-   * Download source file from direct URL
-   */
-  private async downloadSourceMetadataFileFromUrl(
-    url: string,
-    source: string
-  ): Promise<Buffer | null> {
-    try {
-      logger.debug('SourceService', `Downloading from URL (source: ${source})`);
-
-      // Throttle the request
-      const rateLimiter = this.getSourceRateLimiter(source);
-      await rateLimiter.throttle();
-
-      const response = await this.requestService.request(url, {
-        asBuffer: true,
-      });
-
-      const validation = validateContentFileResponse(response);
-      if (!validation.isValid) {
-        logger.warn('SourceService', `Download validation failed: ${validation.error}`);
-        return null;
-      }
-
-      // Convert response body to Buffer
-      if (response.body instanceof ArrayBuffer) {
-        return Buffer.from(response.body);
-      }
-      if (typeof response.body === 'string') {
-        return Buffer.from(response.body, 'binary');
-      }
-      throw new SourceError('Invalid response body', 'invalid_response_body');
-    } catch (error) {
-      logger.error('SourceService', `Error downloading from URL: ${url}`, error);
-      return null;
     }
   }
 }
