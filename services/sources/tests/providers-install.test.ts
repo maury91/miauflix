@@ -1,12 +1,13 @@
 import { execFileSync } from 'node:child_process';
 import { mkdirSync, mkdtempSync, readFileSync, rmSync, unlinkSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
 import { sources } from '@miauflix/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
+import { parse } from 'yaml';
 
 import { createSourcesService } from '../src/service';
 
@@ -690,4 +691,88 @@ it('reads stored indexers again when the way they are read changes, without down
   expect(fake.downloaded).toEqual([]);
   const entry = (await client.cardigannDefinitions({ ...all, query: 'private' })).entries[0];
   expect(entry).toMatchObject({ supported: false, supports: { imdb: true, movies: true } });
+});
+
+it('discovers fixture sources for movies 550 and 120 through the E2E provider configuration', async () => {
+  const e2e = join(import.meta.dir, '../../../backend-e2e/docker');
+  const compose = parse(readFileSync(join(e2e, 'docker-compose.test.yml'), 'utf8')) as {
+    services: Record<string, { environment: string[]; volumes: string[] }>;
+  };
+  const environment = (service: string) =>
+    Object.fromEntries(
+      compose.services[service].environment.map(value => {
+        const at = value.indexOf('=');
+        return [value.slice(0, at), value.slice(at + 1)];
+      })
+    );
+  const backend = environment('backend');
+  const service = environment('miauflix-services');
+  const definitionsHost = new URL(backend.CARDIGANN_DEFINITION_SOURCES).host;
+  const moviesDefinition = parse(
+    readFileSync(join(e2e, 'indexer/definitions/movies-api.yml'), 'utf8')
+  ) as { links: string[] };
+  const moviesHost = new URL(moviesDefinition.links[0]).host;
+  const dataMount = compose.services[moviesHost].volumes.find(volume =>
+    /:\/app\/data(?::ro)?$/.test(volume)
+  );
+  if (!dataMount) throw new Error('The movie mock must mount its checked-in data');
+  const dataDir = resolve(e2e, dataMount.split(':')[0]);
+  const dir = mkdtempSync(join(tmpdir(), 'sources-e2e-fixtures-'));
+  dirs.push(dir);
+  const calls: string[] = [];
+  const created = createSourcesService({
+    dataDir: dir,
+    keyFile: join(dir, '.key'),
+    encryptionKey: 'test',
+    preloadProviders: service.SOURCES_PRELOAD_PROVIDERS,
+    fetch: (async (input: URL | string | Request) => {
+      const url = new URL(String(input));
+      calls.push(url.href);
+      if (url.host === definitionsHost && url.pathname.startsWith('/definitions/')) {
+        const file = url.pathname.slice('/definitions/'.length);
+        if (!['movies-api.yml', 'imdb-title.yml'].includes(file))
+          throw new Error(`Unexpected definition ${url}`);
+        return new Response(readFileSync(join(e2e, 'indexer/definitions', file), 'utf8'));
+      }
+      if (url.pathname.startsWith('/imdb-detail/'))
+        return new Response('No fixture', { status: 404 });
+      if (url.host === moviesHost && url.pathname === '/api/v2/list_movies.json') {
+        const imdb = url.searchParams.get('query_term');
+        if (!['tt0137523', 'tt0120737'].includes(imdb ?? ''))
+          throw new Error(`Unexpected movie ${url}`);
+        const recording = JSON.parse(
+          readFileSync(
+            join(dataDir, 'api/v2', `list_movies.json-limit-20-page-1-query_term-${imdb}.json`),
+            'utf8'
+          )
+        ) as { data: unknown };
+        return Response.json(recording.data);
+      }
+      throw new Error(`Unexpected E2E source request ${url}`);
+    }) as typeof fetch,
+  });
+  stops.push(created.stop);
+  const transport = localTransport(created.service);
+  await createClient(management, transport).applyConfig({
+    values: {
+      SOURCES_DISABLE_VPN_CHECK: backend.SOURCES_DISABLE_VPN_CHECK,
+      CARDIGANN_DEFINITION_SOURCES: backend.CARDIGANN_DEFINITION_SOURCES,
+    },
+  });
+  const client = createClient(sources, transport);
+  for (const [tmdbId, imdbId] of [
+    [550, 'tt0137523'],
+    [120, 'tt0120737'],
+  ] as const) {
+    const candidates = [];
+    const start = performance.now();
+    for await (const item of client.search({
+      media: { kind: 'movie', tmdbId, imdbId, title: 'Fixture movie' },
+      purpose: 'interactive',
+    }))
+      if (item.type === 'candidate') candidates.push(item.candidate);
+    expect(candidates.length).toBeGreaterThan(0);
+    expect(performance.now() - start).toBeLessThan(1000);
+  }
+  expect(calls.some(url => url.includes('/definitions/movies-api.yml'))).toBe(true);
 });

@@ -31,8 +31,7 @@ services:
       - TRAKT_CLIENT_ID=${E2E_TRAKT_CLIENT_ID-${TRAKT_CLIENT_ID:-mock-trakt-client-id}}
       - TRAKT_CLIENT_SECRET=${E2E_TRAKT_CLIENT_SECRET-${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}}
       - TRAKT_REDIRECT_URI=${E2E_TRAKT_REDIRECT_URI-${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}}
-      - YTS_API_URL=http://yts-mock
-      - THE_RARBG_API_URL=http://therarbg-mock
+      - CARDIGANN_DEFINITION_SOURCES=http://yts-mock/definitions
       - DISABLE_VPN_CHECK=true
       - DISABLE_DISCOVERY=true
       - STATIC_TRACKERS=udp://tracker-mock:6969/announce
@@ -93,6 +92,7 @@ services:
     environment:
       - SOURCES_PORT=3003
       - SOURCES_DATA_DIR=/app/data
+      - SOURCES_PRELOAD_PROVIDERS=imdb-title@http://yts-mock/definitions movies-api@http://yts-mock/definitions
     volumes:
       - ../../services/sources/src:/workspace/services/sources/src
       - sources_data:/app/data
@@ -264,6 +264,7 @@ services:
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=none
       - OWN_URL=http://yts-mock
+      - DEFINITIONS_DIR=/app/definitions
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s
@@ -272,6 +273,7 @@ services:
       start_period: 10s
     volumes:
       - ./yts/data:/app/data
+      - ./indexer/definitions:/app/definitions:ro
     networks:
       - test-network
 
