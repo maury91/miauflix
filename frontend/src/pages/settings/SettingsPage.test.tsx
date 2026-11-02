@@ -12,6 +12,8 @@ describe('settings keyboard navigation', () => {
         canManageStorage
         onConfiguration={vi.fn()}
         onStorage={vi.fn()}
+        canManageSources
+        onSources={vi.fn()}
         onDismiss={vi.fn()}
       />
     );

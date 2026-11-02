@@ -46,7 +46,9 @@ interface SettingsPageProps {
   onConfiguration: () => void;
   canManageStorage: boolean;
   onStorage: () => void;
-  initialFocus?: 'configuration' | 'storage';
+  canManageSources: boolean;
+  onSources: () => void;
+  initialFocus?: 'configuration' | 'storage' | 'sources';
   onDismiss: () => void;
 }
 
@@ -55,26 +57,33 @@ export default function SettingsPage({
   onConfiguration,
   canManageStorage,
   onStorage,
+  canManageSources,
+  onSources,
   initialFocus = 'configuration',
   onDismiss,
 }: SettingsPageProps) {
   const configurationRef = useRef<HTMLButtonElement>(null);
   const storageRef = useRef<HTMLButtonElement>(null);
+  const sourcesRef = useRef<HTMLButtonElement>(null);
   const backRef = useRef<HTMLButtonElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
   useRailContentLeft();
 
   useEffect(() => {
     const target =
-      initialFocus === 'storage' && canManageStorage
-        ? storageRef.current
-        : canConfigure
-          ? configurationRef.current
-          : canManageStorage
-            ? storageRef.current
-            : backRef.current;
+      initialFocus === 'sources' && canManageSources
+        ? sourcesRef.current
+        : initialFocus === 'storage' && canManageStorage
+          ? storageRef.current
+          : canConfigure
+            ? configurationRef.current
+            : canManageStorage
+              ? storageRef.current
+              : canManageSources
+                ? sourcesRef.current
+                : backRef.current;
     target?.focus({ preventScroll: true });
-  }, [canConfigure, canManageStorage, initialFocus]);
+  }, [canConfigure, canManageStorage, canManageSources, initialFocus]);
 
   const moveFocus = (direction: -1 | 1) => {
     const buttons = [
@@ -88,7 +97,9 @@ export default function SettingsPage({
     return true;
   };
   const firstEnabled = () =>
-    [configurationRef.current, storageRef.current].find(button => button && !button.disabled);
+    [configurationRef.current, storageRef.current, sourcesRef.current].find(
+      button => button && !button.disabled
+    );
   const navigationRef = useKeyboardNavigation({
     onRestoreFocus: () => {
       const target = firstEnabled() ?? backRef.current;
@@ -137,6 +148,16 @@ export default function SettingsPage({
         >
           Storage
         </Button>
+        <Button
+          ref={sourcesRef}
+          appearance="settings"
+          color="secondary"
+          fullWidth
+          disabled={!canManageSources}
+          onClick={onSources}
+        >
+          Sources
+        </Button>
         {builtForTizen && (
           <Button appearance="settings" color="secondary" fullWidth onClick={changeTvServer}>
             Change server ({displayServerAddress(API_URL)})
@@ -144,8 +165,8 @@ export default function SettingsPage({
         )}
         <Description>
           {canConfigure
-            ? 'Manage services, integrations, server configuration, and downloaded storage.'
-            : 'Configuration and storage management are available to administrators.'}
+            ? 'Manage services, integrations, server configuration, downloaded storage, and source providers.'
+            : 'Configuration, storage and source management are available to administrators.'}
         </Description>
       </Content>
       <BackRail ref={backRef} label="Back to Home" onBack={onDismiss} />

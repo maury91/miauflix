@@ -13,6 +13,7 @@ export type AppScreen =
   | { kind: 'requiredConfig' }
   | { kind: 'configuration' }
   | { kind: 'storage' }
+  | { kind: 'sources' }
   | { kind: 'settings' }
   | { kind: 'search' }
   | { kind: 'notFound' }
@@ -54,7 +55,7 @@ export function resolveScreen({
   if (appState === 'config') return { kind: 'optionalConfig' };
   if (requiredConfigActive || appState === 'config_wizard') return { kind: 'requiredConfig' };
   // Past the gates the user is signed in.
-  if (route.type === 'configuration' || route.type === 'storage')
+  if (route.type === 'configuration' || route.type === 'storage' || route.type === 'sources')
     return isAdmin ? { kind: route.type } : { kind: 'redirect', to: SETTINGS };
   if (route.type === 'settings') return { kind: 'settings' };
   if (route.type === 'search') return { kind: 'search' };

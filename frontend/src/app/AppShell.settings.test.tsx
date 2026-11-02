@@ -159,6 +159,8 @@ describe('Settings navigation', () => {
     fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
     expect(screen.getByRole('button', { name: 'Storage' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
+    expect(screen.getByRole('button', { name: 'Sources' })).toHaveFocus();
+    fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
     expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
     fireEvent.keyDown(document.activeElement!, { key: 'Escape' });
     await waitFor(() => expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument());
@@ -183,6 +185,7 @@ describe('Settings navigation', () => {
     act(() => navigate({ type: 'settings' }, { parent: { type: 'home' } }));
     expect(screen.getByRole('button', { name: 'Configuration' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Storage' })).toBeDisabled();
+    expect(screen.getByRole('button', { name: 'Sources' })).toBeDisabled();
     expect(screen.getByRole('button', { name: 'Back to Home' })).toHaveFocus();
     fireEvent.click(screen.getByRole('button', { name: 'Configuration' }));
     expect(screen.queryByText('Close configuration editor')).not.toBeInTheDocument();
@@ -191,6 +194,7 @@ describe('Settings navigation', () => {
   it.each([
     ['configuration', '/settings/configuration'],
     ['storage', '/settings/storage'],
+    ['sources', '/settings/sources'],
   ] as const)(
     'sends a non-admin opening %s directly to Settings without mounting Home',
     async (type, path) => {
