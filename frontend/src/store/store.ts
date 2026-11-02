@@ -11,6 +11,7 @@ import { progressApi } from '@features/progress/api/progress.api';
 import { realtimeMiddleware } from '@features/realtime/realtime.middleware';
 import { searchMiddleware } from '@features/search/search.middleware';
 import { setupApi } from '@features/setup/api/setup.api';
+import { sourcesApi } from '@features/sources/api/sources.api';
 import { storageApi } from '@features/storage/api/storage.api';
 import { configureStore } from '@reduxjs/toolkit';
 import { appStateSlice } from '@store/slices/appState';
@@ -33,6 +34,7 @@ export const store = configureStore({
     [progressApi.reducerPath]: progressApi.reducer,
     [configApi.reducerPath]: configApi.reducer,
     [setupApi.reducerPath]: setupApi.reducer,
+    [sourcesApi.reducerPath]: sourcesApi.reducer,
     [storageApi.reducerPath]: storageApi.reducer,
     [authSlice.name]: authSlice.reducer,
     [artworkSlice.name]: artworkSlice.reducer,
@@ -55,6 +57,7 @@ export const store = configureStore({
       progressApi.middleware,
       configApi.middleware,
       setupApi.middleware,
+      sourcesApi.middleware,
       storageApi.middleware,
       searchMiddleware,
       realtimeMiddleware,
