@@ -166,7 +166,8 @@ export class HttpClient {
         checkServerIdentity: (_hostname, certificate) => checkServerIdentity(hostname, certificate),
       };
       // An ambient proxy could resolve the hostname again or redirect outside this guard.
-      init.proxy = '';
+      // An empty string means "no option" and keeps the environment proxy; `false` forces a direct connection.
+      init.proxy = false as unknown as string;
     }
     const cap = options.maxBytes ?? 10 * 1024 * 1024;
     let response = await this.bounded(

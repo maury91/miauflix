@@ -277,7 +277,8 @@ it('checks all DNS answers on each redirect and pins public requests with their 
           subjectaltname: 'DNS:cdn.invalid',
         } as never)
       ).toBeUndefined();
-      expect((init as BunFetchRequestInit).proxy).toBe('');
+      // @ts-expect-error false is not a valid value for proxy but it is accepted by bun
+      expect((init as BunFetchRequestInit).proxy).toBe(false);
       return Promise.resolve(
         new Response(null, { status: 302, headers: { location: 'https://next.invalid/b' } })
       );
