@@ -22,6 +22,8 @@ COPY packages/contract/package.json ./packages/contract/
 COPY packages/service-contracts/package.json ./packages/service-contracts/
 COPY packages/service-configuration/package.json ./packages/service-configuration/
 COPY services/media-catalog/package.json ./services/media-catalog/
+COPY services/list-service/package.json ./services/list-service/
+COPY services/sources/package.json ./services/sources/
 
 # Some workspace packages have prepare scripts that require their source. The
 # source is copied after dependency installation, so skip those scripts here.

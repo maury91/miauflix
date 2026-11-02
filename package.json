@@ -16,7 +16,7 @@
     "package:tizen": "./scripts/package-tizen.sh",
     "install:tizen": "./scripts/install-tizen.sh",
     "generate:icons": "node scripts/generate-icons.mjs",
-    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:catalog\" \"npm run start:list\" --names \"backend,frontend,catalog,list\" --prefix-colors \"blue,green,yellow,magenta\"",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:catalog\" \"npm run start:list\" \"npm run start:sources\" --names \"backend,frontend,catalog,list,sources\" --prefix-colors \"blue,green,yellow,magenta,cyan\"",
     "docker:build": "./scripts/docker-publish.sh latest build",
     "docker:cleanup": "./scripts/docker-publish.sh cleanup",
     "docker:deploy": "./scripts/docker-publish.sh latest deploy",
@@ -66,7 +66,9 @@
     "extract:provider-fictionalization": "node scripts/extract-provider-fictionalization.mjs",
     "apply:provider-fictionalization": "node scripts/apply-provider-fictionalization.mjs",
     "test": "turbo run test --concurrency=2 --filter='./backend' --filter='./frontend' --filter='./packages/*' --filter='./services/*'",
-    "test:frontend:e2e:smooth-core-flows": "npm run test:e2e:smooth-core-flows --workspace frontend"
+    "test:frontend:e2e:smooth-core-flows": "npm run test:e2e:smooth-core-flows --workspace frontend",
+    "start:sources": "bun run --cwd services/sources src/index.ts",
+    "start:sources:watch": "bun --watch --cwd services/sources src/index.ts"
   },
   "dependencies": {
     "concurrently": "9.2.1"
