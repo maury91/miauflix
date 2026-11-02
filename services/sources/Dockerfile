@@ -51,5 +51,5 @@ RUN mkdir -p /app/data && chown bun:bun /app/data
 VOLUME /app/data
 EXPOSE 3003
 USER bun
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=5 CMD bun -e "fetch('http://localhost:3003/health').then(r => { if (!r.ok) process.exit(1) })"
+HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=5 CMD bun -e "fetch('http://127.0.0.1:' + (process.env.SOURCES_PORT || 3003) + '/health').then(r => { if (!r.ok) process.exit(1) })"
 CMD ["bun", "run", "/app/services/sources/src/index.ts"]

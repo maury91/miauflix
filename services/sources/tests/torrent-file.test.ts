@@ -8,6 +8,7 @@ import { afterEach, expect, it } from 'bun:test';
 
 import { createSourcesService } from '../src/service';
 import { createSeal } from '../src/util/seal';
+import { fixtureFetch, fixtureResolver } from './http-fixture';
 const dirs: string[] = [];
 const stops: Array<() => Promise<void>> = [];
 const hash = 'a'.repeat(40),
@@ -17,10 +18,10 @@ const setup = async (handler: (url: URL) => Response) => {
   dirs.push(dir);
   const created = createSourcesService({
     dataDir: dir,
+    resolveHost: fixtureResolver,
     keyFile: join(dir, '.key'),
     encryptionKey: 'test',
-    fetch: ((url: URL | string | Request) =>
-      handler(new URL(String(url)))) as unknown as typeof fetch,
+    fetch: fixtureFetch(url => handler(url)),
   });
   stops.push(created.stop);
   const transport = localTransport(created.service);

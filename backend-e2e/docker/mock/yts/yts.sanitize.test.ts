@@ -29,17 +29,32 @@ it('preserves an actually mismatched response so production identity validation 
   expect(result.data.movies[0].imdb_code).toBe('tt0111161');
 });
 
-it('all recorded IMDb lookups retain the identity encoded in their fixture request', () => {
+it('sanitization retains each recorded IMDb identity, including mismatched hits', () => {
   const directory = new URL('../../yts/data/api/v2/', import.meta.url);
   let checked = 0;
   for (const name of readdirSync(directory)) {
     const match = /query_term-(tt\d+)\.json$/.exec(name);
     if (!match) continue;
     const fixture = JSON.parse(readFileSync(new URL(name, directory), 'utf8'));
-    for (const movie of fixture.data?.data?.movies ?? []) {
-      expect(movie.imdb_code).toBe(match[1]);
-      checked++;
-    }
+    const movies = fixture.data?.data?.movies ?? [];
+    const result = sanitize(
+      {
+        status: 'ok',
+        data: {
+          // Exercise recorded identities independently of torrent hash fictionalization.
+          movies: movies.map((movie: { id: number; imdb_code: string }) => ({
+            id: movie.id,
+            imdb_code: movie.imdb_code,
+            torrents: [],
+          })),
+        },
+      },
+      `https://yts.invalid/api/v2/list_movies.json?query_term=${match[1]}`
+    );
+    expect(
+      (result.data?.movies ?? []).map((movie: { imdb_code: string }) => movie.imdb_code)
+    ).toEqual(movies.map((movie: { imdb_code: string }) => movie.imdb_code));
+    checked += movies.length;
   }
   expect(checked).toBeGreaterThan(0);
 });

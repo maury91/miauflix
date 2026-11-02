@@ -93,6 +93,7 @@ export class YtsProvider implements Provider {
       const response = await ctx.http.request('https://yifystatus.com/', {
         signal: ctx.signal,
         timeoutMs: 10_000,
+        blockInternal: true,
         maxBytes: 1024 * 1024,
       });
       if (!response.ok) throw new HttpError(response.status, response.headers.get('retry-after'));
@@ -120,7 +121,7 @@ export class YtsProvider implements Provider {
       url.searchParams.set('limit', '20');
       const data = await ctx.http.json<{ status: string; data?: { movies?: YtsMovie[] } }>(
         url.href,
-        { signal: ctx.signal }
+        { signal: ctx.signal, blockInternal: !custom }
       );
       if (data.status !== 'ok') throw new Error('YTS invalid response');
       return {

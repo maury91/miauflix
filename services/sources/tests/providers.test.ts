@@ -8,6 +8,7 @@ import { HttpClient } from '../src/http/http-client';
 import { toCandidate } from '../src/normalize/candidate';
 import { TherarbgProvider } from '../src/providers/native/therarbg';
 import { YtsProvider } from '../src/providers/native/yts';
+import { fixtureResolver } from './http-fixture';
 
 const fixture = (path: string) =>
   JSON.parse(readFileSync(join(import.meta.dir, 'fixtures/recorded', path), 'utf8')) as {
@@ -23,7 +24,9 @@ const setup = (data: { status: number; headers: Record<string, string>; body: un
       new Response(typeof data.body === 'string' ? data.body : JSON.stringify(data.body), {
         status: data.status,
         headers: data.headers,
-      })) as unknown as typeof fetch
+      })) as unknown as typeof fetch,
+    Date.now,
+    fixtureResolver
   );
   return { config, ctx: { http, signal: new AbortController().signal } };
 };

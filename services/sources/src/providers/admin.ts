@@ -52,7 +52,7 @@ export class ProviderAdmin {
       requiresFlareSolverr: instance?.requiresFlareSolverr ?? false,
       settingsSchema: schema,
       settings: Object.fromEntries(
-        Object.entries(settings).map(([name, value]) => [
+        Object.entries(settings ?? {}).map(([name, value]) => [
           name,
           schema.find(s => s.name === name)?.type === 'password' && value ? MASK : value,
         ])
@@ -62,11 +62,14 @@ export class ProviderAdmin {
           ? 'disabled'
           : cooling
             ? 'cooldown'
-            : row.failures > 0
+            : settings === null || row.failures > 0
               ? 'degraded'
               : 'ok',
         cooldownUntil: cooling ? new Date(row.cooldown_until!).toISOString() : null,
-        lastError: row.last_error,
+        lastError:
+          settings === null
+            ? 'Saved settings are unreadable. Replace settings, then explicitly enable the provider.'
+            : row.last_error,
         lastSuccessAt: row.last_success_at ? new Date(row.last_success_at).toISOString() : null,
       },
       usage: {
@@ -90,16 +93,28 @@ export class ProviderAdmin {
       (!Number.isInteger(patch.priority) || patch.priority < 1 || patch.priority > 999)
     )
       throw new AdminError('bad_request', 'Priority must be an integer from 1 to 999');
+    if (patch.enabled !== undefined && typeof patch.enabled !== 'boolean')
+      throw new AdminError('bad_request', 'Enabled must be a boolean');
+    const saved = this.store.settings(row);
+    if (saved === null && patch.enabled === true)
+      throw new AdminError(
+        'bad_request',
+        'Replace unreadable settings before enabling the provider'
+      );
     let settings: Record<string, string | boolean> | undefined;
     if (patch.settings) {
       const schema = this.registry.settingsSchema(row);
-      settings = { ...this.store.settings(row) };
+      settings = { ...saved };
       for (const [name, value] of Object.entries(patch.settings)) {
         const setting = schema.find(s => s.name === name);
         if (!setting) throw new AdminError('bad_request', `Unknown setting ${name}`);
         if (typeof value !== 'string' && typeof value !== 'boolean')
           throw new AdminError('bad_request', `Invalid value for ${name}`);
-        if (setting.type === 'password' && value === MASK) continue;
+        if (setting.type === 'password' && value === MASK) {
+          if (saved === null)
+            throw new AdminError('bad_request', 'Unreadable credentials must be replaced');
+          continue;
+        }
         if (
           ['dailyBudget', 'perMinute'].includes(name) &&
           value !== '' &&
@@ -114,7 +129,11 @@ export class ProviderAdmin {
     }
     if (patch.enabled !== undefined) this.store.setEnabled(id, patch.enabled);
     if (patch.priority !== undefined) this.store.setPriorities([[id, patch.priority]]);
-    if (settings) this.store.setSettings(id, settings);
+    if (settings) {
+      // Recovery must not silently activate defaults after losing saved restrictions.
+      if (saved === null) this.store.setEnabled(id, false);
+      this.store.setSettings(id, settings);
+    }
     this.changed();
     return this.view(this.store.provider(id)!);
   }
@@ -134,7 +153,8 @@ export class ProviderAdmin {
     const row = this.store.provider(id);
     if (!row) throw new AdminError('not_found', `Unknown provider ${id}`);
     const instance = this.registry.instance(row);
-    if (!instance) return { success: false, message: 'This provider type is not supported yet' };
+    if (!instance)
+      return { success: false, message: 'Provider is unsupported or its settings are unreadable' };
     try {
       return await instance.test({ signal, http: this.http });
     } catch (error) {

@@ -5,16 +5,19 @@ import { HttpClient, HttpError, RateLimitError } from '../src/http/http-client';
 import { TherarbgProvider } from '../src/providers/native/therarbg';
 import { parseMirrorDomains, YtsProvider } from '../src/providers/native/yts';
 import { SingleFlight, withAbort } from '../src/util/single-flight';
+import { fixtureFetch, fixtureResolver } from './http-fixture';
 
 const client = (
   handler: (url: URL, init: RequestInit) => Response | Promise<Response>,
   timeout = 1000,
   solver = ''
 ) =>
-  new HttpClient({ timeout: () => timeout, flareSolverr: () => solver }, ((
-    input: URL | string | Request,
-    init?: RequestInit
-  ) => handler(new URL(String(input)), init ?? {})) as typeof fetch);
+  new HttpClient(
+    { timeout: () => timeout, flareSolverr: () => solver },
+    fixtureFetch(handler),
+    Date.now,
+    fixtureResolver
+  );
 const context = (http: HttpClient) => ({ http, signal: new AbortController().signal });
 const config = async (values: Record<string, string>) => {
   const config = new SourcesConfigService();

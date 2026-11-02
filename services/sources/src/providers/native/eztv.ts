@@ -28,7 +28,7 @@ export class EztvProvider implements Provider {
         episode: string;
         torrent_url: string;
       }[];
-    }>(url.href, { signal: ctx.signal, ...this.rate });
+    }>(url.href, { signal: ctx.signal, ...this.rate, blockInternal: true });
     return {
       results: (data.torrents ?? []).map(
         (t): RawResult => ({
@@ -38,7 +38,7 @@ export class EztvProvider implements Provider {
           seeders: t.seeds,
           leechers: t.peers,
           size: Number(t.size_bytes),
-          date: new Date(t.date_released_unix * 1000).toISOString(),
+          date: new Date(t.date_released_unix * 1000),
           season: Number(t.season),
           episode: Number(t.episode),
           torrentUrl: t.torrent_url,
