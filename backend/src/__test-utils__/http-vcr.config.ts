@@ -1,8 +1,6 @@
 import { join } from 'path/posix';
 
-import { transformTheRarbgData } from './http-vcr-utils/therarbg.transformer';
 import type { HttpVcrConfig } from './http-vcr-utils/types';
-import { transformYtsData } from './http-vcr-utils/yts.transformer';
 
 export const HTTP_VCR_CONFIG: HttpVcrConfig = {
   mode: (process.env.HTTP_VCR_MODE as HttpVcrConfig['mode']) || 'hybrid',
@@ -12,16 +10,6 @@ export const HTTP_VCR_CONFIG: HttpVcrConfig = {
   providerMap: [
     { pattern: 'api.themoviedb.org', name: 'tmdb' },
     { pattern: 'api.trakt.tv', name: 'trakt' },
-    { pattern: 'yts.mx', name: 'yts' },
-    { pattern: 'yts.rs', name: 'yts' },
-    { pattern: 'yts.hn', name: 'yts' },
-    { pattern: 'yts.lt', name: 'yts' },
-    { pattern: 'yts.am', name: 'yts' },
-    { pattern: 'yifystatus.com', name: 'yifystatus' },
-    { pattern: 'torrage.info', name: 'torrage' },
-    { pattern: 'itorrents.org', name: 'itorrents' },
-    { pattern: 'therarbg.to', name: 'therarbg' },
-    { pattern: 'therar.site', name: 'therarbg' },
   ],
   defaultProvider: 'other',
   headersBlacklist: [
@@ -58,15 +46,6 @@ export const HTTP_VCR_CONFIG: HttpVcrConfig = {
     'set-cookie',
   ],
   prettyPrintJson: true,
-  transformers: [
-    {
-      urlPattern: 'yts\\..*\\/api\\/v2\\/',
-      transform: transformYtsData,
-    },
-    {
-      urlPattern: '(therarbg\\.to|therar\\.site)',
-      transform: transformTheRarbgData,
-    },
-  ],
+  transformers: [],
   autoTransform: true,
 };

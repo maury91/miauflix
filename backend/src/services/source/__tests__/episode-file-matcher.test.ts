@@ -1,9 +1,14 @@
-import type { SourceMetadata } from '@content-directories/content-directory.abstract';
+import type { SourceMetadata } from '@services/sources/source-candidate';
 
 import { matchEpisodeFile } from '../episode-file-matcher';
 
 function release(files: string[]): SourceMetadata {
   return {
+    provider: 'therarbg',
+    providerKind: 'native',
+    matchedBy: 'imdb',
+    accuracy: 'medium',
+    releaseName: 'Show',
     audioCodec: [],
     bitrate: 0,
     broadcasters: 0,

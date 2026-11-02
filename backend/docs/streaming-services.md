@@ -1,6 +1,6 @@
 # Streaming Services
 
-> **Status Updated:** 2025-06-25 - Verified against actual implementation
+> Source search runs in the standalone Bun sources service; playback remains in the backend.
 
 The backend provides comprehensive torrent infrastructure with WebTorrent integration. **Note:** The streaming endpoint is fully implemented and production-ready.
 
@@ -17,9 +17,9 @@ The backend provides comprehensive torrent infrastructure with WebTorrent integr
 
 ### Source Services (Production Ready)
 
-- ✅ **Multi-Provider Aggregation**: YTS + THERARBG content directories fully implemented
-- ✅ **Background Source Discovery**: Automated source search every 0.1 seconds
-- ✅ **VPN-Aware Processing**: Automatic pause/resume based on VPN status
+- ✅ **Multi-Provider Aggregation**: the sources service searches TheRARBG, YTS and EZTV and streams normalized candidates to the backend
+- ✅ **Background Source Discovery**: background jobs follow the sources planner's coverage and retry summaries
+- ✅ **VPN-Aware Processing**: the sources service checks its own VPN before website requests; backend downloads and tracker stats retain their VPN checks
 - ✅ **On-Demand Source Search**: Real-time source discovery with timeout (`getSourcesForMovieWithOnDemandSearch`)
 - ✅ **Rate Limiting**: Per-provider rate limiters with configurable limits
 - ✅ **Quality Detection**: Automatic quality, codec, and metadata extraction
@@ -100,8 +100,21 @@ DISABLE_DISCOVERY=false   # DHT enabled
 SOURCE_SECURITY_KEY=...   # AES-256 encryption key
 
 # VPN Configuration (Active)
-DISABLE_VPN_CHECK=false   # VPN required for source search
+DISABLE_VPN_CHECK=false   # Backend download/stats VPN checks
+SOURCES_SERVICE_URL=http://localhost:3003
+
+# Source-provider settings are stored and pushed through the configuration wizard.
+# SOURCES_DISABLE_VPN_CHECK defaults to the backend DISABLE_VPN_CHECK value on first push.
 ```
+
+### Source service boundary
+
+Run `npm run start:sources` from the repository root, or use `npm run dev`. In Docker,
+`miauflix-services` includes source search on port 3003; development compose runs a separate
+`sources` container. The backend uses `SourcesClientService` and never downloads provider
+web pages or metadata-cache responses directly. Source URLs are encrypted opaque references.
+The backend keeps source rows, source verification, episode matching and all playback logic.
+See [the service README](../../services/sources/README.md) for configuration and offline fixtures.
 
 ## Development Status
 

@@ -56,8 +56,7 @@ export class SourceAvailabilityService {
     private readonly notifications?: Pick<
       NotificationService,
       'episodeAvailable' | 'playableAvailable'
-    >,
-    private readonly movieProviderNames: () => string[] = () => []
+    >
   ) {}
 
   /** Record the verdict for a source's file list; returns whether it holds a real video. */
@@ -88,15 +87,11 @@ export class SourceAvailabilityService {
 
   /** A movie's availability; `sources` saves the lookup when the caller already has them. */
   async forMovie(
-    movie: Pick<Movie, 'contentDirectoriesSearched' | 'id'>,
+    movie: Pick<Movie, 'id' | 'sourceSearchComplete'>,
     sources?: ReadonlyArray<Pick<ContentSource, 'hasVideo'>>
   ): Promise<SourceAvailability> {
     const known = sources ?? (await this.db.getContentSourceRepository().findByMovieId(movie.id));
-    const providers = this.movieProviderNames();
-    const searched =
-      providers.length > 0 &&
-      providers.every(name => movie.contentDirectoriesSearched?.includes(name));
-    return availabilityOf(known, searched);
+    return availabilityOf(known, movie.sourceSearchComplete);
   }
 
   /**

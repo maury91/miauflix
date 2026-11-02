@@ -42,7 +42,7 @@ import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
 import { SourceAvailabilityService } from '@services/source/source-availability.service';
 import { SourceHealthService } from '@services/source/source-health.service';
-import { ContentDirectoryService } from '@services/source-metadata/content-directory.service';
+import { SourcesClientService } from '@services/sources/sources-client.service';
 import { StatsService } from '@services/stats/stats.service';
 import { StorageService } from '@services/storage/storage.service';
 import { StreamService } from '@services/stream/stream.service';
@@ -82,6 +82,8 @@ try {
   await catalogClient.initialize();
   const listClient = new ListClientService(configurationService);
   await listClient.initialize();
+  const sourcesClientService = new SourcesClientService(configurationService);
+  await sourcesClientService.initialize();
 
   // Initialize DB
   const db = new Database(configurationService);
@@ -107,16 +109,7 @@ try {
   const storageService = new StorageService(db, configurationService);
   const sourceHealthService = new SourceHealthService();
   const downloadService = new DownloadService(storageService, requestService, configurationService);
-  const contentDirectoryService = new ContentDirectoryService(
-    cacheService.cache,
-    downloadService,
-    requestService,
-    statsService,
-    configurationService
-  );
-  const sourceAvailabilityService = new SourceAvailabilityService(db, notificationService, () =>
-    contentDirectoryService.getMovieDirectoryNames()
-  );
+  const sourceAvailabilityService = new SourceAvailabilityService(db, notificationService);
   // Every file list that becomes known decides whether its source is real.
   storageService.onLayout((sourceId, layout) => {
     sourceAvailabilityService.recordFiles(sourceId, layout.files).catch(error => {
@@ -127,12 +120,15 @@ try {
     downloadService,
     requestService,
     statsService,
-    configurationService
+    configurationService,
+    false,
+    true,
+    sourcesClientService
   );
   const sourceService = new SourceService(
     db,
     vpnDetectionService,
-    contentDirectoryService,
+    sourcesClientService,
     magnetService,
     requestService,
     configurationService,
@@ -233,6 +229,7 @@ try {
   configurationService.registerService('SERVER', serverService);
   configurationService.registerService('CATALOG', catalogClient);
   configurationService.registerService('LIST', listClient);
+  configurationService.registerService('SOURCES', sourcesClientService);
 
   // Run the configuration setup, if the environment is interactive the setup will guide the user into configuring all the unconfigured services
   // if it is not, it will still be possible through the frontend
@@ -303,6 +300,8 @@ try {
       await scheduleCoordinator.stop();
       catalogClient.stop();
       listClient.stop();
+      sourceService.stop();
+      sourcesClientService.stop();
       await backgroundWorker.stop();
       preloadIntentService.close();
       backgroundJobs.close();
@@ -334,7 +333,7 @@ try {
     listService,
     listClient,
     vpnDetectionService,
-    contentDirectoryService,
+    sourcesClientService,
     magnetService,
     qrLoginService,
     downloadService,

@@ -13,13 +13,13 @@ import {
   VideoCodec,
 } from '@miauflix/source-metadata-extractor';
 
-import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import type { ContentSource } from '@entities/content-source.entity';
 import type { Episode } from '@entities/episode.entity';
 import type { Movie } from '@entities/movie.entity';
 import type { Season } from '@entities/season.entity';
 import type { TVShow } from '@entities/tvshow.entity';
 import type { MovieDetail, SeasonDetail, TVShowDetail } from '@services/catalog/catalog.types';
+import type { SourceMetadata } from '@services/sources/source-candidate';
 
 /**
  * Local slim media mirrors (movies, shows, seasons, episodes) and the catalog
@@ -46,6 +46,7 @@ export function createMockMovie(overrides: Partial<Movie> = {}): Movie {
     poster: overrides.poster ?? movieMetadata.poster,
     backdrop: overrides.backdrop ?? movieMetadata.backdrop,
     contentDirectoriesSearched: overrides.contentDirectoriesSearched ?? [],
+    sourceSearchComplete: overrides.sourceSearchComplete ?? false,
     sources: overrides.sources ?? [],
     createdAt: overrides.createdAt ?? faker.date.past(),
     updatedAt: overrides.updatedAt ?? faker.date.recent(),
@@ -252,6 +253,11 @@ export function createMockSourceMetadata(overrides: Partial<SourceMetadata> = {}
     overrides.quality ?? faker.helpers.arrayElement([Quality.FHD, Quality.HD, Quality.SD]);
 
   return {
+    provider: 'yts',
+    providerKind: 'native',
+    matchedBy: 'imdb',
+    accuracy: 'medium',
+    releaseName: 'Example movie',
     audioCodec:
       overrides.audioCodec ??
       faker.helpers.arrayElements([AudioCodec.AAC, AudioCodec.AC3, AudioCodec.DTS], {

@@ -22,7 +22,8 @@ describe('providerSourcesToEntities', () => {
     const [row] = providerSourcesToEntities([metadata], 'YTS');
 
     expect(row.hash).toBe(metadata.hash);
-    expect(row.source).toBe('YTS');
+    expect(row.source).toBe(metadata.provider);
+    expect(row.url).toBeNull();
     expect(row).not.toHaveProperty('movieId');
   });
 });

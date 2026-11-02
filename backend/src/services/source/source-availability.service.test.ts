@@ -41,7 +41,7 @@ describe('SourceAvailabilityService', () => {
       getMany: jest
         .fn()
         .mockResolvedValue([
-          { id: 7, mediaId: 1400940, title: 'Clayface', contentDirectoriesSearched: ['YTS'] },
+          { id: 7, mediaId: 1400940, title: 'Clayface', sourceSearchComplete: true },
         ]),
     };
     const episodeSources = { find: jest.fn().mockResolvedValue([]) };
@@ -55,7 +55,7 @@ describe('SourceAvailabilityService', () => {
             : undefined,
     } as unknown as Database;
     const notifications = { playableAvailable: jest.fn(), episodeAvailable: jest.fn() };
-    const service = new SourceAvailabilityService(database, notifications, () => ['YTS']);
+    const service = new SourceAvailabilityService(database, notifications);
     const changes = jest.fn();
     service.onChange(changes);
     return { service, contentSources, notifications, changes, episodeSources };
@@ -63,6 +63,17 @@ describe('SourceAvailabilityService', () => {
 
   beforeAll(() => {
     configureFakerSeed();
+  });
+
+  it('keeps an empty partial search pending until the sources service reports complete', async () => {
+    const { service } = setupTest();
+
+    await expect(service.forMovie({ id: 7, sourceSearchComplete: false }, [])).resolves.toBe(
+      'pending'
+    );
+    await expect(service.forMovie({ id: 7, sourceSearchComplete: true }, [])).resolves.toBe(
+      'unavailable'
+    );
   });
 
   it('marks a source fake and tells listeners its movie has no source left', async () => {

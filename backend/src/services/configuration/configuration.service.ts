@@ -199,6 +199,21 @@ export class ConfigurationService {
       });
       this._variableGroups.set(key, group.id);
     }
+    // The source service inherits the existing VPN opt-out on its first configuration.
+    // Seed its default before normal resolution so an explicit service value still wins.
+    const sourcesVpnKey = 'SOURCES_DISABLE_VPN_CHECK' as VariableName;
+    if (
+      serviceName === 'SOURCES' &&
+      keys.has(sourcesVpnKey) &&
+      !this._rawValues.has(sourcesVpnKey)
+    ) {
+      const info = this._variablesInfo.get(sourcesVpnKey)!;
+      this._variablesInfo.set(sourcesVpnKey, {
+        ...info,
+        password: false,
+        defaultValue: this._rawValues.get('DISABLE_VPN_CHECK') ?? 'false',
+      });
+    }
     this.autoConfigureDefaults(keys, false);
     for (const key of keys) {
       const raw = this._rawValues.get(key);
@@ -256,7 +271,13 @@ export class ConfigurationService {
     const values = Object.fromEntries(
       variables.map(item => [
         item.key,
-        overrides[item.key] ?? rawValues.get(item.key as VariableName) ?? item.defaultValue ?? '',
+        overrides[item.key] ??
+          rawValues.get(item.key as VariableName) ??
+          (serviceName === 'SOURCES' && item.key === 'SOURCES_DISABLE_VPN_CHECK'
+            ? rawValues.get('DISABLE_VPN_CHECK')
+            : undefined) ??
+          item.defaultValue ??
+          '',
       ])
     );
     if (variables.some(item => item.required && !values[item.key])) return undefined;
