@@ -1,5 +1,6 @@
 import type { MediaDto } from '@miauflix/backend';
 import { builtForTizen } from '@shared/config/constants';
+import { getTvHeroBackdropSizes } from '@shared/config/tv-profile';
 
 export function getMediaTitle(media: MediaDto): string {
   return media._type === 'movie' ? media.title : media.name;
@@ -34,7 +35,8 @@ const MAX_CACHED_ARTWORK_URLS = 5_000;
 /** Size artwork for its rendered width; keep provider and bundled asset URLs intact. */
 export function artworkUrl(
   path: string | null | undefined,
-  kind: 'card' | 'logo' | 'backdrop' | 'still',
+  /** `backdrop` while the selection moves, `backdrop-resting` once it rests (the TV sizes them). */
+  kind: 'card' | 'logo' | 'backdrop' | 'backdrop-resting' | 'still',
   cssWidth = typeof window === 'undefined' ? 1280 : window.innerWidth
 ): string {
   const dpr = typeof window === 'undefined' ? 1 : window.devicePixelRatio || 1;
@@ -53,7 +55,7 @@ export function artworkUrl(
             ? 'w300'
             : 'w780'
           : builtForTizen
-            ? 'w780'
+            ? getTvHeroBackdropSizes()[kind === 'backdrop' ? 'moving' : 'resting']
             : pixels <= 1280
               ? 'w1280'
               : 'original';

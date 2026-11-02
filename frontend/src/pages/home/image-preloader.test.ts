@@ -116,6 +116,30 @@ describe('image preloader', () => {
     expect(started()).toEqual(['/nearby.jpg', '/idle-1.jpg', '/idle-2.jpg']);
   });
 
+  it('loads an idle image someone will show first, decoded, and drops it once replaced', async () => {
+    let idle = false;
+    let retry: (() => void) | null = null;
+    const preloader = setup({ isIdle: () => idle, whenIdle: next => (retry = next) });
+    void preloader.prepare('rows', ['/row-1.jpg', '/row-2.jpg'], IDLE);
+    const dropped = preloader.loadWhenIdle('hero', '/first.jpg');
+    const resting = preloader.loadWhenIdle('hero', '/second.jpg');
+    await expect(dropped).rejects.toThrow('image_load_cancelled');
+    expect(started()).toEqual([]);
+
+    idle = true;
+    retry!();
+    expect(started()).toEqual(['/second.jpg']);
+    image('/second.jpg').finish(3840, 2160);
+    await expect(resting).resolves.toEqual({ width: 3840, height: 2160 });
+    expect(image('/second.jpg').decoded).toBe(true);
+    expect(preloader.isLoaded('/second.jpg')).toBe(true);
+    expect(started()).toEqual(['/second.jpg', '/row-1.jpg']);
+    await expect(preloader.loadWhenIdle('hero', '/second.jpg')).resolves.toEqual({
+      width: 3840,
+      height: 2160,
+    });
+  });
+
   it('drops queued images an owner no longer wants, but finishes ones already loading', async () => {
     const preloader = setup({ maxConcurrent: 1 });
     void preloader.prepare('row', ['/1.jpg', '/2.jpg', '/3.jpg']);

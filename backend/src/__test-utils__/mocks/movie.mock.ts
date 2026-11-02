@@ -94,6 +94,7 @@ export function createMockTVShow(overrides: Partial<TVShow> = {}): TVShow {
     backdrop: overrides.backdrop ?? `/backdrops/${faker.string.alphanumeric(8)}.jpg`,
     imdbId: overrides.imdbId ?? generateImdbId(),
     status: overrides.status ?? 'Returning Series',
+    episodeRuntime: overrides.episodeRuntime ?? null,
     popularity: overrides.popularity ?? faker.number.float({ min: 0, max: 100, fractionDigits: 1 }),
     rating: overrides.rating ?? faker.number.float({ min: 1, max: 10, fractionDigits: 1 }),
     watching: overrides.watching ?? false,

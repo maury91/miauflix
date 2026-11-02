@@ -677,6 +677,7 @@ describe('PlayerView', () => {
     });
     render(<PlayerView playable={playable} title="Languages" onBack={vi.fn()} />);
     const video = (await screen.findByLabelText('Languages')) as HTMLVideoElement;
+    await waitFor(() => expect(startAudioPlayback).toHaveBeenCalled());
     video.currentTime = 45;
     act(() => startAudioPlayback.mock.lastCall?.[0].onReady());
     fireEvent.timeUpdate(video);

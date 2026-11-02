@@ -63,7 +63,7 @@ jobs:
           key: ${{ runner.os }}-turbo-${{ github.ref_name }}-${{ hashFiles('turbo.json', 'package-lock.json') }}-${{ github.sha }}
 
   e2e-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code
@@ -189,7 +189,7 @@ jobs:
           retention-days: 7
 
   visual-tests:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout code

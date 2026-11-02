@@ -119,6 +119,10 @@ export const HomeSidebar = memo(function HomeSidebar({
 
   const navigationRef = useKeyboardNavigation({
     enabled: active,
+    onRestoreFocus: () => {
+      focusSelected(selected);
+      return true;
+    },
     onDown: () => {
       step(1);
       return true;

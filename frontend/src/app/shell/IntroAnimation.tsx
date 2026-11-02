@@ -61,6 +61,8 @@ const INTRO_CUES = {
 const PULSE_SCALE = 1.25;
 const PULSE_ATTACK_S = 0.05;
 const PULSE_RELEASE_S = 0.22;
+/** How much each letter grows as the logo expands. */
+const LETTER_SCALE = 10;
 
 const AnimationContainer = styled.div<{ $lowResource: boolean }>`
   position: fixed;
@@ -190,6 +192,9 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
       // Position letters relative to the viewport using their original viewport boxes
       typedEntries(letters).forEach(([key, letter]) => {
         const { left, top, width, height } = constants[key].box;
+        // Set here, not through GSAP: it splits the current margins to change them, and could not
+        // split the TV's ("0px 10,752px"), so the sides kept their margins and the letters shifted
+        letter.style.margin = '0';
         gsap.set(letter, {
           position: 'fixed',
           display: 'block',
@@ -197,7 +202,6 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
           top: `${top}px`,
           width: `${width}px`,
           height: `${height}px`,
-          margin: 0,
           transformOrigin: 'center center',
           force3D: true, // Hardware acceleration
           // Give each letter its layer now, not as the expansion starts: on a TV painting eight
@@ -217,13 +221,16 @@ export const IntroAnimation = forwardRef<LogoAnimationHandle, LogoAnimatedProps>
         translateX: constants[key].multiplier,
       }));
 
-      // Animate all letters scaling and moving simultaneously
+      // Animate all letters scaling and moving simultaneously: `scale(10) translateX(t)`, as
+      // GSAP's own x and scale. A transform string makes GSAP read the browser's matrix back, and
+      // the TV writes it with decimal commas ("scale(1,25)"): most letters then stayed put
       letterAnimations.forEach(({ letter, translateX }) => {
         animation.fromTo(
           letter,
-          { transform: 'scale(1) translateX(0)' },
+          { x: 0, scale: 1 },
           {
-            transform: `scale(10) translateX(${translateX}px)`,
+            x: LETTER_SCALE * translateX,
+            scale: LETTER_SCALE,
             duration: duration,
             ease: 'expoScale(1, 10)',
           },

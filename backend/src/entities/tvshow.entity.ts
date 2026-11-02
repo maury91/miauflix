@@ -45,6 +45,10 @@ export class TVShow {
   @Column()
   status: string;
 
+  /** A typical episode's length in minutes (the catalog's shortest), null when unknown. */
+  @Column({ type: 'integer', nullable: true })
+  episodeRuntime: number | null;
+
   @Column({
     type: 'float',
     default: 0,
