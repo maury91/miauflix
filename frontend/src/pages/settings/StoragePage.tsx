@@ -223,6 +223,11 @@ export default function StoragePage({ onDismiss }: StoragePageProps) {
   };
 
   const navigationRef = useKeyboardNavigation({
+    onRestoreFocus: () => {
+      const target = confirmingId === null ? backRef.current : cancelRef.current;
+      target?.focus({ preventScroll: true });
+      return !!target;
+    },
     onUp: () => cycleButtons(-1),
     onDown: () => cycleButtons(1),
     onBack: () => {

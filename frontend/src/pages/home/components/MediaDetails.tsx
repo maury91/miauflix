@@ -361,6 +361,8 @@ interface MediaDetailsProps {
 
 export interface MediaDetailsHandle {
   handleAction: (action: HomeAction) => NavigationOutcome;
+  /** Focus the default item (the primary action, else the page) after focus was lost. */
+  restoreFocus: () => boolean;
 }
 
 const formatYear = (value: string | null | undefined) => value?.slice(0, 4) ?? '';
@@ -542,7 +544,12 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     artwork && artwork.artworkRevision >= currentRevision
       ? artwork.backdrop
       : (current?.backdrop ?? media.backdrop);
-  const backdrop = artworkUrl(selectedBackdrop, 'backdrop');
+  // The hero's resting backdrop when it has loaded; otherwise the one it showed while moving,
+  // so opening details never waits for a larger image. Chosen once, so it never swaps while open.
+  const backdrop = useMemo(() => {
+    const resting = artworkUrl(selectedBackdrop, 'backdrop-resting');
+    return imagePreloader.isLoaded(resting) ? resting : artworkUrl(selectedBackdrop, 'backdrop');
+  }, [selectedBackdrop]);
   const backdropFocus = current?.backdropFocus ?? media.backdropFocus ?? resolvedBackdropFocus;
   const backdropPlacement = getBackdropPlacement(backdropFocus, backdropContext);
   const warmupState: WarmupState = preparation?.warmup?.state ?? 'not_requested';
@@ -715,7 +722,17 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
     }
   }, [current]);
 
-  useImperativeHandle(forwardedRef, () => ({ handleAction }), [handleAction]);
+  const restoreFocus = useCallback(() => {
+    const page = pageRef.current;
+    const target = page?.querySelector<HTMLButtonElement>('[data-details-primary]') ?? page;
+    target?.focus({ preventScroll: true });
+    return !!target;
+  }, []);
+
+  useImperativeHandle(forwardedRef, () => ({ handleAction, restoreFocus }), [
+    handleAction,
+    restoreFocus,
+  ]);
 
   return (
     <>
@@ -780,8 +797,10 @@ export const MediaDetails = forwardRef<MediaDetailsHandle, MediaDetailsProps>(fu
                 icon={<BookmarkIcon />}
                 $selected={inWatchlist}
                 aria-pressed={inWatchlist}
-                disabled={watchlistPending}
+                // Not `disabled`: disabling the focused button would drop focus to the page body.
+                aria-disabled={watchlistPending}
                 onClick={() => {
+                  if (watchlistPending) return;
                   const item = { mediaType: watchlistType, mediaId: media.mediaId } as const;
                   void (inWatchlist ? removeFromWatchlist(item) : addToWatchlist(item));
                 }}

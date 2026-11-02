@@ -11,16 +11,14 @@ export type PosterCardProps = Omit<
   /** Secondary caption line, e.g. `2021 • 2h 35m • ★ 8.0`. */
   meta?: ReactNode;
   focused?: boolean;
-  /** CSS width of the card; the poster keeps a 2:3 ratio. */
+  /** CSS width of the card, as an absolute length (px, vw); the poster keeps a 2:3 ratio. */
   width?: string;
 };
 
 const Card = styled.button<{ $width: string; $focused: boolean }>`
   box-sizing: border-box;
-  display: flex;
+  display: block;
   flex: 0 0 auto;
-  flex-direction: column;
-  gap: 0.6em;
   width: ${({ $width }) => $width};
   padding: 0;
   border: 0;
@@ -32,6 +30,17 @@ const Card = styled.button<{ $width: string; $focused: boolean }>`
   outline: none;
   user-select: none;
   -webkit-user-select: none;
+`;
+
+/**
+ * Lays out the card inside the button: older TV browsers (Chromium 69 on Tizen 5.5) cannot make a
+ * button a flex container and shrink its content to fit, so this takes the card's width instead.
+ */
+const Content = styled.span`
+  display: flex;
+  flex-direction: column;
+  gap: 0.6em;
+  width: inherit;
 `;
 
 const Artwork = styled.span<{ $focused: boolean }>`
@@ -96,11 +105,13 @@ const Meta = styled.span`
 export const PosterCard = forwardRef<HTMLButtonElement, PosterCardProps>(
   ({ poster, title, meta, focused = false, width = '200px', type = 'button', ...props }, ref) => (
     <Card ref={ref} type={type} aria-label={title} $width={width} $focused={focused} {...props}>
-      <Artwork $focused={focused}>
-        {poster ? <Poster src={poster} alt="" loading="lazy" /> : <Fallback>{title}</Fallback>}
-      </Artwork>
-      <Title aria-hidden="true">{title}</Title>
-      {meta && <Meta aria-hidden="true">{meta}</Meta>}
+      <Content>
+        <Artwork $focused={focused}>
+          {poster ? <Poster src={poster} alt="" loading="lazy" /> : <Fallback>{title}</Fallback>}
+        </Artwork>
+        <Title aria-hidden="true">{title}</Title>
+        {meta && <Meta aria-hidden="true">{meta}</Meta>}
+      </Content>
     </Card>
   )
 );

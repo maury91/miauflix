@@ -44,22 +44,32 @@ export function filterSources(sources: ContentSource[], allowHevc = true): Conte
   );
 }
 
+/** The bytes a source plays, or null when unknown: the whole source, or an episode's file. */
+export type PlayedSize = (source: ContentSource) => number | null;
+const wholeSource: PlayedSize = source => source.size || null;
+
 /**
- * A source's average bitrate in kbit/s, from its size and the movie's runtime, or null when
+ * A source's average bitrate in kbit/s, from the bytes it plays and the runtime, or null when
  * either is unknown. Extras in the source count too, so this errs on the high side.
  */
-export function estimatedBitrateKbps(source: ContentSource, runtimeSeconds: number): number | null {
-  if (!source.size || !(runtimeSeconds > 0)) return null;
-  return (source.size * 8) / runtimeSeconds / 1000;
+export function estimatedBitrateKbps(
+  source: ContentSource,
+  runtimeSeconds: number,
+  sizeOf: PlayedSize = wholeSource
+): number | null {
+  const size = sizeOf(source);
+  if (!size || !(runtimeSeconds > 0)) return null;
+  return (size * 8) / runtimeSeconds / 1000;
 }
 
 /** Whether a source fits the client's bitrate cap; a source of unknown bitrate fits. */
 export function fitsBitrate(
   source: ContentSource,
   maxBitrateKbps: number,
-  runtimeSeconds: number
+  runtimeSeconds: number,
+  sizeOf: PlayedSize = wholeSource
 ): boolean {
-  const bitrate = estimatedBitrateKbps(source, runtimeSeconds);
+  const bitrate = estimatedBitrateKbps(source, runtimeSeconds, sizeOf);
   return bitrate === null || bitrate <= maxBitrateKbps;
 }
 
@@ -70,11 +80,13 @@ export function fitsBitrate(
 export function preferWithinBitrate(
   sources: ContentSource[],
   maxBitrateKbps: number,
-  runtimeSeconds: number
+  runtimeSeconds: number,
+  sizeOf: PlayedSize = wholeSource
 ): ContentSource[] {
-  const fitting = sources.filter(source => fitsBitrate(source, maxBitrateKbps, runtimeSeconds));
+  const fits = (source: ContentSource) =>
+    fitsBitrate(source, maxBitrateKbps, runtimeSeconds, sizeOf);
   const over = sources
-    .filter(source => !fitsBitrate(source, maxBitrateKbps, runtimeSeconds))
-    .sort((a, b) => a.size - b.size);
-  return [...fitting, ...over];
+    .filter(source => !fits(source))
+    .sort((a, b) => (sizeOf(a) ?? 0) - (sizeOf(b) ?? 0));
+  return [...sources.filter(fits), ...over];
 }

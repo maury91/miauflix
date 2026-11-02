@@ -118,7 +118,7 @@ DISABLE_VPN_CHECK=false   # VPN required for source search
 - ✅ `/api/stream/:token` route implementation with streaming key authentication
 - ✅ Range request handling for video streaming and seeking
 - ✅ Quality and codec preference selection (auto, specific quality, HEVC support)
-- ✅ Bitrate cap (`preferences.maxBitrateKbps`): movie sources within the client's cap are tried first, then the rest from the leanest (the TV app asks for 8 Mbit/s)
+- ✅ Bitrate cap (`preferences.maxBitrateKbps`): sources within the client's cap are tried first, then the rest from the leanest. Movies are estimated from their size and runtime; episodes from the episode's file in the source (not a whole season pack) and the show's typical episode length (`TVShow.episodeRuntime`, uncapped when TMDB has none) (the TV app asks for 8 Mbit/s)
 - ✅ Comprehensive error handling and rate limiting (60 req/min)
 - ✅ Stream source optimization and fallback logic
 
