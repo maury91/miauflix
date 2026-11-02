@@ -6,7 +6,7 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - http://yts-mock/
+  - http://indexer-mock/
 
 caps:
   categorymappings:
