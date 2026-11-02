@@ -31,12 +31,12 @@ describe('movie source search scheduling', () => {
     const past = new Date(Date.now() - 60_000).toISOString();
     const future = new Date(Date.now() + 60_000).toISOString();
 
-    await repository.recordSourceSearch(movie.id, ['therarbg', 'yts'], past, true);
+    await repository.recordSourceSearch(movie.id, ['indexer-a', 'indexer-b'], past, true);
     expect((await repository.findMoviesPendingSourceSearch()).map(row => row.id)).toEqual([
       movie.id,
     ]);
 
-    await repository.recordSourceSearch(movie.id, ['therarbg', 'yts'], future, true);
+    await repository.recordSourceSearch(movie.id, ['indexer-a', 'indexer-b'], future, true);
     expect(await repository.findMoviesPendingSourceSearch()).toEqual([]);
 
     await repository.recordSourceSearch(movie.id, [], null, false);
@@ -47,14 +47,14 @@ describe('movie source search scheduling', () => {
 
   it('records completeness separately from provider names and clears it after a failed attempt', async () => {
     const { repository, movie } = await setupTest();
-    await repository.recordSourceSearch(movie.id, ['therarbg'], null, false);
+    await repository.recordSourceSearch(movie.id, ['indexer-a'], null, false);
     expect(await repository.findById(movie.id)).toMatchObject({
-      contentDirectoriesSearched: ['therarbg'],
+      contentDirectoriesSearched: ['indexer-a'],
       sourceSearchComplete: false,
       nextSourceSearchAt: null,
     });
 
-    await repository.recordSourceSearch(movie.id, ['therarbg'], null, true);
+    await repository.recordSourceSearch(movie.id, ['indexer-a'], null, true);
     await repository.markSourceSearchAttempt(movie.id);
     const stored = await repository.findById(movie.id);
     expect(stored?.sourceSearchComplete).toBe(false);
@@ -74,7 +74,7 @@ describe('movie source search scheduling', () => {
     await db.getRepository(MovieSource).save({ movieId: movie.id, sourceId: source.id });
     await repository.recordSourceSearch(
       movie.id,
-      ['YTS'],
+      ['indexer-a'],
       new Date(Date.now() + 86_400_000).toISOString(),
       true
     );

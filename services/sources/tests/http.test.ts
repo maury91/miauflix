@@ -1,9 +1,6 @@
 import { expect, it } from 'bun:test';
 
-import { SourcesConfigService } from '../src/config/config.service';
-import { HttpClient, HttpError, RateLimitError } from '../src/http/http-client';
-import { TherarbgProvider } from '../src/providers/native/therarbg';
-import { parseMirrorDomains, YtsProvider } from '../src/providers/native/yts';
+import { HttpClient, RateLimitError } from '../src/http/http-client';
 import { SingleFlight, withAbort } from '../src/util/single-flight';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
 
@@ -18,14 +15,6 @@ const client = (
     Date.now,
     fixtureResolver
   );
-const context = (http: HttpClient) => ({ http, signal: new AbortController().signal });
-const config = async (values: Record<string, string>) => {
-  const config = new SourcesConfigService();
-  config.registerProber({ test: async () => ({ success: true, message: 'fixture' }) });
-  await config.applyRemote(values);
-  return config;
-};
-
 it('skips an exhausted background host without making a request or charging budget', async () => {
   let calls = 0,
     charges = 0;
@@ -207,64 +196,6 @@ it('cancels shared work once its last caller leaves and permits a fresh operatio
   expect(shared.aborted).toBe(true);
   expect(await flights.runCancelable('same', new AbortController().signal, async () => 2)).toBe(2);
 });
-it('YTS custom fixture endpoints do not discover mirrors or contact public sites', async () => {
-  const calls: string[] = [];
-  const http = client(url => {
-    calls.push(url.host);
-    return new Response('offline', { status: 503 });
-  });
-  const provider = new YtsProvider(await config({ YTS_API_URL: 'https://fixture.invalid/api/v2' }));
-  await expect(
-    provider.search({ kind: 'movie', q: 'Example' }, context(http))
-  ).rejects.toBeInstanceOf(HttpError);
-  expect(calls).toEqual(['fixture.invalid']);
-});
-it('YTS discovers official mirrors after the default endpoint fails and reuses the working mirror', async () => {
-  const calls: string[] = [];
-  const http = client(url => {
-    calls.push(url.host);
-    if (url.host === 'yts.mx') return new Response('offline', { status: 503 });
-    if (url.host === 'yifystatus.com')
-      return new Response(
-        '<section><h2>Official sites</h2><a href="https://working.invalid">YTS</a></section><section><h2>Other sites</h2><a href="https://ignored.invalid">Other</a></section>'
-      );
-    if (url.host === 'working.invalid')
-      return Response.json({ status: 'ok', data: { movies: [] } });
-    throw new Error('Unexpected fixture host');
-  });
-  const provider = new YtsProvider(await config({ YTS_API_URL: 'https://yts.mx/api/v2' }));
-  await (Object.create(provider) as YtsProvider).search(
-    { kind: 'movie', q: 'Example' },
-    context(http)
-  );
-  await (Object.create(provider) as YtsProvider).search(
-    { kind: 'movie', q: 'Second' },
-    context(http)
-  );
-  expect(calls).toEqual(['yts.mx', 'yifystatus.com', 'working.invalid', 'working.invalid']);
-  expect(
-    await parseMirrorDomains(
-      '<div class="serviceGroup"><h2>Official</h2><a href="https://good.invalid">good</a><a href="javascript:bad">bad</a></div>'
-    )
-  ).toEqual(['good.invalid']);
-});
-it('TheRARBG preserves 429 Retry-After without fanning out to mirrors', async () => {
-  let calls = 0;
-  const http = client(() => {
-    calls++;
-    return new Response('slow down', { status: 429, headers: { 'retry-after': '120' } });
-  });
-  const provider = new TherarbgProvider(
-    await config({ THE_RARBG_API_URL: 'https://fixture.invalid' })
-  );
-  const error = await provider
-    .search({ kind: 'movie', imdbid: 'tt1234567' }, context(http))
-    .catch(error => error);
-  expect(error).toBeInstanceOf(HttpError);
-  expect(error.retryAfter).toBe('120');
-  expect(calls).toBe(1);
-});
-
 it('shares a GET URL across callers and returns independent response bodies', async () => {
   let calls = 0;
   const http = client(() => {
@@ -278,21 +209,6 @@ it('shares a GET URL across callers and returns independent response bodies', as
   expect(await first.json()).toEqual({ ok: true });
   expect(await second.json()).toEqual({ ok: true });
   expect(calls).toBe(1);
-});
-
-it('accepts the historical YTS root URL and an API URL with the recorded pagination defaults', async () => {
-  for (const base of ['https://fixture.invalid', 'https://fixture.invalid/api/v2/']) {
-    const cfg = await config({ YTS_API_URL: base });
-    const calls: URL[] = [];
-    const http = client(url => {
-      calls.push(url);
-      return Response.json({ status: 'ok', data: { movies: [] } });
-    });
-    await new YtsProvider(cfg).search({ kind: 'movie', imdbid: 'tt0137523' }, context(http));
-    expect(calls[0].pathname).toBe('/api/v2/list_movies.json');
-    expect(calls[0].searchParams.get('page')).toBe('1');
-    expect(calls[0].searchParams.get('limit')).toBe('20');
-  }
 });
 
 it('does not space requests to internal hosts but still charges budget', async () => {

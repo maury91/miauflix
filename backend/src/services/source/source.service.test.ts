@@ -49,7 +49,7 @@ const candidateItem = (source = createMockSourceMetadata()): SourceSearchItem =>
 });
 const summaryItem: SourceSearchItem = {
   type: 'summary',
-  providersSearched: ['yts'],
+  providersSearched: ['indexer-a'],
   providersFailed: [],
   providersSkipped: [],
   complete: true,
@@ -299,11 +299,11 @@ describe('SourceService', () => {
     );
     expect(mockContentSourceRepository.upsertForMovie).toHaveBeenCalledWith(
       mockMovie.id,
-      expect.arrayContaining([expect.objectContaining({ source: 'yts' })])
+      expect.arrayContaining([expect.objectContaining({ source: 'indexer-a' })])
     );
     expect(mockMovieRepository.recordSourceSearch).toHaveBeenCalledWith(
       mockMovie.id,
-      ['yts'],
+      ['indexer-a'],
       summaryItem.retryAfter,
       true
     );
