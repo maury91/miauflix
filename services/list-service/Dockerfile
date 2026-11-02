@@ -15,15 +15,18 @@ COPY packages/contract/package.json packages/contract/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
 COPY services/list-service/package.json services/list-service/package.json
+COPY services/sources/package.json services/sources/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 RUN npm ci --ignore-scripts
 
+COPY packages/source-metadata-extractor packages/source-metadata-extractor
 COPY packages/contract packages/contract
 COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
 COPY services/list-service services/list-service
-RUN npm run build --workspace @miauflix/contract && \
+RUN npm run build --workspace @miauflix/source-metadata-extractor && \
+    npm run build --workspace @miauflix/contract && \
     npm run build --workspace @miauflix/service-contracts && \
     npm run build --workspace @miauflix/service-configuration
 
@@ -38,6 +41,7 @@ RUN npm prune --omit=dev --ignore-scripts
 FROM bun-runtime AS production
 WORKDIR /app
 COPY --from=production-dependencies /workspace/node_modules /app/node_modules
+COPY --from=runtime /workspace/packages/source-metadata-extractor /app/packages/source-metadata-extractor
 COPY --from=runtime /workspace/packages/contract /app/packages/contract
 COPY --from=runtime /workspace/packages/service-contracts /app/packages/service-contracts
 COPY --from=runtime /workspace/packages/service-configuration /app/packages/service-configuration

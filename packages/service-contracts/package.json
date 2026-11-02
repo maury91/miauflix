@@ -22,7 +22,8 @@
     "clean": "rm -rf dist"
   },
   "dependencies": {
-    "@miauflix/contract": "*"
+    "@miauflix/contract": "*",
+    "@miauflix/source-metadata-extractor": "*"
   },
   "devDependencies": {
     "typescript": "^5.9.3"
