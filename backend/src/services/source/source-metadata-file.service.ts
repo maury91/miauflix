@@ -5,13 +5,11 @@ import path from 'path';
 import { SourceError } from '@errors/source.errors';
 import type { ConfigService } from '@mytypes/configuration';
 import type { RequestService } from '@services/request/request.service';
+import type { SourcesClientService } from '@services/sources/sources-client.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
 import type { DownloadService } from '../download/download.service';
-import { ErrorWithStatus } from './services/error-with-status.util';
-import { getSourceMetadataFileFromITorrents } from './services/itorrents';
-import { getSourceMetadataFileFromTorrage } from './services/torrage';
 import type { Service, ServiceData, ServiceStats } from './types';
 
 /**
@@ -44,11 +42,12 @@ export class SourceMetadataFileService {
 
   constructor(
     private readonly downloadService: DownloadService,
-    private readonly requestService: RequestService,
+    _requestService: RequestService,
     private readonly statsService: StatsService,
     private readonly config: ConfigService,
     enableWebTorrentMetadata = false,
-    enableCacheMetadata = false
+    enableCacheMetadata = false,
+    sourcesClient?: SourcesClientService
   ) {
     if (enableWebTorrentMetadata) {
       this.createService('webTorrent', {
@@ -64,74 +63,15 @@ export class SourceMetadataFileService {
       });
     }
 
-    if (enableCacheMetadata) {
-      this.createService('itorrents', {
+    if (enableCacheMetadata && sourcesClient) {
+      this.createService('sources', {
         maxConcurrentRequests: 1,
-        rateLimit: {
-          windowSize: 60000, // 1 minute
-          limit: 90, // 90 requests per minute
-        },
         shouldVerify: true,
-        getSourceMetadata: async (
-          _magnetLink: string,
-          hash: string,
-          rateLimiter?: DynamicRateLimit
-        ): Promise<Buffer> => {
-          const response = await getSourceMetadataFileFromITorrents(
-            hash,
-            5000,
-            this.requestService
-          );
-          if (response) {
-            rateLimiter?.reportResponse(response);
-            if (response.ok) {
-              if (response.body instanceof ArrayBuffer) {
-                return Buffer.from(response.body);
-              }
-              throw new SourceError('Invalid response body', 'invalid_response_body');
-            }
-          }
-          logger.warn(
-            'DataResolver',
-            `Failed to get data from iTorrents for identifier: ${hash}, status code: ${response?.status}`
-          );
-          throw new ErrorWithStatus(
-            `Failed to get data from iTorrents for identifier: ${hash}, status code: ${response?.status}`,
-            response?.status.toString(10) || 'unknown_error'
-          );
-        },
-      });
-
-      this.createService('torrage', {
-        maxConcurrentRequests: 1,
-        rateLimit: {
-          windowSize: 60000, // 1 minute
-          limit: 90, // 90 requests per minute
-        },
-        shouldVerify: true,
-        getSourceMetadata: async (
-          _magnetLink: string,
-          hash: string,
-          rateLimiter?: DynamicRateLimit
-        ): Promise<Buffer> => {
-          const response = await getSourceMetadataFileFromTorrage(hash, 5000, this.requestService);
-          if (response) {
-            rateLimiter?.reportResponse(response);
-            if (response.ok) {
-              if (typeof response.body === 'string') {
-                return Buffer.from(response.body, 'binary');
-              }
-              throw new SourceError('Invalid response body', 'invalid_response_body');
-            }
-          }
-          logger.warn(
-            'DataResolver',
-            `Failed to get data from Torrage for identifier: ${hash}, status code: ${response?.status}`
-          );
-          throw new ErrorWithStatus(
-            `Failed to get data from Torrage for identifier: ${hash}, status code: ${response?.status}`,
-            response?.status.toString(10) || 'unknown_error'
-          );
+        getSourceMetadata: async (_sourceLink: string, hash: string): Promise<Buffer> => {
+          const result = await sourcesClient.torrentFile(hash);
+          if (!result)
+            throw new SourceError('Source metadata is unavailable', 'invalid_response_body');
+          return result;
         },
       });
     }

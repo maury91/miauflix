@@ -23,6 +23,8 @@ services:
       - BUNQUEUE_PORT=6789
       - CATALOG_SERVICE_URL=http://media-catalog:3001
       - LIST_SERVICE_URL=http://list-service:3002
+      - SOURCES_SERVICE_URL=http://sources:3003
+      - SOURCES_DISABLE_VPN_CHECK=true
       - TMDB_API_URL=http://tmdb-mock/3
       - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
       - TRAKT_API_URL=http://trakt-mock
@@ -76,9 +78,42 @@ services:
         condition: service_healthy
       list-service:
         condition: service_healthy
+      sources:
+        condition: service_healthy
       therarbg-mock:
         condition: service_healthy
       tracker-mock:
+        condition: service_healthy
+
+  sources:
+    build:
+      context: ../../
+      dockerfile: services/sources/Dockerfile
+      target: development
+    environment:
+      - SOURCES_PORT=3003
+      - SOURCES_DATA_DIR=/app/data
+    volumes:
+      - ../../services/sources/src:/workspace/services/sources/src
+      - sources_data:/app/data
+    networks:
+      - test-network
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'bun',
+          '-e',
+          "fetch('http://localhost:3003/health').then(r => { if (!r.ok) process.exit(1) })",
+        ]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
+    depends_on:
+      yts-mock:
+        condition: service_healthy
+      therarbg-mock:
         condition: service_healthy
 
   # Media catalog service (fronts the TMDB mock)
@@ -297,3 +332,5 @@ volumes:
     name: miauflix_dev_downloads
   list_service_data:
     name: miauflix_dev_list_service_data
+  sources_data:
+    name: miauflix_dev_sources_data

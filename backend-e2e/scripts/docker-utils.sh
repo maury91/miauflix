@@ -27,6 +27,10 @@ extract_port_from_containers() {
     
     # Try to get the port from the running backend container
     local container_port=$(docker compose -p "$project_name" -f "$compose_file" port backend 3000 2>/dev/null | cut -d: -f2)
+    if [[ -z "$container_port" ]]; then
+        # Replay tests expose the isolated backend through the host-facing gateway.
+        container_port=$(docker compose -p "$project_name" -f "$compose_file" port test-gateway 3000 2>/dev/null | cut -d: -f2)
+    fi
     if [[ -n "$container_port" && "$container_port" =~ ^[0-9]+$ ]]; then
         cd "$current_dir"
         echo "$container_port"

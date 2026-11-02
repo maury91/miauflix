@@ -98,14 +98,15 @@ export class ContentSource {
   @Column({
     nullable: true,
     name: 'u',
+    type: 'text',
     transformer: {
-      to: (value?: string) =>
-        value ? ContentSource.encryptionService.encryptString(value) : undefined,
+      to: (value?: string | null) =>
+        value ? ContentSource.encryptionService.encryptString(value) : null,
       from: (value?: string) =>
         value ? ContentSource.encryptionService.decryptString(value) : undefined,
     },
   })
-  url?: string; // URI link to the source, if available
+  url?: string | null; // Opaque sources-service file reference, if available
 
   // URI link to the source, if available
   @Column({

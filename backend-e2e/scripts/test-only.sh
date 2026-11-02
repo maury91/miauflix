@@ -51,6 +51,7 @@ echo "✅ Backend service is responding"
 
 # Set environment variables for tests
 export BACKEND_URL="$BACKEND_URL"
+export E2E_COMPOSE_PROJECT="$PROJECT_NAME"
 
 # Run the tests
 echo "🧪 Running tests..."

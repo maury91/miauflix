@@ -1,4 +1,7 @@
-import type { CookiePair } from '@mytypes/flaresolverr.types';
+interface CookiePair {
+  name: string;
+  value: string;
+}
 
 /**
  * Simple per-domain cookie jar for request management.

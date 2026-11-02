@@ -252,25 +252,5 @@ export const serverConfigurationDefinition = serviceConfiguration({
       example: 'true',
       transform: transforms.boolean(),
     }),
-    FLARESOLVERR_URL: variable({
-      description: 'URL for FlareSolverr instance to bypass Cloudflare protection',
-      required: false,
-      advanced: true,
-      defaultValue: '',
-      example: 'http://localhost:8191',
-      transform: transforms.optional(transforms.url()),
-    }),
-    ENABLE_FLARESOLVERR: variable({
-      description: 'Enable FlareSolverr for bypassing Cloudflare protection on 403 responses',
-      booleanStateDescriptions: {
-        true: 'FlareSolverr enabled',
-        false: 'FlareSolverr disabled',
-      },
-      required: false,
-      advanced: true,
-      defaultValue: 'false',
-      example: 'true',
-      transform: transforms.boolean(),
-    }),
   },
 });

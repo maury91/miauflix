@@ -125,6 +125,8 @@ export class PlayablePreparationService {
       .getSourcesForMovieWithOnDemandSearch(
         {
           id: media.local.id,
+          mediaId: media.local.mediaId,
+          releaseDate: media.local.releaseDate,
           imdbId: media.local.imdbId,
           title: media.local.title,
           contentDirectoriesSearched: media.local.contentDirectoriesSearched,
@@ -265,6 +267,8 @@ export class PlayablePreparationService {
       episodeId: episode.id,
       showMediaId: show.local.mediaId,
       showTitle: show.local.name,
+      showTmdbId: show.local.mediaId,
+      showYear: show.local.firstAirDate ? Number(show.local.firstAirDate.slice(0, 4)) : null,
       showImdbId: show.local.imdbId ?? null,
       seasonNumber: playable.seasonNumber,
       episodeNumber: playable.episodeNumber,

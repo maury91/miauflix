@@ -5,31 +5,44 @@ these files directly, so this is the canonical store for provider recordings.
 
 ## Replay (default)
 
-The mocks replay existing files and return a 404 for a missing fixture. Tests do
-not contact TMDB or Trakt.
+The mocks replay existing files and return a 404 for a missing fixture. The E2E
+Docker network is internal by default, preventing the backend, source service and
+mocks from reaching live providers or metadata caches.
+Host tests reach the backend and image fixtures through the E2E gateway; only
+that fixed TCP proxy joins the host-facing bridge. Application services stay
+on the internal network.
 
 ```bash
 npm run validate:provider-fixtures
 npm run test:backend:e2e
 ```
 
+The development stack (`npm run start:backend:e2e`) also runs the Sources service
+with hot reload, persistent provider settings, and the local YTS/TheRARBG mocks.
+Both E2E runners pass their active Compose project to the encryption test so it
+copies the database from the matching backend container.
+
 ## Explicit recording
 
 Recording is opt-in for one invocation and may contact the configured provider:
 
 ```bash
-RECORD_PROVIDER_FIXTURES=true npm run start:backend:e2e
+E2E_PROVIDER_NETWORK_INTERNAL=false RECORD_PROVIDER_FIXTURES=true npm run start:backend:e2e
 ```
 
 For the homepage catalog cross-load lane, run the bounded desktop flow instead:
 
 ```bash
-npm run test:frontend:e2e:home-catalog
+E2E_PROVIDER_NETWORK_INTERNAL=false npm run test:frontend:e2e:home-catalog
 ```
 
 This sets `RECORD_PROVIDER_FIXTURES=true`, enables the opt-in Playwright flow,
 and runs one Chromium worker so the missing TV and community-list TMDB details
 are recorded without multiplying provider traffic across browser projects.
+`E2E_PROVIDER_NETWORK_INTERNAL=false` explicitly enables outbound network access
+for this recording invocation. `env.sh` loads `.env` after reading the shell, so for
+replay tests set `E2E_PROVIDER_NETWORK_INTERNAL=true` explicitly (or remove the variable
+from `.env`); leaving it unset does not guarantee an isolated network.
 
 Run only the flow that needs new responses, then stop the environment. Review the
 raw diff before asking Codex to fictionalize it. Raw provider content is local
