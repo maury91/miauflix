@@ -44,6 +44,7 @@ vi.mock('@features/sources/api/sources.api', () => ({
   useAddTorznabProviderMutation: () => [api.addTorznab, { isLoading: false }],
 }));
 
+import SourcesAddProviders from './SourcesAddProviders';
 import SourcesPage from './SourcesPage';
 
 const provider = (id: string, priority: number, overrides: Record<string, unknown> = {}) => ({
@@ -475,14 +476,27 @@ describe('SourcesPage', () => {
       entry(`site-${String(i).padStart(3, '0')}`, null)
     );
     api.sync = sync({ total: 586 });
-    await browse();
-    await screen.findByText('Showing 40 of 100 matching indexers (586 in total)');
-    // jsdom has no IntersectionObserver, so the list offers a button instead.
-    fireEvent.click(screen.getByRole('button', { name: 'Show more' }));
-    await screen.findByText('Showing 80 of 100 matching indexers (586 in total)');
+    render(<SourcesAddProviders onNotice={vi.fn()} />);
+    await act(async () => {
+      fireEvent.click(screen.getByText('Browse indexers', { selector: 'button' }));
+    });
+    expect(
+      screen.getByText('Showing 40 of 100 matching indexers (586 in total)')
+    ).toBeInTheDocument();
+    expect(lastArgs()).toMatchObject({ offset: 0, limit: 40 });
+    // Exercise the explicit pagination control without computing every row's accessible name.
+    await act(async () => {
+      fireEvent.click(screen.getByText('Show more', { selector: 'button' }));
+    });
+    expect(
+      screen.getByText('Showing 80 of 100 matching indexers (586 in total)')
+    ).toBeInTheDocument();
     expect(lastArgs()).toMatchObject({ offset: 40, limit: 40 });
-    expect(screen.getAllByLabelText(/^Add site-/)).toHaveLength(80);
-  }, 15_000);
+    const list = within(screen.getByRole('list', { name: 'Available indexers' }));
+    expect(list.getAllByLabelText(/^Add site-/)).toHaveLength(80);
+    expect(list.getByLabelText('Add site-000')).toBeInTheDocument();
+    expect(list.getByLabelText('Add site-079')).toBeInTheDocument();
+  });
 
   it('loads the next page when the end of the list scrolls into view', async () => {
     let notify: (entries: { isIntersecting: boolean }[]) => void = () => undefined;
