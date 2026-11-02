@@ -37,7 +37,6 @@ export GROUP_ID=$(id -g)
 
 snapshot_report_dir="$root_dir/frontend/playwright-report-initial-setup"
 snapshot_results_dir="$root_dir/frontend/test-results-initial-setup"
-docker_dist_dir="$backend_e2e_dir/docker/dist"
 env_test_file="$backend_e2e_dir/.env.test"
 env_test_backup="$backend_e2e_dir/.env.test.initial-setup-backup"
 
@@ -49,7 +48,6 @@ cleanup() {
   status=$?
 
   docker compose -p "$project_name" -f "$backend_e2e_dir/$compose_file" down -v --remove-orphans || true
-  rm -rf "$docker_dist_dir"
 
   if [[ -f "$env_test_backup" ]]; then
     mv "$env_test_backup" "$env_test_file"
@@ -65,8 +63,6 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 npm run build:backend
-
-bash "$backend_e2e_dir/scripts/prepare-docker-build-context.sh"
 
 docker compose -p "$project_name" -f "$backend_e2e_dir/$compose_file" up --build -d
 

@@ -35,7 +35,7 @@ runs:
       shell: bash
       run: npm ci
 
-    # npm ci runs workspace prepare scripts (e.g. yts-sanitizer's tsc); replay
+    # npm ci runs workspace prepare scripts (e.g. a package's tsc); replay
     # them when node_modules came from the cache so their outputs still exist.
     - name: Run workspace prepare scripts
       if: steps.node-modules-cache.outputs.cache-hit == 'true'

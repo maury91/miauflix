@@ -81,7 +81,6 @@ jobs:
         run: |
           date -u '+[E2E_PHASE] host-prerequisites-start %Y-%m-%dT%H:%M:%SZ'
           npm run build:backend
-          bash backend-e2e/scripts/prepare-docker-build-context.sh
           date -u '+[E2E_PHASE] host-prerequisites-end %Y-%m-%dT%H:%M:%SZ'
 
       - name: Start E2E image build timing

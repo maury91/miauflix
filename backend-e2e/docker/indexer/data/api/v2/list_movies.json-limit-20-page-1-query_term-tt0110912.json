@@ -1,0 +1,108 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "pragma": "no-cache",
+    "vary": "Accept-Encoding",
+    "set-cookie": "PHPSESSID=ekuj6261ljdg7hjvfkgpm48d1e; path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 1,
+      "limit": 20,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 2429,
+          "url": "https://present-interconnection.org/private/tmp",
+          "imdb_code": "tt0110912",
+          "title": "Overseas Tick",
+          "title_english": "Ashamed Aardwolf",
+          "title_long": "Shaky Gopher",
+          "slug": "overseas-tick-1994",
+          "year": 1994,
+          "rating": 8.9,
+          "runtime": 154,
+          "genres": ["Action", "Crime", "Drama"],
+          "summary": "Terebro aggredior solvo sponte dapifer tametsi quaerat brevis vulgo voluptatum. Curvo validus adficio hic adhaero vinco.",
+          "description_full": "Valeo vitium sursum conor thymbra crur. Benigne sopor aequitas derelinquo. Catena aer vestigium vulariter ademptio arcesso placeat talis.",
+          "synopsis": "Vespillo aufero video praesentium coruscus adaugeo supplanto appello quisquam. Ante utilis communis curvo.",
+          "yt_trailer_code": "Nnsv5J86dFT",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://competent-motel.biz/usr",
+          "background_image_original": "https://reflecting-cytoplasm.name/tmp",
+          "small_cover_image": "https://warlike-curd.biz/usr/local/bin",
+          "medium_cover_image": "https://moist-embossing.name/Users",
+          "large_cover_image": "https://cheerful-task.net/Network",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "http://indexer-mock/torrent/download/AABA24B7446D5540DFFCEF94005EFC6704A6E490",
+              "hash": "AABA24B7446D5540DFFCEF94005EFC6704A6E490",
+              "quality": "720p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "751.29 MB",
+              "size_bytes": 787784663,
+              "date_uploaded": "2015-11-01 01:52:11",
+              "date_uploaded_unix": 1446339131
+            },
+            {
+              "url": "http://indexer-mock/torrent/download/9D6FFDAD68516E8C4CA7D2E04BC8872BEE0E5CA1",
+              "hash": "9D6FFDAD68516E8C4CA7D2E04BC8872BEE0E5CA1",
+              "quality": "1080p",
+              "type": "bluray",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 0,
+              "peers": 0,
+              "size": "1.40 GB",
+              "size_bytes": 1503238554,
+              "date_uploaded": "2015-11-01 01:52:15",
+              "date_uploaded_unix": 1446339135
+            },
+            {
+              "url": "http://indexer-mock/torrent/download/C25F8423660575070B8524EBB3547F9255188627",
+              "hash": "C25F8423660575070B8524EBB3547F9255188627",
+              "quality": "2160p",
+              "type": "bluray",
+              "is_repack": "",
+              "video_codec": "x265",
+              "bit_depth": "10",
+              "audio_channels": "5.1",
+              "seeds": 100,
+              "peers": 39,
+              "size": "7.3 GB",
+              "size_bytes": 7838315315,
+              "date_uploaded": "2022-12-20 21:31:56",
+              "date_uploaded_unix": 1671568316
+            }
+          ],
+          "date_uploaded": "2015-11-01 01:52:11",
+          "date_uploaded_unix": 1446339131
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1749449896,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

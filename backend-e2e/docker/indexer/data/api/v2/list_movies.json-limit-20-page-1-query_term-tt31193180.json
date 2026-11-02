@@ -1,0 +1,124 @@
+{
+  "headers": {
+    "accept-ranges": "bytes",
+    "access-control-allow-origin": "*",
+    "age": "0",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "no-store, no-cache, must-revalidate",
+    "content-type": "application/json; charset=utf-8",
+    "expires": "Thu, 19 Nov 1981 08:52:00 GMT",
+    "pragma": "no-cache",
+    "vary": "Accept-Encoding",
+    "set-cookie": "PHPSESSID=0hvsqn7hh8rgiih56c9p0rvofl; path=/"
+  },
+  "data": {
+    "status": "ok",
+    "status_message": "Query was successful",
+    "data": {
+      "movie_count": 1,
+      "limit": 20,
+      "page_number": 1,
+      "movies": [
+        {
+          "id": 69350,
+          "url": "https://sardonic-variant.info/boot",
+          "imdb_code": "tt31193180",
+          "title": "Adequate Whale",
+          "title_english": "Cautious Chimpanzee",
+          "title_long": "Gentle Bison",
+          "slug": "adequate-whale-2025",
+          "year": 2025,
+          "rating": 7.8,
+          "runtime": 137,
+          "genres": ["Action", "Drama", "Horror", "Thriller"],
+          "summary": "",
+          "description_full": "",
+          "synopsis": "",
+          "yt_trailer_code": "bj6KUDfXnIc",
+          "language": "en",
+          "mpa_rating": "",
+          "background_image": "https://profitable-tobacco.com/private/var",
+          "background_image_original": "https://emotional-slide.name/System",
+          "small_cover_image": "https://first-alluvium.info/opt/share",
+          "medium_cover_image": "https://sweltering-goodness.com/etc",
+          "large_cover_image": "https://lanky-welfare.net/tmp",
+          "state": "ok",
+          "torrents": [
+            {
+              "url": "http://indexer-mock/torrent/download/FB2023B30056BD4958A4EB672CF22427F096CA2A",
+              "hash": "FB2023B30056BD4958A4EB672CF22427F096CA2A",
+              "quality": "720p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "2.0",
+              "seeds": 100,
+              "peers": 100,
+              "size": "1.24 GB",
+              "size_bytes": 1331439862,
+              "date_uploaded": "2025-05-29 09:48:59",
+              "date_uploaded_unix": 1748504939
+            },
+            {
+              "url": "http://indexer-mock/torrent/download/D8E6BEF96B9231749EF2E8179CD86CC9ADA510FA",
+              "hash": "D8E6BEF96B9231749EF2E8179CD86CC9ADA510FA",
+              "quality": "1080p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x264",
+              "bit_depth": "8",
+              "audio_channels": "5.1",
+              "seeds": 100,
+              "peers": 100,
+              "size": "2.54 GB",
+              "size_bytes": 2727304233,
+              "date_uploaded": "2025-05-29 11:07:55",
+              "date_uploaded_unix": 1748509675
+            },
+            {
+              "url": "http://indexer-mock/torrent/download/E12AFAA78EF1982F5FF1D59FAFC4B1AA56E54AEC",
+              "hash": "E12AFAA78EF1982F5FF1D59FAFC4B1AA56E54AEC",
+              "quality": "1080p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x265",
+              "bit_depth": "10",
+              "audio_channels": "5.1",
+              "seeds": 100,
+              "peers": 100,
+              "size": "2.3 GB",
+              "size_bytes": 2469606195,
+              "date_uploaded": "2025-05-29 21:23:44",
+              "date_uploaded_unix": 1748546624
+            },
+            {
+              "url": "http://indexer-mock/torrent/download/C85EE1779D93B4547882F9A9317BE927B17C0F57",
+              "hash": "C85EE1779D93B4547882F9A9317BE927B17C0F57",
+              "quality": "2160p",
+              "type": "web",
+              "is_repack": "0",
+              "video_codec": "x265",
+              "bit_depth": "10",
+              "audio_channels": "5.1",
+              "seeds": 100,
+              "peers": 100,
+              "size": "6.14 GB",
+              "size_bytes": 6592774799,
+              "date_uploaded": "2025-05-31 10:37:03",
+              "date_uploaded_unix": 1748680623
+            }
+          ],
+          "date_uploaded": "2025-05-29 09:48:59",
+          "date_uploaded_unix": 1748504939
+        }
+      ]
+    },
+    "@meta": {
+      "server_time": 1749450656,
+      "server_timezone": "CET",
+      "api_version": 2,
+      "execution_time": "0 ms"
+    }
+  }
+}

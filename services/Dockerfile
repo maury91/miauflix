@@ -12,8 +12,6 @@ COPY backend/package.json backend/package.json
 COPY frontend/package.json frontend/package.json
 COPY backend-e2e/package.json backend-e2e/package.json
 COPY packages/source-metadata-extractor/package.json packages/source-metadata-extractor/package.json
-COPY packages/yts-sanitizer/package.json packages/yts-sanitizer/package.json
-COPY packages/therarbg-sanitizer/package.json packages/therarbg-sanitizer/package.json
 COPY packages/contract/package.json packages/contract/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
