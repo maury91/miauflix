@@ -18,7 +18,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup Bun (media-catalog service)
+      - name: Setup Bun (application services)
         uses: oven-sh/setup-bun@v2
         with:
           bun-version: latest
@@ -235,6 +235,7 @@ jobs:
             miauflix-services,
             miauflix-media-catalog,
             miauflix-list-service,
+            miauflix-sources,
             miauflix-tv-pairing,
           ]
         platform: [linux/amd64, linux/arm64]
@@ -250,6 +251,9 @@ jobs:
             target: production
           - image: miauflix-list-service
             file: services/list-service/Dockerfile
+            target: production
+          - image: miauflix-sources
+            file: services/sources/Dockerfile
             target: production
           - image: miauflix-tv-pairing
             file: tv-pairing/Dockerfile
@@ -319,11 +323,13 @@ jobs:
           - image: miauflix
             description: Miauflix backend, serves the web frontend
           - image: miauflix-services
-            description: Miauflix bunqueue, media catalog and list service in one container
+            description: Miauflix bunqueue, media catalog, lists and source search in one container
           - image: miauflix-media-catalog
             description: Miauflix media catalog service
           - image: miauflix-list-service
             description: Miauflix list service
+          - image: miauflix-sources
+            description: Miauflix source search service
           - image: miauflix-tv-pairing
             description: Miauflix TV pairing service (hosted, pairs TV apps with servers)
 
