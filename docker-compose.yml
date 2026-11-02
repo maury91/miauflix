@@ -37,6 +37,11 @@ services:
       FLARESOLVERR_URL: http://flaresolverr:8191
       OTEL_EXPORTER_OTLP_ENDPOINT: http://jaeger:4318
       DEBUG: ${DEBUG:-}
+      # Samsung TV discovery, see docs/setup/samsung-tv.md#how-the-tv-finds-your-server. In Docker the server
+      # cannot see its network address, so set TV_PAIRING_ADDRESSES (e.g. http://192.168.1.10:3000) in .env.
+      TV_PAIRING_ENABLED: ${TV_PAIRING_ENABLED:-true}
+      TV_PAIRING_URL: ${TV_PAIRING_URL:-https://pair.miauflix.cat}
+      TV_PAIRING_ADDRESSES: ${TV_PAIRING_ADDRESSES:-}
     volumes:
       - miauflix_data:/usr/src/app/data
       - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads

@@ -51,7 +51,7 @@ describe('ServiceConfigGroup', () => {
   it('labels a degraded service and explains the runtime reason', () => {
     render(
       <ServiceConfigGroup
-        groupName="THE_RARBG"
+        groupName="SOURCES"
         entries={[entry('OPTIONAL_KEY', false)]}
         values={{ OPTIONAL_KEY: '' }}
         onChange={vi.fn()}

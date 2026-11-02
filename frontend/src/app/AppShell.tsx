@@ -107,10 +107,7 @@ export function AppShell() {
         ? 'login'
         : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
           ? 'intro'
-          : configurationWizardActive ||
-              route.type === 'configuration' ||
-              route.type === 'storage' ||
-              route.type === 'sources'
+          : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
             ? 'config_wizard'
             : appState;
   const logoMotionDisabled =

@@ -1,3 +1,5 @@
+import { readdir } from 'node:fs/promises';
+
 import { sanitize } from './sanitize';
 import { filterTmdbImages, tmdbFixtureQuery } from './tmdb-fixture';
 import { handleRequest } from './handleRequest';
@@ -19,6 +21,8 @@ const API_AUTH_HEADER = process.env.API_AUTH_HEADER || 'Authorization';
 const API_AUTH_HEADER_IS_BEARER = process.env.API_AUTH_HEADER_IS_BEARER === 'true';
 const RECORD_PROVIDER_FIXTURES = process.env.RECORD_PROVIDER_FIXTURES === 'true';
 const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL;
+/** When set, `/definitions/` serves the indexer definitions found in this folder. */
+const DEFINITIONS_DIR = process.env.DEFINITIONS_DIR;
 // Recording mode is the explicit original-data path; ordinary generated writes are faker-backed.
 const ANONYMIZED_BY: AnonymizedBy = RECORD_PROVIDER_FIXTURES ? false : 'faker';
 
@@ -266,6 +270,23 @@ Bun.serve({
 
     if (path === '/health') {
       return new Response('OK', { status: 200 });
+    }
+
+    if (DEFINITIONS_DIR && path.startsWith('/definitions/')) {
+      const name = path.slice('/definitions/'.length);
+      if (name === 'index.json') {
+        const ids = (await readdir(DEFINITIONS_DIR))
+          .filter(file => file.endsWith('.yml'))
+          .map(file => file.slice(0, -4))
+          .sort();
+        return Response.json(ids);
+      }
+      if (/^[a-z0-9][a-z0-9._-]*\.yml$/.test(name)) {
+        const file = Bun.file(`${DEFINITIONS_DIR}/${name}`);
+        if (await file.exists())
+          return new Response(file, { headers: { 'Content-Type': 'text/yaml' } });
+      }
+      return new Response('Not found', { status: 404 });
     }
 
     let filePath = getFilePath(path, queryParams, method);

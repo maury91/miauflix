@@ -38,7 +38,7 @@ export interface SourceCandidate {
   watchers: number; // leechers
   uploadDate: string; // ISO
   provider: string; // provider id, persisted into content_source.source
-  providerKind: 'native' | 'cardigann' | 'torznab' | 'http';
+  providerKind: 'cardigann' | 'torznab' | 'http';
   matchedBy: MatchedBy;
   accuracy: Accuracy;
   quality: Quality | null;
@@ -56,7 +56,7 @@ export interface SourceCandidate {
   files?: string[];
   /** Opaque id the service resolves in torrentFile(); never a raw URL to the backend. */
   fileRef?: string;
-  trailerCode?: string; // YTS only
+  trailerCode?: string; // only some indexers give one
 }
 export type SourceSearchItem =
   | { type: 'candidate'; candidate: SourceCandidate }
@@ -72,6 +72,8 @@ export type SourceSearchItem =
 export interface ProviderView {
   id: string;
   name: string;
+  /** What the indexer's definition says it is; null when it has none. */
+  description: string | null;
   kind: SourceCandidate['providerKind'];
   repositoryId: string | null;
   version: string | null;
@@ -106,7 +108,79 @@ export interface RepositoryView {
   providerCount: number;
 }
 
-export const sources = contract('sources', '1.1', {
+/** An installable Jackett indexer, as last read from the synced definition list. */
+export interface CardigannDefinitionEntry {
+  id: string;
+  /** Which configured definition source it came from (key and readable name). */
+  source: string;
+  sourceLabel: string;
+  name: string | null;
+  language: string | null;
+  /** `public`, `private` or `semi-private`; null until the definition has been read. */
+  type: string | null;
+  installed: boolean;
+  /** `pending` and `failed` entries have not been read yet; their capabilities are unknown. */
+  status: 'ready' | 'pending' | 'failed';
+  supported: boolean;
+  /** Why it cannot be added (needs an account, uses an unsupported feature, could not be read). */
+  reason: string | null;
+  supports: {
+    imdb: boolean;
+    tmdb: boolean;
+    tvdb: boolean;
+    movies: boolean;
+    tv: boolean;
+    anime: boolean;
+  };
+  requiresFlareSolverr: boolean;
+}
+export interface CardigannCatalogQuery {
+  /** Matches the id or name. */
+  query?: string;
+  /** Only indexers from this definition source (a key from the sync status). */
+  source?: string;
+  /** Each flag, when true, keeps only indexers that support it. */
+  imdb?: boolean;
+  tmdb?: boolean;
+  tvdb?: boolean;
+  movies?: boolean;
+  tv?: boolean;
+  anime?: boolean;
+  publicOnly?: boolean;
+  /** Hide indexers Miauflix cannot use. */
+  supportedOnly?: boolean;
+  offset: number;
+  /** 0 returns only the total and the sync status. */
+  limit: number;
+}
+export interface CardigannSyncStatus {
+  lastSyncAt: string | null;
+  lastError: string | null;
+  syncing: boolean;
+  total: number;
+  ready: number;
+  pending: number;
+  failed: number;
+  /** What the last run that found changes did. */
+  lastChange: { added: number; updated: number; removed: number; failed: number } | null;
+  intervalMinutes: number;
+  /** One entry per configured definition source. */
+  sources: {
+    key: string;
+    label: string;
+    total: number;
+    lastSyncAt: string | null;
+    lastError: string | null;
+  }[];
+}
+export interface CardigannCatalog {
+  entries: CardigannDefinitionEntry[];
+  /** Matches for the query, before paging. */
+  total: number;
+  sync: CardigannSyncStatus;
+}
+
+export const sources = contract('sources', '1.3', {
   search: stream<SourceSearchRequest, SourceSearchItem, 'vpn_required'>(),
   /** Bytes of the .torrent (base64), or null. Tries fileRef → itorrents → torrage. */
   torrentFile: call<{ hash: string; fileRef?: string }, string | null, 'vpn_required'>(),
@@ -132,5 +206,19 @@ export const sources = contract('sources', '1.1', {
     since: 1,
   }),
   providersChanged: event<{ at: string }>({ since: 1 }),
+  /** The synced Jackett definition list, filtered and paged. */
+  cardigannDefinitions: call<CardigannCatalogQuery, CardigannCatalog, 'bad_request'>({ since: 2 }),
+  /** Starts a sync now (it keeps running after this returns) and reports the current status. */
+  syncCardigannDefinitions: call<void, CardigannSyncStatus>({ since: 3 }),
+  addCardigannProvider: call<{ id: string; source?: string }, ProviderView, 'bad_request'>({
+    since: 2,
+  }),
+  addTorznabProvider: call<
+    { name: string; baseUrl: string; apiKey?: string },
+    ProviderView,
+    'bad_request'
+  >({ since: 2 }),
+  /** Removes a provider the admin added themselves (not one owned by a repository). */
+  removeProvider: call<{ id: string }, void, 'not_found' | 'bad_request'>({ since: 2 }),
 });
 export type Sources = typeof sources;

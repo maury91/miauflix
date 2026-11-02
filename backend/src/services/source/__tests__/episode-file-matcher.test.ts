@@ -4,8 +4,8 @@ import { matchEpisodeFile } from '../episode-file-matcher';
 
 function release(files: string[]): SourceMetadata {
   return {
-    provider: 'therarbg',
-    providerKind: 'native',
+    provider: 'indexer-a',
+    providerKind: 'cardigann',
     matchedBy: 'imdb',
     accuracy: 'medium',
     releaseName: 'Show',

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Prepare compiled sanitizer packages consumed by the YTS and TheRARBG mock
-# image build contexts. The caller is responsible for building the packages.
+# image build contexts. These are test dependencies, outside the backend build graph.
 
 set -euo pipefail
 
@@ -11,6 +11,7 @@ root_dir=$(dirname "$backend_e2e_dir")
 docker_dist_dir="$backend_e2e_dir/docker/dist"
 
 cd "$root_dir"
+npm run build:libs
 rm -rf "$docker_dist_dir"
 mkdir -p "$docker_dist_dir"
 
