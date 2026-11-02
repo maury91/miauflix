@@ -4,11 +4,13 @@ import { join } from 'node:path';
 
 import { createClient, localTransport, management } from '@miauflix/contract';
 import { sources } from '@miauflix/service-contracts';
+import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
 
 import { createSourcesService } from '../src/service';
 import { createSeal } from '../src/util/seal';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
+import { tvApi, useProviders } from './providers';
 const dirs: string[] = [];
 const stops: Array<() => Promise<void>> = [];
 const hash = 'a'.repeat(40),
@@ -25,6 +27,10 @@ const setup = async (handler: (url: URL) => Response) => {
   });
   stops.push(created.stop);
   const transport = localTransport(created.service);
+  // The provider a file reference names must exist and be enabled.
+  const db = new Database(join(dir, 'sources.sqlite'));
+  useProviders(db, [{ id: 'files', yaml: tvApi('files', 'provider.invalid'), priority: 10 }]);
+  db.close();
   await createClient(management, transport).applyConfig({
     values: { SOURCES_DISABLE_VPN_CHECK: 'true' },
   });
@@ -41,7 +47,7 @@ it('resolves opaque provider references before public caches and shares identica
     return new Response(file);
   });
   const fileRef = codec.seal(
-    JSON.stringify({ provider: 'yts', url: 'https://provider.invalid/source' })
+    JSON.stringify({ provider: 'test-files', url: 'https://provider.invalid/source' })
   );
   const results = await Promise.all([
     client.torrentFile({ hash, fileRef }),

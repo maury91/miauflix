@@ -1,0 +1,33 @@
+id: htmldetails
+name: HTML Details
+language: en-US
+type: public
+links:
+  - https://details.invalid/
+caps:
+  categorymappings:
+    - { id: 1, cat: Movies, desc: Movies }
+  modes:
+    search: [q]
+    movie-search: [q]
+search:
+  paths:
+    - path: find
+  inputs:
+    q: '{{ .Keywords }}'
+  rows:
+    selector: div.item
+  fields:
+    title:
+      selector: a.title
+    details:
+      selector: a.title
+      attribute: href
+    seeders:
+      selector: span.seeds
+    size:
+      selector: span.size
+download:
+  selectors:
+    - selector: a.dl
+      attribute: href

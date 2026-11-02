@@ -66,11 +66,7 @@ trap cleanup EXIT INT TERM
 
 npm run build:backend
 
-rm -rf "$docker_dist_dir"
-mkdir -p "$docker_dist_dir"
-cp -r packages/yts-sanitizer "$docker_dist_dir/yts-sanitizer"
-cp -r packages/therarbg-sanitizer "$docker_dist_dir/therarbg-sanitizer"
-cp -r packages/source-metadata-extractor "$docker_dist_dir/source-metadata-extractor"
+bash "$backend_e2e_dir/scripts/prepare-docker-build-context.sh"
 
 docker compose -p "$project_name" -f "$backend_e2e_dir/$compose_file" up --build -d
 

@@ -13,6 +13,8 @@ const { service } = createSourcesService({
   dataDir: DATA_DIR,
   keyFile: KEY_FILE,
   encryptionKey: process.env.SOURCES_ENCRYPTION_KEY || undefined,
+  useGit: process.env.SOURCES_USE_GIT !== 'false',
+  preloadProviders: process.env.SOURCES_PRELOAD_PROVIDERS || undefined,
 });
 
 const server = await serve(service, { hostname: HOST, port: PORT });

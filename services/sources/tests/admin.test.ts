@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -7,8 +7,13 @@ import { sources } from '@miauflix/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
 
+import { Store } from '../src/db/store';
+import type { HttpClient } from '../src/http/http-client';
+import { ProviderAdmin } from '../src/providers/admin';
+import type { Registry } from '../src/providers/registry';
 import { createSourcesService } from '../src/service';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
+import { idTitle, useProviders } from './providers';
 
 const dirs: string[] = [];
 const stops: Array<() => Promise<void>> = [];
@@ -65,14 +70,15 @@ it('lists the built-in providers in priority order', async () => {
   const { client, ready } = setup(() => json({}));
   await ready();
   const providers = await client.providers();
-  expect(providers.map(p => [p.id, p.priority, p.repositoryId])).toEqual([
-    ['therarbg', 10, 'builtin:miauflix'],
-    ['yts', 20, 'builtin:miauflix'],
-    ['eztv', 30, 'builtin:miauflix'],
+  expect(providers.map(p => [p.id, p.priority, p.repositoryId, p.enabled]).slice(0, 4)).toEqual([
+    ['maury91-therarbg-imdb', 10, 'builtin:miauflix', true],
+    ['prowlarr-yts', 20, 'builtin:miauflix', true],
+    ['maury91-eztv-api', 30, 'builtin:miauflix', true],
+    ['maury91-torrentio', 35, 'builtin:miauflix', true],
   ]);
-  expect(providers[0].caps.movie).toContain('imdbid');
+  expect(providers.slice(5).every(p => !p.enabled)).toBe(true);
   expect((await client.repositories()).map(r => [r.id, r.builtIn, r.providerCount])).toEqual([
-    ['builtin:miauflix', true, 3],
+    ['builtin:miauflix', true, 8],
   ]);
 });
 
@@ -109,14 +115,14 @@ it('does not overwrite a provider owned by another repository', async () => {
   const { client, ready } = setup(() =>
     json(
       manifest('1.0.0', [
-        { id: 'yts', name: 'Evil YTS', version: '9', kind: 'native', native: 'yts' },
+        { id: 'prowlarr-yts', name: 'Evil YTS', version: '9', kind: 'cardigann', cardigann: 'yts' },
       ])
     )
   );
   await ready();
   const repo = await client.addRepository({ url: 'https://repo.invalid/a' });
-  expect(repo.lastError).toContain('yts');
-  const yts = (await client.providers()).find(p => p.id === 'yts')!;
+  expect(repo.lastError).toContain('prowlarr-yts');
+  const yts = (await client.providers()).find(p => p.id === 'prowlarr-yts')!;
   expect(yts).toMatchObject({ name: 'YTS', repositoryId: 'builtin:miauflix' });
 });
 
@@ -170,43 +176,49 @@ it('validates provider updates', async () => {
   const { client, ready } = setup(() => json({}));
   await ready();
   await rejectsWith(client.updateProvider({ id: 'nope', enabled: true }), 'not_found');
-  await rejectsWith(client.updateProvider({ id: 'yts', priority: 0 }), 'bad_request');
+  await rejectsWith(client.updateProvider({ id: 'prowlarr-yts', priority: 0 }), 'bad_request');
   await rejectsWith(
-    client.updateProvider({ id: 'yts', settings: { unknown: 'x' } }),
+    client.updateProvider({ id: 'prowlarr-yts', settings: { unknown: 'x' } }),
     'bad_request'
   );
   await rejectsWith(
-    client.updateProvider({ id: 'yts', settings: { dailyBudget: '-3' } }),
+    client.updateProvider({ id: 'prowlarr-yts', settings: { dailyBudget: '-3' } }),
     'bad_request'
   );
-  const view = await client.updateProvider({ id: 'yts', settings: { dailyBudget: '50' } });
+  const view = await client.updateProvider({ id: 'prowlarr-yts', settings: { dailyBudget: '50' } });
   expect(view.usage.dailyBudget).toBe(50);
   expect(
-    (await client.updateProvider({ id: 'yts', settings: { dailyBudget: '' } })).usage.dailyBudget
+    (await client.updateProvider({ id: 'prowlarr-yts', settings: { dailyBudget: '' } })).usage
+      .dailyBudget
   ).toBe(2000);
 });
 
 it('reorders providers and the planner follows the new order', async () => {
   const calls: string[] = [];
-  const { client, ready } = setup(url => {
+  const { client, ready, db } = setup(url => {
     calls.push(url.host);
-    return json({ status: 'ok', data: { movie_count: 0, movies: [] } });
+    return json({ results: [] });
   });
-  await ready();
-  const ordered = await client.reorderProviders({ ids: ['yts', 'therarbg'] });
-  expect(ordered.map(p => [p.id, p.priority])).toEqual([
-    ['yts', 10],
-    ['therarbg', 20],
-    ['eztv', 30],
+  useProviders(db, [
+    { id: 'a', yaml: idTitle('a', 'a'), priority: 10 },
+    { id: 'b', yaml: idTitle('b', 'b'), priority: 20 },
   ]);
-  await rejectsWith(client.reorderProviders({ ids: ['yts', 'yts'] }), 'bad_request');
+  await ready();
+  const ordered = await client.reorderProviders({ ids: ['test-b', 'test-a'] });
+  expect(ordered.map(p => [p.id, p.priority]).slice(0, 3)).toEqual([
+    ['test-b', 10],
+    ['test-a', 20],
+    ['maury91-therarbg-imdb', 30],
+  ]);
+  await rejectsWith(client.reorderProviders({ ids: ['test-a', 'test-a'] }), 'bad_request');
   await rejectsWith(client.reorderProviders({ ids: ['ghost'] }), 'bad_request');
-  for await (const _ of client.search({
+  for await (const item of client.search({
     media: { kind: 'movie', tmdbId: 1, imdbId: 'tt0000001', title: 'Nothing', year: 2000 },
     purpose: 'background',
-  }));
-  expect(calls[0]).not.toContain('rarbg');
-  expect(calls.some(host => host.includes('rarbg'))).toBe(true);
+  }))
+    void item;
+  expect(calls[0]).toBe('b');
+  expect(calls).toContain('a');
 });
 
 it('emits providersChanged and tests providers', async () => {
@@ -214,9 +226,105 @@ it('emits providersChanged and tests providers', async () => {
   await ready();
   const seen: string[] = [];
   const stop = client.providersChanged.on((change: { at: string }) => seen.push(change.at));
-  await client.updateProvider({ id: 'eztv', enabled: false });
+  await client.updateProvider({ id: 'maury91-eztv-api', enabled: false });
   expect(seen).toHaveLength(1);
   stop?.();
   await rejectsWith(client.testProvider({ id: 'ghost' }), 'not_found');
-  expect(typeof (await client.testProvider({ id: 'eztv' })).success).toBe('boolean');
+  expect(typeof (await client.testProvider({ id: 'maury91-eztv-api' })).success).toBe('boolean');
 });
+
+it('clears a select override to its definition default and rejects unknown choices', async () => {
+  const { client, ready, db } = setup(() => json({}));
+  useProviders(db, [
+    {
+      id: 'select',
+      priority: 1,
+      yaml: readFileSync(join(import.meta.dir, 'fixtures/cardigann/json-api.yml'), 'utf8'),
+    },
+  ]);
+  await ready();
+  expect(
+    (await client.updateProvider({ id: 'test-select', settings: { sort: 'date' } })).settings.sort
+  ).toBe('date');
+  await rejectsWith(
+    client.updateProvider({ id: 'test-select', settings: { sort: 'missing' } }),
+    'bad_request'
+  );
+  const cleared = await client.updateProvider({ id: 'test-select', settings: { sort: '' } });
+  expect(cleared.settings.sort).toBeUndefined();
+  expect(cleared.settingsSchema.find(setting => setting.name === 'sort')?.default).toBe('seeders');
+});
+
+it.each(['update', 'test'] as const)(
+  'preserves preparation errors during admin %s',
+  async method => {
+    const { db } = setup(() => json({}));
+    const error = new Error('Definition is invalid');
+    const registry = {
+      prepare: async () => {
+        throw error;
+      },
+      unsupportedReason: () => null,
+      instance: () => {
+        throw new Error('A failed preparation must not run a probe');
+      },
+    } as unknown as Registry;
+    const admin = new ProviderAdmin(
+      new Store(
+        db,
+        value => value,
+        value => value
+      ),
+      registry,
+      {} as HttpClient
+    );
+    const signal = new AbortController().signal;
+    if (method === 'update')
+      await expect(admin.update('prowlarr-nyaasi', { enabled: true }, signal)).rejects.toThrow(
+        'Definition is invalid'
+      );
+    else
+      await expect(admin.test('prowlarr-nyaasi', signal)).resolves.toEqual({
+        success: false,
+        message: 'Definition is invalid',
+      });
+  }
+);
+
+it.each(['update', 'test'] as const)(
+  'propagates cancellation during admin %s preparation',
+  async method => {
+    const { db } = setup(() => json({}));
+    const controller = new AbortController();
+    const error = new Error('Admin operation cancelled');
+    const registry = {
+      prepare: async () => {
+        controller.abort(error);
+        throw error;
+      },
+      unsupportedReason: () => null,
+      instance: () => {
+        throw new Error('A cancelled preparation must not run a probe');
+      },
+    } as unknown as Registry;
+    const admin = new ProviderAdmin(
+      new Store(
+        db,
+        value => value,
+        value => value
+      ),
+      registry,
+      {} as HttpClient
+    );
+    const request =
+      method === 'update'
+        ? admin.update('prowlarr-nyaasi', { enabled: true }, controller.signal)
+        : admin.test('prowlarr-nyaasi', controller.signal);
+    await expect(request).rejects.toBe(error);
+    expect(
+      db
+        .query<{ enabled: number }, []>("SELECT enabled FROM providers WHERE id='prowlarr-nyaasi'")
+        .get()?.enabled
+    ).toBe(0);
+  }
+);

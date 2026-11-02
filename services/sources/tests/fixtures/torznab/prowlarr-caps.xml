@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<caps>
+  <server version="1.1" title="Prowlarr" />
+  <searching>
+    <search available="yes" supportedParams="q" />
+    <tv-search available="yes" supportedParams="q,season,ep,imdbid,tvdbid,tmdbid" />
+    <movie-search available="yes" supportedParams="q,imdbid,tmdbid" />
+  </searching>
+</caps>

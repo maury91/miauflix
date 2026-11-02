@@ -74,10 +74,6 @@ COPY --from=builder /usr/src/app/dist/backend /usr/src/app/backend
 # Copy built packages (internal workspace dependencies)
 COPY --from=builder /usr/src/app/packages/source-metadata-extractor/dist /usr/src/app/packages/source-metadata-extractor/dist
 COPY --from=builder /usr/src/app/packages/source-metadata-extractor/package.json /usr/src/app/packages/source-metadata-extractor/package.json
-COPY --from=builder /usr/src/app/packages/yts-sanitizer/dist /usr/src/app/packages/yts-sanitizer/dist
-COPY --from=builder /usr/src/app/packages/yts-sanitizer/package.json /usr/src/app/packages/yts-sanitizer/package.json
-COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/dist /usr/src/app/packages/therarbg-sanitizer/dist
-COPY --from=builder /usr/src/app/packages/therarbg-sanitizer/package.json /usr/src/app/packages/therarbg-sanitizer/package.json
 COPY --from=builder /usr/src/app/packages/contract/dist /usr/src/app/packages/contract/dist
 COPY --from=builder /usr/src/app/packages/contract/package.json /usr/src/app/packages/contract/package.json
 COPY --from=builder /usr/src/app/packages/service-contracts/dist /usr/src/app/packages/service-contracts/dist

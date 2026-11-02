@@ -41,6 +41,8 @@ export interface RawResult {
   hash?: string;
   magnet?: string;
   torrentUrl?: string;
+  /** A page to resolve a download link from, for providers whose rows lack one. */
+  detailsUrl?: string;
   size?: number;
   runtimeMinutes?: number;
   trackerMetadata?: TrackerMetadata;
@@ -63,11 +65,17 @@ export interface ProviderPage {
 export interface Provider {
   readonly id: string;
   readonly name: string;
-  readonly kind: 'native' | 'cardigann' | 'torznab' | 'http';
+  readonly kind: 'cardigann' | 'torznab' | 'http';
   readonly caps: ProviderCaps;
   readonly rate: { perMinute: number; minIntervalMs: number; dailyBudget: number | null };
   readonly requiresFlareSolverr: boolean;
-  readonly maxPages: number; // default 1; TheRARBG season search 3
+  /** A sentence from the definition describing the indexer. */
+  readonly description?: string;
+  readonly maxPages: number; // default 1; paged definitions up to 3
+  /** Hosts this provider talks to; its own download links may point at them even if internal. */
+  readonly hosts?: string[];
+  /** Settings the admin can edit; absent means the registry's defaults. */
+  readonly settingsSchema?: import('@miauflix/service-contracts').ProviderSetting[];
   search(
     query: ProviderQuery,
     ctx: { signal: AbortSignal; http: HttpClient }

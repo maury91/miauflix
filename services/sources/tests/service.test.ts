@@ -13,13 +13,16 @@ import { afterEach, expect, it } from 'bun:test';
 
 import { mergeCandidate, toCandidate } from '../src/normalize/candidate';
 import { magnetHash, normalizeHash } from '../src/normalize/magnet';
-import { EztvProvider } from '../src/providers/native/eztv';
+import type { Provider } from '../src/providers/types';
 import { createSourcesService } from '../src/service';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
+import { idTitle, movieApi, tvApi, useProviders } from './providers';
 
 const dirs: string[] = [];
 const stops: Array<() => Promise<void>> = [];
 const hash = 'a'.repeat(40);
+/** Stands in for a provider where only its identity matters. */
+const stubProvider = { id: 'eztv', name: 'eztv', kind: 'cardigann' } as unknown as Provider;
 const request: SourceSearchRequest = {
   media: { kind: 'show', tmdbId: 123, imdbId: 'tt1234567', title: 'Example Show' },
   season: 1,
@@ -63,8 +66,6 @@ const ready = async (
       SOURCES_MIN_SEEDERS: '5',
       SOURCES_MOVIE_MIN_HEALTHY: '3',
       SOURCES_DEFAULT_DAILY_BUDGET: '2000',
-      THE_RARBG_API_URL: 'https://rarbg.invalid',
-      YTS_API_URL: 'https://yts.invalid/api/v2',
       ...values,
     },
   });
@@ -94,35 +95,27 @@ it('finds an older season pack from paged title search after irrelevant IMDb res
   const { client, admin, db } = setup(url => {
     calls.push(url.href);
     if (url.host === 'api.nordvpn.com') return Response.json({ protected: false });
-    if (url.pathname.includes('imdb-detail'))
+    if (url.pathname.includes('by-imdb'))
       return Response.json({
-        trb_posts: [
-          { name: 'Example.Show.S02E08.1080p', info_hash: 'b'.repeat(40), season: 2, episode: 8 },
-        ],
-        imdb: {},
+        results: [{ n: 'Example.Show.S02E08.1080p', h: 'b'.repeat(40), se: 20, i: 'tt1234567' }],
       });
-    if (url.pathname.includes('S01E01'))
-      return Response.json({ results: [], links: { next: null } });
+    if (url.pathname.includes('S01E01')) return Response.json({ results: [] });
     if (url.pathname.includes('S01'))
-      return Response.json(
-        url.searchParams.get('page') === '2'
-          ? {
-              results: [
-                { n: 'Example.Show.S01.Complete.1080p', h: hash, se: 20, s: 1000, i: 'tt1234567' },
-              ],
-              links: { next: null },
-            }
-          : { results: [], links: { next: '?page=2' } }
-      );
+      return Response.json({
+        results:
+          url.searchParams.get('page') === '2'
+            ? [{ n: 'Example.Show.S01.Complete.1080p', h: hash, se: 20, s: 1000, i: 'tt1234567' }]
+            : [{ n: 'Example.Show.S03.Complete.1080p', h: 'c'.repeat(40), se: 20, i: 'tt1234567' }],
+      });
     throw new Error('Unexpected fixture URL ' + url);
   });
-  db.run("UPDATE providers SET enabled=0 WHERE id<>'therarbg'");
+  useProviders(db, [{ id: 'idtitle', yaml: idTitle('idtitle', 'index'), priority: 10 }]);
   await ready(admin);
   const items = await collect(client.search(request));
   expect(items.filter(i => i.type === 'candidate').map(i => i.candidate.hash)).toEqual([hash]);
   expect(items.at(-1)).toMatchObject({
     type: 'summary',
-    providersSearched: ['therarbg'],
+    providersSearched: ['test-idtitle'],
     complete: true,
   });
   const before = calls.length;
@@ -135,14 +128,14 @@ it('opens the breaker after three failures and persists cooldown', async () => {
     if (url.host === 'api.nordvpn.com') return Response.json({ protected: false });
     throw new Error('fixture offline');
   });
-  db.run("UPDATE providers SET enabled=0 WHERE id<>'eztv'");
+  useProviders(db, [{ id: 'tvapi', yaml: tvApi('tvapi', 'tv'), priority: 10 }]);
   await ready(admin);
   for (let i = 0; i < 3; i++)
     expect((await collect(client.search(request))).at(-1)).toMatchObject({
-      providersFailed: ['eztv'],
+      providersFailed: ['test-tvapi'],
     });
   expect((await collect(client.search(request))).at(-1)).toMatchObject({
-    providersSkipped: ['eztv'],
+    providersSkipped: ['test-tvapi'],
     complete: false,
   });
   db.close();
@@ -153,23 +146,26 @@ it('hedges a slow first tier and propagates cancellation to outstanding requests
   const { client, admin, db } = setup(async (url, init) => {
     if (url.host === 'api.nordvpn.com') return Response.json({ protected: false });
     calls.push(url.host);
-    if (url.host === 'rarbg.invalid')
+    if (url.host === 'slow')
       return new Promise((_, reject) =>
         init?.signal?.addEventListener('abort', () => reject(init.signal?.reason), { once: true })
       );
     return Response.json({
-      status: 'ok',
       data: {
         movies: [
           {
             title_long: 'Example Movie (2020)',
             imdb_code: 'tt1234567',
-            torrents: [{ hash, url: 'https://file.invalid/a', quality: '1080p', seeds: 20 }],
+            torrents: [{ hash, quality: '1080p', seeds: 20 }],
           },
         ],
       },
     });
   });
+  useProviders(db, [
+    { id: 'slow', yaml: idTitle('slow', 'slow'), priority: 10 },
+    { id: 'fast', yaml: movieApi('fast', 'fast'), priority: 20 },
+  ]);
   await ready(admin);
   const timer = setTimeout(() => abort.abort(), 100);
   await collect(
@@ -183,7 +179,7 @@ it('hedges a slow first tier and propagates cancellation to outstanding requests
     )
   ).catch(() => undefined);
   clearTimeout(timer);
-  expect(calls).toContain('yts.invalid');
+  expect(calls).toContain('fast');
   db.close();
 });
 it('reserves background budget and charges every HTTP request', async () => {
@@ -192,10 +188,10 @@ it('reserves background budget and charges every HTTP request', async () => {
       ? Response.json({ protected: false })
       : Response.json({ torrents: [], torrents_count: 0 })
   );
-  db.run("UPDATE providers SET enabled=0 WHERE id<>'eztv'");
+  useProviders(db, [{ id: 'tvapi', yaml: tvApi('tvapi', 'tv'), priority: 10 }]);
   await ready(admin, { SOURCES_DEFAULT_DAILY_BUDGET: '1' });
   expect((await collect(client.search(request))).at(-1)).toMatchObject({
-    providersSkipped: ['eztv'],
+    providersSkipped: ['test-tvapi'],
   });
   expect(db.query('SELECT * FROM provider_usage').all()).toHaveLength(0);
   db.close();
@@ -204,7 +200,7 @@ it('normalizes base32 hashes, rejects invalid hashes and merges stats without ch
   expect(normalizeHash('A'.repeat(32))).toBe('0'.repeat(40));
   expect(magnetHash('magnet:?xt=urn:btih:' + 'A'.repeat(32))).toBe('0'.repeat(40));
   expect(normalizeHash('bad')).toBeNull();
-  const p = new EztvProvider();
+  const p = stubProvider;
   expect(
     toCandidate(
       { title: 'Example Show S01E01', hash: 'bad' },
@@ -259,15 +255,13 @@ it('normalizes a cached ID-only response separately for each requested episode',
       torrents: [1, 2].map(episode => ({
         title: `Example Show S01E0${episode} 1080p`,
         hash: String(episode).repeat(40),
-        season: '1',
-        episode: String(episode),
         seeds: 10,
         size_bytes: '1000',
         date_released_unix: 0,
       })),
     });
   });
-  db.run("UPDATE providers SET enabled=0 WHERE id<>'eztv'");
+  useProviders(db, [{ id: 'tvapi', yaml: tvApi('tvapi', 'tv'), priority: 10 }]);
   await ready(admin);
   expect((await collect(client.search(request))).find(i => i.type === 'candidate')).toMatchObject({
     candidate: { episode: 1 },
@@ -282,7 +276,7 @@ it('normalizes a cached ID-only response separately for each requested episode',
 it('preserves season zero specials', () => {
   const c = toCandidate(
     { title: 'Example Show S00E01', hash, season: 0, episode: 1 },
-    new EztvProvider(),
+    stubProvider,
     'imdb',
     { kind: 'tv' },
     { ...request, season: 0 },
@@ -296,26 +290,21 @@ it('spreads background searches across equally ranked providers by remaining bud
   const { client, admin, db } = setup(
     url => {
       calls.push(url.host);
-      if (url.host === 'rarbg.invalid')
+      if (url.host === 'a')
         return Response.json({
-          trb_posts: [
-            { name: 'Example Movie 2020 1080p', info_hash: 'a'.repeat(40), seeders: 20 },
-            { name: 'Example Movie 2020 720p', info_hash: 'b'.repeat(40), seeders: 20 },
-            { name: 'Example Movie 2020 2160p', info_hash: 'c'.repeat(40), seeders: 20 },
+          results: [
+            { n: 'Example Movie 2020 1080p', h: 'a'.repeat(40), se: 20 },
+            { n: 'Example Movie 2020 720p', h: 'b'.repeat(40), se: 20 },
+            { n: 'Example Movie 2020 2160p', h: 'c'.repeat(40), se: 20 },
           ],
         });
       return Response.json({
-        status: 'ok',
         data: {
           movies: [
             {
-              title_long: 'Another Movie 2020',
+              title_long: 'Another Movie 2020 1080p',
               imdb_code: 'tt7654321',
-              torrents: ['d', 'e', 'f'].map(h => ({
-                hash: h.repeat(40),
-                quality: '1080p',
-                seeds: 20,
-              })),
+              torrents: ['d', 'e', 'f'].map(h => ({ hash: h.repeat(40), seeds: 20 })),
             },
           ],
         },
@@ -323,8 +312,10 @@ it('spreads background searches across equally ranked providers by remaining bud
     },
     () => time
   );
-  db.run("UPDATE providers SET priority=10 WHERE id IN ('therarbg','yts')");
-  db.run("UPDATE providers SET enabled=0 WHERE id='eztv'");
+  useProviders(db, [
+    { id: 'a', yaml: idTitle('a', 'a'), priority: 10 },
+    { id: 'b', yaml: movieApi('b', 'b'), priority: 10 },
+  ]);
   await ready(admin);
   await collect(
     client.search({
@@ -339,7 +330,7 @@ it('spreads background searches across equally ranked providers by remaining bud
       media: { kind: 'movie', tmdbId: 2, imdbId: 'tt7654321', title: 'Another Movie', year: 2020 },
     })
   );
-  expect(calls).toEqual(['rarbg.invalid', 'yts.invalid']);
+  expect(calls).toEqual(['a', 'b']);
   db.close();
 });
 
@@ -351,8 +342,6 @@ it('keeps the interactive budget reserve usable while the same background query 
         {
           title: 'Example Show S01E01 1080p',
           hash,
-          season: '1',
-          episode: '1',
           seeds: 10,
           size_bytes: '1000',
           date_released_unix: 0,
@@ -360,13 +349,13 @@ it('keeps the interactive budget reserve usable while the same background query 
       ],
     })
   );
-  db.run("UPDATE providers SET enabled=0 WHERE id<>'eztv'");
+  useProviders(db, [{ id: 'tvapi', yaml: tvApi('tvapi', 'tv'), priority: 10 }]);
   await ready(admin, { SOURCES_DEFAULT_DAILY_BUDGET: '1' });
   const [background, interactive] = await Promise.all([
     collect(client.search(request)),
     collect(client.search({ ...request, purpose: 'interactive' })),
   ]);
-  expect(background.at(-1)).toMatchObject({ providersSkipped: ['eztv'] });
+  expect(background.at(-1)).toMatchObject({ providersSkipped: ['test-tvapi'] });
   expect(interactive.find(i => i.type === 'candidate')).toMatchObject({ candidate: { hash } });
   db.close();
 });

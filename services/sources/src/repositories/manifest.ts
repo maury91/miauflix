@@ -1,14 +1,16 @@
 import { z } from 'zod';
 
+import { PROWLARR_SOURCE_KEY } from '../providers/cardigann/sources';
+
 const settingValue = z.union([z.string(), z.boolean()]);
 const entry = z
   .object({
     id: z.string().regex(/^[a-z0-9][a-z0-9._-]{1,63}$/),
     name: z.string().trim().min(1).max(100),
     version: z.string().min(1).max(50),
-    kind: z.enum(['native', 'cardigann', 'torznab', 'http']),
-    native: z.string().optional(), // native provider id
-    cardigann: z.string().optional(), // Jackett definition id
+    kind: z.enum(['cardigann', 'torznab', 'http']),
+    cardigann: z.string().optional(), // Definition id within its source
+    source: z.string().trim().min(1).max(300).default(PROWLARR_SOURCE_KEY),
     baseUrl: z.string().url().optional(), // torznab/http
     defaults: z
       .object({
@@ -22,7 +24,6 @@ const entry = z
   })
   .superRefine((value, ctx) => {
     const required = {
-      native: value.native,
       cardigann: value.cardigann,
       torznab: value.baseUrl,
       http: value.baseUrl,
@@ -30,7 +31,7 @@ const entry = z
     if (!required)
       ctx.addIssue({
         code: 'custom',
-        message: `${value.kind} providers need ${value.kind === 'native' || value.kind === 'cardigann' ? value.kind : 'baseUrl'}`,
+        message: `${value.kind} providers need ${value.kind === 'cardigann' ? 'cardigann' : 'baseUrl'}`,
       });
   });
 

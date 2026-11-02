@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:torznab="http://torznab.com/schemas/2015/feed">
+  <channel>
+    <title>Example Indexer</title>
+    <item>
+      <title>Example.Movie.2020.1080p.BluRay.x264-GRP</title>
+      <link>https://jackett.invalid/dl/example/?jackett_apikey=k&amp;file=Example.Movie</link>
+      <pubDate>Sat, 01 Aug 2026 10:00:00 +0000</pubDate>
+      <size>2147483648</size>
+      <enclosure url="https://jackett.invalid/dl/example/?jackett_apikey=k&amp;file=Example.Movie" length="2147483648" type="application/x-bittorrent" />
+      <torznab:attr name="seeders" value="40" />
+      <torznab:attr name="peers" value="55" />
+      <torznab:attr name="infohash" value="AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" />
+      <torznab:attr name="imdbid" value="1234567" />
+    </item>
+    <item>
+      <title>Example.Movie.2020.720p.WEB.x264-OTHER</title>
+      <link>magnet:?xt=urn:btih:bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb&amp;dn=Example.Movie</link>
+      <pubDate>Fri, 31 Jul 2026 10:00:00 +0000</pubDate>
+      <enclosure url="https://jackett.invalid/dl/other/" length="734003200" type="application/x-bittorrent" />
+      <torznab:attr name="seeders" value="7" />
+      <torznab:attr name="peers" value="7" />
+    </item>
+    <item>
+      <title></title>
+    </item>
+  </channel>
+</rss>

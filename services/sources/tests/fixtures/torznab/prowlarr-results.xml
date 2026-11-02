@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:torznab="http://torznab.com/schemas/2015/feed">
+  <channel>
+    <item>
+      <title>Example Show S01E02 1080p WEB h264-GRP</title>
+      <guid>https://prowlarr.invalid/1/download</guid>
+      <pubDate>Sun, 02 Aug 2026 12:00:00 +0000</pubDate>
+      <enclosure url="magnet:?xt=urn:btih:cccccccccccccccccccccccccccccccccccccccc&amp;dn=Example" length="1073741824" type="application/x-bittorrent" />
+      <torznab:attr name="seeders" value="12" />
+      <torznab:attr name="peers" value="20" />
+      <torznab:attr name="magneturl" value="magnet:?xt=urn:btih:cccccccccccccccccccccccccccccccccccccccc&amp;dn=Example" />
+      <torznab:attr name="size" value="1073741824" />
+    </item>
+  </channel>
+</rss>

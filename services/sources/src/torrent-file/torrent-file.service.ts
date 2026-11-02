@@ -10,8 +10,7 @@ export class TorrentFileService {
     private http: HttpClient,
     private open: (s: string) => string,
     private store: Store,
-    private registry: Registry,
-    private allowedHosts: () => string[] = () => []
+    private registry: Registry
   ) {}
   async resolve(
     hash: string,
@@ -31,7 +30,7 @@ export class TorrentFileService {
             urls.push(data.url);
             directOptions.set(data.url, {
               blockInternal: true,
-              allowHosts: this.allowedHosts(),
+              allowHosts: provider.hosts ?? [],
               ...provider.rate,
               maxRateWaitMs: 1000,
               beforeRequest: () =>
