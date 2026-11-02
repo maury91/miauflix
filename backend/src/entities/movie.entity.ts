@@ -95,11 +95,16 @@ export class Movie {
   })
   contentDirectoriesSearched: string[];
 
+  /** The sources service answered for every eligible provider in the last search. */
+  @Column({ default: false })
+  sourceSearchComplete: boolean;
+
   @Column({
     type: 'datetime',
+    nullable: true,
     default: () => 'CURRENT_TIMESTAMP',
   })
-  nextSourceSearchAt: Date;
+  nextSourceSearchAt: Date | null;
 
   @OneToMany('MovieSource', 'movie')
   sources: Relation<MovieSource>[];

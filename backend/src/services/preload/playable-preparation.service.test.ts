@@ -35,7 +35,9 @@ describe('PlayablePreparationService', () => {
       file: Buffer.from('torrent'),
     };
     const mediaService = {
-      getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }),
+      getMovieByMediaId: jest.fn().mockResolvedValue({
+        local: { id: 7, mediaId: 42, releaseDate: '2020-05-01' },
+      }),
     };
     const sourceService = {
       requestMovieVerification: jest.fn(),
@@ -64,6 +66,10 @@ describe('PlayablePreparationService', () => {
       );
       expect(result.source).toBe(downloaded);
     }
+    expect(sourceService.getSourcesForMovieWithOnDemandSearch).toHaveBeenCalledWith(
+      expect.objectContaining({ id: 7, mediaId: 42, releaseDate: '2020-05-01' }),
+      3_000
+    );
     expect(warmup.warm).toHaveBeenCalledWith(movieTarget(downloaded), 'm:42', 'm:42', {});
     expect(sourceService.processSourceMetadata).not.toHaveBeenCalled();
   });

@@ -80,8 +80,6 @@ function createSyntheticPeerServerSpan(
 const HOST_TO_PEER_SERVICE: Array<{ pattern: RegExp | string; service: string }> = [
   { pattern: 'api.trakt.tv', service: 'trakt' },
   { pattern: 'themoviedb.org', service: 'tmdb' },
-  { pattern: /yts\.\w+/, service: 'yts' },
-  { pattern: /therar\w*\.\w+/, service: 'therarbg' },
 ];
 
 function peerServiceForSpan(span: ReadableSpan): string | undefined {

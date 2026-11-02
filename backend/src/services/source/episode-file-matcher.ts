@@ -1,5 +1,5 @@
-import type { SourceMetadata } from '@content-directories/content-directory.abstract';
 import { isVideoFile } from '@services/download/download.utils';
+import type { SourceMetadata } from '@services/sources/source-candidate';
 
 export interface EpisodeFileMatch {
   videoFilePath: string | null;

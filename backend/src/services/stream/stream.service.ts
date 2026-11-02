@@ -91,6 +91,8 @@ export class StreamService {
     let sources = await this.sourceService.getSourcesForMovieWithOnDemandSearch(
       {
         id: movie.id,
+        mediaId: movie.mediaId,
+        releaseDate: movie.releaseDate,
         imdbId: movie.imdbId,
         title: movie.title,
         contentDirectoriesSearched: movie.contentDirectoriesSearched,
