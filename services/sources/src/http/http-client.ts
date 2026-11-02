@@ -292,8 +292,3 @@ export class HttpClient {
     return response.json() as Promise<T>;
   }
 }
-
-const isInternalHost = (hostname: string): boolean =>
-  !hostname.includes('.') ||
-  hostname.endsWith('.localhost') ||
-  /^(0\.|127\.|10\.|169\.254\.|192\.168\.|172\.(1[6-9]|2\d|3[01])\.)/.test(hostname);
