@@ -1,4 +1,6 @@
 import { mkdtempSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
 
 import { createClient, localTransport, management } from '@miauflix/contract';
 import { sources } from '@miauflix/service-contracts';
@@ -25,7 +27,7 @@ const manifest = [
 const setupTest = async (
   handler: (url: URL, init: RequestInit) => Response | Promise<Response>
 ) => {
-  const dir = mkdtempSync('/private/tmp/sources-review-');
+  const dir = mkdtempSync(join(tmpdir(), 'sources-review-'));
   const made = createSourcesService({
     dataDir: dir,
     keyFile: `${dir}/.key`,
