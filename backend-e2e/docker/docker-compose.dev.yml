@@ -31,7 +31,7 @@ services:
       - TRAKT_CLIENT_ID=${E2E_TRAKT_CLIENT_ID-${TRAKT_CLIENT_ID:-mock-trakt-client-id}}
       - TRAKT_CLIENT_SECRET=${E2E_TRAKT_CLIENT_SECRET-${TRAKT_CLIENT_SECRET:-mock-trakt-client-secret}}
       - TRAKT_REDIRECT_URI=${E2E_TRAKT_REDIRECT_URI-${TRAKT_REDIRECT_URI:-https://app.example/trakt/callback}}
-      - CARDIGANN_DEFINITION_SOURCES=http://yts-mock/definitions
+      - CARDIGANN_DEFINITION_SOURCES=http://indexer-mock/definitions
       - DISABLE_VPN_CHECK=true
       - DISABLE_DISCOVERY=true
       - STATIC_TRACKERS=udp://tracker-mock:6969/announce
@@ -71,15 +71,13 @@ services:
         condition: service_healthy
       tmdb-mock:
         condition: service_healthy
-      yts-mock:
+      indexer-mock:
         condition: service_healthy
       trakt-mock:
         condition: service_healthy
       list-service:
         condition: service_healthy
       sources:
-        condition: service_healthy
-      therarbg-mock:
         condition: service_healthy
       tracker-mock:
         condition: service_healthy
@@ -92,7 +90,7 @@ services:
     environment:
       - SOURCES_PORT=3003
       - SOURCES_DATA_DIR=/app/data
-      - SOURCES_PRELOAD_PROVIDERS=imdb-title@http://yts-mock/definitions movies-api@http://yts-mock/definitions
+      - SOURCES_PRELOAD_PROVIDERS=imdb-title@http://indexer-mock/definitions movies-api@http://indexer-mock/definitions
     volumes:
       - ../../services/sources/src:/workspace/services/sources/src
       - sources_data:/app/data
@@ -111,9 +109,7 @@ services:
       retries: 30
       start_period: 5s
     depends_on:
-      yts-mock:
-        condition: service_healthy
-      therarbg-mock:
+      indexer-mock:
         condition: service_healthy
 
   # Media catalog service (fronts the TMDB mock)
@@ -252,18 +248,15 @@ services:
     networks:
       - test-network
 
-  # YTS Mock Service
-  yts-mock:
+  # Indexer mock: fictional release data plus the Cardigann definitions that query it
+  indexer-mock:
+    image: miauflix-e2e-indexer-mock:${E2E_IMAGE_TAG:-local}
     build:
-      context: .
-      dockerfile: mock/yts.Dockerfile
+      context: mock
+      dockerfile: tmdb.Dockerfile
     user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
     environment:
       - DATA_DIR=/app/data
-      - API_BASE_URL=https://yts.mx/api/v2
-      - API_AUTH_HEADER_IS_BEARER=false
-      - API_KEY=none
-      - OWN_URL=http://yts-mock
       - DEFINITIONS_DIR=/app/definitions
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
@@ -272,31 +265,8 @@ services:
       retries: 30
       start_period: 10s
     volumes:
-      - ./yts/data:/app/data
+      - ./indexer/data:/app/data
       - ./indexer/definitions:/app/definitions:ro
-    networks:
-      - test-network
-
-  # TheRARBG Mock Service
-  therarbg-mock:
-    build:
-      context: .
-      dockerfile: mock/therarbg.Dockerfile
-    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
-    environment:
-      - DATA_DIR=/app/data
-      - API_BASE_URL=https://therarbg.to
-      - API_AUTH_HEADER_IS_BEARER=false
-      - API_KEY=none
-      - OWN_URL=http://therarbg-mock
-    healthcheck:
-      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
-      interval: 0.5s
-      timeout: 2s
-      retries: 30
-      start_period: 10s
-    volumes:
-      - ./therarbg/data:/app/data
     networks:
       - test-network
 

@@ -34,16 +34,9 @@ services:
       cache_to:
         - type=gha,mode=max,scope=miauflix-e2e-trakt-mock
 
-  yts-mock:
+  indexer-mock:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-yts-mock
+        - type=gha,scope=miauflix-e2e-indexer-mock
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-yts-mock
-
-  therarbg-mock:
-    build:
-      cache_from:
-        - type=gha,scope=miauflix-e2e-therarbg-mock
-      cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-therarbg-mock
+        - type=gha,mode=max,scope=miauflix-e2e-indexer-mock

@@ -120,7 +120,7 @@ describe('Sources E2E Tests', () => {
 
       // If we have sources, verify they come from different providers
       if (totalSources > 0) {
-        // Should ideally have multiple source types (YTS, TMDB integrations, etc.)
+        // Should ideally have multiple source types (indexers, integrations, etc.)
         expect(allSourceTypes.size).toBeGreaterThan(0);
       }
     });

@@ -276,7 +276,7 @@ describe('Movie Endpoints', () => {
       );
     }
 
-    // Use a movie ID with active TMDB and YTS fixtures that is unused by this suite.
+    // Use a movie ID with active TMDB and indexer fixtures that is unused by this suite.
     const unprocessedMovieId = 120; // The Ember Covenant
     const start = Date.now();
 

@@ -234,7 +234,6 @@ fi
 cleanupArtifacts() {
     echo "🧹 Cleaning up previous build artifacts..."
     cd ${backend_e2e_dir}
-    rm -rf docker/dist
     
     $script_dir/cleanup-logs.sh
 }
@@ -305,7 +304,6 @@ if [[ "$SKIP_DOCKER_STARTUP" == "false" ]]; then
     # Clean up previous build artifacts
     cleanupArtifacts
     cd ${root_dir}
-    bash "$script_dir/prepare-docker-build-context.sh"
 
     # Navigate to the integration tests directory
     cd "${backend_e2e_dir}"

@@ -20,10 +20,6 @@ cd "$backend_e2e_dir"
 # Stop and remove containers, networks, and volumes
 docker compose -p "$PROJECT_NAME" -f "$DOCKER_COMPOSE_FILE" down -v --remove-orphans
 
-# Clean up build artifacts
-echo "🧹 Cleaning up build artifacts..."
-rm -rf docker/dist
-
 # Cleanup old log files using common script
 $script_dir/cleanup-logs.sh
 
