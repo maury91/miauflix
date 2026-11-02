@@ -30,6 +30,8 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - TV login works with the remote, and an expired QR code can be renewed
 - The intro on some TVs grows all of the logo's letters again, instead of two, and no longer shows two logos
 - In the player, Find subtitles keeps the remote working while it searches
+- On the TV, the remote never gets stuck with nothing selected: adding or removing a title from the watchlist keeps it on the button, and if focus is ever lost an arrow key brings it back
+- Search results on older Samsung TVs show full-size posters instead of half-width ones
 - Signing in on the TV with the QR code while its keyboard is open no longer starts the intro too high
 - Approving a QR login from another device works again
 - Continue watching opens the episode its card shows

@@ -492,10 +492,18 @@ export class PlayablePreparationService {
     const compatible = this.sortCandidates(sources, preferences, requireFile, bitrate);
     if (!compatible.length) return null;
     if (preferences.quality === 'auto') return compatible[0];
+    // The bitrate cap outranks the requested quality: an over-cap match would stall playback.
+    const maxBitrateKbps = preferences.maxBitrateKbps;
+    const withinCap =
+      maxBitrateKbps && bitrate
+        ? compatible.filter(source =>
+            fitsBitrate(source, maxBitrateKbps, bitrate.runtimeSeconds, bitrate.sizeOf)
+          )
+        : [];
+    const pool = withinCap.length ? withinCap : compatible;
     return (
-      compatible.find(
-        source => source.quality?.toLowerCase() === preferences.quality.toLowerCase()
-      ) ?? compatible[0]
+      pool.find(source => source.quality?.toLowerCase() === preferences.quality.toLowerCase()) ??
+      compatible[0]
     );
   }
 

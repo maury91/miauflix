@@ -249,7 +249,11 @@ describe('PlayablePreparationService', () => {
   describe('with a bitrate cap', () => {
     const GB = 2 ** 30;
     /** A 100-minute movie: 1 GB is about 1.4 Mbit/s. */
-    const setupCapped = (sources: object[], downloadedIds: number[] = []) => {
+    const setupCapped = (
+      sources: object[],
+      downloadedIds: number[] = [],
+      quality: Quality | 'auto' = 'auto'
+    ) => {
       const mediaService = {
         getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7, runtime: 100 } }),
       };
@@ -276,7 +280,7 @@ describe('PlayablePreparationService', () => {
           { kind: 'movie', mediaId: 42 },
           {
             through,
-            preferences: { quality: 'auto', allowHevc: true, maxBitrateKbps: 8_000 },
+            preferences: { quality, allowHevc: true, maxBitrateKbps: 8_000 },
             workClass: 'interactive',
           }
         );
@@ -288,6 +292,19 @@ describe('PlayablePreparationService', () => {
       size: sizeGb * GB,
       streamingScore,
       file: Buffer.from(`torrent ${id}`),
+    });
+
+    it('keeps an explicitly requested quality within the cap', async () => {
+      const heavy4k = source(1, 17, 10_000);
+      const fhd = { ...source(2, 3, 8_000), quality: Quality.FHD };
+      const lean4k = source(3, 4.5, 7_000);
+
+      expect(
+        (await setupCapped([heavy4k, fhd, lean4k], [], Quality['4K']).prepare('sources')).source
+      ).toBe(lean4k);
+      expect((await setupCapped([heavy4k, fhd], [], Quality['4K']).prepare('sources')).source).toBe(
+        fhd
+      );
     });
 
     it('passes over a finished download above the cap for a leaner source', async () => {

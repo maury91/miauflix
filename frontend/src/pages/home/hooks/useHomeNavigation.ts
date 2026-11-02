@@ -307,6 +307,17 @@ export function useHomeNavigation({
 
   const navigationRef = useKeyboardNavigation({
     enabled,
+    // Focus lost: back to the selected card, or the details page's primary action. The player,
+    // sidebar and notifications restore their own.
+    onRestoreFocus: () => {
+      if (view === 'details') return detailsRef.current?.restoreFocus() ?? false;
+      if (view === 'player' || activeRegion === 'sidebar' || activeRegion === 'notifications')
+        return false;
+      if (rowRefs.current.get(activeCategory)?.focusIndex(selectedIndexIn(activeCategory)))
+        return true;
+      pageRef.current?.focus({ preventScroll: true });
+      return !!pageRef.current;
+    },
     onLeft: step('left'),
     onRight: step('right'),
     onUp: step('up'),

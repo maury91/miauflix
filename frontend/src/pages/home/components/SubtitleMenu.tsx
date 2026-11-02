@@ -259,6 +259,11 @@ export function SubtitleMenu({
     });
   };
   const panelNavigation = useKeyboardNavigation({
+    onRestoreFocus: () => {
+      const first = panel.current?.querySelector<HTMLElement>('button:not(:disabled)');
+      first?.focus();
+      return !!first;
+    },
     onUp: () => move(-1),
     onDown: () => move(1),
     onLeft: event => {
