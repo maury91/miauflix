@@ -24,13 +24,13 @@ miauflix/
 │   └── src/                        # Source code
 ├── services/                       # Standalone services
 │   ├── media-catalog/              # TMDB-backed media catalog (Bun)
-│   └── list-service/               # Trakt list service
+│   ├── list-service/               # Trakt lists and playback sync (Bun)
+│   └── sources/                    # Cardigann/Torznab discovery and provider management (Bun)
 ├── packages/                       # Shared libraries
 │   ├── contract/                   # Contract runtime: typed clients, transports, serve()
-│   ├── service-contracts/          # The service contracts (catalog, lists) and their types
+│   ├── service-contracts/          # Catalog, list, and source contracts and their types
 │   ├── service-configuration/      # Shared service configuration and the config store
-│   ├── source-metadata-extractor/  # Content metadata processing
-│   └── *-sanitizer/                # Source metadata sanitizers (used for test fixtures)
+│   └── source-metadata-extractor/  # Content metadata processing
 ├── test-fixtures/                  # Recorded provider responses and fixture images
 ├── nginx/                          # Nginx configuration and certificates
 ├── scripts/                        # Support scripts
@@ -43,7 +43,7 @@ miauflix/
 ### Prerequisites
 
 - Node.js 22 or later (`nvm use` picks the pinned version)
-- [Bun](https://bun.sh/) (runs the media-catalog service)
+- [Bun](https://bun.sh/) (runs the catalog, list, and source services)
 - Docker and Docker Compose (for full stack testing)
 - Git
 
@@ -103,15 +103,15 @@ npm run start:frontend
 npm run dev:ssr -w frontend
 
 # Frontend tests
-npm run test:frontend
+npm test --workspace frontend
 npm run test:frontend:e2e
-npm run test:frontend:visual
+npm run test:visual --workspace frontend
 ```
 
 ### Full-stack Development
 
 ```bash
-# Start both backend and frontend
+# Start backend, frontend, catalog, list, and source services
 npm run dev
 
 # Run all tests
@@ -151,11 +151,11 @@ Use path aliases to avoid deep relative imports:
 
 ```typescript
 // ✅ GOOD - Use aliases
-import { UserEntity } from '@entities/user.entity';
+import { User } from '@entities/user.entity';
 import { AuthService } from '@services/auth/auth.service';
 
 // ❌ BAD - Deep relative paths
-import { UserEntity } from '../../../entities/user.entity';
+import { User } from '../../../entities/user.entity';
 ```
 
 ### Backend Path Aliases
@@ -392,11 +392,13 @@ npm run check:ts
 
 ### Authentication
 
-**Three-Tier Authentication System:**
+Authentication has browser and TV transports:
 
-- **API Endpoints**: Use JWT tokens in `Authorization: Bearer` headers (most endpoints)
-- **Token Refresh**: HttpOnly cookies used only for `/api/auth/refresh/:session` endpoint
-- **Streaming Access**: Non-JWT streaming keys for `/api/stream/:token` endpoint
+- **Browser API calls:** `X-Session-Id` selects the session. Its JWT access token is read from an HttpOnly cookie; the refresh token uses a separate HttpOnly cookie scoped to `/api/auth/`, including refresh and logout.
+- **Installed TV app:** `X-Auth-Transport: token` requests token responses. API calls use `Authorization: Bearer` and `X-Session-Id`; refresh and logout use `X-Refresh-Token`.
+- **Streaming:** separate grants authorize media delivery at `/api/stream/:token`.
+
+Reuse the [shared API client](../../frontend/src/shared/api/backend-client.ts), [authenticated request helper](../../frontend/src/shared/api/authenticated-request.ts), and [existing backend transport](../../backend/src/utils/auth-transport.util.ts). Do not introduce a separate browser token store or duplicate refresh logic.
 
 **Security Measures:**
 
@@ -433,7 +435,7 @@ DEBUG=miauflix:auth npm run start:backend
 
 ```bash
 # View container logs
-docker compose logs -f backend
+docker compose logs -f miauflix
 
 # Execute commands in containers
 docker compose exec backend bash

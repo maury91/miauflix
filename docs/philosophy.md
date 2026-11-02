@@ -1,56 +1,35 @@
 # Philosophy
 
-Miauflix is based on these principles:
+Miauflix aims to make a self-hosted streaming service approachable while keeping control with the person running it. These principles describe the design goals. The [feature guide](features.md) explains what is implemented, and [ToDo.md](../ToDo.md) tracks unfinished work.
 
 ## Simplicity
 
-Starting Miauflix on your machine or VPS must be as easy as possible.
-The setup accommodates both beginners and advanced users.
+Starting Miauflix on your own computer or server should require as little setup as practical. The supplied Docker Compose deployment starts the application and supporting services together, and the browser guides you through creating the first administrator and configuring required integrations. Using prebuilt images does not require cloning the repository.
 
-If you’re a beginner running Miauflix locally, run the wizard and start a single Docker container—you don’t even need to clone this repository.
-
-If you’re an advanced user, everything is ready for you to set up a full website with SSL, custom domain, VPN, and anything else you might need.
+The deployment contains multiple containers; the viewer still has one app to open. Optional Compose files add HTTPS for a domain, a VPN, FlareSolverr, or tracing. See [Docker setup](setup/docker-setup.md) for the supported installation path.
 
 ## Resilience
 
-Miauflix is designed to work with multiple sources. Many are integrated into the codebase so you can use them without installing anything else (simplicity principle).  
-Others can be added so Miauflix can still work even if those sources are not available anymore.
+Miauflix searches several sources so playback is not tied to one indexer. Supported Cardigann definitions describe how to search sites without adding site-specific code to the backend. Administrators can manage providers and definition repositories, and can connect an external Jackett or Prowlarr through Torznab.
 
-> Note: This principle is not fully implemented yet; integration with Prowlarr and Jackett is planned.
+The search planner caches results, applies request budgets, and backs off from failing providers. The backend separately verifies video files and can try another source when one is unusable. These mechanisms improve resilience; they cannot make a release available if nobody is sharing it or guarantee access to every indexer. Cardigann support is a subset, with unsupported definitions and private-tracker sign-in flows excluded.
 
-## Running everywhere
+Catalog, list, and source services have separate ownership and versioned communication contracts. A developer can supply a compatible replacement service; an arbitrary Docker image does not automatically become a plugin. See [source features](features/sources.md) and [system architecture](architecture/system-overview.md).
 
-Miauflix is designed so you can run it in a possibly hostile environment, like a VPS that is partially monitored by the provider.
+## Privacy and controlled access
 
-### First part: obfuscation
+Downloaded torrent pieces and selected sensitive application fields are encrypted at rest. The application needs its encryption keys while running, so someone with root access to the host could also obtain those keys and read the data. This is not whole-database encryption or protection against a fully compromised host. Persistent keys must be kept with the data they protect.
 
-Miauflix encrypts sensitive data at rest. The application must access the decryption key at runtime; accordingly, a host with root access could also access it.
+HTTPS protects traffic between a device and the server. The optional Gluetun/NordVPN deployment routes outbound traffic through a VPN and supplies a network firewall; application VPN checks are a separate safeguard. A VPN does not replace HTTPS, and encrypted storage does not make torrent traffic anonymous.
 
-When SSL is configured, data in transit is protected via HTTPS (TLS). A VPN is recommended for upstream privacy and ISP/provider exposure reduction, but it is not a substitute for HTTPS.  
-For stronger protection, store encryption keys in an external secrets manager (e.g., HashiCorp Vault, AWS KMS) and inject short‑lived keys at runtime.
+Miauflix uses administrator-created accounts rather than open self-registration. The first administrator is created during setup; additional account creation exists in the API, while its management screen remains planned. Password and QR-code login identify a Miauflix account. Connecting Trakt is separate from signing in to Miauflix.
 
-![Encryption flow diagram for at-rest key handling and HTTPS in transit](../assets/encryption-flow.png)
-
-### Second part: authentication
-
-To run outside your local network, Miauflix must support user authentication.
-
-Miauflix provides a closed authentication system: an admin can create users; self‑signup is not available.
-
-The purpose is to let you deploy your instance of Miauflix in a server exposed to the internet, while ensuring only authorized users can access it.
+The supplied Compose file binds the app to localhost initially. Exposing it to a network requires completing setup and choosing the appropriate access and HTTPS configuration. See [storage and privacy](features/storage-privacy.md) and [accounts](features/accounts.md).
 
 ## Speed
 
-Miauflix is designed for fast start times. The tenet is: "When a user clicks Watch Now, streaming should start in under 2 seconds."
+The goal is for playback to begin quickly after the viewer presses Watch Now. An under-two-second start is an aspiration, not a guarantee: source availability, peer speeds, server resources, and media inspection or conversion all affect startup.
 
-To achieve this, Miauflix uses background processing, preloading, and priority queues.
+Miauflix works ahead where it has evidence of viewing intent. Background jobs refresh catalog information and lists and discover sources. Focusing a title can prepare torrent information, initial file pieces, and audio/subtitle inspection. During playback, the download layer reads ahead, and TV playback can prefetch the next episode. Suitable completed downloads are reused.
 
-When idle, Miauflix searches for new content and preloads data needed for streaming.
-
-- Periodic synchronization of catalog metadata and Trakt-backed lists
-- Periodic source discovery of recently acquired content and re-discovery of older content
-- Pre-download of content marked as "continue watching" (e.g., new episode of a TV show)
-
-Miauflix prioritizes content the user shows intent to watch (e.g., opening a movie detail). If data isn't present, it's fetched with priority and downloading begins so some content is ready when the user clicks Watch Now.
-
-Miauflix supports streaming while downloading.
+Miauflix can stream before the whole file has downloaded. It avoids unnecessary re-encoding when the device can play the original audio and video, and converts supported media only when needed for delivery. See [watching](features/watching.md) and [audio and subtitles](features/audio-subtitles.md).

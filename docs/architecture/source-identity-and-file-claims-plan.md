@@ -1,227 +1,79 @@
-# Refactor plan: source identity, explicit file targets, file claims
+# Source identity, playback targets, and file claims
 
-Status: PRs 1–2 committed; PRs 3–4 implemented (uncommitted). Follows the architecture review of the `tv-show-discovery` branch.
+Miauflix separates a downloadable source from the movies or episodes it contains, the file a viewer plays, and the consumers that need that file. This separation lets several accounts play different episodes from one season pack without sharing a mutable file selection.
 
-Goal: replace three shortcuts from the TV work with a model that holds for movies and season packs alike.
+See [TV source architecture](tv-source-support-plan.md) for episode discovery and continuation, and [System overview](system-overview.md) for service boundaries.
 
-| Today                                                                                     | Target                                                                             |
-| ----------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
-| `MovieSource` = torrent + movie link; TV rows use `movieId = null` + in-process hash lock | `ContentSource` (unique hash) + `MovieSource` / `EpisodeSource` association rows   |
-| `EncryptedStorageLayout.video` = "last selected file", persisted and shared               | Layout holds only the file table; every read names its file via a `PlaybackTarget` |
-| `Storage.selectedFiles` grows forever; `videoCompletedAt` / `retentionClass` per torrent  | `StorageFile` (per-file completion) + `StorageFileClaim` (per-consumer, expiring)  |
+## Source and association records
 
-**No data migration.** The project runs on a single machine and the database can be wiped at any time. Schema changes rely on `synchronize()`. After each PR, delete `DATA_DIR/database.sqlite` and the downloads directory, then let the app rebuild them. Old schemas get no compatibility shims, no deprecated columns and no ID preservation.
+| Record             | Identity and responsibility                                                                                         |
+| ------------------ | ------------------------------------------------------------------------------------------------------------------- |
+| `ContentSource`    | One source per normalized torrent info hash; provider metadata, quality, codec, torrent metadata, and video verdict |
+| `MovieSource`      | Unique movie/source association with a nullable main-video path                                                     |
+| `EpisodeSource`    | Episode/source/file association with a `single` or `combined` match kind                                            |
+| `Storage`          | Encrypted source storage, layout, verified pieces, allocation, and seeding state                                    |
+| `StorageFile`      | A file's path, offset, length, and completion state within source storage                                           |
+| `StorageFileClaim` | One consumer's live request for a file or byte range                                                                |
+| `PlaybackGrant`    | Expiring authorization bound to a user, playable identity, and source                                               |
 
-Order: **1 → 2 → 3 → 4**, one PR each. Each PR leaves the app working.
+Info hashes are trimmed and lowercased before deterministic encryption. Database uniqueness and repository lookups therefore use one identity regardless of provider casing. Association rows allow one source to contain several movies or episodes without duplicating the source or its storage.
 
----
+Sensitive file paths are encrypted. Deterministic encryption is used where equality and uniqueness checks require matching stored values. Raw SQL must use the encrypted stored representation and physical column names.
 
-## Constraints that still apply
+Implementation: [source entity](../../backend/src/entities/content-source.entity.ts), [movie association](../../backend/src/entities/movie-source.entity.ts), [episode association](../../backend/src/entities/episode-source.entity.ts), and [source repository](../../backend/src/repositories/content-source.repository.ts).
 
-- **Hash case.** YTS returns uppercase hashes, while TheRARBG/TV hashes are lowercased in `createTorrentSource`. The `ih` column is deterministically encrypted, so `ABC…` and `abc…` are different ciphertexts. A unique constraint on `ih` only works if the hash is lowercased at a single point of entry. Today the same torrent can end up as two rows. Both `Storage` rows then point at the same directory (`generateStoragePath(hash)`), so usage is counted twice and evicting one row deletes the other's files.
-- **Selection is ours.** Torrents are added with `deselect: true`, which the Phase 3 reconciler requires.
-- **Startup state.** `resetActiveStreams()` already clears in-flight state at boot. Phase 3 does the same for `playback` claims.
+## Explicit playback targets
 
----
+A `PlaybackTarget` names a source, file path, and match kind, with an optional probed duration. Downloading, warming, reading, audio inspection, and subtitle operations use this target. The encrypted layout describes the file table; it does not choose a globally active video.
 
-## PR 1: `ContentSource` + `MovieSource` (implemented)
+For a movie, `PlaybackTargetService` uses the path saved on its movie/source association. If no path is saved, it resolves the source layout, selects the largest usable video, and persists the choice with first-writer-wins semantics. A source without usable video receives a failure verdict.
 
-**Naming rule:** a source is not necessarily a torrent. Today every source is one, but a source could later be a link to a streaming service. Entity, table, relation and foreign-key names therefore say "source", never "torrent". Torrent-specific data (`hash`, `magnetLink`, `file`) stays as columns of the source, and code that really drives WebTorrent keeps torrent names.
+For an episode, resolution first checks the associated path exactly against the torrent layout. Otherwise it accepts a unique suffix match. Ambiguous and missing matches fail rather than selecting an arbitrary file. The canonical path is persisted. Association insertion and canonicalization share a serialized mutation boundary, including nullable-path cases; duplicate canonical associations merge safely.
 
-### Schema
+Probe caches and subtitle candidate identities include the video file identity. Different episodes in one source therefore have distinct inspection and subtitle state. Subtitle sidecars are addressed as specific files of the same source.
 
-| Entity          | Table            | Purpose                                                                                                                                |
-| --------------- | ---------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
-| `ContentSource` | `content_source` | One row per provider source. `UNIQUE(hash)` (lowercase info hash); no `movieId`. `movies: MovieSource[]`, `episodes: EpisodeSource[]`. |
-| `MovieSource`   | `movie_source`   | Link `(movieId, sourceId)` (unique), plus nullable `videoFilePath` that PR 2 fills in. Mirrors `EpisodeSource`.                        |
-| `EpisodeSource` | `episode_source` | Unchanged role; relation `source`, column `sourceId`.                                                                                  |
+Implementation: [target type](../../backend/src/services/playback/playback-target.ts), [target resolution](../../backend/src/services/playback/playback-target.service.ts), [episode association mutations](../../backend/src/repositories/episode-source.repository.ts), and [encrypted file reader](../../backend/src/services/download/encrypted-file-reader.ts).
 
-Other renames:
+## Claims and selection
 
-- `Storage.movieSourceId` → `sourceId`; relation `Storage.contentSource`
-- `PlaybackGrant.sourceId` keeps its name, now pointing at `ContentSource`
-- `Movie.sources` is now `MovieSource[]` (links)
-- Storage API and frontend: `movieSourceId` → `sourceId` (route `DELETE /api/storage/:sourceId`)
+A claim identifies storage, path, kind, owner key, optional byte range, and optional expiry. Uniqueness is `(storageId, path, kind, ownerKey)`. Range claims use `[rangeStart, rangeEnd)`; a null end requests the whole file. A file stays wanted while any consumer has a live claim.
 
-### What changed in code
+| Kind        | Download piece priority | Reclamation protection rank   |
+| ----------- | ----------------------- | ----------------------------- |
+| `warmup`    | 1                       | 1                             |
+| `watchlist` | 0                       | 2                             |
+| `watched`   | 1                       | 3                             |
+| `prefetch`  | 1                       | 4                             |
+| `playback`  | 10                      | 5; protected from reclamation |
 
-- `ContentSourceRepository` ([content-source.repository.ts](../../backend/src/repositories/content-source.repository.ts)): `upsertByHash` (`ON CONFLICT DO NOTHING`, which on SQLite only covers uniqueness conflicts; read by hash; update only changed provider fields in place), `upsertForMovie`, `linkMovie`, `isLinkedToMovie`, `findByMovieId` through `movie_source`. The in-memory per-hash lock and `createTorrentSource` are gone, and so are the unused `getBestSource`, `save`, `findAll` and `MovieRepository.findMoviesWithoutSources`.
-- `getNextSourcesToProcess` ranks through `movie_source`. A source shared by several movies is queued once; sources without a movie (TV-only) are skipped, as before.
-- `normalizeInfoHash` (trim + lowercase) runs inside the `ih` column transformer, so every write and lookup by hash uses the canonical form. Lowercase hashes work with iTorrents and Torrage (see the recorded fixtures).
-- The old `movieId` partial indexes were dropped and not replaced: no query filters or sorts on `file`/`streamingScore` in SQL.
-- `StreamService.resolvePlaybackSource`: for movie grants it looks up the local movie by the grant's `mediaId`, checks `isLinkedToMovie`, and returns `movie`. `SubtitlesService` uses that movie and no longer depends on `MediaService`.
-- New `MediaService.getLocalMovieByMediaId` (local mirror only, no catalog call).
+Download priority and retention protection are separate properties. Selection uses the union of live claims, applying the highest applicable priority to overlapping data. Releasing one owner does not release another owner's interest. Paused sources have no selected pieces until resumed. Matching subtitle sidecars copy the video's live claims.
 
-### Known gaps
+`StorageService` owns claim persistence and storage admission. `DownloadService` owns WebTorrent selection and applies claim changes through per-source reconciliation. Admission records its claim with the admitted storage, preventing an unclaimed interval in which cleanup could remove a newly accepted request. Expiry cleanup releases expired claims and reconciles affected source selections; startup clears transient playback claims.
 
-- The metadata queue still skips sources with unknown (`NULL`) quality, as before.
-- TV-only storage rows have no linked movie, so the storage page shows `Download N`.
-- In-memory `sourceId` names in the warm-up controller and job payloads were already neutral and are unchanged.
+Implementation: [claim model and ranks](../../backend/src/entities/storage-file-claim.entity.ts), [file completion model](../../backend/src/entities/storage-file.entity.ts), [storage service](../../backend/src/services/storage/storage.service.ts), and [download selection](../../backend/src/services/download/download.service.ts).
 
----
+## Completion and retention
 
-## PR 2: explicit file targets; remove `layout.video` (implemented)
+A file is complete when all overlapping torrent pieces are verified. Completion is recorded per file, and a source's seeding clock reflects completion of the currently requested files. Claiming an incomplete file reopens that state.
 
-`EncryptedStorageLayout` is now only the file table (`storeName`, `filenameSalt`, `pieceLength`, `files`). Every read, warmup, download, and subtitle operation names its file through a `PlaybackTarget` (`services/playback/playback-target.ts`):
+After the configured seeding period, an idle torrent can detach while encrypted files and torrent metadata remain available. A later request for missing data can reattach it. Playback reads completed retained files directly when their verified data is available.
 
-```ts
-export interface PlaybackTarget {
-  source: ContentSource;
-  filePath: string;
-  matchKind: 'combined' | 'movie' | 'single';
-}
-```
+Storage accounting includes physical allocation and reservations. Reservations follow the requested files and torrent-piece boundaries, rather than assuming that one episode needs the entire season pack downloaded.
 
-### Resolving targets (`PlaybackTargetService`)
+## Per-file reclamation and concurrency
 
-- **Episodes:** straight from the `EpisodeSource` match (`forEpisode`).
-- **Movies:** `forMovie(movieId, source)` uses, in order, `MovieSource.videoFilePath`, the stored layout, the parsed `.torrent` file, and finally attaching the torrent with nothing selected to receive its metadata (`DownloadService.resolveLayout`). The largest video is chosen and stored first-writer-wins (`ContentSourceRepository.setMovieVideoFilePath`).
-- Preparation resolves movie targets only when warming, which already attached the torrent before. `through: 'sources'` leaves movie targets null; the stream route resolves them from the grant later.
+Reclamation ranks each file by its strongest live claim. A file is eligible only when its protection is within the admission's allowed rank and it contains reclaimable data. Active streams block reclamation, and pieces overlapping a live playback claim are protected. The entire storage is removed only when no stronger claimed file remains and whole-storage removal is permitted.
 
-### `DownloadService`
+A torrent piece can overlap adjacent files. Removing one file clears verification for the affected pieces, including shared boundary pieces. Kept neighbors that lose a boundary piece become incomplete and can fetch that piece again. A file that owns no independently reclaimable piece does not trigger a deletion that frees nothing.
 
-- Public methods take a `PlaybackTarget`: `startDownload`, `warmSource`, `promoteSource`, `predownload` (replaces `predownloadSource` and `predownloadEpisode`), `getMediaFiles`, `prepareSubtitleFiles`, `streamFile`. `isEpisodeFileComplete` became `isFileComplete(sourceId, filePath)`; `getRangeProgress`/`isRangeVerified` take the file path.
-- `startDownload` has one path: a stored file is read from disk; otherwise the file is selected, the torrent attached, and the reservation recomputed from the selected files. `forceAttach`, `selectLayoutVideo`, and the movie/episode branches are gone. Movies now also record their file in `selectedFiles`.
-- "Stored" means the file's pieces are verified, or it is a requested file of a source already marked complete.
-- `streamFile` serves any file of the source (video or sidecar subtitle) and names the response after the file.
-- Bitfield helpers (`isPieceInBitfield`, `isByteRangeCompleteInBitfield`, `isFileCompleteInBitfield`) and `mainVideoPath` live in `download.utils.ts`.
-- `EncryptedFileReader(location, layout, filePath, key)` validates the path against the layout.
+Physical deletion, bitfield changes, and database completion/accounting updates run under the source lock. The encrypted chunk store coordinates removal with in-flight file reads and writes. If physical cleanup or its commit fails, affected verification and completion state is cleared conservatively rather than claiming potentially missing data is stored.
 
-### Other changes
+Reselection runs after the source lock and outside the admission queue. It can attach torrents and acquire source locks, so running it inside admission would create a lock-order hazard. Claimed files are reselected after either successful or failed cleanup.
 
-- `TorrentWarmupController` slots record `filePath`; two files of one source are separate warmups.
-- `StreamService.resolvePlaybackTarget(grant)` returns `{ target, movie }`; `movieTarget(movieId, source)` serves the legacy streaming-key route.
-- `TorrentSubtitlesService` and `AudioPlaybackService` take targets; probe caches are keyed by source and file.
-- Subtitle track ids include the video path. Previously, embedded tracks of two episodes in one pack shared ids, so cached subtitles could be served for the wrong episode.
-- Storage inventory `fileName` is the first requested video's base name.
+Implementation: [reclamation](../../backend/src/services/storage/storage.service.ts), [file repository](../../backend/src/repositories/storage-file.repository.ts), [encrypted chunk storage](../../backend/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts), and [piece geometry helpers](../../backend/src/services/download/download.utils.ts).
 
-### Behavior changes to note
+## Data preservation
 
-- Admission collects the sources to reselect and runs them after the admission queue is released, unawaited: reselect may attach a torrent and take source locks, which must not block or deadlock admission. Calling `reclaimFiles` directly still awaits it.
-- The `verified` handler persists the bitfield under the source lock from a snapshot taken once it holds the lock, coalescing bursts, so a write queued before a reclaim cannot restore reclaimed bits.
+Database initialization applies registered column renames and synchronizes the TypeORM schema. Ordered data migrations run before normal service work. Entity changes require preservation of existing associations, encrypted records, storage data, and keys; deleting the database or downloads is not an initialization requirement.
 
-- Movie reservations follow the requested files (video plus boundary pieces) instead of the whole torrent.
-- Background movie predownload pauses for active playback only while that playback's file is incomplete (previously: whenever anything was streaming), the same rule episodes already used.
-- A movie whose file list cannot be resolved while warming is returned cold without warmup; its grant is still issued, and the stream route resolves the file later.
-
-### Tests
-
-`download.service.pack.test.ts` writes a real encrypted two-episode pack and streams both episodes concurrently: correct bytes, per-episode ranges and file names, no layout writes, no WebTorrent attach. Also new: `playback-target.service.test.ts`, first-writer-wins path storage, controller warmups per file, per-video subtitle ids, unresolved movie preparation, and session grants without a resolved file.
-
----
-
-## PR 3: `StorageFile` + `StorageFileClaim` (implemented)
-
-### Schema
-
-- `storage_file` (`StorageFile`): one row per file of a stored source, `UNIQUE(storageId, path)`, with `completedAt` set once every overlapping piece verifies. Rows are recorded whenever a source's layout becomes known.
-- `storage_file_claim` (`StorageFileClaim`): one owner's request for one file, `UNIQUE(storageId, path, kind, ownerKey)`, with `rangeEnd` (prefix-only, warmups) and `expiresAt`.
-- Removed from `Storage`: `selectedFiles`, `retentionClass`, `speculativeExpiresAt`.
-- **Kept** `Storage.videoCompletedAt`, now meaning "every currently claimed file is complete". It is the seeding clock and is cleared whenever an incomplete file is claimed. Deriving it from `StorageFile.completedAt` would need the same timestamp; keeping the column avoids a query on every activity check.
-
-### Claim kinds (`storage-file-claim.entity.ts`)
-
-| Kind        | Owner key                                         | Piece priority | TTL                                         | Eviction rank |
-| ----------- | ------------------------------------------------- | -------------- | ------------------------------------------- | ------------- |
-| `warmup`    | warmup lease key                                  | 1, prefix only | 10 min (released when the warmup is paused) | 1             |
-| `watchlist` | `watchlist:tv:{show}` / `watchlist:movie:{movie}` | 0              | TV 30 min, renewed by each scan; movie none | 2             |
-| `watched`   | `user:{userId}:{playableKey}`                     | 1              | none                                        | 3             |
-| `prefetch`  | `next:{userId}:{playableKey}`                     | 1              | 24 h                                        | 4             |
-| `playback`  | `stream` (one per file)                           | 10             | 2 min, renewed by every range request       | 5 (never)     |
-
-Subtitle sidecars copy the live claims of their video (`StorageService.copyClaims`).
-
-### Where the logic lives
-
-The plan's separate `FileClaimService` became two parts, matching who owns what:
-
-- **Persistence** in `StorageService` (backed by `StorageFileRepository`): `claimFile`, `releaseClaims`, `getLiveClaims`, `getClaimedPaths`, `copyClaims`, `deleteClaims({ expiredAt | kind })`, `recordFiles`, `markFilesComplete`, `getSpeculativeSourceIds`. `createStorage` records the admission's claim in the same admission step, so a newly admitted row is never unclaimed (and evictable) before its owner records it.
-- **Selection** in `DownloadService` (it owns the torrents): `reconcileSelection(sourceId)` clears file and piece selections and reapplies the union of live claims (whole files at their highest priority, prefixes as piece ranges). It runs serialized per source after every download request, pause/resume, warmup pause, and expiry sweep. Paused sources keep nothing selected until resumed.
-- `startDownload(target, claim)` replaces `retentionClass`/`speculativeExpiresAt`; `promoteSource(target, ownerKey)`, `predownload(target, claim)`, `warmSource(target, bytes, leaseKey)`. `selectTorrentFile`, `reactivateTorrent`, `maybeMarkVideoComplete`, `warmupSelections`, and `reserveSpeculativeStorage` are gone.
-- `recordCompletion` marks `StorageFile.completedAt` as pieces verify, then `videoCompletedAt` once every claimed file is complete.
-- Expired claims are swept every 60 s and their sources reselected; `playback` claims are dropped at startup.
-- `pauseSource` (warmup controller) now releases only the source's warmup claims, so other owners' downloads on the same source continue.
-
-### Eviction
-
-`StorageFileRepository.findEvictionCandidate(maxRank)` picks idle storage whose strongest live claim ranks at most `maxRank`, then least recently wanted. Storage with no live claim ranks 0.
-
-- Periodic cleanup: rank 0 (unclaimed) only.
-- Speculative admission (warmup, watchlist, prefetch): up to `watchlist` (2).
-- Retained admission (watched, playback): up to `prefetch` (4), never live playback.
-
-Eviction picks storage; since PR 4 it frees individual files of that storage (see below).
-
-### Behavior changes to note
-
-- Watched storage is now evictable by another viewer's admission (LRU), as the TV plan's storage priorities intended; before, only completed TV packs were.
-- Warmups no longer use the 15-second `speculativeExpiresAt`; their claim lives 10 minutes or until the warmup is paused.
-- Background pausing for playback applies to sources whose live claims are all speculative.
-- The storage inventory's `fileName` comes from the first requested video (`requestedFiles`).
-
-### Tests
-
-Real-database tests for claim liveness and expiry, per-owner release, reopen-on-incomplete, sidecar claim copying, per-file completion, inventory requested files, speculative-source listing, eviction by rank (speculative admission cannot evict another user's prefetch; nothing evicts playback; least protected first), and atomic admission claims. Unit tests for selection: strongest priority wins, prefixes become piece ranges, a file stays selected while any owner claims it, paused sources stay empty, warmup pause releases only warmup claims, and expiry sweeps reselect.
-
----
-
-## PR 4: per-file physical reclaim (implemented)
-
-The encrypted chunk store keeps one encrypted file per torrent path, so a single path can be deleted. Then clear the bitfield bits of every piece overlapping that file. That includes **boundary pieces shared with a neighbor**, which the neighbor re-downloads; the bytes rewritten are identical. Delete the whole storage directory only when no `StorageFile` remains claimed or complete.
-
-**Done when:** a pack with nine completed, unclaimed episodes and one claimed pending episode can reclaim the nine without disturbing the tenth.
-
-### Schema
-
-None. `StorageFile.completedAt` is reset and `Storage` columns are updated in place.
-
-### What changed in code
-
-- `EncryptedChunkStore.removeFiles(logicalPaths)`: closes the named files' handles, deletes their encrypted files and leaves the rest. Handles are now reset-able (replacing `thunky`), so the live store reopens a removed file when a shared piece is written again. Each file has a gate: a removal waits for in-flight reads and writes on it, closes, deletes, and clears the handle again; operations arriving meanwhile wait and then reopen a fresh file, so no write lands on a closed or unlinked handle. File descriptors carry the content `logicalPath`. A physical file that a kept path also maps to (same base name) is not deleted.
-- `download.utils.ts`: `pieceRangeOf` and `clearPiecesInBitfield`.
-- `StorageFileRepository.findIdleStorageIds` replaces `findEvictionCandidate`: idle storage, least protected first, with no rank filter (rank is decided per file). `clearFilesComplete` forgets completion of cleared files.
-- `StorageService.reclaimFiles(sourceId, maxClaimRank, allowRemoval)` runs under the per-source lock (the one for torrent startup, expiry detach and `removeStorage`):
-  - rejects storage with an active stream;
-  - ranks each file by its strongest live claim (unclaimed is 0). Files above `maxClaimRank` are kept. A file at or below it that holds data is reclaimed; data that is only a boundary piece shared with a kept file does not count, so it is not reclaimed for that alone;
-  - a file whose pieces overlap a file under a live `playback` claim is skipped;
-  - a completed unclaimed file lying wholly inside a kept neighbor's pieces is not reclaimed either (it would free nothing); a claim on a path outside the known file table is ignored. Nothing kept: the whole storage goes (`removeStorageLocked`, as before). Something kept: weak claims on the reclaimed files are dropped, the download layer deletes the files and clears pieces, and the commit updates `Storage`.
-- Commit: `downloadedPieces` with the reclaimed pieces cleared (boundary pieces included), `downloaded`, `verifiedBytes`, `logicalBytes` (kept files), `reservedBytes` (capped at the estimate for the kept files), then `reconcileAllocation` re-measures the directory. Reclaimed files and kept neighbors that lost a boundary piece get `completedAt = null`. A kept claimed file that is now incomplete clears `videoCompletedAt` and `localOnly`. The result reports the charge freed.
-- `StorageService.cleanupWithinAdmission` walks `findIdleStorageIds` and calls `reclaimFiles` until a candidate frees something. Last-record protection applies only to whole removal; periodic cleanup still reclaims files of the last storage.
-- `DownloadService` registers a `ReclaimHandler`:
-  - `reclaim` (inside the lock): drops the files' selections, marks every cleared piece unverified in the attached torrent (`_markUnverified`, a fresh reservation list, `done = false`), and deletes the encrypted files through the live store, or a transient `EncryptedChunkStore` when nothing is attached. Returns the live bitfield, which the commit clears again so no concurrent verification is lost.
-  - Failure after the unverify (`removeFiles` or the commit throws): the stored bitfield and `completedAt` of the planned files and their neighbors are cleared, so the database never claims data that may be gone; the result is `cleanup_failed`. The reselect runs whether the reclaim succeeds or fails.
-  - `reselect` (after the lock): if a claimed file is not stored any more and no torrent is attached, the torrent is attached again from the cleared bitfield (seed timer dropped); then `reconcileSelection` and `recordCompletion` run, so a claimed neighbor refetches only its boundary piece.
-
-### Behavior changes to note
-
-- Admission and periodic cleanup no longer remove a storage because its strongest claim is too strong: a pack with a watched or prefetched episode keeps that episode and loses the unclaimed ones.
-- Reclaiming a file whose pieces are shared makes a claimed complete neighbor incomplete until it refetches one piece (a source that was detached and `localOnly` is reattached for that).
-- Free space after a partial reclaim comes from re-measuring the directory (`allocatedBytes`), so charge falls by the deleted files' blocks.
-
-### Known limits
-
-- A write racing a removal is serialized by the per-file gate, but the removed file's own pending write is discarded with it (the piece is unverified and refetched if still wanted).
-- Before the file table is known, every claimed path counts as kept (admission claims precede the layout).
-- Files that share a base name inside one source already map to one encrypted file; reclaim leaves that file in place while either path is kept.
-
-### Tests
-
-- `download.service.reclaim.test.ts` (real database, real encrypted store, real `StorageService` and `DownloadService`; only the WebTorrent attach is faked): the nine-of-ten scenario (storage row, directory, the tenth's claim and file stay; the nine files and their bits go; the whole directory goes once the tenth is released); a claimed neighbor stays readable for its own pieces and misses only the shared boundary piece; a neighbor under live playback blocks reclaim of the file it shares a piece with; active streams are refused; weak claims are reclaimed while stronger ones stay; admission and periodic cleanup reclaim files instead of removing the storage, and periodic cleanup never removes the last record.
-- `download.service.pack.test.ts`: reclaim on the real encrypted pack, with and without an attached torrent (pieces unverified, bitfield returned, store reopens the removed file).
-- `download.service.reclaim.test.ts` also covers: deletion failing partway (database made conservative, reselect still runs), a subtitle inside a kept neighbor's pieces, a claim on an unknown path, and admission finishing while a reselect is pending. `download.service.test.ts`: the verified handler writes a fresh snapshot under the source lock and coalesces. `encrypted-chunk-store.test.ts`: `removeFiles` deletes only named files, tolerates unwritten files, keeps shared physical files, and survives concurrent puts. `download.utils.test.ts`: piece range and bitfield clearing.
-
----
-
-## Tests to add
-
-| PR  | Test                                                                                                                                                                                                                                        |
-| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 1   | Upper and lowercase hash for one source produce one row and one storage directory; concurrent `upsertByHash` calls yield one row (no in-memory lock); a movie and an episode can share a source.                                            |
-| 2   | Two episodes of one pack streamed concurrently: correct bytes for each, layout unchanged; subtitle sidecar matching uses the target's path; the movie's `videoFilePath` is resolved once under concurrency.                                 |
-| 3   | Claim/release refcounting per path; TTL sweep; startup drops `playback` claims; the seed timer starts only after all claimed files complete; eviction ordering and per-user protection; a prefix warmup claim selects only its piece range. |
-| 4   | Reclaiming one file clears the bitfield for its pieces, including shared boundary pieces; the neighbor file stays readable and re-fetches only its boundary piece. (Implemented; see PR 4.)                                                 |
-
-## Open questions
-
-1. Should `watched` claims for movies ever expire, or stay purely LRU-evictable as today? Recommendation: no TTL, LRU only (current behavior).
-2. Does WebTorrent's `file.deselect()` reliably drop a selection created via `torrent.select(range)`? Verify early in PR 3. Otherwise the reconciler should only use `torrent.select`/`deselect` with explicit piece ranges.
+See [data migration constraints](../ai/gotchas.md#-data-migrations) and the [migration registry](../../backend/src/database/migrations/index.ts). Tests for targets, associations, claims, shared-pack reads, and reclamation live alongside their owning modules. Planned combined-episode boundaries and additional integration coverage are tracked in [ToDo.md](../../ToDo.md#tv-source-support).

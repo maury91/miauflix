@@ -1,85 +1,59 @@
 # Miauflix Backend
 
-> **Status**: 100% complete and production-ready, including full streaming capabilities. Only needs frontend JWT authentication integration.
+The backend serves the browser app and authenticated API, manages users and personal state, and streams media from encrypted torrent storage. Frontend authentication, playback sessions, preloading, seeking, audio conversion, and subtitles are implemented.
 
-## Quick Start
+See the [feature guide](../docs/features.md) for user-facing capabilities and [ToDo.md](../ToDo.md) for remaining work. An implemented feature is not a blanket claim that every device or deployment has been validated.
+
+## Quick start
+
+Run commands from the repository root; this project uses npm workspaces.
 
 ```bash
-# Install dependencies
-npm install --workspace backend
-
-# Run with configuration wizard
-npm run start:backend
-
-# Or run with Docker
-docker-compose up
+npm install
+npm run dev
 ```
+
+`npm run dev` starts the backend, frontend, catalog, list, and source services. `npm run start:backend` starts only the backend; its supporting services must be running separately. The default Docker Compose deployment starts the application and its supporting services together:
+
+```bash
+docker compose up -d
+```
+
+Follow [Docker setup](../docs/setup/docker-setup.md) for initial configuration, networking, and VPN setup.
+
+## Responsibilities
+
+- **Authentication:** email/password and QR login, administrator/user roles, JWT access tokens, and refresh-token rotation. Browser clients receive both access and refresh tokens in HttpOnly cookies. The packaged TV app requests token transport and sends tokens in headers; API access also accepts a Bearer token when no access cookie is present.
+- **Personal state:** watchlists, Like/Dislike/Love ratings, playback progress, availability requests, and in-app notifications.
+- **Playback:** source selection, source-bound playback grants, byte-range streaming, preloading, codec-aware delivery, subtitles, and next-episode preparation.
+- **Downloads and storage:** WebTorrent, encrypted torrent pieces, seeding retention, storage budgets, and cleanup that protects active streams.
+- **External services:** versioned clients for the catalog, lists, and sources. The catalog currently uses TMDB; the list service owns Trakt association and synchronization; the source service owns indexer website access.
+- **Background jobs:** queue jobs on the shared Bunqueue broker, rather than a fixed set of in-process polling tasks.
+- **Operations:** configuration, service status, VPN checks, rate limiting, audit logging, and optional tracing.
+
+The backend uses Node.js, Hono, SQLite/TypeORM, JOSE, and WebTorrent. The catalog, list, and source services run on Bun. See [system architecture](../docs/architecture/system-overview.md) for ownership and deployment boundaries.
 
 ## Documentation
 
-### 📖 Essential Docs
-
-| File                                                     | Purpose                  |
-| -------------------------------------------------------- | ------------------------ |
-| [architecture.md](../docs/architecture.md)               | Technical stack overview |
-| [directory-structure.md](../docs/directory-structure.md) | Codebase layout          |
-| [coding-conventions.md](../docs/coding-conventions.md)   | Code style guide         |
-| [run-and-debug.md](../docs/run-and-debug.md)             | Development setup        |
-
-### 🔄 Development Workflow
-
-| File                                                 | Purpose                       |
-| ---------------------------------------------------- | ----------------------------- |
-| [workflow.md](../docs/workflow.md)                   | Development process           |
-| [extension-recipes.md](../docs/extension-recipes.md) | How to add features           |
-| [task-file-mapping.md](../docs/task-file-mapping.md) | Implementation status by file |
-
-### 🔧 System Documentation
-
-| File                                                | Purpose                       |
-| --------------------------------------------------- | ----------------------------- |
-| [authentication.md](docs/authentication.md)         | JWT auth system (complete)    |
-| [security.md](docs/security.md)                     | VPN detection & audit logging |
-| [media-services.md](docs/media-services.md)         | TMDB, Trakt.tv integration    |
-| [streaming-services.md](docs/streaming-services.md) | WebTorrent infrastructure     |
-| [configuration.md](docs/configuration.md)           | Environment setup             |
-
-## What's Implemented
-
-### ✅ Production Ready
-
-- **Authentication**: Complete JWT system with refresh tokens
-- **Source Discovery**: YTS + THERARBG content directory aggregation
-- **Background Processing**: 7 scheduled tasks running continuously
-- **Database**: SQLite + TypeORM with encryption
-- **Security**: VPN detection, audit logging, rate limiting
-- **Streaming Infrastructure**: Complete `/api/stream/:token` endpoint with quality selection
-- **API Infrastructure**: All backend routes implemented and functional
-
-### ⚠️ Integration Needed
-
-- **Frontend JWT**: Token management and authentication flow integration with existing backend
-
-## Architecture
-
-- **Framework**: Hono (lightweight web framework)
-- **Database**: SQLite with TypeORM
-- **Media Streaming**: WebTorrent client for peer-to-peer delivery
-- **Auth**: JWT with JOSE library
-- **Background Jobs**: Custom scheduler (100ms-5s intervals)
-
-See [architecture.md](../docs/architecture.md) for complete details.
+| Guide                                                   | Purpose                                       |
+| ------------------------------------------------------- | --------------------------------------------- |
+| [Feature guide](../docs/features.md)                    | Available and planned user-facing features    |
+| [Media services](docs/media-services.md)                | Catalog, lists, search, and media API routes  |
+| [Streaming services](docs/streaming-services.md)        | Playback, delivery, preloading, and subtitles |
+| [Authentication](docs/authentication.md)                | Authentication reference                      |
+| [Security](docs/security.md)                            | VPN detection and audit logging               |
+| [Configuration](docs/configuration.md)                  | Configuration reference                       |
+| [Development workflow](../docs/development/workflow.md) | Workspace commands and development patterns   |
+| [Testing guide](../docs/development/testing-guide.md)   | Test environments and fixtures                |
+| [Documentation index](../docs/README.md)                | Setup and other references                    |
 
 ## Testing
 
-```bash
-# Unit tests
-npm test --workspace backend
+Run from the repository root:
 
-# E2E tests (spins up Docker environment)
+```bash
+npm test --workspace backend
 npm run test:backend:e2e
 ```
 
-## Need Help?
-
-Check the [overview.md](../docs/overview.md) for the complete documentation map.
+Tests must use mocks and recorded fixtures rather than live external services. The E2E command manages a Docker test environment.

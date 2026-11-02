@@ -1,58 +1,75 @@
-# Assisted Configuration
+# Assisted configuration
 
-The backend includes an assisted configuration system that helps manage environment variables and application settings:
+Miauflix manages application settings through the administrator's browser configuration editor and an interactive terminal wizard. Environment variables can provide bootstrap values; saved application settings live in the persistent configuration store rather than being written to a generated `.env` file.
 
 ## Features
 
-- **Environment Variable Validation**: Automatically validates required environment variables at startup
-- **Interactive Configuration**: Prompts for missing configuration values in an interactive terminal
-- **Service-Specific Configuration**: Handles configuration for the catalog and standalone list services
-- **Configuration Testing**: Tests service connections with provided credentials
-- **Default Values**: Provides sensible defaults for optional configuration
-- **Error Reporting**: Clear error messages when configuration is missing or invalid
-- **.env File Generation**: Automatically saves configuration to .env file
-- **Command Line Configuration Flags**: Force configuration prompts with `--config` and `--only-config` flags
+- **Validation and defaults:** detects missing required settings and invalid values, with defaults for optional settings.
+- **Browser configuration:** administrators can view settings, edit service groups, test draft values, save changes, and reload supported services.
+- **Interactive terminal setup:** prompts for missing settings when the backend runs in an interactive terminal; command-line flags can force reconfiguration.
+- **Service-specific configuration:** local services and the separate catalog, list, and sources services publish settings to the configuration UI.
+- **Connection tests:** testable services can validate credentials or connectivity. Other groups report validation-only results rather than claiming a live connection test.
+- **Persistent settings:** the backend writes application configuration to `config.json` in `DATA_DIR`, with secret values encrypted. Remote services manage their own persisted configuration through the management contract.
+- **Generated secrets:** required generated secrets are saved so they survive restarts.
 
-## Command Line Options
+Keep the application and service data volumes, including their encryption keys, across container recreation. See [Docker setup](../../docs/setup/docker-setup.md) for deployment storage.
 
-### `--config` Flag
+## Browser configuration
 
-Forces the configuration prompts to run for all services, even if they are already configured:
+Open Settings → Configuration as an administrator. The editor displays settings grouped by service and masks stored secrets. Missing essential configuration still needs completing; optional integration prompts can be dismissed while browsing remains available.
+
+The administrator API exposes these operations:
+
+| Endpoint                            | Purpose                                                                   |
+| ----------------------------------- | ------------------------------------------------------------------------- |
+| `GET /api/config`                   | Read configuration metadata and values, with secrets masked               |
+| `PUT /api/config`                   | Test and save submitted settings                                          |
+| `POST /api/config/:service/test`    | Test draft settings without persisting them                               |
+| `PUT /api/config/:service`          | Test and save one service group's settings                                |
+| `POST /api/config/:service/restart` | Reload a registered service, or report that a process restart is required |
+
+Write and test requests use `{ entries: [{ key, value }] }`, with string values. Unknown keys and keys belonging to the wrong group are rejected. A service may require a full process restart; not every setting can be applied live.
+
+Implementation: [configuration routes](../src/routes/config.routes.ts) and [configuration service](../src/services/configuration/configuration.service.ts).
+
+## Command-line options
+
+Run these commands from the repository root. For local execution, the backend's supporting services must also be available; `npm run dev` starts the backend, frontend, catalog, list, and sources processes together.
+
+### `--config`
+
+Force the terminal wizard to offer all configuration groups, even if settings already exist:
 
 ```bash
 npm run config
 ```
 
-This is useful when you want to reconfigure existing settings or update configuration values.
+This runs the backend with `--config` and continues startup after setup. Interactive prompts require a terminal; the flag does not make a non-interactive container prompt for input.
 
-### `--only-config` Flag
+### `--only-config`
 
-Same as `--config` but exits after configuration is complete without starting the server:
+Run the same forced configuration setup, then exit without starting the application server:
 
 ```bash
 npm run config-only
 ```
 
-This is useful for:
+For the Docker-based wizard from a repository checkout, use:
 
-- Setting up configuration in deployment scripts
-- Updating configuration without starting the server
-- Initial setup workflows
+```bash
+npm run config-only:docker
+```
 
-## How It Works
+The browser editor is the simpler setup path for the supplied prebuilt-image deployment. See [Getting Started](../../docs/setup/getting-started.md).
 
-The configuration system:
+## Startup and persistence
 
-1. Checks for required environment variables at startup
-2. If any are missing, prompts the user interactively for each value
-3. Tests the configuration by attempting to connect to the service
-4. Offers to save the configuration to a .env file
-5. Provides clear error messages if configuration is invalid
+1. Load environment bootstrap values and defaults, adopting previously persisted generated secrets before initializing encryption.
+2. Load saved application configuration. Saved values normally take precedence over environment values, which take precedence over defaults. Explicit environment values for generated secrets are an exception and take precedence over their saved values.
+3. Discover remote service contracts and their configuration schemas, and make their settings available to the configuration system.
+4. Detect missing values or failed service validation. Interactive terminals can run the wizard; non-interactive startup can continue in a degraded state so configuration remains possible from the browser or administrator API.
+5. Test and save changes through the configuration system. Secret values in the backend config store are encrypted; generated secrets are persisted automatically.
 
-## Benefits
+A Compose `.env` file controls deployment inputs such as image versions, VPN setup, and domain names. It is separate from saved application configuration. Compose values only reach a service when its deployment passes or mounts them; editing `.env` is not a substitute for updating a saved application setting through the configuration editor.
 
-- **Reduced Configuration Errors**: Catches missing or invalid configuration early
-- **Improved Developer Experience**: Interactive prompts guide users through setup
-- **Simplified Deployment**: Easier to identify missing configuration in production
-- **Centralized Configuration**: All configuration in one place with validation
-- **Service Validation**: Tests service connections before saving configuration
+For setting names and ownership, see the [environment variables guide](../../docs/setup/environment-variables.md). For the boundary between local and remote services, see the [system overview](../../docs/architecture/system-overview.md#remote-contracts-and-configuration).
