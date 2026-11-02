@@ -124,20 +124,25 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
     if (clamped.zone !== focus.zone || clamped.index !== focus.index) setFocus(clamped);
   }, [counts, focus, setFocus]);
 
+  const elementFor = useCallback(
+    (target: SearchFocus) =>
+      target.zone === 'input'
+        ? inputRef.current
+        : target.zone === 'back'
+          ? backRef.current
+          : elements.current.get(`${target.zone}:${target.index}`),
+    []
+  );
+
   // Move DOM focus to the focused control.
   useEffect(() => {
-    const element =
-      focus.zone === 'input'
-        ? inputRef.current
-        : focus.zone === 'back'
-          ? backRef.current
-          : elements.current.get(`${focus.zone}:${focus.index}`);
+    const element = elementFor(focus);
     if (element && document.activeElement !== element) {
       element.focus({ preventScroll: true });
     }
     if (focus.zone === 'results')
       element?.scrollIntoView?.({ block: 'nearest', inline: 'nearest' });
-  }, [focus, search.results.length]);
+  }, [elementFor, focus, search.results.length]);
 
   // Ask for more results as focus nears the end of the row.
   useEffect(() => {
@@ -205,6 +210,14 @@ const SearchPage: FC<SearchPageProps> = ({ onDismiss }) => {
   };
 
   const navigationRef = useKeyboardNavigation({
+    // Focus lost: back to the selected control, else the keyboard's first key.
+    onRestoreFocus: () => {
+      const element = elementFor(focus) ?? elementFor({ zone: 'keyboard', index: 0 });
+      if (!element) return false;
+      if (element !== elementFor(focus)) setFocus({ zone: 'keyboard', index: 0 });
+      element.focus({ preventScroll: true });
+      return true;
+    },
     onUp: () => move('up'),
     onDown: () => move('down'),
     onLeft: () => move('left'),

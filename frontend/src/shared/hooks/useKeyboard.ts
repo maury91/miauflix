@@ -35,6 +35,11 @@ export type KeyboardOptions = KeyboardHandlers & {
   enabled?: boolean;
   /** Capture keyboard input even when focus is outside this scope (for dialogs). */
   exclusive?: boolean;
+  /**
+   * Put focus back on this scope's default item when a direction key arrives while nothing is
+   * focused (a focused control was disabled or removed). Return true once focus is restored.
+   */
+  onRestoreFocus?: () => boolean;
 };
 
 export type KeyboardScope = {
@@ -109,6 +114,100 @@ export function getKeyboardAction(event: KeyboardEvent): KeyboardAction | null {
 }
 
 const scopes = new Set<KeyboardScope>();
+
+const DIRECTIONS: ReadonlySet<KeyboardAction> = new Set(['up', 'down', 'left', 'right']);
+const FOCUSABLE =
+  'button:not(:disabled), [href], input:not(:disabled), select:not(:disabled), textarea:not(:disabled), [tabindex]:not([tabindex="-1"])';
+
+/**
+ * The element that last held focus, tracked here rather than read back from the DOM: when a
+ * focused control is disabled or removed the browser moves focus to the body, but this remembers
+ * where the user was.
+ */
+let lastFocused: HTMLElement | null = null;
+const rememberFocus = (event: FocusEvent) => {
+  if (event.target instanceof HTMLElement) lastFocused = event.target;
+};
+
+/** Whether focus was lost: on the page body, or on an element that left the document. */
+function hasNoFocus(): boolean {
+  const active = document.activeElement;
+  return (
+    !active ||
+    active === document.body ||
+    active === document.documentElement ||
+    !active.isConnected
+  );
+}
+
+/** Whether an element is on screen and interactive (not inert, hidden, or undisplayed). */
+function isShown(element: Element): boolean {
+  return (
+    element.isConnected &&
+    !element.closest('[inert], [aria-hidden="true"]') &&
+    element.getClientRects().length > 0 &&
+    getComputedStyle(element).visibility !== 'hidden'
+  );
+}
+
+/** Focus a container's `[data-default-focus]` element, else its first focusable one. */
+function focusDefaultIn(container: Element): boolean {
+  const target =
+    Array.from(container.querySelectorAll<HTMLElement>('[data-default-focus]')).find(isShown) ??
+    Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE)).find(isShown);
+  if (!target) return false;
+  target.focus({ preventScroll: true });
+  return !hasNoFocus();
+}
+
+/**
+ * Give focus back to the page after it was lost, so the remote keeps working: the element that
+ * last had it when it is still on screen and enabled, else dialogs first,
+ * then the innermost scope that can restore its own default item, then the outermost scopes'
+ * first focusable element, and finally the page's main content.
+ */
+function restoreFocus(): boolean {
+  const last = lastFocused;
+  if (last && isShown(last) && !(last as HTMLButtonElement).disabled) {
+    last.focus({ preventScroll: true });
+    if (!hasNoFocus()) return true;
+  }
+  const shown = [...scopes]
+    .filter(
+      scope => scope.options.current.enabled !== false && (!scope.element || isShown(scope.element))
+    )
+    // Newest first, so a page that just opened wins over one that is leaving.
+    .reverse();
+  const restore = (scope: KeyboardScope) =>
+    scope.options.current.onRestoreFocus
+      ? scope.options.current.onRestoreFocus()
+      : !!scope.element && focusDefaultIn(scope.element);
+
+  for (const scope of shown) {
+    if (scope.options.current.exclusive && restore(scope)) return true;
+  }
+  const withElement = shown.filter(scope => scope.element && !scope.options.current.exclusive);
+  const depth = (element: Element) => {
+    let count = 0;
+    for (let node = element.parentElement; node; node = node.parentElement) count++;
+    return count;
+  };
+  const innermostFirst = [...withElement].sort((a, b) => depth(b.element!) - depth(a.element!));
+  for (const scope of innermostFirst) {
+    if (scope.options.current.onRestoreFocus?.()) return true;
+  }
+  for (const scope of withElement) {
+    const outermost = !withElement.some(
+      other => other !== scope && other.element!.contains(scope.element)
+    );
+    if (outermost && !scope.options.current.onRestoreFocus && restore(scope)) return true;
+  }
+  for (const scope of shown) {
+    if (!scope.element && scope.options.current.onRestoreFocus?.()) return true;
+  }
+  const main = Array.from(document.querySelectorAll('main')).find(isShown);
+  return focusDefaultIn(main ?? document.body);
+}
 let listening = false;
 
 /** Identify text-editable elements and native inputs, textareas, or selects whose keys need native handling. */
@@ -143,6 +242,13 @@ function dispatch(event: KeyboardEvent): void {
     (action === 'back' && event.key !== 'Backspace');
   if (isNativeEditingTarget(event.target) && !remoteOnly) return;
 
+  // A direction key with nothing focused only brings the focus back.
+  if (DIRECTIONS.has(action) && hasNoFocus() && restoreFocus()) {
+    event.preventDefault();
+    event.stopPropagation();
+    return;
+  }
+
   const target = event.target instanceof Node ? event.target : document.activeElement;
   const matching = [...scopes]
     .filter(
@@ -174,12 +280,15 @@ export function registerKeyboardScope(scope: KeyboardScope): () => void {
   scopes.add(scope);
   if (!listening) {
     document.addEventListener('keydown', dispatch, true);
+    document.addEventListener('focusin', rememberFocus, true);
     listening = true;
   }
   return () => {
     scopes.delete(scope);
     if (listening && scopes.size === 0) {
       document.removeEventListener('keydown', dispatch, true);
+      document.removeEventListener('focusin', rememberFocus, true);
+      lastFocused = null;
       listening = false;
     }
   };

@@ -249,6 +249,17 @@ export interface NotificationsMenuProps {
 const FOCUSABLE = '[data-notification-focusable]:not([disabled])';
 
 /** Calls `onVisible` whenever the sentinel scrolls into the list's view. */
+/** Focus the panel's newest notification, else its first control, else the panel itself. */
+function focusFirstIn(zone: HTMLElement | null): boolean {
+  if (!zone) return false;
+  const target =
+    zone.querySelector<HTMLElement>('[data-notification-row]') ??
+    zone.querySelector<HTMLElement>(FOCUSABLE) ??
+    zone;
+  target.focus({ preventScroll: true });
+  return true;
+}
+
 function useSentinel(root: RefObject<HTMLElement | null>, enabled: boolean, onVisible: () => void) {
   const sentinel = useRef<HTMLDivElement>(null);
   const callback = useRef(onVisible);
@@ -347,13 +358,13 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
     if (last === 'read') read.loadMore();
   };
 
+  const focusFirst = () => focusFirstIn(zoneRef.current);
+
   // Entering the panel lands on the newest notification, like the rail lands on its item.
   useEffect(() => {
     if (!focused) return;
-    const zone = zoneRef.current;
-    if (!zone || zone.contains(document.activeElement)) return;
-    const firstRow = zone.querySelector<HTMLElement>('[data-notification-row]');
-    (firstRow ?? focusables()[0] ?? zone).focus({ preventScroll: true });
+    if (zoneRef.current?.contains(document.activeElement)) return;
+    focusFirstIn(zoneRef.current);
     // Runs when the keyboard arrives, and once the first page loads.
   }, [focused, unread.items.length]);
 
@@ -367,6 +378,7 @@ export const NotificationsMenu: FC<NotificationsMenuProps> = ({
 
   const navigationRef = useKeyboardNavigation({
     enabled: focused,
+    onRestoreFocus: focusFirst,
     onUp: () => move(-1),
     onDown: () => move(1),
     onLeft: () => {

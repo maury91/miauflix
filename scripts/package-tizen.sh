@@ -11,6 +11,10 @@
 #                  found by scanning it, or by typing the address.
 #   --no-pairing   leave the pairing service out: the TV never contacts it
 #   --pairing-url  use another pairing service (tv-pairing) than pair.miauflix.cat
+#
+# The Home hero's backdrop size, while the selection moves and once it rests, is picked for the
+# TV's model year; MIAUFLIX_TV_HERO_BACKDROP and MIAUFLIX_TV_HERO_BACKDROP_RESTING set it instead
+# (w300, w780, w1280 or original; auto picks it).
 
 set -e
 
@@ -68,6 +72,8 @@ rm -rf "${BUILD_DIR}"
 # Without a server the build gets "/", which the TV app reads as none (an empty value would fall
 # back to the development default)
 VITE_TIZEN=true VITE_API_URL="${API_URL:-/}" VITE_TV_PAIRING_URL="${PAIRING_URL}" \
+  VITE_TV_HERO_BACKDROP="${MIAUFLIX_TV_HERO_BACKDROP:-auto}" \
+  VITE_TV_HERO_BACKDROP_RESTING="${MIAUFLIX_TV_HERO_BACKDROP_RESTING:-auto}" \
   npx turbo run build:tizen --filter='./frontend'
 
 sed "s/version=\"[^\"]*\" viewmodes/version=\"${VERSION}\" viewmodes/" \

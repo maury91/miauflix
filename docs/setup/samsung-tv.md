@@ -33,6 +33,26 @@ Plain CSS files don't go through it: keep them to what Chromium 69 supports. The
 unsigned. The launcher icon is generated on every build from `assets/tv-logo.png`, the only
 copy of the TV icons, by `scripts/generate-tv-icons.mjs`: replace that image to change it.
 
+### Backdrop sizes
+
+The Home hero shows a smaller backdrop while you move between titles, and loads a sharper one
+while you rest on a title, swapping it in once it has loaded. By default (`auto`) the app picks
+both for the TV it runs on: the smallest size that covers the hero (about 70% of the screen's
+width), up to what the TV's generation paints smoothly. The generation comes from its model
+code (`23_…` is a 2023 TV) or, without it, its browser version:
+
+| TV                                   | While moving | Resting    |
+| ------------------------------------ | ------------ | ---------- |
+| 2023 and newer (measured on a QCQ80) | `w1280`      | `original` |
+| Older (measured on a 2020 TU8072)    | `w780`       | `w1280`    |
+
+To set them yourself, package with `MIAUFLIX_TV_HERO_BACKDROP` (while moving) and
+`MIAUFLIX_TV_HERO_BACKDROP_RESTING` set to `w300`, `w780`, `w1280`, `original` or `auto`:
+
+```bash
+MIAUFLIX_TV_HERO_BACKDROP=w780 MIAUFLIX_TV_HERO_BACKDROP_RESTING=original npm run package:tizen
+```
+
 ## How the TV finds your server
 
 The TV keeps the server it connected to and checks it at every start. When it has none yet, or

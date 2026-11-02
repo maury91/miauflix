@@ -4,7 +4,8 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
-const { query, mutation, save, reset, ensureBackdropFocus } = vi.hoisted(() => ({
+const { query, mutation, save, reset, ensureBackdropFocus, watchlist } = vi.hoisted(() => ({
+  watchlist: { add: vi.fn(), isLoading: false },
   query: {
     currentData: { rating: 'like' as string | null },
     isFetching: false,
@@ -24,7 +25,7 @@ vi.mock('@features/media/api/ratings.api', () => ({
 }));
 vi.mock('@features/media/api/lists.api', () => ({
   useGetWatchlistMembershipQuery: () => ({ data: { inWatchlist: false } }),
-  useAddToWatchlistMutation: () => [vi.fn(), { isLoading: false }],
+  useAddToWatchlistMutation: () => [watchlist.add, { isLoading: watchlist.isLoading }],
   useRemoveFromWatchlistMutation: () => [vi.fn(), { isLoading: false }],
 }));
 vi.mock('@features/media/api/media.api', () => ({
@@ -79,6 +80,8 @@ beforeEach(() => {
   mutation.isError = false;
   save.mockReset();
   ensureBackdropFocus.mockClear();
+  watchlist.add.mockReset();
+  watchlist.isLoading = false;
 });
 
 // These tests check rating state; browser E2E tests cover visibility and layout.
@@ -174,5 +177,20 @@ describe('Details saved ratings', () => {
       'aria-pressed',
       'true'
     );
+  });
+
+  it('keeps focus on the watchlist button while it updates', () => {
+    const view = setupTest();
+    const button = screen.getByRole('button', { name: 'Add to watchlist' });
+    button.focus();
+    fireEvent.click(button);
+    expect(watchlist.add).toHaveBeenCalledOnce();
+    watchlist.isLoading = true;
+    view.rerender();
+    const pending = screen.getByRole('button', { name: 'Updating…' });
+    expect(pending).toHaveFocus();
+    expect(pending).toHaveAttribute('aria-disabled', 'true');
+    fireEvent.click(pending);
+    expect(watchlist.add).toHaveBeenCalledOnce();
   });
 });

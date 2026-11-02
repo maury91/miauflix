@@ -1001,15 +1001,21 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
     },
   };
 
+  const pageRef = useRef<HTMLElement | null>(null);
+  const retryRef = useRef<HTMLButtonElement>(null);
+  const notifyRef = useRef<HTMLButtonElement>(null);
   const navigationRef = useKeyboardNavigation({
+    // A remote needs something focused: the failure's action, else the player (for Back).
+    onRestoreFocus: () => {
+      const target = retryRef.current ?? notifyRef.current ?? pageRef.current;
+      target?.focus({ preventScroll: true });
+      return !!target;
+    },
     onBack: () => {
       onBack();
       return true;
     },
   });
-  const pageRef = useRef<HTMLElement | null>(null);
-  const retryRef = useRef<HTMLButtonElement>(null);
-  const notifyRef = useRef<HTMLButtonElement>(null);
   const setPage = useCallback(
     (element: HTMLElement | null) => {
       pageRef.current = element;

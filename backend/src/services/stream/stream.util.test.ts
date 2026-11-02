@@ -168,5 +168,20 @@ describe('stream.util', () => {
       const over = sized(2, 20e9);
       expect(preferWithinBitrate([over, unknown], 8_000, HOUR)).toEqual([unknown, over]);
     });
+
+    it('measures the bytes a source plays, like one episode of a season pack', () => {
+      const pack = sized(1, 40e9);
+      const single = sized(2, 6e9);
+      const episodeFile = new Map([
+        [1, 1.5e9],
+        [2, 6e9],
+      ]);
+      const sizeOf = (source: { id: number }) => episodeFile.get(source.id) ?? null;
+      expect(estimatedBitrateKbps(pack, HOUR, sizeOf)).toBeCloseTo(3_333.3, 1);
+      expect(preferWithinBitrate([single, pack], 8_000, HOUR, sizeOf).map(s => s.id)).toEqual([
+        1, 2,
+      ]);
+      expect(preferWithinBitrate([pack, single], 8_000, HOUR, () => null)).toEqual([pack, single]);
+    });
   });
 });

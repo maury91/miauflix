@@ -90,6 +90,11 @@ export default function SettingsPage({
   const firstEnabled = () =>
     [configurationRef.current, storageRef.current].find(button => button && !button.disabled);
   const navigationRef = useKeyboardNavigation({
+    onRestoreFocus: () => {
+      const target = firstEnabled() ?? backRef.current;
+      target?.focus({ preventScroll: true });
+      return !!target;
+    },
     onUp: () => moveFocus(-1),
     onDown: () => moveFocus(1),
     // Back sits on the rail to the left of the page.

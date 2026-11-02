@@ -53,3 +53,40 @@ describe('subtitle language grouping', () => {
     expect(screen.getByRole('button', { name: /Italian · Torrent/ })).toBeVisible();
   });
 });
+
+describe('subtitle search', () => {
+  it('keeps the focus on Find subtitles while it searches', () => {
+    const onSearch = vi.fn();
+    const menu = (loading: boolean) => (
+      <SubtitleMenu
+        candidates={[]}
+        configured
+        available
+        loading={loading}
+        message=""
+        selectedId={null}
+        offset={0}
+        onSearch={onSearch}
+        onSelect={vi.fn()}
+        onOffsetChange={vi.fn()}
+        preferencesKey={null}
+      />
+    );
+    const { rerender } = render(menu(false));
+    fireEvent.click(screen.getByRole('button', { name: 'Subtitles', exact: true }));
+    const search = screen.getByRole('button', { name: 'Find subtitles' });
+    search.focus();
+    fireEvent.click(search);
+    expect(onSearch).toHaveBeenCalledTimes(1);
+
+    rerender(menu(true));
+    const searching = screen.getByRole('button', { name: 'Searching…' });
+    // A disabled button would drop the focus to the page, where the remote reaches nothing
+    expect(searching).toBe(search);
+    expect(searching).toBeEnabled();
+    expect(searching).toHaveAttribute('aria-disabled', 'true');
+    expect(searching).toHaveFocus();
+    fireEvent.click(searching);
+    expect(onSearch).toHaveBeenCalledTimes(1);
+  });
+});
