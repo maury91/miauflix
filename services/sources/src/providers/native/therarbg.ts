@@ -40,9 +40,11 @@ export class TherarbgProvider implements Provider {
   constructor(private config: SourcesConfigService) {}
   async search(query: ProviderQuery, ctx: { signal: AbortSignal; http: HttpClient }) {
     const configured = this.config.value('THE_RARBG_API_URL');
-    const mirrors = [...new Set([configured, 'https://therarbg.to', 'https://therar.site'])].filter(
-      Boolean
-    );
+    const custom = !!configured && new URL(configured).hostname !== 'therarbg.to';
+    const mirrors = custom
+      ? [configured]
+      : [...new Set([configured, 'https://therarbg.to', 'https://therar.site'])].filter(Boolean);
+
     const endpoint = query.imdbid
       ? `imdb-detail/${encodeURIComponent(query.imdbid)}/`
       : `get-posts/keywords:${encodeURIComponent(query.q ?? '')}:ncategory:XXX:order:-se/`;

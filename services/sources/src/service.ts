@@ -5,6 +5,7 @@ import { z } from 'zod';
 import { SourcesConfigService } from './config/config.service';
 import { openDatabase } from './db/database';
 import { Store } from './db/store';
+import type { ResolveHost } from './http/destination';
 import { type Fetch, HttpClient } from './http/http-client';
 import { Planner } from './planner/planner';
 import { AdminError, ProviderAdmin } from './providers/admin';
@@ -45,6 +46,7 @@ export interface SourcesServiceOptions {
   keyFile: string;
   encryptionKey?: string;
   fetch?: Fetch;
+  resolveHost?: ResolveHost;
   now?: () => number;
 }
 export function createSourcesService(options: SourcesServiceOptions): {
@@ -61,7 +63,8 @@ export function createSourcesService(options: SourcesServiceOptions): {
       flareSolverr: () => config.value('FLARESOLVERR_URL'),
     },
     options.fetch,
-    options.now
+    options.now,
+    options.resolveHost
   );
   const vpn = new VpnGuard(config, http, options.now),
     registry = new Registry(store, config),
@@ -79,6 +82,12 @@ export function createSourcesService(options: SourcesServiceOptions): {
     repositories = new RepositoryService(store, http, () => admin.changed(), options.now);
   const stopping = new AbortController();
   const pending = new Set<Promise<unknown>>();
+  const track = <T>(run: () => T | Promise<T>): Promise<T> => {
+    stopping.signal.throwIfAborted();
+    const task = Promise.resolve().then(run);
+    pending.add(task);
+    return task.finally(() => pending.delete(task));
+  };
   config.registerProber({
     test: async values => ({
       success: true,
@@ -89,12 +98,12 @@ export function createSourcesService(options: SourcesServiceOptions): {
   });
   const timer = setInterval(() => {
     store.prune();
-    void repositories.refreshStale(stopping.signal);
+    void track(() => repositories.refreshStale(stopping.signal)).catch(() => undefined);
   }, 3600_000);
   timer.unref();
   const guarded = async <T>(ctx: { fail: unknown }, run: () => T | Promise<T>): Promise<T> => {
     try {
-      return await run();
+      return await track(run);
     } catch (error) {
       if (error instanceof AdminError)
         return (ctx.fail as (code: string, message: string) => never)(error.code, error.message);
@@ -123,8 +132,7 @@ export function createSourcesService(options: SourcesServiceOptions): {
   }).implement(sources, {
     search: async function* (request, ctx) {
       const signal = AbortSignal.any([ctx.signal, stopping.signal]);
-      if (!(await vpn.isProtected(signal)))
-        return ctx.fail('vpn_required', 'Sources require a protected connection');
+      stopping.signal.throwIfAborted();
       if (!searchSchema.safeParse(request).success)
         return ctx.fail('bad_request', 'Invalid source search request');
       let resolve!: () => void;
@@ -132,11 +140,25 @@ export function createSourcesService(options: SourcesServiceOptions): {
         resolve = r;
       });
       pending.add(task);
-      try {
-        yield* planner.search(request, signal);
-      } finally {
+      const iterator = planner.search(request, signal);
+      const finish = () => {
         pending.delete(task);
         resolve();
+      };
+      // A consumer may be paused at a yield. Close the planner on stop even if it never resumes.
+      const abort = () => {
+        void iterator.return(undefined).then(finish, finish);
+      };
+      signal.addEventListener('abort', abort, { once: true });
+      try {
+        if (!(await vpn.isProtected(signal)))
+          return ctx.fail('vpn_required', 'Sources require a protected connection');
+        signal.throwIfAborted();
+        yield* iterator;
+      } finally {
+        signal.removeEventListener('abort', abort);
+        await iterator.return(undefined);
+        finish();
       }
     },
     providers: () => admin.list(),
@@ -164,16 +186,12 @@ export function createSourcesService(options: SourcesServiceOptions): {
       const parsed = fileSchema.safeParse(input);
       if (!parsed.success) return ctx.fail('bad_request', 'Invalid source file request');
       const { hash, fileRef } = parsed.data;
-      const signal = AbortSignal.any([ctx.signal, stopping.signal]);
-      if (!(await vpn.isProtected(signal)))
-        return ctx.fail('vpn_required', 'Sources require a protected connection');
-      const task = files.resolve(hash, fileRef, signal);
-      pending.add(task);
-      try {
-        return await task;
-      } finally {
-        pending.delete(task);
-      }
+      return track(async () => {
+        const signal = AbortSignal.any([ctx.signal, stopping.signal]);
+        if (!(await vpn.isProtected(signal)))
+          return ctx.fail('vpn_required', 'Sources require a protected connection');
+        return files.resolve(hash, fileRef, signal);
+      });
     },
   });
   return { service, stop: () => service.stop() };

@@ -37,8 +37,23 @@ export class Store {
   providers(): ProviderRow[] {
     return this.db.query<ProviderRow, []>('SELECT * FROM providers ORDER BY priority,id').all();
   }
-  settings(row: ProviderRow): Record<string, string | boolean> {
-    return row.settings ? JSON.parse(this.open(row.settings)) : {};
+  settings(row: ProviderRow): Record<string, string | boolean> | null {
+    if (!row.settings) return {};
+    try {
+      const value: unknown = JSON.parse(this.open(row.settings));
+      if (
+        !value ||
+        typeof value !== 'object' ||
+        Array.isArray(value) ||
+        Object.values(value).some(v => typeof v !== 'string' && typeof v !== 'boolean')
+      )
+        throw new Error('Invalid settings');
+      return value as Record<string, string | boolean>;
+    } catch {
+      // Keep the ciphertext for recovery; never run this provider with fallback defaults.
+      console.warn(`Sources: settings unavailable for provider ${row.id}`);
+      return null;
+    }
   }
   provider(id: string): ProviderRow | undefined {
     return this.providers().find(p => p.id === id);

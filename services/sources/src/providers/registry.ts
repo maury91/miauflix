@@ -36,8 +36,9 @@ export class Registry {
     return JSON.parse(row.definition) as ProviderDefinition;
   }
   /** Manifest defaults overlaid with what the admin configured. */
-  settings(row: ProviderRow): Record<string, string | boolean> {
-    return { ...this.definition(row).settings, ...this.store.settings(row) };
+  settings(row: ProviderRow): Record<string, string | boolean> | null {
+    const saved = this.store.settings(row);
+    return saved === null ? null : { ...this.definition(row).settings, ...saved };
   }
   settingsSchema(row: ProviderRow): ProviderSetting[] {
     const definition = this.definition(row);
@@ -68,6 +69,7 @@ export class Registry {
   instance(row: ProviderRow): Provider | null {
     const definition = this.definition(row);
     const settings = this.settings(row);
+    if (settings === null) return null;
     const base =
       definition.native === 'eztv'
         ? new EztvProvider(settings)

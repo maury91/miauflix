@@ -15,6 +15,7 @@ import { mergeCandidate, toCandidate } from '../src/normalize/candidate';
 import { magnetHash, normalizeHash } from '../src/normalize/magnet';
 import { EztvProvider } from '../src/providers/native/eztv';
 import { createSourcesService } from '../src/service';
+import { fixtureFetch, fixtureResolver } from './http-fixture';
 
 const dirs: string[] = [];
 const stops: Array<() => Promise<void>> = [];
@@ -33,10 +34,10 @@ const setup = (
   dirs.push(dir);
   const created = createSourcesService({
     dataDir: dir,
+    resolveHost: fixtureResolver,
     keyFile: join(dir, '.key'),
     encryptionKey: 'test',
-    fetch: ((input: URL | string | Request, init?: RequestInit) =>
-      handler(new URL(String(input)), init)) as typeof fetch,
+    fetch: fixtureFetch(handler),
     now,
   });
   stops.push(created.stop);

@@ -1,6 +1,8 @@
 import { setTimeout as delay } from 'node:timers/promises';
+import { checkServerIdentity } from 'node:tls';
 
 import { SingleFlight, withAbort } from '../util/single-flight';
+import { isInternalHost, publicAddress, type ResolveHost, resolveHost } from './destination';
 
 export type Fetch = typeof globalThis.fetch;
 export interface HttpOptions extends RequestInit {
@@ -50,7 +52,8 @@ export class HttpClient {
   constructor(
     private readonly config: { timeout: () => number; flareSolverr: () => string },
     private readonly fetchImpl: Fetch = globalThis.fetch,
-    private readonly now = Date.now
+    private readonly now = Date.now,
+    private readonly resolve: ResolveHost = resolveHost
   ) {}
 
   async request(input: string, options: HttpOptions = {}): Promise<Response> {
@@ -70,6 +73,8 @@ export class HttpClient {
       options.perMinute,
       options.minIntervalMs,
       options.maxRateWaitMs,
+      options.blockInternal,
+      [...(options.allowHosts ?? [])].sort(),
     ]);
     const result = await this.gets.runCancelable(key, signal, sharedSignal =>
       this.follow(url, options, sharedSignal, 0)
@@ -137,26 +142,36 @@ export class HttpClient {
     depth: number
   ): Promise<Response> {
     this.validUrl(url);
-    if (
-      options.blockInternal &&
-      isInternalHost(url.hostname) &&
-      !options.allowHosts?.includes(url.host)
-    )
-      throw new Error('Provider URL targets an internal address');
+    const guarded = options.blockInternal && !options.allowHosts?.includes(url.host);
+    const address = guarded ? await publicAddress(url, this.resolve, signal) : undefined;
     await this.gate(url, options, signal);
     const headers = new Headers(options.headers);
     if (!headers.has('user-agent'))
       headers.set('user-agent', USER_AGENTS[this.userAgent++ % USER_AGENTS.length]);
-    const init: RequestInit = {
+    const init: BunFetchRequestInit = {
       method: options.method,
       body: options.body,
       signal,
       redirect: 'manual',
       headers,
     };
+    const destination = new URL(url);
+    if (address) {
+      // Connect to the checked IP, retaining virtual hosting and TLS identity.
+      destination.hostname = address.includes(':') ? `[${address}]` : address;
+      headers.set('host', url.host);
+      const hostname = url.hostname.replace(/^\[|\]$/g, '');
+      init.tls = {
+        serverName: hostname,
+        checkServerIdentity: (_hostname, certificate) => checkServerIdentity(hostname, certificate),
+      };
+      // An ambient proxy could resolve the hostname again or redirect outside this guard.
+      // An empty string means "no option" and keeps the environment proxy; `false` forces a direct connection.
+      init.proxy = false as unknown as string;
+    }
     const cap = options.maxBytes ?? 10 * 1024 * 1024;
     let response = await this.bounded(
-      await withAbort(this.fetchImpl(url, init), signal),
+      await withAbort(this.fetchImpl(destination, init), signal),
       cap,
       signal
     );
@@ -167,6 +182,8 @@ export class HttpClient {
     ) {
       const endpoint = this.config.flareSolverr();
       if (endpoint) {
+        // The external solver follows redirects and resolves DNS outside our pinned connection.
+        if (guarded) throw new Error('FlareSolverr is unavailable for guarded provider URLs');
         const solverUrl = new URL(`${endpoint.replace(/\/$/, '')}/v1`);
         this.validUrl(solverUrl);
         await this.gate(solverUrl, options, signal);

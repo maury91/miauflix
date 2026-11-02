@@ -231,6 +231,7 @@ services:
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=none
       - OWN_URL=http://yts-mock
+      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s
@@ -254,6 +255,7 @@ services:
       - API_BASE_URL=https://therarbg.to
       - API_AUTH_HEADER_IS_BEARER=false
       - API_KEY=none
+      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
     healthcheck:
       test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
       interval: 0.5s

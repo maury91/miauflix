@@ -51,6 +51,7 @@ export class RepositoryService {
         timeoutMs: 10_000,
         maxBytes: MAX_MANIFEST_BYTES,
         redirect: 'follow',
+        blockInternal: true,
         headers: { accept: 'application/json' },
       });
     } catch (error) {
@@ -135,6 +136,7 @@ export class RepositoryService {
     if (this.store.repositories().some(r => r.url === url.href))
       throw new AdminError('bad_request', 'Repository already added');
     const entries = await this.fetchManifest(url.href, signal);
+    signal.throwIfAborted();
     const id = `repo:${createHash('sha256').update(url.href).digest('hex').slice(0, 12)}`;
     this.store.insertRepository(id, url.href, url.hostname);
     this.record(id, this.apply(id, entries));
@@ -147,6 +149,8 @@ export class RepositoryService {
     if (row.built_in) return this.view(row);
     try {
       const entries = await this.fetchManifest(row.url, signal);
+      signal.throwIfAborted();
+      if (!this.store.repository(id)) throw new AdminError('not_found', `Unknown repository ${id}`);
       this.record(id, this.apply(id, entries));
     } catch (error) {
       this.store.markRepositoryFetched(

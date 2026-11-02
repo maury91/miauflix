@@ -36,7 +36,8 @@ export class VpnGuard {
           .filter(Boolean)
           .includes(data.ip ?? '');
     } catch {
-      /* Fail closed. */
+      signal?.throwIfAborted();
+      /* Fail closed for actual VPN-check failures, never caller cancellation. */
     }
     this.cached = {
       value: protectedConnection,

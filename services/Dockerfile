@@ -82,7 +82,7 @@ ENV CATALOG_DATA_DIR=/app/data/catalog \
 EXPOSE 3001 3002 3003 6789 6790
 VOLUME /app/data
 HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=10 \
-  CMD bun -e "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:3003/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))"
+  CMD bun -e "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:' + (process.env.SOURCES_PORT || 3003) + '/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))"
 
 USER bunqueue
 ENTRYPOINT ["/bin/bash", "/app/miauflix-services-entrypoint.sh"]
