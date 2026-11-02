@@ -30,7 +30,10 @@ export const providerSourceToEntity = (
     videoCodec: providerSource.videoCodec,
     broadcasters: providerSource.broadcasters,
     watchers: providerSource.watchers,
-    sourceUploadedAt: providerSource.uploadDate,
+    // The sources service reports an unknown upload date as the Unix epoch; scoring treats a
+    // missing date as unknown, not as 56 years old.
+    sourceUploadedAt:
+      providerSource.uploadDate.getTime() > 0 ? providerSource.uploadDate : undefined,
     url: providerSource.fileRef ?? null,
     source: providerSource.provider ?? providerName ?? 'unknown',
     sourceType: providerSource.source,

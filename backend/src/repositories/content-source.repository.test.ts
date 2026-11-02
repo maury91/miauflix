@@ -81,14 +81,14 @@ describe('ContentSourceRepository', () => {
   it('stores one row per info hash regardless of provider casing', async () => {
     const { repository, countSources } = await setupTest();
 
-    const yts = await repository.upsertByHash(sourceInput());
-    const therarbg = await repository.upsertByHash(
+    const first = await repository.upsertByHash(sourceInput());
+    const second = await repository.upsertByHash(
       sourceInput({ hash: UPPERCASE_HASH.toLowerCase(), magnetLink: 'magnet:?xt=urn:btih:new' })
     );
 
-    expect(therarbg.id).toBe(yts.id);
-    expect(therarbg.hash).toBe(UPPERCASE_HASH.toLowerCase());
-    expect(therarbg.magnetLink).toBe('magnet:?xt=urn:btih:new');
+    expect(second.id).toBe(first.id);
+    expect(second.hash).toBe(UPPERCASE_HASH.toLowerCase());
+    expect(second.magnetLink).toBe('magnet:?xt=urn:btih:new');
     expect(await countSources()).toBe(1);
   });
 

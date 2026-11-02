@@ -1,0 +1,59 @@
+id: jsonapi
+name: JSON API
+description: Invented JSON API
+language: en-US
+type: public
+links:
+  - https://jsonapi.invalid/
+legacylinks:
+  - https://backup.jsonapi.invalid/
+requestDelay: 2
+settings:
+  - name: sort
+    type: select
+    label: Sort by
+    default: seeders
+    options:
+      seeders: Seeders
+      date: Date
+caps:
+  categorymappings:
+    - { id: 1, cat: Movies, desc: Movies }
+    - { id: 2, cat: TV, desc: TV }
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, imdbid]
+search:
+  paths:
+    - path: api/{{ if .Query.IMDBID }}imdb/{{ .Query.IMDBID }}{{ else }}posts/{{ .Keywords }}{{ end }}/
+      response:
+        type: json
+  inputs:
+    format: json
+    order: '{{ .Config.sort }}'
+    page: '{{ .Query.Page }}'
+  keywordsfilters:
+    - name: re_replace
+      args: ['[^a-zA-Z0-9]+', ' ']
+    - name: trim
+  rows:
+    selector: results
+  fields:
+    category:
+      selector: c
+    title:
+      selector: n
+    infohash:
+      selector: h
+    size:
+      selector: s
+    seeders:
+      selector: se
+    leechers:
+      selector: le
+    date:
+      selector: a
+      filters:
+        - name: dateparse
+          args: '2006-01-02 15:04:05'

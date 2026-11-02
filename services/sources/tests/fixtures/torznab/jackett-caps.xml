@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<caps>
+  <server title="Jackett" />
+  <searching>
+    <search available="yes" supportedParams="q" />
+    <tv-search available="yes" supportedParams="q,season,ep,imdbid,tvdbid" />
+    <movie-search available="yes" supportedParams="q,imdbid,tmdbid" />
+    <music-search available="no" supportedParams="" />
+  </searching>
+</caps>

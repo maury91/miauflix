@@ -1,0 +1,17 @@
+id: weird
+name: Weird Filter
+type: public
+links: [https://weird.invalid/]
+caps:
+  modes:
+    search: [q]
+search:
+  paths:
+    - path: /
+  rows:
+    selector: tr
+  fields:
+    title:
+      selector: a
+      filters:
+        - name: hexdump

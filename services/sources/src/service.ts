@@ -1,3 +1,5 @@
+import { join } from 'node:path';
+
 import { defineService, type Service } from '@miauflix/contract';
 import { sources } from '@miauflix/service-contracts';
 import { z } from 'zod';
@@ -9,6 +11,10 @@ import type { ResolveHost } from './http/destination';
 import { type Fetch, HttpClient } from './http/http-client';
 import { Planner } from './planner/planner';
 import { AdminError, ProviderAdmin } from './providers/admin';
+import { DefinitionIndex } from './providers/cardigann/definition-index';
+import { DefinitionStore } from './providers/cardigann/definition-store';
+import { parseSources } from './providers/cardigann/sources';
+import { preloadProviders } from './providers/preload';
 import { Registry } from './providers/registry';
 import { RepositoryService } from './repositories/repository.service';
 import { TorrentFileService } from './torrent-file/torrent-file.service';
@@ -47,6 +53,12 @@ export interface SourcesServiceOptions {
   encryptionKey?: string;
   fetch?: Fetch;
   resolveHost?: ResolveHost;
+  /** Providers to install and enable at startup: `<definition id>@<source URL>` entries. */
+  preloadProviders?: string;
+  /** Use git for GitHub-hosted definitions (the service entrypoint turns this on). */
+  useGit?: boolean;
+  /** Where to clone a GitHub definitions repository from (tests point this at a local repo). */
+  definitionsGitUrl?: (owner: string, repo: string) => string;
   now?: () => number;
 }
 export function createSourcesService(options: SourcesServiceOptions): {
@@ -57,6 +69,11 @@ export function createSourcesService(options: SourcesServiceOptions): {
     config = new SourcesConfigService(),
     codec = createSeal(options.keyFile, options.encryptionKey);
   const store = new Store(db, codec.seal, codec.open, options.now);
+  if (options.preloadProviders) {
+    const invalid = preloadProviders(store, options.preloadProviders);
+    if (invalid.length)
+      console.warn(`Sources: ignored SOURCES_PRELOAD_PROVIDERS entries: ${invalid.join(', ')}`);
+  }
   const http = new HttpClient(
     {
       timeout: () => config.number('SOURCES_REQUEST_TIMEOUT_MS') || 15000,
@@ -67,17 +84,20 @@ export function createSourcesService(options: SourcesServiceOptions): {
     options.resolveHost
   );
   const vpn = new VpnGuard(config, http, options.now),
-    registry = new Registry(store, config),
+    definitions = new DefinitionStore(
+      store,
+      http,
+      () => parseSources(config.value('CARDIGANN_DEFINITION_SOURCES')).sources,
+      options.now,
+      {
+        gitDir: options.useGit ? join(options.dataDir, 'definitions-git') : undefined,
+        gitUrlFor: options.definitionsGitUrl,
+      }
+    ),
+    index = new DefinitionIndex(store, definitions, options.now),
+    registry = new Registry(store, config, http, definitions),
     planner = new Planner(store, registry, config, http, options.now),
-    files = new TorrentFileService(http, codec.open, store, registry, () =>
-      ['THE_RARBG_API_URL', 'YTS_API_URL'].flatMap(key => {
-        try {
-          return [new URL(config.value(key)).host];
-        } catch {
-          return [];
-        }
-      })
-    );
+    files = new TorrentFileService(http, codec.open, store, registry);
   const admin = new ProviderAdmin(store, registry, http, options.now),
     repositories = new RepositoryService(store, http, () => admin.changed(), options.now);
   const stopping = new AbortController();
@@ -101,6 +121,25 @@ export function createSourcesService(options: SourcesServiceOptions): {
     void track(() => repositories.refreshStale(stopping.signal)).catch(() => undefined);
   }, 3600_000);
   timer.unref();
+  const syncInterval = () => Math.max(1, config.number('CARDIGANN_SYNC_INTERVAL_MINUTES') || 60);
+  const startSync = async (): Promise<void> => {
+    try {
+      stopping.signal.throwIfAborted();
+      const syncing = index.sync(stopping.signal);
+      await track(async () => {
+        const change = await syncing;
+        if (change.added || change.updated || change.removed) admin.changed();
+      });
+    } catch {
+      // Sync failures are reported by the index; cancellation is expected during shutdown.
+    }
+  };
+  // Checked often so the first sync starts soon after the service is configured and a changed
+  // interval applies at once; a run only starts when one is due.
+  const syncTimer = setInterval(() => {
+    if (config.ready && index.due(syncInterval())) void startSync();
+  }, 5_000);
+  syncTimer.unref();
   const guarded = async <T>(ctx: { fail: unknown }, run: () => T | Promise<T>): Promise<T> => {
     try {
       return await track(run);
@@ -126,6 +165,7 @@ export function createSourcesService(options: SourcesServiceOptions): {
     onStop: async () => {
       stopping.abort();
       clearInterval(timer);
+      clearInterval(syncTimer);
       await Promise.allSettled(pending);
       db.close();
     },
@@ -162,7 +202,10 @@ export function createSourcesService(options: SourcesServiceOptions): {
       }
     },
     providers: () => admin.list(),
-    updateProvider: ({ id, ...patch }, ctx) => guarded(ctx, () => admin.update(String(id), patch)),
+    updateProvider: ({ id, ...patch }, ctx) =>
+      guarded(ctx, () =>
+        admin.update(String(id), patch, AbortSignal.any([ctx.signal, stopping.signal]))
+      ),
     reorderProviders: ({ ids }, ctx) =>
       guarded(ctx, () => {
         if (!Array.isArray(ids) || ids.some(id => typeof id !== 'string'))
@@ -182,6 +225,22 @@ export function createSourcesService(options: SourcesServiceOptions): {
         repositories.refresh(String(id), AbortSignal.any([ctx.signal, stopping.signal]))
       ),
     providersChanged: emit => admin.subscribe(emit),
+    cardigannDefinitions: (query, ctx) =>
+      guarded(ctx, () => admin.catalog(query, index, syncInterval())),
+    syncCardigannDefinitions: () => {
+      void startSync();
+      return { ...index.status(), intervalMinutes: syncInterval() };
+    },
+    addCardigannProvider: ({ id, source }, ctx) =>
+      guarded(ctx, () =>
+        admin.addCardigann(
+          String(id),
+          typeof source === 'string' ? source : undefined,
+          AbortSignal.any([ctx.signal, stopping.signal])
+        )
+      ),
+    addTorznabProvider: (input, ctx) => guarded(ctx, () => admin.addTorznab(input)),
+    removeProvider: ({ id }, ctx) => guarded(ctx, () => admin.remove(String(id))),
     torrentFile: async (input, ctx) => {
       const parsed = fileSchema.safeParse(input);
       if (!parsed.success) return ctx.fail('bad_request', 'Invalid source file request');

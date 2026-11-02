@@ -13,10 +13,12 @@
   },
   "dependencies": {
     "@miauflix/contract": "*",
-    "@miauflix/service-contracts": "*",
     "@miauflix/service-configuration": "*",
-    "zod": "4.1.12",
-    "@miauflix/source-metadata-extractor": "*"
+    "@miauflix/service-contracts": "*",
+    "@miauflix/source-metadata-extractor": "*",
+    "cheerio": "^1.2.0",
+    "yaml": "^2.9.1",
+    "zod": "4.1.12"
   },
   "devDependencies": {
     "bun-types": "^1.4.0",

@@ -1,0 +1,42 @@
+id: nested
+name: Nested JSON
+language: en-US
+type: public
+links:
+  - https://nested.invalid/
+caps:
+  categorymappings:
+    - { id: movies, cat: Movies, desc: Movies }
+  modes:
+    search: [q]
+    movie-search: [q, imdbid]
+search:
+  paths:
+    - path: api/list
+      response:
+        type: json
+  inputs:
+    query_term: '{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}'
+  rows:
+    selector: data.movies
+    attribute: torrents
+    multiple: true
+  fields:
+    title_phase1:
+      selector: ..title
+    year:
+      selector: ..year
+    quality:
+      selector: quality
+    title:
+      text: '{{ .Result.title_phase1 }} ({{ .Result.year }}) [{{ .Result.quality }}]'
+    infohash:
+      selector: hash
+    size:
+      selector: size_bytes
+    seeders:
+      selector: seeds
+    leechers:
+      selector: peers
+    imdbid:
+      selector: ..imdb_code

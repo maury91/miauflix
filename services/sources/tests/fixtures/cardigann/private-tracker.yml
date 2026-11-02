@@ -1,0 +1,18 @@
+id: privatesite
+name: Private Site
+type: private
+links: [https://private.invalid/]
+caps:
+  categorymappings:
+    - { id: 1, cat: Movies, desc: Movies }
+  modes:
+    search: [q]
+    movie-search: [q, imdbid]
+search:
+  paths:
+    - path: /
+  rows:
+    selector: tr
+  fields:
+    title:
+      selector: a

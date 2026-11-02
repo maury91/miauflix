@@ -101,7 +101,7 @@ export const createMovieRoutes = ({
                 title: movie.title,
                 contentDirectoriesSearched: movie.contentDirectoriesSearched,
               },
-              1200 // 1.2 second timeout - enough time for YTS API search but still reasonable for users
+              1200 // 1.2 second timeout - enough time for an indexer search but still reasonable for users
             );
             response.sources = sources.map(source => ({
               id: source.id,

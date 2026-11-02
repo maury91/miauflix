@@ -42,7 +42,7 @@ RUN npm run build --workspace @miauflix/source-metadata-extractor && \
 FROM ghcr.io/egeominotti/bunqueue:2.8.61 AS runtime
 
 USER root
-RUN apk add --no-cache bash && \
+RUN apk add --no-cache bash git && \
     mkdir -p /app/data/bunqueue /app/data/catalog /app/data/list-service /app/data/sources /app/models /app/wasm && \
     chown -R bunqueue:bunqueue /app/data /app/models /app/wasm
 
