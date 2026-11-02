@@ -25,6 +25,20 @@ export function sanitize(data: any, url?: string): any {
     changeDownloadUrlOrigin: process.env.OWN_URL,
   });
 
+  // IMDb IDs join the source response to catalog fixtures. Fictionalize display
+  // content, but retain the API's actual IDs (including mismatched search hits).
+  const originalPayload = data?.body ?? data;
+  const sanitizedPayload = sanitized?.body ?? sanitized;
+  const preserveId = (original: any, replacement: any) => {
+    if (replacement && /^tt\d{7,8}$/.test(original?.imdb_code ?? '')) {
+      replacement.imdb_code = original.imdb_code;
+    }
+  };
+  originalPayload?.data?.movies?.forEach((movie: any, index: number) =>
+    preserveId(movie, sanitizedPayload?.data?.movies?.[index])
+  );
+  preserveId(originalPayload?.data?.movie, sanitizedPayload?.data?.movie);
+
   console.log('🔧 Sanitization complete');
   return sanitized;
 }

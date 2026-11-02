@@ -1,0 +1,9 @@
+{
+  "status": 404,
+  "statusText": "Not Found",
+  "headers": {
+    "content-type": "text/plain; charset=utf-8"
+  },
+  "body": "Not Found",
+  "bodyIsJson": false
+}
