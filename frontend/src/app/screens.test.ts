@@ -11,6 +11,7 @@ const routes: Record<string, AppRoute> = {
   settings: { type: 'settings' },
   configuration: { type: 'configuration' },
   storage: { type: 'storage' },
+  sources: { type: 'sources' },
   qr: { type: 'qrApproval', approvalToken: 'abc' },
   missing: { type: 'notFound', pathname: '/nope' },
 };
@@ -46,6 +47,7 @@ describe('resolveScreen', () => {
     ['settings', 'home', 'settings'],
     ['configuration', 'home', 'configuration'],
     ['storage', 'home', 'storage'],
+    ['sources', 'home', 'sources'],
     ['missing', 'home', 'notFound'],
   ])('%s while %s → %s', (route, appState, kind) => {
     expect(resolve(route, appState).kind).toBe(kind);
@@ -56,12 +58,15 @@ describe('resolveScreen', () => {
       expect(resolve('qr', appState)).toEqual({ kind: 'qrApproval', approvalToken: 'abc' });
   });
 
-  it.each(['configuration', 'storage'])('sends non-admins from %s to Settings', route => {
-    expect(resolve(route, 'home', { isAdmin: false })).toEqual({
-      kind: 'redirect',
-      to: { type: 'settings' },
-    });
-  });
+  it.each(['configuration', 'storage', 'sources'])(
+    'sends non-admins from %s to Settings',
+    route => {
+      expect(resolve(route, 'home', { isAdmin: false })).toEqual({
+        kind: 'redirect',
+        to: { type: 'settings' },
+      });
+    }
+  );
 
   it('keeps the required wizard open until it is dismissed, even once configured', () => {
     expect(resolve('home', 'home', { requiredConfigActive: true }).kind).toBe('requiredConfig');

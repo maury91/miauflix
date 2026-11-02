@@ -24,6 +24,7 @@ import { createPreloadRoutes } from './preload.routes';
 import { createProgressRoutes } from './progress.routes';
 import { createRatingRoutes } from './ratings.routes';
 import { createShowRoutes } from './show.routes';
+import { createSourcesRoutes } from './sources.routes';
 import { createStorageRoutes } from './storage.routes';
 import { createStreamRoutes } from './stream.routes';
 import { createSubtitleRoutes } from './subtitles.routes';
@@ -73,6 +74,7 @@ function createApiRoutes(deps: Deps) {
       .route('/playback', createPlaybackRoutes(deps))
       .route('/subtitles', createSubtitleRoutes(deps))
       .route('/storage', createStorageRoutes(deps))
+      .route('/sources', createSourcesRoutes(deps))
       .route('/', createListRoutes(deps))
   );
 }

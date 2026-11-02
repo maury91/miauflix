@@ -29,6 +29,7 @@ describe('application routes', () => {
     [{ type: 'settings' }, '/settings'],
     [{ type: 'configuration' }, '/settings/configuration'],
     [{ type: 'storage' }, '/settings/storage'],
+    [{ type: 'sources' }, '/settings/sources'],
     [{ type: 'qrApproval', approvalToken: 'approval token' }, '/auth/qr/approval%20token'],
   ] as const)('builds and parses %s', (route, path) => {
     expect(routePath(route)).toBe(path);

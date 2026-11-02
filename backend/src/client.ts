@@ -33,6 +33,7 @@ export type * from './routes/progress.types';
 export type * from './routes/ratings.types';
 export type * from './routes/search.types';
 export type * from './routes/show.types';
+export type * from './routes/sources.types';
 export type * from './routes/storage.types';
 export type * from './routes/stream.types';
 export type * from './routes/subtitles.types';

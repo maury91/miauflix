@@ -20,6 +20,7 @@ import LoginPage from '@pages/login/LoginPage';
 import QrApprovalPage from '@pages/qr/QrApprovalPage';
 import SearchPage from '@pages/search/SearchPage';
 import SettingsPage from '@pages/settings/SettingsPage';
+import SourcesPage from '@pages/settings/SourcesPage';
 import StoragePage from '@pages/settings/StoragePage';
 import SetupPage from '@pages/setup/SetupPage';
 import { ErrorBoundary } from '@shared/components';
@@ -106,7 +107,10 @@ export function AppShell() {
         ? 'login'
         : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
           ? 'intro'
-          : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
+          : configurationWizardActive ||
+              route.type === 'configuration' ||
+              route.type === 'storage' ||
+              route.type === 'sources'
             ? 'config_wizard'
             : appState;
   const logoMotionDisabled =
@@ -146,6 +150,8 @@ export function AppShell() {
         );
       case 'storage':
         return <StoragePage key="route-storage" onDismiss={backTo({ type: 'settings' })} />;
+      case 'sources':
+        return <SourcesPage key="route-sources" onDismiss={backTo({ type: 'settings' })} />;
       case 'settings':
         return (
           <SettingsPage
@@ -154,6 +160,8 @@ export function AppShell() {
             onConfiguration={() => navigate({ type: 'configuration' })}
             canManageStorage={isAdmin}
             onStorage={() => navigate({ type: 'storage' })}
+            canManageSources={isAdmin}
+            onSources={() => navigate({ type: 'sources' })}
             initialFocus={settingsFocus}
             onDismiss={backTo(
               getRouteParent()?.type === 'search' ? { type: 'search' } : { type: 'home' }
