@@ -1,4 +1,4 @@
-import { execFileSync, execSync } from 'child_process';
+import { execFileSync } from 'child_process';
 import fs from 'fs';
 import os from 'os';
 import path from 'path';
@@ -31,7 +31,7 @@ describe('Database Encryption E2E Tests', () => {
           '--filter',
           'label=com.docker.compose.service=backend',
           '--filter',
-          'name=miauflix-tests-',
+          `label=com.docker.compose.project=${global.E2E_COMPOSE_PROJECT}`,
           '--format',
           '{{.Names}}',
         ],
@@ -45,10 +45,14 @@ describe('Database Encryption E2E Tests', () => {
       throw new Error('No running backend container found');
     }
 
+    if (containerName.split('\n').length !== 1) {
+      throw new Error(`Multiple backend containers found for ${global.E2E_COMPOSE_PROJECT}`);
+    }
+
     // Copy the database file from the container to a temp location
     const tempDbPath = path.join(tmpDbDir, `database.sqlite.testcopy.${Date.now()}`);
     try {
-      execSync(`docker cp ${containerName}:${DATABASE_FILE} ${tempDbPath}`);
+      execFileSync('docker', ['cp', `${containerName}:${DATABASE_FILE}`, tempDbPath]);
     } catch (err) {
       throw new Error(`Failed to copy database from container (${containerName}): ${err}`);
     }

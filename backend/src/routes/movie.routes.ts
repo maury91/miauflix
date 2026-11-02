@@ -95,6 +95,8 @@ export const createMovieRoutes = ({
             const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
               {
                 id: movie.id,
+                mediaId: movie.mediaId,
+                releaseDate: movie.releaseDate,
                 imdbId: movie.imdbId,
                 title: movie.title,
                 contentDirectoriesSearched: movie.contentDirectoriesSearched,
@@ -181,6 +183,8 @@ export const createMovieRoutes = ({
           const sources = await sourceService.getSourcesForMovieWithOnDemandSearch(
             {
               id: movie.id,
+              mediaId: movie.mediaId,
+              releaseDate: movie.releaseDate,
               imdbId: movie.imdbId,
               title: movie.title,
               contentDirectoriesSearched: movie.contentDirectoriesSearched,

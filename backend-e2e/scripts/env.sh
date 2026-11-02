@@ -388,6 +388,7 @@ else
     FRONTEND_TEST_PASSED=true
     
     export BACKEND_URL="http://localhost:$PORT"
+    export E2E_COMPOSE_PROJECT="$PROJECT_NAME"
     cd "$backend_e2e_dir"
 
     # Run backend tests if not frontend-only

@@ -125,6 +125,8 @@ export class PlayablePreparationService {
       .getSourcesForMovieWithOnDemandSearch(
         {
           id: media.local.id,
+          mediaId: media.local.mediaId,
+          releaseDate: media.local.releaseDate,
           imdbId: media.local.imdbId,
           title: media.local.title,
           contentDirectoriesSearched: media.local.contentDirectoriesSearched,

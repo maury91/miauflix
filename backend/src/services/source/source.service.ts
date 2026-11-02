@@ -259,7 +259,7 @@ export class SourceService {
   private async searchSourcesForMovie(
     movie: {
       id: number;
-      mediaId?: number;
+      mediaId: number;
       year?: number | null;
       releaseDate?: string | null;
       imdbId: string | null;
@@ -302,7 +302,7 @@ export class SourceService {
             media: {
               kind: 'movie',
               releaseDate: movie.releaseDate,
-              tmdbId: movie.mediaId ?? movie.id,
+              tmdbId: movie.mediaId,
               imdbId: movie.imdbId,
               title: movie.title,
               year:
@@ -468,7 +468,16 @@ export class SourceService {
             (await this.contentSourceRepository.findById(candidate.source.id)) ?? candidate.source;
           let torrentFile: Buffer | undefined =
             source.file ??
-            (await this.sourcesClient.torrentFile(source.hash, source.url ?? undefined)) ??
+            (await this.sourcesClient
+              .torrentFile(source.hash, source.url ?? undefined)
+              .catch(error => {
+                logger.debug(
+                  'SourceService',
+                  `Sources lookup failed for TV source ${source.id}`,
+                  error
+                );
+                return null;
+              })) ??
             undefined;
           if (!torrentFile && source.magnetLink) {
             torrentFile =
@@ -681,7 +690,7 @@ export class SourceService {
   public async getSourcesForMovieWithOnDemandSearch(
     movie: {
       id: number;
-      mediaId?: number;
+      mediaId: number;
       releaseDate?: string | null;
       imdbId: string | null;
       title: string;

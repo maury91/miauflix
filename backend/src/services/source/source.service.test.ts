@@ -327,6 +327,78 @@ describe('SourceService', () => {
     expect(mockSourcesClient.search).not.toHaveBeenCalled();
   });
 
+  it('passes the catalog ID and release year to interactive movie searches', async () => {
+    const { service, mockMovie, mockSourcesClient, mockContentSourceRepository } = setupTest();
+    const movie = { ...mockMovie, id: 7, mediaId: 9001, releaseDate: '2020-05-01' };
+    mockContentSourceRepository.findByMovieId.mockResolvedValue([]);
+
+    await service.getSourcesForMovieWithOnDemandSearch(movie);
+
+    expect(mockSourcesClient.search).toHaveBeenCalledWith(
+      expect.objectContaining({
+        purpose: 'interactive',
+        media: expect.objectContaining({ tmdbId: 9001, releaseDate: '2020-05-01', year: 2020 }),
+      }),
+      expect.any(AbortSignal)
+    );
+  });
+
+  it.each(['rejected', 'missing', 'remote', 'stored'] as const)(
+    'resolves TV pack files when Sources metadata is %s',
+    async outcome => {
+      const {
+        service,
+        mockContentSource1,
+        mockDatabase,
+        mockContentSourceRepository,
+        mockSourcesClient,
+        mockSourceMetadataFileService,
+      } = setupTest();
+      const torrentFile = Buffer.from('TV pack metadata');
+      const source = {
+        ...mockContentSource1,
+        file: outcome === 'stored' ? torrentFile : undefined,
+        magnetLink: 'magnet:?xt=urn:btih:' + mockContentSource1.hash,
+      };
+      const episodeSources = mockDatabase.getEpisodeSourceRepository();
+      const associate = jest.fn().mockResolvedValue(undefined);
+      Object.assign(episodeSources, { associate });
+      jest
+        .spyOn(service as never, 'getTVReleases')
+        .mockResolvedValue([{ metadata: { season: 1, files: [] }, source }] as never);
+      mockContentSourceRepository.findById.mockResolvedValue(source);
+      if (outcome === 'rejected') {
+        mockSourcesClient.torrentFile.mockRejectedValue(new Error('Sources unavailable'));
+      } else {
+        mockSourcesClient.torrentFile.mockResolvedValue(outcome === 'remote' ? torrentFile : null);
+      }
+      mockSourceMetadataFileService.getPlaybackTorrentMetadataFile.mockResolvedValue(torrentFile);
+      (parseTorrent as unknown as jest.Mock).mockResolvedValue({
+        infoHash: source.hash,
+        files: [{ path: 'Show.S01E08.mkv' }],
+      });
+
+      await service.getSourcesForEpisodeWithOnDemandSearch({
+        episodeId: 5,
+        showImdbId: 'tt1234567',
+        seasonNumber: 1,
+        episodeNumber: 8,
+        airDate: '2020-01-01',
+      });
+
+      expect(associate).toHaveBeenCalledWith(5, source.id, 'Show.S01E08.mkv', 'single');
+      if (outcome === 'rejected' || outcome === 'missing') {
+        expect(mockSourceMetadataFileService.getPlaybackTorrentMetadataFile).toHaveBeenCalledWith(
+          source.magnetLink,
+          source.hash
+        );
+      } else {
+        expect(mockSourceMetadataFileService.getPlaybackTorrentMetadataFile).not.toHaveBeenCalled();
+      }
+      if (outcome === 'stored') expect(mockSourcesClient.torrentFile).not.toHaveBeenCalled();
+    }
+  );
+
   it('returns existing sources immediately', async () => {
     const { service, mockMovie, mockContentSource1, mockContentSource2, mockSourcesClient } =
       setupTest();
