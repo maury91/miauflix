@@ -69,7 +69,11 @@ export function createSourcesService(options: SourcesServiceOptions): {
     config = new SourcesConfigService(),
     codec = createSeal(options.keyFile, options.encryptionKey);
   const store = new Store(db, codec.seal, codec.open, options.now);
-  if (options.preloadProviders) preloadProviders(store, options.preloadProviders);
+  if (options.preloadProviders) {
+    const invalid = preloadProviders(store, options.preloadProviders);
+    if (invalid.length)
+      console.warn(`Sources: ignored SOURCES_PRELOAD_PROVIDERS entries: ${invalid.join(', ')}`);
+  }
   const http = new HttpClient(
     {
       timeout: () => config.number('SOURCES_REQUEST_TIMEOUT_MS') || 15000,

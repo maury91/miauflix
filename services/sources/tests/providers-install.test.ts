@@ -6,7 +6,7 @@ import { join, resolve } from 'node:path';
 import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
 import { sources } from '@miauflix/service-contracts';
 import { Database } from 'bun:sqlite';
-import { afterEach, expect, it } from 'bun:test';
+import { afterEach, expect, it, spyOn } from 'bun:test';
 import { parse } from 'yaml';
 
 import { createSourcesService } from '../src/service';
@@ -776,3 +776,61 @@ it('discovers fixture sources for movies 550 and 120 through the E2E provider co
   }
   expect(calls.some(url => url.includes('/definitions/movies-api.yml'))).toBe(true);
 });
+
+it.each([{ invalid: [] }, { invalid: ['missing-at', `UPPER@${DEFS}`, 'bad@not-a-url'] }])(
+  'warns only about rejected preload entries (%j)',
+  ({ invalid }) => {
+    const warn = spyOn(console, 'warn').mockImplementation(() => {});
+    try {
+      const dir = mkdtempSync(join(tmpdir(), 'sources-preload-warning-'));
+      dirs.push(dir);
+      const created = createSourcesService({
+        dataDir: dir,
+        keyFile: join(dir, '.key'),
+        encryptionKey: 'test',
+        preloadProviders: [`jsonapi@${DEFS}`, ...invalid].join(' '),
+        fetch: (async (input: URL | string | Request): Promise<Response> => {
+          throw new Error(`Unexpected startup request: ${String(input)}`);
+        }) as typeof fetch,
+      });
+      stops.push(created.stop);
+      if (invalid.length)
+        expect(warn).toHaveBeenCalledWith(
+          `Sources: ignored SOURCES_PRELOAD_PROVIDERS entries: ${invalid.join(', ')}`
+        );
+      else expect(warn).not.toHaveBeenCalled();
+    } finally {
+      warn.mockRestore();
+    }
+  }
+);
+
+it.each([true, false])(
+  'keeps an admin-added provider removable after its definition becomes unsupported (enabled: %s)',
+  async enabled => {
+    const files = { jsonapi: { sha: 'v1', yaml: definition('json-api.yml') } };
+    const tree = { value: 't1' };
+    const fake = github(files, tree);
+    const { client, ready } = setup(fake.handler, DEFS);
+    await ready();
+    await wait(client);
+    const added = await client.addCardigannProvider({ id: 'jsonapi' });
+    if (enabled) await client.updateProvider({ id: added.id, enabled: true });
+    files.jsonapi = { sha: 'v2', yaml: definition('private-tracker.yml') };
+    tree.value = 't2';
+    await wait(client);
+    const rows = await client.providers();
+    expect(rows.find(row => row.id === added.id)).toMatchObject({
+      repositoryId: 'local:user',
+      enabled,
+      health: {
+        state: enabled ? 'degraded' : 'disabled',
+        lastError: expect.stringMatching(/private|login|account/i),
+      },
+    });
+    await rejectsWith(client.removeRepository({ id: 'local:user' }), 'bad_request');
+    await client.removeProvider({ id: added.id });
+    expect((await client.providers()).some(row => row.id === added.id)).toBe(false);
+    await client.removeRepository({ id: 'local:user' });
+  }
+);

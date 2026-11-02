@@ -202,6 +202,54 @@ describe('SourcesPage', () => {
     expect(screen.getByText(/searched from top to bottom/)).toBeInTheDocument();
   });
 
+  it('cycles from Back to the last control and wraps back exactly once', () => {
+    render(<SourcesPage onDismiss={vi.fn()} />);
+    const back = screen.getByRole('button', { name: 'Back to Settings' });
+    const controls = screen
+      .getAllByRole('button')
+      .filter(button => button !== back && !button.hasAttribute('disabled'));
+    expect(back).toHaveFocus();
+    fireEvent.keyDown(back, { key: 'ArrowUp' });
+    expect(controls.at(-1)).toHaveFocus();
+    fireEvent.keyDown(controls.at(-1)!, { key: 'ArrowDown' });
+    expect(back).toHaveFocus();
+    fireEvent.keyDown(back, { key: 'ArrowRight' });
+    expect(controls[0]).toHaveFocus();
+    fireEvent.keyDown(controls[0], { key: 'ArrowUp' });
+    expect(back).toHaveFocus();
+  });
+
+  it('includes provider setting selects in remote navigation', () => {
+    api.providers = [
+      provider('indexer-a', 10, {
+        settingsSchema: [
+          {
+            name: 'sort',
+            type: 'select',
+            label: 'Sort by',
+            options: { seeders: 'Seeders', date: 'Newest' },
+          },
+        ],
+      }),
+    ];
+    render(<SourcesPage onDismiss={vi.fn()} />);
+    openMenu('INDEXER-A');
+    fireEvent.click(screen.getByRole('menuitem', { name: 'Settings' }));
+    const select = screen.getByRole('combobox', { name: 'Sort by' });
+    const back = screen.getByRole('button', { name: 'Back to Settings' });
+    const controls = Array.from(
+      screen
+        .getByRole('main')
+        .querySelectorAll<HTMLElement>(
+          'button:not(:disabled), input:not(:disabled), select:not(:disabled)'
+        )
+    ).filter(control => control !== back);
+    const next = controls[controls.indexOf(select) + 1] ?? back;
+    act(() => next.focus());
+    fireEvent.keyDown(next, { key: 'ArrowUp' });
+    expect(select).toHaveFocus();
+  });
+
   it('shows what each source says about itself, or what kind of source it is', () => {
     api.providers = [
       provider('indexer-a', 10, { description: ' Movies in small sizes ' }),
@@ -382,6 +430,29 @@ describe('SourcesPage', () => {
     await screen.findByRole('list', { name: 'Available indexers' });
   };
   const lastArgs = () => api.loadDefinitions.mock.calls.at(-1)![0];
+
+  it('reaches the definition source picker with the remote', async () => {
+    api.sync = sync({
+      sources: [
+        { key: 'source-a', label: 'Source A', total: 1 },
+        { key: 'source-b', label: 'Source B', total: 1 },
+      ],
+    });
+    await browse();
+    const select = screen.getByRole('combobox', { name: 'Source' });
+    const back = screen.getByRole('button', { name: 'Back to Settings' });
+    const controls = Array.from(
+      screen
+        .getByRole('main')
+        .querySelectorAll<HTMLElement>(
+          'button:not(:disabled), input:not(:disabled), select:not(:disabled)'
+        )
+    ).filter(control => control !== back);
+    const next = controls[controls.indexOf(select) + 1] ?? back;
+    act(() => next.focus());
+    fireEvent.keyDown(next, { key: 'ArrowUp' });
+    expect(select).toHaveFocus();
+  });
 
   it('starts with public indexers that support IMDb search', async () => {
     await browse();

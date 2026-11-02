@@ -127,13 +127,12 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
     backRef.current?.focus({ preventScroll: true });
   }, []);
 
-  const focusables = () => [
-    ...Array.from(
+  const focusables = () =>
+    Array.from(
       pageRef.current?.querySelectorAll<HTMLElement>(
-        'button:not(:disabled), input:not(:disabled)'
+        'button:not(:disabled), input:not(:disabled), select:not(:disabled)'
       ) ?? []
-    ),
-  ];
+    ).filter(item => item !== backRef.current);
   const cycle = (direction: -1 | 1) => {
     const items = [backRef.current, ...focusables()].filter((item): item is HTMLElement => !!item);
     const index = items.indexOf(document.activeElement as HTMLElement);

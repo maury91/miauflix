@@ -55,6 +55,7 @@ export class ProviderAdmin {
     const instance = this.registry.instance(row);
     const schema = this.registry.settingsSchema(row);
     const settings = this.registry.settings(row);
+    const unsupported = this.registry.unsupportedReason(row);
     const cooling = !!row.cooldown_until && row.cooldown_until > this.now();
     return {
       id: row.id,
@@ -85,14 +86,14 @@ export class ProviderAdmin {
           ? 'disabled'
           : cooling
             ? 'cooldown'
-            : settings === null || row.failures > 0
+            : settings === null || unsupported || row.failures > 0
               ? 'degraded'
               : 'ok',
         cooldownUntil: cooling ? new Date(row.cooldown_until!).toISOString() : null,
         lastError:
           settings === null
             ? 'Saved settings are unreadable. Replace settings, then explicitly enable the provider.'
-            : row.last_error,
+            : (unsupported ?? row.last_error),
         lastSuccessAt: row.last_success_at ? new Date(row.last_success_at).toISOString() : null,
       },
       usage: {
@@ -105,7 +106,9 @@ export class ProviderAdmin {
   list(): ProviderView[] {
     return this.store
       .providers()
-      .filter(row => !this.registry.unsupportedReason(row))
+      .filter(
+        row => row.repository_id === LOCAL_REPOSITORY || !this.registry.unsupportedReason(row)
+      )
       .map(row => this.view(row));
   }
   async update(
