@@ -7,7 +7,7 @@ import {
 } from '@features/sources/api/sources.api';
 import type { CardigannDefinitionEntry, CardigannSyncStatus } from '@miauflix/backend';
 import { ActionRow, Button, FieldLabel, Input, Select } from '@shared/ui';
-import { type FormEvent, useCallback, useEffect, useRef, useState } from 'react';
+import { type FormEvent, useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 
 import { errorMessage } from './sources/errors';
@@ -224,7 +224,9 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
   const requestId = useRef(0);
   const hasObserver = typeof IntersectionObserver !== 'undefined';
   const args = useRef<CatalogArgs>({ ...DEFAULT_FILTERS, offset: 0, limit: PAGE_SIZE });
-  args.current = { ...filters, query, source, offset: 0, limit: PAGE_SIZE };
+  useLayoutEffect(() => {
+    args.current = { ...filters, query, source, offset: 0, limit: PAGE_SIZE };
+  }, [filters, query, source]);
 
   // The search box waits for a pause in typing before asking for results.
   useEffect(() => {
@@ -280,7 +282,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
   const manySources = (sync?.sources.length ?? 0) > 1;
   useEffect(() => {
     const target = sentinelRef.current;
-    if (!browsing || !more || loading || !target || !hasObserver) return;
+    if (!browsing || !more || loading || error || !target || !hasObserver) return;
     const observer = new IntersectionObserver(
       seen => {
         if (seen.some(item => item.isIntersecting)) void load(entries.length);
@@ -289,7 +291,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
     );
     observer.observe(target);
     return () => observer.disconnect();
-  }, [browsing, more, loading, hasObserver, entries.length, load]);
+  }, [browsing, more, loading, error, hasObserver, entries.length, load]);
 
   const install = async (target: CardigannDefinitionEntry) => {
     setError('');
@@ -452,7 +454,7 @@ export default function SourcesAddProviders({ onNotice }: SourcesAddProvidersPro
                 <Message role="status">Loading indexers…</Message>
               )}
               {more && hasObserver && <Sentinel ref={sentinelRef} aria-hidden="true" />}
-              {more && !hasObserver && (
+              {more && (!hasObserver || error) && (
                 <Row role="listitem">
                   <Button
                     size="small"

@@ -1,4 +1,4 @@
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -7,6 +7,10 @@ import { sources } from '@miauflix/service-contracts';
 import { Database } from 'bun:sqlite';
 import { afterEach, expect, it } from 'bun:test';
 
+import { Store } from '../src/db/store';
+import type { HttpClient } from '../src/http/http-client';
+import { ProviderAdmin } from '../src/providers/admin';
+import type { Registry } from '../src/providers/registry';
 import { createSourcesService } from '../src/service';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
 import { idTitle, useProviders } from './providers';
@@ -228,3 +232,99 @@ it('emits providersChanged and tests providers', async () => {
   await rejectsWith(client.testProvider({ id: 'ghost' }), 'not_found');
   expect(typeof (await client.testProvider({ id: 'maury91-eztv-api' })).success).toBe('boolean');
 });
+
+it('clears a select override to its definition default and rejects unknown choices', async () => {
+  const { client, ready, db } = setup(() => json({}));
+  useProviders(db, [
+    {
+      id: 'select',
+      priority: 1,
+      yaml: readFileSync(join(import.meta.dir, 'fixtures/cardigann/json-api.yml'), 'utf8'),
+    },
+  ]);
+  await ready();
+  expect(
+    (await client.updateProvider({ id: 'test-select', settings: { sort: 'date' } })).settings.sort
+  ).toBe('date');
+  await rejectsWith(
+    client.updateProvider({ id: 'test-select', settings: { sort: 'missing' } }),
+    'bad_request'
+  );
+  const cleared = await client.updateProvider({ id: 'test-select', settings: { sort: '' } });
+  expect(cleared.settings.sort).toBeUndefined();
+  expect(cleared.settingsSchema.find(setting => setting.name === 'sort')?.default).toBe('seeders');
+});
+
+it.each(['update', 'test'] as const)(
+  'preserves preparation errors during admin %s',
+  async method => {
+    const { db } = setup(() => json({}));
+    const error = new Error('Definition is invalid');
+    const registry = {
+      prepare: async () => {
+        throw error;
+      },
+      unsupportedReason: () => null,
+      instance: () => {
+        throw new Error('A failed preparation must not run a probe');
+      },
+    } as unknown as Registry;
+    const admin = new ProviderAdmin(
+      new Store(
+        db,
+        value => value,
+        value => value
+      ),
+      registry,
+      {} as HttpClient
+    );
+    const signal = new AbortController().signal;
+    if (method === 'update')
+      await expect(admin.update('prowlarr-nyaasi', { enabled: true }, signal)).rejects.toThrow(
+        'Definition is invalid'
+      );
+    else
+      await expect(admin.test('prowlarr-nyaasi', signal)).resolves.toEqual({
+        success: false,
+        message: 'Definition is invalid',
+      });
+  }
+);
+
+it.each(['update', 'test'] as const)(
+  'propagates cancellation during admin %s preparation',
+  async method => {
+    const { db } = setup(() => json({}));
+    const controller = new AbortController();
+    const error = new Error('Admin operation cancelled');
+    const registry = {
+      prepare: async () => {
+        controller.abort(error);
+        throw error;
+      },
+      unsupportedReason: () => null,
+      instance: () => {
+        throw new Error('A cancelled preparation must not run a probe');
+      },
+    } as unknown as Registry;
+    const admin = new ProviderAdmin(
+      new Store(
+        db,
+        value => value,
+        value => value
+      ),
+      registry,
+      {} as HttpClient
+    );
+    const request =
+      method === 'update'
+        ? admin.update('prowlarr-nyaasi', { enabled: true }, controller.signal)
+        : admin.test('prowlarr-nyaasi', controller.signal);
+    await expect(request).rejects.toBe(error);
+    expect(
+      db
+        .query<{ enabled: number }, []>("SELECT enabled FROM providers WHERE id='prowlarr-nyaasi'")
+        .get()?.enabled
+    ).toBe(0);
+  }
+);

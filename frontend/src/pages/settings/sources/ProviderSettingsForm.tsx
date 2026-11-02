@@ -1,6 +1,6 @@
 import { useUpdateProviderMutation } from '@features/sources/api/sources.api';
 import type { ProviderView } from '@miauflix/backend';
-import { ActionRow, Button, FieldLabel, Input, Switch } from '@shared/ui';
+import { ActionRow, Button, FieldLabel, Input, Select, Switch } from '@shared/ui';
 import { type FormEvent, useState } from 'react';
 import styled from 'styled-components';
 
@@ -71,6 +71,26 @@ export function ProviderSettingsForm({
                 />
                 <span>{setting.label}</span>
               </Inline>
+            ) : setting.type === 'select' && setting.options ? (
+              <>
+                <FieldLabel htmlFor={id}>{setting.label}</FieldLabel>
+                <Select
+                  id={id}
+                  value={String(values[setting.name] ?? '')}
+                  onChange={event =>
+                    setValues(current => ({ ...current, [setting.name]: event.target.value }))
+                  }
+                >
+                  <option value="">
+                    Default{setting.default === undefined ? '' : ` (${String(setting.default)})`}
+                  </option>
+                  {Object.entries(setting.options).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </Select>
+              </>
             ) : (
               <>
                 <FieldLabel htmlFor={id}>{setting.label}</FieldLabel>

@@ -35,8 +35,17 @@ export const torznabSettings: ProviderSetting[] = [
   { name: 'apiKey', type: 'password', label: 'API key' },
 ];
 
-/** Torznab capabilities document to our params per mode. */
-export function parseCaps(xml: string): ProviderCaps {
+interface TorznabCapabilities {
+  caps: ProviderCaps;
+  modes: { movie: 'movie' | 'search'; tv: 'tvsearch' | 'search' };
+}
+const DEFAULT_CAPABILITIES: TorznabCapabilities = {
+  caps: DEFAULT_CAPS,
+  modes: { movie: 'movie', tv: 'tvsearch' },
+};
+
+/** Keep wire search modes separate from the planner's supported parameters. */
+function readCapabilities(xml: string): TorznabCapabilities {
   const $ = cheerio.load(xml, { xmlMode: true });
   const params = (mode: string): Param[] | null => {
     const node = $(`searching > ${mode}`).first();
@@ -53,12 +62,22 @@ export function parseCaps(xml: string): ProviderCaps {
   const search = params('search');
   const withQ = (list: Param[] | null): Param[] =>
     list ? [...new Set<Param>(['q', ...list])] : search ? ['q'] : [];
-  const tv = withQ(params('tv-search'));
+  const movie = params('movie-search');
+  const tv = params('tv-search');
+  const tvCaps = withQ(tv);
   return {
-    movie: withQ(params('movie-search')),
-    tv,
-    anime: tv.includes('q') ? ['q'] : [],
+    caps: {
+      movie: withQ(movie),
+      tv: tvCaps,
+      anime: tvCaps.includes('q') ? ['q'] : [],
+    },
+    modes: { movie: movie ? 'movie' : 'search', tv: tv ? 'tvsearch' : 'search' },
   };
+}
+
+/** Torznab capabilities document to our params per mode. */
+export function parseCaps(xml: string): ProviderCaps {
+  return readCapabilities(xml).caps;
 }
 
 const attr = (item: cheerio.Cheerio<never>, name: string): string | undefined =>
@@ -115,7 +134,10 @@ export class TorznabProvider implements Provider {
   readonly settingsSchema = torznabSettings;
   readonly hosts: string[];
   /** Shared by every copy the registry makes, so capabilities are fetched once per day. */
-  private readonly state: { caps: ProviderCaps; until: number } = { caps: DEFAULT_CAPS, until: 0 };
+  private readonly state: { capabilities: TorznabCapabilities; until: number } = {
+    capabilities: DEFAULT_CAPABILITIES,
+    until: 0,
+  };
 
   constructor(
     readonly id: string,
@@ -128,7 +150,7 @@ export class TorznabProvider implements Provider {
   }
 
   get caps(): ProviderCaps {
-    return this.state.caps;
+    return this.state.capabilities.caps;
   }
 
   private url(params: Record<string, string | number | undefined>): string {
@@ -146,13 +168,14 @@ export class TorznabProvider implements Provider {
     try {
       const response = await ctx.http.request(this.url({ t: 'caps' }), { signal: ctx.signal });
       if (!response.ok) throw new Error(`Indexer HTTP ${response.status}`);
-      const caps = parseCaps(await response.text());
-      if (!caps.movie.length && !caps.tv.length) throw new Error('No search modes advertised');
-      this.state.caps = caps;
+      const capabilities = readCapabilities(await response.text());
+      if (!capabilities.caps.movie.length && !capabilities.caps.tv.length)
+        throw new Error('No search modes advertised');
+      this.state.capabilities = capabilities;
       this.state.until = this.now() + CAPS_TTL_MS;
     } catch {
       ctx.signal.throwIfAborted();
-      this.state.caps = DEFAULT_CAPS;
+      this.state.capabilities = DEFAULT_CAPABILITIES;
       this.state.until = this.now() + FAILED_CAPS_TTL_MS;
     }
   }
@@ -171,7 +194,7 @@ export class TorznabProvider implements Provider {
     ctx: { signal: AbortSignal; http: HttpClient }
   ): Promise<ProviderPage> {
     const base = {
-      t: query.kind === 'movie' ? 'movie' : query.kind === 'tv' ? 'tvsearch' : 'search',
+      t: query.kind === 'anime' ? 'search' : this.state.capabilities.modes[query.kind],
       q: query.q,
       tmdbid: query.tmdbid,
       tvdbid: query.tvdbid,

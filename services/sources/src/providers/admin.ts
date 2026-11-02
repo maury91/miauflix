@@ -36,6 +36,21 @@ export class ProviderAdmin {
     const change = { at: new Date(this.now()).toISOString() };
     for (const listener of this.listeners) listener(change);
   }
+  /** Preserve actionable preparation errors and propagate caller cancellation. */
+  private async prepare(row: ProviderRow, signal: AbortSignal): Promise<string | null> {
+    signal.throwIfAborted();
+    try {
+      const problem = await this.registry.prepare(row, signal);
+      signal.throwIfAborted();
+      return problem;
+    } catch (error) {
+      signal.throwIfAborted();
+      return error instanceof Error && error.message.trim()
+        ? error.message.slice(0, 300)
+        : 'Could not reach the source';
+    }
+  }
+
   view(row: ProviderRow): ProviderView {
     const instance = this.registry.instance(row);
     const schema = this.registry.settingsSchema(row);
@@ -133,16 +148,19 @@ export class ProviderAdmin {
           !/^[1-9]\d{0,8}$/.test(String(value))
         )
           throw new AdminError('bad_request', `${name} must be a positive whole number`);
-        if (setting.type === 'select' && setting.options && !(String(value) in setting.options))
+        if (
+          setting.type === 'select' &&
+          value !== '' &&
+          setting.options &&
+          !Object.hasOwn(setting.options, String(value))
+        )
           throw new AdminError('bad_request', `Invalid value for ${name}`);
         if (value === '') delete settings[name];
         else settings[name] = value;
       }
     }
     if (patch.enabled) {
-      const problem = await this.registry
-        .prepare(row, signal)
-        .catch(() => 'Could not reach the source');
+      const problem = await this.prepare(row, signal);
       const reason = problem ?? this.registry.unsupportedReason(row);
       if (reason) throw new AdminError('bad_request', `Cannot enable ${row.name}: ${reason}`);
     }
@@ -171,17 +189,13 @@ export class ProviderAdmin {
   async test(id: string, signal: AbortSignal): Promise<{ success: boolean; message: string }> {
     const row = this.store.provider(id);
     if (!row) throw new AdminError('not_found', `Unknown provider ${id}`);
-    const problem = await this.registry
-      .prepare(row, signal)
-      .catch(() => 'Could not reach the source');
+    const problem = await this.prepare(row, signal);
+    if (problem) return { success: false, message: problem };
     const instance = this.registry.instance(row);
     if (!instance)
       return {
         success: false,
-        message:
-          problem ??
-          this.registry.unsupportedReason(row) ??
-          'This provider type is not supported yet',
+        message: this.registry.unsupportedReason(row) ?? 'This provider type is not supported yet',
       };
     try {
       return await instance.test({ signal, http: this.http });

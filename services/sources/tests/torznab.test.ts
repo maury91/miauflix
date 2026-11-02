@@ -128,3 +128,45 @@ it('throws indexer errors and falls back to default capabilities', async () => {
     success: true,
   });
 });
+
+it.each(['movie', 'tv'] as const)(
+  'uses generic search for %s when the indexer has no native mode',
+  async kind => {
+    const requests: URL[] = [];
+    const http = client(url => {
+      requests.push(url);
+      if (url.searchParams.get('t') === 'caps')
+        return xml(
+          '<caps><searching><search available="yes" supportedParams="q"/></searching></caps>'
+        );
+      return url.searchParams.get('t') === 'search'
+        ? xml(fixture('prowlarr-results.xml'))
+        : xml('<error code="202" description="Unsupported search mode"/>');
+    });
+    const provider = new TorznabProvider('generic', 'Generic', 'http://indexer/api');
+    await provider.prepare(context(http));
+    expect(provider.caps[kind]).toEqual(['q']);
+    const q = kind === 'tv' ? 'Example Show S01E02' : 'Example Movie';
+    const page = await provider.search({ kind, q }, context(http));
+    expect(page.results).toHaveLength(1);
+    expect(requests.at(-1)?.searchParams.get('t')).toBe('search');
+    expect(requests.at(-1)?.searchParams.get('q')).toBe(q);
+  }
+);
+
+it('uses each advertised native mode independently', async () => {
+  const requests: URL[] = [];
+  const http = client(url => {
+    requests.push(url);
+    return url.searchParams.get('t') === 'caps'
+      ? xml(
+          '<caps><searching><search available="yes" supportedParams="q"/><movie-search available="yes" supportedParams="q,imdbid"/><tv-search available="no"/></searching></caps>'
+        )
+      : xml(fixture('prowlarr-results.xml'));
+  });
+  const provider = new TorznabProvider('mixed', 'Mixed', 'http://indexer/api');
+  await provider.prepare(context(http));
+  await provider.search({ kind: 'movie', imdbid: 'tt1234567' }, context(http));
+  await provider.search({ kind: 'tv', q: 'Show S01E02' }, context(http));
+  expect(requests.map(url => url.searchParams.get('t'))).toEqual(['caps', 'movie', 'search']);
+});

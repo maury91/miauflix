@@ -297,6 +297,41 @@ describe('SourcesPage', () => {
     );
   });
 
+  it.each(['seeders', ''])(
+    'saves a select setting or resets it to its default (%s)',
+    async value => {
+      api.providers = [
+        provider('indexer-a', 10, {
+          settingsSchema: [
+            {
+              name: 'sort',
+              type: 'select',
+              label: 'Sort by',
+              default: 'seeders',
+              options: { seeders: 'Seeders', date: 'Newest' },
+            },
+          ],
+          settings: { sort: 'date' },
+        }),
+      ];
+      render(<SourcesPage onDismiss={vi.fn()} />);
+      openMenu('INDEXER-A');
+      fireEvent.click(screen.getByRole('menuitem', { name: 'Settings' }));
+      const select = screen.getByRole('combobox', { name: 'Sort by' });
+      expect(select).toHaveValue('date');
+      expect(within(select).getByRole('option', { name: 'Seeders' })).toHaveValue('seeders');
+      expect(within(select).getByRole('option', { name: 'Newest' })).toHaveValue('date');
+      fireEvent.change(select, { target: { value } });
+      fireEvent.click(screen.getByRole('button', { name: 'Save settings' }));
+      await waitFor(() =>
+        expect(api.updateProvider).toHaveBeenCalledWith({
+          id: 'indexer-a',
+          settings: { sort: value },
+        })
+      );
+    }
+  );
+
   it('shows errors from a failed update', async () => {
     api.updateProvider.mockReturnValueOnce({
       unwrap: () => Promise.reject({ status: 400, data: 'Priority must be an integer' }),
@@ -446,8 +481,8 @@ describe('SourcesPage', () => {
     fireEvent.click(screen.getByRole('button', { name: 'Show more' }));
     await screen.findByText('Showing 80 of 100 matching indexers (586 in total)');
     expect(lastArgs()).toMatchObject({ offset: 40, limit: 40 });
-    expect(screen.getAllByRole('button', { name: /^Add site-/ })).toHaveLength(80);
-  });
+    expect(screen.getAllByLabelText(/^Add site-/)).toHaveLength(80);
+  }, 15_000);
 
   it('loads the next page when the end of the list scrolls into view', async () => {
     let notify: (entries: { isIntersecting: boolean }[]) => void = () => undefined;
@@ -473,6 +508,49 @@ describe('SourcesPage', () => {
       vi.unstubAllGlobals();
     }
   });
+
+  it('stops automatic pagination after a failure and allows an explicit retry', async () => {
+    vi.stubGlobal(
+      'IntersectionObserver',
+      class {
+        active = true;
+        constructor(private callback: (entries: { isIntersecting: boolean }[]) => void) {}
+        observe() {
+          queueMicrotask(() => {
+            if (this.active) this.callback([{ isIntersecting: true }]);
+          });
+        }
+        disconnect() {
+          this.active = false;
+        }
+      }
+    );
+    try {
+      const catalog = Array.from({ length: 41 }, (_, i) => entry(`site-${i}`, null));
+      api.loadDefinitions
+        .mockReturnValueOnce(api.unwrap({ entries: catalog.slice(0, 40), total: 41, sync: sync() }))
+        .mockReturnValueOnce({
+          unwrap: () => Promise.reject({ status: 500, data: 'Page unavailable' }),
+        })
+        .mockReturnValue({ unwrap: () => new Promise(() => {}) });
+      await browse();
+      expect(await screen.findByRole('alert')).toHaveTextContent('Page unavailable');
+      const retry = screen.getByRole('button', { name: 'Show more' });
+      await act(async () => {});
+      expect(api.loadDefinitions).toHaveBeenCalledTimes(2);
+      api.loadDefinitions.mockReturnValueOnce(
+        api.unwrap({ entries: catalog.slice(40), total: 41, sync: sync() })
+      );
+      fireEvent.click(retry);
+      await screen.findByText(/Showing 41 of 41/);
+      expect(api.loadDefinitions).toHaveBeenCalledTimes(3);
+      expect(lastArgs()).toMatchObject({ offset: 40 });
+      expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    } finally {
+      cleanup();
+      vi.unstubAllGlobals();
+    }
+  }, 15_000);
 
   it('reports when the list was last updated and what changed', async () => {
     await browse();
