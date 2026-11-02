@@ -11,6 +11,7 @@ export type AppRoute =
   | { type: 'settings' }
   | { type: 'configuration' }
   | { type: 'storage' }
+  | { type: 'sources' }
   | { type: 'qrApproval'; approvalToken: string }
   | { type: 'notFound'; pathname: string };
 
@@ -30,6 +31,7 @@ export function parseRoute(pathname: string): AppRoute {
   if (path === '/settings') return { type: 'settings' };
   if (path === '/settings/configuration') return { type: 'configuration' };
   if (path === '/settings/storage') return { type: 'storage' };
+  if (path === '/settings/sources') return { type: 'sources' };
   const qr = path.match(/^\/auth\/qr\/([^/]+)$/);
   if (qr?.[1]) {
     try {
@@ -85,6 +87,8 @@ export function routePath(route: AppRoute): string {
       return '/settings/configuration';
     case 'storage':
       return '/settings/storage';
+    case 'sources':
+      return '/settings/sources';
     case 'qrApproval':
       return `/auth/qr/${encodeURIComponent(route.approvalToken)}`;
     case 'notFound':
@@ -153,7 +157,7 @@ export function navigate(
   const previousState = window.history.state?.[HISTORY_KEY] ?? {};
   if (
     previous.type === 'settings' &&
-    (route.type === 'storage' || route.type === 'configuration')
+    (route.type === 'storage' || route.type === 'sources' || route.type === 'configuration')
   ) {
     window.history.replaceState(
       { ...window.history.state, [HISTORY_KEY]: { ...previousState, focus: route.type } },
@@ -174,13 +178,15 @@ export function navigate(
   }
 }
 
-export function getRouteFocusSnapshot(): 'configuration' | 'storage' {
+export type SettingsFocus = 'configuration' | 'storage' | 'sources';
+
+export function getRouteFocusSnapshot(): SettingsFocus {
   const focus =
     typeof window === 'undefined' ? undefined : window.history.state?.[HISTORY_KEY]?.focus;
-  return focus === 'storage' ? 'storage' : 'configuration';
+  return focus === 'storage' || focus === 'sources' ? focus : 'configuration';
 }
 
-export function useRouteFocus(): 'configuration' | 'storage' {
+export function useRouteFocus(): SettingsFocus {
   return useSyncExternalStore(subscribeRoute, getRouteFocusSnapshot, () => 'configuration');
 }
 
