@@ -356,7 +356,9 @@ export class CardigannProvider implements Provider {
       const key = r.hash ?? r.magnet ?? r.torrentUrl ?? r.detailsUrl ?? r.title;
       return seen.has(key) ? false : (seen.add(key), true);
     });
-    const resolved = await resolveHashes(unique, ctx, result => this.resolveDownload(result, ctx));
+    const resolved = await resolveHashes(unique, { ...ctx, hosts: this.hosts }, result =>
+      this.resolveDownload(result, ctx)
+    );
     return {
       results: resolved,
       hasMore: this.paged && unique.length > 0 && (query.page ?? 1) < this.maxPages,
@@ -372,6 +374,8 @@ export class CardigannProvider implements Provider {
     if (!result.detailsUrl || !selectors?.length) return;
     const response = await ctx.http.request(result.detailsUrl, {
       signal: ctx.signal,
+      blockInternal: true,
+      allowHosts: this.hosts,
       requiresFlareSolverr: this.requiresFlareSolverr,
     });
     if (!response.ok) return;

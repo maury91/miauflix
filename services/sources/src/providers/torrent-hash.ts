@@ -10,11 +10,13 @@ export const RESOLVE_LIMIT = 8;
 
 export async function fetchInfoHash(
   url: string,
-  ctx: { signal: AbortSignal; http: HttpClient }
+  ctx: { signal: AbortSignal; http: HttpClient; hosts?: string[] }
 ): Promise<string | null> {
   const response = await ctx.http.request(url, {
     signal: ctx.signal,
     maxBytes: MAX_TORRENT_BYTES,
+    blockInternal: true,
+    allowHosts: ctx.hosts ?? [],
     headers: { 'accept-encoding': 'identity' },
   });
   if (!response.ok) return null;
@@ -27,7 +29,7 @@ export async function fetchInfoHash(
  */
 export async function resolveHashes(
   results: RawResult[],
-  ctx: { signal: AbortSignal; http: HttpClient },
+  ctx: { signal: AbortSignal; http: HttpClient; hosts?: string[] },
   resolveLink?: (result: RawResult) => Promise<void>
 ): Promise<RawResult[]> {
   const known = results.filter(r => normalizeHash(r.hash ?? '') ?? magnetHash(r.magnet));

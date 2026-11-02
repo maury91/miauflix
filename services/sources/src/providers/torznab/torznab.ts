@@ -191,7 +191,10 @@ export class TorznabProvider implements Provider {
       }
     } else page = await this.fetchItems(ctx, base);
     if (page.error) throw new Error(page.error);
-    return { results: await resolveHashes(page.results, ctx), hasMore: false };
+    return {
+      results: await resolveHashes(page.results, { ...ctx, hosts: this.hosts }),
+      hasMore: false,
+    };
   }
 
   async test(ctx: { signal: AbortSignal; http: HttpClient }) {

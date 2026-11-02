@@ -1,15 +1,28 @@
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdtempSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { createClient, localTransport, management } from '@miauflix/contract';
 import { sources } from '@miauflix/service-contracts';
 import { Database } from 'bun:sqlite';
-import { expect, it } from 'bun:test';
+import { expect, it, spyOn } from 'bun:test';
 
 import { SourcesConfigService } from '../src/config/config.service';
+import { Store } from '../src/db/store';
 import { isInternalHost } from '../src/http/destination';
 import { type Fetch, HttpClient } from '../src/http/http-client';
+import { parseDefinition } from '../src/providers/cardigann/definition';
+import { DefinitionIndex } from '../src/providers/cardigann/definition-index';
+import { DefinitionStore } from '../src/providers/cardigann/definition-store';
+import { CardigannProvider } from '../src/providers/cardigann/engine';
+import {
+  DEFAULT_SOURCES,
+  LEGACY_SOURCE_KEY,
+  parseSources,
+  PROWLARR_SOURCE_KEY,
+} from '../src/providers/cardigann/sources';
+import { resolveHashes } from '../src/providers/torrent-hash';
+import { TorznabProvider } from '../src/providers/torznab/torznab';
 import { createSourcesService } from '../src/service';
 import { VpnGuard } from '../src/vpn/vpn-guard';
 import { fixtureFetch, fixtureResolver } from './http-fixture';
@@ -26,11 +39,13 @@ const manifest = [
   },
 ];
 const setupTest = async (
-  handler: (url: URL, init: RequestInit) => Response | Promise<Response>
+  handler: (url: URL, init: RequestInit) => Response | Promise<Response>,
+  now: () => number = Date.now
 ) => {
   const dir = mkdtempSync(join(tmpdir(), 'sources-review-'));
   const made = createSourcesService({
     dataDir: dir,
+    now,
     keyFile: `${dir}/.key`,
     encryptionKey: 'test',
     resolveHost: fixtureResolver,
@@ -310,3 +325,289 @@ it('does not delegate guarded DNS or redirects to FlareSolverr', async () => {
   );
   expect(calls).toBe(1);
 });
+
+it('blocks internal hash-only downloads and public redirects to internal destinations', async () => {
+  const calls: string[] = [];
+  const http = new HttpClient(
+    { timeout: () => 1000, flareSolverr: () => '' },
+    fixtureFetch(url => {
+      calls.push(url.href);
+      return new Response(null, {
+        status: 302,
+        headers: { location: 'http://169.254.169.254/latest' },
+      });
+    }),
+    Date.now,
+    fixtureResolver
+  );
+  const results = await resolveHashes(
+    [
+      { title: 'Internal', torrentUrl: 'http://miauflix-services:3000/admin' },
+      { title: 'Metadata', torrentUrl: 'http://169.254.169.254/latest' },
+      { title: 'Redirect', torrentUrl: 'https://downloads.invalid/file.torrent' },
+    ],
+    { signal: new AbortController().signal, http }
+  );
+  expect(results).toEqual([]);
+  expect(calls).toEqual(['https://downloads.invalid/file.torrent']);
+});
+
+it('allows hash-only torrent downloads from the configured LAN Torznab host only', async () => {
+  const bytes = Buffer.from('d4:infod6:lengthi5e4:name1:xee');
+  const calls: string[] = [];
+  const http = new HttpClient(
+    { timeout: () => 1000, flareSolverr: () => '' },
+    fixtureFetch(url => {
+      calls.push(url.href);
+      if (url.pathname === '/api')
+        return new Response(
+          `<rss><channel><item><title>Movie</title><link>http://jackett:9117/file.torrent</link></item><item><title>Other port</title><link>http://jackett:9999/file.torrent</link></item></channel></rss>`
+        );
+      return new Response(bytes);
+    }),
+    Date.now,
+    fixtureResolver
+  );
+  const page = await new TorznabProvider('lan', 'LAN', 'http://jackett:9117/api').search(
+    { kind: 'movie', q: 'Movie' },
+    { signal: new AbortController().signal, http }
+  );
+  expect(page.results.map(result => result.title)).toEqual(['Movie']);
+  expect(page.results[0].hash).toMatch(/^[a-f0-9]{40}$/);
+  expect(calls).toHaveLength(2);
+  expect(calls[1]).toBe('http://jackett:9117/file.torrent');
+});
+
+it('blocks internal details pages but keeps same-host FlareSolverr details working', async () => {
+  const yaml = readFileSync(join(import.meta.dir, 'fixtures/cardigann/html-details.yml'), 'utf8');
+  const definition = parseDefinition(yaml);
+  definition.settings = [{ name: 'solver', type: 'info_flaresolverr' }];
+  const calls: string[] = [];
+  const http = new HttpClient(
+    { timeout: () => 1000, flareSolverr: () => 'http://solver' },
+    fixtureFetch((url, init) => {
+      calls.push(url.href);
+      if (url.host === 'solver') {
+        const request = JSON.parse(String(init.body)) as { url: string };
+        const body =
+          new URL(request.url).pathname === '/find'
+            ? '<div class="item"><a class="title" href="http://127.0.0.1/admin">Blocked</a></div><div class="item"><a class="title" href="/details">Allowed</a></div>'
+            : '<html><a class="dl" href="magnet:?xt=urn:btih:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa">Get</a></html>';
+        return Response.json({ status: 'ok', solution: { status: 200, response: body } });
+      }
+      return new Response('challenge', { status: 403 });
+    }),
+    Date.now,
+    fixtureResolver
+  );
+  const page = await new CardigannProvider('details', 'Details', definition).search(
+    { kind: 'movie', q: 'Movie' },
+    { signal: new AbortController().signal, http }
+  );
+  expect(page.results.map(result => result.title)).toEqual(['Allowed']);
+  expect(calls).toEqual([
+    'https://details.invalid/find?q=Movie',
+    'http://solver/v1',
+    'https://details.invalid/details',
+    'http://solver/v1',
+  ]);
+});
+
+it('waits for an in-flight definition sync to settle before stop completes', async () => {
+  let release!: () => void;
+  const done = new Promise<void>(resolve => {
+    release = resolve;
+  });
+  const sync = spyOn(DefinitionIndex.prototype, 'sync').mockImplementation(async () => {
+    await done;
+    return { added: 0, updated: 0, removed: 0, failed: 0 };
+  });
+  const s = await setupTest(() => Response.json({}));
+  let stopping: Promise<void> | undefined;
+  try {
+    await s.client.syncCardigannDefinitions();
+    expect(sync).toHaveBeenCalledTimes(1);
+    let stopped = false;
+    stopping = s.stop().then(() => {
+      stopped = true;
+    });
+    await new Promise<void>(resolve => setImmediate(resolve));
+    expect(stopped).toBe(false);
+    release();
+    await stopping;
+    expect(stopped).toBe(true);
+  } finally {
+    release();
+    await stopping;
+    sync.mockRestore();
+    await s.close();
+  }
+});
+
+it.each([undefined, 'https://custom.invalid/definitions'])(
+  'prepares a manifest Cardigann entry with source %s',
+  async source => {
+    const calls: string[] = [];
+    const s = await setupTest(url => {
+      calls.push(url.href);
+      return url.host === 'repo.invalid'
+        ? Response.json([
+            {
+              id: 'manifest-indexer',
+              name: 'Manifest',
+              kind: 'cardigann',
+              cardigann: 'sample',
+              source,
+              version: '1',
+            },
+          ])
+        : new Response(idTitle('sample', 'indexer.invalid'));
+    });
+    try {
+      if (source)
+        await createClient(management, localTransport(s.service)).applyConfig({
+          values: { SOURCES_DISABLE_VPN_CHECK: 'true', CARDIGANN_DEFINITION_SOURCES: source },
+        });
+      await s.client.addRepository({ url: 'https://repo.invalid/manifest' });
+      const enabled = await s.client.updateProvider({ id: 'manifest-indexer', enabled: true });
+      expect(enabled.caps.movie).toContain('imdbid');
+      const stored = s.db
+        .query<
+          { definition: string },
+          []
+        >("SELECT definition FROM providers WHERE id='manifest-indexer'")
+        .get()!;
+      expect(JSON.parse(stored.definition).source).toBe(source ?? PROWLARR_SOURCE_KEY);
+      expect(calls[1]).toBe(
+        source
+          ? `${source}/sample.yml`
+          : 'https://raw.githubusercontent.com/Prowlarr/Indexers/master/definitions/v11/sample.yml'
+      );
+    } finally {
+      await s.close();
+    }
+  }
+);
+
+it.each([false, true])(
+  'prepares a source-less stored row (legacy cache: %s)',
+  async cachedLegacy => {
+    const calls: string[] = [];
+    const s = await setupTest(url => {
+      calls.push(url.href);
+      return new Response(idTitle('sample', 'indexer.invalid'));
+    });
+    try {
+      s.db
+        .query(
+          "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES ('old-indexer','cardigann','builtin:miauflix','Old',?,0,1)"
+        )
+        .run(JSON.stringify({ cardigann: 'sample' }));
+      if (cachedLegacy)
+        s.db
+          .query('INSERT INTO cardigann_definitions (source,id,yaml,fetched_at) VALUES (?,?,?,0)')
+          .run(LEGACY_SOURCE_KEY, 'sample', idTitle('sample', 'legacy.invalid'));
+      expect(
+        (await s.client.updateProvider({ id: 'old-indexer', enabled: true })).caps.movie
+      ).toContain('imdbid');
+      expect(calls).toEqual(
+        cachedLegacy
+          ? []
+          : [
+              'https://raw.githubusercontent.com/Prowlarr/Indexers/master/definitions/v11/sample.yml',
+            ]
+      );
+      expect(
+        s.db.query("SELECT source FROM cardigann_definitions WHERE id='sample'").get()
+      ).toEqual({ source: cachedLegacy ? LEGACY_SOURCE_KEY : PROWLARR_SOURCE_KEY });
+    } finally {
+      await s.close();
+    }
+  }
+);
+
+it('briefly caches failed definition downloads and retries after the cooldown', async () => {
+  let now = Date.now();
+  let attempts = 0;
+  const s = await setupTest(
+    () => {
+      attempts++;
+      return new Response('unavailable', { status: 503 });
+    },
+    () => now
+  );
+  try {
+    s.db
+      .query(
+        "INSERT INTO providers (id,kind,repository_id,name,definition,enabled,priority) VALUES ('missing','cardigann','builtin:miauflix','Missing',?,0,1)"
+      )
+      .run(JSON.stringify({ cardigann: 'missing', source: PROWLARR_SOURCE_KEY }));
+    expect((await s.client.testProvider({ id: 'missing' })).success).toBe(false);
+    expect((await s.client.testProvider({ id: 'missing' })).success).toBe(false);
+    expect(attempts).toBe(1);
+    now += 60_001;
+    expect((await s.client.testProvider({ id: 'missing' })).success).toBe(false);
+    expect(attempts).toBe(2);
+  } finally {
+    await s.close();
+  }
+});
+
+it('reports a newly requested definition sync as running', async () => {
+  const s = await setupTest(() => new Promise<Response>(() => {}));
+  try {
+    expect((await s.client.syncCardigannDefinitions()).syncing).toBe(true);
+  } finally {
+    await s.close();
+  }
+});
+
+it.each(['AbortError', 'TimeoutError'])(
+  'handles a definition download aborted with %s without repeated stalls',
+  async reason => {
+    const s = await setupTest(() => Response.json({}));
+    let started!: () => void;
+    const waiting = new Promise<void>(resolve => {
+      started = resolve;
+    });
+    let calls = 0;
+    const http = new HttpClient(
+      { timeout: () => 1000, flareSolverr: () => '' },
+      fixtureFetch(() => {
+        if (++calls === 1) {
+          started();
+          return new Promise<Response>(() => {});
+        }
+        return new Response(idTitle('sample', 'indexer.invalid'));
+      })
+    );
+    const definitions = new DefinitionStore(
+      new Store(
+        s.db,
+        value => value,
+        value => value
+      ),
+      http,
+      () => parseSources(DEFAULT_SOURCES).sources
+    );
+    const controller = new AbortController();
+    try {
+      const first = definitions
+        .ensure(PROWLARR_SOURCE_KEY, 'sample', controller.signal)
+        .catch(error => error);
+      await waiting;
+      controller.abort(new DOMException('Definition request stopped', reason));
+      expect(await first).toBeInstanceOf(Error);
+      const result = await definitions.ensure(
+        PROWLARR_SOURCE_KEY,
+        'sample',
+        new AbortController().signal
+      );
+      expect(result instanceof Error).toBe(reason === 'TimeoutError');
+      expect(calls).toBe(reason === 'TimeoutError' ? 1 : 2);
+    } finally {
+      controller.abort();
+      await s.close();
+    }
+  }
+);

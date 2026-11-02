@@ -118,13 +118,18 @@ export function createSourcesService(options: SourcesServiceOptions): {
   }, 3600_000);
   timer.unref();
   const syncInterval = () => Math.max(1, config.number('CARDIGANN_SYNC_INTERVAL_MINUTES') || 60);
-  const startSync = (): Promise<unknown> =>
-    index
-      .sync(stopping.signal)
-      .then(change => {
+  const startSync = async (): Promise<void> => {
+    try {
+      stopping.signal.throwIfAborted();
+      const syncing = index.sync(stopping.signal);
+      await track(async () => {
+        const change = await syncing;
         if (change.added || change.updated || change.removed) admin.changed();
-      })
-      .catch(() => undefined);
+      });
+    } catch {
+      // Sync failures are reported by the index; cancellation is expected during shutdown.
+    }
+  };
   // Checked often so the first sync starts soon after the service is configured and a changed
   // interval applies at once; a run only starts when one is due.
   const syncTimer = setInterval(() => {

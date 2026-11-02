@@ -192,8 +192,12 @@ export default function SourcesPage({ onDismiss }: SourcesPageProps) {
     setOver(null);
     setArmed(null);
     if (!source || source === targetId) return;
-    const ids = ordered.map(item => item.id).filter(id => id !== source);
-    ids.splice(ids.indexOf(targetId), 0, source);
+    const ids = ordered.map(item => item.id);
+    const from = ids.indexOf(source);
+    const to = ids.indexOf(targetId);
+    if (from < 0 || to < 0) return;
+    ids.splice(from, 1);
+    ids.splice(to, 0, source);
     reorderTo(ids, ordered.find(item => item.id === source)?.name ?? 'source');
   };
   const test = async (provider: ProviderView) => {

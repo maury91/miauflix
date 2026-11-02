@@ -5,7 +5,7 @@ import { deriveCaps } from './capabilities';
 import { parseDefinition } from './definition';
 import type { DefinitionStore, IndexEntry } from './definition-store';
 import { CardigannProvider } from './engine';
-import { type DefinitionSource, LEGACY_SOURCE_KEY } from './sources';
+import type { DefinitionSource } from './sources';
 
 /** Bump when `inspectDefinition` learns to read something new, so stored rows are redone. */
 const ANALYSIS_VERSION = '2';
@@ -174,7 +174,9 @@ export class DefinitionIndex {
     for (const row of this.store.providers()) {
       const definition = JSON.parse(row.definition) as { cardigann?: string; source?: string };
       if (definition.cardigann)
-        keys.add(`${definition.source ?? LEGACY_SOURCE_KEY}|${definition.cardigann}`);
+        keys.add(
+          `${this.definitions.sourceKey(definition.cardigann, definition.source)}|${definition.cardigann}`
+        );
     }
     return keys;
   }

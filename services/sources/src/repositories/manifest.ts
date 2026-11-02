@@ -1,5 +1,7 @@
 import { z } from 'zod';
 
+import { PROWLARR_SOURCE_KEY } from '../providers/cardigann/sources';
+
 const settingValue = z.union([z.string(), z.boolean()]);
 const entry = z
   .object({
@@ -7,7 +9,8 @@ const entry = z
     name: z.string().trim().min(1).max(100),
     version: z.string().min(1).max(50),
     kind: z.enum(['cardigann', 'torznab', 'http']),
-    cardigann: z.string().optional(), // Jackett definition id
+    cardigann: z.string().optional(), // Definition id within its source
+    source: z.string().trim().min(1).max(300).default(PROWLARR_SOURCE_KEY),
     baseUrl: z.string().url().optional(), // torznab/http
     defaults: z
       .object({

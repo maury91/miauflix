@@ -250,6 +250,20 @@ describe('SourcesPage', () => {
     expect(api.reorder).toHaveBeenCalledWith(['tv-index', 'indexer-b', 'indexer-a']);
   });
 
+  it.each([
+    [1, ['indexer-a', 'indexer-b', 'tv-index']],
+    [2, ['indexer-a', 'tv-index', 'indexer-b']],
+  ])('moves a dragged first row down to position %s', (target, expected) => {
+    render(<SourcesPage onDismiss={vi.fn()} />);
+    const items = rows();
+    const dataTransfer = { setData: vi.fn(), effectAllowed: '' };
+    fireEvent.mouseDown(within(items[0]).getByTitle('Drag to reorder'));
+    fireEvent.dragStart(items[0], { dataTransfer });
+    fireEvent.dragOver(items[target as number], { dataTransfer });
+    fireEvent.drop(items[target as number], { dataTransfer });
+    expect(api.reorder).toHaveBeenCalledWith(expected);
+  });
+
   it('toggles a provider', () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
     fireEvent.click(screen.getByRole('switch', { name: 'Disable INDEXER-A' }));

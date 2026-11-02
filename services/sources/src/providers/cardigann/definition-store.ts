@@ -5,10 +5,11 @@ import type { Store } from '../../db/store';
 import type { HttpClient } from '../../http/http-client';
 import { type CardigannDefinition, parseDefinition } from './definition';
 import { GitSource, type GitSpec, type GitUrlFor } from './git-source';
-import { type DefinitionSource, LEGACY_SOURCE_KEY } from './sources';
+import { type DefinitionSource, LEGACY_SOURCE_KEY, PROWLARR_SOURCE_KEY } from './sources';
 
 const ID = /^[a-z0-9][a-z0-9._-]{0,63}$/;
 const MAX_BYTES = 512 * 1024;
+const DOWNLOAD_RETRY_MS = 60_000;
 /** Listings of hundreds of definitions are larger than any single definition. */
 const MAX_INDEX_BYTES = 4 * 1024 * 1024;
 
@@ -30,6 +31,7 @@ export interface DefinitionListing {
 export class DefinitionStore {
   private parsed = new Map<string, { yaml: string; definition: CardigannDefinition | Error }>();
   private gits = new Map<string, GitSource>();
+  private failures = new Map<string, { error: Error; until: number }>();
   /** Sources whose working tree holds the current definitions, so reads can skip the network. */
   private gitSpecs = new Map<string, GitSpec>();
 
@@ -46,6 +48,10 @@ export class DefinitionStore {
   }
   source(key: string): DefinitionSource | undefined {
     return this.configured().find(source => source.key === key);
+  }
+  /** Source-less rows retain their legacy cache; uncached entries use the default source. */
+  sourceKey(id: string, source?: string): string {
+    return source ?? (this.row(LEGACY_SOURCE_KEY, id) ? LEGACY_SOURCE_KEY : PROWLARR_SOURCE_KEY);
   }
   private gitFor(source: DefinitionSource): { git: GitSource; spec: GitSpec } | null {
     if (!this.options.gitDir || source.kind !== 'github') return null;
@@ -167,6 +173,7 @@ export class DefinitionStore {
         'INSERT INTO cardigann_definitions (source,id,yaml,sha,fetched_at) VALUES (?,?,?,?,?) ON CONFLICT(source,id) DO UPDATE SET yaml=excluded.yaml,sha=excluded.sha,fetched_at=excluded.fetched_at'
       )
       .run(source.key, id, yaml, sha, this.now());
+    this.failures.delete(`${source.key}|${id}`);
     return yaml;
   }
 
@@ -176,6 +183,7 @@ export class DefinitionStore {
       .query('DELETE FROM cardigann_definitions WHERE source=? AND id=?')
       .run(source, id);
     this.parsed.delete(`${source}|${id}`);
+    this.failures.delete(`${source}|${id}`);
   }
 
   /** Makes sure a definition is cached, fetching it when absent. */
@@ -184,14 +192,22 @@ export class DefinitionStore {
     id: string,
     signal: AbortSignal
   ): Promise<CardigannDefinition | Error> {
+    signal.throwIfAborted();
     if (!this.row(source, id)) {
       const spec = this.source(source);
       if (!spec) return new Error('This definition source is no longer configured');
+      const key = `${source}|${id}`;
+      const failed = this.failures.get(key);
+      if (failed && failed.until > this.now()) return failed.error;
       try {
         await this.download(spec, id, signal);
       } catch (error) {
+        const failure = error instanceof Error ? error : new Error('Could not fetch definition');
+        // A timed-out source should back off too; caller cancellation must not poison retries.
+        if (!signal.aborted || signal.reason?.name === 'TimeoutError')
+          this.failures.set(key, { error: failure, until: this.now() + DOWNLOAD_RETRY_MS });
         signal.throwIfAborted();
-        return error instanceof Error ? error : new Error('Could not fetch definition');
+        return failure;
       }
     }
     return this.cached(source, id) ?? new Error('Definition missing');

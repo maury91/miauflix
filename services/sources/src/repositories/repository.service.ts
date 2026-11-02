@@ -12,7 +12,7 @@ export const BUILTIN_REPOSITORY = 'builtin:miauflix';
 const MAX_MANIFEST_BYTES = 256 * 1024;
 const REFRESH_AFTER_MS = 24 * 3600_000;
 const definitionOf = (entry: ManifestEntry): ProviderDefinition => ({
-  ...(entry.cardigann ? { cardigann: entry.cardigann } : {}),
+  ...(entry.cardigann ? { cardigann: entry.cardigann, source: entry.source } : {}),
   ...(entry.baseUrl ? { baseUrl: entry.baseUrl } : {}),
   defaults: {
     dailyBudget: entry.defaults.dailyBudget,

@@ -5,7 +5,6 @@ import type { ProviderRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';
 import type { DefinitionStore } from './cardigann/definition-store';
 import { CardigannProvider, settingsOf } from './cardigann/engine';
-import { LEGACY_SOURCE_KEY } from './cardigann/sources';
 import { TorznabProvider, torznabSettings } from './torznab/torznab';
 import type { Provider } from './types';
 
@@ -44,7 +43,10 @@ export class Registry {
     if (row.kind === 'torznab') schema.push(...torznabSettings);
     if (row.kind === 'cardigann') {
       const cached = definition.cardigann
-        ? this.definitions.cached(definition.source ?? LEGACY_SOURCE_KEY, definition.cardigann)
+        ? this.definitions.cached(
+            this.definitions.sourceKey(definition.cardigann, definition.source),
+            definition.cardigann
+          )
         : null;
       if (cached && !(cached instanceof Error)) schema.push(...settingsOf(cached));
     }
@@ -68,7 +70,10 @@ export class Registry {
     if (row.kind !== 'cardigann') return null;
     const definition = this.definition(row);
     const cached = definition.cardigann
-      ? this.definitions.cached(definition.source ?? LEGACY_SOURCE_KEY, definition.cardigann)
+      ? this.definitions.cached(
+          this.definitions.sourceKey(definition.cardigann, definition.source),
+          definition.cardigann
+        )
       : null;
     return cached instanceof Error ? cached.message : null;
   }
@@ -78,10 +83,13 @@ export class Registry {
     const hit = this.built.get(row.id);
     if (row.kind === 'cardigann') {
       const cached = definition.cardigann
-        ? this.definitions.cached(definition.source ?? LEGACY_SOURCE_KEY, definition.cardigann)
+        ? this.definitions.cached(
+            this.definitions.sourceKey(definition.cardigann, definition.source),
+            definition.cardigann
+          )
         : null;
       if (!cached || cached instanceof Error) return null;
-      const stamp = `${key}:${this.definitions.row(definition.source ?? LEGACY_SOURCE_KEY, definition.cardigann!)?.fetched_at}`;
+      const stamp = `${key}:${this.definitions.row(this.definitions.sourceKey(definition.cardigann!, definition.source), definition.cardigann!)?.fetched_at}`;
       if (hit?.key === stamp) return hit.provider;
       const provider = new CardigannProvider(row.id, row.name, cached, settings);
       this.built.set(row.id, { key: stamp, provider });
@@ -131,7 +139,7 @@ export class Registry {
     const definition = this.definition(row);
     if (row.kind === 'cardigann' && definition.cardigann) {
       const result = await this.definitions.ensure(
-        definition.source ?? LEGACY_SOURCE_KEY,
+        this.definitions.sourceKey(definition.cardigann, definition.source),
         definition.cardigann,
         signal
       );

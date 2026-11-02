@@ -8,7 +8,6 @@ import type {
 import type { ProviderRow, Store } from '../db/store';
 import type { HttpClient } from '../http/http-client';
 import type { DefinitionIndex, IndexRow } from './cardigann/definition-index';
-import { LEGACY_SOURCE_KEY } from './cardigann/sources';
 import { MASK, type Registry } from './registry';
 
 export class AdminError extends Error {
@@ -203,7 +202,9 @@ export class ProviderAdmin {
     for (const row of this.store.providers()) {
       const definition = this.registry.definition(row);
       if (definition.cardigann)
-        keys.add(`${definition.source ?? LEGACY_SOURCE_KEY}|${definition.cardigann}`);
+        keys.add(
+          `${this.registry.definitions.sourceKey(definition.cardigann, definition.source)}|${definition.cardigann}`
+        );
     }
     return keys;
   }
