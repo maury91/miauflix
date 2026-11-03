@@ -34,8 +34,11 @@ For a source checkout, a root `.env` can provide bootstrap values. For Docker, `
 The media catalog (TMDB today) runs as its own Bun service. Configure its published settings through Miauflix's UI or CLI and retain the application and service data volumes and encryption keys. The backend needs the service address; the default Compose file supplies it automatically:
 
 ```bash
-# URL of the media catalog service (internal network). Default: http://localhost:3001
-CATALOG_SERVICE_URL=http://localhost:3001
+# Default Docker Compose deployment (internal network)
+CATALOG_SERVICE_URL=http://miauflix-services:3001
+
+# Host-run development only
+# CATALOG_SERVICE_URL=http://localhost:3001
 ```
 
 TMDB and Trakt settings appear in the setup and administrator configuration UI through the connected services' schemas. Use that UI for later changes; bootstrap environment values may already have been superseded by saved settings.

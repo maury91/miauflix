@@ -479,7 +479,7 @@ miauflix/
 
 - **Don't rebuild existing infrastructure** - Verify and extend its existing owner
 - **Don't trust todo status blindly** - Verify against actual implementation
-- **Don't create authentication from scratch** - Backend JWT system is complete
+- **Reuse the existing authentication flow** - Browsers use session-scoped HttpOnly cookies, TV clients use token transport, and streaming uses separate expiring grants. Preserve these distinctions and reuse the [backend authentication transport](backend/src/utils/auth-transport.util.ts) and [TV client transport](frontend/src/shared/api/tv-auth.ts) utilities
 - **Don't implement source aggregation** - the sources service and its indexer definitions are fully functional
 - **Don't assume WebTorrent needs setup** - DownloadService is complete and operational
 - **Don't install dependencies in workspace directories** - Will break npm workspaces
