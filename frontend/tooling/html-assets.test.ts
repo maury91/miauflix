@@ -5,7 +5,7 @@ import { extractHtmlAssets } from './html-assets';
 describe('extractHtmlAssets', () => {
   it.each(['</script>', '</script >', '</SCRIPT>', '</script foo="bar">'])(
     'extracts assets after browser-accepted closing tag %s',
-    closing => {
+    (closing: string) => {
       expect(extractHtmlAssets(`<script src='/app.js'>${closing}<link href='/app.css'>`)).toEqual({
         jsFiles: ['/app.js'],
         cssFiles: ['/app.css'],

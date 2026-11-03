@@ -6,7 +6,8 @@ export function extractHtmlAssets(html: string): { jsFiles: string[]; cssFiles: 
   const cssFiles: string[] = [];
   const visit = (node: DefaultTreeAdapterMap['node']): void => {
     if ('tagName' in node) {
-      const attribute = (name: string) => node.attrs.find(attr => attr.name === name)?.value;
+      const attribute = (name: string) =>
+        node.attrs.find((attr: (typeof node.attrs)[number]) => attr.name === name)?.value;
       const src = attribute('src');
       const href = attribute('href');
       if (node.tagName === 'script' && src) jsFiles.push(src);
