@@ -106,12 +106,14 @@ The `Caddyfile` serves HTTP/1.1 and HTTP/2 only. HTTP/3 runs over UDP, and for a
 
 ### Published images
 
-| Image                                    | Contents                                              |
-| ---------------------------------------- | ----------------------------------------------------- |
-| `ghcr.io/maury91/miauflix`               | Main backend, also serves the web frontend            |
-| `ghcr.io/maury91/miauflix-services`      | Bunqueue, media catalog and list service in one image |
-| `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                      |
-| `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                       |
+| Image                                    | Contents                                                       |
+| ---------------------------------------- | -------------------------------------------------------------- |
+| `ghcr.io/maury91/miauflix`               | Main backend, also serves the web frontend                     |
+| `ghcr.io/maury91/miauflix-services`      | Bunqueue, media catalog, lists, and source search in one image |
+| `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                               |
+| `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                                |
+| `ghcr.io/maury91/miauflix-sources`       | Source-search service on its own                               |
+| `ghcr.io/maury91/miauflix-tv-pairing`    | TV server-discovery pairing service                            |
 
 All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for [releases](https://github.com/maury91/miauflix/releases), `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
 
@@ -175,39 +177,39 @@ npm run start:backend:docker:prod
 
 `npm run start:backend:docker:prod` (and `stop:` / `restart:`) use the `COMPOSE_FILE` from `.env` when it's set. Otherwise they pick `docker-compose.yml`, `docker-compose.build.yml`, `docker-compose.flaresolverr.yml` and `docker-compose.tracing.yml`, plus `docker-compose.vpn.yml` once `NORDVPN_PRIVATE_KEY` is in `.env`. With your own `COMPOSE_FILE`, run `docker compose up -d --build` after a `git pull` to rebuild.
 
-The build file also mounts `.env` into the `miauflix` container, so settings from the configuration wizard (`npm run config-only:docker`) apply. It runs Miauflix as `USER_ID` / `GROUP_ID`, which the scripts set to your user so the container can read a `.env` only you can read; set them in `.env` when you run `docker compose` directly. You can also skip the wizard and set Miauflix up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
+The build file also mounts `.env` into the `miauflix` container for bootstrap environment values. The configuration wizard (`npm run config-only:docker`) saves application settings in the persistent data directory. It runs Miauflix as `USER_ID` / `GROUP_ID`, which the scripts set to your user so the container can read a `.env` only you can read; set them in `.env` when you run `docker compose` directly. You can also skip the wizard and set Miauflix up from the browser like with the prebuilt images. Watchtower stays off: there's no published image to update from.
 
-### Moving from the old source-built stack
+### Importing an existing data directory
 
-The `docker-compose.yml` that built from source before (and `docker-compose.novpn.yml` / `docker-compose.prod.yml`) ran the catalog, list service and Bunqueue as separate containers, put an nginx container with certbot in front, and kept data in `./data`. The stack now keeps data in Docker volumes, uses one `miauflix-services` container, and replaces nginx with [Caddy](#https-with-a-domain). Copy the data over once, with everything stopped (`-f docker-compose.yml` leaves out the VPN, which isn't needed for this):
+If application data is stored in `./data`, copy it into the deployment's persistent volumes with the containers stopped. The commands below expect the backend database/settings in `./data`, List Service data in `./data/list-service`, and catalog data in either `./data/media-catalog` or `./data/catalog.db*`. Confirm these paths and keep a backup before importing. The import runs without the VPN overlay:
 
 ```bash
 docker compose down --remove-orphans
 # Backend database and settings
-docker compose -f docker-compose.yml run --rm --no-deps --entrypoint sh -v ./data:/old:ro miauflix \
-  -c 'cp -a /old/. /usr/src/app/data/'
-# List service (Trakt) and media catalog. The VPN variant kept the catalog in ./data itself.
-docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint sh -v ./data:/old:ro miauflix-services \
+docker compose -f docker-compose.yml run --rm --no-deps --entrypoint sh -v ./data:/source-data:ro miauflix \
+  -c 'cp -a /source-data/. /usr/src/app/data/'
+# List service (Trakt) and catalog data
+docker compose -f docker-compose.yml run --rm --no-deps --user root --entrypoint sh -v ./data:/source-data:ro miauflix-services \
   -c 'set -e; mkdir -p /app/data/list-service /app/data/catalog
-      cp -a /old/list-service/. /app/data/list-service/
-      if [ -d /old/media-catalog ]; then cp -a /old/media-catalog/. /app/data/catalog/; else cp -a /old/catalog.db* /app/data/catalog/; fi
+      cp -a /source-data/list-service/. /app/data/list-service/
+      if [ -d /source-data/media-catalog ]; then cp -a /source-data/media-catalog/. /app/data/catalog/; else cp -a /source-data/catalog.db* /app/data/catalog/; fi
       chown -R bunqueue:bunqueue /app/data'
 ```
 
-Keep `LIST_SERVICE_ENCRYPTION_KEY` in `.env` if you had set it: the list service needs it to read its data. The backend now listens on `localhost:3000` instead of `5000`. Leave `./data` in place until you've checked everything works.
+Keep the same `LIST_SERVICE_ENCRYPTION_KEY` when that variable supplies the list service's active encryption key. The backend listens on `localhost:3000`. Retain the source directory and backup until the imported data is verified.
 
 ### Secrets set in `.env`
 
 Miauflix generates `JWT_SECRET`, `STREAM_TOKEN_SECRET`, `STREAM_KEY_SALT` and `SOURCE_SECURITY_KEY` on first start and saves them in its `config.json`. When one is set as an environment variable instead, Miauflix uses it and deliberately doesn't save it, so it's only known for as long as the variable is passed in.
 
-The compose files don't pass these variables, except `docker-compose.build.yml`, which mounts `.env`. If an older setup passed them (the old `docker-compose.https.yml` did, so did the source-built stack through `.env`), check which ones are in `config.json`:
+The base Compose file does not pass these variables; `docker-compose.build.yml` mounts `.env`. When deployment environment variables supply active keys, preserve their exact values. To inspect which generated-key names are persisted without printing their values:
 
 ```bash
 docker compose run --rm --no-deps --entrypoint node miauflix \
   -e 'console.log(Object.keys(require("/usr/src/app/data/config.json")))'
 ```
 
-Keep passing every value the old setup set in `.env`, with the same value, even when `config.json` has the same key: the saved one may be an older generated value. A value missing from both is generated anew: data encrypted with the old `SOURCE_SECURITY_KEY` can no longer be read, and every user is signed out. Keep the values in `.env` and add a file such as `docker-compose.secrets.yml` at the end of `COMPOSE_FILE`:
+Environment-supplied generated secrets take precedence over saved values. Continue supplying the same active values when changing Compose files or storage mounts. A missing value is generated automatically; a different `SOURCE_SECURITY_KEY` cannot decrypt existing media and records, and changing authentication keys invalidates affected sessions. Keep the values in `.env` and add a file such as `docker-compose.secrets.yml` at the end of `COMPOSE_FILE`:
 
 ```yaml
 services:
@@ -224,7 +226,7 @@ services:
 ### Main Services
 
 - **miauflix**: Node.js API server and static-asset frontend host
-- **miauflix-services**: Bunqueue, media catalog and list service in one container
+- **miauflix-services**: Bunqueue, media catalog, list service, and source service in one container
 - **autoheal**: Restarts the backend when its healthcheck fails (see [Health checks and automatic restarts](#health-checks-and-automatic-restarts))
 - **watchtower**: Updates the Miauflix containers when a new image is published (not with `docker-compose.build.yml`)
 - **vpn** (`docker-compose.vpn.yml`): [gluetun](https://github.com/qdm12/gluetun) connected to NordVPN; the other services share its network
@@ -291,7 +293,7 @@ Both are files you add to the stack: see [Using a VPN](#using-a-vpn) and [HTTPS 
 
 Docker deployments use the same environment variables as other installation methods.
 
-**Recommended Setup**: Use the interactive configuration wizard to set up all required variables:
+**Recommended setup:** use the browser setup and administrator Configuration screen. From a source checkout, the CLI wizard is also available:
 
 ```bash
 npm run config-only:docker
@@ -300,17 +302,18 @@ npm run config-only:docker
 This will guide you through configuring:
 
 - **Required**: TMDB API access token
-- **Optional**: Trakt.tv integration, NordVPN settings
+- **Optional application integration**: Trakt.tv and movie subtitle search
+- **Deployment settings**: VPN, HTTPS, and container image choices remain Compose settings
 - **Auto-configured**: JWT secrets, server settings
 
-For a complete reference of all available environment variables, see the [Environment Variables Guide](environment-variables.md).
+For common bootstrap and deployment variables, see the [Environment Variables Guide](environment-variables.md). The configuration screen shows the current settings published by connected services.
 
 ## Volumes and Data Persistence
 
 ### Important Volumes
 
 - **`miauflix_data`**: Backend database and settings
-- **`miauflix_services_data`**: Media catalog, list service (Trakt) and Bunqueue data
+- **`miauflix_services_data`**: Media catalog, list service (Trakt), source search, and Bunqueue data
 - **`./downloads`** (or `DOWNLOADS_HOST_PATH`): Downloaded content
 - **`caddy_data`** (`docker-compose.https.yml`): Certificates
 
@@ -328,7 +331,7 @@ docker compose run --rm --no-deps --user root --entrypoint tar -v "$PWD":/backup
 docker compose start miauflix-services miauflix
 ```
 
-Keep `.env` with the backups: it holds your secrets and `COMPOSE_FILE`. This leaves out `./downloads` (copy it like any folder if you want to keep downloaded content; Miauflix can download it again) and `caddy_data` (Caddy requests new certificates when it starts without them).
+Keep `.env` with the backups for deployment settings and any explicitly supplied secrets. The data volumes contain saved application configuration and generated encryption keys; retain them together. This leaves out `./downloads` (copy it like any folder if you want to keep downloaded content; Miauflix can download it again) and `caddy_data` (Caddy requests new certificates when it starts without them).
 
 ## Troubleshooting
 
@@ -423,12 +426,9 @@ docker buildx build -t miauflix .
 docker compose build
 ```
 
-**Expected Performance:**
+**Build behavior:**
 
-- First build: Same as before (no cache)
-- Subsequent builds (no changes): **50-70% faster**
-- Subsequent builds (dependency changes only): **30-50% faster**
-- Subsequent builds (source changes only): **60-80% faster** (with Turborepo cache)
+A first build populates caches. Subsequent builds reuse dependency and build outputs where their inputs match. Build time depends on the changed files, cache availability, hardware, and network; cache reuse does not guarantee a fixed percentage improvement.
 
 Cache mounts persist on the same machine. For CI/CD, use GitHub Actions cache (already configured in `.github/workflows/ci.yml`).
 

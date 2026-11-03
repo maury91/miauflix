@@ -1,317 +1,100 @@
-# FlareSolverr Configuration Guide
+# FlareSolverr setup
 
-FlareSolverr is a proxy server that bypasses Cloudflare protection, allowing Miauflix to access content sources that are protected by Cloudflare's anti-bot measures.
+FlareSolverr is an optional helper for source websites that present browser challenges. Miauflix's source-search service can ask it to fetch a protected page. It is not needed for every provider and does not guarantee access to every protected website.
 
-## What is FlareSolverr?
+## Where it fits
 
-FlareSolverr is a lightweight proxy server that uses a headless browser (Puppeteer) to solve Cloudflare challenges. Many content sources use Cloudflare to protect their websites from automated access, which can block normal HTTP requests. FlareSolverr automatically handles these challenges and returns the resolved content.
+Source website access belongs to the standalone Sources service. Its HTTP client uses FlareSolverr when a definition requires it, or when a response is a `403` or `503` containing a recognized Cloudflare challenge marker. A generic `403` alone does not trigger a retry.
 
-### Why is it needed?
+The Sources configuration field `FLARESOLVERR_URL` controls this behavior. An empty URL disables it, and providers that require it are skipped until it is configured.
 
-Some content sources protected by Cloudflare will return `403 Forbidden` responses to direct HTTP requests. FlareSolverr:
+## Docker setup
 
-- Automatically solves Cloudflare JavaScript challenges
-- Handles browser fingerprinting and bot detection
-- Returns valid cookies and user agents that can be reused
-- Enables seamless access to protected content sources
+Add [docker-compose.flaresolverr.yml](../../docker-compose.flaresolverr.yml) to the files listed in your deployment's `.env`:
 
-## How It Works in Miauflix
-
-Miauflix integrates FlareSolverr transparently through the `RequestService`. The integration is automatic and requires no code changes when enabled.
-
-### Automatic 403 Retry
-
-When `RequestService` makes a request and receives a `403 Forbidden` response:
-
-1. If FlareSolverr is enabled, the request is automatically retried through FlareSolverr
-2. FlareSolverr solves the Cloudflare challenge and returns the content
-3. Cookies and user agent from the FlareSolverr solution are stored for future requests
-4. Subsequent requests to the same domain use the stored credentials, avoiding FlareSolverr overhead
-
-### Cookie and User Agent Management
-
-FlareSolverr solutions include:
-
-- **Cookies**: Cloudflare challenge cookies that prove the request is legitimate
-- **User Agent**: The browser user agent used by FlareSolverr
-
-These are automatically stored per-domain in Miauflix's `CookieJar` and `userAgentByDomain` maps. This means:
-
-- First request to a protected domain → Goes through FlareSolverr
-- Subsequent requests → Use stored cookies/user agent directly (faster)
-- Cookies are reused until they expire or become invalid
-
-### Request Flow
-
-```mermaid
-flowchart TD
-    Start[RequestService.request] --> NormalRequest[Make Normal HTTP Request]
-    NormalRequest --> CheckStatus{Response Status?}
-    CheckStatus -->|200 OK| Success[Return Response]
-    CheckStatus -->|403 Forbidden| CheckFlareSolverr{FlareSolverr Enabled?}
-    CheckFlareSolverr -->|No| Return403[Return 403 Error]
-    CheckFlareSolverr -->|Yes| FlareSolverrRequest[Request via FlareSolverr]
-    FlareSolverrRequest --> FlareSolverrAPI[FlareSolverr API /v1]
-    FlareSolverrAPI --> SolveChallenge[Solve Cloudflare Challenge]
-    SolveChallenge --> GetSolution[Get Solution with Cookies/User Agent]
-    GetSolution --> StoreCredentials[Store Cookies & User Agent]
-    StoreCredentials --> ReturnFlareResponse[Return FlareSolverr Response]
-    ReturnFlareResponse --> Success
-
-    Start --> CheckStored{Stored Cookies Available?}
-    CheckStored -->|Yes| UseStored[Use Stored Cookies/User Agent]
-    UseStored --> NormalRequest
-    CheckStored -->|No| GetRandomUA[Get Random User Agent]
-    GetRandomUA --> NormalRequest
+```bash
+COMPOSE_FILE=docker-compose.yml:docker-compose.flaresolverr.yml
 ```
 
-## Configuration
-
-### Environment Variables
-
-FlareSolverr is configured through two environment variables:
-
-#### `ENABLE_FLARESOLVERR`
-
-- **Type**: Boolean (`true` or `false`)
-- **Default**: `false`
-- **Description**: Enable or disable FlareSolverr integration
-- **Example**: `ENABLE_FLARESOLVERR=true`
-
-#### `FLARESOLVERR_URL`
-
-- **Type**: String (URL)
-- **Default**: `http://localhost:8191`
-- **Description**: Base URL of the FlareSolverr instance
-- **Example**: `FLARESOLVERR_URL=http://localhost:8191`
-- **Note**: In Docker, use `http://flaresolverr:8191` to reference the service
-
-### Docker Setup
-
-Add [`docker-compose.flaresolverr.yml`](../../docker-compose.flaresolverr.yml) to `COMPOSE_FILE` in `.env` (see [Combining compose files](docker-setup.md#combining-compose-files)), e.g.:
+Keep any other overlays you use, such as VPN or HTTPS, in that list. For example:
 
 ```bash
 COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.flaresolverr.yml
 ```
 
-In a clone of the repository, add `docker-compose.build.yml` to the list as well, or `npm run start:backend:docker:prod` runs the prebuilt images instead of building the checkout (and without the `.env` mount the configuration wizard writes to).
-
-It starts the `flaresolverr` service, which `docker-compose.yml` defines but leaves off, and sets `ENABLE_FLARESOLVERR=true` on `miauflix`. Its settings live in the `flaresolverr_config` volume.
-
-- **Without the VPN**, Miauflix reaches it at `http://flaresolverr:8191`.
-- **With `docker-compose.vpn.yml`**, FlareSolverr shares the VPN container's network like Miauflix, so its requests also go through the VPN, and Miauflix reaches it at `http://127.0.0.1:8191`.
-
-The source-build scripts (`npm run start:backend:docker:prod`) include it unless you set your own `COMPOSE_FILE`.
-
-### Manual Setup
-
-If you're not using Docker, you can run FlareSolverr manually:
-
-#### 1. Install FlareSolverr
+Start or update the stack:
 
 ```bash
-# Using Docker (recommended)
+docker compose up -d
+```
+
+The overlay starts the `flaresolverr` container defined in the base Compose file. Configure the Sources group's `FLARESOLVERR_URL` from the administrator's Configuration screen, using the address that the source service can reach:
+
+| Deployment                                          | Address                    |
+| --------------------------------------------------- | -------------------------- |
+| Base Docker network                                 | `http://flaresolverr:8191` |
+| Shared VPN network                                  | `http://127.0.0.1:8191`    |
+| Both services running directly on the same computer | `http://localhost:8191`    |
+
+The default Compose environment also supplies a bootstrap URL. Saved settings determine the effective value shown in the configuration screen. `FLARESOLVERR_URL` is the Sources service's enable/disable control.
+
+When building from a checkout, include `docker-compose.build.yml` as well. See [Combining Compose files](docker-setup.md#combining-compose-files).
+
+## Running the helper separately
+
+You can run the helper outside the Miauflix Compose stack. For example, to expose it only on this computer:
+
+```bash
 docker run -d \
   --name flaresolverr \
-  -p 8191:8191 \
+  -p 127.0.0.1:8191:8191 \
   -e LOG_LEVEL=info \
   -e LOG_HTML=false \
   -e CAPTCHA_SOLVER=none \
   ghcr.io/flaresolverr/flaresolverr:latest
 ```
 
-#### 2. Configure Miauflix
+Then set the Sources configuration URL to an address reachable from the Sources service. `localhost` inside a container means that container, not the host or another container.
 
-Add to your `.env` file:
+If source requests must travel through a VPN, the helper needs the same routing protection. The supplied VPN overlay places the helper in the shared VPN network.
 
-```bash
-ENABLE_FLARESOLVERR=true
-FLARESOLVERR_URL=http://localhost:8191
-```
+## How requests are handled
 
-#### 3. Verify Setup
+1. The source service performs its normal VPN, timeout, and response-size checks.
+2. A definition requirement or recognized challenge can trigger a request to FlareSolverr's `/v1` endpoint.
+3. The client uses the returned page content, status, and headers as the source response.
+4. A failed challenge, oversized response, or timeout remains an error; it is not treated as a successful source search.
 
-Check that FlareSolverr is running:
-
-```bash
-curl http://localhost:8191/v1
-```
-
-You should receive a response indicating the FlareSolverr API is available.
-
-## Architecture
-
-### Component Interaction
-
-```mermaid
-graph LR
-    RequestService[RequestService] -->|HTTP Request| TargetSite[Protected Website]
-    TargetSite -->|403 Forbidden| RequestService
-    RequestService -->|POST /v1| FlareSolverr[FlareSolverr Service]
-    FlareSolverr -->|Headless Browser| Cloudflare[Cloudflare Challenge]
-    Cloudflare -->|Solved| FlareSolverr
-    FlareSolverr -->|Solution + Cookies| RequestService
-    RequestService -->|Store| CookieJar[CookieJar]
-    RequestService -->|Store| UserAgentMap[User Agent Map]
-    CookieJar -->|Reuse| RequestService
-    UserAgentMap -->|Reuse| RequestService
-```
-
-### Integration Points
-
-1. **RequestService** (`backend/src/services/request/request.service.ts`)
-   - Detects 403 responses
-   - Automatically retries through FlareSolverr
-   - Stores cookies and user agents from solutions
-
-2. **FlareSolverr Types** (`backend/src/types/flaresolverr.types.ts`)
-   - TypeScript definitions for FlareSolverr API
-   - Request/response interfaces
-
-3. **CookieJar** (internal to RequestService)
-   - Per-domain cookie storage
-   - Automatic cookie header generation
-
-4. **User Agent Management** (internal to RequestService)
-   - Per-domain user agent storage
-   - Random user agent fallback
+The current client does not extract solver cookies into a persistent per-domain cookie jar. Avoid assuming every subsequent request will bypass the helper or meet a particular latency target.
 
 ## Troubleshooting
 
-### Common Issues
+### The helper cannot be reached
 
-#### FlareSolverr Not Responding
-
-**Symptoms**: Requests fail with connection errors or timeouts
-
-**Solutions**:
-
-1. **Check FlareSolverr is running**:
-
-   ```bash
-   # Docker
-   docker compose ps flaresolverr
-
-   # Manual
-   curl http://localhost:8191/v1
-   ```
-
-2. **Verify URL configuration**:
-   - Check `FLARESOLVERR_URL` in `.env`
-   - In Docker, ensure services can communicate (same network)
-
-3. **Check FlareSolverr logs**:
-   ```bash
-   docker compose logs flaresolverr
-   ```
-
-#### Still Getting 403 Errors
-
-**Symptoms**: Requests still return 403 even with FlareSolverr enabled
-
-**Possible Causes**:
-
-1. **FlareSolverr not enabled**: Check `ENABLE_FLARESOLVERR=true` in `.env`
-2. **Invalid FlareSolverr URL**: Verify `FLARESOLVERR_URL` is correct
-3. **FlareSolverr service down**: Check container status
-4. **Cookies expired**: Stored cookies may have expired; FlareSolverr will retry automatically
-
-**Solutions**:
-
-- Verify environment variables are set correctly
-- Check FlareSolverr logs for errors
-- Restart FlareSolverr service: `docker compose restart flaresolverr`
-
-#### Slow Request Performance
-
-**Symptoms**: Requests take a long time when going through FlareSolverr
-
-**Explanation**: FlareSolverr uses a headless browser, which is slower than direct HTTP requests. However, cookies are cached, so subsequent requests to the same domain should be faster.
-
-**Optimization**:
-
-- Cookies are automatically reused, reducing FlareSolverr calls
-- Only 403 responses trigger FlareSolverr; successful requests bypass it
-- Consider increasing FlareSolverr timeout if needed (see FlareSolverr documentation)
-
-#### VPN Network Issues
-
-**Symptoms**: FlareSolverr can't connect when using VPN
-
-**Solution**: Ensure FlareSolverr service uses `network_mode: service:vpn` in Docker Compose, which routes traffic through the VPN service.
-
-### Debugging Tips
-
-#### Enable Debug Logging
-
-Add to your `.env`:
+Check that its container is running and inspect its logs:
 
 ```bash
-DEBUG=RequestService,FlareSolverr
-```
-
-This will log:
-
-- When FlareSolverr is triggered
-- Cookie storage operations
-- User agent management
-- Request/response details
-
-#### Check FlareSolverr Logs
-
-```bash
-# View real-time logs
-docker compose logs -f flaresolverr
-
-# View last 100 lines
+docker compose ps flaresolverr
 docker compose logs --tail=100 flaresolverr
 ```
 
-#### Test FlareSolverr Directly
+Check the saved Sources URL and the network shared by the source service and helper. With the VPN overlay, use the loopback address shown above. Without it, use the Docker service name.
 
-You can test FlareSolverr manually:
+### A provider is skipped or still fails
 
-```bash
-curl -X POST http://localhost:8191/v1 \
-  -H "Content-Type: application/json" \
-  -d '{
-    "cmd": "request.get",
-    "url": "https://example.com"
-  }'
-```
+A provider marked as requiring FlareSolverr needs a non-empty Sources URL. Even with a reachable helper, a website can change its challenge, reject the request, or be unavailable. Check the source-provider test in Settings → Sources and inspect both source-service and helper logs.
 
-#### Verify Cookie Storage
+FlareSolverr does not make unsupported Cardigann definitions or private-tracker sign-in flows supported. See [Source features and limits](../features/sources.md).
 
-Check that cookies are being stored by examining RequestService logs when `DEBUG=RequestService` is enabled. You should see messages like:
+### Searches are slower
 
-```
-FlareSolverr: Stored 3 cookies in cookie jar for example.com
-FlareSolverr: Stored user agent for example.com
-```
+Fetching a page through a browser helper can take longer than a direct request. Miauflix bounds requests with timeouts and response-size limits; it does not promise a fixed search time. A slow or failing provider may also enter a cooldown.
 
-### Performance Considerations
+## Implementation and related guides
 
-- **First Request**: Slower (goes through FlareSolverr, ~2-5 seconds)
-- **Subsequent Requests**: Faster (uses cached cookies, ~100-500ms)
-- **Cookie Expiration**: Cookies may expire; FlareSolverr will automatically retry when needed
-
-### Security Notes
-
-- FlareSolverr runs through VPN for privacy protection
-- Cookies are stored in memory only (not persisted to disk)
-- User agents are rotated per domain
-- All traffic is encrypted when using HTTPS sources
-
-## Related Documentation
-
-- [Environment Variables Reference](environment-variables.md) - Complete environment variable guide
-- [Docker Setup Guide](docker-setup.md) - Docker deployment details
-- [System Architecture Overview](../architecture/system-overview.md) - Overall system architecture
-- [FlareSolverr GitHub](https://github.com/FlareSolverr/FlareSolverr) - Official FlareSolverr documentation
-
-## References
-
-- **FlareSolverr GitHub**: https://github.com/FlareSolverr/FlareSolverr
-- **Implementation**: `backend/src/services/request/request.service.ts`
-- **Type Definitions**: `backend/src/types/flaresolverr.types.ts`
-- **Docker Configuration**: `docker-compose.flaresolverr.yml` (and the `flaresolverr` service in `docker-compose.yml`)
+- [Source HTTP client](../../services/sources/src/http/http-client.ts)
+- [Search planning and required-helper checks](../../services/sources/src/planner/planner.ts)
+- [Sources configuration schema](../../services/sources/src/config/schema.ts)
+- [Docker helper overlay](../../docker-compose.flaresolverr.yml)
+- [Docker setup](docker-setup.md)
+- [Environment settings](environment-variables.md)

@@ -1,286 +1,146 @@
 # System Architecture Overview
 
-Miauflix is a production-ready self-hosted streaming platform built with modern web technologies and designed for scalability, security, and performance.
+Miauflix is a self-hosted streaming application. Its backend serves a React frontend, owns accounts and playback, and delegates catalog information, lists, and source searches to separate services.
 
-For the current service boundaries, data ownership, authentication, list ingestion, streaming, and
-deployment topology, see [Miauflix Architecture Diagrams](diagrams.md).
+For a user-facing explanation, see the [Feature Guide](../features.md). This page describes the current ownership boundaries; [architecture diagrams](diagrams.md) provide additional views. Features still being developed are tracked in [ToDo.md](../../ToDo.md).
 
-## Technology Stack
+## Technology stack
 
-| **Layer**          | **Technology**                                 | **Purpose**                          | **Key Components**                          |
-| ------------------ | ---------------------------------------------- | ------------------------------------ | ------------------------------------------- |
-| **Frontend**       | React 19 + Vite + Redux Toolkit                | Single-page application              | Components, pages, state management         |
-| **HTTP API**       | Node.js 22 + Hono Framework                    | REST API and static file serving     | Routes, middleware, authentication          |
-| **Authentication** | JWT + HttpOnly cookies + bcrypt                | User authentication & authorization  | JWT API access, refresh token cookies       |
-| **Database**       | TypeORM + SQLite                               | Data persistence with auto-sync      | Entities, repositories, migrations          |
-| **Streaming**      | WebTorrent + BitTorrent                        | Peer-to-peer media streaming         | Torrent client, source aggregation          |
-| **External APIs**  | Media catalog (Bun service), Trakt.tv, NordVPN | Catalog data, lists, VPN integration | Catalog provider abstraction, rate limiting |
-| **Deployment**     | Docker + Nginx + Let's Encrypt                 | Containerized deployment with SSL    | Reverse proxy, SSL termination              |
+| Area             | Implementation                             | Responsibility                                                                     |
+| ---------------- | ------------------------------------------ | ---------------------------------------------------------------------------------- |
+| Frontend         | React, Vite, Redux Toolkit                 | Browsing, search, accounts, settings, and player controls                          |
+| Backend          | Node.js, Hono                              | Public API, frontend hosting, authentication, playback, and local state            |
+| Backend database | SQLite and TypeORM                         | Users, source associations, progress, ratings, notifications, and storage records  |
+| Catalog service  | Bun and SQLite                             | TMDB catalog data, metadata freshness, seasons, episodes, and artwork              |
+| List service     | Bun and SQLite                             | Trakt connections, public/personal lists, watchlists, and playback synchronization |
+| Sources service  | Bun and SQLite                             | Indexer access, search planning, provider configuration, and cached candidates     |
+| Background work  | Bunqueue broker and workers                | Scheduled and queued work across the backend and catalog service                   |
+| Media delivery   | WebTorrent, FFmpeg, FFprobe                | Torrent downloads, inspection, remuxing, conversion, and subtitles                 |
+| Client playback  | Browser video/MSE or Samsung AVPlay        | Device-specific playback and audio-track controls                                  |
+| Deployment       | Docker Compose, optional Caddy and Gluetun | Application hosting, HTTPS, and VPN routing                                        |
 
-## System Components
+## Service boundaries
 
-### Core Services
+### Backend and frontend
 
-#### Authentication Service
+The backend exposes the application API under `/api` and hosts the browser frontend. The frontend owns navigation and display state, including the home feed, search, details, and player. It uses authenticated API requests and a realtime connection for supported operations.
 
-**Three-Tier Authentication System:**
+The backend owns Miauflix accounts, authentication, local watchlists and ratings, progress, notifications, persisted source candidates, torrent verification, downloads, and playback sessions. Its local movie/show records are indexes of catalog data needed for joins and source matching; they are not the authoritative full catalog.
 
-1. **API Authentication**: JWT access tokens in `Authorization: Bearer` headers (15 minutes expiration)
-2. **Token Renewal**: HttpOnly refresh token cookies - used exclusively for `/api/auth/refresh/:session` endpoint (7 days expiration)
-3. **Streaming Authentication**: Non-JWT streaming keys for `/api/stream/:token` endpoint (very short-lived, stream-specific)
+The frontend also has a Tizen build. It uses Samsung AVPlay when available and suitable, with browser playback for converted delivery. TV-specific code registers remote keys, adapts styles and artwork, and finds or remembers the backend server.
 
-**Additional Features:**
+### Catalog service
 
-- **Atomic token rotation** with race condition detection
-- **Multi-profile session support** with session-scoped cookies
-- **Role-based access control** (admin, user)
-- **Secure password hashing** with bcrypt
-- **Audit logging** for security events
+The catalog service owns complete movie/show metadata and its own SQLite database. It handles search, discovery, genres, external identifiers, artwork, freshness, changed-title scans, and season/episode synchronization.
 
-#### Media Services
+TMDB is the currently wired provider. The service has a provider abstraction, but there is no administrator-facing installer for arbitrary catalog providers. The backend calls the catalog service instead of contacting TMDB directly.
 
-- **Media Catalog Service** - A standalone **Bun service** (`services/media-catalog`) that owns the media catalog: it talks to the catalog provider (TMDB today), stores full catalog data in its own SQLite database, enforces freshness, and implements the versioned `catalog` contract from `@miauflix/service-contracts`. The backend keeps one WebSocket open to it (`@miauflix/contract`) for calls, artwork events, status and configuration; payloads are typed at build time and not re-validated at runtime.
-- **Local Media Index** - The backend keeps a slim mirror of catalog data (identity, imdbId, popularity, posters) in its own database, written through the catalog service responses, so source-discovery and streaming SQL joins keep working locally.
-- **Remote Service Management** - Named service URLs such as `CATALOG_SERVICE_URL` feed a generic discovery manager. Service-owned configuration is namespaced, rendered by the existing wizard/admin UI, pushed with explicit set/unset semantics, and continuously monitored with retrying discovery and status polling.
-- **Source Discovery** - Multi-provider content aggregation
-- **Quality Management** - Automatic quality detection and selection
-- **Progress Tracking** - User watch history and resume functionality
+`EPISODE_SYNC_MODE` chooses whether catalog work focuses on shows being watched (`ON_DEMAND`, the default) or incomplete seasons more broadly (`GREEDY`). The backend communicates the watching set to the catalog service.
 
-#### Streaming Infrastructure
+### List service
 
-- **WebTorrent Client** - Complete BitTorrent client implementation
-- **Source Aggregation** - YTS, THERARBG, and an extensible provider system
-- **Quality Selection** - Automatic best quality selection with codec preferences
-- **Range Requests** - Full support for video seeking and partial content delivery
-- **On-Demand Search** - Real-time source discovery with timeout handling
+The list service owns Trakt access, encrypted provider credentials, public and personal list pages, account association, and watchlist/playback synchronization. Public lists include popular, trending, and community lists; personal lists include watchlists, favorites, and history.
 
-#### Background Processing
+A Trakt connection belongs to an authenticated Miauflix account. Trakt authorization does not create or authenticate a Miauflix login. Playback synchronization uses a durable outbox with retries, while the backend retains local progress used by the application.
 
-- **Bunqueue Background Processing** - Durable per-domain schedules and workers with retries, overlap prevention, and restart recovery
-- **Source Discovery** - Queue-backed content indexing with service-owned schedule definitions
-- **VPN-Aware Processing** - Automatic pause/resume based on VPN status
-- **Statistics Scraping** - Real-time seeders/leechers data
-- **Database Maintenance** - Cleanup and optimization tasks
+### Sources service
 
-### Data Layer
+The sources service owns outbound indexer website requests. It plans background and interactive searches, applies provider priorities and request budgets, caches results, backs off from failures, and emits candidates incrementally. The backend stores those candidates, resolves torrent information, matches episode files, and verifies usable video.
 
-#### Database Design
+The implemented provider registry supports:
 
-- **SQLite Database** with TypeORM ORM
-- **13 Core Entities** - User, Movie, TVShow, Episode, Season, etc.
-- **AES-256-GCM Encryption** - Field-level encryption for sensitive data
-- **Repository Pattern** - Clean data access abstraction
-- **Auto-sync Schema** - Automatic database schema updates
+- **Cardigann:** supported Jackett/Prowlarr-format definitions obtained at runtime. Compatibility is a subset; unsupported definitions and private-tracker login flows are excluded.
+- **Torznab:** an external Jackett/Prowlarr-compatible search endpoint configured with its address and API key.
 
-#### Caching Strategy
+Administrators can manage providers and definition repositories through Settings. A declared generic `http` provider kind is not implemented in the registry. FlareSolverr is optional and applies to supported protected source requests, rather than all outbound requests in the application.
 
-- **Multi-layer Caching** - In-memory and persistent cache layers
-- **Pluggable stores** - cache-manager with Keyv (in-memory/disk) by default; Redis store optional via configuration
-- **Smart Cache Invalidation** - Automatic cache updates on data changes
-- **API Response Caching** - Reduces external API calls
+### Remote contracts and configuration
 
-### Security Architecture
+The backend clients share a remote-service implementation. Each configured service address establishes a multiplexed WebSocket connection through `@miauflix/contract`. Contract definitions live in `@miauflix/service-contracts`.
 
-> Note: Use source discovery and streaming features in accordance with local laws and content licenses. Disable or remove providers where required.
-
-#### Data Protection
-
-- **Encryption at Rest** - AES-256-GCM for sensitive database fields
-- **HTTPS Everywhere** - SSL/TLS encryption for all communications
-- **Secure Headers** - HSTS, CSP, and other security headers
-- **Input Validation** - Comprehensive request validation
-
-#### Access Control
+On connection or reconnection, the backend negotiates a supported contract major, obtains the service's configuration schema, delivers the saved configuration snapshot, and observes service status. A previous-major adapter can be used when that particular client supplies one. Calls fail as unavailable or not configured while a required service is not ready.
 
-- **Rate Limiting** - Per-endpoint and per-user rate limits
-- **CORS Configuration** - Proper cross-origin resource sharing
-- **Authentication Middleware** - JWT verification and session management
-- **Audit Logging** - Security event tracking and monitoring
+The contract layer provides calls, streams, subscriptions, and byte delivery. These internal service contracts are distinct from the public browser API. A replacement service must implement the expected contract and management behavior; running an arbitrary Docker image does not install a Miauflix provider.
 
-#### VPN Integration
+Implementation: [remote service client](../../backend/src/services/remote/remote-service.ts), [contract protocol](../../packages/contract/src/protocol.ts), and [service contracts](../../packages/service-contracts/src/).
 
-- **NordVPN Support** - Built-in VPN detection and enforcement
-- **Automatic Failover** - Service pause/resume on VPN status changes
-- **Privacy Protection** - IP masking for content discovery
-
-#### Request Handling & Cloudflare Bypass
-
-- **FlareSolverr Integration** - Automatic Cloudflare challenge solving for protected content sources
-- **Automatic 403 Retry** - Requests that receive 403 responses are automatically retried through FlareSolverr
-- **Cookie & User Agent Management** - Cookies and user agents from FlareSolverr solutions are cached per-domain for reuse
-- **Transparent Integration** - Works automatically when enabled, no code changes required
-- **See also**: [FlareSolverr Configuration Guide](../setup/flaresolverr.md) for detailed documentation
-
-## Data Flow Architecture
-
-### Request Lifecycle
-
-```mermaid
-graph TD
-    A[Client Request] --> B[Nginx Reverse Proxy]
-    B --> C[Rate Limiting Middleware]
-    C --> D[Authentication Middleware]
-    D --> E[Route Handler]
-    E --> F[Service Layer]
-    F --> G[Repository Layer]
-    G --> H[Database]
+## Authentication and authorization
 
-    F --> I[External APIs]
-    F --> J[WebTorrent Client]
-    F --> K[Background Tasks]
+Miauflix has two account roles: `user` and `admin`. Protected API requests use JWT access tokens. Administrators can create additional accounts through the API and manage configuration, sources, and storage; a complete account-management interface remains planned.
 
-    E --> L[Response] --> B --> A
-```
+Browser access and refresh tokens use session-scoped HttpOnly cookies. Protected API calls identify the session with `X-Session-Id`; middleware reads its access-token cookie, falling back to `Authorization: Bearer`. Login, renewal, logout, and session discovery have their own routes and transport handling. The installed TV app requests explicit token transport because it runs from a different origin and cannot rely on those browser cookies: access uses Bearer authorization, while refresh/logout use `X-Refresh-Token`. QR login lets an authenticated account approve a new device session.
 
-### Authentication Flow
+Streaming has separate short-lived credentials and persisted playback grants. A stream URL is checked against its playback authorization rather than treating the video request as a normal JWT API request.
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant A as Auth Service
-    participant D as Database
+Session-scoped storage does not imply an implemented profile-switching screen. See [Accounts](../features/accounts.md) for available controls and planned UI.
 
-    Note over C,A: Login Flow
-    C->>A: Login credentials
-    A->>D: Verify user
-    D->>A: User data
-    A->>A: Generate JWT + refresh token
-    A->>C: JWT + HttpOnly cookie (refresh token)
+Implementation: [authentication routes](../../backend/src/routes/auth.routes.ts), [roles](../../backend/src/entities/user.entity.ts), [token transport](../../backend/src/utils/auth-transport.util.ts), and [stream route](../../backend/src/routes/stream.routes.ts).
 
-    Note over C,A: API Request Flow
-    C->>A: Request with JWT in Authorization header
-    A->>A: Verify JWT access token
-    A->>C: Protected resource
+## Playback flow
 
-    Note over C,A: Token Refresh Flow
-    C->>A: POST /api/auth/refresh/:session (cookie sent automatically)
-    A->>A: Verify refresh token from cookie
-    A->>D: Update refresh token (atomic)
-    D->>A: Confirm update
-    A->>A: Generate new JWT + refresh token
-    A->>C: New JWT + HttpOnly cookie (new refresh token)
+1. Browsing can warm a focused title by preparing torrent information, initial pieces, and audio/subtitle inspection. This is speculative work and can be cancelled when focus changes.
+2. A playback session resolves the movie or episode to a specific source and file. Suitable completed downloads are preferred; quality, codec support, and bitrate preferences influence selection.
+3. Completed FFprobe results determine delivery for the requesting device, including native and MSE codec support, audio-track controls, and preferred languages. An unknown file can begin direct delivery with `deliveryPending` while a background probe reports delivery updates to the player.
+4. Compatible media is delivered directly with byte-range support. Other supported media can be remuxed to fragmented MP4, copying compatible tracks or converting selected audio to stereo AAC.
+5. HEVC can be copied for compatible devices. Optional HEVC-to-H.264 conversion is disabled by default and capped at 1080p/30 fps. When HEVC cannot be delivered, selection can fall back to an H.264 source.
+6. WebTorrent prioritizes required pieces and reads ahead during playback. FFmpeg/FFprobe read decrypted torrent ranges through a private loopback input without requiring a plaintext media copy on disk.
+7. The player reports progress and supports pause, seeking, audio/subtitle choices, and resume. TV playback can prefetch the next episode and use named credit chapters or the final-90-second fallback for continuation.
 
-    Note over C,A: Streaming Authentication Flow
-    C->>A: Request stream key with JWT in Authorization header
-    A->>A: Verify JWT and generate non-JWT streaming token
-    A->>C: Short-lived streaming token (valid only for specific stream)
-    C->>+S: GET /api/stream/:token (uses streaming token, not JWT)
-```
+Live playback sessions sample peer availability, throughput, and blocked reads. A weak source can trigger a backup source warming near the current read position. A failed source produces a session-scoped recreation event so the player can select another source. Each issued grant remains bound to its source; failover creates another session. This is source selection and fallback, not continuous adaptive-bitrate streaming.
 
-### Streaming Flow
+Local subtitles include embedded text and matching SRT/VTT/ASS/SSA files, converted to sanitized WebVTT. Embedded tracks are delivered in moving windows refreshed after seeks. OpenSubtitles search currently applies to movies with an IMDb ID and configured API key. Image-based PGS/VobSub conversion is not implemented.
 
-```mermaid
-sequenceDiagram
-    participant C as Client
-    participant S as Stream Service
-    participant W as WebTorrent
-    participant P as Provider APIs
+Implementation: [playback sessions](../../backend/src/services/playback/playback-session.service.ts), [audio delivery](../../backend/src/services/playback/audio-playback.service.ts), [torrent input](../../backend/src/services/playback/torrent-input.ts), [local subtitles](../../backend/src/services/subtitles/torrent-subtitles.service.ts), and [Samsung playback](../../frontend/src/features/player/lib/avplay-media.ts).
 
-    C->>S: Request stream for movie
-    S->>P: Search for sources
-    P->>S: Available sources
-    S->>S: Select best quality source
-    S->>W: Start torrent download
-    W->>S: Stream ready
-    S->>C: Stream token & URL
-    C->>S: Request video stream
-    S->>C: Video data stream
-```
+## Data layer
 
-## Deployment Architecture
+### Local databases
 
-### Docker Services
+The backend uses SQLite through TypeORM. The catalog, list, and sources services have their own SQLite state and ownership. Account, source, storage, progress, notification, probe, and other records are registered in the backend database module.
 
-#### Core Services
+Backend startup initializes the database, performs registered column renames, and explicitly synchronizes its schema. Ordered data migrations run before normal service work. Schema synchronization and data migrations are separate: changing an entity can still change the live schema, and removing or renaming fields requires preservation work.
 
-- **Backend** - Node.js API server and frontend host
-- **Nginx** - Reverse proxy with SSL termination
-- **Certbot** - Automatic SSL certificate management
+The application's caches include both in-memory and persisted data, with service-specific freshness rules. Catalog rows, list pages, source search results, and media probes have different lifetimes; there is no single cache lifetime governing them all.
 
-#### Optional Services
+Implementation: [backend database](../../backend/src/database/database.ts) and [data migration runner](../../backend/src/database/migrations/migration.service.ts).
 
-- **NordVPN** - VPN container for privacy protection
-- **Monitoring** - Health checks and performance monitoring
+### Encrypted media and storage claims
 
-#### Service Communication
+Downloaded torrent pieces use encrypted chunk storage. Selected sensitive database columns are encrypted too; this is not whole-database encryption. Keys must be preserved with the persistent data they protect.
 
-- **Internal Network** - Docker compose networking
-- **Volume Mounts** - Persistent data storage
-- **Environment Variables** - Configuration management
+Storage records track downloaded files, reserved space, and claims from playback and preparation. Reclamation considers those claims and protects active playback. Completed torrents can detach after the seeding period while their encrypted files remain available locally. Storage-pressure cleanup or explicit administrator removal can later delete retained files.
 
-### Production Deployment
+Implementation: [encrypted chunk store](../../backend/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts), [storage service](../../backend/src/services/storage/storage.service.ts), and [download service](../../backend/src/services/download/download.service.ts).
 
-#### Load Balancing
+## Background work
 
-- **Nginx** handles reverse proxy and load balancing
-- **SSL Termination** at proxy level
-- **Static File Serving** optimized for frontend assets
+Background processing uses the shared Bunqueue broker with configured schedules and workers. Backend workers register handlers for list refreshes, source discovery/verification, availability work, and maintenance. Catalog workers consume changed-movie/show scans and season-sync jobs.
 
-#### Monitoring and Logging
+Schedules and workers define concurrency, leases, retries, and priorities. VPN-aware source jobs check whether they can run before contacting providers. The sources planner separately controls provider requests, result caches, budgets, and cooldowns.
 
-- **Health Check Endpoints** - `/health` endpoint for monitoring
-- **Structured Logging** - JSON-formatted logs with correlation IDs
-- **Error Tracking** - Comprehensive error reporting and alerting
+Implementation: [backend job handlers](../../backend/src/services/background-job/background-job.handlers.ts), [backend worker](../../backend/src/services/background-job/background-job.worker.ts), and [catalog workers](../../services/media-catalog/src/workers/).
 
-#### Backup Strategy
+## Deployment and network boundaries
 
-- **Database Backups** - Automated SQLite backups
-- **Configuration Backups** - Environment and SSL certificates
-- **Media Cache** - Torrent data and metadata backups
+The default Compose deployment contains:
 
-## Performance Characteristics
+- **`miauflix`:** Node.js backend and built frontend, published on port 3000 with a localhost-only default binding.
+- **`miauflix-services`:** the Bunqueue broker and catalog, list, and source services, with persistent service data.
+- **Supporting containers:** scheduled image updates and unhealthy-application recovery.
 
-### Scalability Features
+Optional Compose files add Caddy HTTPS, Gluetun/NordVPN routing, FlareSolverr, and Jaeger tracing. HTTPS terminates at Caddy in the supplied HTTPS setup. Internal services should remain on the trusted application network rather than being exposed as public browser APIs.
 
-- **Horizontal Scaling** - Multiple backend instances support
-- **Caching Layers** - Reduced database and API load
-- **Background Processing** - Non-blocking task execution
-- **Connection Pooling** - Efficient database connections
+VPN detection checks whether the outbound connection is recognized as NordVPN-protected. The Gluetun deployment supplies the tunnel and firewall; application status checks and a network kill switch are different mechanisms. VPN checks can be explicitly disabled in configuration.
 
-### Resource Management
+The backend has process-local playback and torrent state alongside its local SQLite database. The split service design does not by itself provide load-balanced, stateless backend replicas. The supplied deployment runs one application instance.
 
-- **Memory Usage** - Optimized for typical VPS resources
-- **CPU Utilization** - Background task throttling
-- **Storage Optimization** - Efficient torrent chunk management
-- **Network Optimization** - Bandwidth-aware streaming
+Deployment definitions: [base Compose](../../docker-compose.yml), [HTTPS](../../docker-compose.https.yml), [VPN](../../docker-compose.vpn.yml), and [tracing](../../docker-compose.tracing.yml).
 
-## Security Model
+## Extending the system
 
-### Threat Protection
+- Add ordinary source providers through supported Cardigann definitions, provider repositories, or Torznab. See the [source service guide](../../services/sources/README.md).
+- Add a catalog adapter by implementing the catalog provider boundary and wiring it into the catalog service; TMDB is the currently selected implementation.
+- Supply a replacement catalog, list, or sources service by implementing its versioned contract and management protocol.
+- Extend authentication within the existing routes and service only when the requested behavior requires it. There is no documented drop-in authentication plugin registry.
 
-- **SQL Injection** - Parameterized queries and ORM protection
-- **XSS Protection** - Input sanitization and CSP headers
-- **CSRF Protection** - Token-based protection
-- **Token Security** - HttpOnly refresh token cookies, JWT access tokens
-
-### Data Privacy
-
-- **User Data Encryption** - Sensitive fields encrypted at rest
-- **Audit Trail** - Complete user action logging
-- **Privacy Controls** - User data export and deletion
-- **VPN Integration** - IP address protection
-
-## Extension Points
-
-### Adding New Content Providers
-
-1. Implement `ContentProvider` interface
-2. Add provider configuration
-3. Register with `SourceService`
-4. Configure rate limiting
-
-### Custom Authentication
-
-1. Extend `AuthService` class
-2. Implement authentication strategy
-3. Update middleware configuration
-4. Add provider-specific routes
-
-### Additional Streaming Sources
-
-1. Create provider class extending base provider
-2. Implement search and metadata methods
-3. Add quality detection logic
-4. Register with aggregation service
-
-This architecture provides a solid foundation for a scalable, secure, and maintainable streaming platform while remaining extensible for future enhancements.
+See the [Feature Guide](../features.md) for current user-facing capabilities and [ToDo.md](../../ToDo.md) for planned work, including combined-episode handling, account-management screens, and language settings.

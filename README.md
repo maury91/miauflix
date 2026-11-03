@@ -12,14 +12,16 @@
 
 </div>
 
-Miauflix is a streaming service you run yourself. Browse movies with rich artwork, press **Watch Now**, and it streams peer-to-peer straight to your browser or TV, with no media library to manage.
+Miauflix is a streaming service you run yourself. Browse movies and TV shows with rich artwork and press **Watch Now**. The server downloads the media through BitTorrent and streams it to your browser or TV, with no media library to manage.
 
-- ⚡ **Starts fast**: background preloading aims for playback in under 2 seconds
-- 🔎 **Finds sources for you**: searches several content directories and picks the best quality
+- ⚡ **Prepares playback ahead**: background preloading and media inspection reduce waiting; startup depends on the source, connection, and conversion needed
+- 🔎 **Finds sources for you**: searches multiple providers and chooses a source for your device
 - 📺 **Made for the couch**: full remote-control navigation, and sign in on a TV by scanning a QR code
-- 🔐 **Private by design**: invite-only accounts, data encrypted at rest, VPN enforcement
-- 🔗 **Trakt sync**: your watchlist and lists, kept in sync
+- 🔐 **Account and privacy controls**: administrator-created accounts, encrypted downloads and selected sensitive records, and VPN checks
+- 🔗 **Personal viewing**: watchlists, ratings, Continue watching, and optional Trakt watchlist and playback sync
 - 🐳 **One command to run**: prebuilt images for `amd64` and `arm64`, configured from the browser
+
+See the [Feature Guide](docs/features.md) for grouped explanations, requirements, and current limitations.
 
 ## Screenshots
 
@@ -61,7 +63,7 @@ docker compose up -d
 ## Next steps
 
 - 📺 **Watch from your TV or phone**: [Open it to your local network](docs/setup/docker-setup.md#open-it-to-your-local-network)
-- 📺 **Install it on a Samsung TV** (work in progress): [Samsung TV app](docs/setup/samsung-tv.md)
+- 📺 **Install it on a Samsung TV**: [Samsung TV app](docs/setup/samsung-tv.md)
 - 🔒 **Route traffic through a VPN**: [Using a VPN](docs/setup/docker-setup.md#using-a-vpn)
 - 🌐 **Put it on a domain with HTTPS**: [Getting Started](docs/setup/getting-started.md) and [HTTPS with a domain](docs/setup/docker-setup.md#https-with-a-domain)
 - ⚙️ **Tune every setting**: [Environment Variables](docs/setup/environment-variables.md)
@@ -69,12 +71,18 @@ docker compose up -d
 - 🐱 **Why it works the way it does**: [Philosophy](docs/philosophy.md)
 - 📚 **Everything else**: [Documentation](docs/README.md)
 
-## Roadmap
+## Planned improvements
 
-- 📺 TV shows: episode navigation and season management
-- ⛩️ Anime support
-- 🎯 More sources: 1337x, Nyaa, Jackett and Prowlarr
-- 📱 Native iOS and Android apps
+TV season and episode navigation, subtitles, and Jackett/Prowlarr integration are implemented. The current [task list](ToDo.md) includes:
+
+- A quality picker beside Watch Now
+- Correct handling of multiple episodes combined in one video
+- Account creation screens, profile editing, and profile selection
+- Interface translations and language preferences
+- Subtitle translation and language-learning tools
+- VPN diagnostics and exit-server controls in Settings
+
+See the [Feature Guide](docs/features.md) for how these plans differ from available features. The task list does not promise delivery dates.
 
 ## Contributing
 
@@ -86,7 +94,7 @@ Miauflix doesn't host or distribute any content. It's a tool for streaming media
 
 ## License
 
-[MIT](LICENSE)
+[MIT](https://opensource.org/licenses/MIT)
 
 <div align="center">
   <sub>Built with 😻 by the Miauflix team</sub>

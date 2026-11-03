@@ -50,8 +50,6 @@ The system organizes fixtures by API provider for better organization:
 providerMap: [
   { pattern: 'api.themoviedb.org', name: 'tmdb' },
   { pattern: 'api.trakt.tv', name: 'trakt' },
-  { pattern: 'yts.mx', name: 'yts' },
-  { pattern: 'yts.rs', name: 'yts' },
   { pattern: 'torrage.info', name: 'torrage' },
   { pattern: 'itorrents.org', name: 'itorrents' },
 ];
@@ -91,8 +89,6 @@ test-fixtures/providers/
 └── trakt/
 
 backend/test-fixtures/
-├── yts/
-├── therarbg/
 ├── torrage/
 └── itorrents/
 ```
@@ -134,20 +130,11 @@ Transformers are configured per URL pattern to modify response data:
 ```typescript
 transformers: [
   {
-    urlPattern: 'yts\\..*\\/api\\/v2\\/',
-    transform: transformYtsData,
+    urlPattern: 'example\\.test\\/api\\/',
+    transform: transformExampleData,
   },
 ];
 ```
-
-### YTS Data Transformer
-
-The [`yts.transformer.ts`](../backend/src/__test-utils__/http-vcr-utils/yts.transformer.ts) sanitizes YTS API responses:
-
-- **Peer Information**: Removes or anonymizes peer data
-- **Torrent URLs**: Sanitizes download URLs
-- **Timing Data**: Normalizes timestamps
-- **Personal Data**: Removes potentially sensitive information
 
 ### Custom Transformers
 
@@ -262,7 +249,7 @@ export const HTTP_VCR_CONFIG: HttpVcrConfig = {
 Specify which URLs to intercept:
 
 ```typescript
-includePatterns: ['api.themoviedb.org', 'yts.mx'];
+includePatterns: ['api.themoviedb.org', 'example.test'];
 ```
 
 #### Exclude Patterns
@@ -367,7 +354,7 @@ Error: No cached response found for: https://api.example.com/data
 #### Transformation Errors
 
 ```
-Error: Transformer failed for pattern: yts\..*\/api\/v2\/
+Error: Transformer failed for pattern: example\.test\/api\/
 ```
 
 **Solutions**:
@@ -408,7 +395,7 @@ find test-fixtures/providers -name "*.json" | head -10
 
 ```typescript
 // Test transformer in isolation
-import { transformYtsData } from './yts.transformer';
+import { transformExampleData } from './example.transformer';
 
 const testResponse = {
   body: {
@@ -417,13 +404,12 @@ const testResponse = {
   bodyIsJson: true,
 };
 
-const transformed = transformYtsData(testResponse);
+const transformed = transformExampleData(testResponse);
 console.log('Transformed data:', transformed);
 ```
 
 ## Related Components
 
-- **[API Testing](../backend/src/trackers/yts/yts.api.test.ts)**: Example VCR usage in YTS API tests
 - **[Test Data Factory](../backend/src/__test-utils__/test-data.factory.ts)**: Utilities for generating test data
 - **[Database Helpers](../backend/src/__test-utils__/database.helpers.ts)**: Database testing utilities
 

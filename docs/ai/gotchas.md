@@ -33,8 +33,8 @@ npm install --workspace frontend package-name
 ### ✅ **Use existing fixtures or record new ones properly**
 
 ```bash
-# To update fixtures, run specific test file:
-npm test --workspace backend -- yts.api.test.ts
+# Run a specific backend test file offline:
+HTTP_VCR_MODE=replay npm test --workspace backend -- src/services/request/request.service.test.ts
 ```
 
 For browser and screenshot work, follow the repository's [E2E and CI Playbook](./e2e-ci-playbook.md). It covers the ordered CI lanes, offline API harnesses, and Linux versus macOS snapshot baselines.
@@ -129,8 +129,8 @@ afterEach(() => {
 
 ### ⚠️ **Database uses TypeORM synchronize mode**
 
-- Database schema automatically syncs with entity changes (`synchronize: true`)
-- No schema migrations - TypeORM handles schema updates automatically
+- Backend initialization explicitly calls TypeORM schema synchronization after registered column renames (the DataSource option itself is `synchronize: false`)
+- TypeORM synchronizes schema changes; ordered data migrations also run at startup (see below)
 - Changes to entities immediately affect database structure
 
 ### 🔁 **Data migrations**
@@ -164,21 +164,18 @@ Text that would reveal what is stored or watched (file paths, ffprobe output, se
 
 ## 🔄 **Background Tasks Are Live**
 
-### ⚠️ **7 background tasks run continuously**
+### Queue schedules depend on configuration and service readiness
 
-- Movie source search (0.1s intervals)
-- Source metadata processing (0.2s intervals)
-- Stats updates (2s intervals)
-- List sync (1h intervals)
-- Movie metadata sync (1.5h intervals)
-- **Episode sync (1s intervals)** - Now mode-aware (GREEDY/ON_DEMAND)
+Recurring work is registered with Bunqueue, not a fixed set of seven polling loops. Backend schedules cover source discovery, metadata, availability checks, stats, lists, and maintenance. Catalog workers consume catalog scan and season-sync jobs; the backend coordinates their recurring schedules.
+
+Inspect the [schedule coordinator](../../backend/src/services/background-job/service-schedule.coordinator.ts), [source schedules](../../backend/src/services/source/source.schedule.ts), and [catalog workers](../../services/media-catalog/src/workers/worker.ts) before assuming a task is active or relying on a particular interval. Disabled background work and unavailable services affect execution.
 
 ### 🎬 **Episode Sync Behavior**
 
 #### **GREEDY Mode** (`EPISODE_SYNC_MODE=GREEDY`)
 
 - Syncs all incomplete seasons for all shows
-- Original behavior, high resource usage
+- Uses more catalog requests to cover the full set of incomplete seasons
 - Good for complete episode libraries
 
 #### **ON_DEMAND Mode** (`EPISODE_SYNC_MODE=ON_DEMAND`) - **Default**
@@ -195,11 +192,9 @@ Text that would reveal what is stored or watched (file paths, ffprobe output, se
 
 ## 🎯 **Frontend Build Issues**
 
-### ✅ **Frontend builds successfully**
+### Verify the current checkout
 
-- Build currently passes
-- No TypeScript errors
-- Frontend is ready for feature development
+The frontend has implemented authentication, browsing, and playback. A documentation status is not a build result; run checks appropriate to the change.
 
 ### ✅ **Verify build status before adding features**
 
@@ -211,21 +206,21 @@ npm run build -w frontend  # Verify build status
 
 ### ❌ **DON'T hardcode secrets or API keys**
 
-- Use environment variables only
-- Follow existing configuration.utils.ts pattern
+- Use the managed configuration system and its service schemas; normal setup is through the browser
+- Keep deployment/bootstrap settings in the documented environment configuration
 - Never commit .env files
 
 ### ❌ **DON'T read or share `.env` contents**
 
 - Treat `.env` files as off-limits for AI agents
 - Never open, copy, or log sensitive configuration values
-- Use the `ENV()` helper for any required configuration access
+- Follow the configuration access pattern of the owning module: injected `ConfigService` in backend services, and the existing environment/configuration modules in each standalone service
 
 ### ⚠️ **VPN detection is active**
 
-- Backend detects if VPN is running
-- Some features may behave differently without VPN
-- NordVPN integration is production-ready
+- The backend detector recognizes NordVPN-protected public IPs; it is not a detector for every VPN vendor
+- Sources and downloads have VPN-aware behavior unless checks are explicitly disabled
+- The supplied Gluetun deployment provides the tunnel/firewall; application checks do not replace that firewall
 
 ## 📁 **File Organization Patterns**
 
@@ -276,7 +271,7 @@ npm run docker:cleanup                 # Clean up when done
 ### ❌ **DON'T assume external APIs are always available**
 
 - TMDB API has rate limits
-- YTS mirrors can be unreliable
+- Indexer websites can be unreliable or rate limit
 - Trakt.tv has OAuth requirements
 
 ### ✅ **Follow existing error handling patterns**
@@ -286,12 +281,6 @@ npm run docker:cleanup                 # Clean up when done
 - Handle timeouts gracefully
 
 ## 📚 **Documentation Accuracy**
-
-### ⚠️ **Previous documentation was massively outdated**
-
-- Todo lists marked complete features as incomplete
-- Implementation status was wrong by ~90%
-- Always verify against actual codebase
 
 ### ✅ **Trust codebase over documentation**
 

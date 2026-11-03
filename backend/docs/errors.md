@@ -76,7 +76,7 @@ Single class `EncryptionError(message, code)`.
 
 ### `api` — `@errors/api.errors`
 
-Class `ApiError(message, code, service?, status?)` where `service` is the external service name (e.g. `'trakt'`, `'tmdb'`, `'yts'`, `'therarbg'`) and `status` is the HTTP status code when applicable.
+Class `ApiError(message, code, service?, status?)` where `service` is the external service name (e.g. `'trakt'`, `'tmdb'`) and `status` is the HTTP status code when applicable.
 
 | Code               | When used                                                  |
 | ------------------ | ---------------------------------------------------------- |

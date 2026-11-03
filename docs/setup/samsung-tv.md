@@ -1,7 +1,8 @@
 # Samsung TV (Tizen) app
 
-> **Work in progress.** The app is checked against a Chromium 69 build, but not yet tried on a
-> real TV.
+> **Compatibility:** the TV build includes Chromium 69 support and device-specific playback
+> and artwork adaptations. The implementation records observations from a 2020 TU8072 and
+> a 2023 QCQ80; this is not a compatibility guarantee for every Samsung model.
 
 The frontend can be packaged as a Tizen app (`.wgt`) that runs from the TV's storage and talks
 to your Miauflix backend over HTTPS. It targets 2020 TVs (Tizen 5.5, Chromium 69) and newer.
@@ -52,6 +53,17 @@ To set them yourself, package with `MIAUFLIX_TV_HERO_BACKDROP` (while moving) an
 ```bash
 MIAUFLIX_TV_HERO_BACKDROP=w780 MIAUFLIX_TV_HERO_BACKDROP_RESTING=original npm run package:tizen
 ```
+
+## Playback and controls
+
+On a TV with Samsung AVPlay available, Miauflix uses that native player for supported video
+and audio, including compatible HEVC files and native audio-track selection. Unsupported
+audio can use server-side conversion and the browser video player instead. The TV requests
+a bitrate preference of 8 Mbit/s when choosing sources; it does not continuously switch
+quality during playback.
+
+Browse, search, select episodes, and operate player and subtitle controls with the remote.
+For audio conversion and subtitle limitations, see [Audio and subtitles](../features/audio-subtitles.md).
 
 ## How the TV finds your server
 
