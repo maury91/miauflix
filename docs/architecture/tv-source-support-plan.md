@@ -1,78 +1,71 @@
-# TV source support plan
+# TV source and episode playback architecture
 
-Status: core implementation is in place. Remaining edge cases and broader integration coverage are listed in [ToDo.md](../../ToDo.md).
+TV playback combines catalog episode identity, source discovery, explicit video-file associations, per-file storage claims, and user-bound streaming grants. A season pack is shared storage containing independently selectable episode files.
 
-## Confirmed behavior
+See [source identity and file claims](source-identity-and-file-claims-plan.md) for the data model and [System overview](system-overview.md) for service ownership.
 
-- Discover sources for individual episodes and season packs using the existing provider, source, queue, and playback infrastructure.
-- Keep one torrent per info hash, with episode-to-video-file associations. Select files explicitly rather than selecting the largest video.
-- Combine file selections across active playback, prefetch, and retained download consumers. Releasing one consumer must not deselect another consumer's files.
-- Bind streaming keys to an episode and its resolved source file. The same key permits embedded subtitles and associated episode sidecars, but cannot access another episode or arbitrary pack files.
-- Prefer exact single-episode files. Multi-episode videos are a last resort when no usable exact source exists; do not claim episode-accurate boundaries. See root ToDo.md.
-- After all currently requested files finish, seed until the configured timeout (`CONTENT_SEED_DURATION_SECONDS`), then detach when active reads permit. Preserve metadata and downloaded pieces. A newly requested incomplete episode cancels the old deadline; start a fresh configured window after requested files finish. Completed files remain playable from storage. Pack detachment allows later reattachment for another episode rather than permanently making the entire pack local-only.
+## Catalog identity and source matching
 
-## Search and download ahead
+The catalog service supplies shows, seasons, episode numbers, runtimes, and air dates. The backend mirrors the records needed for source associations and playback. Catalog presence and an air date do not establish that a video is available.
 
-- While an episode is playing, discover sources for the next episode in catalog order, including season transitions. This source-only preparation does not warm the episode file before the 70% threshold.
-- At 70% playback progress, send an authorized prefetch request for the next available episode. The current file has higher piece priority within a shared torrent. For a separate torrent, pause the selected episode while any active playback file is incomplete, then resume it when the active file is fully buffered. If the current file is already complete, prefetch can proceed immediately.
-- Deduplicate progress-triggered jobs across repeated events and concurrent clients. A seek past 70% should trigger the same idempotent request. The exact bandwidth policy remains to be defined.
-- For watchlisted shows, periodically discover newly released episodes and download them when capacity permits. Release dates alone do not establish source availability; retry empty searches with bounded backoff.
-- Start acquisition at the episode following the user's latest watched episode in catalog order: progress through S01E07 makes S01E08 the next target. Reuse existing watched/progress semantics and handle season transitions. With no viewing history, default to the first regular episode; specials require explicit interest.
-- Under storage pressure, prioritize active playback and the current show’s next episode. Watchlist acquisition jobs are weighted by owner count and recent progress. Admission first evicts the least recently interested speculative storage, then an idle completed TV torrent if needed; active playback is protected. Pack eviction removes the shared torrent’s stored files as a unit while preserving source and episode associations for later reacquisition.
+The sources service searches providers by supported identifiers and title/season/episode variants. Searches can return single episodes or season packs. The backend persists normalized sources, resolves torrent metadata, verifies usable video, and associates episodes with video paths.
 
-## Credits detection and next-episode autoplay
+Exact single-episode matches are preferred. A combined-episode video is a fallback and carries `matchKind: combined`; the application does not infer accurate episode boundaries by dividing its duration. A provider-relative path must resolve to an exact or unique suffix match in the actual torrent layout. Canonicalized paths persist on the association.
 
-Research performed on 2026-10-11: detecting credits is feasible, but not universally reliable. There is no verified general credits-timestamp service established for this project by this research.
+Implementation: [source planner](../../services/sources/src/planner/planner.ts), [episode matcher](../../backend/src/services/source/episode-file-matcher.ts), [target resolution](../../backend/src/services/playback/playback-target.service.ts), and [episode associations](../../backend/src/repositories/episode-source.repository.ts).
 
-- [Intro Skipper's own documentation](https://github.com/intro-skipper/intro-skipper/wiki/) describes named chapter detection, recurring audio matching with Chromaprint, and visual black-frame analysis. Named chapters are the simplest first path; audio matching benefits from multiple episodes sharing closing music; dark-frame evidence alone is insufficient to identify credits confidently. The Jellyfin plugin is a reference, not a drop-in backend dependency.
-- [Its visual detection documentation](https://github.com/intro-skipper/intro-skipper/wiki/Settings-%E2%80%90-Black-Frame) also describes uniform low-saturation credit cards and boundary refinement. Credits over live action or colorful animation remain important validation cases.
-- [Plex documents file-specific credit markers](https://support.plex.tv/articles/credits-detection/), local analysis, and its own cloud marker lookup. [Plex's engineering explanation](https://www.plex.tv/blog/let-the-next-episode-roll/) describes combining text detection and black frames with machine learning. This demonstrates feasibility, not availability of a public marker API for Miauflix.
+## Episode authorization and delivery
 
-Implemented first pass: inspect end-credit chapter titles through existing media probing. When a usable marker is present, the player offers a five-second cancelable transition; otherwise it offers the final-90-second countdown. Bounded background tail analysis remains future work. Before enabling it, compare detections against representative offline fixtures and cache markers by exact torrent/video file identity and analysis version on the original media clock. Missing tail pieces, uncertain detections, unavailable analysis, or failure must use the fallback and never block playback. Analysis must respect playback priority and storage admission rather than downloading an entire pack.
+A playback session selects a source for a movie or episode and creates an expiring grant bound to that user, playable identity, and source. Stream requests validate the grant and resolve its associated file. One episode's grant does not authorize arbitrary files elsewhere in the pack.
 
-### Required player behavior
+Supported local subtitle tracks belong to the selected video or its matching sidecars. Audio and subtitle probes are keyed by source and video path. Per-account choices and timing remain independent when viewers share torrent data.
 
-- With a reliable credits-start marker, show `Play next episode (5s)` at that marker, decrement the countdown, and invoke the same next-episode action as a click when it reaches zero.
-- Without a reliable marker, show `Play next episode (90s)` at 90 seconds before the episode ends. Count down using remaining media time so it reaches zero at the end, rather than jumping immediately after five seconds. If entering this window late, display actual remaining time.
-- Only offer the transition when a next episode exists and has a usable source; if preparation is still pending, show that state without an automatic transition into an unavailable episode.
-- Clicking starts the next episode immediately. Provide a keyboard-accessible cancel/stay action. Freeze automatic countdowns while paused or buffering; clear stale timers on seeks, source changes, navigation, and session teardown. A dismissed countdown stays dismissed for that playback session. Dispatch at most one transition even if click, timer, and ended events coincide.
-- Short episodes use their actual remaining duration rather than displaying an impossible 90-second countdown. Unknown or non-finite duration cannot use the timed fallback. Combined-episode fallback files have no reliable per-episode end: suppress timed autoplay until episode boundaries are known.
-- Mid/post-credit story scenes are a known limitation of credits-start autoplay. Preserve the requested five-second behavior and allow cancellation; record future scene-aware improvements in ToDo.md rather than assuming credits mean no remaining story.
+Completed probes determine device-specific delivery immediately. An unknown file can start direct playback with `deliveryPending` while a background probe supplies delivery information. Native playback, remuxing, and conversion depend on the client's capabilities. The player receives session-scoped delivery updates.
 
-## Storage priorities and eviction
+Implementation: [playback sessions](../../backend/src/services/playback/playback-session.service.ts), [stream routes](../../backend/src/routes/stream.routes.ts), [stream authorization](../../backend/src/services/stream/stream.service.ts), and [local subtitles](../../backend/src/services/subtitles/torrent-subtitles.service.ts).
 
-1. Protect active playback and its buffering needs.
-2. Prioritize the next episode of the show currently playing.
-3. Allocate remaining capacity to next unwatched episodes of watchlisted shows, prioritizing current and near-future interest using recent viewing activity. A stale watchlist entry must not displace active viewing needs.
-4. Download additional released episodes only after higher-priority requests fit.
+## Next-episode preparation
 
-Watched episodes may be evicted automatically to make room, preferring older episodes and shows with less recent interest. Protect active playback, its required subtitles, and explicitly retained downloads. Eviction must account for every consumer of shared storage, including other accounts: one user's watched status must not remove files needed by another active or higher-priority consumer. Reclaim only bytes no remaining consumer needs, and keep torrent metadata and episode associations for later reacquisition.
+The player prepares the next episode's source in catalog order, including season transitions. It can request the selected next episode's download through its authorized `/api/stream/:token/prefetch` route. The request is best-effort and uses a `prefetch` claim; a movie grant is rejected by this route.
 
-Reserve estimated bytes before admitting concurrent downloads; reconcile against torrent file metadata and actual stored bytes. Count shared torrent pieces once. Do not assume whole-pack size is required for one selected episode. Failed capacity admission must remain retryable. The exact ranking weights are implementation details to settle against existing progress and storage behavior; they must preserve the priorities above.
+Playback claims have higher piece priority than prefetch claims. File selections combine all live consumers, so preparing one episode does not deselect another viewer's file. Speculative downloads yield to active playback that still needs data according to the download layer's pause/resume policy.
 
-## Notifications
+The player deduplicates its next-download request by episode identity. Seeking or repeated progress reports do not require a separate copy of the same episode.
 
-- Movies: notify both users who watchlisted the movie and users who previously started watching it, including incomplete viewing, when a discovered source improves release quality (for example CAM to WEB). A user who stopped because of CAM quality remains eligible. Deduplicate users belonging to both audiences. Define release-quality improvement separately from resolution or seed count.
-- TV: notify interested users when a newly released episode first gains a usable source. Metadata release and source discovery are separate events.
-- Persist per-user notifications and deduplicate repeated scans/provider results. Avoid generating a historical backlog when initially adding a show to a watchlist.
-- Place the notification control at the top of the sidebar. Clicking it opens a compact overlay menu over Home, with unread state, keyboard navigation, dismissal, and focus restoration.
-- Decide click destination and whether later movie upgrades each warrant a new notification before implementation.
+Implementation: [player preparation](../../frontend/src/pages/home/components/PlayerView.tsx), [prefetch authorization](../../backend/src/routes/stream.routes.ts), and [download ownership](../../backend/src/services/download/download.service.ts).
 
-## Implemented sequence
+## Credits and automatic continuation
 
-1. Trace existing torrent/storage ownership, playback keys, progress, watchlist jobs, and sidebar behavior.
-2. Preserve TV identity and coverage in provider metadata and implement conservative episode/file matching.
-3. Add episode associations and shared torrent ownership, retaining existing movie IDs, encrypted metadata, and stored downloads.
-4. Add episode discovery, watchlist jobs, episode-scoped playback/subtitle authorization, per-file selection, completion, and reattachment.
-5. Add next-episode discovery and prefetch, watchlist release scans, storage admission/eviction, and persistent notifications.
-6. Add the sidebar notification overlay and chapter-marker/fallback player countdown.
+Media inspection reads named end-credit chapters when available. The player can offer a five-second transition from a usable credits marker. Without one, its fallback counts down the remaining playback time during the final 90 seconds. A next episode must be prepared before an automatic transition is offered.
 
-## Acceptance proof
+Controls allow the viewer to play next immediately or cancel. Playback state, seeks, navigation, and session teardown govern the countdown; a combined-episode fallback has no reliable per-episode boundary for timed continuation. Named credits do not establish that no story scene follows them.
 
-Current proof includes backend and frontend TypeScript checks, exact/combined matcher tests, storage admission and eviction-candidate tests, and offline source-matcher coverage. Broader integration tests still need to cover cross-episode authorization, embedded and sidecar subtitles, concurrent users of one pack, late reattachment, season transitions, S01E07-to-S01E08 watchlist acquisition, notification deduplication, and keyboard focus behavior. See [ToDo.md](../../ToDo.md).
+Implementation: [chapter inspection](../../backend/src/services/playback/audio-playback.service.ts), [player](../../frontend/src/pages/home/components/PlayerView.tsx), and [player controls](../../frontend/src/pages/home/components/PlayerControls.tsx).
 
-## Current scope notes
+## Watchlist acquisition
 
-- Clicking the sidebar control opens the overlay. Clicking a notification marks it read; notifications do not deep-link to title details yet.
-- Storage eviction removes an idle completed TV torrent as a unit. It does not reclaim individual files from a retained pack.
-- Combined videos remain a last resort and do not get episode-boundary autoplay until trustworthy boundaries are available.
+Recurring backend jobs gather local TV-watchlist interest and viewing progress. Owner count and recency influence acquisition priority. Acquisition uses the owners' most recent progress: an unfinished episode remains the immediate target, while a completed episode advances the target in catalog order. Regular episodes are the starting point for a show without history.
+
+Acquisition searches for playable sources and attempts downloads within storage capacity. Empty or pending source results remain distinguishable from verified availability. Admission failure does not turn a catalog episode into a permanently unavailable title.
+
+Implementation: [background job handlers](../../backend/src/services/background-job/background-job.handlers.ts), [list scheduling](../../backend/src/services/media/list.schedule.ts), and [source availability](../../backend/src/services/source/source-availability.service.ts).
+
+## Shared storage and retention
+
+A single normalized source owns torrent data for all associated episodes. Storage reservations and completion follow selected files and piece boundaries. All consumers' live claims contribute to selection and retention, including other accounts and subtitle sidecars.
+
+The configured seeding window starts when currently requested files are complete. An incomplete request reopens completion state. Detaching an idle completed torrent retains encrypted data, and a later episode request can attach it again for missing pieces.
+
+Cleanup can reclaim individual eligible files from a retained pack. It protects active playback and stronger claims, and accounts for shared boundary pieces. Source records and episode associations remain available for reacquisition. See [file reclamation](source-identity-and-file-claims-plan.md#per-file-reclamation-and-concurrency).
+
+## Notifications and navigation
+
+Movie quality-upgrade notifications target users with local watchlist or viewing interest. Episode notifications target interested accounts when a recent episode gains a verified source. Availability requests support notification when the requested playable becomes available. Notifications persist per user and are deduplicated.
+
+The Home sidebar opens the notification menu. Users can view unread or read items, mark one or all items read, and open the related playable or show details. Notification actions preserve remote/keyboard navigation behavior; they are not limited to dismissing a message.
+
+Implementation: [notification service](../../backend/src/services/notifications/notification.service.ts), [Home actions](../../frontend/src/pages/home/HomePage.tsx), and [notification targets](../../frontend/src/pages/home/notification-copy.ts).
+
+## Scope and verification
+
+Accurate boundaries for combined-episode videos and scene-aware credits analysis are not implemented. [ToDo.md](../../ToDo.md#tv-source-support) tracks these features and additional integration coverage. Implementation and test files beside the owning modules define the supported behaviors; documentation does not establish a passing result for a particular checkout.

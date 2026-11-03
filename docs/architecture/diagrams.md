@@ -1,62 +1,65 @@
 # Miauflix Architecture Diagrams
 
-These diagrams describe the current architecture after the Trakt/list-service extraction and the
-Miauflix-owned QR authentication redesign. They are intended as boundary maps: the arrows show who
-may call whom, while the database shapes show ownership.
+These diagrams describe the current runtime and ownership boundaries. The arrows show who calls
+whom; the database shapes show ownership. See the [system overview](system-overview.md) for details
+and the [feature guide](../features.md) for user-facing explanations.
 
 ## 1. System context and runtime services
 
 ```mermaid
 flowchart LR
-  User[User devices]
-
-  subgraph Edge[Public edge]
-    Nginx[Nginx and TLS]
-    Frontend[React frontend]
-  end
+  Browser[Browser running React]
+  TV[Samsung Tizen app]
+  Edge[Optional Caddy HTTPS]
 
   subgraph Core[Miauflix application]
-    Backend[Node and Hono backend]
+    Backend[Node and Hono backend<br/>API and static frontend]
     BackendDB[(Backend SQLite)]
-    Downloads[(Download storage)]
+    Downloads[(Encrypted download storage)]
   end
 
-  subgraph Internal[Internal capabilities]
+  subgraph Internal[Internal services]
     Catalog[Media Catalog service]
     CatalogDB[(Catalog SQLite)]
     Lists[List Service]
-    ListDB[(List Service SQLite)]
+    ListDB[(List SQLite)]
+    Sources[Sources service]
+    SourceDB[(Sources SQLite)]
     Queue[Bunqueue broker]
+    Solver[Optional FlareSolverr]
   end
 
-  subgraph Providers[External providers]
-    TMDB[TMDB]
-    Trakt[Trakt]
-    Sources[Source providers and trackers]
-  end
-
-  User -->|HTTPS| Nginx
-  Nginx -->|static assets| Frontend
-  Frontend -->|versioned API| Nginx
-  Nginx --> Backend
-
-  Backend -->|users, sessions, QR requests, local indexes| BackendDB
-  Backend -->|catalog capability| Catalog
-  Backend -->|list capability| Lists
+  Browser --> Edge
+  TV --> Edge
+  Edge --> Backend
+  Browser -. direct local connection .-> Backend
+  TV -. direct local connection .-> Backend
+  Backend --> BackendDB
+  Backend -->|versioned contract| Catalog
+  Backend -->|versioned contract| Lists
+  Backend -->|versioned contract| Sources
   Backend -->|durable jobs| Queue
-  Backend -->|source discovery and streaming| Sources
   Backend --> Downloads
-
+  Backend -->|torrent data and statistics| Peers[Peers and trackers]
   Catalog --> CatalogDB
-  Catalog --> TMDB
+  Catalog --> TMDB[TMDB]
   Catalog --> Queue
   Lists --> ListDB
-  Lists --> Trakt
+  Lists --> Trakt[Trakt]
+  Sources --> SourceDB
+  Sources --> Indexers[Indexer websites or Torznab]
+  Sources --> Solver
+  Solver --> Indexers
 ```
 
-The browser talks only to the public Miauflix edge. The catalog and list services are internal:
-the backend keeps one WebSocket open to each and calls the typed contracts from
-`@miauflix/service-contracts` over it (see `service-contract-v2.md`).
+The backend hosts the browser frontend and public `/api` routes. The Tizen app is packaged on the
+TV. The browser and TV can connect directly on a trusted network or through the optional HTTPS
+proxy. Catalog, list, and source clients each use a versioned contract over a persistent WebSocket
+connection; these internal services are not public browser APIs. See
+[the contract design](service-contract-v2.md).
+
+Source website requests belong to the sources service. Torrent data and tracker statistics remain
+backend responsibilities; these are different outbound paths.
 
 ## 2. Storage and credential ownership
 
@@ -65,16 +68,19 @@ flowchart TB
   Backend[Backend]
   Catalog[Media Catalog service]
   Lists[List Service]
+  Sources[Sources service]
   Queue[Bunqueue]
 
   Backend --> BDB[(Backend SQLite)]
   Catalog --> CDB[(Catalog SQLite)]
   Lists --> LDB[(List Service SQLite)]
+  Sources --> SDB[(Sources SQLite)]
   Queue --> QDB[(Broker SQLite)]
 
-  BDB --- BData[Users and sessions<br/>hashed QR tokens<br/>local media and list projections<br/>sources and playback progress]
+  BDB --- BData[Users and sessions<br/>hashed QR tokens<br/>local media and list projections<br/>sources, progress, ratings and notifications]
   CDB --- CData[Full movie and TV metadata<br/>seasons and episodes<br/>provider sync state]
   LDB --- LData[Pending Trakt device codes<br/>user-to-account associations<br/>AES-256-GCM access and refresh tokens]
+  SDB --- SData[Providers and definition repositories<br/>encrypted settings and cached searches]
   QDB --- QData[Scheduled and queued work<br/>leases, retries and dead letters]
 ```
 
@@ -82,6 +88,8 @@ Ownership invariants:
 
 - The backend never stores Trakt credentials and Trakt is not a Miauflix identity provider.
 - The List Service is the only reader and writer of Trakt association secrets.
+- The sources service owns indexer definitions, credentials/settings, and search caches; the backend
+  owns persisted candidates, verification, episode associations, and playback.
 - The Media Catalog service is the only owner of full provider metadata; the backend keeps only the
   projection needed for lists, source discovery, and playback.
 - Public list projections use the `public` subject. Personal projections use the authenticated
@@ -154,12 +162,19 @@ sequenceDiagram
   loop Until terminal state or expiry
     Screen->>API: POST /api/auth/qr/:requestId/claim with claimToken
     API->>DB: Match token and request ID; atomically claim once
-    API-->>Screen: 202 pending, or session credentials when approved
+    API-->>Screen: 202 pending, or authenticated session when approved
   end
 ```
 
 The approval and claim tokens are independent, short-lived, stored only as hashes, and bound to the
-same request ID. The final state transition is single-use and race-safe.
+same request ID. The final state transition is single-use and race-safe. Approval requires an
+authenticated Miauflix account; a device already signed in does not need to enter its password again.
+
+Browser login and QR claim deliver access and refresh tokens as session-scoped HttpOnly cookies.
+The client identifies its session with `X-Session-Id`; middleware reads the matching access cookie
+first and then falls back to `Authorization: Bearer`. A packaged TV app requests
+`X-Auth-Transport: token` and receives tokens in the response body; it uses Bearer access tokens and
+`X-Refresh-Token` for refresh/logout. See [token transport](../../backend/src/utils/auth-transport.util.ts).
 
 ### Trakt account association
 
@@ -173,7 +188,7 @@ sequenceDiagram
   participant ListDB as List Service SQLite
 
   User->>UI: Connect Trakt
-  UI->>API: Start association with Miauflix JWT
+  UI->>API: Start association with authenticated Miauflix session
   API->>Lists: Start device flow with authenticated user ID
   Lists->>Trakt: Request device code
   Trakt-->>Lists: Verification URL, user code, expiry, interval
@@ -183,7 +198,7 @@ sequenceDiagram
   User->>Trakt: Approve Miauflix on Trakt
 
   loop While pending
-    UI->>API: Poll authorization ID with Miauflix JWT
+    UI->>API: Poll authorization ID with authenticated session
     API->>Lists: Poll using user ID and authorization ID
     Lists->>Trakt: Exchange device code
   end
@@ -204,95 +219,113 @@ the List Service to revoke the provider token and remove the association.
 sequenceDiagram
   actor Player
   participant API as Backend API
-  participant Auth as AuthService
-  participant Media as Local media index
-  participant Sources as SourceService
-  participant Providers as Source providers
-  participant Stream as StreamService
-  participant Torrent as DownloadService and WebTorrent
+  participant Session as PlaybackSessionService
+  participant Preparation as Shared preparation pipeline
+  participant Sources as Backend SourceService
+  participant Search as Sources service
+  participant Indexers
+  participant Probe as FFprobe and delivery inspection
+  participant Torrent as DownloadService and encrypted storage
 
-  Player->>API: Request stream key with JWT
-  API->>Auth: Authorize user and media
-  Auth-->>Player: Short-lived media-specific stream URL
-  Player->>API: GET /api/stream/:token with optional Range
-  API->>Auth: Verify non-JWT streaming key
-  API->>Media: Resolve local movie
-  API->>Stream: Select quality and codec
-
-  alt no streamable source is ready
-    Stream->>Sources: Resolve source metadata inline
-    Sources->>Providers: Search or inspect candidates
-    Providers-->>Sources: Magnet and availability metadata
+  opt Browse warm-up
+    Player->>API: Update preload intent for focused title
+    API->>Preparation: Update preload intent and warm focused target
   end
 
-  Stream-->>API: Best usable source
-  API->>Torrent: streamFile(source, Range)
-  Torrent-->>Player: 200 or 206 media bytes
+  Player->>API: POST /api/playback/sessions with authenticated session
+  API->>Session: Resolve movie or episode with device preferences
+  opt Additional source discovery needed
+    Session->>Sources: Find candidates
+    Sources->>Search: Versioned source search contract
+    Search->>Indexers: Search supported indexers or Torznab
+    Indexers-->>Search: Candidate releases
+    Search-->>Sources: Incremental normalized candidates
+  end
+  Session->>Torrent: Resolve and verify the selected video file
+  Session->>Probe: Read completed inspection for selected file
+  alt Probe result available
+    Probe-->>Session: Per-device delivery decision
+  else Inspection pending
+    Session->>Probe: Start shared background inspection
+    Note over Session,Probe: Direct stream URL with deliveryPending
+  end
+  Session-->>API: Source-bound expiring grant and delivery information
+  API-->>Player: streamUrl, preparation and selected source
+  opt Background inspection completes
+    Session-->>Player: Session-scoped delivery update over realtime channel
+  end
+
+  alt Direct playback
+    Player->>API: GET /api/stream/:token with optional Range
+    API->>Session: Validate grant and source binding
+    API->>Torrent: Read selected file and prioritize required pieces
+    Torrent-->>Player: 200 or 206 video bytes
+  else Remux or conversion
+    Player->>API: GET /api/stream/:token/audio with start and track
+    API->>Session: Validate grant
+    API->>Probe: Start FFmpeg for authorized target
+    Probe->>Torrent: Read decrypted ranges over private loopback input
+    Probe-->>Player: Fragmented MP4 with copied or converted tracks
+  end
 ```
 
-Request-time source and metadata resolution does not depend on the queue being available. Bunqueue
-adds durable discovery, statistics, and maintenance work around this synchronous fallback.
+A playback grant binds a user, playable identity, and source; target resolution selects the associated
+file. The preparation pipeline and player can try another source when one fails. The stream route
+also accepts movie keys issued by `POST /api/movies/:mediaId/:quality`.
 
-## 6. Production container topology
+Compatible audio/video can remain unchanged. Selected unsupported audio is converted to stereo
+AAC. HEVC delivery depends on device support; optional H.264 conversion is disabled by default and
+capped at 1080p/30 fps. Text subtitles have a separate authorized WebVTT path. See
+[streaming services](../../backend/docs/streaming-services.md) for routes and limits.
+
+Request-time source and metadata resolution calls its owning services directly. Bunqueue supplies
+durable discovery, statistics, acquisition, and maintenance work; broker failures can affect
+preparation and follow-up operations that enqueue jobs.
+
+## 6. Container topology and optional deployment layers
 
 ```mermaid
 flowchart LR
-  Internet[LAN or Internet]
-  Nginx[Nginx<br/>ports 80 and 443]
+  Device[Browser or TV]
+  Caddy[Optional Caddy<br/>HTTPS on 80 and 443]
+  Backend[Application container<br/>backend and frontend :3000]
 
-  subgraph VPNNS[Shared VPN network namespace]
-    VPN[NordVPN container]
-    Backend[Backend :3000]
+  subgraph Services[Services container]
     Catalog[Media Catalog :3001]
     Lists[List Service :3002]
+    Sources[Sources service :3003]
     Queue[Bunqueue :6789]
-    Solver[FlareSolverr :8191]
-    Tracing[Jaeger and OTLP]
   end
 
-  Internet --> Nginx
-  Nginx --> Backend
+  Solver[Optional FlareSolverr :8191]
+  Tracing[Optional Jaeger tracing]
+  Updater[Scheduled image updater]
+  Recovery[Unhealthy-app recovery]
+
+  Device --> Caddy
+  Caddy --> Backend
+  Device -. direct local connection .-> Backend
   Backend --> Catalog
   Backend --> Lists
+  Backend --> Sources
   Backend --> Queue
-  Backend --> Solver
   Backend --> Tracing
   Catalog --> Queue
+  Sources --> Solver
 
-  Backend --> BackendVolume[(Backend data and downloads)]
-  Catalog --> CatalogVolume[(Catalog data)]
-  Lists --> ListVolume[(List Service data)]
-  Queue --> QueueVolume[(Queue data)]
-
-  VPNNS --> ProviderInternet[TMDB, Trakt, providers and trackers]
+  Backend --> BackendVolume[(Application data and downloads)]
+  Services --> ServiceVolume[(Persistent service data)]
+  Updater -. updates labelled containers .-> Backend
+  Updater -. updates labelled containers .-> Services
+  Recovery -. restarts unhealthy app .-> Backend
 ```
 
-The production Compose file places the backend, both capability services, the broker, and outbound
-helpers in the VPN container's network namespace. Their ports are therefore reached internally on
-`localhost`; only the intended edge ports are published.
+The [base Compose file](../../docker-compose.yml) publishes port 3000 on localhost by default. It
+runs one application container, one combined services container, and update/recovery helpers.
 
-## 7. Recent ownership migration
-
-```mermaid
-flowchart LR
-  subgraph Before[Legacy ownership]
-    OldAuth[Backend authentication] --> OldTrakt[Trakt login and tokens]
-    OldCatalog[Media Catalog service] --> OldLists[Provider list tables and pages]
-  end
-
-  subgraph After[Current ownership]
-    NewAuth[Miauflix authentication] --> Password[Email and password]
-    NewAuth --> QR[Miauflix QR login]
-    NewLists[List Service] --> Association[Trakt association and encrypted tokens]
-    NewLists --> Membership[List definitions and pages]
-    NewCatalog[Media Catalog service] --> Metadata[Metadata and external-ID resolution]
-    NewBackend[Backend] --> Projection[Subject-scoped local list projection]
-  end
-
-  Before -->|pre-production reset; no compatibility layer| After
-```
-
-This was a contract-and-data ownership migration, not a dual-running rollout. Fresh catalog and
-List Service databases are the forward path. Restoring a pre-extraction code revision together with
-its matching development databases is the rollback path; mixing old databases with the new service
-layout is unsupported.
+The [HTTPS overlay](../../docker-compose.https.yml) adds Caddy for a configured domain. The
+[VPN overlay](../../docker-compose.vpn.yml) adds Gluetun/NordVPN and moves the application,
+services, and enabled outbound helpers into its shared network namespace. Only in that VPN setup
+do internal service URLs switch to `127.0.0.1`; the base deployment uses service hostnames.
+FlareSolverr and Jaeger are optional overlays. Developers can also run the catalog, list, and source
+services as individual processes or containers.

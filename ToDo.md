@@ -8,6 +8,19 @@ See [TV source support plan](docs/architecture/tv-source-support-plan.md).
 - [ ] Evaluate bounded credits-tail analysis and mid/post-credit story-scene detection. Current playback uses named end-credit chapters when present and otherwise the final-90-second countdown; validate any detector against offline fixtures before enabling automatic transitions.
 - [ ] Add end-to-end coverage for shared-pack playback and subtitles, late episode reattachment, competing watchlist capacity, notification focus behavior, and next-episode countdown cancellation.
 
+## Sources
+
+- [ ] Extend the Watch Now button to have a quality selector for users that want to choose the quality
+- [ ] Update the source quality pill to show the highest quality available
+
+## Account
+
+- [ ] Admins can create new accounts from the UI
+- [ ] Profile editor
+- [ ] Support for [plushies](https://github.com/prathje/plushies) or [DiceBear](https://github.com/dicebear/dicebear)
+- [ ] Profile selector
+- [ ] Logout
+
 ## VPN
 
 - [ ] Add an option in settings (gluetun service) to check the VPN tunnel's bandwidth, and to choose the country or exit node. Miauflix shares gluetun's network, so it can reach gluetun's control server at `127.0.0.1:8000` (`/v1/vpn/status`, `/v1/publicip/ip`; changing settings needs an entry in gluetun's `/gluetun/auth/config.toml`). Measure the tunnel apart from the torrents: latency and failure rate of the VPN IP checks plus a small download test, so a bad exit server can be told apart from a weak swarm.
@@ -27,3 +40,7 @@ See [TV source support plan](docs/architecture/tv-source-support-plan.md).
 ## Language learning
 
 - [ ] Add support for partial translation of subtitles (translate everything except few words so the user has to learn them (or the opposite in case the target translation is the language the user wants to learn))
+
+## UI
+
+- [ ] Use the same input elements everywhere ( like in the admin setup page )
