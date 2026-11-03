@@ -17,7 +17,7 @@ See [TV source support plan](docs/architecture/tv-source-support-plan.md).
 
 - [ ] Admins can create new accounts from the UI
 - [ ] Profile editor
-- [ ] Support for [plushies](https://github.com/prathje/plushies) or [dicebear](<[https://github.com/pawpaw/pawpaw](https://github.com/dicebear/dicebear)>)
+- [ ] Support for [plushies](https://github.com/prathje/plushies) or [DiceBear](https://github.com/dicebear/dicebear)
 - [ ] Profile selector
 - [ ] Logout
 

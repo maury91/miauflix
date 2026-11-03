@@ -34,7 +34,7 @@ Compatibility is partial: Miauflix does not implement every Cardigann instructio
 
 ## Connecting Jackett or Prowlarr
 
-If you already run Jackett or Prowlarr, you can connect its Torznab endpoint by supplying a name, address, and API key. Torznab is a shared search format that lets these applications communicate.
+If you already run Jackett or Prowlarr, you can connect its Torznab endpoint by supplying a name and address, plus an API key when the endpoint requires authentication. Torznab is a shared search format that lets these applications communicate.
 
 This is a working integration. An arbitrary website address is not enough to create a provider, and the declared generic HTTP provider type does not currently have a working implementation.
 

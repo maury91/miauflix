@@ -12,7 +12,7 @@
 
 </div>
 
-Miauflix is a streaming service you run yourself. Browse movies and TV shows with rich artwork, press **Watch Now**, and it streams peer-to-peer straight to your browser or TV, with no media library to manage.
+Miauflix is a streaming service you run yourself. Browse movies and TV shows with rich artwork and press **Watch Now**. The server downloads the media through BitTorrent and streams it to your browser or TV, with no media library to manage.
 
 - ⚡ **Prepares playback ahead**: background preloading and media inspection reduce waiting; startup depends on the source, connection, and conversion needed
 - 🔎 **Finds sources for you**: searches multiple providers and chooses a source for your device
