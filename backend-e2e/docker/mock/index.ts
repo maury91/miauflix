@@ -352,7 +352,7 @@ Bun.serve({
       return response;
     } catch (error) {
       console.error('Error handling request:', error);
-      return new Response(JSON.stringify({ error: 'Failed to process request', details: error }), {
+      return new Response(JSON.stringify({ error: 'Failed to process request' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json' },
       });

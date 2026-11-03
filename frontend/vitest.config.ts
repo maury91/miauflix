@@ -22,7 +22,7 @@ export default mergeConfig(
             environment: 'jsdom',
             setupFiles: ['./src/setupTests.ts'],
             globals: true,
-            include: ['src/**/*.{test,spec}.{ts,tsx}'],
+            include: ['src/**/*.{test,spec}.{ts,tsx}', 'tooling/**/*.test.ts'],
             exclude: ['src/**/*.stories.{ts,tsx}', 'e2e/**'],
           },
         },

@@ -10,6 +10,9 @@ on:
   # Only collaborators with write access can start it; pull requests from forks cannot.
   workflow_dispatch:
 
+permissions:
+  contents: read
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -54,6 +57,9 @@ jobs:
           HTTP_VCR_MODE: replay
           # Mock API keys - not real credentials needed
           TMDB_API_KEY: mock-api-key
+
+      - name: Mock server unit tests
+        run: bun test ./backend-e2e/docker/mock
 
       - name: Save Turbo cache
         if: steps.setup.outputs.turbo-cache-hit != 'true'
