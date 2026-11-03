@@ -1,8 +1,8 @@
 # Environment Variables Reference
 
-Miauflix uses environment variables to configure various services and features.
+Miauflix uses environment variables for bootstrap and deployment settings. Application settings can be edited in the browser or CLI configuration wizard and are persisted in the data directory. Saved application values can override environment defaults.
 
-**The recommended approach is to use the interactive configuration wizard**, which automatically detects missing variables and guides you through setup.
+**For Docker installations, start with browser setup.** The CLI wizard is also available from a source checkout. This page covers commonly used settings; the configuration UI reflects each running service's current schema.
 
 ## Quick Setup (Recommended)
 
@@ -18,34 +18,30 @@ The configuration wizard will:
 
 - ✅ Detect missing required settings
 - 🧪 Test API credentials in real-time
-- 💾 Store application values in the backend config store, with secrets encrypted at rest
+- 💾 Persist application configuration, with secrets encrypted at rest
 - 🔗 Provide links to obtain API keys
 
 See [Configuration Guide](../../backend/docs/configuration.md) for detailed wizard documentation.
 
 ## Manual Configuration
 
-If you need to configure manually or understand all available variables, create a `.env` file in the project root with the following:
+For a source checkout, a root `.env` can provide bootstrap values. For Docker, `.env` also controls Compose substitutions: a variable reaches an application container only if the Compose file passes it through or mounts the file. Use the application configuration editor for saved service settings.
 
 ### Required Variables
 
 #### Media Catalog Service (Required)
 
-The media catalog (TMDB today) runs as its own Bun service. It is configured from
-Miauflix's UI or CLI: values are stored encrypted in the backend's `config.json`
-and pushed to the service at startup. No catalog variable is required in `.env`,
-with one exception for deployments where the backend cannot reach the service
-before it is configured:
+The media catalog (TMDB today) runs as its own Bun service. Configure its published settings through Miauflix's UI or CLI and retain the application and service data volumes and encryption keys. The backend needs the service address; the default Compose file supplies it automatically:
 
 ```bash
-# URL of the media catalog service (internal network). Default: http://localhost:3001
-CATALOG_SERVICE_URL=http://localhost:3001
+# Default Docker Compose deployment (internal network)
+CATALOG_SERVICE_URL=http://miauflix-services:3001
+
+# Host-run development only
+# CATALOG_SERVICE_URL=http://localhost:3001
 ```
 
-TMDB and Trakt application values are configured in the Miauflix setup or admin
-configuration UI. The backend stores them encrypted and pushes complete
-snapshots to each consuming service. Backend environment variables can seed
-initial values when needed.
+TMDB and Trakt settings appear in the setup and administrator configuration UI through the connected services' schemas. Use that UI for later changes; bootstrap environment values may already have been superseded by saved settings.
 
 ```bash
 # Optional backend bootstrap value for the TMDB API access token
@@ -72,7 +68,7 @@ LIST_SERVICE_ENCRYPTION_KEY=replace-with-a-long-random-secret
 - **Description**: OAuth application credentials and the exact redirect URI configured for the Trakt.tv integration
 - **Get from**: [Trakt.tv OAuth Applications](https://trakt.tv/oauth/applications)
 - **Required for**: Trakt features that consume the shared Trakt application credentials
-- **Configuration**: The backend stores these values encrypted and shares them with every declared consumer.
+- **Configuration**: Use the `TRAKT` group in Miauflix's configuration UI. Retain the List Service data directory and active key across restarts.
 - **Encryption key**: `LIST_SERVICE_ENCRYPTION_KEY` is optional. If set, keep it stable and store it in deployment secrets; the service uses it directly and does not create a key file. Otherwise, it generates a key in its data directory. Losing or changing the active key makes encrypted associations, pending authorizations, and cached pages unreadable.
 
 #### NordVPN (Optional)
@@ -90,17 +86,9 @@ NORDVPN_COUNTRIES=Switzerland,Netherlands
 
 #### FlareSolverr (Optional)
 
-```bash
-# FlareSolverr integration - Optional for bypassing Cloudflare protection
-ENABLE_FLARESOLVERR=true
-FLARESOLVERR_URL=http://localhost:8191
-```
+Configure `FLARESOLVERR_URL` in the Sources configuration group. Its source-service default is empty (disabled). Use the address reachable from that service: typically `http://flaresolverr:8191` in Docker, `http://127.0.0.1:8191` with the shared VPN network, or `http://localhost:8191` when running both locally.
 
-- **ENABLE_FLARESOLVERR**: Enable or disable FlareSolverr integration (default: `true` when `FLARESOLVERR_URL` is set)
-- **FLARESOLVERR_URL**: Base URL of the FlareSolverr instance (default: `http://localhost:8191`)
-- **Description**: FlareSolverr is a proxy server that bypasses Cloudflare protection, allowing access to content sources protected by Cloudflare's anti-bot measures
-- **Required for**: Accessing Cloudflare-protected content sources
-- **See also**: [FlareSolverr Configuration Guide](flaresolverr.md) for detailed setup instructions
+The current source HTTP client uses this URL for definitions that require FlareSolverr and detected Cloudflare-style challenges. Configure the helper through this URL; the Compose overlay starts its container. See [FlareSolverr setup](flaresolverr.md).
 
 ### Authentication & Security
 
@@ -116,6 +104,8 @@ STREAM_KEY_SALT=64-character-hex-string
 - **Description**: Cryptographic keys for JWT token signing and streaming authentication
 - **Default**: Automatically generated 256-bit random keys
 - **Note**: These are auto-configured by the system if not provided
+
+Browsers receive session-scoped HttpOnly access and refresh cookies. The Samsung TV app uses token transport instead: access and refresh tokens are returned to the app and sent in headers. See [TV sign-in](samsung-tv.md#how-the-tv-app-signs-in).
 
 #### Session Configuration
 
@@ -187,7 +177,16 @@ DOWNLOAD_ALL_SOURCE_FILES=false
 
 - **SOURCE_SECURITY_KEY**: AES-256 encryption key for source metadata (auto-generated)
 - **CONTENT_CONNECTION_LIMIT**: Max peer-to-peer connections
-- **DOWNLOAD_ALL_SOURCE_FILES**: Download metadata for all sources vs top 2
+- **DOWNLOAD_ALL_SOURCE_FILES**: Reserved setting; currently has no effect
+
+#### Playback compatibility and subtitles
+
+- **CONVERT_H265_TO_H264**: Download setting, disabled by default. Allows server-side H.265-to-H.264 conversion when required, limited to 1080p/30 fps. Compatible clients retain the original video.
+- **OPENSUBTITLES_API_KEY**: Optional server-side key for movie subtitle searches. Embedded text subtitles and matching torrent subtitle files do not need this integration.
+- **CONTENT_DOWNLOAD_LIMIT / CONTENT_UPLOAD_LIMIT**: Download settings for peer-transfer bandwidth, expressed as sizes such as `20MB`.
+- **CONTENT_SEED_DURATION_SECONDS**: Time to keep seeding after the main video finishes downloading; `0` stops seeding immediately. Retained encrypted files can still be reused until cleanup.
+
+See [Audio and subtitles](../features/audio-subtitles.md) and [Storage](../features/storage-privacy.md) for behavior and limitations.
 
 #### Streaming Tokens
 
@@ -231,20 +230,18 @@ BACKEND_URL=http://localhost:5000
 
 ### Production Deployment
 
-#### SSL & Docker (Production)
+#### Docker and HTTPS
+
+The supplied production HTTPS setup uses Caddy, rather than manually configured nginx certificate paths:
 
 ```bash
-# SSL certificates (production)
-SSL_CERTIFICATE=/etc/nginx/ssl/fullchain.pem
-SSL_CERTIFICATE_KEY=/etc/nginx/ssl/privkey.pem
-SSL_DHPARAM=/etc/nginx/ssl/dhparam.pem
-
-# Docker deployment
-GITHUB_REPOSITORY=yourusername/miauflix
+COMPOSE_FILE=docker-compose.yml:docker-compose.https.yml
+MIAUFLIX_DOMAIN=miauflix.example.com
+REVERSE_PROXY_SECRET=your-secure-random-string
 MIAUFLIX_VERSION=latest
-DOMAIN=yourdomain.com
-WWW_DOMAIN=www.yourdomain.com
 ```
+
+With the VPN overlay, include `docker-compose.vpn.yml` and set `MIAUFLIX_UPSTREAM=vpn:3000`. See [HTTPS with a domain](docker-setup.md#https-with-a-domain) for the complete setup and first-account behavior.
 
 ## Configuration by Category
 
@@ -256,7 +253,7 @@ WWW_DOMAIN=www.yourdomain.com
 
 1. **Trakt client ID + client secret + redirect URI** - Configure once in `TRAKT` for all consumers
 2. **NORDVPN_PRIVATE_KEY** - VPN integration and enforcement
-3. **ENABLE_FLARESOLVERR + FLARESOLVERR_URL** - Cloudflare bypass for protected content sources
+3. **FLARESOLVERR_URL** - Optional challenge handling for supported source providers
 
 ### Advanced Configuration (Auto-configured)
 
@@ -307,7 +304,7 @@ By default (`ALLOW_CREATE_ADMIN_ON_FIRST_RUN` unset or `false`), Miauflix genera
 - Email: `admin@<hostname>.local`
 - Password: randomly generated, printed to the startup logs
 
-Retrieve the credentials from the logs, then change the password after first login.
+Keep these logs private. The profile/password editor is still planned, so do not rely on an existing password-change screen. The supplied base Compose file instead sets this option to `true` for browser setup; the HTTPS overlay sets it to `false`.
 
 ### Setup endpoint mode
 
@@ -322,13 +319,12 @@ Content-Type: application/json
 
 Responses:
 
-| Status          | Meaning                                         |
-| --------------- | ----------------------------------------------- |
-| `201 Created`   | Admin created successfully                      |
-| `404 Not Found` | Feature not enabled (or endpoint doesn't exist) |
-| `409 Conflict`  | An admin already exists                         |
+| Status          | Meaning                                           |
+| --------------- | ------------------------------------------------- |
+| `201 Created`   | Admin created successfully                        |
+| `404 Not Found` | Setup disabled or an administrator already exists |
 
-The endpoint is permanently disabled once any admin account exists. Use this mode when you want to avoid credentials appearing in logs — for example in automated deployments or environments where log access is restricted.
+The endpoint closes once an administrator exists. The browser uses the same endpoint for initial setup and signs the new administrator in. Keep the server reachable only by you until this step is complete.
 
 ## Related Documentation
 

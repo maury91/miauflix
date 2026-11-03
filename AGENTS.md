@@ -13,32 +13,9 @@
 
 ## 🎯 Project Reality Check
 
-### Implementation Status Overview
+Use [current project context](docs/ai/context.md), the [feature guide](docs/features.md), and [ToDo.md](ToDo.md) for implemented capabilities and planned work. Verify them against the code before editing. Do not infer completion percentages, delivery dates, passing builds, or deployment readiness from a status summary.
 
-- **Backend Infrastructure**: **95% complete and production-ready** ⚡
-- **Frontend**: Basic structure exists, has TypeScript build errors, JWT authentication missing
-- **Timeline Reality**: **2-3 weeks to full functionality** (not months)
-- **Critical Reality**: **Only 2 missing pieces prevent full operation**
-
-### Key Insight: Documentation Was Wrong
-
-- Previous documentation marked 95%+ implemented features as "incomplete"
-- Always verify against actual codebase implementation
-- Most infrastructure is production-ready - don't rebuild it
-
-### Production-Ready Components (DON'T REBUILD THESE)
-
-✅ **Source Aggregation**: Multi-provider (YTS + THERARBG) with background processing  
-✅ **WebTorrent Infrastructure**: Complete client with tracker management and stats scraping  
-✅ **Streaming Infrastructure**: Complete `/api/stream/:token` endpoint with quality selection and range requests  
-✅ **Authentication Backend**: Full JWT system with refresh tokens and role-based access  
-✅ **Database Layer**: Complete entity model with AES-256-GCM encryption  
-✅ **Background Tasks**: All 7 scheduled tasks operational  
-✅ **API Infrastructure**: Comprehensive routes with auth/rate limiting
-
-### Only Missing Component
-
-❌ **Frontend JWT Auth**: Login page, token management, interceptors to connect with existing backend auth system
+Authentication is integrated in the browser and TV app. Catalog data, source discovery, streaming, subtitles, progress, ratings, notifications, and storage management already have implementations. Extend the existing owners rather than rebuilding these systems. Account/profile UI improvements and other remaining tasks are listed separately in the backlog.
 
 ---
 
@@ -67,24 +44,26 @@ npm install --workspace frontend package-name
 
 ### ❌ Database Schema Changes Are Immediate
 
-- Database uses TypeORM `synchronize: true`
+- Startup explicitly synchronizes TypeORM schema after registered column renames
 - Entity changes **immediately affect database schema**
-- No migrations system - changes can cause data loss
+- TypeORM synchronizes schema; ordered data migrations and pre-sync column renames also exist. Follow `docs/ai/gotchas.md` to preserve existing data
 - **Test entity changes thoroughly in development**
 
-### ❌ Frontend Has Build Errors - Fix First
+### Verify the Current Frontend Build Before Adding Features
+
+Resolve current type-check/build failures before adding frontend features.
 
 ```bash
-# Check current errors before adding features:
-cd frontend && npm run type-check
-npm run build  # Must pass before adding features
+# Run from the workspace root; documentation is not evidence of a passing build
+npm run check:ts --workspace frontend
+npm run build:frontend
 ```
 
 ### ❌ NEVER Read or Share `.env` Contents
 
 - Treat `.env` files as off-limits for AI agents
 - Never open, copy, or log sensitive configuration values
-- Use the `ENV()` helper from `@constants` for any required configuration access
+- Use the injected `ConfigurationService` for backend configuration access through `get()` or `getOrThrow()`
 
 ---
 
@@ -167,13 +146,16 @@ afterEach(() => {
 
 ## 🏗️ Architecture Awareness
 
-### Key Services (All Implemented - DON'T REBUILD)
+### Key Services (Extend Existing Owners)
 
-- `AuthService` - JWT authentication with refresh tokens (228 lines, 18 methods)
-- `SourceService` - Multi-provider torrent source aggregation (719 lines, 24 methods)
-- `DownloadService` - WebTorrent client management (179 lines)
-- `MediaService` - TMDB integration and movie metadata
-- `TraktService` - Trakt.tv integration for lists
+- `AuthService` - Account authentication, session tokens, and user/admin roles
+- `SourceService` - Backend candidate persistence, discovery orchestration, and verification
+- `DownloadService` - WebTorrent client, encrypted downloads, and retention
+- `MediaService` - Local catalog-index mirroring through the catalog client
+- `services/media-catalog` - TMDB-backed catalog data and catalog workers
+- `services/list-service` - Trakt lists, watchlists, and playback synchronization
+- `services/sources` - Indexer access, constrained Cardigann/Torznab providers, and search planning
+- `backend/src/services/background-job/` - Bunqueue workers and recurring schedule coordination
 
 ### File Structure Patterns
 
@@ -185,14 +167,7 @@ afterEach(() => {
 
 ### Background Tasks Overview
 
-**7 background tasks run continuously:**
-
-- Movie source search (0.1s intervals)
-- Source metadata processing (0.2s intervals)
-- Stats updates (2s intervals)
-- List sync (1h intervals)
-- Movie metadata sync (1.5h intervals)
-- **Episode sync (1s intervals)** - Mode-aware (GREEDY/ON_DEMAND)
+Recurring jobs run through the shared Bunqueue broker. Backend workers handle lists, sources, and maintenance; catalog workers handle metadata scans and season synchronization. Schedules depend on configuration and service readiness. Inspect the schedule definitions before assuming a fixed number of jobs or polling intervals.
 
 **Episode Sync Modes:**
 
@@ -201,13 +176,11 @@ afterEach(() => {
 
 ### Authentication System
 
-**Three-Tier Authentication System:**
+- **Browser API authentication**: session-scoped HttpOnly access and refresh cookies; `X-Session-Id` selects the session.
+- **TV authentication**: `X-Auth-Transport: token` requests token delivery; the app sends Bearer access tokens and refresh-token headers.
+- **Streaming access**: separate expiring grants for `/api/stream/:token`.
 
-1. **Primary API Auth**: JWT tokens in TraktAuthorization headers (15min expiration)
-2. **Token Refresh Only**: HttpOnly cookies exclusively for `/api/auth/refresh/:session`
-3. **Streaming Access**: Non-JWT streaming keys for `/api/stream/:token`
-
-**Backend is complete** - Frontend needs to integrate with this system.
+Reuse the existing frontend and backend authentication flow. See `backend/src/utils/auth-transport.util.ts` and `backend/src/routes/auth.routes.ts` for current transport behavior.
 
 ---
 
@@ -234,11 +207,11 @@ Use TypeScript path aliases consistently:
 
 ```typescript
 // ✅ GOOD - Use aliases
-import { UserEntity } from '@entities/user.entity';
+import { User } from '@entities/user.entity';
 import { AuthService } from '@services/auth/auth.service';
 
 // ❌ BAD - Deep relative paths
-import { UserEntity } from '../../../entities/user.entity';
+import { User } from '../../../entities/user.entity';
 ```
 
 **Backend Path Aliases:**
@@ -276,15 +249,11 @@ import { UserEntity } from '../../../entities/user.entity';
 ### Error Handling Pattern
 
 ```typescript
-import { ValidationError, NotFoundError } from '@errors/index';
+import { RepositoryError } from '@errors/repository.errors';
 
 // ✅ GOOD - Specific error types
 if (!movie) {
-  throw new NotFoundError('Movie not found');
-}
-
-if (!isValidId(movieId)) {
-  throw new ValidationError('Invalid movie ID format');
+  throw new RepositoryError('Movie not found', 'not_found');
 }
 ```
 
@@ -308,7 +277,7 @@ npm test --workspace backend          # Unit tests
 npm run test:backend:e2e              # E2E tests with Docker
 
 # Frontend testing
-npm run test:frontend                 # Unit tests
+npm test --workspace frontend        # Unit tests
 npm run test:frontend:e2e            # E2E tests with backend integration
 npm run test:frontend:visual         # Visual regression tests
 
@@ -328,8 +297,8 @@ npm run lint:fix
 
 # Type check
 npm run check:ts
-npm run check:ts:backend
-npm run check:ts:frontend
+npm run check:ts --workspace backend
+npm run check:ts --workspace frontend
 
 # Build verification
 npm run build           # Builds everything
@@ -341,7 +310,7 @@ npm run build:frontend
 
 ```bash
 # Start full stack
-npm run dev                           # Backend + Frontend concurrently
+npm run dev                           # Backend, frontend, catalog, lists, and sources
 
 # Backend only
 npm run start:backend                # With configuration wizard
@@ -379,7 +348,7 @@ npm run stop:backend:e2e             # Clean up when done
 
 **Frontend Components:**
 
-- Reusable UI: `frontend/src/shared/components/`
+- Reusable UI: `frontend/src/shared/ui/`
 - Page-level: `frontend/src/pages/`
 - Feature-specific: `frontend/src/features/[feature-name]/ui/`
 - Redux state: `frontend/src/store/` or `frontend/src/features/[feature-name]/api/`
@@ -392,9 +361,9 @@ npm run stop:backend:e2e             # Clean up when done
 
 **Background Tasks:**
 
-- Task scheduling: `backend/src/services/scheduler/`
+- Task scheduling: `backend/src/services/background-job/`
 - Content discovery: `backend/src/services/source/`
-- Metadata processing: `backend/src/services/media/`
+- Catalog metadata and season sync: `services/media-catalog/`
 
 ### Key File Locations
 
@@ -406,7 +375,7 @@ npm run stop:backend:e2e             # Clean up when done
 - `backend/src/services/auth/auth.service.ts` - Authentication (complete)
 - `backend/src/routes/index.ts` - Route definitions
 - `frontend/src/app/AppShell.tsx` - Application shell
-- `frontend/src/features/auth/` - Auth feature module (needs completion)
+- `frontend/src/features/auth/` - Auth APIs, login, QR flows, and session integration
 
 ### Project Structure
 
@@ -456,21 +425,21 @@ miauflix/
 
 ### Database Changes
 
-- ⚠️ Entity changes immediately affect schema (synchronize: true)
-- ⚠️ No migrations system - test thoroughly in development
+- ⚠️ Entity changes affect schema through explicit startup synchronization
+- ⚠️ Follow ordered data migrations and pre-sync column renames; test preservation of existing data
 - ⚠️ Adding optional fields: Safe
-- ⚠️ Renaming/removing fields: Will lose data
+- ⚠️ Renaming/removing fields requires a preservation plan; see `docs/ai/gotchas.md`
 
 ### Background Tasks
 
-- ⚠️ 7 tasks run continuously - be aware of active processes
+- ⚠️ Configured recurring jobs may be active through Bunqueue; inspect schedules and readiness
 - ⚠️ E2E environment supports hot reloading
 - ⚠️ Production Docker requires rebuild/redeploy to update tasks
 
 ### Frontend Status
 
-- ✅ Frontend builds successfully
-- ⚠️ Frontend JWT auth integration is missing (backend is complete)
+- Authentication is integrated; account/profile UI work remains in `ToDo.md`
+- Run build and type checks against the current checkout
 
 ---
 
@@ -484,7 +453,7 @@ miauflix/
 2. **Verify Implementation Status**
    - Don't assume tasks marked as incomplete are actually incomplete
    - Check actual codebase implementation vs todo status
-   - **95% of backend is production-ready** - focus on what's actually missing
+   - Use `docs/features.md` and `ToDo.md`, then verify what the implementation already owns
 
 3. **Understand Dependencies**
    - Check if required infrastructure already exists (it probably does)
@@ -500,7 +469,7 @@ miauflix/
 
 ## 💡 Development Priorities
 
-1. **Frontend JWT Integration** - Connect to existing backend auth
+1. **Current task scope** - Use `ToDo.md` and verified implementation gaps
 2. **Documentation Updates** - Keep docs synchronized with implementation
 3. **Bug Fixes** - Address issues in existing functionality
 
@@ -508,10 +477,10 @@ miauflix/
 
 ## 🚨 Common Pitfalls to Avoid
 
-- **Don't rebuild existing infrastructure** - 95% of backend is production-ready
+- **Don't rebuild existing infrastructure** - Verify and extend its existing owner
 - **Don't trust todo status blindly** - Verify against actual implementation
-- **Don't create authentication from scratch** - Backend JWT system is complete
-- **Don't implement source aggregation** - YTS + THERARBG providers are fully functional
+- **Reuse the existing authentication flow** - Browsers use session-scoped HttpOnly cookies, TV clients use token transport, and streaming uses separate expiring grants. Preserve these distinctions and reuse the [backend authentication transport](backend/src/utils/auth-transport.util.ts) and [TV client transport](frontend/src/shared/api/tv-auth.ts) utilities
+- **Don't implement source aggregation** - the sources service and its indexer definitions are fully functional
 - **Don't assume WebTorrent needs setup** - DownloadService is complete and operational
 - **Don't install dependencies in workspace directories** - Will break npm workspaces
 - **Don't make real API calls in tests** - Use HTTP-VCR fixtures only
@@ -523,21 +492,20 @@ miauflix/
 
 ### Environment Variables
 
-- **Never hardcode secrets** - Use environment variables only
-- **Follow existing configuration.utils.ts pattern** - Interactive setup system exists
-- **Use `ENV()` helper** - Never read `process.env` directly
+- **Never hardcode secrets** - Use the managed configuration system
+- **Follow existing configuration services and helpers** - Browser and CLI setup already exist
+- **Use the injected `ConfigurationService`** - It is the backend source of truth for environment configuration. Use `get()` for optional values and `getOrThrow()` for required values; never read `process.env` directly in backend application code
 - **VPN detection is active** - Backend detects VPN status
-- **Encryption is production-ready** - AES-256-GCM for sensitive fields
+- **Encryption is implemented** - Preserve keys and existing encrypted data
 
 ### Configuration Access
 
 ```typescript
-// ✅ CORRECT - Use ENV() helper
-import { ENV } from '@constants';
-const apiUrl = ENV('TMDB_API_URL');
+// ✅ CORRECT - Inside a service with an injected configurationService
+const port = this.configurationService.getOrThrow('PORT');
 
 // ❌ WRONG - Direct process.env access
-const apiUrl = process.env.TMDB_API_URL; // Don't do this
+const port = process.env.PORT; // Don't do this
 ```
 
 ---
@@ -553,10 +521,6 @@ const apiUrl = process.env.TMDB_API_URL; // Don't do this
 
 ## 🎬 Remember
 
-This is a **complete, sophisticated streaming platform** that needs **only frontend JWT authentication integration**, not a ground-up rebuild. The backend including streaming is fully functional. Focus surgically on connecting the frontend to existing backend authentication.
+Verify the existing implementation before planning new work. Authentication is integrated, and the backend and supporting services already own discovery, catalog data, playback, and personal state. Follow [current context](docs/ai/context.md), [features](docs/features.md), and the [task list](ToDo.md) and verify the implementation relevant to the task.
 
-**Golden Rule**: When in doubt, check the actual implementation in `backend/src/services/` - most things are already built and working.
-
----
-
-_Last updated: Based on project status as of 2025-01-30_
+**Golden Rule**: When in doubt, check the responsible service and its current tests before rebuilding it.

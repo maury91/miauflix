@@ -39,10 +39,22 @@ finish events save immediately; the player's periodic heartbeat stops while
 paused.
 
 The durable outbox starts after the List Service accepts a progress update. If the
-List Service itself is unavailable, the backend still saves local progress and
-logs the export failure; the next playback report can enqueue the latest position.
+List Service itself is unavailable, the backend still saves local progress. A failed
+export attempt is logged; a playback report can enqueue the latest position once the
+service is ready.
 Existing local records are not bulk-exported on account connection.
 
 Trakt rejects pauses above 80% progress and requires a stop scrobble. Such late
 pauses are exported using stop; Trakt can mark them watched while Miauflix keeps
 the exact local position.
+
+## Implementation references
+
+- [Local progress and provider merge](../../backend/src/services/progress/progress.service.ts)
+- [Progress routes](../../backend/src/routes/progress.routes.ts)
+- [Encrypted outbox and snapshots](../../services/list-service/src/playback-sync.ts)
+- [Trakt provider operations](../../services/list-service/src/trakt-client.ts)
+- [List service lifecycle](../../services/list-service/src/service.ts)
+- [Player progress reports](../../frontend/src/pages/home/components/PlayerView.tsx)
+
+For account linking and transport ownership, see [Service contracts](service-contract-v2.md) and [System overview](system-overview.md).

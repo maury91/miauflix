@@ -26,6 +26,8 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 - TV episodes now find season packs and older episodes; source search runs in a separate service.
 - **Sources settings**: admins can enable, disable and reorder source providers, test them, set request budgets and add provider repositories from Settings → Sources.
+- **Sources are definitions**: Miauflix ships no code for any particular site. Indexers come from definition lists fetched at runtime (Prowlarr's by default, plus a small `maury91/miauflix-indexers` list), which you can change or extend with your own URLs.
+- **More source providers**: add public Jackett indexers (no Jackett needed) or your own Jackett/Prowlarr Torznab endpoints from Settings → Sources.
 
 - The server no longer slows down after running for a few hours
 - A server that stops responding is restarted automatically

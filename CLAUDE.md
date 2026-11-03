@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Miauflix is a self-hosted streaming platform that enables users to discover and stream content from various sources. The backend is production-ready and fully functional, including complete streaming capabilities. The frontend is fully integrated with session-based authentication using HttpOnly cookies. The project uses a monorepo structure with npm workspaces.
+Miauflix is a self-hosted movie and TV streaming platform in an npm workspace monorepo. Read `docs/ai/context.md` and `docs/ai/gotchas.md` before changes. Use `docs/features.md` for implemented capabilities and `ToDo.md` for planned work, then verify behavior against the current code. Documentation is not proof of passing builds or production readiness.
 
 ## Key Commands
 
@@ -25,7 +25,7 @@ npm run check:ts                     # TypeScript type checking
 
 ```bash
 # Start development environment
-npm run dev                          # Starts backend and frontend concurrently
+npm run dev                          # Backend, frontend, catalog, lists, and sources
 npm run start:backend               # Backend only
 
 # Production deployment
@@ -84,9 +84,9 @@ npm run start:backend:e2e           # Start Docker environment for development
 npm run stop:backend:e2e            # Stop Docker environment
 
 # Frontend tests
-npm run test:frontend               # Unit tests (limited coverage)
+npm test --workspace frontend      # Frontend unit tests
 npm run test:e2e                    # E2E tests with full backend integration
-npm run test:visual                 # Visual regression tests (Storybook components)
+npm run test:frontend:visual        # Visual regression tests (Storybook components)
 ```
 
 ### Code Quality
@@ -103,12 +103,12 @@ npm run format:check                # Check formatting without changes
 ### Technology Stack
 
 - **Runtime**: Node.js 22 with ESM modules
-- **Backend Framework**: Hono (Express-like but faster)
+- **Backend Framework**: Hono
 - **Frontend**: React with Vite, Redux Toolkit, styled-components
 - **Database**: TypeORM with SQLite
-- **Authentication**: Three-tier system: (1) JWT tokens for API authentication, (2) HttpOnly refresh token cookies for token renewal only, (3) Non-JWT streaming keys for video access (jose library)
+- **Authentication**: JWT access and opaque rotating refresh tokens. Browsers receive session-scoped HttpOnly access/refresh cookies; the TV app requests token transport and sends token headers. Streaming uses separate grants.
 - **Streaming**: WebTorrent for peer-to-peer content delivery
-- **External APIs**: TMDB (metadata), Trakt.tv (lists), NordVPN (status)
+- **Supporting services**: Bun catalog (TMDB), lists (Trakt), and sources (Cardigann/Torznab), accessed through versioned contracts; NordVPN status checks run in the relevant network owners
 
 ### Project Structure
 
@@ -129,72 +129,30 @@ miauflix/
 └── docs/                       # Project documentation
 ```
 
-### Core Services (All Production-Ready)
+### Core Services
 
-- **AuthService**: JWT access tokens with HttpOnly refresh cookies and role-based access
-- **SourceService**: Multi-provider torrent source aggregation (YTS, THERARBG)
-- **DownloadService**: WebTorrent client management for streaming
-- **StreamService**: Source selection and streaming optimization
-- **MediaService**: TMDB integration for movie/TV metadata
-- **TraktService**: Trakt.tv integration for list synchronization
-- **EncryptionService**: AES-256-GCM encryption for sensitive data
-- **SchedulerService**: Background task management (7 operational tasks)
+- **AuthService**: Account authentication, sessions, and user/admin roles
+- **SourceService**: Backend source persistence, discovery orchestration, and verification
+- **DownloadService**: WebTorrent client, encrypted media storage, and retention
+- **StreamService / PlaybackSessionService**: Playback selection, preparation, grants, and delivery
+- **MediaService / CatalogClient**: Local indexes and access to the catalog service
+- **services/media-catalog**: TMDB-backed metadata, freshness, artwork, and season workers
+- **services/list-service**: Trakt lists, account linking, watchlists, and playback synchronization
+- **services/sources**: Supported Cardigann/Torznab providers and search planning
+- **EncryptionService**: Encryption for selected sensitive data
+- **backend/src/services/background-job/**: Bunqueue workers and recurring schedule coordination
 
 ## Current Implementation Status
 
-### ✅ Fully Functional Components
+Authentication is integrated in both the browser and packaged TV app. Movie/TV browsing, source discovery, playback sessions, seeking, audio conversion, local text subtitles, progress, ratings, watchlists, notifications, and storage administration have implementations. Reuse these owners rather than assuming they need creating.
 
-- **Complete Streaming Infrastructure**: WebTorrent client with streaming endpoint `/api/stream/:token`
-- **Source Aggregation**: Multi-provider background processing (YTS + THERARBG)
-- **Authentication System**: Full JWT implementation with refresh tokens and role-based access
-- **Database Layer**: Complete entity model with AES-256-GCM encryption
-- **Background Processing**: All 7 scheduled tasks operational and production-ready
-- **API Infrastructure**: Comprehensive routes with authentication and rate limiting
-- **VPN Integration**: Detection and enforcement system
-- **Security**: Audit logging, encryption, rate limiting, and timing attack protection
+Known boundaries include movie-only OpenSubtitles search, optional HEVC conversion, partial Cardigann support, and pending account/profile UI work. See `docs/ai/context.md`, `docs/features.md`, and `ToDo.md` for the detailed boundaries. Run relevant checks for the current checkout; verify build and completion claims against relevant checks.
 
-### ✅ Frontend Status
+## Streaming Implementation
 
-- **Build System**: Frontend builds successfully without TypeScript errors
-- **Architecture**: React application with Vite, Redux Toolkit setup
-- **Authentication**: Complete session-based auth with HttpOnly cookies
-- **Components**: Full login system with email/password and QR code flows
-- **Integration**: Backend serves frontend with API mounted under `/api`
+`/api/stream/:token` delivers a source authorized by an expiring streaming grant and supports byte ranges for direct playback. Playback sessions select and prepare sources using stored-download, codec, quality, and bitrate preferences; incompatible sources can fall back. Audio/video adaptation, local subtitle delivery, next-episode preparation, and encrypted storage have dedicated owners.
 
-### ✅ Integration Complete
-
-The frontend-backend integration is now **fully implemented**:
-
-- ✅ Session-based authentication with secure HttpOnly cookies
-- ✅ User authentication flow with email and QR code login
-- ✅ Protected route management
-- ✅ Backend serves frontend static assets and handles client-side routing
-- ✅ API requests properly authenticated via session cookies
-
-### Current Status
-
-- **Backend**: 100% complete and production-ready with full streaming capabilities
-- **Frontend**: 100% complete with full authentication integration
-- **Status**: Production-ready streaming platform
-
-## Streaming Implementation (Completed)
-
-The streaming system is fully implemented and production-ready:
-
-### Stream Endpoint: `/api/stream/:token`
-
-- **Authentication**: Uses streaming keys with timing attack protection
-- **Quality Selection**: Supports quality preference and codec filtering (HEVC support)
-- **Range Requests**: Full support for video seeking and partial content delivery
-- **Error Handling**: Comprehensive error handling for various streaming scenarios
-- **Rate Limiting**: 60 requests per minute for streaming operations
-
-### Stream Service Features
-
-- **Best Source Selection**: Automatically selects optimal source based on quality and codec preferences
-- **On-Demand Search**: Real-time source discovery with 3-second timeout
-- **Fallback Logic**: Quality fallback when exact matches aren't available
-- **Statistics**: Real-time seeders/leechers data
+See `backend/docs/streaming-services.md` and inspect the current route/service definitions for limits, endpoints, and configuration. The existing automatic quality preference is not the planned Watch Now quality-selection UI.
 
 ## Development Guidelines
 
@@ -215,14 +173,14 @@ The project uses path aliases to avoid deep relative imports:
 
 ```typescript
 // ✅ Use aliases (backend)
-import { UserEntity } from '@entities/user.entity';
+import { User } from '@entities/user.entity';
 import { AuthService } from '@services/auth/auth.service';
 
 // ❌ Avoid deep relative paths
-import { UserEntity } from '../../../entities/user.entity';
+import { User } from '../../../entities/user.entity';
 ```
 
-Available aliases: `@entities/`, `@services/`, `@repositories/`, `@routes/`, `@middleware/`, `@utils/`, `@database/`, `@mytypes/`, `@content-directories/`, `@errors/`
+Available aliases: `@entities/`, `@services/`, `@repositories/`, `@routes/`, `@middleware/`, `@utils/`, `@database/`, `@mytypes/`, `@errors/`
 
 ### Testing Patterns (MANDATORY)
 
@@ -275,63 +233,31 @@ afterEach(() => {
 
 - Tests use HTTP-VCR fixtures (pre-recorded API responses)
 - NEVER make real API calls in tests (breaks CI and rate limits)
-- Database uses `synchronize: true` - entity changes immediately affect schema
+- Startup explicitly synchronizes TypeORM schema after registered column renames; ordered data migrations also run
 - Test in isolation to avoid race conditions
 
 ## Development Focus Areas
 
-### 1. ✅ Authentication System Complete
+Follow the user's task and the current backlog in `ToDo.md`. Existing API account creation/logout must not be mistaken for a finished account-management interface. Profile selection/editing, account-creation screens, a logout control, interface translations, and other future work are tracked separately.
 
-The frontend authentication system is fully implemented:
+Current authentication endpoints include:
 
-**Completed implementations:**
+- `POST /api/auth/login` - Email/password login
+- `POST /api/auth/refresh/:session` - Session token rotation
+- `POST /api/auth/logout/:session` - Session logout
+- `/api/auth/qr/*` - QR approval and claim flow
 
-- ✅ User login/logout flow with email and QR code options
-- ✅ Session-based authentication with HttpOnly cookies
-- ✅ Protected route components
-- ✅ API request authentication via session cookies
-- ✅ User session management
-
-**Available backend endpoints:**
-
-- `POST /api/auth/login` - User authentication
-- `POST /api/auth/refresh/:session` - Token refresh
-- `POST /api/auth/logout` - User logout
-- All protected endpoints accessible via session cookies
-
-### 2. ✅ Frontend-Backend Integration Complete
-
-- ✅ Movie listing and search endpoints connected
-- ✅ Stream key generation for video playback
-- ✅ User progress tracking
-- ✅ List management (Trakt integration)
-- ✅ Backend serves frontend and handles all API requests
-
-### 3. ✅ Video Player Integration Ready
-
-- ✅ Integrated with `/api/stream/:token` endpoint for video playback
-- ✅ Streaming key generation and management
-- ✅ Video player controls and seeking capabilities
+Browser API calls use session cookies; token-transport clients use headers. Trakt account linking is an integration, not Miauflix login.
 
 ## Configuration System
 
-The project includes an interactive configuration wizard:
+The browser editor and CLI wizard (`npm run config` or `npm run config-only`) validate settings and persist application configuration in the data directory. Saved values can override bootstrap environment defaults. Connected services publish configuration schemas; retain their data volumes and encryption keys.
 
-- Detects missing environment variables
-- Guides through setup with real-time API credential testing
-- Saves settings to `.env` file
-- Run with `npm run config` or `npm run config-only`
-
-Required environment variables:
-
-- `TMDB_API_ACCESS_TOKEN` - TMDB API access token
-- `TRAKT_CLIENT_ID` - Trakt.tv client ID (optional)
-- `JWT_SECRET` - JWT signing secret
-- `NORDVPN_PRIVATE_KEY` - NordVPN private key (optional)
+TMDB credentials are needed for catalog access; Trakt credentials enable optional list/synchronization features. Signing/encryption secrets can be generated automatically. NordVPN credentials belong to the VPN deployment. See `docs/setup/environment-variables.md` rather than treating every setting as a required backend environment variable.
 
 ## Common Pitfalls to Avoid
 
-- **Don't rebuild existing backend infrastructure** - It's production-ready and fully functional
+- **Don't rebuild existing backend infrastructure** - Verify and extend the responsible owner
 - **Don't install dependencies in workspace directories** - Will break npm workspaces
 - **Don't make real API calls in tests** - Use HTTP-VCR fixtures only
 - **Don't put jest.mock() in describe blocks** - Must be at file top
@@ -340,7 +266,7 @@ Required environment variables:
 
 ## Key File References
 
-### Critical Backend Files (Production-Ready)
+### Critical Backend Files
 
 - `backend/src/app.ts` - Main application entry point, serves frontend
 - `backend/src/routes/stream.routes.ts` - Streaming endpoint (complete)
@@ -349,13 +275,13 @@ Required environment variables:
 - `backend/src/services/auth/auth.service.ts` - Authentication (complete)
 - `backend/src/routes/index.ts` - Route registration under `/api`
 
-### Frontend Files (Complete Integration)
+### Frontend Files
 
 - `frontend/src/store/` - Redux store setup (complete)
-- `frontend/src/store/api/` - API integration layer (complete with auth)
+- `frontend/src/features/*/api/` - Feature API integrations
 - `frontend/src/store/slices/` - State management (complete auth slice)
-- `frontend/src/app/pages/login/` - Login page components (complete)
-- `frontend/src/app/pages/login/components/` - LoginWithEmail, LoginWithQR components
+- `frontend/src/features/auth/ui/login/` - Email/password and QR login controls
+- `frontend/src/pages/login/` - Login page
 
 ## Documentation Resources
 
@@ -371,17 +297,6 @@ Essential reading before making changes:
 
 ## Project Reality Check
 
-This is a **sophisticated, production-ready streaming platform** with:
-
-- ✅ Complete backend infrastructure including full streaming capabilities
-- ✅ WebTorrent integration with peer-to-peer streaming
-- ✅ Multi-provider content aggregation
-- ✅ JWT authentication with refresh tokens
-- ✅ Database layer with encryption
-- ✅ Background processing and scheduling
-- ✅ VPN integration and security features
-- ✅ Frontend builds successfully without errors
-
-**The platform is production-ready** - Both backend infrastructure and frontend integration are complete. The system features session-based authentication with HttpOnly cookies, full streaming capabilities, and a responsive React frontend. Development efforts can now focus on new features, performance optimizations, and user experience enhancements.
+Verify behavior against implementation, using the owning modules and task-relevant checks. Read `docs/ai/context.md`, `docs/features.md`, and `ToDo.md` for current capabilities and gaps.
 
 - always run npm commands from the workspace root, never from subfolders

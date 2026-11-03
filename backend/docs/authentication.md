@@ -1,800 +1,161 @@
-# Authentication System
+# Authentication system
 
-### Overview
+Miauflix authenticates its own accounts with passwords or an approved QR login. API access uses JWTs; opaque refresh tokens renew sessions. Browsers and the installed Samsung TV app use different token transports. Trakt account linking is a separate integration and never authenticates a Miauflix account.
 
-Miauflix uses a **secure, cookie-based authentication system** with rotating opaque refresh tokens and memory-stored JWT access tokens. This design provides maximum security by preventing client-side token theft and implementing efficient token rotation with race condition detection.
+For available account controls and planned UI, see [Accounts and your personal collection](../../docs/features/accounts.md). The implementation is in [auth routes](../src/routes/auth.routes.ts), [AuthService](../src/services/auth/auth.service.ts), and [auth middleware](../src/middleware/auth.middleware.ts).
 
-## Security Features
+## Tokens and sessions
 
-- **HttpOnly Cookie Refresh Tokens**: Refresh tokens stored in secure, HttpOnly cookies inaccessible to JavaScript
-- **Memory-Only Access Tokens**: JWT access tokens stored in memory, never persisted client-side
-- **Rotating Opaque Refresh Tokens**: Cryptographically secure tokens with atomic rotation and race condition detection
-- **Atomic Token Updates**: Single token per user gets atomically updated on refresh
-- **Chain Lifetime Limits**: Maximum refresh period prevents infinite token extension
-- **User Session Management**: Configurable token limits per user (default: 5 concurrent sessions)
-- **HS256 JWT Signatures**: HMAC-SHA256 with secret key for secure token signing
-- **Origin/Referer Validation**: CSRF protection through header validation
-- **Role-based Access Control**: Supports different user roles (USER, ADMIN)
-- **Password Hashing**: Uses bcrypt for secure password storage
-- **Comprehensive Audit Logging**: Security events and token operations logging
-- **Admin-Only User Creation**: Only administrators can create new user accounts
+- Access tokens are signed with HS256 and include user identity and role. Their default lifetime is 15 minutes.
+- Refresh tokens are random 256-bit opaque values. The database stores token hashes, with one active token row per session. Their default lifetime is seven days, with a default maximum chain age of 30 days.
+- Each successful login creates a fresh, random session identifier. It is not a deterministic device fingerprint and does not reuse a fixed user/device session ID.
+- The session-slot limit is configurable. When a login reaches the limit, the oldest refresh-token record by last access is removed to make room.
+- API middleware requires `X-Session-Id` to select the request's session and access token. A Bearer token alone does not establish the middleware's session context.
 
-## Authentication Flow
+Defaults and configuration names are defined in [auth configuration](../src/services/auth/auth.configuration.ts). Passwords are hashed with bcrypt; account roles are `user` and `admin`.
 
-| Flow                        | Endpoint(s)                                                                                 | Notes                                                                                    |
-| --------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
-| **E-mail + Password login** | `POST /api/auth/login`                                                                      | Returns access token + session + user info, sets session-scoped cookie                   |
-| **Token refresh**           | `POST /api/auth/refresh/:session`                                                           | No body required - uses session-scoped cookie                                            |
-| **Token validation**        | `POST /api/auth/refresh/:session?dry_run=true`                                              | Validates token without rotation (for profile management)                                |
-| **Logout**                  | `POST /api/auth/logout/:session`                                                            | Clears session-scoped cookie, deletes refresh token                                      |
-| **Miauflix QR login**       | `POST /api/auth/qr` → scan `/auth/qr/:approvalToken` → `POST /api/auth/qr/:requestId/claim` | The authenticated phone approves a Miauflix session; Trakt is never an identity provider |
+## Browser transport
 
-**Account creation** – only an **admin** may create users via `POST /auth/users`; self-registration is disabled.
+Normal browser login, first-run setup, QR claim, and token refresh set **both access and refresh tokens as HttpOnly cookies**. The browser response does not return a top-level `accessToken` or `refreshToken` field.
 
-#### Token Details
+| Cookie  | Default name              | Path         | Use                                    |
+| ------- | ------------------------- | ------------ | -------------------------------------- |
+| Access  | `__miauflix_at_<session>` | `/`          | Authenticated application requests     |
+| Refresh | `__miauflix_rt_<session>` | `/api/auth/` | Refresh, logout, and session discovery |
 
-- **Access Token TTL**: 15 minutes (stored in memory only)
-- **Refresh Token TTL**: 7 days (configurable via `REFRESH_TOKEN_EXPIRATION`), can be refreshed up to 30 days (configurable via `REFRESH_TOKEN_MAX_REFRESH_DAYS`)
-- **Access Token Algorithm**: HS256 with HMAC-SHA256
-- **Refresh Token**: Cryptographically secure random 256-bit tokens
-- **Cookie Security**: HttpOnly, Secure, SameSite=Strict
-- **Device Sessions**: Configurable limit per user (`MAX_DEVICE_SESSIONS_PER_USER`)
+Both cookies use `SameSite=Strict`. `COOKIE_SECURE` controls the `Secure` attribute and defaults to `false`; the supplied HTTPS deployment enables it. `COOKIE_DOMAIN` is optional. Enabling `COOKIE_SECURE` does **not** automatically add a `__Secure-` prefix to cookie names.
 
-#### Protecting Routes
+The browser sends credentials and `X-Session-Id` for protected requests. Middleware first looks for the selected session's access cookie, then falls back to `Authorization: Bearer`. JavaScript does not read the browser's HttpOnly tokens.
 
-```ts
-import { authGuard } from '@/middleware/authGuard';
-
-app.get('/api/secure', authGuard(), c => c.json({ ok: true }));
-```
-
-**Public endpoints** (no guard):  
-`POST /auth/login`, `/auth/refresh`, `/auth/logout`, `/auth/qr`, `/auth/qr/:requestId/claim`,
-`GET /auth/qr/:approvalToken`, `GET /health`.
-
-All other routes must opt-in to `authGuard` if they need authentication.
-
-##### Usage Example
-
-```typescript
-// Protected route example
-app.get('/protected', ({ user }) => {
-  return { message: `Hello ${user.email}!` };
-});
-
-// Admin-only route example
-app.get('/admin', ({ user }) => {
-  if (user.role !== UserRole.ADMIN) {
-    throw new Error('Forbidden');
-  }
-  return { message: 'Admin access granted' };
-});
-```
-
-## API Endpoints
-
-### Public Routes
-
-#### `POST /api/auth/login` - Email/Password Login
-
-- **Body**: `{ email: string, password: string }`
-- **Returns**: `{ accessToken: string, session: string, user: { id: string, email: string, role: string } }`
-- **Side Effects**:
-  - Generates or reuses session for user/device combination
-  - Sets session-scoped HttpOnly refresh token cookie with path restriction
-- **Security**: Origin validation, rate limiting, device fingerprinting
-- **Cookie**: Scoped to `/api/auth/` path (allows access from both refresh and logout endpoints)
-- **Session Generation**:
-  - Existing session: Reuses consistent session based on device fingerprint
-  - New session: Generates new unique session identifier
-
-#### `POST /api/auth/refresh/:session` - Refresh Access Token
-
-- **Path Params**: `session` - Profile session identifier matching the login session
-- **Query Params**: `dry_run=true` (optional) - Validates token without rotation
-- **Body**: None (uses session-scoped HttpOnly cookie)
-- **Returns**:
-  - Normal mode: `{ accessToken: string, user: { id: string, email: string, role: string } }`
-  - Dry-run mode: `{ valid: boolean }`
-- **Side Effects**:
-  - Normal mode: Atomically updates refresh token in same database row, updates device session
-  - Dry-run mode: No side effects, only validation
-- **Security**: Race condition detection via atomic UPDATE operations, chain lifetime validation
-- **Use Case**: Dry-run mode used by client to validate stored profile sessions for profile selector
-
-#### `POST /api/auth/logout/:session` - Logout
-
-- **Path Params**: `session` - Profile session identifier matching the login/refresh session
-- **Body**: None (uses session-scoped HttpOnly cookie)
-- **Returns**: `{ message: string }`
-- **Side Effects**: Clears session-scoped cookie, deletes refresh token from database
-
-### Admin-Only Routes
-
-#### `POST /api/auth/users` - Create User
-
-- **Body**: `{ email: string, password: string, role: UserRole }`
-- **Returns**: `{ id: string, email: string, role: UserRole }`
-- **Security**: Admin role required, rate limiting
-
-## Environment Variables
-
-The authentication system uses the following environment variables:
-
-```bash
-# JWT Secret (auto-generated if not provided)
-JWT_SECRET=auto-generated-hex-key
-
-# Cookie Configuration
-REFRESH_TOKEN_COOKIE_NAME=__miauflix_rt
-COOKIE_DOMAIN=.yourdomain.com  # Optional - leave empty for same-origin
-COOKIE_SECURE=false            # Default: false (allows HTTP for development)
-                               # Set to true for production HTTPS environments
-
-# Token Configuration
-REFRESH_TOKEN_EXPIRATION=7d          # Amount of time before refresh tokens expire ( valid units are m | h | d )
-REFRESH_TOKEN_MAX_REFRESH_DAYS=30    # Maximum days a refresh token can be refreshed
-MAX_DEVICE_SESSIONS_PER_USER=5       # Maximum devices per user
-
-# Streaming
-STREAM_TOKEN_EXPIRATION=6h
-STREAM_KEY_SALT=auto-generated
-```
-
-**Key Generation**: If JWT_SECRET is not provided, it is automatically generated on startup and should be saved to your `.env` file for consistency across restarts.
-
-### Cookie Security Configuration
-
-#### COOKIE_SECURE Environment Variable
-
-The `COOKIE_SECURE` environment variable controls whether cookies are marked with the `Secure` attribute and affects security prefix usage:
-
-**Development/Local (Default):**
-
-```bash
-COOKIE_SECURE=false  # Allows HTTP connections (localhost, development)
-```
-
-- Cookies work over HTTP and HTTPS
-- No secure cookie prefix applied
-- Suitable for local development and self-hosted environments without SSL
-
-**Production (Recommended):**
-
-```bash
-COOKIE_SECURE=true   # Requires HTTPS connections
-```
-
-- Cookies only sent over HTTPS connections
-- Automatically applies `__Secure-` prefix to cookie names
-- Enhanced security for production environments
-- **Required** for deployments with SSL certificates
-
-#### Cookie Naming with Security Prefixes
-
-When `COOKIE_SECURE=true`, the system automatically applies secure cookie prefixes per RFC 6265bis:
+Example of the browser request sequence:
 
 ```javascript
-// Development (COOKIE_SECURE=false):
-Cookie: __miauflix_rt_session_abc123;
-
-// Production (COOKIE_SECURE=true):
-Cookie: __Secure - __miauflix_rt_session_abc123;
-```
-
-**Security Benefits of `__Secure-` Prefix:**
-
-- **HTTP Downgrade Protection**: Browser enforces HTTPS-only transmission
-- **Standards Compliance**: Follows RFC 6265bis security recommendations
-- **Attack Prevention**: Prevents insecure sites from overwriting secure cookies
-
-#### Deployment Scenarios
-
-**Self-Hosted without SSL:**
-
-```bash
-COOKIE_SECURE=false
-COOKIE_DOMAIN=          # Empty for same-origin only
-```
-
-**Self-Hosted with SSL:**
-
-```bash
-COOKIE_SECURE=true
-COOKIE_DOMAIN=          # Empty for same-origin only
-```
-
-**Production with Custom Domain:**
-
-```bash
-COOKIE_SECURE=true
-COOKIE_DOMAIN=.yourdomain.com
-```
-
-**Local Development:**
-
-```bash
-COOKIE_SECURE=false     # Allows http://localhost
-COOKIE_DOMAIN=          # Empty for localhost
-```
-
-## Multi-Profile Session System
-
-### Overview
-
-The authentication system supports **multiple user profiles per browser** through a session-based cookie scoping mechanism. This allows users to maintain separate authenticated sessions for different profiles simultaneously.
-
-### How Sessions Work
-
-1. **Automatic Session Generation**: Login generates or reuses session identifiers based on user/device combinations
-2. **Cookie Scoping**: Refresh tokens are stored in session-specific cookies with path restrictions
-3. **URL-Based Routing**: Different sessions use different endpoint paths for automatic cookie selection
-4. **Profile Management**: Client can validate all stored sessions to show available profiles
-5. **Session Reuse**: Same user on same device gets consistent session for existing sessions
-
-### Session-Based Cookie System
-
-```javascript
-// Each session gets its own cookie name, all cookies accessible to auth endpoints
-Cookie: __miauflix_rt_session_abc123  →  Available to /api/auth/* endpoints
-Cookie: __miauflix_rt_session_def456  →  Available to /api/auth/* endpoints
-Cookie: __miauflix_rt_session_ghi789  →  Available to /api/auth/* endpoints
-
-// Session isolation through cookie names, not path restrictions
-/api/auth/refresh/session_abc123   →  Uses __miauflix_rt_session_abc123
-/api/auth/logout/session_abc123    →  Uses __miauflix_rt_session_abc123
-/api/auth/refresh/session_def456   →  Uses __miauflix_rt_session_def456
-/api/auth/logout/session_def456    →  Uses __miauflix_rt_session_def456
-```
-
-**Cookie Properties:**
-
-- **Name**: `{REFRESH_TOKEN_COOKIE_NAME}_{session}` (e.g., `__miauflix_rt_session_abc123`)
-- **Path**: `/api/auth/` (restricts cookie to all auth endpoints, enables logout functionality)
-- **Session Isolation**: Through unique cookie names, not path restrictions
-- **HttpOnly**: True (prevents JavaScript access)
-- **Secure**: True (HTTPS only)
-- **SameSite**: Strict (CSRF protection)
-
-### Client Profile Management
-
-```javascript
-// Login and get session
-const loginResponse = await fetch('/api/auth/login', {
+const login = await fetch('/api/auth/login', {
   method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
   credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify({ email, password }),
 });
-
-const { accessToken, session, user } = await loginResponse.json();
-
-// Store session for this profile
-const profiles = JSON.parse(localStorage.getItem('profiles') || '{}');
-profiles[user.email] = { session, user };
-localStorage.setItem('profiles', JSON.stringify(profiles));
-
-// On app startup, validate all stored profile sessions
-const storedProfiles = JSON.parse(localStorage.getItem('profiles') || '{}');
-const validProfiles = {};
-
-for (const [email, profile] of Object.entries(storedProfiles)) {
-  try {
-    // Dry-run validation - no token rotation
-    const response = await fetch(`/api/auth/refresh/${profile.session}?dry_run=true`, {
-      method: 'POST',
-      credentials: 'include', // Include session-scoped cookies
-    });
-
-    if (response.ok) {
-      const { valid } = await response.json();
-      if (valid) {
-        validProfiles[email] = profile;
-      }
-    }
-  } catch (error) {
-    // Profile is invalid, remove from storage
-    console.log(`Profile ${email} is no longer valid`);
-  }
-}
-
-// Update storage and show profile selector
-localStorage.setItem('profiles', JSON.stringify(validProfiles));
-showProfileSelector(validProfiles);
-```
-
-### Authentication Flow with Sessions
-
-1. **Login**: `POST /api/auth/login` → Returns `{ session: "session_abc123", ... }` and sets `__miauflix_rt_session_abc123` cookie
-2. **Client Storage**: Client stores session identifier in localStorage for profile management
-3. **Token Use**: Client stores access token in memory/sessionStorage for API calls
-4. **Profile Switch**: Client can switch between profiles without re-authentication
-5. **Token Refresh**: `POST /api/auth/refresh/session_abc123` → Browser automatically sends correct cookie
-6. **Logout**: `POST /api/auth/logout/session_abc123` → Clears specific profile's cookie
-
-### Benefits
-
-- **Multiple Profiles**: Users can stay logged into multiple accounts simultaneously
-- **Automatic Cookie Selection**: Browser handles cookie routing based on URL paths
-- **Profile Persistence**: Profiles remain authenticated across browser sessions
-- **Easy Validation**: Dry-run mode allows efficient profile state checking
-- **Clean Logout**: Each profile can be logged out independently
-
-## Frontend Session Management
-
-### Security Models
-
-The frontend can choose between two session management approaches based on security requirements:
-
-#### Option 1: Memory-Only Storage (Maximum Security)
-
-```javascript
-class MemorySessionStore {
-  private sessions = new Map();
-
-  storeSession(email, sessionId) {
-    this.sessions.set(email, {
-      session: sessionId,
-      timestamp: Date.now()
-    });
-  }
-
-  getSession(email) {
-    return this.sessions.get(email)?.session || null;
-  }
-
-  clearExpiredSessions() {
-    const now = Date.now();
-    const TIMEOUT = 15 * 60 * 1000; // 15 minutes
-
-    for (const [email, data] of this.sessions) {
-      if (now - data.timestamp > TIMEOUT) {
-        this.sessions.delete(email);
-      }
-    }
-  }
-}
-```
-
-**Security Properties:**
-
-- ✅ Maximum security - no JavaScript access from malicious scripts
-- ✅ Memory cleared on tab close/refresh
-- ✅ No persistent storage exposure
-- ❌ Requires re-login for each tab/session
-
-#### Option 2: SessionStorage (Balanced Security)
-
-```javascript
-class SessionStorageStore {
-  private readonly STORAGE_KEY = 'miauflix_sessions';
-
-  storeSession(email, sessionId) {
-    try {
-      const sessions = this.getAllSessions();
-      sessions[email] = {
-        session: sessionId,
-        timestamp: Date.now()
-      };
-      sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(sessions));
-    } catch (error) {
-      console.error('Failed to store session:', error);
-      // Fallback to memory storage
-    }
-  }
-
-  getSession(email) {
-    try {
-      const sessions = this.getAllSessions();
-      return sessions[email]?.session || null;
-    } catch (error) {
-      console.error('Failed to retrieve session:', error);
-      return null;
-    }
-  }
-
-  getAllSessions() {
-    try {
-      const data = sessionStorage.getItem(this.STORAGE_KEY);
-      return data ? JSON.parse(data) : {};
-    } catch (error) {
-      console.error('Failed to parse sessions:', error);
-      return {};
-    }
-  }
-
-  async validateStoredSessions() {
-    const sessions = this.getAllSessions();
-    const validSessions = {};
-
-    for (const [email, data] of Object.entries(sessions)) {
-      try {
-        // Dry-run validation
-        const response = await fetch(`/api/auth/refresh/${data.session}?dry_run=true`, {
-          method: 'POST',
-          credentials: 'include'
-        });
-
-        if (response.ok) {
-          const { valid } = await response.json();
-          if (valid) {
-            validSessions[email] = data;
-          }
-        }
-      } catch (error) {
-        console.log(`Session validation failed for ${email}:`, error);
-      }
-    }
-
-    // Update storage with only valid sessions
-    sessionStorage.setItem(this.STORAGE_KEY, JSON.stringify(validSessions));
-    return validSessions;
-  }
-
-  clearInvalidSessions() {
-    // Clear all sessions on security errors
-    sessionStorage.removeItem(this.STORAGE_KEY);
-  }
-}
-```
-
-**Security Properties:**
-
-- ✅ Survives tab refresh and new tabs
-- ✅ Better UX for multi-tab usage
-- ✅ Automatically cleared when browser closes
-- ❌ Accessible to malicious JavaScript (XSS risk)
-- ❌ Requires additional security hardening
-
-### SessionStorage Security Hardening Requirements
-
-When using sessionStorage for session management, the following security measures are **mandatory**:
-
-#### 1. Content Security Policy (CSP)
-
-**Minimum Required CSP:**
-
-```http
-Content-Security-Policy:
-  default-src 'self';
-  script-src 'self' 'nonce-{random}';
-  object-src 'none';
-  base-uri 'self';
-  frame-ancestors 'none';
-  form-action 'self';
-  upgrade-insecure-requests;
-```
-
-**Strict Production CSP (Recommended):**
-
-```http
-Content-Security-Policy:
-  default-src 'self';
-  script-src 'self' 'nonce-{random}';
-  style-src 'self' 'nonce-{random}';
-  img-src 'self' data: https:;
-  connect-src 'self';
-  font-src 'self';
-  object-src 'none';
-  media-src 'self';
-  child-src 'none';
-  frame-src 'none';
-  worker-src 'self';
-  frame-ancestors 'none';
-  form-action 'self';
-  base-uri 'self';
-  manifest-src 'self';
-  upgrade-insecure-requests;
-  require-trusted-types-for 'script';
-```
-
-**Why CSP is Critical:**
-
-- Prevents XSS attacks that could read sessionStorage
-- Blocks malicious script injection from CDNs
-- Restricts inline JavaScript execution
-- Prevents clickjacking attacks
-
-#### 2. Additional Security Headers
-
-```http
-# Prevent MIME type sniffing attacks
-X-Content-Type-Options: nosniff
-
-# Enable XSS filtering in browsers
-X-XSS-Protection: 1; mode=block
-
-# Prevent iframe embedding (clickjacking)
-X-Frame-Options: DENY
-
-# Force HTTPS connections
-Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
-
-# Control referrer information
-Referrer-Policy: strict-origin-when-cross-origin
-
-# Disable DNS prefetching
-X-DNS-Prefetch-Control: off
-
-# Disable feature policy
-Permissions-Policy: geolocation=(), microphone=(), camera=()
-```
-
-#### 3. XSS Prevention Strategies
-
-**Input Sanitization:**
-
-```javascript
-// ✅ ALWAYS use established, well-tested libraries for sanitization
-import DOMPurify from 'dompurify';
-
-// For HTML content sanitization
-const cleanHTML = DOMPurify.sanitize(userInput);
-
-// For HTML entity encoding in frameworks
-import { escape } from 'lodash';
-const safeText = escape(userInput);
-
-// ❌ NEVER implement your own sanitization functions
-// Custom sanitization is prone to bypass vulnerabilities and security flaws
-```
-
-**Security Principle: Never Roll Your Own Sanitization**
-
-- Custom sanitization functions are extremely vulnerable to bypass attacks
-- Use battle-tested libraries like DOMPurify, OWASP Java HTML Sanitizer, or framework-built-in escaping
-- Sanitization libraries are maintained by security experts and regularly updated against new attack vectors
-
-**Safe DOM Manipulation:**
-
-```javascript
-// ✅ Safe - Use textContent for user data
-element.textContent = userInput;
-
-// ✅ Safe - Use framework templates
-<div>{sanitizedInput}</div>;
-
-// ❌ Dangerous - Never use innerHTML with user data
-element.innerHTML = userInput; // XSS VULNERABILITY
-```
-
-**Template Security:**
-
-```javascript
-// ✅ Use framework-provided escaping
-const SafeComponent = ({ userInput }) => (
-  <div>{userInput}</div> // React automatically escapes
-);
-
-// ❌ Avoid dangerouslySetInnerHTML
-const UnsafeComponent = ({ userInput }) => (
-  <div dangerouslySetInnerHTML={{ __html: userInput }} /> // XSS RISK
-);
-```
-
-#### 4. Session Storage Implementation
-
-```javascript
-// Production-ready session storage with security
-class SecureSessionStorage {
-  private readonly STORAGE_KEY = 'miauflix_auth_sessions';
-  private readonly MAX_SESSIONS = 5;
-  private readonly SESSION_TIMEOUT = 15 * 60 * 1000; // 15 minutes
-
-  constructor() {
-    this.setupSecurityMonitoring();
-  }
-
-  storeSession(email, sessionId) {
-    try {
-      // Validate inputs
-      if (!this.isValidEmail(email) || !this.isValidSessionId(sessionId)) {
-        throw new Error('Invalid session data');
-      }
-
-      const sessions = this.getAllSessions();
-
-      // Enforce session limits
-      if (Object.keys(sessions).length >= this.MAX_SESSIONS) {
-        this.removeOldestSession(sessions);
-      }
-
-      sessions[email] = {
-        session: sessionId,
-        timestamp: Date.now(),
-        userAgent: navigator.userAgent.slice(0, 100), // Limited for security
-      };
-
-      this.saveToStorage(sessions);
-      this.logSecurityEvent('session_stored', email);
-    } catch (error) {
-      this.handleSecurityError('store_session_failed', error);
-    }
-  }
-
-  private isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return typeof email === 'string' &&
-           email.length <= 254 &&
-           emailRegex.test(email);
-  }
-
-  private isValidSessionId(sessionId) {
-    // Session IDs should match our backend format
-    const sessionRegex = /^session_[A-Za-z0-9_-]{21,22}$/;
-    return typeof sessionId === 'string' && sessionRegex.test(sessionId);
-  }
-
-  private saveToStorage(sessions) {
-    const data = JSON.stringify(sessions);
-    if (data.length > 10000) { // Prevent storage bloat
-      throw new Error('Session data too large');
-    }
-    sessionStorage.setItem(this.STORAGE_KEY, data);
-  }
-
-  private setupSecurityMonitoring() {
-    // Monitor for suspicious activity
-    window.addEventListener('storage', (event) => {
-      if (event.key === this.STORAGE_KEY) {
-        this.logSecurityEvent('external_session_modification', null);
-        this.clearInvalidSessions(); // Clear on tampering
-      }
-    });
-
-    // Periodic cleanup
-    setInterval(() => this.cleanupExpiredSessions(), 60000); // Every minute
-  }
-
-  private logSecurityEvent(event, email) {
-    console.log(`Security Event: ${event}`, {
-      timestamp: new Date().toISOString(),
-      email,
-      userAgent: navigator.userAgent,
-    });
-  }
-
-  private handleSecurityError(event, error) {
-    this.logSecurityEvent(event, null);
-    console.error('Session security error:', error);
-
-    // On security errors, clear all sessions
-    this.clearInvalidSessions();
-  }
-}
-```
-
-#### 5. Build Configuration
-
-```javascript
-// webpack.config.js or vite.config.js
-const config = {
-  define: {
-    // Configure session storage mode at build time
-    __SESSION_STORAGE_MODE__: JSON.stringify(
-      process.env.NODE_ENV === 'production'
-        ? process.env.SESSION_STORAGE_MODE || 'sessionStorage'
-        : 'memory'
-    ),
-    __MAX_SESSIONS__: JSON.stringify(parseInt(process.env.MAX_SESSIONS) || 5),
-  },
-};
-
-// Usage in application
-const sessionStore = new SessionManager({
-  mode: __SESSION_STORAGE_MODE__,
-  maxSessions: __MAX_SESSIONS__,
+const { session, user } = await login.json();
+
+const current = await fetch('/api/auth/session', {
+  credentials: 'include',
+  headers: { 'X-Session-Id': session },
 });
 ```
 
-#### 6. Monitoring and Alerting
+The example assumes successful responses; application clients must handle errors and expired access tokens. See [authenticated requests](../../frontend/src/shared/api/authenticated-request.ts) for the existing refresh-and-retry behavior.
 
-```javascript
-// Security event monitoring
-class SecurityMonitor {
-  static reportViolation(violation) {
-    // Report CSP violations
-    fetch('/api/security/csp-violation', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        violation,
-        timestamp: Date.now(),
-        userAgent: navigator.userAgent,
-        url: window.location.href,
-      }),
-    });
-  }
+## Installed TV token transport
 
-  static reportSessionAnomaly(anomaly) {
-    console.warn('Session anomaly detected:', anomaly);
-    // Consider clearing sessions on suspicious activity
+The Tizen app runs from local files and cannot rely on the backend's browser cookies. It sets `X-Auth-Transport: token` on authentication requests. Successful login/setup/QR-claim responses then include:
+
+```typescript
+{
+  session: string;
+  user: UserDto;
+  tokens: {
+    accessToken: string;
+    refreshToken: string;
   }
 }
+```
 
-// CSP violation reporting
-document.addEventListener('securitypolicyviolation', event => {
-  SecurityMonitor.reportViolation({
-    blockedURI: event.blockedURI,
-    violatedDirective: event.violatedDirective,
-    originalPolicy: event.originalPolicy,
-  });
+Refresh responses include `{ user, tokens }` and use the session already named in the request path. Ordinary browser responses omit `tokens`.
+
+| Request             | Headers used by the TV client                            |
+| ------------------- | -------------------------------------------------------- |
+| Protected API       | `X-Session-Id` and `Authorization: Bearer <accessToken>` |
+| Refresh or logout   | `X-Refresh-Token: <refreshToken>`; session is in the URL |
+| Session discovery   | `X-Refresh-Tokens: <session>:<token>,<session>:<token>`  |
+| Auth token delivery | `X-Auth-Transport: token`                                |
+
+The TV client keeps access tokens in memory and refresh tokens in the installed app's local storage. It omits browser credentials and updates stored tokens after successful renewal. This is the TV-specific transport, not an optional session-storage mode for ordinary browsers.
+
+Implementation: [transport readers](../src/utils/auth-transport.util.ts), [TV auth fetch](../../frontend/src/shared/api/tv-auth.ts), and [frontend backend client](../../frontend/src/shared/api/backend-client.ts).
+
+## Authentication API
+
+All routes below are mounted under `/api/auth`. `UserDto` contains `id`, `email`, nullable `displayName`, and `role`.
+
+| Method and path          | Authentication/input                                     | Successful behavior                                                                                |
+| ------------------------ | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `GET /setup`             | No existing session required                             | Returns `{ available }` for first-admin setup                                                      |
+| `POST /setup`            | `{ email, password }`; password minimum eight characters | Creates the initial admin only while setup is available, then returns login data                   |
+| `POST /login`            | `{ email, password }`                                    | Returns `{ session, user }` and delivers tokens using the selected transport                       |
+| `POST /refresh/:session` | Session refresh cookie or `X-Refresh-Token`              | Rotates refresh token, issues a new access token, returns `{ user }` plus TV tokens when requested |
+| `POST /logout/:session`  | Session refresh cookie or `X-Refresh-Token`              | Revokes that refresh session, clears both browser cookies, returns `{ message }`                   |
+| `GET /sessions`          | Refresh cookies or `X-Refresh-Tokens`                    | Returns valid presented sessions as `{ session, user }[]`                                          |
+| `GET /session`           | Valid access token and `X-Session-Id`                    | Returns `{ id: sessionId, user }`                                                                  |
+| `POST /users`            | Admin access token/session; `{ email, password, role }`  | Creates a `user` or `admin` account and returns its user data                                      |
+
+The refresh route performs token rotation. Use `/session` to validate the access token or `/sessions` to discover the refresh sessions presented by the client. Session discovery checks at most five presented tokens, rather than listing every device ever used by the account.
+
+Authentication routes have endpoint-specific rate limits. User creation is guarded by the administrator role; refresh, logout, and session discovery validate their presented refresh credentials rather than requiring a current access JWT.
+
+Logout revokes the refresh session and removes browser cookies. It does not implement a denylist that immediately invalidates every copy of an already issued access JWT; such a token still has its own expiry.
+
+## QR login
+
+QR login lets a signed-in account approve a new device without entering its password on that device:
+
+1. The new device calls `POST /api/auth/qr`. The response contains `requestId`, `claimToken`, `approvalPath`, `expiresAt`, and `pollInterval`.
+2. The QR code points to the frontend approval path `/auth/qr/:approvalToken`. The approval device reads request information through `GET /api/auth/qr/:approvalToken`.
+3. A signed-in user calls `POST /api/auth/qr/:approvalToken/approve` or `/reject`. Both actions require normal API authentication.
+4. The new device polls `POST /api/auth/qr/:requestId/claim` with `{ claimToken }`. While no claim can be completed it returns a pending response; a successful claim returns login data and delivers tokens.
+
+Approval and claim use different random secrets. Requests expire after five minutes. Claiming uses a lease and completion step so competing claims do not create multiple usable sessions; failed completion revokes the newly generated refresh session.
+
+Implementation: [QR service](../src/services/auth/qr-login.service.ts) and [QR routes](../src/routes/auth.routes.ts).
+
+## Refresh rotation and lifetime
+
+The refresh repository locates the session and verifies the presented token against its stored hash. Successful renewal replaces that hash through a conditional update that matches the old hash, user, and session. A stale or competing update cannot replace the new token and is treated as a failed renewal.
+
+Refresh lifetime and chain age are different limits. Renewal moves the token's expiry forward but does not reset the original session creation time used for the maximum chain age. Expired sessions are rejected. Token rotation and suspicious renewal behavior are recorded through the security audit service.
+
+Implementation: [refresh-token repository](../src/repositories/refresh-token.repository.ts) and [AuthService](../src/services/auth/auth.service.ts).
+
+## Protecting application routes
+
+Use the existing Hono middleware rather than duplicating role checks:
+
+```typescript
+import { UserRole } from '@entities/user.entity';
+import { authGuard } from '@middleware/auth.middleware';
+
+app.get('/secure', authGuard(), c => {
+  const { user } = c.get('sessionInfo');
+  return c.json({ email: user.email });
 });
+
+app.get('/admin', authGuard(UserRole.ADMIN), c => c.json({ ok: true }));
 ```
 
-### Deployment Security Checklist
+The application must have its authentication middleware installed before these guards. The middleware extracts and verifies a JWT; `authGuard()` requires its session context, and `authGuard(UserRole.ADMIN)` additionally requires the exact role.
 
-**Before enabling sessionStorage mode:**
+## Configuration
 
-- [ ] CSP headers properly configured and tested
-- [ ] All security headers implemented
-- [ ] Input sanitization implemented throughout application
-- [ ] XSS testing completed with automated tools
-- [ ] Session storage implementation reviewed for security
-- [ ] Error handling prevents information disclosure
-- [ ] Monitoring and alerting configured
-- [ ] Security incident response plan established
-- [ ] `COOKIE_SECURE=true` configured for HTTPS environments
-- [ ] SSL/TLS certificates properly installed and configured
+These are the current authentication setting names and defaults, rather than a requirement to hand-edit secrets:
 
-**Ongoing Security Requirements:**
+| Setting                          | Default/purpose                                    |
+| -------------------------------- | -------------------------------------------------- |
+| `JWT_SECRET`                     | Generated signing secret                           |
+| `ACCESS_TOKEN_EXPIRATION`        | `15m`                                              |
+| `REFRESH_TOKEN_EXPIRATION`       | `7d`                                               |
+| `REFRESH_TOKEN_MAX_REFRESH_DAYS` | `30`                                               |
+| `MAX_DEVICE_SLOTS_PER_USER`      | `5`                                                |
+| `ACCESS_TOKEN_COOKIE_NAME`       | `__miauflix_at`                                    |
+| `REFRESH_TOKEN_COOKIE_NAME`      | `__miauflix_rt`                                    |
+| `COOKIE_SECURE`                  | `false`; enabled for the supplied HTTPS deployment |
+| `COOKIE_DOMAIN`                  | Optional cookie domain                             |
 
-- [ ] Regular security audits and penetration testing
-- [ ] Dependency updates and vulnerability scanning
-- [ ] CSP policy updates as application evolves
-- [ ] Session storage anomaly monitoring
-- [ ] User education about security best practices
+Generated secrets are persisted by the configuration system so they survive restarts. Preserve the server's persistent data and keys. See [configuration bootstrap](../src/services/configuration/configuration.service.ts) and [HTTPS deployment](../../docker-compose.https.yml).
 
-## Token Rotation System
+Streaming uses separate settings and credentials, including `STREAM_TOKEN_EXPIRATION`, `STREAM_TOKEN_SECRET`, and `STREAM_KEY_SALT`. Video access is not authenticated by putting an ordinary API JWT in the stream URL. See [Streaming Services](streaming-services.md) and the [stream route](../src/routes/stream.routes.ts).
 
-### Session-Based Token Updates
+## Current UI boundaries
 
-The refresh token system uses a **single database row per user session** that gets atomically updated on each refresh:
+The application has password login, QR login, and first-admin setup. The frontend can discover sessions and renew access. Session-scoped cookies support independent session records, but a profile selector, profile editor, administrator account-creation screen, and ordinary logout control remain in [ToDo.md](../../ToDo.md#account).
 
-```sql
--- Login: Creates initial token with session identifier
-INSERT INTO refresh_tokens (token, userId, session, expiresAt, createdAt, ...)
-
--- Refresh: Atomic update with race condition detection
-UPDATE refresh_tokens
-SET token = 'new_token', expiresAt = 'new_expiry', updatedAt = NOW()
-WHERE token = 'old_token' AND userId = 'user_id' AND session = 'session_id'
--- Returns affected_rows: 1 = success, 0 = race condition/token reuse
-```
-
-### Key Benefits
-
-- **Database Efficiency**: One row per session instead of unlimited growth
-- **Session Isolation**: Each user session has its own token that can't interfere with others
-- **Automatic Revocation**: Old token disappears when new one is created
-- **Race Condition Detection**: Concurrent refresh attempts are detected via UPDATE affected rows
-- **Chain Lifetime**: Uses `createdAt` + `REFRESH_TOKEN_MAX_REFRESH_DAYS` to prevent infinite refresh
-- **Proper Token Identification**: Session ID ensures the correct token is updated/deleted
-
-### Security Flow
-
-1. **Token Refresh Request**: Client sends old token in HttpOnly cookie
-2. **Validation**: Verify token exists and chain hasn't exceeded lifetime
-3. **Atomic Update**: Generate new token and UPDATE WHERE old_token matches
-4. **Race Detection**: If affected_rows = 0, token was already used (security event)
-5. **Success**: Return new access token, client gets new refresh token cookie
-
-## Security Best Practices
-
-1. Always use HTTPS in production
-2. Store sensitive environment variables securely
-3. Implement rate limiting for authentication endpoints
-4. Regularly rotate JWT secrets
-5. Monitor for suspicious activity
-6. Implement proper error handling
-7. Use secure password policies
-
-## JWT Implementation
-
-The authentication system uses industry-standard JWT handling, which provides:
-
-- **Standards Compliance**: Full implementation of JWT standards
-- **Advanced Security**: Support for multiple algorithms and key types
-- **Fine-grained Control**: Detailed control over token claims and headers
-- **Type Safety**: Excellent TypeScript support
-- **Performance**: Optimized for performance with minimal dependencies
+For frontend behavior, consult [auth API](../../frontend/src/features/auth/api/auth.api.ts) and [auth state](../../frontend/src/store/slices/auth.ts).
