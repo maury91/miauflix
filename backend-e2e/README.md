@@ -7,7 +7,7 @@ This directory contains end-to-end integration tests for the Miauflix backend. T
 The E2E test suite provides:
 
 - **Integration Testing**: Tests the complete backend functionality including all external API integrations
-- **Mock Services**: Simulates TMDB, YTS, and Trakt APIs with realistic test data
+- **Mock Services**: Simulates the TMDB and Trakt APIs and an indexer with realistic test data
 - **Isolated Environment**: Runs in Docker containers to ensure consistency and isolation
 - **Realistic Data**: Uses cached API responses to provide realistic test scenarios
 - **Security Testing**: Validates authentication, authorization, and audit logging functionality
@@ -18,7 +18,7 @@ The test environment consists of:
 
 - **Backend Service**: The main Miauflix backend application
 - **TMDB Mock**: Mock service for The Movie Database API
-- **YTS Mock**: Mock service for YTS torrent API
+- **Indexer Mock**: Fictional release data, plus the Cardigann definitions that query it (the sources service loads them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`)
 - **Trakt Mock**: Mock service for Trakt API
 - **Test Runner**: Jest-based tests that interact with the backend
 
@@ -217,11 +217,11 @@ This file is automatically created in the `backend-e2e` directory and consumed b
 - Uses cached responses from real TMDB API calls
 - Supports search, details, and recommendation endpoints
 
-### YTS Mock
+### Indexer Mock
 
-- Simulates torrent search functionality
-- Returns torrent metadata for testing purposes
-- Uses realistic torrent data structure
+- Serves fictional release data from `docker/indexer/data`, by IMDb id
+- Serves the test definitions in `docker/indexer/definitions` at `/definitions/` (with an `index.json`)
+- Has no knowledge of any real indexer
 
 ### Trakt Mock
 
