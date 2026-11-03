@@ -63,7 +63,7 @@ npm run build:frontend
 
 - Treat `.env` files as off-limits for AI agents
 - Never open, copy, or log sensitive configuration values
-- Use the `ENV()` helper from `@constants` for any required configuration access
+- Use the injected `ConfigurationService` for backend configuration access through `get()` or `getOrThrow()`
 
 ---
 
@@ -492,18 +492,17 @@ miauflix/
 
 ### Environment Variables
 
-- **Never hardcode secrets** - Use environment variables only
+- **Never hardcode secrets** - Use the managed configuration system
 - **Follow existing configuration services and helpers** - Browser and CLI setup already exist
-- **Use `ENV()` helper** - Never read `process.env` directly
+- **Use the injected `ConfigurationService`** - It is the backend source of truth for environment configuration. Use `get()` for optional values and `getOrThrow()` for required values; never read `process.env` directly in backend application code
 - **VPN detection is active** - Backend detects VPN status
 - **Encryption is implemented** - Preserve keys and existing encrypted data
 
 ### Configuration Access
 
 ```typescript
-// ✅ CORRECT - Use ENV() helper
-import { ENV } from '@constants';
-const port = ENV('PORT');
+// ✅ CORRECT - Inside a service with an injected configurationService
+const port = this.configurationService.getOrThrow('PORT');
 
 // ❌ WRONG - Direct process.env access
 const port = process.env.PORT; // Don't do this
