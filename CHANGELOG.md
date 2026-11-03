@@ -2,7 +2,7 @@
 
 What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHANGELOG.md).
 
-## Unreleased
+## 2026-11-03 v0.1.0 Samsung TV support, smarter sources, smoother playback, and better reliability
 
 ### New
 
