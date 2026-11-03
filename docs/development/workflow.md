@@ -438,7 +438,7 @@ DEBUG=miauflix:auth npm run start:backend
 docker compose logs -f miauflix
 
 # Execute commands in containers
-docker compose exec backend bash
+docker compose exec miauflix bash
 
 # Check container health
 docker compose ps

@@ -68,7 +68,7 @@ The browser editor is the simpler setup path for the supplied prebuilt-image dep
 2. Load saved application configuration. Saved values normally take precedence over environment values, which take precedence over defaults. Explicit environment values for generated secrets are an exception and take precedence over their saved values.
 3. Discover remote service contracts and their configuration schemas, and make their settings available to the configuration system.
 4. Detect missing values or failed service validation. Interactive terminals can run the wizard; non-interactive startup can continue in a degraded state so configuration remains possible from the browser or administrator API.
-5. Test and save changes through the configuration system. Secret values in the backend config store are encrypted; generated secrets are persisted automatically.
+5. Test and save changes through the configuration system. Secret values saved through the configuration editor are encrypted. Generated bootstrap secrets are persisted automatically in plaintext in `config.json`, including `SOURCE_SECURITY_KEY`, which is needed to initialize the encryption service.
 
 A Compose `.env` file controls deployment inputs such as image versions, VPN setup, and domain names. It is separate from saved application configuration. Compose values only reach a service when its deployment passes or mounts them; editing `.env` is not a substitute for updating a saved application setting through the configuration editor.
 

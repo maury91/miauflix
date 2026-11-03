@@ -33,8 +33,8 @@ npm install --workspace frontend package-name
 ### ✅ **Use existing fixtures or record new ones properly**
 
 ```bash
-# To update fixtures, run specific test file:
-npm test --workspace backend -- tmdb.api.test.ts
+# Run a specific backend test file offline:
+HTTP_VCR_MODE=replay npm test --workspace backend -- src/services/request/request.service.test.ts
 ```
 
 For browser and screenshot work, follow the repository's [E2E and CI Playbook](./e2e-ci-playbook.md). It covers the ordered CI lanes, offline API harnesses, and Linux versus macOS snapshot baselines.
