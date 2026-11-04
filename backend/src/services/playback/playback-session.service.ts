@@ -37,13 +37,13 @@ const SAMPLE_HISTORY = 15;
 /** A session whose stream has not opened yet is watched this long (it may be waiting on metadata). */
 const STARTUP_WINDOW_MS = 60_000;
 /**
- * Healthy samples in a row (one per HEALTH_SAMPLE_MS, so about three minutes of streaming without
- * starving) that prove a source plays; it is then recorded once per session as a ranking signal.
+ * Uninterrupted streaming without starving that proves a source plays; it is then recorded once
+ * per session as a ranking signal.
  */
-const PROVEN_PLAY_SAMPLES = 180;
+const PROVEN_PLAY_MS = 180_000;
 /**
- * A healthy sample only counts towards a proven play when new bytes reached the viewer since the
- * previous one; a stream that delivers nothing for this long (backpressure, pause) starts over.
+ * A stream that delivers nothing for this long (backpressure, pause) starts its proof over; the
+ * proof only completes when bytes are still reaching the viewer at its end.
  */
 const PROVEN_PLAY_DELIVERY_MS = 30_000;
 /** The primary must deliver this long before its backup torrent is released. */
@@ -107,12 +107,10 @@ interface LiveSession {
   samples: SwarmSample[];
   healthySince?: number;
   /**
-   * Healthy samples that saw new bytes delivered, while the stream stays open; reset when it
-   * starves, closes, or delivers nothing for PROVEN_PLAY_DELIVERY_MS.
+   * When the current unstarved, delivering stretch began; cleared when the stream starves,
+   * closes, or delivers nothing for PROVEN_PLAY_DELIVERY_MS.
    */
-  healthySamples: number;
-  /** The delivery time last counted in `healthySamples`, so a stalled reader adds nothing. */
-  countedDeliveryAt?: number;
+  provenSince?: number;
   /** The source was recorded as proven playable for this session. */
   provenRecorded?: boolean;
   /** A second source warming in case this one fails; `sourceId` once its claim exists. */
@@ -277,7 +275,6 @@ export class PlaybackSessionService {
       filePath: prepared.target?.filePath,
       durationSeconds: delivery?.durationSeconds,
       samples: [],
-      healthySamples: 0,
     });
     if (pendingTarget) {
       this.deliverWhenProbed(pendingTarget, preferences, {
@@ -355,7 +352,7 @@ export class PlaybackSessionService {
           health.streaming ||
           (startup && !health.hasMetadata && now - live.createdAt < STARTUP_WINDOW_MS);
         if (!watched) {
-          live.healthySamples = 0;
+          live.provenSince = undefined;
           continue;
         }
         live.samples.push({ at: now, peers: health.peers, downloadSpeed: health.downloadSpeed });
@@ -363,14 +360,12 @@ export class PlaybackSessionService {
         const starvedSince = startup ? live.createdAt : health.blockedSince;
         if (starvedSince === null) {
           live.healthySince ??= now;
-          this.countDelivery(live, health.lastDeliveryAt, now);
-          if (!live.provenRecorded && live.healthySamples >= PROVEN_PLAY_SAMPLES)
-            this.recordProvenPlay(live, now);
+          this.trackProvenPlay(live, health.lastDeliveryAt, now);
           if (live.hedge && now - live.healthySince >= HEDGE_RELEASE_MS) this.releaseHedge(live);
           continue;
         }
         live.healthySince = undefined;
-        live.healthySamples = 0;
+        live.provenSince = undefined;
         const verdict = assessSwarm({
           samples: live.samples,
           starvedForMs: now - starvedSince,
@@ -390,14 +385,18 @@ export class PlaybackSessionService {
     }
   }
 
-  /** Count a healthy sample towards a proven play only if it saw fresh delivery. */
-  private countDelivery(live: LiveSession, lastDeliveryAt: number | null, now: number): void {
+  /**
+   * Measure the unstarved stretch in elapsed time, up to the latest delivery, so a stalled reader
+   * adds nothing and sparse samples or bursty reads do not slow the proof down.
+   */
+  private trackProvenPlay(live: LiveSession, lastDeliveryAt: number | null, now: number): void {
     if (lastDeliveryAt === null || now - lastDeliveryAt > PROVEN_PLAY_DELIVERY_MS) {
-      live.healthySamples = 0;
-    } else if (lastDeliveryAt !== live.countedDeliveryAt) {
-      live.countedDeliveryAt = lastDeliveryAt;
-      live.healthySamples++;
+      live.provenSince = undefined;
+      return;
     }
+    live.provenSince ??= now;
+    if (!live.provenRecorded && lastDeliveryAt - live.provenSince >= PROVEN_PLAY_MS)
+      this.recordProvenPlay(live, now);
   }
 
   /**

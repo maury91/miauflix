@@ -385,7 +385,8 @@ describe('PlaybackSessionService', () => {
     it('records a source as played once it streams for minutes without starving', async () => {
       const { playedSources, start, play } = setupMonitor();
       await start();
-      await play(179);
+      // Measured from the first healthy sample: three minutes later is the 181st.
+      await play(180);
       expect(playedSources.recordPlayed).not.toHaveBeenCalled();
       await play(1);
       expect(playedSources.recordPlayed).toHaveBeenCalledWith(1, Date.now());
@@ -402,7 +403,22 @@ describe('PlaybackSessionService', () => {
       await tick(1_000);
       await play(150);
       expect(playedSources.recordPlayed).not.toHaveBeenCalled();
-      await play(30);
+      await play(31);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+    });
+
+    it('counts elapsed time, not deliveries, so bursty reads prove a play in three minutes', async () => {
+      const { playedSources, start, tick, deliver } = setupMonitor();
+      await start();
+      // The player reads a burst every 5 seconds and the health loop samples every 5 seconds. The
+      // stretch starts at the first sample (5s); a burst read at 186s completes three minutes.
+      for (let burst = 0; burst < 37; burst++) {
+        deliver();
+        await tick(5_000);
+      }
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+      deliver();
+      await tick(5_000);
       expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
     });
 
@@ -426,9 +442,9 @@ describe('PlaybackSessionService', () => {
       health.streaming = false;
       await tick(1_000);
       health.streaming = true;
-      await play(170);
+      await play(180);
       expect(playedSources.recordPlayed).not.toHaveBeenCalled();
-      await play(10);
+      await play(1);
       expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
     });
 
