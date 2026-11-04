@@ -426,8 +426,11 @@ describe('SourcesPage', () => {
   const browse = async () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
     openAdvanced();
-    fireEvent.click(screen.getByRole('button', { name: 'Browse indexers' }));
-    await screen.findByRole('list', { name: 'Available indexers' });
+    // Flush the mocked catalog request before querying its results.
+    await act(async () => {
+      fireEvent.click(screen.getByText('Browse indexers', { selector: 'button' }));
+    });
+    return screen.getByRole('list', { name: 'Available indexers' });
   };
   const lastArgs = () => api.loadDefinitions.mock.calls.at(-1)![0];
 
@@ -518,19 +521,20 @@ describe('SourcesPage', () => {
 
   it('adds an indexer and marks it added', async () => {
     api.addCardigann.mockReturnValueOnce(api.unwrap({ name: 'Anime Index' }));
-    await browse();
-    fireEvent.click(await screen.findByRole('button', { name: 'Add anime-index' }));
+    const indexers = await browse();
+    const add = within(indexers).getByRole('button', { name: 'Add anime-index' });
+    await act(async () => {
+      fireEvent.click(add);
+    });
     expect(api.addCardigann).toHaveBeenCalledWith({
       id: 'anime-index',
       source: 'Prowlarr/Indexers@master:definitions/v11',
     });
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Add anime-index' })).toHaveTextContent('Added')
-    );
+    expect(add).toHaveTextContent('Added');
     expect(
       screen.getByText('Added Anime Index. Turn it on when you are ready.')
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Add anime-index' })).toBeDisabled();
+    expect(add).toBeDisabled();
   });
 
   it('shows why an indexer could not be added', async () => {
