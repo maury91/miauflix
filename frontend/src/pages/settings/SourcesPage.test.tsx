@@ -178,7 +178,7 @@ const sync = (overrides: Record<string, unknown> = {}) => ({
 });
 const openMenu = (name: string) =>
   fireEvent.click(screen.getByRole('button', { name: `More options for ${name}` }));
-const openAdvanced = () => fireEvent.click(screen.getByRole('button', { name: /Advanced setup/ }));
+const openAdvanced = () => fireEvent.click(screen.getByText('Advanced setup'));
 const rows = () => within(screen.getByRole('list', { name: 'Sources' })).getAllByRole('listitem');
 
 describe('SourcesPage', () => {
@@ -426,8 +426,11 @@ describe('SourcesPage', () => {
   const browse = async () => {
     render(<SourcesPage onDismiss={vi.fn()} />);
     openAdvanced();
-    fireEvent.click(screen.getByRole('button', { name: 'Browse indexers' }));
-    await screen.findByRole('list', { name: 'Available indexers' });
+    // Flush the mocked catalog request before querying its results.
+    await act(async () => {
+      fireEvent.click(screen.getByText('Browse indexers', { selector: 'button' }));
+    });
+    return screen.getByLabelText('Available indexers');
   };
   const lastArgs = () => api.loadDefinitions.mock.calls.at(-1)![0];
 
@@ -518,19 +521,20 @@ describe('SourcesPage', () => {
 
   it('adds an indexer and marks it added', async () => {
     api.addCardigann.mockReturnValueOnce(api.unwrap({ name: 'Anime Index' }));
-    await browse();
-    fireEvent.click(await screen.findByRole('button', { name: 'Add anime-index' }));
+    const indexers = await browse();
+    const add = within(indexers).getByRole('button', { name: 'Add anime-index' });
+    await act(async () => {
+      fireEvent.click(add);
+    });
     expect(api.addCardigann).toHaveBeenCalledWith({
       id: 'anime-index',
       source: 'Prowlarr/Indexers@master:definitions/v11',
     });
-    await waitFor(() =>
-      expect(screen.getByRole('button', { name: 'Add anime-index' })).toHaveTextContent('Added')
-    );
+    expect(add).toHaveTextContent('Added');
     expect(
       screen.getByText('Added Anime Index. Turn it on when you are ready.')
     ).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Add anime-index' })).toBeDisabled();
+    expect(add).toBeDisabled();
   });
 
   it('shows why an indexer could not be added', async () => {
@@ -563,7 +567,7 @@ describe('SourcesPage', () => {
       screen.getByText('Showing 80 of 100 matching indexers (586 in total)')
     ).toBeInTheDocument();
     expect(lastArgs()).toMatchObject({ offset: 40, limit: 40 });
-    const list = within(screen.getByRole('list', { name: 'Available indexers' }));
+    const list = within(screen.getByLabelText('Available indexers'));
     expect(list.getAllByLabelText(/^Add site-/)).toHaveLength(80);
     expect(list.getByLabelText('Add site-000')).toBeInTheDocument();
     expect(list.getByLabelText('Add site-079')).toBeInTheDocument();
@@ -583,11 +587,14 @@ describe('SourcesPage', () => {
     );
     try {
       api.catalog = Array.from({ length: 60 }, (_, i) => entry(`site-${i}`, null));
-      await browse();
-      await screen.findByText(/Showing 40 of 60/);
-      expect(screen.queryByRole('button', { name: 'Show more' })).not.toBeInTheDocument();
-      act(() => notify([{ isIntersecting: true }]));
-      await screen.findByText(/Showing 60 of 60/);
+      const indexers = within(await browse());
+      expect(screen.getByText(/Showing 40 of 60/)).toBeInTheDocument();
+      expect(indexers.getAllByLabelText(/^Add site-/)).toHaveLength(40);
+      // Avoid computing accessible names and visibility for every button in the long list.
+      expect(screen.queryByText('Show more', { selector: 'button' })).not.toBeInTheDocument();
+      await act(async () => notify([{ isIntersecting: true }]));
+      expect(screen.getByText(/Showing 60 of 60/)).toBeInTheDocument();
+      expect(indexers.getAllByLabelText(/^Add site-/)).toHaveLength(60);
       expect(lastArgs()).toMatchObject({ offset: 40 });
     } finally {
       vi.unstubAllGlobals();
@@ -620,14 +627,16 @@ describe('SourcesPage', () => {
         .mockReturnValue({ unwrap: () => new Promise(() => {}) });
       await browse();
       expect(await screen.findByRole('alert')).toHaveTextContent('Page unavailable');
-      const retry = screen.getByRole('button', { name: 'Show more' });
+      const retry = screen.getByText('Show more', { selector: 'button' });
       await act(async () => {});
       expect(api.loadDefinitions).toHaveBeenCalledTimes(2);
       api.loadDefinitions.mockReturnValueOnce(
         api.unwrap({ entries: catalog.slice(40), total: 41, sync: sync() })
       );
-      fireEvent.click(retry);
-      await screen.findByText(/Showing 41 of 41/);
+      await act(async () => {
+        fireEvent.click(retry);
+      });
+      expect(screen.getByText(/Showing 41 of 41/)).toBeInTheDocument();
       expect(api.loadDefinitions).toHaveBeenCalledTimes(3);
       expect(lastArgs()).toMatchObject({ offset: 40 });
       expect(screen.queryByRole('alert')).not.toBeInTheDocument();

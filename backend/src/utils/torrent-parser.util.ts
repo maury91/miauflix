@@ -98,8 +98,9 @@ const LANGUAGE_PATTERNS: Record<string, RegExp> = {
   vietnamese: /\b(?:vietnamese|vie|vi)\b/i,
   indonesian: /\b(?:indonesian|ind|id)\b/i,
   hebrew: /\b(?:hebrew|heb|he)\b/i,
-  multi: /\b(?:multi(?:ple)?|multi[.-_ ]?(?:lang|language|sub|audio)s?|dual[.-_ ]?audio)\b/i,
-  dual: /\b(?:dual[.-_ ]?(?:lang|language|audio)?|2audio)\b/i,
+  multi:
+    /(?<![a-z0-9])(?:multi(?:ple)?|multi[-._ ]?(?:lang|language|sub|audio)s?|dual[-._ ]?audio)(?![a-z0-9])/i,
+  dual: /(?<![a-z0-9])(?:dual[-._ ]?(?:lang|language|audio)?|2audio)(?![a-z0-9])/i,
   nordic: /\b(?:nordic|scandinavian)\b/i,
   other: /\b(?:other|multiple|various)\b/i,
 };

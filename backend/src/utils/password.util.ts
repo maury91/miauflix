@@ -1,4 +1,4 @@
-import { randomBytes } from 'crypto';
+import { randomInt } from 'node:crypto';
 
 const lowercaseChars = 'abcdefghijklmnopqrstuvwxyz';
 const uppercaseChars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -48,26 +48,6 @@ export function generateSecurePassword(
 
   // Shuffle the password to make it more random
   return shuffleString(password);
-}
-
-/**
- * Generates a cryptographically secure random integer between min (inclusive) and max (exclusive)
- * @param min Minimum value (inclusive)
- * @param max Maximum value (exclusive)
- * @returns A random integer
- */
-function randomInt(min: number, max: number): number {
-  const range = max - min;
-  const bytes = Math.ceil(Math.log2(range) / 8);
-  const buffer = randomBytes(bytes);
-  let value = 0;
-
-  for (let i = 0; i < bytes; i++) {
-    value = (value << 8) + buffer[i];
-  }
-
-  // Ensure the value is within the range
-  return min + (value % range);
 }
 
 /**
