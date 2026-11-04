@@ -168,13 +168,11 @@ export const handleRequest = async ({
     return {
       data: {
         error: 'Failed to process OAuth request',
-        details: error instanceof Error ? error.message : String(error),
       },
       store: false,
       response: new Response(
         JSON.stringify({
           error: 'Failed to process OAuth request',
-          details: error instanceof Error ? error.message : String(error),
         }),
         {
           status: 500,

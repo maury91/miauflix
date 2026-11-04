@@ -1,3 +1,5 @@
+import { randomUUID } from 'node:crypto';
+
 import { UserRole } from '@miauflix/backend';
 
 import { TestClient, testUtils } from './test-utils';
@@ -26,7 +28,7 @@ export class UserPool {
 
     // Create pool of test users
     for (let i = 0; i < poolSize; i++) {
-      const email = `test-user-${i}-${Date.now()}-${Math.random().toString(36).substring(2, 9)}@example.com`;
+      const email = `test-user-${i}-${Date.now()}-${randomUUID()}@example.com`;
       const password = testUtils.randomPassword();
 
       const createResponse = await adminClient.post(['api', 'auth', 'users'], {

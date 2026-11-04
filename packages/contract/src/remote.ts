@@ -73,6 +73,13 @@ const SUBSCRIBE_RETRY_MAX_MS = 30_000;
 
 const unavailable = () => new ContractError('unavailable', 'Service is not connected');
 
+/** Remove trailing slashes in one pass, including on malformed configured URLs. */
+function withoutTrailingSlashes(url: string): string {
+  let end = url.length;
+  while (end > 0 && url.charCodeAt(end - 1) === 47) end--;
+  return url.slice(0, end);
+}
+
 /** Remote transport: one multiplexed WebSocket with reconnect, heartbeat and re-subscription. */
 export const connect = (options: ConnectOptions): RemoteConnection => {
   const Socket = options.WebSocket ?? globalThis.WebSocket;
@@ -270,7 +277,7 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
     setState('connecting');
     let url: URL;
     try {
-      url = new URL(CONTROL_PATH, `${resolveUrl().replace(/\/+$/, '')}/`);
+      url = new URL(CONTROL_PATH, `${withoutTrailingSlashes(resolveUrl())}/`);
     } catch (error) {
       setState('closed', error as Error);
       scheduleReconnect();
@@ -320,7 +327,7 @@ export const connect = (options: ConnectOptions): RemoteConnection => {
     (heartbeat as { unref?: () => void }).unref?.();
   }
 
-  const httpBase = () => resolveUrl().replace(/\/+$/, '');
+  const httpBase = () => withoutTrailingSlashes(resolveUrl());
 
   const transport: Transport = {
     call(method, input, requestOptions) {
