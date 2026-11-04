@@ -17,6 +17,7 @@ import { defineConfig } from 'vite';
 import webfontDownload from 'vite-plugin-webfont-dl';
 
 import { legacyChromiumPostcss } from './src/shared/styles/legacy-chromium-postcss';
+import { extractHtmlAssets } from './tooling/html-assets';
 
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 
@@ -219,26 +220,7 @@ export default defineConfig({
               const serverModule = await import(serverModulePath);
               const { render } = serverModule;
 
-              // Extract asset paths from the Vite-processed HTML
-              // NOTE: Using regex for HTML parsing is fragile and may break with complex HTML
-              // (e.g., attributes with escaped quotes, multi-line tags). Consider using a proper
-              // HTML parser like 'node-html-parser' or 'cheerio' if this becomes problematic.
-              const scriptMatches = html.match(/<script[^>]+src="([^"]+)"[^>]*><\/script>/g) || [];
-              const linkMatches = html.match(/<link[^>]+href="([^"]+\.css)"[^>]*>/g) || [];
-
-              const jsFiles = scriptMatches
-                .map(match => {
-                  const srcMatch = match.match(/src="([^"]+)"/);
-                  return srcMatch ? srcMatch[1] : '';
-                })
-                .filter(Boolean);
-
-              const cssFiles = linkMatches
-                .map(match => {
-                  const hrefMatch = match.match(/href="([^"]+\.css)"/);
-                  return hrefMatch ? hrefMatch[1] : '';
-                })
-                .filter(Boolean);
+              const { jsFiles, cssFiles } = extractHtmlAssets(html);
 
               // Render the SSR content
               const { appHtml, head } = render([...jsFiles, ...cssFiles]);
