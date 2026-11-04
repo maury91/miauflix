@@ -3,6 +3,16 @@ import { describe, expect, it } from 'vitest';
 import { parseVtt } from './vtt';
 
 describe('parseVtt', () => {
+  it('drops cue annotations and incomplete tags while decoding entities only once', () => {
+    const source =
+      'WEBVTT\n\n00:00.000 --> 00:03.000\n<v Speaker><c.green>Hello</c> <00:01.000>&lt;b&gt; &amp;lt; <unfinished';
+    expect(parseVtt(source)).toEqual([{ start: 0, end: 3, text: 'Hello <b> &lt;' }]);
+  });
+
+  it('handles many unterminated opening delimiters without regex backtracking', () => {
+    const source = `WEBVTT\n\n00:00.000 --> 00:03.000\nHello ${'<'.repeat(100_000)}`;
+    expect(parseVtt(source)).toEqual([{ start: 0, end: 3, text: 'Hello' }]);
+  });
   it('reads cue timings and text', () => {
     const source = [
       'WEBVTT',

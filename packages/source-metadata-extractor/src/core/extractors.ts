@@ -79,7 +79,16 @@ export function extractValue<T>(
     // Special handling for video codec combination
     if (isVideoCodecExtraction(values)) {
       // Check if any of the original matches (including nulls) indicate 10bit
-      const has10bit = allMatches.some(m => /10.*bit/i.test(m.match));
+      // Search each line once; an unanchored /10.*bit/ retries at every "10".
+      const has10bit = allMatches.some(m =>
+        m.match
+          .toLowerCase()
+          .split(/[\r\n\u2028\u2029]/)
+          .some(line => {
+            const start = line.indexOf('10');
+            return start !== -1 && line.includes('bit', start + 2);
+          })
+      );
       values = combineVideoCodecs(values, has10bit) as Set<T>;
     }
 
