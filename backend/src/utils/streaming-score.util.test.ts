@@ -110,8 +110,8 @@ describe('provenPlayBoost', () => {
 
   it('halves every 30 days, so an old play counts for little', () => {
     const today = provenPlayBoost(daysAgo(0), NOW);
-    expect(today).toBeGreaterThan(380);
-    expect(today).toBeLessThanOrEqual(400);
+    expect(today).toBeGreaterThan(280);
+    expect(today).toBeLessThanOrEqual(300);
     expect(provenPlayBoost(daysAgo(30), NOW)).toBeCloseTo(today / 2, -1);
     expect(provenPlayBoost(daysAgo(60), NOW)).toBeCloseTo(today / 4, -1);
     expect(provenPlayBoost(daysAgo(180), NOW)).toBeLessThan(10);
@@ -128,6 +128,22 @@ describe('provenPlayBoost', () => {
     const fhd = calculateStreamingScore(source({ quality: Quality.FHD }), NOW);
     expect(playbackRank({ streamingScore: hd, lastPlayedOn: daysAgo(0) }, NOW)).toBeLessThan(
       playbackRank({ streamingScore: fhd, lastPlayedOn: null }, NOW)
+    );
+  });
+
+  it('never lifts a source over the smallest quality step, even for the oldest uploads', () => {
+    const oldUpload = new Date(NOW - 3 * 365 * 24 * 60 * 60 * 1000);
+    const fhd = calculateStreamingScore(
+      source({ quality: Quality.FHD, sourceUploadedAt: oldUpload }),
+      NOW
+    );
+    const twoK = calculateStreamingScore(
+      source({ quality: Quality['2K'], sourceUploadedAt: oldUpload }),
+      NOW
+    );
+    expect(twoK - fhd).toBe(350);
+    expect(playbackRank({ streamingScore: fhd, lastPlayedOn: daysAgo(0) }, NOW)).toBeLessThan(
+      playbackRank({ streamingScore: twoK, lastPlayedOn: null }, NOW)
     );
   });
 

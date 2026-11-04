@@ -194,10 +194,21 @@ export class ContentSourceRepository {
     return Boolean(result.affected);
   }
 
-  /** Record that the source played well today; only the UTC day is kept (see `lastPlayedOn`). */
+  /**
+   * Record that the source played well today; only the UTC day is kept (see `lastPlayedOn`).
+   * `updatedAt` is pinned to its current value: the automatic `CURRENT_TIMESTAMP` would leave
+   * the exact play time in a plaintext column next to the encrypted day.
+   */
   async recordPlayed(sourceId: number, now = Date.now()): Promise<void> {
     const lastPlayedOn = new Date(now).toISOString().slice(0, 10);
-    await this.repository.update(sourceId, { lastPlayedOn });
+    await this.db.write(() =>
+      this.repository
+        .createQueryBuilder()
+        .update(ContentSource)
+        .set({ lastPlayedOn, updatedAt: () => '"updatedAt"' })
+        .where('id = :sourceId', { sourceId })
+        .execute()
+    );
   }
 
   /**

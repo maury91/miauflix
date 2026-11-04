@@ -65,8 +65,11 @@ export function calculateStreamingScore(source: StreamingScoreInput, now = Date.
 }
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-/** Ranking points for a source that played well today: below the smallest quality step (500). */
-const PROVEN_PLAY_BOOST = 400;
+/**
+ * Ranking points for a source that played well today: below the smallest quality step once the
+ * oldest upload-age multiplier applies (500 × 0.7 = 350), so it never outranks a better quality.
+ */
+const PROVEN_PLAY_BOOST = 300;
 /** The boost halves every this many days; swarms that once played well die out. */
 const PROVEN_PLAY_HALF_LIFE_DAYS = 30;
 

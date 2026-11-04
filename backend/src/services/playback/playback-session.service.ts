@@ -41,6 +41,11 @@ const STARTUP_WINDOW_MS = 60_000;
  * starving) that prove a source plays; it is then recorded once per session as a ranking signal.
  */
 const PROVEN_PLAY_SAMPLES = 180;
+/**
+ * A healthy sample only counts towards a proven play when new bytes reached the viewer since the
+ * previous one; a stream that delivers nothing for this long (backpressure, pause) starts over.
+ */
+const PROVEN_PLAY_DELIVERY_MS = 30_000;
 /** The primary must deliver this long before its backup torrent is released. */
 const HEDGE_RELEASE_MS = 10_000;
 /** Bitrate assumed before a file's size is known. */
@@ -101,8 +106,13 @@ interface LiveSession {
   durationSeconds?: number;
   samples: SwarmSample[];
   healthySince?: number;
-  /** Healthy samples since the last starvation, counted while the stream is open. */
+  /**
+   * Healthy samples that saw new bytes delivered, while the stream stays open; reset when it
+   * starves, closes, or delivers nothing for PROVEN_PLAY_DELIVERY_MS.
+   */
   healthySamples: number;
+  /** The delivery time last counted in `healthySamples`, so a stalled reader adds nothing. */
+  countedDeliveryAt?: number;
   /** The source was recorded as proven playable for this session. */
   provenRecorded?: boolean;
   /** A second source warming in case this one fails; `sourceId` once its claim exists. */
@@ -344,13 +354,16 @@ export class PlaybackSessionService {
         const watched =
           health.streaming ||
           (startup && !health.hasMetadata && now - live.createdAt < STARTUP_WINDOW_MS);
-        if (!watched) continue;
+        if (!watched) {
+          live.healthySamples = 0;
+          continue;
+        }
         live.samples.push({ at: now, peers: health.peers, downloadSpeed: health.downloadSpeed });
         if (live.samples.length > SAMPLE_HISTORY) live.samples.shift();
         const starvedSince = startup ? live.createdAt : health.blockedSince;
         if (starvedSince === null) {
           live.healthySince ??= now;
-          live.healthySamples++;
+          this.countDelivery(live, health.lastDeliveryAt, now);
           if (!live.provenRecorded && live.healthySamples >= PROVEN_PLAY_SAMPLES)
             this.recordProvenPlay(live, now);
           if (live.hedge && now - live.healthySince >= HEDGE_RELEASE_MS) this.releaseHedge(live);
@@ -374,6 +387,16 @@ export class PlaybackSessionService {
         clearInterval(this.healthTimer);
         this.healthTimer = undefined;
       }
+    }
+  }
+
+  /** Count a healthy sample towards a proven play only if it saw fresh delivery. */
+  private countDelivery(live: LiveSession, lastDeliveryAt: number | null, now: number): void {
+    if (lastDeliveryAt === null || now - lastDeliveryAt > PROVEN_PLAY_DELIVERY_MS) {
+      live.healthySamples = 0;
+    } else if (lastDeliveryAt !== live.countedDeliveryAt) {
+      live.countedDeliveryAt = lastDeliveryAt;
+      live.healthySamples++;
     }
   }
 

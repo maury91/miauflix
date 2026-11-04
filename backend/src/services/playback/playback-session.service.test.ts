@@ -300,6 +300,13 @@ describe('PlaybackSessionService', () => {
         health.downloadSpeed = 2 * 1024 * 1024;
         health.blockedSince = null;
       };
+      /** Stream healthily for `seconds`, delivering bytes every second. */
+      const play = async (seconds: number) => {
+        for (let second = 0; second < seconds; second++) {
+          deliver();
+          await tick(1_000);
+        }
+      };
       return {
         service,
         health,
@@ -310,6 +317,7 @@ describe('PlaybackSessionService', () => {
         start,
         tick,
         deliver,
+        play,
       };
     };
 
@@ -375,29 +383,52 @@ describe('PlaybackSessionService', () => {
     });
 
     it('records a source as played once it streams for minutes without starving', async () => {
-      const { playedSources, start, tick, deliver } = setupMonitor();
+      const { playedSources, start, play } = setupMonitor();
       await start();
-      deliver();
-      for (let second = 0; second < 179; second++) await tick(1_000);
+      await play(179);
       expect(playedSources.recordPlayed).not.toHaveBeenCalled();
-      await tick(1_000);
+      await play(1);
       expect(playedSources.recordPlayed).toHaveBeenCalledWith(1, Date.now());
       // Once per session.
-      for (let second = 0; second < 300; second++) await tick(1_000);
+      await play(300);
       expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
     });
 
     it('starts the count over when the stream starves', async () => {
-      const { health, playedSources, start, tick, deliver } = setupMonitor();
+      const { health, playedSources, start, tick, play } = setupMonitor();
       await start();
-      deliver();
-      for (let second = 0; second < 150; second++) await tick(1_000);
+      await play(150);
       health.blockedSince = Date.now();
       await tick(1_000);
-      deliver();
-      for (let second = 0; second < 150; second++) await tick(1_000);
+      await play(150);
       expect(playedSources.recordPlayed).not.toHaveBeenCalled();
-      for (let second = 0; second < 30; second++) await tick(1_000);
+      await play(30);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+    });
+
+    it('never records a stream whose reader stopped pulling bytes', async () => {
+      const { playedSources, start, tick, deliver } = setupMonitor();
+      await start();
+      // Delivered once, then the reader applies backpressure: no blocked read, no new bytes.
+      deliver();
+      for (let second = 0; second < 400; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+    });
+
+    it('starts the count over when delivery stops or the stream closes', async () => {
+      const { health, playedSources, start, tick, play } = setupMonitor();
+      await start();
+      await play(150);
+      // Reader stalls: stalled samples add nothing, and past the delivery window the count resets.
+      for (let second = 0; second < 31; second++) await tick(1_000);
+      await play(150);
+      // Stream closes for a moment.
+      health.streaming = false;
+      await tick(1_000);
+      health.streaming = true;
+      await play(170);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+      await play(10);
       expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
     });
 
@@ -415,11 +446,10 @@ describe('PlaybackSessionService', () => {
     });
 
     it('keeps playing when the played record cannot be written', async () => {
-      const { playedSources, sourceHealth, start, tick, deliver } = setupMonitor();
+      const { playedSources, sourceHealth, start, play } = setupMonitor();
       playedSources.recordPlayed.mockRejectedValue(new Error('database is locked'));
       await start();
-      deliver();
-      for (let second = 0; second < 200; second++) await tick(1_000);
+      await play(200);
       expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
       expect(sourceHealth.markFailed).not.toHaveBeenCalled();
     });
