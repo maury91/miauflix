@@ -41,14 +41,11 @@ export interface LogoutResponse {
 }
 
 import type { UserRole } from '@entities/user.entity';
-import type { AvatarLook } from '@mytypes/avatar.types';
-export type { AvatarLook, UserRole };
+export type { UserRole };
 export interface CreateUserRequest {
   email: string;
   password: string;
   role: UserRole;
-  displayName?: string;
-  avatar?: AvatarLook;
 }
 
 export interface UserDto {
@@ -56,14 +53,6 @@ export interface UserDto {
   email: string;
   displayName: string | null;
   role: UserRole;
-  avatar: AvatarLook | null;
-  /** Changes whenever a new avatar image is saved; null when the profile has no image. */
-  avatarVersion: number | null;
-}
-
-export interface UpdateProfileRequest {
-  displayName?: string;
-  avatar?: AvatarLook | null;
 }
 
 export type CreateUserResponse = UserDto;

@@ -3,33 +3,6 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { HomeSidebar } from './HomeSidebar';
 
-const profile = {
-  session: 'session-1',
-  user: {
-    id: 'user-1',
-    email: 'maurizio@example.com',
-    displayName: 'Maurizio',
-    role: 'user' as const,
-    avatar: null,
-    avatarVersion: null,
-  },
-};
-
-const sidebar = (overrides: Partial<Parameters<typeof HomeSidebar>[0]> = {}) => (
-  <HomeSidebar
-    active={false}
-    showSettings={false}
-    onAction={() => ({ type: 'handled' })}
-    onHover={vi.fn()}
-    onSettings={vi.fn()}
-    onSearch={vi.fn()}
-    onEnterNotifications={vi.fn()}
-    unreadCount={0}
-    hasNotifications={false}
-    {...overrides}
-  />
-);
-
 describe('HomeSidebar', () => {
   it('keeps Search and Settings accessible, without a Home item, when the rail is collapsed', () => {
     const onSettings = vi.fn();
@@ -152,41 +125,6 @@ describe('HomeSidebar', () => {
       expect(onEnterNotifications).toHaveBeenCalledTimes(entered);
       expect(onAction).not.toHaveBeenCalled();
       expect(bell).toHaveFocus();
-    }
-  );
-
-  it('puts the watching profile at the bottom, above Settings, and opens its panel', () => {
-    const onEnterProfile = vi.fn();
-    const { rerender } = render(sidebar({ profile, onEnterProfile, showSettings: true }));
-
-    const buttons = screen.getAllByRole('button').map(button => button.getAttribute('aria-label'));
-    expect(buttons).toEqual([
-      'Notifications',
-      'Search',
-      'Profile, Maurizio is watching',
-      'Settings',
-    ]);
-    fireEvent.click(screen.getByRole('button', { name: /^Profile/ }));
-    expect(onEnterProfile).toHaveBeenCalledTimes(1);
-
-    rerender(sidebar({ profile, onEnterProfile }));
-    const last = screen.getAllByRole('button').at(-1);
-    expect(last).toHaveAccessibleName('Profile, Maurizio is watching');
-  });
-
-  it.each(['Enter', 'ArrowRight'])(
-    'moves into the profile panel with %s, like the bell into notifications',
-    key => {
-      const onEnterProfile = vi.fn();
-      const onAction = vi.fn(() => ({ type: 'handled' as const }));
-      render(sidebar({ active: true, profile, onEnterProfile, onAction }));
-      expect(screen.getByRole('button', { name: 'Search' })).toHaveFocus();
-      fireEvent.keyDown(document.activeElement!, { key: 'ArrowDown' });
-      const item = screen.getByRole('button', { name: /^Profile/ });
-      expect(item).toHaveFocus();
-      fireEvent.keyDown(item, { key });
-      expect(onEnterProfile).toHaveBeenCalledTimes(1);
-      expect(onAction).not.toHaveBeenCalled();
     }
   );
 });

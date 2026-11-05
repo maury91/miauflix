@@ -168,8 +168,6 @@ frontend/src/app/            # Shell and startup
 frontend/src/store/          # Redux store
 ```
 
-Inner pages go back through the shared back rail (`frontend/src/shared/ui/rail/BackRail.tsx`), the preferred back UI, rather than their own Back or Done buttons. See [coding conventions](../development/coding-conventions.md#going-back-in-the-ui).
-
 ### Database Changes
 
 ```

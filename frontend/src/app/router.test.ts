@@ -31,27 +31,17 @@ describe('application routes', () => {
     [{ type: 'storage' }, '/settings/storage'],
     [{ type: 'sources' }, '/settings/sources'],
     [{ type: 'qrApproval', approvalToken: 'approval token' }, '/auth/qr/approval%20token'],
-    [{ type: 'profiles' }, '/profiles'],
-    [{ type: 'manageProfiles' }, '/profiles/manage'],
-    [{ type: 'newProfile' }, '/profiles/new'],
-    [
-      { type: 'editProfile', userId: '7f1c1a8e-6f3b-4c55-9a41-2b7c6c3f9d10' },
-      '/profiles/7f1c1a8e-6f3b-4c55-9a41-2b7c6c3f9d10/edit',
-    ],
   ] as const)('builds and parses %s', (route, path) => {
     expect(routePath(route)).toBe(path);
     expect(parseRoute(path)).toEqual(route);
   });
 
-  it.each([
-    '/movies/0',
-    '/movies/1.2',
-    '/shows/2/seasons/-1/episodes/1/watch',
-    '/unknown',
-    '/profiles/not-a-user/edit',
-  ])('rejects malformed or unknown path %s', path => {
-    expect(parseRoute(path).type).toBe('notFound');
-  });
+  it.each(['/movies/0', '/movies/1.2', '/shows/2/seasons/-1/episodes/1/watch', '/unknown'])(
+    'rejects malformed or unknown path %s',
+    path => {
+      expect(parseRoute(path).type).toBe('notFound');
+    }
+  );
 
   it('remembers that details were opened from search', () => {
     navigate({ type: 'search' });

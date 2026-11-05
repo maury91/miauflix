@@ -4,11 +4,10 @@ import { Hono } from 'hono';
 import { z } from 'zod';
 
 import { UserRole } from '@entities/user.entity';
-import { InvalidTokenError, UserAlreadyExistsError } from '@errors/auth.errors';
+import { InvalidTokenError } from '@errors/auth.errors';
 import { authGuard } from '@middleware/auth.middleware';
 import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middleware';
 import type { AuthResult, AuthService } from '@services/auth/auth.service';
-import { toUserDto } from '@services/auth/user-dto.util';
 import { readRefreshToken, wantsTokenTransport } from '@utils/auth-transport.util';
 import { setCookies } from '@utils/setCookies.util';
 
@@ -21,7 +20,6 @@ import type {
   SessionResponse,
 } from './auth.types';
 import type { Deps, ErrorResponse } from './common.types';
-import { avatarLookSchema, displayNameSchema } from './profile.schema';
 
 /** Set the session cookies, or hand the tokens to a client that asked for token transport. */
 function deliverTokens(
@@ -201,26 +199,21 @@ export const createAuthRoutes = ({
           email: z.email(),
           password: z.string().min(1),
           role: z.enum(UserRole),
-          displayName: displayNameSchema.optional(),
-          avatar: avatarLookSchema.optional(),
         })
       ),
       async context => {
-        const { email, password, role, displayName, avatar } = context.req.valid('json');
+        const { email, password, role } = context.req.valid('json');
 
-        let newUser: Awaited<ReturnType<typeof authService.createUser>>;
-        try {
-          newUser = await authService.createUser(email, password, role, { displayName, avatar });
-        } catch (error) {
-          if (error instanceof UserAlreadyExistsError) {
-            return context.json(
-              { error: 'An account with this email already exists' } satisfies ErrorResponse,
-              409
-            );
-          }
-          throw error;
-        }
-        return context.json(toUserDto(newUser) satisfies CreateUserResponse, 201);
+        const newUser = await authService.createUser(email, password, role);
+        return context.json(
+          {
+            id: newUser.id,
+            email: newUser.email,
+            displayName: newUser.displayName,
+            role: newUser.role,
+          } satisfies CreateUserResponse,
+          201
+        );
       }
     )
     .post('/qr', rateLimitGuard(2), async context => {
@@ -314,7 +307,12 @@ export const createAuthRoutes = ({
 
       return context.json({
         id: sessionInfo.sessionId,
-        user: toUserDto(user),
+        user: {
+          id: user.id,
+          email: user.email,
+          displayName: user.displayName,
+          role: user.role,
+        },
       } satisfies SessionResponse);
     });
 };
