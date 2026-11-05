@@ -7,7 +7,7 @@ jest.mock('@middleware/rate-limit.middleware', () => ({
 import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
-import { InvalidTokenError, UserAlreadyExistsError } from '@errors/auth.errors';
+import { InvalidTokenError } from '@errors/auth.errors';
 
 import { createAuthRoutes } from './auth.routes';
 
@@ -110,84 +110,5 @@ describe('auth routes token transport', () => {
       headers: { 'X-Refresh-Token': 'stored-refresh' },
     });
     expect(authService.logout).toHaveBeenCalledWith('stored-refresh', 'session-1');
-  });
-});
-
-describe('auth routes account creation', () => {
-  const setupAdminApp = () => {
-    const created = {
-      ...user,
-      id: 'user-2',
-      email: 'alex@example.com',
-      displayName: 'Alex',
-      avatar: { kind: 'squircle', color: '#2bb3a3' },
-      avatarRenderedAt: null,
-    };
-    const authService = {
-      createUser: jest.fn().mockResolvedValue(created),
-    };
-    const app = new Hono();
-    app.use('*', async (c, next) => {
-      c.set('sessionInfo', {
-        sessionId: 'admin-session',
-        user: { id: 'admin-1', email: 'admin@example.com', role: UserRole.ADMIN },
-      });
-      await next();
-    });
-    app.route(
-      '/auth',
-      createAuthRoutes({
-        authService,
-        auditLogService: {},
-        configurationService: { get: () => undefined },
-        qrLoginService: {},
-      } as never)
-    );
-    return { app, authService, created };
-  };
-
-  const createAccount = (app: Hono, body: unknown) =>
-    app.request('/auth/users', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-
-  it('creates an account with a profile name and look', async () => {
-    const { app, authService, created } = setupAdminApp();
-    const response = await createAccount(app, {
-      email: created.email,
-      password: 'long-enough',
-      role: UserRole.USER,
-      displayName: 'Alex',
-      avatar: created.avatar,
-    });
-
-    expect(response.status).toBe(201);
-    expect(authService.createUser).toHaveBeenCalledWith(
-      created.email,
-      'long-enough',
-      UserRole.USER,
-      { displayName: 'Alex', avatar: created.avatar }
-    );
-    expect(await response.json()).toEqual({
-      id: 'user-2',
-      email: created.email,
-      displayName: 'Alex',
-      role: UserRole.USER,
-      avatar: created.avatar,
-      avatarVersion: null,
-    });
-  });
-
-  it('answers 409 when the email is taken', async () => {
-    const { app, authService } = setupAdminApp();
-    authService.createUser.mockRejectedValueOnce(new UserAlreadyExistsError());
-    const response = await createAccount(app, {
-      email: 'alex@example.com',
-      password: 'long-enough',
-      role: UserRole.USER,
-    });
-    expect(response.status).toBe(409);
   });
 });

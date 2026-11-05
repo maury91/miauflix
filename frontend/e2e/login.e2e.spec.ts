@@ -166,10 +166,6 @@ test.describe('Login flow', () => {
     const statusCode = loginResponse.status();
 
     expect(statusCode).toBe(200);
-    // Signing in adds the profile to the device; Who's watching then picks who is watching.
-    const selector = page.getByRole('main', { name: 'Who’s watching?' });
-    await expect(selector).toBeVisible({ timeout: 30000 });
-    await expect(selector.getByRole('listitem').first().getByRole('button')).toBeFocused();
   });
 
   test('should display proper visual feedback during form interaction', async ({ page }) => {

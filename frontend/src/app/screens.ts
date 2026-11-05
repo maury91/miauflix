@@ -7,11 +7,6 @@ export type AppScreen =
   | { kind: 'loading' }
   | { kind: 'setup' }
   | { kind: 'login' }
-  /** Who's watching: at startup (`startup`, nothing to go back to) or opened from Home. */
-  | { kind: 'whosWatching'; startup: boolean }
-  | { kind: 'manageProfiles' }
-  | { kind: 'newProfile' }
-  | { kind: 'editProfile'; userId: string }
   /** Something is not configured, but the app can be used: the admin may skip it. */
   | { kind: 'optionalConfig' }
   /** Essential configuration is missing (or the admin is still finishing it). */
@@ -57,12 +52,6 @@ export function resolveScreen({
   if (appState === 'loading' || (!booted && !homeEligible)) return { kind: 'loading' };
   if (appState === 'initial_setup') return { kind: 'setup' };
   if (appState === 'login') return { kind: 'login' };
-  // Profiles are managed before anyone is watching too, so they come before the other gates.
-  if (route.type === 'profiles') return { kind: 'whosWatching', startup: appState === 'profiles' };
-  if (route.type === 'manageProfiles') return { kind: 'manageProfiles' };
-  if (route.type === 'newProfile') return { kind: 'newProfile' };
-  if (route.type === 'editProfile') return { kind: 'editProfile', userId: route.userId };
-  if (appState === 'profiles') return { kind: 'whosWatching', startup: true };
   if (appState === 'config') return { kind: 'optionalConfig' };
   if (requiredConfigActive || appState === 'config_wizard') return { kind: 'requiredConfig' };
   // Past the gates the user is signed in.
