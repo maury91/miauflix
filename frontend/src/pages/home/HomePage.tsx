@@ -1,4 +1,6 @@
 import { type AppRoute, navigate, useRoute } from '@app/router';
+import { useLogoutMutation } from '@features/auth/api/auth.api';
+import { logOutSessions } from '@features/auth/logOutSessions';
 import { homeFeedActions, type RowIntent } from '@features/home-feed/homeFeed.slice';
 import { selectEmptyListSlugs } from '@features/home-feed/listPages';
 import type { MediaDto } from '@miauflix/backend';
@@ -6,7 +8,12 @@ import { Spinner } from '@shared/components';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { useAppSelector } from '@store/hooks';
-import { selectCurrentSessionId, selectCurrentUser, selectIsAdmin } from '@store/slices/auth';
+import {
+  selectAvailableSessions,
+  selectCurrentSessionId,
+  selectCurrentUser,
+  selectIsAdmin,
+} from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
 import {
@@ -28,6 +35,7 @@ import { HomeSidebar, type SidebarItem } from './components/HomeSidebar';
 import { NotificationsMenu } from './components/NotificationsMenu';
 import { PlayerView } from './components/PlayerView';
 import { PreparedMediaDetails, PreparedMediaHero } from './components/PreparedViews';
+import { ProfileMenu } from './components/ProfileMenu';
 import { TraktModal } from './components/TraktModal';
 import { useFocusPrefetch } from './hooks/useFocusPrefetch';
 import { useHomeArtwork } from './hooks/useHomeArtwork';
@@ -146,6 +154,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
   const sessionId = useSelector(selectCurrentSessionId);
   const currentUser = useSelector(selectCurrentUser);
+  const availableSessions = useSelector(selectAvailableSessions);
   const isAdmin = useAppSelector(selectIsAdmin);
   const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
 
@@ -168,6 +177,10 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const notificationsVisible =
     browsing && ((sidebarActive && sidebarItem === 'notifications') || notificationsFocused);
   const notifications = useHomeNotifications(sessionId, notificationsVisible);
+  // Likewise the profile panel, beside the rail's avatar.
+  const profileMenuFocused = interactive && !trakt.open && region === 'profileMenu';
+  const profileMenuVisible =
+    browsing && ((sidebarActive && sidebarItem === 'profile') || profileMenuFocused);
   const { mediaWidth, mediaPerPage, gap, margin, peekWidth, rowHeight } = useMediaBoxSizes();
   // The hero and the fixed app logo line up with the rows' left edge.
   useEffect(() => {
@@ -348,6 +361,19 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const onSidebarAction = useStableCallback(navigation.onSidebarAction);
   const onSidebarSettings = useStableCallback(navigation.openSettings);
   const onSidebarSearch = useStableCallback(navigation.openSearch);
+  const [logout] = useLogoutMutation();
+  const onEnterProfile = useStableCallback(() =>
+    dispatch(homeNavigationActions.setActiveRegion('profileMenu'))
+  );
+  /** Leave Home for a profile screen; coming back, the rail (not the panel) has the keyboard. */
+  const openProfileScreen = (route: AppRoute) => {
+    dispatch(homeNavigationActions.setActiveRegion('sidebar'));
+    navigate(route, { parent: { type: 'home' } });
+  };
+  const sidebarProfile = useMemo(
+    () => (sessionId && currentUser ? { session: sessionId, user: currentUser } : null),
+    [currentUser, sessionId]
+  );
   const onSidebarHover = useStableCallback(() =>
     dispatch(homeNavigationActions.setActiveRegion('sidebar'))
   );
@@ -464,12 +490,14 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
             </Content>
             <HomeSidebar
               active={sidebarActive}
-              expanded={notificationsVisible}
+              expanded={notificationsVisible || profileMenuVisible}
               showSettings={isAdmin}
               onAction={onSidebarAction}
               onHover={onSidebarHover}
               onSettings={onSidebarSettings}
               onSearch={onSidebarSearch}
+              profile={sidebarProfile}
+              onEnterProfile={onEnterProfile}
               onEnterNotifications={onEnterNotifications}
               onSelectedChange={setSidebarItem}
               unreadCount={notifications.unreadCount}
@@ -539,6 +567,29 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
           }}
           onExit={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
           onPointerEnter={() => dispatch(homeNavigationActions.setActiveRegion('notifications'))}
+          onPointerLeave={() => navigation.onSidebarAction('right')}
+        />
+      )}
+      {profileMenuVisible && sidebarProfile && (
+        <ProfileMenu
+          profile={sidebarProfile}
+          focused={profileMenuFocused}
+          railExpanded
+          onSwitch={() => openProfileScreen({ type: 'profiles' })}
+          onEdit={() => openProfileScreen({ type: 'editProfile', userId: sidebarProfile.user.id })}
+          onLogout={() => {
+            // Who's watching (or sign-in, with no other profile) takes over once it is gone:
+            // every session of this profile on the device ends, or it would still be listed.
+            dispatch(homeNavigationActions.setActiveRegion('sidebar'));
+            void logOutSessions(
+              availableSessions
+                .filter(({ user }) => user.id === sidebarProfile.user.id)
+                .map(({ session }) => session),
+              session => logout({ session })
+            );
+          }}
+          onExit={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
+          onPointerEnter={() => dispatch(homeNavigationActions.setActiveRegion('profileMenu'))}
           onPointerLeave={() => navigation.onSidebarAction('right')}
         />
       )}

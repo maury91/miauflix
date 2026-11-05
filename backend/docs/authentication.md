@@ -76,20 +76,23 @@ Implementation: [transport readers](../src/utils/auth-transport.util.ts), [TV au
 
 ## Authentication API
 
-All routes below are mounted under `/api/auth`. `UserDto` contains `id`, `email`, nullable `displayName`, and `role`.
+All routes below are mounted under `/api/auth`. `UserDto` contains `id`, `email`, nullable `displayName`, `role`, `avatar` (the profile's Plushie look; generated with the editor's Surprise me generator when an account is created without one, and for older accounts by a data migration, so it is only `null` for a record the migration has not reached yet) and nullable `avatarVersion` (changes when a new avatar picture is saved; `null` when there is none, or after a look change until its new picture is saved).
 
-| Method and path          | Authentication/input                                     | Successful behavior                                                                                |
-| ------------------------ | -------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `GET /setup`             | No existing session required                             | Returns `{ available }` for first-admin setup                                                      |
-| `POST /setup`            | `{ email, password }`; password minimum eight characters | Creates the initial admin only while setup is available, then returns login data                   |
-| `POST /login`            | `{ email, password }`                                    | Returns `{ session, user }` and delivers tokens using the selected transport                       |
-| `POST /refresh/:session` | Session refresh cookie or `X-Refresh-Token`              | Rotates refresh token, issues a new access token, returns `{ user }` plus TV tokens when requested |
-| `POST /logout/:session`  | Session refresh cookie or `X-Refresh-Token`              | Revokes that refresh session, clears both browser cookies, returns `{ message }`                   |
-| `GET /sessions`          | Refresh cookies or `X-Refresh-Tokens`                    | Returns valid presented sessions as `{ session, user }[]`                                          |
-| `GET /session`           | Valid access token and `X-Session-Id`                    | Returns `{ id: sessionId, user }`                                                                  |
-| `POST /users`            | Admin access token/session; `{ email, password, role }`  | Creates a `user` or `admin` account and returns its user data                                      |
+| Method and path          | Authentication/input                                                           | Successful behavior                                                                                                                                      |
+| ------------------------ | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /setup`             | No existing session required                                                   | Returns `{ available }` for first-admin setup                                                                                                            |
+| `POST /setup`            | `{ email, password }`; password minimum eight characters                       | Creates the initial admin only while setup is available, then returns login data                                                                         |
+| `POST /login`            | `{ email, password }`                                                          | Returns `{ session, user }` and delivers tokens using the selected transport                                                                             |
+| `POST /refresh/:session` | Session refresh cookie or `X-Refresh-Token`                                    | Rotates refresh token, issues a new access token, returns `{ user }` plus TV tokens when requested                                                       |
+| `POST /logout/:session`  | Session refresh cookie or `X-Refresh-Token`                                    | Revokes that refresh session, clears both browser cookies, returns `{ message }`                                                                         |
+| `GET /sessions`          | Refresh cookies or `X-Refresh-Tokens`                                          | Returns valid presented sessions as `{ session, user }[]`                                                                                                |
+| `GET /session`           | Valid access token and `X-Session-Id`                                          | Returns `{ id: sessionId, user }`                                                                                                                        |
+| `POST /users`            | Admin access token/session; `{ email, password, role, displayName?, avatar? }` | Creates a `user` or `admin` account and returns its user data; 409 when the email is taken                                                               |
+| `PATCH /session/profile` | Valid access token and `X-Session-Id`; `{ displayName?, avatar? }`             | Updates the session's own profile name and look (a look can be replaced, not removed: `null` is a 400) and returns its user data                         |
+| `PUT /session/avatar`    | Valid access token and `X-Session-Id`; `image/png` body, at most 1 MB          | Stores the profile's pre-rendered avatar picture (`DATA_DIR/avatars/<userId>.png`)                                                                       |
+| `GET /avatars/:userId`   | Valid access token and `X-Session-Id`                                          | Returns a profile's avatar picture, or 404 when it has none. With `?v=<avatarVersion>` it may be cached for good; without it the browser must revalidate |
 
-The refresh route performs token rotation. Use `/session` to validate the access token or `/sessions` to discover the refresh sessions presented by the client. Session discovery checks at most five presented tokens, rather than listing every device ever used by the account.
+The refresh route performs token rotation. Use `/session` to validate the access token or `/sessions` to discover the refresh sessions presented by the client. Session discovery checks at most eight presented tokens (one per profile on a shared TV), rather than listing every device ever used by the account.
 
 Authentication routes have endpoint-specific rate limits. User creation is guarded by the administrator role; refresh, logout, and session discovery validate their presented refresh credentials rather than requiring a current access JWT.
 
@@ -156,6 +159,6 @@ Streaming uses separate settings and credentials, including `STREAM_TOKEN_EXPIRA
 
 ## Current UI boundaries
 
-The application has password login, QR login, and first-admin setup. The frontend can discover sessions and renew access. Session-scoped cookies support independent session records, but a profile selector, profile editor, administrator account-creation screen, and ordinary logout control remain in [ToDo.md](../../ToDo.md#account).
+The application has password login, QR login, and first-admin setup. Each session the device holds is a profile: Who's watching picks the current one (kept in `sessionStorage` for the app run), signing in adds a profile without switching to it, and Logout in Home's profile panel removes the watching one by logging out its session. Administrators add profiles from Who's watching.
 
 For frontend behavior, consult [auth API](../../frontend/src/features/auth/api/auth.api.ts) and [auth state](../../frontend/src/store/slices/auth.ts).

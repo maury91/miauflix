@@ -1,3 +1,4 @@
+import { PLUSHIE_KINDS } from '@miauflix/service-contracts';
 import type { Context } from 'hono';
 
 import { Database } from '@database/database';
@@ -11,7 +12,7 @@ import type { UserRepository } from '@repositories/user.repository';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
 
-import { AuthService } from './auth.service';
+import { AuthService, MAX_LISTED_SESSIONS } from './auth.service';
 
 jest.mock('@database/database');
 jest.mock('@services/configuration/configuration.service');
@@ -45,6 +46,7 @@ jest.mock('jose', () => ({
 // Mock bcrypt
 jest.mock('bcrypt', () => ({
   compare: jest.fn(),
+  hash: jest.fn().mockResolvedValue('hashed-password'),
 }));
 
 // Mock proxy utility
@@ -358,7 +360,10 @@ describe('AuthService', () => {
       expect(result?.user).toEqual({
         id: 'user-123',
         email: 'test@example.com',
+        displayName: undefined,
         role: UserRole.USER,
+        avatar: null,
+        avatarVersion: null,
       });
 
       expect(mockRefreshTokenRepository.updateToken).toHaveBeenCalledWith(
@@ -470,13 +475,19 @@ describe('AuthService', () => {
             email: user.email,
             displayName: user.displayName,
             role: user.role,
+            avatar: null,
+            avatarVersion: null,
           },
         },
       ]);
     });
 
     it('clears invalid cookies and still returns a valid session after them', async () => {
-      const invalidSessions = Array.from({ length: 6 }, (_, index) => `invalid-${index}`);
+      // One more than the cap: the valid session (it has an access cookie) goes first.
+      const invalidSessions = Array.from(
+        { length: MAX_LISTED_SESSIONS },
+        (_, index) => `invalid-${index}`
+      );
       const validSession = 'valid-session';
       const cookieHeader = [
         ...invalidSessions.map(session => `__test_rt_${session}=invalid-token`),
@@ -517,15 +528,18 @@ describe('AuthService', () => {
             email: user.email,
             displayName: user.displayName,
             role: user.role,
+            avatar: null,
+            avatarVersion: null,
           },
         },
       ]);
-      expect(mockRefreshTokenRepository.findByToken).toHaveBeenCalledTimes(5);
+      expect(mockRefreshTokenRepository.findByToken).toHaveBeenCalledTimes(MAX_LISTED_SESSIONS);
 
       const { deleteCookie } = jest.requireMock('hono/cookie') as {
         deleteCookie: jest.Mock;
       };
-      for (const session of invalidSessions.slice(0, 4)) {
+      const checked = invalidSessions.slice(0, MAX_LISTED_SESSIONS - 1);
+      for (const session of checked) {
         expect(deleteCookie).toHaveBeenCalledWith(context, `__test_rt_${session}`, {
           domain: undefined,
           path: '/api/auth/',
@@ -535,11 +549,61 @@ describe('AuthService', () => {
           path: '/',
         });
       }
-      expect(deleteCookie).toHaveBeenCalledTimes(8);
+      expect(deleteCookie).toHaveBeenCalledTimes(checked.length * 2);
       expect(deleteCookie).not.toHaveBeenCalledWith(
         context,
-        `__test_rt_${invalidSessions[4]}`,
+        `__test_rt_${invalidSessions[MAX_LISTED_SESSIONS - 1]}`,
         expect.anything()
+      );
+    });
+  });
+
+  describe('generated avatars', () => {
+    const generatedLook = expect.objectContaining({
+      kind: expect.stringMatching(new RegExp(`^(${PLUSHIE_KINDS.join('|')})$`)),
+      color: expect.stringMatching(/^#[0-9a-f]{6}$/i),
+      cheeks: expect.any(Boolean),
+    });
+
+    it('gives an account created without a look a generated Plushie', async () => {
+      mockUserRepository.findByEmail.mockResolvedValue(null);
+      mockUserRepository.create.mockImplementation(async user => user as User);
+
+      await authService.createUser('new@example.com', 'password', UserRole.USER);
+
+      expect(mockUserRepository.create).toHaveBeenCalledWith(
+        expect.objectContaining({ email: 'new@example.com', avatar: generatedLook })
+      );
+    });
+
+    it('keeps the look an account is created with', async () => {
+      mockUserRepository.findByEmail.mockResolvedValue(null);
+      mockUserRepository.create.mockImplementation(async user => user as User);
+      const avatar = { kind: 'heart', color: '#3d9be9' };
+
+      await authService.createUser('new@example.com', 'password', UserRole.USER, { avatar });
+
+      expect(mockUserRepository.create).toHaveBeenCalledWith(expect.objectContaining({ avatar }));
+    });
+
+    it('gives the first admin a generated Plushie', async () => {
+      const setup = new AuthService(
+        mockDatabase,
+        mockAuditLogService,
+        (() => {
+          const config = createMockConfig() as jest.Mocked<ConfigurationService>;
+          const base = config.get.getMockImplementation()!;
+          config.get.mockImplementation(((key: string) =>
+            key === 'ALLOW_CREATE_ADMIN_ON_FIRST_RUN' ? true : base(key as never)) as never);
+          return config;
+        })()
+      );
+      mockUserRepository.createAdminIfNone.mockImplementation(async user => user as User);
+
+      await setup.setupAdmin('admin@example.com', 'password', mockContext);
+
+      expect(mockUserRepository.createAdminIfNone).toHaveBeenCalledWith(
+        expect.objectContaining({ role: UserRole.ADMIN, avatar: generatedLook })
       );
     });
   });

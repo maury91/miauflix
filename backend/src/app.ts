@@ -32,6 +32,7 @@ import { PlaybackTargetService } from '@services/playback/playback-target.servic
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
 import { PreloadIntentService } from '@services/preload/preload-intent.service';
 import { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
+import { ProfileService } from '@services/profile/profile.service';
 import { ProgressService } from '@services/progress/progress.service';
 import { RealtimeGateway } from '@services/realtime/realtime.gateway';
 import { RealtimeSearchChannel } from '@services/realtime/realtime.search';
@@ -100,6 +101,7 @@ try {
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db);
+  const profileService = new ProfileService(db, configurationService);
   const progressService = new ProgressService(db, listClient);
   const notificationService = new NotificationService(db);
   const mediaService = new MediaService(db, catalogClient);
@@ -337,6 +339,7 @@ try {
     sourcesClientService,
     magnetService,
     qrLoginService,
+    profileService,
     downloadService,
     streamService,
     requestService,

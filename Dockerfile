@@ -46,6 +46,9 @@ COPY backend/ ./backend/
 
 # Copy frontend sources before running the complete build graph so the same
 # Turbo cache is available to the backend client and frontend tasks.
+# The profile editor's sprite sheets are generated from these originals (prebuild/predev).
+COPY assets/profile/ ./assets/profile/
+COPY scripts/generate-profile-sprites.mjs ./scripts/
 COPY frontend/ ./frontend/
 # The frontend TypeScript build includes Storybook fixtures under src/. Those
 # fixtures intentionally reuse the repository-level provider recordings.

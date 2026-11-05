@@ -34,6 +34,9 @@ RUN npm run build:libs
 # Seed the remaining workspaces. These files are replaced by bind mounts when
 # the development stack runs.
 COPY backend/ ./backend/
+# The profile editor's sprite sheets are generated from these originals (prebuild/predev).
+COPY assets/profile/ ./assets/profile/
+COPY scripts/generate-profile-sprites.mjs ./scripts/
 COPY frontend/ ./frontend/
 RUN npm run build:backend
 

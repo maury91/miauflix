@@ -7,6 +7,8 @@ import { mediaApi } from '@features/media/api/media.api';
 import { notificationsApi } from '@features/notifications/api/notifications.api';
 import { playbackApi } from '@features/player/api/playback.api';
 import { preloadApi } from '@features/preload/api/preload.api';
+import { profilesApi } from '@features/profiles/api/profiles.api';
+import { profileSessionMiddleware } from '@features/profiles/profileSession.middleware';
 import { progressApi } from '@features/progress/api/progress.api';
 import { realtimeMiddleware } from '@features/realtime/realtime.middleware';
 import { searchMiddleware } from '@features/search/search.middleware';
@@ -31,6 +33,7 @@ export const store = configureStore({
     [notificationsApi.reducerPath]: notificationsApi.reducer,
     [playbackApi.reducerPath]: playbackApi.reducer,
     [preloadApi.reducerPath]: preloadApi.reducer,
+    [profilesApi.reducerPath]: profilesApi.reducer,
     [progressApi.reducerPath]: progressApi.reducer,
     [configApi.reducerPath]: configApi.reducer,
     [setupApi.reducerPath]: setupApi.reducer,
@@ -54,6 +57,7 @@ export const store = configureStore({
       notificationsApi.middleware,
       playbackApi.middleware,
       preloadApi.middleware,
+      profilesApi.middleware,
       progressApi.middleware,
       configApi.middleware,
       setupApi.middleware,
@@ -61,7 +65,8 @@ export const store = configureStore({
       storageApi.middleware,
       searchMiddleware,
       realtimeMiddleware,
-      homeFeedMiddleware
+      homeFeedMiddleware,
+      profileSessionMiddleware
     ),
 });
 
