@@ -2,6 +2,12 @@
 
 What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHANGELOG.md).
 
+## Unreleased
+
+### New
+
+- **Profiles**: Who's watching shows the accounts signed in on the device; pick one to watch, switch, edit or log out of your profile from the avatar at the bottom of Home's sidebar, add profiles (admins) and edit each one's name and Plushie
+
 ## 2026-11-03 v0.1.0 Samsung TV support, smarter sources, smoother playback, and better reliability
 
 ### New
