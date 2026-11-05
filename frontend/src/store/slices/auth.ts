@@ -59,6 +59,9 @@ function updateUser(state: AuthState, user: UserDto): void {
   if (state.currentUser?.id === user.id) state.currentUser = user;
 }
 
+/** Responses meaning the session is gone (or was never valid), so the profile can go too. */
+const INVALID_SESSION_STATUSES = new Set([401, 403, 404]);
+
 function removeSession(state: AuthState, session: string): void {
   state.availableSessions = state.availableSessions.filter(entry => entry.session !== session);
   if (state.currentSessionId === session) {
@@ -114,15 +117,16 @@ export const authSlice = createSlice({
       updateUser(state, action.payload.user);
     });
 
-    // Logging out removes only that profile from the device (on failure too: the server
-    // has already cleared the session cookies, or the session was invalid), except when the
-    // request was turned away (429) and the session is still valid.
+    // Logging out removes only that profile from the device. A failed logout removes it only
+    // when the session is no longer valid; otherwise (turned away, a server or network error)
+    // the session may still work, and the profile stays to be logged out again.
     builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state, action) => {
       removeSession(state, action.meta.arg.originalArgs.session);
     });
     builder.addMatcher(authApi.endpoints.logout.matchRejected, (state, action) => {
-      if ((action.payload as { status?: unknown } | undefined)?.status === 429) return;
-      removeSession(state, action.meta.arg.originalArgs.session);
+      const status = (action.payload as { status?: unknown } | undefined)?.status;
+      if (typeof status === 'number' && INVALID_SESSION_STATUSES.has(status))
+        removeSession(state, action.meta.arg.originalArgs.session);
     });
 
     // The device's sessions are its profiles. The chosen one is kept while it is still listed,

@@ -122,15 +122,16 @@ describe('auth profiles', () => {
     expect(state.currentUser).toBeNull();
   });
 
-  it('keeps a profile whose logout was turned away, and drops one whose logout failed', () => {
+  it('keeps a profile whose logout may not have ended its session, and drops an invalid one', () => {
     let state = authSlice.reducer(
       undefined,
       listed([session('one', 'user-1'), session('two', 'user-2')])
     );
-    state = authSlice.reducer(
-      state,
-      mutationRejected('logout', { status: 429, data: 'Too Many Requests' }, { session: 'one' })
-    );
+    for (const status of [429, 500])
+      state = authSlice.reducer(
+        state,
+        mutationRejected('logout', { status, data: 'Failed' }, { session: 'one' })
+      );
     expect(state.availableSessions.map(({ session }) => session)).toEqual(['one', 'two']);
 
     state = authSlice.reducer(
