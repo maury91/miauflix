@@ -25,13 +25,14 @@ describe('CacheService', () => {
     try {
       // Provider responses churn like this: read (expiring on access), then set again.
       // cacheable <= 2.2 lost track of expired keys here and grew without bound. Three times
-      // the LRU size in distinct keys shows the bound; every set also writes the SQLite layer,
-      // so the volume stays small enough for slow CI disks.
+      // the LRU size in distinct keys shows the bound. The churn drives the service's memory
+      // layer directly: the SQLite layer plays no part in the bound and is too slow on CI disks.
+      const memoryLayer = service.cache.stores[0];
       for (let round = 0; round < 3; round++) {
         for (let index = 0; index < 1200; index++) {
           const key = `provider:${(index * 7 + round * 13) % 1500}`;
-          await service.cache.get(key);
-          await service.cache.set(key, { body: 'x' }, 5);
+          await memoryLayer.get(key);
+          await memoryLayer.set(key, { body: 'x' }, 5);
         }
         await new Promise(resolve => setTimeout(resolve, 20));
       }
