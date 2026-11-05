@@ -26,5 +26,6 @@ export const displayNameSchema = z.string().trim().min(1).max(40);
 
 export const updateProfileSchema = z.object({
   displayName: displayNameSchema.optional(),
-  avatar: avatarLookSchema.nullable().optional(),
+  // Not null: every profile keeps a look (generated when it had none).
+  avatar: avatarLookSchema.optional(),
 });

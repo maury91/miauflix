@@ -9,7 +9,7 @@ import {
 } from '@shared/api/authenticated-request';
 import { backendClient } from '@shared/api/backend-client';
 import { API_CREDENTIALS } from '@shared/config/constants';
-import { addSession, profileUpdated, type SessionInfo } from '@store/slices/auth';
+import { addSession, profileUpdated, type SessionInfo, sessionRemoved } from '@store/slices/auth';
 
 export interface CreateProfileRequest {
   /** An admin session on this device; it creates the account. */
@@ -34,9 +34,10 @@ type Dispatch = (action: unknown) => unknown;
 
 const sessionHeaders = (session: string) => ({ 'X-Session-Id': session });
 
-function onInvalidSession(dispatch: Dispatch) {
+/** A refused session leaves the device alone: the other profiles, and who is watching, stay. */
+function onInvalidSession(dispatch: Dispatch, session: string) {
   return () => {
-    dispatch({ type: 'auth/clearAuth' });
+    dispatch(sessionRemoved(session));
     dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
   };
 }
@@ -58,7 +59,7 @@ function uploadAvatarImage(
       ),
     session,
     errorContext: 'Failed to save the profile picture',
-    onInvalidSession: onInvalidSession(dispatch),
+    onInvalidSession: onInvalidSession(dispatch, session),
   });
 }
 
@@ -80,15 +81,18 @@ export const profilesApi = createApi({
             ),
           session: adminSession,
           errorContext: 'Failed to create the profile',
-          onInvalidSession: onInvalidSession(dispatch),
+          onInvalidSession: onInvalidSession(dispatch, adminSession),
         });
-        if ('error' in created) return created;
+        // Taken: maybe by this very profile, created on an earlier try whose sign-in failed.
+        // With its password it can still be signed in, instead of being stuck as "taken".
+        const taken = 'error' in created && created.error.status === 409;
+        if ('error' in created && !taken) return created;
 
         const signedIn = await request<LoginResponse>(
           () => backendClient.api.auth.login.$post({ json: { email, password } }),
-          'The profile was created, but signing it in failed'
+          'The profile was created, but signing it in failed: try again'
         );
-        if ('error' in signedIn) return signedIn;
+        if ('error' in signedIn) return taken ? created : signedIn;
 
         let profile: SessionInfo = { session: signedIn.data.session, user: signedIn.data.user };
         if (image) {
@@ -111,7 +115,7 @@ export const profilesApi = createApi({
             ),
           session,
           errorContext: 'Failed to save the profile',
-          onInvalidSession: onInvalidSession(dispatch),
+          onInvalidSession: onInvalidSession(dispatch, session),
         });
         if ('error' in updated) return updated;
 

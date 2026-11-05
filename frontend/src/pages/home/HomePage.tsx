@@ -1,5 +1,6 @@
 import { type AppRoute, navigate, useRoute } from '@app/router';
 import { useLogoutMutation } from '@features/auth/api/auth.api';
+import { logOutSessions } from '@features/auth/logOutSessions';
 import { homeFeedActions, type RowIntent } from '@features/home-feed/homeFeed.slice';
 import { selectEmptyListSlugs } from '@features/home-feed/listPages';
 import type { MediaDto } from '@miauflix/backend';
@@ -580,8 +581,12 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
             // Who's watching (or sign-in, with no other profile) takes over once it is gone:
             // every session of this profile on the device ends, or it would still be listed.
             dispatch(homeNavigationActions.setActiveRegion('sidebar'));
-            for (const { session, user } of availableSessions)
-              if (user.id === sidebarProfile.user.id) void logout({ session });
+            void logOutSessions(
+              availableSessions
+                .filter(({ user }) => user.id === sidebarProfile.user.id)
+                .map(({ session }) => session),
+              session => logout({ session })
+            );
           }}
           onExit={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
           onPointerEnter={() => dispatch(homeNavigationActions.setActiveRegion('profileMenu'))}

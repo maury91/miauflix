@@ -92,6 +92,10 @@ export const authSlice = createSlice({
     profileUpdated: (state, action: PayloadAction<UserDto>) => {
       updateUser(state, action.payload);
     },
+    /** A session stopped being valid (its refresh was refused): only that profile leaves. */
+    sessionRemoved: (state, action: PayloadAction<string>) => {
+      removeSession(state, action.payload);
+    },
     clearAuth: state => {
       state.currentSessionId = null;
       state.availableSessions = [];
@@ -111,11 +115,13 @@ export const authSlice = createSlice({
     });
 
     // Logging out removes only that profile from the device (on failure too: the server
-    // has already cleared the session cookies, or the session was invalid).
+    // has already cleared the session cookies, or the session was invalid), except when the
+    // request was turned away (429) and the session is still valid.
     builder.addMatcher(authApi.endpoints.logout.matchFulfilled, (state, action) => {
       removeSession(state, action.meta.arg.originalArgs.session);
     });
     builder.addMatcher(authApi.endpoints.logout.matchRejected, (state, action) => {
+      if ((action.payload as { status?: unknown } | undefined)?.status === 429) return;
       removeSession(state, action.meta.arg.originalArgs.session);
     });
 
@@ -140,10 +146,19 @@ export const authSlice = createSlice({
   },
 });
 
-export const { setSession, setSessions, setCurrentUser, addSession, profileUpdated, clearAuth } =
-  authSlice.actions;
+export const {
+  setSession,
+  setSessions,
+  setCurrentUser,
+  addSession,
+  profileUpdated,
+  sessionRemoved,
+  clearAuth,
+} = authSlice.actions;
 
-type AuthRoot = { auth: AuthState };
+interface AuthRoot {
+  auth: AuthState;
+}
 
 // Selectors
 export const selectCurrentSessionId = (state: AuthRoot) => state.auth.currentSessionId;

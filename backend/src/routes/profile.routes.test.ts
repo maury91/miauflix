@@ -89,6 +89,7 @@ describe('profile routes', () => {
     ['an option name with symbols', { avatar: { 'kind<': 'pill' } }],
     ['an option value with markup', { avatar: { kind: '<script>' } }],
     ['a nested option', { avatar: { kind: { nested: true } } }],
+    ['a removed look', { avatar: null }],
     [
       'too many options',
       {

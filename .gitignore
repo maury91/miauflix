@@ -2,7 +2,7 @@
 frontend-legacy
 legacy
 plan
-output
+/output
 
 # Dependencies
 node_modules

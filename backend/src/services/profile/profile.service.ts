@@ -56,7 +56,7 @@ export class ProfileService {
   @traced('ProfileService')
   async updateProfile(
     userId: string,
-    profile: { avatar?: AvatarLook | null; displayName?: string }
+    profile: { avatar?: AvatarLook; displayName?: string }
   ): Promise<User | null> {
     const changes: Partial<User> = {};
     if (profile.displayName !== undefined) changes.displayName = profile.displayName;

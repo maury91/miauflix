@@ -8,6 +8,7 @@ import {
   profileUpdated,
   selectAdminSession,
   selectProfiles,
+  sessionRemoved,
   setSession,
 } from './auth';
 
@@ -36,6 +37,19 @@ function mutationFulfilled(endpointName: string, payload: unknown, originalArgs:
     type: `${authApi.reducerPath}/executeMutation/fulfilled`,
     payload,
     meta: { arg: { endpointName, originalArgs }, requestStatus: 'fulfilled' },
+  };
+}
+
+function mutationRejected(endpointName: string, payload: unknown, originalArgs: unknown) {
+  return {
+    type: `${authApi.reducerPath}/executeMutation/rejected`,
+    payload,
+    error: { message: 'Rejected' },
+    meta: {
+      arg: { endpointName, originalArgs },
+      requestStatus: 'rejected',
+      rejectedWithValue: true,
+    },
   };
 }
 
@@ -106,6 +120,35 @@ describe('auth profiles', () => {
     expect(state.availableSessions).toEqual([]);
     expect(state.currentSessionId).toBeNull();
     expect(state.currentUser).toBeNull();
+  });
+
+  it('keeps a profile whose logout was turned away, and drops one whose logout failed', () => {
+    let state = authSlice.reducer(
+      undefined,
+      listed([session('one', 'user-1'), session('two', 'user-2')])
+    );
+    state = authSlice.reducer(
+      state,
+      mutationRejected('logout', { status: 429, data: 'Too Many Requests' }, { session: 'one' })
+    );
+    expect(state.availableSessions.map(({ session }) => session)).toEqual(['one', 'two']);
+
+    state = authSlice.reducer(
+      state,
+      mutationRejected('logout', { status: 401, data: 'Invalid session' }, { session: 'one' })
+    );
+    expect(state.availableSessions.map(({ session }) => session)).toEqual(['two']);
+  });
+
+  it('drops only a refused session, keeping who is watching', () => {
+    let state = authSlice.reducer(
+      undefined,
+      listed([session('one', 'user-1'), session('two', 'user-2')])
+    );
+    state = authSlice.reducer(state, setSession('two'));
+    state = authSlice.reducer(state, sessionRemoved('one'));
+    expect(state.availableSessions.map(({ session }) => session)).toEqual(['two']);
+    expect(state.currentSessionId).toBe('two');
   });
 
   it('updates a profile in every session it holds', () => {

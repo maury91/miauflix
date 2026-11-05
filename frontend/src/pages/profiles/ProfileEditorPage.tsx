@@ -147,6 +147,8 @@ const Tab = styled.button<{ $selected: boolean }>`
     color: #ffffff;
     background: rgba(255, 255, 255, 0.08);
     border-radius: 8px 8px 0 0;
+    /* A ring like the other controls': the tint alone hardly shows on the dark page. */
+    box-shadow: inset 0 0 0 3px #ffffff;
   }
 `;
 

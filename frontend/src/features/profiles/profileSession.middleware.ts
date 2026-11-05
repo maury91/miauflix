@@ -23,7 +23,9 @@ const PROFILE_APIS = [
   storageApi,
 ];
 
-type AuthSnapshot = { auth: { currentSessionId: string | null } };
+interface AuthSnapshot {
+  auth: { currentSessionId: string | null };
+}
 
 /**
  * Remember the chosen profile for this app run, and drop the cached data of the previous one
