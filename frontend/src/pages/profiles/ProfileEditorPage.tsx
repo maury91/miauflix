@@ -335,6 +335,8 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCanc
     setRendering(true);
     try {
       await save(displayName);
+    } catch {
+      setError('Saving the profile failed.');
     } finally {
       submitting.current = false;
       setRendering(false);
