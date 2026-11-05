@@ -5,7 +5,12 @@ import { join } from 'node:path';
 import type { Database } from '@database/database';
 import type { UserRepository } from '@repositories/user.repository';
 
-import { InvalidAvatarImageError, MAX_AVATAR_IMAGE_BYTES, ProfileService } from './profile.service';
+import {
+  InvalidAvatarImageError,
+  InvalidUserIdError,
+  MAX_AVATAR_IMAGE_BYTES,
+  ProfileService,
+} from './profile.service';
 
 const USER_ID = '7f1c1a8e-6f3b-4c55-9a41-2b7c6c3f9d10';
 const PNG = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a, 0x01, 0x02]);
@@ -79,6 +84,17 @@ describe('ProfileService', () => {
     );
     expect(setup.userRepository.update).not.toHaveBeenCalled();
   });
+
+  it.each(['../secrets', 'a/b', `${'0'.repeat(8)}-..-..`])(
+    'refuses %s as a user id for an avatar file',
+    async userId => {
+      const setup = await setupTest();
+      dataDir = setup.dataDir;
+      await expect(setup.service.getAvatarImage(userId)).rejects.toThrow(InvalidUserIdError);
+      await expect(setup.service.saveAvatarImage(userId, PNG)).rejects.toThrow(InvalidUserIdError);
+      expect(setup.userRepository.update).not.toHaveBeenCalled();
+    }
+  );
 
   it('returns null for a profile without an image', async () => {
     const setup = await setupTest();

@@ -1,6 +1,8 @@
 import { mkdir, readFile, rename, rm, writeFile } from 'node:fs/promises';
 import { resolve } from 'node:path';
 
+import { z } from 'zod';
+
 import type { Database } from '@database/database';
 import type { User } from '@entities/user.entity';
 import type { AvatarLook } from '@mytypes/avatar.types';
@@ -18,6 +20,13 @@ export class InvalidAvatarImageError extends Error {
   constructor(message: string) {
     super(message);
     this.name = 'InvalidAvatarImageError';
+  }
+}
+
+export class InvalidUserIdError extends Error {
+  constructor(userId: string) {
+    super(`Not a user id: ${JSON.stringify(userId.slice(0, 64))}`);
+    this.name = 'InvalidUserIdError';
   }
 }
 
@@ -48,8 +57,9 @@ export class ProfileService {
     return resolve(this.config.getOrThrow('DATA_DIR'), 'avatars');
   }
 
-  /** Users are uuids, so this cannot leave the avatar directory. */
+  /** Only a uuid names a file, so no id can reach outside the avatar directory. */
   private avatarPath(userId: string): string {
+    if (!z.uuid().safeParse(userId).success) throw new InvalidUserIdError(userId);
     return resolve(this.avatarDirectory, `${userId}.png`);
   }
 
