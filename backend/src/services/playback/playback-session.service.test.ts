@@ -268,6 +268,7 @@ describe('PlaybackSessionService', () => {
         getWarmupTargetBytes: () => 1024,
       };
       const sourceHealth = { onFailed: jest.fn(() => () => undefined), markFailed: jest.fn() };
+      const playedSources = { recordPlayed: jest.fn().mockResolvedValue(undefined) };
       const service = new PlaybackSessionService(
         { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
         preparation as never,
@@ -278,7 +279,9 @@ describe('PlaybackSessionService', () => {
           knownDelivery: jest.fn().mockResolvedValue({ mode: 'direct', durationSeconds: 3_600 }),
         } as never,
         sourceHealth,
-        downloads
+        downloads,
+        undefined,
+        playedSources
       );
       const start = () =>
         service.create(
@@ -291,7 +294,31 @@ describe('PlaybackSessionService', () => {
         await service.checkHealth();
         await jest.advanceTimersByTimeAsync(0);
       };
-      return { service, health, preparation, downloads, sourceHealth, start, tick };
+      /** Stream healthily: bytes delivered past startup, no read waiting on a piece. */
+      const deliver = () => {
+        health.lastDeliveryAt = Date.now() + 1_000;
+        health.downloadSpeed = 2 * 1024 * 1024;
+        health.blockedSince = null;
+      };
+      /** Stream healthily for `seconds`, delivering bytes every second. */
+      const play = async (seconds: number) => {
+        for (let second = 0; second < seconds; second++) {
+          deliver();
+          await tick(1_000);
+        }
+      };
+      return {
+        service,
+        health,
+        preparation,
+        downloads,
+        sourceHealth,
+        playedSources,
+        start,
+        tick,
+        deliver,
+        play,
+      };
     };
 
     afterEach(() => jest.useRealTimers());
@@ -353,6 +380,94 @@ describe('PlaybackSessionService', () => {
         `hedge:${session?.playbackId}`,
         'warmup'
       );
+    });
+
+    it('records a source as played once it streams for minutes without starving', async () => {
+      const { playedSources, start, play } = setupMonitor();
+      await start();
+      // Measured from the first healthy sample: three minutes later is the 181st.
+      await play(180);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+      await play(1);
+      expect(playedSources.recordPlayed).toHaveBeenCalledWith(1, Date.now());
+      // Once per session.
+      await play(300);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+    });
+
+    it('starts the count over when the stream starves', async () => {
+      const { health, playedSources, start, tick, play } = setupMonitor();
+      await start();
+      await play(150);
+      health.blockedSince = Date.now();
+      await tick(1_000);
+      await play(150);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+      await play(31);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+    });
+
+    it('counts elapsed time, not deliveries, so bursty reads prove a play in three minutes', async () => {
+      const { playedSources, start, tick, deliver } = setupMonitor();
+      await start();
+      // The player reads a burst every 5 seconds and the health loop samples every 5 seconds. The
+      // stretch starts at the first sample (5s); a burst read at 186s completes three minutes.
+      for (let burst = 0; burst < 37; burst++) {
+        deliver();
+        await tick(5_000);
+      }
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+      deliver();
+      await tick(5_000);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+    });
+
+    it('never records a stream whose reader stopped pulling bytes', async () => {
+      const { playedSources, start, tick, deliver } = setupMonitor();
+      await start();
+      // Delivered once, then the reader applies backpressure: no blocked read, no new bytes.
+      deliver();
+      for (let second = 0; second < 400; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+    });
+
+    it('starts the count over when delivery stops or the stream closes', async () => {
+      const { health, playedSources, start, tick, play } = setupMonitor();
+      await start();
+      await play(150);
+      // Reader stalls: stalled samples add nothing, and past the delivery window the count resets.
+      for (let second = 0; second < 31; second++) await tick(1_000);
+      await play(150);
+      // Stream closes for a moment.
+      health.streaming = false;
+      await tick(1_000);
+      health.streaming = true;
+      await play(180);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+      await play(1);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+    });
+
+    it('never records a stream that has not delivered past startup, or a local file', async () => {
+      const { health, playedSources, start, tick } = setupMonitor();
+      health.downloadSpeed = 2 * 1024 * 1024;
+      health.peers = 50;
+      health.local = true;
+      await start();
+      for (let second = 0; second < 200; second++) await tick(1_000);
+      health.local = false;
+      health.lastDeliveryAt = 0;
+      for (let second = 0; second < 200; second++) await tick(1_000);
+      expect(playedSources.recordPlayed).not.toHaveBeenCalled();
+    });
+
+    it('keeps playing when the played record cannot be written', async () => {
+      const { playedSources, sourceHealth, start, play } = setupMonitor();
+      playedSources.recordPlayed.mockRejectedValue(new Error('database is locked'));
+      await start();
+      await play(200);
+      expect(playedSources.recordPlayed).toHaveBeenCalledTimes(1);
+      expect(sourceHealth.markFailed).not.toHaveBeenCalled();
     });
 
     it('ignores sessions whose stream never opened once the file list is known', async () => {
