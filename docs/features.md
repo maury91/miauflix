@@ -48,14 +48,15 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 ## [Accounts and your personal collection](features/accounts.md)
 
 - Use separate accounts with their own watchlists, ratings, progress, and notifications.
-- Give administrators permission to configure the server and create accounts through the API.
+- Give administrators permission to configure the server and create accounts.
+- Choose who's watching from the profiles signed in on a device, switch from Home's sidebar, and give each profile a name and a Plushie avatar.
 - Sign in with a password or approve QR-code login from another device.
 - Keep a personal watchlist and rate titles with Like, Dislike, or Love.
 - Connect Trakt to synchronize watchlists and playback progress.
 - Get notifications about better movie sources and newly available episodes.
 - Ask to be notified when an unavailable title becomes playable.
 - Read notifications and mark them individually or all at once as read.
-- **Planned:** account creation screens, profile editing, avatar choices, a profile selector, and a logout control in the interface.
+- **Planned:** signing in an existing account from Who's watching.
 
 ## [Finding and adding video sources](features/sources.md)
 

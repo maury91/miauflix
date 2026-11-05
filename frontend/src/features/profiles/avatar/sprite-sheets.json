@@ -1,0 +1,105 @@
+{
+  "areaRatio": 1.3333333333333333,
+  "areaWidth": 100,
+  "densities": [1, 2, 3],
+  "sheets": {
+    "eyes": {
+      "file": "eyes",
+      "width": 1536,
+      "height": 1024,
+      "columns": 3,
+      "rows": 2,
+      "count": 6,
+      "crop": {
+        "width": 512,
+        "height": 384
+      }
+    },
+    "mouth": {
+      "file": "mouth",
+      "width": 1536,
+      "height": 1024,
+      "columns": 3,
+      "rows": 2,
+      "count": 5,
+      "crop": {
+        "width": 512,
+        "height": 384
+      }
+    },
+    "cheeks": {
+      "file": "cheeks",
+      "width": 2172,
+      "height": 724,
+      "columns": 1,
+      "rows": 1,
+      "count": 1,
+      "cutout": true,
+      "padding": 0.12
+    },
+    "fabric": {
+      "file": "fabric",
+      "width": 2172,
+      "height": 724,
+      "columns": 5,
+      "rows": 1,
+      "count": 5,
+      "cutout": true,
+      "padding": 0.06
+    },
+    "moustache": {
+      "file": "moustache",
+      "width": 2172,
+      "height": 724,
+      "columns": 3,
+      "rows": 1,
+      "count": 3,
+      "cutout": true,
+      "padding": 0.1
+    },
+    "glasses": {
+      "file": "glasses",
+      "width": 1536,
+      "height": 1024,
+      "columns": 2,
+      "rows": 2,
+      "count": 4,
+      "crop": {
+        "width": 720,
+        "height": 540
+      }
+    },
+    "hat": {
+      "file": "hat",
+      "width": 1448,
+      "height": 1086,
+      "columns": 4,
+      "rows": 3,
+      "count": 12,
+      "cutout": true,
+      "padding": 0.08
+    },
+    "neck": {
+      "file": "neckwear",
+      "width": 1774,
+      "height": 887,
+      "columns": 2,
+      "rows": 1,
+      "count": 2,
+      "cutout": true,
+      "padding": 0.1
+    },
+    "pin": {
+      "file": "pin",
+      "width": 1536,
+      "height": 1024,
+      "columns": 3,
+      "rows": 2,
+      "count": 5,
+      "crop": {
+        "width": 520,
+        "height": 390
+      }
+    }
+  }
+}
