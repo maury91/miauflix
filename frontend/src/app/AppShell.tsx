@@ -13,10 +13,13 @@ import {
 import { resolveScreen } from '@app/screens';
 import { IntroAnimation } from '@app/shell/IntroAnimation';
 import { VersionBadge } from '@app/shell/VersionBadge';
+import { useMissingProfilePictures } from '@features/profiles/avatar/useMissingProfilePictures';
 import ConfigurationWizardPage from '@pages/config/ConfigurationWizardPage';
 import ConfigWizardPage from '@pages/config/ConfigWizardPage';
 import HomePage from '@pages/home/HomePage';
 import LoginPage from '@pages/login/LoginPage';
+import ProfileEditorPage from '@pages/profiles/ProfileEditorPage';
+import WhosWatchingPage from '@pages/profiles/WhosWatchingPage';
 import QrApprovalPage from '@pages/qr/QrApprovalPage';
 import SearchPage from '@pages/search/SearchPage';
 import SettingsPage from '@pages/settings/SettingsPage';
@@ -29,7 +32,12 @@ import { useKeyboard } from '@shared/hooks/useKeyboard';
 import { Logo } from '@shared/ui/logo/Logo';
 import { useAppDispatch, useAppSelector } from '@store';
 import { dismissConfigWizard } from '@store/slices/appState';
-import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
+import {
+  selectIsAdmin,
+  selectIsAuthenticated,
+  selectProfiles,
+  setSession,
+} from '@store/slices/auth';
 import { AnimatePresence, MotionConfig } from 'framer-motion';
 import { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -41,6 +49,10 @@ function Redirect({ to }: { to: AppRoute }) {
   }, [to]);
   return <LoadingContainer />;
 }
+
+const HOME: AppRoute = { type: 'home' };
+const PROFILES: AppRoute = { type: 'profiles' };
+const MANAGE_PROFILES: AppRoute = { type: 'manageProfiles' };
 
 const LoadingContainer = styled.div`
   position: fixed;
@@ -56,7 +68,12 @@ export function AppShell() {
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
   const isAdmin = useAppSelector(selectIsAdmin);
   const appState = useKeyboardClosedAppState(useAppState());
+  const profiles = useAppSelector(selectProfiles);
+  // Pictures for looks the server generated, once Home is up (not competing with the intro)
+  useMissingProfilePictures(profiles, appState === 'home');
   const [configurationWizardActive, setConfigurationWizardActive] = useState(false);
+  /** The profile Who's watching focuses next (one just created). */
+  const [profileFocus, setProfileFocus] = useState<string | null>(null);
   const homeEligible = appState === 'home' && route.type === 'home' && !configurationWizardActive;
   const {
     introPhase,
@@ -97,6 +114,20 @@ export function AppShell() {
     }
   }, [appState, isAdmin, isAuthenticated]);
 
+  const screen = resolveScreen({
+    route,
+    appState,
+    booted,
+    homeEligible,
+    requiredConfigActive: configurationWizardActive,
+    isAdmin,
+  });
+  const profileScreen =
+    screen.kind === 'whosWatching' ||
+    screen.kind === 'manageProfiles' ||
+    screen.kind === 'newProfile' ||
+    screen.kind === 'editProfile';
+
   const logoPage =
     homeEligible && introPhase !== 'complete'
       ? introPhase === 'playing' && introHasStarted
@@ -107,24 +138,20 @@ export function AppShell() {
         ? 'login'
         : (!booted && !homeEligible) || (appState === 'loading' && !hasShownScreen)
           ? 'intro'
-          : configurationWizardActive || route.type === 'configuration' || route.type === 'storage'
-            ? 'config_wizard'
-            : appState;
+          : // Profile pages carry the logo in the corner, as Home does
+            profileScreen
+            ? 'home'
+            : configurationWizardActive ||
+                route.type === 'configuration' ||
+                route.type === 'storage'
+              ? 'config_wizard'
+              : appState;
   const logoMotionDisabled =
     (!booted && !homeEligible) || !hasShownScreen || (homeEligible && introPhase === 'playing');
   const showSharedLogo = !(homeEligible && introPhase === 'playing' && !introHasStarted);
   // The centred logo pulses until the app knows where to go; the intro then takes over.
   const logoPulsing =
     logoPage === 'intro' && !(homeEligible && (introReady || introPhase === 'playing'));
-
-  const screen = resolveScreen({
-    route,
-    appState,
-    booted,
-    homeEligible,
-    requiredConfigActive: configurationWizardActive,
-    isAdmin,
-  });
 
   const renderPage = () => {
     switch (screen.kind) {
@@ -137,6 +164,65 @@ export function AppShell() {
         return <SetupPage key="setup" />;
       case 'login':
         return <LoginPage key="login" />;
+      case 'whosWatching':
+        return (
+          <WhosWatchingPage
+            key="whos-watching"
+            focusUserId={profileFocus}
+            onSelect={profile => {
+              setProfileFocus(null);
+              dispatch(setSession(profile.session));
+              if (!screen.startup) navigateBack(HOME);
+              else if (route.type === 'profiles') navigate(HOME, { replace: true });
+            }}
+            onEdit={() => undefined}
+            onAdd={() => navigate({ type: 'newProfile' })}
+            onManage={() => navigate({ type: 'manageProfiles' })}
+            onDone={() => undefined}
+            onBack={screen.startup ? undefined : () => navigateBack(HOME)}
+          />
+        );
+      case 'manageProfiles':
+        return (
+          <WhosWatchingPage
+            key="manage-profiles"
+            mode="manage"
+            focusUserId={profileFocus}
+            onSelect={() => undefined}
+            onEdit={profile => {
+              setProfileFocus(profile.user.id);
+              navigate({ type: 'editProfile', userId: profile.user.id });
+            }}
+            onAdd={() => undefined}
+            onManage={() => undefined}
+            onDone={() => navigateBack(PROFILES)}
+          />
+        );
+      case 'newProfile':
+        return (
+          <ProfileEditorPage
+            key="new-profile"
+            onDone={userId => {
+              setProfileFocus(userId);
+              navigateBack(PROFILES);
+            }}
+            onCancel={() => navigateBack(PROFILES)}
+          />
+        );
+      case 'editProfile': {
+        const profile = profiles.find(({ user }) => user.id === screen.userId);
+        if (!profile) return <Redirect key="redirect" to={{ type: 'manageProfiles' }} />;
+        // Opened from Home's profile panel it returns there; from Manage profiles, to that list.
+        const editParent = getRouteParent()?.type === 'home' ? HOME : MANAGE_PROFILES;
+        return (
+          <ProfileEditorPage
+            key={`edit-profile-${profile.user.id}`}
+            profile={profile}
+            onDone={() => navigateBack(editParent)}
+            onCancel={() => navigateBack(editParent)}
+          />
+        );
+      }
       case 'optionalConfig':
         return <ConfigWizardPage key="config" onDismiss={handleConfigDismiss} />;
       case 'requiredConfig':

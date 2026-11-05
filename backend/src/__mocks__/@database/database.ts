@@ -119,6 +119,8 @@ const createMockUser = (overrides: Partial<User> = {}): User => {
     role: UserRole.USER,
     isEmailVerified: false,
     displayName: null,
+    avatar: null,
+    avatarRenderedAt: null,
     refreshTokens: [],
     createdAt: now,
     updatedAt: now,
@@ -153,6 +155,8 @@ const createMockUserRepository = (): jest.Mocked<UserRepository> => {
   return {
     findByEmail: jest.fn(() => Promise.resolve(null)),
     findByRole: jest.fn(() => Promise.resolve([])),
+    findWithoutAvatar: jest.fn(() => Promise.resolve([])),
+    createAdminIfNone: jest.fn(user => Promise.resolve(createMockUser(user as Partial<User>))),
     create: jest.fn(user => Promise.resolve(createMockUser(user as Partial<User>))),
     findById: jest.fn(() => Promise.resolve(null)),
     update: jest.fn(() => Promise.resolve(null)),

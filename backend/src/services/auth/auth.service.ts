@@ -23,6 +23,7 @@ import type { StreamingKeyRepository } from '@repositories/streaming-key.reposit
 import type { UserRepository } from '@repositories/user.repository';
 import type { UserDto } from '@routes/auth.types';
 import type { StreamingToken } from '@services/auth/auth.types';
+import { randomAvatar } from '@services/profile/random-avatar.util';
 import type { AuditLogService } from '@services/security/audit-log.service';
 import { readRefreshTokenPairs } from '@utils/auth-transport.util';
 import { InMemoryCache } from '@utils/in-memory-cache';
@@ -37,6 +38,10 @@ import {
   parseStreamingKey,
   validateTokenPayload,
 } from './auth.util';
+import { toUserDto } from './user-dto.util';
+
+/** How many of the sessions a device holds `/auth/sessions` validates: one per profile on a shared TV. */
+export const MAX_LISTED_SESSIONS = 8;
 
 export interface AuthResult {
   accessToken: string;
@@ -178,6 +183,7 @@ export class AuthService {
       email,
       passwordHash,
       role: UserRole.ADMIN,
+      avatar: randomAvatar(),
     });
     if (!newUser) {
       throw new AdminAlreadyExistsError();
@@ -200,7 +206,12 @@ export class AuthService {
   }
 
   @traced('AuthService')
-  async createUser(email: string, password: string, role: UserRole = UserRole.USER): Promise<User> {
+  async createUser(
+    email: string,
+    password: string,
+    role: UserRole = UserRole.USER,
+    profile: Pick<Partial<User>, 'avatar' | 'displayName'> = {}
+  ): Promise<User> {
     const existingUser = await this.userRepository.findByEmail(email);
     if (existingUser) {
       throw new UserAlreadyExistsError();
@@ -212,6 +223,9 @@ export class AuthService {
       email,
       passwordHash,
       role,
+      displayName: profile.displayName ?? null,
+      // Generated once, so every profile has a Plushie from the start
+      avatar: profile.avatar ?? randomAvatar(),
     });
 
     // Create audit log for user creation
@@ -266,12 +280,7 @@ export class AuthService {
       accessToken,
       refreshToken: opaqueRefreshToken,
       session,
-      user: {
-        id: user.id,
-        email: user.email,
-        displayName: user.displayName,
-        role: user.role,
-      },
+      user: toUserDto(user),
     };
   }
 
@@ -445,12 +454,7 @@ export class AuthService {
         accessToken: newAccessToken,
         refreshToken: newOpaqueToken,
         session,
-        user: {
-          id: refreshToken.user.id,
-          email: refreshToken.user.email,
-          displayName: refreshToken.user.displayName,
-          role: refreshToken.user.role,
-        },
+        user: toUserDto(refreshToken.user),
       };
     } catch {
       return null;
@@ -512,12 +516,7 @@ export class AuthService {
     // Return session info
     return {
       session: sessionId,
-      user: {
-        id: user.id,
-        email: user.email,
-        displayName: user.displayName,
-        role: user.role,
-      },
+      user: toUserDto(user),
     };
   }
 
@@ -559,29 +558,26 @@ export class AuthService {
     // Validate each refresh token and collect valid sessions
     const verifiedSessions = await Promise.all(
       // Keep validation work bounded while prioritizing the currently active browser sessions.
-      [...refreshTokenCookies, ...headerTokens].slice(0, 5).map(async ({ session, token }) => {
-        try {
-          const refreshToken = await this.verifyOpaqueRefreshToken(token, session);
-          const user = await this.userRepository.findById(refreshToken.userId);
-          if (user) {
-            return {
-              session,
-              user: {
-                id: user.id,
-                email: user.email,
-                displayName: user.displayName,
-                role: user.role,
-              },
-            };
+      [...refreshTokenCookies, ...headerTokens]
+        .slice(0, MAX_LISTED_SESSIONS)
+        .map(async ({ session, token }) => {
+          try {
+            const refreshToken = await this.verifyOpaqueRefreshToken(token, session);
+            const user = await this.userRepository.findById(refreshToken.userId);
+            if (user) {
+              return {
+                session,
+                user: toUserDto(user),
+              };
+            }
+          } catch {
+            this.clearCookies(context, session);
+            return null;
           }
-        } catch {
+
           this.clearCookies(context, session);
           return null;
-        }
-
-        this.clearCookies(context, session);
-        return null;
-      })
+        })
     );
 
     return verifiedSessions.filter((session): session is UserSession => session !== null);
