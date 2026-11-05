@@ -9,8 +9,6 @@ export interface BackRailProps {
   label: string;
   onBack: MouseEventHandler<HTMLButtonElement>;
   onFocus?: () => void;
-  /** Extra attributes for the button, e.g. to join a page's own D-pad navigation. */
-  buttonAttributes?: Record<`data-${string}`, string>;
 }
 
 /**
@@ -18,7 +16,7 @@ export interface BackRailProps {
  * holds only a back button where the sidebar's items start.
  */
 export const BackRail = forwardRef<HTMLButtonElement, BackRailProps>(
-  ({ label, onBack, onFocus, buttonAttributes }, ref) => {
+  ({ label, onBack, onFocus }, ref) => {
     // Tracked like the sidebar's selection, but the rail never opens, so it is not highlighted:
     // items are only highlighted while a rail is open.
     const [focused, setFocused] = useState(false);
@@ -31,7 +29,6 @@ export const BackRail = forwardRef<HTMLButtonElement, BackRailProps>(
             $active={false}
             $selected={focused}
             aria-label={label}
-            {...buttonAttributes}
             onClick={onBack}
             onFocus={() => {
               setFocused(true);

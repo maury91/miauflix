@@ -10,7 +10,7 @@ import type { AuthTokens } from '@miauflix/backend';
 
 const REFRESH_TOKENS_KEY = 'miauflix.tv.refreshTokens';
 /** `GET /api/auth/sessions` checks at most this many refresh tokens (see AuthService). */
-const MAX_LISTED_SESSIONS = 8;
+const MAX_LISTED_SESSIONS = 5;
 const accessTokens = new Map<string, string>();
 
 function readRefreshTokens(): Record<string, string> {

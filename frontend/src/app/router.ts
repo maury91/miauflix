@@ -12,10 +12,6 @@ export type AppRoute =
   | { type: 'configuration' }
   | { type: 'storage' }
   | { type: 'sources' }
-  | { type: 'profiles' }
-  | { type: 'manageProfiles' }
-  | { type: 'newProfile' }
-  | { type: 'editProfile'; userId: string }
   | { type: 'qrApproval'; approvalToken: string }
   | { type: 'notFound'; pathname: string };
 
@@ -36,11 +32,6 @@ export function parseRoute(pathname: string): AppRoute {
   if (path === '/settings/configuration') return { type: 'configuration' };
   if (path === '/settings/storage') return { type: 'storage' };
   if (path === '/settings/sources') return { type: 'sources' };
-  if (path === '/profiles') return { type: 'profiles' };
-  if (path === '/profiles/manage') return { type: 'manageProfiles' };
-  if (path === '/profiles/new') return { type: 'newProfile' };
-  const editProfile = path.match(/^\/profiles\/([0-9a-f-]{36})\/edit$/i);
-  if (editProfile?.[1]) return { type: 'editProfile', userId: editProfile[1].toLowerCase() };
   const qr = path.match(/^\/auth\/qr\/([^/]+)$/);
   if (qr?.[1]) {
     try {
@@ -98,14 +89,6 @@ export function routePath(route: AppRoute): string {
       return '/settings/storage';
     case 'sources':
       return '/settings/sources';
-    case 'profiles':
-      return '/profiles';
-    case 'manageProfiles':
-      return '/profiles/manage';
-    case 'newProfile':
-      return '/profiles/new';
-    case 'editProfile':
-      return `/profiles/${route.userId}/edit`;
     case 'qrApproval':
       return `/auth/qr/${encodeURIComponent(route.approvalToken)}`;
     case 'notFound':
