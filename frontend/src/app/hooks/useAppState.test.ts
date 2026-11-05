@@ -120,6 +120,24 @@ describe('resolveAppState', () => {
     expect(resolveAppState({ ...defaults, setupCheckLoading: true })).toBe('loading');
   });
 
+  it('asks who is watching when the device has profiles but none is chosen', () => {
+    expect(resolveAppState({ ...defaults, authenticated: false, hasSessions: true })).toBe(
+      'profiles'
+    );
+    expect(resolveAppState({ ...defaults, authenticated: false, hasSessions: false })).toBe(
+      'login'
+    );
+    // The configuration checks wait until someone is watching.
+    expect(
+      resolveAppState({
+        ...defaults,
+        authenticated: false,
+        hasSessions: true,
+        configEntries: [entry({ hasValue: false, required: true })],
+      })
+    ).toBe('profiles');
+  });
+
   it('chooses setup, login, and user Home before admin-only configuration checks', () => {
     expect(resolveAppState({ ...defaults, setupAvailable: true })).toBe('initial_setup');
     expect(resolveAppState({ ...defaults, authenticated: false })).toBe('login');

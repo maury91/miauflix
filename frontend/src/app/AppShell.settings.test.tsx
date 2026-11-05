@@ -63,6 +63,8 @@ vi.mock('@pages/settings/StoragePage', () => ({
   ),
 }));
 vi.mock('@pages/login/LoginPage', () => ({ default: () => <div>Login</div> }));
+vi.mock('@pages/profiles/WhosWatchingPage', () => ({ default: () => <div>Who’s watching</div> }));
+vi.mock('@pages/profiles/ProfileEditorPage', () => ({ default: () => null }));
 vi.mock('@pages/setup/SetupPage', () => ({ default: () => null }));
 vi.mock('@pages/qr/QrApprovalPage', () => ({ default: () => null }));
 
