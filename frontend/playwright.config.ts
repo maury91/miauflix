@@ -149,7 +149,8 @@ export default defineConfig({
 
   /* Run your local dev server before starting tests */
   webServer: {
-    command: 'npx storybook dev -p 6006 --no-open',
+    // Through npm, so the profile sprites are generated first (prestorybook).
+    command: 'npm run storybook -- --no-open',
     url: 'http://localhost:6006',
     reuseExistingServer: !process.env['CI'],
     timeout: 120000,

@@ -14,6 +14,10 @@ const routes: Record<string, AppRoute> = {
   sources: { type: 'sources' },
   qr: { type: 'qrApproval', approvalToken: 'abc' },
   missing: { type: 'notFound', pathname: '/nope' },
+  profiles: { type: 'profiles' },
+  manageProfiles: { type: 'manageProfiles' },
+  newProfile: { type: 'newProfile' },
+  editProfile: { type: 'editProfile', userId: 'user-1' },
 };
 
 const resolve = (
@@ -32,6 +36,19 @@ const resolve = (
   });
 
 describe('resolveScreen', () => {
+  it('shows Who’s watching over any route until a profile is chosen', () => {
+    expect(resolve('movie', 'profiles')).toEqual({ kind: 'whosWatching', startup: true });
+    expect(resolve('profiles', 'profiles')).toEqual({ kind: 'whosWatching', startup: true });
+    expect(resolve('profiles', 'home')).toEqual({ kind: 'whosWatching', startup: false });
+  });
+
+  it('opens profile management before and after a profile is chosen, but not before sign-in', () => {
+    expect(resolve('manageProfiles', 'profiles')).toEqual({ kind: 'manageProfiles' });
+    expect(resolve('newProfile', 'home')).toEqual({ kind: 'newProfile' });
+    expect(resolve('editProfile', 'profiles')).toEqual({ kind: 'editProfile', userId: 'user-1' });
+    expect(resolve('manageProfiles', 'login')).toEqual({ kind: 'login' });
+  });
+
   it.each<[string, AppState, string]>([
     // Startup gates show over any route, so a deep link opens once they clear.
     ['movie', 'loading', 'loading'],

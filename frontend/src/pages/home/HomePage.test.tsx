@@ -83,6 +83,10 @@ const {
   heroControls: { ready: null as null | ((mediaId: number | null) => void) },
 }));
 
+vi.mock('@features/auth/api/auth.api', async importOriginal => ({
+  ...(await importOriginal<object>()),
+  useLogoutMutation: () => [vi.fn()],
+}));
 vi.mock('@features/integrations/api/trakt.api', () => ({
   getTraktAssociation: getAssociation,
   beginTraktAssociation: vi.fn(),
@@ -122,7 +126,9 @@ vi.mock('@features/notifications/api/notifications.api', () => ({
   useMarkAllNotificationsReadMutation,
 }));
 vi.mock('@shared/components', () => ({ Spinner: () => null }));
+const noSessions: never[] = [];
 vi.mock('@store/slices/auth', () => ({
+  selectAvailableSessions: () => noSessions,
   selectCurrentSessionId: currentSession,
   selectCurrentUser: currentUser,
   selectIsAdmin: currentUserIsAdmin,
