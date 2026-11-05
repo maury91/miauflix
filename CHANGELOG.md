@@ -4,6 +4,10 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ## Unreleased
 
+### Improvements
+
+- Seeder and leecher counts are checked for many sources at once and combine every tracker's answer, so they are more accurate and use less tracker traffic
+
 ## 2026-11-03 v0.1.0 Samsung TV support, smarter sources, smoother playback, and better reliability
 
 ### New

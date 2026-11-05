@@ -1,8 +1,6 @@
 import { createHash } from 'node:crypto';
 
 import { logger } from '@logger';
-import type { ScrapeData } from 'bittorrent-tracker';
-import { Client as BTClient } from 'bittorrent-tracker';
 import { access, constants, mkdir, rm } from 'fs/promises';
 import MemoryChunkStore from 'memory-chunk-store';
 import parseTorrent from 'parse-torrent';
@@ -38,6 +36,7 @@ import {
   parseRangeHeader,
 } from './download.utils';
 import { EncryptedFileReader } from './encrypted-file-reader';
+import { ScrapeBatcher } from './scrape-batcher';
 import { TorrentDiagnostics } from './torrent-diagnostics';
 
 // Types for greedy streaming
@@ -201,9 +200,6 @@ export interface WarmupRangeProgress {
 export class DownloadService {
   public readonly client: WebTorrent;
   private activeStreams = 0;
-  private activeScrapes = 0;
-  private completedScrapes = 0;
-  private failedScrapes = 0;
   private readonly activeSourceCounts = new Map<number, number>();
   /** Playback reads waiting on a piece, by source, with when each started waiting. */
   private readonly blockedReadsBySource = new Map<number, Map<symbol, number>>();
@@ -231,7 +227,7 @@ export class DownloadService {
   private readonly staticTrackers: string[];
   private readonly bestTrackersDownloadUrl: string;
   private readonly blacklistedTrackersDownloadUrl: string;
-  private readonly scrapeTrackers: string[];
+  private readonly scrapes: ScrapeBatcher;
 
   constructor(
     private readonly storageService: StorageService,
@@ -239,7 +235,7 @@ export class DownloadService {
     private readonly config: ConfigService
   ) {
     this.staticTrackers = config.getOrThrow('STATIC_TRACKERS');
-    this.scrapeTrackers = config.getOrThrow('SCRAPE_TRACKERS');
+    this.scrapes = new ScrapeBatcher(config.getOrThrow('SCRAPE_TRACKERS'));
     this.bestTrackers = [...new Set([...this.staticTrackers])];
     this.bestTrackersDownloadUrl = config.getOrThrow('BEST_TRACKERS_DOWNLOAD_URL');
     this.blacklistedTrackersDownloadUrl = config.getOrThrow('BLACKLISTED_TRACKERS_DOWNLOAD_URL');
@@ -257,9 +253,7 @@ export class DownloadService {
       activeStreams: this.activeStreams,
       activeSources: this.activeSourceCounts.size,
       pendingTorrentStarts: this.torrentStartPromises.size,
-      activeScrapes: this.activeScrapes,
-      completedScrapes: this.completedScrapes,
-      failedScrapes: this.failedScrapes,
+      ...this.scrapes.stats,
     }));
     this.client.on('error', (error: Error) => {
       logger.error('DownloadService', 'Error:', error.message, error);
@@ -431,6 +425,7 @@ export class DownloadService {
 
   async close(): Promise<void> {
     clearInterval(this.claimSweep);
+    this.scrapes.close();
     for (const timer of this.seedTimers.values()) clearTimeout(timer);
     this.seedTimers.clear();
     await new Promise<void>((resolve, reject) => {
@@ -1064,49 +1059,9 @@ export class DownloadService {
     });
   }
 
-  private async scrape(infoHash: string): Promise<ScrapeData> {
-    this.activeScrapes += 1;
-    return new Promise<ScrapeData>((resolve, reject) => {
-      const client = new BTClient({
-        infoHash: infoHash.toLowerCase(),
-        announce: this.scrapeTrackers,
-        peerId: Buffer.from('01234567890123456789'), // 20-byte dummy peer ID
-        port: 6881, // arbitrary port for scrape
-      });
-
-      client.once('scrape', data => {
-        resolve(data);
-        client.destroy();
-      });
-
-      client.once('error', err => {
-        reject(err);
-        client.destroy();
-      });
-
-      client.scrape();
-
-      setTimeout(() => {
-        reject(new ErrorWithStatus(`Scrape request timed out for ${infoHash}`, 'scrape_timeout'));
-        client.destroy();
-      }, 5000); // 5 seconds timeout
-    }).then(
-      result => {
-        this.activeScrapes -= 1;
-        this.completedScrapes += 1;
-        return result;
-      },
-      error => {
-        this.activeScrapes -= 1;
-        this.failedScrapes += 1;
-        throw error;
-      }
-    );
-  }
-
   @traced('DownloadService')
   async getStats(infoHash: string): Promise<{ broadcasters: number; watchers: number }> {
-    const result = await this.scrape(infoHash);
+    const result = await this.scrapes.scrape(infoHash);
     return {
       broadcasters: result.complete || 0,
       watchers: result.incomplete || 0,
