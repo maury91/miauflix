@@ -83,10 +83,6 @@ const {
   heroControls: { ready: null as null | ((mediaId: number | null) => void) },
 }));
 
-vi.mock('@features/auth/api/auth.api', async importOriginal => ({
-  ...(await importOriginal<object>()),
-  useLogoutMutation: () => [vi.fn()],
-}));
 vi.mock('@features/integrations/api/trakt.api', () => ({
   getTraktAssociation: getAssociation,
   beginTraktAssociation: vi.fn(),

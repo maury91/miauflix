@@ -8,17 +8,9 @@ import { useCheckSetupStatusQuery } from '@features/setup/api/setup.api';
 import type { ConfigEntryView } from '@miauflix/backend';
 import { useAppSelector } from '@store';
 import { selectConfigDismissed, selectSetupAvailable } from '@store/slices/appState';
-import { selectHasSessions, selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
+import { selectIsAdmin, selectIsAuthenticated } from '@store/slices/auth';
 
-export type AppState =
-  | 'loading'
-  | 'initial_setup'
-  | 'login'
-  /** Signed in on this device, but nobody has picked who is watching yet. */
-  | 'profiles'
-  | 'config'
-  | 'config_wizard'
-  | 'home';
+export type AppState = 'loading' | 'initial_setup' | 'login' | 'config' | 'config_wizard' | 'home';
 
 /**
  * Report missing required values or a service explicitly needing configuration.
@@ -62,8 +54,6 @@ export function resolveAppState(input: {
   setupCheckLoading: boolean;
   sessionsLoading: boolean;
   setupAvailable: boolean | null;
-  /** The device holds at least one signed-in profile. */
-  hasSessions?: boolean;
   authenticated: boolean;
   admin: boolean;
   configLoading: boolean;
@@ -77,7 +67,6 @@ export function resolveAppState(input: {
     sessionsLoading,
     setupAvailable,
     authenticated,
-    hasSessions = authenticated,
     admin,
     configLoading,
     serviceStatusesLoading,
@@ -88,7 +77,7 @@ export function resolveAppState(input: {
 
   if (setupCheckLoading || sessionsLoading) return 'loading';
   if (setupAvailable === true) return 'initial_setup';
-  if (!authenticated) return hasSessions ? 'profiles' : 'login';
+  if (!authenticated) return 'login';
   if (!admin) return 'home';
   if (configLoading || serviceStatusesLoading) return 'loading';
   return getConfigurationPageState(configEntries, serviceStatuses, configDismissed) ?? 'home';
@@ -98,7 +87,6 @@ export function useAppState(): AppState {
   const configDismissed = useAppSelector(selectConfigDismissed);
   const setupAvailable = useAppSelector(selectSetupAvailable);
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const hasSessions = useAppSelector(selectHasSessions);
   const isAdmin = useAppSelector(selectIsAdmin);
 
   // These queries are already initiated at store init; here we just read their loading state
@@ -118,7 +106,6 @@ export function useAppState(): AppState {
     setupCheckLoading: isSetupCheckLoading,
     sessionsLoading: isSessionsLoading,
     setupAvailable,
-    hasSessions,
     authenticated: isAuthenticated,
     admin: isAdmin,
     configLoading: isConfigLoading,

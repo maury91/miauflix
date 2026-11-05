@@ -13,10 +13,6 @@
     "./catalog/v1": {
       "types": "./dist/catalog.d.ts",
       "default": "./dist/catalog.js"
-    },
-    "./profiles/v1": {
-      "types": "./dist/profiles.d.ts",
-      "default": "./dist/profiles.js"
     }
   },
   "scripts": {

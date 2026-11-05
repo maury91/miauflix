@@ -263,9 +263,8 @@ export function useHomeNavigation({
         return outcome;
       }
       if (activeRegion === 'sidebar') return onSidebarAction(action);
-      // The panels beside the rail handle their own keys.
-      if (activeRegion === 'notifications' || activeRegion === 'profileMenu')
-        return { type: 'ignored' };
+      // The notifications panel handles its own keys.
+      if (activeRegion === 'notifications') return { type: 'ignored' };
       // Back (the remote's Return, or Esc) while browsing the rows opens the sidebar.
       if (action === 'back') {
         dispatch(homeNavigationActions.setActiveRegion('sidebar'));
@@ -309,15 +308,10 @@ export function useHomeNavigation({
   const navigationRef = useKeyboardNavigation({
     enabled,
     // Focus lost: back to the selected card, or the details page's primary action. The player,
-    // sidebar and the panels beside it restore their own.
+    // sidebar and notifications restore their own.
     onRestoreFocus: () => {
       if (view === 'details') return detailsRef.current?.restoreFocus() ?? false;
-      if (
-        view === 'player' ||
-        activeRegion === 'sidebar' ||
-        activeRegion === 'notifications' ||
-        activeRegion === 'profileMenu'
-      )
+      if (view === 'player' || activeRegion === 'sidebar' || activeRegion === 'notifications')
         return false;
       if (rowRefs.current.get(activeCategory)?.focusIndex(selectedIndexIn(activeCategory)))
         return true;

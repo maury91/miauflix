@@ -21,7 +21,6 @@ import { createMovieRoutes } from './movie.routes';
 import { createNotificationRoutes } from './notifications.routes';
 import { createPlaybackRoutes } from './playback.routes';
 import { createPreloadRoutes } from './preload.routes';
-import { createProfileRoutes } from './profile.routes';
 import { createProgressRoutes } from './progress.routes';
 import { createRatingRoutes } from './ratings.routes';
 import { createShowRoutes } from './show.routes';
@@ -62,7 +61,6 @@ function createApiRoutes(deps: Deps) {
         });
       })
       .route('/auth', createAuthRoutes(deps))
-      .route('/auth', createProfileRoutes(deps))
       .route('/config', createConfigRoutes(deps))
       .route('/integrations', createIntegrationRoutes(deps))
       .route('/movies', createMovieRoutes(deps))

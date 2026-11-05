@@ -1,4 +1,4 @@
-import { type EntityManager, IsNull, type Repository } from 'typeorm';
+import type { EntityManager, Repository } from 'typeorm';
 
 import type { Database } from '@database/database';
 import type { UserRole } from '@entities/user.entity';
@@ -38,11 +38,6 @@ export class UserRepository {
   async delete(id: string): Promise<boolean> {
     const result = await this.repository.delete(id);
     return result.affected ? result.affected > 0 : false;
-  }
-
-  /** Accounts that never had a Plushie look (created before profiles). */
-  async findWithoutAvatar(): Promise<Pick<User, 'id'>[]> {
-    return this.repository.find({ select: { id: true }, where: { avatar: IsNull() } });
   }
 
   async findByRole(role: UserRole): Promise<User[]> {
