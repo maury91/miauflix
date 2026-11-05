@@ -30,3 +30,7 @@ Domain error files live in `backend/src/errors/`. **Never throw `new Error(...)`
 
 - Entities: `*.entity.ts`, services: `*.service.ts`, repos: `*.repository.ts`.
 - camelCase variables; UPPERCASE constants.
+
+### Going Back in the UI
+
+The back rail (`BackRail` in `frontend/src/shared/ui/rail/BackRail.tsx`) is the preferred way to offer "go back" on inner pages, such as search, details, settings, Manage profiles and the profile editor. Don't add separate Back or Done buttons that only return to the previous screen. A form's Cancel, which discards changes, is a form action and can stay. Also handle the remote's Back key (Escape, Backspace, GoBack, 10009) through the page's keyboard scope. Pages with their own D-pad navigation pass `buttonAttributes` so the rail's button joins it. Leave the rail out when there is nothing to go back to, for example Who's watching at startup.

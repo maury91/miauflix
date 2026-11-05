@@ -15,11 +15,11 @@ See [TV source support plan](docs/architecture/tv-source-support-plan.md).
 
 ## Account
 
-- [ ] Admins can create new accounts from the UI
-- [ ] Profile editor
-- [ ] Support for [plushies](https://github.com/prathje/plushies) or [DiceBear](https://github.com/dicebear/dicebear)
-- [ ] Profile selector
-- [ ] Logout
+- [x] Admins can create new accounts from the UI
+- [x] Profile editor
+- [x] Support for [plushies](https://github.com/prathje/plushies)
+- [x] Profile selector
+- [x] Logout
 
 ## VPN
 
