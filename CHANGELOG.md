@@ -4,14 +4,12 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ## Unreleased
 
-### New
-
-- **Profiles**: Who's watching shows the accounts signed in on the device; pick one to watch, switch, edit or log out of your profile from the avatar at the bottom of Home's sidebar, add profiles (admins) and edit each one's name and Plushie
 
 ## 2026-11-03 v0.1.0 Samsung TV support, smarter sources, smoother playback, and better reliability
 
 ### New
 
+- **Profiles**: Who's watching shows the accounts signed in on the device; pick one to watch, switch, edit or log out of your profile from the avatar at the bottom of Home's sidebar, add profiles (admins) and edit each one's name and Plushie
 - **Samsung TV app**: install Miauflix on a Samsung TV, which finds your server on the network by itself or lets you type its address (see `docs/setup/samsung-tv.md`)
 - **No more fake sources**: fake releases (an `.exe`, an archive) are detected and never picked again, and titles with no real source are marked "No source"
 - **Automatic source fallback**: when a source fails, the player tries the next one by itself
@@ -22,6 +20,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Improvements
 
+- Sources that recently streamed well are preferred among otherwise close candidates, while respecting quality and device preferences. The ranking boost fades over time.
 - Much smoother Home on the TV: faster moves along and between rows, rows ready before you reach them
 - On slow connections (and on the TV) Miauflix picks lighter sources for movies and episodes, so playback starts instead of freezing
 - Sharper backdrops on the TV's Home: newer TVs get larger ones, and resting on a title swaps in a sharper backdrop

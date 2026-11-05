@@ -1,6 +1,12 @@
 import { Quality, VideoCodec } from '@miauflix/source-metadata-extractor';
 
-import { calculateStreamingScore, type StreamingScoreInput } from './streaming-score.util';
+import {
+  byPlaybackRank,
+  calculateStreamingScore,
+  playbackRank,
+  provenPlayBoost,
+  type StreamingScoreInput,
+} from './streaming-score.util';
 
 const NOW = new Date('2026-10-25T12:00:00Z').getTime();
 
@@ -89,5 +95,69 @@ describe('calculateStreamingScore', () => {
       calculateStreamingScore(source({ quality: '3D', videoCodec: VideoCodec.X264 }), NOW)
     ).toBe(Math.round(1800 * 0.9));
     expect(calculateStreamingScore(source({}), NOW)).toBe(Math.round(2000 * 0.9));
+  });
+});
+
+describe('provenPlayBoost', () => {
+  const daysAgo = (days: number) =>
+    new Date(NOW - days * 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
+
+  it('gives nothing to a source never seen playing, or an unreadable day', () => {
+    expect(provenPlayBoost(null, NOW)).toBe(0);
+    expect(provenPlayBoost(undefined, NOW)).toBe(0);
+    expect(provenPlayBoost('not a day', NOW)).toBe(0);
+  });
+
+  it('halves every 30 days, so an old play counts for little', () => {
+    const today = provenPlayBoost(daysAgo(0), NOW);
+    expect(today).toBeGreaterThan(280);
+    expect(today).toBeLessThanOrEqual(300);
+    expect(provenPlayBoost(daysAgo(30), NOW)).toBeCloseTo(today / 2, -1);
+    expect(provenPlayBoost(daysAgo(60), NOW)).toBeCloseTo(today / 4, -1);
+    expect(provenPlayBoost(daysAgo(180), NOW)).toBeLessThan(10);
+  });
+
+  it('breaks a tie between equal scores in favour of the proven source', () => {
+    const unproven = { streamingScore: 4_000, lastPlayedOn: null };
+    const proven = { streamingScore: 4_000, lastPlayedOn: daysAgo(2) };
+    expect([unproven, proven].sort(byPlaybackRank(NOW))).toEqual([proven, unproven]);
+  });
+
+  it('never lifts a source over a whole quality step', () => {
+    const hd = calculateStreamingScore(source({ quality: Quality.HD }), NOW);
+    const fhd = calculateStreamingScore(source({ quality: Quality.FHD }), NOW);
+    expect(playbackRank({ streamingScore: hd, lastPlayedOn: daysAgo(0) }, NOW)).toBeLessThan(
+      playbackRank({ streamingScore: fhd, lastPlayedOn: null }, NOW)
+    );
+  });
+
+  it('never lifts a source over the smallest quality step, even for the oldest uploads', () => {
+    const oldUpload = new Date(NOW - 3 * 365 * 24 * 60 * 60 * 1000);
+    const fhd = calculateStreamingScore(
+      source({ quality: Quality.FHD, sourceUploadedAt: oldUpload }),
+      NOW
+    );
+    const twoK = calculateStreamingScore(
+      source({ quality: Quality['2K'], sourceUploadedAt: oldUpload }),
+      NOW
+    );
+    expect(twoK - fhd).toBe(350);
+    expect(playbackRank({ streamingScore: fhd, lastPlayedOn: daysAgo(0) }, NOW)).toBeLessThan(
+      playbackRank({ streamingScore: twoK, lastPlayedOn: null }, NOW)
+    );
+  });
+
+  it('beats a modestly larger tracker seeder claim when recent, but not once it decays', () => {
+    const claimed = calculateStreamingScore(
+      source({ broadcasters: 15, quality: Quality.FHD }),
+      NOW
+    );
+    const seen = calculateStreamingScore(source({ broadcasters: 10, quality: Quality.FHD }), NOW);
+    expect(playbackRank({ streamingScore: seen, lastPlayedOn: daysAgo(1) }, NOW)).toBeGreaterThan(
+      playbackRank({ streamingScore: claimed, lastPlayedOn: null }, NOW)
+    );
+    expect(playbackRank({ streamingScore: seen, lastPlayedOn: daysAgo(120) }, NOW)).toBeLessThan(
+      playbackRank({ streamingScore: claimed, lastPlayedOn: null }, NOW)
+    );
   });
 });
