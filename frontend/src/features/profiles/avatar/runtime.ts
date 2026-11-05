@@ -21,11 +21,26 @@ export function loadPlushies(): Promise<PlushiesRuntime> {
 
 let webgl: boolean | null = null;
 
+const SOFTWARE_RENDERER = /swiftshader|llvmpipe|softpipe|software/i;
+
+/**
+ * Whether WebGL is drawn by a GPU. Without one (software rendering, as in headless or GPU-less
+ * browsers) the browser refuses a context that asks to fail on a major performance caveat: a few
+ * animated Plushies would then take over the page.
+ */
 function supportsWebGl(): boolean {
   if (webgl !== null) return webgl;
   try {
     const canvas = document.createElement('canvas');
-    webgl = Boolean(canvas.getContext('webgl2') ?? canvas.getContext('webgl'));
+    const options: WebGLContextAttributes = { failIfMajorPerformanceCaveat: true };
+    const context: WebGLRenderingContext | WebGL2RenderingContext | null =
+      canvas.getContext('webgl2', options) ?? canvas.getContext('webgl', options);
+    // Some browsers (Chromium started with --disable-gpu) do not flag their software renderer.
+    const info = context?.getExtension('WEBGL_debug_renderer_info');
+    const renderer =
+      context && info ? String(context.getParameter(info.UNMASKED_RENDERER_WEBGL)) : '';
+    webgl = Boolean(context) && !SOFTWARE_RENDERER.test(renderer);
+    context?.getExtension('WEBGL_lose_context')?.loseContext();
   } catch {
     webgl = false;
   }
@@ -33,8 +48,9 @@ function supportsWebGl(): boolean {
 }
 
 /**
- * Whether avatars are drawn live (animated 3D) in Who's watching and the sidebar. TVs show the
- * pre-rendered pictures instead; the editor draws live everywhere, as it must.
+ * Whether avatars are drawn live (animated 3D) in Who's watching and the sidebar, and missing
+ * pictures drawn and uploaded. TVs and browsers without GPU-drawn WebGL show the pre-rendered
+ * pictures instead; the editor draws live everywhere, as it must.
  */
 export function liveAvatarsSupported(): boolean {
   return typeof window !== 'undefined' && !builtForTizen && supportsWebGl();

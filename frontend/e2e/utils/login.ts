@@ -36,14 +36,21 @@ export async function waitForHomeReady(page: Page): Promise<void> {
 /** Home opens the Trakt prompt only after 5 s without input; leave headroom for slow CI. */
 export const TRAKT_PROMPT_TIMEOUT_MS = 15_000;
 
+/**
+ * Armed before signing in, it waits through choosing the profile and Home's intro (Home asks only
+ * then), so it allows as long as Home itself may take to get ready.
+ */
 export function waitForTraktAssociation(page: Page): Promise<Response> {
-  return page.waitForResponse(response => {
-    const url = new URL(response.url());
-    return (
-      response.request().method() === 'GET' &&
-      url.pathname === '/api/integrations/trakt/association'
-    );
-  });
+  return page.waitForResponse(
+    response => {
+      const url = new URL(response.url());
+      return (
+        response.request().method() === 'GET' &&
+        url.pathname === '/api/integrations/trakt/association'
+      );
+    },
+    { timeout: 30_000 }
+  );
 }
 
 export async function dismissTraktPrompt(

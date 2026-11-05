@@ -81,10 +81,25 @@ const Heading = styled.h1`
   text-transform: none;
 `;
 
+/* As wide as 52vh or the column, whichever is less; square without aspect-ratio or min()
+   (neither exists on the 2020 TVs): the inner padding is a share of this width. */
 const Stage = styled.div`
-  width: min(100%, 52vh);
-  aspect-ratio: 1;
-  flex-shrink: 1;
+  flex-shrink: 0;
+  width: 52vh;
+  max-width: 100%;
+`;
+
+const StageSquare = styled.div`
+  position: relative;
+  padding-bottom: 100%;
+`;
+
+const StageFill = styled.div`
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
 `;
 
 const Form = styled.form`
@@ -239,7 +254,11 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCanc
   const [error, setError] = useState<string | null>(null);
   const [createProfile, createState] = useCreateProfileMutation();
   const [updateProfile, updateState] = useUpdateProfileMutation();
-  const busy = createState.isLoading || updateState.isLoading;
+  // Saving starts by drawing the picture, before either request: a second submit meanwhile
+  // would save twice (and create the profile twice).
+  const [rendering, setRendering] = useState(false);
+  const submitting = useRef(false);
+  const busy = rendering || createState.isLoading || updateState.isLoading;
   const pageRef = useRef<HTMLElement | null>(null);
   // The logo lines up with the content beside the back rail, as on the other inner pages.
   useRailContentLeft();
@@ -300,7 +319,7 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCanc
 
   const submit = async (event?: FormEvent) => {
     event?.preventDefault();
-    if (busy) return;
+    if (busy || submitting.current) return;
     const displayName = name.trim();
     if (!displayName) return setError('Give the profile a name.');
     if (creating) {
@@ -310,6 +329,17 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCanc
         return setError(`The password needs at least ${MIN_PASSWORD_LENGTH} characters.`);
     }
     setError(null);
+    submitting.current = true;
+    setRendering(true);
+    try {
+      await save(displayName);
+    } finally {
+      submitting.current = false;
+      setRendering(false);
+    }
+  };
+
+  const save = async (displayName: string) => {
     const image = await renderPlushieSnapshot(look);
     const avatar = toAvatar(look);
     const result = creating
@@ -346,7 +376,11 @@ const ProfileEditorPage: FC<ProfileEditorPageProps> = ({ profile, onDone, onCanc
       <Preview {...{ [NAV_REGION_ATTRIBUTE]: '' }}>
         <Heading id="profile-editor-title">{creating ? 'Add profile' : 'Edit profile'}</Heading>
         <Stage>
-          <PlushieLive look={look} animated hopSignal={hops} />
+          <StageSquare>
+            <StageFill>
+              <PlushieLive look={look} animated hopSignal={hops} />
+            </StageFill>
+          </StageSquare>
         </Stage>
         <Button
           data-profile-nav=""

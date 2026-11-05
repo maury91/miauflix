@@ -2,7 +2,10 @@
 
 // Generate the profile editor's option pictures from the original sprite sheets.
 //
-// Usage: npm run generate:profile-sprites
+// Usage: npm run generate:profile-sprites (always regenerates)
+//        node scripts/generate-profile-sprites.mjs --if-stale (skips when the pictures are newer
+//        than the originals, the config and this script; the frontend's build, dev and Storybook
+//        scripts run it this way, since the pictures are not committed)
 //
 // Reads assets/profile/<file>.png (the full-size originals, not shipped): each lays out a
 // category's options on a grid, left to right then top to bottom. For each sheet and screen
@@ -15,7 +18,7 @@
 // an item reaching into a neighbouring cell (a hat brim) stays whole and does not show up next
 // door. Opaque sheets take a fixed `crop` around each cell's centre.
 
-import { mkdir, readdir, readFile, rm } from 'node:fs/promises';
+import { mkdir, readdir, readFile, rm, stat } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -24,12 +27,34 @@ import sharp from 'sharp';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sourceDir = path.join(root, 'assets/profile');
 const outputDir = path.join(root, 'frontend/public/assets/profile');
-const config = JSON.parse(
-  await readFile(
-    path.join(root, 'frontend/src/features/profiles/avatar/sprite-sheets.json'),
-    'utf8'
-  )
-);
+const configPath = path.join(root, 'frontend/src/features/profiles/avatar/sprite-sheets.json');
+const config = JSON.parse(await readFile(configPath, 'utf8'));
+
+const modified = async file => (await stat(file).catch(() => null))?.mtimeMs ?? null;
+
+/** Whether every picture exists and is newer than everything it is made from. */
+async function upToDate() {
+  const sheets = Object.values(config.sheets);
+  const inputs = await Promise.all([
+    modified(configPath),
+    modified(fileURLToPath(import.meta.url)),
+    ...sheets.map(sheet => modified(path.join(sourceDir, `${sheet.file}.png`))),
+  ]);
+  const outputs = await Promise.all(
+    sheets.flatMap(sheet =>
+      config.densities.map(density =>
+        modified(path.join(outputDir, `${sheet.file}@${density}.png`))
+      )
+    )
+  );
+  if (inputs.includes(null) || outputs.includes(null)) return false;
+  return Math.min(...outputs) >= Math.max(...inputs);
+}
+
+if (process.argv.includes('--if-stale') && (await upToDate())) {
+  console.log('Profile sprites are up to date');
+  process.exit(0);
+}
 
 /** Pixels at least this opaque belong to an item. */
 const ALPHA_THRESHOLD = 24;

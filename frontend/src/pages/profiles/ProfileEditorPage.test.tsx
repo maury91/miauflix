@@ -113,6 +113,23 @@ describe('ProfileEditorPage', () => {
     });
   });
 
+  it('saves once while the picture is still being drawn', async () => {
+    let drawn: (picture: Blob) => void = () => undefined;
+    mocks.snapshot.mockImplementation(() => new Promise<Blob>(resolve => (drawn = resolve)));
+    mocks.updateProfile.mockResolvedValue({ data: admin.user });
+    const { onDone } = setupTest(admin);
+
+    const save = screen.getByRole('button', { name: 'Save changes' });
+    fireEvent.click(save);
+    fireEvent.submit(save.closest('form')!);
+    await waitFor(() => expect(save).toBeDisabled());
+    drawn(image);
+
+    await waitFor(() => expect(onDone).toHaveBeenCalledTimes(1));
+    expect(mocks.snapshot).toHaveBeenCalledTimes(1);
+    expect(mocks.updateProfile).toHaveBeenCalledTimes(1);
+  });
+
   it('switches tabs between the parts of the Plushie', () => {
     setupTest(admin);
     fireEvent.click(screen.getByRole('tab', { name: 'Accessories' }));

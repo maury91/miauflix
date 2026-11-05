@@ -7,7 +7,12 @@ import { Spinner } from '@shared/components';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useStableCallback } from '@shared/hooks/useStableCallback';
 import { useAppSelector } from '@store/hooks';
-import { selectCurrentSessionId, selectCurrentUser, selectIsAdmin } from '@store/slices/auth';
+import {
+  selectAvailableSessions,
+  selectCurrentSessionId,
+  selectCurrentUser,
+  selectIsAdmin,
+} from '@store/slices/auth';
 import { homeNavigationActions } from '@store/slices/homeNavigation';
 import type { AppDispatch, RootState } from '@store/store';
 import {
@@ -148,6 +153,7 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
   const activeRoute = route ?? currentRoute ?? FALLBACK_HOME_ROUTE;
   const sessionId = useSelector(selectCurrentSessionId);
   const currentUser = useSelector(selectCurrentUser);
+  const availableSessions = useSelector(selectAvailableSessions);
   const isAdmin = useAppSelector(selectIsAdmin);
   const activeCategory = useSelector((state: RootState) => state.homeNavigation.activeCategory);
 
@@ -571,9 +577,11 @@ const HomePage: FC<HomePageProps> = ({ route, interactive = true, onHydrated }) 
           onSwitch={() => openProfileScreen({ type: 'profiles' })}
           onEdit={() => openProfileScreen({ type: 'editProfile', userId: sidebarProfile.user.id })}
           onLogout={() => {
-            // Who's watching (or sign-in, with no other profile) takes over once it is gone.
+            // Who's watching (or sign-in, with no other profile) takes over once it is gone:
+            // every session of this profile on the device ends, or it would still be listed.
             dispatch(homeNavigationActions.setActiveRegion('sidebar'));
-            void logout({ session: sidebarProfile.session });
+            for (const { session, user } of availableSessions)
+              if (user.id === sidebarProfile.user.id) void logout({ session });
           }}
           onExit={() => dispatch(homeNavigationActions.setActiveRegion('sidebar'))}
           onPointerEnter={() => dispatch(homeNavigationActions.setActiveRegion('profileMenu'))}

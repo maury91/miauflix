@@ -51,6 +51,9 @@
         "tsconfig*.json",
         "package.json",
         "$TURBO_ROOT$/package.json",
+        "$TURBO_ROOT$/assets/profile/**",
+        "$TURBO_ROOT$/scripts/generate-profile-sprites.mjs",
+        "!public/assets/profile/*@*.png",
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],
@@ -79,6 +82,9 @@
         "tsconfig*.json",
         "package.json",
         "$TURBO_ROOT$/package.json",
+        "$TURBO_ROOT$/assets/profile/**",
+        "$TURBO_ROOT$/scripts/generate-profile-sprites.mjs",
+        "!public/assets/profile/*@*.png",
         "!src/**/*.{test,spec}.{ts,tsx}",
         "!src/{__test-utils__,__mocks__}/**"
       ],

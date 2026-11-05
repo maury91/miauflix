@@ -37,7 +37,9 @@ const HoverZone = styled.div<{ $railExpanded: boolean }>`
 `;
 
 const Panel = styled.section`
-  width: min(340px, calc(100vw - var(--rail-width) - 24px));
+  /* Not min(): the 2020 TVs do not have it. */
+  width: 340px;
+  max-width: calc(100vw - var(--rail-width) - 24px);
   padding: 8px;
   border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 14px;
