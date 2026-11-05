@@ -2,9 +2,13 @@
 frontend-legacy
 legacy
 plan
+output
 
 # Dependencies
 node_modules
+
+# Generated images
+frontend/public/assets/profile/*@*.png
 
 # Builds
 dist

@@ -60,7 +60,11 @@ export class ProfileService {
   ): Promise<User | null> {
     const changes: Partial<User> = {};
     if (profile.displayName !== undefined) changes.displayName = profile.displayName;
-    if (profile.avatar !== undefined) changes.avatar = profile.avatar;
+    if (profile.avatar !== undefined) {
+      changes.avatar = profile.avatar;
+      // The saved picture shows the previous look; it counts as missing until one is uploaded.
+      changes.avatarRenderedAt = null;
+    }
     if (!Object.keys(changes).length) return this.userRepository.findById(userId);
     return this.userRepository.update(userId, changes);
   }

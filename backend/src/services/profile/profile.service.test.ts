@@ -41,6 +41,18 @@ describe('ProfileService', () => {
     expect(setup.userRepository.findById).toHaveBeenCalledWith(USER_ID);
   });
 
+  it('marks the saved picture as outdated when the look changes', async () => {
+    const setup = await setupTest();
+    dataDir = setup.dataDir;
+    const avatar = { kind: 'pill', color: '#a65ce8' } as never;
+
+    await setup.service.updateProfile(USER_ID, { avatar });
+    expect(setup.userRepository.update).toHaveBeenCalledWith(USER_ID, {
+      avatar,
+      avatarRenderedAt: null,
+    });
+  });
+
   it('writes the avatar image into the data directory and records when', async () => {
     const setup = await setupTest();
     dataDir = setup.dataDir;

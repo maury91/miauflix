@@ -43,11 +43,15 @@ export const PlushieLive = memo(function PlushieLive({
   const stageRef = useRef<HTMLDivElement>(null);
   const viewRef = useRef<PlushieViewer | null>(null);
   const lookRef = useRef(look);
-  lookRef.current = look;
   const animatedRef = useRef(animated);
-  animatedRef.current = animated;
   const onErrorRef = useRef(onError);
-  onErrorRef.current = onError;
+
+  // The latest committed props, for the viewer mounted once the runtime loads.
+  useEffect(() => {
+    lookRef.current = look;
+    animatedRef.current = animated;
+    onErrorRef.current = onError;
+  });
 
   useEffect(() => {
     let disposed = false;

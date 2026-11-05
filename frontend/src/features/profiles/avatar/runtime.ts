@@ -1,10 +1,10 @@
 import { builtForTizen } from '@shared/config/constants';
 
-type PlushiesRuntime = {
+interface PlushiesRuntime {
   THREE: typeof import('three');
   viewer: typeof import('plushies/viewer');
   plushies: typeof import('plushies');
-};
+}
 
 let runtime: Promise<PlushiesRuntime> | null = null;
 

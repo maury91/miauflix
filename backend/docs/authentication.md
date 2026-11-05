@@ -76,7 +76,7 @@ Implementation: [transport readers](../src/utils/auth-transport.util.ts), [TV au
 
 ## Authentication API
 
-All routes below are mounted under `/api/auth`. `UserDto` contains `id`, `email`, nullable `displayName`, `role`, `avatar` (the profile's Plushie look; generated with the editor's Surprise me generator when an account is created without one, and for older accounts by a data migration, so it is only `null` for a record the migration has not reached yet) and nullable `avatarVersion` (changes when a new avatar picture is saved).
+All routes below are mounted under `/api/auth`. `UserDto` contains `id`, `email`, nullable `displayName`, `role`, `avatar` (the profile's Plushie look; generated with the editor's Surprise me generator when an account is created without one, and for older accounts by a data migration, so it is only `null` for a record the migration has not reached yet) and nullable `avatarVersion` (changes when a new avatar picture is saved; `null` when there is none, or after a look change until its new picture is saved).
 
 | Method and path          | Authentication/input                                                           | Successful behavior                                                                                                                                      |
 | ------------------------ | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |

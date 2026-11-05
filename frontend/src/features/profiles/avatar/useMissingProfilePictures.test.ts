@@ -58,6 +58,21 @@ describe('useMissingProfilePictures', () => {
     expect(mocks.render).toHaveBeenCalledTimes(2);
   });
 
+  it('tries again a profile whose render was interrupted', async () => {
+    let finish: (image: Blob) => void = () => undefined;
+    mocks.render.mockImplementationOnce(() => new Promise<Blob>(resolve => (finish = resolve)));
+    const profiles = [profile('a', null)];
+    const { unmount } = renderHook(() => useMissingProfilePictures(profiles));
+    await waitFor(() => expect(mocks.render).toHaveBeenCalledTimes(1));
+    unmount();
+    finish(new Blob(['png'], { type: 'image/png' }));
+    await Promise.resolve();
+    expect(mocks.initiate).not.toHaveBeenCalled();
+
+    renderHook(() => useMissingProfilePictures(profiles));
+    await waitFor(() => expect(mocks.initiate).toHaveBeenCalledTimes(1));
+  });
+
   it('leaves it to devices that can draw Plushies', async () => {
     mocks.live.mockReturnValue(false);
     renderHook(() => useMissingProfilePictures([profile('a', null)]));

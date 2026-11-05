@@ -30,7 +30,12 @@ export function useMissingProfilePictures(profiles: readonly SessionInfo[], enab
         if (stopped) return;
         attempted.add(user.id);
         const image = await renderPlushieSnapshot(lookFor(user.avatar, user.id));
-        if (image && !stopped)
+        if (stopped) {
+          // Interrupted before uploading: a later run may try again.
+          attempted.delete(user.id);
+          return;
+        }
+        if (image)
           await dispatch(profilesApi.endpoints.uploadProfilePicture.initiate({ session, image }));
       }
     })();
