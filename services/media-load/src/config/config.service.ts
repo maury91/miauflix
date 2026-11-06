@@ -3,9 +3,9 @@ import { ServiceConfiguration } from '@miauflix/service-configuration';
 import { createMediaLoadConfigSchema } from './schema';
 
 export class MediaLoadConfigService extends ServiceConfiguration {
-  constructor() {
+  constructor(defaultDownloadPath?: string) {
     super({
-      schema: createMediaLoadConfigSchema(),
+      schema: createMediaLoadConfigSchema(defaultDownloadPath),
       notWiredMessage: 'Media load configuration has not been applied',
     });
   }

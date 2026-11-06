@@ -46,10 +46,11 @@ COPY --from=runtime /workspace/packages/contract /app/packages/contract
 COPY --from=runtime /workspace/packages/service-contracts /app/packages/service-contracts
 COPY --from=runtime /workspace/packages/service-configuration /app/packages/service-configuration
 COPY --from=runtime /workspace/services/media-load /app/services/media-load
-# The service database, and the downloads at the path the backend used to keep them.
-RUN mkdir -p /app/data /usr/src/app/downloads && chown -R bun:bun /app/data /usr/src/app/downloads
+# Keep the database and default downloads in the same persistent volume.
+RUN mkdir -p /app/data/downloads /usr/src/app/downloads && chown -R bun:bun /app/data /usr/src/app/downloads
 ENV MEDIA_LOAD_PORT=3004 \
-    MEDIA_LOAD_DATA_DIR=/app/data
+    MEDIA_LOAD_DATA_DIR=/app/data \
+    MEDIA_LOAD_DEFAULT_DOWNLOAD_PATH=/app/data/downloads
 EXPOSE 3004
 VOLUME /app/data
 USER bun

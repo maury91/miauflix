@@ -51,7 +51,9 @@ const text = (variable: Omit<ConfigVariable, 'inputType'>): ConfigVariable => ({
  * The engine's settings. The keys are the backend's former download and storage settings, so
  * values saved there (or set in its environment) keep applying.
  */
-export const createMediaLoadConfigSchema = (): ServiceConfigSchema => ({
+export const createMediaLoadConfigSchema = (
+  defaultDownloadPath = resolve(process.cwd(), 'downloads')
+): ServiceConfigSchema => ({
   groups: [
     {
       id: 'MEDIA_LOAD',
@@ -139,7 +141,7 @@ export const createMediaLoadConfigSchema = (): ServiceConfigSchema => ({
           description:
             'Directory for storing downloaded and encrypted media files (must be writable)',
           example: '/var/miauflix/cache',
-          defaultValue: resolve(process.cwd(), './downloads'),
+          defaultValue: defaultDownloadPath,
           required: false,
           advanced: true,
         }),

@@ -59,7 +59,7 @@ These settings belong to this service's `MEDIA_LOAD` group. The backend keeps th
 
 Limits and storage thresholds apply at once. The connection settings, `DISABLE_DISCOVERY` and the tracker lists apply when the service restarts.
 
-`DOWNLOAD_PATH` is a path inside the services container. The Compose files mount the downloads folder (`DOWNLOADS_HOST_PATH`) there at `/usr/src/app/downloads`.
+`DOWNLOAD_PATH` is a path inside the services container. The Compose files mount the downloads folder (`DOWNLOADS_HOST_PATH`) there at `/usr/src/app/downloads`. The standalone media-load image defaults to `/app/data/downloads` inside its data volume when the backend has no configured download path.
 
 The service keeps its records in `MEDIA_LOAD_DATA_DIR` (`/app/data/media-load` in the services image). They are encrypted with the backend's `SOURCE_SECURITY_KEY`, which the backend sends when it connects, so keep that key and the services data volume together.
 

@@ -7,8 +7,16 @@ set -Eeuo pipefail
 if [[ $(id -u) -eq 0 ]]; then
   mkdir -p /app/data/media-load
   chown -R bunqueue:bunqueue /app/data/media-load
-  if [[ -d /usr/src/app/downloads ]] && [[ -n $(find /usr/src/app/downloads ! -user bunqueue -print -quit) ]]; then
-    chown -R bunqueue:bunqueue /usr/src/app/downloads
+  downloads=/usr/src/app/downloads
+  if [[ -d "$downloads" ]]; then
+    if [[ -n $(find "$downloads" ! -user bunqueue -print -quit) ]] &&
+      ! chown -R bunqueue:bunqueue "$downloads"; then
+      echo "Could not change ownership of $downloads; checking access as bunqueue" >&2
+    fi
+    if ! su-exec bunqueue:bunqueue /bin/bash -c '[[ -r "$1" && -w "$1" && -x "$1" ]]' bash "$downloads"; then
+      echo "bunqueue needs read, write, and search access to $downloads" >&2
+      exit 1
+    fi
   fi
   exec su-exec bunqueue:bunqueue /bin/bash "$0" "$@"
 fi

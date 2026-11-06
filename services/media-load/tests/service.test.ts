@@ -58,12 +58,14 @@ const ENGINE_VALUES = {
   ...new MediaLoadConfigService().defaults(),
   DOWNLOAD_PATH: downloads,
   DOWNLOAD_SALT: TEST_SETTINGS.DOWNLOAD_SALT,
+  DISABLE_DISCOVERY: 'true',
 };
 const KEY = TEST_SETTINGS.SOURCE_SECURITY_KEY;
 
-const setup = async ({ attach = true } = {}) => {
-  const { service, stop } = createMediaLoadService({
+const setup = async ({ attach = true, defaultDownloadPath = downloads } = {}) => {
+  const { service, runtime, stop } = createMediaLoadService({
     dataDir: ':memory:',
+    defaultDownloadPath,
     scrape: { windowMs: 1 },
   });
   stops.push(stop);
@@ -72,6 +74,7 @@ const setup = async ({ attach = true } = {}) => {
   if (attach) await client.attach({ securityKey: KEY });
   return {
     service,
+    runtime,
     client,
     admin: createClient(management, transport),
     /** Push settings as the backend does, then (unless told not to) finish its storage import. */
@@ -147,6 +150,30 @@ describe('media-load service', () => {
     const error = await client.swarmStats({ hash: 'a'.repeat(40) }).catch((e: unknown) => e);
     expect(isContractError(error, 'not_configured')).toBe(true);
     expect((await admin.status()).state).toBe('standby');
+  });
+
+  it('advertises the standalone image download path to the backend', async () => {
+    const imagePath = join(downloads, 'default');
+    const { admin } = await setup({ defaultDownloadPath: imagePath });
+    const schema = await admin.configSchema();
+    const pathSetting = schema.groups
+      .flatMap(group => group.variables)
+      .find(variable => variable.key === 'DOWNLOAD_PATH');
+    expect(pathSetting?.defaultValue).toBe(imagePath);
+  });
+
+  it('reschedules seed expiry on a duration change without reinitializing downloads', async () => {
+    const { apply, runtime } = await setup();
+    await apply({});
+    const { downloads: engine } = runtime.running;
+    const reschedule = jest.spyOn(engine, 'rescheduleSeedExpiry');
+    const reload = jest.spyOn(engine, 'reload');
+
+    expect((await apply({ CONTENT_UPLOAD_LIMIT: '10MB' })).success).toBe(true);
+    expect(reschedule).not.toHaveBeenCalled();
+    expect((await apply({ CONTENT_SEED_DURATION_SECONDS: '0' })).success).toBe(true);
+    expect(reschedule).toHaveBeenCalledTimes(1);
+    expect(reload).not.toHaveBeenCalled();
   });
 
   it('scrapes through the applied trackers', async () => {

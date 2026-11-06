@@ -96,12 +96,10 @@ describe('DownloadService with a shared season pack', () => {
   };
 
   beforeEach(async () => {
-    jest.useFakeTimers();
     location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-pack-'));
   });
 
   afterEach(async () => {
-    jest.useRealTimers();
     await rm(location, { recursive: true, force: true });
   });
 
@@ -150,9 +148,34 @@ describe('DownloadService with a shared season pack', () => {
   it('rejects a file that is not part of the source', async () => {
     const { service, episode } = await setupTest();
 
-    await expect(service.streamFile(episode('Show/Show.S01E03.mkv'))).rejects.toThrow(
-      'Requested file is not part of this source'
-    );
+    await expect(service.streamFile(episode('Show/Show.S01E03.mkv'))).rejects.toMatchObject({
+      status: 'source_file_unavailable',
+    });
+  });
+
+  it('preserves the missing storage error during playback admission', async () => {
+    const { service, storageService, storage, episode } = await setupTest();
+    storageService.getStorageBySource.mockResolvedValueOnce(storage).mockResolvedValue(null);
+
+    await expect(service.streamFile(episode('Show/Show.S01E01.mkv'))).rejects.toMatchObject({
+      status: 'local_media_unavailable',
+    });
+  });
+
+  it('admits and releases playback when a listener throws', async () => {
+    const { service, storageService, episode } = await setupTest();
+    service.onPlaybackChange(() => {
+      throw new Error('Listener failed');
+    });
+    const listener = jest.fn();
+    service.onPlaybackChange(listener);
+
+    const response = await service.streamFile(episode('Show/Show.S01E01.mkv'));
+    await response.body!.cancel();
+
+    expect(listener.mock.calls).toEqual([[[31]], [[]]]);
+    expect(service.hasActivePlayback()).toBe(false);
+    expect(storageService.setPlaybackActive).toHaveBeenLastCalledWith(31, false);
   });
 });
 
@@ -207,12 +230,10 @@ describe('DownloadService reclaiming one file of a pack', () => {
   };
 
   beforeEach(async () => {
-    jest.useFakeTimers();
     location = await mkdtemp(path.join(os.tmpdir(), 'miauflix-reclaim-'));
   });
 
   afterEach(async () => {
-    jest.useRealTimers();
     await rm(location, { recursive: true, force: true });
   });
 

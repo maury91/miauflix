@@ -115,6 +115,9 @@ export class MediaLoadRuntime {
     const { downloads, storage } = this.engine;
     downloads.client.throttleDownload?.(Number(next.CONTENT_DOWNLOAD_LIMIT));
     downloads.client.throttleUpload?.(Number(next.CONTENT_UPLOAD_LIMIT));
+    if (previous?.CONTENT_SEED_DURATION_SECONDS !== next.CONTENT_SEED_DURATION_SECONDS) {
+      await downloads.rescheduleSeedExpiry();
+    }
     await storage.reload();
     return { restartKeys };
   }

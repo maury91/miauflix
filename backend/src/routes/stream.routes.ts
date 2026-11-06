@@ -169,9 +169,14 @@ export const createStreamRoutes = ({
           const target = await streamService.movieTarget(movieId, source);
           return await mediaLoadClient.streamFile(target, context.req.header('range'));
         } catch (error: unknown) {
-          if (error instanceof ErrorWithStatus && error.status === 'source_file_unavailable') {
-            // A fake source: the player moves on to the next one.
-            return context.json({ error: error.message } satisfies ErrorResponse, 404);
+          if (error instanceof ErrorWithStatus) {
+            if (error.status === 'source_file_unavailable') {
+              // A fake source: the player moves on to the next one.
+              return context.json({ error: error.message } satisfies ErrorResponse, 404);
+            }
+            if (error.status === 'local_media_unavailable') {
+              return context.json({ error: error.message } satisfies ErrorResponse, 410);
+            }
           }
           console.error('Failed to stream content:', error);
 

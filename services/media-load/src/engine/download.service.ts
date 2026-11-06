@@ -297,7 +297,13 @@ export class DownloadService {
 
   private notifyPlaybackChange(): void {
     const ids = this.activePlaybackSourceIds();
-    for (const listener of this.playbackListeners) listener(ids);
+    for (const listener of this.playbackListeners) {
+      try {
+        listener(ids);
+      } catch (error) {
+        logger.warn('DownloadService', 'Playback change listener failed', error);
+      }
+    }
   }
 
   hasActivePlayback(): boolean {
@@ -421,12 +427,16 @@ export class DownloadService {
    */
   public async adoptStorage(): Promise<void> {
     await this.restoreCompletedDownloads();
-    const completed = (await this.storageService.getStoragesWithCompletion()) ?? [];
-    for (const storage of completed) this.scheduleSeedExpiry(storage);
+    await this.rescheduleSeedExpiry();
   }
 
   public async reload(): Promise<void> {
     await this.init();
+    await this.rescheduleSeedExpiry();
+  }
+
+  /** Apply the current seed duration to completed downloads without resetting playback claims. */
+  public async rescheduleSeedExpiry(): Promise<void> {
     const completed = (await this.storageService.getStoragesWithCompletion()) ?? [];
     for (const storage of completed) this.scheduleSeedExpiry(storage);
   }
@@ -1243,6 +1253,12 @@ export class DownloadService {
       );
       return start;
     } catch (error) {
+      if (
+        error instanceof ErrorWithStatus &&
+        (error.status === 'source_file_unavailable' || error.status === 'local_media_unavailable')
+      ) {
+        throw error;
+      }
       logger.error(
         'DownloadService',
         `Failed to start greedy download for source ${source.id}:`,
@@ -2103,7 +2119,7 @@ export class DownloadService {
         if (!speculative)
           await this.storageService.withSourceLock(contentSource.id, async () => {
             if (!(await this.storageService.setPlaybackActive(contentSource.id, true))) {
-              throw new Error(`Storage not found for movie source ${contentSource.id}`);
+              throw new ErrorWithStatus('Storage record is unavailable', 'local_media_unavailable');
             }
             this.activeStreams += 1;
             this.activeSourceCounts.set(

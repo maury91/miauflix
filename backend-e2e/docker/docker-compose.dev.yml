@@ -96,6 +96,7 @@ services:
       - MEDIA_LOAD_DATA_DIR=/app/data
     volumes:
       - ../../services/media-load/src:/workspace/services/media-load/src
+      - dev_media_load_data:/app/data
       - dev_downloads:/usr/src/app/downloads
     networks:
       - test-network
@@ -332,6 +333,8 @@ volumes:
     name: miauflix_dev_database
   dev_downloads:
     name: miauflix_dev_downloads
+  dev_media_load_data:
+    name: miauflix_dev_media_load_data
   list_service_data:
     name: miauflix_dev_list_service_data
   sources_data:

@@ -10,6 +10,8 @@ import { MediaLoadRuntime } from './runtime';
 export interface MediaLoadServiceOptions {
   /** Directory of the service database; `:memory:` keeps it in memory (tests). */
   dataDir?: string;
+  /** Default advertised to the backend when no download path is configured. */
+  defaultDownloadPath?: string;
   /** Scrape timing, for tests. */
   scrape?: ScrapeBatcherOptions;
 }
@@ -32,7 +34,7 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
   runtime: MediaLoadRuntime;
   stop: () => Promise<void>;
 } {
-  const config = new MediaLoadConfigService();
+  const config = new MediaLoadConfigService(options.defaultDownloadPath);
   const runtime = new MediaLoadRuntime(
     MediaLoadRuntime.databasePathFor(options.dataDir ?? './data')
   );

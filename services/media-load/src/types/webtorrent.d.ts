@@ -849,7 +849,7 @@ declare module 'ip-set' {
 }
 
 declare module 'load-ip-set' {
-  import type { IPSet } from 'ip-set';
+  import type IPSet from 'ip-set';
 
   export interface LoadIPSetOptions {
     /** User agent string for HTTP requests */

@@ -29,7 +29,7 @@ export const getIpSet = async (url: string): Promise<IPSet | null> => {
           logger.error('DownloadService', 'Error loading IP set:', err);
           return resolve(null);
         }
-        resolve(ipSet);
+        resolve(ipSet ?? null);
       }
     );
   });
