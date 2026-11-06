@@ -230,8 +230,8 @@ export class DownloadService {
     } else if (dhtBootstrap?.length) {
       options.dht = { bootstrap: dhtBootstrap };
     }
-    // Bun is documented to panic inside utp-native's timers on x64 (arm64 has no prebuild, so
-    // uTP was already off there); TCP and WebRTC peers remain.
+    // Bun panics inside utp-native's libuv timers (x64 and macOS prebuilds; arm64 has none), so
+    // uTP stays off under Bun; TCP and WebRTC peers remain. See plan/utp-dgram.
     if ('Bun' in globalThis) options.utp = false;
     this.client = new WebTorrent(options);
     new TorrentDiagnostics(this.client, () => ({
