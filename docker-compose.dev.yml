@@ -62,10 +62,15 @@ services:
       target: development
     environment:
       MEDIA_LOAD_PORT: '3004'
+      MEDIA_LOAD_DATA_DIR: /app/data
     ports:
       - '127.0.0.1:3004:3004'
     volumes:
       - ./services/media-load/src:/workspace/services/media-load/src
+      - ./data/media-load:/app/data
+      # The backend's downloads: both paths it used, so recorded storage locations resolve.
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
+      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/backend/downloads
 
   backend:
     build:
@@ -88,6 +93,8 @@ services:
       LIST_SERVICE_URL: http://list-service:3002
       SOURCES_SERVICE_URL: http://sources:3003
       MEDIA_LOAD_SERVICE_URL: http://media-load:3004
+      # Pushed to media-load, which keeps the downloads.
+      DOWNLOAD_PATH: /usr/src/app/downloads
       SOURCES_DISABLE_VPN_CHECK: 'true'
     depends_on:
       bunqueue:
@@ -112,9 +119,6 @@ services:
       - ./backend/tsconfig.app.json:/usr/src/app/backend/tsconfig.app.json:ro
       - ./backend/tsconfig.client.json:/usr/src/app/backend/tsconfig.client.json:ro
       - ./data:/usr/data
-      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/downloads
-      # npm workspace commands run from backend; persist the default DOWNLOAD_PATH too.
-      - ${DOWNLOADS_HOST_PATH:-./downloads}:/usr/src/app/backend/downloads
 
   frontend:
     build:

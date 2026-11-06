@@ -685,7 +685,7 @@ describe('PlaybackSessionService', () => {
       }),
     };
     const warmup = { promote: jest.fn().mockResolvedValue(true) };
-    const storageService = { getStorageBySource: jest.fn().mockResolvedValue(null) };
+    const storageService = { getStorageState: jest.fn().mockResolvedValue(null) };
     const database = {
       getPlaybackGrantRepository: jest.fn().mockReturnValue(grants),
     } as unknown as Database;

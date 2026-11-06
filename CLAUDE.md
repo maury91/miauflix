@@ -133,7 +133,7 @@ miauflix/
 
 - **AuthService**: Account authentication, sessions, and user/admin roles
 - **SourceService**: Backend source persistence, discovery orchestration, and verification
-- **DownloadService**: WebTorrent client, encrypted media storage, and retention
+- **services/media-load**: Bun torrent engine: WebTorrent client (`DownloadService`), encrypted media storage and its own storage database (`StorageService`), retention and tracker scrapes. The backend reaches it through `MediaLoadClientService`
 - **StreamService / PlaybackSessionService**: Playback selection, preparation, grants, and delivery
 - **MediaService / CatalogClient**: Local indexes and access to the catalog service
 - **services/media-catalog**: TMDB-backed metadata, freshness, artwork, and season workers
@@ -188,10 +188,10 @@ Available aliases: `@entities/`, `@services/`, `@repositories/`, `@routes/`, `@m
 
 ```typescript
 // ✅ CORRECT - At file top before imports
-jest.mock('@services/download/download.service');
+jest.mock('@services/media-load/media-load-client.service');
 jest.mock('@repositories/movie.repository');
 
-import { DownloadService } from '@services/download/download.service';
+import { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
 describe('Service', () => {
   // Tests here
@@ -271,7 +271,8 @@ TMDB credentials are needed for catalog access; Trakt credentials enable optiona
 - `backend/src/app.ts` - Main application entry point, serves frontend
 - `backend/src/routes/stream.routes.ts` - Streaming endpoint (complete)
 - `backend/src/services/stream/stream.service.ts` - Stream service (complete)
-- `backend/src/services/download/download.service.ts` - WebTorrent client (complete)
+- `backend/src/services/media-load/media-load-client.service.ts` - Client for the media-load torrent engine (complete)
+- `services/media-load/src/engine/download.service.ts` - WebTorrent client, in the media-load service (complete; tests use `bun test`)
 - `backend/src/services/auth/auth.service.ts` - Authentication (complete)
 - `backend/src/routes/index.ts` - Route registration under `/api`
 

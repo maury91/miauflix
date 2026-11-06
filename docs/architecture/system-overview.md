@@ -10,7 +10,7 @@ For a user-facing explanation, see the [Feature Guide](../features.md). This pag
 | ---------------- | ------------------------------------------ | ---------------------------------------------------------------------------------- |
 | Frontend         | React, Vite, Redux Toolkit                 | Browsing, search, accounts, settings, and player controls                          |
 | Backend          | Node.js, Hono                              | Public API, frontend hosting, authentication, playback, and local state            |
-| Backend database | SQLite and TypeORM                         | Users, source associations, progress, ratings, notifications, and storage records  |
+| Backend database | SQLite and TypeORM                         | Users, source associations, progress, ratings, and notifications                   |
 | Catalog service  | Bun and SQLite                             | TMDB catalog data, metadata freshness, seasons, episodes, and artwork              |
 | List service     | Bun and SQLite                             | Trakt connections, public/personal lists, watchlists, and playback synchronization |
 | Sources service  | Bun and SQLite                             | Indexer access, search planning, provider configuration, and cached candidates     |
@@ -26,7 +26,7 @@ For a user-facing explanation, see the [Feature Guide](../features.md). This pag
 
 The backend exposes the application API under `/api` and hosts the browser frontend. The frontend owns navigation and display state, including the home feed, search, details, and player. It uses authenticated API requests and a realtime connection for supported operations.
 
-The backend owns Miauflix accounts, authentication, local watchlists and ratings, progress, notifications, persisted source candidates, torrent verification, downloads, and playback sessions. Its local movie/show records are indexes of catalog data needed for joins and source matching; they are not the authoritative full catalog.
+The backend owns Miauflix accounts, authentication, local watchlists and ratings, progress, notifications, persisted source candidates, torrent verification, and playback sessions. Its local movie/show records are indexes of catalog data needed for joins and source matching; they are not the authoritative full catalog.
 
 The frontend also has a Tizen build. It uses Samsung AVPlay when available and suitable, with browser playback for converted delivery. TV-specific code registers remote keys, adapts styles and artwork, and finds or remembers the backend server.
 
@@ -57,7 +57,7 @@ Administrators can manage providers and definition repositories through Settings
 
 ### Media load service
 
-The media-load service is the torrent engine. It currently answers tracker scrapes: the backend's source statistics jobs ask it for seeders and leechers, and it batches concurrent requests into multi-hash scrapes (`SCRAPE_TRACKERS`). WebTorrent downloads, encrypted storage and byte ranges are planned to move here; playback sessions, FFmpeg and subtitles stay in the backend. In Docker it runs in the services container, so with the VPN layer its tracker traffic uses the tunnel.
+The media-load service is the torrent engine. It runs WebTorrent, keeps the encrypted downloads and their storage records and claims, and serves verified byte ranges that the backend proxies to players and FFmpeg. It also answers tracker scrapes, batching concurrent requests into multi-hash scrapes (`SCRAPE_TRACKERS`). The backend names sources by id and sends each one's descriptor. Playback sessions, FFmpeg and subtitles stay in the backend. In Docker it runs in the services container with the downloads volume, so with the VPN layer its peer and tracker traffic uses the tunnel.
 
 ### Remote contracts and configuration
 
@@ -88,7 +88,7 @@ Implementation: [authentication routes](../../backend/src/routes/auth.routes.ts)
 3. Completed FFprobe results determine delivery for the requesting device, including native and MSE codec support, audio-track controls, and preferred languages. An unknown file can begin direct delivery with `deliveryPending` while a background probe reports delivery updates to the player.
 4. Compatible media is delivered directly with byte-range support. Other supported media can be remuxed to fragmented MP4, copying compatible tracks or converting selected audio to stereo AAC.
 5. HEVC can be copied for compatible devices. Optional HEVC-to-H.264 conversion is disabled by default and capped at 1080p/30 fps. When HEVC cannot be delivered, selection can fall back to an H.264 source.
-6. WebTorrent prioritizes required pieces and reads ahead during playback. FFmpeg/FFprobe read decrypted torrent ranges through a private loopback input without requiring a plaintext media copy on disk.
+6. WebTorrent, in media-load, prioritizes required pieces and reads ahead during playback. FFmpeg/FFprobe read decrypted torrent ranges through a private loopback input, which streams from media-load, without requiring a plaintext media copy on disk.
 7. The player reports progress and supports pause, seeking, audio/subtitle choices, and resume. TV playback can prefetch the next episode and use named credit chapters or the final-90-second fallback for continuation.
 
 Live playback sessions sample peer availability, throughput, and blocked reads. A weak source can trigger a backup source warming near the current read position. A failed source produces a session-scoped recreation event so the player can select another source. Each issued grant remains bound to its source; failover creates another session. This is source selection and fallback, not continuous adaptive-bitrate streaming.
@@ -101,7 +101,7 @@ Implementation: [playback sessions](../../backend/src/services/playback/playback
 
 ### Local databases
 
-The backend uses SQLite through TypeORM. The catalog, list, and sources services have their own SQLite state and ownership. Account, source, storage, progress, notification, probe, and other records are registered in the backend database module.
+The backend uses SQLite through TypeORM. The catalog, list, and sources services have their own SQLite state and ownership. Account, source, progress, notification, probe, and other records are registered in the backend database module. Storage records belong to the media-load service's SQLite database.
 
 Backend startup initializes the database, performs registered column renames, and explicitly synchronizes its schema. Ordered data migrations run before normal service work. Schema synchronization and data migrations are separate: changing an entity can still change the live schema, and removing or renaming fields requires preservation work.
 
@@ -115,7 +115,7 @@ Downloaded torrent pieces use encrypted chunk storage. Selected sensitive databa
 
 Storage records track downloaded files, reserved space, and claims from playback and preparation. Reclamation considers those claims and protects active playback. Completed torrents can detach after the seeding period while their encrypted files remain available locally. Storage-pressure cleanup or explicit administrator removal can later delete retained files.
 
-Implementation: [encrypted chunk store](../../backend/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts), [storage service](../../backend/src/services/storage/storage.service.ts), and [download service](../../backend/src/services/download/download.service.ts).
+Implementation: [encrypted chunk store](../../services/media-load/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts), [storage service](../../services/media-load/src/storage/storage.service.ts), [download service](../../services/media-load/src/engine/download.service.ts), and the backend's [media-load client](../../backend/src/services/media-load/media-load-client.service.ts).
 
 ## Background work
 

@@ -10,8 +10,9 @@ const PORT =
     ? configuredPort
     : DEFAULT_PORT;
 const HOST = process.env.MEDIA_LOAD_HOST ?? '0.0.0.0';
+const DATA_DIR = process.env.MEDIA_LOAD_DATA_DIR ?? process.env.DATA_DIR ?? './data';
 
-const { service } = createMediaLoadService();
+const { service } = createMediaLoadService({ dataDir: DATA_DIR });
 
 const server = await serve(service, { hostname: HOST, port: PORT });
 console.info(`Media load listening on http://${HOST}:${server.port}`);

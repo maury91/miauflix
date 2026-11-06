@@ -15,7 +15,7 @@ export const createStreamRoutes = ({
   audioPlaybackService,
   authService,
   configurationService,
-  downloadService,
+  mediaLoadClient,
   mediaService,
   playbackSessionService,
   streamService,
@@ -52,7 +52,7 @@ export const createStreamRoutes = ({
         if (unavailable) return context.json({ error: unavailable } satisfies ErrorResponse, 404);
         if (!resolved) return context.json({ error: 'Playback grant does not match source' }, 403);
         // Best-effort: grant and source are validated above, so failures here are only logged.
-        void downloadService
+        void mediaLoadClient
           .predownload(resolved.target, {
             kind: 'prefetch',
             ownerKey: `next:${grant.userId}:${grant.playableKey}`,
@@ -138,7 +138,7 @@ export const createStreamRoutes = ({
                 403
               );
             }
-            return await downloadService.streamFile(resolved.target, context.req.header('range'));
+            return await mediaLoadClient.streamFile(resolved.target, context.req.header('range'));
           }
 
           // Verify streaming key (includes timing attack protection)
@@ -167,7 +167,7 @@ export const createStreamRoutes = ({
 
           // Stream the movie's main video
           const target = await streamService.movieTarget(movieId, source);
-          return await downloadService.streamFile(target, context.req.header('range'));
+          return await mediaLoadClient.streamFile(target, context.req.header('range'));
         } catch (error: unknown) {
           if (error instanceof ErrorWithStatus && error.status === 'source_file_unavailable') {
             // A fake source: the player moves on to the next one.

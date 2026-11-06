@@ -9,7 +9,7 @@
 - **Authentication**: JWT access tokens, rotating opaque refresh tokens, email/password and QR login, and user/admin roles. Browsers use session-scoped HttpOnly access and refresh cookies; the packaged TV app requests token transport and sends token headers. API requests select a session with `X-Session-Id`.
 - **Media Catalog Service**: Standalone Bun service (`services/media-catalog`) that owns catalog data (TMDB today), freshness, change-syncs, and its published configuration schema. The backend uses a versioned service contract rather than calling TMDB directly.
 - **Source Discovery**: Indexer search through the sources service, with background processing
-- **Media Streaming Infrastructure**: Complete client with peer-to-peer networking (DownloadService)
+- **Media Streaming Infrastructure**: Complete peer-to-peer client in the Bun media-load service (`services/media-load`, `DownloadService` and `StorageService`), reached by the backend through `MediaLoadClientService`
 - **Database Layer**: SQLite entities with AES-256-GCM encryption; movie/tv tables are slim local indexes mirrored from the catalog service
 - **Background Tasks**: Queue jobs on the shared Bunqueue broker (backend: lists/sources/maintenance; catalog service: hydration scans/season sync)
 - **API Infrastructure**: Catalog, source administration, playback sessions, streaming, subtitles, progress, ratings, notifications, and storage routes are implemented. Check route declarations before documenting an endpoint.
@@ -77,12 +77,13 @@
 // Extend existing owners rather than recreating these systems:
 backend/src/services/auth/auth.service.ts
 backend/src/services/source/source.service.ts
-backend/src/services/download/download.service.ts
+backend/src/services/media-load/                 // MediaLoadClientService (torrent engine client)
 backend/src/services/catalog/                     // CatalogClient + remote config group
 backend/src/services/media/                       // MediaService (local index mirroring), ListService
 services/media-catalog/                           // Catalog storage, provider adapter, and workers
 services/list-service/                            // Trakt lists, watchlists, and playback sync
 services/sources/                                 // Provider search and administration
+services/media-load/                              // Torrent engine, encrypted storage, tracker scrapes
 ```
 
 ## 🎬 **Episode Sync Management**

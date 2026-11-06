@@ -61,7 +61,7 @@ describe('next-episode prefetch', () => {
     const app = createStreamRoutes({
       playbackSessionService,
       streamService,
-      downloadService,
+      mediaLoadClient: downloadService,
     } as never);
     const response = await app.request(`/${token}/prefetch`, { method: 'POST' });
     expect(response.status).toBe(202);

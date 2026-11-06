@@ -10,7 +10,7 @@ import type { ContentSourceRepository } from '@repositories/content-source.repos
 import type { PlaybackGrantRepository } from '@repositories/playback-grant.repository';
 import type { ProgressRepository } from '@repositories/progress.repository';
 import type { PlayableRef } from '@routes/playable.types';
-import type { DownloadService } from '@services/download/download.service';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type {
   PlayablePreparationService,
@@ -20,7 +20,6 @@ import type {
 import type { TorrentWarmupController } from '@services/preload/torrent-warmup.controller';
 import { findResumeFraction } from '@services/progress/resume-fraction';
 import type { SourceHealthService } from '@services/source/source-health.service';
-import type { StorageService } from '@services/storage/storage.service';
 
 import {
   AudioConversionRequiredError,
@@ -151,11 +150,11 @@ export class PlaybackSessionService {
     private readonly preparation: PlayablePreparationService,
     config: ConfigService,
     private readonly warmup?: TorrentWarmupController,
-    private readonly storageService?: StorageService,
+    private readonly storage?: Pick<MediaLoadClientService, 'getStorageState'>,
     private readonly audioPlaybackService?: AudioPlaybackService,
     private readonly sourceHealth?: Pick<SourceHealthService, 'markFailed' | 'onFailed'>,
     private readonly downloads?: Pick<
-      DownloadService,
+      MediaLoadClientService,
       'getPlaybackHealth' | 'getWarmupTargetBytes' | 'releaseClaims' | 'warmSource'
     >,
     private readonly progress?: Pick<ProgressRepository, 'findByKey'>,
@@ -250,7 +249,8 @@ export class PlaybackSessionService {
       }
     }
     if (!prepared.source) return null;
-    const storage = await this.storageService?.getStorageBySource(prepared.source.id);
+    // Download state is informational here: an unreachable engine reports nothing stored.
+    const storage = await this.storage?.getStorageState(prepared.source.id).catch(() => null);
 
     const streamingKey = randomBytes(32).toString('base64url');
     const expiresAt = new Date(Date.now() + this.ttlMs);

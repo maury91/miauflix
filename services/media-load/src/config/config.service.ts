@@ -21,6 +21,15 @@ export class MediaLoadConfigService extends ServiceConfiguration {
     );
   }
 
+  /** Every key's schema default. */
+  defaults(): Record<string, string> {
+    return Object.fromEntries(
+      this.getSchema()
+        .groups.flatMap(group => group.variables)
+        .map(variable => [variable.key, variable.defaultValue ?? ''])
+    );
+  }
+
   /** A comma-separated setting as a list, without empty entries. */
   list(key: string): string[] {
     return this.value(key)

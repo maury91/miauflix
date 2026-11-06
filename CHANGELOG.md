@@ -8,7 +8,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 - Seeder and leecher counts are checked for many sources at once and combine every tracker's answer, so they are more accurate and use less tracker traffic
 - What you're watching gets peers and bandwidth before background downloads, so playback starts sooner while other titles download
-- Seeder counts now come from a new internal service, media-load, which runs in the services container (port 3004). It will run all torrent downloading later
+- Torrent downloading, streaming, seeder counts and download storage now run in a new internal service, media-load, in the services container (port 3004). The downloads folder is now mounted on the services container instead of the main one
 
 ### Fixes
 

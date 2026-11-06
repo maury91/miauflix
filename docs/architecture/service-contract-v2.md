@@ -33,15 +33,15 @@ Implementation: [builders](../../packages/contract/src/define.ts), [typed client
 
 ## Application contracts
 
-| Contract       | Version | Main operations                                                                                                                                   |
-| -------------- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `catalog`      | `2.0`   | Movie/show/season details, search/discovery, external-ID resolution, batches, artwork snapshots/events, backdrop focus, and watching-set delivery |
-| `lists`        | `2.0`   | Public/personal/community lists, Trakt association, watchlist synchronization, and playback synchronization                                       |
-| `sources`      | `1.3`   | Incremental candidate searches, torrent metadata lookup, provider/repository management, and Cardigann definition synchronization                 |
-| `media-load`   | `1.0`   | Tracker scrapes (`swarmStats`): seeders and leechers per info hash, batched across requests                                                       |
-| `$` management | `1.0`   | Service status, status events, configuration schema, testing, applying, and clearing configuration                                                |
+| Contract       | Version | Main operations                                                                                                                                     |
+| -------------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `catalog`      | `2.0`   | Movie/show/season details, search/discovery, external-ID resolution, batches, artwork snapshots/events, backdrop focus, and watching-set delivery   |
+| `lists`        | `2.0`   | Public/personal/community lists, Trakt association, watchlist synchronization, and playback synchronization                                         |
+| `sources`      | `1.3`   | Incremental candidate searches, torrent metadata lookup, provider/repository management, and Cardigann definition synchronization                   |
+| `media-load`   | `1.0`   | Torrent engine: source descriptors, downloads and claims, warmups, verified byte ranges (`read`), storage inventory, tracker scrapes (`swarmStats`) |
+| `$` management | `1.0`   | Service status, status events, configuration schema, testing, applying, and clearing configuration                                                  |
 
-The source search stream emits candidate records and a coverage/retry summary. `sources.torrentFile` returns base64-encoded torrent metadata or `null` through a regular call. `media-load` is the torrent engine. Today it answers tracker scrapes; the backend still owns candidate persistence, torrent verification, WebTorrent downloads, encrypted media storage and playback. Downloads, storage and byte ranges are planned to move to `media-load` as later minor versions, while playback sessions, FFmpeg and subtitles stay in the backend.
+The source search stream emits candidate records and a coverage/retry summary. `sources.torrentFile` returns base64-encoded torrent metadata or `null` through a regular call. `media-load` is the torrent engine. It owns WebTorrent downloads, claims, encrypted media storage and its storage records, and answers tracker scrapes. The backend owns candidate persistence, torrent verification, playback sessions, FFmpeg and subtitles. It names sources by id and sends each source's descriptor with `putSource` (again after `unknown_source`). The ungated `attach` call delivers `SOURCE_SECURITY_KEY` before each configuration push, so the key never travels as a setting. `playbackChanged` mirrors the open streams and `layoutKnown` reports file lists as they become known.
 
 Definitions: [catalog](../../packages/service-contracts/src/catalog.ts), [lists](../../packages/service-contracts/src/lists.ts), [sources](../../packages/service-contracts/src/sources.ts), [media-load](../../packages/service-contracts/src/media-load.ts), and [management](../../packages/contract/src/management.ts).
 
@@ -116,7 +116,7 @@ The runtime's `bytes` primitive exposes `url()`, `path()`, and `open()`. Signed 
 
 Remote `open()` performs an HTTP request to the service; local `open()` calls the byte handler directly. Local URL generation requires a host-provided `bytesBaseUrl` that serves the service's HTTP handler. Range behavior belongs to the byte implementation and its forwarded request headers.
 
-This runtime facility does not describe the application's video route. Miauflix's backend serves `/api/stream/:token` from its own download/storage layer. FFmpeg reads verified decrypted ranges from the backend's private loopback input. The supplied Caddy configuration does not route video to a separate contract-based streaming service.
+Miauflix's backend serves `/api/stream/:token` by proxying `media-load`'s `read` bytes response, forwarding the viewer's `Range`. FFmpeg reads verified decrypted ranges from the backend's private loopback input, which opens the same call. The supplied Caddy configuration does not route video to a separate contract-based streaming service.
 
 Implementation: [signed tickets](../../packages/contract/src/tickets.ts), [local transport](../../packages/contract/src/local.ts), [video route](../../backend/src/routes/stream.routes.ts), and [FFmpeg input](../../backend/src/services/playback/torrent-input.ts).
 

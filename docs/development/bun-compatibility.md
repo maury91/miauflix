@@ -37,7 +37,7 @@ panic(main thread): unsupported uv function: uv_timer_init
 
 ### Workaround
 
-Pass `utp: false` in the WebTorrent options in `backend/src/services/download/download.service.ts`. Trade-off: uTP peers become unreachable (only TCP and WebRTC remain), which can reduce the peer count on some torrents.
+Pass `utp: false` in the WebTorrent options. The media-load service does so under Bun (`services/media-load/src/engine/download.service.ts`). Trade-off: uTP peers become unreachable (only TCP and WebRTC remain), which can reduce the peer count on some torrents.
 
 ## How to re-check
 

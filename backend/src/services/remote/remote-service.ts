@@ -1,3 +1,5 @@
+import { randomBytes } from 'node:crypto';
+
 import { logger } from '@logger';
 import {
   type Client,
@@ -78,6 +80,8 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
       url: () => this.connectedUrl,
       timeoutMs: () => this.timeoutMs(),
       WebSocket: WebSocket as unknown as typeof globalThis.WebSocket,
+      // Signs `bytes` URLs; the service learns it on every connection.
+      ticketKey: randomBytes(32).toString('base64url'),
     });
     this.admin = createClient(management, this.connection.transport);
     const gated = this.gatedTransport(this.connection.transport);
@@ -290,8 +294,15 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
   }
 
   private async applySnapshot(values: Record<string, string>): Promise<ConfigurationResult> {
+    await this.beforeConfigure();
     return this.toResult(await this.admin.applyConfig({ values }));
   }
+
+  /**
+   * Runs before every configuration delivery, on the same connection: state the service needs
+   * before its settings (pushed with an ungated call). Throwing fails the delivery.
+   */
+  protected async beforeConfigure(): Promise<void> {}
 
   private toResult(result: {
     success: boolean;

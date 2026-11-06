@@ -1,6 +1,18 @@
 #!/bin/bash
 set -Eeuo pipefail
 
+# Started as root: give the service user what it writes, then run everything as that user. The
+# downloads volume was the backend's before media-load ran the torrent engine, so files written
+# by the backend's user (PUID) change owner once.
+if [[ $(id -u) -eq 0 ]]; then
+  mkdir -p /app/data/media-load
+  chown -R bunqueue:bunqueue /app/data/media-load
+  if [[ -d /usr/src/app/downloads ]] && [[ -n $(find /usr/src/app/downloads ! -user bunqueue -print -quit) ]]; then
+    chown -R bunqueue:bunqueue /usr/src/app/downloads
+  fi
+  exec su-exec bunqueue:bunqueue /bin/bash "$0" "$@"
+fi
+
 children=()
 loggers=()
 log_pipes=()
