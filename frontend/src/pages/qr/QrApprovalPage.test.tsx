@@ -1,6 +1,6 @@
 import { configureStore } from '@reduxjs/toolkit';
-import { authSlice } from '@store/slices/auth';
-import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { addSession, authSlice } from '@store/slices/auth';
+import { act, fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
@@ -19,9 +19,15 @@ const json = (body: unknown, status = 200): Response =>
 
 const setupTest = ({
   signedIn = true,
+  availableSessions = [],
   request = { state: 'pending', expiresAt: new Date(Date.now() + 120_000).toISOString() },
   approve = json({ state: 'approved' }),
-}: { signedIn?: boolean; request?: object; approve?: Response } = {}) => {
+}: {
+  signedIn?: boolean;
+  availableSessions?: { session: string; user: typeof user }[];
+  request?: object;
+  approve?: Response;
+} = {}) => {
   const fetchMock = vi.fn((input: RequestInfo | URL) => {
     const url = String(input instanceof Request ? input.url : input);
     if (url.endsWith('/approve') || url.endsWith('/reject')) return Promise.resolve(approve);
@@ -33,7 +39,11 @@ const setupTest = ({
     preloadedState: {
       auth: signedIn
         ? { currentSessionId: 'phone', availableSessions: [], currentUser: user as never }
-        : { currentSessionId: null, availableSessions: [], currentUser: null },
+        : {
+            currentSessionId: null,
+            availableSessions: availableSessions as never,
+            currentUser: null,
+          },
     },
   });
   render(
@@ -41,8 +51,13 @@ const setupTest = ({
       <QrApprovalPage approvalToken="approval-token" />
     </Provider>
   );
-  return { fetchMock };
+  return { fetchMock, store };
 };
+
+const approvalCall = (fetchMock: ReturnType<typeof vi.fn>) =>
+  fetchMock.mock.calls.find((call: unknown[]) =>
+    String(call[0] instanceof Request ? call[0].url : call[0]).endsWith('/approve')
+  );
 
 const requestHeaders = (call: unknown[]): Headers => {
   const [input, init] = call as [RequestInfo | URL, RequestInit | undefined];
@@ -79,6 +94,40 @@ describe('QrApprovalPage', () => {
     expect(await screen.findByRole('heading', { name: 'Sign in to continue' })).toBeInTheDocument();
     expect(screen.getByText('Samsung TV')).toBeInTheDocument();
     expect(screen.getByTestId('login-with-email')).toBeInTheDocument();
+  });
+
+  it('approves with the only signed-in profile when this tab has not chosen one', async () => {
+    const { fetchMock } = setupTest({
+      signedIn: false,
+      availableSessions: [{ session: 'stored', user }],
+    });
+    fireEvent.click(await screen.findByRole('button', { name: 'Approve' }));
+    expect(await screen.findByRole('heading', { name: 'Approved' })).toBeInTheDocument();
+    expect(requestHeaders(approvalCall(fetchMock)!).get('X-Session-Id')).toBe('stored');
+  });
+
+  it('offers approval once signing in here adds a profile', async () => {
+    const { store } = setupTest({ signedIn: false });
+    expect(await screen.findByRole('heading', { name: 'Sign in to continue' })).toBeInTheDocument();
+    act(() => {
+      store.dispatch(addSession({ session: 'new', user: user as never }));
+    });
+    expect(await screen.findByRole('button', { name: 'Approve' })).toBeInTheDocument();
+  });
+
+  it('asks which profile approves when several are signed in', async () => {
+    const other = { ...user, id: 'user-2', displayName: 'Other' };
+    const { fetchMock } = setupTest({
+      signedIn: false,
+      availableSessions: [
+        { session: 'first', user },
+        { session: 'second', user: other },
+      ],
+    });
+    fireEvent.click(await screen.findByRole('button', { name: 'Other' }));
+    fireEvent.click(await screen.findByRole('button', { name: 'Approve' }));
+    expect(await screen.findByRole('heading', { name: 'Approved' })).toBeInTheDocument();
+    expect(requestHeaders(approvalCall(fetchMock)!).get('X-Session-Id')).toBe('second');
   });
 
   it('explains an expired or unknown code', async () => {

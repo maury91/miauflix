@@ -7,7 +7,13 @@ import { backendClient } from '@shared/api/backend-client';
 import { Alert, Button, PALETTE, Spinner } from '@shared/ui';
 import { NARROW_MAX_WIDTH_PX } from '@shared/ui/logo/logoGeometry';
 import { useAppDispatch, useAppSelector } from '@store';
-import { clearAuth, selectCurrentSessionId, selectIsAuthenticated } from '@store/slices/auth';
+import {
+  selectCurrentSessionId,
+  selectIsAuthenticated,
+  selectProfiles,
+  sessionRemoved,
+  setSession,
+} from '@store/slices/auth';
 import { type ComponentType, type ReactNode, useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -238,7 +244,16 @@ function Outcome({
 export default function QrApprovalPage({ approvalToken }: { approvalToken: string }) {
   const dispatch = useAppDispatch();
   const isAuthenticated = useAppSelector(selectIsAuthenticated);
-  const sessionId = useAppSelector(selectCurrentSessionId);
+  const currentSessionId = useAppSelector(selectCurrentSessionId);
+  const profiles = useAppSelector(selectProfiles);
+  // A new tab has no profile chosen yet (that lasts for one app run), and signing in here only
+  // adds one: the device's only profile approves, or the user picks which of them does.
+  const sessionId =
+    isAuthenticated && currentSessionId
+      ? currentSessionId
+      : profiles.length === 1
+        ? profiles[0]!.session
+        : null;
   const [phase, setPhase] = useState<Phase>({ kind: 'checking' });
   const [actionError, setActionError] = useState<string | null>(null);
   const [busy, setBusy] = useState<'approve' | 'reject' | null>(null);
@@ -279,7 +294,7 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
           ? 'Unable to approve this sign-in'
           : 'Unable to decline this sign-in',
       onInvalidSession: () => {
-        dispatch(clearAuth());
+        if (sessionId) dispatch(sessionRemoved(sessionId));
         dispatch(authApi.endpoints.listSessions.initiate(undefined, { forceRefetch: true }));
       },
     });
@@ -334,7 +349,28 @@ export default function QrApprovalPage({ approvalToken }: { approvalToken: strin
           The device was not signed in. You can close this page.
         </Outcome>
       );
-    if (!isAuthenticated)
+    if (!sessionId && profiles.length > 1)
+      return (
+        <Card>
+          <Title>Who is approving?</Title>
+          <Text>Choose the profile that signs this device in.</Text>
+          <DeviceRow request={current} secondsLeft={secondsLeft} />
+          <Actions>
+            {profiles.map(profile => (
+              <Button
+                key={profile.session}
+                type="button"
+                color="secondary"
+                fullWidth
+                onClick={() => dispatch(setSession(profile.session))}
+              >
+                {profile.user.displayName || profile.user.email}
+              </Button>
+            ))}
+          </Actions>
+        </Card>
+      );
+    if (!sessionId)
       return (
         <Card>
           <Title>Sign in to continue</Title>
