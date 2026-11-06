@@ -52,6 +52,12 @@
       "runtimeExecutable": "bun",
       "runtimeArgs": ["run", "tv-pairing/src/index.ts"],
       "port": 3003
+    },
+    {
+      "name": "media-load",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "start:media-load:watch"],
+      "port": 3004
     }
   ]
 }

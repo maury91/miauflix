@@ -55,6 +55,18 @@ services:
       - ./services/sources/src:/workspace/services/sources/src
       - ./data/sources:/app/data
 
+  media-load:
+    build:
+      context: .
+      dockerfile: services/media-load/Dockerfile
+      target: development
+    environment:
+      MEDIA_LOAD_PORT: '3004'
+    ports:
+      - '127.0.0.1:3004:3004'
+    volumes:
+      - ./services/media-load/src:/workspace/services/media-load/src
+
   backend:
     build:
       context: .
@@ -75,6 +87,7 @@ services:
       CATALOG_SERVICE_URL: http://media-catalog:3001
       LIST_SERVICE_URL: http://list-service:3002
       SOURCES_SERVICE_URL: http://sources:3003
+      MEDIA_LOAD_SERVICE_URL: http://media-load:3004
       SOURCES_DISABLE_VPN_CHECK: 'true'
     depends_on:
       bunqueue:
@@ -84,6 +97,8 @@ services:
       list-service:
         condition: service_started
       sources:
+        condition: service_started
+      media-load:
         condition: service_started
     ports:
       - '127.0.0.1:5000:3000'

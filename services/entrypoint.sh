@@ -51,6 +51,7 @@ launch bunqueue /app/bunqueue
 launch media-catalog bun run --cwd /workspace/services/media-catalog src/index.ts
 launch list-service bun run --cwd /workspace/services/list-service src/index.ts
 launch sources bun run --cwd /workspace/services/sources src/index.ts
+launch media-load bun run --cwd /workspace/services/media-load src/index.ts
 
 set +e
 wait -n "${children[@]}"

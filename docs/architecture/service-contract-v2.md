@@ -1,6 +1,6 @@
 # Service contracts
 
-Miauflix uses typed, versioned contracts for communication between the backend and its catalog, list, and source services. Each service owns its implementation, configuration schema, and persistent data. The backend owns the public browser API and calls these internal services through typed clients.
+Miauflix uses typed, versioned contracts for communication between the backend and its catalog, list, source and media-load services. Each service owns its implementation, configuration schema, and persistent data. The backend owns the public browser API and calls these internal services through typed clients.
 
 See [System overview](system-overview.md) for ownership and deployment, and [External synchronization and query fallback](external-sync-and-query-fallback.md) for request-time data loading.
 
@@ -9,10 +9,10 @@ See [System overview](system-overview.md) for ownership and deployment, and [Ext
 | Package                           | Responsibility                                                                                                                                               |
 | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `@miauflix/contract`              | Contract builders, typed clients and implementations, service dispatch, local and WebSocket transports, management operations, and signed byte-response URLs |
-| `@miauflix/service-contracts`     | Catalog, list, and source procedure definitions, payload types, and catalog job names                                                                        |
+| `@miauflix/service-contracts`     | Catalog, list, source and media-load procedure definitions, payload types, and catalog job names                                                             |
 | `@miauflix/service-configuration` | Service configuration storage and lifecycle support                                                                                                          |
 
-The application backend runs on Node.js. The catalog, list, and source services run as separate Bun processes. Their clients use configured service URLs. The contract runtime also supports direct in-process transport; selecting that transport requires wiring a service instance explicitly, rather than leaving a service URL empty.
+The application backend runs on Node.js. The catalog, list, source and media-load services run as separate Bun processes. Their clients use configured service URLs. The contract runtime also supports direct in-process transport; selecting that transport requires wiring a service instance explicitly, rather than leaving a service URL empty.
 
 ## Contract definitions
 
@@ -38,11 +38,12 @@ Implementation: [builders](../../packages/contract/src/define.ts), [typed client
 | `catalog`      | `2.0`   | Movie/show/season details, search/discovery, external-ID resolution, batches, artwork snapshots/events, backdrop focus, and watching-set delivery |
 | `lists`        | `2.0`   | Public/personal/community lists, Trakt association, watchlist synchronization, and playback synchronization                                       |
 | `sources`      | `1.3`   | Incremental candidate searches, torrent metadata lookup, provider/repository management, and Cardigann definition synchronization                 |
+| `media-load`   | `1.0`   | Tracker scrapes (`swarmStats`): seeders and leechers per info hash, batched across requests                                                       |
 | `$` management | `1.0`   | Service status, status events, configuration schema, testing, applying, and clearing configuration                                                |
 
-The source search stream emits candidate records and a coverage/retry summary. `sources.torrentFile` returns base64-encoded torrent metadata or `null` through a regular call. The backend owns candidate persistence, torrent verification, peer statistics, encrypted media storage, and playback; these responsibilities do not reside in a separate streaming service.
+The source search stream emits candidate records and a coverage/retry summary. `sources.torrentFile` returns base64-encoded torrent metadata or `null` through a regular call. `media-load` is the torrent engine. Today it answers tracker scrapes; the backend still owns candidate persistence, torrent verification, WebTorrent downloads, encrypted media storage and playback. Downloads, storage and byte ranges are planned to move to `media-load` as later minor versions, while playback sessions, FFmpeg and subtitles stay in the backend.
 
-Definitions: [catalog](../../packages/service-contracts/src/catalog.ts), [lists](../../packages/service-contracts/src/lists.ts), [sources](../../packages/service-contracts/src/sources.ts), and [management](../../packages/contract/src/management.ts).
+Definitions: [catalog](../../packages/service-contracts/src/catalog.ts), [lists](../../packages/service-contracts/src/lists.ts), [sources](../../packages/service-contracts/src/sources.ts), [media-load](../../packages/service-contracts/src/media-load.ts), and [management](../../packages/contract/src/management.ts).
 
 ## Version negotiation
 

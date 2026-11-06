@@ -4,12 +4,14 @@ import path from 'path';
 
 import { SourceError } from '@errors/source.errors';
 import type { ConfigService } from '@mytypes/configuration';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { RequestService } from '@services/request/request.service';
 import type { SourcesClientService } from '@services/sources/sources-client.service';
 import type { StatsService } from '@services/stats/stats.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
 import type { DownloadService } from '../download/download.service';
+import { ErrorWithStatus } from './services/error-with-status.util';
 import type { Service, ServiceData, ServiceStats } from './types';
 
 /**
@@ -47,7 +49,8 @@ export class SourceMetadataFileService {
     private readonly config: ConfigService,
     enableWebTorrentMetadata = false,
     enableCacheMetadata = false,
-    sourcesClient?: SourcesClientService
+    sourcesClient?: SourcesClientService,
+    private readonly mediaLoad?: Pick<MediaLoadClientService, 'swarmStats'>
   ) {
     if (enableWebTorrentMetadata) {
       this.createService('webTorrent', {
@@ -153,8 +156,12 @@ export class SourceMetadataFileService {
     return resolution;
   }
 
+  /** Swarm size from the media-load service's tracker scrapes. */
   public async getStats(hash: string): Promise<{ broadcasters: number; watchers: number }> {
-    return this.downloadService.getStats(hash);
+    if (!this.mediaLoad) {
+      throw new ErrorWithStatus('The media-load service is not connected', 'scrape_unavailable');
+    }
+    return this.mediaLoad.swarmStats(hash);
   }
 
   public getAvailableConcurrency(): number {
