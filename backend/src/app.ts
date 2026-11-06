@@ -25,6 +25,7 @@ import { DownloadService } from '@services/download/download.service';
 import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
+import { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import { NotificationService } from '@services/notifications/notification.service';
 import { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
@@ -85,6 +86,8 @@ try {
   await listClient.initialize();
   const sourcesClientService = new SourcesClientService(configurationService);
   await sourcesClientService.initialize();
+  const mediaLoadClient = new MediaLoadClientService(configurationService);
+  await mediaLoadClient.initialize();
 
   // Initialize DB
   const db = new Database(configurationService);
@@ -125,7 +128,8 @@ try {
     configurationService,
     false,
     true,
-    sourcesClientService
+    sourcesClientService,
+    mediaLoadClient
   );
   const sourceService = new SourceService(
     db,
@@ -233,6 +237,7 @@ try {
   configurationService.registerService('CATALOG', catalogClient);
   configurationService.registerService('LIST', listClient);
   configurationService.registerService('SOURCES', sourcesClientService);
+  configurationService.registerService('MEDIA_LOAD', mediaLoadClient);
 
   // Run the configuration setup, if the environment is interactive the setup will guide the user into configuring all the unconfigured services
   // if it is not, it will still be possible through the frontend
@@ -305,6 +310,7 @@ try {
       listClient.stop();
       sourceService.stop();
       sourcesClientService.stop();
+      mediaLoadClient.stop();
       await backgroundWorker.stop();
       preloadIntentService.close();
       backgroundJobs.close();

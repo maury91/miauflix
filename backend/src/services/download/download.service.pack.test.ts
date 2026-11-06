@@ -33,12 +33,12 @@ const HASH = 'c'.repeat(40);
 const createConfig = () => {
   const values: Record<string, unknown> = {
     CONTENT_CONNECTION_LIMIT: 100,
+    CONTENT_CONNECTION_BUDGET: 200,
     CONTENT_DOWNLOAD_LIMIT: 1000000,
     CONTENT_UPLOAD_LIMIT: 500000,
     CONTENT_SEED_DURATION_SECONDS: 3600,
     DISABLE_DISCOVERY: true,
     STATIC_TRACKERS: [],
-    SCRAPE_TRACKERS: [],
     BEST_TRACKERS_DOWNLOAD_URL: 'https://example.com/trackers_best.txt',
     BLACKLISTED_TRACKERS_DOWNLOAD_URL: 'https://example.com/blacklist.txt',
     DOWNLOAD_PATH: '/tmp/test-downloads',

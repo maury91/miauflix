@@ -32,12 +32,6 @@ const staticTrackers = [
   'udp://p4p.arenabg.com:1337/announce',
 ];
 
-const scrapeTrackers = [
-  'udp://tracker.opentrackr.org:1337/announce',
-  'udp://tracker.openbittorrent.com:80/announce',
-  'udp://tracker.openbittorrent.com:6969/announce',
-];
-
 export const downloadConfigurationDefinition = serviceConfiguration({
   name: 'Download',
   description: 'Download and streaming configuration',
@@ -90,14 +84,6 @@ export const downloadConfigurationDefinition = serviceConfiguration({
       description: 'Static trackers for peer-to-peer client',
       example: 'udp://tracker1.example.com:1337,udp://tracker2.example.com:1337',
       defaultValue: staticTrackers.join(','),
-      required: false,
-      advanced: true,
-      transform: transforms.stringArray(),
-    }),
-    SCRAPE_TRACKERS: variable({
-      description: 'Tracker announce URLs used to scrape peer and seeder statistics',
-      example: 'udp://tracker1.example.com:1337,udp://tracker2.example.com:1337',
-      defaultValue: scrapeTrackers.join(','),
       required: false,
       advanced: true,
       transform: transforms.stringArray(),

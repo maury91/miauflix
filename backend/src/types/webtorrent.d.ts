@@ -42,6 +42,12 @@ declare module 'webtorrent' {
     natPmp?: boolean;
     /** Maximum number of connections per torrent (default: 55) */
     maxConns?: number;
+    /**
+     * Connection target shared by all torrents in proportion to their priority (default: 500).
+     * Once it is used up, a torrent at or above its share accepts no new peers. Added by the
+     * maury91/webtorrent fork.
+     */
+    connectionBudget?: number;
     /** Enable uTP protocol (default: true if supported) */
     utp?: boolean;
     /** Create outgoing connections when seeding (default: true) */
@@ -103,6 +109,8 @@ declare module 'webtorrent' {
     destroyStoreOnDestroy?: boolean;
     /** Custom options passed to the store */
     storeOpts?: StoreOpts;
+    /** Connection-budget priority, minimum 1 (maury91/webtorrent fork) */
+    priority?: number;
     /** Always choke seeders when seeding (default: true) */
     alwaysChokeSeeders?: boolean;
     /** Custom callback for announce parameters */
@@ -458,6 +466,16 @@ declare module 'webtorrent' {
     deselect(start: number, end: number): void;
     /** Mark piece range as critical (high priority) */
     critical(start: number, end: number): void;
+
+    // Fork additions (maury91/webtorrent): connection budget share and per-torrent throttling
+    /** Share of the client's connection budget, relative to other torrents (minimum 1) */
+    readonly priority?: number;
+    /** Set the torrent's connection budget priority (minimum 1) */
+    setPriority?(priority: number): void;
+    /** Per-torrent download limit in bytes/sec (-1 = unlimited) */
+    throttleDownloadSpeed?(rate: number): boolean | void;
+    /** Per-torrent upload limit in bytes/sec (-1 = unlimited) */
+    throttleUploadSpeed?(rate: number): boolean | void;
 
     // Stream methods
     /** Create readable stream for entire torrent */

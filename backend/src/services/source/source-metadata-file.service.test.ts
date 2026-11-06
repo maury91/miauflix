@@ -15,7 +15,6 @@ const magnet = `magnet:?xt=urn:btih:${hash}`;
 const setupTest = (enabled = true) => {
   const download = {
     getSourceMetadataFile: jest.fn().mockResolvedValue(Buffer.from('metadata')),
-    getStats: jest.fn(),
   };
   const remote = { torrentFile: jest.fn().mockResolvedValue(Buffer.from('metadata')) };
   const service = new SourceMetadataFileService(
@@ -45,6 +44,27 @@ describe('SourceMetadataFileService', () => {
     expect(await result).toEqual(Buffer.from('metadata'));
     expect(remote.torrentFile).toHaveBeenCalledWith(hash);
     expect(download.getSourceMetadataFile).not.toHaveBeenCalled();
+  });
+
+  it('gets swarm stats from the media-load service', async () => {
+    const swarmStats = jest.fn().mockResolvedValue({ broadcasters: 5, watchers: 1 });
+    const service = new SourceMetadataFileService(
+      {} as DownloadService,
+      {} as never,
+      new StatsService(),
+      { getOrThrow: jest.fn() } as unknown as ConfigService,
+      false,
+      false,
+      undefined,
+      { swarmStats }
+    );
+    await expect(service.getStats(hash)).resolves.toEqual({ broadcasters: 5, watchers: 1 });
+    expect(swarmStats).toHaveBeenCalledWith(hash);
+  });
+
+  it('reports stats as unavailable without the media-load service', async () => {
+    const { service } = setupTest();
+    await expect(service.getStats(hash)).rejects.toMatchObject({ status: 'scrape_unavailable' });
   });
 
   it('rejects metadata with a different info hash', async () => {

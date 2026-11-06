@@ -160,25 +160,6 @@ export class StreamService {
   }
 
   /**
-   * Get streaming statistics for a source
-   */
-  @traced('StreamService')
-  async getStreamingStats(source: ContentSource): Promise<{
-    broadcasters: number;
-    watchers: number;
-  }> {
-    try {
-      return await this.downloadService.getStats(source.hash);
-    } catch (error) {
-      logger.warn('StreamService', `Failed to get stats for source ${source.id}:`, error);
-      return {
-        broadcasters: source.broadcasters || 0,
-        watchers: source.watchers || 0,
-      };
-    }
-  }
-
-  /**
    * Get a movie source by ID
    */
   @traced('StreamService')
