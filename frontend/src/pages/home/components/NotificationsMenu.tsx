@@ -102,10 +102,10 @@ const List = styled.div`
   }
 `;
 
+/* Flex, not grid: the 2020 TVs (Chromium 69) cannot lay out a button as a grid. */
 const Row = styled.button`
   position: relative;
-  display: grid;
-  grid-template-columns: ${POSTER_SIZE}px minmax(0, 1fr) 10px;
+  display: flex;
   align-items: center;
   gap: 16px;
   width: 100%;
@@ -143,6 +143,7 @@ const Row = styled.button`
 `;
 
 const Poster = styled.div`
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -168,6 +169,7 @@ const Poster = styled.div`
 const Text = styled.div`
   display: flex;
   flex-direction: column;
+  flex: 1 1 auto;
   gap: 4px;
   min-width: 0;
 
@@ -195,8 +197,15 @@ const InlineBadge = styled(QualityBadge)`
   gap: 0.35rem;
 `;
 
+/** Holds the unread dot's column on read rows, so their text lines up. */
+const DotSlot = styled.span`
+  flex: 0 0 10px;
+`;
+
 const UnreadDot = styled.span`
+  flex: 0 0 9px;
   width: 9px;
+  margin-right: 1px;
   height: 9px;
   border-radius: 50%;
   background: #e60019;
@@ -313,7 +322,7 @@ const NotificationRow: FC<{
         </p>
         <time dateTime={notification.createdAt}>{formatRelativeTime(notification.createdAt)}</time>
       </Text>
-      {unread ? <UnreadDot aria-hidden="true" /> : <span />}
+      {unread ? <UnreadDot aria-hidden="true" /> : <DotSlot />}
     </Row>
   );
 };

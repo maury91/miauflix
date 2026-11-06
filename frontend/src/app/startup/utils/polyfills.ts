@@ -55,3 +55,30 @@ if (typeof stringPrototype.replaceAll !== 'function') {
     return replace(new RegExp(search.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'g'), replacement);
   };
 }
+
+// three.js (WebGLRenderer) tracks geometries and textures with WeakRef and FinalizationRegistry
+// (Chromium 84), only to forget objects collected without dispose(). Here the references stay
+// strong and nothing is finalized: what the app never disposes stays until the renderer is
+// disposed, which frees everything it tracked.
+const legacyWindow = window as unknown as { WeakRef?: unknown; FinalizationRegistry?: unknown };
+
+if (typeof legacyWindow.WeakRef !== 'function') {
+  legacyWindow.WeakRef = class WeakRef<T extends object> {
+    readonly #target: T;
+    constructor(target: T) {
+      this.#target = target;
+    }
+    deref(): T {
+      return this.#target;
+    }
+  };
+}
+
+if (typeof legacyWindow.FinalizationRegistry !== 'function') {
+  legacyWindow.FinalizationRegistry = class FinalizationRegistry {
+    register(): void {}
+    unregister(): boolean {
+      return false;
+    }
+  };
+}
