@@ -39,4 +39,15 @@ describe('resolveDhtBootstrap', () => {
     resolve4.mockImplementation(() => new Promise(() => undefined));
     expect(await resolveDhtBootstrap(['a.example:6881'], 10)).toEqual(['a.example:6881']);
   });
+
+  it('keeps deduplicated addresses from routers that resolved before the deadline', async () => {
+    resolve4.mockImplementation(host =>
+      host === 'slow.example'
+        ? new Promise(() => undefined)
+        : Promise.resolve(['1.1.1.1', '1.1.1.1'])
+    );
+    expect(await resolveDhtBootstrap(['slow.example:6881', 'fast.example:6881'], 10)).toEqual([
+      '1.1.1.1:6881',
+    ]);
+  });
 });

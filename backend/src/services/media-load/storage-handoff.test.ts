@@ -2,7 +2,8 @@ jest.unmock('@database/database');
 
 import { createTestDatabase } from '@__test-utils__/database.helpers';
 import { TestDataFactory } from '@__test-utils__/test-data.factory';
-import type { ImportedSource } from '@miauflix/service-contracts';
+import { F, MAX_FRAME_BYTES, methodName } from '@miauflix/contract';
+import { type ImportedSource, mediaLoad } from '@miauflix/service-contracts';
 
 import { Storage } from '@entities/storage.entity';
 import { StorageFile } from '@entities/storage-file.entity';
@@ -12,10 +13,10 @@ import type { MediaLoadClientService } from './media-load-client.service';
 import { createStorageHandoff } from './storage-handoff';
 
 /** The service side of the handoff, remembering every batch. */
-const fakeClient = (alreadyImported = false) => {
+const fakeClient = (status: { imported: boolean; sealed?: boolean } = { imported: false }) => {
   const batches: ImportedSource[][] = [];
   const client = {
-    importStatus: jest.fn(async () => alreadyImported),
+    importStatus: jest.fn(async () => status),
     importStorage: jest.fn(async (items: ImportedSource[]) => {
       batches.push(items);
       return { imported: items.length, skipped: 0 };
@@ -36,7 +37,7 @@ describe('createStorageHandoff', () => {
     await dbHelper.cleanup();
   });
 
-  const seed = async (count: number) => {
+  const seed = async (count: number, bitfieldBytes?: number) => {
     const db = dbHelper.getDatabase();
     const factory = new TestDataFactory(db);
     const movie = await factory.createTestMovie();
@@ -46,6 +47,7 @@ describe('createStorageHandoff', () => {
       stored.push(
         await db.getRepository(Storage).save({
           ...factory.createTestStorage(source.id),
+          ...(bitfieldBytes ? { downloadedPieces: Buffer.alloc(bitfieldBytes) } : {}),
           totalPieces: 2,
           pieceLength: 4,
           videoCompletedAt: new Date('2026-10-02T00:00:00.000Z'),
@@ -110,7 +112,7 @@ describe('createStorageHandoff', () => {
     expect(empty.mock.importStorage).not.toHaveBeenCalled();
     expect(empty.mock.completeImport).toHaveBeenCalledTimes(1);
 
-    const done = fakeClient(true);
+    const done = fakeClient({ imported: true });
     await createStorageHandoff(db)(done.client);
     expect(done.mock.completeImport).not.toHaveBeenCalled();
   });
@@ -120,5 +122,52 @@ describe('createStorageHandoff', () => {
     const { client, batches } = fakeClient();
     await createStorageHandoff(db)(client);
     expect(batches.map(batch => batch.length)).toEqual([50, 1]);
+  });
+
+  it('retries adoption without reading or resending legacy rows once sealed', async () => {
+    const { db } = await seed(1);
+    const { client, mock } = fakeClient({ imported: false, sealed: true });
+    const getRepository = jest.spyOn(db, 'getRepository');
+    try {
+      await createStorageHandoff(db)(client);
+      expect(getRepository).not.toHaveBeenCalled();
+      expect(mock.importStorage).not.toHaveBeenCalled();
+      expect(mock.completeImport).toHaveBeenCalledTimes(1);
+    } finally {
+      getRepository.mockRestore();
+    }
+  });
+
+  it('splits a page when its serialized records would exceed the frame limit', async () => {
+    const { db, stored } = await seed(2, 6 * 1024 * 1024);
+    const { client, batches } = fakeClient();
+    await createStorageHandoff(db)(client);
+
+    expect(batches.map(batch => batch.map(item => item.source.id))).toEqual(
+      stored.map(storage => [storage.sourceId])
+    );
+    for (const items of batches) {
+      const frame = [
+        F.call,
+        Number.MAX_SAFE_INTEGER,
+        methodName(mediaLoad, 'importStorage'),
+        { items },
+      ];
+      expect(Buffer.byteLength(JSON.stringify(frame))).toBeLessThanOrEqual(MAX_FRAME_BYTES);
+    }
+  });
+
+  it('reports an oversized source and leaves its original record available', async () => {
+    const {
+      db,
+      stored: [storage],
+    } = await seed(1, 12 * 1024 * 1024);
+    const { client, mock } = fakeClient();
+    await expect(createStorageHandoff(db)(client)).rejects.toThrow(
+      `legacy source ${storage.sourceId} exceeds the 16 MiB import frame limit`
+    );
+    expect(mock.importStorage).not.toHaveBeenCalled();
+    expect(mock.completeImport).not.toHaveBeenCalled();
+    expect(await db.getRepository(Storage).count()).toBe(1);
   });
 });

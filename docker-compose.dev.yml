@@ -63,6 +63,7 @@ services:
     environment:
       MEDIA_LOAD_PORT: '3004'
       MEDIA_LOAD_DATA_DIR: /app/data
+      MEDIA_LOAD_LEGACY_DOWNLOAD_PATH: /usr/src/app/backend/downloads
     ports:
       - '127.0.0.1:3004:3004'
     volumes:

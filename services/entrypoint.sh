@@ -9,9 +9,18 @@ if [[ $(id -u) -eq 0 ]]; then
   chown -R bunqueue:bunqueue /app/data/media-load
   downloads=/usr/src/app/downloads
   if [[ -d "$downloads" ]]; then
-    if [[ -n $(find "$downloads" ! -user bunqueue -print -quit) ]] &&
+    if { ! other_owner=$(find "$downloads" ! -user bunqueue -print -quit) ||
+      [[ -n "$other_owner" ]]; } &&
       ! chown -R bunqueue:bunqueue "$downloads"; then
       echo "Could not change ownership of $downloads; checking access as bunqueue" >&2
+      su-exec bunqueue:bunqueue /bin/bash -o pipefail -c '
+        find "$1" -type f -print0 | while IFS= read -r -d "" file; do
+          if [[ ! -r "$file" ]]; then
+            printf "bunqueue cannot read download: %q\n" "$file" >&2
+            exit 1
+          fi
+        done
+      ' bash "$downloads"
     fi
     if ! su-exec bunqueue:bunqueue /bin/bash -c '[[ -r "$1" && -w "$1" && -x "$1" ]]' bash "$downloads"; then
       echo "bunqueue needs read, write, and search access to $downloads" >&2

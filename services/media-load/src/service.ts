@@ -12,6 +12,8 @@ export interface MediaLoadServiceOptions {
   dataDir?: string;
   /** Default advertised to the backend when no download path is configured. */
   defaultDownloadPath?: string;
+  /** An extra mount for importing legacy downloads recorded under a different path. */
+  legacyDownloadPath?: string;
   /** Scrape timing, for tests. */
   scrape?: ScrapeBatcherOptions;
 }
@@ -36,7 +38,8 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
 } {
   const config = new MediaLoadConfigService(options.defaultDownloadPath);
   const runtime = new MediaLoadRuntime(
-    MediaLoadRuntime.databasePathFor(options.dataDir ?? './data')
+    MediaLoadRuntime.databasePathFor(options.dataDir ?? './data'),
+    options.legacyDownloadPath
   );
   let scrapes: { trackers: string; batcher: ScrapeBatcher } | null = null;
 

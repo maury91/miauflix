@@ -18,19 +18,27 @@ export async function resolveDhtBootstrap(
   routers: readonly string[] = DHT_ROUTERS,
   timeoutMs = 3_000
 ): Promise<string[]> {
+  const addresses: string[][] = [];
   const lookup = Promise.all(
-    routers.map(async router => {
+    routers.map(async (router, index) => {
       const [host, port] = router.split(':');
       try {
-        return (await resolve4(host)).map(ip => `${ip}:${port}`);
+        addresses[index] = (await resolve4(host)).map(ip => `${ip}:${port}`);
       } catch {
-        return [];
+        // Other routers may still resolve.
       }
     })
-  ).then(addresses => addresses.flat());
-  const timeout = new Promise<string[]>(resolve =>
-    setTimeout(() => resolve([]), timeoutMs).unref?.()
   );
-  const resolved = await Promise.race([lookup, timeout]);
-  return resolved.length ? [...new Set(resolved)] : [...routers];
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const timeout = new Promise<void>(resolve => {
+    timer = setTimeout(resolve, timeoutMs);
+    timer.unref?.();
+  });
+  try {
+    await Promise.race([lookup, timeout]);
+    const resolved = [...new Set(addresses.flat())];
+    return resolved.length ? resolved : [...routers];
+  } finally {
+    clearTimeout(timer);
+  }
 }

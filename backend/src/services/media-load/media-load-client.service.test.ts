@@ -12,7 +12,7 @@ import type { ConfigurationService } from '@services/configuration/configuration
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 
-import { MediaLoadClientService } from './media-load-client.service';
+import { MediaLoadClientService, type StorageHandoff } from './media-load-client.service';
 
 const until = async (check: () => boolean) => {
   const started = Date.now();
@@ -157,7 +157,7 @@ describe('MediaLoadClientService', () => {
     await Promise.all(servers.splice(0).map(server => server.stop()));
   });
 
-  const setupTest = async () => {
+  const setupTest = async (handoff?: StorageHandoff) => {
     const fake = await startMediaLoad();
     servers.push(fake.server);
     const client = new MediaLoadClientService({
@@ -175,6 +175,7 @@ describe('MediaLoadClientService', () => {
       getServiceConfigSnapshot: jest.fn(() => ({})),
     } as unknown as ConfigurationService);
     clients.push(client);
+    if (handoff) client.setStorageHandoff(handoff);
     await client.initialize();
     await until(() => client.isReady());
     return { client, ...fake };
@@ -258,7 +259,7 @@ describe('MediaLoadClientService', () => {
     await until(() => calls.includes('applyConfig'));
 
     const handoff = jest.fn(async (remote: MediaLoadClientService) => {
-      if (await remote.importStatus()) return;
+      if ((await remote.importStatus()).imported) return;
       await remote.importStorage([]);
       await remote.completeImport();
     });
@@ -270,5 +271,67 @@ describe('MediaLoadClientService', () => {
       'importStatus',
       'completeImport',
     ]);
+  });
+
+  it('runs a handoff registered before the first configuration is accepted', async () => {
+    const handoff = jest.fn(async (client: MediaLoadClientService) => {
+      await client.completeImport();
+    });
+    const { client, calls, importState } = await setupTest(handoff);
+    await until(() => importState.imported);
+    expect(handoff).toHaveBeenCalledWith(client);
+    expect(calls.indexOf('completeImport')).toBeGreaterThan(calls.indexOf('applyConfig'));
+  });
+
+  it('runs again immediately if configuration is accepted during a failed handoff', async () => {
+    let rejectRun!: (error: Error) => void;
+    const pending = new Promise<void>((_, reject) => {
+      rejectRun = reject;
+    });
+    const handoff = jest.fn().mockReturnValueOnce(pending).mockResolvedValue(undefined);
+    const { client } = await setupTest(handoff);
+    await until(() => handoff.mock.calls.length === 1);
+
+    await client.reload();
+    expect(handoff).toHaveBeenCalledTimes(1);
+    rejectRun(new Error('Interrupted handoff'));
+
+    await until(() => handoff.mock.calls.length === 2);
+    expect(handoff).toHaveBeenLastCalledWith(client);
+  });
+
+  it.each([false, true])('cancels handoff retries on stop (pending=%s)', async pending => {
+    const { client } = await setupTest();
+    let rejectRun!: (error: Error) => void;
+    const handoff = jest
+      .fn()
+      .mockImplementationOnce(
+        () =>
+          new Promise<void>((_, reject) => {
+            rejectRun = reject;
+          })
+      )
+      .mockResolvedValue(undefined);
+    jest.useFakeTimers();
+    try {
+      client.setStorageHandoff(handoff);
+      await jest.advanceTimersByTimeAsync(0);
+      if (pending) client.stop();
+      rejectRun(new Error('Handoff failed'));
+      await jest.advanceTimersByTimeAsync(0);
+      if (!pending) {
+        await jest.advanceTimersByTimeAsync(30_000);
+        expect(handoff).toHaveBeenCalledTimes(2);
+        // A second failure schedules a timer that stop must cancel.
+        handoff.mockRejectedValueOnce(new Error('Handoff failed again'));
+        client.setStorageHandoff(handoff);
+        await jest.advanceTimersByTimeAsync(0);
+        client.stop();
+      }
+      await jest.advanceTimersByTimeAsync(30_000);
+      expect(handoff).toHaveBeenCalledTimes(pending ? 1 : 3);
+    } finally {
+      jest.useRealTimers();
+    }
   });
 });

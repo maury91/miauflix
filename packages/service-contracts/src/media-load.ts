@@ -196,8 +196,8 @@ export interface ImportedSource {
   claims: ImportedClaim[];
 }
 
-/** `import_closed`: the import already finished, so batches are refused. */
-export type StorageImportError = 'import_closed';
+/** A sealed import or a location outside the service's downloads directories. */
+export type StorageImportError = 'import_closed' | 'invalid_storage_location';
 
 export const mediaLoad = contract('media-load', '1.0', {
   /**
@@ -255,14 +255,15 @@ export const mediaLoad = contract('media-load', '1.0', {
 
   /**
    * The one-time handoff of the storage the backend recorded before media-load ran the engine.
-   * `importStatus` says whether it finished; `importStorage` adds sources (each in one
+   * `importStatus` distinguishes a finished import from one sealed for adoption.
+   * `importStorage` adds sources (each in one
    * transaction, skipping a source the service already stores, so a retried batch is safe);
    * `completeImport` closes it and makes the engine adopt the imported downloads.
    *
    * Until then the service reports `configuring` and refuses engine calls, so nothing creates
    * storage the import would then skip; these calls are ungated for that window.
    */
-  importStatus: call<void, { imported: boolean }>({ ungated: true }),
+  importStatus: call<void, { imported: boolean; sealed?: boolean }>({ ungated: true }),
   importStorage: call<
     { items: ImportedSource[] },
     { imported: number; skipped: number },

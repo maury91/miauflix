@@ -1,5 +1,6 @@
 import { logger } from '@logger';
-import type { ImportedSource } from '@miauflix/service-contracts';
+import { F, MAX_FRAME_BYTES, methodName } from '@miauflix/contract';
+import { type ImportedSource, mediaLoad } from '@miauflix/service-contracts';
 import { In, MoreThan } from 'typeorm';
 
 import type { Database } from '@database/database';
@@ -11,9 +12,19 @@ import {
   type MediaLoadClientService,
   sourceDescriptor,
   type StorageHandoff,
+  StorageHandoffBlockedError,
 } from './media-load-client.service';
 
 const BATCH_SIZE = 50;
+// Reserve the JSON envelope with the largest request ID the client can represent precisely.
+const FRAME_OVERHEAD = Buffer.byteLength(
+  JSON.stringify([
+    F.call,
+    Number.MAX_SAFE_INTEGER,
+    methodName(mediaLoad, 'importStorage'),
+    { items: [] },
+  ])
+);
 
 const iso = (value: Date | null | undefined): string | null => (value ? value.toISOString() : null);
 
@@ -69,13 +80,23 @@ const toImported = (
 export const createStorageHandoff =
   (db: Database): StorageHandoff =>
   async (client: MediaLoadClientService) => {
-    if (await client.importStatus()) return;
+    const status = await client.importStatus();
+    if (status.imported) return;
+    if (status.sealed) {
+      await client.completeImport();
+      return;
+    }
     const storages = db.getRepository(Storage);
     const files = db.getRepository(StorageFile);
     const claims = db.getRepository(StorageFileClaim);
     let lastId = 0;
     let imported = 0;
     let skipped = 0;
+    const send = async (items: ImportedSource[]) => {
+      const result = await client.importStorage(items);
+      imported += result.imported;
+      skipped += result.skipped;
+    };
     for (;;) {
       const batch = await storages.find({
         where: { id: MoreThan(lastId) },
@@ -94,17 +115,29 @@ export const createStorageHandoff =
         files.find({ where: { storageId: In(ids) } }),
         claims.find({ where: { storageId: In(ids) } }),
       ]);
-      const result = await client.importStorage(
-        owned.map(storage =>
-          toImported(
-            storage,
-            fileRows.filter(file => file.storageId === storage.id),
-            claimRows.filter(claim => claim.storageId === storage.id)
-          )
-        )
-      );
-      imported += result.imported;
-      skipped += result.skipped;
+      let items: ImportedSource[] = [];
+      let bytes = FRAME_OVERHEAD;
+      for (const storage of owned) {
+        const item = toImported(
+          storage,
+          fileRows.filter(file => file.storageId === storage.id),
+          claimRows.filter(claim => claim.storageId === storage.id)
+        );
+        const itemBytes = Buffer.byteLength(JSON.stringify(item));
+        if (FRAME_OVERHEAD + itemBytes > MAX_FRAME_BYTES) {
+          throw new StorageHandoffBlockedError(
+            `Storage handoff blocked: legacy source ${item.source.id} exceeds the 16 MiB import frame limit. Its files and backend records are preserved.`
+          );
+        }
+        if (bytes + 1 + itemBytes > MAX_FRAME_BYTES && items.length) {
+          await send(items);
+          items = [];
+          bytes = FRAME_OVERHEAD;
+        }
+        bytes += itemBytes + (items.length ? 1 : 0);
+        items.push(item);
+      }
+      if (items.length) await send(items);
     }
     const stored = await client.completeImport();
     logger.info(

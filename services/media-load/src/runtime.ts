@@ -51,9 +51,13 @@ export class MediaLoadRuntime {
   private engine: Engine | null = null;
   /** Whether the backend's storage import finished (read when the engine starts). */
   private imported = false;
+  private importCompletion: Promise<{ imported: number }> | null = null;
   private readonly startListeners = new Set<(engine: Engine) => void>();
 
-  constructor(private readonly databasePath: string) {}
+  constructor(
+    private readonly databasePath: string,
+    private readonly legacyDownloadPath?: string
+  ) {}
 
   static databasePathFor(dataDir: string): string {
     return dataDir === ':memory:' ? dataDir : join(dataDir, 'media-load.sqlite');
@@ -124,18 +128,30 @@ export class MediaLoadRuntime {
 
   private async start(dhtBootstrap?: string[]): Promise<void> {
     const encryption = new Encryption(this.securityKey!);
-    const database = new MediaLoadDatabase(openDatabase(this.databasePath), encryption);
+    const db = openDatabase(this.databasePath);
     const config = engineConfig(() => this.settings!);
     try {
+      const database = new MediaLoadDatabase(db, encryption);
+      const { imported } = new StorageImporter(database).status();
       const storage = new StorageService(database, config);
       const downloads = new DownloadService(storage, config, dhtBootstrap);
       this.engine = { database, storage, downloads };
-      this.imported = new StorageImporter(database).imported;
+      this.imported = imported;
     } catch (error) {
-      database.close();
+      db.close();
       throw error;
     }
-    for (const listener of this.startListeners) listener(this.engine);
+    this.notifyStart(this.engine);
+  }
+
+  private notifyStart(engine: Engine): void {
+    for (const listener of this.startListeners) {
+      try {
+        listener(engine);
+      } catch (error) {
+        logger.warn('MediaLoad', 'Engine start listener failed', error);
+      }
+    }
   }
 
   /** The running engine. @throws when it has not started (calls are gated on readiness). */
@@ -216,33 +232,45 @@ export class MediaLoadRuntime {
     };
   }
 
-  importStatus(): { imported: boolean } {
-    if (!this.engine) throw new Error('The media-load engine has not started');
-    return { imported: this.imported };
+  importStatus(): { imported: boolean; sealed: boolean } {
+    return new StorageImporter(this.running.database).status();
   }
 
   importStorage(items: ImportedSource[]): Promise<{ imported: number; skipped: number }> {
-    return new StorageImporter(this.running.database).importItems(items);
+    const roots = [this.settings!.DOWNLOAD_PATH];
+    if (this.legacyDownloadPath) roots.push(this.legacyDownloadPath);
+    return new StorageImporter(this.running.database).importItems(items, roots);
   }
 
-  /** Close the import and hand the imported downloads to the engine. */
-  async completeImport(): Promise<{ imported: number }> {
-    const { database, storage, downloads } = this.running;
-    const imported = new StorageImporter(database).complete();
+  /** Seal the import and share one adoption attempt across overlapping callers. */
+  completeImport(): Promise<{ imported: number }> {
+    this.importCompletion ??= this.adoptImport(this.running).finally(() => {
+      this.importCompletion = null;
+    });
+    return this.importCompletion;
+  }
+
+  private async adoptImport(engine: Engine): Promise<{ imported: number }> {
+    const { database, storage, downloads } = engine;
+    const importer = new StorageImporter(database);
     if (!this.imported) {
+      importer.seal();
       await storage.reload();
       await downloads.adoptStorage();
+      const imported = importer.complete();
       this.imported = true;
       logger.info('MediaLoad', `Storage import finished: ${imported} stored source(s)`);
-      for (const listener of this.startListeners) listener(this.engine!);
+      if (this.engine === engine) this.notifyStart(engine);
+      return { imported };
     }
-    return { imported };
+    return { imported: importer.complete() };
   }
 
   async stop(): Promise<void> {
     const engine = this.engine;
     this.engine = null;
     if (!engine) return;
+    await this.importCompletion?.catch(() => undefined);
     await engine.downloads.close().catch(error => logger.warn('MediaLoad', 'Close failed', error));
     engine.database.close();
   }

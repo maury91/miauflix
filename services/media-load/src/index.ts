@@ -21,6 +21,7 @@ const DATA_DIR = process.env.MEDIA_LOAD_DATA_DIR ?? process.env.DATA_DIR ?? './d
 const { service } = createMediaLoadService({
   dataDir: DATA_DIR,
   defaultDownloadPath: process.env.MEDIA_LOAD_DEFAULT_DOWNLOAD_PATH,
+  legacyDownloadPath: process.env.MEDIA_LOAD_LEGACY_DOWNLOAD_PATH,
 });
 
 const server = await serve(service, { hostname: HOST, port: PORT });

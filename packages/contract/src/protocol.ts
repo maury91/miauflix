@@ -5,6 +5,7 @@
 export const PROTOCOL_VERSION = 3;
 export const CONTROL_PATH = '/_c';
 export const BYTES_PATH = '/_b/';
+export const MAX_FRAME_BYTES = 16 * 1024 * 1024;
 
 export const F = {
   /** S→C `[0, 0, ServiceHello]` */

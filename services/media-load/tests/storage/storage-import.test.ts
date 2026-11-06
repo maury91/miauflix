@@ -21,7 +21,7 @@ const item = (id: number): ImportedSource => {
       localOnly: false,
       encryptedLayout: null,
       downloaded: 10_000,
-      location: `/downloads/${id}`,
+      location: `/downloads/${id.toString(16).padStart(16, '0')}`,
       lastAccessAt: null,
       lastWriteAt: null,
       createdAt: '2026-09-01T00:00:00.000Z',
@@ -57,7 +57,10 @@ describe('StorageImporter', () => {
     const database = await testDatabase();
     const importer = new StorageImporter(database);
 
-    await expect(importer.importItems([item(5)])).resolves.toEqual({ imported: 1, skipped: 0 });
+    await expect(importer.importItems([item(5)], ['/downloads'])).resolves.toEqual({
+      imported: 1,
+      skipped: 0,
+    });
 
     const storage = (await database.getStorageRepository().findBySourceIdWithRelation(5))!;
     expect(storage).toMatchObject({
@@ -65,7 +68,7 @@ describe('StorageImporter', () => {
       downloadedPieces: new Uint8Array([0b11000000]),
       totalPieces: 2,
       activeStreams: 0,
-      location: '/downloads/5',
+      location: '/downloads/0000000000000005',
       videoCompletedAt: new Date('2026-10-02T00:00:00.000Z'),
       createdAt: new Date('2026-09-01T00:00:00.000Z'),
       contentSource: { id: 5, hash: '5'.padStart(40, '0') },
@@ -85,14 +88,16 @@ describe('StorageImporter', () => {
   it('records completion once and refuses later batches', async () => {
     const database = await testDatabase();
     const importer = new StorageImporter(database);
-    expect(importer.imported).toBe(false);
-    await importer.importItems([item(1)]);
-    expect(importer.complete()).toBe(1);
-    expect(importer.complete()).toBe(1);
-    expect(new StorageImporter(database).imported).toBe(true);
-    await expect(importer.importItems([item(2)])).rejects.toMatchObject({
+    expect(importer.status()).toEqual({ imported: false, sealed: false });
+    await importer.importItems([item(1)], ['/downloads']);
+    importer.seal();
+    expect(new StorageImporter(database).status()).toEqual({ imported: false, sealed: true });
+    await expect(importer.importItems([item(2)], ['/downloads'])).rejects.toMatchObject({
       status: 'import_closed',
     });
+    expect(importer.complete()).toBe(1);
+    expect(importer.complete()).toBe(1);
+    expect(new StorageImporter(database).status()).toEqual({ imported: true, sealed: true });
     database.close();
   });
 });

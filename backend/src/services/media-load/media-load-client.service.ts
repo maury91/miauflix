@@ -62,6 +62,9 @@ export const sourceDescriptor = (source: ContentSource): SourceDescriptor => ({
 /** Hands the backend's recorded storage to the service; see `setStorageHandoff`. */
 export type StorageHandoff = (client: MediaLoadClientService) => Promise<void>;
 
+/** The same legacy data cannot be sent again until the operator addresses the reported issue. */
+export class StorageHandoffBlockedError extends Error {}
+
 const HANDOFF_RETRY_MS = 30_000;
 
 const targetRef = (target: PlaybackTarget): TargetRef => ({
@@ -112,6 +115,8 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
   private handoff: StorageHandoff | null = null;
   private handoffRun: Promise<void> | null = null;
   private handoffRetry: ReturnType<typeof setTimeout> | null = null;
+  private handoffQueued = false;
+  private stopped = false;
   /** A configuration was accepted (each reconnection delivers it, and runs the handoff, again). */
   private configured = false;
 
@@ -131,24 +136,41 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
   }
 
   private runHandoff(): void {
-    if (!this.handoff || this.handoffRun) return;
+    if (this.stopped || !this.handoff) return;
+    if (this.handoffRun) {
+      this.handoffQueued = true;
+      return;
+    }
     if (this.handoffRetry) clearTimeout(this.handoffRetry);
     this.handoffRetry = null;
     const handoff = this.handoff;
-    this.handoffRun = handoff(this)
+    this.handoffRun = Promise.resolve()
+      .then(() => {
+        if (!this.stopped) return handoff(this);
+      })
       .catch(error => {
+        if (this.stopped) return;
+        if (error instanceof StorageHandoffBlockedError) {
+          logger.error('MediaLoad', error.message);
+          return;
+        }
+        if (this.handoffQueued) return;
         logger.warn('MediaLoad', 'Storage handoff failed; retrying in 30 seconds', error);
         this.handoffRetry = setTimeout(() => this.runHandoff(), HANDOFF_RETRY_MS);
         this.handoffRetry.unref?.();
       })
       .finally(() => {
         this.handoffRun = null;
+        if (this.handoffQueued) {
+          this.handoffQueued = false;
+          this.runHandoff();
+        }
       });
   }
 
-  /** Whether the service already holds the backend's storage. */
-  async importStatus(): Promise<boolean> {
-    return (await this.client.importStatus()).imported;
+  /** Whether to send records, retry adoption, or leave the completed import alone. */
+  importStatus(): Promise<{ imported: boolean; sealed?: boolean }> {
+    return this.client.importStatus();
   }
 
   importStorage(items: ImportedSource[]): Promise<{ imported: number; skipped: number }> {
@@ -160,6 +182,8 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
   }
 
   override stop(): void {
+    this.stopped = true;
+    this.handoffQueued = false;
     if (this.handoffRetry) clearTimeout(this.handoffRetry);
     this.handoffRetry = null;
     super.stop();

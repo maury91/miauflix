@@ -1,5 +1,5 @@
 import { EventEmitter } from 'node:events';
-import { mkdtempSync, rmSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, symlinkSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
@@ -37,6 +37,7 @@ mock.module('bittorrent-tracker', () => ({ Client: FakeClient }));
 
 const { createMediaLoadService } = await import('../src/service');
 const { MediaLoadConfigService } = await import('../src/config/config.service');
+const { StorageImporter } = await import('../src/storage/storage-import');
 
 const downloads = mkdtempSync(join(tmpdir(), 'media-load-service-'));
 afterAll(() => rmSync(downloads, { recursive: true, force: true }));
@@ -62,10 +63,21 @@ const ENGINE_VALUES = {
 };
 const KEY = TEST_SETTINGS.SOURCE_SECURITY_KEY;
 
-const setup = async ({ attach = true, defaultDownloadPath = downloads } = {}) => {
+const setup = async ({
+  attach = true,
+  dataDir = ':memory:',
+  defaultDownloadPath = downloads,
+  legacyDownloadPath,
+}: {
+  attach?: boolean;
+  dataDir?: string;
+  defaultDownloadPath?: string;
+  legacyDownloadPath?: string;
+} = {}) => {
   const { service, runtime, stop } = createMediaLoadService({
-    dataDir: ':memory:',
+    dataDir,
     defaultDownloadPath,
+    legacyDownloadPath,
     scrape: { windowMs: 1 },
   });
   stops.push(stop);
@@ -115,7 +127,7 @@ const imported = (
         files: [{ path: 'movie.mkv', offset: 0, length: 12 }],
       },
       downloaded: 10_000,
-      location: join(downloads, String(id)),
+      location: join(downloads, id.toString(16).padStart(16, '0')),
       lastAccessAt: '2026-10-01T00:00:00.000Z',
       lastWriteAt: '2026-10-01T00:00:00.000Z',
       createdAt: '2026-09-01T00:00:00.000Z',
@@ -263,11 +275,94 @@ describe('media-load service', () => {
     expect((await admin.status()).state).toBe('configuring');
     const gated = await client.storageStates({ sourceIds: [1] }).catch((e: unknown) => e);
     expect(isContractError(gated, 'not_configured')).toBe(true);
-    await expect(client.importStatus()).resolves.toEqual({ imported: false });
+    await expect(client.importStatus()).resolves.toEqual({ imported: false, sealed: false });
 
     await expect(client.completeImport()).resolves.toEqual({ imported: 0 });
     expect((await admin.status()).state).toBe('ready');
-    await expect(client.importStatus()).resolves.toEqual({ imported: true });
+    await expect(client.importStatus()).resolves.toEqual({ imported: true, sealed: true });
+  });
+
+  it('can retry startup after reading the import marker fails', async () => {
+    const { apply, runtime } = await setup();
+    const status = jest.spyOn(StorageImporter.prototype, 'status').mockImplementationOnce(() => {
+      throw new Error('Could not read import marker');
+    });
+    try {
+      expect((await apply({})).success).toBe(false);
+      expect(runtime.started).toBe(false);
+      expect((await apply({})).success).toBe(true);
+    } finally {
+      status.mockRestore();
+    }
+  });
+
+  it('starts and notifies other listeners when one start listener throws', async () => {
+    const { apply, runtime } = await setup();
+    runtime.onStart(() => {
+      throw new Error('Listener failed');
+    });
+    const listener = jest.fn();
+    runtime.onStart(listener);
+
+    expect((await apply({})).success).toBe(true);
+    expect(runtime.serving).toBe(true);
+    expect(listener).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps failed adoption sealed across restart and shares the next attempt', async () => {
+    const dataDir = mkdtempSync(join(downloads, 'sealed-'));
+    const first = await setup({ dataDir });
+    await first.apply({}, { importStorage: false });
+    await first.client.importStorage({ items: [imported(1)] });
+    const failure = new Error('Adoption failed');
+    jest.spyOn(first.runtime.running.downloads, 'adoptStorage').mockRejectedValueOnce(failure);
+
+    await expect(first.runtime.completeImport()).rejects.toBe(failure);
+    await first.service.stop();
+
+    const { client, apply, runtime } = await setup({ dataDir });
+    await apply({}, { importStorage: false });
+    await expect(client.importStatus()).resolves.toEqual({ imported: false, sealed: true });
+    const closed = await client.importStorage({ items: [imported(2)] }).catch((e: unknown) => e);
+    expect(isContractError(closed, 'import_closed')).toBe(true);
+    expect(runtime.serving).toBe(false);
+
+    const adopt = jest.spyOn(runtime.running.downloads, 'adoptStorage');
+    await expect(Promise.all([client.completeImport(), client.completeImport()])).resolves.toEqual([
+      { imported: 1 },
+      { imported: 1 },
+    ]);
+    expect(adopt).toHaveBeenCalledTimes(1);
+    expect(runtime.serving).toBe(true);
+  });
+
+  it('accepts a mounted legacy root but refuses paths outside it and symlink targets', async () => {
+    const legacyDownloadPath = mkdtempSync(join(downloads, 'legacy-'));
+    const { client, apply, runtime } = await setup({ legacyDownloadPath });
+    await apply({}, { importStorage: false });
+    const name = '0000000000000001';
+    const link = join(legacyDownloadPath, name);
+    symlinkSync(downloads, link);
+
+    for (const location of [
+      link,
+      downloads,
+      `${downloads}-other/${name}`,
+      join(downloads, 'nested', name),
+    ]) {
+      const rejected = await client
+        .importStorage({ items: [imported(1, { location })] })
+        .catch((e: unknown) => e);
+      expect(isContractError(rejected, 'invalid_storage_location')).toBe(true);
+      expect(await runtime.running.database.getSourceRepository().findById(1)).toBeNull();
+    }
+    const location = join(legacyDownloadPath, '0000000000000002');
+    mkdirSync(location);
+    await expect(client.importStorage({ items: [imported(2, { location })] })).resolves.toEqual({
+      imported: 1,
+      skipped: 0,
+    });
+    expect(await runtime.running.storage.getStorageBySource(2)).toMatchObject({ location });
   });
 
   it('imports stored sources once, keeping their files and non-playback claims', async () => {
