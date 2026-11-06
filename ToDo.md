@@ -8,6 +8,11 @@ See [TV source support plan](docs/architecture/tv-source-support-plan.md).
 - [ ] Evaluate bounded credits-tail analysis and mid/post-credit story-scene detection. Current playback uses named end-credit chapters when present and otherwise the final-90-second countdown; validate any detector against offline fixtures before enabling automatic transitions.
 - [ ] Add end-to-end coverage for shared-pack playback and subtitles, late episode reattachment, competing watchlist capacity, notification focus behavior, and next-episode countdown cancellation.
 
+## Details page
+
+- [ ] Add trailers
+- [ ] Change to icon buttons with tooltips
+
 ## Sources
 
 - [ ] Extend the Watch Now button to have a quality selector for users that want to choose the quality

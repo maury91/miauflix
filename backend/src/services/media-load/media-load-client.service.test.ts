@@ -35,6 +35,7 @@ const unused = () => {
 const startMediaLoad = async () => {
   const calls: string[] = [];
   const sources = new Map<number, SourceDescriptor>();
+  const importState = { imported: false, batches: [] as number[][] };
   const playbackListeners = new Set<(payload: { activeSourceIds: number[] }) => void>();
   const configuration: ManagedConfiguration = {
     getSchema: () => ({ groups: [] }),
@@ -99,6 +100,19 @@ const startMediaLoad = async () => {
       })),
     storageInventory: unused,
     removeStorage: unused,
+    importStatus: () => {
+      calls.push('importStatus');
+      return { imported: importState.imported };
+    },
+    importStorage: ({ items }) => {
+      importState.batches.push(items.map(item => item.source.id));
+      return { imported: items.length, skipped: 0 };
+    },
+    completeImport: () => {
+      calls.push('completeImport');
+      importState.imported = true;
+      return { imported: importState.batches.flat().length };
+    },
     read: ({ target }, ctx) => {
       known(target.sourceId, ctx.fail);
       if (target.filePath === 'missing.mkv')
@@ -110,6 +124,7 @@ const startMediaLoad = async () => {
   return {
     server,
     calls,
+    importState,
     forget: () => sources.clear(),
     emitPlayback: (activeSourceIds: number[]) =>
       playbackListeners.forEach(emit => emit({ activeSourceIds })),
@@ -236,5 +251,24 @@ describe('MediaLoadClientService', () => {
     });
     await expect(client.getStorageStates([])).resolves.toEqual([]);
     expect(client.getWarmupTargetBytes()).toBe(64);
+  });
+
+  it('runs the storage handoff after the configuration, also when set later', async () => {
+    const { client, calls, importState } = await setupTest();
+    await until(() => calls.includes('applyConfig'));
+
+    const handoff = jest.fn(async (remote: MediaLoadClientService) => {
+      if (await remote.importStatus()) return;
+      await remote.importStorage([]);
+      await remote.completeImport();
+    });
+    client.setStorageHandoff(handoff);
+
+    await until(() => importState.imported);
+    expect(handoff).toHaveBeenCalledWith(client);
+    expect(calls.filter(call => /^(importStatus|completeImport)$/.test(call))).toEqual([
+      'importStatus',
+      'completeImport',
+    ]);
   });
 });

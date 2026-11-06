@@ -4,9 +4,11 @@ import {
   type ClaimKind,
   type ClaimRequest,
   type EncryptedStorageLayout,
+  type ImportedSource,
   mediaLoad,
   type MediaLoadError,
   type PlaybackHealth,
+  type SourceDescriptor,
   type StorageInventory,
   type StorageRemovalResult,
   type StorageState,
@@ -47,6 +49,20 @@ const toEngineError = (error: unknown): unknown =>
 
 const isUnknownSource = (error: unknown) =>
   error instanceof ContractError && error.code === 'unknown_source';
+
+/** What the service needs to fetch a source. */
+export const sourceDescriptor = (source: ContentSource): SourceDescriptor => ({
+  id: source.id,
+  hash: source.hash,
+  magnetLink: source.magnetLink,
+  size: Number(source.size) || 0,
+  ...(source.file?.length ? { file: Buffer.from(source.file).toString('base64') } : {}),
+});
+
+/** Hands the backend's recorded storage to the service; see `setStorageHandoff`. */
+export type StorageHandoff = (client: MediaLoadClientService) => Promise<void>;
+
+const HANDOFF_RETRY_MS = 30_000;
 
 const targetRef = (target: PlaybackTarget): TargetRef => ({
   sourceId: target.source.id,
@@ -93,6 +109,62 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
     });
   }
 
+  private handoff: StorageHandoff | null = null;
+  private handoffRun: Promise<void> | null = null;
+  private handoffRetry: ReturnType<typeof setTimeout> | null = null;
+  /** A configuration was accepted (each reconnection delivers it, and runs the handoff, again). */
+  private configured = false;
+
+  /**
+   * The service reports ready only once the storage the backend recorded is imported. The
+   * handoff runs after each accepted configuration (and at once if one already was), and again
+   * every 30 seconds while it fails.
+   */
+  setStorageHandoff(handoff: StorageHandoff): void {
+    this.handoff = handoff;
+    if (this.configured) this.runHandoff();
+  }
+
+  protected override async afterConfigure(): Promise<void> {
+    this.configured = true;
+    this.runHandoff();
+  }
+
+  private runHandoff(): void {
+    if (!this.handoff || this.handoffRun) return;
+    if (this.handoffRetry) clearTimeout(this.handoffRetry);
+    this.handoffRetry = null;
+    const handoff = this.handoff;
+    this.handoffRun = handoff(this)
+      .catch(error => {
+        logger.warn('MediaLoad', 'Storage handoff failed; retrying in 30 seconds', error);
+        this.handoffRetry = setTimeout(() => this.runHandoff(), HANDOFF_RETRY_MS);
+        this.handoffRetry.unref?.();
+      })
+      .finally(() => {
+        this.handoffRun = null;
+      });
+  }
+
+  /** Whether the service already holds the backend's storage. */
+  async importStatus(): Promise<boolean> {
+    return (await this.client.importStatus()).imported;
+  }
+
+  importStorage(items: ImportedSource[]): Promise<{ imported: number; skipped: number }> {
+    return this.client.importStorage({ items });
+  }
+
+  async completeImport(): Promise<number> {
+    return (await this.client.completeImport()).imported;
+  }
+
+  override stop(): void {
+    if (this.handoffRetry) clearTimeout(this.handoffRetry);
+    this.handoffRetry = null;
+    super.stop();
+  }
+
   private setPlayback(activeSourceIds: number[]): void {
     this.activePlayback = new Set(activeSourceIds);
   }
@@ -109,15 +181,7 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
     const hasFile = Boolean(source.file?.length);
     const known = this.described.get(source.id);
     if (!force && known !== undefined && (known || !hasFile)) return;
-    await this.client.putSource({
-      source: {
-        id: source.id,
-        hash: source.hash,
-        magnetLink: source.magnetLink,
-        size: Number(source.size) || 0,
-        ...(hasFile ? { file: Buffer.from(source.file!).toString('base64') } : {}),
-      },
-    });
+    await this.client.putSource({ source: sourceDescriptor(source) });
     this.described.set(source.id, hasFile || (!force && Boolean(known)));
   }
 

@@ -1,0 +1,36 @@
+import { resolve4 } from 'node:dns/promises';
+
+/** k-rpc's routers, plus libtorrent's. */
+export const DHT_ROUTERS = [
+  'router.bittorrent.com:6881',
+  'router.utorrent.com:6881',
+  'dht.transmissionbt.com:6881',
+  'dht.libtorrent.org:25401',
+];
+
+/**
+ * The DHT bootstrap nodes as every IPv4 address of each router. Given hostnames, `node:dgram`
+ * sends to the first address only, and under Bun a `udp4` socket may resolve them to IPv6 and
+ * fail (`EINVAL`), so the DHT never bootstraps. Falls back to the hostnames when DNS gives
+ * nothing in time.
+ */
+export async function resolveDhtBootstrap(
+  routers: readonly string[] = DHT_ROUTERS,
+  timeoutMs = 3_000
+): Promise<string[]> {
+  const lookup = Promise.all(
+    routers.map(async router => {
+      const [host, port] = router.split(':');
+      try {
+        return (await resolve4(host)).map(ip => `${ip}:${port}`);
+      } catch {
+        return [];
+      }
+    })
+  ).then(addresses => addresses.flat());
+  const timeout = new Promise<string[]>(resolve =>
+    setTimeout(() => resolve([]), timeoutMs).unref?.()
+  );
+  const resolved = await Promise.race([lookup, timeout]);
+  return resolved.length ? [...new Set(resolved)] : [...routers];
+}

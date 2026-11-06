@@ -58,7 +58,11 @@ export const resetMocks = () => {
 };
 
 export default class WebTorrentMock {
-  constructor() {
+  /** The options the last client was created with. */
+  static lastOptions: unknown;
+
+  constructor(options?: unknown) {
+    WebTorrentMock.lastOptions = options;
     return mockedTorrentInstance;
   }
 }

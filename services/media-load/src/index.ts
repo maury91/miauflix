@@ -1,6 +1,12 @@
+import { setDefaultResultOrder } from 'node:dns';
+
 import { serve } from '@miauflix/contract';
 
 import { createMediaLoadService } from './service';
+
+// Trackers and DHT nodes are reached over IPv4 sockets; under Bun a hostname may otherwise
+// resolve to IPv6 and the send fails with EINVAL.
+setDefaultResultOrder('ipv4first');
 
 const DEFAULT_PORT = 3004;
 /** An empty or invalid MEDIA_LOAD_PORT would bind a random port (or fail): use the default. */

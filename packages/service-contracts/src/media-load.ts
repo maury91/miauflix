@@ -150,6 +150,55 @@ type PieceRangeInput = SourceInput & { filePath: string; firstPiece: number; las
  * storage and verified byte ranges. The backend keeps playback sessions, ffmpeg and subtitles,
  * and names sources by id after sending their descriptor once per connection (`putSource`).
  */
+/** A storage row recorded by the backend before media-load ran the engine. Dates are ISO strings. */
+export interface ImportedStorage {
+  downloadedPieces: string;
+  size: number;
+  logicalBytes: number;
+  verifiedBytes: number;
+  allocatedBytes: number;
+  reservedBytes: number;
+  totalPieces: number;
+  pieceLength: number;
+  lastInterestAt: string | null;
+  videoCompletedAt: string | null;
+  localOnly: boolean;
+  encryptedLayout: EncryptedStorageLayout | null;
+  downloaded: number;
+  location: string;
+  lastAccessAt: string | null;
+  lastWriteAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ImportedStorageFile {
+  path: string;
+  offset: number;
+  length: number;
+  completedAt: string | null;
+}
+
+export interface ImportedClaim {
+  path: string;
+  kind: ClaimKind;
+  ownerKey: string;
+  rangeStart: number;
+  rangeEnd: number | null;
+  expiresAt: string | null;
+}
+
+/** One stored source, with what the backend knew about it, imported in one transaction. */
+export interface ImportedSource {
+  source: SourceDescriptor;
+  storage: ImportedStorage;
+  files: ImportedStorageFile[];
+  claims: ImportedClaim[];
+}
+
+/** `import_closed`: the import already finished, so batches are refused. */
+export type StorageImportError = 'import_closed';
+
 export const mediaLoad = contract('media-load', '1.0', {
   /**
    * The key that encrypts media and the service's records (the backend's `SOURCE_SECURITY_KEY`).
@@ -203,6 +252,23 @@ export const mediaLoad = contract('media-load', '1.0', {
   storageStates: call<{ sourceIds: number[] }, StorageState[]>(),
   storageInventory: call<void, StorageInventory>(),
   removeStorage: call<SourceInput, StorageRemovalResult>(),
+
+  /**
+   * The one-time handoff of the storage the backend recorded before media-load ran the engine.
+   * `importStatus` says whether it finished; `importStorage` adds sources (each in one
+   * transaction, skipping a source the service already stores, so a retried batch is safe);
+   * `completeImport` closes it and makes the engine adopt the imported downloads.
+   *
+   * Until then the service reports `configuring` and refuses engine calls, so nothing creates
+   * storage the import would then skip; these calls are ungated for that window.
+   */
+  importStatus: call<void, { imported: boolean }>({ ungated: true }),
+  importStorage: call<
+    { items: ImportedSource[] },
+    { imported: number; skipped: number },
+    StorageImportError
+  >({ ungated: true }),
+  completeImport: call<void, { imported: number }>({ ungated: true }),
 
   /**
    * Verified bytes of a target, honouring `Range`. Playback reads claim the file and count as an

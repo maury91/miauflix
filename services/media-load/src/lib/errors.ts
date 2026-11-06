@@ -1,4 +1,4 @@
-import type { MediaLoadError } from '@miauflix/service-contracts';
+import type { MediaLoadError, StorageImportError } from '@miauflix/service-contracts';
 
 /**
  * An engine failure with a machine-readable code, as the backend's `ErrorWithStatus`. The
@@ -7,7 +7,7 @@ import type { MediaLoadError } from '@miauflix/service-contracts';
 export class ErrorWithStatus extends Error {
   constructor(
     message: string,
-    public status: MediaLoadError
+    public status: MediaLoadError | StorageImportError
   ) {
     super(message);
     this.name = 'ErrorWithStatus';

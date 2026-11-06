@@ -2,6 +2,7 @@ import { join } from 'node:path';
 
 import type {
   EncryptedStorageLayout,
+  ImportedSource,
   SourceDescriptor,
   StorageInventory,
   StorageState,
@@ -9,6 +10,7 @@ import type {
 } from '@miauflix/service-contracts';
 
 import { MediaLoadDatabase, openDatabase } from './db/database';
+import { resolveDhtBootstrap } from './engine/dht-bootstrap';
 import { DownloadService } from './engine/download.service';
 import {
   engineConfig,
@@ -20,6 +22,7 @@ import { Encryption } from './lib/encryption';
 import { ErrorWithStatus } from './lib/errors';
 import { logger } from './lib/logger';
 import { StorageService } from './storage/storage.service';
+import { StorageImporter } from './storage/storage-import';
 import type { ContentSource, PlaybackTarget } from './storage/types';
 
 /** Settings read once, when the WebTorrent client is created; changing them needs a restart. */
@@ -46,6 +49,8 @@ export class MediaLoadRuntime {
   private securityKey: string | null = null;
   private settings: EngineSettings | null = null;
   private engine: Engine | null = null;
+  /** Whether the backend's storage import finished (read when the engine starts). */
+  private imported = false;
   private readonly startListeners = new Set<(engine: Engine) => void>();
 
   constructor(private readonly databasePath: string) {}
@@ -58,11 +63,16 @@ export class MediaLoadRuntime {
     return this.engine !== null;
   }
 
+  /** The engine runs and holds the backend's storage: engine calls may be served. */
+  get serving(): boolean {
+    return this.engine !== null && this.imported;
+  }
+
   get keyMissing(): boolean {
     return this.securityKey === null;
   }
 
-  /** Hear the engine start (once per process); returns the unsubscribe function. */
+  /** Hear the engine start and the storage import finish; returns the unsubscribe function. */
   onStart(listener: (engine: Engine) => void): () => void {
     this.startListeners.add(listener);
     return () => this.startListeners.delete(listener);
@@ -90,7 +100,7 @@ export class MediaLoadRuntime {
     this.settings = next;
     if (!this.engine) {
       try {
-        this.start();
+        await this.start(next.DISABLE_DISCOVERY ? undefined : await resolveDhtBootstrap());
       } catch (error) {
         this.settings = previous;
         throw error;
@@ -109,14 +119,15 @@ export class MediaLoadRuntime {
     return { restartKeys };
   }
 
-  private start(): void {
+  private async start(dhtBootstrap?: string[]): Promise<void> {
     const encryption = new Encryption(this.securityKey!);
     const database = new MediaLoadDatabase(openDatabase(this.databasePath), encryption);
     const config = engineConfig(() => this.settings!);
     try {
       const storage = new StorageService(database, config);
-      const downloads = new DownloadService(storage, config);
+      const downloads = new DownloadService(storage, config, dhtBootstrap);
       this.engine = { database, storage, downloads };
+      this.imported = new StorageImporter(database).imported;
     } catch (error) {
       database.close();
       throw error;
@@ -200,6 +211,29 @@ export class MediaLoadRuntime {
         };
       }),
     };
+  }
+
+  importStatus(): { imported: boolean } {
+    if (!this.engine) throw new Error('The media-load engine has not started');
+    return { imported: this.imported };
+  }
+
+  importStorage(items: ImportedSource[]): Promise<{ imported: number; skipped: number }> {
+    return new StorageImporter(this.running.database).importItems(items);
+  }
+
+  /** Close the import and hand the imported downloads to the engine. */
+  async completeImport(): Promise<{ imported: number }> {
+    const { database, storage, downloads } = this.running;
+    const imported = new StorageImporter(database).complete();
+    if (!this.imported) {
+      await storage.reload();
+      await downloads.adoptStorage();
+      this.imported = true;
+      logger.info('MediaLoad', `Storage import finished: ${imported} stored source(s)`);
+      for (const listener of this.startListeners) listener(this.engine!);
+    }
+    return { imported };
   }
 
   async stop(): Promise<void> {

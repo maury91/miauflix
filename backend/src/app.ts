@@ -25,6 +25,7 @@ import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
 import { MediaLoadClientService } from '@services/media-load/media-load-client.service';
+import { createStorageHandoff } from '@services/media-load/storage-handoff';
 import { NotificationService } from '@services/notifications/notification.service';
 import { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
@@ -92,6 +93,8 @@ try {
   await db.initialize();
   // Data migrations finish before any service reads the data; a failure stops startup.
   await new MigrationService(db).run();
+  // media-load reports ready once it holds the storage recorded here before it ran the engine.
+  mediaLoadClient.setStorageHandoff(createStorageHandoff(db));
 
   // Create ( and initialize ) all the services
   const cacheService = new CacheService(configurationService);

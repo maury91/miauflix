@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 
 import { createClient, isContractError, localTransport, management } from '@miauflix/contract';
-import { mediaLoad } from '@miauflix/service-contracts';
+import { type ImportedSource, mediaLoad } from '@miauflix/service-contracts';
 import { afterAll, afterEach, beforeEach, describe, expect, it, jest, mock } from 'bun:test';
 
 import { mockedTorrentInstance, mockEngineModules, TEST_SETTINGS } from './helpers/engine';
@@ -74,8 +74,70 @@ const setup = async ({ attach = true } = {}) => {
     service,
     client,
     admin: createClient(management, transport),
-    apply: (values: Record<string, string>) =>
-      createClient(management, transport).applyConfig({ values: { ...ENGINE_VALUES, ...values } }),
+    /** Push settings as the backend does, then (unless told not to) finish its storage import. */
+    apply: async (values: Record<string, string>, { importStorage = true } = {}) => {
+      const result = await createClient(management, transport).applyConfig({
+        values: { ...ENGINE_VALUES, ...values },
+      });
+      if (result.success && importStorage) await client.completeImport();
+      return result;
+    },
+  };
+};
+
+/** A stored source as the backend recorded it. */
+const imported = (
+  id: number,
+  overrides: Partial<ImportedSource['storage']> = {}
+): ImportedSource => {
+  const hash = id.toString(16).padStart(40, '0');
+  return {
+    source: { id, hash, magnetLink: `magnet:?xt=urn:btih:${hash}`, size: 12 },
+    storage: {
+      downloadedPieces: Buffer.from([0b11100000]).toString('base64'),
+      size: 12,
+      logicalBytes: 12,
+      verifiedBytes: 12,
+      allocatedBytes: 4096,
+      reservedBytes: 0,
+      totalPieces: 3,
+      pieceLength: 4,
+      lastInterestAt: null,
+      videoCompletedAt: null,
+      localOnly: true,
+      encryptedLayout: {
+        storeName: `store-${id}`,
+        filenameSalt: `download-${hash}`,
+        pieceLength: 4,
+        files: [{ path: 'movie.mkv', offset: 0, length: 12 }],
+      },
+      downloaded: 10_000,
+      location: join(downloads, String(id)),
+      lastAccessAt: '2026-10-01T00:00:00.000Z',
+      lastWriteAt: '2026-10-01T00:00:00.000Z',
+      createdAt: '2026-09-01T00:00:00.000Z',
+      updatedAt: '2026-10-01T00:00:00.000Z',
+      ...overrides,
+    },
+    files: [{ path: 'movie.mkv', offset: 0, length: 12, completedAt: '2026-10-01T00:00:00.000Z' }],
+    claims: [
+      {
+        path: 'movie.mkv',
+        kind: 'watched',
+        ownerKey: 'user:1',
+        rangeStart: 0,
+        rangeEnd: null,
+        expiresAt: null,
+      },
+      {
+        path: 'movie.mkv',
+        kind: 'playback',
+        ownerKey: 'stream',
+        rangeStart: 0,
+        rangeEnd: null,
+        expiresAt: null,
+      },
+    ],
   };
 };
 
@@ -156,5 +218,57 @@ describe('media-load service', () => {
     });
     await expect(client.storageStates({ sourceIds: [7] })).resolves.toEqual([]);
     await expect(client.playbackActivity()).resolves.toEqual({ activeSourceIds: [] });
+  });
+
+  it('serves engine calls only once the backend finished its storage import', async () => {
+    const { client, admin, apply } = await setup();
+    expect((await apply({}, { importStorage: false })).success).toBe(true);
+    expect((await admin.status()).state).toBe('configuring');
+    const gated = await client.storageStates({ sourceIds: [1] }).catch((e: unknown) => e);
+    expect(isContractError(gated, 'not_configured')).toBe(true);
+    await expect(client.importStatus()).resolves.toEqual({ imported: false });
+
+    await expect(client.completeImport()).resolves.toEqual({ imported: 0 });
+    expect((await admin.status()).state).toBe('ready');
+    await expect(client.importStatus()).resolves.toEqual({ imported: true });
+  });
+
+  it('imports stored sources once, keeping their files and non-playback claims', async () => {
+    const { client, apply } = await setup();
+    await apply({}, { importStorage: false });
+
+    await expect(client.importStorage({ items: [imported(1), imported(2)] })).resolves.toEqual({
+      imported: 2,
+      skipped: 0,
+    });
+    // A batch retried after a crash adds nothing twice.
+    await expect(client.importStorage({ items: [imported(2), imported(3)] })).resolves.toEqual({
+      imported: 1,
+      skipped: 1,
+    });
+    await expect(client.completeImport()).resolves.toEqual({ imported: 3 });
+
+    expect(await client.storageStates({ sourceIds: [1, 2, 3, 4] })).toEqual(
+      [1, 2, 3].map(sourceId => ({
+        sourceId,
+        verifiedBytes: 12,
+        allocatedBytes: 4096,
+        downloaded: 10_000,
+        videoComplete: false,
+        localOnly: true,
+      }))
+    );
+    const inventory = await client.storageInventory();
+    expect(inventory.items.map(item => [item.sourceId, item.requestedFiles])).toEqual([
+      [1, ['movie.mkv']],
+      [2, ['movie.mkv']],
+      [3, ['movie.mkv']],
+    ]);
+    await expect(client.resolveLayout({ sourceId: 1 })).resolves.toEqual(
+      imported(1).storage.encryptedLayout!
+    );
+
+    const closed = await client.importStorage({ items: [imported(4)] }).catch((e: unknown) => e);
+    expect(isContractError(closed, 'import_closed')).toBe(true);
   });
 });

@@ -97,11 +97,17 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
       version: '0.2.0',
     },
     configuration: config,
-    ready: () => config.ready && runtime.started,
+    ready: () => config.ready && runtime.serving,
     status: () => ({
-      state: config.ready && runtime.started ? 'ready' : 'standby',
+      // `configuring`, not `standby`: the host must not deliver the configuration again.
+      state:
+        config.ready && runtime.started ? (runtime.serving ? 'ready' : 'configuring') : 'standby',
       missingConfiguration: config.missingVars(),
-      ...(runtime.keyMissing ? { message: 'Waiting for the host to send the security key' } : {}),
+      ...(runtime.keyMissing
+        ? { message: 'Waiting for the host to send the security key' }
+        : runtime.started && !runtime.serving
+          ? { message: 'Waiting for the host to import its storage' }
+          : {}),
       details: {
         engine: runtime.started ? engine().downloads.getStatus().status : 'stopped',
         torrents: runtime.started ? engine().downloads.client.torrents.length : 0,
@@ -187,6 +193,10 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
     storageInventory: () => runtime.inventory(),
     removeStorage: ({ sourceId }) => engine().storage.removeStorageWithResult(sourceId),
 
+    importStatus: () => runtime.importStatus(),
+    importStorage: ({ items }, ctx) => engineCall(ctx, () => runtime.importStorage(items)),
+    completeImport: () => runtime.completeImport(),
+
     read: ({ target, speculative }, ctx) =>
       engineCall(ctx, async () =>
         engine().downloads.streamFile(
@@ -196,7 +206,8 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
         )
       ),
   });
-  // Readiness also depends on the engine, which starts after the configuration is applied.
+  // Readiness also depends on the engine, which starts after the configuration is applied, and
+  // on the storage import (listeners hear both).
   runtime.onStart(() => service.notifyStatus());
   return { service, runtime, stop: () => service.stop() };
 }

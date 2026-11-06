@@ -295,7 +295,16 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
 
   private async applySnapshot(values: Record<string, string>): Promise<ConfigurationResult> {
     await this.beforeConfigure();
-    return this.toResult(await this.admin.applyConfig({ values }));
+    const result = this.toResult(await this.admin.applyConfig({ values }));
+    if (result.success)
+      this.afterConfigure().catch(error =>
+        logger.warn(
+          'RemoteService',
+          `${this.descriptor.serviceName} post-configuration step failed`,
+          error
+        )
+      );
+    return result;
   }
 
   /**
@@ -303,6 +312,12 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
    * before its settings (pushed with an ungated call). Throwing fails the delivery.
    */
   protected async beforeConfigure(): Promise<void> {}
+
+  /**
+   * Runs after every accepted configuration delivery, without delaying it: work the service
+   * needs from the host before it reports ready (with ungated calls). Failures are logged.
+   */
+  protected async afterConfigure(): Promise<void> {}
 
   private toResult(result: {
     success: boolean;

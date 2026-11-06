@@ -37,7 +37,7 @@ export class MediaLoadDatabase {
 
   constructor(
     readonly db: Database,
-    encryption: Encryption
+    readonly encryption: Encryption
   ) {
     MediaLoadDatabase.checkKey(db, encryption);
     this.sources = new SourceRepository(db, encryption);

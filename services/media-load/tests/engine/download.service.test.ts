@@ -5,6 +5,7 @@ import type { Torrent } from 'webtorrent';
 import { logger } from '../../src/lib/logger';
 import type { StorageService } from '../../src/storage/storage.service';
 import type { EncryptedStorageLayout, PlaybackTarget, Storage } from '../../src/storage/types';
+import WebTorrentMock from '../__mocks__/webtorrent';
 import type { AnyMock } from '../helpers/engine';
 import {
   advanceTimersByTimeAsync,
@@ -93,6 +94,31 @@ describe('DownloadService', () => {
       mockStorageService,
     };
   };
+
+  describe('DHT bootstrap', () => {
+    const build = (bootstrap?: string[], DISABLE_DISCOVERY = false) =>
+      new DownloadService(
+        mockInstance(StorageServiceClass) as Mocked<StorageService>,
+        testConfig({ DISABLE_DISCOVERY }),
+        bootstrap
+      );
+    const dhtOption = () => (WebTorrentMock.lastOptions as { dht?: unknown }).dht;
+
+    it('passes resolved bootstrap nodes to the DHT', () => {
+      build(['1.1.1.1:6881']);
+      expect(dhtOption()).toEqual({ bootstrap: ['1.1.1.1:6881'] });
+    });
+
+    it("keeps the DHT's own bootstrap when none is given", () => {
+      build();
+      expect(dhtOption()).toBeUndefined();
+    });
+
+    it('turns the DHT off when discovery is disabled, whatever the bootstrap', () => {
+      build(['1.1.1.1:6881'], true);
+      expect(dhtOption()).toBe(false);
+    });
+  });
 
   describe('storage activity snapshot', () => {
     it('distinguishes incomplete activity from complete offline and local-only content', () => {

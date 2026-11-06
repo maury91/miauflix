@@ -48,13 +48,20 @@ Every change in full, for developers and self-hosters. The short version for use
     - The backend's STORAGE group is removed, and its DOWNLOAD group keeps `CONVERT_H265_TO_H264` and `PRELOAD_WARM_TARGET`. The setup wizard's summaries follow, and Media load is no longer an advanced-only group.
   - The backend no longer depends on WebTorrent, `load-ip-set`, `thunky`, `filename-reserved-regex` or `typed-emitter`.
   - Under Bun the engine turns uTP off (`utp: false`); TCP and WebRTC peers remain.
+  - The DHT bootstraps under Bun. Bun's `node:dgram` resolves a hostname for a `udp4` socket to IPv6 and the send fails with `EINVAL`, so the DHT never found a node (0 peers for a torrent where Node found hundreds). The service entry now calls `dns.setDefaultResultOrder('ipv4first')`, and the runtime resolves the DHT routers (`router.bittorrent.com`, `router.utorrent.com`, `dht.transmissionbt.com` and `dht.libtorrent.org:25401`) to every IPv4 address before it starts WebTorrent (`src/engine/dht-bootstrap.ts`), falling back to the hostnames when DNS gives nothing within 3 seconds. Plain hostnames reach only each router's first address. `services/media-load/scripts/webtorrent-probe.ts` checks each discovery path (UDP and HTTP trackers, DHT, WebRTC, local TCP and WebRTC seeding, the fork's APIs) under the current runtime.
   - Tests moved with the code to `bun test --isolate` (337 tests). `services/media-load/tests/helpers/engine.ts` replaces Jest's automocks and the backend's TypeORM test database (module mocks, `mockInstance`, an `EngineConfig` stub, an in-memory service database). The backend's HTTP VCR no longer records loopback URLs (`127.0.0.1`, `localhost`), so in-process contract servers in tests leave no fixtures.
   - Deployment:
     - `docker-compose.yml` mounts the downloads folder (`DOWNLOADS_HOST_PATH`) on `miauflix-services` at the backend's old path `/usr/src/app/downloads`, and no longer on `miauflix`. The backend keeps `DOWNLOAD_PATH` to push it.
     - The combined image sets `MEDIA_LOAD_DATA_DIR=/app/data/media-load`. Its entrypoint starts as root to change the owner of downloads written by the backend's user to `bunqueue` (only when some file is not already `bunqueue`'s), then drops to `bunqueue` with `su-exec`.
     - The dev compose mounts the downloads on `media-load` at both paths the backend used (`/usr/src/app/downloads` and `/usr/src/app/backend/downloads`) and its data at `./data/media-load`.
     - The E2E test compose gives the backend `MEDIA_LOAD_SERVICE_URL` (it had none), mounts the test downloads on `miauflix-services` and health-checks port 3004.
-  - Storage recorded by the backend before this change is not imported yet, so the service starts with no stored downloads (phase 4).
+  - Storage the backend recorded before this change is handed to the service once (phase 4 of the plan).
+    - The ungated calls `importStatus`, `importStorage({ items })` and `completeImport` carry it. Each item is a source descriptor with its storage row, files and claims; dates are ISO strings and the bitfield is base64.
+    - Until `completeImport`, the service reports `configuring` (message "Waiting for the host to import its storage") and refuses engine calls. No storage can be created that the import would then skip.
+    - The service writes each source in one transaction, skips sources it already stores (so a retried batch is safe), drops playback claims and resets `activeStreams`. `completeImport` records `storage_import` in `meta`, refuses later batches with `import_closed`, reloads storage and lets the engine adopt completed downloads (seeding or detaching them, and scheduling seed timers).
+    - The backend runs `createStorageHandoff(db)` (`backend/src/services/media-load/storage-handoff.ts`) from the new `RemoteService.afterConfigure` hook, which runs after every accepted configuration delivery without delaying it.
+    - The handoff sends the `storage`, `storage_file` and `storage_file_claim` rows in batches of 50, skipping rows whose source no longer exists, and retries every 30 seconds after a failure. A fresh install completes an empty import.
+    - The backend's rows are kept; a later release drops the tables.
 
 ### Bug fixes
 

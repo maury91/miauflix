@@ -210,7 +210,9 @@ export class DownloadService {
 
   constructor(
     private readonly storageService: StorageService,
-    private readonly config: EngineConfig
+    private readonly config: EngineConfig,
+    /** DHT bootstrap nodes (`ip:port`); see `resolveDhtBootstrap`. Default: the DHT's own. */
+    dhtBootstrap?: string[]
   ) {
     this.staticTrackers = config.getOrThrow('STATIC_TRACKERS');
     this.bestTrackers = [...new Set([...this.staticTrackers])];
@@ -225,6 +227,8 @@ export class DownloadService {
     };
     if (config.getOrThrow('DISABLE_DISCOVERY')) {
       options.dht = false;
+    } else if (dhtBootstrap?.length) {
+      options.dht = { bootstrap: dhtBootstrap };
     }
     // Bun is documented to panic inside utp-native's timers on x64 (arm64 has no prebuild, so
     // uTP was already off there); TCP and WebRTC peers remain.
@@ -409,6 +413,16 @@ export class DownloadService {
         };
       }
     }
+  }
+
+  /**
+   * Take over storage recorded elsewhere (the backend's import): seed completed downloads whose
+   * seeding period has not ended, detach expired ones, and schedule the rest.
+   */
+  public async adoptStorage(): Promise<void> {
+    await this.restoreCompletedDownloads();
+    const completed = (await this.storageService.getStoragesWithCompletion()) ?? [];
+    for (const storage of completed) this.scheduleSeedExpiry(storage);
   }
 
   public async reload(): Promise<void> {
