@@ -46,7 +46,6 @@ describe('reclaiming files of a pack', () => {
       CONTENT_SEED_DURATION_SECONDS: 3600,
       DISABLE_DISCOVERY: true,
       STATIC_TRACKERS: [],
-      SCRAPE_TRACKERS: [],
       BEST_TRACKERS_DOWNLOAD_URL: 'https://example.com/trackers_best.txt',
       BLACKLISTED_TRACKERS_DOWNLOAD_URL: 'https://example.com/blacklist.txt',
       DOWNLOAD_PATH: downloads,

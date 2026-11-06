@@ -5,6 +5,7 @@ import { catalogConfigurationDefinition } from '@services/catalog/catalog.config
 import { serverConfigurationDefinition } from '@services/configuration/configuration.configuration';
 import { downloadConfigurationDefinition } from '@services/download/download.configuration';
 import { listConfigurationDefinition } from '@services/list/list.configuration';
+import { mediaLoadConfigurationDefinition } from '@services/media-load/media-load.configuration';
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
 import { sourcesConfigurationDefinition } from '@services/sources/sources.configuration';
@@ -20,6 +21,7 @@ export const services = {
   CATALOG: catalogConfigurationDefinition,
   LIST: listConfigurationDefinition,
   SOURCES: sourcesConfigurationDefinition,
+  MEDIA_LOAD: mediaLoadConfigurationDefinition,
   VPN: vpnConfigurationDefinition,
   DOWNLOAD: downloadConfigurationDefinition,
   STORAGE: storageConfigurationDefinition,

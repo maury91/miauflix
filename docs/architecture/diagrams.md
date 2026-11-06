@@ -294,6 +294,7 @@ flowchart LR
     Catalog[Media Catalog :3001]
     Lists[List Service :3002]
     Sources[Sources service :3003]
+    MediaLoad[Media load :3004]
     Queue[Bunqueue :6789]
   end
 
@@ -308,6 +309,7 @@ flowchart LR
   Backend --> Catalog
   Backend --> Lists
   Backend --> Sources
+  Backend --> MediaLoad
   Backend --> Queue
   Backend --> Tracing
   Catalog --> Queue

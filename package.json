@@ -17,7 +17,7 @@
     "install:tizen": "./scripts/install-tizen.sh",
     "generate:icons": "node scripts/generate-icons.mjs",
     "generate:profile-sprites": "node scripts/generate-profile-sprites.mjs",
-    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:catalog\" \"npm run start:list\" \"npm run start:sources\" --names \"backend,frontend,catalog,list,sources\" --prefix-colors \"blue,green,yellow,magenta,cyan\"",
+    "dev": "concurrently \"npm run start:backend\" \"npm run start:frontend\" \"npm run start:catalog\" \"npm run start:list\" \"npm run start:sources\" \"npm run start:media-load\" --names \"backend,frontend,catalog,list,sources,media-load\" --prefix-colors \"blue,green,yellow,magenta,cyan,red\"",
     "docker:build": "./scripts/docker-publish.sh latest build",
     "docker:cleanup": "./scripts/docker-publish.sh cleanup",
     "docker:deploy": "./scripts/docker-publish.sh latest deploy",
@@ -69,7 +69,9 @@
     "test": "turbo run test --concurrency=2 --filter='./backend' --filter='./frontend' --filter='./packages/*' --filter='./services/*'",
     "test:frontend:e2e:smooth-core-flows": "npm run test:e2e:smooth-core-flows --workspace frontend",
     "start:sources": "bun run --cwd services/sources src/index.ts",
-    "start:sources:watch": "bun --watch --cwd services/sources src/index.ts"
+    "start:sources:watch": "bun --watch --cwd services/sources src/index.ts",
+    "start:media-load": "bun run --cwd services/media-load src/index.ts",
+    "start:media-load:watch": "bun --watch --cwd services/media-load src/index.ts"
   },
   "dependencies": {
     "concurrently": "9.2.1"

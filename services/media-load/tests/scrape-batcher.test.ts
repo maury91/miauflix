@@ -1,38 +1,29 @@
-jest.mock('@logger');
-jest.mock('bittorrent-tracker', () => {
-  const { EventEmitter } = jest.requireActual<typeof EventsModule>('events');
-  class FakeClient extends EventEmitter {
-    static instances: FakeClient[] = [];
-    readonly announce: string[];
-    scraped: Array<Buffer | string> = [];
-    destroyed = false;
-    constructor(opts: { announce: string[] }) {
-      super();
-      this.announce = opts.announce;
-      FakeClient.instances.push(this);
-    }
-    scrape(opts: { infoHash: Array<Buffer | string> }) {
-      this.scraped = opts.infoHash;
-    }
-    destroy() {
-      this.destroyed = true;
-    }
+import { EventEmitter } from 'node:events';
+
+import { afterEach, beforeEach, describe, expect, it, jest, mock } from 'bun:test';
+
+class FakeClient extends EventEmitter {
+  static instances: FakeClient[] = [];
+  readonly announce: string[];
+  scraped: Array<Buffer | string> = [];
+  destroyed = false;
+  constructor(opts: { announce: string[] }) {
+    super();
+    this.announce = opts.announce;
+    FakeClient.instances.push(this);
   }
-  return { Client: FakeClient };
-});
-
-import { Client } from 'bittorrent-tracker';
-import type * as EventsModule from 'events';
-
-import { ScrapeBatcher } from './scrape-batcher';
-
-interface FakeClient {
-  announce: string[];
-  scraped: Array<Buffer | string>;
-  destroyed: boolean;
-  emit(event: string, data: unknown): boolean;
+  scrape(opts: { infoHash: Array<Buffer | string> }) {
+    this.scraped = opts.infoHash;
+  }
+  destroy() {
+    this.destroyed = true;
+  }
 }
-const instances = (Client as unknown as { instances: FakeClient[] }).instances;
+mock.module('bittorrent-tracker', () => ({ Client: FakeClient }));
+
+const { ScrapeBatcher } = await import('../src/scrape/scrape-batcher');
+
+const instances = FakeClient.instances;
 
 const hashA = 'a'.repeat(40);
 const hashB = 'b'.repeat(40);
@@ -112,7 +103,7 @@ describe('ScrapeBatcher', () => {
 
     jest.advanceTimersByTime(5_000);
     await expect(answered).resolves.toEqual({ complete: 1, incomplete: 0 });
-    await expect(silent).rejects.toMatchObject({ status: 'scrape_timeout' });
+    await expect(silent).rejects.toMatchObject({ code: 'scrape_timeout' });
     expect(batcher.stats).toEqual({ activeScrapes: 0, completedScrapes: 1, failedScrapes: 1 });
   });
 
@@ -172,16 +163,16 @@ describe('ScrapeBatcher', () => {
 
   it('rejects invalid hashes, missing trackers and requests after close', async () => {
     await expect(new ScrapeBatcher([UDP_1]).scrape('nope')).rejects.toMatchObject({
-      status: 'invalid_hash',
+      code: 'invalid_hash',
     });
     await expect(new ScrapeBatcher(['wss://only.example']).scrape(hashA)).rejects.toMatchObject({
-      status: 'scrape_unavailable',
+      code: 'scrape_unavailable',
     });
 
     const batcher = new ScrapeBatcher([UDP_1]);
     const queued = batcher.scrape(hashA);
     batcher.close();
-    await expect(queued).rejects.toMatchObject({ status: 'scrape_unavailable' });
-    await expect(batcher.scrape(hashA)).rejects.toMatchObject({ status: 'scrape_unavailable' });
+    await expect(queued).rejects.toMatchObject({ code: 'scrape_unavailable' });
+    await expect(batcher.scrape(hashA)).rejects.toMatchObject({ code: 'scrape_unavailable' });
   });
 });

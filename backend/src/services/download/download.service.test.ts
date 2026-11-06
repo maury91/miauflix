@@ -54,7 +54,6 @@ const createMockConfig = (seedDurationSeconds = 3600): TestConfigurationService 
     CONTENT_SEED_DURATION_SECONDS: seedDurationSeconds,
     DISABLE_DISCOVERY: false,
     STATIC_TRACKERS: ['udp://tracker1.example.com:1337', 'udp://tracker2.example.com:1337'],
-    SCRAPE_TRACKERS: ['udp://tracker.opentrackr.org:1337/announce'],
     BEST_TRACKERS_DOWNLOAD_URL: 'https://example.com/trackers_best.txt',
     BLACKLISTED_TRACKERS_DOWNLOAD_URL: 'https://example.com/blacklist.txt',
     DOWNLOAD_PATH: '/tmp/test-downloads',

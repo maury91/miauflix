@@ -1,14 +1,21 @@
-import { logger } from '@logger';
+import type { SwarmCounts, SwarmStatsError } from '@miauflix/service-contracts';
 import { Client as BTClient } from 'bittorrent-tracker';
 
-import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
-
-export interface SwarmCounts {
-  /** Seeders: the highest count any tracker reported. */
-  complete: number;
-  /** Leechers: the highest count any tracker reported. */
-  incomplete: number;
+/** A scrape failure; `code` is the contract error code. */
+export class ScrapeError extends Error {
+  constructor(
+    message: string,
+    readonly code: SwarmStatsError
+  ) {
+    super(message);
+    this.name = 'ScrapeError';
+  }
 }
+
+/** Tracker errors are expected (dead trackers); print them only when DEBUG is set. */
+const debug = (message: string) => {
+  if (process.env.DEBUG) console.debug(`[media-load] ${message}`);
+};
 
 export interface ScrapeBatcherOptions {
   /** How long a request waits for others to share its scrape. */
@@ -75,14 +82,14 @@ export class ScrapeBatcher {
   scrape(infoHash: string): Promise<SwarmCounts> {
     const hash = infoHash.toLowerCase();
     if (!/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(hash)) {
-      return Promise.reject(new ErrorWithStatus(`Invalid info hash ${infoHash}`, 'invalid_hash'));
+      return Promise.reject(new ScrapeError(`Invalid info hash ${infoHash}`, 'invalid_hash'));
     }
     if (this.closed) {
-      return Promise.reject(new ErrorWithStatus('Scraping has stopped', 'scrape_unavailable'));
+      return Promise.reject(new ScrapeError('Scraping has stopped', 'scrape_unavailable'));
     }
     if (!this.udpTrackers.length && !this.httpTrackers.length) {
       return Promise.reject(
-        new ErrorWithStatus('No UDP or HTTP scrape trackers are configured', 'scrape_unavailable')
+        new ScrapeError('No UDP or HTTP scrape trackers are configured', 'scrape_unavailable')
       );
     }
     const cached = this.cache.get(hash);
@@ -103,7 +110,7 @@ export class ScrapeBatcher {
     this.closed = true;
     if (this.flushTimer) clearTimeout(this.flushTimer);
     this.flushTimer = null;
-    const error = new ErrorWithStatus('Scraping has stopped', 'scrape_unavailable');
+    const error = new ScrapeError('Scraping has stopped', 'scrape_unavailable');
     for (const pending of this.queue.values()) {
       for (const waiter of pending.waiters) waiter.reject(error);
     }
@@ -159,10 +166,7 @@ export class ScrapeBatcher {
           for (const waiter of pending.waiters) waiter.resolve({ ...result });
         } else {
           this.failed += 1;
-          const error = new ErrorWithStatus(
-            `Scrape request timed out for ${hash}`,
-            'scrape_timeout'
-          );
+          const error = new ScrapeError(`Scrape request timed out for ${hash}`, 'scrape_timeout');
           for (const waiter of pending.waiters) waiter.reject(error);
         }
       }
@@ -201,10 +205,8 @@ export class ScrapeBatcher {
       this.clients.add(client);
       client.on('scrape', onScrape);
       // A failing tracker must not fail the batch; the others or the timeout settle it.
-      client.on('error', error => logger.debug('ScrapeBatcher', `Scrape error: ${error.message}`));
-      client.on('warning', error =>
-        logger.debug('ScrapeBatcher', `Scrape warning: ${error.message}`)
-      );
+      client.on('error', error => debug(`Scrape error: ${error.message}`));
+      client.on('warning', error => debug(`Scrape warning: ${error.message}`));
       client.scrape({ infoHash: hashes });
     };
 

@@ -13,7 +13,7 @@ COPY tsconfig.json ./
 COPY turbo.json ./
 
 # Create package directories and copy ONLY their package.json files for dependency resolution
-RUN mkdir -p packages/source-metadata-extractor packages/contract packages/service-contracts packages/service-configuration backend frontend services/media-catalog services/list-service services/sources
+RUN mkdir -p packages/source-metadata-extractor packages/contract packages/service-contracts packages/service-configuration backend frontend services/media-catalog services/list-service services/sources services/media-load
 COPY backend/package.json ./backend/
 COPY frontend/package.json ./frontend/
 COPY packages/source-metadata-extractor/package.json ./packages/source-metadata-extractor/
@@ -23,6 +23,7 @@ COPY packages/service-configuration/package.json ./packages/service-configuratio
 COPY services/media-catalog/package.json ./services/media-catalog/
 COPY services/list-service/package.json ./services/list-service/
 COPY services/sources/package.json ./services/sources/
+COPY services/media-load/package.json ./services/media-load/
 
 # Temporarily remove problematic prepare scripts that require source code
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true

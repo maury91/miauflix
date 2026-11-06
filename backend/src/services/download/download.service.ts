@@ -36,7 +36,6 @@ import {
   parseRangeHeader,
 } from './download.utils';
 import { EncryptedFileReader } from './encrypted-file-reader';
-import { ScrapeBatcher } from './scrape-batcher';
 import { TorrentDiagnostics } from './torrent-diagnostics';
 import { claimStartPriority, torrentDownloadCap, torrentPriority } from './torrent-priority';
 
@@ -228,7 +227,6 @@ export class DownloadService {
   private readonly staticTrackers: string[];
   private readonly bestTrackersDownloadUrl: string;
   private readonly blacklistedTrackersDownloadUrl: string;
-  private readonly scrapes: ScrapeBatcher;
   /** Connection priority and download cap last applied to each torrent. */
   private readonly appliedTorrentLimits = new WeakMap<
     Torrent,
@@ -243,7 +241,6 @@ export class DownloadService {
     private readonly config: ConfigService
   ) {
     this.staticTrackers = config.getOrThrow('STATIC_TRACKERS');
-    this.scrapes = new ScrapeBatcher(config.getOrThrow('SCRAPE_TRACKERS'));
     this.bestTrackers = [...new Set([...this.staticTrackers])];
     this.bestTrackersDownloadUrl = config.getOrThrow('BEST_TRACKERS_DOWNLOAD_URL');
     this.blacklistedTrackersDownloadUrl = config.getOrThrow('BLACKLISTED_TRACKERS_DOWNLOAD_URL');
@@ -262,7 +259,6 @@ export class DownloadService {
       activeStreams: this.activeStreams,
       activeSources: this.activeSourceCounts.size,
       pendingTorrentStarts: this.torrentStartPromises.size,
-      ...this.scrapes.stats,
     }));
     this.client.on('error', (error: Error) => {
       logger.error('DownloadService', 'Error:', error.message, error);
@@ -434,7 +430,6 @@ export class DownloadService {
 
   async close(): Promise<void> {
     clearInterval(this.claimSweep);
-    this.scrapes.close();
     for (const timer of this.seedTimers.values()) clearTimeout(timer);
     this.seedTimers.clear();
     await new Promise<void>((resolve, reject) => {
@@ -1070,14 +1065,6 @@ export class DownloadService {
   }
 
   @traced('DownloadService')
-  async getStats(infoHash: string): Promise<{ broadcasters: number; watchers: number }> {
-    const result = await this.scrapes.scrape(infoHash);
-    return {
-      broadcasters: result.complete || 0,
-      watchers: result.incomplete || 0,
-    };
-  }
-
   /**
    * Start greedy download with storage tracking and priority management
    * Implements storage-conscious downloading for hobbyist constraints (150GB total storage)
