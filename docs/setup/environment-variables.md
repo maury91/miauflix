@@ -172,11 +172,13 @@ DISABLE_VPN_CHECK=false
 # Content source settings (automatically configured)
 SOURCE_SECURITY_KEY=base64-encoded-256-bit-key
 CONTENT_CONNECTION_LIMIT=100
+CONTENT_CONNECTION_BUDGET=200
 DOWNLOAD_ALL_SOURCE_FILES=false
 ```
 
 - **SOURCE_SECURITY_KEY**: AES-256 encryption key for source metadata (auto-generated)
-- **CONTENT_CONNECTION_LIMIT**: Max peer-to-peer connections
+- **CONTENT_CONNECTION_LIMIT**: Max peer-to-peer connections per torrent
+- **CONTENT_CONNECTION_BUDGET**: Peer connections shared by all torrents (default 200). Each torrent's share follows its priority, so a stream gets most of it. Once the budget is used up, a torrent at its share takes no new peers, and no torrent loses the peers it has
 - **DOWNLOAD_ALL_SOURCE_FILES**: Reserved setting; currently has no effect
 
 #### Playback compatibility and subtitles

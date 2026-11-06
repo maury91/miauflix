@@ -33,6 +33,7 @@ const HASH = 'c'.repeat(40);
 const createConfig = () => {
   const values: Record<string, unknown> = {
     CONTENT_CONNECTION_LIMIT: 100,
+    CONTENT_CONNECTION_BUDGET: 200,
     CONTENT_DOWNLOAD_LIMIT: 1000000,
     CONTENT_UPLOAD_LIMIT: 500000,
     CONTENT_SEED_DURATION_SECONDS: 3600,

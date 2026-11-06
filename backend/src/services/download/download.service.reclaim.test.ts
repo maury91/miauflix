@@ -40,6 +40,7 @@ describe('reclaiming files of a pack', () => {
   const setupTest = async (thresholdBytes = 10n * 1024n * 1024n) => {
     const values: Record<string, unknown> = {
       CONTENT_CONNECTION_LIMIT: 100,
+      CONTENT_CONNECTION_BUDGET: 200,
       CONTENT_DOWNLOAD_LIMIT: 1000000,
       CONTENT_UPLOAD_LIMIT: 500000,
       CONTENT_SEED_DURATION_SECONDS: 3600,

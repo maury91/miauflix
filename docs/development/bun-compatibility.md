@@ -11,10 +11,18 @@ Miauflix originally ran on Bun and moved to Node.js in `a2f8046c` ("Move from Bu
 | WebTorrent `utp:false`                   | 2.8.4          | ✅            | DHT, trackers, metadata, `createReadStream`, `destroy()` OK     |
 | `node:dgram` (DHT)                       | —              | ✅            | Missing in early Bun, now supported                             |
 | `fs-native-extensions`, `utf-8-validate` | —              | ✅            | Native addons load fine                                         |
-| `node-datachannel` (WebRTC)              | —              | ❓ Not tested |                                                                 |
+| `node-datachannel` (WebRTC)              | —              | ✅            | Loads on linux/arm64 (2026-11-05); needs `trustedDependencies`  |
 | TypeORM + SQLite                         | —              | ❓ Not tested |                                                                 |
 | Jest test suite                          | —              | ❓ Not tested | Would likely need porting to `bun test` or running Jest on Node |
 | Full backend                             | —              | ❓ Not tested | Only WebTorrent was tested, in a standalone script              |
+
+### Rechecked 2026-11-05: WebTorrent 3.0.21 on linux/arm64
+
+Bun 1.4.0 in a linux/arm64 container ran WebTorrent 3.0.21 with this repo's `node_modules`. Metadata arrived in 0.6–1.9 s and the first 4 MB of Sintel streamed. Three findings:
+
+- **uTP is already off on arm64, under Node too.** `utp-native` ships no `linux-arm64` prebuild, so WebTorrent silently runs without uTP in the arm64 images. The x64 crash below was not re-checked, because emulating x64 locally is too slow.
+- **Bun blocks dependency install scripts.** A Bun workspace that uses WebTorrent must list `node-datachannel` in `trustedDependencies`, since it downloads its binary in a postinstall.
+- The backend now uses the `maury91/webtorrent` fork (Hayase's `aio` branch, still 3.0.21), which switches to `@thaunknown/utp-native`. That addon has no `linux-arm64` prebuild either.
 
 ## The blocker: `utp-native`
 
