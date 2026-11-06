@@ -43,10 +43,11 @@ const EpisodeHeading = styled.h3`
   font-size: clamp(1rem, 2.5vh, 1.4rem);
 `;
 
+// Flex, not grid: the 2020 TVs (Chromium 69) cannot lay out a button as a grid.
 // eslint-disable-next-line no-restricted-syntax -- Existing media/player interaction and TV-scaled chrome; see shared/ui/README.md.
 const EpisodeRow = styled(BaseButton)<{ $selected: boolean; $image: string }>`
-  display: grid;
-  grid-template-columns: minmax(150px, 18vw) 1fr;
+  display: flex;
+  align-items: stretch;
   width: 100%;
   min-height: 10vh;
   margin-bottom: 0.8vh;
@@ -63,6 +64,8 @@ const EpisodeRow = styled(BaseButton)<{ $selected: boolean; $image: string }>`
 
   &::before {
     display: block;
+    flex: 0 0 18vw;
+    min-width: 150px;
     min-height: 10vh;
     content: '';
     background:
@@ -76,11 +79,15 @@ const EpisodeRow = styled(BaseButton)<{ $selected: boolean; $image: string }>`
   }
 
   @media (max-width: 860px) {
-    grid-template-columns: 38vw 1fr;
+    &::before {
+      flex-basis: 38vw;
+    }
   }
 `;
 
 const EpisodeCaption = styled.span`
+  flex: 1 1 auto;
+  min-width: 0;
   align-self: center;
   padding: 1rem;
   font-size: clamp(0.85rem, 2vh, 1.1rem);

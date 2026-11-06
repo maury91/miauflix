@@ -1,5 +1,8 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+const constants = vi.hoisted(() => ({ builtForTizen: false }));
+vi.mock('@shared/config/constants', () => constants);
+
 const RENDERER = 0x9246;
 
 /** A WebGL context drawn by `renderer`, or none when the browser refuses a slow one. */
@@ -19,13 +22,16 @@ function stubWebGl(renderer: string | null) {
 }
 
 /** The capability is measured once per app run: load the module afresh for each case. */
-const liveAvatarsSupported = async () => {
+const liveAvatarsSupported = async (options?: { onTv?: boolean }) => {
   vi.resetModules();
-  return (await import('./runtime')).liveAvatarsSupported();
+  return (await import('./runtime')).liveAvatarsSupported(options);
 };
+
+const GPU = 'ANGLE (Apple, ANGLE Metal Renderer: Apple M2, Unspecified)';
 
 afterEach(() => {
   vi.restoreAllMocks();
+  constants.builtForTizen = false;
 });
 
 describe('liveAvatarsSupported', () => {
@@ -45,5 +51,18 @@ describe('liveAvatarsSupported', () => {
       'ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (LLVM 10.0.0)), SwiftShader driver)'
     );
     await expect(liveAvatarsSupported()).resolves.toBe(false);
+  });
+
+  it('shows pictures on the TV unless the page asks for live drawing there', async () => {
+    constants.builtForTizen = true;
+    stubWebGl(GPU);
+    await expect(liveAvatarsSupported()).resolves.toBe(false);
+    await expect(liveAvatarsSupported({ onTv: true })).resolves.toBe(true);
+  });
+
+  it('shows pictures on a TV without GPU-drawn WebGL, even when asked to draw live', async () => {
+    constants.builtForTizen = true;
+    stubWebGl(null);
+    await expect(liveAvatarsSupported({ onTv: true })).resolves.toBe(false);
   });
 });

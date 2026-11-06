@@ -53,7 +53,8 @@ export const ProfileAvatar = memo(function ProfileAvatar({
 }: ProfileAvatarProps) {
   const look = useMemo(() => lookFor(user.avatar, user.id), [user.avatar, user.id]);
   const [liveFailed, setLiveFailed] = useState(false);
-  const showLive = live && !liveFailed && liveAvatarsSupported();
+  // Whoever asks for live has already decided about TVs; this only checks the device can draw.
+  const showLive = live && !liveFailed && liveAvatarsSupported({ onTv: true });
   const [picture, setPicture] = useState<string | null>(null);
 
   useEffect(() => {

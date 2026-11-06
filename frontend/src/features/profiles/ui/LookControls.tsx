@@ -83,6 +83,10 @@ const Chip = styled.button<{ $selected: boolean }>`
 
 const ShapeChip = styled(Chip)`
   flex-direction: column;
+  /* Stretch, not center: on the 2020 TVs (Chromium 69) a button lays its children out in an inner
+     box that takes this alignment, so centring would shrink the picture to the label's width. */
+  align-items: stretch;
+  text-align: center;
   width: clamp(4.5rem, 6.2vw, 7.5rem);
   padding: 0.6rem 0.4rem;
   border-radius: 16px;
@@ -94,6 +98,7 @@ const ShapeArea = styled.span`
   position: relative;
   display: block;
   width: 70%;
+  margin: 0 auto;
   padding-bottom: 70%;
 `;
 
@@ -272,7 +277,10 @@ export function ColorPicker({
 const PictureTile = styled.button<{ $selected: boolean }>`
   display: flex;
   flex-direction: column;
-  align-items: center;
+  /* Stretch, not center: on the 2020 TVs (Chromium 69) a button lays its children out in an inner
+     box that takes this alignment, so centring would shrink the picture to the label's width. */
+  align-items: stretch;
+  text-align: center;
   gap: 0.35rem;
   width: clamp(5.5rem, 7.2vw, 8.75rem);
   padding: 0.45rem 0.45rem 0.55rem;
