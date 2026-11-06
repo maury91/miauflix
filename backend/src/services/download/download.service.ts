@@ -1066,7 +1066,6 @@ export class DownloadService {
     });
   }
 
-  @traced('DownloadService')
   /**
    * Start greedy download with storage tracking and priority management
    * Implements storage-conscious downloading for hobbyist constraints (150GB total storage)
