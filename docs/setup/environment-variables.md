@@ -41,6 +41,18 @@ CATALOG_SERVICE_URL=http://miauflix-services:3001
 # CATALOG_SERVICE_URL=http://localhost:3001
 ```
 
+#### Media load service
+
+The torrent engine runs as its own Bun service (port 3004, in the services container). It answers tracker scrapes today. The default Compose files set the address:
+
+```bash
+MEDIA_LOAD_SERVICE_URL=http://miauflix-services:3004
+# Host-run development only
+# MEDIA_LOAD_SERVICE_URL=http://localhost:3004
+```
+
+`SCRAPE_TRACKERS` (comma-separated UDP or HTTP announce URLs, advanced) belongs to this service's `MEDIA_LOAD` group. The backend keeps the stored value and pushes it to the service.
+
 TMDB and Trakt settings appear in the setup and administrator configuration UI through the connected services' schemas. Use that UI for later changes; bootstrap environment values may already have been superseded by saved settings.
 
 ```bash
@@ -172,11 +184,13 @@ DISABLE_VPN_CHECK=false
 # Content source settings (automatically configured)
 SOURCE_SECURITY_KEY=base64-encoded-256-bit-key
 CONTENT_CONNECTION_LIMIT=100
+CONTENT_CONNECTION_BUDGET=200
 DOWNLOAD_ALL_SOURCE_FILES=false
 ```
 
 - **SOURCE_SECURITY_KEY**: AES-256 encryption key for source metadata (auto-generated)
-- **CONTENT_CONNECTION_LIMIT**: Max peer-to-peer connections
+- **CONTENT_CONNECTION_LIMIT**: Max peer-to-peer connections per torrent
+- **CONTENT_CONNECTION_BUDGET**: Peer connections shared by all torrents (default 200). Each torrent's share follows its priority, so a stream gets most of it. Once the budget is used up, a torrent at its share takes no new peers, and no torrent loses the peers it has
 - **DOWNLOAD_ALL_SOURCE_FILES**: Reserved setting; currently has no effect
 
 #### Playback compatibility and subtitles

@@ -14,6 +14,7 @@ For a user-facing explanation, see the [Feature Guide](../features.md). This pag
 | Catalog service  | Bun and SQLite                             | TMDB catalog data, metadata freshness, seasons, episodes, and artwork              |
 | List service     | Bun and SQLite                             | Trakt connections, public/personal lists, watchlists, and playback synchronization |
 | Sources service  | Bun and SQLite                             | Indexer access, search planning, provider configuration, and cached candidates     |
+| Media load       | Bun                                        | Torrent engine; today tracker scrapes for seeder and leecher counts                |
 | Background work  | Bunqueue broker and workers                | Scheduled and queued work across the backend and catalog service                   |
 | Media delivery   | WebTorrent, FFmpeg, FFprobe                | Torrent downloads, inspection, remuxing, conversion, and subtitles                 |
 | Client playback  | Browser video/MSE or Samsung AVPlay        | Device-specific playback and audio-track controls                                  |
@@ -53,6 +54,10 @@ The implemented provider registry supports:
 - **Torznab:** an external Jackett/Prowlarr-compatible search endpoint configured with its address and API key.
 
 Administrators can manage providers and definition repositories through Settings. A declared generic `http` provider kind is not implemented in the registry. FlareSolverr is optional and applies to supported protected source requests, rather than all outbound requests in the application.
+
+### Media load service
+
+The media-load service is the torrent engine. It currently answers tracker scrapes: the backend's source statistics jobs ask it for seeders and leechers, and it batches concurrent requests into multi-hash scrapes (`SCRAPE_TRACKERS`). WebTorrent downloads, encrypted storage and byte ranges are planned to move here; playback sessions, FFmpeg and subtitles stay in the backend. In Docker it runs in the services container, so with the VPN layer its tracker traffic uses the tunnel.
 
 ### Remote contracts and configuration
 

@@ -24,6 +24,7 @@ services:
       - CATALOG_SERVICE_URL=http://media-catalog:3001
       - LIST_SERVICE_URL=http://list-service:3002
       - SOURCES_SERVICE_URL=http://sources:3003
+      - MEDIA_LOAD_SERVICE_URL=http://media-load:3004
       - SOURCES_DISABLE_VPN_CHECK=true
       - TMDB_API_URL=http://tmdb-mock/3
       - TMDB_API_ACCESS_TOKEN=${TMDB_API_ACCESS_TOKEN:-e2e-dummy-token}
@@ -79,8 +80,35 @@ services:
         condition: service_healthy
       sources:
         condition: service_healthy
+      media-load:
+        condition: service_healthy
       tracker-mock:
         condition: service_healthy
+
+  # Tracker scrapes; SCRAPE_TRACKERS above reaches it through the backend's configuration push.
+  media-load:
+    build:
+      context: ../../
+      dockerfile: services/media-load/Dockerfile
+      target: development
+    environment:
+      - MEDIA_LOAD_PORT=3004
+    volumes:
+      - ../../services/media-load/src:/workspace/services/media-load/src
+    networks:
+      - test-network
+    healthcheck:
+      test:
+        [
+          'CMD',
+          'bun',
+          '-e',
+          "fetch('http://localhost:3004/health').then(r => { if (!r.ok) process.exit(1) })",
+        ]
+      interval: 2s
+      timeout: 5s
+      retries: 30
+      start_period: 5s
 
   sources:
     build:

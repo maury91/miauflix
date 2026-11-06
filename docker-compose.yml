@@ -26,6 +26,7 @@ services:
       CATALOG_SERVICE_URL: http://miauflix-services:3001
       LIST_SERVICE_URL: http://miauflix-services:3002
       SOURCES_SERVICE_URL: http://miauflix-services:3003
+      MEDIA_LOAD_SERVICE_URL: http://miauflix-services:3004
       ALLOW_CREATE_ADMIN_ON_FIRST_RUN: ${ALLOW_CREATE_ADMIN_ON_FIRST_RUN:-true} # create the admin from the browser
       # Without a VPN, Miauflix refuses to search for sources: torrents would go out from your real IP.
       # Add docker-compose.vpn.yml (strongly recommended, required on anything internet-facing), see
@@ -53,7 +54,7 @@ services:
       com.centurylinklabs.watchtower.enable: 'true'
       autoheal: 'true'
 
-  # Bunqueue, media catalog, lists and source search in one container.
+  # Bunqueue, media catalog, lists, source search and media load (tracker scrapes) in one container.
   miauflix-services:
     image: ghcr.io/${MIAUFLIX_IMAGE_NAMESPACE:-maury91}/miauflix-services:${MIAUFLIX_VERSION:-latest}
     init: true
