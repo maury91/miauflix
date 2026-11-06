@@ -10,15 +10,14 @@ export class MediaLoadConfigService extends ServiceConfiguration {
     });
   }
 
-  /** The value applied by the backend, or the schema default. */
+  /** The value applied by the backend (an empty one included), or the schema default. */
   value(key: string): string {
-    return (
-      this.resolve(key) ||
-      String(
-        this.getSchema()
-          .groups.flatMap(group => group.variables)
-          .find(variable => variable.key === key)?.defaultValue ?? ''
-      )
+    const applied = this.values;
+    if (key in applied) return applied[key];
+    return String(
+      this.getSchema()
+        .groups.flatMap(group => group.variables)
+        .find(variable => variable.key === key)?.defaultValue ?? ''
     );
   }
 

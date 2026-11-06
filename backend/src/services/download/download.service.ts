@@ -234,6 +234,8 @@ export class DownloadService {
   >();
   private priorityRefresh: Promise<void> | null = null;
   private priorityRefreshAgain = false;
+  /** Whether the last priority pass capped torrents because a stream was buffering. */
+  private bufferingCapsApplied = false;
 
   constructor(
     private readonly storageService: StorageService,
@@ -2357,21 +2359,25 @@ export class DownloadService {
       return;
     }
     this.priorityRefresh = (async () => {
-      do {
-        this.priorityRefreshAgain = false;
-        try {
-          await this.applyTorrentPriorities();
-        } catch (error) {
-          logger.warn('DownloadService', 'Failed to update torrent priorities', error);
-        }
-      } while (this.priorityRefreshAgain);
-    })().finally(() => {
-      this.priorityRefresh = null;
-    });
+      try {
+        do {
+          this.priorityRefreshAgain = false;
+          try {
+            await this.applyTorrentPriorities();
+          } catch (error) {
+            logger.warn('DownloadService', 'Failed to update torrent priorities', error);
+          }
+        } while (this.priorityRefreshAgain);
+      } finally {
+        // Cleared in the same step as the last check, so no later call is left without a pass.
+        this.priorityRefresh = null;
+      }
+    })();
   }
 
   private async applyTorrentPriorities(): Promise<void> {
     const streamBuffering = this.activeStreams > 0 && (await this.hasIncompleteActivePlayback());
+    this.bufferingCapsApplied = streamBuffering;
     const downloadLimit = Number(this.config.getOrThrow('CONTENT_DOWNLOAD_LIMIT'));
     for (const torrent of this.client.torrents) {
       if (torrent.destroyed) continue;
@@ -2398,8 +2404,11 @@ export class DownloadService {
   }
 
   private async resumeSpeculativeDownloadsWhenPlaybackReady(): Promise<void> {
-    if (!this.pausedForPlayback.size || (await this.hasIncompleteActivePlayback())) return;
-    await this.resumeSpeculativeDownloads();
+    if (!this.pausedForPlayback.size && !this.bufferingCapsApplied) return;
+    if (await this.hasIncompleteActivePlayback()) return;
+    // Resuming refreshes priorities too; without paused sources the caps still have to go.
+    if (this.pausedForPlayback.size) await this.resumeSpeculativeDownloads();
+    else this.refreshTorrentPriorities();
   }
 
   private async hasIncompleteActivePlayback(excludeSourceId?: number): Promise<boolean> {

@@ -30,6 +30,9 @@ describe('torrent priority', () => {
     expect(torrentDownloadCap({ streams: 1, streamBuffering: true, downloadLimit })).toBe(-1);
     expect(torrentDownloadCap({ streams: 0, streamBuffering: false, downloadLimit })).toBe(-1);
     expect(torrentDownloadCap({ streams: 0, streamBuffering: true, downloadLimit: 0 })).toBe(-1);
+    expect(torrentDownloadCap({ streams: 0, streamBuffering: true, downloadLimit: Infinity })).toBe(
+      -1
+    );
     expect(torrentDownloadCap({ streams: 0, streamBuffering: true, downloadLimit: 2 })).toBe(1);
   });
 });

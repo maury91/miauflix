@@ -54,7 +54,8 @@ export const torrentPriority = ({
 /**
  * A torrent's own download limit in bytes per second, or -1 for none (the client's global limit
  * still applies). While a stream is still buffering, torrents without a viewer share a quarter of
- * the global limit, so the stream gets the rest. With no global limit there is no share to give.
+ * the global limit, so the stream gets the rest. With no (or no finite) global limit there is no share
+ * to give.
  */
 export const torrentDownloadCap = ({
   streams,
@@ -65,6 +66,8 @@ export const torrentDownloadCap = ({
   streamBuffering: boolean;
   downloadLimit: number;
 }): number => {
-  if (streams > 0 || !streamBuffering || !(downloadLimit > 0)) return -1;
+  if (streams > 0 || !streamBuffering) return -1;
+  // A huge configured limit can parse to Infinity, which the fork's throttle rejects.
+  if (!Number.isFinite(downloadLimit) || downloadLimit <= 0) return -1;
   return Math.max(1, Math.round(downloadLimit * BACKGROUND_DOWNLOAD_SHARE));
 };

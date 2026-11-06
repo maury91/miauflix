@@ -30,7 +30,8 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
   config.registerProber({
     // No network check: a tracker being down is normal, and the others still answer.
     test: async values => {
-      const usable = (values.SCRAPE_TRACKERS || config.value('SCRAPE_TRACKERS'))
+      // An explicitly empty value means no trackers; only a missing key falls back.
+      const usable = (values.SCRAPE_TRACKERS ?? config.value('SCRAPE_TRACKERS'))
         .split(',')
         .map(item => item.trim())
         .filter(url => /^(udp|https?):\/\//.test(url));

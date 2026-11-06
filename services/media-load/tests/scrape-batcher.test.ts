@@ -4,6 +4,8 @@ import { afterEach, beforeEach, describe, expect, it, jest, mock } from 'bun:tes
 
 class FakeClient extends EventEmitter {
   static instances: FakeClient[] = [];
+  /** Trackers whose client throws when it sends its scrape. */
+  static broken = new Set<string>();
   readonly announce: string[];
   scraped: Array<Buffer | string> = [];
   destroyed = false;
@@ -13,6 +15,7 @@ class FakeClient extends EventEmitter {
     FakeClient.instances.push(this);
   }
   scrape(opts: { infoHash: Array<Buffer | string> }) {
+    if (this.announce.some(url => FakeClient.broken.has(url))) throw new Error('bad port');
     this.scraped = opts.infoHash;
   }
   destroy() {
@@ -219,6 +222,25 @@ describe('ScrapeBatcher', () => {
     void batcher.scrape(hashB).catch(() => undefined);
     expect(cache.has(hashA)).toBe(false);
     batcher.close();
+  });
+
+  it('treats a tracker that throws during setup like one that never answers', async () => {
+    FakeClient.broken = new Set([HTTP_1]);
+    try {
+      const batcher = new ScrapeBatcher([UDP_1, HTTP_1]);
+      const answered = batcher.scrape(hashA);
+      jest.advanceTimersByTime(50);
+      reply(instances[0], UDP_1, hashA, 3);
+      jest.advanceTimersByTime(1_000);
+      await expect(answered).resolves.toEqual({ complete: 3, incomplete: 0 });
+
+      const onlyBroken = new ScrapeBatcher([HTTP_1]);
+      const silent = onlyBroken.scrape(hashB);
+      jest.advanceTimersByTime(5_050);
+      await expect(silent).rejects.toMatchObject({ code: 'scrape_timeout' });
+    } finally {
+      FakeClient.broken = new Set();
+    }
   });
 
   it('rejects invalid hashes, missing trackers and requests after close', async () => {

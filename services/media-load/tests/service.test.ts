@@ -67,6 +67,17 @@ describe('media-load service', () => {
     expect(FakeClient.instances.map(instance => instance.opts.announce)).toEqual([[tracker]]);
   });
 
+  it('keeps an explicitly empty tracker list instead of the defaults', async () => {
+    const { client, admin } = setup();
+    const result = await admin.applyConfig({ values: { SCRAPE_TRACKERS: '' } });
+    expect(result.test?.message).toBe(
+      'No UDP or HTTP scrape trackers: swarm stats are unavailable'
+    );
+    const error = await client.swarmStats({ hash: 'a'.repeat(40) }).catch(e => e);
+    expect(isContractError(error, 'scrape_unavailable')).toBe(true);
+    expect(FakeClient.instances).toHaveLength(0);
+  });
+
   it('returns scrape failures as contract errors', async () => {
     const { client, admin } = setup();
     await admin.applyConfig({ values: { SCRAPE_TRACKERS: 'wss://only.example' } });

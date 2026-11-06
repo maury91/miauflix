@@ -2,7 +2,13 @@ import { serve } from '@miauflix/contract';
 
 import { createMediaLoadService } from './service';
 
-const PORT = Number(process.env.MEDIA_LOAD_PORT ?? 3004);
+const DEFAULT_PORT = 3004;
+/** An empty or invalid MEDIA_LOAD_PORT would bind a random port (or fail): use the default. */
+const configuredPort = Number(process.env.MEDIA_LOAD_PORT);
+const PORT =
+  Number.isInteger(configuredPort) && configuredPort > 0 && configuredPort < 65536
+    ? configuredPort
+    : DEFAULT_PORT;
 const HOST = process.env.MEDIA_LOAD_HOST ?? '0.0.0.0';
 
 const { service } = createMediaLoadService();

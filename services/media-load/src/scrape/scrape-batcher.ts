@@ -243,18 +243,23 @@ export class ScrapeBatcher {
     };
 
     const start = (announce: string[], hashes: Array<Buffer | string>) => {
-      const client = new BTClient({
-        infoHash: typeof hashes[0] === 'string' ? hashes[0] : hashes[0].toString('hex'),
-        announce,
-        peerId: DUMMY_PEER_ID,
-        port: 6881,
-      });
-      clients.push(client);
-      client.on('scrape', onScrape);
-      // A failing tracker must not fail the batch; the others or the timeout settle it.
-      client.on('error', error => debug(`Scrape error: ${error.message}`));
-      client.on('warning', error => debug(`Scrape warning: ${error.message}`));
-      client.scrape({ infoHash: hashes });
+      // A tracker that cannot even be set up (a malformed URL, port 0, which `dgram.send` throws
+      // on) is handled like one that never answers: the others or the timeout settle the batch.
+      try {
+        const client = new BTClient({
+          infoHash: typeof hashes[0] === 'string' ? hashes[0] : hashes[0].toString('hex'),
+          announce,
+          peerId: DUMMY_PEER_ID,
+          port: 6881,
+        });
+        clients.push(client);
+        client.on('scrape', onScrape);
+        client.on('error', error => debug(`Scrape error: ${error.message}`));
+        client.on('warning', error => debug(`Scrape warning: ${error.message}`));
+        client.scrape({ infoHash: hashes });
+      } catch (error) {
+        debug(`Scrape setup failed: ${error instanceof Error ? error.message : String(error)}`);
+      }
     };
 
     // The UDP client packs hashes as raw bytes while the HTTP client hex-decodes them, so the
