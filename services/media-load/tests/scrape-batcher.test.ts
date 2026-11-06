@@ -161,6 +161,66 @@ describe('ScrapeBatcher', () => {
     batcher.close();
   });
 
+  it('joins a request that was already sent to trackers', async () => {
+    const batcher = new ScrapeBatcher([UDP_1]);
+    const first = batcher.scrape(hashA);
+    jest.advanceTimersByTime(50);
+    const second = batcher.scrape(hashA);
+    jest.advanceTimersByTime(50);
+    expect(instances).toHaveLength(1);
+
+    reply(instances[0], UDP_1, hashA, 8);
+    await expect(Promise.all([first, second])).resolves.toEqual([
+      { complete: 8, incomplete: 0 },
+      { complete: 8, incomplete: 0 },
+    ]);
+    expect(batcher.stats.completedScrapes).toBe(1);
+  });
+
+  it('gives each hash its own grace period after its first reply', async () => {
+    const batcher = new ScrapeBatcher([UDP_1, UDP_2]);
+    const early = batcher.scrape(hashA);
+    const late = batcher.scrape(hashB);
+    jest.advanceTimersByTime(50);
+    reply(instances[0], UDP_1, hashA, 2);
+
+    // hashA's grace period ends; hashB still has until the timeout.
+    jest.advanceTimersByTime(1_000);
+    await expect(early).resolves.toEqual({ complete: 2, incomplete: 0 });
+    jest.advanceTimersByTime(2_000);
+    reply(instances[0], UDP_2, hashB, 6);
+    jest.advanceTimersByTime(1_000);
+    await expect(late).resolves.toEqual({ complete: 6, incomplete: 0 });
+    expect(instances[0].destroyed).toBe(true);
+  });
+
+  it('fails sent requests as unavailable on close without counting them as failed', async () => {
+    const batcher = new ScrapeBatcher([UDP_1]);
+    const sent = batcher.scrape(hashA);
+    jest.advanceTimersByTime(50);
+    batcher.close();
+
+    await expect(sent).rejects.toMatchObject({ code: 'scrape_unavailable' });
+    expect(instances[0].destroyed).toBe(true);
+    expect(batcher.stats).toEqual({ activeScrapes: 0, completedScrapes: 0, failedScrapes: 0 });
+    expect(jest.getTimerCount()).toBe(0);
+  });
+
+  it('drops expired results of hashes nobody asks for again', async () => {
+    const batcher = new ScrapeBatcher([UDP_1]);
+    const cache = (batcher as unknown as { cache: Map<string, unknown> }).cache;
+    const result = batcher.scrape(hashA);
+    jest.advanceTimersByTime(50);
+    reply(instances[0], UDP_1, hashA, 1);
+    await result;
+    expect(cache.has(hashA)).toBe(true);
+
+    jest.advanceTimersByTime(60_001);
+    void batcher.scrape(hashB).catch(() => undefined);
+    expect(cache.has(hashA)).toBe(false);
+    batcher.close();
+  });
+
   it('rejects invalid hashes, missing trackers and requests after close', async () => {
     await expect(new ScrapeBatcher([UDP_1]).scrape('nope')).rejects.toMatchObject({
       code: 'invalid_hash',

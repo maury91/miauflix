@@ -41,6 +41,16 @@ interface Pending {
   waiters: Array<{ resolve: (counts: SwarmCounts) => void; reject: (error: Error) => void }>;
 }
 
+/** The hashes of a batch that trackers know by one tracker hash; they settle together. */
+interface Group {
+  hashes: string[];
+  counts: SwarmCounts | null;
+  /** Trackers that answered for this group. */
+  replies: Set<string>;
+  graceTimer: NodeJS.Timeout | null;
+  settled: boolean;
+}
+
 /**
  * Shares tracker scrapes between concurrent stats requests. Requests arriving within a short
  * window go out together, one multi-hash scrape per tracker. Each tracker's counts are combined
@@ -53,11 +63,15 @@ export class ScrapeBatcher {
   private readonly graceMs: number;
   private readonly timeoutMs: number;
   private readonly cacheTtlMs: number;
+  /** Requests waiting for the next batch. */
   private readonly queue = new Map<string, Pending>();
+  /** Requests already sent to trackers; later callers for the same hash join them. */
+  private readonly inFlight = new Map<string, Pending>();
   private readonly cache = new Map<string, { counts: SwarmCounts; expiresAt: number }>();
-  private readonly clients = new Set<BTClient>();
+  /** Settles every sent batch with the given error; called on close. */
+  private readonly activeBatches = new Set<(error: Error) => void>();
   private flushTimer: NodeJS.Timeout | null = null;
-  private inFlightHashes = 0;
+  private nextCacheSweep = 0;
   private completed = 0;
   private failed = 0;
   private closed = false;
@@ -71,14 +85,16 @@ export class ScrapeBatcher {
     this.cacheTtlMs = options.cacheTtlMs ?? 60_000;
   }
 
+  /** Hashes waiting or in flight, and how many scrapes succeeded or failed so far. */
   get stats(): { activeScrapes: number; completedScrapes: number; failedScrapes: number } {
     return {
-      activeScrapes: this.queue.size + this.inFlightHashes,
+      activeScrapes: this.queue.size + this.inFlight.size,
       completedScrapes: this.completed,
       failedScrapes: this.failed,
     };
   }
 
+  /** Seeders and leechers for a v1 or v2 info hash. */
   scrape(infoHash: string): Promise<SwarmCounts> {
     const hash = infoHash.toLowerCase();
     if (!/^(?:[0-9a-f]{40}|[0-9a-f]{64})$/.test(hash)) {
@@ -92,11 +108,17 @@ export class ScrapeBatcher {
         new ScrapeError('No UDP or HTTP scrape trackers are configured', 'scrape_unavailable')
       );
     }
+    this.sweepCache();
     const cached = this.cache.get(hash);
     if (cached && cached.expiresAt > Date.now()) return Promise.resolve({ ...cached.counts });
     if (cached) this.cache.delete(hash);
 
     return new Promise<SwarmCounts>((resolve, reject) => {
+      const sent = this.inFlight.get(hash);
+      if (sent) {
+        sent.waiters.push({ resolve, reject });
+        return;
+      }
       // BEP 52: trackers identify a v2 torrent by its hash truncated to 20 bytes.
       const pending = this.queue.get(hash) ?? { trackerHash: hash.slice(0, 40), waiters: [] };
       pending.waiters.push({ resolve, reject });
@@ -106,6 +128,7 @@ export class ScrapeBatcher {
     });
   }
 
+  /** Stops scraping: every waiting and in-flight request fails with `scrape_unavailable`. */
   close(): void {
     this.closed = true;
     if (this.flushTimer) clearTimeout(this.flushTimer);
@@ -115,8 +138,18 @@ export class ScrapeBatcher {
       for (const waiter of pending.waiters) waiter.reject(error);
     }
     this.queue.clear();
-    for (const client of this.clients) client.destroy();
-    this.clients.clear();
+    for (const abort of [...this.activeBatches]) abort(error);
+    this.cache.clear();
+  }
+
+  /** Drops expired results, at most once per cache lifetime. */
+  private sweepCache(): void {
+    const now = Date.now();
+    if (now < this.nextCacheSweep) return;
+    this.nextCacheSweep = now + this.cacheTtlMs;
+    for (const [hash, entry] of this.cache) {
+      if (entry.expiresAt <= now) this.cache.delete(hash);
+    }
   }
 
   private flush(): void {
@@ -128,50 +161,68 @@ export class ScrapeBatcher {
         if (batch.size >= HASHES_PER_BATCH) break;
         batch.set(hash, pending);
         this.queue.delete(hash);
+        this.inFlight.set(hash, pending);
       }
       this.run(batch);
     }
   }
 
+  /** Sends one batch and settles each tracker-hash group on its own. */
   private run(batch: Map<string, Pending>): void {
-    this.inFlightHashes += batch.size;
-    const byTrackerHash = new Map<string, string[]>();
+    const groups = new Map<string, Group>();
     for (const [hash, { trackerHash }] of batch) {
-      byTrackerHash.set(trackerHash, [...(byTrackerHash.get(trackerHash) ?? []), hash]);
+      const group = groups.get(trackerHash) ?? {
+        hashes: [],
+        counts: null,
+        replies: new Set<string>(),
+        graceTimer: null,
+        settled: false,
+      };
+      group.hashes.push(hash);
+      groups.set(trackerHash, group);
     }
-    const trackerHashes = [...byTrackerHash.keys()];
-    const counts = new Map<string, SwarmCounts>();
-    const replies = new Map<string, Set<string>>();
+    const trackerHashes = [...groups.keys()];
     const trackerCount = this.udpTrackers.length + this.httpTrackers.length;
     const clients: BTClient[] = [];
-    let graceTimer: NodeJS.Timeout | null = null;
-    let finished = false;
+    let open = groups.size;
 
-    const finish = () => {
-      if (finished) return;
-      finished = true;
+    const cleanup = () => {
       clearTimeout(timeoutTimer);
-      if (graceTimer) clearTimeout(graceTimer);
-      for (const client of clients) {
-        this.clients.delete(client);
-        client.destroy();
-      }
-      this.inFlightHashes -= batch.size;
+      this.activeBatches.delete(abort);
+      for (const client of clients) client.destroy();
+    };
+
+    /** Settles a group: its counts if any tracker answered, otherwise `error`. */
+    const settle = (group: Group, error: Error | null) => {
+      if (group.settled) return;
+      group.settled = true;
+      if (group.graceTimer) clearTimeout(group.graceTimer);
       const expiresAt = Date.now() + this.cacheTtlMs;
-      for (const [hash, pending] of batch) {
-        const result = counts.get(pending.trackerHash);
-        if (result) {
+      for (const hash of group.hashes) {
+        const pending = batch.get(hash)!;
+        this.inFlight.delete(hash);
+        if (group.counts) {
           this.completed += 1;
-          this.cache.set(hash, { counts: result, expiresAt });
-          for (const waiter of pending.waiters) waiter.resolve({ ...result });
+          if (!this.closed) this.cache.set(hash, { counts: group.counts, expiresAt });
+          for (const waiter of pending.waiters) waiter.resolve({ ...group.counts });
         } else {
-          this.failed += 1;
-          const error = new ScrapeError(`Scrape request timed out for ${hash}`, 'scrape_timeout');
-          for (const waiter of pending.waiters) waiter.reject(error);
+          const failure =
+            error ?? new ScrapeError(`Scrape request timed out for ${hash}`, 'scrape_timeout');
+          // A shutdown is not a failed scrape.
+          if (!error) this.failed += 1;
+          for (const waiter of pending.waiters) waiter.reject(failure);
         }
       }
+      open -= 1;
+      if (open === 0) cleanup();
     };
-    const timeoutTimer = setTimeout(finish, this.timeoutMs);
+
+    const settleAll = (error: Error | null) => {
+      for (const group of groups.values()) settle(group, error);
+    };
+    const abort = (error: Error) => settleAll(error);
+    this.activeBatches.add(abort);
+    const timeoutTimer = setTimeout(() => settleAll(null), this.timeoutMs);
 
     const onScrape = (data: {
       infoHash?: string;
@@ -179,19 +230,16 @@ export class ScrapeBatcher {
       incomplete?: number;
       announce?: string;
     }) => {
-      if (finished || typeof data.infoHash !== 'string') return;
-      const trackerHash = data.infoHash.toLowerCase();
-      if (!byTrackerHash.has(trackerHash)) return;
-      const previous = counts.get(trackerHash);
-      counts.set(trackerHash, {
-        complete: Math.max(previous?.complete ?? 0, Number(data.complete) || 0),
-        incomplete: Math.max(previous?.incomplete ?? 0, Number(data.incomplete) || 0),
-      });
-      const seen = replies.get(trackerHash) ?? new Set<string>();
-      seen.add(data.announce ?? '');
-      replies.set(trackerHash, seen);
-      if (trackerHashes.every(h => (replies.get(h)?.size ?? 0) >= trackerCount)) finish();
-      else graceTimer ??= setTimeout(finish, this.graceMs);
+      if (typeof data.infoHash !== 'string') return;
+      const group = groups.get(data.infoHash.toLowerCase());
+      if (!group || group.settled) return;
+      group.counts = {
+        complete: Math.max(group.counts?.complete ?? 0, Number(data.complete) || 0),
+        incomplete: Math.max(group.counts?.incomplete ?? 0, Number(data.incomplete) || 0),
+      };
+      group.replies.add(data.announce ?? '');
+      if (group.replies.size >= trackerCount) settle(group, null);
+      else group.graceTimer ??= setTimeout(() => settle(group, null), this.graceMs);
     };
 
     const start = (announce: string[], hashes: Array<Buffer | string>) => {
@@ -202,7 +250,6 @@ export class ScrapeBatcher {
         port: 6881,
       });
       clients.push(client);
-      this.clients.add(client);
       client.on('scrape', onScrape);
       // A failing tracker must not fail the batch; the others or the timeout settle it.
       client.on('error', error => debug(`Scrape error: ${error.message}`));
