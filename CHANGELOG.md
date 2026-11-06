@@ -4,6 +4,10 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ## Unreleased
 
+### Fixes
+
+- Signing in a TV by scanning its QR code works again: the phone no longer keeps asking you to sign in
+
 ## 2026-11-03 v0.1.0 Samsung TV support, smarter sources, smoother playback, and better reliability
 
 ### New
