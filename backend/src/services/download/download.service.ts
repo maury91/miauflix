@@ -1,8 +1,6 @@
 import { createHash } from 'node:crypto';
 
 import { logger } from '@logger';
-import type { ScrapeData } from 'bittorrent-tracker';
-import { Client as BTClient } from 'bittorrent-tracker';
 import { access, constants, mkdir, rm } from 'fs/promises';
 import MemoryChunkStore from 'memory-chunk-store';
 import parseTorrent from 'parse-torrent';
@@ -39,6 +37,7 @@ import {
 } from './download.utils';
 import { EncryptedFileReader } from './encrypted-file-reader';
 import { TorrentDiagnostics } from './torrent-diagnostics';
+import { claimStartPriority, torrentDownloadCap, torrentPriority } from './torrent-priority';
 
 // Types for greedy streaming
 // export type DownloadPriority = 'full' | 'partial';
@@ -201,9 +200,6 @@ export interface WarmupRangeProgress {
 export class DownloadService {
   public readonly client: WebTorrent;
   private activeStreams = 0;
-  private activeScrapes = 0;
-  private completedScrapes = 0;
-  private failedScrapes = 0;
   private readonly activeSourceCounts = new Map<number, number>();
   /** Playback reads waiting on a piece, by source, with when each started waiting. */
   private readonly blockedReadsBySource = new Map<number, Map<symbol, number>>();
@@ -231,7 +227,15 @@ export class DownloadService {
   private readonly staticTrackers: string[];
   private readonly bestTrackersDownloadUrl: string;
   private readonly blacklistedTrackersDownloadUrl: string;
-  private readonly scrapeTrackers: string[];
+  /** Connection priority and download cap last applied to each torrent. */
+  private readonly appliedTorrentLimits = new WeakMap<
+    Torrent,
+    { priority: number; downloadCap: number }
+  >();
+  private priorityRefresh: Promise<void> | null = null;
+  private priorityRefreshAgain = false;
+  /** Whether the last priority pass capped torrents because a stream was buffering. */
+  private bufferingCapsApplied = false;
 
   constructor(
     private readonly storageService: StorageService,
@@ -239,12 +243,12 @@ export class DownloadService {
     private readonly config: ConfigService
   ) {
     this.staticTrackers = config.getOrThrow('STATIC_TRACKERS');
-    this.scrapeTrackers = config.getOrThrow('SCRAPE_TRACKERS');
     this.bestTrackers = [...new Set([...this.staticTrackers])];
     this.bestTrackersDownloadUrl = config.getOrThrow('BEST_TRACKERS_DOWNLOAD_URL');
     this.blacklistedTrackersDownloadUrl = config.getOrThrow('BLACKLISTED_TRACKERS_DOWNLOAD_URL');
     const options: WebTorrentOptions = {
       maxConns: config.getOrThrow('CONTENT_CONNECTION_LIMIT'),
+      connectionBudget: config.getOrThrow('CONTENT_CONNECTION_BUDGET'),
       downloadLimit: Number(config.getOrThrow('CONTENT_DOWNLOAD_LIMIT')),
       uploadLimit: Number(config.getOrThrow('CONTENT_UPLOAD_LIMIT')),
       // blocklist: [this.blacklistedTrackersDownloadUrl],
@@ -257,9 +261,6 @@ export class DownloadService {
       activeStreams: this.activeStreams,
       activeSources: this.activeSourceCounts.size,
       pendingTorrentStarts: this.torrentStartPromises.size,
-      activeScrapes: this.activeScrapes,
-      completedScrapes: this.completedScrapes,
-      failedScrapes: this.failedScrapes,
     }));
     this.client.on('error', (error: Error) => {
       logger.error('DownloadService', 'Error:', error.message, error);
@@ -582,7 +583,7 @@ export class DownloadService {
           torrent.select(tail.firstPiece, tail.lastPiece, want.priority);
         }
       }
-    });
+    }).finally(() => this.refreshTorrentPriorities());
   }
 
   /** File and piece selections are independent in WebTorrent; clear both. */
@@ -922,6 +923,7 @@ export class DownloadService {
     trackedSourceIds.add(sourceId);
     this.bitfieldTrackedTorrents.set(torrent, trackedSourceIds);
     this.setupBitfieldTracking(torrent, sourceId, layout);
+    this.refreshTorrentPriorities();
   }
 
   private async readVerifiedPiece(
@@ -1064,55 +1066,6 @@ export class DownloadService {
     });
   }
 
-  private async scrape(infoHash: string): Promise<ScrapeData> {
-    this.activeScrapes += 1;
-    return new Promise<ScrapeData>((resolve, reject) => {
-      const client = new BTClient({
-        infoHash: infoHash.toLowerCase(),
-        announce: this.scrapeTrackers,
-        peerId: Buffer.from('01234567890123456789'), // 20-byte dummy peer ID
-        port: 6881, // arbitrary port for scrape
-      });
-
-      client.once('scrape', data => {
-        resolve(data);
-        client.destroy();
-      });
-
-      client.once('error', err => {
-        reject(err);
-        client.destroy();
-      });
-
-      client.scrape();
-
-      setTimeout(() => {
-        reject(new ErrorWithStatus(`Scrape request timed out for ${infoHash}`, 'scrape_timeout'));
-        client.destroy();
-      }, 5000); // 5 seconds timeout
-    }).then(
-      result => {
-        this.activeScrapes -= 1;
-        this.completedScrapes += 1;
-        return result;
-      },
-      error => {
-        this.activeScrapes -= 1;
-        this.failedScrapes += 1;
-        throw error;
-      }
-    );
-  }
-
-  @traced('DownloadService')
-  async getStats(infoHash: string): Promise<{ broadcasters: number; watchers: number }> {
-    const result = await this.scrape(infoHash);
-    return {
-      broadcasters: result.complete || 0,
-      watchers: result.incomplete || 0,
-    };
-  }
-
   /**
    * Start greedy download with storage tracking and priority management
    * Implements storage-conscious downloading for hobbyist constraints (150GB total storage)
@@ -1209,7 +1162,11 @@ export class DownloadService {
         this.seedTimers.delete(source.id);
 
         // Serialize torrent startup against expiry detachment and storage deletion.
-        const torrent = await this.addTorrentWithLock(source, current);
+        const torrent = await this.addTorrentWithLock(
+          source,
+          current,
+          claimStartPriority(claim.kind)
+        );
         const layout = this.createEncryptedLayout(torrent, source.hash);
         if (!layout.files.some(file => file.path === filePath)) {
           // The files were unknown at admission; drop the claim on a path that does not exist.
@@ -1697,6 +1654,7 @@ export class DownloadService {
   private async addTorrent(
     { magnetLink, hash, file }: Pick<ContentSource, 'file' | 'hash' | 'magnetLink'>,
     { location, downloadedPieces }: Pick<Storage, 'downloadedPieces' | 'location'>,
+    priority = 1,
     timeout: number = 30000
   ): Promise<Torrent> {
     return new Promise((resolve, reject) => {
@@ -1707,6 +1665,7 @@ export class DownloadService {
           store: EncryptedChunkStore,
           storeCacheSlots: TORRENT_STORE_CACHE_SLOTS,
           announce: this.bestTrackers,
+          priority,
           storeOpts: {
             encryptionKey: this.config.getOrThrow('SOURCE_SECURITY_KEY'),
             filenameSalt: `download-${hash}`,
@@ -1775,13 +1734,19 @@ export class DownloadService {
 
   private async addTorrentWithLock(
     source: Pick<ContentSource, 'file' | 'hash' | 'magnetLink'>,
-    storage: Pick<Storage, 'downloadedPieces' | 'location'>
+    storage: Pick<Storage, 'downloadedPieces' | 'location'>,
+    priority = 1
   ): Promise<Torrent> {
     const key = source.hash.toLowerCase();
     const inFlight = this.torrentStartPromises.get(key);
-    if (inFlight) return inFlight;
+    if (inFlight) {
+      // A playback joining a background start must not wait for metadata at background priority.
+      const pending = this.client.torrents.find(item => item.infoHash?.toLowerCase() === key);
+      if (pending && (pending.priority ?? 1) < priority) pending.setPriority?.(priority);
+      return inFlight;
+    }
 
-    const start = this.addTorrent(source, storage).finally(() => {
+    const start = this.addTorrent(source, storage, priority).finally(() => {
       if (this.torrentStartPromises.get(key) === start) {
         this.torrentStartPromises.delete(key);
       }
@@ -2160,6 +2125,7 @@ export class DownloadService {
               (this.activeSourceCounts.get(contentSource.id) ?? 0) + 1
             );
             this.changeActiveFileCount(contentSource.id, file.path, 1);
+            this.refreshTorrentPriorities();
             if (this.activeStreams === 1) {
               try {
                 await this.pauseSpeculativeDownloads(contentSource.id);
@@ -2172,6 +2138,7 @@ export class DownloadService {
                 if (remaining > 0) this.activeSourceCounts.set(contentSource.id, remaining);
                 else this.activeSourceCounts.delete(contentSource.id);
                 this.changeActiveFileCount(contentSource.id, file.path, -1);
+                this.refreshTorrentPriorities();
                 await this.storageService.setPlaybackActive(contentSource.id, false);
                 throw error;
               }
@@ -2215,6 +2182,7 @@ export class DownloadService {
           if (remaining > 0) this.activeSourceCounts.set(contentSource.id, remaining);
           else this.activeSourceCounts.delete(contentSource.id);
           this.changeActiveFileCount(contentSource.id, file.path, -1);
+          this.refreshTorrentPriorities();
           releasePromise = this.storageService.withSourceLock(contentSource.id, async () => {
             await this.storageService.setPlaybackActive(contentSource.id, false);
             if (this.activeStreams === 0) await this.resumeSpeculativeDownloads();
@@ -2376,11 +2344,70 @@ export class DownloadService {
     const sourceIds = [...this.pausedForPlayback];
     this.pausedForPlayback.clear();
     await Promise.all(sourceIds.map(sourceId => this.resumeDownload(sourceId)));
+    // The stream has buffered its file (or ended): lift the caps on the other torrents.
+    this.refreshTorrentPriorities();
+  }
+
+  /**
+   * Recompute every attached torrent's connection priority and download cap. Calls made while a
+   * refresh runs coalesce into one more pass, since claims and streams change in bursts.
+   */
+  private refreshTorrentPriorities(): void {
+    if (this.priorityRefresh) {
+      this.priorityRefreshAgain = true;
+      return;
+    }
+    this.priorityRefresh = (async () => {
+      try {
+        do {
+          this.priorityRefreshAgain = false;
+          try {
+            await this.applyTorrentPriorities();
+          } catch (error) {
+            logger.warn('DownloadService', 'Failed to update torrent priorities', error);
+          }
+        } while (this.priorityRefreshAgain);
+      } finally {
+        // Cleared in the same step as the last check, so no later call is left without a pass.
+        this.priorityRefresh = null;
+      }
+    })();
+  }
+
+  private async applyTorrentPriorities(): Promise<void> {
+    const streamBuffering = this.activeStreams > 0 && (await this.hasIncompleteActivePlayback());
+    this.bufferingCapsApplied = streamBuffering;
+    const downloadLimit = Number(this.config.getOrThrow('CONTENT_DOWNLOAD_LIMIT'));
+    for (const torrent of this.client.torrents) {
+      if (torrent.destroyed) continue;
+      const sourceIds = this.bitfieldTrackedTorrents.get(torrent);
+      // Until its files are known a torrent keeps the priority it was added with.
+      if (!sourceIds?.size) continue;
+      let streams = 0;
+      const claimKinds = new Set<ClaimKind>();
+      for (const sourceId of sourceIds) {
+        streams += this.activeSourceCounts.get(sourceId) ?? 0;
+        for (const claim of await this.storageService.getLiveClaims(sourceId)) {
+          claimKinds.add(claim.kind);
+        }
+      }
+      if (torrent.destroyed) continue;
+      const priority = torrentPriority({ streams, claimKinds });
+      const downloadCap = torrentDownloadCap({ streams, streamBuffering, downloadLimit });
+      const applied = this.appliedTorrentLimits.get(torrent);
+      if (applied?.priority !== priority) torrent.setPriority?.(priority);
+      if ((applied?.downloadCap ?? -1) !== downloadCap)
+        torrent.throttleDownloadSpeed?.(downloadCap);
+      this.appliedTorrentLimits.set(torrent, { priority, downloadCap });
+    }
   }
 
   private async resumeSpeculativeDownloadsWhenPlaybackReady(): Promise<void> {
-    if (!this.pausedForPlayback.size || (await this.hasIncompleteActivePlayback())) return;
-    await this.resumeSpeculativeDownloads();
+    if (!this.pausedForPlayback.size && !this.bufferingCapsApplied) return;
+    if (await this.hasIncompleteActivePlayback()) return;
+    // Resuming refreshes priorities too; without paused sources the caps still have to go.
+    if (this.pausedForPlayback.size) await this.resumeSpeculativeDownloads();
+    else this.refreshTorrentPriorities();
   }
 
   private async hasIncompleteActivePlayback(excludeSourceId?: number): Promise<boolean> {

@@ -283,6 +283,7 @@ const SERVICE_SUMMARIES: Record<string, string> = {
   CATALOG_RUNTIME: 'Episode syncing and catalog freshness behavior.',
   LIST: 'Trakt lists and watchlist integration.',
   SOURCES: 'Source providers, search budgets and VPN protection.',
+  MEDIA_LOAD: 'Torrent engine service: tracker scrapes for seeder counts.',
   DOWNLOAD: 'Torrent downloads used to prepare movie playback.',
   SOURCE: 'Source discovery and ranking for available movies.',
   STORAGE: 'Download and cache storage used by playback.',
@@ -293,7 +294,13 @@ const SERVICE_SUMMARIES: Record<string, string> = {
   SERVER: 'HTTP server and runtime settings.',
 };
 
-const ADVANCED_OPTIONAL_GROUPS = new Set(['CATALOG_RUNTIME', 'JWT', 'QUEUE', 'SERVER']);
+const ADVANCED_OPTIONAL_GROUPS = new Set([
+  'CATALOG_RUNTIME',
+  'JWT',
+  'MEDIA_LOAD',
+  'QUEUE',
+  'SERVER',
+]);
 
 function getServiceSummary(name: string, entries: ConfigEntryView[]): string {
   return SERVICE_SUMMARIES[name] ?? entries[0]?.serviceDescription ?? 'Optional service settings.';

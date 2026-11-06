@@ -18,7 +18,7 @@ services:
       # Settings written by the configuration wizard (npm run config-only:docker)
       - ./.env:/usr/src/app/.env
 
-  # Includes the sources service on port 3003.
+  # Includes the sources service on port 3003 and media load on port 3004.
   miauflix-services:
     build:
       context: .

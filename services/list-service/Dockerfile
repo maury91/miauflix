@@ -14,6 +14,7 @@ COPY packages/service-contracts/package.json packages/service-contracts/package.
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
 COPY services/list-service/package.json services/list-service/package.json
 COPY services/sources/package.json services/sources/package.json
+COPY services/media-load/package.json services/media-load/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 RUN sed -i 's/"prepare".*/"prepare": "echo skipped",/' packages/*/package.json || true
 RUN npm ci --ignore-scripts

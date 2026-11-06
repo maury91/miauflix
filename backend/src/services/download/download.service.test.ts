@@ -48,12 +48,12 @@ type TestConfigurationService = ConfigurationService & {
 const createMockConfig = (seedDurationSeconds = 3600): TestConfigurationService => {
   const values: Record<string, unknown> = {
     CONTENT_CONNECTION_LIMIT: 100,
+    CONTENT_CONNECTION_BUDGET: 200,
     CONTENT_DOWNLOAD_LIMIT: 1000000,
     CONTENT_UPLOAD_LIMIT: 500000,
     CONTENT_SEED_DURATION_SECONDS: seedDurationSeconds,
     DISABLE_DISCOVERY: false,
     STATIC_TRACKERS: ['udp://tracker1.example.com:1337', 'udp://tracker2.example.com:1337'],
-    SCRAPE_TRACKERS: ['udp://tracker.opentrackr.org:1337/announce'],
     BEST_TRACKERS_DOWNLOAD_URL: 'https://example.com/trackers_best.txt',
     BLACKLISTED_TRACKERS_DOWNLOAD_URL: 'https://example.com/blacklist.txt',
     DOWNLOAD_PATH: '/tmp/test-downloads',
@@ -611,6 +611,120 @@ describe('DownloadService', () => {
         service.getSourceMetadataFile(`magnet:?xt=urn:btih:${hash}`, hash, 5000)
       ).resolves.toBe(torrentFile);
       expect(mockedTorrentInstance.remove).toHaveBeenCalledWith(hash, { destroyStore: true });
+    });
+  });
+
+  describe('torrent priorities', () => {
+    const flush = async () => {
+      for (let i = 0; i < 10; i++) await new Promise(resolve => setImmediate(resolve));
+    };
+
+    it('adds playback torrents at playback priority, raises them while streamed and lowers them after', async () => {
+      // Another attached torrent nobody watches: capped while the stream buffers.
+      const background = {
+        infoHash: 'b'.repeat(40),
+        destroyed: false,
+        setPriority: jest.fn(),
+        throttleDownloadSpeed: jest.fn(),
+      };
+      const { service, mockStorageService } = setupTest();
+      const webtorrent = service.client as unknown as {
+        ready: boolean;
+        add: jest.Mock;
+        torrents: unknown[];
+      };
+      const storage = {
+        id: 1,
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array(0),
+        size: 10,
+      };
+      webtorrent.ready = true;
+      mockStorageService.createStorage.mockResolvedValue(storage as never);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage as never);
+      mockStorageService.setPlaybackActive.mockResolvedValue(true);
+      const file = {
+        name: 'movie.mkv',
+        path: 'movie.mkv',
+        length: 10,
+        offset: 0,
+        select: jest.fn(),
+      };
+      const torrent = {
+        infoHash: 'a'.repeat(40),
+        name: 'movie',
+        bitfield: undefined,
+        pieces: new Array(1),
+        ready: true,
+        pieceLength: 10,
+        length: 10,
+        files: [file],
+        on: jest.fn(),
+        once: jest.fn(),
+        removeListener: jest.fn(),
+        off: jest.fn(),
+        _select: jest.fn(),
+        _deselect: jest.fn(),
+        critical: jest.fn(),
+        setPriority: jest.fn(),
+        throttleDownloadSpeed: jest.fn(),
+      };
+      webtorrent.torrents = [background];
+      (
+        service as unknown as { bitfieldTrackedTorrents: WeakMap<object, Set<number>> }
+      ).bitfieldTrackedTorrents.set(background, new Set([2]));
+      webtorrent.add.mockImplementation((_input, _options, callback) => {
+        webtorrent.torrents.push(torrent);
+        queueMicrotask(() => callback?.(torrent as never));
+        return torrent as never;
+      });
+
+      const response = await service.streamFile(
+        target({
+          id: 1,
+          size: 10,
+          hash: 'a'.repeat(40),
+          magnetLink: 'magnet:?xt=urn:btih:test',
+          file: null,
+        })
+      );
+      expect(webtorrent.add.mock.calls[0][1]).toMatchObject({ priority: 6 });
+      await flush();
+      expect(torrent.setPriority).toHaveBeenLastCalledWith(10);
+      // A stream is never capped; the stream has no file layout yet, so it is still buffering.
+      expect(torrent.throttleDownloadSpeed).not.toHaveBeenCalled();
+      // A quarter of CONTENT_DOWNLOAD_LIMIT (1,000,000).
+      expect(background.throttleDownloadSpeed).toHaveBeenLastCalledWith(250_000);
+
+      await response.body!.cancel();
+      await flush();
+      // No stream and no live claim left: idle priority, and the cap is lifted.
+      expect(torrent.setPriority).toHaveBeenLastCalledWith(1);
+      expect(background.throttleDownloadSpeed).toHaveBeenLastCalledWith(-1);
+    });
+  });
+
+  describe('torrent priorities after buffering', () => {
+    type Internals = {
+      bufferingCapsApplied: boolean;
+      refreshTorrentPriorities: () => void;
+      resumeSpeculativeDownloadsWhenPlaybackReady: () => Promise<void>;
+    };
+
+    it('lifts buffering caps once playback is ready even with nothing paused', async () => {
+      const { service } = setupTest();
+      const internals = service as unknown as Internals;
+      const refresh = jest
+        .spyOn(internals, 'refreshTorrentPriorities')
+        .mockImplementation(() => {});
+
+      // Nothing was capped: progress events do not trigger a pass.
+      await internals.resumeSpeculativeDownloadsWhenPlaybackReady();
+      expect(refresh).not.toHaveBeenCalled();
+
+      internals.bufferingCapsApplied = true;
+      await internals.resumeSpeculativeDownloadsWhenPlaybackReady();
+      expect(refresh).toHaveBeenCalledTimes(1);
     });
   });
 
