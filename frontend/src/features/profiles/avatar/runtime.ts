@@ -49,9 +49,10 @@ function supportsWebGl(): boolean {
 
 /**
  * Whether avatars are drawn live (animated 3D) in Who's watching and the sidebar, and missing
- * pictures drawn and uploaded. TVs and browsers without GPU-drawn WebGL show the pre-rendered
- * pictures instead; the editor draws live everywhere, as it must.
+ * pictures drawn and uploaded. Browsers without GPU-drawn WebGL show the pre-rendered pictures
+ * instead; the editor draws live everywhere, as it must. TVs draw live only where `onTv` asks for
+ * it (Who's watching, for now), while live drawing is being tried out on them.
  */
-export function liveAvatarsSupported(): boolean {
-  return typeof window !== 'undefined' && !builtForTizen && supportsWebGl();
+export function liveAvatarsSupported({ onTv = false }: { onTv?: boolean } = {}): boolean {
+  return typeof window !== 'undefined' && (onTv || !builtForTizen) && supportsWebGl();
 }

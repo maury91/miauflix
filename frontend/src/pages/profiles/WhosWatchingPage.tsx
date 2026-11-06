@@ -100,7 +100,7 @@ const WhosWatchingPage: FC<WhosWatchingPageProps> = ({
   const managing = mode === 'manage';
   /** Manage always returns to the selector; the selector only when opened from Home. */
   const back = managing ? onDone : onBack;
-  const live = liveAvatarsSupported();
+  const live = liveAvatarsSupported({ onTv: true });
   const initialFocus = focusUserId ?? currentUser?.id ?? profiles[0]?.user.id;
   /** The card under the highlight, from the remote's moves as well as focus events. */
   const [focusedId, setFocusedId] = useState<string | null>(null);

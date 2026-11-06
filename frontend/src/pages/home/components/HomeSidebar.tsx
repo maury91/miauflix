@@ -263,7 +263,7 @@ export const HomeSidebar = memo(function HomeSidebar({
           >
             <AvatarIcon aria-hidden="true">
               <Avatar>
-                <ProfileAvatar user={profile.user} session={profile.session} />
+                <ProfileAvatar user={profile.user} session={profile.session} live />
               </Avatar>
             </AvatarIcon>
             {open && <span>{profile.user.displayName || 'Profiles'}</span>}
