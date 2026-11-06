@@ -84,9 +84,9 @@ const Avatar = styled.div`
   height: 56px;
 `;
 
+/* Flex, not grid: the 2020 TVs (Chromium 69) cannot lay out a button as a grid. */
 const Row = styled.button`
-  display: grid;
-  grid-template-columns: 24px minmax(0, 1fr) 18px;
+  display: flex;
   align-items: center;
   gap: 14px;
   width: 100%;
@@ -100,13 +100,25 @@ const Row = styled.button`
   text-align: left;
   cursor: pointer;
 
-  svg {
-    width: 100%;
-    height: auto;
+  > svg {
+    flex: 0 0 auto;
+    width: 24px;
+    height: 24px;
   }
 
-  svg:last-child {
+  > svg:last-child {
+    width: 18px;
+    height: 18px;
     color: ${PALETTE.text.muted};
+  }
+
+  > span {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  > span:last-child {
+    flex: 0 0 18px;
   }
 
   &:hover,
@@ -258,7 +270,7 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
             onClick={onSwitch}
           >
             <SwitchIcon aria-hidden="true" />
-            Switch profile
+            <span>Switch profile</span>
             <ChevronIcon aria-hidden="true" />
           </Row>
           <Row
@@ -268,7 +280,7 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
             onClick={onEdit}
           >
             <EditIcon aria-hidden="true" />
-            Edit profile
+            <span>Edit profile</span>
             <ChevronIcon aria-hidden="true" />
           </Row>
           <Separator />
@@ -279,7 +291,7 @@ export const ProfileMenu: FC<ProfileMenuProps> = ({
             onClick={onLogout}
           >
             <LogoutIcon aria-hidden="true" />
-            Logout
+            <span>Logout</span>
             <span />
           </Row>
         </Panel>

@@ -65,7 +65,10 @@ export const PlushieLive = memo(function PlushieLive({
           maxPixelRatio: 1.5,
         });
       })
-      .catch(() => onErrorRef.current?.());
+      .catch((error: unknown) => {
+        console.warn('The Plushie could not be drawn', error);
+        onErrorRef.current?.();
+      });
     return () => {
       disposed = true;
       viewRef.current?.dispose();

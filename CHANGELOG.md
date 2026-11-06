@@ -7,6 +7,8 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 ### Fixes
 
 - Signing in a TV by scanning its QR code works again: the phone no longer keeps asking you to sign in
+- On Samsung TVs, Who's watching now shows the profiles' animated 3D Plushies, and the editor draws them too; Home's sidebar shows your Plushie in 3D (still) on every device
+- On Samsung TVs, the profile and notifications panels and the episode list are laid out properly again (the profile panel no longer shows giant icons running off the screen), and the profile editor's shape and fabric pictures fill their tiles
 
 ## 2026-11-03 v0.1.0 Samsung TV support, smarter sources, smoother playback, and better reliability
 
