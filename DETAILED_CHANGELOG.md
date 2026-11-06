@@ -36,6 +36,10 @@ Every change in full, for developers and self-hosters. The short version for use
 
   `bittorrent-tracker` loads WebRTC through its WebSocket tracker, so both service images run `npm rebuild node-datachannel` after `npm ci --ignore-scripts`. The setup wizard lists Media load with the advanced groups.
 
+### Bug fixes
+
+- QR sign-in approval (`/auth/qr/:approvalToken`) works again since profiles: it only looked at the profile chosen in this app run, which a newly opened tab (the QR link) never has and which signing in on that page does not set, so it kept asking to sign in. It now approves with the chosen profile, else the device's only profile (including the one just signed in), and asks **Who is approving?** when several profiles are signed in and none is chosen. A refused approval session removes only that profile instead of every profile on the device.
+
 ## 2026-11-03 v0.1.0 Samsung TV support, smarter sources, smoother playback, and better reliability
 
 ### Features
