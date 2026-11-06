@@ -323,6 +323,38 @@ describe('PlaybackSessionService', () => {
 
     afterEach(() => jest.useRealTimers());
 
+    it('continues sampling other sessions after a health lookup fails', async () => {
+      const { service, downloads, preparation, start } = setupMonitor();
+      await start();
+      const second = { id: 3 };
+      preparation.prepare.mockResolvedValueOnce({
+        source: second,
+        target: movie(second),
+        state: 'ready',
+      });
+      await start();
+      downloads.getPlaybackHealth.mockRejectedValueOnce(new Error('Media-load unavailable'));
+
+      await service.checkHealth();
+
+      expect(downloads.getPlaybackHealth.mock.calls).toEqual([
+        [1, 'movie.mkv'],
+        [3, 'movie.mkv'],
+      ]);
+    });
+
+    it('keeps sampling after an interval check rejects', async () => {
+      const { service, downloads, start } = setupMonitor();
+      await start();
+      jest
+        .spyOn(service, 'checkHealth')
+        .mockRejectedValueOnce(new Error('Unexpected check failure'));
+
+      await jest.advanceTimersByTimeAsync(2_000);
+
+      expect(downloads.getPlaybackHealth).toHaveBeenCalledTimes(1);
+    });
+
     it('warms a backup while a starting source is weak, avoiding the primary', async () => {
       const { preparation, downloads, sourceHealth, start, tick } = setupMonitor();
       const session = await start();

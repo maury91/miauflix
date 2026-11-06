@@ -321,7 +321,11 @@ export class PlaybackSessionService {
     for (const [id, live] of this.liveSessions) if (live.expiresAt <= now) this.forget(id, live);
     this.liveSessions.set(playbackId, session);
     if (this.downloads && !this.healthTimer) {
-      this.healthTimer = setInterval(() => void this.checkHealth(), HEALTH_SAMPLE_MS);
+      this.healthTimer = setInterval(() => {
+        void this.checkHealth().catch(error =>
+          logger.warn('PlaybackSessionService', 'Playback health check failed', error)
+        );
+      }, HEALTH_SAMPLE_MS);
       this.healthTimer.unref?.();
     }
   }
@@ -344,7 +348,16 @@ export class PlaybackSessionService {
           this.forget(playbackId, live);
           continue;
         }
-        const health = await this.downloads.getPlaybackHealth(live.sourceId, live.filePath);
+        const health = await this.downloads
+          .getPlaybackHealth(live.sourceId, live.filePath)
+          .catch(error => {
+            logger.debug(
+              'PlaybackSessionService',
+              `Could not sample source ${live.sourceId}`,
+              error
+            );
+            return null;
+          });
         if (!health || health.local) continue;
         const startup = health.lastDeliveryAt === null || health.lastDeliveryAt < live.createdAt;
         // Before the stream opens, only a missing file list can be what the viewer waits on.

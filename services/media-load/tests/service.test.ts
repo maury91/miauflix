@@ -176,6 +176,16 @@ describe('media-load service', () => {
     expect(reload).not.toHaveBeenCalled();
   });
 
+  it('trims static trackers and discards blank entries', async () => {
+    const { runtime } = await setup();
+    const tracker = 'udp://tracker.example:1337/announce';
+    const parse = (value: string) =>
+      runtime.check({ ...ENGINE_VALUES, STATIC_TRACKERS: value }).STATIC_TRACKERS;
+
+    expect(parse('')).toEqual([]);
+    expect(parse(` , ${tracker} , ,`)).toEqual([tracker]);
+  });
+
   it('scrapes through the applied trackers', async () => {
     const { client, apply } = await setup();
     const tracker = 'udp://tracker.example:1337/announce';

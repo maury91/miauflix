@@ -79,7 +79,10 @@ export const parseEngineSettings = (
     CONTENT_CONNECTION_BUDGET: integer('CONTENT_CONNECTION_BUDGET', 1),
     CONTENT_SEED_DURATION_SECONDS: integer('CONTENT_SEED_DURATION_SECONDS', 0),
     DISABLE_DISCOVERY: flag('DISABLE_DISCOVERY'),
-    STATIC_TRACKERS: (values.STATIC_TRACKERS ?? '').split(',').map(item => item.trim()),
+    STATIC_TRACKERS: (values.STATIC_TRACKERS ?? '')
+      .split(',')
+      .map(item => item.trim())
+      .filter(Boolean),
     BEST_TRACKERS_DOWNLOAD_URL: text('BEST_TRACKERS_DOWNLOAD_URL'),
     BLACKLISTED_TRACKERS_DOWNLOAD_URL: text('BLACKLISTED_TRACKERS_DOWNLOAD_URL'),
     DOWNLOAD_PATH: text('DOWNLOAD_PATH', 1),
