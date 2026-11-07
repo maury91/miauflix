@@ -7,8 +7,10 @@ import {
   type ImportedSource,
   mediaLoad,
   type MediaLoadError,
+  type PiecesUpdate,
   type PlaybackHealth,
   type SourceDescriptor,
+  type StorageBitfield,
   type StorageInventory,
   type StorageRemovalResult,
   type StorageState,
@@ -374,6 +376,19 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
 
   removeStorageWithResult(sourceId: number): Promise<StorageRemovalResult> {
     return this.engine(() => this.client.removeStorage({ sourceId }));
+  }
+
+  /**
+   * Hear verified-piece changes of every source; `onResync` runs after a gap in which updates
+   * were lost. Returns the unsubscribe function.
+   */
+  onPieces(listener: (update: PiecesUpdate) => void, onResync: () => void): () => void {
+    return this.client.piecesChanged.on(listener, { onResync });
+  }
+
+  /** The verified pieces of stored sources (rejects with `unsupported` on a 1.0 service). */
+  getStorageBitfields(sourceIds: number[]): Promise<StorageBitfield[]> {
+    return this.engine(() => this.client.storageBitfields({ sourceIds }));
   }
 
   /** Hear each source whose file list becomes known; returns the unsubscribe function. */

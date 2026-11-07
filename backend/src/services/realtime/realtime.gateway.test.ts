@@ -1,6 +1,7 @@
 import { EventEmitter } from 'node:events';
 
 import type { PlaybackDelivery } from '@services/playback/audio-playback.service';
+import type { PlaybackPiecesUpdate } from '@services/playback/playback-pieces.service';
 import type { PlaybackDeliveryUpdate } from '@services/playback/playback-session.service';
 
 import { RealtimeGateway } from './realtime.gateway';
@@ -147,6 +148,75 @@ describe('RealtimeGateway playback delivery', () => {
         update,
       });
       expect(sent(otherDevice).some(message => message.type === 'playback-delivery')).toBe(false);
+    } finally {
+      gateway.close();
+    }
+    expect(unsubscribe).toHaveBeenCalled();
+  });
+});
+
+describe('RealtimeGateway playback pieces', () => {
+  it('sends a playback’s downloaded ranges to its session, and the latest ones on connect', async () => {
+    let deliver: ((update: PlaybackPiecesUpdate) => void) | undefined;
+    const unsubscribe = jest.fn();
+    const latest: PlaybackPiecesUpdate = {
+      userId: 'user',
+      sessionId: 'session',
+      playbackId: 'playback',
+      ranges: [[0, 100]],
+    };
+    const pieces = {
+      onRanges: (listener: (update: PlaybackPiecesUpdate) => void) => {
+        deliver = listener;
+        return unsubscribe;
+      },
+      latestFor: jest.fn((userId: string, sessionId: string) =>
+        userId === 'user' && sessionId === 'session' ? [latest] : []
+      ),
+    };
+    const gateway = new RealtimeGateway(
+      { verifyAccessToken: jest.fn().mockResolvedValue({ userId: 'user' }) } as never,
+      { get: jest.fn().mockReturnValue('__at') } as never,
+      { onChange: jest.fn(), offChange: jest.fn(), remove: jest.fn() } as never,
+      {} as never,
+      {
+        onArtwork: jest.fn(() => jest.fn()),
+        onArtworkStreamReady: jest.fn(() => jest.fn()),
+      } as never,
+      null,
+      { handles: () => false } as never,
+      { onChange: () => () => undefined } as never,
+      pieces
+    );
+    const connect = async (session: string) => {
+      const socket = Object.assign(new EventEmitter(), {
+        readyState: 1,
+        send: jest.fn(),
+        close: jest.fn(),
+      });
+      const server = (gateway as unknown as { server: EventEmitter }).server;
+      server.emit('connection', socket, { headers: { cookie: `__at_${session}=fixture-token` } });
+      socket.emit('message', JSON.stringify({ type: 'authenticate', session, clientId: 'client' }));
+      await Promise.resolve();
+      return socket;
+    };
+    const sent = (socket: { send: jest.Mock }) =>
+      socket.send.mock.calls
+        .map(([raw]) => JSON.parse(raw as string))
+        .filter(message => message.type === 'playback-pieces');
+    try {
+      const player = await connect('session');
+      const otherDevice = await connect('other-session');
+      expect(sent(player)).toEqual([
+        { type: 'playback-pieces', playbackId: 'playback', ranges: [[0, 100]] },
+      ]);
+      deliver?.({ ...latest, ranges: [[0, 250]] });
+      expect(sent(player).at(-1)).toEqual({
+        type: 'playback-pieces',
+        playbackId: 'playback',
+        ranges: [[0, 250]],
+      });
+      expect(sent(otherDevice)).toEqual([]);
     } finally {
       gateway.close();
     }

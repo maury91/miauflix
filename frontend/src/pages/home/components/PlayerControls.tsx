@@ -1,4 +1,5 @@
 import type { PlayerMedia } from '@features/player/lib/avplay-media';
+import { type DownloadedRanges, seekTrackBackground } from '@features/player/lib/seek-track';
 import type { SubtitleCandidateDto } from '@miauflix/backend';
 import { builtForTizen, PALETTE } from '@shared/config/constants';
 import { useKeyboard } from '@shared/hooks/useKeyboard';
@@ -136,15 +137,15 @@ const Seek = styled.div`
   display: flex;
   align-items: center;
 `;
-const Track = styled.div<{ $percent: number }>`
+// Inline style: the layers change every second, and a class per value would pile up.
+const Track = styled.div.attrs<{ $percent: number; $ranges?: DownloadedRanges | null }>(
+  ({ $percent, $ranges }) => ({
+    style: seekTrackBackground($percent, $ranges, PALETTE.color.brand),
+  })
+)`
   width: 100%;
   height: 4px;
   border-radius: 2px;
-  background: linear-gradient(
-    to right,
-    ${PALETTE.color.brand} ${({ $percent }) => $percent}%,
-    #aaa ${({ $percent }) => $percent}%
-  );
 `;
 const Paw = styled(PawIcon)<{ $percent: number }>`
   position: absolute;
@@ -223,6 +224,7 @@ export function PlayerControls({
   audioTracks,
   selectedAudioTrackIndex,
   onSelectAudioTrack,
+  downloadedRanges,
 }: {
   videoRef: RefObject<PlayerMedia | null>;
   preparing?: boolean;
@@ -246,6 +248,8 @@ export function PlayerControls({
   audioTracks?: AudioTrack[];
   selectedAudioTrackIndex?: number;
   onSelectAudioTrack?: (index: number) => void;
+  /** Downloaded parts of the file, drawn under the watched part; null when unknown. */
+  downloadedRanges?: DownloadedRanges | null;
 }) {
   const [paused, setPaused] = useState(true);
   const [mediaReady, setMediaReady] = useState(false);
@@ -436,7 +440,7 @@ export function PlayerControls({
       <Controls $visible={shown}>
         {notice && <p role="alert">{notice}</p>}
         <Seek>
-          <Track $percent={percent} />
+          <Track $percent={percent} $ranges={downloadedRanges} />
           <SeekInput
             type="range"
             min={0}

@@ -52,6 +52,7 @@ describe('realtime state', () => {
       ready: false,
       preparationByMediaId: {},
       playbackDeliveries: {},
+      playbackPieces: {},
       availabilityByPlayable: {},
       sourceAttempts: {},
     });

@@ -73,6 +73,16 @@ export interface PlaybackDeliveryUpdate {
     | { type: 'recreate'; reason: string };
 }
 
+/** A session that may still be playing, for per-playback pushes. */
+export interface LivePlayback {
+  playbackId: string;
+  userId: string;
+  sessionId?: string;
+  sourceId: number;
+  /** The played file; unknown until the stream route resolves it. */
+  filePath?: string;
+}
+
 /** A candidate source being checked while a viewer waits for playback to start. */
 export interface PlaybackSourceAttempt {
   userId: string;
@@ -505,6 +515,21 @@ export class PlaybackSessionService {
         });
       }
     }
+  }
+
+  /** Unexpired sessions: who watches which file of which source. */
+  livePlaybacks(now = Date.now()): LivePlayback[] {
+    const playbacks: LivePlayback[] = [];
+    for (const [playbackId, live] of this.liveSessions)
+      if (live.expiresAt > now)
+        playbacks.push({
+          playbackId,
+          userId: live.userId,
+          sessionId: live.sessionId,
+          sourceId: live.sourceId,
+          filePath: live.filePath,
+        });
+    return playbacks;
   }
 
   /** Subscribe to the candidates tried while sessions are created; returns the unsubscribe. */
