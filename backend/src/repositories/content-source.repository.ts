@@ -170,6 +170,15 @@ export class ContentSourceRepository {
     return Object.keys(changes).length ? (changes as Partial<ContentSource>) : null;
   }
 
+  /** Sources with their linked movies, for labelling stored downloads. */
+  findWithMovies(sourceIds: number[]): Promise<ContentSource[]> {
+    if (!sourceIds.length) return Promise.resolve([]);
+    return this.repository.find({
+      where: { id: In(sourceIds) },
+      relations: { movies: { movie: true } },
+    });
+  }
+
   /** Resolution and release type of a source, as shown on its quality badge. */
   async findQuality(
     sourceId: number

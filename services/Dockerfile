@@ -44,9 +44,9 @@ RUN npm run build --workspace @miauflix/source-metadata-extractor && \
 FROM ghcr.io/egeominotti/bunqueue:2.8.61 AS runtime
 
 USER root
-RUN apk add --no-cache bash git && \
-    mkdir -p /app/data/bunqueue /app/data/catalog /app/data/list-service /app/data/sources /app/data/media-load /app/models /app/wasm && \
-    chown -R bunqueue:bunqueue /app/data /app/models /app/wasm
+RUN apk add --no-cache bash git su-exec && \
+    mkdir -p /app/data/bunqueue /app/data/catalog /app/data/list-service /app/data/sources /app/data/media-load /app/models /app/wasm /usr/src/app/downloads && \
+    chown -R bunqueue:bunqueue /app/data /app/models /app/wasm /usr/src/app/downloads
 
 WORKDIR /workspace
 COPY --from=builder --chown=1001:1001 /workspace/node_modules ./node_modules
@@ -77,6 +77,7 @@ ENV CATALOG_DATA_DIR=/app/data/catalog \
     SOURCES_PORT=3003 \
     SOURCES_DATA_DIR=/app/data/sources \
     MEDIA_LOAD_PORT=3004 \
+    MEDIA_LOAD_DATA_DIR=/app/data/media-load \
     DATA_PATH=/app/data/bunqueue/bunqueue.db \
     TCP_PORT=6789 \
     HTTP_PORT=6790 \
@@ -88,5 +89,5 @@ VOLUME /app/data
 HEALTHCHECK --interval=10s --timeout=5s --start-period=10s --retries=10 \
   CMD bun -e "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:' + (process.env.SOURCES_PORT || 3003) + '/health','http://127.0.0.1:' + (process.env.MEDIA_LOAD_PORT || 3004) + '/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))"
 
-USER bunqueue
+# The entrypoint starts as root only to hand the downloads volume to bunqueue, then drops to it.
 ENTRYPOINT ["/bin/bash", "/app/miauflix-services-entrypoint.sh"]

@@ -10,7 +10,6 @@ import type { SourcesClientService } from '@services/sources/sources-client.serv
 import type { StatsService } from '@services/stats/stats.service';
 import { DynamicRateLimit } from '@utils/dynamic-rate-limit';
 
-import type { DownloadService } from '../download/download.service';
 import { ErrorWithStatus } from './services/error-with-status.util';
 import type { Service, ServiceData, ServiceStats } from './types';
 
@@ -43,7 +42,7 @@ export class SourceMetadataFileService {
   private activeWorkers = 0;
 
   constructor(
-    private readonly downloadService: DownloadService,
+    private readonly metadataFiles: Pick<MediaLoadClientService, 'getSourceMetadataFile'>,
     _requestService: RequestService,
     private readonly statsService: StatsService,
     private readonly config: ConfigService,
@@ -57,11 +56,7 @@ export class SourceMetadataFileService {
         maxConcurrentRequests: 1,
         shouldVerify: false,
         getSourceMetadata: async (sourceLink: string, hash: string): Promise<Buffer> => {
-          return downloadService.getSourceMetadataFile(
-            sourceLink,
-            hash,
-            webTorrentMetadataTimeoutMs
-          );
+          return metadataFiles.getSourceMetadataFile(sourceLink, hash, webTorrentMetadataTimeoutMs);
         },
       });
     }
@@ -138,7 +133,7 @@ export class SourceMetadataFileService {
     if (this.playbackMetadataResolutions.size >= 2) return Promise.resolve(null);
 
     const resolution = this.playbackMetadataQueue.then(() =>
-      this.downloadService.getSourceMetadataFile(
+      this.metadataFiles.getSourceMetadataFile(
         sourceLink,
         normalizedHash,
         webTorrentMetadataTimeoutMs

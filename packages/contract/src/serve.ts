@@ -3,7 +3,7 @@ import type { Duplex } from 'node:stream';
 import { Readable } from 'node:stream';
 import type { ReadableStream as NodeReadableStream } from 'node:stream/web';
 
-import { CONTROL_PATH } from './protocol.js';
+import { CONTROL_PATH, MAX_FRAME_BYTES } from './protocol.js';
 import type { ConnectionHandler, Service } from './service.js';
 
 export interface ServeOptions {
@@ -17,8 +17,6 @@ export interface RunningServer {
   readonly port: number;
   stop(): Promise<void>;
 }
-
-const MAX_FRAME_BYTES = 16 * 1024 * 1024;
 
 const handleHttp = (service: Service, options: ServeOptions, request: Request) => {
   const path = new URL(request.url).pathname;

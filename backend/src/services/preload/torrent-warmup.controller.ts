@@ -1,6 +1,6 @@
 import { logger } from '@logger';
+import type { WarmupRangeProgress, WarmupResult } from '@miauflix/service-contracts';
 
-import type { WarmupRangeProgress, WarmupResult } from '@services/download/download.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 
 export type WarmState =

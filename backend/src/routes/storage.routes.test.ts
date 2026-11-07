@@ -2,30 +2,25 @@ import { Hono } from 'hono';
 
 import { UserRole } from '@entities/user.entity';
 import { AuthError, RoleError } from '@errors/auth.errors';
-import type { DownloadService } from '@services/download/download.service';
-import type { StorageService } from '@services/storage/storage.service';
+import type { ContentSourceRepository } from '@repositories/content-source.repository';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
 import { createStorageRoutes } from './storage.routes';
 
 const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
   const storage = {
     sourceId: 2,
-    size: 100,
     allocatedBytes: 80,
     reservedBytes: 100,
     downloaded: 10_000,
-    videoCompletedAt: new Date('2026-10-08T10:00:00Z'),
     activeStreams: 0,
-    localOnly: false,
-    location: '/private/downloads/movie',
     requestedFiles: ['Movie (2020)/movie.mkv', 'Movie (2020)/movie.en.srt'],
-    contentSource: {
-      quality: '1080p',
-      hash: 'must-not-be-returned',
-      movies: [{ movie: { title: 'Example Movie' } }],
-    },
+    activity: 'available_offline',
+    videoComplete: true,
+    torrentLoaded: true,
+    seedEndsAt: null,
   };
-  const storageService = {
+  const mediaLoadClient = {
     getInventory: jest.fn().mockResolvedValue({
       items: [storage],
       physicalBytes: 80,
@@ -36,13 +31,15 @@ const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
     }),
     removeStorageWithResult: jest.fn().mockResolvedValue({ status: 'removed', bytes: 80 }),
   };
-  const downloadService = {
-    getStorageActivity: jest.fn().mockReturnValue({
-      activity: 'available_offline',
-      seedEndsAt: null,
-      videoComplete: true,
-      torrentLoaded: true,
-    }),
+  const contentSourceRepository = {
+    findWithMovies: jest.fn().mockResolvedValue([
+      {
+        id: 2,
+        quality: '1080p',
+        hash: 'must-not-be-returned',
+        movies: [{ movie: { title: 'Example Movie' } }],
+      },
+    ]),
   };
   const app = new Hono();
   app.use('*', async (c, next) => {
@@ -63,13 +60,13 @@ const setupTest = (role: UserRole | null = UserRole.ADMIN) => {
   app.route(
     '/storage',
     createStorageRoutes({
-      storageService: storageService as unknown as StorageService,
-      downloadService: downloadService as unknown as DownloadService,
+      mediaLoadClient: mediaLoadClient as unknown as MediaLoadClientService,
+      contentSourceRepository: contentSourceRepository as unknown as ContentSourceRepository,
       auditLogService: {} as never,
       configurationService: { get: () => undefined } as never,
     })
   );
-  return { app, storageService, downloadService };
+  return { app, mediaLoadClient, contentSourceRepository };
 };
 
 beforeAll(() => {
@@ -90,7 +87,7 @@ describe('storage routes', () => {
   });
 
   it('returns display-only inventory with activity and capacity details', async () => {
-    const { app, storageService, downloadService } = setupTest();
+    const { app, mediaLoadClient, contentSourceRepository } = setupTest();
     const response = await app.request('/storage');
 
     expect(response.status).toBe(200);
@@ -120,28 +117,25 @@ describe('storage routes', () => {
         },
       ],
     });
-    expect(storageService.getInventory).toHaveBeenCalledTimes(1);
-    expect(downloadService.getStorageActivity).toHaveBeenCalledWith(
-      expect.objectContaining({ location: '/private/downloads/movie' })
-    );
+    expect(mediaLoadClient.getInventory).toHaveBeenCalledTimes(1);
+    expect(contentSourceRepository.findWithMovies).toHaveBeenCalledWith([2]);
     expect(JSON.stringify(payload)).not.toContain('must-not-be-returned');
-    expect(JSON.stringify(payload)).not.toContain('/private/downloads');
   });
 
   it('validates source IDs and maps safe removal outcomes', async () => {
-    const { app, storageService } = setupTest();
+    const { app, mediaLoadClient } = setupTest();
     expect((await app.request('/storage/0', { method: 'DELETE' })).status).toBe(400);
     expect((await app.request('/storage/1.5', { method: 'DELETE' })).status).toBe(400);
 
     const response = await app.request('/storage/2', { method: 'DELETE' });
     expect(response.status).toBe(200);
-    expect(storageService.removeStorageWithResult).toHaveBeenCalledWith(2);
+    expect(mediaLoadClient.removeStorageWithResult).toHaveBeenCalledWith(2);
 
-    storageService.removeStorageWithResult.mockResolvedValueOnce({ status: 'active_playback' });
+    mediaLoadClient.removeStorageWithResult.mockResolvedValueOnce({ status: 'active_playback' });
     expect((await app.request('/storage/2', { method: 'DELETE' })).status).toBe(409);
-    storageService.removeStorageWithResult.mockResolvedValueOnce({ status: 'cleanup_failed' });
+    mediaLoadClient.removeStorageWithResult.mockResolvedValueOnce({ status: 'cleanup_failed' });
     expect((await app.request('/storage/2', { method: 'DELETE' })).status).toBe(500);
-    storageService.removeStorageWithResult.mockResolvedValueOnce({ status: 'removed', bytes: 0 });
+    mediaLoadClient.removeStorageWithResult.mockResolvedValueOnce({ status: 'removed', bytes: 0 });
     expect((await app.request('/storage/2', { method: 'DELETE' })).status).toBe(200);
   });
 });
