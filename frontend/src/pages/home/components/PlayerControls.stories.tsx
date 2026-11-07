@@ -65,6 +65,49 @@ function RemoteSubtitleFlow() {
   );
 }
 
+/** A download arriving while 30% is watched: the stretches grow every second. */
+function DownloadingFlow() {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [ranges, setRanges] = useState<Array<[number, number]>>([
+    [0, 120],
+    [300, 340],
+    [700, 720],
+  ]);
+  useEffect(() => {
+    const timer = setInterval(
+      () =>
+        setRanges(current =>
+          current.map(([start, end]) => [start, Math.min(1000, end + 15)] as [number, number])
+        ),
+      1_000
+    );
+    return () => clearInterval(timer);
+  }, []);
+  return (
+    <div style={{ position: 'relative', width: '100vw', height: '100vh', background: 'black' }}>
+      <video ref={videoRef} aria-label="Downloading fixture video" />
+      <PlayerControls
+        videoRef={videoRef}
+        durationSeconds={100}
+        pendingPosition={30}
+        onBack={() => {}}
+        subtitleCandidates={[]}
+        subtitleConfigured={false}
+        subtitleAvailable={false}
+        subtitleLoading={false}
+        subtitleMessage=""
+        selectedSubtitleId={null}
+        subtitleOffset={0}
+        onSearchSubtitles={() => {}}
+        onSelectSubtitle={() => {}}
+        onSubtitleOffsetChange={() => {}}
+        subtitlePreferencesKey={null}
+        downloadedRanges={ranges}
+      />
+    </div>
+  );
+}
+
 const meta = {
   title: 'Home/Player controls',
   component: RemoteSubtitleFlow,
@@ -73,3 +116,4 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 export const RemoteSubtitles: Story = {};
+export const DownloadedPieces: Story = { render: () => <DownloadingFlow /> };

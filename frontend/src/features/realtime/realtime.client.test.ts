@@ -163,6 +163,34 @@ describe('RealtimeClient', () => {
     expect(frame.clientSequence).toEqual(expect.any(Number));
   });
 
+  it('delivers playback pieces and ignores malformed ones', () => {
+    const onPieces = vi.fn();
+    const client = new RealtimeClient(
+      'session-1',
+      'tab-1',
+      vi.fn(),
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      onPieces
+    );
+    client.start();
+    const socket = FakeWebSocket.instances[0]!;
+    socket.open();
+    socket.message({ type: 'playback-pieces', playbackId: 'p1', ranges: [[0, 120]] });
+    socket.message({ type: 'playback-pieces', playbackId: 'p1', ranges: [[0]] });
+    socket.message({ type: 'playback-pieces', ranges: [] });
+    expect(onPieces).toHaveBeenCalledTimes(1);
+    expect(onPieces).toHaveBeenCalledWith({
+      type: 'playback-pieces',
+      playbackId: 'p1',
+      ranges: [[0, 120]],
+    });
+    client.stop();
+  });
+
   it('batches artwork subscriptions, replays them after reconnect, and delivers artwork updates', () => {
     const onArtwork = vi.fn();
     const client = new RealtimeClient('session-1', 'tab-1', vi.fn(), undefined, onArtwork);
