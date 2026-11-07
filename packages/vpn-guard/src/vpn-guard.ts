@@ -19,6 +19,8 @@ export interface VpnGuardOptions {
   /** Fetches and parses JSON. Defaults to `fetch`; services pass their own HTTP client. */
   fetchJson?: (url: string, init: { signal?: AbortSignal }) => Promise<unknown>;
   now?: () => number;
+  /** How long the default `fetchJson` waits for NordVPN before the check counts as failed. */
+  timeoutMs?: number;
 }
 
 export const NORDVPN_INSIGHTS_URL = 'https://api.nordvpn.com/v1/helpers/ips/insights';
@@ -27,10 +29,30 @@ export const NORDVPN_INSIGHTS_URL = 'https://api.nordvpn.com/v1/helpers/ips/insi
 const PROTECTED_TTL_MS = 300_000;
 const UNPROTECTED_TTL_MS = 30_000;
 
-const defaultFetchJson = async (url: string, init: { signal?: AbortSignal }): Promise<unknown> => {
-  const response = await fetch(url, init);
-  if (!response.ok) throw new Error(`${url} returned ${response.status}`);
-  return response.json();
+const DEFAULT_TIMEOUT_MS = 10_000;
+
+/**
+ * Plain `fetch`, bounded: a server that accepts the connection but never answers would otherwise
+ * hold the check (and every status report waiting on it) until undici's own, much longer timeouts.
+ */
+const boundedFetchJson =
+  (timeoutMs: number) =>
+  async (url: string, init: { signal?: AbortSignal }): Promise<unknown> => {
+    const timeout = AbortSignal.timeout(timeoutMs);
+    const signal = init.signal ? AbortSignal.any([timeout, init.signal]) : timeout;
+    const response = await fetch(url, { signal });
+    if (!response.ok) throw new Error(`${url} returned ${response.status}`);
+    return response.json();
+  };
+
+/** Settles with `promise`, or rejects as soon as `signal` aborts. */
+const abortable = <T>(promise: Promise<T>, signal: AbortSignal): Promise<T> => {
+  signal.throwIfAborted();
+  return new Promise<T>((resolve, reject) => {
+    const onAbort = () => reject(signal.reason);
+    signal.addEventListener('abort', onAbort, { once: true });
+    promise.then(resolve, reject).finally(() => signal.removeEventListener('abort', onAbort));
+  });
 };
 
 /**
@@ -43,11 +65,12 @@ const defaultFetchJson = async (url: string, init: { signal?: AbortSignal }): Pr
 export class VpnGuard {
   private cached = { value: false, until: 0, knownVpnIps: '' };
   private checked = false;
+  private inflight: { knownVpnIps: string; run: Promise<boolean> } | null = null;
   private readonly fetchJson: NonNullable<VpnGuardOptions['fetchJson']>;
   private readonly now: () => number;
 
   constructor(private readonly options: VpnGuardOptions) {
-    this.fetchJson = options.fetchJson ?? defaultFetchJson;
+    this.fetchJson = options.fetchJson ?? boundedFetchJson(options.timeoutMs ?? DEFAULT_TIMEOUT_MS);
     this.now = options.now ?? Date.now;
   }
 
@@ -62,32 +85,49 @@ export class VpnGuard {
     if (disabled) return true;
     if (this.cached.until > this.now() && this.cached.knownVpnIps === knownVpnIps)
       return this.cached.value;
-    let protectedConnection = false;
+    // A check made with draft settings (a configuration test) must not decide the live state.
+    if (settings) return this.check(knownVpnIps, signal);
+    // Live checks share one request, so status reports and `watch` never stack them up. It runs
+    // without the caller's signal: a caller that gives up stops waiting, the check still finishes
+    // and is cached, and a cancellation is never taken for a failed check.
+    if (!this.inflight || this.inflight.knownVpnIps !== knownVpnIps) {
+      const run = this.check(knownVpnIps).then(value => {
+        this.cached = {
+          value,
+          until: this.now() + (value ? PROTECTED_TTL_MS : UNPROTECTED_TTL_MS),
+          knownVpnIps,
+        };
+        this.checked = true;
+        return value;
+      });
+      const inflight = { knownVpnIps, run };
+      this.inflight = inflight;
+      void run.finally(() => {
+        if (this.inflight === inflight) this.inflight = null;
+      });
+    }
+    return signal ? abortable(this.inflight.run, signal) : this.inflight.run;
+  }
+
+  /** Asks NordVPN; an error counts as unprotected, the caller's cancellation rejects. */
+  private async check(knownVpnIps: string, signal?: AbortSignal): Promise<boolean> {
     try {
       const data = (await this.fetchJson(NORDVPN_INSIGHTS_URL, { signal })) as {
         protected?: boolean;
         ip?: string;
       };
-      protectedConnection =
+      return (
         data.protected === true ||
         knownVpnIps
           .split(',')
           .map(ip => ip.trim())
           .filter(Boolean)
-          .includes(data.ip ?? '');
+          .includes(data.ip ?? '')
+      );
     } catch {
       signal?.throwIfAborted();
-      // Fail closed for actual check failures, never for the caller's cancellation.
+      return false;
     }
-    // A check made with draft settings (a configuration test) must not decide the live state.
-    if (settings) return protectedConnection;
-    this.cached = {
-      value: protectedConnection,
-      until: this.now() + (protectedConnection ? PROTECTED_TTL_MS : UNPROTECTED_TTL_MS),
-      knownVpnIps,
-    };
-    this.checked = true;
-    return protectedConnection;
   }
 
   /**

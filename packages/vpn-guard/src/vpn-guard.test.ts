@@ -60,13 +60,49 @@ test('fails closed and retries a failure after 30 seconds', async () => {
   assert.equal(calls(), 2);
 });
 
-test('does not cache the caller cancelling', async () => {
+test('a caller that gives up rejects, without failing the check for the others', async () => {
   const { guard, calls } = setup(() => ({ protected: true }));
   const controller = new AbortController();
   controller.abort();
   await assert.rejects(guard.isProtected(controller.signal));
   assert.equal(await guard.isProtected(), true);
-  assert.equal(calls(), 2);
+  assert.equal(calls(), 1);
+});
+
+test('concurrent checks share one request', async () => {
+  let release!: () => void;
+  const answered = new Promise<void>(resolve => (release = resolve));
+  const { guard, calls } = setup(async () => {
+    await answered;
+    return { protected: true };
+  });
+  const checks = [guard.isProtected(), guard.isProtected(), guard.isProtected()];
+  release();
+  assert.deepEqual(await Promise.all(checks), [true, true, true]);
+  assert.equal(calls(), 1);
+});
+
+test('a check NordVPN never answers fails closed after the timeout', async () => {
+  const realFetch = globalThis.fetch;
+  globalThis.fetch = ((_url: string, init?: RequestInit) =>
+    new Promise((_resolve, reject) =>
+      init?.signal?.addEventListener('abort', () => reject(init.signal?.reason))
+    )) as typeof fetch;
+  try {
+    const guard = new VpnGuard({
+      settings: () => ({ disabled: false, knownVpnIps: '' }),
+      timeoutMs: 20,
+    });
+    // AbortSignal.timeout does not keep the process alive; a running service always is.
+    const keepAlive = setInterval(() => undefined, 1000);
+    const started = Date.now();
+    const result = await guard.isProtected().finally(() => clearInterval(keepAlive));
+    assert.equal(result, false);
+    assert.ok(Date.now() - started < 1000);
+    assert.equal(guard.state, 'unprotected');
+  } finally {
+    globalThis.fetch = realFetch;
+  }
 });
 
 test('is disabled without asking NordVPN', async () => {
