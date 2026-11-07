@@ -8,7 +8,6 @@ import type { PlaybackGrant } from '@entities/playback-grant.entity';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
 import { playableFromKey } from '@routes/playable.types';
-import type { DownloadService } from '@services/download/download.service';
 import type { MediaService } from '@services/media/media.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
@@ -29,7 +28,6 @@ export class StreamService {
   constructor(
     db: Database,
     private readonly sourceService: SourceService,
-    private readonly downloadService: DownloadService,
     private readonly mediaService: MediaService,
     private readonly targets: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>
   ) {

@@ -5,8 +5,8 @@ import type { ContentSource } from '@entities/content-source.entity';
 import type { EpisodeSource } from '@entities/episode-source.entity';
 import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { EpisodeSourceRepository } from '@repositories/episode-source.repository';
-import type { DownloadService } from '@services/download/download.service';
 import { containsPlayableVideo, mainVideoPath } from '@services/download/download.utils';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import type { SourceAvailabilityService } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
@@ -20,7 +20,7 @@ export class PlaybackTargetService {
 
   constructor(
     db: Database,
-    private readonly downloads: Pick<DownloadService, 'resolveLayout'>,
+    private readonly downloads: Pick<MediaLoadClientService, 'resolveLayout'>,
     private readonly sourceHealth: Pick<SourceHealthService, 'markFailed'>,
     private readonly availability: Pick<SourceAvailabilityService, 'recordFiles'>
   ) {

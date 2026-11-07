@@ -8,12 +8,12 @@ import type { PlayableRef } from '@routes/playable.types';
 import type { PreloadWarmupSnapshot, PreloadWarmupState } from '@routes/preload.types';
 import { isVideoFile } from '@services/download/download.utils';
 import type { MediaService } from '@services/media/media.service';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { SourceService } from '@services/source/source.service';
 import { isUsableSource } from '@services/source/source-availability.service';
 import type { SourceHealthService } from '@services/source/source-health.service';
-import type { StorageService } from '@services/storage/storage.service';
 import {
   filterHevcSources,
   filterSources,
@@ -87,7 +87,7 @@ export class PlayablePreparationService {
     private readonly mediaService: MediaService,
     private readonly sourceService: SourceService,
     private readonly warmup?: TorrentWarmupController,
-    private readonly storageService?: StorageService,
+    private readonly storage?: Pick<MediaLoadClientService, 'getStorageStates'>,
     private readonly targets?: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>,
     private readonly sourceHealth?: Pick<SourceHealthService, 'hasFailed'>
   ) {}
@@ -144,17 +144,17 @@ export class PlayablePreparationService {
       // Nothing verified yet: check the candidates in the background, well before Watch.
       this.sourceService.requestMovieVerification(media.local.id, 10);
     }
-    const completedSources = this.storageService
-      ? await Promise.all(
-          filterHevcSources(sources, options.preferences.allowHevc).map(async source => {
-            const storage = await this.storageService!.getStorageBySource(source.id);
-            return storage &&
-              (storage.videoCompletedAt || storage.localOnly || storage.downloaded >= 10000)
-              ? source
-              : null;
-          })
-        )
+    const candidates = filterHevcSources(sources, options.preferences.allowHevc);
+    // An unreachable engine has no local copy to offer: fall back to the swarm.
+    const stored = this.storage
+      ? await this.storage.getStorageStates(candidates.map(source => source.id)).catch(() => [])
       : [];
+    const complete = new Set(
+      stored
+        .filter(state => state.videoComplete || state.localOnly || state.downloaded >= 10000)
+        .map(state => state.sourceId)
+    );
+    const completedSources = candidates.filter(source => complete.has(source.id));
     this.throwIfAborted(options.signal);
     const runtimeSeconds = media.local.runtime > 0 ? media.local.runtime * 60 : undefined;
     const bitrate = runtimeSeconds ? { runtimeSeconds } : undefined;
@@ -162,11 +162,8 @@ export class PlayablePreparationService {
     // A finished download over the client's bitrate cap would stall it; fetch a leaner one.
     const localSource = this.select(
       completedSources.filter(
-        (source): source is ContentSource =>
-          source !== null &&
-          (!maxBitrateKbps ||
-            !runtimeSeconds ||
-            fitsBitrate(source, maxBitrateKbps, runtimeSeconds))
+        source =>
+          !maxBitrateKbps || !runtimeSeconds || fitsBitrate(source, maxBitrateKbps, runtimeSeconds)
       ),
       options.preferences,
       false,

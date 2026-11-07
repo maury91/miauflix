@@ -2,7 +2,7 @@ import { serviceConfiguration, transforms, variable } from '@utils/config';
 
 export const mediaLoadConfigurationDefinition = serviceConfiguration({
   name: 'Media load',
-  description: 'Torrent engine: tracker scrapes, and later downloads and storage.',
+  description: 'Torrent engine: downloads, encrypted storage and tracker scrapes.',
   variables: {
     MEDIA_LOAD_SERVICE_URL: variable({
       description: 'URL of the internal media-load (torrent engine) service',

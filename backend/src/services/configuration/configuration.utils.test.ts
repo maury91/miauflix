@@ -92,11 +92,12 @@ describe('buildAllConfigs', () => {
   it('includes UI input metadata derived from configuration transforms', () => {
     const entries = buildAllConfigs(new Map());
 
-    expect(entries.find(entry => entry.key === 'DISABLE_DISCOVERY')).toMatchObject({
+    expect(entries.find(entry => entry.key === 'ALLOW_TV_APP')).toMatchObject({
       inputType: 'boolean',
+      advanced: true,
       booleanStateDescriptions: {
-        true: 'DHT discovery disabled',
-        false: 'DHT discovery enabled',
+        true: 'TV app allowed',
+        false: 'TV app blocked',
       },
     });
     expect(entries.find(entry => entry.key === 'PORT')).toMatchObject({
@@ -116,10 +117,6 @@ describe('buildAllConfigs', () => {
       label: 'Catalog Service URL',
       required: true,
       advanced: true,
-    });
-    expect(entries.find(entry => entry.key === 'DOWNLOAD_SALT')).toMatchObject({
-      advanced: true,
-      warning: expect.stringContaining('derived storage paths'),
     });
   });
 });

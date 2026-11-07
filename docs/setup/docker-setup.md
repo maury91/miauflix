@@ -106,14 +106,15 @@ The `Caddyfile` serves HTTP/1.1 and HTTP/2 only. HTTP/3 runs over UDP, and for a
 
 ### Published images
 
-| Image                                    | Contents                                                       |
-| ---------------------------------------- | -------------------------------------------------------------- |
-| `ghcr.io/maury91/miauflix`               | Main backend, also serves the web frontend                     |
-| `ghcr.io/maury91/miauflix-services`      | Bunqueue, media catalog, lists, and source search in one image |
-| `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                               |
-| `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                                |
-| `ghcr.io/maury91/miauflix-sources`       | Source-search service on its own                               |
-| `ghcr.io/maury91/miauflix-tv-pairing`    | TV server-discovery pairing service                            |
+| Image                                    | Contents                                                                                        |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------- |
+| `ghcr.io/maury91/miauflix`               | Main backend, also serves the web frontend                                                      |
+| `ghcr.io/maury91/miauflix-services`      | Bunqueue, media catalog, lists, source search, and the torrent engine (media-load) in one image |
+| `ghcr.io/maury91/miauflix-media-catalog` | Media catalog service on its own                                                                |
+| `ghcr.io/maury91/miauflix-list-service`  | List (Trakt) service on its own                                                                 |
+| `ghcr.io/maury91/miauflix-sources`       | Source-search service on its own                                                                |
+| `ghcr.io/maury91/miauflix-media-load`    | Torrent engine (downloads, encrypted storage, tracker scrapes) on its own                       |
+| `ghcr.io/maury91/miauflix-tv-pairing`    | TV server-discovery pairing service                                                             |
 
 All images are built for `linux/amd64` and `linux/arm64`. Tags: `latest` and `X.Y.Z` / `X.Y` / `X` for [releases](https://github.com/maury91/miauflix/releases), `edge` for the latest `main`, and `sha-<commit>` for a specific commit. Pin a version tag for stable deployments.
 

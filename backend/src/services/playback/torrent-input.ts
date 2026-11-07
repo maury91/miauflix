@@ -5,7 +5,7 @@ import { Readable } from 'node:stream';
 import { pipeline } from 'node:stream/promises';
 import type { ReadableStream as NodeReadableStream } from 'node:stream/web';
 
-import type { DownloadService } from '@services/download/download.service';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
 import type { PlaybackTarget } from './playback-target';
 
@@ -14,7 +14,7 @@ export const PROBE_SIZE_BYTES = 2 * 1024 * 1024;
 
 /** A private loopback capability exposes only this file; no arbitrary URLs or plaintext files. */
 export async function openTorrentInput(
-  downloadService: DownloadService,
+  mediaLoad: MediaLoadClientService,
   target: PlaybackTarget,
   speculative = false
 ) {
@@ -31,7 +31,7 @@ export async function openTorrentInput(
       return;
     }
     try {
-      const result = await downloadService.streamFile(target, range, speculative);
+      const result = await mediaLoad.streamFile(target, range, speculative);
       if (response.destroyed || request.method === 'HEAD') {
         if (!response.destroyed) {
           result.headers.forEach((value, key) => response.setHeader(key, value));

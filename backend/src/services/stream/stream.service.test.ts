@@ -5,7 +5,6 @@ import { configureFakerSeed } from '@__test-utils__/utils';
 import { Quality } from '@miauflix/source-metadata-extractor';
 
 import type { Database } from '@database/database';
-import type { DownloadService } from '@services/download/download.service';
 import type { MediaService } from '@services/media/media.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
@@ -38,7 +37,6 @@ describe('StreamService immediate source readiness', () => {
     const service = new StreamService(
       database,
       sourceService,
-      {} as DownloadService,
       mediaService,
       {} as PlaybackTargetService
     );
@@ -101,13 +99,7 @@ describe('StreamService.resolvePlaybackTarget', () => {
         }) => ({ source: match.source, filePath: match.videoFilePath, matchKind: match.matchKind })
       ),
     };
-    const service = new StreamService(
-      database,
-      {} as SourceService,
-      {} as DownloadService,
-      mediaService,
-      targets
-    );
+    const service = new StreamService(database, {} as SourceService, mediaService, targets);
     const grant = {
       sourceId: contentSource.id,
       playableKind: 'movie' as const,

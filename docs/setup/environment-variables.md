@@ -43,7 +43,7 @@ CATALOG_SERVICE_URL=http://miauflix-services:3001
 
 #### Media load service
 
-The torrent engine runs as its own Bun service (port 3004, in the services container). It answers tracker scrapes today. The default Compose files set the address:
+The torrent engine runs as its own Bun service (port 3004, in the services container). It downloads, stores and streams sources and answers tracker scrapes. The default Compose files set the address:
 
 ```bash
 MEDIA_LOAD_SERVICE_URL=http://miauflix-services:3004
@@ -51,7 +51,17 @@ MEDIA_LOAD_SERVICE_URL=http://miauflix-services:3004
 # MEDIA_LOAD_SERVICE_URL=http://localhost:3004
 ```
 
-`SCRAPE_TRACKERS` (comma-separated UDP or HTTP announce URLs, advanced) belongs to this service's `MEDIA_LOAD` group. The backend keeps the stored value and pushes it to the service.
+These settings belong to this service's `MEDIA_LOAD` group. The backend keeps the stored or environment value and pushes it to the service, so set them where you set the backend's:
+
+- the download settings: `CONTENT_DOWNLOAD_LIMIT`, `CONTENT_UPLOAD_LIMIT`, `CONTENT_CONNECTION_LIMIT`, `CONTENT_CONNECTION_BUDGET`, `CONTENT_SEED_DURATION_SECONDS` and `DISABLE_DISCOVERY`
+- the storage settings: `STORAGE_THRESHOLD`, `STORAGE_PLAYBACK_RESERVE`, `DOWNLOAD_PATH` and `DOWNLOAD_SALT`
+- the trackers: `STATIC_TRACKERS`, `BEST_TRACKERS_DOWNLOAD_URL`, `BLACKLISTED_TRACKERS_DOWNLOAD_URL` and `SCRAPE_TRACKERS` (comma-separated UDP or HTTP announce URLs, advanced)
+
+Limits and storage thresholds apply at once. The connection settings, `DISABLE_DISCOVERY` and the tracker lists apply when the service restarts.
+
+`DOWNLOAD_PATH` is a path inside the services container. The Compose files mount the downloads folder (`DOWNLOADS_HOST_PATH`) there at `/usr/src/app/downloads`. The standalone media-load image defaults to `/app/data/downloads` inside its data volume when the backend has no configured download path.
+
+The service keeps its records in `MEDIA_LOAD_DATA_DIR` (`/app/data/media-load` in the services image). They are encrypted with the backend's `SOURCE_SECURITY_KEY`, which the backend sends when it connects, so keep that key and the services data volume together.
 
 TMDB and Trakt settings appear in the setup and administrator configuration UI through the connected services' schemas. Use that UI for later changes; bootstrap environment values may already have been superseded by saved settings.
 
@@ -188,17 +198,17 @@ CONTENT_CONNECTION_BUDGET=200
 DOWNLOAD_ALL_SOURCE_FILES=false
 ```
 
-- **SOURCE_SECURITY_KEY**: AES-256 encryption key for source metadata (auto-generated)
-- **CONTENT_CONNECTION_LIMIT**: Max peer-to-peer connections per torrent
-- **CONTENT_CONNECTION_BUDGET**: Peer connections shared by all torrents (default 200). Each torrent's share follows its priority, so a stream gets most of it. Once the budget is used up, a torrent at its share takes no new peers, and no torrent loses the peers it has
+- **SOURCE_SECURITY_KEY**: AES-256 encryption key for source metadata, downloaded media and media-load's records (auto-generated)
+- **CONTENT_CONNECTION_LIMIT** (media-load): Max peer-to-peer connections per torrent
+- **CONTENT_CONNECTION_BUDGET** (media-load): Peer connections shared by all torrents (default 200). Each torrent's share follows its priority, so a stream gets most of it. Once the budget is used up, a torrent at its share takes no new peers, and no torrent loses the peers it has
 - **DOWNLOAD_ALL_SOURCE_FILES**: Reserved setting; currently has no effect
 
 #### Playback compatibility and subtitles
 
 - **CONVERT_H265_TO_H264**: Download setting, disabled by default. Allows server-side H.265-to-H.264 conversion when required, limited to 1080p/30 fps. Compatible clients retain the original video.
 - **OPENSUBTITLES_API_KEY**: Optional server-side key for movie subtitle searches. Embedded text subtitles and matching torrent subtitle files do not need this integration.
-- **CONTENT_DOWNLOAD_LIMIT / CONTENT_UPLOAD_LIMIT**: Download settings for peer-transfer bandwidth, expressed as sizes such as `20MB`.
-- **CONTENT_SEED_DURATION_SECONDS**: Time to keep seeding after the main video finishes downloading; `0` stops seeding immediately. Retained encrypted files can still be reused until cleanup.
+- **CONTENT_DOWNLOAD_LIMIT / CONTENT_UPLOAD_LIMIT** (media-load): Download settings for peer-transfer bandwidth, expressed as sizes such as `20MB`.
+- **CONTENT_SEED_DURATION_SECONDS** (media-load): Time to keep seeding after the main video finishes downloading; `0` stops seeding immediately. Retained encrypted files can still be reused until cleanup.
 
 See [Audio and subtitles](../features/audio-subtitles.md) and [Storage](../features/storage-privacy.md) for behavior and limitations.
 

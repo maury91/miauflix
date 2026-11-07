@@ -5,7 +5,7 @@ import { configureFakerSeed } from '@__test-utils__/utils';
 import parseTorrent from 'parse-torrent';
 
 import type { ConfigService } from '@mytypes/configuration';
-import type { DownloadService } from '@services/download/download.service';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import { StatsService } from '@services/stats/stats.service';
 
 import { SourceMetadataFileService } from './source-metadata-file.service';
@@ -18,7 +18,7 @@ const setupTest = (enabled = true) => {
   };
   const remote = { torrentFile: jest.fn().mockResolvedValue(Buffer.from('metadata')) };
   const service = new SourceMetadataFileService(
-    download as unknown as DownloadService,
+    download as unknown as MediaLoadClientService,
     {} as never,
     new StatsService(),
     { getOrThrow: jest.fn() } as unknown as ConfigService,
@@ -49,7 +49,7 @@ describe('SourceMetadataFileService', () => {
   it('gets swarm stats from the media-load service', async () => {
     const swarmStats = jest.fn().mockResolvedValue({ broadcasters: 5, watchers: 1 });
     const service = new SourceMetadataFileService(
-      {} as DownloadService,
+      {} as MediaLoadClientService,
       {} as never,
       new StatsService(),
       { getOrThrow: jest.fn() } as unknown as ConfigService,
