@@ -20,15 +20,26 @@ interface FenceableTorrent {
 export function fenceTorrent(torrent: Torrent): void {
   const fenced = torrent as unknown as FenceableTorrent;
   if (fenced.destroyed) return;
-  fenced.pause();
+  // Every step runs even when an earlier one throws, so one failure leaves as little open as
+  // possible; the first error is reported afterwards so the caller can fail closed.
+  let failure: unknown;
+  const step = (action: () => void) => {
+    try {
+      action();
+    } catch (error) {
+      failure ??= error;
+    }
+  };
+  step(() => fenced.pause());
   const peers = fenced._peers;
   const peerIds = !peers ? [] : peers instanceof Map ? [...peers.keys()] : Object.keys(peers);
-  for (const id of peerIds) fenced.removePeer(id);
+  for (const id of peerIds) step(() => fenced.removePeer(id));
   const discovery = fenced.discovery;
   if (discovery) {
     fenced.discovery = null;
-    discovery.destroy();
+    step(() => discovery.destroy());
   }
+  if (failure !== undefined) throw failure;
 }
 
 /** Undoes `fenceTorrent`: peers are accepted again and discovery announces again. */

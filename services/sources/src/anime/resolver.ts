@@ -152,8 +152,9 @@ export class AnimeResolver {
       0,
       ...Object.values(data.episodes ?? {}).map(e => days(e.airDate ?? e.airdate) ?? 0)
     );
-    const airing = latest * DAY > this.now() - 14 * DAY;
-    this.store.putAnimeCache(key, data, airing ? 12 * 3600_000 : 7 * DAY);
+    // A mapping without dated episodes is new or lagging: it is read again soon, like an airing one.
+    const settled = latest > 0 && latest * DAY <= this.now() - 14 * DAY;
+    this.store.putAnimeCache(key, data, settled ? 7 * DAY : 12 * 3600_000);
     return data;
   }
 }

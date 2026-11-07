@@ -127,4 +127,44 @@ describe('AniList lists', () => {
     await expect(aniList.page('anilist-trending', 1)).rejects.toThrow('AniList HTTP 429');
     await expect(aniList.page('unknown', 1)).rejects.toThrow('List not found');
   });
+
+  it('does not take inherited names for lists', async () => {
+    const { aniList } = setup();
+    expect(aniList.has('constructor')).toBe(false);
+    await expect(aniList.page('toString', 1)).rejects.toThrow('List not found');
+  });
+
+  it('serves a stale id list while it refreshes, and waits before retrying a failed refresh', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'anilist-'));
+    dirs.push(dir);
+    let now = NOW;
+    let listDownloads = 0;
+    let finishDownload: (response: Response) => void = () => undefined;
+    const fetchImpl = (async (input: string | URL | Request) => {
+      if (String(input) === URLS.animeLists) {
+        listDownloads++;
+        // The first download succeeds; later ones hang until told to fail.
+        if (listDownloads === 1) return Response.json(fribb);
+        return new Promise<Response>(resolve => {
+          finishDownload = resolve;
+        });
+      }
+      return Response.json({ data: { Page: { media } } });
+    }) as typeof fetch;
+    const aniList = new AniListLists(dir, fetchImpl, () => now, URLS);
+    expect((await aniList.page('anilist-trending', 1)).items).toHaveLength(4);
+
+    now += 8 * 86400_000;
+    // The refresh is still running, yet the page is served from the old copy.
+    expect((await aniList.page('anilist-trending', 1)).items).toHaveLength(4);
+    expect(listDownloads).toBe(2);
+    finishDownload(new Response('down', { status: 503 }));
+    await new Promise(resolve => setTimeout(resolve, 0));
+
+    expect((await aniList.page('anilist-trending', 1)).items).toHaveLength(4);
+    expect(listDownloads).toBe(2);
+    now += 3600_000;
+    await aniList.page('anilist-trending', 1);
+    expect(listDownloads).toBe(3);
+  });
 });

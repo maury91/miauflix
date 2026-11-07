@@ -9,6 +9,8 @@ export const ANILIST_URL = 'https://graphql.anilist.co';
 export const ANIME_LISTS_URL =
   'https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json';
 const REFRESH_MS = 7 * 86400_000;
+/** A failed download is not retried sooner than this. */
+const RETRY_MS = 3600_000;
 const PER_PAGE = 50;
 
 type Season = 'WINTER' | 'SPRING' | 'SUMMER' | 'FALL';
@@ -79,6 +81,7 @@ type Ids = [tv: number | null, movie: number | null, imdb: string | null];
 export class AniListLists {
   private ids = new Map<number, Ids>();
   private loadedAt = 0;
+  private attemptedAt = 0;
   private loading: Promise<void> | null = null;
   private readonly file: string;
 
@@ -92,15 +95,15 @@ export class AniListLists {
   }
 
   has(listId: string): boolean {
-    return listId in aniListDefinitions;
+    return Object.hasOwn(aniListDefinitions, listId);
   }
 
   async page(
     listId: string,
     page: number
   ): Promise<{ items: TraktItem[]; totalItems: number; totalPages: number }> {
-    const definition = aniListDefinitions[listId];
-    if (!definition) throw new Error('List not found');
+    if (!this.has(listId)) throw new Error('List not found');
+    const definition = aniListDefinitions[listId]!;
     const [, response] = await Promise.all([
       this.ensureIds(),
       this.fetchImpl(this.urls.anilist, {
@@ -134,13 +137,18 @@ export class AniListLists {
   private async ensureIds(): Promise<void> {
     if (!this.loadedAt) this.readFile();
     if (this.loadedAt && this.now() - this.loadedAt < REFRESH_MS) return;
-    this.loading ??= this.download().finally(() => {
-      this.loading = null;
-    });
-    // A stale copy keeps serving while a refresh fails.
-    await this.loading.catch(error => {
-      if (!this.loadedAt) throw error;
-    });
+    if (!this.loading && this.now() - this.attemptedAt >= RETRY_MS) {
+      this.attemptedAt = this.now();
+      this.loading = this.download().finally(() => {
+        this.loading = null;
+      });
+      // Nobody may be waiting for a background refresh.
+      this.loading.catch(() => undefined);
+    }
+    // A stale copy keeps serving while it is refreshed, without waiting for the download.
+    if (this.loadedAt) return;
+    if (!this.loading) throw new Error('Anime list unavailable');
+    await this.loading;
   }
 
   private async download(): Promise<void> {

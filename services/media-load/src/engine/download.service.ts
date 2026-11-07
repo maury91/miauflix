@@ -213,6 +213,8 @@ export class DownloadService {
   private networkAllowed: boolean;
   /** Seeding restore waits for the network when it was blocked at startup. */
   private restorePending = false;
+  /** Counts network blocks, so a restore pass knows it was interrupted even after a reconnect. */
+  private networkBlocks = 0;
 
   constructor(
     private readonly storageService: StorageService,
@@ -456,6 +458,7 @@ export class DownloadService {
     if (allowed === this.networkAllowed) return;
     this.networkAllowed = allowed;
     if (!allowed) {
+      this.networkBlocks++;
       for (const torrent of this.client.torrents) this.safeFence(torrent, true);
       logger.warn('DownloadService', 'Connection is not protected: torrents are disconnected');
       return;
@@ -470,13 +473,24 @@ export class DownloadService {
     }
   }
 
-  /** One torrent failing must not leave the others connected (or disconnected). */
+  /**
+   * One torrent failing must not leave the others connected (or disconnected). A torrent that
+   * cannot be fenced fails closed: it is removed (its stored files stay) and restored once the
+   * network is allowed again.
+   */
   private safeFence(torrent: Torrent, fence: boolean): void {
     try {
       if (fence) fenceTorrent(torrent);
       else unfenceTorrent(torrent);
     } catch (error) {
       logger.error('DownloadService', `Could not ${fence ? 'fence' : 'unfence'} torrent`, error);
+      if (!fence) return;
+      this.restorePending = true;
+      void Promise.resolve()
+        .then(() => this.client.remove(torrent, { destroyStore: false }))
+        .catch(removeError =>
+          logger.error('DownloadService', 'Could not remove an unfenced torrent', removeError)
+        );
     }
   }
 
@@ -874,6 +888,7 @@ export class DownloadService {
       this.restorePending = true;
       return;
     }
+    const blocks = this.networkBlocks;
     const completed = (await this.storageService.getStoragesWithCompletion()) ?? [];
     for (const storage of completed) {
       if (storage.localOnly) continue;
@@ -915,8 +930,8 @@ export class DownloadService {
           this.scheduleSeedExpiry(current);
         });
       } catch (error) {
-        // Blocked mid-restore: the rest seeds once the network is allowed again.
-        if (!this.networkAllowed) this.restorePending = true;
+        // Blocked mid-restore (even if already allowed again): the rest seeds once allowed.
+        if (this.networkBlocks !== blocks) this.restorePending = true;
         logger.warn(
           'DownloadService',
           `Could not restore seeding for completed source ${storage.sourceId}`,
@@ -926,6 +941,11 @@ export class DownloadService {
       await this.reconcileSelection(storage.sourceId).catch(error =>
         logger.warn('DownloadService', `Could not reselect source ${storage.sourceId}`, error)
       );
+    }
+    // The network came back before this pass noticed the interruption: retry now.
+    if (this.restorePending && this.networkAllowed && this._initStatus.status === 'ready') {
+      this.restorePending = false;
+      await this.restoreCompletedDownloads();
     }
   }
 

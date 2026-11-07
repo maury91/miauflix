@@ -57,18 +57,25 @@ export function parseAnimeRelease(name: string): AnimeRelease {
   const season = seasonOf(text) ?? seasonOf(base.replace(/[[\]()【】]/g, ' ')) ?? pairs[0]?.season;
   const rest = text.replace(SEASON_MARKERS, ' ');
   let range: [number, number] | undefined;
-  for (const match of [
+  const ranges = [
     // The end of a range is only looked at, so "Part 2 - 01 ~ 10" still finds "01 ~ 10".
-    ...rest.matchAll(
-      /(?<![\p{L}\d.])(?:(?:ep(?:isodes?)?|e)\.? ?)?(\d{1,4}) ?[-~] ?(?=(\d{1,4})(?:\s|$))/giu
-    ),
-    ...(bracketRange ? [bracketRange] : []),
-  ]) {
-    const from = Number(match[1]),
-      to = Number(match[2]);
-    // Years ("2019-2021") and "Part 2 - 01" are not ranges.
-    if (from < to && !(from >= 1900 && to >= 1900)) {
-      range = [from, to];
+    ...[
+      ...rest.matchAll(
+        /(?<![\p{L}\d.])(?:(?:ep(?:isodes?)?|e)\.? ?)?(\d{1,4})( ?[-~] ?)(?=(\d{1,4})(?:\s|$))/giu
+      ),
+    ].map(m => ({ from: m[1]!, separator: m[2]!, to: m[3]!, before: rest.slice(0, m.index) })),
+    ...(bracketRange
+      ? [{ from: bracketRange[1]!, separator: '-', to: bracketRange[2]!, before: '' }]
+      : []),
+  ];
+  for (const { from, separator, to, before } of ranges) {
+    // A number ending the title is not the start of a range: "Kaiju No. 8 - 09",
+    // "Part 2 - 10". Batches spaced like episodes pad both ends alike ("13 - 30").
+    if (/\b(?:part|no|cour|vol)\.?\s*$/i.test(before)) continue;
+    if (separator === ' - ' && from.length !== to.length) continue;
+    // Years ("2019-2021") are not ranges.
+    if (Number(from) < Number(to) && !(Number(from) >= 1900 && Number(to) >= 1900)) {
+      range = [Number(from), Number(to)];
       break;
     }
   }

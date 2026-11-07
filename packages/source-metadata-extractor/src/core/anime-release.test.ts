@@ -23,6 +23,8 @@ describe('parseAnimeRelease', () => {
       '[Hakata Ramen] Shingeki no Kyojin (Attack on Titan) S3-P2 (2019) 01 [1080p][HEVC]',
       { season: 3, episode: 1 },
     ],
+    ['[SubsPlease] Kaiju No. 8 - 09 (1080p) [A1B2C3D4].mkv', { episode: 9 }],
+    ['[Erai-raws] Shingeki no Kyojin Season 3 Part 2 - 10 [1080p]', { season: 3, episode: 10 }],
   ])('reads the episode of %s', (name, expected) => {
     const parsed = parseAnimeRelease(name);
     expect({ season: parsed.season, episode: parsed.episode }).toEqual({
@@ -52,6 +54,8 @@ describe('parseAnimeRelease', () => {
     ],
     ['[BlackRabbit] JUJUTSU KAISEN (2020) - S03 [WEBDL-1080p][Opus 2.0][AV1]', { season: 3 }],
     ['[jaaj] Jujutsu Kaisen S02 (2020) (BD 1080p AV1 AAC)', { season: 2 }],
+    ['[Group] Bleach - 13 - 30 [1080p]', { range: [13, 30] }],
+    ['[Group] Kaiju No. 8 01-12 [Batch]', { range: [1, 12] }],
   ])('reads %s as a pack', (name, expected) => {
     const parsed = parseAnimeRelease(name);
     expect(parsed.pack || parsed.range !== undefined).toBe(true);
