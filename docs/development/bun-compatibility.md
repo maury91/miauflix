@@ -53,6 +53,8 @@ Node 26 gave the same results, except for the DHT before the fix.
 - It calls `dns.setDefaultResultOrder('ipv4first')`.
 - It resolves the DHT routers to every IPv4 address before WebTorrent starts (`services/media-load/src/engine/dht-bootstrap.ts`). With every address, bootstrap is stronger than plain hostnames give, which reach only the first address, even under Node.
 
+**uTP stays off** (2026-11-06). A libuv-free `utp-native`, with JS-owned UDP and timer, runs under Bun, but uTP-first WebTorrent downloaded 2–4× slower than TCP-only on a public swarm. See `plan/utp-dgram/`.
+
 **uTP on x64 is a real loss.** `@thaunknown/utp-native` has prebuilds for linux-x64, darwin and win32, so an x64 VPS running the old Node backend had uTP. Under Bun it would panic, so it stays off and only TCP and WebRTC peers remain.
 
 ## The blocker: `utp-native`

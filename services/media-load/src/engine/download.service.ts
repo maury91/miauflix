@@ -2110,6 +2110,26 @@ export class DownloadService {
         const selected = layout.files.find(file => file.path === target.filePath);
         if (!selected) throw new Error('Requested torrent file is unavailable');
         const file = { ...selected, name: selected.path.split('/').pop() || selected.path };
+        const range = parseRangeHeader(file.length, rangeHeader || '');
+        const firstByte = range?.start ?? 0;
+        const lastByte = range?.end ?? file.length - 1;
+        // An inspection read of a source that isn't downloading can't fetch a missing piece, and
+        // once the 206 is sent a failure could only cut the body short (an empty 206): refuse
+        // before responding.
+        if (
+          speculative &&
+          !torrent &&
+          !storage.localOnly &&
+          !isPieceInBitfield(
+            storage.downloadedPieces,
+            Math.floor((file.offset + firstByte) / layout.pieceLength)
+          )
+        ) {
+          throw new ErrorWithStatus(
+            'Requested range is not stored and the source is not downloading',
+            'local_media_incomplete'
+          );
+        }
         const reader = new EncryptedFileReader(
           storage.location,
           layout,
@@ -2164,9 +2184,6 @@ export class DownloadService {
           'Access-Control-Allow-Headers': 'Range',
         };
         let status = 200;
-        const range = parseRangeHeader(file.length, rangeHeader || '');
-        const firstByte = range?.start ?? 0;
-        const lastByte = range?.end ?? file.length - 1;
         if (range) {
           status = 206;
           headers['Content-Range'] = `bytes ${range.start}-${range.end}/${file.length}`;

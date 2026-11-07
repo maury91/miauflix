@@ -701,6 +701,37 @@ describe('DownloadService', () => {
       expect(service.hasActivePlayback()).toBe(false);
     });
 
+    it('refuses a speculative read of an unstored range before responding', async () => {
+      const { service, mockStorageService } = setupTest();
+      const layout = {
+        storeName: 'movie',
+        filenameSalt: 'salt',
+        pieceLength: 10,
+        files: [{ path: 'movie.mkv', length: 20, offset: 0 }],
+      };
+      // Piece 0 is stored, piece 1 is not, and no torrent is attached to fetch it.
+      mockStorageService.getStorageBySource.mockResolvedValue({
+        id: 1,
+        sourceId: 1,
+        location: '/tmp/test-downloads/movie',
+        downloadedPieces: new Uint8Array([128]),
+        localOnly: false,
+        encryptedLayout: layout,
+      } as never);
+      const webtorrent = service.client as unknown as { ready: boolean; torrents: unknown[] };
+      webtorrent.ready = true;
+      webtorrent.torrents = [];
+
+      await expect(
+        service.streamFile(target({ id: 1, size: 20 }), 'bytes=10-19', true)
+      ).rejects.toMatchObject({ status: 'local_media_incomplete' });
+      expect(fakeFileReader).not.toHaveBeenCalled();
+
+      const stored = await service.streamFile(target({ id: 1, size: 20 }), 'bytes=0-9', true);
+      expect(stored.status).toBe(206);
+      await stored.body!.cancel();
+    });
+
     it('releases stream activity once when cancellation interrupts a pending piece read', async () => {
       const { service, mockStorageService } = setupTest();
       const webtorrent = service.client as unknown as {
