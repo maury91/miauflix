@@ -1,5 +1,6 @@
 import { type CallContext, defineService, type Service } from '@miauflix/contract';
 import { mediaLoad } from '@miauflix/service-contracts';
+import { VpnGuard, vpnSettingsFrom } from '@miauflix/vpn-guard';
 
 import { MediaLoadConfigService } from './config/config.service';
 import { InvalidSettingsError } from './engine/engine-config';
@@ -16,6 +17,8 @@ export interface MediaLoadServiceOptions {
   legacyDownloadPath?: string;
   /** Scrape timing, for tests. */
   scrape?: ScrapeBatcherOptions;
+  /** Fetches the VPN check's JSON, for tests. */
+  vpnFetchJson?: (url: string, init: { signal?: AbortSignal }) => Promise<unknown>;
 }
 
 /** Runs an engine call, turning its coded failures into contract errors. */
@@ -37,11 +40,40 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
   stop: () => Promise<void>;
 } {
   const config = new MediaLoadConfigService(options.defaultDownloadPath);
+  // Follows the values being applied: the configuration commits them only after `activate`, and
+  // the engine that starts there must already see the right VPN setting.
+  let vpnSettings = vpnSettingsFrom('MEDIA_LOAD', key => config.value(key));
+  const vpn = new VpnGuard({
+    settings: () => vpnSettings,
+    fetchJson: options.vpnFetchJson,
+  });
+  // The engine itself is fenced while the connection is unprotected (no peers, announces or new
+  // torrents), so every path that would reach the swarm is covered, including startup restores.
   const runtime = new MediaLoadRuntime(
     MediaLoadRuntime.databasePathFor(options.dataDir ?? './data'),
-    options.legacyDownloadPath
+    options.legacyDownloadPath,
+    () => vpn.state !== 'unprotected'
   );
+  /** Checks the connection (cached) and applies the result to the engine's fence. */
+  const checkVpn = async (signal?: AbortSignal): Promise<boolean> => {
+    const isProtected = await vpn.isProtected(signal);
+    await runtime.refreshNetwork();
+    return isProtected;
+  };
   let scrapes: { trackers: string; batcher: ScrapeBatcher } | null = null;
+  /** Fails fast with `vpn_required` before anything that reaches trackers or peers. */
+  const peerCall = async <T, E extends string>(
+    ctx: CallContext<E | 'vpn_required'>,
+    run: () => Promise<T> | T
+  ): Promise<T> => {
+    if (!(await checkVpn(ctx.signal)))
+      return ctx.fail('vpn_required', 'Media load requires a protected connection');
+    return run();
+  };
+  const peerEngineCall = <T, E extends string>(
+    ctx: CallContext<E | 'vpn_required'>,
+    run: () => Promise<T> | T
+  ): Promise<T> => peerCall(ctx, () => engineCall(ctx, run));
 
   /** The batcher for the applied trackers; a tracker change starts a new one. */
   const batcher = (): ScrapeBatcher => {
@@ -78,8 +110,12 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
       return { success: true, message: trackerSummary(values) };
     },
     activate: async values => {
+      const previousVpnSettings = vpnSettings;
       try {
-        const { restartKeys } = await runtime.activate({ ...config.defaults(), ...values });
+        const applied = { ...config.defaults(), ...values };
+        vpnSettings = vpnSettingsFrom('MEDIA_LOAD', key => applied[key]);
+        const { restartKeys } = await runtime.activate(applied);
+        void checkVpn().catch(() => undefined);
         return {
           success: true,
           message: restartKeys.length
@@ -87,6 +123,7 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
             : trackerSummary(values),
         };
       } catch (error) {
+        vpnSettings = previousVpnSettings;
         return { success: false, message: error instanceof Error ? error.message : String(error) };
       }
     },
@@ -103,23 +140,29 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
     },
     configuration: config,
     ready: () => config.ready && runtime.serving,
-    status: () => ({
-      // `configuring`, not `standby`: the host must not deliver the configuration again.
-      state:
-        config.ready && runtime.started ? (runtime.serving ? 'ready' : 'configuring') : 'standby',
-      missingConfiguration: config.missingVars(),
-      ...(runtime.keyMissing
-        ? { message: 'Waiting for the host to send the security key' }
-        : runtime.started && !runtime.serving
-          ? { message: 'Waiting for the host to import its storage' }
-          : {}),
-      details: {
-        engine: runtime.started ? engine().downloads.getStatus().status : 'stopped',
-        torrents: runtime.started ? engine().downloads.client.torrents.length : 0,
-        scrapes: scrapes?.batcher.stats ?? null,
-      },
-    }),
+    // `details.vpn` is this service's own connection; refreshed (cached) before reporting.
+    status: async () => {
+      await checkVpn().catch(() => false);
+      return {
+        // `configuring`, not `standby`: the host must not deliver the configuration again.
+        state:
+          config.ready && runtime.started ? (runtime.serving ? 'ready' : 'configuring') : 'standby',
+        missingConfiguration: config.missingVars(),
+        ...(runtime.keyMissing
+          ? { message: 'Waiting for the host to send the security key' }
+          : runtime.started && !runtime.serving
+            ? { message: 'Waiting for the host to import its storage' }
+            : {}),
+        details: {
+          vpn: vpn.state,
+          engine: runtime.started ? engine().downloads.getStatus().status : 'stopped',
+          torrents: runtime.started ? engine().downloads.client.torrents.length : 0,
+          scrapes: scrapes?.batcher.stats ?? null,
+        },
+      };
+    },
     onStop: async () => {
+      stopVpnWatch();
       scrapes?.batcher.close();
       scrapes = null;
       await runtime.stop();
@@ -135,24 +178,26 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
 
     swarmStats: async ({ hash }, ctx) => {
       if (typeof hash !== 'string') return ctx.fail('invalid_hash', 'hash must be a string');
-      try {
-        return await batcher().scrape(hash);
-      } catch (error) {
-        if (error instanceof ScrapeError) return ctx.fail(error.code, error.message);
-        throw error;
-      }
+      return peerCall(ctx, async () => {
+        try {
+          return await batcher().scrape(hash);
+        } catch (error) {
+          if (error instanceof ScrapeError) return ctx.fail(error.code, error.message);
+          throw error;
+        }
+      });
     },
 
     putSource: ({ source }) => runtime.putSource(source),
     sourceMetadataFile: ({ link, hash, timeoutMs }, ctx) =>
-      engineCall(ctx, async () => ({
+      peerEngineCall(ctx, async () => ({
         file: (await engine().downloads.getSourceMetadataFile(link, hash, timeoutMs)).toString(
           'base64'
         ),
       })),
 
     predownload: ({ target, claim }, ctx) =>
-      engineCall(ctx, async () =>
+      peerEngineCall(ctx, async () =>
         engine().downloads.predownload(await runtime.target(target), claim)
       ),
     isFileComplete: ({ sourceId, filePath }) =>
@@ -170,7 +215,7 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
       engine().downloads.releaseClaims(sourceId, ownerKey, kind),
 
     warmSource: ({ target, targetBytes, leaseKey, startFraction }, ctx) =>
-      engineCall(ctx, async () =>
+      peerEngineCall(ctx, async () =>
         engine().downloads.warmSource(
           await runtime.target(target),
           targetBytes,
@@ -180,7 +225,7 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
       ),
     pauseSource: ({ sourceId }) => engine().downloads.pauseSource(sourceId),
     promoteSource: ({ target, ownerKey }, ctx) =>
-      engineCall(ctx, async () =>
+      peerEngineCall(ctx, async () =>
         engine().downloads.promoteSource(await runtime.target(target), ownerKey)
       ),
     isRangeVerified: ({ sourceId, filePath, firstPiece, lastPiece }) =>
@@ -215,8 +260,16 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
         )
       ),
   });
+  const stopVpnWatch = vpn.watch(() => {
+    void runtime.refreshNetwork();
+    service.notifyStatus();
+  });
   // Readiness also depends on the engine, which starts after the configuration is applied, and
   // on the storage import (listeners hear both).
-  runtime.onStart(() => service.notifyStatus());
+  runtime.onStart(() => {
+    // The engine starts fenced until the first check says otherwise.
+    void checkVpn().catch(() => undefined);
+    service.notifyStatus();
+  });
   return { service, runtime, stop: () => service.stop() };
 }

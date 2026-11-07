@@ -40,6 +40,45 @@ describe('PlaybackSessionService', () => {
     }
   );
 
+  it('inspects again while the session plays after a failed inspection', async () => {
+    jest.useFakeTimers();
+    const audio = {
+      knownDelivery: jest.fn().mockResolvedValue(null),
+      inspect: jest
+        .fn()
+        .mockRejectedValueOnce(new AudioPlaybackError('could not be inspected'))
+        .mockResolvedValueOnce({ mode: 'audio-transcode', durationSeconds: 60 }),
+    };
+    const service = new PlaybackSessionService(
+      { getPlaybackGrantRepository: () => ({ create: jest.fn() }) } as never,
+      {
+        prepare: async () => ({ source: { id: 1 }, target: movie({ id: 1 }), state: 'cold' }),
+      } as never,
+      { getOrThrow: () => 60000 } as never,
+      undefined,
+      undefined,
+      audio as never
+    );
+    const listener = jest.fn();
+    service.onDeliveryUpdate(listener);
+    const session = await service.create(
+      'user',
+      { kind: 'movie', mediaId: 1 },
+      { quality: 'auto', allowHevc: false }
+    );
+    await jest.advanceTimersByTimeAsync(0);
+    expect(listener).not.toHaveBeenCalled();
+    await jest.advanceTimersByTimeAsync(5_000);
+    expect(audio.inspect).toHaveBeenCalledTimes(2);
+    expect(listener).toHaveBeenCalledWith(
+      expect.objectContaining({
+        playbackId: session?.playbackId,
+        update: expect.objectContaining({ type: 'delivery' }),
+      })
+    );
+    jest.useRealTimers();
+  });
+
   it('shares each candidate it tries with the viewer and returns the one it plays', async () => {
     type Attempt = { sourceId: number; position: number; total: number };
     const prepare = jest.fn(
@@ -394,6 +433,19 @@ describe('PlaybackSessionService', () => {
       expect(sourceHealth.markFailed).not.toHaveBeenCalled();
       for (let second = 0; second < 3; second++) await tick(1_000);
       expect(sourceHealth.markFailed).toHaveBeenCalledWith(1);
+    });
+
+    it('stops keeping a failed source for its viewers', async () => {
+      const { downloads, sourceHealth, start } = setupMonitor();
+      await start();
+      const [[failOver]] = sourceHealth.onFailed.mock.calls as unknown as [
+        [(sourceId: number) => void],
+      ];
+      failOver(1);
+      expect(downloads.releaseClaims).toHaveBeenCalledWith(1, 'user:user:m:1', 'watched');
+      // Another source's failure leaves this viewer's claims alone.
+      failOver(3);
+      expect(downloads.releaseClaims).toHaveBeenCalledTimes(1);
     });
 
     it('releases the backup once the primary has delivered for a while', async () => {

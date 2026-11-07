@@ -250,6 +250,15 @@ export class StorageRepository {
       .run(allocatedBytes, Date.now(), id);
   }
 
+  /** Charge only what is on disk: nothing will grow this storage until it is claimed again. */
+  async releaseReservation(id: number, allocatedBytes: number): Promise<void> {
+    this.db
+      .query(
+        'UPDATE storage SET allocatedBytes = ?1, reservedBytes = 0, updatedAt = ?2 WHERE id = ?3'
+      )
+      .run(allocatedBytes, Date.now(), id);
+  }
+
   async changeActiveStreams(id: number, delta: -1 | 1): Promise<boolean> {
     const expression =
       delta === 1

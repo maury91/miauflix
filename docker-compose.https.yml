@@ -3,9 +3,7 @@
 #   COMPOSE_FILE=docker-compose.yml:docker-compose.https.yml
 #   MIAUFLIX_DOMAIN=miauflix.example.com
 #   REVERSE_PROXY_SECRET=<a long random string, e.g. from openssl rand -hex 32>
-# With docker-compose.vpn.yml as well, Miauflix shares the VPN container's network:
-#   COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml:docker-compose.https.yml
-#   MIAUFLIX_UPSTREAM=vpn:3000
+# Works the same with docker-compose.vpn.yml: the backend stays outside the VPN.
 # Guide: docs/setup/docker-setup.md#https-with-a-domain
 
 services:
@@ -18,7 +16,8 @@ services:
     environment:
       MIAUFLIX_DOMAIN: ${MIAUFLIX_DOMAIN:?Set MIAUFLIX_DOMAIN in .env}
       REVERSE_PROXY_SECRET: ${REVERSE_PROXY_SECRET:?Set REVERSE_PROXY_SECRET in .env}
-      MIAUFLIX_UPSTREAM: ${MIAUFLIX_UPSTREAM:-miauflix:3000}
+      # Fixed: an older .env may still say vpn:3000, from when the backend ran inside the VPN.
+      MIAUFLIX_UPSTREAM: miauflix:3000
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

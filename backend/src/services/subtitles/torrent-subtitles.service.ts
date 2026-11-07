@@ -8,6 +8,7 @@ import { isVideoFile } from '@services/download/download.utils';
 import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import { withFile } from '@services/playback/playback-target';
+import { collectStderr } from '@services/playback/stderr-tail';
 import { openTorrentInput, PROBE_SIZE_BYTES } from '@services/playback/torrent-input';
 
 import { toWebVtt, webVttWindow } from './subtitles.util';
@@ -112,6 +113,9 @@ export function matchingSubtitleFiles(
 }
 
 /** Text subtitle discovery/extraction through decrypted, verified torrent ranges. */
+/** Wait before probing a video again after a failed probe. */
+const PROBE_RETRY_DELAY_MS = 3_000;
+
 export class TorrentSubtitlesService {
   private readonly probes = new Map<
     string,
@@ -164,7 +168,8 @@ export class TorrentSubtitlesService {
       logger.warn(
         'TorrentSubtitlesService',
         'Embedded subtitle inspection failed',
-        error instanceof Error ? error.message : error
+        error instanceof Error ? error.message : error,
+        (error as { detail?: string } | null)?.detail ?? ''
       );
     }
     // Track ids are scoped to the video: episodes of one pack share embedded stream indices.
@@ -180,19 +185,30 @@ export class TorrentSubtitlesService {
     speculative = false,
     signal?: AbortSignal
   ): Promise<TorrentSubtitle[]> {
-    const body = await this.run(
-      target,
-      'ffprobe',
-      [
-        '-select_streams',
-        's',
-        '-show_entries',
-        'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
-        '-of',
-        'json',
-      ],
-      { speculative, signal }
-    );
+    const inspect = () =>
+      this.run(
+        target,
+        'ffprobe',
+        [
+          '-select_streams',
+          's',
+          '-show_entries',
+          'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
+          '-of',
+          'json',
+        ],
+        { speculative, signal }
+      );
+    let body: string;
+    try {
+      body = await inspect();
+    } catch (error) {
+      // A source just switched to can drop its first reads; one more try a moment later.
+      if (speculative || signal?.aborted || this.closed) throw error;
+      await new Promise(resolve => setTimeout(resolve, PROBE_RETRY_DELAY_MS).unref());
+      signal?.throwIfAborted();
+      body = await inspect();
+    }
     const probe = JSON.parse(body) as {
       streams?: Array<{
         index: number;
@@ -332,7 +348,7 @@ export class TorrentSubtitlesService {
           process.kill('SIGKILL');
         } else chunks.push(chunk);
       });
-      process.stderr!.resume();
+      const stderr = collectStderr(process.stderr);
       timeout = setTimeout(() => {
         failure = new Error('Subtitle preparation timed out');
         process.kill('SIGKILL');
@@ -344,7 +360,12 @@ export class TorrentSubtitlesService {
         process.once('close', code =>
           code === 0 && !failure
             ? resolve()
-            : reject(failure ?? new Error('Subtitle extraction failed'))
+            : reject(
+                failure ??
+                  Object.assign(new Error('Subtitle extraction failed'), {
+                    detail: stderr() || `${program} exited with ${code}`,
+                  })
+              )
         );
       });
       return Buffer.concat(chunks).toString('utf8');

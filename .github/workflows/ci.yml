@@ -238,6 +238,7 @@ jobs:
           [
             miauflix,
             miauflix-services,
+            miauflix-catalog-services,
             miauflix-media-catalog,
             miauflix-list-service,
             miauflix-sources,
@@ -251,7 +252,10 @@ jobs:
             target: ''
           - image: miauflix-services
             file: services/Dockerfile
-            target: ''
+            target: services
+          - image: miauflix-catalog-services
+            file: services/Dockerfile
+            target: catalog-services
           - image: miauflix-media-catalog
             file: services/media-catalog/Dockerfile
             target: production
@@ -259,11 +263,11 @@ jobs:
             file: services/list-service/Dockerfile
             target: production
           - image: miauflix-sources
-            file: services/sources/Dockerfile
-            target: production
+            file: services/Dockerfile
+            target: sources
           - image: miauflix-media-load
-            file: services/media-load/Dockerfile
-            target: production
+            file: services/Dockerfile
+            target: media-load
           - image: miauflix-tv-pairing
             file: tv-pairing/Dockerfile
             target: production
@@ -333,6 +337,8 @@ jobs:
             description: Miauflix backend, serves the web frontend
           - image: miauflix-services
             description: Miauflix bunqueue, media catalog, lists, source search and torrent engine in one container
+          - image: miauflix-catalog-services
+            description: Miauflix bunqueue, media catalog and lists (no VPN needed)
           - image: miauflix-media-catalog
             description: Miauflix media catalog service
           - image: miauflix-list-service

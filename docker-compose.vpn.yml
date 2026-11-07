@@ -1,12 +1,15 @@
-# Route Miauflix through NordVPN with gluetun (https://github.com/qdm12/gluetun).
+# Route source search and torrents through NordVPN with gluetun (https://github.com/qdm12/gluetun).
 # Usage: put these in a .env file next to the compose files, then run docker compose up -d
 #   COMPOSE_FILE=docker-compose.yml:docker-compose.vpn.yml
 #   NORDVPN_PRIVATE_KEY=<your NordLynx key, scripts/nordvpn-key.sh writes it for you>
 #   NORDVPN_COUNTRIES=<optional, comma-separated, e.g. Switzerland,Netherlands>
 # Guide: docs/setup/docker-setup.md#using-a-vpn
 #
-# Gluetun owns the network of every service below and its firewall drops all traffic outside
-# the tunnel, so it doubles as a kill switch: if the VPN goes down, nothing leaks from your real IP.
+# Only what talks to indexers, trackers and peers runs inside the VPN: miauflix-sources,
+# miauflix-media-load and FlareSolverr. Gluetun owns their network and its firewall drops all
+# traffic outside the tunnel, so it doubles as a kill switch: if the VPN goes down, nothing leaks
+# from your real IP. The backend and the catalog services (TMDB, Trakt) stay on the normal network
+# and reach the two through the vpn container.
 
 services:
   vpn:
@@ -21,45 +24,32 @@ services:
       WIREGUARD_PRIVATE_KEY: ${NORDVPN_PRIVATE_KEY:?Set NORDVPN_PRIVATE_KEY in .env, see docs/setup/docker-setup.md#using-a-vpn}
       SERVER_CATEGORIES: P2P
       SERVER_COUNTRIES: ${NORDVPN_COUNTRIES:-}
-    ports:
-      # The services share the VPN container's network, so their ports are published here.
-      # See docs/setup/docker-setup.md#open-it-to-your-local-network (MIAUFLIX_LISTEN_ADDRESS)
-      - '${MIAUFLIX_LISTEN_ADDRESS:-127.0.0.1}:3000:3000'
-      - '127.0.0.1:16686:16686' # Jaeger UI, with docker-compose.tracing.yml
     restart: unless-stopped
 
   miauflix:
-    network_mode: service:vpn
-    ports: !reset []
     environment:
-      BUNQUEUE_HOST: 127.0.0.1
-      CATALOG_SERVICE_URL: http://127.0.0.1:3001
-      LIST_SERVICE_URL: http://127.0.0.1:3002
-      SOURCES_SERVICE_URL: http://127.0.0.1:3003
-      MEDIA_LOAD_SERVICE_URL: http://127.0.0.1:3004
+      # These two share the VPN container's network, so they answer at its address.
+      SOURCES_SERVICE_URL: http://vpn:3003
+      MEDIA_LOAD_SERVICE_URL: http://vpn:3004
+      # Source search reaches FlareSolverr inside the VPN's network.
       FLARESOLVERR_URL: http://127.0.0.1:8191
-      OTEL_EXPORTER_OTLP_ENDPOINT: http://127.0.0.1:4318
       DISABLE_VPN_CHECK: 'false'
-    depends_on:
-      vpn:
-        condition: service_healthy
 
-  miauflix-services:
+  miauflix-sources:
     network_mode: service:vpn
     depends_on:
       vpn:
         condition: service_healthy
 
-  # Only started with docker-compose.flaresolverr.yml / docker-compose.tracing.yml
+  miauflix-media-load:
+    network_mode: service:vpn
+    depends_on:
+      vpn:
+        condition: service_healthy
+
+  # Only started with docker-compose.flaresolverr.yml
   flaresolverr:
     network_mode: service:vpn
-    depends_on:
-      vpn:
-        condition: service_healthy
-
-  jaeger:
-    network_mode: service:vpn
-    ports: !reset []
     depends_on:
       vpn:
         condition: service_healthy

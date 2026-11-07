@@ -8,6 +8,7 @@ import type { MediaLoadClientService } from '@services/media-load/media-load-cli
 
 import { FragmentedMp4Timeline } from './fragmented-mp4';
 import type { PlaybackTarget } from './playback-target';
+import { collectStderr } from './stderr-tail';
 import { openTorrentInput, PROBE_SIZE_BYTES } from './torrent-input';
 
 export interface PlaybackAudioTrack {
@@ -48,7 +49,9 @@ export interface AudioPlaybackPreferences {
 export class AudioPlaybackError extends Error {
   constructor(
     message: string,
-    readonly status: 422 | 503 = 503
+    readonly status: 422 | 503 = 503,
+    /** What FFmpeg reported, for the logs; never sent to the client. */
+    readonly detail?: string
   ) {
     super(message);
   }
@@ -465,7 +468,7 @@ export class AudioPlaybackService {
         body += chunk.toString();
         if (body.length > 1024 * 1024) child.kill('SIGKILL');
       });
-      child.stderr.resume();
+      const stderr = collectStderr(child.stderr);
       const timeout = setTimeout(() => child.kill('SIGKILL'), 45_000);
       timeout.unref();
       try {
@@ -477,7 +480,11 @@ export class AudioPlaybackService {
             code === 0
               ? resolve()
               : reject(
-                  new AudioPlaybackError('The source audio could not be inspected. Retry playback.')
+                  new AudioPlaybackError(
+                    'The source audio could not be inspected. Retry playback.',
+                    503,
+                    stderr() || `ffprobe exited with ${code}`
+                  )
                 )
           );
         });

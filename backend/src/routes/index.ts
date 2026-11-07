@@ -56,10 +56,8 @@ function createApiRoutes(deps: Deps) {
         return c.json(deps.statsService.report());
       })
       .get('/status', rateLimitGuard(10), c => {
-        return c.json({
-          vpn: deps.vpnDetectionService.status(),
-          services: deps.configurationService.getServiceStatuses(),
-        });
+        // Services that reach trackers, peers or indexers report their own VPN check as `vpn`.
+        return c.json({ services: deps.configurationService.getServiceStatuses() });
       })
       .route('/auth', createAuthRoutes(deps))
       .route('/auth', createProfileRoutes(deps))
