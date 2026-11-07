@@ -89,6 +89,13 @@ export interface RealtimePlaybackDelivery {
     | { type: 'recreate'; reason: string };
 }
 
+/** Downloaded stretches of a playback's file, `[start, end)` in thousandths of the file. */
+export interface RealtimePlaybackPieces {
+  type: 'playback-pieces';
+  playbackId: string;
+  ranges: Array<[number, number]>;
+}
+
 export interface RealtimeFocus {
   type: 'focus';
   subtitleLanguage?: string;
@@ -146,7 +153,8 @@ export class RealtimeClient {
     private readonly onArtworkUpdate?: (update: ArtworkUpdate) => void,
     private readonly onPlaybackDelivery?: (message: RealtimePlaybackDelivery) => void,
     private readonly onSearch?: (message: SearchServerMessage) => void,
-    private readonly onSource?: (message: RealtimeSourceMessage) => void
+    private readonly onSource?: (message: RealtimeSourceMessage) => void,
+    private readonly onPlaybackPieces?: (message: RealtimePlaybackPieces) => void
   ) {}
 
   start(): void {
@@ -283,6 +291,7 @@ export class RealtimeClient {
         this.onStatus(message);
       if (isArtworkUpdate(message)) this.onArtworkUpdate?.(message);
       if (isPlaybackDelivery(message)) this.onPlaybackDelivery?.(message);
+      if (isPlaybackPieces(message)) this.onPlaybackPieces?.(message);
       if (isSearchMessage(message)) this.onSearch?.(message);
       if (isSourceMessage(message)) this.onSource?.(message);
       if (isReady(message)) {
@@ -426,6 +435,23 @@ function isPlaybackDelivery(value: unknown): value is RealtimePlaybackDelivery {
     candidate.type === 'playback-delivery' &&
     typeof candidate.playbackId === 'string' &&
     (candidate.update?.type === 'delivery' || candidate.update?.type === 'recreate')
+  );
+}
+
+function isPlaybackPieces(value: unknown): value is RealtimePlaybackPieces {
+  if (typeof value !== 'object' || value === null) return false;
+  const candidate = value as Partial<RealtimePlaybackPieces>;
+  return (
+    candidate.type === 'playback-pieces' &&
+    typeof candidate.playbackId === 'string' &&
+    Array.isArray(candidate.ranges) &&
+    candidate.ranges.every(
+      range =>
+        Array.isArray(range) &&
+        range.length === 2 &&
+        typeof range[0] === 'number' &&
+        typeof range[1] === 'number'
+    )
   );
 }
 
