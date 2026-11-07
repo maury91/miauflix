@@ -227,9 +227,17 @@ STREAM_TOKEN_EXPIRATION=6h
 # API endpoints (use defaults unless customizing)
 TMDB_API_URL=https://api.themoviedb.org/3
 TRAKT_API_URL=https://api.trakt.tv
+
+# Anime (list service): AniList's rankings and the AniList → TMDB id list
+ANILIST_API_URL=https://graphql.anilist.co
+ANIME_LISTS_URL=https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json
+
+# Anime (sources service): the same id list and ani.zip's episode mappings
+SOURCES_ANIME_LISTS_URL=https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json
+SOURCES_ANI_ZIP_URL=https://api.ani.zip/mappings
 ```
 
-- **Description**: Base URLs for external APIs
+- **Description**: Base URLs for external APIs. The anime ones are environment variables of the list and sources services; AniList and ani.zip need no account or key
 - **Default**: Standard API endpoints
 - **When to change**: Custom proxy or testing environments only
 

@@ -12,7 +12,7 @@ A title appearing in the catalog does not guarantee that a playable source is av
 
 ## Browse lists
 
-The home screen organizes titles into rows. It loads more rows and titles as you browse, rather than loading the entire catalog at once. Connected list services can supply popular, trending, personal, and community lists.
+The home screen organizes titles into rows. It loads more rows and titles as you browse, rather than loading the entire catalog at once. Connected list services can supply popular, trending, personal, and community lists. Anime rows come from AniList: the most popular anime airing this season, trending anime and all-time popular anime. They need no account; AniList counts each season of a show separately, so its seasons appear as one show, and titles TMDB does not list are left out.
 
 ## Search by title or genre
 

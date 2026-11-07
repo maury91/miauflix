@@ -1,0 +1,227 @@
+{
+  "headers": {
+    "access-control-allow-headers": "Authorization,Accept,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range",
+    "access-control-allow-methods": "GET, POST, OPTIONS",
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Content-Length, Content-Range",
+    "cache-control": "no-cache, private",
+    "content-type": "application/json",
+    "x-ratelimit-limit": "30",
+    "x-ratelimit-remaining": "27",
+    "set-cookie": "laravel_session=0RglUJrZfGtEinx9EEZXTO0xHOXABqyCfAgXvQKG; expires=Sun, 08-Nov-2026 02:07:48 GMT; Max-Age=43200; path=/; httponly"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "data": {
+      "Page": {
+        "pageInfo": {
+          "total": 5000,
+          "lastPage": 100
+        },
+        "media": [
+          {
+            "id": 16498,
+            "format": "TV"
+          },
+          {
+            "id": 101922,
+            "format": "TV"
+          },
+          {
+            "id": 113415,
+            "format": "TV"
+          },
+          {
+            "id": 1535,
+            "format": "TV"
+          },
+          {
+            "id": 21459,
+            "format": "TV"
+          },
+          {
+            "id": 11061,
+            "format": "TV"
+          },
+          {
+            "id": 21087,
+            "format": "TV"
+          },
+          {
+            "id": 21,
+            "format": "TV"
+          },
+          {
+            "id": 20605,
+            "format": "TV"
+          },
+          {
+            "id": 20958,
+            "format": "TV"
+          },
+          {
+            "id": 5114,
+            "format": "TV"
+          },
+          {
+            "id": 20,
+            "format": "TV"
+          },
+          {
+            "id": 11757,
+            "format": "TV"
+          },
+          {
+            "id": 20954,
+            "format": "MOVIE"
+          },
+          {
+            "id": 21519,
+            "format": "MOVIE"
+          },
+          {
+            "id": 99147,
+            "format": "TV"
+          },
+          {
+            "id": 21856,
+            "format": "TV"
+          },
+          {
+            "id": 110277,
+            "format": "TV"
+          },
+          {
+            "id": 127230,
+            "format": "TV"
+          },
+          {
+            "id": 101759,
+            "format": "TV"
+          },
+          {
+            "id": 20755,
+            "format": "TV"
+          },
+          {
+            "id": 21507,
+            "format": "TV"
+          },
+          {
+            "id": 21355,
+            "format": "TV"
+          },
+          {
+            "id": 20665,
+            "format": "TV"
+          },
+          {
+            "id": 104578,
+            "format": "TV"
+          },
+          {
+            "id": 1735,
+            "format": "TV"
+          },
+          {
+            "id": 21234,
+            "format": "TV"
+          },
+          {
+            "id": 100166,
+            "format": "TV"
+          },
+          {
+            "id": 9253,
+            "format": "TV"
+          },
+          {
+            "id": 97940,
+            "format": "TV"
+          },
+          {
+            "id": 20464,
+            "format": "TV"
+          },
+          {
+            "id": 101291,
+            "format": "TV"
+          },
+          {
+            "id": 140960,
+            "format": "TV"
+          },
+          {
+            "id": 101921,
+            "format": "TV"
+          },
+          {
+            "id": 105333,
+            "format": "TV"
+          },
+          {
+            "id": 101348,
+            "format": "TV"
+          },
+          {
+            "id": 21827,
+            "format": "TV"
+          },
+          {
+            "id": 124080,
+            "format": "TV"
+          },
+          {
+            "id": 4224,
+            "format": "TV"
+          },
+          {
+            "id": 19815,
+            "format": "TV"
+          },
+          {
+            "id": 20613,
+            "format": "TV"
+          },
+          {
+            "id": 20447,
+            "format": "TV"
+          },
+          {
+            "id": 104276,
+            "format": "TV"
+          },
+          {
+            "id": 20789,
+            "format": "TV"
+          },
+          {
+            "id": 269,
+            "format": "TV"
+          },
+          {
+            "id": 21202,
+            "format": "TV"
+          },
+          {
+            "id": 112151,
+            "format": "MOVIE"
+          },
+          {
+            "id": 1575,
+            "format": "TV"
+          },
+          {
+            "id": 99423,
+            "format": "TV"
+          },
+          {
+            "id": 20623,
+            "format": "TV"
+          }
+        ]
+      }
+    }
+  }
+}

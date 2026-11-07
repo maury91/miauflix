@@ -129,6 +129,9 @@ export class CardigannProvider implements Provider {
         TVDBID: query.tvdbid ?? '',
         Season: query.season ?? '',
         Ep: query.ep ?? '',
+        AniDBAID: query.anidbAid ?? '',
+        AniDBEID: query.anidbEid ?? '',
+        AniListID: query.anilistId ?? '',
         Type: query.kind === 'movie' ? 'movie' : query.kind === 'tv' ? 'tvsearch' : 'search',
         Page: query.page ?? 1,
       },
@@ -251,6 +254,8 @@ export class CardigannProvider implements Provider {
         date: date?.toISOString(),
         imdbid: (result.imdbid ?? result.imdb)?.match(/tt\d+/)?.[0],
         category: result.category ? this.categoryName(result.category) : undefined,
+        // Miauflix extension: a curated pick (SeaDex) as `best` or `alt`.
+        release: result.release === 'best' || result.release === 'alt' ? result.release : undefined,
       });
     }
     return results;

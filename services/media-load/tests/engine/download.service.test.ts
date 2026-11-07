@@ -595,6 +595,33 @@ describe('DownloadService', () => {
       expect(torrent._startDiscovery).toHaveBeenCalled();
     });
 
+    it('drops peers kept in a plain object (older WebTorrent)', async () => {
+      const { service } = setupTest();
+      const { torrent } = fakeTorrent();
+      const legacy = { ...torrent, _peers: { 'peer-1': {}, 'peer-2': {} } };
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [legacy];
+
+      await service.setNetworkAllowed(false);
+
+      expect(legacy.removePeer.mock.calls).toEqual([['peer-1'], ['peer-2']]);
+    });
+
+    it('fences every other torrent when one fails', async () => {
+      const { service } = setupTest();
+      const broken = fakeTorrent().torrent;
+      broken.pause.mockImplementation(() => {
+        throw new Error('boom');
+      });
+      const healthy = fakeTorrent().torrent;
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [broken, healthy];
+      jest.spyOn(logger, 'error').mockImplementation(() => undefined);
+
+      await service.setNetworkAllowed(false);
+
+      expect(healthy.pause).toHaveBeenCalled();
+      expect(healthy.discovery).toBeNull();
+    });
+
     it('refuses new torrents and metadata lookups while blocked', async () => {
       const { service } = setupTest();
       (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [];
@@ -629,6 +656,33 @@ describe('DownloadService', () => {
 
       internals._initStatus = { status: 'ready' };
       await service.setNetworkAllowed(true);
+      expect(mockStorageService.getStoragesWithCompletion).toHaveBeenCalledTimes(1);
+    });
+
+    it('retries the seeding restore when the network is blocked while it runs', async () => {
+      const { service, mockStorageService } = setupTest();
+      const internals = service as unknown as {
+        restoreCompletedDownloads: () => Promise<void>;
+        addTorrentWithLock: () => Promise<Torrent>;
+        _initStatus: { status: string };
+      };
+      internals._initStatus = { status: 'ready' };
+      const storage = createMockStorage({ videoCompletedAt: new Date(), localOnly: false });
+      mockStorageService.getStoragesWithCompletion.mockResolvedValue([storage]);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
+      // The VPN drops while this source is being restored.
+      jest.spyOn(internals, 'addTorrentWithLock').mockImplementation(async () => {
+        await service.setNetworkAllowed(false);
+        throw new ErrorWithStatus('blocked', 'vpn_required');
+      });
+      jest.spyOn(logger, 'warn').mockImplementation(() => undefined);
+
+      await internals.restoreCompletedDownloads();
+      mockStorageService.getStoragesWithCompletion.mockClear();
+      mockStorageService.getStoragesWithCompletion.mockResolvedValue([]);
+      internals._initStatus = { status: 'ready' };
+      await service.setNetworkAllowed(true);
+
       expect(mockStorageService.getStoragesWithCompletion).toHaveBeenCalledTimes(1);
     });
   });

@@ -4,6 +4,11 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ## Unreleased
 
+### New
+
+- **Anime sources**: anime is recognised automatically and searched the way anime is released, by AniDB episode and with the names fansub groups use ("2nd Season - 07", episode numbers counted from the first episode, batches). Later seasons that TMDB lists as one long season are matched to the right episode, and the episode is found inside batch downloads. A new AnimeTosho source is on by default and only used for anime; it marks SeaDex's recommended releases
+- **Anime rows**: Home can show the anime lists, from AniList: popular this season, trending and all-time popular. No account needed
+
 ### Improvements
 
 - Seeder and leecher counts are checked for many sources at once and combine every tracker's answer, so they are more accurate and use less tracker traffic

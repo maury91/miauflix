@@ -7,7 +7,8 @@ interface FenceableTorrent {
   pause(): void;
   resume(): void;
   removePeer(id: string): void;
-  _peers?: Map<string, unknown> | null;
+  /** A Map in the pinned version; a plain object in older WebTorrent releases. */
+  _peers?: Map<string, unknown> | Record<string, unknown> | null;
   discovery?: { destroy(cb?: () => void): void } | null;
   _startDiscovery?: () => void;
 }
@@ -20,7 +21,9 @@ export function fenceTorrent(torrent: Torrent): void {
   const fenced = torrent as unknown as FenceableTorrent;
   if (fenced.destroyed) return;
   fenced.pause();
-  for (const id of [...(fenced._peers?.keys() ?? [])]) fenced.removePeer(id);
+  const peers = fenced._peers;
+  const peerIds = !peers ? [] : peers instanceof Map ? [...peers.keys()] : Object.keys(peers);
+  for (const id of peerIds) fenced.removePeer(id);
   const discovery = fenced.discovery;
   if (discovery) {
     fenced.discovery = null;

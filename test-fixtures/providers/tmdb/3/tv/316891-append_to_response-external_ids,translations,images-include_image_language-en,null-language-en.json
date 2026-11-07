@@ -1,0 +1,441 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23952",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e7e93c3170fc2ff43f0421315b536667\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ukHKDQO3ILHEAsZ6uXRCeT7tKlO.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-10-06",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://shioama-anime.com/",
+    "id": 316891,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-03",
+    "last_episode_to_air": {
+      "id": 7895724,
+      "name": "Now Serving: Mutual Feelings",
+      "overview": "Sota and Koharu are officially a couple. Sota visits Rinka for relationship advice.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-03",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 316891,
+      "still_path": "/iTRJKM7N15KETfTszwZze6mLxWt.jpg"
+    },
+    "name": "The Cold Sato-san Is Only Sweet to Me",
+    "next_episode_to_air": {
+      "id": 7895725,
+      "name": "The Beach, a Cat, and Love Talk",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-10",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 316891,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 173,
+        "logo_path": "/fERjndErEpveJmQZccJbJDi93rj.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "塩対応の佐藤さんが俺にだけ甘い",
+    "overview": "Sato may be the most beautiful girl in school but she's also the coldest, never smiling at anyone. When her classmate Oshio spots her at a café, he learns Sato's secret: she's actually just shy and clumsy. As Sato and Oshio bond over their shared interests in photography and desserts, a sweet romance starts to blossom between two socially awkward people.",
+    "popularity": 10.9156,
+    "poster_path": "/eInC49veg0lHg13BaBiKmQiPk6U.jpg",
+    "production_companies": [
+      {
+        "id": 4262,
+        "logo_path": "/K1m4DWOObFOKCJp6XGOskEKymE.png",
+        "name": "Tezuka Productions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 192,
+        "logo_path": "/93eAKlnQecDdMtucfOprzcjMw9V.png",
+        "name": "Shochiku",
+        "origin_country": "JP"
+      },
+      {
+        "id": 60197,
+        "logo_path": "/D5B8l99tlFJGoMpYJk1kqxYdey.png",
+        "name": "Good Smile Company",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Pony Canyon",
+        "origin_country": "JP"
+      },
+      {
+        "id": 187932,
+        "logo_path": "/5qlRgi2XlCSyKdN8wMSiLrA5uKO.png",
+        "name": "armabianca",
+        "origin_country": "JP"
+      },
+      {
+        "id": 17981,
+        "logo_path": "/8UABNMysukRi4udTHYxcNUMbPR1.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157002,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Tokyo MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 104444,
+        "logo_path": "/oMPR1Xy6FE9Vlr1yWfbeRD1fAfP.png",
+        "name": "81 Produce",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157807,
+        "logo_path": "/tyrJOOVAUIxQEJzjP1PhP2H5zFi.png",
+        "name": "WOWOW",
+        "origin_country": "JP"
+      },
+      {
+        "id": 121339,
+        "logo_path": "/119mbwFIqX2NEDLzqYNG8qVaLdC.png",
+        "name": "BS-TBS",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-06",
+        "episode_count": 12,
+        "id": 505806,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/eInC49veg0lHg13BaBiKmQiPk6U.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 0,
+    "vote_count": 0,
+    "external_ids": {
+      "imdb_id": "tt43691365",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 475634,
+      "tvrage_id": null,
+      "wikidata_id": "Q138714382",
+      "facebook_id": null,
+      "instagram_id": "shioama_official",
+      "twitter_id": "shioamaofficial"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Cold Sato-san Is Only Sweet to Me",
+            "overview": "Sato may be the most beautiful girl in school but she's also the coldest, never smiling at anyone. When her classmate Oshio spots her at a café, he learns Sato's secret: she's actually just shy and clumsy. As Sato and Oshio bond over their shared interests in photography and desserts, a sweet romance starts to blossom between two socially awkward people.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "クラス中の高嶺の花、佐藤こはる。誰にも笑顔を見せない、通称“塩対応の佐藤さん”。でもある日、同じクラスの押尾颯太が、実家が営むカフェで見た佐藤さんの姿は……スイーツの写真を撮るため奮闘する、隙だらけの姿で!?本当は人見知りで不器用なだけの佐藤さんと、そんな佐藤さんのことが好きな押尾君。二人の距離は、スイーツとカメラをきっかけに、少しずつ縮まっていく。もどかしくて、愛おしい。世界で一番甘い両片想いに、きっとあなたもとろけてしまう――。不器用な二人が織りなす“甘くてしょっぱい”青春ラブコメディ！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "쌀쌀맞은 사토 양이 나에게만 상냥하다",
+            "overview": "반 전체의 우상, 사토 코하루.\n\n누구에게도 미소를 보여주지 않는, 통칭 \"소금 대응의 사토 양\".\n\n하지만 어느 날, 같은 반의 오시오 소우타가\n\n본가에서 운영하는 카페에서 목격한 사토 양의 모습은…\n\n디저트 사진을 찍기 위해 고군분투하는, 빈틈투성이인 모습이었다?!\n\n사실은 낯가림이 심하고 서툴 뿐인 사토 양과,\n\n그런 사토 양을 좋아하는 오시오 군.\n\n두 사람의 거리는 디저트와 카메라를 계기로 조금씩 좁혀져 간다.\n\n애타면서도, 사랑스러운.\n\n세상에서 가장 달콤한 서로의 짝사랑에, 당신도 분명 녹아내리고 말 것——.\n\n서툰 두 사람이 엮어내는\n\n\"단짠단짠\" 청춘 러브 코미디!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Shiotaio no Sato-san ga Ore ni Dake Amai",
+            "overview": "Sato es la chica más guapa del instituto, pero también la más fría y jamás sonríe a nadie. Cuando su compañero Oshio la ve en una cafetería, descubre su gran secreto: en realidad es tímida y torpe. Al unirse por su pasión compartida por la fotografía y los dulces, un tierno romance empieza a florecer entre dos personas con pocas dotes sociales.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Shiotaio no Sato-san ga Ore ni Dake Amai",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Не слишком ли ты сладкая, Бог соли Сато?",
+            "overview": "Сато-сан - недосягаемый цветок нашего класса. Она всегда холодна и резка с одноклассниками, но только я знаю, что на самом деле она очень милая, когда улыбается, даже если она не очень хороший фотограф\".\n\n\"Ошио-кун дружелюбный и живой, но только Я знаю, что после школы он работает в семейном кафе. Он отлично справляется с аккаунтом кафе в социальной сети SNS, а от его озорной улыбки у меня замирает сердце!\"\n\nНевинная и милая, но иногда разочаровывающая, эта история о двух людях на 120% искренняя и непринужденная. влюбляюсь в первый раз.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Cold Sato-san is Only Sweet to Me",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冷淡的佐藤同学只对我撒娇",
+            "overview": "班上的高岭之花——佐藤小春。从不向任何人展露笑容，绰号“冷淡的佐藤同学”。然而某天，同班的押尾颯太在自家经营的咖啡厅里看到的佐藤同学，竟是……为了拍摄甜品照片而拼尽全力、毫无防备的模样！？其实只是害羞又笨拙的佐藤同学，以及喜欢着这样的佐藤同学的押尾君。两人的距离，以甜品和相机为契机，一点点地拉近。令人焦心，又令人心生怜爱。世界上最甜的“双向暗恋”，你一定会为之融化。笨拙的两人交织出的“又甜又咸”青春恋爱喜剧！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Cold Sato-san is Only Sweet to Me",
+            "overview": "Apesar de sua postura fria, Koharu Sato começa a mostrar sua verdadeira personalidade a uma colega de classe após um encontro casual.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Cold Sato-san Is Only Sweet to Me",
+            "overview": "Sato Koharu est une jeune fille dont la beauté est appréciée par tous ses camarades de classe. Mais elle est aussi réputée pour se montrer toujours très froide avec eux. D'innombrables personnes ont été brisées par sa froideur alors qu'elles essayaient de la connaître. Mais un jour, Oshio, un garçon de sa classe, tombe sur elle par hasard lors de son travail à temps partiel, et la sauve des avances de dragueurs un peu trop insistants. Depuis, elle semble s'être prise d'affection pour lui. Oshio se retrouve alors à l'aider à prendre de belles photos pour ses réseaux sociaux. L'impassible Sato devient ainsi avec lui une douce et adorable personne au sourire enchanteur.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冷淡的佐藤同學只對我撒嬌",
+            "overview": "佐藤小春是班級裡的高嶺之花，沒有人能夠成功看到她的笑容，因此被稱為「冷淡的佐藤同學」。然而某一天，同班的押尾颯太在老家經營的咖啡廳裡，看到了佐藤同學的身影……她為了拍甜點的照片而努力奮戰，甚至顯得毫不設防！？實際上既內向又笨拙的佐藤，加上喜歡著佐藤的押尾，兩個人的距離在甜點和相機等話題的影響下，正一步步地接近中。讓人無比焦急，又讓人無比微笑。這場世界上最甜蜜的雙向單戀，相信一定也會讓你融化 ── 笨拙的兩人編織出的「鹹鹹甜甜」的青春戀愛喜劇！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "คุณซาโต้ยอดนักเมิน เธอหวานใส่ผมแค่คนเดียว",
+            "overview": "ซาโต้ โคฮารุ สาวสวยที่เย็นชา ใครก็ตามที่พยายามจะเข้าหาเธอต่างก็ต้องบาดเจ็บทางใจกลับไปอย่างไม่เป็นท่า หลังโอชิโอะ โซตะช่วยคุณซาโต้จากพวกผู้ชายที่เข้ามาตื๊อจีบเธอ ทำให้กลายเป็นเพื่อนกัน และเวลาอยู่กันเธอมักอ่อนหวานต่อเขาเป็นพิเศษ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Sato-san Lạnh Lùng Chỉ Ngọt Ngào Với Mình Tôi",
+            "overview": "Sato có thể là cô gái xinh đẹp nhất trường nhưng cũng là người lạnh lùng nhất, không bao giờ cười với ai. Khi bạn cùng lớp Oshio bắt gặp cô ở một quán cà phê, cậu phát hiện ra bí mật của Sato: thực ra cô chỉ nhút nhát và vụng về. Khi Sato và Oshio gắn bó qua sở thích chung về nhiếp ảnh và đồ ngọt, một chuyện tình ngọt ngào bắt đầu nảy nở giữa hai người vụng về trong giao tiếp.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冷淡的佐藤同學只對我撒嬌",
+            "overview": "佐藤小春是班級裏的高嶺之花，沒有人能夠成功看到她的笑容，因此被稱為「冷淡的佐藤同學」。然而某一天，同班的押尾颯太在老家經營的咖啡廳裏，看到了佐藤同學的身影……她為了拍甜點的照片而努力奮戰，甚至顯得毫不設防！？實際上既內向又笨拙的佐藤，加上喜歡著佐藤的押尾，兩個人的距離在甜點和相機等話題的影響下，正一步步地接近中。讓人無比焦急，又讓人無比微笑。這場世界上最甜蜜的雙向單戀，相信一定也會讓你融化 ── 笨拙的兩人編織出的「鹹鹹甜甜」的青春戀愛喜劇！",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ukHKDQO3ILHEAsZ6uXRCeT7tKlO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nJPhvnwwz9X96cmfM7akn2MMFUU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1918
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yMUooyeOGNWVo1NweQMXumNZSWt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t3nLfyona55Ha6MlTpYAb6tQqI3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3837
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.613,
+          "height": 636,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x7SnoIng0q5GyAO9AN8QhX6JPEi.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1026
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eInC49veg0lHg13BaBiKmQiPk6U.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1131,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AcnIFYna7bZAaESJIKNusrJRzjs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        }
+      ]
+    }
+  }
+}

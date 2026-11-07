@@ -1,0 +1,531 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21435",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"28edacca13b3263c8dca76dc55476a87\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qRgXreXNyUO30yAniTckVAho2va.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-05",
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      }
+    ],
+    "homepage": "https://psyren-anime.com",
+    "id": 297903,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-26",
+    "last_episode_to_air": {
+      "id": 7904385,
+      "name": "Recall",
+      "overview": "In a bid for survival, Ageha undergoes PSI training. Meanwhile, the actor Oboro and opportunistic Kabuto also receive phone cards.",
+      "vote_average": 6,
+      "vote_count": 1,
+      "air_date": "2026-10-26",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 297903,
+      "still_path": "/92YVxeNHjgIVTwt7EYBYKxsuE85.jpg"
+    },
+    "name": "PSYREN",
+    "next_episode_to_air": {
+      "id": 7904386,
+      "name": "Those Gathered",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-09",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 297903,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 13,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "PSYREN -サイレン-",
+    "overview": "One day, high schooler Ageha Yoshina picks up a mysterious red phone card. Days later, his childhood friend, Sakurako Amamiya, who possessed the same card, suddenly vanishes. In search of her, he's drawn into rumors of a nationwide string of mysterious disappearances by a secret organization known as Psyren. When he accesses the group, a deadly game that changes his fate forever begins.",
+    "popularity": 9.5792,
+    "poster_path": "/3imj2VLU77bLOyJ4aPnEUlpJZDX.jpg",
+    "production_companies": [
+      {
+        "id": 30293,
+        "logo_path": "/uXK0FJB6rlX6kegyZl8uGOeiwHd.png",
+        "name": "SATELIGHT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 202952,
+        "logo_path": "/1lkaaSq1FCx1KtnFuGcAYV7zHRy.png",
+        "name": "REMOW",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3234,
+        "logo_path": "/wTPPnz05ZCQgEQVeSOxTkUCyhr5.png",
+        "name": "Pierrot",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157001,
+        "logo_path": "/vDBycpPRLKBf7T0RQbQtU49BQO6.png",
+        "name": "KADOKAWA Media House",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6681,
+        "logo_path": "/s4RElEnQyM2VrHZCQ3jYemPdxML.png",
+        "name": "THE KLOCKWORX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 313256,
+        "logo_path": "/nucouMeStMs4W60uwX9DY4O9RLv.png",
+        "name": "Sekai Laboratory",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-05",
+        "episode_count": 13,
+        "id": 468923,
+        "name": "Season 1",
+        "overview": "A high schooler uncovers a deadly mystery when a strange phone card leads him into a secret organization behind nationwide disappearances.",
+        "poster_path": "/3imj2VLU77bLOyJ4aPnEUlpJZDX.jpg",
+        "season_number": 1,
+        "vote_average": 6.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "A PSYЯEN echoes through our future.",
+    "type": "Scripted",
+    "vote_average": 7.2,
+    "vote_count": 3,
+    "external_ids": {
+      "imdb_id": "tt39181351",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 471609,
+      "tvrage_id": null,
+      "wikidata_id": "Q137351587",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "PSYREN_official"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "PSYREN",
+            "overview": "Ageha est dégoûté par notre monde et rêve d’une vie meilleure. Un soir, il trouve une étrange carte rouge sur laquelle il est écrit Psyren. Il s’agirait d’une société secrète à l’origine de nombreux enlèvements.\n\nPeu après, l’une de ses camarades, qui semblait connaître cette société, disparaît devant ses yeux. Ageha décide alors de la sauver : il utilise la carte rouge et se retrouve soudainement projeté dans un monde parallèle. A présent, Ageha doit lutter pour survivre et arriver jusqu’au bout du jeu, car c’est le seul moyen pour lui de retrouver son monde originel, qui n’est peut-être pas si horrible que ça finalement.\n\nDans cette entreprise, il n’est pas seul. D’autres personnes sont dans la même galère. Et c’est ensemble, qu’ils vont affronter le danger et peut-être même le vaincre…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "高校一年生・夜科アゲハは、ある日、公衆電話に放置されていた\n\n“赤いテレホンカード”を拾う。数日後、同じテレホンカードを持っていた\n\n幼馴染みの同級生・雨宮桜子が姿を消す。\n\nアゲハは彼女を捜すため、全国規模で起こっている連続“神隠し”失踪事件\n\nの黒幕と噂される「秘密結社サイレン」へとアクセスする。\n\nそして、命を懸けたゲームが始まってしまった─",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "PSYREN",
+            "overview": "One day, high schooler Ageha Yoshina picks up a mysterious red phone card. Days later, his childhood friend, Sakurako Amamiya, who possessed the same card, suddenly vanishes. In search of her, he's drawn into rumors of a nationwide string of mysterious disappearances by a secret organization known as Psyren. When he accesses the group, a deadly game that changes his fate forever begins.",
+            "homepage": "",
+            "tagline": "A PSYЯEN echoes through our future."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Psyren",
+            "overview": "Ageha Yoshina, un chico de instituto que, tras usar una misteriosa tarjeta telefónica, es transportado a un futuro desolado de la Tierra, un mundo apocalíptico llamado Psyren, donde descubre poderes psíquicos y debe sobrevivir en un juego mortal para desentrañar el misterio de cómo el mundo llegó a ese estado y salvar a su amiga desaparecida, todo mientras se enfrenta a una sociedad secreta con habilidades PSI.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Psyren",
+            "overview": "Ageha Yoshina, un chico de instituto que, tras usar una misteriosa tarjeta telefónica, es transportado a un futuro desolado de la Tierra, un mundo apocalíptico llamado Psyren, donde descubre poderes psíquicos y debe sobrevivir en un juego mortal para desentrañar el misterio de cómo el mundo llegó a ese estado y salvar a su amiga desaparecida, todo mientras se enfrenta a una sociedad secreta con habilidades PSI.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "PSYREN",
+            "overview": "Certo dia, o estudante do ensino médio Ageha Yoshina encontra um misterioso \"cartão telefônico vermelho\" esquecido em uma cabine telefônica. Alguns dias depois, sua amiga de infância e colega de classe, Sakurako Amaina, que possuía o mesmo cartão, desaparece repentinamente sem deixar rastros. Em sua busca, Ageha se vê envolvido em rumores que cercam uma série de desaparecimentos misteriosos em todo o país, supostamente obra de uma organização secreta conhecida apenas como \"Psyren\". Ao se infiltrar no grupo, um jogo mortal começa: um jogo que mudará seu destino para sempre.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Psyren",
+            "overview": "Eines Tages findet der Oberschüler Ageha Yoshina eine rote Telefonkarte. Einige Tage später verschwindet plötzlich seine Kindheitsfreundin Sakurako Amamiya. Auf der Suche nach ihr erfährt er von einer Serie mysteriöser Vermisstenvorfälle, hinter der eine Organisation namens „Psyren“ stecken soll. Als er Kontakt zu ihr aufnimmt, beginnt ein tödliches Spiel, das sein Schicksal für immer verändert.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "PSYREN～決戰遊戲～",
+            "overview": "故事中的主角，夜科揚羽是一個高中生，被怪人尼彌西斯Q選中參加PSYREN遊戲。遊戲進行的地方是一片荒原，事實上為十年後的世界。夜科揚羽與他的同伴試圖改變未來、拯救世界。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "PSYREN－末日遊戲－",
+            "overview": "故事中的主角，夜科揚羽是一個高中生，被怪人尼彌西斯 Q 選中參加 PSYREN 遊戲。遊戲進行的地方是一片荒原，事實上為十年後的世界。夜科揚羽與他的同伴試圖改變未來、拯救世界。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "PSYREN -사이렌-",
+            "overview": "“도와줘.”\n\n그 말만 남기고 아마미야 사쿠라코는 자취를 감췄다.\n\n요시나 아케하는 그녀를 찾기 위해 연쇄 ‘카미카쿠시’ 실종사건과 관련된 도시괴담 ‘비밀결사 사이렌’에 접속한다. 그리고, 아게하의 목숨을 건 게임이 시작된다!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "PSYREN -决战游戏-",
+            "overview": "高中一年级学生·夜科扬羽，某天捡到了被遗弃在公共电话亭里的“红色电话卡”。\n\n　　几天后，持有相同电话卡的青梅竹马兼同学·雨宫樱子失去了踪影。\n\n　　为了寻找她，扬羽联系了传闻中在全国范围内制造连续“神隐”失踪事件的黑幕——“秘密结社PSYREN”。\n\n　　随后，一场赌上性命的游戏开始了——",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "PSYREN",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Псайрен",
+            "overview": "Однажды старшеклассник Агэха Ёшина находит в телефонной будке странную «красную телефонную карту». Спустя несколько дней его подруга детства и одноклассница Сакурако, у которой была такая же карта, бесследно исчезает.\n\nВ поисках ответов Агэха сталкивается с жуткими слухами о массовых исчезновениях, за которыми стоит некая секретная организация — «Псайрен». Стоит ему копнуть глубже, как начинается смертельная игра, и назад дороги уже нет.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "PSYREN",
+            "overview": "Một ngày nọ, cậu học sinh trung học Ageha Yoshina nhặt được một tấm thẻ điện thoại đỏ bí ẩn. Vài ngày sau, Sakurako Amamiya — người bạn thời thơ ấu cũng sở hữu tấm thẻ tương tự — đột nhiên biến mất. Trong hành trình tìm kiếm cô, cậu bị cuốn vào tin đồn về hàng loạt vụ mất tích bí ẩn trên toàn quốc do một tổ chức bí mật mang tên Psyren gây ra. Khi cậu tiếp cận được tổ chức này, một trò chơi chết chóc thay đổi vận mệnh của cậu mãi mãi bắt đầu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Op een dag vindt middelbare scholier Ageha Yoshina een mysterieuze rode telefoonkaart. Dagen later verdwijnt zijn jeugdvriendin Sakurako Amamiya, die dezelfde kaart bezat, spoorloos. Op zoek naar haar raakt hij betrokken bij geruchten over een landelijke reeks mysterieuze verdwijningen, gepleegd door een geheime organisatie genaamd Psyren. Wanneer hij toegang krijgt tot deze groep, begint een dodelijk spel dat zijn lot voorgoed verandert.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qRgXreXNyUO30yAniTckVAho2va.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o8jHdRwB9GZtkdZjmMoFJyC7eDZ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/upSatvIH3w8c9hAuSRPgZOTUTTT.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xOQBZxRh5W7tE0gdVivc2NwDpun.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/avOHprINAK61GJg40CfIiWMnDX8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.126,
+          "height": 1716,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4p8RNcI2CpZ4xHRWD8EFxViHcMd.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3648
+        },
+        {
+          "aspect_ratio": 1.72,
+          "height": 1944,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/znlN7cqMeXqZpOEBcuV8pGTuLiR.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3343
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3imj2VLU77bLOyJ4aPnEUlpJZDX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gQAORdwJKn4YxRwTaR8B0tSdqwY.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 845
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2828,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g6eoR2gUcc4BSFvJ4Bt4EeoNSLI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.698,
+          "height": 1375,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dCG2oh6uLHpci0f4NCpacOJERg3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 2841,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lGAgDOYKRsVjdzKm488n7QJcfCv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2094,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mphNfziF8a93fVMJ19JIhYrTz7j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1480
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4Y6uc0cc47P8ctLT8J0gTyvTQos.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

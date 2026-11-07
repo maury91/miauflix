@@ -42,6 +42,8 @@ export function openDatabase(dataDir: string): Database {
   builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'eztv-api', 'EZTV (API)', 30, true);
   builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'therarbg', 'TheRARBG', 40, true);
   builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'torrentio', 'Torrentio', 35, true);
+  // Anime only (its definition offers no movie or TV search), by AniDB episode id.
+  builtIn(MIAUFLIX_SOURCE_KEY, 'maury91', 'animetosho', 'AnimeTosho', 45, true);
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'nyaasi', 'Nyaa (Prowlarr)', 130, false);
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'eztv', 'EZTV (Prowlarr)', 140, false);
   builtIn(PROWLARR_SOURCE_KEY, 'prowlarr', 'thepiratebay', 'The Pirate Bay (Prowlarr)', 150, false);

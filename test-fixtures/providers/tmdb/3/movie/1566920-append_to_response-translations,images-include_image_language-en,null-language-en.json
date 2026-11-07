@@ -1,0 +1,253 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ddbe6762e0777c31b0230a4a6af37342\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yOUg48i59CeX4Qd20ItYi8lTAW2.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "",
+    "id": 1566920,
+    "imdb_id": "tt39110207",
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_title": "劇場版 薬屋のひとりごと 亡妃の秘宝",
+    "overview": "The emperor gives Jinshi an order: He must grant the final wish of a concubine who passed away five years ago by returning her to her homeland. In order to return her to her family, Jinshi examines the remains, only to discover that they're in pristine condition. To solve the mystery of the remains, Jinshi drags Maomao along on a journey to Binan-shu, the southern province ruled by the Bi clan. Maomao is excited to see herbs and medicines she has never seen before, but tensions are high in the area, as pirates are viciously trying to find the treasure their late leader hid away. On the day of the concubine's funeral, a huge incident occurs, triggering a chain of events that nobody could see coming.",
+    "popularity": 1.6148,
+    "poster_path": "/2EqHHvFwcJLG1cxJTTLwefO3dfT.jpg",
+    "production_companies": [
+      {
+        "id": 193504,
+        "logo_path": "/lDBGXkGe4ZqWnyMfDWHx03KcWlx.png",
+        "name": "TOHO animation STUDIO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 5372,
+        "logo_path": "/tPtJc2rCOTHEzJQPStT6m3dI0eK.png",
+        "name": "OLM",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "2026-12-11",
+    "revenue": 0,
+    "runtime": 0,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "In Production",
+    "tagline": "A hidden truth, a final wish.",
+    "title": "The Apothecary Diaries: The Late Lady's Treasure",
+    "video": false,
+    "vote_average": 0,
+    "vote_count": 0,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "The emperor gives Jinshi an order: He must grant the final wish of a concubine who passed away five years ago by returning her to her homeland. In order to return her to her family, Jinshi examines the remains, only to discover that they're in pristine condition. To solve the mystery of the remains, Jinshi drags Maomao along on a journey to Binan-shu, the southern province ruled by the Bi clan. Maomao is excited to see herbs and medicines she has never seen before, but tensions are high in the area, as pirates are viciously trying to find the treasure their late leader hid away. On the day of the concubine's funeral, a huge incident occurs, triggering a chain of events that nobody could see coming.",
+            "runtime": 0,
+            "tagline": "A hidden truth, a final wish.",
+            "title": "The Apothecary Diaries: The Late Lady's Treasure"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://kusuriyanohitorigoto.jp/movie/",
+            "overview": "水上都市に隠された秘宝を巡り、新たなミステリーの幕が上がる  帝から壬氏にとある命が下された。 それは、5年前に後宮で命を落とした妃の“故郷へ帰りたい”という最期の願いを叶えること。  彼女を家族の元へと返すため、遺体を確認すると、 まるで生きているかのように美しい姿のまま眠っていた。 遺体の謎を解き明かすため、猫猫は壬氏に連れられ、 未の一族が治める南の地・未南州へと旅に出る。  辿り着いたのは、活気あふれる水上都市。 見たことのない薬や植物に心躍らせる猫猫だったが、 その地では前頭領が隠した財宝を巡り水賊が暴れまわり、不穏な空気が漂っていた。  「何も起こらないといいが―」  壬氏の嫌な予感は的中し、妃の葬儀当日に起きた大事件をきっかけに、 想像を超える事態へと発展していくー",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "劇場版 藥師少女的獨語 亡妃的秘寶"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "劇場版 藥師少女的獨語 亡妃的秘寶"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "",
+            "overview": "Bức màn mở ra một bí ẩn mới xoay quanh kho báu bí mật được giấu trong một thành phố trên mặt nước. Hoàng đế giao cho Jinshi một mệnh lệnh: thực hiện di nguyện cuối cùng của một phi tần đã qua đời năm năm trước — đưa nàng trở về quê hương. Để đưa nàng về với gia đình, Jinshi kiểm tra hài cốt và phát hiện chúng còn nguyên vẹn đến lạ thường, nàng vẫn xinh đẹp như thể còn đang sống. Để giải mã bí ẩn về hài cốt, Jinshi kéo Maomao cùng lên đường đến Binan-shu, tỉnh phía nam do gia tộc Bi cai quản. Họ đến một thành phố sầm uất trên mặt nước. Maomao háo hức trước những dược liệu chưa từng thấy, nhưng không khí nơi đây căng thẳng tột độ khi bọn cướp biển đang ráo riết truy lùng kho báu mà thủ lĩnh quá cố của chúng đã giấu đi. Vào ngày tang lễ của phi tần, một biến cố lớn xảy ra, kéo theo chuỗi sự kiện không ai lường trước được.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Dược Sư Tự Sự: Kho Báu Của Hoàng Hậu Đã Khuất"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "L'imperatore dà un ordine a Renshi. Deve esaudire l'ultimo desiderio di una concubina che è morta cinque anni prima, riportandola nella sua terra d'origine.  Per poterla restituire alla sua famiglia, Renshi esamina la salma, solo per scoprire che si trova in una condizione impeccabile. Stupenda, come se fosse ancora viva.  Per risolvere il mistero del cadavere, Renshi trascina Maomao in un viaggio verso Binan-shu, la provincia meridionale governata dal clan Bi.  Arrivano così in una città vivace che sorge sull'acqua. Maomao è emozionata nel vedere piante e medicine che non aveva mai visto prima, ma la zona è densa di tensione, perché i pirati stanno tentando ferocemente di trovare un tesoro che il loro defunto capo ha nascosto.  “Spero non accada nulla...”  Ma il presentimento di Renshi si avvera. Il giorno del funerale della concubina, avviene un terribile incidente che innesca a una catena di eventi che nessuno si sarebbe aspettato.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "The Apothecary Diaries: The Late Lady’s Treasure"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "",
+            "overview": "L'empereur donne un ordre à Jinshi : il doit exaucer le dernier vœu d'une concubine décédée il y a cinq ans en la ramenant dans sa terre natale. Afin de la rendre à sa famille, Jinshi examine la dépouille, mais découvre qu'elle est en parfait état. Pour élucider le mystère de cette dépouille, Jinshi entraîne Maomao dans un voyage vers Binan-shu, la province méridionale gouvernée par le clan Bi. Maomao est ravie de découvrir des herbes et des remèdes qu’elle n’a jamais vus auparavant, mais la tension est palpable dans la région, car des pirates cherchent sans relâche le trésor que leur défunt chef avait caché. Le jour des funérailles de la concubine, un incident majeur se produit, déclenchant une série d’événements que personne n’aurait pu prévoir.",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yOUg48i59CeX4Qd20ItYi8lTAW2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.469,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f4gQGrMijpV6oEKL3xnJ5IXDOI5.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3173
+        },
+        {
+          "aspect_ratio": 1.787,
+          "height": 2089,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/izgBs6sJZZIq2crUVWe9QTj5rGz.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3732
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2EqHHvFwcJLG1cxJTTLwefO3dfT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1505,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tDFTMv5XT50WpVRWJsGKWslz6LG.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aMQnlYqfKU9JZTwtlhVtDQ69hpe.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 848
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tNIbQ3yERsDXUabqFjSlJtQFFYf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1448
+        }
+      ]
+    }
+  }
+}

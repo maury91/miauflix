@@ -1,0 +1,983 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=28363",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"611e65bbcd26254ce6f032845d5ca2c9\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/dOCpqck500K9JmdEIOye6Ivmoip.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2015-01-10",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "http://www.ansatsu-anime.com",
+    "id": 62110,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2016-07-01",
+    "last_episode_to_air": {
+      "id": 1212751,
+      "name": "Future Time",
+      "overview": "Graduation day: one of life's chapters ends and another begins as the students and teachers of Class 3-E go on to forge their own paths in the world.",
+      "vote_average": 8.1,
+      "vote_count": 8,
+      "air_date": "2016-07-01",
+      "episode_number": 25,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 62110,
+      "still_path": "/kiLifALGs9Srw7dWMTLNEo7jEFA.jpg"
+    },
+    "name": "Assassination Classroom",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1,
+        "logo_path": "/4x4GsmRmSLLL0RVNKsoqAVH43tz.png",
+        "name": "Fuji TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4799,
+        "logo_path": "/y1F9WoEjz7MhzjN56im3tVKTd1r.png",
+        "name": "Iwate Menkoi Television",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 47,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "暗殺教室",
+    "overview": "The students of Class 3-E have a mission: kill their teacher before graduation. He has already destroyed the moon, and has promised to destroy the Earth if he can not be killed within a year. But how can this class of misfits kill a tentacled monster, capable of reaching Mach 20 speed, who may be the best teacher any of them have ever had?",
+    "popularity": 28.2864,
+    "poster_path": "/qf0l0nQ2t06Es3cSXflqx6l6vsJ.jpg",
+    "production_companies": [
+      {
+        "id": 42811,
+        "logo_path": "/2ZPUk3aYOtKbZk1W4Kp6mfeays8.png",
+        "name": "Lerche",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59206,
+        "logo_path": "/oMtJVGvqLAyQZvYTvjDIcbVEzwD.png",
+        "name": "BS Fuji",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7549,
+        "logo_path": "/bXc1vp0lER6PDHtsVe12pSPwNkv.png",
+        "name": "Kansai Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3341,
+        "logo_path": "/dTG5dXE1kU2mpmL9BNnraffckLU.png",
+        "name": "Fuji Television Network",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2014-11-09",
+        "episode_count": 9,
+        "id": 74367,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/A3PVGEPIro428TpCby7pzdahCAM.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2015-01-09",
+        "episode_count": 22,
+        "id": 65177,
+        "name": "Season 1",
+        "overview": "A class of junior high \"misfit\" students who are tasked with assassinating their new teacher, an octopus-like creature nicknamed Koro-sensei, who destroyed the moon and threatens to destroy Earth in a year. The students have to learn to balance their assassination attempts with the lessons from Koro-sensei, who is surprisingly an excellent teacher, while the government offers a ¥10 billion reward for his head. Each episode often focuses on individual students, their growth, and their internal conflicts between wanting to kill their teacher and growing to care for him.",
+        "poster_path": "/7QoBbnfmUHvIc44PkvZLE6vTds1.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2016-01-08",
+        "episode_count": 25,
+        "id": 74366,
+        "name": "Season 2",
+        "overview": "Class 3E and while some things have changed, the class assignment is still the same: kill their teacher before the end of the year.  Easier said than done since Koro Sensei's made it clear he won't go down without a fight.",
+        "poster_path": "/y0VbPCitWbDUJLCjtuCi01dDSHn.jpg",
+        "season_number": 2,
+        "vote_average": 8.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.384,
+    "vote_count": 1275,
+    "external_ids": {
+      "imdb_id": "tt3837246",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 283947,
+      "tvrage_id": null,
+      "wikidata_id": "Q50376961",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "ansatsu_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "The students of Class 3-E have a mission: kill their teacher before graduation. He has already destroyed the moon, and has promised to destroy the Earth if he can not be killed within a year. But how can this class of misfits kill a tentacled monster, capable of reaching Mach 20 speed, who may be the best teacher any of them have ever had?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "La trama se centra en la clase 3-E de la secundaria Kunugigaoka, que tiene por objetivo matar a su profesor: \"Koro-sensei\", un ser con tentáculos que destruye parcialmente la Luna dejando una permanente Luna creciente y amenaza con destruir la Tierra en el plazo de un año, a menos que uno de sus alumnos lo asesine antes de la graduación. Para motivar a la clase a acabar con Koro-sensei, el gobierno promete dar como recompensa 10 mil millones de yenes a quien lo consiga.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": " Assassination Classroom",
+            "overview": "En mærkelig tentacled væsen pludselig fordampet 70% af månen i en eksplosion. Det kan luske rundt på 20 gange hastigheden af lyd; det har også en 10000000000 ¥ pris på hovedet. Men en eller anden grund, det endte med at blive en lærer for en mellemskole klasse i begyndelsen af skoleåret. De studerende har nu indtil eksamen at myrde deres lærer, eller det vil ødelægge jorden så godt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "暗杀教室",
+            "overview": "故事发生在椚丘中学三年E班，表面上，这是一个普通的班级，然而实际上，这里聚集着的均是技艺高超冷酷无情的杀手。每一年，他们通过特殊渠道接收着来自世界各地的暗杀任务，替各国首脑“排忧解难”，而这一次，他们有了一个统一的目标——刺杀班主任杀老师。杀老师是一个神奇的存在，它的外表并非人类，却有着及其敏感的神经和及其迅速的反应力，没有人知道它从哪里来，也没有人知道，它为何会变成三年E班的班主任。因为想要毁灭地球，杀老师成为了暗杀名单上的高价悬赏人物，而作为三年E班的学生，只要成功消灭杀老师，即可毕业。就这样，围绕着这位神秘的老师，充满了危险的日常就此展开。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "암살교실",
+            "overview": "어느 날 일반 진학교인 쿠누기가오카 중학교의 낙오자반이라고 불리는 3학년 E반에 정부 사람들과 인간이 아닌 정체불명의 생물이 찾아온다. 이 수수께끼의 생물은 어느 날 갑자기 나타나 달의 70%를 날려 버린 초생물로 내년에 지구를 날려버리겠다고 선언한 공공의 적. 마하 20의 속도로 하늘을 날며, 상상을 초월한 공격력과 다양한 능력을 가진 이 생물이 무슨 이유에서인지 ‘쿠누기가오카 중학교 3학년 E반의 선생님으로 일하겠다는 제안을 했고, 세계는 그것을 받아들인 것이다.  정부는 감시와 동시와 암살을 할 수 있기 때문에 이 제안을 승낙한다. 암살 성공의 보수 100억 엔과 인류의 운명을 걸고 30명의 중학생과 살생님의 긴장감 넘치는 수업이 시작된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "Un extraterrestre destructeur qui menace la Terre devient professeur d'une classe dont les élèves ont pour mission de le supprimer, alors même qu'ils adorent sa drôlerie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "Esqueça lições de casa e provas relâmpago. A Classe 3-E tem uma tarefa muito mais importante: matar seu professor antes do fim do ano!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "Die Schüler der 9-E, der sogenannten „End-Klasse“ der Kunugigaoka-Mittelschule, sind nicht nur die Versager der gesamten Schülerschaft, obendrein haben sie auch noch einen ganz besonderen Lehrer. Koro-sensei ist nämlich eine gefährliche Bedrohung für die Menschheit. Erst hat er den Mond für immer zu einer Sichel „frisiert“ und nun will er zu allem Überfluss auch noch die Erde zerstören. Das muss die Regierung um jeden Preis verhindern und setzt Koro-sensei bis zu der geplanten Zerstörung im Unterricht der End-Klasse ein – mit einer recht speziellen Absicht: Die Schüler sollen ihren neuen Lehrer möglichst schnell um die Ecke bringen, um die Menschheit zu retten. Und die verlockende Belohnung dafür ist die Anerkennung ihrer erfolgreichen Mitschüler und ganze zehn Milliarden Yen!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Клас убивць",
+            "overview": "Станом на першу  серію маємо: інопланетну жовту тентаклеподібну істоту, що підірвала  Місяць та за рік планує підірвати Землю, з одного боку, та клас Е -  найгірший клас елітної приватної школи, який за волею випадку став  класом убивць, що має зупинити знищення планети, з іншого боку. Що буде  далі - побачимо, але наразі це оригінально та доволі весело.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "All'improvviso, la Luna che tutti erano abituati a vedere viene quasi completamente distrutta. Uno strano essere tentacolare rivendica l'atto e annuncia ai leader mondiali che entro un anno farà la stessa cosa con la Terra. E, cosa ancora più strana, insiste nel voler essere il professore responsabile della classe 3-E della scuola media Kunugigaoka.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "ある日突然、月が爆発して7割方蒸発した。その犯人と称し、しかも来年三月には地球をも爆破するという超生物がやってきたのは、何故か中学校の教室。なんとここで教師をするというのだ。人知を超えた能力を持ち、軍隊でも殺せないその怪物の暗殺を、各国首脳はやむをえず、そのクラス、椚ヶ丘中学校3年E組の生徒に委ねることになる。なんと成功報酬は百億円。落ちこぼれクラス、「エンドのE組」の生徒たちは、卒業までにこの暗殺対象の教師、「殺せんせー」を殺せるのか。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "暗殺教室",
+            "overview": "號稱史上最凶惡的超生物「殺老師」將月球炸掉了七成，並揚言明年要炸掉地球，卻因不明目的而擔任椚丘中學3年E班的教師。各國首腦將暗殺重任交給椚丘中學3年E班，為他們配送特製武器，希望學生們能在一年之內消滅殺老師，報酬是一百億日元。從第二學期開始，國家決定讓暗殺成功者獨得一百億日元報酬，協力團體共享三百億日元報酬。\n\n全班同學想盡辦法殺死老師，故事就圍繞著這樣非日常的校園生活而展開。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "כיתת ההתנקשות",
+            "overview": "ביום בהיר אחד הרימו יושבי כדור הארץ את ראשם לשמיים וגילו תופעה מוזרה – כ-70% מהירח המוכר לנו הושמד! האחראי למעשה הקונדס הקטן הזה הוא ככל הנראה יצור מסתורי דמוי תמנון שכנראה החליט שלפוצץ את הירח הוא רעיון נחמד, והוא מתכוון לעשות את אותו הדבר גם לכדור הארץ במרץ הבא. הפתרון המתבקש למשבר הוא לחסל את היצור, אבל מסתבר שיש בעיה קטנה עם התכנית – התמנון נע במהירות של מאך 20. כשתושבי כדור הארץ מתחילים לאבד תקווה, היצור החלקלק מציע הצעה מעניינת – הוא מתעקש להיות המורה של כיתת הכשלונות אי-3 בחטיבת הביניים היוקרתית קונוגיגאוקה, ובכך לתת לילדים החמודים את ההזדמנות לעשות את מה שכל משאבי הממשלה לא הצליחו – להתנקש בו עד מרץ הקרוב.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "La Tierra se ve amenazada por un poderoso monstruo que destruyó el 70% de la Luna con su poder, dejándola permanentemente en forma de cuarto creciente. El monstruo afirma que dentro de un año, la Tierra también será destruida por él, pero ofrece a la humanidad una oportunidad para evitar ese destino. Éste mismo comienza a trabajar como maestro en la clase 3-E de la secundaria Kunugigaoka, cuyos estudiantes tienen el objetivo de asesinarlo. El gobierno japonés promete una recompensa de ¥10 billones (100 millones de dólares,",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Класс убийц",
+            "overview": "Однажды 70% Луны оказывается уничтожено неизвестным дотоле науке существом. При этом оно заявляет, что если в течение последующего года его никто не убьёт, то оно уничтожит и Землю. Мировой конгресс после ряда попыток потерял все надежды на его убийство. Теперь очередь японских школьников! У учеников особого класса 3-E поставлена единственная задача — убить своего учителя, коим и является то самое существо. Да только каким образом класс, с первого взгляда, обычных не преуспевающих учеников сможет убить неизвестного монстра, физические особенности и способности которого превосходят всё, что известно человечеству? И насколько изощрённые способы убийства самый уникальный класс сможет придумать и реализовать?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Ansatsu Kyoushitsu",
+            "overview": "Kunugigaoka Ortaokulu öğrencilerinin mezun olmadan önce bir görevi vardır; o da Ay'ın %70'ini yok eden ve 1 yıl içinde Dünya'yı da yok edecek olan öğretmenleri Koro-sensei'yi öldürmektir. İşin aslına bakacak olursak Dünya'yı bir yıl içinde yerle bir edeceğini duyuran Koro-sensei; bundan önce tüm ülkelere şöhreti kötü 3-E sınıfının öğretmeni olup 1 yıl süreyle öğrencilere kendisini nasıl öldürebilecekleri konusunda eğitim vermeyi önerir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "Pewnego dnia naturalny satelita ziemi wyparował, pozostawiając po sobie resztki w kształcie półksiężyca. Stworzenie, które przypisuje sobie dokonanie tego czynu, zarzeka się także, że w marcu przyszłego roku to samo spotka Ziemię. Posiada ono moce przerastające ludzkie możliwości, przez co żadna potęga militarna świata nie ma z nim szans. Jednakże z jakiegoś powodu w międzyczasie obcy postanawia podjąć pracę jako nauczyciel w najgorszej klasie gimnazjum Kunugigaoka. Tym samym los świata spoczywa w rękach uczniów klasy E – mają czas do zakończenia roku, żeby wymyślić, jak zamordować swojego nowego wychowawcę, a tym samym zgarnąć 10 miliardów jenów za uratowanie świata.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ห้องเรียนลอบสังหาร",
+            "overview": "เอเลี่ยนตัวอันตรายที่จ้องทำลายล้างโลกต้องกลายมาเป็นอาจารย์ที่ตกเป็นเป้าในภารกิจสังหารของเหล่านักเรียน แม้ว่าพวกเขาจะชอบความสนุกสนานของอาจารย์คนนี้มากก็ตาม",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Lớp Học Ám Sát",
+            "overview": "Các học sinh lớp 3-E có 1 nhiệm vụ, đó là ám sát giáo viên của họ trước khi tốt nghiệp. Ông ta đã phá hủy mặt trăng, và hứa hẹn rằng trong vòng 1 năm nếu không ai giết được mình, ông ta sẽ hủy diệt luôn cả Trái Đất. Nhưng làm sao mà cái lớp học chỉ có toàn những học sinh không thích nghi được với ngoại cảnh này, có thể giết được một con quái vật xúc tu có khả năng đạt tới tốc độ 20 Mác, người mà rất có thể là giáo viên giỏi nhất mà họ từng có.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "Een destructief buitenaards wezen dat de Aarde bedreigt, wordt een leraar wiens leerlingen de opdracht krijgen hem te doden, ook al zijn ze dol op zijn leuke manieren.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "gl",
+          "name": "Galego",
+          "english_name": "Galician",
+          "data": {
+            "name": "Aula de asasinato",
+            "overview": "Un día, de repente, a lúa explotou e evaporouse ao 70%. O autor da explosión é un ser sobrenatural que afirma que tamén fará explotar a Terra no próximo mes de marzo. ¿Por qué vai a clase nunha escola secundaria? O ser sobrenatural ten habilidades sobrenaturais e até o exército non pode matalo, polo que os líderes de todos os países non teñen outra opción senón confiar na tarefa de asasinato aos estudantes do terceiro ano E da escola secundaria Meugasaki. ¡A recompensa por un éxito é de 100 mil millóns de iens! ¿Serán capaces os estudantes do \"grupo E de End\", a clase de descarte, de matar ao obxectivo de asasinato, o profesor \"Kill-sensei\", antes de graduarse?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "EO",
+          "iso_639_1": "eo",
+          "name": "Esperanto",
+          "english_name": "Esperanto",
+          "data": {
+            "name": "Mortigo-Klaso",
+            "overview": "Subite, la Luno subite eksplodis kaj vaporis 70%. La aŭtoro de la eksplodo estas super-estulo kiu asertas ke li ankaŭ detruos la Tero en marto de la venonta jaro. Kial li iras al la klaso en mezlernejo? La super-estulo havas supernaturajn kapablojn, kaj eĉ la armeo ne povas mortigi lin, do la gvidantoj de ĉiuj landoj ne havas elekton, krom entrusti la taskon de mortigo al la studentoj de la tria jaro E de la mezlernejo Meugasaki. La rekompenco por sukceso estas 100 miliardoj da enoj! Ĉu la studentoj de la \"End-E-klako\", la malsukcesa klaso, sukcesos mortigi la celon de la mortigo, la instruiston \"Mortig-sensei\", antes ol ili diplomiĝos?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "暗殺教室",
+            "overview": "一位破壞力十足，還對地球帶來威脅的外星人成了學校老師，即使他風趣的舉止深受歡迎，學生還是得想辦法除掉他。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "Egy napon a Hold nagy része felrobbant, örökös kifli formára alakítva az égitestet. Az elkövető egy szuper képességekkel megáldott polip, aki megfenyegeti a világot, miszerint egy év múlva a Földdel is ugyanezt teszi, és nincs az a hadsereg, amely ebben megakadályozhatná.\n\nAztán valami oknál fogva azt kéri, az elkövetkezendő egy év során hagy lehessen a Kunugigaoka Előkészítő Iskola, bajkeverőkből és javíthatatlan diákokból álló, E-3 osztályának az osztályfőnöke.\n\nA kormány megbízást ad a diákoknak: 10 milliárd jenes jutalom ellenében, a tanév során ragadjanak meg minden kínálkozó alkalmat és vessenek be minden eszközt a tanáruk megölése érdekében. Koro-sensei azonban a legyőzhetetlensége mellett, azzal is nehezíti az amatőr bérgyilkosok dolgát, hogy még első osztályú tanár is.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Ansatsu Kyoushitsu",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Studenti třídy 3-E mají za úkol zabít svého učitele před maturitou. Už zničil Měsíc a slíbil, že zničí Zemi, pokud nebude do roka zabit. Ale jak může tato třída ztroskotanců zabít chapadlovité monstrum, schopné dosáhnout rychlosti Mach 20, které může být tím nejlepším učitelem, jakého kdy měli?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Assassination Classroom",
+            "overview": "Una criatura misteriosa i poderosa ha destruït el 70% de la massa de la Lluna i amenaça de fer el mateix amb la Terra d'aquí a un any. Tot i això, ofereix una última oportunitat a la humanitat convertint-se en professor de la classe 3-E, la pitjor classe de l'institut Kunugigaoka. Després de diversos intents fallits d'eliminar-lo, el govern ofereix una recompensa descomunal a qui aconsegueixi assassinar l'estranya criatura. Però la tasca no resultarà fàcil, ja que en Korosense es pot moure a supervelocitat, disposa de tentacles multiús i a més és un esplèndid professor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "فصل الاغتيال",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dOCpqck500K9JmdEIOye6Ivmoip.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3839
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/62pIwEsYX2dtlyMJjDSM6zpDTU2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AlNExlouMMfMRufQKiqlSoQqAyQ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2667
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wdi9KP7dwvuCztaAawXNjDBdwGB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2R4wTTnkDvMWGQwItvEdOYEWBZv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bLmlKHN1bBqiNui3Izx60flz2Gv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w9qiYMbhpTE3uKEfJLEjWfitYFU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8RCV0YwnmtG0VRX1fZwvFn5e6yv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/p4kPkLfngAwSzZcYpR48qG7lSvD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pCZiCibJdRhir5hbBlf10ZNUxlp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dZiHEjIZD96cj0aKHukYkFGahKf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.092,
+          "height": 251,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qbhofHzHg4zzxmgspIay0jXIJNx.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1278
+        },
+        {
+          "aspect_ratio": 4.583,
+          "height": 192,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h2gmyT8zx7VFHh1gtOUFpSTDxgz.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 880
+        },
+        {
+          "aspect_ratio": 4.559,
+          "height": 186,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zkvZRFfJoXCwiGWtOSEI0kXMjy8.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 848
+        },
+        {
+          "aspect_ratio": 4.583,
+          "height": 192,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fVVTnQBcGshZS5lrjaw1JmKgOLW.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 880
+        },
+        {
+          "aspect_ratio": 5.833,
+          "height": 72,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9ioGkXrT1mNRY3QfSXHrmp6f9pQ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 420
+        },
+        {
+          "aspect_ratio": 5.83,
+          "height": 171,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kCE4uzE4M5apsEVqhSkFF4u9F3H.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 997
+        },
+        {
+          "aspect_ratio": 3.243,
+          "height": 272,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hdFTYkgfmvyDxQ169SwOveJTa6i.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 882
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qf0l0nQ2t06Es3cSXflqx6l6vsJ.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.709,
+          "height": 1920,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tuNiT4rPDVYzDopKCtv3iowTHbc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1362
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/IG9QJfLAUkgkkvPZLLp8ztaePT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wOd98jDHkoWy2LZ4gSy67X1ihv1.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/leBY2xtNXG4cwT9K4zxlBUS86Sz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ynnUecPP1uoewV1XZ6ehz0lif0F.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cvTdUnTqCszLf02R0aYqY3JbnfU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.726,
+          "height": 800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yGCJSLFDmW9VUAPIK3yiblFtjIq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 581
+        },
+        {
+          "aspect_ratio": 0.726,
+          "height": 800,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1WeE4AHLueB4W3dMEoRrz4nj0Pn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 581
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1he4Emb9t9YQRSc1unT8JDqFZWn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 853
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/biHvQmPxI0KWNN8m6WPelvYSSe8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 853
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jZRcbm1PQF2kY6ZGmSThFAsHZYG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/84iT29gLjg22YzE5ik2DsGFUY1E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.726,
+          "height": 800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9uldRGP5kioN9POb71Zww9AuBYg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 581
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7dHONdLf91r1SmEthST1MmLrLjh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pUHLxjCNgDpsozezNpdicAEqCpt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iXHhgrursLHHNAyBJh5AGsrT2CX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dQrmABpcgxwlcTeWVrdKbXkuYZm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cPUlAO5or9ZQBN9q8IeglpHBX4x.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wwrcSjJQ4klP0F3Bm7dJuPWY3bl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lWP6NOIj9cE5noovmVcsG9DHHCl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 2184,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zK8UZlRKTkuMG7VqpLeR5acY3UJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1536
+        }
+      ]
+    }
+  }
+}

@@ -4,6 +4,7 @@ import type {
   SourceSearchRequest,
 } from '@miauflix/service-contracts';
 
+import type { AnimeResolver } from '../anime/resolver';
 import type { SourcesConfigService } from '../config/config.service';
 import { BudgetExceeded, type Store } from '../db/store';
 import { HttpClient, RateLimitError } from '../http/http-client';
@@ -20,17 +21,20 @@ export class Planner {
     private registry: Registry,
     private config: SourcesConfigService,
     private http: HttpClient,
-    private now = Date.now
+    private now = Date.now,
+    private anime?: AnimeResolver
   ) {}
   async *search(
     request: SourceSearchRequest,
     signal: AbortSignal
   ): AsyncGenerator<SourceSearchItem> {
-    const all = await this.registry.providers();
+    const [all, anime] = await Promise.all([
+      this.registry.providers(),
+      this.anime?.resolve(request, signal) ?? null,
+    ]);
+    const isAnime = !!(request.media.isAnime || anime);
     const kind = request.media.kind === 'movie' ? 'movie' : 'tv';
-    const providers = all.filter(
-      p => p.caps[kind].length || (request.media.isAnime && p.caps.anime.length)
-    );
+    const providers = all.filter(p => p.caps[kind].length || (isAnime && p.caps.anime.length));
     const seen = new Map<string, SourceCandidate>();
     const searched = new Set<string>(),
       failed = new Set<string>(),
@@ -79,7 +83,7 @@ export class Planner {
       }
       let count = 0;
       try {
-        for (const variant of variantsFor(provider, request)) {
+        for (const variant of variantsFor(provider, request, anime)) {
           for (
             let page = 1;
             page <= (provider.caps[variant.query.kind].includes('page') ? provider.maxPages : 1);
@@ -127,7 +131,15 @@ export class Planner {
               ));
             const candidates = result.results
               .map(raw =>
-                toCandidate(raw, provider, variant.matchedBy, query, request, this.store.seal)
+                toCandidate(
+                  raw,
+                  provider,
+                  variant.matchedBy,
+                  query,
+                  request,
+                  this.store.seal,
+                  anime
+                )
               )
               .filter((c): c is SourceCandidate => c !== null);
             const hasMore = result.hasMore;

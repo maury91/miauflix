@@ -1,0 +1,2087 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16626",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"19a663b88a8ca3921abe6714834d8cfb\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3US5UXJSStOVozc6EwhGSMDguol.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2020-10-03",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://jujutsukaisen.jp",
+    "id": 95479,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-03-27",
+    "last_episode_to_air": {
+      "id": 6827074,
+      "name": "Sendai Colony",
+      "overview": "Okkotsu fights three powerful sorcerers in Sendai Colony.",
+      "vote_average": 7.548,
+      "vote_count": 31,
+      "air_date": "2026-03-27",
+      "episode_number": 59,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 29,
+      "season_number": 1,
+      "show_id": 95479,
+      "still_path": "/3A5kRJKO3ziU0cBVMBjzaaEhvSD.jpg"
+    },
+    "name": "JUJUTSU KAISEN",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 94,
+        "logo_path": "/7RNXnyiMbjgqtPAjja13wchcrGI.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 160,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 201,
+        "logo_path": "/qNooLje0YQh1y3y9LUM2Y5QCtiF.png",
+        "name": "CBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 896,
+        "logo_path": "/qfUzYnpnN5bnd2bqGUH0OlAMell.png",
+        "name": "Tulip Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1559,
+        "logo_path": "/ihcrBmZYwCmT3YZ7ykNmFgtj2oA.png",
+        "name": "SBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2460,
+        "logo_path": "/34sNEcsgcTAuDidRMrgxdfNyVjL.png",
+        "name": "BSN",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2461,
+        "logo_path": "/b4Ivxqz6UY0EogjYc09Y22ctC6F.png",
+        "name": "tys",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2462,
+        "logo_path": "/7zXfwh5ZhFqvdOWgWX80weU6Sqb.png",
+        "name": "NBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3658,
+        "logo_path": "/sJwRsE1lfMwAwYZi1OtRfn7V03t.png",
+        "name": "HBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3705,
+        "logo_path": "/6vOG1oEihq6eStEzPnOGal2AIV9.png",
+        "name": "RKK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3969,
+        "logo_path": "/nhCsLIGjzIIp6jIFCdHN0cQEzjP.png",
+        "name": "i-Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3970,
+        "logo_path": "/9coKtCf4jSNCdSqGveVFyzvjrZt.png",
+        "name": "SBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3971,
+        "logo_path": "/zoFgqDe0v8svSA01yExlhcG1Bss.png",
+        "name": "IBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3972,
+        "logo_path": "/rL2IlndcEiQnIbym5EoSEM7rGlx.png",
+        "name": "BSS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3973,
+        "logo_path": "/dh4E8hGvqD9Xqu51kbqUU06UKbt.png",
+        "name": "MRO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3974,
+        "logo_path": "/yMQxsmGs88q54bslmcSeXlmpObC.png",
+        "name": "OBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3975,
+        "logo_path": "/6ACZlk44MWsIIwYHxjRGXGKlpRb.png",
+        "name": "TUF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3977,
+        "logo_path": "/sGMMrdCmptaLLwJX7CsXTDaduLO.png",
+        "name": "RSK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3978,
+        "logo_path": "/zOz9LK6WWLUWGuG0fthzDzCIXlA.png",
+        "name": "TUY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3979,
+        "logo_path": "/6oIE2LmtONObnw5wtFO4IIXwgkb.png",
+        "name": "tbc",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4748,
+        "logo_path": "/o5Hlt7ZXJPEm4Qrx2Pl2rtc9A5y.png",
+        "name": "RKB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4792,
+        "logo_path": "/8kzeHaKeW3gZubs3cqlGWFvfJI7.png",
+        "name": "KUTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4859,
+        "logo_path": "/fhQU8sGOoV877wDfHmPZftKldvE.png",
+        "name": "RBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6171,
+        "logo_path": "/vxemHAgdzVCbvAFcO84MWg2wnXC.png",
+        "name": "UTY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6172,
+        "logo_path": "/mKslL0MTHHt9ukugWOv3Vh8Tn0E.png",
+        "name": "RCC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6173,
+        "logo_path": "/92bKXaygjtTwAbX4AH2UnLJN2Xe.png",
+        "name": "MRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6174,
+        "logo_path": "/aawphEBuBGT9RVP6xG3BZV8NOCw.png",
+        "name": "ATV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6175,
+        "logo_path": "/fVUs2F2qTjOzJ9oP0jeqtpZEAai.png",
+        "name": "MBC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 59,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "呪術廻戦",
+    "overview": "Yuji Itadori is a boy with tremendous physical strength, though he lives a completely ordinary high school life. One day, to save a classmate who has been attacked by curses, he eats the finger of Ryomen Sukuna, taking the curse into his own soul. From then on, he shares one body with Ryomen Sukuna. Guided by the most powerful of sorcerers, Satoru Gojo, Itadori is admitted to Tokyo Jujutsu High School, an organization that fights the curses... and thus begins the heroic tale of a boy who became a curse to exorcise a curse, a life from which he could never turn back.",
+    "popularity": 98.9171,
+    "poster_path": "/6qQzMJG27XOJsyAEEIisoJB45j2.jpg",
+    "production_companies": [
+      {
+        "id": 21444,
+        "logo_path": "/wSejGn3lAZdQ5muByxvzigwyDY6.png",
+        "name": "MAPPA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 158200,
+        "logo_path": "/rf4ZArxPuqx5hdeU7rPIU8IQlYx.png",
+        "name": "Sumzap",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3363,
+        "logo_path": "/sj3vD7n63bTCih7bcf6GnWvRf1Q.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 882,
+        "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+        "name": "TOHO",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2021-01-08",
+        "episode_count": 10,
+        "id": 175591,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/lUWSkuen0Vu9Xnn1r1SPcucx60e.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2020-10-03",
+        "episode_count": 59,
+        "id": 135856,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/fHQ2XHRdRix0rkDCShmGQ8c6d03.jpg",
+        "season_number": 1,
+        "vote_average": 8.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "A boy fights... for \"the right death.\"",
+    "type": "Scripted",
+    "vote_average": 8.574,
+    "vote_count": 4736,
+    "external_ids": {
+      "imdb_id": "tt12343534",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 377543,
+      "tvrage_id": null,
+      "wikidata_id": "Q98836216",
+      "facebook_id": "jujutsu.kaisen.official",
+      "instagram_id": "jujutsukaisen",
+      "twitter_id": "animejujutsu"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "La vida de Itadori cambia para siempre cuando, para salvar a un compañero de clase, se come el dedo de Ryomen Sukuna y absorbe una poderosa maldición.",
+            "homepage": "",
+            "tagline": "Un niño lucha… por “la muerte justa”."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Souffrance, regrets, humiliations... les sentiments négatifs que ressentent les humains se transforment peu à peu en fléaux se cachant dans notre existence. Sévissant dans le monde entier, ils sont capables d'entraîner les gens dans de terribles malheurs et, parfois même, jusqu'à la mort. De plus, ces créatures ne peuvent être exorcisées que par un autre fléau.\n\nLycéen ordinaire, Yuji Itadori est toutefois doté d'une force physique hors du commun. Un jour, pour sauver un ami attaqué par un fléau, il mange un des doigts du démon à deux visages, devenant à son tour un fléau. Dès lors, il partage son corps avec le démon...",
+            "homepage": "",
+            "tagline": "Un garçon se bat… pour une « mort juste »."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "JUJUTSU KAISEN",
+            "overview": "Yuji Itadori is a boy with tremendous physical strength, though he lives a completely ordinary high school life. One day, to save a classmate who has been attacked by curses, he eats the finger of Ryomen Sukuna, taking the curse into his own soul. From then on, he shares one body with Ryomen Sukuna. Guided by the most powerful of sorcerers, Satoru Gojo, Itadori is admitted to Tokyo Jujutsu High School, an organization that fights the curses... and thus begins the heroic tale of a boy who became a curse to exorcise a curse, a life from which he could never turn back.",
+            "homepage": "",
+            "tagline": "A boy fights... for \"the right death.\""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "驚異的な身体能力を持つ、少年・虎杖悠仁はごく普通の高校生活を送っていたが、ある日“呪い”に襲われた仲間を救うため、特級呪物“両面宿儺の指”を喰らい、己の魂に呪いを宿してしまう。\n\n呪いである“両面宿儺”と肉体を共有することとなった虎杖は、最強の呪術師である五条 悟の案内で、対呪い専門機関である「東京都立呪術高等専門学校」へと。編入することになり……",
+            "homepage": "",
+            "tagline": "少年は戦う―「正しい死」を求めて"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "JUJUTSU KAISEN",
+            "overview": "Mühsal, Reue, Schmach: Die negativen Gefühle, die den Herzen der Menschen entspringen, werden zu Flüchen, die sich in unser aller Leben einnisten. Und das Einzige, was einen Fluch austreiben kann, ist ein anderer Fluch. Yūji verbringt seine Tage wie jeder andere Schüler. Doch eines Tages wird sein Freund von Flüchen angegriffen und um ihn zu retten, isst er den Finger des Zwiegesichts Sukuna. Fortan teilt er sich seinen Körper mit ihm und tritt der Jujutsu-Akademie bei, um gegen Flüche zu kämpfen. So beginnt die Geschichte des Jungen, der zum Fluch wurde, um einen Fluch auszutreiben.",
+            "homepage": "",
+            "tagline": "Ein Junge kämpft... und will den \"gerechten Tod\"."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Sofrimento, arrependimento, vergonha: os sentimentos negativos dos humanos tornam-se Maldições, causando terríveis acidentes que podem levar até mesmo à morte. E pra piorar, Maldições só podem ser exorcizadas por outras Maldições. Certo dia, para salvar amigos que estavam sendo atacados por Maldições, Yuji Itadori engole o dedo do Ryomen-Sukuna, absorvendo sua Maldição. Ele então decide se matricular no Colégio Técnico de Feitiçaria de Tóquio, uma organização que combate as Maldições... e assim começa a heróica lenda do garoto que tornou-se uma Maldição para exorcizar uma Maldição.",
+            "homepage": "",
+            "tagline": "Um menino luta por uma morte justa..."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "La vida de Itadori cambia para siempre cuando, para salvar a un compañero de clase, se come el dedo de Ryomen Sukuna y absorbe una poderosa maldición.",
+            "homepage": "",
+            "tagline": "Un niño lucha… por “la muerte justa”."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Dotato di una straordinaria forza fisica, il liceale Yuji Itadori ingoia il dito dello Spettro  Bifronte per salvare il suo amico, diventando l'ospite di Ryomen Sukuna, il Re delle Maledizioni. Sotto la tutela del potente stregone Satoru Gojo, Yuji entra nell'Istituto di Magia di Tokyo. Il ragazzo intraprenderà un pericoloso cammino per raccogliere tutte le dita di Sukuna ed esorcizzarlo per sempre.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Indulgindo sem pensar em actividades paranormais infundadas com o Clube Oculto, o estudante Yuuji Itadori passa os seus dias quer na sala do clube, quer no hospital, onde visita o seu avô acamado. No entanto, este estilo de vida descontraído rapidamente toma um rumo estranho quando ele, sem saber, encontra um objecto amaldiçoado. Ao desencadear uma cadeia de ocorrências sobrenaturais, Yuuji vê-se subitamente lançado no mundo das Maldições, seres aterradores formados pela maldade e negatividade humanas, após engolir o referido objecto, que se revela ser um dedo do demónio Sukuna Ryoumen, o Rei das Maldições. Yuuji experimenta na primeira pessoa a ameaça que estas Maldições representam para a sociedade enquanto descobre os seus próprios poderes recém-descobertos. Introduzido na Escola Secundária de Jujutsu da Prefeitura de Tóquio, ele começa a trilhar um caminho do qual não pode voltar, o caminho de um feiticeiro de Jujutsu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Nu zijn dagen geteld zijn, besluit middelbare scholier Yuji op jacht te gaan en de resterende 19 vingers van een dodelijke vloek te consumeren, zodat deze met hem kan sterven.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "주술회전",
+            "overview": "소년은 싸운다 '올바른 죽음'을 위해  쓰라린 고통, 후회, 치욕. 인간으로부터 흘러나온 부정적인 감정이 저주로 변해 일상에 숨어든다. 저주는 세상에 만연한 재앙의 근원이며, 최악의 경우 인간을 죽음으로 이끈다. 그리고 저주는 저주로밖에 없앨 수 없다.  경이적인 신체능력을 가진 소년 이타도리 유지는 아주 평범한 고등학생이었지만, 어느 날 '저주'에 습격당한 친구를 구하기 위해 특급 주물 '양면 스쿠나의 손가락'을 먹고 영혼에 저주가 깃들게 된다. 저주인 '양면 스쿠나'와 몸을 공유하게 된 이타도리는 최강의 주술사인 고죠 사토루의 안내로 저주에 대항하는 전문 기관인 '도쿄 도립 주술 고등전문학교'에 편입하게 되는데... 저주를 없애기 위해 저주가 된 소년의 돌이킬 수 없는 장렬한 이야기가 움직이기 시작한다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Lukittujen päiviensä jälkeen lukiolainen Yuji päättää metsästää ja kuluttaa loput 19 sormea tappavasta kirouksesta, jotta se voi kuolla hänen kanssaan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "МАГИЧЕСКАЯ БИТВА",
+            "overview": "Мир, в котором демоны питаются людьми, а те об этом даже не догадываются. Когда-то давно самый могущественный демон был повержен, а части его тела разбросаны по свету. Тот, кто сможет их собрать и поглотить, получит безграничную власть и даже сможет уничтожить человечество. Физически развитого старшеклассника Юдзи Итадори волнуют насущные проблемы — почти всё время парень проводит в больнице с дедушкой, поэтому, чтобы отвязаться от настырных предложений вступить в спортивные клубы, записывается в оккультный. И внезапно оказывается в эпицентре борьбы за людские судьбы, когда его приятели снимают заклятье с некоего магического артефакта.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "咒术回战",
+            "overview": "少年战斗着——「为寻求正确的死亡」。辛酸·后悔·耻辱人类产生的负面情感，化为诅咒，潜入日常生活诅咒是蔓延于世界的祸源，最糟糕的情况下，会让人类踏入死亡，并且诅咒只能以诅咒祓除。虎杖悠仁是一位体育万能的高中生，某天他为了从“咒物”危机中解救学姐，而吞下了被诅咒的手指“两面宿傩之指”，让“宿傩”这种诅咒跟自己合而为一。在最强咒术师五条悟的指引下，进入对诅咒专门机关「东京都立咒术高等专门学校」，并遇到了伏黑惠与钉崎野蔷薇这两位同学。某日，突然出现“特级咒物”，他们三人就奉命到现场支援。为了实现爷爷要他“助人”的遗言，虎杖将会继续与“诅咒”奋斗下去。为了祓除诅咒而成为诅咒的少年，无法回头的壮阔故事开始了——",
+            "homepage": "",
+            "tagline": "一个男孩为“正确的死亡”而战。"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Магічна битва",
+            "overview": "Ітадорі Юджі — хлопець з надзвичайною фізичною силою, хоча живе абсолютно звичайним життям у середній школі. Одного разу, щоб врятувати друзів від нападу Прокляття, він з’їдає палець Дволикого, беручи Прокляття на власну душу. Відтоді він ділиться тілом з Дволиким. Під керівництвом наймогутнішого з магів Ґоджьо Сатору, Ітадорі вступає до Токійської школи темних мистецтв — організації, яка бореться з прокляттями… і таким чином починається героїчна історія про хлопця, який сам став Прокляттям, щоб протистояти Прокляттям.",
+            "homepage": "",
+            "tagline": "Хлопець бореться... за «правильну смерть»."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Ses jours étant comptés, le jeune Yuji décide de trouver les 19 autres doigts liés à des fléaux et de les avaler pour qu'ils disparaissent avec lui.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "kr",
+          "name": "",
+          "english_name": "Kanuri",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "咒術迴戰",
+            "overview": "少年戰鬥著 —「為了尋求正確的死亡」辛酸、後悔、恥辱人類產生的負面情感，化為詛咒，潛入日常生活詛咒是蔓延於世界的禍源，最糟糕的情況下，會讓人類踏入死亡並且，詛咒只能以詛咒祓除擁有驚人身體能力的少年·虎杖悠仁原本過著普通的高中生活有一天，為了拯救被「詛咒」襲擊的同伴，他吃下了特級咒物「兩面宿儺之指」，讓詛咒寄宿於自己的靈魂之中與詛咒「兩面宿儺」共有肉體的虎杖，在最強咒術師五條悟的指引下，進入對詛咒專門機關「東京都立咒術高等專門學校」……。為了祓除詛咒而成為詛咒的少年，無法回頭的壯闊故事開始了。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Egy fiú lenyeli “az egy démon ujja” nevű elátkozott talizmánt és ő maga is átkozottá válik. Belép egy sámán iskolába, hogy képes legyen meghatározni a démon többi testrészének a helyét, hogy maga űzhesse ki őket.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Yuuji Itadori jest chłopcem o ogromnej sile fizycznej, choć prowadzi zupełnie zwyczajne licealne życie. Pewnego dnia, aby uratować przyjaciela, który został zaatakowany przez Klątwy, zjada palec Ryoumen Sukuna, biorąc Klątwę w swoją duszę. Odtąd dzieli jedno ciało z Sukuną. Prowadzony przez najpotężniejszego z czarowników, Satoru Gojou, Itadori zostaje przyjęty do liceum Jujutsu Prefektury Tokio, organizacji, która walczy z klątwami ... i tak rozpoczyna się heroiczna opowieść o chłopcu, który stał się klątwą do egzorcyzmowania klątw, życie, z którego nigdy nie mógł zawrócić.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "ג'וג'וטסו קאיזן",
+            "overview": "קשיים, חרטה, בושה: התחושות השליליות שבני אדם מרגישים הופכות לקללות האורבות בחיי היומיום שלנו. הקללות משתוללות ברחבי העולם, ומסוגלות להוביל אנשים לאסון נורא ואפילו למוות. איטאדורי יוג'י הוא ילד בעל כוח פיזי אדיר שסופג חלק מכוחו של הרוח המקוללת ריומן סוקונה ומכאן ואילך, הוא חולק איתו גוף. בהדרכתו של המכשף החזקי ביותר, גוג'ו סאטורו, איטאדורי מתקבל לבית הספר התיכון הטכני למכשפים של טוקיו, ארגון שנלחם בקללות... וכך מתחיל סיפור הגבורה של ילד שהפך לקללה כדי לשאת קללה, חיים מהם הוא לעולם לא יכול היה לחזור.",
+            "homepage": "",
+            "tagline": "נער נלחם עבור המוות הנכון..."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chú Thuật Hồi Chiến",
+            "overview": "Vì một lý do kỳ lạ nào đó, Yuji Itadori, mặc dù với thể chất hoàn hảo nhưng anh lại đâm đầu vào tham gia CLB Huyền Bí. Tuy nhiên, họ đã sớm phát hiện ra là những câu chuyện huyền bí hoàn toàn có thật khi các thành viên trong CLB lần lượt bị tấn công! Trong khi đó, Megumi Fushiguro “bí ẩn” lại đang truy tìm một đối tượng bị nguyền rủa cấp đặc biệt và cuộc tìm kiếm này đã đưa nhóm bạn đến Itadori",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Bir çocuk… \"doğru ölüm\" için savaşır. Zorluklar, pişmanlık, utanç… İnsanların hissettiği olumsuz duygular günlük hayatımızda gizlenen lanetlere dönüşür. Lanetler tüm dünyaya yayılır; insanları korkunç bir talihsizliğe, hatta ölüme götürebilir. Dahası, lanetler yalnızca başka bir lanetle defedilebilir. Itadori Yuji sıradan bir lise hayatı yaşamakla birlikte çok büyük bir fiziksel güce sahiptir. Bir gün, lanetlerce saldırıya uğrayan bir arkadaşını kurtarmak için İki Yüzlü Hayalet'in parmağını yer ve laneti kendi ruhuna alır. Artık İki Yüzlü Hayalet ile aynı bedeni paylaşmaktadır. Büyücülerin en güçlüsü olan Gojo Satoru'nun yönlendirmesiyle lanetlerle savaşan bir organizasyon olan Tokyo Büyükşehir Teknik Büyücülük Lisesi'ne kabul edilir. Böylece bir laneti def etmek için lanete dönüşen çocuğun kahramanlık masalı; asla geri dönemeyeceği hayatı başlar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "JUJUTSU KAISEN",
+            "overview": "Ve světě, kde se démoni živí na nic netušících lidech a kde mnoho z nich padlo za oběť nejrůznějším prokletím, jsou všemožně schované části těla legendárního a obávaného démona Sukuny. Každý démon, který pozře nějaký z těchto ostatků, může získat obrovskou moc, se kterou by mohl být schopný zničit celý svět, či vážně narušit běžný chod věcí. Naštěstí však existuje tajemná škola bojovníků Jujutsu – čarodějů, kteří běžné smrtelníky v tajnosti ochraňují před všemi nebezpečími ze strany démonů a nebezpečných prokletí.\n\nYuuji Itadori je obyčejný středoškolák jehož největší starostí je jeho nemocný dědeček, který leží v nemocnici. I když chlapec vypadá na první pohled úplně normálně, má neobyčejnou fyzickou sílu a vytrvalost, díky které o něj má zájem mnoho školních sportovních klubů. Yuujimu je to ale jedno a mnohem raději tráví svůj volný čas ve společnosti dvou dalších přítel, členů okultního kroužku.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Keďže jeho dni sú spočítané, mladý Yuji sa rozhodne nájsť zvyšných 19 prstov spojených s kliatbami a prehltnúť ich, aby spolu s ním zmizli.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "มหาเวทย์ผนึกมาร",
+            "overview": "เมื่อไม่อาจหนีความตายได้พ้น ยูจิ นักเรียนมัธยมที่กลืนนิ้วต้องสาปเข้าไปตัดสินใจตามล่าหานิ้วที่เหลืออีก 19 นิ้วมากลืนกิน เพื่อผนึกคำสาปมรณะและตายไปพร้อมกับมัน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Med sine dage nummereret, beslutter gymnasiet Yuji at jage og forbruge de resterende 19 fingre af en dødbringende forbandelse, så den kan dø med ham.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Dengan hari-harinya yang sudah terhitung, Yuji memutuskan untuk memburu dan mengkonsumsi 19 jari yang tersisa dari kutukan maut agar bisa mati bersamanya.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "JUJUTSU KAISEN",
+            "overview": "إيتادوري يوجي فتى يملك قوة جسدية هائلة، لكنّه يعيش حياة مدرسية عادية تمامًا. في أحد الأيّام، ومن أجل إنقاذ صديق هاجمته لعنة، يأكل إصبع طيفٍ ذو وجهين ويمتص اللعنة. وهنا تبدأ قصة فتى يصبح لعنة كي يطرد لعنة تحت إشراف أقوى مستعمل جوجيتسو، غوجو ساتورو.",
+            "homepage": "",
+            "tagline": "فتى يقاتل... من أجل \"الموت الصحيح\"."
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "咒術迴戰",
+            "overview": "少年戰鬥著 —「為了尋求正確的死亡」辛酸、後悔、恥辱人類產生的負面情感，化為詛咒，潛入日常生活詛咒是蔓延於世界的禍源，最糟糕的情況下，會讓人類踏入死亡並且，詛咒只能以詛咒祓除擁有驚人身體能力的少年·虎杖悠仁原本過著普通的高中生活有一天，為了拯救被「詛咒」襲擊的同伴，他吃下了特級咒物「兩面宿儺之指」，讓詛咒寄宿於自己的靈魂之中與詛咒「兩面宿儺」共有肉體的虎杖，在最強咒術師五條悟的指引下，進入對詛咒專門機關「東京都立咒術高等專門學校」……。為了祓除詛咒而成為詛咒的少年，無法回頭的壯闊故事開始了。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Yūji Itadori, seorang pemuda ditimpa kejadian hebat apabila suatu bahan peninggalan berupa sebatang jari reput dicuri rakan-rakan sekelabnya lalu menarik perhatian makhluk halus ganas menyerang mereka. Megumi Fushiguro, seorang pemantera (呪術師, jujutsushi) cuba menyelamatkan mereka bertiga, namun dilemahkan. Yūji dalam keadaan terdesak mahu menyelamatkan Megumi (dan rakan-rakan sekelabnya) serta ada rasa ingin tahu memakan jari ini lalu membangkitkan suatu roh jahat iaitu Ryomen Sukuna yang berjaya menghapuskan makhluk ini. Megumi dan gurunya, Satoru Gojō, yang maklum keadaan ini mengundang Yuji belajar sekolah mereka di Tokyo untuk mempelajari jurusan mereka sambil mereka mencari kesemua 20 jari berpuaka membolehkan mereka menumpaskan roh yang merasuknya.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Ο Yuji Itadori είναι ένα αγόρι με τρομερή σωματική δύναμη, αν και ζει μια εντελώς συνηθισμένη ζωή στο γυμνάσιο. Μια μέρα, για να σώσει έναν συμμαθητή που έχει δεχτεί επίθεση από κατάρες, τρώει το δάχτυλο του Ryomen Sukuna, παίρνοντας την κατάρα στην ίδια του την ψυχή. Από εκεί και πέρα, μοιράζεται ένα σώμα με τον Ryomen Sukuna. Με οδηγό τον πιο ισχυρό των μάγων, τον Satoru Gojo, ο Itadori γίνεται δεκτός στο Γυμνάσιο Tokyo Jujutsu, μια οργάνωση που πολεμά τις κατάρες... και έτσι ξεκινά η ηρωική ιστορία ενός αγοριού που έγινε κατάρα για να ξορκίσει μια κατάρα, μια ζωή από όπου δεν μπόρεσε ποτέ να γυρίσει πίσω.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Yuji Itadori är en pojke med enorm fysisk styrka, även om han lever ett helt vanligt high school-liv. En dag, för att rädda en klasskamrat som har attackerats av förbannelser, äter han Ryomen Sukunas finger och tar in förbannelsen i sin egen själ. Från och med då delar han en kropp med Ryomen Sukuna. Vägledd av den mäktigaste av trollkarlar, Satoru Gojo, blir Itadori antagen till Tokyo Jujutsu High School, en organisation som bekämpar förbannelserna... Och så börjar den heroiska berättelsen om en pojke som blev en förbannelse för att driva ut en förbannelse, ett liv som han aldrig kunde vända tillbaka från.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Yuji Itadori er en gutt med enorm fysisk styrke, selv om han lever et helt vanlig liv på videregående skole. En dag, for å redde en klassekamerat som har blitt angrepet av forbannelser, spiser han fingeren til Ryomen Sukuna, og tar forbannelsen inn i sin egen sjel. Fra da av deler han en kropp med Ryomen Sukuna. Guidet av den mektigste trollmannen, Satoru Gojo, blir Itadori tatt opp på Tokyo Jujutsu High School, en organisasjon som bekjemper forbannelsene... og slik begynner den heroiske fortellingen om en gutt som ble en forbannelse for å utdrive en forbannelse, et liv han aldri kunne vende tilbake fra.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "JUJUTSU KAISEN",
+            "overview": "إيتادوري يوجي فتى يملك قوة جسدية هائلة، لكنّه يعيش حياة مدرسية عادية تمامًا. في أحد الأيّام، ومن أجل إنقاذ صديق هاجمته لعنة، يأكل إصبع طيفٍ ذو وجهين ويمتص اللعنة. وهنا تبدأ قصة فتى يصبح لعنة كي يطرد لعنة تحت إشراف أقوى مستعمل جوجيتسو، غوجو ساتورو.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "جوجوتسو کایسن",
+            "overview": "یوجی ایتادوری پسری با قدرت بدنی فوق‌العاده است، اگرچه زندگی دبیرستانی کاملاً معمولی دارد. یک روز، برای نجات همکلاسی که مورد حمله نفرین قرار گرفته، انگشت ریومن سوکونا را می‌خورد و نفرین جذب روح و روانش می‌شود. از آن به بعد، او با ریومن سوکونا یک بدن مشترک دارد. ایتادوری با هدایت قدرتمندترین جادوگران، ساتورو گوجو، در دبیرستان جوجوتسو توکیو پذیرفته می‌شود، سازمانی که با نفرین‌ها مبارزه می‌کند... و بدین ترتیب داستان قهرمانانه پسری آغاز می‌شود که برای از بین بردن نفرینی تبدیل به یک نفرین شد، زندگی‌ای که هرگز نمی‌تواند از آن روی برگرداند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Nu zijn dagen geteld zijn, besluit de jonge Yuji de overige 19 vingers te vinden die verbonden zijn met vloeken en ze in te slikken, zodat ze samen met hem verdwijnen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "咒术回战",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "ჯუჯუცუ კაისენი",
+            "overview": "რადგან მისი დღეები დათვლილია, ახალგაზრდა იუჯი გადაწყვეტს იპოვოს დანარჩენი 19 თითი, რომლებიც წყევლილ არსებებთან არის დაკავშირებული, და გადაყლაპოს ისინი, რათა ისინი მასთან ერთად გაქრნენ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "JUJUTSU KAISEN",
+            "overview": "En Yuji Itadori és un noi amb una força física tremenda, tot i que viu una vida d'institut completament normal. Un dia, per salvar un company de classe que ha estat atacat per malediccions, es menja el dit d'en Ryomen Sukuna, i així la maledicció s'imposa a la seva ànima. A partir d'aleshores, comparteix un cos amb en Ryomen Sukuna. Guiat pel més poderós dels bruixots, en Satoru Gojo, en Itadori és admès a l'institut Tokyo Jujutsu, una organització que lluita contra les malediccions... i així comença la història heroica d'un noi que es va convertir en una maledicció per exorcitzar-ne una, una vida de la qual mai més podria tornar enrere.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Джуджуцу Кайсен",
+            "overview": "Юджи Итадори е момче с невероятна физическа сила, въпреки че води напълно обикновен гимназиален живот. Един ден, за да спаси свой съученик от нападение на проклятия, той поглъща пръста на Рьомен Сукуна и поема проклятието в собствената си душа. Оттогава споделя едно тяло с Рьомен Сукуна. Под ръководството на най-могъщия магьосник, Сатору Годжо, Итадори постъпва в Токийското джуджутсу училище – организация, която се бори с проклятията. Така започва героичната история на момче, превърнало се в проклятие, за да победи проклятие – живот, от който няма връщане назад.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Bilang na ang mga araw niya, kaya nagpasiya ang high schooler na si Yuji na hanapin at kainin ang natitirang 19 na daliri ng sumpa para mamatay itong kasama niya.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Budući da su mu dani odbrojani, mladi Yuji odlučuje pronaći preostalih 19 prstiju povezanih s kletvama i progutati ih kako bi nestali zajedno s njim.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "अभिशाप नेटवर्क",
+            "overview": "एक लड़के के अलौकिक दुनिया में धकेल दिए जाने के बाद, उसे उन चुनौतियों का सामना करना होगा ताकि राक्षस उसकी हर प्रिय चीज को नष्ट न कर दें।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Jujutsu Kaisen",
+            "overview": "Judžis Itadoris – nepaprasta fizine jėga pasižymintis vaikinas, nors gyvena visiškai įprastą gimnazisto gyvenimą. Vieną dieną, norėdamas išgelbėti prakeiksmų užpultą bendraklasį, jis praryja Riomeno Sukunos pirštą ir taip priima prakeiksmą į savo sielą. Nuo tos akimirkos jis dalijasi vienu kūnu su Riomenu Sukuna. Vedamas galingiausio burtininko Satoru Godžo, Itadoris įstoja į Tokijo Jujutsu mokyklą – organizaciją, kovojančią su prakeiksmais... Taip prasideda herojiška istorija apie vaikiną, kuris pats tapo prakeiksmu, kad galėtų išvaryti kitus prakeiksmus, ir pasuko gyvenimo keliu, iš kurio nebegalėjo grįžti.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3US5UXJSStOVozc6EwhGSMDguol.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j2GvamiUMRpPjmNQSSht0Q7Z7e9.jpg",
+          "vote_average": 6.088,
+          "vote_count": 17,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9CsTtHlvErQ93jvIWIjs06G0Abe.jpg",
+          "vote_average": 5.778,
+          "vote_count": 18,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gmECX1DvFgdUPjtio2zaL8BPYPu.jpg",
+          "vote_average": 5.71,
+          "vote_count": 31,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lthkKBLe1rX6iThgVFg22O02sJw.jpg",
+          "vote_average": 5.566,
+          "vote_count": 30,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qpin8cASXEVtwhzNsprHYFiOAGk.jpg",
+          "vote_average": 5.44,
+          "vote_count": 25,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nIHp6fz2MX33blJKYa9BSbhct7W.jpg",
+          "vote_average": 4.656,
+          "vote_count": 16,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j0gsESaBzFmYVhnBTXzIE9PsgY8.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zAfK8cVjJiYUsVLDkHoIgxJh319.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r5LwIWhiqoeK7X3CUEBSVdilaJe.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qNtWAi36mk4JW8eJmwOcCKWBeAn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/32RyCe6ACbmG4xIdoQPtThUul7t.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vXEr0z4wwAjWTSkgQzZNiKiTmjd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wBuO8UVKo1ky74gEeQUpOwyuMVr.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wwTjrRb0HG9sd87EDAn6ZbvxQGX.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cv85878gHDntOh4htf4PNUjpgSt.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 836,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ibtWY4Ywc0QUbK5joQ7h4ulOPlU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1486
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qt4hh7vGMlq1bJFw3By6K3ddQXX.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fgPa2oJD8lbLaTanzlGDd32tqDE.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qqr0Snv7qBCWLunF7wve1FiKmS7.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/goUbecLfPsASstrG5q6f88wpwnQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qFh2MZ8ihwWK4A54E50cAQRS9ZG.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4xU8RwtTmfrhs6lOi2EXTGVDapZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8iSqYMlHxTE767CxYvxl2Wnbwvs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aj1fr3CRfVNi7OxodiWyeZCJhrz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sB4cOWhwnsbeQyoBkruBzuEz6k8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 899,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8qYJqxzJ7rUGrdmiw4wopiGzYDV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pvl4pworSYkroGrfCEj0WlgzTYo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pVEPyfiomYcDjGh2OYupa1Ntfzg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7pqirTsFzGGjd6HJavUHOMFdUrM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zNJVwBMLgKLrM3VgqSm7dxoBBsG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1124,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6Pdlbk2jLRv5CDPaip7CM9BuGG5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hGlqzh1A6ZyG7T1XTGqDvglzuTh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7XOwseC7osJnyjgCg9WfKujFsKT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.781,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wAcIgFEiFuPBINL3k4FZZlLNwep.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1282
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bbkuD7JQAEOmLr6fnM6Vvwc2Xgy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qqLl9rDF0xF1RPGCbe2Pv9fP6kE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2133
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zL3OdMQbQ1FFhEb6iwB1GpgVwGr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pzCAdMiBUd86BISyVOLv4K0iJ9Y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5pfKHHfz9ttJVUeLrStAYUrilcf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/klfq5BVyyCAAHaq9ok9grwG3cyD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 969,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jENeq4eMUuQwC2AKJG0AoyDLqgf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1723
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/64ccTb0aYQlg9wo3Q2MLhXazRV7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xZZaEVpA1NupmoXXUCbVf1TQgUG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iUs7MpIwT5yLeFszQGzorN9H9Ao.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n0R2HN3mDEC6wpuQdawAHRNl0tv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x8AUVbn5K4HQiER6Z7jWD1hOcDN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iUyEwpyCiv6U12Ab5NMxwtvrQep.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/orB5uULpyRcf1piD32TMJWyW6cs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1728,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/leLVfznnc7WrkBlp1lJBTm0EuQ5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3072
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wrYmqBQgj6ePsaIoytLW4TMhgWt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d1lQb4qgJmKcNA7Qd3cKnj7ic8J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/73wItio4p20mVR8ntJ7lp6Ntiiv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aBTpVwlOqEwmex3ayQbV1z8Qahc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.483,
+          "height": 265,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tEmqJ1k4MdjuaKaetn8wGyZGcyC.png",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 1188
+        },
+        {
+          "aspect_ratio": 4.479,
+          "height": 48,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gPflM950uYjpJ20Pu1QMVBwkpBn.svg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 215
+        },
+        {
+          "aspect_ratio": 4.486,
+          "height": 428,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fOZl04GPyiWeDi5gg8yOce5QWap.png",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 4.511,
+          "height": 663,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fcJa9bXXfF33p5WwLMO2U10VZgc.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2991
+        },
+        {
+          "aspect_ratio": 3.529,
+          "height": 361,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rYw43yhTeksZC7FXMq1nPjSCauP.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1274
+        },
+        {
+          "aspect_ratio": 4.483,
+          "height": 265,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8K3jzJ4iVlyYJRU5pWDGgX8jWVB.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1188
+        },
+        {
+          "aspect_ratio": 4.469,
+          "height": 603,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A7dt8OLxYJP7R6pFBbJSAm4sEkV.svg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2695
+        },
+        {
+          "aspect_ratio": 3.516,
+          "height": 273,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zVydIu4MKryYiyCulQ5UIwo15ZV.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 3.491,
+          "height": 224,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2LOnMn1PS0CSnGeLcb44LCjY2Dy.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 782
+        },
+        {
+          "aspect_ratio": 4.181,
+          "height": 188,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6Z50wWT6F57oKnqFVMYWZoyCaUD.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 786
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6qQzMJG27XOJsyAEEIisoJB45j2.jpg",
+          "vote_average": 7.076,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fHpKWq9ayzSk8nSwqRuaAUemRKh.jpg",
+          "vote_average": 6.648,
+          "vote_count": 34,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3yFHMtdhriig4sm1w8oMQfA2gFN.jpg",
+          "vote_average": 5.53,
+          "vote_count": 17,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mJVUZpPR4BdZzLWyP51h8pOU1RO.jpg",
+          "vote_average": 4.934,
+          "vote_count": 15,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dG6H80X9zF3nA7NiOAs3gmxO6mc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ccZoTZRqADjx7OsttZJREkyC4Gi.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7KIlQxQb1a07DyaxXofPuUponJs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o0aPaA16JpTLl2nrZxzhiopDSms.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6WCHIvjBQClUSVvGbMM9AiIu7l8.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1360
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qsFgxc9whGpGfLYzQjgq3xkNEbB.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/voajKwMZyb8Zj8Ahc2PhPQ67EAe.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4nUgm82M0FgVqCLnT2fkEy6iI3w.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3Lgonmng80a7BpEHdQ2TIhuvMBv.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aoJZMbn4WAaaEjqOP4r0F7lzpeP.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uyyMrkDgjnpGFM9dnJEYlUya7O0.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nB4wHGixMRAkTOAihsZ6wD2GwcY.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1728,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oXmJzm4mTV8y0c7lwpi9dIy0JLj.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1152
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/80eHrBl03xWcQYecoTO1LlkXpN1.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xEeNqu9Vwc1KO7W9zfDAhrmnMOL.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1449
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 2837,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g1p1Vx6FgUEY6fDRnOCncQ9V21o.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.697,
+          "height": 1435,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ukXER2pkQPC4c78s0yvNSo8gcPa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1416,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8FoeCkMhH1qNqnL4lw88pUOuwnJ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1415,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pmOerdzpgul6P4y7DQkI1aVFMXI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1415,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aurWIOPhjgQw6LAkgaDUzhA3Mvd.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1145,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oQE8Xi1QoJwl4XE94RgumpxdtMu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 809
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1145,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bJF1y6dkF6ZYuehz7Na9Aq0xYPy.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 809
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iljKqptaX37Rr4B5z3ubo45HhhD.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fHQ2XHRdRix0rkDCShmGQ8c6d03.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/exuUBKX1qtZs81CJHVLF4WkXQFv.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 1429,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hUhm4sL1nUGDJHjgUoqOMq9BnxU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1145,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3OPbrVJbmmaRHjRTFoFtXuU8HAj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 809
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1417,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wTCtC5qYaEuz64FCDNCHlfXUgUy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 1199,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oqC1LCvRRuxWLvvbvkpQEjJQ53y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 845
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1145,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7mrTjKjaBDP9D7FWWbDehCMNjSm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 809
+        },
+        {
+          "aspect_ratio": 0.743,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dGvJUOS01OrgDntHXGF04tW6oJ5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 951
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dsbQuow3YDuhjIe2ig7R4Oivg96.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qJc1oS7Nm0ZLB5Kqc7lUzGpnd4R.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kWcxo94dMo9FqqnxyYTC3yePpLH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mvYznVlIPU3cfcbG7dXh1fBONcc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6LQ7kH4Vmloh3m1rhhBx69lK7GW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tucFAfTClAknkO4gI4NFrqxBqz6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/emxyWxnb15ahE9Lm9uqmwpgWLYs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1526,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1n0he0XERFZ7PtAkuWvS6ZD5eth.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.722,
+          "height": 1661,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8ztUAcLKlBw9wjUO81jHFB2m5sU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t7PZPJuQE6V4nMKhuf8ffN6V79W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5t1siYDVIEYLFkDmAwmcLwzXjWj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iGWcH7jI2VoIAB08GTlX9qQWr9Z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6ZpwfHU3cln71oGUOCcauOmTveI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nQRitNLUUmd8mSdR4E5kfueu4ui.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wRINo2hYSWQNpuodgFYViDybPQi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mKZIw5gW0msQVivLswZnZ41FMEK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1449
+        },
+        {
+          "aspect_ratio": 0.714,
+          "height": 1680,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4o16NrEgE43EfBEu06iCL6yKxvd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1199
+        },
+        {
+          "aspect_ratio": 0.719,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zmnvck5A0xRqx4hxcQU3dkiIKl4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 828
+        },
+        {
+          "aspect_ratio": 0.657,
+          "height": 1547,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5r8KDJCWtZBUln11ZxBG5hWLAnN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1017
+        },
+        {
+          "aspect_ratio": 0.691,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qV7N6sA9Y0tnBCgaV2R1ehZRndN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1049,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tddZurOuQ7npGhLXzvN2g4IVZSD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        }
+      ]
+    }
+  }
+}
