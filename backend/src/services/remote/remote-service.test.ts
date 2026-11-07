@@ -39,7 +39,9 @@ const schema: ServiceConfigSchema = {
 };
 
 /** A served fake service whose configuration accepts DEMO_TOKEN=good only. */
-const startService = async (options: { majors?: Major[]; port?: number } = {}) => {
+const startService = async (
+  options: { majors?: Major[]; port?: number; details?: Record<string, unknown> } = {}
+) => {
   const listeners = new Set<() => void>();
   let values: Record<string, string> = {};
   const applied: Array<Record<string, string>> = [];
@@ -81,7 +83,9 @@ const startService = async (options: { majors?: Major[]; port?: number } = {}) =
     },
   };
   const status = (): ServiceStatus =>
-    ready() ? { state: 'ready' } : { state: 'standby', missingConfiguration: ['DEMO_TOKEN'] };
+    ready()
+      ? { state: 'ready', details: options.details }
+      : { state: 'standby', missingConfiguration: ['DEMO_TOKEN'], details: options.details };
   const service = defineService({
     info: { id: 'demo', name: 'Demo', description: 'Demo service', version: '2.0.0' },
     configuration,
@@ -186,6 +190,22 @@ describe('RemoteService', () => {
     await expect(remote.client.hello({ name: 'ada' })).rejects.toBeInstanceOf(
       ServiceNotConfiguredError
     );
+  });
+
+  it("carries the service's VPN check into its status", async () => {
+    const { server } = await start({ details: { vpn: 'unprotected', torrents: 0 } });
+    const { remote } = connect(server, { DEMO_TOKEN: 'good' });
+    await remote.initialize();
+
+    expect(await statusOf(remote, 'ready')).toEqual({ status: 'ready', vpn: 'unprotected' });
+  });
+
+  it('ignores details without a known VPN state', async () => {
+    const { server } = await start({ details: { vpn: 'maybe' } });
+    const { remote } = connect(server, { DEMO_TOKEN: 'good' });
+    await remote.initialize();
+
+    expect(await statusOf(remote, 'ready')).toEqual({ status: 'ready' });
   });
 
   it('passes declared errors through to callers', async () => {

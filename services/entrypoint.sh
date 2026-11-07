@@ -1,20 +1,68 @@
 #!/bin/bash
 set -Eeuo pipefail
 
+# Runs the services named in the arguments (the image's CMD) side by side, as the bunqueue user:
+#   bunqueue media-catalog list-service sources media-load   miauflix-services
+#   bunqueue media-catalog list-service                      miauflix-catalog-services
+#   sources                                                  miauflix-sources
+#   media-load                                               miauflix-media-load
+# Any subset works, in any image that contains those services.
+if (($# == 0)); then
+  echo 'Name the services to run: bunqueue, media-catalog, list-service, sources, media-load' >&2
+  exit 64
+fi
+for name in "$@"; do
+  case $name in
+  bunqueue | media-catalog | list-service | sources | media-load) ;;
+  *)
+    echo "Unknown service: $name" >&2
+    exit 64
+    ;;
+  esac
+done
+
+# Each service's data directory, as the service itself reads it.
+data_dir() {
+  case $1 in
+  bunqueue) dirname "${DATA_PATH:-/app/data/bunqueue/bunqueue.db}" ;;
+  media-catalog) echo "${CATALOG_DATA_DIR:-/app/data/catalog}" ;;
+  list-service) echo "${LIST_SERVICE_DATA_DIR:-/app/data/list-service}" ;;
+  sources) echo "${SOURCES_DATA_DIR:-/app/data/sources}" ;;
+  media-load) echo "${MEDIA_LOAD_DATA_DIR:-/app/data/media-load}" ;;
+  esac
+}
+
+runs() {
+  local name
+  for name in "${@:2}"; do
+    [[ $name == "$1" ]] && return 0
+  done
+  return 1
+}
+
 # Started as root: give the service user what it writes, then run everything as that user. The
 # downloads volume was the backend's before media-load ran the torrent engine, so files written
 # by the backend's user (PUID) change owner once.
 if [[ $(id -u) -eq 0 ]]; then
-  mkdir -p /app/data/media-load
-  chown -R bunqueue:bunqueue /app/data/media-load
+  for name in "$@"; do
+    dir=$(data_dir "$name")
+    mkdir -p "$dir"
+    # Only this container's own directories: the data volume may be shared with other containers.
+    # Files of an earlier image's user (the standalone images ran as bun) change owner once.
+    if [[ -n $(find "$dir" ! -user bunqueue -print -quit) ]]; then
+      chown -R bunqueue:bunqueue "$dir"
+    fi
+  done
   downloads=/usr/src/app/downloads
-  if [[ -d "$downloads" ]]; then
+  if runs media-load "$@" && [[ -d "$downloads" ]]; then
     if { ! other_owner=$(find "$downloads" ! -user bunqueue -print -quit) ||
       [[ -n "$other_owner" ]]; } &&
       ! chown -R bunqueue:bunqueue "$downloads"; then
       echo "Could not change ownership of $downloads; checking access as bunqueue" >&2
+      # Links are skipped, as chown -R skips them: media-load never creates any, and a stray one
+      # to something read-only must not stop the services.
       su-exec bunqueue:bunqueue /bin/bash -o pipefail -c '
-        find "$1" -mindepth 1 -print0 | while IFS= read -r -d "" entry; do
+        find "$1" -mindepth 1 ! -type l -print0 | while IFS= read -r -d "" entry; do
           if [[ -d "$entry" && ! ( -r "$entry" && -w "$entry" && -x "$entry" ) ]] ||
             [[ -f "$entry" && ! ( -r "$entry" && -w "$entry" ) ]]; then
             printf "bunqueue cannot use download: %q\n" "$entry" >&2
@@ -30,6 +78,9 @@ if [[ $(id -u) -eq 0 ]]; then
   fi
   exec su-exec bunqueue:bunqueue /bin/bash "$0" "$@"
 fi
+
+# For the image's healthcheck: the services to check.
+printf '%s\n' "$@" >/tmp/miauflix-services
 
 children=()
 loggers=()
@@ -77,11 +128,12 @@ trap stop_children EXIT
 trap 'exit 130' INT
 trap 'exit 143' TERM
 
-launch bunqueue /app/bunqueue
-launch media-catalog bun run --cwd /workspace/services/media-catalog src/index.ts
-launch list-service bun run --cwd /workspace/services/list-service src/index.ts
-launch sources bun run --cwd /workspace/services/sources src/index.ts
-launch media-load bun run --cwd /workspace/services/media-load src/index.ts
+for name in "$@"; do
+  case $name in
+  bunqueue) launch bunqueue /app/bunqueue ;;
+  *) launch "$name" bun run --cwd "/workspace/services/$name" src/index.ts ;;
+  esac
+done
 
 set +e
 wait -n "${children[@]}"

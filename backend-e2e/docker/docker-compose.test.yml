@@ -43,6 +43,7 @@ services:
       - SOURCES_SERVICE_URL=http://miauflix-services:3003
       - MEDIA_LOAD_SERVICE_URL=http://miauflix-services:3004
       - SOURCES_DISABLE_VPN_CHECK=true
+      - MEDIA_LOAD_DISABLE_VPN_CHECK=true
       - TMDB_API_URL=http://tmdb-mock/3
       # The initial-setup lane overrides E2E_CATALOG_TMDB_TOKEN with an empty
       # value so the browser must complete Catalog configuration through the UI.
@@ -92,6 +93,7 @@ services:
     build:
       context: ../../
       dockerfile: services/Dockerfile
+      target: services
     init: true
     environment:
       - TCP_PORT=6789

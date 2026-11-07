@@ -102,6 +102,9 @@ export class PlaybackUnavailableError extends Error {
   }
 }
 
+/** Waits before inspecting a playing source's audio again after a failed inspection. */
+const INSPECTION_RETRY_DELAYS_MS = [5_000, 15_000];
+
 interface LiveSession {
   sourceId: number;
   userId: string;
@@ -213,7 +216,7 @@ export class PlaybackSessionService {
     if (prepared.exhausted) throw new PlaybackUnavailableError('exhausted');
     if (!prepared.source) return null;
     // Each viewer keeps what they started watching; another viewer's claim is independent.
-    const ownerKey = `user:${userId}:${this.playableKey(playable)}`;
+    const ownerKey = this.watchOwnerKey(userId, playable);
     if (prepared.target && (prepared.state === 'ready' || prepared.state === 'warming')) {
       await this.warmup?.promote(prepared.target, this.playableKey(playable), ownerKey);
     }
@@ -497,13 +500,30 @@ export class PlaybackSessionService {
       .catch(error => logger.warn('PlaybackSessionService', 'Failed to release backup', error));
   }
 
-  /** A failed source will not recover quickly: move its viewers to a new session and source. */
+  /**
+   * A failed source will not recover quickly: move its viewers to a new session and source, and
+   * stop keeping the failed source for them, so it stops downloading next to the replacement.
+   */
   private failOver(sourceId: number): void {
     const now = Date.now();
+    const released = new Set<string>();
     for (const [playbackId, live] of this.liveSessions) {
       if (live.sourceId !== sourceId) continue;
       // The backup's claim is kept: the new session most likely starts on it.
       this.liveSessions.delete(playbackId);
+      const ownerKey = this.watchOwnerKey(live.userId, live.playable);
+      if (!released.has(ownerKey)) {
+        released.add(ownerKey);
+        void this.downloads
+          ?.releaseClaims(sourceId, ownerKey, 'watched')
+          .catch(error =>
+            logger.warn(
+              'PlaybackSessionService',
+              `Failed to release failed source ${sourceId}`,
+              error
+            )
+          );
+      }
       if (live.expiresAt <= now) continue;
       logger.warn('PlaybackSessionService', `Source ${sourceId} failed; recreating ${playbackId}`);
       for (const listener of this.deliveryListeners) {
@@ -547,7 +567,8 @@ export class PlaybackSessionService {
   private deliverWhenProbed(
     target: PlaybackTarget,
     preferences: AudioPlaybackPreferences,
-    session: { userId: string; sessionId?: string; playbackId: string; streamingKey: string }
+    session: { userId: string; sessionId?: string; playbackId: string; streamingKey: string },
+    attempt = 0
   ): void {
     const { streamingKey, ...address } = session;
     const emit = (update: PlaybackDeliveryUpdate['update']) => {
@@ -564,6 +585,22 @@ export class PlaybackSessionService {
         if (error instanceof AudioConversionRequiredError) {
           logger.warn('PlaybackSessionService', `Source ${target.source.id}: ${error.message}`);
           emit({ type: 'recreate', reason: error.message });
+          return;
+        }
+        // A source just switched to can fail its first reads: inspect again while it plays.
+        const retryIn = INSPECTION_RETRY_DELAYS_MS[attempt];
+        const live = this.liveSessions.get(address.playbackId);
+        const permanent = error instanceof AudioPlaybackError && error.status === 422;
+        if (!permanent && retryIn !== undefined && live && live.expiresAt > Date.now()) {
+          logger.warn(
+            'PlaybackSessionService',
+            `Audio inspection failed; retrying in ${retryIn / 1000}s`,
+            error
+          );
+          setTimeout(() => {
+            if (this.liveSessions.get(address.playbackId) === live)
+              this.deliverWhenProbed(target, preferences, session, attempt + 1);
+          }, retryIn).unref();
           return;
         }
         logger.warn(
@@ -584,6 +621,11 @@ export class PlaybackSessionService {
 
   private hash(value: string): string {
     return createHash('sha256').update(value).digest('hex');
+  }
+
+  /** Owner of the `watched` claim that keeps a viewer's source downloading. */
+  private watchOwnerKey(userId: string, playable: PlayableRef): string {
+    return `user:${userId}:${this.playableKey(playable)}`;
   }
 
   private playableKey(playable: PlayableRef): string {

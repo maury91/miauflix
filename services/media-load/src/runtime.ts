@@ -62,8 +62,15 @@ export class MediaLoadRuntime {
 
   constructor(
     private readonly databasePath: string,
-    private readonly legacyDownloadPath?: string
+    private readonly legacyDownloadPath?: string,
+    /** Whether torrents may reach trackers and peers (the VPN check); see `refreshNetwork`. */
+    private readonly networkAllowed: () => boolean = () => true
   ) {}
+
+  /** Applies `networkAllowed` to the running engine: blocked, torrents are disconnected. */
+  async refreshNetwork(): Promise<void> {
+    await this.engine?.downloads.setNetworkAllowed(this.networkAllowed());
+  }
 
   static databasePathFor(dataDir: string): string {
     return dataDir === ':memory:' ? dataDir : join(dataDir, 'media-load.sqlite');
@@ -141,7 +148,9 @@ export class MediaLoadRuntime {
       const { imported } = new StorageImporter(database).status();
       const storage = new StorageService(database, config);
       const pieces = new PieceUpdates(database.getStorageRepository());
-      const downloads = new DownloadService(storage, config, dhtBootstrap);
+      const downloads = new DownloadService(storage, config, dhtBootstrap, {
+        networkAllowed: this.networkAllowed(),
+      });
       const transfers = new TransferStats(downloads.client, database.getTransferRepository());
       transfers.start();
       this.engine = { database, storage, downloads, transfers, pieces };

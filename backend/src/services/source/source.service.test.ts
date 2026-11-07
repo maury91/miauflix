@@ -2,7 +2,6 @@ jest.mock('@database/database');
 jest.mock('@repositories/movie.repository');
 jest.mock('@repositories/content-source.repository');
 jest.mock('@services/source/source-metadata-file.service');
-jest.mock('@services/security/vpn.service');
 jest.mock('@services/configuration/configuration.service');
 jest.mock('@logger');
 jest.mock('parse-torrent');
@@ -22,7 +21,6 @@ import type { ContentSource } from '@entities/content-source.entity';
 import { ContentSourceRepository } from '@repositories/content-source.repository';
 import { MovieRepository } from '@repositories/movie.repository';
 import { ConfigurationService } from '@services/configuration/configuration.service';
-import { VpnDetectionService } from '@services/security/vpn.service';
 import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
 import { SourceService } from '@services/source/source.service';
 import { SourceMetadataFileService } from '@services/source/source-metadata-file.service';
@@ -70,11 +68,7 @@ const setupTest = () => {
   const mockConfigService = new ConfigurationService() as jest.Mocked<ConfigurationService>;
   mockConfigService.get.mockReturnValue(undefined as never);
   mockConfigService.getOrThrow.mockReturnValue(false as never);
-  const mockVpnService = new VpnDetectionService(
-    mockConfigService
-  ) as jest.Mocked<VpnDetectionService>;
-  mockVpnService.isVpnActive.mockResolvedValue(true);
-  mockVpnService.on.mockReturnValue(jest.fn());
+  const mockPeers = { getStatus: jest.fn().mockReturnValue({ status: 'ready', vpn: 'protected' }) };
   const mockRequestService = { request: jest.fn() };
   const mockSourceMetadataFileService = new SourceMetadataFileService(
     {} as never,
@@ -117,7 +111,7 @@ const setupTest = () => {
   });
   const service = new SourceService(
     mockDatabase,
-    mockVpnService,
+    mockPeers,
     mockSourcesClient as never,
     mockSourceMetadataFileService,
     mockRequestService as never,
@@ -135,18 +129,18 @@ const setupTest = () => {
     mockContentSourceRepository,
     mockDatabase,
     mockConfigService,
-    mockVpnService,
+    mockPeers,
     mockSourcesClient,
     mockRequestService,
     mockSourceMetadataFileService,
   };
 };
-const createServiceWithDisconnectedVpn = () => {
+const createServiceWithUnprotectedPeers = () => {
   const mocks = setupTest();
-  mocks.mockVpnService.isVpnActive.mockResolvedValue(false);
+  mocks.mockPeers.getStatus.mockReturnValue({ status: 'ready', vpn: 'unprotected' });
   const service = new SourceService(
     mocks.mockDatabase,
-    mocks.mockVpnService,
+    mocks.mockPeers,
     mocks.mockSourcesClient as never,
     mocks.mockSourceMetadataFileService,
     mocks.mockRequestService as never,
@@ -221,7 +215,7 @@ describe('SourceService', () => {
       const backgroundJobs = { bulkBestEffort: jest.fn(), enqueueBestEffort: jest.fn() };
       const service = new SourceService(
         mocks.mockDatabase,
-        mocks.mockVpnService,
+        mocks.mockPeers,
         mocks.mockSourcesClient as never,
         mocks.mockSourceMetadataFileService,
         mocks.mockRequestService as never,
@@ -281,14 +275,14 @@ describe('SourceService', () => {
     });
   });
 
-  it('saves streamed candidates and summary even while the backend VPN is disconnected', async () => {
+  it('saves streamed candidates and summary even while media-load is not behind a VPN', async () => {
     const {
       service,
       mockMovie,
       mockMovieRepository,
       mockContentSourceRepository,
       mockSourcesClient,
-    } = createServiceWithDisconnectedVpn();
+    } = createServiceWithUnprotectedPeers();
     await service.searchSourcesForMovies();
     expect(mockSourcesClient.search).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -357,7 +351,7 @@ describe('SourceService', () => {
         mockContentSourceRepository,
         mockSourcesClient,
         mockSourceMetadataFileService,
-      } = vpnConnected ? setupTest() : createServiceWithDisconnectedVpn();
+      } = vpnConnected ? setupTest() : createServiceWithUnprotectedPeers();
       const torrentFile = Buffer.from('TV pack metadata');
       const source = {
         ...mockContentSource1,
@@ -585,8 +579,8 @@ describe('SourceService', () => {
       expect(mockContentSourceRepository.updateStats).not.toHaveBeenCalled();
     });
 
-    it('should skip when VPN is disconnected', async () => {
-      const { service, mockContentSourceRepository } = createServiceWithDisconnectedVpn();
+    it('should skip when media-load is not behind a VPN', async () => {
+      const { service, mockContentSourceRepository } = createServiceWithUnprotectedPeers();
       await service.syncStatsForSources();
 
       expect(mockContentSourceRepository.findSourceThatNeedsStatsUpdate).not.toHaveBeenCalled();

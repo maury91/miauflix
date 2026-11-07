@@ -14,7 +14,6 @@ import type { MovieRepository } from '@repositories/movie.repository';
 import type { BackgroundJobService } from '@services/background-job/background-job.service';
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { RequestService } from '@services/request/request.service';
-import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { SourceMetadata } from '@services/sources/source-candidate';
 import { fromCandidate } from '@services/sources/source-candidate';
 import type { SourcesClientService } from '@services/sources/sources-client.service';
@@ -103,18 +102,10 @@ export class SourceService {
   /** Sources whose file list could not be fetched, and when they may be tried again. */
   private readonly unresolvedUntil = new Map<number, number>();
 
-  private vpnConnected = false;
-  private searchOnlyBehindVpn: boolean;
-  private startPromise: Promise<void>;
-  private startError: unknown = null;
-  private startResolved = false;
-  private startStartedAt = 0;
-  private vpnProbeVersion = 0;
-  private vpnUnsubscribers: Array<() => void> = [];
-
   constructor(
     db: Database,
-    private readonly vpnService: VpnDetectionService,
+    /** media-load: reports whether its own connection is VPN-protected. */
+    private readonly peers: { getStatus(): ServiceInstanceStatus },
     private readonly sourcesClient: SourcesClientService,
     private readonly magnetService: SourceMetadataFileService,
     _requestService: RequestService,
@@ -123,95 +114,16 @@ export class SourceService {
     private readonly notifications: NotificationService,
     private readonly availability: SourceAvailabilityService
   ) {
-    this.searchOnlyBehindVpn = !config.getOrThrow('DISABLE_VPN_CHECK');
     this.movieRepository = db.getMovieRepository();
     this.contentSourceRepository = db.getContentSourceRepository();
     this.episodeSourceRepository = db.getEpisodeSourceRepository();
     config.registerService('SOURCE', this);
-    if (this.searchOnlyBehindVpn) {
-      this.startPromise = this.trackStartPromise(this.refreshVpnState());
-      this.vpnUnsubscribers = [
-        vpnService.on('connect', () => {
-          this.vpnConnected = true;
-        }),
-        vpnService.on('disconnect', () => {
-          this.vpnConnected = false;
-        }),
-      ];
-    } else {
-      this.vpnConnected = true; // If not searching only behind VPN, assume connected
-      this.startResolved = true;
-      this.startPromise = Promise.resolve();
-    }
   }
 
-  private trackStartPromise(promise: Promise<void>): Promise<void> {
-    this.startResolved = false;
-    this.startError = null;
-    this.startStartedAt = Date.now();
-    promise.then(
-      () => {
-        this.startResolved = true;
-      },
-      (err: unknown) => {
-        this.startError = err;
-      }
-    );
-    return promise;
-  }
-
-  private refreshVpnState(): Promise<void> {
-    const version = ++this.vpnProbeVersion;
-    return this.vpnService.isVpnActive().then(connected => {
-      if (version === this.vpnProbeVersion && this.searchOnlyBehindVpn) {
-        this.vpnConnected = connected;
-      }
-    });
-  }
-
-  async reload(): Promise<void> {
-    this.searchOnlyBehindVpn = !this.config.getOrThrow('DISABLE_VPN_CHECK');
-    if (!this.searchOnlyBehindVpn) {
-      this.vpnConnected = true;
-      this.startResolved = true;
-      this.startPromise = Promise.resolve();
-      this.startError = null;
-      for (const unsub of this.vpnUnsubscribers) unsub();
-      this.vpnUnsubscribers = [];
-    } else {
-      for (const unsub of this.vpnUnsubscribers) unsub();
-      this.startPromise = this.trackStartPromise(this.refreshVpnState());
-      this.vpnUnsubscribers = [
-        this.vpnService.on('connect', () => {
-          this.vpnConnected = true;
-        }),
-        this.vpnService.on('disconnect', () => {
-          this.vpnConnected = false;
-        }),
-      ];
-    }
-  }
+  async reload(): Promise<void> {}
 
   testable = false;
   getStatus(): ServiceInstanceStatus {
-    if (!this.searchOnlyBehindVpn) {
-      return { status: 'ready' };
-    }
-    if (this.startError !== null) {
-      const msg =
-        this.startError instanceof Error ? this.startError.message : String(this.startError);
-      return { status: 'error', errorMessage: msg, error: this.startError };
-    }
-    if (!this.startResolved) {
-      return {
-        status: 'initializing',
-        details: 'Checking VPN connection',
-        startedAt: this.startStartedAt,
-      };
-    }
-    if (!this.vpnConnected) {
-      return { status: 'degraded', reason: 'vpn-disconnected' };
-    }
     return { status: 'ready' };
   }
 
@@ -221,12 +133,14 @@ export class SourceService {
 
   public stop(): void {
     this.searchLifetime.abort();
-    for (const unsubscribe of this.vpnUnsubscribers) unsubscribe();
   }
 
+  /**
+   * Whether jobs that reach trackers or peers through media-load may run. media-load refuses them
+   * itself without a protected connection; this only keeps the jobs from failing one by one.
+   */
   public async canRunPeerJobs(): Promise<boolean> {
-    await this.startPromise;
-    return this.vpnConnected || !this.searchOnlyBehindVpn;
+    return this.peers.getStatus().vpn !== 'unprotected';
   }
 
   public async canRunMetadataJobs(): Promise<boolean> {
@@ -819,10 +733,8 @@ export class SourceService {
 
   @traced('SourceService')
   public async syncStatsForSources(): Promise<void> {
-    await this.startPromise;
-
-    if (!this.vpnConnected) {
-      logger.warn('SourceService', `VPN is not connected, skipping stats sync`);
+    if (!(await this.canRunPeerJobs())) {
+      logger.warn('SourceService', `media-load is not behind a VPN, skipping stats sync`);
       await sleep(5000);
       return;
     }
