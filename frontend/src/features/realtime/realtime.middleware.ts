@@ -138,6 +138,9 @@ export const realtimeMiddleware: Middleware = api => next => action => {
         },
         message => {
           if (isCurrentClient()) api.dispatch(realtimeActions.sourceReceived(message));
+        },
+        message => {
+          if (isCurrentClient()) api.dispatch(realtimeActions.playbackPiecesReceived(message));
         }
       );
       activeClient = client;

@@ -33,6 +33,7 @@ import { selectCurrentUser } from '@store/slices/auth';
 import {
   realtimeActions,
   selectPlaybackDelivery,
+  selectPlaybackPieces,
   selectSourceAttempt,
 } from '@store/slices/realtime';
 import type { AppDispatch } from '@store/store';
@@ -190,6 +191,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
   const createdSession = sessionRequest.data ?? null;
   // Streams start before the file is probed; the probe's delivery arrives over realtime.
   const deliveryUpdate = useSelector(selectPlaybackDelivery(createdSession?.playbackId));
+  const downloadedRanges = useSelector(selectPlaybackPieces(createdSession?.playbackId));
   const session = useMemo(
     () =>
       createdSession && deliveryUpdate?.type === 'delivery'
@@ -1123,6 +1125,7 @@ export function PlayerView({ playable, title, onBack, nextEpisode, onPlayNext }:
             onSelectSubtitle={handleSubtitleSelect}
             onSubtitleOffsetChange={handleSubtitleOffsetChange}
             subtitlePreferencesKey={currentUser?.id ?? null}
+            downloadedRanges={downloadedRanges}
             durationSeconds={audioDelivery?.durationSeconds}
             pendingPosition={pendingPosition}
             audioTracks={session?.delivery?.audioTracks?.filter(

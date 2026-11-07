@@ -28,6 +28,7 @@ import { MediaLoadClientService } from '@services/media-load/media-load-client.s
 import { createStorageHandoff } from '@services/media-load/storage-handoff';
 import { NotificationService } from '@services/notifications/notification.service';
 import { AudioPlaybackService } from '@services/playback/audio-playback.service';
+import { PlaybackPiecesService } from '@services/playback/playback-pieces.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
 import { PlaybackTargetService } from '@services/playback/playback-target.service';
 import { PlayablePreparationService } from '@services/preload/playable-preparation.service';
@@ -194,6 +195,11 @@ try {
     db.getProgressRepository(),
     db.getContentSourceRepository()
   );
+  const playbackPiecesService = new PlaybackPiecesService(
+    playbackSessionService,
+    mediaLoadClient,
+    db.getContentSourceRepository()
+  );
   const realtimeGateway = new RealtimeGateway(
     authService,
     configurationService,
@@ -202,7 +208,8 @@ try {
     catalogClient,
     playbackSessionService,
     new RealtimeSearchChannel(new SearchService(catalogClient, new RecentSearchRepository(db))),
-    sourceAvailabilityService
+    sourceAvailabilityService,
+    playbackPiecesService
   );
   const subtitlesService = new SubtitlesService(
     configurationService,
@@ -297,6 +304,7 @@ try {
         drained = new Promise<void>(resolve => httpServer.current!.close(() => resolve()));
       }
       realtimeGateway.close();
+      playbackPiecesService.close();
       tvPairingService.stop();
       await scheduleCoordinator.stop();
       catalogClient.stop();

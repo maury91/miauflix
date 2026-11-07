@@ -1,6 +1,7 @@
 import type {
   RealtimeMediaRef,
   RealtimePlaybackDelivery,
+  RealtimePlaybackPieces,
   RealtimeSourceAvailability,
   RealtimeSourceMessage,
   RealtimeStatusMessage,
@@ -17,6 +18,8 @@ interface RealtimeState {
   preparationByMediaId: Record<number, PreloadPreparationSnapshot>;
   /** Latest background probe result per playback session. */
   playbackDeliveries: Record<string, RealtimePlaybackDelivery['update']>;
+  /** Downloaded stretches of each playback's file (thousandths), for the seek bar. */
+  playbackPieces: Record<string, RealtimePlaybackPieces['ranges']>;
   /** Pushed source availability per playable key, newer than any details response. */
   availabilityByPlayable: Record<string, RealtimeSourceAvailability>;
   /** The candidate a starting playback is trying, per playable key. */
@@ -27,6 +30,7 @@ const initialState: RealtimeState = {
   ready: false,
   preparationByMediaId: {},
   playbackDeliveries: {},
+  playbackPieces: {},
   availabilityByPlayable: {},
   sourceAttempts: {},
 };
@@ -126,6 +130,9 @@ export const realtimeSlice = createSlice({
     playbackDeliveryReceived(state, action: PayloadAction<RealtimePlaybackDelivery>) {
       state.playbackDeliveries[action.payload.playbackId] = action.payload.update;
     },
+    playbackPiecesReceived(state, action: PayloadAction<RealtimePlaybackPieces>) {
+      state.playbackPieces[action.payload.playbackId] = action.payload.ranges;
+    },
     resetRealtimeState() {
       return initialState;
     },
@@ -143,6 +150,10 @@ export const selectPreparationByMediaId =
 export const selectPlaybackDelivery =
   (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>
     playbackId === undefined ? null : (state.realtime.playbackDeliveries[playbackId] ?? null);
+
+export const selectPlaybackPieces =
+  (playbackId: string | undefined) => (state: { realtime: RealtimeState }) =>
+    playbackId === undefined ? null : (state.realtime.playbackPieces[playbackId] ?? null);
 
 export const selectSourceAvailability =
   (playable: RealtimeMediaRef | PlayableRef | null | undefined) =>
