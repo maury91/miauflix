@@ -1,0 +1,2026 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9888",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"17a694c573cb4a7a5c1d6c23b87cd3b9\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/2fOKVDoc2O3eZmBZesWPuE5kgPN.jpg",
+    "created_by": [
+      {
+        "id": 1113116,
+        "credit_id": "682cac47989cf65c7edb32d8",
+        "name": "Andy Muschietti",
+        "original_name": "Andy Muschietti",
+        "gender": 2,
+        "profile_path": "/4ndnP2NNavhfGtJqihD4FVDsYMY.jpg"
+      },
+      {
+        "id": 1094761,
+        "credit_id": "682cac56bb2a3d77b7f563d1",
+        "name": "Barbara Muschietti",
+        "original_name": "Barbara Muschietti",
+        "gender": 1,
+        "profile_path": "/xWvPT4cOogigu2okyIXzN0VFhWc.jpg"
+      },
+      {
+        "id": 131947,
+        "credit_id": "682d0d7b363fe5d2f6e25497",
+        "name": "Jason Fuchs",
+        "original_name": "Jason Fuchs",
+        "gender": 2,
+        "profile_path": "/wer1ysjx2dgdLhj8W5lpmfORu9s.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2025-10-26",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://www.hbo.com/content/it-welcome-to-derry",
+    "id": 200875,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2025-12-14",
+    "last_episode_to_air": {
+      "id": 6548357,
+      "name": "Winter Fire",
+      "overview": "As a dense fog engulfs the town – and General Shaw pushes ahead with his mission – the Hanlons, Rose, Dick, and the kids must work together to save Derry.",
+      "vote_average": 7.099,
+      "vote_count": 101,
+      "air_date": "2025-12-14",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 69,
+      "season_number": 1,
+      "show_id": 200875,
+      "still_path": "/8gqmWZUs4GAH1QfqR2u3aXxX5Q2.jpg"
+    },
+    "name": "IT: Welcome to Derry",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "HBO",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 9,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "IT: Welcome to Derry",
+    "overview": "In 1962, amid a spate of unexplained disappearances of local children, a group of misfit friends begin to suspect a long-buried ancient evil lurking. As the kids set out to determine what's really going on, a rising unease prompts several townspeople to work together to restore peace – all while a U.S. military operation seeks to exploit Derry for its own objectives.",
+    "popularity": 131.9528,
+    "poster_path": "/nyy3BITeIjviv6PFIXtqvc8i6xi.jpg",
+    "production_companies": [
+      {
+        "id": 1957,
+        "logo_path": "/pJJw98MtNFC9cHn3o15G7vaUnnX.png",
+        "name": "Warner Bros. Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 152809,
+        "logo_path": "/bdtAEMJpIaVW78c78POabARpotx.png",
+        "name": "Double Dream",
+        "origin_country": "US"
+      },
+      {
+        "id": 118854,
+        "logo_path": "/g9LPNlQFoDcHjfnvrEqFmeIaDrZ.png",
+        "name": "Rideback",
+        "origin_country": "US"
+      },
+      {
+        "id": 829,
+        "logo_path": "/iJo9zP5QCKyBsmKSOcvXd6UDNih.png",
+        "name": "Vertigo Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 3268,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "HBO",
+        "origin_country": "US"
+      },
+      {
+        "id": 273053,
+        "logo_path": null,
+        "name": "FiveTen Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 278524,
+        "logo_path": null,
+        "name": "K Plus Ultra",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-10-26",
+        "episode_count": 8,
+        "id": 291792,
+        "name": "Season 1",
+        "overview": "In 1962, amid a spate of unexplained disappearances of local children, a group of misfit friends begin to suspect a long-buried evil lurking. As the kids set out to determine what's really going on, a rising unease prompts several townspeople to work together to restore peace – all while a U.S. military operation seeks to exploit Derry for its own objectives.",
+        "poster_path": "/vij5NnWQsMnhT6sylaN9X3wjOkU.jpg",
+        "season_number": 1,
+        "vote_average": 6.8
+      },
+      {
+        "air_date": null,
+        "episode_count": 1,
+        "id": 537090,
+        "name": "Season 2",
+        "overview": "Season 2, set in 1935 amidst the Great Depression, revolves around the bloody massacre of the Bradley Gang, a group of bank robbers who stop in Derry to buy ammo and end up facing unimaginable horror.",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Go back to where IT all began.",
+    "type": "Scripted",
+    "vote_average": 8.267,
+    "vote_count": 1787,
+    "external_ids": {
+      "imdb_id": "tt19244304",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 418424,
+      "tvrage_id": null,
+      "wikidata_id": "Q112845107",
+      "facebook_id": "ITMovie",
+      "instagram_id": "itmovieofficial",
+      "twitter_id": "ITMovieOfficial"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "In 1962, amid a spate of unexplained disappearances of local children, a group of misfit friends begin to suspect a long-buried ancient evil lurking. As the kids set out to determine what's really going on, a rising unease prompts several townspeople to work together to restore peace – all while a U.S. military operation seeks to exploit Derry for its own objectives.",
+            "homepage": "",
+            "tagline": "Go back to where IT all began."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "1962-ben egy házaspár fiukkal Derrybe, Maine államba költözik, éppen akkor, amikor egy kisfiú eltűnik. Érkezésükkel nagyon rossz dolgok kezdenek történni a városban. Pennywise, a bohóc eredetéről is szól. Az IT (\"AZ\") előzmény sorozata.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "IT: Bem-Vindos a Derry",
+            "overview": "Durante as férias de 1962, em uma pacata cidadezinha chamada Derry, um grupo de sete amigos começa a ver coisas bizarras. Um conta que viu um palhaço, outro que viu uma múmia. Finalmente, acabam descobrindo que estavam todos vendo a mesma coisa: um ser sobrenatural e maligno que pode assumir várias formas. Ele mesmo. O Pennywise.",
+            "homepage": "",
+            "tagline": "Volte para onde A COISA começou."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "그것: 웰컴 투 데리",
+            "overview": "1962년, 한 가족이 메인 주의 작은 마을 데리에 이사 오면서 연쇄적인 실종과 설명할 수 없는 불길한 징조가 퍼져나간다. 비밀을 감춘 하수도와 오래된 서커스의 그림자, 어른들은 외면하고 아이들은 속삭인다. 무언가가 깨어났다고. 점점 커지는 공포 속에서 마을의 과거와 연결된 금기된 진실이 모습을 드러내기 시작하고, 누구도 안전하지 않다는 사실이 선명해진다. 그 미소의 주인이 다시 환영을 건네올 때, 이들은 과연 무엇을 마주하게 될 것인가",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Es - Welcome to Derry",
+            "overview": "Derry, im Jahr 1962: Die Familie Hanlon zieht in die scheinbar idyllische Kleinstadt im US-Bundesstaat Maine, um ein neues Leben zu beginnen. Während die Eltern versuchen, sich mitsamt ihrem kleinen Sohn einzuleben, häufen sich bald beunruhigende Vorfälle: Immer wieder verschwinden kleine Kinder spurlos, und seltsame Erscheinungen versetzen die Bewohner in Angst. Unterdessen schließen ein paar Jugendliche eine schicksalhafte Freundschaft und entdecken gemeinsam ein uraltes Grauen, das tief unter der Stadt lauert. Sie geraten in einen Strudel aus dunklen Geheimnissen – bis sich die unfassbare Bedrohung allmählich in einer unheimlichen Clownsgestalt verdichtet.",
+            "homepage": "",
+            "tagline": "Willkommen zurück, wo „es“ begann!"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "It: bienvenidos a Derry",
+            "overview": "Precuela de las películas de 'IT' basadas en las novelas de Stephen King. Comienza en la década de 1960, en la época previa a los acontecimientos de la película de 2017, y cuenta los orígenes del payaso Pennywise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "IT: Bienvenidos a Derry",
+            "overview": "En 1958, un grupo de siete amigos están empezando a ver cosas extrañas en el tranquilo pueblito Derry. Con el tiempo, descubren que todos estaban viendo lo mismo: un ser sobrenatural y malvado que puede adoptar muchas formas.",
+            "homepage": "",
+            "tagline": "Vuelve al lugar donde ESO comenzó."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Esta série original da HBO é baseada no romance de Stephen King e expande a visão cinematográfica de Andy Muschietti.",
+            "homepage": "",
+            "tagline": "Tudo começa aqui."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Ça : Bienvenue à Derry",
+            "overview": "Des événements étranges se déroulent dans la ville de Derry dans les années 1960 liés à Pennywise le clown, un personnage mystérieux qui hante Derry.",
+            "homepage": "",
+            "tagline": "Revenez là où Ça a commencé."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "To: Witajcie w Derry",
+            "overview": "Serial cofa się do 1962 roku, by prześledzić początki morderczego, zmiennokształtnego bytu znanego jako klaun Pennywise.",
+            "homepage": "",
+            "tagline": "Wszystko zaczęło się tutaj."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Оно: Добро пожаловать в Дерри",
+            "overview": "В 1962-ом году в небольшом американском городке Дерри, начинают происходить загадочные исчезновения детей и пугающие события, которым местные жители не могут найти объяснения. После переезда на военную базу майор Лерой Хэнлон вместе с женой Шарлотт и сыном Уиллом пытается привыкнуть к новой жизни, но вскоре семья сталкивается с мрачными тайнами города. Тем временем группа школьников - Лилли, Тедди, Фил и Ронни, начинает собственное расследование, пытаясь выяснить, куда пропадают дети и какое отношение к этому имеют странные видения, преследующие их.",
+            "homepage": "",
+            "tagline": "«Оно появилось здесь»"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Воно: Ласкаво просимо в Деррі",
+            "overview": "Приквел культового фільму Воно переносить глядачів у 1962 рік, коли в невеликому містечку Деррі починає прокидатися стародавнє зло, здатне харчуватися страхом та підкоряти собі людей. У центрі сюжету — група підлітків, які стикаються з моторошними подіями та намагаються зрозуміти, що ховається під спокійною поверхнею їхнього рідного міста. Чим глибше вони занурюються в розслідування, тим більше помічають дивацтва, пов'язані зі зникненнями жителів і міфічними істотами, що ховаються в глибинах Деррі. Незважаючи на мовчання дорослих, хлопці вирішують докопатися до істини, не здогадуючись, до яких наслідків це призведе.",
+            "homepage": "",
+            "tagline": "Повернись туди, де все почалося."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "小丑回魂：欢迎来到德里镇",
+            "overview": "1962年，当地发生了一系列儿童神秘失踪事件，一群性格迥异的朋友开始怀疑某种深埋于地下的邪恶力量正在暗中酝酿。孩子们着手调查真相，而日益增长的不安情绪促使几位镇民携手合作，力图恢复和平——与此同时，一支美国军队正试图利用德里镇来实现其自身目的。",
+            "homepage": "",
+            "tagline": "回到梦魇开始的地方"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "TO: Vítejte v Derry",
+            "overview": "Tento děsivý prequel se vrací do roku 1962 a sleduje původ vražedné, měnící se bytosti známé jako klaun Pennywise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Ono: Dobrodošli u Derry",
+            "overview": "Ova zastrašujuća prequel-serija vraća se u 1962. godinu kako bi istražila podrijetlo ubojitog, mjenjolikog entiteta poznatog kao klaun Pennywise.",
+            "homepage": "",
+            "tagline": "Ovdje počinje."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Gã Hề Ma Quái: Chào Mừng Đến Derry",
+            "overview": "Năm 1962, một cặp vợ chồng cùng con trai chuyển đến Derry, Maine đúng lúc một cậu bé biến mất. Với sự xuất hiện của họ, những điều khủng khiếp bắt đầu xảy ra trong thị trấn.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Nel 1962, nella piccola cittadina di Derry, nel Maine, quattro ragazzini vivono vicino alla base della aeronautica militare che ospita un bunker destinato a progetti speciali. Partono alla ricerca di uno dei loro amici che è misteriosamente scomparso. Quattro mesi dopo, il maggiore Leroy Hanlon atterra a Derry e, mentre attende l'arrivo di sua moglie Charlotte e del loro figlio dodicenne Will, iniziano ad accadere cose preoccupanti in città.",
+            "homepage": "",
+            "tagline": "Dove tutto è partito"
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In 1962, te midden van een golf van onverklaarbare verdwijningen van lokale kinderen, begint een groep buitenbeentjesvrienden te vermoeden dat er een eeuwenoud kwaad op de loer ligt. Terwijl de kinderen proberen vast te stellen wat er werkelijk aan de hand is, zet een toenemend ongemak verschillende stadsmensen ertoe aan samen te werken om de vrede te herstellen – en dat terwijl een Amerikaanse militaire operatie Derry voor zijn eigen doeleinden wil uitbuiten.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "IT: Bun-venit în Derry!",
+            "overview": "Acest serial terifiant, un prequel, se întoarce în 1962 pentru a descoperi originile entității criminale, cunoscute sub numele de clovnul Pennywise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "อิท: ยินดีต้อนรับสู่เดอร์รี่",
+            "overview": "\"อิท: ยินดีต้อนรับสู่เดอร์รี่\" สร้างจากนิยาย \"อิท\" ของคิงและขยายมุมมองที่ผู้กำกับ แอนดี้ มัชชิเอตติวางไว้ใน \"อิท โผล่จากนรก\" และ \"อิท โผล่จากนรก 2\"",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "It: Benvinguts a Derry",
+            "overview": "El 1958, un grup de set amics estan començant a veure coses estranyes al tranquil poblet Derry. Amb el temps, descobreixen que tots estaven veient el mateix: un ésser sobrenatural i malvat que pot adoptar moltes formes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "То: Добре дошли в Дери",
+            "overview": "Този сериал ни връща в 1962 г., за да проследи произхода на убийственото, променящо формата си същество, известно като клоуна Пениуайз.",
+            "homepage": "",
+            "tagline": "Върни се там, къдеТО започна всичко..."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "IT／イット ウェルカム・トゥ・デリー \"それ\"が見えたら、終わり。",
+            "overview": "映画館に忍び込み「ザ・ミュージックマン」を見ていた少年マティは追い出され、ある家族の車をヒッチハイクし乗せてもらったが徐々に家族の異常さに気付き行方不明になる。その失踪に疑問を持ったリリーたちがその映画館に赴くが悍ましい光景を目にする。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "זה: ברוכים הבאים לדרי",
+            "overview": "סדרה של HBO שממוקמת בתוך היקום הקולנועי של \"זה\" מאת סטיבן קינג, מבוססת על ספרו של קינג ומרחיבה את היריעה של סרטיו של אנדי מוסקייטי.",
+            "homepage": "",
+            "tagline": "בחזרה לאיפה שזה התחיל."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "小丑回魂：歡迎來到德利鎮",
+            "overview": "《牠：歡迎來到德利鎮》的故事時間線設定在 2017 年電影版《牠》事件的 27 年前，是《牠》系列的「序章」，影集交代了《牠》「魯蛇俱樂部」家長（如麥克漢隆的祖父 Major Leroy Hanlon）所經歷的事件，以及德利鎮的恐怖循環成形之過程。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Den här kusliga prequeln utspelar sig 1962 och kartlägger den mordiska, hamnskiftande clownen Pennywises ursprung.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "牠：歡迎來到德利鎮",
+            "overview": "《牠：歡迎來到德利鎮》的故事時間線設定在 2017 年電影版《牠》事件的 27 年前，是《牠》系列的「序章」，影集交代了《牠》「魯蛇俱樂部」家長（如麥克漢隆的祖父 Major Leroy Hanlon）所經歷的事件，以及德利鎮的恐怖循環成形之過程。",
+            "homepage": "",
+            "tagline": "回到「牠」開始的地方"
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "آن: به دِری خوش آمدید",
+            "overview": "وقتی در شهر کوچک «دِری» در ایالت مِین، کودکان یکی‌یکی ناپدید می‌شوند، گروهی از بچه‌ها با بزرگ‌ترین ترس‌های زندگی‌شان روبه‌رو می‌شوند — زمانی که باید با دلقکی قاتل به نام پنی‌وایز مقابله کنند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Denne skræmmende prequel-serie foregår i 1962 og sporer oprindelsen til det morderiske, formskiftende væsen, der er kendt som klovnen Pennywise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In 1962 verhuist een stel met hun zoon naar Derry, Maine, net wanneer een jonge jongen verdwijnt. Met hun komst gebeuren er vreselijke dingen in het stadje.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "ის: კეთილი იყოს თქვენი მობრძანება დერიში",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Ça : Bienvenue à Derry",
+            "overview": "Cette série suit les événements des années 1960 qui précèdent le premier film dans la franchise « IT » de Stephen King.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "I denne skremmende prequelen går vi tilbake til 1962 og ser på opprinnelsen til den morderiske klovnen Pennywise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Bu dehşet verici prequel dizisi 1962'ye dönerek katil, şekil değiştiren varlık Palyaço Pennywise'ın köklerine iniyor.",
+            "homepage": "",
+            "tagline": "\"O\" her şeye burada başladı."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Tisto: Dobrodošli v Derryju",
+            "overview": "Srhljiva predzgodba sega v leto 1962, ko v mestu Derry v Mainu začnejo izginjati otroci in se skupina otrok sooči s svojimi največjimi strahovi med spopadom z morilskim klovnom Pennywiseom. Serija vodi do dogodkov v filmu To: Prvi del iz leta 2017.",
+            "homepage": "",
+            "tagline": "Vrnite se tja, kjer se je TISTO začelo."
+          }
+        },
+        {
+          "iso_3166_1": "BY",
+          "iso_639_1": "be",
+          "name": "беларуская мова",
+          "english_name": "Belarusian",
+          "data": {
+            "name": "Яно: Вітаем у Дэры",
+            "overview": "У 1962 годзе пара з сынам пераехала ў Дэры, штат Мэн, калі знік маленькі хлопчык. З іх прыездам у горадзе пачалі адбывацца вельмі дрэнныя рэчы.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Tämä kammottava esiosasarja palaa vuoteen 1962 ja näyttää, miten murhanhimoinen muodonmuuttajaolento Pennywise sai alkunsa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Sveiki atvykę į Derį",
+            "overview": "Ši istorija nukels į 1960-uosius metus, laikotarpį, vedantį į pirmojo filmo įvykius pagal Stephen Kingo siaubo epą. Pasinerkite į tamsiąją mažo miestelio praeitį, kur baimė slypi už kiekvieno kampo, o paslaptys, glūdinčios po ramiu paviršiumi, grasina išlįsti į dienos šviesą. Tai pasakojimas apie vaikystės košmarus, draugystės ryšius ir grėsmingą nežinomybę, kuri tyko tamsoje, pasirengusi sugriebti nieko neįtariančias aukas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "IT: Selamat datang di Derry",
+            "overview": "Pada tahun 1962, sepasang suami istri beserta putra mereka pindah ke Derry, Maine, tepat saat seorang anak laki-laki menghilang. Sejak kedatangan mereka, hal-hal buruk mulai terjadi di kota tersebut.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "То: Добро дошли у Дери",
+            "overview": "Овај застрашујући преднаставак враћа нас у 1962. годину како бисмо пратили порекло убилачког бића које мења облик познатог као кловн Пенивајз.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "",
+            "overview": "Hirmutav eellugu läheb tagasi aastasse 1962, et näidata, kuidas sai alguse mõrvarlik ja kuju muutev olend tuntud kui kloun Pennywise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "小丑回魂：欢迎来到德里镇",
+            "overview": "《小丑回魂：欢迎来到德里镇》改编自斯蒂芬金的小说《它》，并延续拓展了导演安迪穆斯切蒂在电影《小丑回魂》及《小丑回魂2》中奠定的世界观。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Η πρωτότυπη σειρά του HBO εντάσσεται στο σύμπαν του μυθιστορήματος \"Το Αυτό\" του Stephen King και διευρύνει το όραμα των ταινιών του Andy Muschietti.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "",
+            "overview": "Šausminošais \"prīkvels\" atgriežas 1962. gadā, lai izsekotu slepkavnieciskās, mainīgās būtnes, klauna Penīvaiza izcelsmi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MK",
+          "iso_639_1": "mk",
+          "name": "",
+          "english_name": "Macedonian",
+          "data": {
+            "name": "Tоа: Добре дојдовте во Дери",
+            "overview": "Оваа страшна серија со ретропродолжение се навраќа во 1962 година, од кога што потекнува ентитетот познат како Кловнот Пенивајз.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "IT: Welcome to Derry diadaptasi daripada novel \"IT\" oleh Stephen King dan memperluas visi Andy Muschietti dari filem IT dan IT Chapter Two.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "To: Vitajte v Derry",
+            "overview": "Táto desivá prequelová séria nás zavedie do roku 1962, aby odhalila počiatky vražednej bytosti, ktorá na seba berie podobu klauna menom Pennywise.",
+            "homepage": "",
+            "tagline": "Vráťte sa tam, kde TO všetko začalo."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "في سنةٍ 1962، تنتقل عائلة صغيرة إلى بلدة هادئة تبدو عادية في ظاهرها، لكن مع وصولهم تبدأ ظواهر غريبة وانتشار أحداث غير مفهومة تجتاح المكان بشكل متسارع.\n\nلكن… هل ما يحدث مجرد صدفة، أم أن هناك شيئًا أعمق بكثير يختبئ خلف هدوء البلدة؟",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الشيء: مرحبًا بكم في ديري",
+            "overview": "في عام 1962، ومع تزايد حالات اختفاء الأطفال الغامضة في بلدة ديري، تبدأ مجموعة من الأصدقاء المنبوذين في الشك بوجود شرٍّ قديم ظلّ مدفونًا لسنوات طويلة.\n\nوأثناء محاولتهم كشف الحقيقة، ينتشر الخوف بين سكان البلدة، فيتعاون بعضهم لاستعادة الأمان. وفي الوقت نفسه، تنفّذ جهة عسكرية أمريكية عملية سرية تسعى لاستغلال ما يحدث في ديري لتحقيق أهدافها الخاصة.",
+            "homepage": "",
+            "tagline": "عُد إلى حيث بدأ كل \"شيء\"."
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2fOKVDoc2O3eZmBZesWPuE5kgPN.jpg",
+          "vote_average": 5.25,
+          "vote_count": 13,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2746UvsbkZINd873Yd3o3TxOwCP.jpg",
+          "vote_average": 4.97,
+          "vote_count": 17,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bZ7M9hqVoUZA0ySN3Ppdg5BE2wI.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6KBpIWkCKfl5U0s1FyQpG53p7Fn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zJci8jESf1Rr6NSokFRJhxHtdJ5.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1801,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cUsNvsLcbqqo25UPI5qCc4Gzrle.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3200
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/isc5qkPSnNPzkwPCw4KfcfNfGwg.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xYhCspt1luWHTKyTqZNWKxO751K.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yecnvYv5LDy5YcH4TqppbPgTZnX.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aeTIvkuXmoC28CfU9cOtK0hXs3l.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wdZ7hTUanwT7jGCHRngQNxTVICu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/UsR3b36KD5Yz5sHAy5VIavwRnv.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wSNTI0XU9hY0ktHqRk8qX1O9o7f.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4b6UnURanaK0KL0cGah4whB731A.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3nHUC3hJFo3ALCgRUJPKIyYNdie.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/f1X9QQAQA8389ARV5sTEFcpjxee.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1215,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zolbO9pVtFdQx0ob9PrS7lHVPaY.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2160
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1215,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v9oguTGRXkKdSOi1MmzkKDXEuMZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2160
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Ry7TtbWzji9FHAuLwHuEIS4BQb.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h8uPe4PkQtsFDDjBa34neo0yZ1k.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/buUPdayS07o0cueSIiiF6rxsfkT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A0OwPoMOmiNdzOp9YvRG4i6tKgW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iC1ZrS3TFOpNG88EsXu19TacBG3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1215,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/czXHrtrueAnFenEAzIRlB0G4Llj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2160
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tpKDUxDvY2IZsF9zSIiUAM9gCWY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2wrIRxseg7MrrWgid8Ac0YO1Nfn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vCXZ6ucKMl7VYKzgdOCJeXJ56Tc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1XevJCcLks5fiyMKFNfueTfK7nC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5rInth53uDMBoqNB6RpSnZ8kgnH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zMihj5tW34uLxG16xSQOcDe9QXI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nHwSYJo6ixfNDljwaZFAcd62d9I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4cDDQ5hUIgQfP8v0nczYqEUne6S.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jXltXnuV53C6TfTZ54zrsn9jc0t.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aXnG8vz2pmSoY5ubA4Vz1ZHUQ9E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7vsodP1W1P4LQ9BUcyBJXJHDWHU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/heUbrSIec2aRtx7I65dTelCBPLE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fH2psptljrZ6XKXQ6wmxLWgQ9gP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k9nDY96HGtCgUCk43WQ6xVuU9p3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mZz6rsCV14uHHHUs1QLuWpm0EP4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1purkrEsqJfrfq8ubd4P2EDldc6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 844,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8MSoJtGwXXc0o53yuUP7EszGU0t.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f4KYgMR6XZ5Y4p5YXttweIQeanR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/98Yv6qneToiVOLgyrUldXt16XRC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dgm7p6JE4yFYNfI4mZHp2vorEP2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aahSrOJtd5NwlEReJHaMYxGy1Oj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3gtzZYnXOapepBvmgH3aSfey7Uv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tXORgE5ofrjowr3YIdxfprYXM24.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hdxKZ1BEqwcLYC2hRA3fkezXGv1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1SQbgi225WJzAyHETBreQcKIaHH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h8DNKKQOtZYEdBBKbYr62ZiqgVr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AmnnvG8JXZ7Cgu7y1GrPXk593Jv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xZOan6TcjaLHkF1xNd8mC6y0k7A.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/apYvXZcr44veZ4ZwBgt7aqoSsy6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/si3M6Dex2WrvkdU5tfQWFZ1tga2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3Wv0sQ1ev9SGrHYAVLpei68T6cn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4jHfVXU6ZxQJ0Kdn5azBS2N4guE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aSlnzYh18I4lrasAfy0Tx0P7oj8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cnZUdnqRKf8oYz3l3IZuHEfoTq9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gTJzA7MoHd4ZuOd1cXtlybwBP9L.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 993,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lKIjwcXSwcyar3ziTMWJCJqjs2A.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1766
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/476I7ZDmfmAZn6TmQGo9a3YEHKS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e378woOGIHiqZ3CUI87Zg6gBRAN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.61,
+          "height": 1049,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vRO1qgCmUSM84fdJvA5wYo8ekQR.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2738
+        },
+        {
+          "aspect_ratio": 2.61,
+          "height": 1049,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xHs2yDdvHZJpLAwhpvVpW0hFto2.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2738
+        },
+        {
+          "aspect_ratio": 2.61,
+          "height": 1049,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dGKL8Ngh6y7E1oKLUN3R4QdJGKg.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2738
+        },
+        {
+          "aspect_ratio": 2.61,
+          "height": 1049,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zitWHYRTBbEPCrLH1Cc6hnoeeYw.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2738
+        },
+        {
+          "aspect_ratio": 2.077,
+          "height": 1748,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/341AbzHMbq5NHSsY7P5v2LyG75S.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3631
+        },
+        {
+          "aspect_ratio": 2.61,
+          "height": 292,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xLnAVFFe94oPBAzfYqvoG5f6ptQ.png",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 762
+        },
+        {
+          "aspect_ratio": 2.61,
+          "height": 1049,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lHf7IJGrpe0vnEzDToEV0bUSrIz.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2738
+        },
+        {
+          "aspect_ratio": 2.613,
+          "height": 300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j7r0Qrj6bxJ2mTMngaSpvBq5F9H.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 784
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nyy3BITeIjviv6PFIXtqvc8i6xi.jpg",
+          "vote_average": 6.834,
+          "vote_count": 15,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sa26OBVEYzYRButAGkMlwr3rTkB.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ycC53SEDcY7YDOSrFqPQigxaCyx.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lOBHd34cIsPEgnkShI6BWEW7ZPU.jpg",
+          "vote_average": 2.278,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3HZy4HRdsdhwJCPSTRCH2kk4jOi.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3vcsdkuZY7dPd26egpTofoGzgaG.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yHy8UIM1RFpyNtG8U3m16SPitjd.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xcxFRWCE4ccsaGEEPnvvRR32f6Y.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7xPtUzZzb5UeOBvfINPxOOolnGI.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ywlqkxwLF0QXHJWVRue6SiuBrP3.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lnDQZY0HC3Y31UVQxO2DWoaoWo3.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lu2qf3BYHxW6XnajEKdehE8NdFW.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d598KEsk98ij0GlrkVCm90J9PKf.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7F1vJ9v5cKA4SFsoOLnt5jCXxRC.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nGgnUa003euWULRRByA440LM5dR.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wHi8wJ389IT7fCUfv5P4fK5d8zQ.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a4oBCgSwBFm7TWsDFb58uITpQVp.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vQb7Kiuqn2J9Jus64vuzUEwcWGq.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pQiI6RtUJAnM5zvcGW61lRFI7zE.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pcZ3vD0WYjSWNhrtqDOiM7mB4hK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ddouWLRunbSI8yMLlMRgOgSSSMg.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ivoeDP5Qevk84NOikgRQ7PF9pkO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wU8ewHjezCLseafLHgeupB93iPF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aa6XcL91rWDEgyfLJfneHNHc9FP.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AuaA23VQ9iI7MfeXsktdgnOqrhb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2456,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bhB0WlD9GIZeR4RK7fWbAuACNBO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1638
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2456,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7OP4O416CUdUHl5K2zM1jsGANuj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1638
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2456,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kqqBPv8qADROiXY0gbrugBgH1zz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1638
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sbktzFCHqDQjqzyEEGxztQ9OAN5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b7tsGzA2YzPKqkhRFVbXT1LEFkm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dfg4ymljtcsJ3rJYeOMOb6vyPQZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8saztqjREVvts1QHmIyQEe266wq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xX3qMYMCq30NahFsTZjmKNwcOMk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bWlvDYQHVVRrsUVw5gqXzaCvIzh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/masQgp6poxviX9kZmtHotGl8EiU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zLIq6F3offkSNpGAHdRioiyG5yC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fResTatFLTfYQuRPe2DO69o79vU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5UNqV5HamkTJQTxYV9Jt8wX9qM8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x3YeT1Qiu3kVMzqvslGUhCKg1Cl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nViBxTS1klCgVvn7TJtg6I1lfQp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aalyQidx21Nf5fwsZ3w2hDO9jkY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2nBGJt9cXVExITw4cEIEgytvKQT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qfFpLWxdHK37ZB72oRrMNgWhBDl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ash9uwrjCZlHT0tWqQKaITiQRjr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dW7DQdRJCbxmAGwrAfd6h2dvr7E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1125,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eQRfBOHG2qPGXJpV31fVn7LtoKH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 912,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xp3p4GutGGaqhv4PpjFZBFtZjWt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 608
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fToooffSkNo0EatCkFEf9KGp6A9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Lit2crsPo4UtEFgLDuHw8zY17b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kWSGZyJkPbNI5YmvcsdYZRyuxNj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o3KszhmaGqulyr8PhfSlfJTIQp9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        }
+      ]
+    }
+  }
+}

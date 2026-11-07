@@ -1,0 +1,2067 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=22900",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"168df65e66170995bbe417a728931d84\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/wJi7fRmHw0wRMldUY28sSzXpp4G.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2012-07-08",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://www.swordart-online.net/",
+    "id": 45782,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2020-09-20",
+    "last_episode_to_air": {
+      "id": 2424288,
+      "name": "New World",
+      "overview": "Rinko informs Kazuto that Alice is missing. He’s about to rush to the Rath Roppongi branch when the doorbell rings. In a panic, Kazuto throws open the door, only to find a deliveryman there with a huge cardboard box.",
+      "vote_average": 7.9,
+      "vote_count": 13,
+      "air_date": "2020-09-20",
+      "episode_number": 23,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 4,
+      "show_id": 45782,
+      "still_path": "/w0u1bSp9EWatole6ZoRKxGWhqpf.jpg"
+    },
+    "name": "Sword Art Online",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 343,
+        "logo_path": "/9rNqtDYAnD6yTOutvHI3synSEs2.png",
+        "name": "Gunma TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 792,
+        "logo_path": "/onniCKpgZl8VEVSS8oa08Oas9jT.png",
+        "name": "tvk",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2478,
+        "logo_path": "/2v82HpzoKRveJEJcGHkeTcktMRM.png",
+        "name": "Tochigi TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 96,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ソードアート・オンライン",
+    "overview": "In the near future, a Virtual Reality Massive Multiplayer Online Role-Playing Game (VRMMORPG) called Sword Art Online has been released where players control their avatars with their bodies using a piece of technology called Nerve Gear. One day, players discover they cannot log out, as the game creator is holding them captive unless they reach the 100th floor of the game's tower and defeat the final boss. However, if they die in the game, they die in real life. Their struggle for survival starts now...",
+    "popularity": 49.215,
+    "poster_path": "/9m8bFIXPg26taNrFSXGwEORVACD.jpg",
+    "production_companies": [
+      {
+        "id": 13113,
+        "logo_path": "/xV5tPYKZhP2Ko9dOh5A3FahuKsx.png",
+        "name": "A-1 Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 5751,
+        "logo_path": "/ex1dPOOB27kWLhhhh9gsngxBRLI.png",
+        "name": "GENCO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 95809,
+        "logo_path": "/5ac8LhghlxYKbPSwbXJkgrNfjGF.png",
+        "name": "EGG FIRM",
+        "origin_country": "JP"
+      },
+      {
+        "id": 32957,
+        "logo_path": "/fsKExPZ443yF5oMRmbK96AjcZBT.png",
+        "name": "ASCII Media Works",
+        "origin_country": "JP"
+      },
+      {
+        "id": 145850,
+        "logo_path": null,
+        "name": "Bandai Namco Games",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12502,
+        "logo_path": "/tlBbCuZditAuvzDdIDjjnGLJUpc.png",
+        "name": "Bandai Namco Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162614,
+        "logo_path": "/xmP3OMWSfARsUB15rlZyv6yjhsE.png",
+        "name": "Straight Edge",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2012-10-24",
+        "episode_count": 25,
+        "id": 54256,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/70kMQ47IG9ddLTEZz7iJSeysbgI.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2012-07-08",
+        "episode_count": 25,
+        "id": 54255,
+        "name": "Sword Art Online",
+        "overview": "In the near future, a Virtual Reality Massive Multiplayer Online Role-Playing Game (VRMMORPG) called Sword Art Online has been released where players control their avatars with their bodies using a piece of technology called Nerve Gear. One day, players discover they cannot log out, as the game creator is holding them captive unless they reach the 100th floor of the game's tower and defeat the final boss. However, if they die in the game, they die in real life. Their struggle for survival starts now...",
+        "poster_path": "/is3J0fmMgmqVt3Shm6J5KtULTyq.jpg",
+        "season_number": 1,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2014-07-05",
+        "episode_count": 24,
+        "id": 62067,
+        "name": "Sword Art Online II",
+        "overview": "A year after escaping Sword Art Online, Kazuto Kirigaya has been settling back into the real world. However, his peace is short-lived as a new incident occurs in a game called Gun Gale Online, where a player by the name of Death Gun appears to be killing people in the real world by shooting them in-game. Approached by officials to assist in investigating the murders, Kazuto assumes his persona of Kirito once again and logs into Gun Gale Online, intent on stopping the killer.",
+        "poster_path": "/eikzrWCrgaEuvNu8hcQHFeC3onR.jpg",
+        "season_number": 2,
+        "vote_average": 6.8
+      },
+      {
+        "air_date": "2018-10-07",
+        "episode_count": 24,
+        "id": 93494,
+        "name": "Sword Art Online Alicization",
+        "overview": "Kirito awakens in a vast, fantastical forest filled with towering trees. In his search for clues to the truth of his surroundings, he encounters a young boy who seems to know him. He ought to be a simple NPC, but the depth of his emotions seem no different than a human. As they search for the boy's parents, Kirito finds a peculiar memory returning to him. A memory from his own childhood, of this boy and a girl, too, with golden hair, and a name he should have never forgotten—Alice.",
+        "poster_path": "/vHYPL0ki5tevokmjOa2pofgpRxW.jpg",
+        "season_number": 3,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2019-10-13",
+        "episode_count": 23,
+        "id": 132606,
+        "name": "Sword Art Online Alicization: War of Underworld",
+        "overview": "Time has passed since Kirito defeated the pontifex. While Bercoulli seeks to rebuild and bolster the defenses of the human lands in anticipation of an assault by the forces of darkness, Alice fears for the catatonic Kirito's safety and so relocates to a cabin near Rulid. She may not be accepted in the village, but at least she's near her sister Selka as she looks after Kirito. Though she feels that she cannot swing her sword anymore except to cut down trees, an attack on Rulid may force her to act anyway.",
+        "poster_path": "/zhOJXbvnJGs1eY91ezQaUrEjxtn.jpg",
+        "season_number": 4,
+        "vote_average": 7.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Blurring the line between the virtual and the real.",
+    "type": "Scripted",
+    "vote_average": 8.145,
+    "vote_count": 2205,
+    "external_ids": {
+      "imdb_id": "tt2250192",
+      "freebase_mid": "/m/0ndb7w6",
+      "freebase_id": null,
+      "tvdb_id": 259640,
+      "tvrage_id": 32135,
+      "wikidata_id": "Q63348493",
+      "facebook_id": "SwordArtOnlineUSA",
+      "instagram_id": "sao_anime_official",
+      "twitter_id": "sao_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "In the near future, a Virtual Reality Massive Multiplayer Online Role-Playing Game (VRMMORPG) called Sword Art Online has been released where players control their avatars with their bodies using a piece of technology called Nerve Gear. One day, players discover they cannot log out, as the game creator is holding them captive unless they reach the 100th floor of the game's tower and defeat the final boss. However, if they die in the game, they die in real life. Their struggle for survival starts now...",
+            "homepage": "",
+            "tagline": "Blurring the line between the virtual and the real."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Schüler Kirito durfte bereits die Beta-Version des Rollenspiels Sword Art Online testen. Er kann es kaum erwarten, dass das Spiel online geht. Dank des NerveGears kann man vollständig in virtuelle Welt \"Aincrad\" eintauchen. Als einer von 10.000 Spielern streift Kirito kurz nach dem Start begeistert durch die Welt von Sword Art Online - bis er feststellt, dass er sich nicht mehr ausloggen kann. Was zunächst aussieht wie ein Bug, entpuppt sich als pure Absicht: Der Entwickler des Spiels verkündet, dass keiner diese virtuelle Welt verlassen kann, bevor nicht die Endgegner aller 100 Ebenen besiegt sind. Und: Wer im Spiel stirbt, verliert auch in der Realität sein Leben!",
+            "homepage": "",
+            "tagline": "Spiele um dein Leben!"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "刀剑神域",
+            "overview": "2022年，人类实现了现实世界和假想空间的融合，电子制造商开发了名为《刀剑神域》的在线电子游戏。SAO一面世便大受好评，限量一万份的名额在发售当天的短时间内便被抢购一空。通过联网，玩家可以身临其境进入充满想象力和异域风情的游戏世界--浮游城市艾恩葛朗特。玩家在这里可以生活、练武、升级、经商、探险，与真实世界别无二致，却拥有无上的乐趣。曾是少数封测玩家的桐人也是这一万名幸运者中的一员。最初的兴奋过后，玩家们却发现根本无法顺利登出游戏，更为恐怖的是一旦玩家的HP归零，现实世界中他们的肉体也将死亡。他们被SAO的开发者茅场晶彦困在游戏中，顺利逃脱的方法似乎只有一个，那就是完成困难重重的攻略任务……",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "L’histoire tourne autour d’un gamer de génie nommé Kazuto « Kirito » Kirigaya qui entre dans une réalité virtuelle massivement multi-joueurs en ligne (MMO) appelé Sword Art Online. La particularité du jeu est sa dangerosité. En effet, il n’y a pas d’échappatoire à ce monde, sauf si le joueur termine entièrement le jeu, car tout « game over » signifie la mort du joueur dans la réalité.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "소드 아트 온라인",
+            "overview": "2022년. 인류는 마침내 완전한 가상 공간을 실현했다. 모든 게이머가 꿈꿔왔던 VRMMORPG (가상 대규모 온라인 롤 플레잉 게임)  \"소드 아트 온라인\" 이 정식 가동을 시작한다. 주인공은 소드 아트 온라인 플레이어인 키리토.  그는 SAO의 세계에서 플레이를 만끽하던 중 다른 1만 명의 플레이어와 함께 게임 마스터의 무자비한 선고를 듣는다. 100층까지 있다는 부유성 아인크라드의 정상을 정복해 게임을 클리어 하지 못하면 로그아웃을 할 수 없다고… 그리고 게임 오버는 현실 세계에서 \"죽음\"을 의미한다고... 키리토는 재빨리 게임의 '진실'을 받아들이고 파티를 짜지 않는 솔로 플레이어로 끝이 보이지 않는 사투에 몸을 던진다.",
+            "homepage": "",
+            "tagline": "이것은, 게임이지만 놀이가 아니다―"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "En \"Sword Art Online\", 10,000 jugadores quedan atrapados en un MMORPG donde morir en el juego significa morir en la vida real. Kirito, un jugador solitario, se asocia con la guerrera Asuna para intentar escapar del mundo virtual y completar el juego.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Мастера меча онлайн",
+            "overview": " В начале XXI века случилась ожидаемая сенсация – некий японский гений создал ролевую игру с абсолютной виртуальной реальностью. Неудивительно, что «Искусство меча онлайн» обрело бешеную популярность, и 10 тысяч счастливчиков, кому достался первый тираж, в назначенный день и час разом оказались в игровом мире, собравшись в Городе Начал. Тут лукавый создатель, явившийся в виде огромной тени, и огорошил клиентов – оказывается, он задумал эксперимент, и выйти из виртуала можно, лишь когда кто-то пройдет игру до конца! Гибель в игре означает смерть в реальном мире, работать надо на полном серьезе – с этими словами злой гений удалился, а собравшиеся быстро поняли, что он прав.\n\nНезадачливые игроки отреагировали по-разному: кто впал в отчаяние, кто стал сбиваться в группы, а кто-то решил жить сам по себе. В число последних попал и Кирито – сирота, который ничего не потерял. Более того, будучи бета-тестером и опытным игроком, Кирито быстро продвинулся, обретя славу как Черный Мечник. С одной стороны, парень сторонился общения, не желая больше заводить и терять близких; с другой – жить в игре и быть свободным от людей нельзя, особенно от таких, как красавица Асуна по прозвищу Вспышка! В общем, пока что Кирито, Асуна, другие герои и злодеи воюют на переднем крае, а мы верим, что они пройдут не только «Искусство меча», но и еще много интересных игр и миров!",
+            "homepage": "",
+            "tagline": "Это просто игра... Или мне так показалось"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Anul în care acțiunea se petrece este 2022, când gamerii erau aliniați în așteptarea lansării noului joc \"Sword Art Online\", un MMORPG evoluat, care le permitea jucătorilor să intre în captivanta realitate virtuală prin căștile speciale numite Nerve Gear. Kirito este unul dintre acești gameri, care este gata să pornească în acțiune, petrecându-și foarte mult timp în testele beta ale jocului, și devenind rapid prieten bun cu războinicul începător Klein... Dar în curând, cei 10.000 de jucători din Sword Art Online descoperă că nu sunt capabili să iasă din joc, și că singura cale de a se reîntoarce în lumea reală și înapoi la corpurile lor, este să bată boss-ul final din turnul de nivel 100 - mort în joc însemnând mort și în lumea reală. Acum, cu nimeni altcineva care să îi conducă, Kirito și ceilalți participanți trebuie să supraviețuiască.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "No ano de 2022, finalmente é possível criar um mundo virtual dentro de um jogo graças à consola NerveGear e ao seu mais recente jogo, Sword Art Online, um MMORPG de realidade virtual. No entanto, passado algum tempo de entrarem no jogo, os jogadores de SAO descobrem que não conseguem sair do jogo. É então que o criador do jogo, Akihiko Kayaba, lhes diz que estão presos dentro do jogo e que, se morrerem lá, morrem também na vida real. A única maneira de todos os 10 mil jogadores presos dentro do jogo saírem de lá, é chegando ao 100º e último andar e derrotando o último boss.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "刀劍神域",
+            "overview": "2022年，人類終於開發出真正的 VR（虛擬實境）。 桐人身為 VRMMORPG「Sword Art Online」的玩家其中一人， 正當大家盡情地享受於 SAO 的世界時， 包含他在內的一萬多名玩家被迫參加遊戲製作者的死亡遊戲。 那就是，只有將遊戲破關，才能夠登出這個世界， 而若是玩家在遊戲中死亡，現實的肉體也會死亡。 這正是 SAO 恐怖的真相。 桐人比其他人還要早接受此事實， 不打算組隊，以獨行玩家身分投身於看不見終點的死鬥中...",
+            "homepage": "",
+            "tagline": "這雖然是遊戲，但可不是鬧著玩的"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Em um futuro próximo, foi lançado um Jogo de Realidade Virtual em Massa para Múltiplos Jogadores Online (VRMMORPG) chamado Sword Art Online, onde seus jogadores controlam seus personagens com o próprio corpo usando um dispositivo tecnológico chamado: NerveGear. Um dia, os jogadores descobrem que não podem sair do jogo, pois o criador do jogo os mantêm presos a menos que eles cheguem ao 100º andar da Torre e derrotem o Boss final. No entanto, se eles morrerem no jogo, morrerão também na vida real. A luta pela sobrevivência começa agora...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Gli appassionati di videogame di mezzo mondo si contendono le 10.000 copie disponibili per il lancio di un nuovo gioco di ruolo online ambientato in una sofisticata realtà virtuale. Ma presto i giocatori si rendono conto di essere entrati in un incubo: intrappolati in una realtà virtuale dalla quale non possono uscire, per tornare liberi devono completare il gioco superandone tutti i livelli.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Мистецтво Меча Онлайн",
+            "overview": "Рік 2022. Створено унікальну гру у жанрі VRMMORPG (Virtual reality Massive Multiplayer Online Role-Playing Game) Sword Art Online (SAO). З допомогою шолома з технологією \"Нейромех\" гравець здатен контролювати свого героя за допомогою розуму. Десятки тисяч людей залогінилося в цій грі, щоб на собі відчути дива техніки, але розробник SAO, Акіхіко Каяба, підготував для них “сюрприз”. Після входження у гру ніхто не може з неї вийти, віртуальна смерть дорівнює реальній смерті, завершення гри станеться тільки тоді, коли буде подолано боса на 100 рівні замку Анкрайд. Казуто Кірагая був одним з бета-тестерів. І став одним з тих, хто потрапив у полон віртуального простору. Тепер він постав перед вибором: відсидітися у безпечних зонах і дозволити іншим ризикувати своїм життя, чи взяти долю за життя тисяч гравців у свої руки, і дійти до кінця.",
+            "homepage": "",
+            "tagline": "\"Вихід лише один – пройти гру до кінця або померти!\""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "2022年。人類はついに完全なる仮想空間を実現した。VRMMORPG（仮想大規模オンラインロールプレイングゲーム）「ソードアート・オンライン」のプレイヤーの一人であるキリト。SAOの世界を満喫していた彼は、ログインした他の1万人のプレイヤーと共にゲームマスターから恐るべき託宣を聞かされる。それは、ゲームをクリアすることだけが、この世界から脱出する唯一の方法であること。そして、このゲーム内でゲームオーバーは、現実世界での“死”を意味すること。それが、このゲームの恐るべき全貌であった。キリトは、いち早くこのMMOの“真実”を受け入れ、パーティーを組まないソロプレイヤーとして、終わりの見えない死闘に身を投じていく……。",
+            "homepage": "",
+            "tagline": "これは、ゲームであっても遊びではない――"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "En el año 2022, miles de jugadores quedan atrapados dentro de Sword Art Online, el primer VRMMORPG de inmersión total. Lo que parecía un sueño se convierte en una pesadilla cuando el creador del juego revela que morir en el mundo virtual significa morir en el mundo real. Kirito, un hábil jugador solitario, decide luchar para alcanzar el piso 100 de la torre de Aincrad y así liberar a todos, pero en su camino encontrará aliados, enemigos y un amor que trascenderá los límites digitales.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "אומנות החרב אונליין",
+            "overview": "הדרך היחידה לברוח מהמשחק היא 'לסיים' את המשחק. מוות במשחק משמעותו מוות בחיים האמיתיים. עשרות אלפי אנשים נכנסו למשחק המסתורי \"אומנות החרב אונליין\" כשהם משתמשים בציוד העצבים שלהם. הם הוכרחו להשתתף במשחק המוות המסוכן הזה והם נלכדו בו. הדמות הראשית קיריטו, אחד מעשרות אלפי השחקנים, \"אימץ\" את האמת הזו. כדי לגמור את המשחק ולעזוב את העולם הוירטואלי המעוות הזה, הוא חייב לעבור את כל מאה הקומות בטירת \"אינקראד\".",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Ett datorspelsgeni skapar en teknik som gör att spelarna kan styra sina spelfigurer med sina egna kroppar. Men det roliga spelet har en mörk sida.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Fanatyk gier komputerowych pomaga stworzyć technologię pozwalającą graczom na kierowanie postaciami za pomocą własnego ciała. Staje się jednak coś nieoczekiwanego.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "دخل مُبرمج عبقري يُدعى “كازوتو” إلى عالم أفتراضي، عالمُ أنترنت يدعى “فن السيف الرقمي” ليس هُناك مهربٌ من هذا العالم حتى يقوم اللاعب بانهاء اللعبة و لكن سيُؤدي حصول اللاعب على “game over” إلى موته .",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Đao Kiếm Thần Vực",
+            "overview": "Một chuyên gia về trò chơi điện tử tạo ra công nghệ mới cho phép người chơi điều khiển nhân vật ảo bằng chính cơ thể của họ. Tuy nhiên, rắc rối đáng sợ lại nảy sinh.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "A videojáték-zseni segít egy új technológia létrehozásában, amellyel a játékos a saját testével irányíthatja online avatarját – de a játék egy sötét csavart tartogat.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Jagoan video game membantu menciptakan teknologi baru yang memungkinkan para pemainnya memandu avatar online dengan tubuh mereka -- tetapi muncul peralihan misterius.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Майсторът на меча онлайн",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Anime zo štúdia A-1 Pictures rozpráva príbeh Kazuty Kirigajiho, prezývaného Kirito, ktorý sa rozhodne, že sa zapojí do novej virtuálnej MMORPG hry. Tá má však dva zaujímavé háčiky. Hráč sa môže z hry odhlásiť iba v prípade, že ju dokončí. A čo viac, pokiaľ cestou v hre zomrie, zomrie aj jeho telo v skutočnom svete.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "2022 yılında piyasaya sürülen Sword Art Online MMORPG oyunu, başa takılan bir alet aracılığıyla oyuncuları kendi dünyasına götürerek gerçek bir Role-Playing oyunu sunmaktadır. Oyuna katılan 10.000 oyuncu arasında olan Kirito da SAO dünyasına giriş yapmıştır. Fakat kısa sürede bütün oyuncular oyundan çıkış olmadığını fark ederler ve herkes bir anda geniş bir alana ışınlanır. Oyunun yapımcısının burada yaptığı açıklamaya göre oyundan çıkmanın tek yolu 100 katlı SAO dünyasını temizlemektir. Her katta bir boss bulunmaktadır ve 100. kattaki boss'u öldürebilen oyundan çıkabilecektir. Fakat oyunda sağlığı biten kişi gerçek hayatta da ölecek, ayrıca dışarıdan biri oyuncuların başındaki aleti çıkarmak isterse alet oyuncuları öldürecektir. Bütün oyuncular şaşkınlık içerisindeyken oyunlar konusunda tecrübeli olan Kirito oyunu kazanmayı kafasına koymuştur.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ซอร์ด อาร์ต ออนไลน์",
+            "overview": "อัจฉริยะคนหนึ่งสร้างวิดีโอเกมส์ด้วยเทคโนโลยีใหม่ให้ผู้เล่นสามารถควบคุมตัวตนจำลองในเกมส์ได้ด้วยร่างกายของพวกเขา แต่การหักมุมสุดสะพรึงกำลังจะเริ่มต้นขึ้น",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Kardų menas tinkle",
+            "overview": "MMORPG žaidimas \"Aincrad Online\" įkalina savo žaidėjus virtualios realybės pasaulyje ir verčia kovoti už savo realias gyvybes. Po paskelbto pranšimo, jog ištrūkti iš žaidimo galima tik tuo atveju, jei jis bus sužaistas iki paskutinio lygio, Kiritas—igudęs kardininkas— ir jo draugai pradeda savo ilgą kelionę, kad išlaisvintu ne tik save, bet visus Aincarde įkalintus protus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JV",
+          "iso_639_1": "jv",
+          "name": "",
+          "english_name": "Javanese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Genius permainan video bantu mencipta teknologi baharu yang membolehkan pemain memandu avatar dalam talian dengan badan mereka sendiri — tetapi sesuatu yang jahat muncul.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Ένας μάγος των βιντεοπαιχνιδιών δημιουργεί μια τεχνολογία που επιτρέπει στους παίχτες να ελέγχουν τους χαρακτήρες με τα σώματά τους. Υπάρχει όμως ένα σκοτεινό σημείο...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Videohra díky nové technologii umožňuje ovládání herních avatarů vlastním tělem v reálném světě. Ale má to háček.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "刀劍神域",
+            "overview": "桐人 是使用 NerveGear 遊玩 VRMMORPG「Sword Art Online」的玩家之一，很幸運的參與過封閉測試 Beta Test 和成功買下了正式版。在正式營運當天（2022 年 11 月 6 日），包括桐人在內的約一萬名玩家就馬上「完全潛行 Full Dive」進入正式版的 SAO，享受著虛擬世界的樂趣。然而，四小時多後部分玩家們發現登出的指令消失了，認為只是系統暫時出錯的桐人以及開始陷入混亂的所有玩家都被傳送到起始城鎮的大廣場，但空中傳來的不是眾人等待許久的故障公告，而是自稱是 SAO 遊戲設計者「茅場晶彥」的人淡淡開始的死亡遊戲説明：不能登出是遊戲的正常現象，只有打倒位於「艾恩葛朗特頂樓第 100 層的最終頭目」——達成完全攻略——才是離開這個世界唯一的方法。並且，在遊戲內死去或是在強行現實世界中脱下 NerveGear，玩家在現實世界中的腦部會被 NerveGear 所發出的高頻率微波破壞而死亡。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "EO",
+          "iso_639_1": "eo",
+          "name": "Esperanto",
+          "english_name": "Esperanto",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Un génie des jeux vidéo aide à créer une technologie permettant aux joueurs de contrôler leurs personnages avec leur propre corps, mais un côté sombre fait surface.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Ein Videospielgenie entwickelt eine neue Technologie, mit der Spieler ihre Online-Avatare mit ihren eigenen Körpern steuern – doch es kommt zu einer düsteren Wende.",
+            "homepage": "",
+            "tagline": "Spiele um dein Leben!"
+          }
+        },
+        {
+          "iso_3166_1": "CH",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Ein Videospielgenie entwickelt eine neue Technologie, mit der Spieler ihre Online-Avatare mit ihren eigenen Körpern steuern – doch es kommt zu einer düsteren Wende.",
+            "homepage": "",
+            "tagline": "Spiele um dein Leben!"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "刀剑神域",
+            "overview": "一位视频游戏高手参与创造了一种新技术，可以使游戏玩家用自己的身体来操纵他们的线上角色，但却引发了黑暗的转折。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "ऑनलाइन तलवार कला",
+            "overview": "वीडियो गेम बनाने में निपुण एक व्यक्ति ऐसी नई तकनीक बनाता है, जिससे खिलाड़ी अपने शरीर से अपने ऑनलाइन अवतार को निर्देशित कर सकते हैं -- लेकिन यह खेल ख़तरनाक साबित होता है.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Genius permainan video bantu mencipta teknologi baharu yang membolehkan pemain memandu avatar dalam talian dengan badan mereka sendiri — tetapi sesuatu yang jahat muncul.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "سيف النجاة",
+            "overview": "يساعد خبير ألعاب فيديو على ابتكار تقنية جديدة تُتيح للاعبين توجيه تجسّداتهم على الإنترنت من خلال أجسادهم... ولكن تطوّرًا قاتمًا يبرز فجأة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Et spillgeni hjelper til med å skape ny teknologi (nervegear) som gjør spillere i stand til å styre VR-avatarene sine med sine egn gjerne. Men underholdningen har en mørk side.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Et spillgeni hjelper til med å skape ny teknologi som gjør spillere i stand til å styre nett-avatarene sine med sine egne kropper. Men underholdningen har en mørk side.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NN",
+          "iso_639_1": "nn",
+          "name": "",
+          "english_name": "Norwegian Nynorsk",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Et spillgeni hjelper til med å skape ny teknologi som gjør spillere i stand til å styre nett-avatarene sine med sine egne kropper. Men underholdningen har en mørk side.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Videopelinero auttaa uuden peliteknologian luomisessa. Sen ansiosta pelaajat voivat ohjata hahmojaan omilla kehoillaan, mutta teknologia ei toimi aivan kuten pitäisi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "En videospilgigant hjælper med at skabe en ny teknologi, der gør det muligt for spillere at styre deres online-avatarer med deres egne kroppe – men der er et mørkt tvist.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Een videogamer ontwikkelt een nieuwe technologie waarmee spelers hun online-avatar kunnen leiden met hun eigen lichaam. Het verhaal krijgt echter een duistere wending.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Een videogamer ontwikkelt een nieuwe technologie waarmee spelers hun online-avatar kunnen leiden met hun eigen lichaam. Het verhaal krijgt echter een duistere wending.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "name": "Sword Art Online",
+            "overview": "Anime serialı Sword Art Online (SAO) adlı virtual reallıq dünyasında ilişmiş Kazuto \"Kirito\" Kiriqaya və Asuna Yuukinin başına gələn hadisələrdən bəhs edir. Onlar oyundan azad olmaq üçün 100 mərtəbəni təmizləməli və final bossu məğlub etməlidirlər. Ölüm oyunundan 3 ay sonra Kirito Asunanın bu dəfə SAO-nun xələfi olan və insanların pəri rolunda çıxış etdikləri ALfheim Online (ALO) adlı başqa virtual reallıq oyununda ilişdiyini öyrənir. Kirito oyuna daxil olur və bacısı Suquha \"Lifa\" Kiriqaya ilə birlikdə Asunanı xilas etməyə çalışır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AM",
+          "iso_639_1": "hy",
+          "name": "",
+          "english_name": "Armenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "te",
+          "name": "తెలుగు",
+          "english_name": "Telugu",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wJi7fRmHw0wRMldUY28sSzXpp4G.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pr78HhmOYlA0fwaoYNcH1FstqBH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yI4Gsd5c8ubCJWoDIYI3VVC2Mqt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gkPtSphimLRYkYOAku8rgUyhu3e.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jLO2dImnY1N8JjzaK7O7FW3aRW2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/meDctApFEcRDtuzIZxPlreRQ0BN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5ibznYTahEujeND3205MZJJgBjT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z7QKvQbOrIhp9uOT63l9dIgHJrb.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jM0bRFctQzibIZRTG74zTuC9wLk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6NA5es3wG3HpRv6CIB2he6rq5J3.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rmU7H417VLYHT6YBSXMELBkxTlm.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9YwYH8TOnXOshyJZCNutftjL1kW.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q9LJoEYBUOas3aMkDZmcCMWOUtG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1yz3R1l9G77W7NDpKNBFt2AbIHa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aWoWsqcVmpPfaK2oHBJ3OMaQfe7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6fkBwy5yfaLKJ8BRD5rlOCiLbxq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t61TOLBPE2hgtVF7FtRu4M1Tuq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6ip9uRTyzdzsKoroCopKblDqfOk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/niJgOvNlflFec8G2DxDqSVTZB1R.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6TbRbKcyMC1gCiiTdeQ0xxA95Bs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fOCMhf5F5vTS7LzRIu2el68jjJ8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/x8eCi1HO7QKFqQxh9k5r0paMiwI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ndlIXFyDuX8WPRImFmbZIjMKX23.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4HNndkthPQXAbEFeRXGhbogEzgM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kEi6wnVt2NHwlxLD6QRjz6GXFFM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dmJcF9DSMd196WoK9flz2uCNCPu.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1PpbZSw8RYJlppbXRbFr1xVJ4w.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wQNpFhT6oDr2SoYhO0W4coJeCUB.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8zZVIdwA7c3pEQoO765lCuRsACl.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5PUo6C8LAzcTzkuPKgLXuUFjafi.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/55AkT8SAav93AGe1LW9XdeGGmHh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xkLwpQbPhYFG7M8lBXBFfqAF00b.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/f7STKj1EzT3IE8Cut8RonPLmvVz.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2nvy14wB2P0dzvDUGyODmNFbCiu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z9bJdyQwQqp141eEGbaQvW1IZhR.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aE9tn1UwsS4G1QuS0l6BgOtY446.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9imYN72zwQ9dmAnhyd7wNQsxFVV.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fsatKuTodTjj3EHQytcgsnbZ5qb.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oIeTjanUMzMyIq8rFX8sqdEl5s1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qi8c9XFjper5KHx9kbFBfghjKN7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ajganlyNG3tb6kD4ElOzDhyC4pE.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eNWWEY4HyaHK6ypwZI3yqkf4Osf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6g4B6ZrKIxPFcSTZ2wYxi76oqzb.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2kFZQTze4b0BhHsxNDYaOzJlKQX.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zxvdcvckxoXFRrPg3r8d8AlZpnp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8i0BcOIPO142nSmkBlLhijqIfRC.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ad6uE8KHxGV8DGXMY5I69yT7CwT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jyr27QkzyWjFnIduCLUFnoOqSfg.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2i8IvyDG2HDaerZkl27OG0jtqQc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i4pDeOonxlOVOyc8ui1ar6xJv0Y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ze8h2jo4uaoANgtmOG7ZrlAgJH8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oi9Fd3ON25vA2XkTaBQrSA6J0As.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7KJmXMRdNRqmYCcBxKspuuwfinR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dbbYUkgL5FJk9bSdDZ11333a9XN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4LSOwvjomKCx5DOyrwypfcEj1X4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bbHRRG5INgsCJPLXh9nS58FKaRh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iXk3aciF9Gn0M1sEr7GfU6GzyKf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qR7GSymWOLUrC1JZ7MAQAw0XIU5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bSGS4WoKhsTHXst3BoD0UQpbHxk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1WLCPUKWQLWeOKeRjqixCvB2GUu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kDJs6EA81UiGKtfEUky7YpfGRha.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8PyWo6DMUtNzmoRXlcDvmzzCGzp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2LtRS8MI5nC6bSK8HTE8dw0rylM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eJKe9kfYvbFHVEMqmseLlcRN5tl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.784,
+          "height": 1076,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fnEw56qBvygZqnbcx6UXBX4svwb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jCYlcTnnk9y7rslnmgBCaMyiSYF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uU41H97B4m1eG2E8CRpRjT4Oyno.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 0.935,
+          "height": 540,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/twrWwjBFKExNAsEs2BRgbMjU0qv.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 505
+        },
+        {
+          "aspect_ratio": 19.642,
+          "height": 218,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jzc9ZYRVMkzhHQaLsaNujKgEnWk.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4282
+        },
+        {
+          "aspect_ratio": 21.827,
+          "height": 197,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2PNKn2G0W2JJ5gZcP5XLL0BnRno.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4300
+        },
+        {
+          "aspect_ratio": 19.642,
+          "height": 218,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mgIfxrvzUQLpClAZeKj3LCyU6pF.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4282
+        },
+        {
+          "aspect_ratio": 9.463,
+          "height": 134,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jY3QJhBpJNjvT3Xr90z0agC76SQ.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1268
+        },
+        {
+          "aspect_ratio": 3.235,
+          "height": 196,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3tnT1uCf5RjbdVU5Rpxz0fHjcSz.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 634
+        },
+        {
+          "aspect_ratio": 0.934,
+          "height": 241,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6dzS3RKOVMO41ZaI107QAWwbzES.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 225
+        },
+        {
+          "aspect_ratio": 1.002,
+          "height": 538,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bhAGK9LpMTR7uyTkhfN0FIEx5w7.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 539
+        },
+        {
+          "aspect_ratio": 4.615,
+          "height": 130,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/upnGj0UGzhB3o2sfRWhTzr82zq2.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9m8bFIXPg26taNrFSXGwEORVACD.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zLdXxodgz0UN0RCca8uxBq3EGTg.jpg",
+          "vote_average": 4.656,
+          "vote_count": 16,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2830,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nc33LuqbsT0g2NYcVTVaMLsvbXu.jpg",
+          "vote_average": 3.954,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.661,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tTa8bB5n8Yhjr9mE44djVKnI8xR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 793
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p8KOAD8CQpjnvge8v2O357uBbPj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1mYx3OKyqCDGjLB8USDKkfMIk6b.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rbvZgZi1st3qLabCZgrIaEbqnMD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tWpBRUaGFLV6Ev21YnfKxlvkBBz.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vaC3inRAj281wRxHlQedN8Pi2wS.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s6nizjcbCvqb5ckGVsXtjlbiXkx.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lP9GoxrhX0q8rxqK9CrjuqffN7b.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tepHgVswrYYH7FZTypIL3tfzGr7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xhURZEW9rcxaCJqL2NM8sFf7v1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lyKOx8WlHm2pC74NZP0h5NPZFh6.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/svMUP0VlqD7BASlpBwTTTXKmBK7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.716,
+          "height": 2418,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zzlKrvQQOAwThRras4q9H8QlbtP.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1732
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mK9zGGk90VmHLOnK79sqlGFjZjW.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zUs5RElWlyynjQL55hIb3EQCla5.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jP8i6GXt7IkWObZryNe55PEMLSb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mJQNtaARBzWOGwiK0lZIj5fWIln.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 918,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g3XV7k5a6HLwa7bCCFt2p3IrsXA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 650
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1280,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iisJzNoGH8lLPuvgt2PjPdbhGmC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 905
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 864,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mpJhsU1whSvAE1Ed0bR7ZA52aZq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 611
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nIyYtur27y1ndxZWa19S9IiuPzF.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vEeTQpAJkf8ztwL56z5ACe3qd7E.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.728,
+          "height": 2404,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gxupmAL9uPjbiENlkNEC60ngqul.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1750
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t9HQK4V6BacvnIuqX4XtnczkCIN.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 844
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aazj8dXl7GT44irnC6x0pGCff9N.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hHY1lCMnNBjxvpQiyHlNqysDRMW.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1062,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/26zSFLdryMKp7Ub2byBszGXwAOZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1982,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5xLiU2DPhKQVvnlu6f1J3tqw8i.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q6mbwNgxJdUw9ZEgaeWCIjfpgqy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 536
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1558,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ot8hpDjdELMGilIjs2QoRHPUoqx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1100
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ruWf0ZbYZ5B18cms12O7vTJUoEl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iy8m0TPT1dj4fgU8mGoibebpzkv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eqf9e9E8hCT7DlY6ADOCSUT6MeU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

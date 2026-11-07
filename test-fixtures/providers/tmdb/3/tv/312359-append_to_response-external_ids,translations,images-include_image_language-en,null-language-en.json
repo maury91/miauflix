@@ -1,0 +1,893 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21966",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"87b8db24ef98c8867446ce1e027ae19b\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8phLVFEXOe02JgFmH9ldn3j4tXW.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-11",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://dragonball-super.com",
+    "id": 312359,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7890506,
+      "name": "The God of Saiyans",
+      "overview": "Over a trivial matter, Beerus decides to destroy Earth. In this desperate situation, Goku suggests asking Shenron about the \"Super Saiyan God\" that Beerus seeks. Is it possible to create this warrior, considered a mythical god?!",
+      "vote_average": 7.8,
+      "vote_count": 5,
+      "air_date": "2026-11-01",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 312359,
+      "still_path": "/ul49AO72NaVyBag1wGrKDLADkLT.jpg"
+    },
+    "name": "Dragon Ball Super: Beerus",
+    "next_episode_to_air": {
+      "id": 7890509,
+      "name": "The God of Destruction and Son Goku",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 312359,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 1,
+        "logo_path": "/4x4GsmRmSLLL0RVNKsoqAVH43tz.png",
+        "name": "Fuji TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 879,
+        "logo_path": "/pX3gDCsG8WcQvQbCNJ37t5w0HyG.png",
+        "name": "Tokai Television Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1163,
+        "logo_path": "/1J33ZvSff1VOEt3aC8CyKmj9GEy.png",
+        "name": "Kansai TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3535,
+        "logo_path": "/sces9gh6ih1DaD54WXvqHeLMScE.png",
+        "name": "Fukui TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3721,
+        "logo_path": "/llvJ29dplQLsoklpPIXtYYcrxHL.png",
+        "name": "Hokkaido Cultural Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4799,
+        "logo_path": "/y1F9WoEjz7MhzjN56im3tVKTd1r.png",
+        "name": "Iwate Menkoi Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4825,
+        "logo_path": "/9dD3buakf1nS6XQVBwEtm50izs4.png",
+        "name": "TOS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4829,
+        "logo_path": "/qHGklsa90XMreAdYm7AZl6eeaCL.png",
+        "name": "Sendai Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4839,
+        "logo_path": "/pRhoUkllLEe3U9341NUCeKdQ7to.png",
+        "name": "SAGA TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4841,
+        "logo_path": "/7QZ9b8bIpNUU5AjdaW6BXcMziY6.png",
+        "name": "Ishikawa TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4850,
+        "logo_path": "/4ibJ7BiVYXB98ejS48vY93hiKqg.png",
+        "name": "TNC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4851,
+        "logo_path": "/ywBaq3nJZzLh7KZBNZN9rEV68v.png",
+        "name": "OHK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4855,
+        "logo_path": "/vRWtsyWIcIrtw0PXbCbjC4xvXtw.png",
+        "name": "Kochi Sun Sun Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4970,
+        "logo_path": "/boaSCPMx8JjYB4agAhYNt7mCJ6N.png",
+        "name": "Television Shin Hiroshima System",
+        "origin_country": "JP"
+      },
+      {
+        "id": 5644,
+        "logo_path": "/832SJcpnozaNWKto6hPSpYvDYQU.png",
+        "name": "TV Shizuoka",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6156,
+        "logo_path": "/n8wyc29KNH1qCUskdWX8FIy7QBZ.png",
+        "name": "UMK TV Miyazaki",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6209,
+        "logo_path": "/fjenNun3vCLtnHHsTpAgVYkubMl.png",
+        "name": "NST",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6210,
+        "logo_path": "/kCNJcIxnOXI4fkc8oZLOk1BZb0o.png",
+        "name": "NBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6211,
+        "logo_path": "/mFM7fx4yt3FOa6leUbBbd8iGZIi.png",
+        "name": "Sakuranbo TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6212,
+        "logo_path": "/eAaH52WuIH4XNlqYSonXZRPRnGE.png",
+        "name": "TSK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6213,
+        "logo_path": "/np5gbKJvysVLnJKg8g1OxhiA6Qa.png",
+        "name": "Ehime Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6214,
+        "logo_path": "/olXD3GjcnRtTwOdTOnWVVALxuK1.png",
+        "name": "KTS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6666,
+        "logo_path": "/1YQFkvU0ngLVHiJvI8ydtFf6bji.png",
+        "name": "Fukushima TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6819,
+        "logo_path": "/hNbCO6N6F4o09DCGAoz7g0G2E9F.png",
+        "name": "AKT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6821,
+        "logo_path": "/aWuhW3nOkrQrjdhcHOTDsbYXNtU.png",
+        "name": "Toyama Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6822,
+        "logo_path": "/IEdOZbIcZOSeKihiRF8dem94nv.png",
+        "name": "TV Kumamoto",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6823,
+        "logo_path": "/gRUUO3lBYddcSqQPfFruXVDAlv2.png",
+        "name": "Okinawa Television Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 8446,
+        "logo_path": "/dHp09KNT493NE46Wt8pnPyL84Ef.png",
+        "name": "KTN",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 19,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ドラゴンボール超 ビルス",
+    "overview": "When Beerus, the God of Destruction, awakens in search of a worthy rival, Goku and his friends face an epic battle to stop him from destroying Earth.\n\nRemastered and re-edited version of Dragon Ball Super.",
+    "popularity": 94.9897,
+    "poster_path": "/AojgldgsOlzZV8ahyOzaiAjJWvV.jpg",
+    "production_companies": [
+      {
+        "id": 5542,
+        "logo_path": "/ayE4LIqoAWotavo7xdvYngwqGML.png",
+        "name": "Toei Animation",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-11",
+        "episode_count": 19,
+        "id": 497113,
+        "name": "Season 1",
+        "overview": "Several years have passed since the fierce battle against Majin Buu, and Earth has finally regained a brief moment of peace. At the same time, Beerus, the God of Destruction, awakens from his long, deep sleep. Even King Kai and Supreme Kai, aware of Beerus's overwhelming power to destroy entire planets, watch his awakening with great fear… Meanwhile, Beerus hears rumors of a Saiyan who defeated Frieza and suddenly appears before Goku. Targeted by Beerus, the strongest being in the universe, Earth is in grave danger. Thus begins an earth-shattering cosmic battle between the God of Destruction and Goku and his allies a conflict that will shake the entire universe.",
+        "poster_path": "/sGuCmIy8kEmx3FWZyMj654rF6g8.jpg",
+        "season_number": 1,
+        "vote_average": 8.5
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 9.627,
+    "vote_count": 394,
+    "external_ids": {
+      "imdb_id": "tt39395275",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 473154,
+      "tvrage_id": null,
+      "wikidata_id": "Q137883816",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "DB_anime_info"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "When Beerus, the God of Destruction, awakens in search of a worthy rival, Goku and his friends face an epic battle to stop him from destroying Earth.\n\nRemastered and re-edited version of Dragon Ball Super.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "魔人ブウとの壮絶な闘いから数年が経ち、地球は束の間の平和を取り戻していた。時を同じくして、長い眠りから目覚めた破壊神・ビルス。星々を破壊する圧倒的な力を持つビルスの目覚めを、界王や界王神たちですら畏れをもって見守っていたのだが…そのさなか、フリーザを倒したサイヤ人の噂を聞きつけたビルスは、突如悟空の前に現れる--。かつてない力を持つビルスの襲来により、消滅の危機に直面する地球…破壊神と悟空たちの宇宙を揺るがす超絶バトルが幕を開ける--。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "Anos após a feroz batalha contra Majin Boo, a Terra recupera uma breve paz. Simultaneamente, Beerus, o Deus da Destruição, desperta de seu longo sono. Cientes de seu poder avassalador para destruir planetas, Sr. Kaioh e Kaiohshin observam seu retorno com grande temor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "Años después de la derrota de Majin Buu, la Tierra ha recuperado la paz. Sin embargo, cuando Beerus, el Dios de la Destrucción, despierta, dicha paz se ve truncada. Atraído a la Tierra por los rumores sobre el Saiyan que derrotó a Freezer, Beerus busca desafiar a Goku con un poder capaz de destruir planetas enteros. Ahora, Goku y sus aliados deben enfrentarse a Beerus en una batalla que sacudirá el universo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Dragon Ball Super: Бирус",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "مرت سنوات عديدة منذ المعركة الضارية ضد ماجين بو، واستعادت الأرض أخيرًا لحظات من السلام. في الوقت نفسه، يستيقظ بيروس، إله الدمار، من سباته الطويل والعميق. حتى الملك كاي والكايو الأعلى، على دراية بقوة بيروس الهائلة في تدمير كواكب بأكملها، يراقبان استيقاظه برعب شديد... في هذه الأثناء، يسمع بيروس شائعات عن سايان هزم فريزا، ويظهر فجأة أمام غوكو. الأرض، التي استهدفها بيروس، أقوى كائن في الكون، في خطر جسيم. وهكذا تبدأ معركة كونية مدمرة بين إله الدمار وغوكو وحلفائه، صراع سيهز الكون بأسره",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "龙珠超：比鲁斯",
+            "overview": "魔人布欧之战结束数年后，地球重归和平。沉睡已久的破坏神比鲁斯苏醒，听闻打败弗利萨的赛亚人孙悟空后，突然现身地球。面对拥有毁灭星球之力的比鲁斯，悟空和伙伴们迎来关乎地球存亡的宇宙级战斗。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "Dopo la sconfitta di Majin Buu, la Terra vive un periodo di pace. Ma nell'Universo 7 si risveglia Beerus, il temibile Dio della Distruzione, incuriosito da una profezia che parla di un guerriero Saiyan capace di tenergli testa. Seguendo queste voci, Beerus arriva sulla Terra e incontra Goku e i suoi compagni. Quello che inizia come una semplice sfida si trasforma presto in una minaccia reale: se nessuno riuscirà a soddisfare Beerus, il pianeta verrà distrutto. Per salvare la Terra, Goku e Vegeta dovranno superare i propri limiti e affrontare un potere mai visto prima, dando inizio a una nuova era di battaglie divine.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "Gdy po przebudzeniu bóg zniszczenia Beerus poszukuje godnego rywala, Goku i znajomi muszą połączyć siły, aby go powstrzymać, zanim zniszczy Ziemię.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "드래곤볼 슈퍼: 비루스",
+            "overview": "마인 부우와의 처절한 싸움으로부터 몇 년이 흐르고, 지구는 잠시나마 평화를 되찾고 있었다. 그와 같은 시기, 오랜 잠에서 깨어난 파괴신 비루스. 별들을 파괴하는 압도적인 힘을 지닌 비루스의 각성을, 계왕과 계왕신들조차 두려움을 품고 지켜보고 있었는데... 바로 그때, 프리저를 쓰러뜨린 사이어인의 소문을 들은 비루스는 갑자기 손오공 앞에 모습을 드러낸다. 전례 없는 힘을 가진 비루스의 습격으로 인해 지구는 소멸의 위기에 직면하게 되는데... 파괴신과 오공 일행이 벌이는 우주를 뒤흔드는 초절정 배틀의 막이 오른다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Dragon Ball Super : Beerus",
+            "overview": "Des années après la défaite de Majin Buu, la paix est revenue sur Terre. Mais lorsque Beerus, le Dieu de la Destruction, se réveille, cette tranquillité vole en éclats. Attiré sur Terre par des rumeurs concernant le Saiyan qui a vaincu Freezer, Beerus cherche à défier Goku en déployant une puissance capable de détruire des planètes entières. Goku et ses alliés doivent désormais affronter Beerus dans un combat qui fera trembler l'univers.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "Edición «mejorada» de Dragon Ball Super que incluye una gran cantidad de escenas nuevas y redibujadas, una narrativa reconstruida y un apartado visual actualizado para ofrecer una representación más fiel e inmersiva del manga original de Akira Toriyama.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "Jahre nach dem erbitterten Kampf gegen Majin Boo herrscht auf der Erde endlich Frieden. Doch dann erwacht Beerus, der Gott der Zerstörung, aus seinem langen Schlaf. Als er von dem Saiyajin hört, der Freezer besiegt hat, taucht er unvermittelt bei Son Goku auf – und die ganze Erde gerät in Gefahr. Goku und seine Freunde stellen sich einem Kampf, der das Universum erschüttert.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Drakonų kova Super: Berusas",
+            "overview": "Pabudęs naikinimo dievas Berusas ieško savęs verto varžovo. Gokui ir jo draugams tenka stoti į nuožmią kovą, kad išgelbėtų Žemę nuo sunaikinimo.\n\nAtnaujinta ir iš naujo sumontuota serialo „Dragon Ball Super“ versija.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "Khi Beerus — Thần Hủy Diệt — thức giấc để tìm kiếm một đối thủ xứng tầm, Goku và bạn bè đối mặt với một trận chiến sử thi để ngăn hắn hủy diệt Trái Đất. Phiên bản remaster và biên tập lại của Dragon Ball Super.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Quando Beerus, o Deus da Destruição, desperta em busca de um rival à altura, Goku e os amigos enfrentam uma batalha épica para impedir a destruição da Terra.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Драгън Бол Супер: Бирус",
+            "overview": "Богът на разрушението Бирус се събужда в търсене на достоен съперник. Гоку и приятелите му влизат в епична битка, за да спасят Земята. Ремастерирана и преработена версия.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "七龍珠超：比魯斯",
+            "overview": "劇情圍繞著從長眠甦醒的破壞神比路斯降臨地球所展開，為了地球免於滅亡危機，悟空等人挺身而戰，化身為「超級撒亞人之神」的悟空將與比路斯展開足以撼動宇宙的超絕對決 。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "龍珠超 比路斯",
+            "overview": "劇情圍繞著從長眠甦醒的破壞神比路斯降臨地球所展開，為了地球免於滅亡危機，悟空等人挺身而戰，化身為「超級撒亞人之神」的悟空將與比路斯展開足以撼動宇宙的超絕對決 。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ดราก้อนบอล ซูเปอร์ บิลส์",
+            "overview": "หลายปีผ่านไปนับตั้งแต่การต่อสู้อันดุเดือดกับมาจินบู โลกก็ได้กลับคืนสู่ความสงบสุขชั่วครู่ ในขณะเดียวกัน บีรุส เทพแห่งการทำลายล้าง ก็ตื่นขึ้นจากการหลับใหลอันยาวนานของเขา เมื่อได้ยินข่าวลือเกี่ยวกับชาวไซย่าที่เอาชนะฟรีซเซอร์ได้ และจู่ๆ ก็ปรากฏตัวต่อหน้าโกคู",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Bola de Drac Súper: Beerus",
+            "overview": "Bola de Drac Súper: Beerus és una adaptació animada de la franquícia \"Bola de Drac\", remake de la sèrie anterior \"Bola de Drac Súper\".\n\nEs tracta d'una versió millorada i renovada dels esdeveniments de l'Arc del Déu de la Destrucció Beerus, l'Arc de Freeza Daurat i l'Arc del Sisè Univers contra el Setè Univers de la sèrie original.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "Kada se Beerus, Bog uništenja, probudi u potrazi za dostojnim protivnikom, Goku i njegovi prijatelji suočavaju se s epskom bitkom kako bi ga spriječili u uništenju Zemlje.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Драгон Бол Супер: Бирус",
+            "overview": "Када се Бирус, бог уништења, пробуди у потрази за достојним ривалом, Гоку и његови пријатељи се суочавају са епском битком како би га спречили да уништи Земљу.\n\nРемастеризована и поново издата верзија игре Dragon Ball Super.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "דרגון בול סופר: בירוס",
+            "overview": "כאשר בירוס, אל ההרס, מתעורר בחיפוש אחר יריב ראוי, גוקו וחבריו עומדים בפני קרב אפי כדי למנוע ממנו להשמיד את כדור הארץ. גרסה מחודשת (Remastered) וערוכה מחדש של דרגון בול סופר.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Dragon Ball Super: Beerus",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8phLVFEXOe02JgFmH9ldn3j4tXW.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ycaeQclsoHdEVLIRZDOLY2oq7E2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2zRJP8TlFsva3tvpqXNxlOoSxXr.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8QA5wsfCIBKzXA9SLZyhWfThKjy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.775,
+          "height": 721,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4uv8G3HYu0mEl2nTonUdkfkh3ZU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.775,
+          "height": 721,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fGoQWPAebKedO75kQNTPqoOuKeh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iCjwkPh342jKkOaEzsbtoGNHHf8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rlMLGXbHnFWVCUaYaS9dnG4DktP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g5CMZorIgGGpSB0zFzhAdhDBBAb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1524,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/m5asVYeEc3TJnZrGpaIOwrpSPIv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2709
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/Y7spHx4ckxwYNppq3Qlvvtf5Qd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nqMXMcs2gXMiuIeCsDFDhXRz0J4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lKbBni8Q1AR9XNvQTHlesDUxQJT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.178,
+          "height": 562,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aFlyMKCE5hAR0OyUSMSbihFHgif.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1224
+        },
+        {
+          "aspect_ratio": 2.169,
+          "height": 236,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1aofGLR3d03Qmf4WsC1AdGMrVBW.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 512
+        },
+        {
+          "aspect_ratio": 2.314,
+          "height": 1207,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mFS7jLr2dBjBYIp1KEA9yJMPwTq.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2793
+        },
+        {
+          "aspect_ratio": 2.246,
+          "height": 1274,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/naD7iHNC4eFxcnpNnD0x43IYDmg.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2862
+        },
+        {
+          "aspect_ratio": 2.29,
+          "height": 1195,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/djrhqwj2RwXLQzU5tW2fX0pau2W.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2736
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AojgldgsOlzZV8ahyOzaiAjJWvV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w9sUCvGRtLeHzP9NylTWYP06rvg.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3brrJ6mSESdGh1uo2YON9tDVXXB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mHJ6ux8E7EosJRs7K02LksIee9N.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2362,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nmhpTtwTU9TliNgLOnPvz3LemGP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1669
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jwWZ0qQeHlhLrdu30uM7uLxnbiP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/57CiOXaO6OoUF96pBWXJxw19OGs.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nKY64SQ2qRBqN3UcGWDwALPOYc5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1mokIU7Z5CLmEKqzM9Wt1zKZPSz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aYnTaXXrISfqsuvkm6Gesg3ofMI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

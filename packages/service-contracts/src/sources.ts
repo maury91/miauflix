@@ -16,7 +16,8 @@ export interface SourceMediaRef {
   originalTitle?: string;
   year?: number | null;
   releaseDate?: string | null;
-  isAnime?: boolean; // phase 5
+  /** Treat as anime; the sources service also recognises anime from its own mapping. */
+  isAnime?: boolean;
 }
 export interface SourceSearchRequest {
   media: SourceMediaRef;
@@ -50,9 +51,15 @@ export interface SourceCandidate {
   score: number;
   season?: number;
   episode?: number;
-  absoluteEpisode?: number; // phase 5
+  absoluteEpisode?: number;
   batch?: boolean; // season/range pack
-  release?: 'best' | 'alt'; // SeaDex, phase 5
+  release?: 'best' | 'alt'; // SeaDex
+  /**
+   * Other names the files of an anime release may give the searched episode: the episode within
+   * its cour (`{season: 2, episode: 7}`), TVDB's numbering, or a number counted from the show's
+   * first episode (`{episode: 31}`, no season).
+   */
+  episodeAliases?: { season?: number; episode: number }[];
   files?: string[];
   /** Opaque id the service resolves in torrentFile(); never a raw URL to the backend. */
   fileRef?: string;

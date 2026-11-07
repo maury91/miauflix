@@ -1,0 +1,725 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6116",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a0e32522db591b2813aa1fe2714595b6\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/2KKDIwALX3HJWCjeDnvLa3Ag6ki.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2023-10-08",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://returners-magic.com",
+    "id": 230050,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-05",
+    "last_episode_to_air": {
+      "id": 7897221,
+      "name": "Error",
+      "overview": "Desir and his team confront Batour, Talka, and Sharina, who seem to work under the Crow Mask.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-05",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 230050,
+      "still_path": "/rhYfALuA75fidn4iOGgDw2lvYQm.jpg"
+    },
+    "name": "A Returner's Magic Should Be Special",
+    "next_episode_to_air": {
+      "id": 7897222,
+      "name": "Arch Wizard",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-12",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 2,
+      "show_id": 230050,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 343,
+        "logo_path": "/9rNqtDYAnD6yTOutvHI3synSEs2.png",
+        "name": "Gunma TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2478,
+        "logo_path": "/2v82HpzoKRveJEJcGHkeTcktMRM.png",
+        "name": "Tochigi TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "帰還者の魔法は特別です",
+    "overview": "In a land dominated by the formidable Shadow Worlds, most of humanity has been destroyed. To rescue their planet from impending doom, six brave heroes fight a perilous battle…and fail. But there’s a glimpse of hope when Desir, one of the last mages, is suddenly sent back in time 13 years! Now armed with knowledge of the grim future, can he alter the course of history and save the world?",
+    "popularity": 10.6529,
+    "poster_path": "/svwCvfLCUqc5tn85lijkKqTXQLF.jpg",
+    "production_companies": [
+      {
+        "id": 116766,
+        "logo_path": "/6P2DnCakufsQBNFRJQQKMPmcrb.png",
+        "name": "ARVO ANIMATION",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 98553,
+        "logo_path": "/qqyXcZlJQKlRmAD1TCKV7mGLQlt.png",
+        "name": "Crunchyroll",
+        "origin_country": "JP"
+      },
+      {
+        "id": 210388,
+        "logo_path": "/yC75UxcYwJwCWZ7V6RmgIeheboJ.png",
+        "name": "D&C WEBTOON Biz",
+        "origin_country": "KR"
+      },
+      {
+        "id": 210441,
+        "logo_path": "/kRGq6Eo3OgwnuLxijYYUIRpeCj9.png",
+        "name": "Kakao piccoma",
+        "origin_country": "JP"
+      },
+      {
+        "id": 229878,
+        "logo_path": "/jPFCAv3mAjPJpNJtv3iwroiLaxQ.png",
+        "name": "HAYATE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 217720,
+        "logo_path": null,
+        "name": "D&C Media",
+        "origin_country": "KR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      },
+      {
+        "iso_3166_1": "KR",
+        "name": "South Korea"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-10-08",
+        "episode_count": 12,
+        "id": 347753,
+        "name": "Season 1",
+        "overview": "In a land dominated by the formidable Shadow Worlds, most of humanity has been destroyed. To rescue their planet from impending doom, six brave heroes fight a perilous battle…and fail. But there’s a glimpse of hope when Desir, one of the last mages, is suddenly sent back in time 13 years! Now armed with knowledge of the grim future, can he alter the course of history and save the world?",
+        "poster_path": "/svwCvfLCUqc5tn85lijkKqTXQLF.jpg",
+        "season_number": 1,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2026-10-08",
+        "episode_count": 12,
+        "id": 371175,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/mxHxRXIReR10p29u8dGJ3qVM9Tx.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7,
+    "vote_count": 51,
+    "external_ids": {
+      "imdb_id": "tt28313387",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 432815,
+      "tvrage_id": null,
+      "wikidata_id": "Q120282932",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "returners_magic"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "A Returner's Magic Should Be Special",
+            "overview": "In a land dominated by the formidable Shadow Worlds, most of humanity has been destroyed. To rescue their planet from impending doom, six brave heroes fight a perilous battle…and fail. But there’s a glimpse of hope when Desir, one of the last mages, is suddenly sent back in time 13 years! Now armed with knowledge of the grim future, can he alter the course of history and save the world?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "絶えず世界を侵食する異次元空間「影の世界」。その中でも最悪の災害と呼ばれる「影の迷宮」に人類は直面した。「デジール・アルマン」は仲間と共に「影の迷宮」最後のボス、破滅竜ボロミア・ナポールと対峙するも、世界は滅亡を迎えてしまう。全てが終わったと思った瞬間、デジールの目の前に広がる光景は…13年前の世界だった。自身の出身校でもある、帝国最高の魔法学園「へブリオン学園」の入学式まで戻ってきたデジール。きたる滅亡の未来を変えるべく、仲間たちを再び集めて世界を救うために立ち上がる！",
+            "homepage": "",
+            "tagline": "地獄の果てから『帰還』する。無数の犠牲と努力を胸に。"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "귀환자의 마법은 특별해야 합니다",
+            "overview": "\"다시 돌아온 이상, 사랑하는 사람들을 두 번 잃을 순 없어!\"\n\n인류가 맞이한 최악의 재앙, 그림자 미궁. 데지르 아르망은 미궁 속에서 마지막까지 살아남은 최후의 생존자 6명 중 한 명이다. 그들은 그림자 미궁의 마지막 단계에 도전하지만 결국 실패하고, 세계는 멸망을 맞이하고 만다.\n\n모든 게 끝이라 생각했던 순간, 데지르의 눈앞에 펼쳐진 것은 다름 아닌 13년 전의 세상?!\n\n제국 최고의 마법 학원, 헤브리온에 입학했던 순간으로 돌아온 데지르. 그림자 미궁에서 잃었던 소중한 사람들과 재회하게 되고, 사랑하는 사람들과 세상을 구하기 위해 과거를 바꾸고자 하는데…!\n\n그림자 세계 발생까지 남은 시간은 3년! 과거를 바꾸고, 강한 동료를 모아 세상을 구원하라!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "La magia de un retornado debe ser especial",
+            "overview": "En una tierra dominada por el Dominio de las Sombras, la humanidad ha sido eliminada casi por completo. Para rescatar su planeta de la perdición inminente, seis valientes héroes libran una peligrosa batalla... pero fracasan. Sin embargo, aparece un nuevo rayo de esperanza cuando Desir, uno de los últimos magos, viaja sin saber cómo 13 años atrás en el tiempo. Ahora, armado con los conocimientos de lo que aguarda en el sombrío futuro, ¿será capaz de alterar el curso de la historia y salvar el mundo?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "A Returner’s Magic Should Be Special",
+            "overview": "Depois que o Reino das Sombras devastou o planeta, a humanidade depende do sucesso de apenas seis magos, incluindo Desir Herrman, um lutador analítico. Quando seus esforços finais para salvar o mundo falham, Desir fecha os olhos, esperando o fim. Mas quando ele os abre novamente, descobre que voltou 13 anos no passado, para o início de seus dias de escola. Com essa nova oportunidade, Desir pode reencontrar seus companheiros guerreiros, salvar seus entes queridos e tentar mudar o destino do mundo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "归还者的魔法要特别",
+            "overview": "不知何时，世界上出现了能蚕食现世的并行世界——“影世界”。只有战胜影迷宫，人类才能获得宁静，然而最终一切付之一炬，战斗失败，地球灭亡。但这并非结局，而是另一个开始……",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "归还者的魔法要特别",
+            "overview": "異次元空間『影之世界』持續侵蝕世界。人類不得不面對影世界帶來的最可怕的災難『影子迷宮』。『戴基爾．阿曼德』與同伴一同對抗最後一個『影子迷宮』的最終頭目破滅龍（波羅米歐．納波利坦），卻仍迎來世界的滅亡結局。就在戴基爾萬念俱灰的瞬間眼前出現了熟悉的光景竟是13年前的世界。戴基爾竟回到了他的母校，全帝國第一的魔法學園「赫布里溫學院」的開學典禮上。於是他為了拯救世界，再次集結伙伴們，起身反抗終將到來的滅亡命運！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "A Returner's Magic Should Be Special",
+            "overview": "Sur une terre dominée par le redoutable Labyrinthe des Ombres, la majeure partie de l'humanité a été anéantie. Pour sauver leur planète d'une catastrophe imminente, six courageux héros livrent une bataille périlleuse... et échouent. Mais une lueur d'espoir apparaît lorsque Désir, l'un des derniers mages, est soudain renvoyé treize ans en arrière ! Désormais armé de la connaissance de ce sinistre futur, pourra-t-il changer le cours de l'histoire et ainsi sauver le monde ?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "A Returner's Magic Should Be Special",
+            "overview": "Die Schattenwelten haben die Erde verwüstet und fast jeden ausgemerzt, der sich ihnen in den Weg stellte. Das Überleben der Menschheit hängt vom Erfolg von nur sechs Magiern ab, darunter der analytische Kämpfer Desir Arman. Die verbliebenen Helden versuchen ein letztes Mal, dem Blutvergießen ein Ende zu setzen … vergeblich. Desir schließt seine Augen und erwartet den Tod – als er sie wieder öffnet, ist er 13 Jahre in die Vergangenheit zu seiner Schulzeit zurückgereist! Ihm wurde eine neue Chance gewährt, die geliebten Menschen, die er verloren hat, wiederzusehen; eine Chance, seine Mitstreiter wiederzutreffen; eine Chance, die Welt zu retten …!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "A Returner's Magic Should Be Special",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "A Returner's Magic Should Be Special",
+            "overview": "Depois que o Reino das Sombras devastou o planeta, a humanidade depende do sucesso de apenas seis magos, incluindo Desir Herman, um lutador analítico. Quando seus esforços finais para salvar o mundo falham, Desir fecha os olhos, esperando o fim. Mas quando ele os abre novamente, descobre que voltou 13 anos no passado, para o início de seus dias de escola. Com essa nova oportunidade, Desir pode reencontrar seus companheiros guerreiros, salvar seus entes queridos e tentar mudar o destino do mundo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Магия вернувшегося должна быть особенной",
+            "overview": "«Мир теней» — пространство, что пожирает земли людей. Это величайшая угроза, с которой столкнулось человечество. Дезир Арман вместе с товарищами сражается ради спасения мира, но в решающем бою с драконом их ждёт гибель… Но когда Дезир открывает глаза, то понимает, что он перенесся на 13 лет в прошлое и снова видит день своего поступления в Академию Гебрион. Дезир решает изменить ход истории и спасти своих друзей, а вместе ними и весь мир…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "La magia de un retornado debe ser especial",
+            "overview": "En una tierra dominada por el Dominio de las Sombras, la humanidad ha sido eliminada casi por completo. Para rescatar su planeta de la perdición inminente, seis valientes héroes libran una peligrosa batalla... pero fracasan. Sin embargo, aparece un nuevo rayo de esperanza cuando Desir, uno de los últimos magos, viaja sin saber cómo 13 años atrás en el tiempo. Ahora, armado con los conocimientos de lo que aguarda en el sombrío futuro, ¿será capaz de alterar el curso de la historia y salvar el mundo?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Další dimenze, která nadále poskvrňuje náš svět, Svět stínů. Lidstvo čelí nejhorší pohromě, známé jako Labyrint stínů.\n\nI přes zoufalé útoky Desir Herrman a jeho přátelé prohrávají boj s Drakem zkázy, Boromirem Napolitanem, a svět spěje ke svému konci.\n\nKdyž je Desir přesvědčen o svém konci, otevře oči... a zjistí, že se ocitl 13 let v minulosti.\n\nDesir se vrátil v čase na slavnostní zápis na Hebrionskou akademii, nejlepší školu pro mágy v Říši.\n\nAby změnil budoucnost hrozící zkázy, Desir znovu shromáždí své přátele a zachrání svět!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "พลังขั้นเทพของจอมเวทจุติใหม่",
+            "overview": "เดเซียร์ เออร์แมน ทำภารกิจในโลกแห่งเงาที่ส่งผลร้ายต่อโลกมนุษย์มาร่วม 10 ปี ทั้งสูญเสียเพื่อนสนิทและคนที่ชอบ จนสุดท้ายสามารถร่วมกับเหล่าผู้กล้าหาญกำจัดเป้าหมายลงได้แต่ก็ไม่รอดจากพลังทำลายล้างที่สะสมในร่างมังกรโบราณที่ทำลายทุกสรรพสิ่ง ส่งผลต่อความพินาศของเผ่ามนุษย์ เมื่อคิดว่าตนไม่รอด เดเซียร์ กลับพบว่าตนถูกย้อนเวลากลับมาในช่วง 3 ปีก่อนที่จะเริ่มเข้าไปต่อสู้ในโลกแห่งเงา หรือนับเป็นเวลา 13 ปีก่อนภารกิจจะจบสิ้น ทำให้เขาตั้งใจเตรียมตัวให้มากขึ้นและใช้ข้อมูลที่มีเพื่อเตรียมความพร้อม ก่อนจะถึงวันตัดสินอีกครั้ง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Маг, що повернувся, — особливий",
+            "overview": "Після руйнівних десяти років війни у Тіньовому лабіринті, світ опинився на межі знищення. Арман Дезір - один з небагатьох могутніх магів, що лишилися, але навіть він не здатний зупинити ворога, що прагне винищити людство. На порозі вирішальної поразки, він був перенесений у часі до моменту, коли щойно почав навчатись магії у престижній Академії Гебріон! Чи зможе він скористатись досвідом та знаннями про події майбутнього та змінити хід історії, або ж він приречений на такий же жахливий кінець?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een andere dimensie die onze wereld blijft bederven, de Schaduwwereld. De mensheid wordt geconfronteerd met de ergste ramp, bekend als het Schaduwlabyrint. Ondanks hun wanhopige aanvallen verliezen Desir Herrman en zijn vrienden hun strijd tegen de Destruction Dragon, Boromir Napolitan, en komt er een einde aan de wereld. Wanneer Desir overtuigd is van zijn einde, opent hij zijn ogen... en bevindt hij zich 13 jaar in het verleden. Desir is terug in de tijd gegaan naar de inschrijvingsceremonie van de Hebrion Academie, de beste school voor magiërs in het rijk. Om de toekomst van naderend onheil te veranderen, brengt Desir zijn vrienden opnieuw bij elkaar om de wereld te redden!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "A Returner's Magic Should Be Special",
+            "overview": "Toinen ulottuvuus, joka Conti News ja Taint Ua World, Taint Shadow World. Ihmiskunta kohtaa pahimman onnettomuuden, joka tunnetaan me varjolabyrintina. Talot huolimatta tarinoista epätoivoinen attax, Desilu Herman ja hänen ystävänsä Rose Tale Battle ja te Destruction Dragon, Boromir napolilainen, ja maailma tulee ja loppuu. Kun Desir on vakuuttunut loppustaan, hän avaa silmänsä... löytää itsensä 13 vuotta menneisyydessä. Desir on palannut ajassa taaksepäin Hebrion Academyn, Imperiumin maagien huippukoulun, ilmoittautumisseremoniaan. Muuttaakseen lähestyvän tuomion tulevaisuuden Desir kokoaa ystävänsä jälleen kerran pelastaakseen maailman!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Ma Thuật Đặc Biệt Của Phù Thủy Quay Ngược Thời Gian",
+            "overview": "Thế giới đứng trước bờ vực diệt vong sau cuộc chiến tàn khốc kéo dài 10 năm trong \"mê cung bóng tối\". Desir Arman là một trong những pháp sư tài giỏi cuối cùng còn sót lại, nhưng ngay cả anh ấy cũng không phải là đối thủ của kẻ địch ghê gớm đang đe dọa sự tồn tại của nhân loại. Ngay thời khắc anh ấy nghĩ rằng tất cả đã chấm dứt, anh ấy được gửi ngược về thời gian, tới những ngày đầu học phép thuật tại Học viện Hebrion danh giá! Với cơ hội hiếm hoi thứ hai này, Desir quyết tâm cứu không chỉ bản thân mà còn cả những người bạn và đồng đội đã mất. Với kiến thức về tương lai, sự nỗ lực của anh ấy có thể tạo ra sự khác biệt hay tất cả họ đều cam chịu sống lại cùng một số phận khủng khiếp? Dựa trên một cuốn tiểu thuyết ăn khách.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Kikansha no Mahou wa Tokubetsu desu",
+            "overview": "Labirynty cieni spustoszyły ziemię i unicestwiły praktycznie każdego na swojej drodze. Losy ludzkości spoczywają na barkach sześciu magów, wliczając w to magicznego analityka Desira Herrmana, którzy stawiają wszystko na ostatnią walkę mającą zatrzymać tą niekończącą się rzeź... lecz bezskutecznie. Desir zamyka oczy w swoich ostatnich chwilach, tylko po to, by otworzyć je na ceremonii rozpoczęcia szkoły. Desir cofnął się 13 lat wstecz, gdzie dostał kolejną szansę. Możliwość ujrzenia utraconych najbliższych mu osób, spotkania poległych druhów, oraz szansę uratowania świata...!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "歸還者的魔法要特別",
+            "overview": "異次元空間『影之世界』持續侵蝕世界。人類不得不面對影世界帶來的最可怕的災難『影子迷宮』。『戴基爾．阿曼德』與同伴一同對抗最後一個『影子迷宮』的最終頭目破滅龍（波羅米歐．納波利坦），卻仍迎來世界的滅亡結局。就在戴基爾萬念俱灰的瞬間眼前出現了熟悉的光景竟是 13 年前的世界。戴基爾竟回到了他的母校，全帝國第一的魔法學園「赫布裏温學院」的開學典禮上。於是他為了拯救世界，再次集結夥伴們，起身反抗終將到來的滅亡命運！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "A Returner's Magic Should Be Special",
+            "overview": "Dünyamızı kirletmeye devam eden bir başka boyut, Gölge Dünya. İnsanlık, Gölge Labirenti olarak bilinen en büyük felaketle karşı karşıya. Desir Herrman ve arkadaşları, umutsuz saldırılarına rağmen Yıkım Ejderhası Boromir Napolitan'a karşı verdikleri savaşı kaybederler ve dünyanın sonu gelir. Desir sonunun geldiğine ikna olduğunda gözlerini açar... kendini 13 yıl geçmişte bulur. Desir, İmparatorluk'taki en iyi büyücü okulu olan Hebrion Akademisi'nin kayıt töreninde zamanda geriye gitmiştir. Yaklaşan kıyametin geleceğini değiştirmek için Desir, dünyayı kurtarmak üzere arkadaşlarını bir kez daha bir araya getirir!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JV",
+          "iso_639_1": "jv",
+          "name": "",
+          "english_name": "Javanese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een andere dimensie die onze wereld blijft bederven, de Schaduwwereld. De mensheid wordt geconfronteerd met de ergste ramp, bekend als het Schaduwlabyrint. Ondanks hun wanhopige aanvallen verliezen Desir Herrman en zijn vrienden hun strijd tegen de Destruction Dragon, Boromir Napolitan, en komt er een einde aan de wereld. Wanneer Desir overtuigd is van zijn einde, opent hij zijn ogen... en bevindt hij zich 13 jaar in het verleden. Desir is terug in de tijd gegaan naar de inschrijvingsceremonie van de Hebrion Academie, de beste school voor magiërs in het rijk. Om de toekomst van naderend onheil te veranderen, brengt Desir zijn vrienden opnieuw bij elkaar om de wereld te redden!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2KKDIwALX3HJWCjeDnvLa3Ag6ki.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dlGbDxOEqTAchmIoY2OUk4A8vpn.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pQ50KyKGjtFbmRVCKiYnd7q6vOE.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gx3eI1zHB2F2KkzOoErk53uFeu8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1349,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hIkwRp9mr8xkZw2afQ1vsj86O9n.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2400
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pPm8XX0IZWuaaRRTpt5WCV5s0SX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.843,
+          "height": 617,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ah6wYzvs50YeR5PpMUjWKCknako.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1137
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.666,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/svwCvfLCUqc5tn85lijkKqTXQLF.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1125
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2340,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ngMp1zSWfzzPQoP5cj1YiXZtRFM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1560
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 780,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uZpr4qU212ZPDANwG4y02YozPan.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 550
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 1278,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2vI6llYWyA2wa5QgvDAq63BxNdI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6X3OmlFKtu3wxcDVsTgUHFzusQA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

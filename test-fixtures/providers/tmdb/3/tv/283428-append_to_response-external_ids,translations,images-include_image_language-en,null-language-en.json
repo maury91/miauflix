@@ -1,0 +1,1019 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12589",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"46461af16e32797a56537ffc884ff39c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ht6WUmez8cFbwlrFmGdjbYyn3RG.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-04-02",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://korinojoheki-pr.com",
+    "id": 283428,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-05",
+    "last_episode_to_air": {
+      "id": 7899760,
+      "name": "Cultural Festival",
+      "overview": "Summer's over and Class 2-2 takes the stage for the cultural festival. But while everyone else celebrates, Minato slowly realizes that something is off.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-05",
+      "episode_number": 20,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 283428,
+      "still_path": "/fjrv3rc0SxLw3ivEg4ELa2X3G34.jpg"
+    },
+    "name": "The Ramparts of Ice",
+    "next_episode_to_air": {
+      "id": 7899763,
+      "name": "Episode 21",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-12",
+      "episode_number": 21,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 283428,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 94,
+        "logo_path": "/7RNXnyiMbjgqtPAjja13wchcrGI.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 160,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 201,
+        "logo_path": "/qNooLje0YQh1y3y9LUM2Y5QCtiF.png",
+        "name": "CBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 896,
+        "logo_path": "/qfUzYnpnN5bnd2bqGUH0OlAMell.png",
+        "name": "Tulip Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1559,
+        "logo_path": "/ihcrBmZYwCmT3YZ7ykNmFgtj2oA.png",
+        "name": "SBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2460,
+        "logo_path": "/34sNEcsgcTAuDidRMrgxdfNyVjL.png",
+        "name": "BSN",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2461,
+        "logo_path": "/b4Ivxqz6UY0EogjYc09Y22ctC6F.png",
+        "name": "tys",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2462,
+        "logo_path": "/7zXfwh5ZhFqvdOWgWX80weU6Sqb.png",
+        "name": "NBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3658,
+        "logo_path": "/sJwRsE1lfMwAwYZi1OtRfn7V03t.png",
+        "name": "HBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3705,
+        "logo_path": "/6vOG1oEihq6eStEzPnOGal2AIV9.png",
+        "name": "RKK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3969,
+        "logo_path": "/nhCsLIGjzIIp6jIFCdHN0cQEzjP.png",
+        "name": "i-Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3970,
+        "logo_path": "/9coKtCf4jSNCdSqGveVFyzvjrZt.png",
+        "name": "SBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3971,
+        "logo_path": "/zoFgqDe0v8svSA01yExlhcG1Bss.png",
+        "name": "IBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3972,
+        "logo_path": "/rL2IlndcEiQnIbym5EoSEM7rGlx.png",
+        "name": "BSS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3973,
+        "logo_path": "/dh4E8hGvqD9Xqu51kbqUU06UKbt.png",
+        "name": "MRO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3974,
+        "logo_path": "/yMQxsmGs88q54bslmcSeXlmpObC.png",
+        "name": "OBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3975,
+        "logo_path": "/6ACZlk44MWsIIwYHxjRGXGKlpRb.png",
+        "name": "TUF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3977,
+        "logo_path": "/sGMMrdCmptaLLwJX7CsXTDaduLO.png",
+        "name": "RSK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3978,
+        "logo_path": "/zOz9LK6WWLUWGuG0fthzDzCIXlA.png",
+        "name": "TUY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3979,
+        "logo_path": "/6oIE2LmtONObnw5wtFO4IIXwgkb.png",
+        "name": "tbc",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4748,
+        "logo_path": "/o5Hlt7ZXJPEm4Qrx2Pl2rtc9A5y.png",
+        "name": "RKB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4792,
+        "logo_path": "/8kzeHaKeW3gZubs3cqlGWFvfJI7.png",
+        "name": "KUTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4859,
+        "logo_path": "/fhQU8sGOoV877wDfHmPZftKldvE.png",
+        "name": "RBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6171,
+        "logo_path": "/vxemHAgdzVCbvAFcO84MWg2wnXC.png",
+        "name": "UTY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6172,
+        "logo_path": "/mKslL0MTHHt9ukugWOv3Vh8Tn0E.png",
+        "name": "RCC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6173,
+        "logo_path": "/92bKXaygjtTwAbX4AH2UnLJN2Xe.png",
+        "name": "MRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6174,
+        "logo_path": "/aawphEBuBGT9RVP6xG3BZV8NOCw.png",
+        "name": "ATV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6175,
+        "logo_path": "/fVUs2F2qTjOzJ9oP0jeqtpZEAai.png",
+        "name": "MBC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 28,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "氷の城壁",
+    "overview": "Weighed down by memories she can't shake, high schooler Koyuki Hikawa keeps everyone at arm's length — until three schoolmates draw her out of her shell.",
+    "popularity": 30.1624,
+    "poster_path": "/rke9UC2QrogvxiQD9TGpbvqDosi.jpg",
+    "production_companies": [
+      {
+        "id": 125523,
+        "logo_path": "/jE5kEho5Dd2XxSOBzPOz7zuF4Y2.png",
+        "name": "Studio KAI",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1393,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 177226,
+        "logo_path": "/ei16ncQFSAUVeq2w3Enrqq1xiRY.png",
+        "name": "Universal Music Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173235,
+        "logo_path": "/nkfGU0YSf1O1tTVBwyaDkE7yBCv.png",
+        "name": "ADK Emotions",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-04-02",
+        "episode_count": 28,
+        "id": 440547,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/96tnzySFpwLxp27Xc5CCi0fkRsx.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.6,
+    "vote_count": 77,
+    "external_ids": {
+      "imdb_id": "tt39123061",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 459627,
+      "tvrage_id": null,
+      "wikidata_id": "Q131984499",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "korinojoheki_pr"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "人と接するのが苦手で、他人との間に壁を作ってしまう高校生・氷川小雪。幼なじみの安曇美姫以外誰ともつるまず、静かに日々を過ごしていた彼女の前に、なぜかぐいぐい距離を詰めてくる男子・雨宮湊が現れて──？孤高の女子・小雪、学校のアイドル・美姫、距離ナシ男子・湊、優しく穏やかなバスケ部員・陽太。不器用で、じれったくて、それでも愛おしい。青春のすれ違いが織りなす群像劇が今、幕を開ける。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Ramparts of Ice",
+            "overview": "Weighed down by memories she can't shake, high schooler Koyuki Hikawa keeps everyone at arm's length — until three schoolmates draw her out of her shell.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Quebrar o Gelo",
+            "overview": "Koyuki tem dificuldade em criar ligações com outras pessoas e está decidida a passar os anos de escola sozinha. Mas surge Minato, decidido a derreter o seu muro de gelo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Parede de Gelo",
+            "overview": "Koyuki não consegue se conectar com as pessoas e curte ficar sozinha na escola. Até que Minato aparece e faz de tudo para quebrar o gelo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Rompiendo el hielo",
+            "overview": "A Koyuki le cuesta trabajo conectar con otros. Preferiría pasar sus años escolares sola…, hasta que aparece Minato, que decide derretir los muros de hielo a su alrededor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Rompiendo el hielo",
+            "overview": "A Koyuki le cuesta relacionarse y le parece bien pasar sus años de instituto sola... hasta que aparece Minato, que se empeña en derretir su muro de hielo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ปราการน้ำแข็งแห่งหัวใจ",
+            "overview": "โคยูกิเข้ากับคนอื่นๆ ไม่ค่อยได้ แต่ก็สุขใจที่ได้ใช้ชีวิตในช่วงมัธยมปลายตามลำพัง จนกระทั่งมินาโตะเข้ามาในชีวิต และหมายมั่นที่จะละลายกำแพงน้ำแข็งในใจเธอ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Bức Tường Băng",
+            "overview": "Nặng lòng bởi những ký ức không thể gạt bỏ, nữ sinh trung học Koyuki Hikawa giữ khoảng cách với mọi người — cho đến khi ba người bạn cùng trường kéo cô ra khỏi vỏ bọc.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Ледяная стена",
+            "overview": "Школьная жизнь не всегда оказывается такой радужной и яркой, как хотелось бы.  Пережив множество издевательств в средней школе, Коюки Хикава стала настолько социально и эмоционально отстранённой, что мало кто может найти с ней общий язык. Кроме, пожалуй, друга детства и по совместительству главного красавчика всего класса, Мики Адзуми. Так бы и дальше длились её тихие дни в старшей школе, если бы не попытки одного очень бесцеремонного парня, Минато Амамии, прорваться сквозь стены, которые окружили Коюки.  Вот начинается эта горькая, но в то же время, и сладкая драма, наполненная духом юности.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Ramparts of Ice",
+            "overview": "Hantée par des souvenirs envahissants, Koyuki Hikawa préfère rester dans sa bulle jusqu'au jour où trois camarades de lycée décident de l'aider à s'ouvrir aux autres.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冰之城牆",
+            "overview": "高中一年級的冰川小雪因其面部表情、態度和難以接近的氣質而被同學們秘密稱為「女王」。基本獨自一人、不擅長與人交往的小雪，只和同為青梅竹馬的好友安曇美姬一同玩耍。然而，此時一位名叫雨宮湊的男孩卻不斷向她靠近",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冰之城牆",
+            "overview": "冰川小雪是個孤僻內向的學生，內心時常築起一道情感城牆，與他人保持距離。她唯一的朋友是從小一起長大的安曇美姫。某天，一個名叫雨宮湊的男生莫名其妙地開始嘗試打破她的心牆，擾亂了小雪原本平靜的生活。\n\n冷酷的小雪、萬人迷美姫、過於親近的湊，還有隨性的籃球少年陽太，四人展開時而尷尬、時而令人挫折，卻又溫馨純粹的校園生活。\n\n這部由青春心事交織而成的群像劇，即將揭開序幕。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冰之城墙",
+            "overview": "冰川小雪不擅长与人接触，与他人之间竖起了一堵城墙。尽管在高中里不与人扯上关系独自度过，却和不知为何不停逼近的雨宫凑相遇了……孤高的女子小雪，学校里的人气之人美姬，毫无距离感男子凑，有着悠哉温柔氛围的阳太。有些问题的四人的，令人着急的青春混线故事！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "얼음 성벽",
+            "overview": "타인과 부딪히는 것이 싫어 벽을 쌓아 버린 코유키. 이 벽을 허물기로 마음먹은 미나토. 이 두 고등학생이 만난 순간, 얼어 있던 감정들이 녹기 시작한다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Ramparts of Ice",
+            "overview": "Die Oberschülerin Koyuki Higawa gilt wegen ihrer kalten Mimik und distanzierten Einstellung als unnahbar. Als jedoch ein Junge versucht, ihr näherzukommen, beginnt die Eiswand zu bröckeln und ihr Freundeskreis sich unversehens zu vergrößern …",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Trencant el gel",
+            "overview": "La Koyuki Hikawa, una estudiant distant que evita els altres, es veu sorpresa quan en Minato Amemiya insisteix a acostar-s'hi. Al costat de la popular Miki i el despreocupat Yota, les seves vides s'entrellacen en una complexa història de joventut.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Les remparts de glace",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Het verhaal draait om Koyuki Hikawa, een afstandelijke middelbare scholier die moeite heeft om zich tot anderen te wenden en een muur tussen zichzelf en anderen optrekt. Hoewel ze haar tijd alleen op school doorbrengt, komt Minato Amemiya om de een of andere reden steeds dichter bij haar in de buurt. Dit frustrerende jeugdverhaal volgt de levens van vier enigszins gecompliceerde personages: Koyuki en Minato, plus het populaire meisje Miki en de relaxte jongen Yōta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Het verhaal draait om Koyuki Hikawa, een afstandelijke middelbare scholier die moeite heeft om zich tot anderen te wenden en een muur tussen zichzelf en anderen optrekt. Hoewel ze haar tijd alleen op school doorbrengt, komt Minato Amemiya om de een of andere reden steeds dichter bij haar in de buurt. Dit frustrerende jeugdverhaal volgt de levens van vier enigszins gecompliceerde personages: Koyuki en Minato, plus het populaire meisje Miki en de relaxte jongen Yōta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "The Ramparts of Ice",
+            "overview": "Licealistka Koyuki ma problemy z nawiązywaniem kontaktów i lubi spędzać czas samotnie. Aż do chwili, gdy pojawia się Minato, który postanawia roztopić jej ścianę lodu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Ramparts of Ice",
+            "overview": "Koyuki fatica a relazionarsi con gli altri e accetta di trascorrere gli anni del liceo in solitudine... finché non arriva Minato, deciso a sciogliere il suo muro di ghiaccio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Ziduri de gheață",
+            "overview": "Lui Koyuki îi e greu să relaționeze cu ceilalți și se mulțumește să-și petreacă singură anii de liceu, până când apare Minato, hotărât să-i dărâme zidurile de gheață.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Крижані стіни",
+            "overview": "Коюкі складно знаходити спільну мову з іншими й подобається проводити шкільні роки на самоті. Доки не з’являється Мінато, сповнений рішучості розтопити її крижану стіну.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "The Ramparts of Ice",
+            "overview": "Koyukin on vaikea tutustua muihin, ja hän onkin koulussa mielellään omissa oloissaan. Sitten paikalle ilmestyy Minato, joka on päättänyt saada Koyukin ulos kuorestaan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "סוללת הקרח",
+            "overview": "זיכרונות העבר של תלמידת התיכון קויוקי היקאווה לא נותנים לה מנוח, והיא מתרחקת מכולם – עד ששלושה חברים לכיתה עוזרים לה להיפתח.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "تثقل كاهل الطالبة الثانوية كويوكي هيكاوا ذكريات لا تستطيع نسيانها، فتبقي الجميع على مسافة منها - إلى أن يقوم ثلاثة من زملائها في المدرسة بإخراجها من عزلتها.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Η Κογιούκι Χικάγουα, μια μαθήτρια λυκείου που την βαραίνουν αναμνήσεις που δεν μπορεί να ξεπεράσει, τους κρατά όλους σε απόσταση. Όμως, τρεις συμμαθητές της καταφέρνουν να την βγάλουν από το καβούκι της.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Jégbástya",
+            "overview": "A történet középpontjában Hikawa Koyuki áll, egy visszahúzódó középiskolás diák, aki nehezen enged közel magához másokat, és falat húz maga és az emberek közé. Habár az iskolában többnyire egyedül van, valamilyen okból Amemiya Minato mégis fokozatosan közeledni próbál hozzá. A fiatalok összetett története négy bonyolult személyiség életét követi: Koyuki és Minato mellett megismerhetjük a népszerű lányt, Mikit, valamint a laza srácot, Yōtát.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Ледените крепости",
+            "overview": "Преследвана от болезнени спомени, гимназистката Коюки Хикава държи всички на разстояние. Но срещата с трима съученици постепенно я кара да отвори сърцето си към света.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ht6WUmez8cFbwlrFmGdjbYyn3RG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1395,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xwoRomUq2YmpgXlDgBQCZIcgXEc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2480
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h2ngPmqV3pshkn2iXDN429JAxXP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 808,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g1p4w1DNYjWhnmwUiKrW80gVCMZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1436
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jtNK9327cHSVOIvFoNkHz6G3TE7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dQvlrziaXEVL4MZADTfW8i6685L.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/phnzvLcj2ACNxEacBz6FHH39alr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/stMOOuTddHRR725efCPreZnQadD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xvrOSxgjmaslq8yaJqBN5AUoNYB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Oh5v6xltWdVgt9Vt465qbLXatM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q14pte2Wq1Nnnl8TOSIusBmkVdD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5p7lIdbxL1XoIsg9iocPshqqBwj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j6GJAAXaoC5WwNSSr2z2wHsnvJR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u18zx8vMWSvOzLi6QSJ4ba5akZG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 736,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qfxdAVkld0QlT9Qbc6DeGhTuahd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1308
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 736,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9mSmtTit7gaYciF2b7IwmLjxizB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1308
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.822,
+          "height": 135,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a5okATkpmXxAClSnAjGP4ums77c.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 786
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.707,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A2h4bwSPlpnl2E3FQQiILl0Gk27.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1528
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1349,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rke9UC2QrogvxiQD9TGpbvqDosi.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 899
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2030,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lqUDZSU2DzorVDVS6dGgpiIh2ZK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1436
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7Vj92GlRvdZtzeRzJDHfr0JiP8Z.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x7o4iZDnwCZphxkWzFyW3RujLMO.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1998
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/41FpUJdOq9DBLpNBNGdrWEIKLkU.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yFQZIxAqmpxZrmVQnFULU5S3kgI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1024
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/B5qevR13QmbumzjLA0IoCbzpBI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2064,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pBeJekIJFJUkJ3hDNqI8WLLsTsR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1376
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8mlQMGEc3mFFVRamrRCKuNt1aU3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 675
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2030,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/al6q31WdsER7ailNIDelCPCRGWB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1353
+        },
+        {
+          "aspect_ratio": 0.669,
+          "height": 1597,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2hJ3QpyS72dmvysX5EGNKStsSWa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1069
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6UjCPyAyRb04LUo8yocvVlh4n8t.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1344,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lw3pYc8iX0H8xvrtLemj4Fmq2T5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 950
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7H1Q6MwhPCwH3MAIaOdjLWr8le8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1344,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hLBV3jcyJbc8eia8z5IcgqgFGL3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 950
+        }
+      ]
+    }
+  }
+}

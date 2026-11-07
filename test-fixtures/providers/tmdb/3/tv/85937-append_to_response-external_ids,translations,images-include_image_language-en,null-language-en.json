@@ -1,0 +1,1965 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19326",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"95dd6888dbc38bb68ebd3ead03751576\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/nTvM4mhqNlHIvUkI1gVnW6XP7GG.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2019-04-06",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://kimetsu.com/anime",
+    "id": 85937,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2024-06-30",
+    "last_episode_to_air": {
+      "id": 5337557,
+      "name": "The Hashira Unite",
+      "overview": "During a silent night when the moon shines, Kagaya finally meets Muzan Kibutsuji, who appears at the Ubuyashiki Mansion.",
+      "vote_average": 8.4,
+      "vote_count": 56,
+      "air_date": "2024-06-30",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 41,
+      "season_number": 5,
+      "show_id": 85937,
+      "still_path": "/a8QEWBNIfRzXN7g5WOdrPS3QeKy.jpg"
+    },
+    "name": "Demon Slayer: Kimetsu no Yaiba",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1,
+        "logo_path": "/4x4GsmRmSLLL0RVNKsoqAVH43tz.png",
+        "name": "Fuji TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 343,
+        "logo_path": "/9rNqtDYAnD6yTOutvHI3synSEs2.png",
+        "name": "Gunma TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 879,
+        "logo_path": "/pX3gDCsG8WcQvQbCNJ37t5w0HyG.png",
+        "name": "Tokai Television Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1163,
+        "logo_path": "/1J33ZvSff1VOEt3aC8CyKmj9GEy.png",
+        "name": "Kansai TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2478,
+        "logo_path": "/2v82HpzoKRveJEJcGHkeTcktMRM.png",
+        "name": "Tochigi TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3535,
+        "logo_path": "/sces9gh6ih1DaD54WXvqHeLMScE.png",
+        "name": "Fukui TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3721,
+        "logo_path": "/llvJ29dplQLsoklpPIXtYYcrxHL.png",
+        "name": "Hokkaido Cultural Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4799,
+        "logo_path": "/y1F9WoEjz7MhzjN56im3tVKTd1r.png",
+        "name": "Iwate Menkoi Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4825,
+        "logo_path": "/9dD3buakf1nS6XQVBwEtm50izs4.png",
+        "name": "TOS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4829,
+        "logo_path": "/qHGklsa90XMreAdYm7AZl6eeaCL.png",
+        "name": "Sendai Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4839,
+        "logo_path": "/pRhoUkllLEe3U9341NUCeKdQ7to.png",
+        "name": "SAGA TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4841,
+        "logo_path": "/7QZ9b8bIpNUU5AjdaW6BXcMziY6.png",
+        "name": "Ishikawa TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4850,
+        "logo_path": "/4ibJ7BiVYXB98ejS48vY93hiKqg.png",
+        "name": "TNC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4851,
+        "logo_path": "/ywBaq3nJZzLh7KZBNZN9rEV68v.png",
+        "name": "OHK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4855,
+        "logo_path": "/vRWtsyWIcIrtw0PXbCbjC4xvXtw.png",
+        "name": "Kochi Sun Sun Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4970,
+        "logo_path": "/boaSCPMx8JjYB4agAhYNt7mCJ6N.png",
+        "name": "Television Shin Hiroshima System",
+        "origin_country": "JP"
+      },
+      {
+        "id": 5644,
+        "logo_path": "/832SJcpnozaNWKto6hPSpYvDYQU.png",
+        "name": "TV Shizuoka",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6156,
+        "logo_path": "/n8wyc29KNH1qCUskdWX8FIy7QBZ.png",
+        "name": "UMK TV Miyazaki",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6209,
+        "logo_path": "/fjenNun3vCLtnHHsTpAgVYkubMl.png",
+        "name": "NST",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6210,
+        "logo_path": "/kCNJcIxnOXI4fkc8oZLOk1BZb0o.png",
+        "name": "NBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6211,
+        "logo_path": "/mFM7fx4yt3FOa6leUbBbd8iGZIi.png",
+        "name": "Sakuranbo TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6212,
+        "logo_path": "/eAaH52WuIH4XNlqYSonXZRPRnGE.png",
+        "name": "TSK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6213,
+        "logo_path": "/np5gbKJvysVLnJKg8g1OxhiA6Qa.png",
+        "name": "Ehime Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6214,
+        "logo_path": "/olXD3GjcnRtTwOdTOnWVVALxuK1.png",
+        "name": "KTS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6666,
+        "logo_path": "/1YQFkvU0ngLVHiJvI8ydtFf6bji.png",
+        "name": "Fukushima TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6819,
+        "logo_path": "/hNbCO6N6F4o09DCGAoz7g0G2E9F.png",
+        "name": "AKT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6821,
+        "logo_path": "/aWuhW3nOkrQrjdhcHOTDsbYXNtU.png",
+        "name": "Toyama Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6822,
+        "logo_path": "/IEdOZbIcZOSeKihiRF8dem94nv.png",
+        "name": "TV Kumamoto",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6823,
+        "logo_path": "/gRUUO3lBYddcSqQPfFruXVDAlv2.png",
+        "name": "Okinawa Television Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 8446,
+        "logo_path": "/dHp09KNT493NE46Wt8pnPyL84Ef.png",
+        "name": "KTN",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 63,
+    "number_of_seasons": 5,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "鬼滅の刃",
+    "overview": "After a demon attack leaves his family slain and his sister cursed, Tanjiro embarks upon a perilous journey to find a cure and avenge those he's lost.",
+    "popularity": 19.0512,
+    "poster_path": "/xUfRZu2mi8jH6SzQEJGP6tjBuYj.jpg",
+    "production_companies": [
+      {
+        "id": 5887,
+        "logo_path": "/m6FEqz8rQECnmfjEwjNhNAlmhCJ.png",
+        "name": "ufotable",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2020-08-26",
+        "episode_count": 18,
+        "id": 131803,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/xkBepJmdcWBU1yBG9bCmtTO6PGh.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2019-04-06",
+        "episode_count": 26,
+        "id": 116882,
+        "name": "Unwavering Resolve Arc",
+        "overview": "It is the Taisho Period in Japan. Tanjiro, a kindhearted boy who sells charcoal for a living, finds his family slaughtered by a demon. To make matters worse, his younger sister Nezuko, the sole survivor, has been transformed into a demon herself. Though devastated by this grim reality, Tanjiro resolves to become a “demon slayer” so that he can turn his sister back into a human, and kill the demon that massacred his family.",
+        "poster_path": "/bV0ZCL0IqrTQKClu6EtXlZaJevD.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2021-10-10",
+        "episode_count": 7,
+        "id": 181846,
+        "name": "Mugen Train Arc",
+        "overview": "Flame Hashira Kyojuro Rengoku receives new orders: Travel to the Mugen Train, where over forty people have gone missing, and conduct an investigation. Leaving the Demon Slayer Corps Headquarters, he sets off on this new mission. Tanjiro's group, fresh from completing their training at the Butterfly Mansion, also head to their next mission, the Mugen Train. There they rendezvous with Rengoku, who arrived ahead of them. On this train running through the darkness, a new battle is about to begin.",
+        "poster_path": "/pLGjaDyg2LeA2d9KZxBZCiiqC2B.jpg",
+        "season_number": 2,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2021-12-05",
+        "episode_count": 11,
+        "id": 215073,
+        "name": "Entertainment District Arc",
+        "overview": "After visiting the Rengoku residence, Tanjirou and his comrades volunteer for a mission within the Entertainment District, a place where desires are sold and demons dwell. They journey alongside the flashy Sound Hashira, Tengen Uzui, in search of a monstrous foe terrorizing the town. Sworn to slay creatures of the night, the hunt continues.",
+        "poster_path": "/gbmhcOtre5SeBgwR9gvTpUra5kZ.jpg",
+        "season_number": 3,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2023-04-09",
+        "episode_count": 11,
+        "id": 243774,
+        "name": "Swordsmith Village Arc",
+        "overview": "Tanjiro’s journey leads him to the Swordsmith Village, where he reunites with two Hashira, members of the Demon Slayer Corps’ highest-ranking swordsmen - Mist Hashira Muichiro Tokito and Love Hashira Mitsuri Kanroji. With the shadows of demons lurking near, a new battle begins for Tanjiro and his comrades.",
+        "poster_path": "/6gD7G8HQay1X8mHiFVttWJ3czYb.jpg",
+        "season_number": 4,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2024-05-12",
+        "episode_count": 8,
+        "id": 345811,
+        "name": "Hashira Training Arc",
+        "overview": "The members of the Demon Slayer Corps and their highest-ranking swordsmen, the Hashira. In preparation for the forthcoming final battle against Muzan Kibutsuji, the Hashira Training commences. While each carry faith and determination within their hearts, Tanjiro and the Hashira enter a new story.",
+        "poster_path": "/axI3BUZgTYz36IYtUtRhivtspUo.jpg",
+        "season_number": 5,
+        "vote_average": 7.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "The love of a brother transcends everything.",
+    "type": "Scripted",
+    "vote_average": 8.636,
+    "vote_count": 7562,
+    "external_ids": {
+      "imdb_id": "tt9335498",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 348545,
+      "tvrage_id": null,
+      "wikidata_id": "Q63350570",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "kimetsu_off"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Demon Slayer: Kimetsu no Yaiba",
+            "overview": "After a demon attack leaves his family slain and his sister cursed, Tanjiro embarks upon a perilous journey to find a cure and avenge those he's lost.",
+            "homepage": "",
+            "tagline": "The love of a brother transcends everything."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Kimetsu no Yaiba: Guardianes de la Noche",
+            "overview": "Tanjiro Kamado vive feliz con su madre y hermanos pequeños en la montaña, subsistiendo humildemente. Una mañana, al regresar a casa, se encuentra a toda su familia asesinada y a su hermana Nezuko convertida en demonio. Tanjiro buscará desesperadamente la manera de devolverla a su condición humana y de cobrarse venganza. Para ello, se someterá a un arduo entrenamiento, con el objetivo de ingresar en el Cuerpo de Matademonios y dar caza al demonio Muzan Kibutsuji, con la ayuda de Nezuko, que se resiste a perder del todo su humanidad. Juntos forman la nueva hornada de los guardianes de la noche.",
+            "homepage": "",
+            "tagline": "El amor de un hermano lo trasciende todo."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Demon Slayer: Kimetsu no Yaiba",
+            "overview": "Japão, era Taisho. Tanjiro, um bondoso jovem que ganha a vida vendendo carvão, descobre que sua família foi massacrada por um demônio. E pra piorar, Nezuko, sua irmã mais nova e única sobrevivente, também foi transformada num demônio. Arrasado com esta sombria realidade, Tanjiro decide se tornar um matador de demônios para fazer sua irmã voltar a ser humana, e para matar o demônio que matou sua família. Um triste conto sobre dois irmãos, onde os destinos dos humanos e dos demônios se entrelaçam, começa agora.",
+            "homepage": "",
+            "tagline": "O amor de um irmão transcende tudo."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "鬼灭之刃",
+            "overview": "时值日本大正时期。\n\n传说太阳下山后，有恶鬼出没吃人。亦有猎鬼人斩杀恶鬼、保护人们。\n\n卖炭少年炭治郎，他那平凡而幸福的日常生活，在家人遭到恶鬼袭击的那一天发生了剧变。母亲与四个弟弟妹妹惨遭杀害，而与他一起生还的妹妹祢豆子亦异变成凶暴的鬼。\n\n在猎鬼人的指引下，立志成为猎鬼人的炭治郎与变成鬼却尚存理智的祢豆子踏上了旅程。通过艰苦的剑术修行与赌命试炼，炭治郎成为了猎鬼人组织“鬼杀队”的一员。\n\n为了让妹妹祢豆子变回人类，为了讨伐杀害家人的恶鬼，为了斩断悲伤的连锁，少年与鬼的战斗不曾停歇。\n\n幸福被破坏之时，总是弥漫着鲜血的味道。纵然我身俱灭，定将恶鬼斩杀！血风剑戟冒险谭，开幕！",
+            "homepage": "",
+            "tagline": "兄妹之情，胜过一切。"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Demon Slayer : Kimetsu no Yaiba",
+            "overview": "Tanjirô, un jeune et sympathique vendeur de charbon voit son quotidien changer radicalement après le massacre de sa famille par un démon. Seule sa petite sœur Nezuko survit à l’attaque, mais elle est transformée en un démon féroce. Ils partent tous deux en voyage afin de prendre leur revanche et de rendre à Nezuko son apparence d’origine. Vivez avec eux ce périple dans lequel le destin des humains et des démons s’entremêlent.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Истребитель демонов",
+            "overview": "Действие происходит в эпоху Тайсё. Ещё с древних времён ходят слухи о том, что в лесу обитают человекоподобные демоны, которые питаются людьми и ходят по ночам, ища новую жертву. Но... это же просто легенда, ведь так?..\n\nТанджиро Камадо — старший сын в семье, потерявший своего отца и взявший на себя заботу о своих родных. Однажды он уходит в соседний город, чтобы продать древесный уголь. Вернувшись утром, парень обнаруживает перед собой страшную картину: вся родня была зверски убита, а единственной выжившей является Нэзуко — обращённая в демона, но пока не потерявшая всю человечность младшая сестра.\n\nС этого момента для Танджиро и Нэзуко начинается долгое и опасное путешествие, в котором мальчик намерен разыскать убийцу и узнать способ исцеления для своей сестры. Но в состоянии ли дети преодолеть все трудности и вернуться домой?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Demon Slayer: Kimetsu no Yaiba",
+            "overview": "Japão, era Taisho. Tanjirou é um menino de bom coração que viveu pacificamente com sua família como vendedor de carvão. A sua vida normal muda completamente quando a sua família é morta por demónios. A única outra sobrevivente, a irmã mais nova de Tanjirou, Nezuko, tornou-se num demónio feroz. Para devolver Nezuko ao normal e vingar-se do demónio que matou a sua família, os dois partem numa jornada. De um jovem talento, começa um conto de aventuras de sangue e espadas!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Demon Slayer: Kimetsu no Yaiba",
+            "overview": "Nachdem seine Familie von Dämonen grausam ermordet wurde und seine Schwester Nezuko selbst in eine solche Kreatur verwandelt wird, tritt der herzensgute Tanjiro Kamado dem geheimen Dämonenjäger-Korps bei, um ein Heilmittel für sie zu finden. Auf seiner Reise schließt er Freundschaft mit den treuen Mitstreitern Zenitsu und Inosuke, während er sich durch harte Kämpfe und intensive Trainingseinheiten stetig weiterentwickelt. Zusammen mit den mächtigen Elite-Kämpfern des Korps stellt sich die Gruppe in immer gefährlicheren Abschnitten wie dem Mugen Train, dem Unterhaltungsdistrikt oder dem Dorf der Schwertschmiede den tödlichen zwölf Dämonenmonden. Über alle Staffeln hinweg verweben sich bildgewaltige Schwertkämpfe und visuell atemberaubende \"Breathing Styles\" mit den tragischen Hintergrundgeschichten von Menschen wie Dämonen gleichermaßen. Schließlich gipfelt der epische Konflikt in der unabwendbaren Konfrontation mit Muzan Kibutsuji, dem Ur-Dämon und Urheber all ihres Leids.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Kimetsu no Yaiba",
+            "overview": "* Anime yang diadaptasi dari manga buatan Gotouge Koyoharu.\n\nSejak dahulu kala, ada banyak rumor tentang iblis pemakan manusia yang bersembunyi di hutan. Karena itu, penduduk setempat tak pernah berani keluar saat malam hari. Legenda mengatakan bahwa Pemburu Iblis juga berkeliaran di malam hari dan memburu iblis yang haus darah. Bagi Tanjirou, hal itu adalah kenangan terburuknya.\n\nSejak kematian ayahnya, Tanjirou menggantikan ayahnya untuk memenuhi kebutuhan keluarganya. Meski kehidupan mereka sangat berat, mereka merasakan kebahagiaan yang luar biasa. Tapi, kebahagiaan itu hancur saat Tanjirou melihat keluarganya dibantai. Tidak hanya itu, satu-satunya keluarganya yang selamat, adik perempuannya, Nezuko, berubah menjadi Iblis. Tapi, Nezuko masih menunjukkan tanda-tanda emosi dan pemikiran manusia. Perjalanan Tanjirou untuk melawan iblis dan mengembalikan adiknya menjadi manusia akhirnya dimulai.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "İblis Keser",
+            "overview": "Bir iblis saldırısında ailesi katledilen ve kız kardeşi lanetlenen Tanjiro, laneti kaldırmanın bir yolunu bulmak ve intikam almak için tehlikeli bir yolculuğa çıkar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "鬼滅之刃",
+            "overview": "時代背景為日本大正時期，賣炭維生的善良少年炭治郎，某天家人慘遭鬼殺害。而唯一倖存的妹妹禰豆子卻變化成鬼。遭到絕望現實打擊的炭治郎，為了讓妹妹恢復回人類，為了被殺害的家人向鬼報仇，決定踏上「獵鬼」之路。人鬼交織的悲憤兄妹故事現在開始了。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Demon Slayer: Kimetsu no Yaiba",
+            "overview": "Giappone, periodo Taisho. Tanjiro trova la sua famiglia massacrata da un demone mentre sua sorella minore Nezuko, l’unica sopravvissuta, è stata lei stessa trasformata in un demone. Tanjiro decide quindi di diventare un \"cacciatore di demoni\" per far tornare sua sorella umana e uccidere chi ha massacrato la sua famiglia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "قاتل الشياطين",
+            "overview": "تقع أحداث القصة باليابان في فترة تايشو (مِن عام 1912 إلى 1926) حول صبي يدعى “كامادو تانجيرو” وهو الإبن الأكبر في عائلته ومعيلها بعد وفاة والدهفي أحد الأيام يذهب “تانجيرو” لبيع الفحم في إحدى البلدات لكنه يضطر لقضاء الليلة عند أحد هناك بدلاً مِن العودة للمنزل بسبب الإشاعات حول الشياطين الآكلة للبشر التي تجوب الأرجاء ليلاً لكن في اليوم الذي يليه عند عودته للمنزل يجد فاجعة بإنتظاره",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "귀멸의 칼날",
+            "overview": "2019년 4월 Tokyo MX에서 방영을 시작한 애니메이션. 고토게 코요하루의 동명의 만화를 원작으로 한다. 다이쇼 시대, 가난하지만 가족들과 함께 행복한 일상을 보내던 카마도 탄지로. 설이 오기 전에 숯을 잔뜩 팔아 가족들을 배불리 먹여주고 싶었던 탄지로는 혼자 마을로 내려가 숯을 판다. 다음날이 밝고 집에 도착한 탄지로는 가족들이 처참하게 몰살당한 모습을 보고, 유일하게 살아있던 여동생 네즈코를 구하기 위해 그녀를 의사에게 데려가려 하지만 네즈코는 이미 혈귀가 되어 있었다. 가혹한 운명의 사슬을 끊어내고 세상에서 혈귀를 멸하려, 지금 탄지로가 복수의 칼날을 높이 든다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Острието на разрушителя",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Κυνηγός Δαιμόνων",
+            "overview": "Είναι η Περίοδος Ταϊσό στην Ιαπωνία. Ο Τάντζιρο, ένα καλόκαρδο αγόρι που πουλά κάρβουνο, για να ζήσει, βρίσκει την οικογένειά του σφαγιασμένη από έναν δαίμονα. Σαν να μην έφτανε αυτό, η μικρότερη αδελφή του, η Νέζουκο, η μόνη επιζώσα, έχει μεταμορφωθεί σε δαίμονα. Αν και καταρρακωμένος από την νέα πραγματικότητα, ο Τάντζιρο αποφασίζει να γίνει Κυνηγός Δαιμόνων, ώστε να βρει τρόπο να κάνει την αδελφή του πάλι άνθρωπο, αλλά και να σκοτώσει τον δαίμονα που κατακρεούργησε τους δικούς του.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Клинок, який знищує демонів",
+            "overview": "Події відбуваються у період Тайшьо в Японії. Повсякденне життя добросердного хлопця Танджіро, який підробляє продаючи вугілля, повністю змінилось після того, як його родину було вбито. Єдина, хто лишилась в живих — його сестра Незуко, але її перетворили на моторошного демона. Попри своє спустошення через  цю похмуру реальність, Танджіро вирішує стати \"вбивцею демонів\", щоб віднайти спосіб перетворити Незуко назад у людину та вбити демона, який замордував усю його родину.",
+            "homepage": "",
+            "tagline": "Ми віддамо навіть свої життя, щоб знищити демонів!"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Demon Slayer: Kimetsu no Yaiba",
+            "overview": "En la era Taisho de Japón, Tanjiro, un joven vendedor de carbón, descubre que su familia ha sido asesinada por un demonio. Su hermana Nezuko, la única superviviente, se ha convertido en demonio. Tanjiro decide convertirse en cazador de demonios para devolver a su hermana a la normalidad y vengar a su familia",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ดาบพิฆาตอสูร",
+            "overview": "หลังปีศาจโจมตีจนทำให้ครอบครัวถูกสังหารและน้องสาวต้องคำสาป ทันจิโร่ก็ก้าวเข้าสู่เส้นทางอันตรายเพื่อหาทางรักษาน้องและแก้แค้นให้กับสิ่งที่ตนเองสูญเสียไป",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Miecz zabójcy demonów – Kimetsu no Yaiba",
+            "overview": "Demon wymordował mu rodzinę i rzucił klątwę na siostrę. Teraz Tanjiro rusza w pełną niebezpieczeństw podróż, żeby znaleźć lekarstwo i pomścić bliskich.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "קוטל השדים",
+            "overview": "מאז מותו של אביו, טאנג'ירו לקח על עצמו את האחריות לתמוך במשפחתו. למרות שחייהם היו מלאים בטרגדיות, הם תמיד הצליחו למצוא אושר ותקווה. הכול מתנפץ כאשר טאנג’ירו מגלה שכל משפחתו נטבחה על ידי שדים והיחידה ששרדה היא אחותו הקטנה, נזוקו, שהפכה היא בעצמה לשד. להפתעתו, בניגוד לשדים האחרים, נזוקו עדיין מראה סימנים של רגש ומחשבה בדומה לבני האדם. טאנג'ירו מחליט לצאת למסע להילחם בשדים ולחפש אחר פתרון שישיב את האנושיות של אחותו.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Kimecu no jaiba",
+            "overview": "Již od pradávných časů si lidé vypráví legendy o strašlivých démonech, kteří se ukrývají v lesích a v noci napadají lidská obydlí, zabíjejí jejich obyvatele a živí se jejich krví a masem. Démoni běžné lidi děsí, protože běžné rány se démonovi hned zacelí a jsou schopni nechat si v mžiku narůst třeba i useknutou končetinu. V těchto legendách se však objevují i zabijáci démonů - zkušení válečníci, kteří znají způsoby, jak démony efektivně zabít. Pro mladého chlapce jménem Tanjirou se tyto legendy velice brzy stanou trpkou skutečností...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "時は大正、日本。炭を売る心優しき少年・炭治郎は、ある日鬼に家族を皆殺しにされてしまう。さらに唯一生き残った妹の禰豆子は鬼に変貌してしまった。絶望的な現実に打ちのめされる炭治郎だったが妹を人間に戻し、家族を殺した鬼を討つため、“鬼狩り”の道を進む決意をする。人と鬼とが織りなす哀しき兄妹の物語が、今、始まる――！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thanh Gươm Diệt Quỷ",
+            "overview": "Demon Slayer: Kimetsu no Yaiba là một bộ truyện tranh Nhật Bản được viết và minh họa bởi Koyoharu Gotouge. Phim kể về cậu thiếu niên Tanjiro Kamado, người cố gắng trở thành một kẻ giết quỷ sau khi gia đình cậu bị tàn sát và em gái cậu, Nezuko, bị biến thành quỷ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "鬼滅之刃",
+            "overview": "大正時代，竈門炭治郎繼承亡父留下的炭業工作，支撐一家七口，在山上過著樸實的生活。某日他做完生意返家後發現全家遭鬼王鬼舞辻無慘屠殺，而妹妹禰豆子變成了鬼。鬼殺隊富岡義勇見狀後本欲斬殺禰豆子，但他在見識到兄妹倆的親情後，推薦炭治郎拜鱗瀧左近次為師。炭治郎經過兩年訓練，學會對抗鬼的呼吸法與劍術，通過考驗加入鬼殺隊。\n\n炭治郎完成首次任務斬殺沼澤鬼後，又接到任務前往淺草，途中他聞到當年家人被殺害時的殘留氣味，炭治郎終於和最初的鬼——鬼舞辻無慘——首次接觸，令炭治郎震驚無慘竟偽裝人類組成家庭。在那之後炭治郎結識與無慘對立的鬼珠世和愈史郎，但突然遭遇到無慘的刺客來襲，解除來襲危機後，炭治郎答應收集鬼的血液要求，與珠世建立起合作關係。\n\n炭治郎接到新任務後，前往傳說中有吃人鬼存在的鼓鬼之家，接續遇見同期的隊士我妻善逸及嘴平伊之助，炭治郎在屋外發現兩個孩子表情十分恐慌，於是前來關心，原來他們的哥哥被惡鬼抓進屋內，為了救回被抓走的人類，進入屋裡的兩人，卻陷入包含十二鬼月「原下弦之陸」響凱在內幾個惡鬼為爭奪稀血而互相殘殺的大亂鬥完成任務後，善逸和伊之助加入炭治郎行列。在結識同伴我妻善逸和嘴平伊之助後，他們前去蜘蛛山支援與「下弦之伍」累的對戰。炭治郎在苦戰之際使出祖傳的呼吸法「火之神神樂」，以及禰豆子覺醒的血鬼術一度扭轉頹勢，最終在義勇助陣下取勝。\n\n由於長期違反隊規帶著身為鬼的禰豆子一同行動，炭治郎被押送往產屋敷耀哉的宅邸進行審判，然而他們早已被產屋敷認可。炭治郎等人在恢復後接受特訓。隨後，炭治郎等人前往無限列車執行下一個任務。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Kimetsu No Yaiba",
+            "overview": "Ősidők óta legendák keringenek az erdőben lakozó, emberevő démonokról, és a démonvadászról, aki éjszakánként az erdőt járja. Az ifjú Tanjirou számára ez a mese hamarosan valósággá válik, mikor a családját lemészárolják a rémek, és egyedül a húga, Nezuko marad életben, aki viszont maga is démonná válik. Tanjirou útnak indul, hogy megtalálja az átok ellenszerét és visszaváltoztassa Nezukót emberré.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Kimetsu no yaiba",
+            "overview": "Od dávnych čias si ľudia rozprávali legendy o strašných démonoch, ktorí sa skrývajú v lesoch a v noci útočia na ľudské príbytky, zabíjajú ich obyvateľov a živia sa ich krvou a mäsom. Démoni naháňajú bežným ľuďom strach, pretože bežné rany sa hneď zahoja a démoni dokážu v okamihu dorásť odrezanú končatinu. V týchto legendách sa však objavujú aj zabijaci démonov - skúsení bojovníci, ktorí vedia, ako účinne zabíjať démonov. Pre mladého chlapca menom Tanjirou sa tieto legendy čoskoro stanú trpkou realitou...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Убица демона",
+            "overview": "То је период Таишо у Јапану. Танђиро, добродушни дечак који продаје угаљ да би преживео, проналази своју породицу коју је заклао демон. Да ствар буде гора, његова млађа сестра Незуко, једина преживела, и сама је претворена у демона. Иако уништен овом мрачном стварношћу, Танђиро одлучује да постане „убица демона“ како би своју сестру поново претворио у човека и убио демона који је масакрирао његову породицу.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "شیطان کش : کیمتسو نو یایبا",
+            "overview": "دوره تایشو در ژاپن است. تانجیرو، پسر مهربانی که برای امرار معاش زغال می‌فروشد، خانواده‌اش را می‌بیند که توسط یک شیطان سلاخی شده‌اند. بدتر از همه، خواهر کوچکترش نزوکو، تنها بازمانده، خود به یک شیطان تبدیل شده است. اگرچه تانجیرو از این واقعیت تلخ شوکه شده است، اما تصمیم می‌گیرد که تبدیل به یک «شیطان‌کش» شود تا بتواند خواهرش را دوباره به یک انسان تبدیل کند و شیطانی که خانواده او را قتل عام کرد، بکشد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Guardians de la nit: Kimetsu no Yaiba",
+            "overview": "A l'Era Taisho, en Tanjiro Kamado és un noi intel·ligent amb un bon olfacte i cor que vivia amb la seva família a les muntanyes i guanyava diners venent carbó, però tot canvia quan la seva família és atacada i assassinada per un dimoni (oni). En Tanjiro i la seva germana Nezuko són els únics supervivents de l'incident, tot i que la seva germana Nezuko es converteix en un dimoni. Sorprenentment, però, encara mostra signes d'emoció i pensament humans. Després d'una trobada amb en Giyu Tomioka, un caçadimonis, en Tanjiro és reclutat per l'Urokodaki per a convertir-se també en un caçadimonis. Així comença la seva cerca per a ajudar la seva germana a tornar-se humana novament.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Ucigașul de demoni",
+            "overview": "După ce în urma unui atac al demonilor, familia lui este ucisă, iar sora lui este blestemată, Tanjiro pornește într-o călătorie periculoasă pentru a găsi un leac și a-i răzbuna pe cei pe care i-a pierdut.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "Demon Slayer: Kimetsu no Yaiba",
+            "overview": "လွန်ခဲ့တဲ့နှစ်​ပေါင်းများစွာကတည်းက လူသား​တွေကိုသတ်ဖြတ် စား​သောက်ခဲ့တဲ့ Demon​တွေဟာ ​တော​တောင်​တွေထဲမှာ ကျက်စားတယ်ဆိုတဲ့ ယုံတမ်းစကား​တွေနဲ့အတူ ပြည်သူ​တွေကို ဒုက္ခ​ပေးလာခဲ့တာပါ၊ ဒီ Demon​တွေကို သတ်ဖြတ်​ချေမှုန်းမယ့် Demon Slayer​​​တွေကလည်း ရှိ​နေခဲ့ပါတယ် MC Tanjiro Kamadoဟာ​ ​မိသားစုနဲ့အတူ ​တောင်​ပေါ်က အိမ်​လေးတစ်လုံးမှာနေထိုင်ရင်း မိသားစုဝမ်း​​ရေးအတွက် ​တောင်​အောက်ဆင်းပြီး မီး​သွေး​ရောင်းရင်း အသက်​မွေးရသူပါ၊ တစ်​နေ့ Tanjiroတစ်​ယောက် မီး​သွေး ရောင်းရင်း အိမ်ပြန်အလာ သူ့မိသားစုဟာ Demon​တွေရဲ့လက်ချက်​ကြောင့် ​​သေဆုံးနှင့်ပြီ ဖြစ်သလို ညီမငယ် Nezukoကလည်း အသက်မ​သေ​သော်ငှား Demonတစ်​ယောက် အသွင်​ပြောင်းသွားတဲ့အခါ ​သာယာအေးချမ်းတဲ့ဘဝထဲ ​လေမုန်တိုင်းထန်ပြီးတဲ့​နောက် သူ့မိသားစုကို သတ်သွားတဲ့မိစ္ဆာ​ကောင်ကို ကလဲ့စား​ချေဖို့နဲ့ Demon​ပြောင်းသွား​ပေမဲ့ လူတစ်​ယောက်ရဲ့ ခံစားချက်​တွေ ရှိ​နေ​သေးတယ်လို့ သူယုံကြည်ထားတဲ့ ညီမငယ်Nezuko အတွက် လူစင်စစ်အသွင်ပြန်​ပြောင်းနိုင်မယ့် နည်းလမ်းကို ရှာ​ဖွေဖို့ Tanjiroတစ်​ယောက် စွန့်စားခန်းခရီးစဉ်ကို စတင်ခဲ့ပါ​တော့တယ်",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Het is de Taisho-periode in Japan. Tanjiro, een goedhartige jongen die voor zijn levensonderhoud houtskool verkoopt, vindt zijn familie afgeslacht door een demon. Tot overmaat van ramp is zijn jongere zus Nezuko, de enige overlevende, zelf in een demon veranderd. Hoewel hij verwoest is door deze grimmige realiteit, besluit Tanjiro een ‘demonendoder’ te worden, zodat hij zijn zus weer in een mens kan veranderen en de demon kan doden die zijn familie heeft afgeslacht.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "दानव वधकर्ता: किमेट्सु नो याइबा",
+            "overview": "डेमन स्लेयर: किमेत्सु नो याइबा, कोयोहारू गोटोगे द्वारा निर्मित एक प्रशंसित जापानी मंगा और एनीमे श्रृंखला है। ताइशो युग के जापान में स्थापित, यह तंजीरो कामाडो नामक एक दयालु लड़के की कहानी है, जो एक दानव बन जाता है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Demonų žudikas",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KZ",
+          "iso_639_1": "kk",
+          "name": "қазақ",
+          "english_name": "Kazakh",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "დემონების მკვეთი ხმალი",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nTvM4mhqNlHIvUkI1gVnW6XP7GG.jpg",
+          "vote_average": 5.53,
+          "vote_count": 17,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3GQKYh6Trm8pxd2AypovoYQf4Ay.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iBAtBLqCMON3NPIjyQ1wdMbpTAk.jpg",
+          "vote_average": 4.3,
+          "vote_count": 15,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/unhUWXYl8DFaIsaz6U59cDGSBgj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1069,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xvNrTu0J4yUah1prvL7yH8falJw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1901
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/adAURIlyNNqqXgC5P1KWliHCZpS.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7e9maFsRJanwrR7YFgn6rEmudiX.jpg",
+          "vote_average": 1.208,
+          "vote_count": 12,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5iilESGDr44JUO5as6KzejxkvJd.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b9PEZeiSu1Ux2oweuoaeHmpaFIC.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ugg7TDrDNct3xTtpfTVIcqMcSB7.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dixegMxSehfC4pSht7reBemnJ2v.jpg",
+          "vote_average": 0.904,
+          "vote_count": 7,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kFqANiHH5CwcqAoau8PuT6qxmB6.jpg",
+          "vote_average": 0.904,
+          "vote_count": 7,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 855,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4UJ6FXv5wIa1rWgJfCSVE9bIHRr.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 1520
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rSsTvyBFyoFtOHV35KkIw3S2jgZ.jpg",
+          "vote_average": 0.5,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6svTzrLTjkmvpgbeQqkzcjsOYNi.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rmlHFRgF3xWRby2trsjWb81wmLL.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/43KESrZGndlKmbIpWc7i0YPg8kJ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xbdWl2p4Kf48CQIsiL7R9UdyYw8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i4UWow6hQ7SxlkVCsIg20wqNent.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qrLG3vLg2oXWlaJFrJfzc8Uu7gg.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ke3WrNN9zDqjaTLPUwAW6WMpcQk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1887,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mUpc1eEJxIs4oDaNgKvErCV1EZO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3355
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a1sByhgufDhGTr2xlyY6sk1QcNJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a3FO3K9YJnT7JLOyRqxYtfUXNyG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u1CoMk2Yqs9rbY5LAPSzDGogLXI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1020,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/heks1AYuCPY7pAbgwaNSYeQmNi2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1814
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yreSdptPucHAZjNUfPf6RVsXCwp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sY6WZLcsYNG2YAtWu31Icv6K5D9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8q9pL4SPofUGxUqq2smcuBAN4FI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 722,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h7WRauY0hWFTZ38xImUVamNdtii.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1284
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jOwiXasL87REISAfla0GrjpjSLK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9rl7AsGDOnApYRvwUC1fUQd24lA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oSenodA8I9coXCvuZWQb9QTUCy5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zGXkvNSnvlHsbTxRfHZXAL1HPMp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oU1ccOqRPcs1NhIkY6vjlP7oCew.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fSl82yYllvthY5FLezTaqSYvu3y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.781,
+          "height": 1078,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qK4vzj5wgjS4QsgzfFKqx2ApkXc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.056,
+          "height": 1161,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ecghlDeabR3X3Vv8tXIOeXHQvQe.png",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 1226
+        },
+        {
+          "aspect_ratio": 1.066,
+          "height": 76,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v5BvSzsYnFjoSesXHL3nR4er6kD.svg",
+          "vote_average": 6.722,
+          "vote_count": 7,
+          "width": 81
+        },
+        {
+          "aspect_ratio": 2.194,
+          "height": 299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mrhydE7gus0t83Or2ouRIYjIveY.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 656
+        },
+        {
+          "aspect_ratio": 1.056,
+          "height": 467,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bF3FBqZhinTIkXKoWcl4m7YX4yu.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 493
+        },
+        {
+          "aspect_ratio": 1.056,
+          "height": 1161,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vLfAkuJU4NYT6CG7z2jGym1bS00.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1226
+        },
+        {
+          "aspect_ratio": 1.063,
+          "height": 536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rkrETqe8280RIhZWuH67WsRL827.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 570
+        },
+        {
+          "aspect_ratio": 1.056,
+          "height": 537,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xSlCTvMMBffvSNYRcnZXWDHdnh.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 567
+        },
+        {
+          "aspect_ratio": 1.485,
+          "height": 260,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zrjV3mFtOcQzKlaj4Nj7s3oIGuS.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 386
+        },
+        {
+          "aspect_ratio": 5.362,
+          "height": 188,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gWSjBBq7FKBYIDHf3HTSJ710qNN.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1008
+        },
+        {
+          "aspect_ratio": 6.081,
+          "height": 124,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qV0xfqZSq6KzBBD6GHqugvBdqXD.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 754
+        },
+        {
+          "aspect_ratio": 1.858,
+          "height": 260,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mI6mjpNCNwggsa3926DRgqgfbwl.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 483
+        },
+        {
+          "aspect_ratio": 1.056,
+          "height": 537,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qlOsJMuGKLhlNPwswJUuaEe5vof.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 567
+        },
+        {
+          "aspect_ratio": 2.422,
+          "height": 166,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Ba2NvLdApcqCCVUf37EMpcosO8.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 402
+        },
+        {
+          "aspect_ratio": 1.059,
+          "height": 290,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rFyA3D9FtyP3KWmHOp6FegKaekd.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 307
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xUfRZu2mi8jH6SzQEJGP6tjBuYj.jpg",
+          "vote_average": 6.346,
+          "vote_count": 26,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/taT33NroOl2Fn8bUGj8bwdmNw3G.jpg",
+          "vote_average": 5.53,
+          "vote_count": 17,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1983,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4RuJf3ufe8DgQVycdyMZrJHGK1s.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1322
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uyiD6EdiAoV78UkeLMx3SSfidvl.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z51EJB6ti6Toidmjv3F2b83OrB0.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2022,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1MGUY0TE4JIiwCKc9IeSmdKkIPs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1348
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1140,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/936cmg8PVFMpfocjkxyuZ804Iiw.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 760
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lebf9hbpsVL09HiHCJsJsXZEIMU.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h0Ld8nZXprBDnarQF8WV9vgxVuF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qBp9S7IqhMhwW2oBPo9SJwwl5mV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dhni0UvEDO9jef23WN0V6vfD6Fa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1RZDFDg2FsxDUehMaRp34C8uZcZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rsxpsYoKOub0mUrocESJvj9qpj4.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3eH92UHVSAVzQ3QDmFkBAtEtxIp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jtnzanLTEGBc1mKSUqACYjLSh1b.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wv9uBkGM1UBHfch9LPQskbUzv9v.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jMOci9Aess5opyr2MJ6XykkvamU.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dFfBKov36FUsTgtXVU9hoDwrUwQ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dvU8R6OY6cjeqZMWQEnno1XyS1i.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w4r5C590X1ekp0FtbDyTCFXmQTS.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hFXlWcVDcNB41aqJDJBJFK8D92t.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/41JFIluUBybJBjnu5WtiNkuxsi1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hLZA4MkITNXy4OoGpqxhzgF5ygV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u7hTsWydNkK2z8FOHUym2uXG72l.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Xa4RQXerJX1ndWewzRYW12m8iC.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hwxPqxW37hCIoOg7cuv9EY7j4Q6.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ssDhf5YpkRHrd977AeNiISjcw2j.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jqiZoaNcCkKgm45VldbyRZmEjTl.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/elL9f6ey1HHXuGyDagNon2nX4vd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/34u0ahX7CzCxpGn9V686ge8PXZ1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b8KnKg4ozEeFTFolvAz1cePXfMO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uGZZonjiy4avVezqktAdEg63Br2.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/x0rVX5lRm8JPbUmYT6wjsjmafww.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mnpgxMLvUJYSXwydB5E1dqLukwy.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 870,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wWol0LRge5czGpCJYlkgVg6A5g.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 580
+        },
+        {
+          "aspect_ratio": 0.72,
+          "height": 2036,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/802OyC7ZcSFWYiqIex5sppSNk1q.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1466
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2322,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ctR9Kv2MNhuIjgb96wARbT1BNts.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1548
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m9RbBhaMADK52UIx3CvvLrrZMad.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1980,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8rWeMJTPMHnttbyU2em5kIGB1q7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6kj9XRLTGe6B6mPjHpqjFkSA4ay.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uspk5k68Hamd86oCgLoUQ1s6SuW.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dZDfgqbgZ09eZ1YaXXM71y2Sskv.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4oy1X4QDgwxmUycIxU7T2VrQkIr.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2544,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vKpp0Yomr36MibAs8H2n19upFZT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1801
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2022,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r4JeNg0X8wOvu6e6sb9pwi96pvc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1430
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A33Nrs22wVoyqrEB1fgJX3YJP47.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ioelDqisMRRjWypc8Lr1Kx2DEQe.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wOxLcXxO4gmZsvXqeXf1DXAUCud.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gsq1pCxMHhZDCHEh78sD6yEHoLu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uHsWKLuXdtUmbO4G8VFXL7c50r5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 1030,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/19NnlknxzjG5L743gJ63MqaagnQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/foHwGbNFzGc48rUi0H917fTIlBx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1IMWXXlET7jWahhPbXcBwZxgyqe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7drgLU7dnjZvM6zv81YURN6hkeN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gbmhcOtre5SeBgwR9gvTpUra5kZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/axI3BUZgTYz36IYtUtRhivtspUo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pLGjaDyg2LeA2d9KZxBZCiiqC2B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bV0ZCL0IqrTQKClu6EtXlZaJevD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pYAGKszD49GOe3Er5mdmYDeCD02.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

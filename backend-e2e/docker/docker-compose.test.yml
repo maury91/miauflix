@@ -105,11 +105,17 @@ services:
       - CATALOG_DISABLE_BACKGROUND_TASKS=${CATALOG_DISABLE_BACKGROUND_TASKS:-true}
       - LIST_SERVICE_PORT=3002
       - LIST_SERVICE_DATA_DIR=/app/data/list-service
+      - ANILIST_API_URL=http://anilist-mock/
+      - ANIME_LISTS_URL=http://anime-lists-mock/Fribb/anime-lists/master/anime-list-full.json
       - SOURCES_PORT=3003
       - SOURCES_DATA_DIR=/app/data/sources
       - MEDIA_LOAD_PORT=3004
       - MEDIA_LOAD_DATA_DIR=/app/data/media-load
       - SOURCES_PRELOAD_PROVIDERS=imdb-title@http://indexer-mock/definitions movies-api@http://indexer-mock/definitions
+      - SOURCES_ANIME_LISTS_URL=http://anime-lists-mock/Fribb/anime-lists/master/anime-list-full.json
+      - SOURCES_ANI_ZIP_URL=http://anizip-mock/mappings
+      - CATALOG_ANIME_LISTS_URL=http://anime-lists-mock/Fribb/anime-lists/master/anime-list-full.json
+      - CATALOG_ANI_ZIP_URL=http://anizip-mock/mappings
       - BACKDROP_FOCUS_MODEL_DIR=/app/models
       - BACKDROP_FOCUS_WASM_DIR=/app/wasm
       - DEBUG=*
@@ -143,6 +149,12 @@ services:
       tmdb-mock:
         condition: service_healthy
       trakt-mock:
+        condition: service_healthy
+      anilist-mock:
+        condition: service_healthy
+      anizip-mock:
+        condition: service_healthy
+      anime-lists-mock:
         condition: service_healthy
       tracker-mock:
         condition: service_healthy
@@ -221,6 +233,81 @@ services:
       start_period: 10s
     volumes:
       - ../../test-fixtures/providers/trakt:/app/data
+    networks:
+      - test-network
+
+  # Anime: AniList rankings (GraphQL, recorded by request body), ani.zip episode mappings and
+  # Fribb's AniList/AniDB → TMDB list (trimmed to what the tests use).
+  anilist-mock:
+    image: miauflix-e2e-anilist-mock:${E2E_IMAGE_TAG:-local}
+    build:
+      context: mock
+      dockerfile: mock.Dockerfile
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
+    environment:
+      - DATA_DIR=/app/data
+      - API_BASE_URL=https://graphql.anilist.co
+      # Public API: no key, but the mock always sends one header.
+      - API_AUTH_HEADER=x-miauflix-mock
+      - API_KEY=none
+      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
+      - KEY_POST_BY_BODY=true
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 10s
+    volumes:
+      - ../../test-fixtures/providers/anilist:/app/data
+    networks:
+      - test-network
+
+  anizip-mock:
+    image: miauflix-e2e-anizip-mock:${E2E_IMAGE_TAG:-local}
+    build:
+      context: mock
+      dockerfile: mock.Dockerfile
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
+    environment:
+      - DATA_DIR=/app/data
+      - API_BASE_URL=https://api.ani.zip
+      # Public API: no key, but the mock always sends one header.
+      - API_AUTH_HEADER=x-miauflix-mock
+      - API_KEY=none
+      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 10s
+    volumes:
+      - ../../test-fixtures/providers/anizip:/app/data
+    networks:
+      - test-network
+
+  anime-lists-mock:
+    image: miauflix-e2e-anime-lists-mock:${E2E_IMAGE_TAG:-local}
+    build:
+      context: mock
+      dockerfile: mock.Dockerfile
+    user: '${USER_ID:-1000}:${GROUP_ID:-1000}'
+    environment:
+      - DATA_DIR=/app/data
+      - API_BASE_URL=https://raw.githubusercontent.com
+      # Public API: no key, but the mock always sends one header.
+      - API_AUTH_HEADER=x-miauflix-mock
+      - API_KEY=none
+      - RECORD_PROVIDER_FIXTURES=${RECORD_PROVIDER_FIXTURES:-false}
+    healthcheck:
+      test: ['CMD', 'wget', '--no-verbose', '--tries=1', '--spider', 'http://localhost:80/health']
+      interval: 0.5s
+      timeout: 2s
+      retries: 30
+      start_period: 10s
+    volumes:
+      - ../../test-fixtures/providers/anime-lists:/app/data
     networks:
       - test-network
 

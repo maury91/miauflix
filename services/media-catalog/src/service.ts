@@ -124,6 +124,14 @@ export const createCatalogService = (context: ServiceContext): Service => {
         throw error;
       }
     },
+    episodeLayout: async ({ tvMediaId }, ctx) => {
+      try {
+        return await catalog().episodeLayout(tvMediaId);
+      } catch (error) {
+        if (isNotFound(error)) ctx.fail('not_found', (error as Error).message);
+        throw error;
+      }
+    },
     search: ({ query, page, language }, ctx) => {
       const trimmed = query.trim();
       if (trimmed.length < 1 || trimmed.length > MAX_QUERY_LENGTH)

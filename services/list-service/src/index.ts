@@ -2,6 +2,7 @@ import { join } from 'node:path';
 
 import { serve } from '@miauflix/contract';
 
+import { ANILIST_URL, AniListLists, ANIME_LISTS_URL } from './anilist';
 import { createListService } from './service';
 
 const PORT = Number(process.env.LIST_SERVICE_PORT ?? 3002);
@@ -13,6 +14,11 @@ const { service } = createListService({
   dataDir: DATA_DIR,
   keyFile: KEY_FILE,
   encryptionKey: process.env.LIST_SERVICE_ENCRYPTION_KEY || undefined,
+  // AniList's anime rankings and the AniList → TMDB ids (test environments point at mocks).
+  aniList: new AniListLists(DATA_DIR, fetch, Date.now, {
+    anilist: process.env.ANILIST_API_URL || ANILIST_URL,
+    animeLists: process.env.ANIME_LISTS_URL || ANIME_LISTS_URL,
+  }),
 });
 
 const server = await serve(service, { hostname: HOST, port: PORT });

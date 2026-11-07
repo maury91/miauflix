@@ -1,0 +1,839 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15027",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f497cfe66469fdfe200610c07e1cdf34\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/u7Q2C10SQlhPoKm7ersFL5f991q.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      23
+    ],
+    "first_air_date": "2019-01-11",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://neverland-anime.com",
+    "id": 83097,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2021-03-26",
+    "last_episode_to_air": {
+      "id": 2696407,
+      "name": "Episode 11",
+      "overview": "As Emma extends her hand to Peter and says, \"Let's be free,\" he shows a calm expression, but realizes his true fate. The children finally arrive at the gate leading to the human world, where they hope to pass through.",
+      "vote_average": 2.6,
+      "vote_count": 9,
+      "air_date": "2021-03-26",
+      "episode_number": 11,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 2,
+      "show_id": 83097,
+      "still_path": "/8rdXFN6r5CF7da4kjdkihFihsQn.jpg"
+    },
+    "name": "The Promised Neverland",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1,
+        "logo_path": "/4x4GsmRmSLLL0RVNKsoqAVH43tz.png",
+        "name": "Fuji TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 23,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "約束のネバーランド",
+    "overview": "Emma, Norman and Ray are the brightest kids at the Grace Field House orphanage. And under the care of the woman they refer to as “Mom,” all the kids have enjoyed a comfortable life. Good food, clean clothes and the perfect environment to learn—what more could an orphan ask for? One day, though, Emma and Norman uncover the dark truth of the outside world they are forbidden from seeing.",
+    "popularity": 14.8106,
+    "poster_path": "/oBgRCpAbtMpk1v8wfdsIph7lPQE.jpg",
+    "production_companies": [
+      {
+        "id": 121589,
+        "logo_path": "/kZvTniBgpTzAThHCa0OZ1FJtRjy.png",
+        "name": "CloverWorks",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2021-02-12",
+        "episode_count": 1,
+        "id": 180946,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/8dCT9tLglrdEPGeO4t0vWFZ5xu5.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2019-01-11",
+        "episode_count": 12,
+        "id": 110816,
+        "name": "Season 1",
+        "overview": "Emma, Norman and Ray are the brightest kids at the Grace Field House orphanage. And under the care of the woman they refer to as “Mom,” all the kids have enjoyed a comfortable life. Good food, clean clothes and the perfect environment to learn—what more could an orphan ask for? One day, though, Emma and Norman uncover the dark truth of the outside world they are forbidden from seeing.",
+        "poster_path": "/x2JKm34FgSvZ8nt5KhoeD0Zt9U.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2021-01-08",
+        "episode_count": 11,
+        "id": 130272,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/3yaPUl2tPg7ADi8a0u8MuSVim83.jpg",
+        "season_number": 2,
+        "vote_average": 4.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.257,
+    "vote_count": 1327,
+    "external_ids": {
+      "imdb_id": "tt8788458",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 348002,
+      "tvrage_id": null,
+      "wikidata_id": "Q61786454",
+      "facebook_id": "neverland.anime",
+      "instagram_id": "neverland_anime",
+      "twitter_id": "yakuneba_staff"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "Emma, Norman and Ray are the brightest kids at the Grace Field House orphanage. And under the care of the woman they refer to as “Mom,” all the kids have enjoyed a comfortable life. Good food, clean clothes and the perfect environment to learn—what more could an orphan ask for? One day, though, Emma and Norman uncover the dark truth of the outside world they are forbidden from seeing.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Yakusoku no Neverland",
+            "overview": "Por mucho que los niños la quieran, ella no es su madre. Viven juntos, pero no son familiares de sangre. Grace Field es un hogar al que son enviados los niños que no tienen padres. Un hogar irreemplazable para los 38 niños que allí viven felices su día a día, como si fueran hermanos, aunque al inicio fueran completos desconocidos. Al menos así era hasta que cierto descubrimiento cambió sus vidas por completo...",
+            "homepage": "",
+            "tagline": "Resistir. al destino de este mundo."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "Celle qu’ils aiment comme leur mère n’est pas leur vraie maman. Les enfants qui vivent tous ensemble dans ce lieu ne sont pas vraiment frères et sœurs. Gracefield House est un orphelinat, une maison unique en son genre où s’épanouissent trente-huit frères et sœurs sans liens de sang, élevés par Maman. Cependant, leur charmant quotidien va brutalement prendre fin…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "Três crianças descobrem que o orfanato onde vivem não é nada do que eles pensavam. Agora, têm que liderar o grupo todo num arriscado plano de fuga.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "Emma, Norman und Ray sind die klügsten Kinder im Waisenhaus Grace Field House. Unter der Obhut der Frau, die sie „Mama“ nennen, haben alle Kinder ein angenehmes Leben geführt. Gutes Essen, saubere Kleidung und die perfekte Umgebung zum Lernen – was könnte sich ein Waisenkind mehr wünschen? Eines Tages jedoch entdecken Emma und Norman die dunkle Wahrheit über die Außenwelt, die ihnen verboten ist zu sehen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "约定的梦幻岛",
+            "overview": "如同母亲般尊敬着的她，并非亲人。相依为命的他们，并非兄弟。恩典农场之家，是没有父母的孩子们居住的地方。即使没有血缘关系，这里也是和妈妈以及38位兄弟姐妹一同度过幸福生活的，无可替代的家。但，他们的日常在某一天，突然宣告结束。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Обіцяний Неверленд",
+            "overview": "Життя в сиротинці «Ґрейс Філд Гаус» схоже на казку. Безліч дітей зростають тут, серед них виділяються троє найстарших — Емма, Рей, та Норман. Щодня діти ростуть, оточені любов’ю та турботою, щодня вони повинні навчатися і проходити інтелектуальний тест, і тільки одна заборона існує в цьому раю: не можна наближатися до воріт та паркана, що в лісі. Проте, одного дня діти порушують цю заборону та дізнаються страшну правду про свій дім…",
+            "homepage": "",
+            "tagline": "Протистій цьому світу та його долі."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "약속의 네버랜드",
+            "overview": "엄마라고 불리는 그 사람은 부모가 아니다. 함께 사는 그 아이들도 형제가 아니다.  그레이스 필드 하우스는 부모가 없는 아이들이 사는 고아원이었다. 핏줄이 이어지진 않았지만 엄마와 38명의 형제자매들이 행복한 나날을 보내는, 안락한 집. 하지만 그 행복한 일상은 아이들에게 갑작스러운 끝을 고했다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Miền Đất Hứa",
+            "overview": "Tại Grace Field House, cuộc sống không thể tốt hơn cho trẻ mồ côi! Mặc dù họ không có cha mẹ, cùng với những đứa trẻ khác và một Mama tốt bụng chăm sóc chúng, chúng tạo thành một gia đình lớn, hạnh phúc. Không có đứa trẻ nào bị bỏ qua, đặc biệt là khi chúng được nhận nuôi ở tuổi 12. Cuộc sống hàng ngày của chúng liên quan đến các bài kiểm tra nghiêm ngặt, nhưng sau đó, chúng được phép chơi bên ngoài.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "Rodeada por uma floresta e uma entrada com portão, a Casa Grace Field é habitada por órfãos que vivem felizmente juntos como uma grande família, sob os cuidados da sua \"Mama\", Isabella. Embora sejam obrigados a fazer testes diariamente, as crianças são livres para passar o tempo como desejarem, geralmente a brincar ao ar livre, desde que não se afastem demasiado do orfanato, uma regra que se espera que cumpram a todo o custo. No entanto, todos os bons momentos têm de chegar ao fim, pois a cada poucos meses, uma criança é adoptada e enviada para viver com a sua nova família, sem nunca mais se ouvir falar dela. Contudo, os três irmãos mais velhos têm as suas suspeitas sobre o que realmente está a acontecer no orfanato, e estão prestes a descobrir o cruel destino que aguarda as crianças que vivem em Grace Field, incluindo a natureza torcida da sua amada Mama.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Обещанный Неверленд",
+            "overview": "Эмма, Норман и Рей — самые яркие дети в приюте «Благодатный дом». И под покровительством женщины, которую они называют «мамой», все дети наслаждаются комфортной жизнью. Хорошая еда, чистая одежда и прекрасная окружающая среда — что ещё может попросить сирота? Однако однажды Эмма и Норман раскрывают тёмную истину внешнего мира, которую доселе от них тщательно скрывали.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "Por mucho que los niños la quieran, ella no es su madre. Viven juntos, pero no son familiares de sangre. Grace Field es un hogar al que son enviados los niños que no tienen padres. Un hogar irreemplazable para los 38 niños que allí viven felices su día a día, como si fueran hermanos, aunque al inicio fueran completos desconocidos. Al menos así era hasta que cierto descubrimiento cambió sus vidas por completo...",
+            "homepage": "",
+            "tagline": "The Promised Neverland"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "نيفيرلاند الموعودة",
+            "overview": "تعيش إيما وأصدقاؤها حياة هنيئة في دار الأيتام التي نشأوا بها. وبالرغم من أن القواعد قد تكون صارمة، إلا أن المربية رحيمة وعطوفةٌ بهم. ولكن لِمَ يُحظَرُ على الأطفال المغادرة…؟",
+            "homepage": "",
+            "tagline": "تمسك بحياتك حتى يتحقق الوعد"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "La Gracefield House è dove vivono gli orfani, una casa insostituibile dove 38 fratelli e una madre vivono vite felici, anche senza essere davvero consanguinei. Tuttavia, un giorno la loro quotidianità verrà bruscamente interrotta...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "ארץ לעולם לא המובטחת",
+            "overview": "בבית היתומים \"שדה החסד\" החיים בשביל הילדים היתומים לא יכולים להיות טובים יותר. יש להם \"מאמא\" אחת שדואגת להם להכל: אוכל משובח, המון זמן למשחקים וכיף ותנאים מצויינים. כולם חיים שם כמשפחה אחת גדולה ומאושרת. חיי היומיום שלהם עוברים בשלווה ובהנאה כשכל הנדרש מהם הוא לעמוד במבחני IQ משונים, עד ליום בו הם ישלחו לבית חם שיאמץ אותם… דבר שבאופן תמוה טרם קרה לשלושת הילדים הגדולים, המוכשרים, האדיבים והחכמים ביותר בבית – אמה, נורמן וריי. יום אחד, כאשר מבשרים לקוני בת ה-6 שיש משפחה אוהבת שמוכנה להעניק לה חיים חדשים, אמה ונורמן מגלים את טיב האמת מאחורי ה\"משפחה\" המאמצת ואת גורל אחיהם הרבים שנשלחו לאימוץ במרוצת השנים – ובעצם את האמת מאחורי המטרה של בית היתומים. כי הרי מדוע שבית יתומים כה מושלם וחם ידרוש מילדיו להסתובב במדים לבנים, מספרים סידוריים על הצוואר ויערוך מבחנים אינטנסיביים? האם יכול להיות שזו בעצם…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Yakusoku no Neverland",
+            "overview": "Grace Field House je sirotčinec  obklopen lesem a bránou a je obýván sirotky šťastně žijícími společně jako jedna velká rodina, o které se postará jejich „máma“ Isabella. Přestože jsou povinny denně provádět testy, děti mohou trávit čas tak, jak uznají za vhodné, obvykle si hrají venku, pokud se neváží příliš daleko od sirotčince - to je jediné pravidlo o kterém  se od nich očekává, že se budou řídit .  ale všechny dobré časy však musí skončit, protože každé několik měsíců je dítě adoptováno a posláno, aby žilo se svou novou rodinou ...  a už o nich nikdy nikdy neslyšel.\n\nTři nejstarší sourozenci však mají podezření, že to není tak jak se zdá, co se ve skutečnosti děje v sirotčinci, a chystají se objevit krutý osud, který čeká děti žijící na Grace Field, včetně pokroucené povahy jejich milované maminky.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "約束のネバーランド",
+            "overview": "母と慕う彼女は親ではない。共に暮らす彼らは兄弟ではない。グレイス＝フィールドハウスは、親のいない子供たちが住むところ。血の繋がりはなくても、ママと38人の兄弟が幸せな毎日をすごす、かけがえのない家。しかし、彼らの日常はある日突然終わりを告げた……突然終わりを告げた、グレイス＝フィールドハウスの幸せな日常。ハウスは農園。子どもたちは、鬼に飼われる食用人間。大好きだったままは、子どもたちの監視役。\n\n「これ以上、家族が死ぬのは嫌だ…！」\n\nそう願ったエマたちは、日常に潜んでいたあらゆる意図を解き明かしていく。鬼vs子ども、命をかけた脱獄計画が始まる――",
+            "homepage": "",
+            "tagline": "抗え。この世界の運命に。"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "Sieroty w Grace Field nie mogłyby wyobrazić sobie lepszego życia! Choć nie mają rodziców, razem z innymi dziećmi i miłą „mamą”, której na tym zależy, tworzą jedną wielką, szczęśliwą rodzinę. Żadne dziecko nie jest pomijane, zwłaszcza, że wszystkie zostały adoptowane przed ukończeniem 12 roku życia. Ich codzienne życie wymaga rygorystycznych testów, ale potem wolno im wszystko. Jest tylko jedna zasada, której muszą przestrzegać: NIE MOGĄ POD ŻADNYM POZOREM OPUŚCIĆ GRANIC SIEROCIŃCA. Ale pewnego dnia dwoje dzieci: Emma i Norman, wychodzą poza bramę odkrywając przerażającą rzeczywistość. Sierociniec to nie pełen radości dom a farma, na której to właśnie oni są hodowani niczym zwierzęta,a później stają się pokarmem dla demonów. Pozostało już tylko kilka miesięcy na opracowanie planu ucieczki, sieroty muszą zmienić swój z góry określony los.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Vaat Edilen Neverland",
+            "overview": "Lütuf Yetimhanesinde, hayat yetimler için daha iyi olamazdı! Ebeveynleri olmamasına rağmen, diğer çocuklar ve onları önemseyen \"Anne\"leriyle mutlu kocaman bir aileyi oluşturmaktadırlar. Özellikle de hepsi 12 yaşına basana kadar evlat edinildiklerinden dolayı, hiçbir çocuk göz ardı edilmez. Gündelik hayatları zorlu yazılılarla doludur fakat yazılılardan sonra dışarıda oynamalarına izin vardır.\n\nUymaları gereken tek bir kural vardır: yetimhaneden ayrılmamak. Ama bir gün, sınav birincilerinden olan iki yetim, Emma ve Norman, yetimhanenin kapısına gitmeyi cüret edip varoluşlarının ardındaki korkunç gerçeği ortaya çıkarırlar: yetimhaneleri gizemli şeytan ırkı için yiyecek üretilen bir çiftlik, kendileriyse yenmek için yetiştirilen besi hayvanıdır. Kaçış planlarını uygulamak için sadece birkaç ayı kalan çocuklar, bir şekilde önceden karar verilmiş kaderlerini değiştirmek zorundadır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "約定的夢幻島",
+            "overview": "「Grace Field House」是一所夢幻般的孤兒院。雖然沒有人去過孤兒院的柵欄和大門外，但不只是吃飽穿暖、還有溫柔的教育員「媽媽」照顧，且只要到達六歲就有可能被領養出去。而孤兒中最年長的三位11歲孩童：艾瑪、諾曼以及雷，就這樣與其他孩子們一同生活了數年。但誰知道在某日一位女孩被領養走，為了讓她帶上心愛的玩偶而追到門口的艾瑪等人，卻因此發現了恐怖的真相……",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "พันธสัญญาเนเวอร์แลนด์",
+            "overview": "ในปี 2045 เอมม่า เด็กกำพร้าวัย 11 ปี ที่อาศัยในบ้านเด็กกำพร้าอีก 37 คน เหล่าเด็กต้องอยู่ที่นี่ใช้ชีวิตแบบเดิมๆ ไม่สามารถออกไปโลกภายนอกได้ จนวันหนึ่ง ได้พบความจริง เมื่อ คอนนี่ ที่ถูกอ้างว่ามีคนอุปการะ พวก เอมม่า ที่เห็นสิ่งผิดปกติได้ตามไปจนทราบความจริงว่า พวกตนถูกเลี้ยงมาเพื่อเป็นอาหารพวกปีศาจ ทำให้ต้องหาทางหนีไปจากที่นี่",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "約定的夢幻島",
+            "overview": "三個天賦異稟的孩子得知他們與世隔絕的孤兒院，並非原本以為的避風港之後，發誓要帶領其他孩子，展開一項危險的逃跑計畫。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Emma, ​​Norman en Ray wonen veilig in het Grace Field House weeshuis. Omringd door hun broertjes en zusjes hebben ze zich voortreffelijk ontwikkeld onder de tedere zorg van 'Moeder', hun verzorger. Op een nacht ontdekken ze echter de vreselijke waarheid achter hun idyllische leven en niets zal meer hetzelfde zijn! Ze moeten nu ontsnappen...of sterven!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "The Promised Neverland",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "შეპირებული ნევერლენდი",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CH",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Emma, Norman und Ray sind die klügsten Kinder im Waisenhaus Grace Field House. Unter der Obhut der Frau, die sie „Mama“ nennen, haben alle Kinder ein angenehmes Leben geführt. Gutes Essen, saubere Kleidung und die perfekte Umgebung zum Lernen – was könnte sich ein Waisenkind mehr wünschen? Eines Tages jedoch entdecken Emma und Norman die dunkle Wahrheit über die Außenwelt, die ihnen verboten ist zu sehen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Emma, Norman und Ray sind die klügsten Kinder im Waisenhaus Grace Field House. Unter der Obhut der Frau, die sie „Mama“ nennen, haben alle Kinder ein angenehmes Leben geführt. Gutes Essen, saubere Kleidung und die perfekte Umgebung zum Lernen – was könnte sich ein Waisenkind mehr wünschen? Eines Tages jedoch entdecken Emma und Norman die dunkle Wahrheit über die Außenwelt, die ihnen verboten ist zu sehen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u7Q2C10SQlhPoKm7ersFL5f991q.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1406,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uAjMQlbPkVHmUahhCouANlHSDW2.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2500
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6t8N28C5NbwqjCHRXhyY1S06Lib.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iYVofymceHyRdc1gFiI0gaYQSb7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/snOFsVbSlwE4BKOhkongVdMVxQJ.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 832,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lIvlMDEKImf3pkDtLjjKZqRZ5AM.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1480
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/obekvfG6QYD8FtaQCdoyPTUksy8.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l5pfQDDjS0Dd1zHHSQWEZ9EvLpd.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zTNsCRFjWaBxM6Ca5c510e1ewPo.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A3Jj3A0XkFGRalTBmuzXTItMGd5.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8q9m5uvdWdqDvDbKiiC90a4IyWe.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/krggjBaaiRZEbxEzB0uvqi24X6M.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9pRzF6rDZEcBa5OXFrbYX4dakRZ.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.235,
+          "height": 395,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o4dhM6xk4Ux7Z3FqtSiZdyeRsyC.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1278
+        },
+        {
+          "aspect_ratio": 3.27,
+          "height": 63,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iUPE0SpFUvHOR6aFx9V1153ZBQA.svg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 206
+        },
+        {
+          "aspect_ratio": 9.836,
+          "height": 61,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j0hmPcKYZTpMTIwYwon4PNYvR9o.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oBgRCpAbtMpk1v8wfdsIph7lPQE.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 1175,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9biMSbM9gQ6LCQKj9WXxdkPbo54.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 823
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8YzAFRUbCpaaKierFUwoJ85cOrz.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xrk3P5JCoul4JsOW2AoJEBnuz5p.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yxdeII5tI8qqiERcMxjW9DfB6Gz.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mL6Syx6S6dLjZmYiDYURYtOujqt.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1sKCm6vJbDq64zcfHNOY67ltLns.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z2z3DHto9kxd3OXEUWSL72C9Jn0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pF4z7EryqhUHdjIWoNUD4VShakG.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2gqhjggR5GCyWqsOytp9Omxz1fa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1280,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g4eZcpty4s28ngMc8g3AxnxQbsh.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sO6KA4DJ1BcjTDeRQjVc58fu8hG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 525
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fSINRppVKNpwO3Ngj0F24aV8byg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1062,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2sYE4mHAWmDWBUTMo5jScYMAAXt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sQvjRYTO2zKfhQgdQIqcI070lgy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

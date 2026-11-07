@@ -1,0 +1,808 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17564",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c0bcf95aa6244cb70ccfdde6010b4984\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/t708JUdkHAoZF83f4RjqcIGrJ99.jpg",
+    "created_by": [
+      {
+        "id": 1216733,
+        "credit_id": "65552e20b5400200c4eb6dba",
+        "name": "Shawn Ryan",
+        "original_name": "Shawn Ryan",
+        "gender": 2,
+        "profile_path": "/49EdiYMjYg0FzTI10zPyubxIPk7.jpg"
+      },
+      {
+        "id": 1411700,
+        "credit_id": "680943b9b2b722aedf8a2052",
+        "name": "Eileen Myers",
+        "original_name": "Eileen Myers",
+        "gender": 1,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-09-20",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.mgmplus.com/series/american-hostage",
+    "id": 239618,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7666961,
+      "name": "Break the Bank",
+      "overview": "Fred must do everything he can to keep Tony alive when they're thrust into the spotlight.",
+      "vote_average": 7,
+      "vote_count": 1,
+      "air_date": "2026-11-01",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 55,
+      "season_number": 1,
+      "show_id": 239618,
+      "still_path": "/pJLFRdZZETSwVhlg0oZ0TTVJBv0.jpg"
+    },
+    "name": "American Hostage",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 6219,
+        "logo_path": "/4umnsbif8tOc6ILCmeO0pqRXWFP.png",
+        "name": "MGM+",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "American Hostage",
+    "overview": "A psychological thriller anthology series focusing on a different hostage case every season.",
+    "popularity": 15.5781,
+    "poster_path": "/kVXkBIJw4eW9KC8VZvYvoS6Qg0j.jpg",
+    "production_companies": [
+      {
+        "id": 11073,
+        "logo_path": "/wHs44fktdoj6c378ZbSWfzKsM2Z.png",
+        "name": "Sony Pictures Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 72407,
+        "logo_path": null,
+        "name": "MiddKid Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 213612,
+        "logo_path": "/qNtzaBmyujhSzGV32zTVqCn1hbX.png",
+        "name": "Criminal Content",
+        "origin_country": "US"
+      },
+      {
+        "id": 311598,
+        "logo_path": null,
+        "name": "Furious Agreement Productions",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-09-20",
+        "episode_count": 8,
+        "id": 365897,
+        "name": "Season 1",
+        "overview": "Fred Heckman, a beloved Indianapolis radio reporter, is thrust into the middle of a life-or-death crisis when hostage-taker, Tony Kiritsis, demands to be interviewed on his popular radio news program.",
+        "poster_path": "/dzoPQ13XrRUGl8Yoz1P66V8rRUy.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7,
+    "vote_count": 17,
+    "external_ids": {
+      "imdb_id": "tt30051064",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 462907,
+      "tvrage_id": null,
+      "wikidata_id": "Q141108648",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "A psychological thriller anthology series focusing on a different hostage case every season.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Um repórter enfrenta uma crise de vida ou morte quando um sequestrador exige ser entrevistado ao vivo em seu programa de rádio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een anthologieserie in het genre psychologische thriller, die zich elk seizoen richt op een andere zaak.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een anthologieserie in het genre psychologische thriller, die zich elk seizoen richt op een andere zaak.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Fred Heckman, omiljeni radijski reporter iz Indianapolisa, nađe se usred krize života i smrti kada otmičar talaca Tony Kiritsis zahtijeva da bude intervjuiran u njegovoj popularnoj radijskoj informativnoj emisiji.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Dans les années 1970, un preneur d'otages exige d'être interviewé dans l'émission d'actualité de Fred Heckman, journaliste radio très apprécié.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Американський заручник",
+            "overview": "Фред Гекман, улюблений радіорепортер Індіанаполіса, опиняється в самому епіцентрі смертельно небезпечної кризи, коли Тоні Кірітсіс, який захопив заручника, вимагає інтерв'ю в його популярній радіопрограмі новин.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "美国人质",
+            "overview": "1970年代的印第安纳波利斯，电台新闻主管弗雷德·赫克曼被卷入一场人质危机。绑匪托尼·基里蒂斯劫持抵押贷款经纪人迪克·霍尔，并要求通过弗雷德的电台直播发声，一场人质事件随即演变成全国瞩目的媒体事件。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Amerykański zakładnik",
+            "overview": "Lata 70. Popularny reporter radiowy Fred Heckman zostaje wciągnięty w walkę o życie, gdy porywacz żąda wywiadu na żywo w jego audycji.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Amerikai túsz",
+            "overview": "Egy abszurd pszichothriller a ’70-es évekből, amelyet Fred Heckman, a közkedvelt indianapolisi rádióriporter megrázó igaz története inspirált.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Fred Heckman, un amato giornalista radiofonico di Indianapolis, si trova nel mezzo di una crisi tra la vita e la morte quando il sequestratore Tony Kiritsis chiede di essere intervistato nel suo popolare programma radiofonico.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Американский заложник",
+            "overview": "1970-е годы. Любимый радиожурналист из Индианаполиса Фред Хекман оказывается в центре смертельно опасного кризиса. Захватчик заложников Тони Киритсис требует интервью в его популярной новостной программе. Киритсис берёт в заложники своего ипотечного брокера Дика Холла, привязав к его шее проволоку, соединённую с дробовиком, и требует, чтобы его голос услышали.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Ein psychologisch bizarrer Thriller, der in den 1970er Jahren spielt und von der erschütternden wahren Geschichte von Fred Heckman inspiriert ist, einem beliebten Radioreporter aus Indianapolis, der in eine lebensbedrohliche Krise gerät, als der Geiselnehmer Tony Kiritsis verlangt, live in seiner beliebten Radionachrichtensendung interviewt zu werden.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Baseado na aclamada primeira temporada do podcast com guião com o mesmo nome, \"American Hostage\" é um thriller psicológico ambientado na década de 1970 que conta a angustiante história verídica de Fred Heckman, um querido repórter de rádio de Indianápolis que se vê envolvido numa crise de vida ou morte quando o sequestrador Tony Kiritsis exige ser entrevistado no seu popular programa de notícias de rádio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Американски заложник",
+            "overview": "Психологически трилър антологичен сериал, фокусиран върху различен случай със заложници във всеки сезон.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Ostatic american",
+            "overview": "Tony Kiritsis, care ține ostatic un bărbat, cere să fie intervievat în direct de Fred Heckman, un îndrăgit prezentator radio din Indianapolis.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Rukojmí v přímém přenosu",
+            "overview": "Antologický seriál v žánru psychologického thrilleru, který se v každé sezóně zaměřuje na jiný případ s rukojmími.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "En psykologisk thriller-antologiserie som fokuserar på ett nytt gisslanfall varje säsong.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Ambientada en la década de 1970, narra la desgarradora historia real de Fred Heckman, un querido reportero de radio de Indianápolis que se ve envuelto en una crisis de vida o muerte cuando el secuestrador Tony Kiritsis exige ser entrevistado en su popular programa de noticias de radio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الرهينة الأمريكية",
+            "overview": "سلسلة مختارات من أفلام الإثارة النفسية تركز على قضية رهائن مختلفة في كل موسم.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Aynı adlı kurgusal podcast serisinin ilk sezonundan uyarlanan American Hostage, rehin alan kişi Tony Kiritsis'in popüler radyo haber programında kendisiyle röportaj yapılmasını talep etmesi üzerine ölüm kalım meselesi haline gelen bir krizin ortasında kalan, Indianapolis'in sevilen radyo muhabiri Fred Heckman'ın sarsıcı gerçek hikayesini konu ediyor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Narra la desgarradora historia real de Fred Heckman, un querido reportero de radio de Indianápolis que se ve envuelto en una crisis de vida o muerte cuando el secuestrador Tony Kiritsis exige ser entrevistado en su popular programa de noticias de radio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "American Hostage",
+            "overview": "เรื่องราวเกิดขึ้นในยุค 1970 เมื่อ เฟร็ด เฮ็กแมน (รับบทโดย จอน แฮมม์) ผู้อำนวยการฝ่ายข่าวและนักข่าววิทยุท้องถิ่นผู้เป็นที่รักของสถานี WIBC ในอินเดียนาโพลิส ต้องตกอยู่ท่ามกลางวิกฤตการณ์ความเป็นความตายอย่างไม่คาดคิด เมื่อ โทนี่ คิริตซิส (รับบทโดย จิโอวานนี ริบิซี) อดีตคนขายรถมือสองที่โกรธแค้นจากข้อพิพาทเรื่องหนี้สินกับบริษัทสินเชื่อบ้าน ได้บุกจับ ดิค ฮอลล์ (รับบทโดย คริสตอฟเฟอร์ โพลาฮา) ผู้บริหารบริษัทสินเชื่อเป็นตัวประกัน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "美國人質",
+            "overview": "1970年代的印第安納波利斯，電台新聞主管弗雷德·赫克曼被捲入一場人質危機。綁匪托尼·基里蒂斯劫持抵押貸款經紀人迪克·霍爾，並要求透過弗雷德的電台直播發聲，一場人質事件隨即演變成全國矚目的媒體事件。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "מלכוד בשידור ישיר",
+            "overview": "פרד הקמן, שדרן רדיו ועיתונאי מוערך מאינדיאנפוליס, נקלע בעל כורחו למרכזה של דרמה לאומית כאשר טוני קיריטסיס, חוטף חמוש ומיואש, דורש להתראיין דווקא בתוכניתו בשידור חי. בעוד מיליוני מאזינים עוקבים אחר כל מילה, הקמן מוצא את עצמו בתפקיד שמעולם לא ביקש: עיתונאי, מגשר ולעיתים גם התקווה האחרונה למנוע טרגדיה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t708JUdkHAoZF83f4RjqcIGrJ99.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/izUp7ooQj5z4kwCYNQd3cOp1LpX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aVaESghXOMg6MU0r8fPqB4CSDwF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mMNduBJhYYEo6wftUpXAOcYfSea.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 882,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/24v2AyGP1hTTeSJDUH83z6a8lgh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1568
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1242,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cMKxqvamNzvayqgVj2ZvBIEmUqH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2210
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1242,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wumGMZUYpFYkbJTarnQQAJckgBI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2210
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z4nsXXzk1yXAZzGxh2wFwN5gFII.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 2159,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8MzF2vVquwJ2yqXcHQ9KKHfj4UV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qwRMdHZNCjh7QP1g24XF81W8Xil.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/scGJwGsEuybopPiODQes1f3KXNU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y0OnXyjH3HYMKP4pL7tWEC266xj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tyjxlZoRGtBXLx7wBrKmkipq1YS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jLNnky2tXWGe1ur9RKY7jSj8udt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u6KtKEAKYqx99GbRsO2Nx1GHEj9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A6Q3DRR4qeLDN7vOjQhpuSo6LIH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/da70hTmj7OdMMbEy4qq0yxEafkF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pmwseXdhh9x2TTfpbSXlFij5tnq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rSFI7A9xAMuYTLJkCVvwBcZBIls.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uiR4vdXUyEy3021px54U0GFKZXV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uTA5MILCMjFV49GKFHeRmP5NT0p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.975,
+          "height": 672,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/azITiQL9UBQVK9z95UQipLoWHkB.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1999
+        },
+        {
+          "aspect_ratio": 2.985,
+          "height": 459,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zFjn1VRM2XCwJKCj1XtidcWjCSd.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1370
+        },
+        {
+          "aspect_ratio": 4.631,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qaEg42q7JOP75h3fzBkVpDBQC16.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1806
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kVXkBIJw4eW9KC8VZvYvoS6Qg0j.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dzoPQ13XrRUGl8Yoz1P66V8rRUy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5CJrEIGiwh8RQkTR4tSjjE4oW2u.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/YQErpzTplHRR3J95x2TEx54xkY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jYoEiHFeq6RoFVP3nZumJYOMaP7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p3Ro0ngezX9aNZY6j3vYbpQqVhr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cJX6cFqJsX4cWe3DeZBJzg7w4rH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iZMCizL7CjNMLIM6Ca8skpDLkCX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bg4JXuYFXy2XKrPZHKytbCnXLfk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mwDwVUz6PIwMDJ7eFKCTg4OcRtf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

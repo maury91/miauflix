@@ -1,0 +1,359 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19724",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"26227de91efa77133bb9096a202bc071\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/eTs5EnaQtnMDfwawMFDoVZLs7Fp.jpg",
+    "belongs_to_collection": null,
+    "budget": 0,
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 14,
+        "name": "Fantasy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "",
+    "id": 920167,
+    "imdb_id": "tt31970593",
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_title": "魔法使いの夜",
+    "overview": "Near the end of the Showa era in the late 1980s, in Misaki town, an old mansion is rumored to be the home of a witch. After moving into the mansion, Aoko Aozaki begins to learn sorcery from a young mage, Alice Kuonji, the rumored witch of the mansion. The Aozaki family oversees the land on which Misaki is built and the heir (Aoko) is tasked with protecting it. Mysterious intruders have been disrupting the bounded field in Misaki, leading Alice and Aoko to investigate. A mannequin or puppet attacks them and is incinerated. As this happens, both of them spot someone running away, a civilian who must not get away having seen magic alive. Unexpectedly, a young boy named Soujuurou Shizuki is drawn to the mansion and comes to reside with them as well.",
+    "popularity": 2.0829,
+    "poster_path": "/xKpYIt7T6nJ8oqzV52yLtZdC0YB.jpg",
+    "production_companies": [
+      {
+        "id": 5887,
+        "logo_path": "/m6FEqz8rQECnmfjEwjNhNAlmhCJ.png",
+        "name": "ufotable",
+        "origin_country": "JP"
+      },
+      {
+        "id": 53787,
+        "logo_path": "/wZ0g1QrGz19fXA2fRzGfqGeMvrC.png",
+        "name": "TYPE-MOON",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "release_date": "2026-11-20",
+    "revenue": 0,
+    "runtime": 0,
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Post Production",
+    "tagline": "",
+    "title": "Witch on the Holy Night",
+    "video": false,
+    "vote_average": 0,
+    "vote_count": 0,
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "homepage": "",
+            "overview": "Near the end of the Showa era in the late 1980s, in Misaki town, an old mansion is rumored to be the home of a witch. After moving into the mansion, Aoko Aozaki begins to learn sorcery from a young mage, Alice Kuonji, the rumored witch of the mansion. The Aozaki family oversees the land on which Misaki is built and the heir (Aoko) is tasked with protecting it. Mysterious intruders have been disrupting the bounded field in Misaki, leading Alice and Aoko to investigate. A mannequin or puppet attacks them and is incinerated. As this happens, both of them spot someone running away, a civilian who must not get away having seen magic alive. Unexpectedly, a young boy named Soujuurou Shizuki is drawn to the mansion and comes to reside with them as well.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Witch on the Holy Night"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "homepage": "https://mahoyo-movie.com",
+            "overview": "",
+            "runtime": 125,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "https://mahoyo-movie.com/",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "魔法使之夜"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "homepage": "",
+            "overview": "1980년대 후반 쇼와 시대의 황혼기, 미사키 마을에는 마녀가 살고 있다는 소문이 감도는 오래된 저택이 있다. 저택으로 들어간 아오자키 아오코는 소문의 주인공이자 젊은 마술사인 쿠온지 아리스에게 마술을 배우기 시작한다. 아오자키 가문은 미사키 마을이 자리 잡은 영지를 관리해 온 일족으로, 후계자인 아오코에게는 이 땅을 지켜야 할 사명이 맡겨져 있다.  어느 날 정체불명의 침입자가 미사키의 결계를 뒤흔들자, 아리스와 아오코는 조사에 착수한다. 둘을 습격해 온 인형을 불태워 처치하던 순간, 마술을 목격하고 달아나는 누군가의 그림자를 발견한다. 마술의 은닉을 위해 결코 살려 보낼 수 없는 일반인이었다. 그러나 뜻밖에도 시즈키 소쥬로라는 이름의 소년이 저택으로 이끌리듯 찾아오며, 세 사람의 기묘한 동거 생활이 시작된다.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "마법사의 밤"
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "homepage": "",
+            "overview": "Aoko Aozaki é uma estudante do ensino médio que também é uma maga vivendo no mundo moderno. Enquanto passa seus dias ao lado de sua colega de quarto, Aoko se dedica arduamente para se tornar uma maga de pleno direito. Essa rotina muda com a chegada de um jovem que acaba cruzando o caminho das duas.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Witch on the Holy Night: O Filme"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "homepage": "",
+            "overview": "Gần cuối thời kỳ Showa vào cuối những năm 1980, tại thị trấn Misaki, một dinh thự cổ được đồn là nhà của một phù thủy. Sau khi chuyển đến dinh thự, Aoko Aozaki bắt đầu học ma thuật từ một pháp sư trẻ, Alice Kuonji, phù thủy được đồn đại của dinh thự. Gia tộc Aozaki quản lý vùng đất nơi Misaki được xây dựng và người thừa kế (Aoko) được giao nhiệm vụ bảo vệ nó. Những kẻ xâm nhập bí ẩn đã phá vỡ trường kết giới ở Misaki, khiến Alice và Aoko phải điều tra. Một ma-nơ-canh hay con rối tấn công họ và bị thiêu rụi. Khi điều này xảy ra, cả hai đều phát hiện có người đang chạy trốn, một thường dân tuyệt đối không được để thoát sau khi đã thấy ma thuật còn sống. Bất ngờ thay, một cậu bé tên Soujuurou Shizuki bị thu hút đến dinh thự và cũng đến ở cùng họ.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Phù Thủy Trong Đêm Thánh"
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "魔法使之夜"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "homepage": "",
+            "overview": "Aoko Aozaki, una normale liceale, è in realtà una maga che vive nel mondo moderno... anche se è ancora solo un'apprendista. Mentre passa le sue giornate al fianco della sua coinquilina, Alice Kuonji, si impegna per diventare una maga a tutti gli effetti...  La ragazza incontra un ragazzo.  È l'inizio della storia di una giovane, il racconto che parla di una strega.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Witch on the Holy Night"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "homepage": "",
+            "overview": "Aoko Aozaki, zwyczajna licealistka, w rzeczywistości jest czarodziejką żyjącą we współczesnym świecie... choć wciąż pozostaje jedynie uczennicą. Wiedzie życie u boku swojej współlokatorki, Alice Kuonji, dążąc do zostania pełnoprawną czarodziejką…  Dziewczyna poznaje chłopaka.  Tak oto rozpoczyna się historia pewnej młodej dziewczyny – opowieść o czarownicy.",
+            "runtime": 0,
+            "tagline": "Czarodziejka żyjąca we współczesnym świecie... Choć wciąż jest zaledwie adeptką...",
+            "title": "Witch on the Holy Night"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "homepage": "https://www.crunchyroll.com/fr/news/announcements/2026/9/10/witch-on-the-holy-night-film-sortie-cinema-france-27-janvier-2027",
+            "overview": "Aoko Aozaki, lycéenne en apparence ordinaire, est en réalité une magicienne qui vit dans le monde moderne… même si elle n’est encore qu’une apprentie. Elle partage son quotidien avec sa colocataire, Alice Kuonji, tout en poursuivant son apprentissage pour devenir une magicienne à part entière… Puis la jeune fille rencontre un jeune garçon. Ainsi commence l’histoire d’une jeune fille - le récit d’une sorcière.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Witch on the Holy Night"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "homepage": "",
+            "overview": "Aoko Aozaki, una estudiante normal de secundaria, es realmente una bruja que vive en el mundo moderno… aunque aún es solo una aprendiz. Mientras, pasa los días junto con su compañera de piso, Alice Kuonji, esforzándose por convertirse en una bruja hecha y derecha...  La chica conoce a un chico.  Este es el comienzo de la historia de una joven, la historia de una bruja.",
+            "runtime": 0,
+            "tagline": "",
+            "title": "WITCH ON THE HOLY NIGHT"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "homepage": "",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "魔法使之夜"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "homepage": "https://www.sonypictures.de/filme/witch-on-the-holy-night",
+            "overview": "",
+            "runtime": 0,
+            "tagline": "",
+            "title": "Witch on the Holy Night"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eTs5EnaQtnMDfwawMFDoVZLs7Fp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/x7OezdC1pLG64xWKNhjIDXY0GcQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ldada7pRjkWipG3KRjiaj4XpsOL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3556
+        }
+      ],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1053,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lYkNSIzHTaHP7s8nL54N2sNYqLH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 702
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1053,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xKpYIt7T6nJ8oqzV52yLtZdC0YB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 702
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2009,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h1IRz3Nb28bNcZAlxKobeCaIeGJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1420
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 2088,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/clxmIlpx7PJ0j2g1voriXce0B5V.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1420
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2009,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yeSuHsBRFSgNZinxTNA8BbsWGnJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1420
+        }
+      ]
+    }
+  }
+}

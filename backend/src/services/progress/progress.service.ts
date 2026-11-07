@@ -6,6 +6,7 @@ import type { ProgressRepository } from '@repositories/progress.repository';
 import { playableKey } from '@routes/playable.types';
 import type { ProgressEntry, ProgressUpdateRequest } from '@routes/progress.types';
 import type { ListClientService } from '@services/list/list-client.service';
+import type { EpisodeNumberingService } from '@services/media/episode-numbering.service';
 
 import { mergeProgress } from './progress.merge';
 
@@ -18,7 +19,9 @@ export class ProgressService {
 
   constructor(
     database: Database,
-    private readonly listClient?: ListClientService
+    private readonly listClient?: ListClientService,
+    /** Trakt speaks TMDB's episode numbers; anime the catalog renumbers are translated. */
+    private readonly numbering?: EpisodeNumberingService
   ) {
     this.progressRepository = database.getProgressRepository();
   }
@@ -30,10 +33,12 @@ export class ProgressService {
   async update(userId: string, update: ProgressUpdateRequest): Promise<void> {
     await this.progressRepository.upsert(userId, update);
     if (this.listClient?.isReady()) {
-      await this.listClient.syncPlayback(userId, update).catch(() => {
-        // Local progress remains authoritative when the optional Trakt sync is unavailable.
-        logger.warn('Progress', 'Trakt playback export failed; local progress was saved');
-      });
+      await this.exported(update)
+        .then(exported => this.listClient!.syncPlayback(userId, exported))
+        .catch(() => {
+          // Local progress remains authoritative when the optional Trakt sync is unavailable.
+          logger.warn('Progress', 'Trakt playback export failed; local progress was saved');
+        });
     }
   }
 
@@ -44,7 +49,7 @@ export class ProgressService {
    */
   async findByUser(userId: string): Promise<ProgressEntry[]> {
     const remote = this.listClient?.isReady()
-      ? await this.listClient.getPlayback(userId).catch(() => {
+      ? await this.imported(userId).catch(() => {
           logger.warn('Progress', 'Trakt playback import failed; returning local progress');
           return [];
         })
@@ -110,11 +115,29 @@ export class ProgressService {
     );
   }
 
+  private async exported(update: ProgressUpdateRequest): Promise<ProgressUpdateRequest> {
+    if (!this.numbering) return update;
+    return { ...update, playable: await this.numbering.toProvider(update.playable) };
+  }
+
+  /** Trakt's playback in the catalog's numbering; episodes without a counterpart are left out. */
+  private async imported(userId: string): Promise<ProgressEntry[]> {
+    const entries = await this.listClient!.getPlayback(userId);
+    if (!this.numbering) return entries;
+    const translated = await Promise.all(
+      entries.map(async entry => {
+        const playable = await this.numbering!.fromProvider(entry.playable);
+        return playable ? { ...entry, playable } : null;
+      })
+    );
+    return translated.filter(entry => entry !== null);
+  }
+
   private async getBackgroundPlayback(userId: string): Promise<ProgressEntry[]> {
     const cached = this.backgroundPlaybackCache.get(userId);
     if (cached && cached.expiresAt > Date.now()) return cached.entries;
     try {
-      const entries = await this.listClient!.getPlayback(userId);
+      const entries = await this.imported(userId);
       if (this.backgroundPlaybackCache.size >= 256)
         this.backgroundPlaybackCache.delete(this.backgroundPlaybackCache.keys().next().value!);
       this.backgroundPlaybackCache.set(userId, { entries, expiresAt: Date.now() + 15 * 60_000 });

@@ -46,6 +46,14 @@ export class Episode {
   @Column()
   imdbId: string;
 
+  /** TMDB's season number when the show is numbered by AniList entry (sources and Trakt use it). */
+  @Column({ type: 'integer', nullable: true })
+  providerSeasonNumber: number | null;
+
+  /** TMDB's episode number when the show is numbered by AniList entry. */
+  @Column({ type: 'integer', nullable: true })
+  providerEpisodeNumber: number | null;
+
   @ManyToOne(() => Season, season => season.episodes)
   season: Relation<Season>;
 

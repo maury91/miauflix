@@ -1,0 +1,1304 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11035",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"15c2a4c6a499bd6635b58d4a8c6e999c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mh2UczqEXJJVgqohbyZbHTuxwhL.jpg",
+    "created_by": [
+      {
+        "id": 1215399,
+        "credit_id": "646d112a706b9f011bb47aab",
+        "name": "Taylor Sheridan",
+        "original_name": "Taylor Sheridan",
+        "gender": 2,
+        "profile_path": "/enrOQII7bCIf7U0WbdxiuXGfzrs.jpg"
+      },
+      {
+        "id": 4077115,
+        "credit_id": "6722ceb80cd8a2a503acf924",
+        "name": "Christian Wallace",
+        "original_name": "Christian Wallace",
+        "gender": 2,
+        "profile_path": "/6Upp4OFydESrMf4ZgcnfH9W5SxW.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2024-11-17",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.paramountplus.com/shows/landman",
+    "id": 157741,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-01-18",
+    "last_episode_to_air": {
+      "id": 6624252,
+      "name": "Tragedy and Flies",
+      "overview": "Amid the chaos, Tommy regroups with Cooper.",
+      "vote_average": 9.1,
+      "vote_count": 47,
+      "air_date": "2026-01-18",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 73,
+      "season_number": 2,
+      "show_id": 157741,
+      "still_path": "/yz5sF9LRnUv2PqRvrqYPklXZ0pv.jpg"
+    },
+    "name": "Landman",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 4330,
+        "logo_path": "/fi83B1oztoS47xxcemFdPMhIzK.png",
+        "name": "Paramount+",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 20,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Landman",
+    "overview": "Set in the proverbial boomtowns of West-Texas and a modern-day tale of fortune-seeking in the world of oil rigs, the series is an upstairs/downstairs story of roughnecks and wildcat billionaires that are fueling a boom so big it’s reshaping our climate, our economy and our geopolitics.",
+    "popularity": 33.6909,
+    "poster_path": "/hYthRgS1nvQkGILn9YmqsF8kSk6.jpg",
+    "production_companies": [
+      {
+        "id": 106789,
+        "logo_path": "/oEgUdRh5YWF6Il705WnpwauirIj.png",
+        "name": "Bosque Ranch Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 124254,
+        "logo_path": "/Aq2pCS1mXg4AiVwLTkh4bhcejmt.png",
+        "name": "101 Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 6329,
+        "logo_path": "/4lZJiVHPClma8YB9hXodraFXSwi.png",
+        "name": "MTV Entertainment Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 154854,
+        "logo_path": "/4bk73yBpMSI7BCFbAJgdUa6pvUb.png",
+        "name": "Texas Monthly",
+        "origin_country": "US"
+      },
+      {
+        "id": 81121,
+        "logo_path": "/1z9ocv9A1qlXhH1ehq2hFqIl0J5.png",
+        "name": "Imperative Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 270146,
+        "logo_path": "/4r6rIxegOrrVeJwqRxpzNrCRQMD.png",
+        "name": "Paramount Television Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2024-11-14",
+        "episode_count": 8,
+        "id": 485296,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2024-11-17",
+        "episode_count": 10,
+        "id": 244146,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/rxWtATtTdwx0ERQjQ7BtVOMyq5r.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2025-11-16",
+        "episode_count": 10,
+        "id": 469633,
+        "name": "Season 2",
+        "overview": "In season two, as oil rises from the earth, so do secrets - and Tommy Norris's breaking point may be closer than he realizes. Facing mounting pressure from M-Tex Oil, Cami Miller, and the shadow of his kin, survival in West Texas isn't noble - it's brutal. And sooner or later something's got to break.",
+        "poster_path": "/f48Y2C9MfwmSeC15VYdBWsYOIwg.jpg",
+        "season_number": 2,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": null,
+        "episode_count": 0,
+        "id": 497158,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/cwlDYk5I0jWIExsjeuw2jB7OzHM.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.209,
+    "vote_count": 669,
+    "external_ids": {
+      "imdb_id": "tt14186672",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 397424,
+      "tvrage_id": null,
+      "wikidata_id": "Q124447212",
+      "facebook_id": "landmanpplus",
+      "instagram_id": "landmanpplus",
+      "twitter_id": "landmanpplus"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Set in the proverbial boomtowns of West-Texas and a modern-day tale of fortune-seeking in the world of oil rigs, the series is an upstairs/downstairs story of roughnecks and wildcat billionaires that are fueling a boom so big it’s reshaping our climate, our economy and our geopolitics.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "랜드맨",
+            "overview": "텍사스 서부 신흥 도시를 배경으로, 유전 현장에서 부를 쫓는 현대인의 이야기를 그린다. 거친 시추 노동자들과 억만장자 투자자들의 세계가 교차하며, 기후와 경제, 세계정세를 뒤흔드는 거대한 붐이 펼쳐진다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Az olajügynök",
+            "overview": "A nyugat-texasi Boomtownban játszódó 'Landman' egy modern történet a szerencsevadászatról az olajfúrótornyok világában. A sorozat egy olyan hatalmas fellendülést gerjesztő, az éghajlatot, a gazdaságot és a geopolitikát is átformáló, az emeletről emeletre haladó és a földszintről lefelé bukó, durva csavargókról és vad milliárdosokról szóló történet, amely egy olyan hatalmas fellendülést táplál, ami átformálja éghajlatunkat, gazdaságunkat és geopolitikánkat.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Serien utspelar sig i de ökända expansionsstäderna i West-Texas i USA och är en modern berättelse om förmögenhetssökande i oljeriggvärlden. Serien skildrar hur grovarbetare och vilda miljardärer driver en högkonjuktur på en skala så stor att det förändrar klimatet, ekonomin och geopolitiken.",
+            "homepage": "",
+            "tagline": "Oljan ger makt. Priset betalas i blod."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ランドマン",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Nelle città in rapida espansione del Texas occidentale, dove irrefrenabili miliardari stanno alimentando il più grande boom economico della storia, Tommy Norris è un anonimo gestore di crisi per la compagnia petrolifera di Monty Miller, un titano del locale sistema industriale con il quale ha una lunga relazione personale e professionale che coinvolge anche la moglie di quest'ultimo, Cami.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Die Serie spielt in den sprichwörtlichen Boomtowns von West-Texas und ist eine moderne Geschichte über die Suche nach dem Glück in der Welt der Ölplattformen. Sie erzählt die Geschichte von Raufbolden und wilden Milliardären, die einen so großen Boom anheizen, dass er unser Klima, unsere Wirtschaft und unsere Geopolitik umgestaltet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Лэндмен",
+            "overview": "Лэндмен Томми Норрис разбирается с мексиканскими картелями, полицейскими, федералами и решает другие проблемы компании, связанные с нефтью.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "石油天王",
+            "overview": "故事背景设定在西德克萨斯的繁荣小镇，以现代石油钻井行业的淘金热为主题。这是一部关于基层工人和冒险致富的亿万富翁的上下阶层故事。他们推动了一场如此庞大的繁荣，不仅正在重塑我们的气候、经济，还改变了全球地缘政治格局。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Ambientada nas cidades em expansão do Texas, Landman é uma fábula de busca por fortuna no mundo do petróleo. A série narra o contraste entre operários e bilionários, que alimentam um boom que está remodelando nosso clima, economia e geopolítica.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Současnost v západním Texasu, která vypráví příběh obyčejných lidí i nenasytných magnátů, kteří při hledání bohatství v ropném byznysu neberou ohled na nikoho a na nic kolem sebe.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "",
+            "overview": "Дії відбуваються у західному Техасі, місті, де стався справжній бум. Серіал розповідає історію пошуку багатства у світі нафтових свердловин, а також про життя робітників нафтових свердловин та мільярдерів. Ці мільярдери створюють бум такої величини, що він змінює наш клімат, економіку та геополітику.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Dans l'ouest du Texas, les champs pétrolifères peuplent le paysage et régissent l'économie locale et la géopolitique. Tommy Norris est un landman, un employé par une compagnie pétrolière chargé de régler les problèmes et de dénicher de futurs terrains. Tommy est épuisé par les épreuves de la vie et par son travail. Père de de deux enfants, il est divorcé d'Angela. Ce redneck invétéré et cynique n'aime pas obéir aux règles et se laisse rarement dicter sa conduite.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De serie speelt zich af in de spreekwoordelijke boomtowns van West-Texas en is een modern verhaal over de zoektocht naar fortuin in de wereld van booreilanden. Het vertelt het verhaal van pestkoppen en wilde miljardairs die een hausse aanwakkeren die zo groot is dat deze ons klimaat, onze economie en onze geopolitiek opnieuw vormgeeft.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "მიწათმფლობელი",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "石油天王",
+            "overview": "老練的油田高手湯米諾里斯，為M-Tex石油公司穿梭於荒漠、油井與談判桌之間，甚至與販毒集團周旋，他都在所不辭。這不僅僅是關乎財富的角力，更是牽動經濟、氣候與地緣政治的巨大博弈。在石油的滾滾浪潮下，湯米將如何平衡道德與利益、權勢與人性？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "石油天王",
+            "overview": "老練的油田高手湯米諾里斯，為 M - Tex 石油公司穿梭於荒漠、油井與談判桌之間，甚至與販毒集團周旋，他都在所不辭。這不僅僅是關乎財富的角力，更是牽動經濟、氣候與地緣政治的巨大博弈。在石油的滾滾浪潮下，湯米將如何平衡道德與利益、權勢與人性？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Landman: Un negocio crudo",
+            "overview": "En Texas, matones y multimillonarios intentan hacerse ricos en el negocio del petróleo a medida que las plataformas petrolíferas dominan el estado. El ejecutivo Tommy Norris intenta llevar a su empresa a lo más alto durante el auge del petróleo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Batı Teksas'ın petrol kuleleri dünyasında servet arayışının modern bir hikayesi. Doğanın sınırlarını zorlayan bu dünyada, zenginlik ve güç peşinde verilen mücadele hem kişisel hem de ahlaki bir sınav haline geliyor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Landman: Negocjator",
+            "overview": "Osadzona w prosperujących miasteczkach zachodniego Teksasu, współczesna opowieść o poszukiwaniu szczęścia w świecie szybów naftowych. Historia przedstawiana jest z dwóch perspektyw - pracowników naftowych i nieokrzesanych miliarderów, wywierających swój wpływ na klimat, gospodarkę oraz geopolitykę.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Landman: Un negocio crudo",
+            "overview": "Ambientada en las proverbiales ciudades en auge del oeste de Texas, se trata de un drama sobre la búsqueda de la fortuna en el mundo de las plataformas petrolíferas basada en el podcast 'Boomtown', una historia de clases, con matones y multimillonarios salvajes que impulsan un boom tan grande que está cambiando nuestro clima, nuestra economía y nuestra geopolítica.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Radnja je smještena u uspješne gradove zapadnog Teksasa, gdje grubijani i divlji milijarderi traže sreću u svijetu naftnih platformi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Serien foregår i de velkendte boomtowns i West-Texas og en moderne fortælling om lykkesøgning i olieriggenes verden, og serien er en historie ovenpå/nedenunder om roughnecks og vilde milliardærer, der giver næring til et boom så stort, at det omformer vores klima, vores økonomi og vores geopolitik.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Η ιστορία εξελίσσεται στις παροιμιώδεις ακμάζουσες πόλεις του Δυτικού Τέξας, σε μια σύγχρονη ιστορία αναζήτησης τύχης στον κόσμο των εξεδρών πετρελαίου. Η σειρά είναι μια ιστορία με αδίστακτους δισεκατομμυριούχους που τροφοδοτούν μια άνθηση τόσο μεγάλη που αναδιαμορφώνει το κλίμα, την οικονομία μας και τη γεωπολιτική μας.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Sodobna zgodba o iskanju bogastva in dogajanju v svetu naftnih ploščadi v zahodnem Teksasu, kjer so delavci na naftnih ploščadih in divji naftni milijarderji gonilo tako velikega razcveta, da ta spreminja naše podnebje, gospodarstvo in geopolitiko.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Човек на земята",
+            "overview": "Действащ в пословичните бум градове на Западен Тексас и съвременен разказ за търсене на богатство в света на петролните платформи, сериалът е история на горния и долния етаж на грубияни и диви милиардери, които подхранват толкова голям бум, че прекроява нашия климат , нашата икономика и нашата геополитика.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Sarja sijoittuu Länsi-Texasin kasvukeskuksiin ja on nykypäivän tarina onnen tavoittelusta öljykenttien maailmassa. Se on ylä- ja alakerran välinen tarina raakalaisista ja villiintyneistä miljardööreistä, jotka ruokkivat niin suurta noususuhdannetta, että se muuttaa ilmastoamme, talouttamme ja geopolitiikkaamme.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Vi befinner oss blant oljeriggene i Vest-Texas, hvor borearbeiderne og ferske milliardærer driver en boom så voldsom at den omformer både klimaet, økonomien og geopolitikken.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Landman",
+            "overview": "Smještena u poslovično rastuće gradove zapadnog Teksasa i suvremena priča o traženju bogatstva u svijetu naftnih platformi, serija je priča gore/dolje o nevaljalima i divljim milijarderima koji potiču tako velik procvat da mijenja našu klimu , naše gospodarstvo i naša geopolitika.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "لندمن",
+            "overview": "لندمن؛ سریالی درام ساخته تیلور شریدان است. ماجرا در شهرک‌های نفت‌خیز غرب تگزاس روایت شده و داستان گروهی از کارگران حفاری و میلیاردرهای سرمایه‌گذار در صنعت نفت را به تصویر می‌کشد که رونق عظیمی را در صنعت نفت ایجاد کرده‌اند، اما این رونق به مرور زمان باعث تغییر آب و هوا، اقتصاد و ژئوپلیتیک منطقه شده و…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Omul petrolului",
+            "overview": "În proverbialele orașe în dezvoltare rapidă din vestul Texasului, sondorii și miliardarii petroliști își încearcă norocul în lumea sondelor de petrol.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Naftininkas",
+            "overview": "Šių dienų istorija apie turtus, kuriuos galima rasti naftos telkinių pasaulyje. Čia darbininkų klasė susitinka su milijardieriais. Tačiau kad ir kiek nulių būtų jų banko sąskaitoje, juos visus vienija nešvaraus aukso troškimas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "לנדמן",
+            "overview": "טומי נוריס הוא 'לנדמן' מנוסה וקשוח, איש שתפקידו לטפל בעסקאות מסובכות ומשברים בלתי צפויים בתעשיית הנפט – אחת התעשיות העשירות בעולם, שמכלכלת בעצמה את כל התעשיות שמדורגות לפניה ברשימה הזאת. עם כניסתו לתפקיד החדש, עליו לנווט בין האינטרסים של הבוסית החדשה שלו ויריביו החדשים: הקרטל.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Landman",
+            "overview": "Landman sa odohráva v povestných prosperujúcich mestách západného Texasu a je moderným príbehom o hľadaní šťastia vo svete ropných plošín. Seriál, ktorý spoločne vytvorili na Oscara nominovaný Taylor Sheridan a Christian Wallace, je založený na pozoruhodnom 11-dielnom podcaste Boomtown a je príbehom o rôznych vrstvách a drsných a divokých miliardároch, ktorí podnecujú obrovský rozmach pretvárajúci našu klímu, našu ekonomiku a našu geopolitiku.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Landman é um drama sobre a indústria petrolífera no Oeste do Texas, focado na busca por fortuna nas \"boomtowns\", mostrando o contraste entre trabalhadores, bilionários e o impacto ambiental e geopolítico da extração de petróleo, baseado no podcast \"Boomtown\" de Taylor Sheridan e Christian Wallace, com Billy Bob Thornton e Demi Moore. A série explora a ganância, corrupção e os perigosos acordos entre magnatas e cartéis, enquanto a exploração remodela o clima e a economia global.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "ชีวิตของครอบครัวชาวนิวยอร์กพังทลายลงหลังเกิดโศกนาฏกรรม พวกเขาใช้เวลาพักผ่อนในชนบทของรัฐมอนแทนาเพื่อเยียวยาความโศกเศร้า และค้นหาความสัมพันธ์ระหว่างมนุษย์ท่ามกลางความเศร้าโศกอย่างสุดซึ้ง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "تدور الأحداث في حقول النفط بغرب تكساس، حيث يكافح مدير ميداني مخضرم لإدارة الأزمات وحماية مصالح شركته، بينما يوازن بين صراعات العمل المعقدة وحياته العائلية المضطربة، في عالم تحكمه الثروة والمخاطر والنفوذ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Người Xăng Dầu​",
+            "overview": "Người quản lý khủng hoảng nghiêm nghị của công ty dầu khí ở Tây Texas xoay xở với gia đình tan vỡ khi cuộc chiến pháp lý và cạnh tranh khốc liệt đe dọa công việc và di sản của ông.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mh2UczqEXJJVgqohbyZbHTuxwhL.jpg",
+          "vote_average": 7.076,
+          "vote_count": 13,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q71au2YjcwXBMZKNzNgjK7RZ3Hs.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/66sWWyJp28bkNQWcIw3YPUyDFvO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1aI5ddIDeZwKXaGQT6cUdXUdl6s.jpg",
+          "vote_average": 3.214,
+          "vote_count": 14,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lsTW6jjloPFqo7ZDTOqEYLaoLnb.jpg",
+          "vote_average": 3.034,
+          "vote_count": 15,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pY0nfk4vlagZTV4gbSpxQ1E9L7B.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k4nfpDouxg17nsXJaDJ2i7aubbv.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 788,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bNRFrUQLOxhk3njWDe3NejQRjoP.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fMbY38tgTBoVOUJ4cLoXtqvREuN.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AgjAt3gQcM6yRRPaI1Hyi2uKCiQ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ogH1lEL0pv0NmuBBNtNKlnuHdY1.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o9uagBbNQB43LwE37BbrWu2QQQj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/baojWPzZdWhNAqfsGT010f4jQvE.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5qI6Y4gNBQU0VjSwhGaStihTZHI.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yj4w50MMjjxCulTJ3FujKgrkZSF.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zRc84H0EX2gkV9cBiIPN9gOa9Lo.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2b5dZ7VfsktETjW3O4RC8XZJpDy.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kGcOlpg2tKtJNvqcgq8SXERzdB1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xMTguhXgKZvmYcxET2HoCKMXnfX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ewc8rcfIJ8C9sUyFMf48UZLLLBD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rll9UKLRzIHh2Cuylr9QQTRDELS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6qQOAg2v69UXAxZBBW3ixado9QC.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wFhlXcC3VmkeicmArnq4Jmp9hgj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ub5sRmULtDpuAFIiFzzT1X5IZe1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aOgTMVtxp7fdnocTMQ8axFicYga.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c3vBDGAE5DxeE1rgueL3AJbw3e5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mmV57Z8aOwslJaISgtPEa6FpEy7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e7pyPm3hoEq4W8ouEqMPFC2Wu3y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rT6MWTMvDFkxpMPRJMKmFCVxPxr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1406,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y2Ir7snY2Yw4ff3WOHUREgNpgjQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2500
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g6LZolqoatkXnuhPT7RAnJ9BqJn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/heVLhY3lVRa67oZhPSOzLZ1mv4d.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/49HF0Io6bxbeubfK2pXPZD4Rzsx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pLCPe4UU0jC2W7hv2bnnCPsRKm6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dp2QrPfGn6ymAlDvv3RAZ5OE4aS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2880
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.185,
+          "height": 1032,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/13lJnfO3oExZ2ECzAR6WDyShzlV.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4319
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hYthRgS1nvQkGILn9YmqsF8kSk6.jpg",
+          "vote_average": 1.208,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/euP1ytkbTAbpHwSv5vGdCip9mOH.jpg",
+          "vote_average": 7.814,
+          "vote_count": 9,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rxWtATtTdwx0ERQjQ7BtVOMyq5r.jpg",
+          "vote_average": 7.05,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1403,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/is3SlnehHVY9RHECTLQnD9Xs4Ur.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 935
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iQIDcC3zC6XiPCZGjxArq4mfZRL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4mWQMTQQsL5ejYEeRJWIGcXGyjT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lGwY36kchDVPqZV02ntlKahO16I.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uFNxi197jPskzW3fBxF4t0tY1qC.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 726
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AnLq5YSssNWpiD06iYF69wFiaNh.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lWy8zDKn7KFf4s9iaQSNgdoPHaN.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AsbW0dmQNSRJZygfkJdo98OjuQZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sAvPBC27Vyt1VcsWbtvP2BVmc11.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9PcTOxNr8chpIVCqrFkJsVqhhNc.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mw94hAcq78eqyIZqkGc5uL982B6.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xD5b3sNxGcQr65gRprmru4TKZf7.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xLdH51V7wvaOB18q5wQwhpEGysK.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wS6xiUtot9Bktx5yWovxUXAadVK.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7CSIHlVIEioBKIlbn4lrgaoehCq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jLa5qhRiotCH4RpW73EtjFretDu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wujHUbQKYCYk18Z9npPLyorJaPg.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/peal64ItCB74pK1Y2OJuDGCwFo.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oLvuE3OJx2tzDbf13ururGzjFvY.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.682,
+          "height": 1249,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aj8uehRXWeQ7WSbnhnKRZ23GBdn.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 852
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4HAhNIKlKavkTddecsHOhfLu292.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7K27sR78joJjNm3bnl83E6exArM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ydEBy8eud6L5J5YA1SWso6oUkO2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7AqrFPGWr6VJlchqmxUP5ZhlXVf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

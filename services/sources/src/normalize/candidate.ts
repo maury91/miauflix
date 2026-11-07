@@ -4,6 +4,8 @@ import {
   extractSourceMetadata,
 } from '@miauflix/source-metadata-extractor';
 
+import { type AnimeMatch, episodeAliases, matchAnimeRelease } from '../anime/release';
+import type { AnimeContext } from '../anime/resolver';
 import type { Provider, ProviderQuery, RawResult } from '../providers/types';
 import { buildMagnet, magnetHash, normalizeHash } from './magnet';
 const normalized = (s: string) =>
@@ -13,16 +15,21 @@ const normalized = (s: string) =>
     .toLowerCase()
     .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim();
+/** Anime releases start with their group: "[SubsPlease] Title - 07". */
+const withoutGroup = (s: string) => s.replace(/^(?:\s*(?:\[[^\]]*\]|【[^】]*】))+/, '');
 export function toCandidate(
   raw: RawResult,
   provider: Provider,
   matchedBy: MatchedBy,
   query: ProviderQuery,
   request: SourceSearchRequest,
-  seal: (value: string) => string
+  seal: (value: string) => string,
+  anime?: AnimeContext | null
 ): SourceCandidate | null {
   const hash = normalizeHash(raw.hash ?? '') ?? magnetHash(raw.magnet);
   if (!hash) return null;
+  // Mixed sites (Nyaa) also list music, books and software under the same names.
+  if (raw.category && /^(?:audio|books|pc|console|xxx)\b/i.test(raw.category)) return null;
   const extracted = extractSourceMetadata({
     name: raw.title,
     type: raw.type,
@@ -43,34 +50,56 @@ export function toCandidate(
       extracted.season ??
       (parsedSeason === undefined ? undefined : Number(parsedSeason)))
     : undefined;
-  const batch = isShow ? (raw.batch ?? (season !== undefined && episode === undefined)) : false;
+  let batch = isShow ? (raw.batch ?? (season !== undefined && episode === undefined)) : false;
   if (
     raw.imdbid &&
     request.media.imdbId &&
     raw.imdbid.replace(/^tt/, '') !== request.media.imdbId.replace(/^tt/, '')
   )
     return null;
+  const title = normalized(withoutGroup(raw.title));
+  const startsWith = (alias: string) =>
+    title === normalized(alias) || title.startsWith(normalized(alias) + ' ');
   if (matchedBy === 'title') {
-    const title = normalized(raw.title);
     const aliases = [
       request.media.title,
       request.media.originalTitle,
       ...(query.titles ?? []),
+      ...(anime?.titles ?? []),
     ].filter((s): s is string => !!s);
-    if (
-      !aliases.some(
-        alias => title === normalized(alias) || title.startsWith(normalized(alias) + ' ')
-      )
-    )
-      return null;
+    if (!aliases.some(startsWith)) return null;
   }
-  if (
+  let finalSeason = season,
+    finalEpisode = episode;
+  // Anime releases number by cour or from the first episode, so their own rules decide first; a
+  // match is reported in TMDB's numbering so the backend files it under the episode it asked for.
+  const show = [request.media.title, request.media.originalTitle].map(t => normalized(t ?? ''));
+  const animeMatch: AnimeMatch | null =
+    isShow && anime?.episode
+      ? matchAnimeRelease(
+          raw.title,
+          anime,
+          request,
+          (anime.seasonTitles ?? []).some(t => !show.includes(normalized(t)) && startsWith(t)),
+          request.media.year
+        )
+      : null;
+  const providerSaysSo =
+    raw.season === request.season && raw.episode !== undefined && raw.episode === request.episode;
+  if (animeMatch) {
+    finalSeason = request.season;
+    finalEpisode = animeMatch === 'episode' ? request.episode : undefined;
+    batch = animeMatch === 'pack';
+  } else if (isShow && anime?.episode && !providerSaysSo) {
+    return null;
+  } else if (
     request.media.kind === 'show' &&
     request.season !== undefined &&
     !(season === request.season && (episode === request.episode || batch)) &&
     !(raw.absoluteEpisode && raw.absoluteEpisode === query.absoluteEpisode)
   )
     return null;
+  const aliases = isShow && anime ? episodeAliases(anime, request) : [];
   const date = new Date(raw.date ?? 0);
   return {
     hash,
@@ -96,9 +125,10 @@ export function toCandidate(
     source: extracted.source ?? null,
     bitrate: calculateApproximateBitrate(raw.size ?? 0, raw.runtimeMinutes ?? 0),
     score: 0,
-    season,
-    episode,
+    season: finalSeason,
+    episode: finalEpisode,
     batch,
+    ...(aliases.length ? { episodeAliases: aliases } : {}),
     absoluteEpisode: raw.absoluteEpisode,
     release: raw.release,
     files: raw.files,

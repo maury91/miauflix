@@ -67,6 +67,8 @@ export interface SeasonSummary {
   poster: string | null;
   episodeCount: number;
   synced: boolean;
+  /** The AniList entry this season is, for anime numbered by entry. */
+  anilistId?: number | null;
 }
 
 export interface TVShowDetail extends ArtworkFields {
@@ -86,11 +88,23 @@ export interface TVShowDetail extends ArtworkFields {
   rating: number;
   seasons: SeasonSummary[];
   detailsSyncedAt: string | null;
+  /**
+   * How seasons are numbered: TMDB's own, or one season per AniList entry (anime TMDB keeps in
+   * fewer seasons). Absent from older catalogs, which only number by TMDB.
+   */
+  seasonLayout?: SeasonLayout;
+  /** Changes whenever the numbering does; stored episode numbers must then be renumbered. */
+  seasonLayoutVersion?: string | null;
 }
+
+export type SeasonLayout = 'tmdb' | 'anilist';
 
 export interface EpisodeDetail {
   mediaId: number;
   episodeNumber: number;
+  /** TMDB's season and episode, when the show is numbered by AniList entry. */
+  providerSeasonNumber?: number;
+  providerEpisodeNumber?: number;
   name: string;
   overview: string;
   airDate: string | null;
@@ -107,6 +121,24 @@ export interface SeasonDetail {
   poster: string | null;
   synced: boolean;
   episodes: EpisodeDetail[];
+  anilistId?: number | null;
+}
+
+/** Where every episode of a show numbered by AniList entry sits, in both numberings. */
+export interface EpisodeLayout {
+  tvMediaId: number;
+  layout: SeasonLayout;
+  version: string | null;
+  /** Empty for `tmdb`: the numbering is TMDB's. */
+  episodes: EpisodeLayoutEntry[];
+}
+export interface EpisodeLayoutEntry {
+  /** TMDB episode id. */
+  mediaId: number;
+  seasonNumber: number;
+  episodeNumber: number;
+  providerSeasonNumber: number;
+  providerEpisodeNumber: number;
 }
 
 export interface MediaSummary {
@@ -175,7 +207,7 @@ export interface CatalogStatusDetails {
 /** Most media refs a batch method accepts. */
 export const MAX_BATCH_ITEMS = 50;
 
-export const catalog = contract('catalog', '2.0', {
+export const catalog = contract('catalog', '2.1', {
   getMovie: call<{ mediaId: number; language: string }, MovieDetail, 'not_found'>({ dedupe: true }),
   getShow: call<{ mediaId: number; language: string }, TVShowDetail, 'not_found'>({ dedupe: true }),
   getSeason: call<
@@ -183,6 +215,11 @@ export const catalog = contract('catalog', '2.0', {
     SeasonDetail,
     'not_found'
   >({ dedupe: true }),
+  /** Both numberings of a show's episodes (anime numbered by AniList entry). */
+  episodeLayout: call<{ tvMediaId: number }, EpisodeLayout, 'not_found'>({
+    dedupe: true,
+    since: 1,
+  }),
   search: call<{ query: string; page: number; language: string }, SearchResponse>({ dedupe: true }),
   discover: call<{ genre: SearchGenreKey; page: number; language: string }, SearchResponse>({
     dedupe: true,

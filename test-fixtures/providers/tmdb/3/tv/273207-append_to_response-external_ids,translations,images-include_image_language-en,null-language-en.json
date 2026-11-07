@@ -1,0 +1,958 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11483",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"60767570e7c02e4994af410e7dc285c4\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/uYOYLFQ4q7asuhdiKXCqGaeAQUH.jpg",
+    "created_by": [
+      {
+        "id": 78417,
+        "credit_id": "66fbf733e7811ef6cba67e07",
+        "name": "Nick Santora",
+        "original_name": "Nick Santora",
+        "gender": 2,
+        "profile_path": "/iipP9fTQhRuPJHFMhbpMCceBiiu.jpg"
+      },
+      {
+        "id": 1214469,
+        "credit_id": "66fbf74902e2e3fa4aa67143",
+        "name": "Nicholas Wootton",
+        "original_name": "Nicholas Wootton",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-09-16",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://www.amazon.com/dp/B0GY916X2W",
+    "id": 273207,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-16",
+    "last_episode_to_air": {
+      "id": 7182639,
+      "name": "Touched",
+      "overview": "With the legacy of her deceased childhood friend on the line, and the lives of her team under threat, Neagley mounts one last stand to bring Tommy's killers to justice.",
+      "vote_average": 7.2,
+      "vote_count": 26,
+      "air_date": "2026-09-16",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "RSPI 108",
+      "runtime": 53,
+      "season_number": 1,
+      "show_id": 273207,
+      "still_path": "/g9oiwVozajHyUaCSABoDj7FSh6v.jpg"
+    },
+    "name": "Neagley",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1024,
+        "logo_path": "/w7HfLNm9CWwRmAMU58udl2L7We7.png",
+        "name": "Prime Video",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Neagley",
+    "overview": "Frances Neagley is a private investigator in Chicago and former military colleague of Jack Reacher in the Army's 110th Special Investigations Unit. When she learns that a beloved friend from her past has been killed in a suspicious accident, she becomes hell-bent on justice.",
+    "popularity": 29.6507,
+    "poster_path": "/lKOPmO0ah17ogQ9hWg7lSd40kIr.jpg",
+    "production_companies": [
+      {
+        "id": 210099,
+        "logo_path": "/g5oRCNCi8kNVb8gEoSoIcqkhjmR.png",
+        "name": "Amazon MGM Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 270146,
+        "logo_path": "/4r6rIxegOrrVeJwqRxpzNrCRQMD.png",
+        "name": "Paramount Television Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-09-16",
+        "episode_count": 8,
+        "id": 421460,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/iKaOtqE88aoIH6CcGg1AIp4TiKW.jpg",
+        "season_number": 1,
+        "vote_average": 7.4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.006,
+    "vote_count": 233,
+    "external_ids": {
+      "imdb_id": "tt33539520",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 455064,
+      "tvrage_id": null,
+      "wikidata_id": "Q132661267",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Frances Neagley is a private investigator in Chicago and former military colleague of Jack Reacher in the Army's 110th Special Investigations Unit. When she learns that a beloved friend from her past has been killed in a suspicious accident, she becomes hell-bent on justice.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Llega un nuevo capítulo del universo de REACHER. Frances Neagley, investigadora privada en Chicago y antigua compañera militar de Jack Reacher en la Unidad de Investigaciones Especiales 110 del Ejército, emprende una implacable búsqueda de justicia cuando descubre que un amigo muy querido del pasado ha muerto en un sospechoso accidente.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Frances Neagley privatna je istražiteljica u Chicagu. Kada sazna da je njezin voljeni prijatelj iz prošlosti poginuo u sumnjivoj nesreći, postaje pakleno odlučna u tome da istjera pravdu. Koristeći sve što je naučila od Jacka Reachera i tijekom svog vremena kao članica 110. postrojbe specijalnih istražitelja, Neagley krece opasnim putem kako bi razotkrila zlokobno zlo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "니글리",
+            "overview": "드라마 '리처' 세계관 속 새로운 이야기가 시작된다. 프랜시스 니글리는 시카고에서 활동하는 사립 탐정으로, 잭 리처와는 제110 헌병대 범죄수사대에 함께 복무했던 전우 사이이다. 니글리는 소중한 옛 친구가 수상한 사고로 목숨을 잃었다는 사실을 알게 되고, 정의를 실현하기 위해 나선다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Uit de wereld van REACHER begint een nieuw hoofdstuk. Frances Neagley is een privédetective in Chicago en voormalig militair collega van Jack Reacher uit de 110e Speciale Onderzoeksafdeling van het leger. Als ze hoort dat een dierbare vriend uit haar verleden is omgekomen bij een verdacht ongeluk, zet ze alles op alles voor gerechtigheid.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Frances Neagley is privédetective in Chicago. Wanneer ze hoort dat een dierbare vriend uit haar verleden is omgekomen bij een verdacht ongeluk, is ze vastbesloten gerechtigheid te krijgen. Gewapend met alles wat ze heeft geleerd van Jack Reacher en tijdens haar tijd bij de 110 Special Investigators, begeeft Neagley zich op een gevaarlijk pad om een ​​dreigend kwaad aan het licht te brengen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Нийгли",
+            "overview": "Франсис Нийгли е частен следовател в Чикаго. Когато научава, че любим приятел от миналото ѝ е убит при подозрителен инцидент, тя е решена на всичко в името на справедливостта. Използвайки всичко, което е научила от Джак Ричър и времето си като член на 110-ти отряд специални следователи, Нийгли поема по опасен път, за да разкрие едно заплашително зло.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Neagley: Detetive Particular",
+            "overview": "Um novo capítulo começa no universo de REACHER. Frances Neagley é uma investigadora particular em Chicago e ex-colega de Jack Reacher na 110ª Unidade de Investigações Especiais do Exército. Ao saber que um amigo querido de seu passado morreu em um acidente suspeito, ela fica determinada a obter justiça.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Frances Neagley est une détective privée à Chicago et une ancienne collègue de Jack Reacher au sein de la 110e Unité d'enquêtes spéciales de l'armée. Lorsqu'elle apprend qu'un ami cher de son passé a été tué dans un accident suspect, elle se lance à corps perdu dans une quête de justice.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Do universo de \"REACHER\", começa um novo capítulo. Frances Neagley é investigadora privada em Chicago e antiga colega militar de Jack Reacher na Unidade 110 de Investigações Especiais do Exército. Quando descobre que um amigo muito querido do seu passado morreu num acidente suspeito, fica determinada a fazer justiça.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "נילי",
+            "overview": "מתוך עולמו של \"ריצ'ר\", פרק חדש מתחיל. פרנסס נילי היא חוקרת פרטית בשיקגו ושותפתו לשעבר מהשירות הצבאי של ג'ק ריצ'ר ביחידת החקירות המיוחדות ה-110 של הצבא. כאשר היא מגלה שחבר אהוב מעברה נהרג בתאונה חשודה, היא נחושה לעשות צדק.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "نیگلی",
+            "overview": "نیگلی، با تکیه بر تجربه‌اش با جک ریچر و تیم ۱۱۰ بازرس ویژه، مأموریتی خطرناک را برای افشای یک تهدید شوم آغاز می‌کند و جان خود را برای کشف این راز به خطر می‌اندازد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ніглі",
+            "overview": "Френсіс Ніглі — приватна детективка з Чикаґо. Дізнавшись, що її близький давній друг загинув у підозрілій аварії, вона стає одержимою жагою правосуддя. Використовуючи все, чого її навчив Джек Річер, та досвід служби у 110-му підрозділі спеціальних розслідувань, Ніґлі ступає на небезпечний шлях, аби викрити зловісну загрозу.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Нили",
+            "overview": "Фрэнсис Нили — бывший сержант специального подразделения военной полиции, верная напарница и, пожалуй, единственный человек, которого Джек Ричер по-настоящему уважает. Она узнает о загадочной смерти близкого друга Томми, чью гибель полиция поспешила объяснить несчастным случаем или самоубийством. Не доверяя официальной версии, Нили начинает собственное расследование. Выясняется, что незадолго до смерти Томми посещал собрания таинственной коммуны, возглавляемой одиозным лидером. Постепенно поиск правды превращается в опасное погружение в мир, где религиозная оболочка скрывает нечто гораздо более мрачное. Нили вынуждена работать с нерадивым детективом чикагской полиции, чтобы распутать это дело. В ходе расследования ей приходится применять навыки, которым её когда-то научил Джек Ричер. Распутывая клубок, ведущий в тёмные уголки человеческой природы, героиня одновременно сталкивается с собственным прошлым, которое так долго пыталась скрыть от себя.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Neagleyová",
+            "overview": "Ze světa seriálu Reacher přichází nový příběh. Frances Neagleyová je soukromá vyšetřovatelka z Chicaga a bývalá kolegyně Jacka Reachera z elitní 110. jednotky zvláštních vyšetřování americké armády. Když se dozví, že její blízký kamarád z minulosti zahynul při podezřelé nehodě, rozhodne se za každou cenu dopadnout viníky a dosáhnout spravedlnosti.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "侠女内莉",
+            "overview": "《侠探杰克》衍生剧。弗朗西丝·内莉是芝加哥一名私家侦探，也是杰克·雷彻过去在陆军110特别调查小组共事的伙伴。当她得知一位挚友在一场疑点重重的意外中丧生后，便下定决心查明真相。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เนียลี่ย์ นักสืบคดีระทึก",
+            "overview": "บทใหม่จากจักรวาล \"ยอดคนสืบระห่ำ\" ได้เริ่มต้นขึ้น ฟรานเซส เนียลี่ย์เป็นนักสืบเอกชนในชิคาโกและอดีตเพื่อนร่วมงานทหารของแจ็ค รีชเชอร์ในหน่วยสืบสวนพิเศษที่ 110 ของกองทัพ เมื่อเธอรู้ข่าวว่าเพื่อนผู้เป็นที่รักจากอดีตของเธอเสียชีวิตในอุบัติเหตุที่น่าสงสัย เธอก็มุ่งมั่นที่จะทวงคืนความยุติธรรมให้ได้",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Frances Neagley ist eine Privatdetektivin in Chicago und eine ehemalige Militärkollegin von Jack Reacher in der 110. Spezialeinheit der US-Army. Als sie erfährt, dass ein lieber Freund aus ihrer Vergangenheit bei einem verdächtigen Unfall ums Leben kam, setzt sie alles daran, für Gerechtigkeit zu sorgen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "REACHER evreninde yeni bir sayfa açılıyor. Frances Neagley, askerlik günlerinde Jack Reacher ile 110'uncu Birlik'te görev yapmış Şikagolu bir özel dedektiftir. Geçmişten çok yakın bir dostunun şüpheli bir kazada öldürüldüğünü öğrenince adalet aramaya başlar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "نيلي",
+            "overview": "من عالم مسلسل ريتشر، يبدأ فصل جديد. فرانسيس نيلي محققة خاصة في شيكاغو وزميلة عسكرية سابقة لجاك ريتشر في وحدة التحقيقات الخاصة رقم 110 التابعة للجيش. وعندما تعلم بمقتل صديقة عزيزة من ماضيها في حادث غامض، تُصمم على تحقيق العدالة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "De l'univers de REACHER, comença una nova aventura. La Frances Neagley és una detectiva privada a Chicago i excompanya d'en Jack Reacher a la unitat 110 d'investigacions especials de l'exèrcit. Quan rep la notícia que un bon amic del seu passat ha mort en un suposat accident, s'entossudeix a fer justícia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "I REACHER-universet begynder et nyt kapitel. Frances Neagley er privatdetektiv i Chicago og tidligere kollega til Jack Reacher i hærens 110th Special Investigations Unit. Da hun får at vide, at en elsket ven fra fortiden er død i en mistænkelig ulykke, er hun fast besluttet på at opnå retfærdighed.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "侠女内莉",
+            "overview": "《侠探杰克》的全新衍生剧。弗朗西丝·内格利是一位常驻芝加哥的私家侦探，也曾是杰克·雷彻在陆军第110特别调查组的战友。当得知一位昔日挚友在一场可疑事故中丧生后，她决心不惜一切代价寻求正义。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Dans l'univers de REACHER, un nouveau chapitre s'ouvre. Frances Neagley est une détective privée à Chicago et une ancienne collègue de Jack Reacher au sein de la 110e Unité d'enquêtes spéciales de l'armée. Lorsqu'elle apprend qu'un ami cher de son passé a été tué dans un accident suspect, elle se lance à corps perdu dans une quête de justice.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "REACHERIN maailmassa alkaa uusi luku. Frances Neagley on chicagolainen yksityisetsivä ja Jack Reacherin entinen kollega armeijan 110. erikoistutkintayksikössä. Kun hän saa tietää, että rakas ystävä hänen menneisyydestään on kuollut epäilyttävässä onnettomuudessa, hän pyrkii jääräpäisesti saamaan oikeutta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "gl",
+          "name": "Galego",
+          "english_name": "Galician",
+          "data": {
+            "name": "",
+            "overview": "Do universo de Reacher chega un novo capítulo: Frances Neagley, investigadora privada en Chicago e antiga compañeira militar de Jack Reacher na 110.ª Unidade de Investigación Especial do Exército, emprende unha incansable procura de xustiza ao saber que un querido amigo do seu pasado morreu nun sospeitoso accidente.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "नियली",
+            "overview": "रीचर की दुनिया से एक नया अध्याय शुरू होता है। फ्रांसिस नियली शिकागो में एक प्राइवेट इन्वेस्टिगेटर हैं और आर्मी की ११०वीं स्पेशल इन्वेस्टिगेशन यूनिट में जैक रीचर की पुरानी सहयोगी रह चुकी हैं। जब उन्हें पता चलता है कि उनके एक पुराने करीबी दोस्त की एक संदिग्ध दुर्घटना में मौत हो गई है, तो वहे न्याय दिलाने के लिए पूरी तरह कमर कस लेती है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Dari dunia REACHER, babak baru dimulai. Frances Neagley, seorang detektif swasta di Chicago dan mantan rekan Jack Reacher di Unit Investigasi Khusus 110 Angkatan Darat AS, bertekad mengungkap kebenaran setelah seorang teman lamanya tewas dalam kecelakaan yang mencurigakan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Νίγκλι",
+            "overview": "Από τον κόσμο του ΡΙΤΣΕΡ, ανοίγει ένα νέο κεφάλαιο. Η Φράνσις Νίγκλι είναι μια ιδιωτική ερευνήτρια στο Σικάγο και τέως συνάδελφος του Τζακ Ρίτσερ στην 110η Μονάδα Ειδικών Ερευνών Στρατού. Όταν μαθαίνει ότι ένας πολυαγαπημένος φίλος από το παρελθόν της έχει σκοτωθεί σε ένα ύποπτο ατύχημα, είναι αποφασισμένη να αποδώσει δικαιοσύνη.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ニーグリー",
+            "overview": "フランシス・ニーグリーはシカゴの私立探偵で、アメリカ陸軍警察の第110特別捜査部隊でジャック・リーチャーの同僚だった人物だ。幼なじみの不審な死を知った彼女は、正義の執念を燃やす。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Daripada dunia REACHER, sebuah bab baharu bermula. Frances Neagley seorang penyiasat persendirian di Chicago dan pernah menjadi rakan setugas Jack Reacher dalam Unit Siasatan Khas 110 Tentera. Apabila dia mendapat tahu rakannya telah terbunuh dalam satu kemalangan mencurigakan, dia berkeras mencari keadilan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Et nytt kapittel i Reacher-verdenen begynner. Frances Neagley er privatetterforsker i Chicago og tidligere militærkollega av Jack Reacher i Hærens 110. spesialenhet. Når hun får vite at en kjær gammel venn har blitt drept i en mistenkelig ulykke, er hun fast bestemt på å få rettferdighet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ml",
+          "name": "",
+          "english_name": "Malayalam",
+          "data": {
+            "name": "നീലി",
+            "overview": "റീച്ചറുടെ ലോകത്തു നിന്നും ഒരു പുതിയ അദ്ധ്യായം തുടങ്ങുന്നു. ഫ്രാൻസെസ് നീലി ചിക്കാഗോയിലെ ഒരു സ്വകാര്യ അന്വേഷകയും കരസേനയുടെ 110-ാം പ്രത്യേക അന്വേഷണ സംഘത്തിൽ ജാക്ക് റീച്ചറുടെ മുൻ സഹപ്രവർത്തകയുമാണ്. ഒരടുത്ത സുഹൃത്ത് ദൂരൂഹമായൊരു അപകടത്തിൽ കൊല്ലപ്പെട്ടു എന്നറിയുന്ന നീലി എന്തു വിലകൊടുത്തും നീതിനേടാൻ ഇറങ്ങുന്നു.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "Frances Neagley este detectiv particular în Chicago și fostă colegă de armată cu Jack Reacher în Unitatea 110 de Investigații Speciale a Armatei. Când află că un prieten drag din trecutul ei a fost ucis într-un accident suspect, devine hotărâtă să facă dreptate cu orice preț.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Del universo de REACHER, comienza un nuevo capítulo. Frances Neagley es una investigadora privada en Chicago y excompañera militar de Jack Reacher en la Unidad 110 de Investigaciones Especiales del Ejército. Al enterarse de que un querido amigo de su pasado murió en un accidente sospechoso, no se detendrá hasta hacer justicia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Frances Neagley är en privatdetektiv i Chicago och var kollega till Jack Reacher under hans tid i militärens underrättelsetjänst. När hon får reda på att en av hennes barndomsvänner dött under mystiska omständigheter, bestämmer hon sig för att skipa rättvisa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "te",
+          "name": "తెలుగు",
+          "english_name": "Telugu",
+          "data": {
+            "name": "నీలీ",
+            "overview": "రీచర్ ప్రపంచం నుండి, ఒక కొత్త అధ్యాయం ప్రారంభమవుతుంది. ఫ్రాన్సెస్ నీలీ చికాగోలో ప్రైవేట్ పరిశోధకురాలు మరియు సైన్యం యొక్క 110వ ప్రత్యేక పరిశోధనల విభాగంలో జాక్ రీచర్ యొక్క మాజీ సైనిక సహచరాలు. తన గతంలోని ఓ ఆత్మీయ స్నేహితుడు అనుమానాస్పద ప్రమాదంలో మరణించాడని తెలుసుకున్న ఆమె, అతనికి న్యాయం చేయాలని కంకణం కట్టుకుంటుంది.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "eu",
+          "name": "euskera",
+          "english_name": "Basque",
+          "data": {
+            "name": "",
+            "overview": "REACHERen munduko atal berri bat. Frances Neagley Chicagoko ikertzaile pribatua da, eta Jack Reacherren armadako kide ohia, biak armadako Ikerketa Berezien 110. Unitatean izanak. Iraganeko lagun bat istripu susmagarri batean hil dena jakiten duenean, justizia egiteko setatuko da.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Dal mondo di REACHER, inizia un nuovo capitolo. Frances Neagley è un'investigatrice privata a Chicago ed ex collega militare di Jack Reacher nella 110ª Unità Investigativa Speciale dell'esercito. Quando scopre che un suo caro amico del suo passato è stato ucciso in un incidente sospetto, decide ostinatamente di ottenere giustizia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "نيلي",
+            "overview": "من عالم مسلسل ريتشر، يبدأ فصل جديد. فرانسيس نيلي محققة خاصة في شيكاغو وزميلة عسكرية سابقة لجاك ريتشر في وحدة التحقيقات الخاصة رقم ١١٠ التابعة للجيش. وعندما تعلم بمقتل صديقة عزيزة من ماضيها في حادث غامض، تُصمم على تحقيق العدالة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "尼格利",
+            "overview": "《神隱任務》宇宙展開全新篇章。法蘭西絲尼格利是芝加哥一名私家偵探，也是傑克李奇過去在陸軍110特別調查小組共事的夥伴。當她得知一位摯友在一場疑點重重的意外中喪生後，便下定決心查明真相。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "Czas na nowy rozdział w świecie REACHERA. Frances Neagley to prywatna detektyw z Chicago i dawna współpracowniczka Jacka Reachera ze Sto dziesiątego oddziału śledczego. Gdy dowiaduje się, że jej ukochany przyjaciel zginął w podejrzanym wypadku, postanawia walczyć o sprawiedliwość za wszelką cenę.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "尼格利",
+            "overview": "《神隱任務》宇宙展開全新篇章。法蘭西絲尼格利是芝加哥一名私家偵探，也是傑克李奇過去在陸軍110特別調查小組共事的夥伴。當她得知一位摯友在一場疑點重重的意外中喪生後，便下定決心查明真相。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "A REACHER világában új fejezet kezdődik. Frances Neagley egy chicagói magánnyomozó, aki Jack Reacher kollégája volt a sereg 110-ik Különleges Nyomozati Egységénél. Amikor megtudja, hogy egy imádott régi barátja életét vesztette egy gyanús balesetben, a végletekig is elmegy, hogy kiderítse az igazságot.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "kn",
+          "name": "?????",
+          "english_name": "Kannada",
+          "data": {
+            "name": "ನೀಲಿ",
+            "overview": "ರೀಚರ್' ಪ್ರಪಂಚದಿಂದ ಒಂದು ಹೊಸ ಅಧ್ಯಾಯ ಆರಂಭವಾಗುತ್ತದೆ. ಫ್ರಾನ್ಸಿಸ್ ನೀಲಿ ಶಿಕಾಗೋದಲ್ಲಿ ಖಾಸಗಿ ತನಿಖಾಧಿಕಾರಿ ಹಾಗೂ ಸೇನೆಯ '110ನೇ ವಿಶೇಷ ತನಿಖಾ ಘಟಕ'ದಲ್ಲಿ ಜಾಕ್ ರೀಚರ್ ಜೊತೆ ಕೆಲಸ ಮಾಡಿದ ಮಾಜಿ ಸಹೋದ್ಯೋಗಿ. ತನ್ನ ಹಿಂದಿನ ಗೆಳೆಯನೊಬ್ಬನು ಅನುಮಾನಾಸ್ಪದ ಅಪಘಾತವೊಂದರಲ್ಲಿ ಮೃತಪಟ್ಟಿದ್ದಾನೆ ಎಂದು ತಿಳಿದಾಗ, ನೀಲಿ ನ್ಯಾಯಕ್ಕಾಗಿ ಪಟ್ಟುಹಿಡಿದು ನಿಲ್ಲುತ್ತಾಳೆ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "name": "நீலி",
+            "overview": "ரீச்சர் உலகத்திலிருந்து, புதிய அத்தியாயம் ஒன்று தொடங்குகிறது. சிகாகோவில் தனியார் புலனாய்வாளராக இருக்கும் ஃபிரான்சஸ் நீலி, ராணுவத்தின் 110வது சிறப்பு விசாரணை பிரிவில் ஜாக் ரீச்சரின் முன்னாள் சக வீரர். தனது நெருங்கிய நண்பர் ஒருவர் சந்தேகமான விபத்தில் உயிரிழந்ததை அறிந்ததும், நீதி வாங்கியே தீர வேண்டும் என்ற உறுதியுடன் நீலி களமிறங்குகிறாள்.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "نیالی",
+            "overview": "ریچر کی دنیا میں ایک نئے باب کا آغاز ہوتا ہے۔ فرانسس نیگلی شکاگو میں ایک نجی تفتیش کار ہیں اور فوج کی ۱۱۰ ویں اسپیشل انویسٹی گیشن یونٹ میں جیک ریچر کی سابقہ ​​ساتھی رہ چکی ہیں۔ جب انہیں معلوم ہوتا ہے کہ ان کے ایک قریبی اور پرانے دوست کی موت ایک مشکوک حادثے میں ہوئی ہے، تو وہ انصاف دلانے کا تہیہ کر لیتی ہیں۔",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Neagleyová",
+            "overview": "Zo sveta seriálu Reacher prichádza nový príbeh. Frances Neagleyová je súkromná vyšetrovateľka z Chicaga a bývalá kolegyňa Jacka Reachera z elitnej 110. jednotky zvláštnych vyšetrovaní americkej armády. Keď sa dozvie, že jej blízky kamarát z minulosti zahynul pri podozrivej nehode, rozhodne sa za každú cenu dopadnúť vinníkov a dosiahnuť spravodlivosť.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Frances Neagley je zasebna preiskovalka v Chicagu in nekdanja vojaška kolegica Jacka Reacherja v 110. enoti za posebne preiskave ameriške vojske. Ko izve, da je bil njen dragi prijatelj iz preteklosti ubit v sumljivi nesreči, postane pripravljena na vse, da bi dosegla pravico.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uYOYLFQ4q7asuhdiKXCqGaeAQUH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yAd3p06AWPNDEMLDUlOAoFajldZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2V9gGTQx7N1XYTHxYPEhhKSa50o.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k1blZfn6loSwog03Fb8kcbQ5uQD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/20ivBYm3H9MbGtRISGdhjydll9L.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2P1z1SwTCc6c6ZzshkftJtPXK0X.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w71MIVVJwJ80v97RRnP4thj9raF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5V7ljbLJpZUQelauzjUuvbBf1Lk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/88vtgwzpGYQrCxtgAEoy0LOY8Os.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8lc8v51RjLKu2SkFgvpVELxSMtg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3V5QNQZ0MQVWjHSUrKCZPTN1DDn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.165,
+          "height": 631,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lI6zO2lw8pteZnIzm1DuucVGutG.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1997
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lKOPmO0ah17ogQ9hWg7lSd40kIr.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5n8yuHdiObGIhZypMDwawQCW0s1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tEPDFIa21VK0Q2YLuzhTt2xrw5W.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1m6CxPAuGv2oHc1ahERrcVWnk2J.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lXop6jK15hJz1Cpv6QVEBT3i1Fr.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pM1lpwrRcgde6GpL4Qx54xBePA4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7a9RmJA142gqRkzkLd2HAirBguU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oUz1cQ4SWb0G1YFNB9sFlYTGJIU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.678,
+          "height": 1594,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s6K8J1xfl5kbU2NW7WVgzZR2Kj2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        }
+      ]
+    }
+  }
+}

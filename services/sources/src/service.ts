@@ -5,6 +5,8 @@ import { sources } from '@miauflix/service-contracts';
 import { VpnGuard, vpnSettingsFrom } from '@miauflix/vpn-guard';
 import { z } from 'zod';
 
+import { AnimeLists } from './anime/anime-lists';
+import { AnimeResolver } from './anime/resolver';
 import { SourcesConfigService } from './config/config.service';
 import { openDatabase } from './db/database';
 import { Store } from './db/store';
@@ -60,6 +62,9 @@ export interface SourcesServiceOptions {
   /** Where to clone a GitHub definitions repository from (tests point this at a local repo). */
   definitionsGitUrl?: (owner: string, repo: string) => string;
   now?: () => number;
+  /** Where anime mappings come from (tests point these at fixtures; '' turns mapping off). */
+  animeListsUrl?: string;
+  aniZipUrl?: string;
 }
 export function createSourcesService(options: SourcesServiceOptions): {
   service: Service;
@@ -102,7 +107,14 @@ export function createSourcesService(options: SourcesServiceOptions): {
     ),
     index = new DefinitionIndex(store, definitions, options.now),
     registry = new Registry(store, config, http, definitions),
-    planner = new Planner(store, registry, config, http, options.now),
+    anime = new AnimeResolver(
+      new AnimeLists(options.dataDir, http, options.now, options.animeListsUrl),
+      store,
+      http,
+      options.now,
+      options.aniZipUrl
+    ),
+    planner = new Planner(store, registry, config, http, options.now, anime),
     files = new TorrentFileService(http, codec.open, store, registry);
   const admin = new ProviderAdmin(store, registry, http, options.now),
     repositories = new RepositoryService(store, http, () => admin.changed(), options.now);

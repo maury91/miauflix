@@ -1,0 +1,1188 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12385",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"dd7ace3a751f3dfd8d35cb3b65fa5b59\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/maOzDEEudq82nN9lRTumrGo9MvJ.jpg",
+    "created_by": [
+      {
+        "id": 1114792,
+        "credit_id": "673b74cdf0e974c26986039d",
+        "name": "Nick Antosca",
+        "original_name": "Nick Antosca",
+        "gender": 2,
+        "profile_path": "/vDG608gWyZX8PPhJyDW5FCFls2U.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-06-04",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://tv.apple.com/show/umc.cmc.377zdzwefgtzkvykexeca9qrc",
+    "id": 277439,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-07-30",
+    "last_episode_to_air": {
+      "id": 6912163,
+      "name": "The Executioners",
+      "overview": "The Bowdens have everything to protect. Max has nothing left to lose.",
+      "vote_average": 7.083,
+      "vote_count": 18,
+      "air_date": "2026-07-30",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 49,
+      "season_number": 1,
+      "show_id": 277439,
+      "still_path": "/aRvAJ30DWRgcLp3hMc8xYYCXvs0.jpg"
+    },
+    "name": "Cape Fear",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2552,
+        "logo_path": "/bngHRFi794mnMq34gfVcm9nDxN1.png",
+        "name": "Apple TV",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Cape Fear",
+    "overview": "When convicted murderer Max Cady is released from prison, he begins infiltrating the family of the married attorneys who helped put him behind bars.",
+    "popularity": 18.0646,
+    "poster_path": "/3ZLy3cfQa9prahoRq1teMmr5pvW.jpg",
+    "production_companies": [
+      {
+        "id": 121708,
+        "logo_path": "/vcryivUnATVk0rpr1TMYSulGt26.png",
+        "name": "Eat the Cat",
+        "origin_country": "US"
+      },
+      {
+        "id": 7671,
+        "logo_path": "/r7KeUsNVv0iggZRh6XmNNq2OEw1.png",
+        "name": "Amblin Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 7938,
+        "logo_path": "/8I52qpy2Dp48gD9Jf6W1D6E7Imo.png",
+        "name": "UCP",
+        "origin_country": "US"
+      },
+      {
+        "id": 23243,
+        "logo_path": "/cBPyrhXhGKzxUdL4Fkg801HZ4W.png",
+        "name": "Sikelia Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-06-04",
+        "episode_count": 10,
+        "id": 429041,
+        "name": "Miniseries",
+        "overview": "",
+        "poster_path": "/xmwpXYZCjc9VkIEzFhpQcwDH1cJ.jpg",
+        "season_number": 1,
+        "vote_average": 6.7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Do you feel safe?",
+    "type": "Miniseries",
+    "vote_average": 7.2,
+    "vote_count": 204,
+    "external_ids": {
+      "imdb_id": "tt34675596",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 456813,
+      "tvrage_id": null,
+      "wikidata_id": "Q134126367",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "When convicted murderer Max Cady is released from prison, he begins infiltrating the family of the married attorneys who helped put him behind bars.",
+            "homepage": "",
+            "tagline": "Do you feel safe?"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "'케이프 피어' - Cape Fear",
+            "overview": "과거에 얽힌 악명 높은 살인범이 출소하면서, 행복한 결혼 생활을 하던 두 변호사에게 폭풍이 몰아친다.",
+            "homepage": "",
+            "tagline": "숨 막힐 듯 다가오는 공포."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Cabo de miedo",
+            "overview": "Se avecina una tormenta para dos abogados felizmente casados cuando un infame asesino de su pasado sale de prisión.",
+            "homepage": "",
+            "tagline": "El miedo se apodera de todo."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Cape Fear - Les Nerfs à vif",
+            "overview": "Une tempête approche pour un couple heureux d’avocats quand un tueur tristement célèbre resurgit de leur passé à sa sortie de prison.",
+            "homepage": "",
+            "tagline": "L’emprise de la peur."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Cabo do Medo",
+            "overview": "Uma tempestade se aproxima para o casal feliz de advogados Anna e Tom Bowden quando Max Cady, o notório assassino que eles ajudaram a colocar atrás das grades, é libertado da prisão e busca vingança.",
+            "homepage": "",
+            "tagline": "O medo toma conta."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "El caos se cierne sobre una pareja de abogados felizmente casados cuando un famoso asesino de su pasado sale de la cárcel.",
+            "homepage": "",
+            "tagline": "El miedo se apodera de todo."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een storm is op komst voor de gelukkig getrouwde advocaten Amanda en Tom Bowden wanneer Max Cady, een beruchte moordenaar uit hun verleden, uit de gevangenis vrijkomt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Er dreigt een storm voor een gelukkig getrouwd advocatenkoppel als een beruchte moordenaar uit hun verleden uit de gevangenis komt.",
+            "homepage": "",
+            "tagline": "Angst slaat toe."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "En storm drar in över två lyckligt gifta advokater när en ökänd mördare från deras förflutna plötsligt dyker upp.",
+            "homepage": "",
+            "tagline": "Rädslan kommer krypandes."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "توشك حياة محاميين هنيئين في زواجهما على الانقلاب رأساً على عقب بعدما خرج من السجن قاتل عتيد الإجرام له صلة مسبقة بهما.",
+            "homepage": "",
+            "tagline": "الخوف يحكم سيطرته."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "توشك حياة محاميين هنيئين في زواجهما على الانقلاب رأساً على عقب بعدما خرج من السجن قاتل عتيد الإجرام له صلة مسبقة بهما.",
+            "homepage": "",
+            "tagline": "الخوف يحكم سيطرته."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Kap der Angst",
+            "overview": "Für ein glücklich verheiratetes Anwaltspaar braut sich ein Sturm zusammen, als ein berüchtigter Mörder aus ihrer Vergangenheit aus dem Gefängnis kommt.",
+            "homepage": "",
+            "tagline": "Die Angst greift um sich."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "海角驚魂",
+            "overview": "一名來自他們過去、惡名昭彰的殺手獲釋之際，一對婚姻美滿律師夫婦的生活即將陷入風暴。",
+            "homepage": "",
+            "tagline": "當內心只剩恐懼。"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Mys hrůzy",
+            "overview": "Nechvalně známého vraha propustili z vězení. Pro spokojený manželský pár právníků, který s ním v minulosti měl co do činění, to nevěstí nic dobrého.",
+            "homepage": "",
+            "tagline": "V zajetí strachu."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "昔日恶煞重获自由，一对律师爱侣的幸福生活岌岌可危。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "恐怖角",
+            "overview": "一對恩愛的律師夫妻過去曾接觸一名惡名昭彰的殺手，在這名殺手出獄後，兩人的生活也迎來了風暴。",
+            "homepage": "",
+            "tagline": "恐懼悄然而至。"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Το Ακρωτήρι του Φόβου",
+            "overview": "Μια καταιγίδα έρχεται για ένα ευτυχισμένο ζευγάρι δικηγόρων όταν αποφυλακίζεται ένας διαβόητος δολοφόνος από το παρελθόν τους.",
+            "homepage": "",
+            "tagline": "Ο φόβος κυριεύει τα πάντα."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Les nerfs à vif",
+            "overview": "Une tempête approche pour un couple heureux d’avocats quand un tueur tristement célèbre resurgit de leur passé à sa sortie de prison.",
+            "homepage": "",
+            "tagline": "La peur s’installe."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Myrsky lähestyy kahta onnellisesti aviossa olevaa juristia, kun pahamaineinen tappaja heidän menneisyydestään vapautuu vankilasta.",
+            "homepage": "",
+            "tagline": "Pelko ottaa vallan."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "En fare lurer for et par lykkeligt gifte advokater, da en berygtet morder fra deres fortid bliver løsladt fra fængslet.",
+            "homepage": "",
+            "tagline": "Rædslen kommer krybende."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "केप फ़ियर",
+            "overview": "दो ख़ुशहाल शादीशुदा वकीलों की ज़िंदगी में तूफ़ान आने वाला है क्योंकि उनके अतीत से जुड़ा एक कुख्यात क़ातिल जेल से बाहर निकल आया है।",
+            "homepage": "",
+            "tagline": "डर का अँधेरा फैलता जा रहा है।"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "",
+            "overview": "סערה מתקרבת לעברם של זוג עורכי דין הנשואים באושר, כאשר רוצח נתעב מעברם משתחרר מהכלא.",
+            "homepage": "",
+            "tagline": "הפחד משתלט."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "Viharfelhők gyülekeznek a boldog házasságban élő két ügyvéd életében, amikor egy általuk korábbról ismert hírhedt gyilkos kiszabadul a börtönből.",
+            "homepage": "",
+            "tagline": "Hatalmába kerít a félelem."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Una coppia di avvocati felicemente sposata viene travolta da un uragano quando un famigerato assassino esce di prigione e riemerge dal loro passato.",
+            "homepage": "",
+            "tagline": "Nella morsa del terrore."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Masalah besar akan menimpa sepasang suami-istri pengacara saat seorang pembunuh ternama dari masa lalu mereka bebas dari penjara.",
+            "homepage": "",
+            "tagline": "Rasa takut merasuk."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ケープ・フィアー",
+            "overview": "過去に関わった悪名高い殺人犯が出所したことで、幸せに暮らす弁護士夫妻の人生に嵐が訪れる。",
+            "homepage": "",
+            "tagline": "恐怖に蝕まれる。"
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Det er trøbbel på vei for to lykkelig gifte advokater når en beryktet morder fra fortiden deres slipper ut av fengsel.",
+            "homepage": "",
+            "tagline": "Frykten griper tak."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Przylądek strachu",
+            "overview": "Szczęśliwe życie małżeństwa prawników wywraca się do góry nogami, gdy zabójca z ich przeszłości wychodzi z więzienia.",
+            "homepage": "",
+            "tagline": "W szponach lęku."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Uma tempestade atinge dois advogados casados e felizes, quando um assassino famoso do passado deles sai da prisão.",
+            "homepage": "",
+            "tagline": "O medo instala-se."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Nebo nad srečno poročenim odvetniškim parom stemni, ko iz zapora pride stari znanec – zloglasen morilec.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Мыс страха",
+            "overview": "На счастливую супружескую пару адвокатов надвигается буря, когда из тюрьмы выходит знаменитый киллер из их прошлого.",
+            "homepage": "",
+            "tagline": "Страх берет верх."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Mys hrôzy",
+            "overview": "Šťastný manželský pár advokátov čaká turbulentné obdobie, keď sa z väzenia dostane neslávne známy vrah z ich minulosti.",
+            "homepage": "",
+            "tagline": "V zajatí strachu."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "หายนะกำลังมาเยือนสองทนายความคู่ชื่น เมื่อฆาตกรชื่อกระฉ่อนจากอดีตได้ออกจากคุก",
+            "homepage": "",
+            "tagline": "ความกลัวจะกลืนกินทุกสิ่ง"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Мис страху",
+            "overview": "Життя щасливого подружжя адвокатів опиняється під загрозою, коли на волю виходить небезпечний злочинець з їхнього минулого.",
+            "homepage": "",
+            "tagline": "У полоні страху."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Korku Burnu",
+            "overview": "Evli ve mutlu iki avukatın geçmişlerinden gelen azılı bir katil hapisten çıkınca hayatlarını altüst edecek bir fırtına yaklaşır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Cape Fear: Dòng Sông Tội Ác",
+            "overview": "Bão tố đang kéo đến với hai luật sư tưởng như đang có cuộc hôn nhân hoàn hảo, khi kẻ sát nhân khét tiếng trong quá khứ của họ được trả tự do.",
+            "homepage": "",
+            "tagline": "Nỗi sợ dần bao trùm tất cả."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "恐怖角",
+            "overview": "一名来自他们过去、恶名昭彰的杀手获释之际，一对婚姻美满律师夫妇的生活即将陷入风暴。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Нос Страх",
+            "overview": "Римейк сериал на \"Нос Страх\".\n\nЩастливо женените адвокати Ана и Том Боудън се изправят пред надвисваща буря, когато Макс Кейди – известен убиец, когото те са изпратили зад решетките – е освободен от затвора и жадува за отмъщение.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "تنگه وحشت",
+            "overview": "طوفانی برای وکلای متاهل و خوشبخت، آنا و تام بودن، در راه است، زمانی که مکس کدی، قاتل بدنامی که آنا و تام مسئول زندانی کردنش بوده‌اند، از زندان آزاد می‌شود و می‌خواهد انتقام بگیرد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Oluja se sprema za sretno vjenčane odvjetnike Annu i Toma Bowdena kada Max Cady, zloglasni ubojica kojeg su upravo oni strpali iza rešetaka, izađe iz zatvora i traži osvetu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "შიშის კონცხი",
+            "overview": "ბედნიერ ქორწინებაში მყოფი ადვოკატების, ანა და ტომ ბოუდენების ცხოვრებაში ნამდვილი ქარიშხალი ახლოვდება, როდესაც ციხიდან მაქს კეიდი თავისუფლდება - ავადსახსენებელი მკვლელი, რომლის გისოსებს მიღმა გამოკეტვაზეც ისინი არიან პასუხისმგებელნი და რომელსაც ახლა მხოლოდ შურისძიება სურს...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Рт страха",
+            "overview": "По изласку из затвора, осуђени убица Макс Кејди полако се увлачи у живот породице адвокатског пара који га је својевремено послао иза решетака.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Promontoriul groazei",
+            "overview": "Când criminalul Max Cady e eliberat de la închisoare, începe să se infiltreze în familia cuplului de avocaţi care a contribuit la condamnarea lui.",
+            "homepage": "",
+            "tagline": "Te simți în siguranță?"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Baimės iškyšulys",
+            "overview": "Anna ir Tomas Boudenai — sėkminga advokatų pora, kurios tvarkingą gyvenimą sudrumsčia iš kalėjimo paleistas Maksas Keidis, prieš septyniolika metų jų pastangomis atsidūręs už grotų.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/maOzDEEudq82nN9lRTumrGo9MvJ.jpg",
+          "vote_average": 6.722,
+          "vote_count": 9,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cl5Rs0z5Il3KHUJfOtDJs2N8Cb.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dz7p0quExY3L8R4aPj2QJUVhp74.jpg",
+          "vote_average": 6.2,
+          "vote_count": 10,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2094,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rvMmQj3nMZbJmoW6QrzU0nq9Xky.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 3723
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/clOh16tUxFzAlv4CWm8u4DtEED7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/81J70HtXDhSQEUemEw5GaD7WSAx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/67d7dSnCeGxjbyCXn7giFtjPN2k.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gjbdE4FsBwIvYdicVIpCOTdes5H.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xoppdVaFlw1ElInZeWcEk4Y1Lqo.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cbK979lbJhcIUFvJVh36RrDMr9v.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mrS7wdmfaz3Q7BYVcH4a0YFWwnC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xkpcjfDU2fn7R4hOXuHOA1aS81c.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m33NxVfbQKUo1X8BYZLJ4Ce5VMM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3KMr15kqtuEBTNgPCvWmG3jyZ7j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dT8w6GbHQm734keg9Gzv1ygxOtS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qHI1AqEREKyooF7EBf8Ce21Gjch.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ivygPnN3zlW8vovVGx3pQWz84bS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7NEAqwaMoh7YVL2u39Jpf38gHRz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iUaocpP4BnJQbekVdsINAnjJpgb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tEgLEETHo8IceIgwVasVYHGQzCI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iuY88mibabYr1MkNpTGAXO2IdE9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1619,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ugQPIkipTt3UUec3s8NuiDTmUJ4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2877
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.779,
+          "height": 525,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yQGUvjjyuAhNxaW1Y8lVKjQcLi0.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3559
+        },
+        {
+          "aspect_ratio": 6.779,
+          "height": 525,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gntoUyFXDjApqBA0OEdP1WsJFsl.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3559
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3ZLy3cfQa9prahoRq1teMmr5pvW.jpg",
+          "vote_average": 6.834,
+          "vote_count": 16,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2zOhbDmelY5WidqqdhEaVfOcEMp.jpg",
+          "vote_average": 6.042,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wlwyFRwz2GXFZzaeMjKKNhhjrKG.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mpZjJ0yOxMX2GCCXJ4viTZKhdRX.jpg",
+          "vote_average": 4.934,
+          "vote_count": 15,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/64gCOK6NKcXVI2amtVKk3Xx7cbC.jpg",
+          "vote_average": 3.852,
+          "vote_count": 17,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e6wZXfymD5FtyMeoU7JGCfv0Ajj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/64O6VxO0tkf369g7d1ysYbEB1OA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/30MPkLg5KkwBpc6cj0u8IVhsmvy.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dAbYRo6D2JkqlJ29rnfjLrsDVSX.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7eomK6dFjxFeOcbGjHi64XlSkhY.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7Wk1369UvS0SGaJhW519d01BoQ0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8yXBWDMfxRwVX3BiFbYrN3KZavb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dUD6xK8iDfUjCjjrZsQDUTTOm9O.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lVOmLS4Vhz1ePNGXXwr8RBsaTzh.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c6NTOJpPN8BTFGAYgY9hJ2xmEy.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qgd5hXGrOdpDrinvXcZNUZjr2td.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1QQZc0XfXuDLwy068Cpw6uHeXnB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/igc2FGxKCLCTA9ooq38ScRSahqW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iEbV8WpoMoE6i35V2vpAdNhuUnf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8gxrZaz39U00kQHIOrrf87Ps4gh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pE2FQjchTvcjoRkyVokCoq2gs5g.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bLoKnokCU62XHpRWFqQ2199tI8J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jiGDxbAcJz1Y4LicPmHzx8UAXLW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iiQxxeWSMIUa78RUgiVe3vI8zQv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1767,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3pCusXGZzscmYTa2127h7CVqWMT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1178
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1528,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y0i8Mk7h2aH80Sb7l9o1Dgp3SEc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1019
+        }
+      ]
+    }
+  }
+}

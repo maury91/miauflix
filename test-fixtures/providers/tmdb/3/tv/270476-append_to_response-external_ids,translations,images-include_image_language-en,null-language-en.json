@@ -1,0 +1,1146 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1190",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b590e88ff5416ccbaae1cd068ac66011\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yx0sfeYOoXol2fjT22SXo9YyviI.jpg",
+    "created_by": [
+      {
+        "id": 1106222,
+        "credit_id": "694237c39fdc3ec9f92dbcc7",
+        "name": "Katie Dippold",
+        "original_name": "Katie Dippold",
+        "gender": 1,
+        "profile_path": "/pOXb1BZeua7j4HIC8VTjuovduVM.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-04-28",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://tv.apple.com/show/umc.cmc.1zzly0vah46bnvnwf0qkrjhh2",
+    "id": 270476,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-06-16",
+    "last_episode_to_air": {
+      "id": 6768818,
+      "name": "We Hope You Enjoyed Your Time!",
+      "overview": "We understand that hard choices had to be made and we may never be the same, but we hope you'll visit again!",
+      "vote_average": 8.043,
+      "vote_count": 46,
+      "air_date": "2026-06-16",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 49,
+      "season_number": 1,
+      "show_id": 270476,
+      "still_path": "/2IBA5wRp0xtYhiAPfgsPA8jLsB2.jpg"
+    },
+    "name": "Widow's Bay",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2552,
+        "logo_path": "/bngHRFi794mnMq34gfVcm9nDxN1.png",
+        "name": "Apple TV",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Widow's Bay",
+    "overview": "The mayor of a New England town resolves to turn it into the next tourist hot spot, despite local warnings that it's cursed.",
+    "popularity": 29.6794,
+    "poster_path": "/5lcxWLVAEICkFpuAiV1aMy7ZZj3.jpg",
+    "production_companies": [
+      {
+        "id": 194232,
+        "logo_path": "/oE7H93u8sy5vvW5EH3fpCp68vvB.png",
+        "name": "Apple Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 283436,
+        "logo_path": "/n4Bvr8iI2RiXoAe79l4EVgpgsAK.png",
+        "name": "Chum Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 294461,
+        "logo_path": null,
+        "name": "Spooky Tree",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-04-28",
+        "episode_count": 10,
+        "id": 416679,
+        "name": "Season 1",
+        "overview": "Widow's Bay is a quaint island town 40 miles off the coast of New England. But something lurks beneath the surface. Mayor Tom Loftis is desperate to revive his struggling community. There's no Wi-Fi, spotty cellular reception and he must contend with superstitious locals who believe their island is cursed. He wants these people to respect him. They don't. They think he is soft and cowardly. And he is. But Loftis is determined to build a better future for his teenage son and turn the island into a tourist destination. Miraculously, he succeeds: tourists are finally coming. Unfortunately, the locals were right. After decades of calm, the old stories that seemed too ludicrous to be true start happening again.",
+        "poster_path": "/uaIC44NtUHcXnIZq00YvnCzG4ZZ.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": null,
+        "episode_count": 0,
+        "id": 522103,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Welcome to the island, please enjoy your stay. Just don't ask too many questions.",
+    "type": "Scripted",
+    "vote_average": 8,
+    "vote_count": 589,
+    "external_ids": {
+      "imdb_id": "tt33332385",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 454109,
+      "tvrage_id": null,
+      "wikidata_id": "Q136498700",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "The mayor of a New England town resolves to turn it into the next tourist hot spot, despite local warnings that it's cursed.",
+            "homepage": "",
+            "tagline": "Welcome to the island, please enjoy your stay. Just don't ask too many questions."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Il sindaco di una cittadina del New England è deciso a farne una meta turistica da urlo, ignorando gli abitanti che la considerano maledetta.",
+            "homepage": "",
+            "tagline": "Vi diamo il benvenuto sull’isola e vi auguriamo un buon soggiorno. Ma non fate troppe domande."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "La maldición de Widow's Bay",
+            "overview": "El alcalde de un pueblo en una isla de Nueva Inglaterra decide convertirla en la próxima sensación turística, a pesar de las advertencias locales de que está maldita.",
+            "homepage": "",
+            "tagline": "Te damos la bienvenida a la isla. Disfruta tu estancia, pero no hagas demasiadas preguntas."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "La maldición de Widow's Bay",
+            "overview": "Un alcalde de Nueva Inglaterra intenta fomentar el turismo, pero se enfrenta a extraños acontecimientos que sugieren que la isla está encantada.",
+            "homepage": "",
+            "tagline": "Disfruta tu estancia en la isla. Eso sí, no hagas preguntas."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "O Segredo de Widow's Bay",
+            "overview": "Um prefeito da Nova Inglaterra, tentando impulsionar o turismo, precisa lidar com estranhos acontecimentos que sugerem que sua ilha pode estar amaldiçoada.",
+            "homepage": "",
+            "tagline": "Boas-vindas à ilha. Aproveite a sua estadia. Só não faça muitas perguntas."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een burgemeester in New England wil het toerisme op zijn eiland verbeteren, ook al wordt hij gewaarschuwd over een vloek.",
+            "homepage": "",
+            "tagline": "Welkom op het eiland, geniet van je verblijf. Maar stel niet te veel vragen."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een burgemeester in New England die het toerisme op zijn eiland wil stimuleren, moet zich een weg banen door vreemde gebeurtenissen die erop lijken te wijzen dat het eiland wel eens vervloekt zou kunnen zijn.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "عمدة بلدة في \"نيو إنجلاند\" يعقد العزم على تحويلها إلى الوجهة التالية للسياح، رغم تحذيرات من السكّان بأنها ملعونة.",
+            "homepage": "",
+            "tagline": "أهلًا بك في الجزيرة، استمتع بإقامتك.. ولا تطرح الكثير من الأسئلة."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "عمدة بلدة في \"نيو إنجلاند\" يعقد العزم على تحويلها إلى الوجهة التالية للسياح، رغم تحذيرات من السكّان بأنها ملعونة.",
+            "homepage": "",
+            "tagline": "أهلًا بك في الجزيرة، استمتع بإقامتك.. ولا تطرح الكثير من الأسئلة."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Auf der abgelegenen Insel Widow’s Bay scheint die Zeit stillzustehen. Das ändert sich, als der ambitionierte Bürgermeister eine Tourismus-Initiative startet, um die Gemeinde zu modernisieren. Doch mit den ersten Fremden erwacht die düstere, verfluchte Geschichte der Insel zum Leben.",
+            "homepage": "",
+            "tagline": "Willkommen auf der Insel! Genieß deinen Aufenthalt. Stell nur nicht zu viele Fragen."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Starosta se z novoanglického města snaží učinit turistickou senzaci, a to navzdory místním varovným náznakům, že je prokleté.",
+            "homepage": "",
+            "tagline": "Vítejte na ostrově a užijte si pobyt. Jen se moc nevyptávejte."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "寡婦灣",
+            "overview": "一名新英格蘭鎮長無視當地人聲稱小鎮受詛咒的警告，執意要將小鎮打造成下一個旅遊熱點。",
+            "homepage": "",
+            "tagline": "歡迎來到這座島嶼，享受一段難忘之旅。沿途如有任何疑難，請盡量不要發問。"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "寡婦灣",
+            "overview": "一位新英格蘭的鎮長決心將小鎮打造成熱門旅遊勝地，儘管當地人不斷示警該鎮遭受詛咒。",
+            "homepage": "",
+            "tagline": "歡迎來島上一遊，盡情享受假期，但可別問太多問題。"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Le maire d'une ville de Nouvelle-Angleterre souhaite en faire une destination touristique, malgré les avertissements sur le fait qu'elle est maudite.",
+            "homepage": "",
+            "tagline": "Nous vous souhaitons un agréable séjour sur l’île. Mais ne posez pas trop de questions."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Uuden-Englannin kaupungin pormestari yrittää lisätä sen turismia huolimatta paikallisten varoituksista, että se on kirottu.",
+            "homepage": "",
+            "tagline": "Tervetuloa saarelle! Nauti lomastasi, mutta älä kysele liikoja."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "En borgmester i New England beslutter at gøre sin ø til det næste store turistmål, trods de lokales advarsler om at der hviler en forbandelse over stedet.",
+            "homepage": "",
+            "tagline": "Velkommen til øen! Vi håber, du nyder dit ophold – og ikke stiller for mange spørgsmål."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "",
+            "overview": "ראש עיירה בניו אינגלנד נחוש בדעתו להפוך אותה למוקד משיכה לתיירים אפילו כשהתושבים מזהירים שהיא מקוללת.",
+            "homepage": "",
+            "tagline": "ברוכים הבאים לאי, ושתהיה שהות נעימה. רק אל תשאלו יותר מדי שאלות."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ο δήμαρχος μιας πόλης στη Νέα Αγγλία αποφασίζει να την κάνει το επόμενο τουριστικό hot spot, παρά τις προειδοποιήσεις των ντόπιων πως είναι καταραμένη.",
+            "homepage": "",
+            "tagline": "Καλώς ήρθατε στο νησί. Σας ευχόμαστε μια ευχάριστη διαμονή. Απλώς μην κάνετε πολλές ερωτήσεις."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "La baie de la Veuve",
+            "overview": "Le maire d'une ville de Nouvelle-Angleterre souhaite en faire une destination touristique, malgré les avertissements sur le fait qu'elle est maudite.",
+            "homepage": "",
+            "tagline": "Bienvenue sur l’île, profitez bien de votre séjour. Mais ne posez pas trop de questions."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "विडोज़ बे",
+            "overview": "न्यू इंग्लैंड के एक शहर का मेयर, स्थानीय लोगों की इस चेतावनी के बावजूद कि वह जगह शापित है, उसे अगला मशहूर पर्यटन स्थल बनाने का संकल्प लेता है।",
+            "homepage": "",
+            "tagline": "इस द्वीप पर आपका स्वागत है। आशा है कि आपका वक़्त यहाँ सुखद हो। बस ज़्यादा सवाल न पूछें।"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ウィドウズ・ベイ",
+            "overview": "町長は島を人気の観光スポットにしようと決意する。しかし島には呪いの言い伝えがあるとかないとか。",
+            "homepage": "",
+            "tagline": "私達の島へようこそ。素晴らしいご滞在を。 ただし、余計な質問はお控えください。"
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Wali kota sebuah kota kecil New England bertekad menjadikannya destinasi wisata populer, terlepas dari peringatan warga akan kutukannya.",
+            "homepage": "",
+            "tagline": "Selamat datang di pulau ini, silakan nikmati kunjungan Anda. Hanya saja, jangan terlalu banyak bertanya."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "Egy új-angliai polgármester elhatározza, hogy menő turistacélponttá alakítja városkáját, annak ellenére, hogy a helyiek figyelmeztetik: a hely elátkozott.",
+            "homepage": "",
+            "tagline": "Üdvözlünk a szigeten! Érezd jól magad, de ne kérdezősködj."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Wdowia Zatoka",
+            "overview": "Burmistrz z Nowej Anglii postanawia przekształcić swoje miasteczko w atrakcję turystyczną – choć miejscowi ostrzegają go, że jest przeklęte.",
+            "homepage": "",
+            "tagline": "Witaj na wyspie. Miłego pobytu. Tylko nie zadawaj zbyt wielu pytań."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "'위도우스 베이의 저주' - Widow's Bay",
+            "overview": "뉴잉글랜드의 한 섬의 시장은 섬이 저주받았다는 주민들의 경고를 무시한 채 섬을 관광 명소로 탈바꿈하기로 결심한다.",
+            "homepage": "",
+            "tagline": "환영합니다. 편히 머무르세요. 질문은 사양입니다."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Borgermesteren i en by i New England prøver å øke turismen, til tross for at de lokale advarer om at byen er forhekset.",
+            "homepage": "",
+            "tagline": "Velkommen til øya, nyt oppholdet. Bare ikke still for mange spørsmål."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Vdovina zátoka",
+            "overview": "Starosta ostrova v Novom Anglicku sa snaží o rozmach turizmu napriek upozorneniam miestnych obyvateľov, že ostrov je prekliaty.",
+            "homepage": "",
+            "tagline": "Vitajte na ostrove, užite si pobyt. Len sa nepýtajte príliš veľa otázok."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "O Presidente da Câmara de uma cidade de Nova Inglaterra resolve transformá-la no próximo grande destino turístico, apesar de os locais avisarem sobre uma maldição.",
+            "homepage": "",
+            "tagline": "Bem-vindos à ilha, desfrutem da vossa estadia: só não façam muitas perguntas."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Уидоус-Бэй",
+            "overview": "Мэр города в Новой Англии решает превратить его в новый центр притяжения туристов, несмотря на предупреждения местных о том, что он проклят.",
+            "homepage": "",
+            "tagline": "Добро пожаловать на остров! Надеемся, вы приятно проведете время... если не будете задавать лишних вопросов."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "นายกเทศมนตรีนิวอิงแลนด์พยายามเปลี่ยนเมืองให้เป็นแหล่งท่องเที่ยวแห่งใหม่ แม้คนในท้องถิ่นจะเตือนว่าเกาะนี้ถูกสาป",
+            "homepage": "",
+            "tagline": "ขอต้อนรับสู่เกาะ ขอให้สนุกกับการพักผ่อนที่นี่ แต่อย่าถามอะไรมากเกินไปก็พอ"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Bir New England kasabasının belediye başkanı, yerel halkın lanetli olduğuna dair uyarılarına rağmen orayı yeni turizm merkezi yapmaya kararlı.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Župan iz Nove Anglije želi pospešiti turizem na svojem otoku kljub krajevnim opozorilom, da je preklet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "En borgmästare i New England vill göra sin stad till nästa stora turistort, trots lokala varningar om att den är fördömd.",
+            "homepage": "",
+            "tagline": "Välkommen till ön, vi hoppas att du trivs här. Men ställ inte för många frågor."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Bí Ẩn Thị Trấn Widow's Bay",
+            "overview": "Một thị trưởng ở một thị trấn thuộc New England muốn du lịch hóa nơi này, dù người dân địa phương cảnh báo hòn đảo bị nguyền rủa.",
+            "homepage": "",
+            "tagline": "Chào mừng đến với hòn đảo, chúc bạn có một kỳ nghỉ thật vui. Nhưng đừng tò mò quá làm gì!"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Відоус-Бей",
+            "overview": "Мер містечка в Новій Англії має намір перетворити його на туристичну принаду, попри застереження місцевих про те, що це місце прокляте.",
+            "homepage": "",
+            "tagline": "Вітаємо на острові. Почувайтеся як удома. Головне — без зайвих запитань."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "寡妇湾",
+            "overview": "新英格兰小岛寡妇湾长期流传着关于诅咒的传说。市长汤姆·洛夫蒂斯试图将小岛打造为旅游胜地，却在游客涌入后接连遭遇一系列诡异事件。随着事态不断失控，笼罩小岛的神秘传说逐渐成为现实。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Заливът на вдовицата",
+            "overview": "Кметът на малък град в Ню Ингланд иска да го превърне в туристически хит, но местните предупреждават: градът е прокълнат.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "خلیج بیوه ها",
+            "overview": "شهردار شهری در نیوانگلند، علیرغم هشدارهای محلی مبنی بر نفرین شدن آن، تصمیم می‌گیرد آن را به مقصد گردشگری بعدی تبدیل کند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Našlių įlanka",
+            "overview": "Naujosios Anglijos miestelio meras nusprendžia paversti jį nauju turistų traukos objektu, nepaisydamas vietinių gyventojų perspėjimų, kad jis prakeiktas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Удовичин Залив",
+            "overview": "Градоначелник једног града у Новој Енглеској одлучује да га претвори у следећу туристичку атракцију, упркос упозорењима локалног становништва да је проклет.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "L'alcalde d'una ciutat de Nova Anglaterra decideix convertir-la en el proper punt turístic de moda, tot i els advertiments locals que està maleïda.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "Povestea unui primar sceptic care îi păstorește pe locuitorii superstițioși ai unei insule blestemate din New England.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "ویڈوز بے",
+            "overview": "نیو انگلینڈ کے ایک قصبے کا میئر اسے سیاحت کا اگلا مشہور مرکز بنانے کا عزم کرتا ہے، حالانکہ مقامی لوگوں نے خبردار کیا ہے کہ یہ جگہ منحوس ہے۔",
+            "homepage": "",
+            "tagline": "اس جزیرے پر خوش آمدید۔ مجھے امید ہے کہ آپ کا یہاں وقت اچھا گزرے گا۔ بس، بہت زیادہ سوالات نہ پوچھیے گا۔"
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yx0sfeYOoXol2fjT22SXo9YyviI.jpg",
+          "vote_average": 7.076,
+          "vote_count": 13,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6h23WrCtrojF92ZgU2MhWcyqBMy.jpg",
+          "vote_average": 6.546,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u6XtMg9Ai9siEbEs0UudPS3EaZY.jpg",
+          "vote_average": 6.346,
+          "vote_count": 13,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kvUKkSsWtK0LPqwq6bfs7QViw6I.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u4QryIEBSU4eS4a9hOFvWxrrOPU.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zWfiOQw0tPD8e95DsDKYx7uS4Gw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rlSJkuneCNhkHN1tjC1eEUG0yvk.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sV6UbdAB0yNjQkpNWmr7OotthMO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/skmrR0x4w8yPdTjPOhy5ry2InPI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/khwRbJkLCGDTtFmw5gsh59wccFr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/p0xJb5n7tppPd6xOE1GITLh7mEI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6m60BjHBRZgf2o8PeALJYTPIzMS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sQSnc1DMbaMWIKJRxCkbcMgCUnf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rt7AgGWXh15RvBNn6yWk9SiqRvL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8F0uXPqoXQSe3TUQscnS9g9e8VB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.106,
+          "height": 1336,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eSseApUtKxaTr0jWtzmbENmQDfa.png",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2813
+        },
+        {
+          "aspect_ratio": 2.106,
+          "height": 1336,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sTu3Xvai7lVNRZcniEC0kFC9BvA.png",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2813
+        },
+        {
+          "aspect_ratio": 5.908,
+          "height": 380,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wcinpeN6xntP5DH0DrznRtz2VFR.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2245
+        },
+        {
+          "aspect_ratio": 2.106,
+          "height": 1336,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uXsqQRfPWMb73jQ3oDq01yXX2b4.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2813
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5lcxWLVAEICkFpuAiV1aMy7ZZj3.jpg",
+          "vote_average": 7.73,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vKq8XEJKxQTHd2Bm5zZMFPUrke7.jpg",
+          "vote_average": 7.286,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bKJOGLnoTWlXLXPk0vO5y95FTOE.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cyUyNa7x3ZgomXUGT9mxK0Rko9r.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7HdUreTP4GNHf4LhgrxvLUVEK4r.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cPaCvcYZwcgX64SAymsTiQSg0Vr.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1621,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/znm2nnmKCjgwxqhqyRNHJdufMhM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uVbXGvIjlJOZzKHEmL9fprmvKPi.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yS9oQbEYNIFjN7aPhThb2at4hrL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ve3LU1EY76XlTwgppNKYOjjuYxM.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oj9hZMvjokxjyjTi4eyXekIWVMe.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qM2TOK3iSXsKGy4vvISXKmPZGgP.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4n3KW1KaiEoCsmwFatR94Y5GT5Q.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mmNDUjkRG93CWpsjSp9MV5aBkT0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cmsi5sJMwJbYYQrKercdCzZWR6g.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9fnSwLlGaSUZ7zKSq13svEUmdbh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y677LrWjq55VtgULndQ31CrIz4W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2430,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cCPY7i8PMkwGJMxeHUJBibZ4NyT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1620
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/chBNmaokjbFQ3EVG8Y45iFsTpVn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7qRi0DuAi7CtwPqkYUmm9sbyLFc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2877,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dQ9hRNlkXLzJKw4N2qXVF1VVu0Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1918
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l1L9Ls4Nx33bGTPBazIOAX9grXx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dzFZDNP8ypAE0HgKeQjUECpxR5k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ijoikY5TyW6nh6ELjZNwCp6CFbE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oBUlAcW4Z8mtZdtIxBS1ZMFkr0R.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fxQRZ3m7KJ5uOEcdHVi95mG5vEs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -13,6 +13,7 @@ COPY packages/source-metadata-extractor/package.json packages/source-metadata-ex
 COPY packages/contract/package.json packages/contract/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
+COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 COPY services/list-service/package.json services/list-service/package.json
 COPY services/sources/package.json services/sources/package.json
@@ -25,10 +26,12 @@ COPY packages/source-metadata-extractor packages/source-metadata-extractor
 COPY packages/contract packages/contract
 COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
+COPY packages/anime-mapping packages/anime-mapping
 COPY services/media-catalog services/media-catalog
 RUN npm run build --workspace @miauflix/source-metadata-extractor && \
     npm run build --workspace @miauflix/contract && \
     npm run build --workspace @miauflix/service-contracts && \
+    npm run build --workspace @miauflix/anime-mapping && \
     npm run build --workspace @miauflix/service-configuration && \
     bun build services/media-catalog/src/index.ts --target=bun --outfile=/tmp/media-catalog.js
 

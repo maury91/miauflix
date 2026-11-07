@@ -213,6 +213,8 @@ export class DownloadService {
   private networkAllowed: boolean;
   /** Seeding restore waits for the network when it was blocked at startup. */
   private restorePending = false;
+  /** Counts network blocks, so a restore pass knows it was interrupted even after a reconnect. */
+  private networkBlocks = 0;
 
   constructor(
     private readonly storageService: StorageService,
@@ -252,7 +254,7 @@ export class DownloadService {
     });
     // A torrent whose add began before the network was blocked is fenced once it is ready.
     this.client.on('torrent', (torrent: Torrent) => {
-      if (!this.networkAllowed) fenceTorrent(torrent);
+      if (!this.networkAllowed) this.safeFence(torrent, true);
     });
     this.claimSweep = setInterval(() => void this.sweepExpiredClaims(), CLAIM_SWEEP_INTERVAL_MS);
     this.claimSweep.unref?.();
@@ -456,17 +458,46 @@ export class DownloadService {
     if (allowed === this.networkAllowed) return;
     this.networkAllowed = allowed;
     if (!allowed) {
-      for (const torrent of this.client.torrents) fenceTorrent(torrent);
+      this.networkBlocks++;
+      for (const torrent of this.client.torrents) this.safeFence(torrent, true);
       logger.warn('DownloadService', 'Connection is not protected: torrents are disconnected');
       return;
     }
-    for (const torrent of this.client.torrents) unfenceTorrent(torrent);
+    for (const torrent of this.client.torrents) this.safeFence(torrent, false);
     logger.info('DownloadService', 'Connection is protected: torrents are reconnected');
     if (this.restorePending && this._initStatus.status === 'ready') {
       this.restorePending = false;
       await this.restoreCompletedDownloads().catch(error =>
         logger.warn('DownloadService', 'Could not restore seeding', error)
       );
+    }
+  }
+
+  /**
+   * One torrent failing must not leave the others connected (or disconnected). A torrent that
+   * cannot be fenced fails closed: it is removed (its stored files stay) and restored once the
+   * network is allowed again.
+   */
+  private safeFence(torrent: Torrent, fence: boolean): void {
+    try {
+      if (fence) fenceTorrent(torrent);
+      else unfenceTorrent(torrent);
+    } catch (error) {
+      logger.error('DownloadService', `Could not ${fence ? 'fence' : 'unfence'} torrent`, error);
+      if (!fence) return;
+      // Completed downloads come back with the restore pass; others with the next request.
+      this.restorePending = true;
+      void Promise.resolve()
+        .then(() => this.client.remove(torrent, { destroyStore: false }))
+        .catch(removeError => {
+          logger.error('DownloadService', 'Could not remove an unfenced torrent', removeError);
+          // Last resort: close its connections directly, keeping its files.
+          try {
+            if (!torrent.destroyed) torrent.destroy({ destroyStore: false });
+          } catch (destroyError) {
+            logger.error('DownloadService', 'Could not destroy an unfenced torrent', destroyError);
+          }
+        });
     }
   }
 
@@ -864,6 +895,7 @@ export class DownloadService {
       this.restorePending = true;
       return;
     }
+    const blocks = this.networkBlocks;
     const completed = (await this.storageService.getStoragesWithCompletion()) ?? [];
     for (const storage of completed) {
       if (storage.localOnly) continue;
@@ -905,6 +937,8 @@ export class DownloadService {
           this.scheduleSeedExpiry(current);
         });
       } catch (error) {
+        // Blocked mid-restore (even if already allowed again): the rest seeds once allowed.
+        if (this.networkBlocks !== blocks) this.restorePending = true;
         logger.warn(
           'DownloadService',
           `Could not restore seeding for completed source ${storage.sourceId}`,
@@ -914,6 +948,11 @@ export class DownloadService {
       await this.reconcileSelection(storage.sourceId).catch(error =>
         logger.warn('DownloadService', `Could not reselect source ${storage.sourceId}`, error)
       );
+    }
+    // The network came back before this pass noticed the interruption: retry now.
+    if (this.restorePending && this.networkAllowed && this._initStatus.status === 'ready') {
+      this.restorePending = false;
+      await this.restoreCompletedDownloads();
     }
   }
 

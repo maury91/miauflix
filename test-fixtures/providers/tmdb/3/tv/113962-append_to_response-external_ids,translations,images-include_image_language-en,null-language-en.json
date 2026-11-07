@@ -1,0 +1,1856 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21325",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a0aed7db88541f1cf733dc45796e6879\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mU7l9UaEItxHbg2YBNs0sHjoFVY.jpg",
+    "created_by": [
+      {
+        "id": 1215399,
+        "credit_id": "62bb917c7304b51b28157927",
+        "name": "Taylor Sheridan",
+        "original_name": "Taylor Sheridan",
+        "gender": 2,
+        "profile_path": "/enrOQII7bCIf7U0WbdxiuXGfzrs.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2023-07-23",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10768,
+        "name": "War & Politics"
+      }
+    ],
+    "homepage": "https://www.paramountplus.com/shows/lioness",
+    "id": 113962,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-20",
+    "last_episode_to_air": {
+      "id": 7355568,
+      "name": "The Unravelling",
+      "overview": "Kyle's chase sparks fallout as Joe uncovers a wider plot.",
+      "vote_average": 8.75,
+      "vote_count": 30,
+      "air_date": "2026-09-20",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 71,
+      "season_number": 3,
+      "show_id": 113962,
+      "still_path": "/eO32l475SEA7QU5r7mYnqOkCDep.jpg"
+    },
+    "name": "Lioness",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 4330,
+        "logo_path": "/fi83B1oztoS47xxcemFdPMhIzK.png",
+        "name": "Paramount+",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Lioness",
+    "overview": "Cruz Manuelos, a rough-around-the-edges but passionate young Marine, is recruited to join the CIA's Lioness Engagement Team to help bring down a terrorist organization from within. Joe, the station chief of the Lioness program, is tasked with training, managing and leading her female undercover operatives.",
+    "popularity": 97.5746,
+    "poster_path": "/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
+    "production_companies": [
+      {
+        "id": 32537,
+        "logo_path": "/7fUmRWUJgO4grf61sPMmc4kVYVR.png",
+        "name": "Blossom Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 6329,
+        "logo_path": "/4lZJiVHPClma8YB9hXodraFXSwi.png",
+        "name": "MTV Entertainment Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 124254,
+        "logo_path": "/Aq2pCS1mXg4AiVwLTkh4bhcejmt.png",
+        "name": "101 Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 106789,
+        "logo_path": "/oEgUdRh5YWF6Il705WnpwauirIj.png",
+        "name": "Bosque Ranch Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 168062,
+        "logo_path": null,
+        "name": "Cinestar Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 270146,
+        "logo_path": "/4r6rIxegOrrVeJwqRxpzNrCRQMD.png",
+        "name": "Paramount Television Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-07-23",
+        "episode_count": 8,
+        "id": 170740,
+        "name": "Season 1",
+        "overview": "Joe attempts to balance her personal and professional life as the tip of the CIA's spear in the war on terror; the Lioness Program enlists Cruz to operate undercover alongside Joe among the power brokers of State terrorism.",
+        "poster_path": "/fU5ZbaTqZRVD8uGoAzjY6rzsDbf.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2024-10-27",
+        "episode_count": 8,
+        "id": 408622,
+        "name": "Season 2",
+        "overview": "In Season 2, as the CIA's fight against terror moves closer to home, Joe, Kaitlyn, and Byron enlist a new Lioness operative to infiltrate a previously unknown threat. With pressure mounting from all sides, Joe is forced to confront the profound personal sacrifices she has made as the leader of the Lioness program.",
+        "poster_path": "/y7nhi6ceyZfdXFAw330b97qAn5F.jpg",
+        "season_number": 2,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2026-08-02",
+        "episode_count": 8,
+        "id": 520890,
+        "name": "Season 3",
+        "overview": "In Season Three, hidden networks, foreign operatives, and personal betrayals collide. Joe walks the line between duty and home as unseen forces circle her world. Patterns appear where they shouldn't, names vanish, and paths rearrange. Guided by Kaitlyn and Westfield, Joe confronts enemies operating in the shadows, leaving her to reckon with a war that now reaches into every part of her life.",
+        "poster_path": "/1YYtL1kWxwP273NZu4bITNtmiP4.jpg",
+        "season_number": 3,
+        "vote_average": 8.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "This wasn't the mission.",
+    "type": "Scripted",
+    "vote_average": 8.276,
+    "vote_count": 1738,
+    "external_ids": {
+      "imdb_id": "tt13111078",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 388589,
+      "tvrage_id": null,
+      "wikidata_id": "Q116199566",
+      "facebook_id": "lionesspplus",
+      "instagram_id": "lionesspplus",
+      "twitter_id": "lionesspplus"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Cruz Manuelos, a rough-around-the-edges but passionate young Marine, is recruited to join the CIA's Lioness Engagement Team to help bring down a terrorist organization from within. Joe, the station chief of the Lioness program, is tasked with training, managing and leading her female undercover operatives.",
+            "homepage": "",
+            "tagline": "This wasn't the mission."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Joe, uma agente da CIA, tenta conciliar a maternidade com o comando de uma equipe secreta em missões perigosas ao enviar a nova recruta Cruz Manuelos para a linha de frente. Inspirado por um programa militar americano, Lioness segue as agentes na perigosa missão secreta para impedir o próximo 11 de setembro.",
+            "homepage": "",
+            "tagline": "Esta não era a missão."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "라이어니스: 특수 작전팀",
+            "overview": "테러리스트를 제거하기 위해 조직 내부에 침투해야하는 실존하는 CIA 팀, ‘라이어니스'의 이야기를 다룬다. 팀의 수장이자 두 딸의 엄마인 ‘조’. 그녀는 국가의 명령을 수행하면서도 테러 조직에 잠입한 팀원 ‘크루즈’의 생명까지 지켜야 한다. 동시에 엄마로서의 책임까지 지켜내야 하는데. 과연 그녀는 무엇을 위해 싸울 것인가.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Operazione speciale: Lioness",
+            "overview": "La vera storia del Lance Corporal Leslie Martz, un Marine degli Stati Uniti stazionato a Haditha, in Iraq. Martz fu il leader di una squadra formata da donne con il compito di ottenere la fiducia delle donne afgane e di fornirle le abilità necessarie per essere indipendenti e per estrarre segretamente informazioni dai mariti talebani. La Martz nascose di essere una lesbica nell'esercito ed era divisa dal desiderio di provare il suo valore ai suoi superiori e dall'alleanza con le donne e i bambini conosciuti sul luogo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "母狮",
+            "overview": "本剧基于一个真实的CIA项目，在该项目中，女性被训练来渗透恐怖组织和犯罪网络。故事讲述Cruz Manuelos，一名经验不足但充满热情的海军陆战队士兵，她被CIA招募加入了「母狮」战斗小队，试图从内部瓦解一个恐怖组织。Joe是一位意志坚强、不屈不挠的女性，CIA「母狮」项目的站长。她负责训练、管理和领导手下的女性特工。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Operaciones Especiales: Lioness",
+            "overview": "Cruz Manuelos, una joven infante de marina ruda pero apasionada, es reclutada para unirse al Equipo Lioness Engagement de la CIA para ayudar a acabar con una organización terrorista desde adentro. Joe, el jefe de estación del programa Lioness, tiene la tarea de capacitar, administrar y liderar a sus agentes encubiertos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Cruz Manuelos, une jeune Marine un peu brutale mais passionnée, a été recrutée pour rejoindre la mission Lioness afin d'aider à démanteler une organisation terroriste. Joe, la cheffe de station du programme Lioness, est chargée de former, de gérer et de diriger ces agents féminins infiltrés.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Спецзагін \"Левиця\"",
+            "overview": "Оперативниця ЦРУ Джо намагається збалансувати особисте та професійне життя, будучи вістрям списа у війні агентства з тероризмом.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Special Ops: Lioness",
+            "overview": "Serial to oparta na rzeczywistym programie CIA historia trojga agentów, zainspirowanych programem militarnym USA. Po ataku terrorystycznym na World Trade Center rozpoczynają niebezpieczną tajną misję w walce z światowym terroryzmem.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Lioness folgt einer Marine-Soldatin, die vom CIA rekrutiert wird, um sich mit der Tochter eines Terroristen anzufreunden und dessen Organisation von Innen heraus zu zerstören.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Η Τζο προσπαθεί να εξισορροπήσει την προσωπική και την επαγγελματική της ζωή κατά τη διάρκεια του αγώνα της CIA κατά της τρομοκρατίας. Επιστρατεύει την Κρουζ, μια γυναίκα πεζοναύτη των ειδικών επιχειρήσεων, ως μυστική πράκτορα στο Πρόγραμμα Lioness.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Mladá mariňačka je naverbována CIA, aby se spřátelila s dcerou vůdce teroristické skupiny s cílem rozvrátit organizaci zevnitř.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Спецназ: Львица",
+            "overview": "Джо - опытная сотрудница ЦРУ, стремящаяся добиться баланса между профессиональной деятельностью и личной жизнью. Однажды она получает должность руководителя специального женского подразделения «Львица», члены которого будут действовать под прикрытием для борьбы с террористическими группировками.",
+            "homepage": "",
+            "tagline": "«Это не входило в задачи миссии»"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "Egy valós programon alapul és Cruz Manuelos, egy kemény, de szenvedélyes fiatal tengerészgyalogos mindennapjairól szól, akit azért szerveztek be a Lioness csapatába, hogy segítsen egy terrorista szervezetet belülről felszámolni. Saldaña Joe-t alakítja, a Lioness program vezetőjét, akinek feladata a beépített női ügynökök kiképzése és irányítása.",
+            "homepage": "",
+            "tagline": "Ez nem a küldetés volt."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Sert mizaçlı fakat tutkulu bir genç deniz piyadesi olan Cruz Manuelos, bir terör örgütünü içeriden çökertmeye yardımcı olmak amacıyla CIA'in Lioness Operasyon Ekibi'ne sızma ajanı olarak seçilir. Lioness programının istasyon şefi Joe ise kadın gizli görev ajanlarını eğitmek, yönetmek ve liderlik etmekle görevlendirilir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "ليونيس",
+            "overview": "بينما تسعى (جو) للحفاظ على استقرار حياتها الشخصية والعملية في آن واحد، تواجه العديد من العقبات في حرب المخابرات المركزية ضد الإرهاب، وتستعين بـ(كروز) من قوات المارينز للعمل عميلة سرية لحسابها في إحدى المهمات.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Specialusis būrys: Liūtė",
+            "overview": "Džo bando subalansuoti savo asmeninį ir profesinį gyvenimą kaip ieties smaigalį CŽV kare su terorizmu. Ji įtraukia jūrų pėstininkę Kru, po priedanga dirbančią operatyvininkę, į Liūtų programą.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Đặc Nhiệm: Sư Tử Cái",
+            "overview": "Joe - mũi nhọn tấn công số một của CIA luôn cố gắng cân bằng cuộc sống cá nhân lẫn nghề nghiệp nguy hiểm của mình. Với chương trình\"Sư Tử Cái\", cô sẽ sát cánh cùng Cruz - một lính hải quân khét tiếng trong công cuộc tiêu diệt những kẻ môi giới quyền lực và chủ nghĩa khủng bố.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Operativo: Lioness",
+            "overview": "Joe intenta equilibrar su vida personal y profesional como punta de lanza de la CIA en la guerra contra el terrorismo. El Programa Lioness recluta a Cruz para que opere de incógnito junto a Joe entre los poderosos del terrorismo de Estado.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "特種部隊：母獅",
+            "overview": "CIA真實反恐任務改編，【黃石公園】鬼才主創泰勒謝里丹打造火爆動作影集，【阿凡達】柔伊莎達娜與妮可基嫚、摩根費里曼等超豪華陣容共同飆戲，驚險臥底、刺激槍戰與詭譎政治角力無一不缺。美國海軍陸戰隊員克魯茲接受中情局招募，加入代號「母獅」的全女性團隊；她的任務是打入一名恐怖份子女兒的社交圈，藉此從內部剷除該組織。步步為營的克魯茲，該如何在隊友與上司的協助下，成功完成使命？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "הלביאות: מבצעים מיוחדים",
+            "overview": "הסוכנות המיוחדות בקבוצת הנשים של תוכנית \"לביאה\" של הסי-איי-איי מטמיעות את עצמן בארגוני פשע וקבוצות טרור על מנת לאסוף מידע ולבצע משימות מעקב מיוחדות.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "諜戰行動：母獅",
+            "overview": "CIA 真實反恐任務改編，《黃石》（Yellowstone）鬼才主創泰萊·舒列頓（Taylor Sheridan）打造火爆動作影集，《阿凡達》（Avatar）素兒·蘇丹娜（Zoe Saldaña）與妮歌·潔曼（Nicole Kidman）、摩根·費曼（Morgan Freeman）等超豪華陣容共同飆戲，驚險卧底、刺激槍戰與詭譎政治角力無一不缺。美國海軍陸戰隊員 Cruz Manuelos 接受中情局招募，加入代號「母獅」的全女性團隊；她的任務是打入一名恐怖份子女兒的社交圈，藉此從內部剷除該組織。步步為營的 Cruz，該如何在隊友與上司的協助下，成功完成使命？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Cruz Manuelos is een ruwe doch gepassioneerde jonge marinier. Ze wordt gerekruteerd om deel uit te maken van het Lioness Engagement Team van de CIA, een nieuw programma om een terroristische organisatie van binnenuit op te rollen. Ze wordt speciaal gerekruteerd om een vriendschap te sluiten met de dochter van een terrorist, om zo de organisatie van binnenuit neer te halen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Лъвица",
+            "overview": "Агент от висшите етажи на ЦРУ вербува млада жена морски пехотинец. Тя трябва да влезе под прикритие в терористична група и да се сприятели с дъщерята на неин член, за да подкопае организацията отвътре. Подготовката за опасната задача се осъществява по програма, наречена „Лъвица“. Целта е да се осуети следваща трагедия като тази на 11 септември. Сериалът е вдъхновен от действителна американска военна програма.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "",
+            "overview": "အာဖဂန်၊ အီရတ်ရှေ့တန်းတွေမှာ ဖမ်းမိတဲ့အမျိုးသမီးတွေကို စစ်ဆေးဖို့ အမျိုးသမီးတပ်ဖွဲ့ဝင်တွေ ရှာရာကနေ ခြင်္သေ့မအထူးတပ်ဖွဲ့ဆိုတာပေါ်လာပါတယ်။ အဲဒီ အဖွဲ့ဝင်အမျိုးသမီးတွေဟာ အရေးကြီးပစ်မှတ်တွေရဲ့ ဇနီး၊ ရည်းစား၊ မိသားစုဝင်တွေကို အသွင်ယူပြီး ခင်အောင်ဝင်လုံးရပါတယ်။ အဲဒီကနေမှာ ပစ်မှတ်ရဲ့သတင်းကို စုဆောင်းပြီး အထူးတပ်ဖွဲ့တွေက လုပ်ကြံတာပဲ ဖြစ်ပါတယ်။ အဲဒီတော့ စပိုင်ဆန်ဆန် thriller ဇာတ်လမ်းကိုမှ စစ်ဆင်ရေးနဲ့တိုက်ပွဲတွေ ပေါင်းစပ် ထားတာမို့ ကြည့်လို့ကောင်းမယ့် စီးရီးတစ်ခုပါပဲ။",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Lioness",
+            "overview": "Joe poskuša uravnotežiti svoje osebno in poklicno življenje, saj je obveščevalka CIA-e in vodja programa Lioness, ki je zadolžena za urjenje in vodenje njenih tajnih operativk. Z namenom, da bi uničila nevarno teroristično organizacijo, rekrutira Cruz Manuelos, neobičajno, a strastno mlado marinko, da se infiltrira vanjo tako, da se približa ženam in hčeram teroristov.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Joe é a líder do grupo de contraterrorismo Lioness, da CIA, encarregue de treinar, gerir e liderar uma equipa agentes que se infiltram nas linha inimigas, tanto dentro como fora dos EUA – porque o verdadeiro perigo está muitas vezes dentro de portas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "CIA-agenten Joe McNamara och hennes team försöker balansera sina privatliv och sina yrkesliv som spetsspetsen i myndighetens krig mot terrorismen.",
+            "homepage": "",
+            "tagline": "Detta var inte uppdraget."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Inspirirane programom američke vojske, tri agentice kreću u opasnu tajnu misiju nakon terorističkog napada 11. rujna.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Sarja perustuu todelliseen kokonaan naisista koostuvan CIA:n peiteagenttiyksikkön toimintaan. Kaitlyn Meaden on karaistunut CIA:n valvova virkamies, joka on tehnyt uransa poliittisen pelin parissa. Kaitlynin ja Yhdysvaltain ulkoministeri Byron Westfieldin valvonnassa toimiva Lioness-ohjelma pestaa nuoren merijalkaväen sotilaan Cruz Manuelosin toimimaan peiteagenttina. Joe on Lioness-ohjelman asemapäällikkö, joka yrittää tasapainotella yksityiselämäänsä ja rooliaan CIA:n terrorismin vastaisen sodan eturintamassa. Joe saa Cruzin koulutettavakseen ja valmistamaan tämä soluttautumaan valtioterrorismin valtapelureiden joukkoon.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Operațiuni speciale: Leoaica",
+            "overview": "Inspirat de un program militar american, serialul urmărește povestea a trei agenți care se angajează într-o misiune sub acoperire periculoasă în urma atentatelor teroriste din 11 septembrie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "ปฏิบัติการพิเศษ: LIONESS มีพื้นฐานมาจากโปรแกรมในชีวิตจริงและติดตามครูซ มานูเอลอส (เด โอลิเวรา) นาวิกโยธินหนุ่มผู้รอบรู้แต่มีความกระตือรือร้นที่ได้รับคัดเลือกให้เข้าร่วมทีม Lioness Engagement เพื่อช่วยโค่นล้มองค์กรก่อการร้ายจากภายใน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "شیرزن",
+            "overview": "کروز مانوئلوس، یک تفنگدار جوان دریایی با ظاهری خشن اما پرشور، جهت پیوستن به گروه درگیری شیرزنِ سازمان سیا استخدام می‌شود تا به سرنگونی یک سازمان تروریستی از درون کمک کند. جو، رئیس مرکز برنامه شیرزن، وظیفه آموزش، مدیریت و رهبری زنان مأمور مخفی خود را بر عهده دارد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "ძუ ლომი",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Cruz Manuelos, en hårdhændet, men passioneret ung marinesoldat, bliver rekrutteret til at slutte sig til CIA's Lioness Engagement Team for at hjælpe med at nedkæmpe en terrororganisation indefra. Joe, stationschefen for Lioness-programmet, har til opgave at træne, lede og lede hendes kvindelige undercover-agenter.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Лавица",
+            "overview": "Круз Мануелос, груба, али страствени млади маринац, регрутована је да се придружи ЦИА-ином Тиму за ангажовање Лавица како би помогао да се сруши терористичка организација изнутра. Џо, шеф станице у програму Лавица, има задатак да обучава, управља и води своје жене на тајном задатку.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "特殊作戦部隊：ライオネス",
+            "overview": "対テロ戦争の尖兵としてCIAに組織された特殊作戦部隊「ライオネス」。隊長のジョーは、前任務の失敗で部下を亡くしたトラウマと、崩壊寸前の家庭と任務の両立に頭を抱えていた。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Opérations Spéciales : Lioness",
+            "overview": "Cruz Manuelos, une jeune Marine un peu brutale mais passionnée, a été recrutée pour rejoindre la mission Lioness afin d'aider à démanteler une organisation terroriste. Joe, la cheffe de station du programme Lioness, est chargée de former, de gérer et de diriger ces agents féminins infiltrés.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Lioness",
+            "overview": "Traja agenti, inšpirovaní programom americkej armády, sa po teroristickom útoku z 11. septembra vydajú na nebezpečnú tajnú misiu.",
+            "homepage": "",
+            "tagline": "Toto nebola misia."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Lioness",
+            "overview": "Cruz Manuelos, una jove infant de marina ruda però apassionada, és reclutada per unir-se a l'Equip Lioness Engagement de la CIA per ajudar a acabar amb una organització terrorista des de dins. Joe, la cap del programa Lioness, té la tasca de capacitar, administrar i liderar els seus agents encoberts.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Cruz Manuelos is een ruwe doch gepassioneerde jonge marinier. Ze wordt gerekruteerd om deel uit te maken van het Lioness Engagement Team van de CIA, een nieuw programma om een terroristische organisatie van binnenuit op te rollen. Ze wordt speciaal gerekruteerd om een vriendschap te sluiten met de dochter van een terrorist, om zo de organisatie van binnenuit neer te halen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mU7l9UaEItxHbg2YBNs0sHjoFVY.jpg",
+          "vote_average": 4.934,
+          "vote_count": 15,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3Udwq6W7y4AIsuJDXV2YwowZ1gQ.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r0Zg70jpcDAD7IMDhVqajSnG9vb.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4NBYDOnEjAzyuP7CMkD5s7fs44K.jpg",
+          "vote_average": 4.656,
+          "vote_count": 16,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1687,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sa9vB0xb3OMU6iSMkig8RBbdESq.jpg",
+          "vote_average": 4.412,
+          "vote_count": 17,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rGaqtYSIrns0cpob8PLbIsMVZAt.jpg",
+          "vote_average": 3.892,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iQmNf2YaCycJB0N7YQPOgEgwpBI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nzvdA8dVx1x8NUBjxYzXbGvih6Y.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7zLnvtDhGVU5c0Qytmp7kOGcKdA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hWA6Fv4oQSAI5vI7h1kH9b4W5ar.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6UROlydvaGuH4lFOExToTbsmVEe.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cprNHh8BkbhHrRyAMldxz7YcdP8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rawqGEAXGChVyTI2llOEv0CqnkT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d06gcQz1YmdWcapC40ARBAoGF2p.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oM4zzf8nd3XLi7ZEkmPJkUzsOim.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zd2xAars2V9rUx1sHur8pBTGjCu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ksnQUGnexWcMKyqCDyWH9ve35QH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/umFiMC0hl7UUOYSFzXdWEQDe2xF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4K5Jdry2gZj5XbomCa0H56g9XCs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fO4C8ERKphIgKBGmaJQMHlCI15k.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7n3ZuENO3p3wDMS8lwz81i93Uq4.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r1GfEW1IGZdlR6puhY00M0kGp8r.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gLPh95BWiOhwV4w1UAGRizXo4DY.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2IjI4RL2K7lmWJ50c6MMTQDphSD.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/48hQDt0Plcw7k2yXTN8mqCJwhVY.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9d1nGSNlKHF4hNsMDiUKCbuueDU.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pk0u1svcsqSEMk4C0PGg4bHMHM7.jpg",
+          "vote_average": 1.208,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cMb5dJpZbDpK8E6oVK98EdAxqwD.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/83VUHDLZFOycvmBFWCufDwcUdhx.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qEsJIMgsOuBlVhGZawvtqI2DEix.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/52gcE58OSmEAr49bDvxRw7VzSJ4.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2LblVjPKk6XnW6xNdM3KksZQ8U1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/DPeZmJzO7haxouMFSLYzxDpNzL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n4nxhz51bQHLEWLtFb4jFVSEW7a.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7iBoXhnLORPrLzaqY9NSz4ofeMn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h4UACjN53vFGB4j5PxOHjPTP5WV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f6hfjSn2j7COyPQNoc4DyHqsjXL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mMQ5dsqSixG807Cx0XCOMiAesnJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f0bL00q8GF8U146Rihd7tXO47IR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bJtOEfr3jZMYLDNAoinXzvVAhre.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hkhZ37WfrVYRRYYLCgEILyKnmjl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4Gvj777OeXDsp3t0afpLMdwwQBO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vEAwpqDOvH4oinkBdnfhNR8XecL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bCb96tsW9vQoaMDvzj7j7qO1eCZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ycXyrpvKcukh7BsuvBL3AW7ZraW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cD2254XWZYFxPFCE9DKpTfzJGpt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cPby57csZdFrtD2VksxOnTJvB2q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2P73Vae3x8woyuWFm3e7JMAZukK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qIGovGs7Mm9JKzrkI9Vpq91tT2c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vjY62KOSpqbR78hfS7vZbwPPMAu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vfSvMqu2Nsqmoak0JUEOAdVauHs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/f07gCIl0yEX2QL1bZeMCfGJkfDb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wbl7C5v5iqAUgG38ReRQpX6oJ4m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jrCNcLf93sWgkNDYhwNhPzxQTXM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rd6jAbCG3RghCExct9HWxuhg9IU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zpXMeajeFMtnHbFHOKBSNUPJQs1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1687,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/34lurvNIsduVZRutMeGN6zbFrRd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sQcM0dcgCSfo8RRoanYb6eH4Zyo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u2DfhiwSaWIU5S51BV4n0iBaVM5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jMfaF65bWvluZfHo10ZRxlW2J7c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kNtDAh8LQ52HAWZAdkwZwHvRLFz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/31sM1Z69F4csV8WhK9OEClTJf2P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xn7yymFODPp2WaC7kI3VoUEpGOF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4aIB0OpRPtgNu9tJX96kH6YsKI8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fcs3EEfBaRsnVN30hWU5yDbhVMr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dQjHEbQUqcYuJtntOpKuxJjiabc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.164,
+          "height": 1037,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xCXmYvX8UwggLh0h3I1A1fbHBxI.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 4318
+        },
+        {
+          "aspect_ratio": 4.164,
+          "height": 1037,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2P3grUAMSp83H9Z1yLTNDq6zMq5.png",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 4318
+        },
+        {
+          "aspect_ratio": 2.554,
+          "height": 1296,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cUDpX6aqZ7LNIquPHZAWiN0v9FS.png",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3310
+        },
+        {
+          "aspect_ratio": 2.553,
+          "height": 1294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yL815b0L7MvzLUHRubaWq8HPfGD.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3303
+        },
+        {
+          "aspect_ratio": 4.102,
+          "height": 88,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/moUBZ10MZIlk352qgdtFZYLnsTq.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 361
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.666,
+          "height": 1714,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rzpHPSEgPTpRs8EHbygwsOw7jC0.jpg",
+          "vote_average": 0.5,
+          "vote_count": 7,
+          "width": 1142
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yYxQnOGlaLlL99eDFcXF2NqNfWY.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4JsqtCDEPOio7vIssLO5jqmSRhj.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1714,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/esNCojGaItOpF5jFfX1OoEUtCRK.jpg",
+          "vote_average": 7.318,
+          "vote_count": 11,
+          "width": 1142
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ajaXSmdAlYYhnvx1EIsvpfN949y.jpg",
+          "vote_average": 6.546,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rXCzevakJoAN1qnZY0nAQPSLVRv.jpg",
+          "vote_average": 5.682,
+          "vote_count": 22,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o1a87xmigWwHB7DUwnmJEFkRM6p.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/33Yx0WKJYQollivOEOfDJsxBeDm.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/itg8FcwmczsuXkzKpJ6sEceilpp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gwPkKmp5k3zKucs47lqjsRhViiY.jpg",
+          "vote_average": 3.214,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bKxjsqAe9Vt3cu05Fy1oOeSnJfX.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a3lR5fOpLJikxYF3O4pyD95DsXQ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l0VuPBDQvECbk7hic4Aq7yaYCL7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n4gClzyXycPYNCxGKaPnRvJBUUL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5XwLZij3PjkVkWvPR0KtJXohRPG.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1462,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d80JEpZVmsRrYtDt3b318NMsoNf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 975
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dBX4elgvYc19LapGk66xzOkRbi9.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Hzhx9D1YzlYR8vzZ5JFlEkAUeF.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gHSve2YRvlLrqYYC4w8b21m4Fbd.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wH9HncHHAHUgEQsSl0OOpnqM8hr.jpg",
+          "vote_average": 1.066,
+          "vote_count": 10,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jKiH4h4LJn8cLStRFjR4bJyWODh.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zpKmyzWF7xKh3yFcIGoKLUcXNu9.jpg",
+          "vote_average": 0.854,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/icPVGTFSpocNEGprdc4DlkwnsGH.jpg",
+          "vote_average": 0.854,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2913,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v6jAvaO4ahoMKsH0v4zaLUCnWHQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1942
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2913,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9WNzzjbUJRSTxM1biul0e6kyb0W.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1942
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2913,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qy9wPzhfbxOIuO5V1tKmnKn1ulg.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1942
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2913,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u71xmErwulUlY4hBqOFL1J4uSWV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1942
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2913,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fo4NxmMPSWg9GbF3l0l5HANge2q.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1942
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ps4qYfsxgqsefdaZIWjKqS5P1t6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c9tQa4t3pAoHdsxdjum4IHx4u3a.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7aDSPCURYRb7JAhA7O1fxKnbeC5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1714,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qK9UccxRcN2LAbfOsuIfDE9Ibk0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1142
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1457,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q2OYMnVSYMtPm2h0KzQXj936Mzu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 970
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2667,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3Tu3enQxqxBSfLZIY9d6mLv8D7n.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8JeYUvwJ7v6fqHoVShg2Utep79v.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9tuPip4EGr8feN6OYBt6Ssj3cQY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tYmuGE5BdGPxoqHiugelQvtho64.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sSldEw3W0HFkSvlNnGKVXp5nEGM.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4X9q4n7cFgxmovroLGKZD827vnU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3Hg39XCbSIsAEbql1KZfmFlClMQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oqJiSLtcBMF7Y4K0TGisShwdntl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lkfyIpu5emwmVrGlDx7gCo19JgZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7i1ETrMu3iGrHQxzoKFDOH1nyo6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mxOpgaJ7cABuwMXd2LYYaKGEzh8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ic2bsNCEg3WJrqIehK7P8zZz5iS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

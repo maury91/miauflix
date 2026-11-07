@@ -1,0 +1,205 @@
+{
+  "headers": {
+    "access-control-allow-methods": "*",
+    "access-control-allow-origin": "*",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=900, s-maxage=900",
+    "content-type": "application/json; charset=utf-8"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "titles": {
+      "x-jat": "Tokyo Revengers: Santen Sensou Hen",
+      "en": "Tokyo Revengers: War of the Three Titans Arc",
+      "ja": "東京リベンジャーズ 三天戦争編"
+    },
+    "episodes": {
+      "1": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10624334,
+        "seasonNumber": 4,
+        "episodeNumber": 1,
+        "absoluteEpisodeNumber": 51,
+        "title": {
+          "ja": "Break up",
+          "en": "Break Up",
+          "x-jat": "Break Up"
+        },
+        "airDate": "2026-10-03",
+        "airDateUtc": "2026-10-02T16:15:00Z",
+        "runtime": 24,
+        "overview": "The war with Tenjiku reaches a deadly conclusion. Takemichi takes this chance to tell Mikey he is a Time Leaper, and explains everything he has been through. After hearing the truth, Mikey announces that the Tokyo Manji Gang is disbanding. The legendary organization that once stood at the top of Japan has come to an end.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10624334/screencap/6abbbbe58f540.jpg",
+        "episode": "1",
+        "anidbEid": 316854,
+        "length": 25,
+        "airdate": "2026-10-03",
+        "rating": "2.50"
+      },
+      "2": {
+        "tvdbShowId": 393478,
+        "tvdbId": 10651424,
+        "seasonNumber": 4,
+        "episodeNumber": 2,
+        "absoluteEpisodeNumber": 52,
+        "title": {
+          "en": null
+        },
+        "airDate": "2026-10-10",
+        "airDateUtc": "2026-10-09T16:15:00Z",
+        "runtime": 24,
+        "overview": "Following Tokyo Manji Gang's disbandment, Takemichi is about to return to his original timeline, but a forgotten Valentine's gift for Hina leads to an unexpected proposal. After burying a time capsule with his comrades and promising to meet again in 12 years, Takemichi makes a Time Leap. He arrives in a world where all his friends are living happily, but Mikey is nowhere to be found.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/10651424/screencap/6ac8492e2df56.jpg",
+        "episode": "2",
+        "anidbEid": 316855,
+        "length": 25,
+        "airdate": "2026-10-10"
+      },
+      "3": {
+        "tvdbShowId": 393478,
+        "tvdbId": 12025049,
+        "seasonNumber": 4,
+        "episodeNumber": 3,
+        "absoluteEpisodeNumber": 53,
+        "title": {
+          "en": null
+        },
+        "airDate": "2026-10-17",
+        "airDateUtc": "2026-10-16T16:15:00Z",
+        "runtime": 24,
+        "overview": "Twelve years later, the criminal underworld is ruled by Bonten, an organization far more vicious than the old Tokyo Manji Gang. Takemichi is stunned to learn that Bonten is led by someone from his former life. He wants to go back in time, but the power he once relied on is now out of reach. With no way back, Takemichi meets his friends to open the time capsule they buried 12 years ago.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/12025049/screencap/6acf42fe1e96b.jpg",
+        "episode": "3",
+        "anidbEid": 316856,
+        "length": 25,
+        "airdate": "2026-10-17"
+      },
+      "4": {
+        "tvdbShowId": 393478,
+        "tvdbId": 12025050,
+        "seasonNumber": 4,
+        "episodeNumber": 4,
+        "absoluteEpisodeNumber": 54,
+        "title": {
+          "en": null
+        },
+        "airDate": "2026-10-24",
+        "airDateUtc": "2026-10-23T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi plays the videotape Mikey slipped into the time capsule, which includes a message meant just for him. Mikey from twelve years ago reveals a darkness inside him that Shinichiro, Emma, and Baji had kept at bay. Having lost everyone who could stop him, Mikey has cut ties with Tokyo Manji Gang, distancing himself from his friends. After learning of Mikey's anguish, Takemichi ignores the danger and tries to make contact.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/12025050/screencap/6ad756624519c.jpg",
+        "episode": "4",
+        "anidbEid": 316857,
+        "length": 25,
+        "airdate": "2026-10-24"
+      },
+      "5": {
+        "tvdbShowId": 393478,
+        "tvdbId": 12025051,
+        "seasonNumber": 4,
+        "episodeNumber": 5,
+        "absoluteEpisodeNumber": 55,
+        "title": {
+          "en": null
+        },
+        "airDate": "2026-10-31",
+        "airDateUtc": "2026-10-30T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi desperately reaches out to grab Mikey as he leaps from the rooftop. Thrown ten years into the past, Takemichi lands in a world two years after Tokyo Manji Gang disbanded, where a war for supremacy rages between Rokuhara Tandai, Brahman, and Kanto Manji.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/12025051/screencap/6ae09e5d10f1a.jpg",
+        "episode": "5",
+        "anidbEid": 317636,
+        "length": 25,
+        "airdate": "2026-10-31"
+      },
+      "6": {
+        "tvdbShowId": 393478,
+        "tvdbId": 12025052,
+        "seasonNumber": 4,
+        "episodeNumber": 6,
+        "absoluteEpisodeNumber": 56,
+        "title": {
+          "en": null
+        },
+        "airDate": "2026-11-07",
+        "airDateUtc": "2026-11-06T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi lands in a brutal clash between Rokuhara Tandai and Brahman. Both gangs are desperate to recruit him, but Takemichi has his own agenda. He shocks everyone by declaring that he wants to take down Mikey, leader of Kanto Manji. After the police intervene and Rokuhara Tandai retreats, Takemichi comes face to face with Brahman's leader.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/12025052/screencap/6aea40036471f.jpg",
+        "episode": "6",
+        "anidbEid": 317637,
+        "length": 25,
+        "airdate": "2026-11-07"
+      },
+      "7": {
+        "tvdbShowId": 393478,
+        "tvdbId": 12025053,
+        "seasonNumber": 4,
+        "episodeNumber": 7,
+        "absoluteEpisodeNumber": 57,
+        "airDate": "2026-11-14",
+        "airDateUtc": "2026-11-13T16:15:00Z",
+        "runtime": 24,
+        "episode": "7",
+        "anidbEid": 317638,
+        "length": 25,
+        "airdate": "2026-11-14",
+        "title": {
+          "en": null
+        }
+      },
+      "8": {
+        "tvdbShowId": 393478,
+        "tvdbId": 12025054,
+        "seasonNumber": 4,
+        "episodeNumber": 8,
+        "absoluteEpisodeNumber": 58,
+        "airDate": "2026-11-21",
+        "airDateUtc": "2026-11-20T16:15:00Z",
+        "runtime": 24,
+        "episode": "8",
+        "anidbEid": 317639,
+        "length": 25,
+        "airdate": "2026-11-21",
+        "title": {
+          "en": null
+        }
+      }
+    },
+    "episodeCount": 13,
+    "specialCount": 0,
+    "images": [
+      {
+        "coverType": "Banner",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/banners/63f699395631b.jpg"
+      },
+      {
+        "coverType": "Poster",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/posters/60d20e7c9ca6a.jpg"
+      },
+      {
+        "coverType": "Fanart",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/backgrounds/60f3733aa53e2.jpg"
+      },
+      {
+        "coverType": "Clearlogo",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/clearlogo/611d007ea31b7.png"
+      }
+    ],
+    "mappings": {
+      "animeplanet_id": "tokyo-revengers-battle-of-three-deities",
+      "kitsu_id": 48960,
+      "mal_id": 59088,
+      "type": "TV",
+      "anilist_id": 178083,
+      "anisearch_id": 19353,
+      "anidb_id": 18693,
+      "notifymoe_id": null,
+      "livechart_id": 12704,
+      "thetvdb_id": 393478,
+      "imdb_id": "tt13196080",
+      "themoviedb_id": "105009"
+    }
+  }
+}

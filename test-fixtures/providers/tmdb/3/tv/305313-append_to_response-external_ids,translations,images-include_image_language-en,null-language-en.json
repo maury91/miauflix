@@ -1,0 +1,465 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4739",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b01c4cc0316215a21bea8b86db882822\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6LeBjYSPULKwSv5R6sX6Iovwoad.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-05",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://romelia-senki.com",
+    "id": 305313,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-02",
+    "last_episode_to_air": {
+      "id": 7903695,
+      "name": "The Line Between Courage and Recklessness",
+      "overview": "Romelia's men face the greater demons on a rocky cliff.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-02",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 305313,
+      "still_path": "/hXPF5cvdIZZCcBmVXD2kjavnGN9.jpg"
+    },
+    "name": "Romelia War Chronicle",
+    "next_episode_to_air": {
+      "id": 7903696,
+      "name": "Episode 6",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-09",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 305313,
+      "still_path": "/osWzHuWA5eQnfn1TnDfRkteA8G2.jpg"
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 817,
+        "logo_path": "/wkyNhgg9DDtQMFBGXpAaHilE99N.png",
+        "name": "Sun TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ロメリア戦記",
+    "overview": "Victory over the Demon King should have been Romelia’s triumph. Instead, her fiance, Prince Henri, breaks off their engagement and sends her home in disgrace to a province in ruins. With no aid in sight, Romelia vows to raise an army, rebuild the ruined towns, and restore a struggling kingdom as new conflicts arise. The war may be over, but her story’s just begun.",
+    "popularity": 11.0898,
+    "poster_path": "/xOhx5KpSAlrEbqsu9TaCdmdIb72.jpg",
+    "production_companies": [
+      {
+        "id": 290127,
+        "logo_path": "/jzx7Xt4lA2ppDr5BBoIRgHmWCza.png",
+        "name": "Atra",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Pony Canyon",
+        "origin_country": "JP"
+      },
+      {
+        "id": 128938,
+        "logo_path": "/jdDqo0jYls2Z3QzfkgkbEkiFYaN.png",
+        "name": "Rakuten",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157002,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Tokyo MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3466,
+        "logo_path": "/lmCg0zarmM52wrmsZRUY0QlPKLh.png",
+        "name": "movic",
+        "origin_country": "JP"
+      },
+      {
+        "id": 43682,
+        "logo_path": "/3OTFn2ZFNtfPdPCamfmdyrUy1fI.png",
+        "name": "SANKYO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 156047,
+        "logo_path": "/bR1IGv2EUNaLGPIA3jRgbATUaX8.png",
+        "name": "Bit grooove promotion",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-05",
+        "episode_count": 24,
+        "id": 484237,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/xOhx5KpSAlrEbqsu9TaCdmdIb72.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 9.5,
+    "vote_count": 2,
+    "external_ids": {
+      "imdb_id": "tt42727894",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 470269,
+      "tvrage_id": null,
+      "wikidata_id": "Q130270243",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "romelia_senki"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Romelia War Chronicle",
+            "overview": "Romelia y su grupo logran derrotar al Rey Demonio Zelgis, aunque la temeraria carga del Príncipe Henri los obliga a librar una agotadora batalla. Tras la batalla, Romelia es tildada de \"peso muerto\" por no combatir directamente, y el Príncipe rompe unilateralmente su compromiso con ella. Sin un lugar en las celebraciones de la victoria, Romelia regresa a casa, donde solo encuentra la indiferencia de su familia y la sociedad. Sin embargo, ella se niega a quebrarse. Ya tiene la mirada puesta en el camino que le espera.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Romelia War Chronicle",
+            "overview": "Romelia e seu grupo conseguem derrotar o Rei Demônio Zelgis, embora a investida imprudente do Príncipe Henri os tenha forçado a uma batalha exaustiva. Após o conflito, Romelia é rotulada de “peso morto” por não ter lutado diretamente, e o príncipe rompe unilateralmente o noivado. Privada de participar das comemorações da vitória, Romelia volta para casa, apenas para ser recebida com fria indiferença por sua família e pela sociedade. No entanto, ela se recusa a desistir. Ela já traçou o caminho que tem pela frente.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "長きにわたり旅をし、魔王ゼルギスを討ち果たしたロメリアと婚約者のアンリ王子。 しかし、アンリ王子は無慈悲にもロメリアに告げる。「婚約を破棄する」と。勝利に酔いしれるアンリたちを横目に、ロメリアは次なる旅へと向かった。 戦乱を通じて荒廃した祖国と、魔族に奪われた人々の暮らし。 魔王を倒したからといって、目の前に積みあがった問題が片付くわけではない。だから、私は私のやり方で、人々の幸せな暮らしを取り戻してみせる。 軍を興し、経済を動かし、時に陰謀に巻き込まれながらも、彼女は歩みを止めない。しかしその選択は、ロメリアの前にさらなる戦禍を運んでくる。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Romelia War Chronicle",
+            "overview": "Victory over the Demon King should have been Romelia’s triumph. Instead, her fiance, Prince Henri, breaks off their engagement and sends her home in disgrace to a province in ruins. With no aid in sight, Romelia vows to raise an army, rebuild the ruined towns, and restore a struggling kingdom as new conflicts arise. The war may be over, but her story’s just begun.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "罗梅莉亚战记",
+            "overview": "“罗梅，不，罗梅莉亚伯爵千金。我和你已经没法再继续下去了，我要解除跟你的婚约，一回国便分手吧。”当亨利王子夙愿以偿打倒了魔王塞尔吉斯，喜悦未平的时候，他突然这么跟我说道。但王子他们不知道。我拥有名为“恩宠”的奇迹之力……这是在打倒魔王后被王子当场宣布退婚的女主角罗梅莉亚，开启了“战后”重建新世界的传奇故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Romelia War Chronicle",
+            "overview": "Mit dem Sieg über den Dämonenkönig hätte Romelia triumphieren sollen. Stattdessen löst Prinz Henri die Verlobung und schickt sie zurück in ihre ländliche Heimat, welche in Schutt und Asche liegt. Auf sich allein gestellt verschreibt sie sich dem Wiederaufbau des geschwächten Königreichs - gerade als neue Konflikte ausbrechen. Der Krieg mag vorbei sein, doch ihre Geschichte hat erst begonnen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Romelia en haar gezelschap slagen erin de Demonenkoning Zelgis te verslaan, al dwingt de roekeloze aanval van prins Henri hen tot een uitputtende strijd. Na afloop wordt Romelia bestempeld als 'ballast' omdat ze niet rechtstreeks heeft meegevochten, en verbreekt de prins eenzijdig hun verloving. Ze mag niet deelnemen aan de overwinningsvieringen en keert huiswaarts, waar ze echter stuit op de kille onverschilligheid van haar familie en de samenleving. Toch weigert ze te bezwijken; ze heeft haar blik al gericht op het pad dat voor haar ligt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Romelia en haar gezelschap slagen erin de Demonenkoning Zelgis te verslaan, al dwingt de roekeloze aanval van prins Henri hen tot een uitputtende strijd. Na afloop wordt Romelia bestempeld als 'ballast' omdat ze niet rechtstreeks heeft meegevochten, en verbreekt de prins eenzijdig hun verloving. Ze mag niet deelnemen aan de overwinningsvieringen en keert huiswaarts, waar ze echter stuit op de kille onverschilligheid van haar familie en de samenleving. Toch weigert ze te bezwijken; ze heeft haar blik al gericht op het pad dat voor haar ligt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "로멜리아 전기",
+            "overview": "오랜 여행 끝에 마왕 젤기스를 쓰러뜨린 로멜리아와 약혼자 앙리 왕자. 그런데 앙리 왕자는 로멜리아에게 '약혼을 파기하겠다'는 무자비한 선언을 한다. 로멜리아는 승리에 취한 앙리 일행에게는 눈길조차 주지 않고 다음 여정을 나섰다. 전란으로 황폐해진 조국과 마족에게 빼앗긴 국민의 삶. 마왕을 쓰러뜨렸다고 해서 눈앞에 쌓인 수많은 문제가 해결되는 것은 아니다. 그러니까 나는 나만의 방식으로 사람들에게 행복한 삶을 되찾아 주겠어. 군대를 일으키고 경제를 살리며 때로는 음모에 휘말리기도 하지만 그녀는 걸음을 멈추지 않는다. 그러나 그 선택은 로멜리아 앞에 더 큰 전쟁의 참화를 불러온다. 이것은 '마왕을 토벌한 후'의 이야기를 그린 한 소녀와 그녀를 돕는 기사들이 재기하는 이야기이다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Romelia War Chronicle",
+            "overview": "Sa victoire sur le Roi-Démon aurait dû être le triomphe de Romélia. Au lieu de cela, son fiancé, le prince Henri, rompt leurs fiançailles et la renvoie dans une province en ruines. Mais Romélia ne se laisse pas abattre. Elle jure de lever une armée, de reconstruire le royaume et ce, malgré des conflits qui continuent. Son histoire ne fait que commencer…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Военная хроника Ромелии",
+            "overview": "После нападения Короля демонов люди смогли отбить захваченные земли лишь спустя несколько лет. Наследный принц одного из королевств отправился в поход против врага и спустя три года вернулся с победой.\n\nВместе с ним сражаться отправилась его невеста, юная графиня Ромелия фон Грэхэм. Не обладая магией и боевыми навыками, она занималась разведкой и бытовыми вопросами, помогая отряду всеми доступными способами. Однако после победы её старания никто не оценил: Ромелию выгнали из отряда, а принц разорвал помолвку.\n\nНе став предаваться отчаянию, Ромелия решает найти себе новое дело. Окончание войны ещё не означает возвращения мира: на освобождённых территориях остались отряды демонов, а разрушенную экономику предстоит восстанавливать. Хладнокровная и решительная девушка начинает действовать — и создаёт собственную небольшую армию на окраине королевства.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "羅梅莉亞戰記",
+            "overview": "《羅梅莉亞戰記》故事主角羅梅莉亞，是一位與王子有著婚約的伯爵千金。無法使用劍與魔法的她，為了與魔王軍一戰不斷蒐集情報與資金，但這一舉動卻被視為「幫不上忙」因此被王子悔婚。在那之後，羅美莉亞思考自己該何去何從，因此決定回到祖國消滅魔族餘黨，藉此實現真正的和平。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "羅梅莉亞戰記",
+            "overview": "《羅梅莉亞戰記》故事主角羅梅莉亞，是一位與王子有著婚約的伯爵千金。無法使用劍與魔法的她，為了與魔王軍一戰不斷蒐集情報與資金，但這一舉動卻被視為「幫不上忙」因此被王子悔婚。在那之後，羅美莉亞思考自己該何去何從，因此決定回到祖國消滅魔族餘黨，藉此實現真正的和平。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Romelia War Chronicle",
+            "overview": "Romelia y su grupo logran derrotar al Rey Demonio Zelgis, aunque la temeraria carga del Príncipe Henri los obliga a librar una agotadora batalla. Tras la batalla, Romelia es tildada de \"peso muerto\" por no combatir directamente, y el Príncipe rompe unilateralmente su compromiso con ella. Sin un lugar en las celebraciones de la victoria, Romelia regresa a casa, donde solo encuentra la indiferencia de su familia y la sociedad. Sin embargo, ella se niega a quebrarse. Ya tiene la mirada puesta en el camino que le espera",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Romelia War Chronicle",
+            "overview": "Chiến thắng trước Quỷ Vương lẽ ra đã là vinh quang của Romelia. Nhưng thay vào đó, vị hôn phu — Hoàng tử Henri — hủy hôn và đuổi cô về quê trong nhục nhã, đến một tỉnh thành đổ nát. Không có viện trợ nào trong tầm mắt, Romelia thề sẽ gây dựng một đội quân, tái thiết những thị trấn đổ nát và khôi phục một vương quốc đang chật vật khi những xung đột mới nảy sinh. Cuộc chiến có thể đã kết thúc, nhưng câu chuyện của cô mới chỉ bắt đầu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.777,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6LeBjYSPULKwSv5R6sX6Iovwoad.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1919
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mSZbeN0Ptv6em7jYkgzAEagg3N0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fzuMCjavQFFhSt1tiGrbIrkJrz7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l4npGR3d7No2Msr8OptVTek6G41.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 7.229,
+          "height": 166,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hXWCx0n6cYBMcjngZ8M2iZXLwmZ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xOhx5KpSAlrEbqsu9TaCdmdIb72.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1980,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gyMINlLwZsxCnNmwCh1pG15cqj2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1321
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1980,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s9ssUHSItlU7QpnXldSLNOK7xMN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        }
+      ]
+    }
+  }
+}

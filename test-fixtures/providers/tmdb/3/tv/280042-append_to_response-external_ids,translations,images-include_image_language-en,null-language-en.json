@@ -1,0 +1,685 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14726",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8888110da691f84faaeec99629457467\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gNYmU3RUlCb6dVqkiPCT7vglMfg.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2025-10-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.lastboss-anime.com",
+    "id": 280042,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-31",
+    "last_episode_to_air": {
+      "id": 7908005,
+      "name": "The Hunting Festival Contestants Have Appeared!",
+      "overview": "Lufas visits Draupnir to take a break and let Virgo build confidence in the Hunting Festival.",
+      "vote_average": 6,
+      "vote_count": 1,
+      "air_date": "2026-10-31",
+      "episode_number": 17,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 280042,
+      "still_path": "/mUbmvxzPUyrVbm1NVcvPRChZq7c.jpg"
+    },
+    "name": "A Wild Last Boss Appeared!",
+    "next_episode_to_air": {
+      "id": 7908006,
+      "name": "The Twelve Heavenly Star, Sagittarius Appeared!",
+      "overview": "Sei and Virgo brave a sacred mountain to get the Elixir for the beastfolk nation. The rest hunt Sagittarius.",
+      "vote_average": 6,
+      "vote_count": 1,
+      "air_date": "2026-11-07",
+      "episode_number": 18,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 280042,
+      "still_path": "/vdVuszMNzPoMw4EXnl1AaVxBIW.jpg"
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "野生のラスボスが現れた！",
+    "overview": "An MMO gamer awakens as the Black-Winged Tyrant, Lufas Maphaahl, rising from her sealed fate—only to find this is very real. Her defeat 200 years ago unleashed monsters of death, and the legend is one of terror. Now, trapped in the body of history's most feared conqueror, he must survive a world that wants her dead…and uncover why he's here.",
+    "popularity": 11.1094,
+    "poster_path": "/xh9lu8gDgzwMBiByTRtTsclluZf.jpg",
+    "production_companies": [
+      {
+        "id": 46954,
+        "logo_path": null,
+        "name": "WAO World",
+        "origin_country": "JP"
+      },
+      {
+        "id": 69968,
+        "logo_path": "/cN8Qhl29ZrmWYgkYTS6CDhPK0A5.png",
+        "name": "NBCUniversal Entertainment Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 276312,
+        "logo_path": "/dteI5DKASmiVdistgacr2eOOJFx.png",
+        "name": "Sun Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1780,
+        "logo_path": "/4Qzhr7FxVtaMwmsh7118G3yvOhO.png",
+        "name": "TFC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 189817,
+        "logo_path": "/6tWMDo6hsbmvO5sorsXRw0qQQRO.png",
+        "name": "Earth Star Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7549,
+        "logo_path": "/bXc1vp0lER6PDHtsVe12pSPwNkv.png",
+        "name": "Kansai Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188144,
+        "logo_path": "/tft4KzwjS3okGiN6duB3qwHkIX1.png",
+        "name": "BS Asahi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 181285,
+        "logo_path": "/xHaPH1Yp50iEH7HOEwhxKTYRC6w.png",
+        "name": "Bushiroad Move",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6681,
+        "logo_path": "/s4RElEnQyM2VrHZCQ3jYemPdxML.png",
+        "name": "THE KLOCKWORX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 313070,
+        "logo_path": "/k1j4l74IJNdw7PI4eIfKBQ2sEVQ.png",
+        "name": "SORAJIMA",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-10-04",
+        "episode_count": 24,
+        "id": 434269,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/9dhoMwDpkJm5dsSIiHMPl7or76t.jpg",
+        "season_number": 1,
+        "vote_average": 6.7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.2,
+    "vote_count": 28,
+    "external_ids": {
+      "imdb_id": "tt33258199",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 453694,
+      "tvrage_id": null,
+      "wikidata_id": "Q129676429",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "lastboss_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "An MMO gamer awakens as the Black-Winged Tyrant, Lufas Maphaahl, rising from her sealed fate—only to find this is very real. Her defeat 200 years ago unleashed monsters of death, and the legend is one of terror. Now, trapped in the body of history's most feared conqueror, he must survive a world that wants her dead…and uncover why he's here.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "ミズガルズ暦2800年、\"黒翼の覇王\"と人々から恐れられた「ルファス・マファール」は、「七英雄」と呼ばれる勇者たちとの最終決戦による激闘の末、その覇道に終焉を迎える。覇王の封印によって安寧の時代が訪れるかに思われたが･･･、力の均衡が崩れた事で、世界は魔神族の脅威にさらされるのであった。それから200年後──、魔神族に対抗すべく人類は新たな勇者の召喚を試みる。しかしそこに現れたのは、長き封印から目覚めた覇王ルファスの姿だった！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "야생의 라스트 보스가 나타났다!",
+            "overview": "엑스게이트 온라인이라는 게임을 통해 과금과 시간을 들여 만든 캐릭터 '루파스 마팔'을 게임 이벤트로서 다른 플레이어들의 연합으로 쓰러지는 보스역을 맡고 시나리오대로 지게 된다.\n\n본인 나름대로도 만족하고 나서 다음날 다시 접속을 하려고 보니 로그인 화면에 엑스게이트 온라인의 세계를 창조했다는 여신 애로비너스가 <당신에게 새로운 역할을 부여하죠 맡으시겠습니까? Yes/No>를 통해 yes라고 선택 후 눈을 뜨고 보니 자신이 만든 계정 캐릭터인 루파스 자체가 되어 게임 속 세상으로 무려 200년 후의 세계로 왔다는 것으로 시작되는 것이 주요 스토리.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "Anno 2800 del calendario di Midgard. Allora, una potente condottiera chiamata Lufas Maphaahl, soprannominata anche comandante dalle Ali Nere, fu sul punto di dominare il mondo. In lei coesistevano forza, agilità e bellezza. Tuttavia, al culmine della sua impresa, la suprema leader venne sconfitta da un gruppo di prodi che si batterono contro la sua ferocia, e le sue ambizioni raggiunsero così una fine. Duecento anni dopo la caduta di Lufas , il nostro protagonista si ritrova per qualche motivo trasportato nel suo mondo (ossia nel videogioco Exgate Online) e...nei suoi panni! Egli dovrà dunque farsi largo in un mondo fantastico, e dovrà affrontare il terrore che ancor oggi la sua figura incute, così come le esagerate adulazioni dei suoi ex-subordinati, a lei ancora fedeli!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "Une joueuse de MMO se réveille sous les traits du tyran aux ailes noires, Lufas Maphaahl, échappant ainsi à son destin scellé, pour découvrir que tout cela est bien réel. Sa défaite il y a 200 ans a libéré des monstres mortels, et la légende est terrifiante. Piégé dans le corps du conquérant le plus redouté de l'histoire, il doit désormais survivre dans un monde qui veut sa mort... et découvrir pourquoi il est là.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Шальной последний босс явился!",
+            "overview": "Был 2800 год по календарю Мидгарда. В те времена жила одна повелительница, которая царствовала над всем миром, покорив его до самых границ. Имя ей было Люфас Мафаал, великая женщина, которую боялись как Темнокрылую Владычицу. Она была слишком сильна, быстра и невероятно красива... Однако её победили герои, восставшие против её жестокости, и её амбициям пришёл конец... Вернее, такой была история игрового персонажа, чьё тело наш главный герой получил по некоторым причинам в мире спустя 200 лет после свержения Люфас. И с этого начинается история увлекательного путешествия по фэнтезийному миру нашего главного героя... или, вернее сказать, героини.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Het is het jaar 2800 en Lufas Maphaahl – de zwart gevleugelde tiran, grote veroveraar en leider van de Twaalf Hemelse Sterren – is teruggekeerd. Een man wordt 200 jaar na haar nederlaag wakker in het lichaam van zijn MMO-personage tijdens een door spelers gemaakt evenement in de game, Exgate Online. Nu zit hij vast in haar lichaam. Maar dit is geen spel, het is echt. Nu haar heerschappij al lang voorbij is en haar erfenis er een is van angst, moet Lufas door de wereld van Exgate reizen, op zoek naar antwoorden, mogelijke kameraden en alle monsters die haar 'dood' op de wereld heeft losgelaten...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "O ano é 2800 e Lufas Maphaahl — A Tirana de Asas Negras, Grande Conquistadora e líder das Doze Estrelas Celestiais — retornou. Um homem acorda no corpo de sua personagem em um MMO depois de 200 anos desde sua derrota durante um evento de jogadores dentro do jogo Exgate Online. Agora, ele está preso no corpo dela. Só que isso não é um jogo, é real. Depois de tanto tempo desde o fim de um reinado que ainda deixa medo, Lufas parte em uma jornada através do mundo de Exgate, buscando por respostas, por possíveis companheiros e pelos monstros que sua \"morte\" liberou no mundo...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "野生的大魔王出现了！",
+            "overview": "米兹加尔兹历2800年，以「黑翼霸王」之名为世人所畏惧的「露法丝·玛法尔」，在与人称「七英雄」勇者们进行的最终决战中历经激战，其霸道之路迎来了终结。人们本以为霸王被封印能够带来安宁的时代，但由于力量的均衡被打破，世界暴露在了魔神族的威胁之中。而在200年后——为了对抗魔神族，人类尝试召唤新的勇者。但出现在那里的，却是从漫长封印中苏醒的霸王露法丝的身影！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "野生的大魔王出現了！",
+            "overview": "《野生的大魔王出現了！》故事中，主角曾一時攀上超熱門線上遊戲「艾克斯之門 Online」的巔峰。在完成某次重大故事後的隔天，想登入遊戲時，卻突然收到「賦予你全新使命」的提示訊息。當他按下「ＹＥＳ」的瞬間，世界被反轉了，醒來後，映入主角眼簾的是！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "Ein MMO-Spieler erwacht als die einst versiegelte Herrscherin der schwarzen Schwingen Rufas Mafahl. Nach ihrer Niederlage vor 200 Jahren wurden Monster des Todes freigesetzt, die Angst und Schrecken verbreitet haben. Gefangen im Körper der furchteinflößendsten Eroberin in der Geschichte des Spiels muss er in einer Welt überleben, die ihn tot sehen will … und herausfinden, warum er dort ist.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "อุบัติการณ์ลาสบอสสุดแกร่ง",
+            "overview": "เรื่องราวเกิดขึ้นในปี 2800 เมื่อตัวละครในเกม MMO ชื่อ Lufas Maphaahl — ราชาผู้โหดเหี้ยมปีกดำและหัวหน้ากลุ่ม “ดาวสวรรค์ทั้ง 12” — ได้ฟื้นคืนชีพขึ้นมาอีกครั้ง\n\nชายคนหนึ่งตื่นขึ้นมาในร่างของตัวละครที่เขาเคยเล่นเมื่อ 200 ปีก่อน หลังจากตัวละครนั้นพ่ายแพ้ในอีเวนต์ที่ผู้เล่นสร้างขึ้นในเกม Exgate Online\n\nแต่ครั้งนี้ไม่ใช่แค่ในเกม — เขาติดอยู่ในร่างเธอ และโลกนี้คือความจริง\n\nอดีตการปกครองของเธอได้กลายเป็นตำนานอันน่ากลัว เขาจึงต้องออกเดินทางในโลกแห่ง Exgate เพื่อหาคำตอบ สหายใหม่ และรับมือกับมอนสเตอร์มากมายที่หลุดออกมาเมื่อเธอ “ตาย” ไปเมื่อก่อน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "Corre el año 2800 y Lufas Maphaahl (la tirana de alas negras, gran conquistadora y líder de las Doce Estrellas Celestiales) ha regresado. Un hombre se despierta en el cuerpo de su personaje de MMO 200 años después de su derrota durante un evento creado por un jugador en el juego Exgate Online. Ahora, está atrapado en ese cuerpo. Pero esto no es un juego, es real. Con su reinado habiendo quedado atrás hace mucho tiempo y su legado de miedo, Lufas debe viajar por el mundo de Exgate en busca de respuestas, posibles camaradas y todos los monstruos que su \"muerte\" desató sobre el mundo...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "“Ruphas Mafahl, a soberana de asas negras e líder das Doze Estrelas do Céu, foi derrotada. Duzentos anos após sua queda, um homem desperta no corpo de Ruphas, a personagem do jogo Exgate. No entanto, o mundo de Exgate que ele conhecia já não é mais governado por humanos – e tampouco é apenas um jogo. Agora, essa realidade é um mundo próprio, onde seus habitantes pensam, sentem e vivem exatamente como ele. Sem país, exército ou aliados, Ruphas embarca em uma jornada para reencontrar as Doze Estrelas do Céu, que há muito se separaram. Mas uma grande dúvida persiste: qual o verdadeiro motivo por trás da reencarnação desse homem comum no corpo da lendária soberana?”",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "Un hombre se reencarna en el personaje de Ruphas del videojuego Exgate 200 años después de que caiga derrotada frente a los siete héroes. Pero el juego no es como él pensaba que era y las reglas han cambiado.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "野生的大魔王出現了！",
+            "overview": "《野生的大魔王出現了！》故事中，主角曾一時攀上超熱門線上遊戲「艾克斯之門 Online」的巔峯。在完成某次重大故事後的隔天，想登入遊戲時，卻突然收到「賦豫你全新使命」的提示訊息。當他按下「ＹＥＳ」的瞬間，世界被反轉了，醒來後，映入主角眼簾的是！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "野生的最终BOSS出现了！",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "בוס אחרון פרוע הופיע!",
+            "overview": "גיימר MMO מתעורר כעריץ בעל הכנפיים השחורות, לופאס מפאהאל, הקם מגורלו החתום—רק כדי לגלות שהפעם זה אמיתי. תבוסתה לפני מאתיים שנה שחררה מפלצות מוות, והאגדה נחרתה כמעשה אימה. כעת, לכוד בגופו של הכובש האימתני בהיסטוריה, עליו לשרוד בעולם שרוצה במותו… ולגלות מדוע הוא נמצא כאן.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Trùm Cuối Hoang Dã Xuất Hiện!",
+            "overview": "Năm 2800, theo lịch Midgard. Một Overlord với sức mạnh tuyệt đối đã thống nhất toàn cõi thế gian. Tên cô là Ruphas Mafahl, hay vốn được biết với cái tên Hắc Dực Thiên Vương. Quá nhanh, quá mạnh, và quá xinh đẹp… Nhưng một ngày nọ, những anh hùng vô danh đã đứng lên chống lại cô, khiến giấc mộng bá vương tan thành mây khói. Đó chính là cốt truyện của nhân vật ingame của MC trong câu chuyện này, không hiểu vì lí do gì lại bị triệu hồi đến Midgard, nhưng là tương lai 200 năm sau khi Ruphas bị đánh bại. Hơn nữa, chính cậu cũng bị biến thành Ruphas. Bối rối và không hiểu chuyện gì đang xảy ra, cậu sẽ phải làm gì để đương đầu với những thứ sắp tới?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Yasei no Last Boss ga Arawareta!",
+            "overview": "القصة تتحدث عن لوفاس مافاهال طاغية الأجنحة السوداء التي تستيقظ في جسد شخصيتها داخل لعبة MMO بعد 200 عام من هزيمتها لتجد نفسها في عالم إكزغيت الحقيقي يجب عليها الآن البحث عن إجابات والعودة إلى قوتها بينما تواجه العواقب التي أطلقتها وفاتها على العالم.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "A Wild Last Boss Appeared!",
+            "overview": "Lufas Maphaahl, czarnoskrzydła władczyni i przywódczyni Dwunastu Niebiańskich Gwiazd, została pokonana przez Siedmiu Bohaterów. Dwieście lat później pewien mężczyzna budzi się w jej ciele w świecie Exgate, który przestał być tylko grą i stał się prawdziwą krainą. Pozbawiona kraju, armii i sprzymierzeńców, Lufas wyrusza, by odnaleźć dawno rozproszonych podwładnych i odzyskać kontrolę nad własnym losem. W tle pozostają pytania: dlaczego właśnie ona, i kto pociąga za sznurki?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Ratu Terakhir Telah Tiba!",
+            "overview": "Seorang gamer MMO terbangun sebagai Lufas Maphaahl, Sang Tiran Bersayap Hitam yang bangkit dari takdirnya yang tersegel, hanya untuk menyadari bahwa semua ini sangat nyata. Kekalahannya 200 tahun yang lalu telah melepaskan monster-monster mematikan, dan legenda tentang dirinya dipenuhi dengan teror. Kini, karena terjebak di dalam tubuh penakluk yang paling ditakuti sepanjang sejarah, ia harus bertahan hidup di dunia yang menginginkan kematiannya… sekaligus mengungkap alasan mengapa ia bisa berada di sini.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een MMO-gamer wordt wakker als de Black-Winged Tyrant, Lufas Maphaahl, die opstaat uit haar verzegelde lot, maar ontdekt dat dit heel reëel is. Haar nederlaag 200 jaar geleden liet monsters van de dood los, en de legende is er een van terreur. Nu hij gevangen zit in het lichaam van de meest gevreesde veroveraar uit de geschiedenis, moet hij een wereld overleven die haar dood wil... en ontdekken waarom hij hier is.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4d1wPKLXjkbmpgNGpr9ElULORrY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lgh9FR0YS8iHvam3s8umDoayHPL.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gNYmU3RUlCb6dVqkiPCT7vglMfg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1068,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jHJtQvmraESA5GoK9oo2Plyzk2U.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1899
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xzW1S4Uqt4hJsOveSZaIxax21jD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aStBZjqiiLEury04wnFjrasv69V.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3BtjrboNMMuZMr8U4u0ZZgvTF5W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7ikQ8w7df2C7t1nUEM6AtxNsdIx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.072,
+          "height": 304,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cklffgw8EqqWLiobCuXI1jBa2fU.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 630
+        },
+        {
+          "aspect_ratio": 4.461,
+          "height": 178,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fJHphMeyfNJfpkLCnf6fdyjWpXh.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 794
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.701,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xh9lu8gDgzwMBiByTRtTsclluZf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 718
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sDb5USp0nknvs3mHmyurgH8y3z6.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jiqYElnrwuulciO0ZDC15pYrH3p.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9dhoMwDpkJm5dsSIiHMPl7or76t.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.717,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ufa1C93faitqx4bZvzusrA9Q4yu.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 860
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1793,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1xrllxCMfVsy2zr7yCsCGtbNnzC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1196
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vrI5vaabJ928ka3icedsiBhYugc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9BFRjHvmgsElF6Kjrfr87TzgFBC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n9VMW16dgTPP0UHiSHrY07DZCLh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/BI7Hb2n7ecV8SLwkJcUkenFltW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

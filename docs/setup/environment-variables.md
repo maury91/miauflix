@@ -227,9 +227,21 @@ STREAM_TOKEN_EXPIRATION=6h
 # API endpoints (use defaults unless customizing)
 TMDB_API_URL=https://api.themoviedb.org/3
 TRAKT_API_URL=https://api.trakt.tv
+
+# Anime (list service): AniList's rankings and the AniList → TMDB id list
+ANILIST_API_URL=https://graphql.anilist.co
+ANIME_LISTS_URL=https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json
+
+# Anime (sources service): the same id list and ani.zip's episode mappings
+SOURCES_ANIME_LISTS_URL=https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json
+SOURCES_ANI_ZIP_URL=https://api.ani.zip/mappings
+
+# Anime (catalog): seasons numbered by AniList entry
+CATALOG_ANIME_LISTS_URL=https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json
+CATALOG_ANI_ZIP_URL=https://api.ani.zip/mappings
 ```
 
-- **Description**: Base URLs for external APIs
+- **Description**: Base URLs for external APIs. The anime ones are environment variables of the list, sources and catalog services; AniList and ani.zip need no account or key. Setting `SOURCES_ANIME_LISTS_URL` or `SOURCES_ANI_ZIP_URL` to an empty value turns that lookup off (an empty `SOURCES_ANIME_LISTS_URL` turns anime recognition off); an empty `CATALOG_ANIME_LISTS_URL` or `CATALOG_ANI_ZIP_URL` stops building AniList seasons, so anime not yet split keeps TMDB's seasons. Shows already split keep their stored AniList seasons; they are not turned back into TMDB's
 - **Default**: Standard API endpoints
 - **When to change**: Custom proxy or testing environments only
 

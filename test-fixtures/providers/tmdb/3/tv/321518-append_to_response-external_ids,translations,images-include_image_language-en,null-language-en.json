@@ -1,0 +1,451 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=9988",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1a253e25d6a58c76aa4828c08f10fa40\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/bM9pGax5PQCvipy7zifscXsVJ8Z.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-07",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://sekamajo-anime.com",
+    "id": 321518,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-28",
+    "last_episode_to_air": {
+      "id": 7903444,
+      "name": "I Tried Quitting Being a Savior!",
+      "overview": "While the elves celebrate the end of the plague, Lorna feels guilty about being revered as their Savior.",
+      "vote_average": 7,
+      "vote_count": 1,
+      "air_date": "2026-11-04",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 321518,
+      "still_path": "/qMBSTIzFF1Nstag7pFs7mq0cwB5.jpg"
+    },
+    "name": "The World's Strongest Witch",
+    "next_episode_to_air": {
+      "id": 7903445,
+      "name": "Episode 6",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-11",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 321518,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "世界最強の魔女、始めました",
+    "overview": "Cast out by her aristocratic family after manifesting a seemingly useless skill, Lorna discovers her ability, “Internet,” is an SSS-rank cheat that grants her access to the entirety of the world’s knowledge. All Lorna wants is a peaceful life, but as she collects rare gear and potent items, the “world’s weakest witch” suddenly becomes very powerful, landing in one chaotic adventure after another.",
+    "popularity": 8.6205,
+    "poster_path": "/kiEzCgnCMTiYP5nhgcv2njstWTf.jpg",
+    "production_companies": [
+      {
+        "id": 43693,
+        "logo_path": "/aO5hWIoTnGjMnVQF7JrlnJgIEvD.png",
+        "name": "Bridge",
+        "origin_country": "JP"
+      },
+      {
+        "id": 279191,
+        "logo_path": null,
+        "name": "AISLE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 138773,
+        "logo_path": "/nw7p1jXBwuMk6WUQ2QKRENcm5Wv.png",
+        "name": "YTE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Pony Canyon",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 156047,
+        "logo_path": "/bR1IGv2EUNaLGPIA3jRgbATUaX8.png",
+        "name": "Bit grooove promotion",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-07",
+        "episode_count": 12,
+        "id": 514478,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/kiEzCgnCMTiYP5nhgcv2njstWTf.jpg",
+        "season_number": 1,
+        "vote_average": 6.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.6,
+    "vote_count": 5,
+    "external_ids": {
+      "imdb_id": "tt43691408",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 477424,
+      "tvrage_id": null,
+      "wikidata_id": "Q139595853",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "sekamajo_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The World's Strongest Witch",
+            "overview": "Depois de manifestar uma habilidade completamente inútil, Lorna se torna a vergonha de sua família e é expulsa de casa. Agora, sem ter onde cair morta, ela alcança o fundo do poço. No entanto, ela descobre como usar sua habilidade de rank SSS, chamada \"Internet\". O poder lhe fornece capacidade de conseguir uma quantidade ilimitada de itens valiosos e de facilmente adquirir equipamentos raros. Armada com um conhecimento divino, Lorna pode fazer o que bem quiser. Se pelo menos ela conseguisse descobrir o que \"KKKKKKKKK\" significa...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The World's Strongest Witch",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "最弱クラスのスキルを発現してしまい、追放された少女・ローナ。しかしそのスキルの正体は、この世界の『攻略サイト』を見ることができるＳＳＳランクのチートスキル【インターネット】だった――！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The World's Strongest Witch",
+            "overview": "Cast out by her aristocratic family after manifesting a seemingly useless skill, Lorna discovers her ability, “Internet,” is an SSS-rank cheat that grants her access to the entirety of the world’s knowledge. All Lorna wants is a peaceful life, but as she collects rare gear and potent items, the “world’s weakest witch” suddenly becomes very powerful, landing in one chaotic adventure after another.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "世界最强魔女，就此开始",
+            "overview": "因为觉醒了最弱等级技能，而被家族扫地出门的少女·罗娜。然而那项技能的真面目，居然是能够浏览这个世界的“攻略网站”的SSS级作弊技能“互联网”！为了追求自由和平的生活而踏上旅程的“世界最强的魔女”罗娜，她那无厘头的冒险日常，终于动画化！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "세계 최강의 마녀, 시작했습니다",
+            "overview": "가장 낮은 등급의 스킬을 발현하여 추방당한 소녀 로나.\n\n그러나 그 스킬의 정체는 이 세계의 ‘공략 사이트’를 볼 수 있는 SSS급 사기 스킬 ‘인터넷’이었다!\n\n자유롭고 평화로운 삶을 추구하며 여행하는 세계 최강 마녀 로나의 엉망진창 모험 이야기가 드디어 애니메이션화!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The World's Strongest Witch",
+            "overview": "Als Lorna eine nutzlose Fähigkeit manifestiert, wird sie aus ihrer Familie verbannt. Doch dann findet sie raus, wie sie ihren vermeintlich nutzlosen SSS-Rang-Skill, „Internet“, verwendet. Dieser Cheat-Skill verschafft ihr das Wissen, um grenzenlose Mengen an wertvollen Items zu sammeln und seltenes Equipment zu finden. Ausgestattet mit gottgleichem Wissen kann Lorna nun tun, was sie will!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "世界最強的魔女，就此開始",
+            "overview": "因為覺醒了最弱等級技能，而被家族掃地出門的少女・羅娜。然而那項技能的真面目，居然是能夠瀏覽這個世界的「攻略網站」的 SSS 級作弊技能【網際網路】！為了追求自由和平的生活，踏上「世界最強的魔女」旅程的羅娜，她那無厘頭的冒險日常！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The World's Strongest Witch",
+            "overview": "Rejetée par sa famille après l'éveil de son pouvoir jugé inutile, Lorna se retrouve seule, sans ressources et au bord du désespoir. Mais elle découvre bientôt que sa compétence de rang SSS, \"Internet\", est en réalité un don extraordinaire. Grâce au savoir illimité que ce pouvoir lui apporte, elle peut mettre la main sur des objets de grande valeur, acquérir sans effort des équipements rares et ainsi changer le cours de sa vie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "世界最強的魔女，就此開始",
+            "overview": "因為覺醒了最弱等級技能，而被家族掃地出門的少女・羅娜。然而那項技能的真面目，居然是能夠瀏覽這個世界的「攻略網站」的 SSS 級作弊技能【網際網路】！為了追求自由和平的生活，踏上「世界最強的魔女」旅程的羅娜，她那無厘頭的冒險日常！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "แม่มดสุดแกร่งแห่งปฐพี",
+            "overview": "ลอร์น่า มีพลังไร้ประโยชน์ที่เรียกว่า “อินเตอร์เน็ต” เมื่อเธอศึกษาทำให้เธอเข้าถึงพลังระดับโกง จนทำให้เธอต้องปิดบังพลังระหว่างการเดินทาง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Phù Thủy Mạnh Nhất Thế Giới",
+            "overview": "Bị gia đình quý tộc ruồng bỏ sau khi thức tỉnh một kỹ năng tưởng chừng vô dụng, Lorna phát hiện ra khả năng \"Internet\" của mình là một cheat hạng SSS, cho cô quyền truy cập vào toàn bộ tri thức của thế giới. Lorna chỉ muốn một cuộc sống yên bình, nhưng khi cô thu thập trang bị hiếm và vật phẩm mạnh, \"phù thủy yếu nhất thế giới\" bỗng trở nên vô cùng hùng mạnh, lao vào hết cuộc phiêu lưu hỗn loạn này đến cuộc phiêu lưu hỗn loạn khác.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Nadat ze door haar aristocratische familie is verstoten vanwege het openbaren van een schijnbaar nutteloze gave, ontdekt Lorna dat haar vermogen – 'Internet' – een 'SSS-rank'-kracht is die haar toegang geeft tot alle kennis ter wereld. Lorna verlangt enkel naar een rustig leven, maar terwijl ze zeldzame uitrusting en krachtige voorwerpen verzamelt, verandert de 'zwakste heks ter wereld' plotseling in een uiterst machtig individu, wat haar in het ene na het andere chaotische avontuur stort.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Сильнейшая ведьма в мире стартовала",
+            "overview": "Когда у Лорны проявилась совершенно бесполезная способность, её назвали позором для семьи и выгнали из дома. Оставшись без денег и еды, она оказалась на грани полного краха. Но тут она понимает, как использовать свой якобы бесполезный навык ранга SSS - «Интернет». Этот талант, граничащий с читерством, даёт ей возможность собирать неограниченное количество ценных предметов и легко добывать редкое снаряжение. Вооружившись божественными знаниями, Лорна может делать всё, что ей заблагорассудится! Если бы только она могла понять, что означает «lmfao»...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Sekai Saikyou no Majo, Hajimemashita",
+            "overview": "Cuando Lorna desarrolla una habilidad totalmente inútil, la tachan de vergüenza para su familia y la echan de casa. Sin dinero ni comida, está a punto de tocar fondo. Pero entonces descubre cómo usar su habilidad de rango SSS, supuestamente sin valor, llamada «Internet». Este talento, que roza la trampa, le proporciona los conocimientos necesarios para reunir una cantidad ilimitada de objetos valiosos y conseguir fácilmente equipamiento raro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bM9pGax5PQCvipy7zifscXsVJ8Z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/abS42ZmDX6K2KVyK8FGaUw1q3DZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.089,
+          "height": 828,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dJV02YybQWx1RhhEwZdTLOPy1FB.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1730
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kiEzCgnCMTiYP5nhgcv2njstWTf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9KT3xygANWLJMFIhJT2WD8ytKkj.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hiwxtVeUTBlgm4xetpZRbwRK9ZH.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1086,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sNojGUl1p5uw5pqyZfoQ7xjwt0B.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 724
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ynxVt18V0ZHhZ73hOLKAovrgnoq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 954
+        }
+      ]
+    }
+  }
+}

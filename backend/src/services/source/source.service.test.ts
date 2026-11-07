@@ -224,13 +224,17 @@ describe('SourceService', () => {
         notifications as never,
         createSourceServiceDependencies().availability as never
       );
-      jest.spyOn(service as never, 'getTVReleases').mockResolvedValue([
+      const releases = jest.spyOn(service as never, 'getTVReleases').mockResolvedValue([
         {
           metadata: { season: 1, episode: 8, files: ['Show.S01E08.mkv'] },
           source: { id: 11, hasVideo },
         },
       ] as never);
-      const search = () =>
+      const search = (
+        numbers: Partial<
+          Parameters<SourceService['getSourcesForEpisodeWithOnDemandSearch']>[0]
+        > = {}
+      ) =>
         service.getSourcesForEpisodeWithOnDemandSearch({
           episodeId: 5,
           showMediaId: 9001,
@@ -239,9 +243,60 @@ describe('SourceService', () => {
           seasonNumber: 1,
           episodeNumber: 8,
           airDate: '2020-01-01',
+          ...numbers,
         });
-      return { search, notifications, backgroundJobs };
+      return { search, notifications, backgroundJobs, releases, episodeSources, ...mocks };
     };
+
+    it('reuses stored single-file matches that have a live swarm', async () => {
+      const { search, releases, episodeSources } = setupEpisodeTest(true);
+      episodeSources.findByEpisodeId.mockReset().mockResolvedValue([
+        {
+          episodeId: 5,
+          sourceId: 11,
+          matchKind: 'single',
+          source: { id: 11, broadcasters: 40, languages: [] },
+        },
+      ]);
+
+      await search();
+
+      expect(releases).not.toHaveBeenCalled();
+    });
+
+    it('searches again once for matches stored before their languages were recorded', async () => {
+      const { search, releases, episodeSources } = setupEpisodeTest(true);
+      episodeSources.findByEpisodeId.mockReset().mockResolvedValue([
+        {
+          episodeId: 5,
+          sourceId: 11,
+          matchKind: 'single',
+          source: { id: 11, broadcasters: 40, languages: null },
+        },
+      ]);
+
+      await search();
+      await search();
+
+      expect(releases).toHaveBeenCalledTimes(1);
+    });
+
+    it('searches again when every stored match is weak, at most every six hours', async () => {
+      const { search, releases, episodeSources } = setupEpisodeTest(true);
+      episodeSources.findByEpisodeId
+        .mockReset()
+        .mockResolvedValue([
+          { episodeId: 5, sourceId: 11, matchKind: 'single', source: { id: 11, broadcasters: 4 } },
+        ]);
+
+      await search();
+      await search();
+      expect(releases).toHaveBeenCalledTimes(1);
+
+      jest.setSystemTime(Date.now() + 6 * 60 * 60_000 + 1);
+      await search();
+      expect(releases).toHaveBeenCalledTimes(2);
+    });
 
     it('announces an episode once a source matched to it is verified', async () => {
       const { search, notifications, backgroundJobs } = setupEpisodeTest(true);
@@ -252,6 +307,48 @@ describe('SourceService', () => {
         expect.objectContaining({ showMediaId: 9001, seasonNumber: 1, episodeNumber: 8 })
       );
       expect(backgroundJobs.bulkBestEffort).not.toHaveBeenCalled();
+    });
+
+    it('searches and matches an anime numbered by AniList entry with TMDB numbering', async () => {
+      const { search, notifications, releases, episodeSources } = setupEpisodeTest(true);
+
+      await search({
+        seasonNumber: 2,
+        episodeNumber: 1,
+        providerSeasonNumber: 1,
+        providerEpisodeNumber: 8,
+      });
+
+      expect(releases).toHaveBeenCalledWith(
+        expect.objectContaining({ seasonNumber: 1, episodeNumber: 8 })
+      );
+      expect(episodeSources.associate).toHaveBeenCalledWith(5, 11, 'Show.S01E08.mkv', 'single');
+      // The announcement uses the numbering the app shows.
+      expect(notifications.episodeAvailable).toHaveBeenCalledWith(
+        expect.objectContaining({ seasonNumber: 2, episodeNumber: 1 })
+      );
+    });
+
+    it('looks up the files of both candidate releases at the same time', async () => {
+      const { search, releases, mockSourcesClient, mockContentSourceRepository } =
+        setupEpisodeTest(true);
+      releases.mockResolvedValue([
+        { metadata: { season: 1, episode: 8 }, source: { id: 21, hash: 'a'.repeat(40) } },
+        { metadata: { season: 1, episode: 8 }, source: { id: 22, hash: 'b'.repeat(40) } },
+      ] as never);
+      mockContentSourceRepository.findById.mockResolvedValue(null);
+      // Each lookup only finishes once both have started: one after another would hang.
+      let open!: () => void;
+      const bothStarted = new Promise<void>(resolve => (open = resolve));
+      mockSourcesClient.torrentFile.mockImplementation(async () => {
+        if (mockSourcesClient.torrentFile.mock.calls.length === 2) open();
+        await bothStarted;
+        return null;
+      });
+
+      await search();
+
+      expect(mockSourcesClient.torrentFile).toHaveBeenCalledTimes(2);
     });
 
     it('waits for verification instead of announcing an unverified match', async () => {

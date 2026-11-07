@@ -1,5 +1,6 @@
 import type { Database } from 'bun:sqlite';
 
+import type { AniListLists } from './anilist';
 import {
   mapItems,
   mapMixedItems,
@@ -48,12 +49,15 @@ export const listPage = async (args: {
   fetchPage: <T>(path: string, token?: string) => Promise<Page>;
   seal: (value: string) => string;
   open: (value: string) => string;
+  /** Anime rankings from AniList, public like Trakt's. */
+  aniList?: AniListLists;
 }) => {
   const { database, listId, subjectId, page, association, accessToken, fetchPage, seal, open } =
     args;
+  const fromAniList = args.aniList?.has(listId) ? args.aniList : undefined;
   const publicPath = publicPaths[listId] ?? communityListPath(listId);
-  const personalPath = personalPaths[listId];
-  if (!publicPath && !personalPath) throw new Error('List not found');
+  const personalPath = fromAniList ? undefined : personalPaths[listId];
+  if (!publicPath && !personalPath && !fromAniList) throw new Error('List not found');
 
   const connectionId = personalPath
     ? subjectId && association(subjectId)?.connection_id
@@ -85,14 +89,24 @@ export const listPage = async (args: {
       const isCommunity = !publicPaths[listId] && Boolean(publicPath);
       const mediaType: 'movie' | 'tv' = listId.includes('shows') ? 'tv' : 'movie';
       const token = personalPath ? await accessToken(subjectId!, connectionId!) : undefined;
-      const path = (publicPath ?? personalPath!).replace('limit=50', `page=${page}&limit=50`);
-      const result = await fetchPage<TraktItem>(path, token);
-      const items = isCommunity
-        ? mapMixedItems(normalizeMixedListItems(result.items))
-        : mapItems(
-            normalizeListItems(result.items as TraktItem[], mediaType, listId.endsWith('-popular')),
-            mediaType
+      const result = fromAniList
+        ? await fromAniList.page(listId, page)
+        : await fetchPage<TraktItem>(
+            (publicPath ?? personalPath!).replace('limit=50', `page=${page}&limit=50`),
+            token
           );
+      const items = fromAniList
+        ? mapMixedItems(result.items as TraktItem[])
+        : isCommunity
+          ? mapMixedItems(normalizeMixedListItems(result.items))
+          : mapItems(
+              normalizeListItems(
+                result.items as TraktItem[],
+                mediaType,
+                listId.endsWith('-popular')
+              ),
+              mediaType
+            );
       const parsed = {
         listId,
         page,

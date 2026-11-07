@@ -1,0 +1,789 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=250",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a670941cdda614f76996b2f4f224c7e1\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/n493br0MLJHASsqEsUwG5PvxDkN.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2024-04-07",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://kanteiskill.com",
+    "id": 237150,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 8010712,
+      "name": "Fujimiya",
+      "overview": "With a gang of bandits making trouble in Canarre, Ars happens upon a group of unusual strangers.",
+      "vote_average": 7,
+      "vote_count": 1,
+      "air_date": "2026-11-01",
+      "episode_number": 30,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 237150,
+      "still_path": "/5IMi39jvED2p87HVN59meQZaOt0.jpg"
+    },
+    "name": "As a Reincarnated Aristocrat, I'll Use My Appraisal Skill to Rise in the World",
+    "next_episode_to_air": {
+      "id": 8019547,
+      "name": "Off to Save Ars",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 31,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 237150,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 94,
+        "logo_path": "/7RNXnyiMbjgqtPAjja13wchcrGI.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 160,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 201,
+        "logo_path": "/qNooLje0YQh1y3y9LUM2Y5QCtiF.png",
+        "name": "CBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 896,
+        "logo_path": "/qfUzYnpnN5bnd2bqGUH0OlAMell.png",
+        "name": "Tulip Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1559,
+        "logo_path": "/ihcrBmZYwCmT3YZ7ykNmFgtj2oA.png",
+        "name": "SBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2460,
+        "logo_path": "/34sNEcsgcTAuDidRMrgxdfNyVjL.png",
+        "name": "BSN",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2461,
+        "logo_path": "/b4Ivxqz6UY0EogjYc09Y22ctC6F.png",
+        "name": "tys",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2462,
+        "logo_path": "/7zXfwh5ZhFqvdOWgWX80weU6Sqb.png",
+        "name": "NBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3658,
+        "logo_path": "/sJwRsE1lfMwAwYZi1OtRfn7V03t.png",
+        "name": "HBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3705,
+        "logo_path": "/6vOG1oEihq6eStEzPnOGal2AIV9.png",
+        "name": "RKK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3969,
+        "logo_path": "/nhCsLIGjzIIp6jIFCdHN0cQEzjP.png",
+        "name": "i-Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3970,
+        "logo_path": "/9coKtCf4jSNCdSqGveVFyzvjrZt.png",
+        "name": "SBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3971,
+        "logo_path": "/zoFgqDe0v8svSA01yExlhcG1Bss.png",
+        "name": "IBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3972,
+        "logo_path": "/rL2IlndcEiQnIbym5EoSEM7rGlx.png",
+        "name": "BSS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3973,
+        "logo_path": "/dh4E8hGvqD9Xqu51kbqUU06UKbt.png",
+        "name": "MRO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3974,
+        "logo_path": "/yMQxsmGs88q54bslmcSeXlmpObC.png",
+        "name": "OBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3975,
+        "logo_path": "/6ACZlk44MWsIIwYHxjRGXGKlpRb.png",
+        "name": "TUF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3977,
+        "logo_path": "/sGMMrdCmptaLLwJX7CsXTDaduLO.png",
+        "name": "RSK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3978,
+        "logo_path": "/zOz9LK6WWLUWGuG0fthzDzCIXlA.png",
+        "name": "TUY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3979,
+        "logo_path": "/6oIE2LmtONObnw5wtFO4IIXwgkb.png",
+        "name": "tbc",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4748,
+        "logo_path": "/o5Hlt7ZXJPEm4Qrx2Pl2rtc9A5y.png",
+        "name": "RKB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4792,
+        "logo_path": "/8kzeHaKeW3gZubs3cqlGWFvfJI7.png",
+        "name": "KUTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4859,
+        "logo_path": "/fhQU8sGOoV877wDfHmPZftKldvE.png",
+        "name": "RBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6171,
+        "logo_path": "/vxemHAgdzVCbvAFcO84MWg2wnXC.png",
+        "name": "UTY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6172,
+        "logo_path": "/mKslL0MTHHt9ukugWOv3Vh8Tn0E.png",
+        "name": "RCC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6173,
+        "logo_path": "/92bKXaygjtTwAbX4AH2UnLJN2Xe.png",
+        "name": "MRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6174,
+        "logo_path": "/aawphEBuBGT9RVP6xG3BZV8NOCw.png",
+        "name": "ATV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6175,
+        "logo_path": "/fVUs2F2qTjOzJ9oP0jeqtpZEAai.png",
+        "name": "MBC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 36,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "転生貴族、鑑定スキルで成り上がる",
+    "overview": "Ars Louvent is reincarnated in another world as the young son of a minor noble who owns a small domain. Ars is not particularly strong or intelligent, but he was born with the Appraisal Skill that's able to see others' abilities and statuses. He uses his skill to find the best hidden talents in the world to make their small, weak domain into the best.",
+    "popularity": 24.9911,
+    "poster_path": "/jsugIfxS7mg7G254ZOi6b4jDIgM.jpg",
+    "production_companies": [
+      {
+        "id": 172950,
+        "logo_path": "/nNFRxh5PkH51TXGG8xqXs3lQRAl.png",
+        "name": "studio MOTHER",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173132,
+        "logo_path": "/yV9EORK2ZwdMg45K10PuVh6LlM3.png",
+        "name": "Bandai Namco Filmworks",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 98553,
+        "logo_path": "/qqyXcZlJQKlRmAD1TCKV7mGLQlt.png",
+        "name": "Crunchyroll",
+        "origin_country": "JP"
+      },
+      {
+        "id": 210002,
+        "logo_path": "/lSRv9WrNL5aZ9h2vWEEbWXwbuNg.png",
+        "name": "Tencent Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173133,
+        "logo_path": "/pB59XO7veWGZjzK4MLGKWxYecD.png",
+        "name": "Bandai Namco Music Live",
+        "origin_country": "JP"
+      },
+      {
+        "id": 181285,
+        "logo_path": "/xHaPH1Yp50iEH7HOEwhxKTYRC6w.png",
+        "name": "Bushiroad Move",
+        "origin_country": "JP"
+      },
+      {
+        "id": 133695,
+        "logo_path": "/xhbd4zDn0iJ1vwj9TcSvtAFEc6w.png",
+        "name": "U-NEXT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12384,
+        "logo_path": "/qNooLje0YQh1y3y9LUM2Y5QCtiF.png",
+        "name": "CBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "dentsu",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2024-04-07",
+        "episode_count": 36,
+        "id": 360897,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/yF9t1erLr7qZu17cTiXggyUcS3R.jpg",
+        "season_number": 1,
+        "vote_average": 7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.437,
+    "vote_count": 71,
+    "external_ids": {
+      "imdb_id": "tt31975847",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 434704,
+      "tvrage_id": null,
+      "wikidata_id": "Q118218872",
+      "facebook_id": null,
+      "instagram_id": "kanteiskill_official",
+      "twitter_id": "kanteiskill"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "As a Reincarnated Aristocrat, I'll Use My Appraisal Skill to Rise in the World",
+            "overview": "Ars Louvent is reincarnated in another world as the young son of a minor noble who owns a small domain. Ars is not particularly strong or intelligent, but he was born with the Appraisal Skill that's able to see others' abilities and statuses. He uses his skill to find the best hidden talents in the world to make their small, weak domain into the best.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "異世界に転生した主人公アルス・ローベントは、小さな領地を持つ弱小貴族の子として生きることになった。アルスには特別な知力や武力はないが、生まれながらにして他人の能力・ステータスを見抜く“鑑定スキル”を手にしていた。そのスキルを活かして世に隠れた「逸材」を発掘し、弱小領地から最強の領地へと変貌させていく。心優しいアルスと、個性豊かな逸材たちの出会いと成長を描く異世界統一記が今、始まる！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "As a Reincarnated Aristocrat, I'll Use My Appraisal Skill to Rise in the World",
+            "overview": "Nach 35 Jahren eines gewöhnlichen Lebens ereilt ein Geschäftsmann der plötzliche Tod. Doch aus den Fesseln dieses Alltags erwacht er als Ars Louvent, Abkömmling einer bescheidenen Adelsdynastie, in einer anderen Welt. Obwohl er nicht besonders stark oder intelligent ist, muss er den Ländereien der Familie aus diversen Miseren helfen. Mit einer besonderen Begabung namens „Appraisal“ ausgestattet, vermag er die Stärken und Fähigkeiten seiner Mitmenschen auf den ersten Blick zu erkennen. Nun liegt es an ihm, jene Individuen mit außergewöhnlichen Talenten zu rekrutieren, die er mittels dieser Gabe aufspüren kann. Nur so kann er seiner Familie zu neuem Glanz verhelfen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "As a Reincarnated Aristocrat, I'll Use My Appraisal Skill to Rise in the World",
+            "overview": "Dans un pays où les nobles manient généralement leurs épées, Ars Louvent utilise sa compétence qui lui permet d'évaluer avec précision le potentiel latent des gens ! Ce jeune garçon réincarné en un fils de nobles œuvre à faire fructifier le modeste domaine de sa famille. Mais ce pouvoir apparemment anodin lui permettra de construire un territoire puissant lorsqu’il s’engage dans un voyage rempli de surprises.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "전생 귀족, 감정 스킬로 성공하다",
+            "overview": "이세계로 전생한 주인공 아르스 로벤트는, 작은 영지를 가지고 있는 약소 귀족 가문의 아이로 살게 되었다. 아르스에게 특별한 지력이나 무력은 없었으나, 태어나면서부터 다른 사람의 능력, 즉 스테이터스를 꿰뚫어 보는 '감정 스킬'을 가지고 있었다. 그 스킬을 활용해 세상에 잠들어 있는 '인재'를 발굴해, 약소 영지에서부터 최강의 영지로 변모시켜 나간다. 상냥한 아르스와, 개성 넘치는 인재들의 만남과 성장을 그리는 이세계 통일기가 지금 시작된다!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "转生贵族凭鉴定技能扭转人生",
+            "overview": "过着平凡人生的平凡上班族，某天准备出门上班时心脏病发，醒来时发现自己转生到异世界并成为了主人公「亚尔斯·罗本特」……也就是一个小领地的弱小贵族之子，展开了新的生活！亚尔斯虽然没有突出的智力或武力，但天生具备可以洞悉他人能力和状态的「鉴定技能」。利用这个技能，他发掘了世间隐藏的「逸材」，将弱小领地摇身一变成最强的领地。描写“心地善良的亚尔斯将与个性迥异的人材们相遇并逐渐成长”的异世界统一故事，即将开始！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "As a Reincarnated Aristocrat, I'll Use My Appraisal Skill to Rise in the World",
+            "overview": "O protagonista, Ars Louvent, renasceu como o filho de um nobre que governa um pequeno domínio... Ars não era particularmente forte ou inteligente, mas nasceu com a \"Habilidade de Avaliação\", que lhe permite enxergar as habilidades e status das pessoas. Com essa habilidade única, Ars embarca em uma jornada para identificar os talentos ocultos ao seu redor, com o objetivo de elevar seu fraco domínio a um novo patamar de excelência. Sua busca por transformação levará esse herdeiro a desbravar os limites do possível!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Na 35 jaar een gewoon leven sterft plotseling een zakenman. Maar uit de ketenen van dit dagelijkse leven ontwaakt hij als Ars Louvent, afstammeling van een eenvoudige aristocratische dynastie, in een andere wereld. Hoewel hij niet bijzonder sterk of intelligent is, moet hij de  familie  verschillende keren helpen. Uitgerust met een speciaal talent dat 'beoordeling' wordt genoemd, kan hij op het eerste gezicht de sterke punten en capaciteiten van de mensen om hem heen herkennen. Nu is het aan hem om die individuen met uitzonderlijke talenten te werven die hij met deze gave kan opsporen. Dit is de enige manier waarop hij zijn familie kan helpen haar glorie terug te krijgen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "As a Reincarnated Aristocrat, I'll Use My Appraisal Skill to Rise in the World",
+            "overview": "Un giovane, dopo essersi reincarnato nel corpo del nobile Ars Louvent, abitante di un altro mondo a lui sconosciuto, dovrebbe vivere come un debole aristocratico. Sia la forza fisica che l'intelligenza di Ars sono mediocri in entrambi i mondi, ma in questa realtà possiede l'abilità di valutazione, che gli permette di vedere il potenziale di qualsiasi persona. Utilizzando al meglio la propria capacità, il giovane cerca di riunire persone di talento al suo fianco.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "轉生貴族憑鑑定技能扭轉人生～繼承弱小領土後，招募優秀人才打造最強領土～",
+            "overview": "過著平凡人生的平凡上班族，某天準備出門上班時心臟病發，醒來時發現自己轉生到異世界並成為了主人公「亞爾斯．羅本特」…也就是一個小領地的弱小貴族之子，展開了新的生活！亞爾斯雖然沒有突出的智力或武力，但天生具備可以洞悉他人能力和狀態的「鑑定技能」。利用這個技能，他發掘了世間隱藏的「逸材」，將弱小領地搖身一變成最強的領地。描寫“心地善良的亞爾斯將與個性迥異的人材們相遇並逐漸成長”的異世界統一故事，即將開始！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chuyển Sinh Thành Quý Tộc Với Kĩ Năng Thẩm Định",
+            "overview": "Series phim kể về cuộc sống sau khi tái sinh từ một người làm công ăn lương bình thường thành Ars Louvent, 'con trai của một quý tộc'. Mặc dù không có tài về phép thuật hay kiếm thuật nhưng anh ấy có một kỹ năng mà không ai có: Thẩm định. Sử dụng khả năng này, Ars có thể xác định sức mạnh hiện tại của một người, tiềm năng của họ và tài năng của họ nằm ở đâu.\n\nVới mong muốn xây dựng một lãnh thổ hưng thịnh, Ars bắt đầu tìm kiếm những cộng sự tài năng. Một người nước ngoài bị đàn áp với thanh kiếm vô song, một nô lệ với tài năng ma thuật vô danh và một cậu bé nhút nhát với niềm khao khát kiến ​​thức không thể nguôi - những tài năng này hỗ trợ Ars rất nhiều trong công cuộc tạo ra lãnh thổ hùng mạnh nhất.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Ars Louvent se převtělí do jiného světa jako mladý syn drobného šlechtice, který vlastní malé panství. Ars není nijak zvlášť silný ani inteligentní, ale narodil se s dovedností Appraisal, díky níž je schopen vidět schopnosti a postavení ostatních. Svou dovednost využívá k tomu, aby našel nejlepší skryté talenty ve světě a udělal ze svého malého a slabého panství to nejlepší.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "As a Reincarnated Aristocrat, I’ll Use My Appraisal Skill to Rise in the New World",
+            "overview": "En una tierra en la que los nobles suelen blandir sus espadas, ¡Ars Louvent prefiere usar su habilidad Tasación! Únete a este noble y no demasiado fuerte joven en su viaje para convertir sus pequeños dominios en una fuerza a tener en cuenta, todo ello mientras recorre un mundo repleto de habilidades mágicas. Pero te avisamos: la habilidad Tasación de Ars es mucho más poderosa que cualquier espada y su viaje dará más giros que un guiverno en un laberinto.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "As a Reincarnated Aristocrat, I’ll Use My Appraisal Skill to Rise in the New World",
+            "overview": "Después de treinta y cinco años de una vida perfectamente ordinaria, un oficinista común y corriente de repente cae muerto... ¡solo para renacer en otro mundo! Ahora debe vivir como Ars Louvent, vástago de una familia noble menor y poseedor de una habilidad fabulosa: la evaluación, el poder de percibir las fortalezas y habilidades de los demás de un vistazo.¡Él también lo necesitará, porque hay muchos problemas que resolver en el territorio de la familia Louvent! Ars solo tiene una opción: ¡reclutar a las personas más talentosas que su habilidad pueda encontrar y ascender a nuevas alturas en su nuevo mundo!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Перерождение в аристократа со способностью анализа",
+            "overview": "Умерев, обычный японский офисный сотрудник переродился в другом мире как дворянин Арс Ловент. Хотя у юного Арса нет таланта ни к магии, ни к мастерству меча, всё же кое-чем похвастаться он может: Арс — единственный обладатель навыка Оценка, с помощью которого он способен определять достоинства и недостатки не только вещей, но и человека. Такой полезный навык пригодился бы во все времена, но особенно необходим он сейчас, когда ситуация в стране, где проживает Арс, не отличается стабильностью. Государственный аппарат погряз в коррупции, то и дело вспыхивают бунты недовольных жителей, а дворяне укрепляют свои поместья, готовясь к предстоящей войне. Вот и Арс решил, что, чтобы выжить, ему нужно собрать вокруг себя талантливых и сильных людей. Например, иностранца-изгоя, который мастерски владеет мечом; рабыню, обладающую непревзойденным магическим искусством; застенчивого мальчика, жаждущего знаний. Эти одарённые люди обязательно помогут Арсу сохранить в безопасности его земли!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Переродження в аристократа зі здатністю аналізу",
+            "overview": "Померши, звичайний японський офісний співробітник переродився в іншому світі як дворянин Арс Ловент. Хоча в юного Арса немає таланту ні до магії, ні до меча, все ж чимось похвалитися він може: Арс — єдиний володар навички Аналізу, за допомогою якої він здатний визначати достоїнства та недоліки не тільки речей, а й людей. Така корисна навичка пригодилася б в усі часи, але особливо необхідна вона зараз, коли ситуація в країні, де проживає Арс, не вирізняється стабільністю. Державний апарат загруз у корупції, раз у раз спалахують бунти незадоволених жителів, а дворяни укріплюють свої маєтки, готуючись до майбутньої війни. Тому Арс вирішив — щоб вижити, йому потрібно зібрати навколо себе талановитих і сильних людей. Наприклад, іноземця-вигнанця, який майстерно володіє мечем; рабиню, яка має неперевершені магічні здібності та сором’язливого хлопчика, який прагне знань. Ці обдаровані люди обов’язково допоможуть Арсу зберегти в безпеці його землі!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "轉生貴族憑鑑定技能扭轉人生",
+            "overview": "過著平凡人生的平凡上班族，某天準備出門上班時心臟病發，醒來時發現自己轉生到異世界並成為了主人公「亞爾斯·羅本特」. . . 也就是一個小領地的弱小貴族之子，展開了新的生活！亞爾斯雖然沒有突出的智力或武力，但天生具備可以洞悉他人能力和狀態的「鑑定技能」。利用這個技能，他發掘了世間隱藏的「逸材」，將弱小領地搖身一變成最強的領地。描寫\"心地善良的亞爾斯將與個性迥異的人材們相遇並逐漸成長\"的異世界統一故事，即將開始！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เกิดใหม่เป็นขุนนางขึ้นเป็นใหญ่ด้วยสกิลประเมิน",
+            "overview": "อัลส์ โลเวนต์ได้มาอาศัยในต่างโลกจากการเกิดใหม่ในฐานะทายาทขุนนางชั้นผู้น้อยแม้แต่ที่ต่างโลกเองเขาก็มีพลังกายและปัญญาในระดับธรรมดาไม่ต่างจากชาติก่อน แต่เขามีสกิลที่สามารถล่วงรู้ความสามารถแฝงของคนอื่นที่เรียกว่า “ประเมิน” มาตั้งแต่เกิด เพื่อปกป้องประชาชนของตัวเอง อัลส์จึงจะใช้ “สกิลประเมิน” แปลงโฉมดินแดนสุดกระจอกให้กลายเป็นดินแดนสุดแกร่ง---!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Tensei Kizoku, Kantei Skill de Nariagaru",
+            "overview": "Zwykły najemnik pewnego dnia umiera i odradza się jako Ars Louvent, syn szlachcica. Chociaż nie jest utalentowany w magii ani szermierce, ma jedną umiejętność, której nikt nie posiada - Ocenę. Korzystając z tej umiejętności, Ars może określić obecną siłę danej osoby, jej potencjał i to, czy wykorzystuje swoje talenty. Umiejętność ta jest szczególnie przydatna w obecnej sytuacji kraju. Rząd jest skorumpowany, bunty zdarzają się coraz częściej, a szlachta na całym świecie wzmacnia swoje fortyfikacje, przygotowując się do wojny. Mając to na uwadze, Ars również musi się przygotować, zbierając utalentowanych ludzi. Prześladowany cudzoziemiec, który nie ma sobie równych we władaniu mieczem, niewolnik z nieznanym talentem do magii i nieśmiały chłopiec z niezaspokojonym pragnieniem wiedzy - te cechy pomogą Arsowi stworzyć najpotężniejsze państwo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Като прероден аристократ, ще използвам уменията си за оценка, за да се издигна в света",
+            "overview": "Арс Луван се преражда в друг свят като млад син на дребен благородник, който притежава малък владение. Арс не е особено силен или интелигентен, но е роден с умението за оценка, което може да вижда способностите и статусите на другите. Той използва уменията си, за да открие най-добрите скрити таланти в света, за да превърне техния малък, слаб домейн в най-добрия.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Ars Louvent reencarna noutro mundo como o filho mais novo de um nobre menor, proprietário de um pequeno domínio. Ars não é particularmente forte nem inteligente, mas nasceu com a Habilidade de Avaliação, que lhe permite ver as capacidades e os atributos dos outros. Ele usa essa habilidade para descobrir os melhores talentos ocultos do mundo, com o objetivo de transformar o seu pequeno e fraco domínio no melhor de todos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Ars Louvent wordt gereïncarneerd in een andere wereld als de jonge zoon van een minderjarige edelman die een klein domein bezit. Ars is niet bijzonder sterk of intelligent, maar hij is geboren met de beoordelingsvaardigheid waarmee hij de capaciteiten en status van anderen kan zien. Hij gebruikt zijn vaardigheden om de beste verborgen talenten ter wereld te vinden en hun kleine, zwakke domein tot de beste te maken.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n493br0MLJHASsqEsUwG5PvxDkN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1215,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eR6AtgdINOCXccSgvPZWLFpleFw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2160
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cANCBWXhNYtgq6Iu3pZmTDGBWOf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/adbxf9S4H6kc0PMYm7BqEvolqzi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.317,
+          "height": 303,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aQiYM1K2rIbiblU9vnZNVBrWj7I.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 399
+        },
+        {
+          "aspect_ratio": 1.321,
+          "height": 536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5v0SYLgb6vgh9zqYz04Uy1ohDbP.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 708
+        },
+        {
+          "aspect_ratio": 1.342,
+          "height": 447,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lmuL3aSPT7YpEo8WBIfIIW6kaPC.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1788,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zOyRswpRCeXae0dHkH81U3dmx7s.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1192
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2340,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jsugIfxS7mg7G254ZOi6b4jDIgM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1560
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dHE6jNboN4KQBcb9wW0PMNPmwSk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iaSLIRACDiwjIrltU46FOM7e9HY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lGLPOqRUD8Jdh2i7y6kjvFkVztl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oZt4MdBFdrLjQ7207zziCGcfnNv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j8AUAu0YhbGQiWdLfgHlDAtBu9f.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mMOy2yyhtc39p9OfQFVF8Qujey2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sKrIojHT4uZvOtwNQuMZT7cY30b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

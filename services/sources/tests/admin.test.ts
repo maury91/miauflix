@@ -33,6 +33,7 @@ const setup = (handler: (url: URL) => Response | Promise<Response>) => {
   const dir = mkdtempSync(join(tmpdir(), 'sources-admin-'));
   dirs.push(dir);
   const created = createSourcesService({
+    animeListsUrl: '',
     dataDir: dir,
     resolveHost: fixtureResolver,
     keyFile: join(dir, '.key'),
@@ -76,9 +77,13 @@ it('lists the built-in providers in priority order', async () => {
     ['maury91-eztv-api', 30, 'builtin:miauflix', true],
     ['maury91-torrentio', 35, 'builtin:miauflix', true],
   ]);
-  expect(providers.slice(5).every(p => !p.enabled)).toBe(true);
+  expect(providers.find(p => p.id === 'maury91-animetosho')).toMatchObject({
+    priority: 45,
+    enabled: true,
+  });
+  expect(providers.slice(6).every(p => !p.enabled)).toBe(true);
   expect((await client.repositories()).map(r => [r.id, r.builtIn, r.providerCount])).toEqual([
-    ['builtin:miauflix', true, 8],
+    ['builtin:miauflix', true, 9],
   ]);
 });
 

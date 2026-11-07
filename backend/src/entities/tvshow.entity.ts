@@ -66,6 +66,13 @@ export class TVShow {
   })
   watching: boolean = false;
 
+  /**
+   * The catalog's season numbering the local seasons and episodes follow: null for TMDB's own,
+   * otherwise the catalog's AniList layout version. A different catalog value renumbers them.
+   */
+  @Column({ type: 'varchar', length: 32, nullable: true })
+  seasonLayoutVersion: string | null = null;
+
   @OneToMany(() => Season, season => season.tvShow)
   seasons: Relation<Season>[];
 

@@ -67,6 +67,9 @@ describe('catalog Drizzle migrations', () => {
     original.db.run(sql`DROP TABLE artwork_logo_cache`);
     original.db.run(sql`DROP TABLE artwork_logo_assets`);
     original.db.run(sql`DROP TABLE artwork_backdrop_cache`);
+    original.db.run(sql`DROP TABLE anime_episodes`);
+    original.db.run(sql`DROP TABLE anime_seasons`);
+    original.db.run(sql`DROP TABLE anime_layouts`);
     original.db.run(sql`DROP TABLE media_artwork`);
     original.db.run(sql`ALTER TABLE movies DROP COLUMN logo_candidates`);
     original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN logo_candidates`);
@@ -103,6 +106,9 @@ describe('catalog Drizzle migrations', () => {
     original.db.run(sql`DROP TABLE artwork_logo_cache`);
     original.db.run(sql`DROP TABLE artwork_logo_assets`);
     original.db.run(sql`DROP TABLE artwork_backdrop_cache`);
+    original.db.run(sql`DROP TABLE anime_episodes`);
+    original.db.run(sql`DROP TABLE anime_seasons`);
+    original.db.run(sql`DROP TABLE anime_layouts`);
     original.db.run(sql`DROP TABLE media_artwork`);
     original.db.run(sql`ALTER TABLE movies DROP COLUMN logo_candidates`);
     original.db.run(sql`ALTER TABLE tv_shows DROP COLUMN logo_candidates`);

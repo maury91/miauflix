@@ -1,0 +1,1718 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21578",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"35f35af856d50356f5e7817837ba0bbd\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oBUwRT7TbhTeFFTguY1s8RmmJpW.jpg",
+    "created_by": [
+      {
+        "id": 1215602,
+        "credit_id": "5257fd8219c29531db3223ba",
+        "name": "John de Mol",
+        "original_name": "John de Mol",
+        "gender": 2,
+        "profile_path": "/6bfVzvwF0EALA7f6Kya50eLXVzD.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2000-07-05",
+    "genres": [
+      {
+        "id": 10764,
+        "name": "Reality"
+      }
+    ],
+    "homepage": "https://www.cbs.com/shows/big_brother",
+    "id": 10160,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-10-01",
+    "last_episode_to_air": {
+      "id": 7768022,
+      "name": "Episode 41",
+      "overview": "Devens, Drew, and Taylor embark on the endgame. Who will win the three part Head of Household competition and earn the power to cast the last eviction vote of the season. The jury also returns to pick the winner of the three quarters of a million dollars grand prize!",
+      "vote_average": 5,
+      "vote_count": 3,
+      "air_date": "2026-10-01",
+      "episode_number": 41,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 65,
+      "season_number": 28,
+      "show_id": 10160,
+      "still_path": "/fh8K19TFlXRNGn6DFZbrpqTpsl4.jpg"
+    },
+    "name": "Big Brother",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "CBS",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 1014,
+    "number_of_seasons": 28,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Big Brother",
+    "overview": "American version of the reality game show which follows a group of HouseGuests living together 24 hours a day in the \"Big Brother\" house, isolated from the outside world but under constant surveillance with no privacy for three months.",
+    "popularity": 74.7719,
+    "poster_path": "/kvuNuOJSiPSBY1FDQHFGz1PIWUe.jpg",
+    "production_companies": [
+      {
+        "id": 35587,
+        "logo_path": "/k9a0975MfqCXRuGKCsOw8Kei2nt.png",
+        "name": "Endemol Shine North America",
+        "origin_country": "US"
+      },
+      {
+        "id": 93848,
+        "logo_path": "/i7eKIf41YiHBbHerkbyidSSG6op.png",
+        "name": "Endemol USA",
+        "origin_country": "US"
+      },
+      {
+        "id": 58895,
+        "logo_path": "/wl7Lotna3d59CEWZJrzqEbp4KCQ.png",
+        "name": "Fly on the Wall Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2006-06-21",
+        "episode_count": 3,
+        "id": 350403,
+        "name": "Specials",
+        "overview": "Various specials shown before a season of Big Brother starts.",
+        "poster_path": "/hyBYFJR91AbDoxH2yST4Q9spgj6.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2000-07-05",
+        "episode_count": 70,
+        "id": 61358,
+        "name": "Season 1",
+        "overview": "Big Brother 2000 was a near-exact port of the hit Netherlands (Holland) series of the same name. Every week, Housemates would nominate two fellow housemates and the two or more housemates with the most nominations were eligible for banishment. American viewers could then call a 1-900 number and cast a vote to banish a HouseGuest.",
+        "poster_path": "/4gDDoZHw0RwIab8ysVjEYU1FAF2.jpg",
+        "season_number": 1,
+        "vote_average": 6.8
+      },
+      {
+        "air_date": "2001-07-05",
+        "episode_count": 30,
+        "id": 61359,
+        "name": "Season 2",
+        "overview": "This season brings a complete reformatting of Big Brother 1. The introduction of the Head of Household (HOH). The HOH nominates two houseguests for eviction. The fellow contestants vote, and the player with the most votes is evicted. On finale night, all former houseguests returned to vote for who they think should win the grand prize.",
+        "poster_path": "/4YrmUJkQpZESiecadLBnmVv52D9.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2002-07-10",
+        "episode_count": 32,
+        "id": 64295,
+        "name": "Season 3",
+        "overview": "This season brings about more changes to the Big Brother format - the introduction of the Silver and Golden Power of Vetos.",
+        "poster_path": "/lesx69pMrvUhvxGymdMd1G6qRwj.jpg",
+        "season_number": 3,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2003-07-08",
+        "episode_count": 33,
+        "id": 64296,
+        "name": "The X-Factor",
+        "overview": "In this season's twist, ten of the thirteen houseguests are shocked to learn that they will compete alongside their exes. In addition, introduction of the Diamond Power of Veto and the sequestered Jury.",
+        "poster_path": "/sLx2w5v9mlXqxO7yo8OGxvtMFb8.jpg",
+        "season_number": 4,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2004-07-06",
+        "episode_count": 31,
+        "id": 64297,
+        "name": "Season 5",
+        "overview": "In this season's twists, there are two sets of pre-existing relationships in the house - secret twins and long lost siblings.",
+        "poster_path": "/6fpCGTLtsun42BlYIiQhgM9NJhu.jpg",
+        "season_number": 5,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2005-07-07",
+        "episode_count": 30,
+        "id": 64298,
+        "name": "Season 6",
+        "overview": "In this season's twist, every houseguest enters the house with a secret partner - believing they were the only pair.  If both can reach the end, the winner would receive a grand prize of $1,000,000 and the runner-up, $250,000.",
+        "poster_path": "/8mCzKnGPpzYB7R2Gk8Xca73KW9s.jpg",
+        "season_number": 6,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2006-07-05",
+        "episode_count": 28,
+        "id": 64299,
+        "name": "All Stars",
+        "overview": "Fourteen of the best and most iconic Big Brother Houseguests make their return to compete for the $500,000 grand prize.",
+        "poster_path": "/kqeEEd3mfk97tCz1KwsiD0TqW2H.jpg",
+        "season_number": 7,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2007-07-05",
+        "episode_count": 33,
+        "id": 64300,
+        "name": "Season 8",
+        "overview": "In the season's twists, 3 houseguests are shocked to learn their \"enemy\" will be entering the game - ex best friends, ex-boyfriends, and an estranged father and daughter.",
+        "poster_path": "/aX4whfndxWzXv53zK27tWY2dOwh.jpg",
+        "season_number": 8,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2008-02-12",
+        "episode_count": 33,
+        "id": 64301,
+        "name": "'Til Death Do You Part",
+        "overview": "In the season's twist, every houseguest would compete, be nominated, and be evicted as couples.",
+        "poster_path": "/2130Lpt1PAgdqSgfpfMtEyAcvMM.jpg",
+        "season_number": 9,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-07-13",
+        "episode_count": 29,
+        "id": 64302,
+        "name": "Season 10",
+        "overview": "",
+        "poster_path": "/w7kCwdLYRfs8N7OKEyIgefDAhG7.jpg",
+        "season_number": 10,
+        "vote_average": 9
+      },
+      {
+        "air_date": "2009-07-09",
+        "episode_count": 30,
+        "id": 64303,
+        "name": "Season 11",
+        "overview": "",
+        "poster_path": "/oHQrFyinJhSGhkNeouDokyfsCKl.jpg",
+        "season_number": 11,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2010-07-07",
+        "episode_count": 30,
+        "id": 64304,
+        "name": "Season 12",
+        "overview": "",
+        "poster_path": "/r9gO6uQIHqpP2cwAjcF83T01xl.jpg",
+        "season_number": 12,
+        "vote_average": 8.6
+      },
+      {
+        "air_date": "2011-07-06",
+        "episode_count": 29,
+        "id": 64305,
+        "name": "Season 13",
+        "overview": "In the twist of the summer, three Dynamic Duos of iconic previous houseguests make their return for another chance to win - Dick and Daniele, Jordan and Jeff, Rachel and Brendon.",
+        "poster_path": "/okro5msgU9mpdDt7kAlDeo1Bqbb.jpg",
+        "season_number": 13,
+        "vote_average": 9.5
+      },
+      {
+        "air_date": "2012-07-11",
+        "episode_count": 30,
+        "id": 64306,
+        "name": "Season 14",
+        "overview": "In the season's twist, four previous houseguests return as Coaches to build a Big Brother dream team - a $100,000 prize awaits the coach who picks the Big Brother winner.",
+        "poster_path": "/pdWkLzAbABMMDXDHgPrTDS2m9MX.jpg",
+        "season_number": 14,
+        "vote_average": 8.5
+      },
+      {
+        "air_date": "2013-06-25",
+        "episode_count": 36,
+        "id": 64307,
+        "name": "Season 15",
+        "overview": "",
+        "poster_path": "/tHysuXA8ARLb1DNfx8dL1ozFgrJ.jpg",
+        "season_number": 15,
+        "vote_average": 3.4
+      },
+      {
+        "air_date": "2014-06-25",
+        "episode_count": 40,
+        "id": 61360,
+        "name": "Season 16",
+        "overview": "This season's twist brings about the Battle of Block - two HOHs, 4 nominations, and the chance of an HOH being evicted.\n\nBig Brother 16 brings about the beginning of the HD era with brand new cameras and more mics than ever.",
+        "poster_path": "/vfA1QDIw9qqICy8J1dqiAhoZyMd.jpg",
+        "season_number": 16,
+        "vote_average": 9.4
+      },
+      {
+        "air_date": "2015-06-24",
+        "episode_count": 40,
+        "id": 67697,
+        "name": "Season 17",
+        "overview": "This season brings back the iconic Twin Twist with two sisters swapping out every few days, unbeknownist to the other houseguests. The Battle of the Block makes it return.",
+        "poster_path": "/6UeDfoJUH5HgvPeiizgPApnHEYi.jpg",
+        "season_number": 17,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2016-06-22",
+        "episode_count": 42,
+        "id": 77904,
+        "name": "Season 18",
+        "overview": "",
+        "poster_path": "/52tlRQgp1XncC41oJ1WCMxrKWn0.jpg",
+        "season_number": 18,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2017-06-28",
+        "episode_count": 39,
+        "id": 89873,
+        "name": "Season 19",
+        "overview": "Season 19's new twist is called “Summer of Temptation,” where the Houseguests will be challenged like never before as they embark on a season of tempting offers that could give them money, power and safety in the game. But, they will need to be careful, because for every temptation taken, there will be a consequence to face. This season's house reflects the temptation twist with words like Money and Revenge hanging on the wall, constantly reminding the Houseguests that the game never stops.",
+        "poster_path": "/chYOmdnKAWhUWZznqB8rM0UL7US.jpg",
+        "season_number": 19,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2018-06-27",
+        "episode_count": 40,
+        "id": 105532,
+        "name": "Season 20",
+        "overview": "It's the Summer of Technology with the house decked out in high-tech. The BB App Store gets it start, as Houseguests purchase upgrades to improve their game. Plus, the H@cker enters the game to shake things up.",
+        "poster_path": "/nOy55vxk8EVampW2kOQYXlVxYiR.jpg",
+        "season_number": 20,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2019-06-25",
+        "episode_count": 40,
+        "id": 126755,
+        "name": "Season 21",
+        "overview": "This season Houseguests get a special entry into Camp Big Brother, a rustic summer camp with secrets. A summer filled with Camp Directors, Comebacks, Field Trips, and Pranks.",
+        "poster_path": "/9CBmRTky8KhQqoCdqGNTdEOvPkN.jpg",
+        "season_number": 21,
+        "vote_average": 4.2
+      },
+      {
+        "air_date": "2020-08-05",
+        "episode_count": 37,
+        "id": 157231,
+        "name": "All Stars 2",
+        "overview": "Sixteen former Houseguests return to the game for a second chance at the grand prize of $500,000.",
+        "poster_path": "/xjYmFkRqgSdjoFRGhVPf11xadWe.jpg",
+        "season_number": 22,
+        "vote_average": 4.9
+      },
+      {
+        "air_date": "2021-07-07",
+        "episode_count": 37,
+        "id": 199298,
+        "name": "Season 23",
+        "overview": "",
+        "poster_path": "/dKPrxiXlx6Wr07jRcjBuB6liUfg.jpg",
+        "season_number": 23,
+        "vote_average": 3.9
+      },
+      {
+        "air_date": "2022-07-06",
+        "episode_count": 34,
+        "id": 295273,
+        "name": "Season 24",
+        "overview": "",
+        "poster_path": "/6YLkwVnnmTGGgRncteebRCK5xtL.jpg",
+        "season_number": 24,
+        "vote_average": 3.8
+      },
+      {
+        "air_date": "2023-08-02",
+        "episode_count": 42,
+        "id": 341938,
+        "name": "Season 25",
+        "overview": "It is the Summer of the BB Multiverse. Three former Houseguests enter the house and unleash four universes onto the house. The Comic, Humili, Scary, and Scramble-verses unlock new twists and themed competition.",
+        "poster_path": "/vFYZvhzq5wbsmxm5K4a0csujxFu.jpg",
+        "season_number": 25,
+        "vote_average": 3.4
+      },
+      {
+        "air_date": "2024-07-17",
+        "episode_count": 39,
+        "id": 377959,
+        "name": "Season 26",
+        "overview": "This season is the Summer of Artificial Intelligence. A.I. bots  Ainsley and Jankie take over and introduce a brand new competion that changes the game - the A.I. Arena.",
+        "poster_path": "/f8tzIBe15aET5YwwwrCgHjX4WPz.jpg",
+        "season_number": 26,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2025-07-09",
+        "episode_count": 39,
+        "id": 425972,
+        "name": "Season 27",
+        "overview": "This season is the Summer of Mystery as the Houseguests enter the Hotel Mystère, a place where secrets lurk behind every door and nothing is as it seems.\n\nThis season celebrates the 25-year anniversary of the series as a whole.",
+        "poster_path": "/38e4O8KjQyBaOvRVDBIU5OTcFua.jpg",
+        "season_number": 27,
+        "vote_average": 4
+      },
+      {
+        "air_date": "2026-07-08",
+        "episode_count": 41,
+        "id": 518814,
+        "name": "Season 28",
+        "overview": "The theme of the summer is the BB Time Trip, sending Houseguests on a journey unlike anything ever seen before–from prehistoric times to iconic decades and unforgettable moments from Big Brother history.",
+        "poster_path": "/apBWBdAsNdZ2Igp1DQY9C6Ctogv.jpg",
+        "season_number": 28,
+        "vote_average": 5.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Expect the unexpected.",
+    "type": "Reality",
+    "vote_average": 4.9,
+    "vote_count": 275,
+    "external_ids": {
+      "imdb_id": "tt0251497",
+      "freebase_mid": "/m/03j5xv",
+      "freebase_id": null,
+      "tvdb_id": 76706,
+      "tvrage_id": 2787,
+      "wikidata_id": "Q2790662",
+      "facebook_id": "BigBrother",
+      "instagram_id": "cbs_bigbrother",
+      "twitter_id": "CBSBigBrother"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "American version of the reality game show which follows a group of HouseGuests living together 24 hours a day in the \"Big Brother\" house, isolated from the outside world but under constant surveillance with no privacy for three months.",
+            "homepage": "",
+            "tagline": "Expect the unexpected."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Большой брат",
+            "overview": "Идея реалити-шоу состоит в том, что несколько людей, называемых «хозяевами» или «гостями», живут вместе в специально созданном большом доме. В течение всего времени они изолированы от внешнего мира и не полностью посвящены в происходящее за его пределами, не имеют доступ к электронным устройствам. За участниками постоянно следят телекамеры установленные в доме, а также личные микрофоны, обязательные для ношения во время съемок. Участникам позволено иметь сексуальные контакты во время шоу. Каждый сезон длится не менее трех месяцев. Минимальное число участников проекта — 10. Чтобы выиграть финальный денежный приз, участник должен пройти еженедельные голосования и стать последним из «хозяев» на этом проекте.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Gran hermano (Estados Unidos)",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Fratele mai mare",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LB",
+          "iso_639_1": "lb",
+          "name": "",
+          "english_name": "Letzeburgesch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "האח הגדול 20",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Биг Брадър",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Великий брат",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "名人老大哥",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "빅 브라더",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "老大哥(美版)",
+            "overview": "《老大哥》（美国版，以下简称美版）是一档美国真人秀节目，改编自制作人小约翰·第摩尔于1997年创造的荷兰同名电视节目[1] 。 在本节目中，一群年龄、职业、家庭背景......等不同的人（称为房客）会共同住在一间特殊设计的房子，他们没有任何联络工具及方法，与外界完全隔离。 这些房客将透过每周的比赛及淘汰来决定最终的赢家，获胜者可以获得五十万美金（第二十三季为七十五万美金）。本节目的名称取自乔治·欧威尔的小说《1984》，因节目组甚至观众可透过屋中的摄影机监视房客的一举一动，犹如书中的老大哥而得此名。本节目在2000年的七月五日甫首播虽获得极大成功，但却不断地遭受负面评价及大众批评，导致节目在第二季时规则大改，变得更具竞争性。《老大哥》一直以来便是CBS旗下的热门节目，也为继《老大哥西班牙版》后，现今世界各地的《老大哥》中第二长寿的改编版本。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Realityprogramma waarin een groep mensen voor lange tijd wordt opgesloten in een huis dat volledig is uitgerust met camera's. De kijker kan de kandidaten volgen bij alles wat ze doen en zeggen. Privacy bestaat niet meer en geen geheim blijft verborgen. Big brother is watching you.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "名人老大哥",
+            "overview": "《老大哥》（美國版，以下簡稱美版）是一檔美國真人秀節目，改編自制作人小約翰·第摩爾於 1997 年創造的荷蘭同名電視節目 。\n\n在本節目中，一群年齡、職業、家庭背景. . . . . . 等不同的人（稱為房客）會共同住在一間特殊設計的房子，他們沒有任何聯絡工具及方法，與外界完全隔離。\n\n這些房客將透過每週的比賽及淘汰來決定最終的贏家，獲勝者可以獲得五十萬美金（第二十三季為七十五萬美金）。本節目的名稱取自喬治·歐威爾的小説《1984》，因節目組甚至觀眾可透過屋中的攝影機監視房客的一舉一動，猶如書中的老大哥而得此名。本節目在 2000 年的七月五日甫首播雖獲得極大成功，但卻不斷地遭受負面評價及大眾批評，導致節目在第二季時規則大改，變得更具競爭性。《老大哥》一直以來便是 CBS 旗下的熱門節目，也為繼《老大哥西班牙版》后，現今世界各地的《老大哥》中第二長壽的改編版本。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oBUwRT7TbhTeFFTguY1s8RmmJpW.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yneQQl9dtD6u29I9Z7Vr7sOv4cs.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/HmKMi8XfmMx3K7nlYL11W526FB.jpg",
+          "vote_average": 4.458,
+          "vote_count": 12,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bvAiJdiSCOjZsMXuIN63RDAQF9F.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1g75wOFC5krmqmpyEGOM1fymxdt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kipy6XxNUxbhOWfPeL0TpeJgNsd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pPVYYq6DE7CWtRCvEPWMPju2OAD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fWR0TodAaaOf2JjnXYkYiGMLl7Q.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4B2gLhckNDfv0qQQ38KuTxzX2Xb.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wxZlt85uZb7x5niVziweAugrITC.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 788,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3DpfHIgLYchSZACgWvwL4YMr8bn.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wRZWfnCjiTncPzcKaGLq3kTPkQb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bbLuv93yLthukjwMOj5SeK55ScH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pGlPNrXdxS0ygXHkOITPAe5FoeB.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kY8ciI1pR2sJrkZeGpR1gNxxGfB.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qwWk79MBuHAB5LCOpiEA5NEDl5a.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9v3z5HzGG4gIyxzTBplMOPbEO78.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/djv1TbAORySJ9G8KcYQ53RELWVm.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qZJpkUuFhz0fjac1AXKKs7wUdEE.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i88TgrCUL3gZtF4ZMi6oo8jLdtC.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2XDF5dt921I8MC5hGC3izidKdui.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e20GQ0HuULvq9gJrP2p2TlYCMo0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/57TJBDAecD3jKBpF0QvLFGPtdho.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zHP07dyHMemfstpPYdrHq7UB4RA.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b5Rb07HXgSjOlDRZSgUrbfxKpLk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/paERVzJ6U9a6jiNoQarlLHog5Ll.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9RBKkIYfXTMs0GEfNWsK2dkwQmK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AquoB3dyAj8ZaEeGGBZtAdUFFCn.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/44TPqcAnx5aBOy62zsQ4srbDVVY.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a0bs3eY761E1PBcYrUlSwSlobJM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wMJANweGApFLoEMDhNfLU2edmAV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8VIkDMNjZpyqLTzYn1EJP8mlYcm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lWMVg4w5Od3tc0lS8298oryp4Le.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5opryCsnXkbojIONvyKLWS9RWwY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xhuA5ldZ45j619mkLoTZd4BX0y3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uEoAeSLVQIMuWGGxr1vGMTPPvsj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/voFuJx0csoDAaUEY6WcCxJFUgDd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eJObjauCkfH0O8PtQWzcWtcrtgB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/grxh0kxKaG7i0AEXwOqDXb0VKdX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kpkKn4WFA7yPCwjFmzVcKrDsKIe.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1919
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sHWlvIa97mv3tra5zFkWUYzVpnX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7apaF0QTDMsiJ4g1yeDUE0JdVXx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9vsF9fIfWsZeScwzRcwCnEhS6UA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.403,
+          "height": 278,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qVAD789r56wPzjYApP8nIPdpzDs.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 946
+        },
+        {
+          "aspect_ratio": 1.764,
+          "height": 1290,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cCGGGu5q3hKcre9rKL7x1nzWcEr.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2275
+        },
+        {
+          "aspect_ratio": 3.836,
+          "height": 110,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qIelK51ZWZaLierV1HJ47Tc0uRv.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 422
+        },
+        {
+          "aspect_ratio": 1.807,
+          "height": 1283,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qNHxWAS2N6sd2m4qIwQd7g9y2B2.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2319
+        },
+        {
+          "aspect_ratio": 2.498,
+          "height": 273,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gJmVJPVX2TcsfOOAbubMXXiQjSb.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 682
+        },
+        {
+          "aspect_ratio": 2.712,
+          "height": 226,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q8U4DLYGy7rJywg4xcPJOE3KZ3g.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 613
+        },
+        {
+          "aspect_ratio": 1.747,
+          "height": 292,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oVp2Bvi3rFcfgDhsMZyCiGe2DPr.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 510
+        },
+        {
+          "aspect_ratio": 1.747,
+          "height": 292,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wRqHX1irbm30iVabACVfQOpLA2X.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 510
+        },
+        {
+          "aspect_ratio": 1.217,
+          "height": 419,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y8J32FK0MRAPTRw5koICaN1WfrH.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 510
+        },
+        {
+          "aspect_ratio": 1.839,
+          "height": 305,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m64JmQyr6LtQYA3XogkXQhTtmUL.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 561
+        },
+        {
+          "aspect_ratio": 1.784,
+          "height": 320,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6wjkXtr5qW8cTG5sLV12npTc4WP.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 571
+        },
+        {
+          "aspect_ratio": 3.035,
+          "height": 200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6CTBm2HHzUDfomNAAkilM7KRK73.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 607
+        },
+        {
+          "aspect_ratio": 1.81,
+          "height": 311,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uvp8RjBgHJKso8DGQtaJ45TOiH4.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 563
+        },
+        {
+          "aspect_ratio": 1.312,
+          "height": 369,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tzOrrxteGWvSA5bH8nR56zSEj7Q.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 484
+        },
+        {
+          "aspect_ratio": 1.694,
+          "height": 265,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q2p85q0jswmNGZVHp8t6mQdPid8.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 449
+        },
+        {
+          "aspect_ratio": 1.939,
+          "height": 296,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mVBkdE8RJWtse6afbnWIc7GuBsd.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 574
+        },
+        {
+          "aspect_ratio": 1.788,
+          "height": 749,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ma4JhpQTsbhIrIXGEtvJhqXmO1U.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1339
+        },
+        {
+          "aspect_ratio": 2.148,
+          "height": 298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sr9WU9AQkoGLo0voMNlbdiSHXps.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 1.4,
+          "height": 250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zDZU7uOd5hZinnzUjePhUTglUKz.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 350
+        },
+        {
+          "aspect_ratio": 1.793,
+          "height": 334,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vuLj5rplfwFOsyv0dXpKIqUwUPJ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 599
+        },
+        {
+          "aspect_ratio": 2.182,
+          "height": 726,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x9xgWmT6gdWqk5uB2cIOQ3v5zfp.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1584
+        },
+        {
+          "aspect_ratio": 2.106,
+          "height": 292,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cvdglaykvBScatrlPaQn0SsIdqO.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 615
+        },
+        {
+          "aspect_ratio": 1.753,
+          "height": 365,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vmyirHH9WKMf0Ehi2g9JzR0a8dM.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 1.499,
+          "height": 351,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7IhRqhDgTnvdWy7vN4e8sRGKLya.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 526
+        },
+        {
+          "aspect_ratio": 1.836,
+          "height": 456,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yOo27yYowZoTPaMan4xOtNhAle4.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 837
+        },
+        {
+          "aspect_ratio": 2.213,
+          "height": 287,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gvxHNL3dPXpulZzapC0II8FhcWT.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 635
+        },
+        {
+          "aspect_ratio": 1.812,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/78tqL3YayLGcrdOBcwb6o98shoS.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2354
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kvuNuOJSiPSBY1FDQHFGz1PIWUe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q2TMOpJITXP2sHd6CrBmO7FvYk1.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w47RwVbN3xu3f4xxVj135vfcWT4.jpg",
+          "vote_average": 5.476,
+          "vote_count": 21,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f8tzIBe15aET5YwwwrCgHjX4WPz.jpg",
+          "vote_average": 4.458,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6YLkwVnnmTGGgRncteebRCK5xtL.jpg",
+          "vote_average": 4.194,
+          "vote_count": 18,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wf5pbXxaXo5O2TqhsDlCVL9K1bP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8ZUfk4awqzBRZqtLzZWuOnu3xTa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/knNbtlqQPguy0PCvCbrcNnGJaeJ.jpg",
+          "vote_average": 3.294,
+          "vote_count": 17,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vFYZvhzq5wbsmxm5K4a0csujxFu.jpg",
+          "vote_average": 3.27,
+          "vote_count": 24,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dKPrxiXlx6Wr07jRcjBuB6liUfg.jpg",
+          "vote_average": 3.214,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kwThj8DRX0FB9ACIhggDUoUYcSt.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/je11q2VYHXUnQ7mZzcRWHBWZjf4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jKjoB7DR0rX6jlrI8Na0xPPONTw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1050,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bObC1zx3VGFVyqqCk9ynzp1TnUQ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 700
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/edg4HpfEuqbichCVGJKlUQ6JLXA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j6kj4apYO4XzidynZZ9X4cF8aNK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r7rxyXPFhq9fhYTZwT6OZlDsim7.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1zhZsZIR8M5wr0UqGuUisCxYWCt.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xEyFg9NelFgE147asqm7ClPOhJN.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2760,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3z1eKtApXsr0FbQAoHX0F8ATwZO.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1840
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fCRkFy3IvM0V1CHyg6qWOuO35Ny.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oPFWuS8d3MesLqGkaTqnoZNdie6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/irUpJgCV3FDSRHnhJSM6LQlE5jd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8zBO3IItiRKhSE1Qqfn6fB6Wxew.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5BGLtlWVWpcJj9TfayDchPS8X0x.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lCokjiutVhkflImrNt5EKjOCzYC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hU024e5fWZl2HGnYENzPHohoiIG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/FuUZUeeeKsDwUo7GUgSgqmQEO2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1768,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6x7B1HIXLgXhfLvz63zGBwKT2ho.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1179
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mFlI55qGJRQtOs7uomLSDPeFf2X.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tRhKwTlsmu4my4irepnGijjkjGX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sdYrFTfinbQi2ZVRFEDmCzXhFDZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1148,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4uoFpSYgjdIhD7pkGKiR7AmIkQ0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 765
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tlnSNrg5qpxgtowV3KZwsYshfEY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 683
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qxWEvp7g53Ik8sLhpSQRP9iQRFq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 683
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1768,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o8cw6wIFy08NkrZ2JgOFRbcsJcP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1179
+        }
+      ]
+    }
+  }
+}

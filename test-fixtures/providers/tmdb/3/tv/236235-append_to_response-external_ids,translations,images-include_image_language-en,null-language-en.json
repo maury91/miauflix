@@ -1,0 +1,1632 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11744",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"06cb1e03d1a3ed090114aada8bea7407\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yG1wltFmkX5c5ocACKfpX0tp3SY.jpg",
+    "created_by": [
+      {
+        "id": 956,
+        "credit_id": "655cf96b53866e00e2964980",
+        "name": "Guy Ritchie",
+        "original_name": "Guy Ritchie",
+        "gender": 2,
+        "profile_path": "/9pLUnjMgIEWXi0mlHYzie9cKUTD.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2024-03-07",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://www.netflix.com/title/81437051",
+    "id": 236235,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-03",
+    "last_episode_to_air": {
+      "id": 7492754,
+      "name": "Bring Me the Head",
+      "overview": "A furious Eddie plots his revenge — until Susie steps in. As the truth behind the break-in comes to light, the Horniman family is shaken to its core.",
+      "vote_average": 8.308,
+      "vote_count": 26,
+      "air_date": "2026-09-03",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 52,
+      "season_number": 2,
+      "show_id": 236235,
+      "still_path": "/hSxytnwBFWtSsSbJeyG1fCpPNRP.jpg"
+    },
+    "name": "The Gentlemen",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Netflix",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 16,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "GB"
+    ],
+    "original_language": "en",
+    "original_name": "The Gentlemen",
+    "overview": "When aristocratic Eddie inherits the family estate, he discovers that it's home to an enormous weed empire — and its proprietors aren't going anywhere.",
+    "popularity": 49.7299,
+    "poster_path": "/tw3tzfXaSpmUZIB8ZNqNEGzMBCy.jpg",
+    "production_companies": [
+      {
+        "id": 110336,
+        "logo_path": "/xofo0nJlKOHqTAjKA0Zni7Hi3l3.png",
+        "name": "Moonage Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 14,
+        "logo_path": "/m6AHu84oZQxvq7n1rsvMNJIAsMu.png",
+        "name": "Miramax",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2024-03-07",
+        "episode_count": 8,
+        "id": 359313,
+        "name": "Season 1",
+        "overview": "When aristocratic Eddie inherits the family estate, he discovers that it's home to an enormous weed empire — and its proprietors aren't going anywhere.",
+        "poster_path": "/f8t1kZx2g7yUjRhpJcSclGgiaP8.jpg",
+        "season_number": 1,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2026-09-03",
+        "episode_count": 8,
+        "id": 406822,
+        "name": "Season 2",
+        "overview": "It's been one year since Eddie and Susie joined forces to work together in Bobby's criminal empire overseas. As they drive to expand their enterprise, the decisions Bobby is making seem to be increasingly unsound. Now Eddie and Susie must decide whether to take action or risk losing it all, but unfettered ambition never ends well...",
+        "poster_path": "/rBzsL0kKGSepQ3iEYGxDMZQH3Wm.jpg",
+        "season_number": 2,
+        "vote_average": 8
+      },
+      {
+        "air_date": null,
+        "episode_count": 0,
+        "id": 547221,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 3,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Ambition can't be tamed.",
+    "type": "Scripted",
+    "vote_average": 7.883,
+    "vote_count": 1060,
+    "external_ids": {
+      "imdb_id": "tt13210838",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 426845,
+      "tvrage_id": null,
+      "wikidata_id": "Q115860329",
+      "facebook_id": null,
+      "instagram_id": "thegentlemen",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Gentlemen: La serie",
+            "overview": "Cuando Eddie hereda la finca de su aristocrática familia, descubre que alberga una enorme plantación de marihuana... y que sus propietarios no piensan marcharse.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Dżentelmeni",
+            "overview": "Kiedy arystokrata Eddie dziedziczy rodzinną posiadłość, odkrywa, że jest ona siedzibą narkotykowego imperium, a jego właściciele nigdzie się nie wybierają.",
+            "homepage": "",
+            "tagline": "Witamy w wyższych sferach."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "When aristocratic Eddie inherits the family estate, he discovers that it's home to an enormous weed empire — and its proprietors aren't going anywhere.",
+            "homepage": "",
+            "tagline": "Ambition can't be tamed."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Джентльмени",
+            "overview": "Успадкувавши сімейний маєток, аристократ Едді виявляє, що тут розташована величезна імперія марихуани, а її власники нікуди не збираються.",
+            "homepage": "",
+            "tagline": "Новий клас злочинців"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "젠틀맨: 더 시리즈",
+            "overview": "가족의 부동산을 물려받은 귀족 에디는 그곳이 거대한 대마초 제국의 본거지였음을 알게 된다. 그리고 그 운영자들이 한 발짝도 물러나지 않을 거라는 사실도.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Magnatas do Crime",
+            "overview": "O aristocrata Eddie herdou a propriedade da família, só para descobrir que há um império da maconha rolando lá nas terras. E os donos não vão arredar pé.",
+            "homepage": "",
+            "tagline": "Uma nova classe de criminosos."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Quand Eddie, un aristocrate, hérite du domaine familial, il y découvre un énorme empire de la beuh... Et les exploitants n'ont aucune intention de l'abandonner !",
+            "homepage": "",
+            "tagline": "La vie de château va vous monter à la tête !"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Los caballeros",
+            "overview": "Cuando el aristócrata Eddie hereda la finca familiar, descubre que alberga un enorme imperio de cannabis... y que sus propietarios no se van a ir a ninguna parte.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "السادة الأفاضل",
+            "overview": "عندما يرث \"إيدي\" الأرستقراطي عقار العائلة، يكتشف أنه يحتضن إمبراطورية عملاقة لتجارة الحشيش... والتي لن يتحرك أصحابها من مكانهم.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "السادة الأفاضل",
+            "overview": "عندما يرث \"إيدي\" الأرستقراطي عقار العائلة، يكتشف أنه يحتضن إمبراطورية عملاقة لتجارة الحشيش... والتي لن يتحرك أصحابها من مكانهم.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "瘋狂紳士幫",
+            "overview": "貴族公子艾迪繼承家族莊園後，發現這裏竟是某個大麻霸業的地盤，這下所有沾得上邊的人都想來分一杯羹。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "绅士们",
+            "overview": "贵族埃迪继承了家族地产，结果发现这里是一个巨型大麻帝国的老巢，而其所有者根本不打算离开。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "紳士追殺令",
+            "overview": "貴族公子艾迪繼承家族莊園後，發現這裡竟是某個大麻霸業的地盤，這下所有沾得上邊的人都想來分一杯羹。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Gospoda",
+            "overview": "Kad naslijedi obiteljsko imanje, aristokrat Eddie otkrije da se na njemu nalazi ogromno carstvo marihuane, a njegovi vlasnici ga ne namjeravaju ostaviti.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Gentlemani",
+            "overview": "Eddie po otci zdědí šlechtické sídlo, které ale slouží jako zástěrka pro milionový byznys s marihuanou. A jeho majitelé se vůbec nemají k odchodu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Da den adelige Eddie arver familiens ejendom, opdager han, at den er hjemsted for et enormt cannabisimperium – og at ejerne har tænkt sig at blive.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Wanneer de adellijke Eddie het familielandgoed erft, ontdekt hij daar een enorme wietplantage. En de eigenaren zijn niet van plan te vertrekken.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Jalosukuinen Eddie perii sukutilan ja huomaa pian, että se on valtavan kannabisimperiumin toimitila – eikä sen liikkeenharjoittajilla ole aikomustakaan poistua paikalta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Les Gentlemen",
+            "overview": "Après avoir hérité du domaine familial, l'aristocrate Eddie y découvre un grand empire du cannabis que ses propriétaires ne comptent pas abandonner.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Als der adlige Eddie das Familienanwesen erbt, stelle er fest, dass ein riesiges Marihuana-Imperium dazugehört – und die Betreiber sich nicht in die Suppe spucken lassen.",
+            "homepage": "",
+            "tagline": "Willkommen in der „High“ Society!"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ο αριστοκράτης Έντι ανακαλύπτει ότι η οικογενειακή έπαυλη που κληρονομεί ανήκει σε μια τεράστια αυτοκρατορία εμπόρων φούντας, οι οποίοι δεν σκοπεύουν να φύγουν.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "הג'נטלמנים",
+            "overview": "אדי האריסטוקרט יורש אחוזה משפחתית ומגלה שהיא כוללת גם אימפריית קנאביס ענקית – שבעליה לא מתכוונים ללכת לשום מקום.",
+            "homepage": "",
+            "tagline": "מעמד חדש של פושעים."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "द जेंटलमेन",
+            "overview": "रईसज़ादे एडी को पता चलता है कि विरासत में उसे जो जागीर मिली है, वहां से चरस साम्राज्य अपनी हुकूमत चलाता है - और उसे चलाने वालों का जगह छोड़ने का कोई इरादा भी नहीं है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Úriemberek",
+            "overview": "Amikor az arisztokrata Eddie megörökli a családi birtokot, rá kell döbbenie, hogy az egy hatalmas marihuánabirodalomnak ad otthont, a tulajdonosok pedig nem mennek sehová.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Saat Eddie si bangsawan mewarisi properti keluarga, ia mendapati bahwa tanah itu merupakan lokasi kerajaan ganja yang sangat besar—dan para pemiliknya tidak mau pergi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Quando l'aristocratico Eddie eredita le proprietà di famiglia, trova anche un enorme impero della marijuana... i cui proprietari non hanno nessuna intenzione di andarsene.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ジェントルメン",
+            "overview": "英国貴族の血を引くエディーは、代々受け継がれてきた屋敷を相続。実はその屋敷が巨大な大麻帝国の本拠地であることを知らされた彼は、やむなく大麻ビジネスの事業主たちと関わることに...。",
+            "homepage": "",
+            "tagline": "由緒正しき犯罪者たち。"
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Apabila aristokrat, Eddie mewarisi estet keluarganya, dia mendapati estet itu menempatkan empayar dadah yang sangat besar — dan pemiliknya enggan beredar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Når aristokratiske Eddie arver familiens eiendom, oppdager han at det er hjem for et enormt marihuanaimperium – hvis eiere har kommet for å bli.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Gentlemen: Senhores do Crime: A Série",
+            "overview": "Quando o aristocrata Eddie herda a propriedade da família, nem imagina que esta alberga um enorme império de erva... e que os proprietários estão lá para ficar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Gangsteri cu stil",
+            "overview": "După ce moștenește conacul familiei, aristocratul Eddie descoperă că acesta este sediul unui imens imperiu al marijuanei, iar proprietarii n-au de gând să plece.",
+            "homepage": "",
+            "tagline": "O nouă clasă de infractor."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Джентльмены",
+            "overview": "Аристократ по имени Эдди наследует родовое поместье и обнаруживает, что на его территории находится огромная конопляная империя, а переезжать ее владельцы не собираются.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "När aristokraten Eddie ärver ett familjegods upptäcker han en enorm cannabisodling på ägorna – och trädgårdsmästarna har inga planer på att flytta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "Nang manahin ng maharlikang si Eddie ang family estate nila, nalaman niyang isa na pala itong malakihang weed empire—at walang balak na umalis ang mga may-ari nito.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สุภาพบุรุษมาหากัญ",
+            "overview": "หนุ่มลูกผู้ดีอย่างเอ็ดดี้จะได้รับมรดกเป็นคฤหาสน์ประจำตระกูล ซึ่งเขามารู้ทีหลังว่าที่นี่คืออาณาจักรกัญชาอันยิ่งใหญ่ และบรรดาผู้มีสิทธิ์ทั้งหลายก็คงไม่ยอมปล่อยมือง่ายๆ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Aristokrat Eddie, kendine miras kalan aile mülkünün dev bir esrar imparatorluğuna yataklık ettiğini keşfeder. Üstelik bu imparatorluğun sahipleri bir yere gitmek istememektedir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Quý ông thế giới ngầm",
+            "overview": "Thừa kế bất động sản của gia đình, chàng quý tộc Eddie phát hiện ra rằng đó là nơi một đế chế cần sa khổng lồ ngự trị và người đứng đầu đế chế đó không chịu rời đi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "绅士们",
+            "overview": "贵族青年埃迪·霍尼曼继承家族庄园，却发现名下产业与庞大的大麻帝国相连。为守住家业，他与黑帮家族合作，在上流社会与犯罪世界之间周旋。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "ჯენტლმენები",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Aristokrat Eddie Horniman po očetovi smrti podeduje družinsko posestvo, pri čemer sprva ni vedel, da to vključuje tudi kmetijo, ki jo uporablja gangsterski sindikat za vodenje mamilarskih poslov - brez namena, da bi se izselili.",
+            "homepage": "",
+            "tagline": "Nov razred kriminalcev."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "Edward Horniman ha heretat inesperadament una finca d'unes 6.000 hectàrees i el títol de duc de Halstead en la lectura de l'últim testament del seu pare difunt. S'assabenta que la terra s'ha convertit en part d'un imperi de cànnabis dirigit per Susie Glass. Ha de navegar per un món de personatges eclèctics i perillosos amb contactes nefastos, alhora que intenta protegir la seva llar i mantenir-se amb vida.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Džentelmenai",
+            "overview": "Kai aristokratas Edis paveldi šeimos dvarą, jis sužino, kad jame gyvena didžiulė piktžolių imperija, o jos savininkai niekur nedingsta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Джентълмените",
+            "overview": "Историята се завърта около Едуард (Тео Джеймс) - син на херцог и капитан от силите на ООН, разположени по границата между Турция и Сирия, който е принуден да се завърне у дома заради смъртта на баща си. При отварянето на завещанието той разбира, че е предпочетен пред по-големия си брат Фреди за наследник на семейното имение и титла. Проблемът обаче е, че Фреди (Даниел Ингс) е затънал в дълбоки дългове към ливърпулски клан на дилъри на кокаин. Мистериозен човек иска да купи семейното имение на двойна или дори тройна цена, а за капак на всичко се появява една млада дама - Сузи Глас (Кая Скоделарио), която обяснява на Едуард, че е работила с баща му... Така се оказва, че главният герой е стопанин на скрита плантация за марихуана и е дълбоко обвързан с опасна и влиятелна гангстерска група.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Господа",
+            "overview": "Еди Халстид је неочекивано наследио имање од 15.000 јутара и титулу војводе од Халстеда од свог недавно преминулог оца, али сазнаје да је земља постала део царства које узгаја коров којим управља Боби Глас. Сада, он мора да се креће светом еклектичних и опасних ликова са злобним плановима, истовремено покушавајући да заштити свој дом и остане жив.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "دی جینٹلمین",
+            "overview": "ایک دولت مند وارث، ایڈی، کو پتا چلتا ہے کہ اسے ورثے میں ملنے والی جاگیر دراصل بھنگ (کینابس) کے کاروبار کی ایک سلطنت کا مرکز ہے—اور اسے چلانے والوں کا وہاں سے جانے کا کوئی ارادہ نہیں ہے۔",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "جنتلمن",
+            "overview": "وقتی ادیِ اشراف‌زاده ملک خانوادگی‌شان را به ارث می‌برد، متوجه می‌شود که آنجا محل یک امپراتوری عظیم علف‌های هرز است - و صاحبانش قرار نیست جایی بروند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Gentlemani",
+            "overview": "Eddie Horniman zdedí rodinné sídlo a spočiatku netuší, že je domovom drogového impéria riadeného syndikátom, ktorý ho neplánuje opustiť.",
+            "homepage": "",
+            "tagline": "Ambícia sa nedá skrotiť."
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yG1wltFmkX5c5ocACKfpX0tp3SY.jpg",
+          "vote_average": 7.888,
+          "vote_count": 19,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iJMSvEENvkgIEImhBSKmGCev15w.jpg",
+          "vote_average": 6.2,
+          "vote_count": 10,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/PqIW7PA74YBURz5slZkxc0K5Pl.jpg",
+          "vote_average": 5.566,
+          "vote_count": 15,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wVEageSjQ0nm0Gpmvw9aYCkKqIp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tsX8hgVS4Du84s0MBMIjawxMz1b.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6XntHNbRuQVVyrwi7uwaltSAHgY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yadQEqAYVtbssKIuKqkxsN3drNM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jQYIP6N5KtXL0pL41vTI4cdegOy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3tkjk3YxEiNF1IKGXVsZIuCp2Ln.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9s00N9eCRDKwDeKCpiWjH3NdMwA.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sEYeWgnx0RKWNsLKh9IyUNJPotF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 844,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8Nk1nqpNOUN7QDvGXfHSZQzqT8z.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/akJDsOzQX8XatQtBrq48PzlzFKp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/296vP6JgrXbBIjKlwHblABfAD0T.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lSLp3fwcLNFdtH1aTzezHFGv23f.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1330,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1GrPOdtPkaOB9RolZsHY5vSCsuD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2364
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y4lMiDT9LzC6c1i6aR4ONsEckPf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/feyYh1stm7FmJJUm2KfiyPZdBxE.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dxEbqGvOvNFFsZfnfn55v0I2lrG.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qkdcBahtiPa7tF8hVukvmXrA6CH.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 810,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ix6CpfYfGlj3pond9qro8qO3bCC.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1441
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2UTptUCms8tjMUWycUdcNjyEufq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yl9BzRHkqFOAxsQKflg5kdTCx7u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cWjTUEJR2m8u0OyHRaxHQZ03b9v.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kvE6yYrrAupGG316hW7P5gtAJWn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/maJ2s3leznIHu4Iwfj5oC7YxI78.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cyaxHE58z0mXcA8otcp35qB6yLc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eWzxDuLBoxCBWUU1LKzthDdtZ4H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/upfRw4xAV61SecQy8F4DDxUJpjW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pXMkphjW6627azDkoJV53QhHfMo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lwSHka2yJGk7uesu8IgTSIQ6zp6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wPPTTOgDvsXjYKIgWvmmVJWcaJG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ggO5WJqhRs3uDAjYEwds5rr587m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A1ldFcJepjuLjrJLcwcqJaSNT2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6PWcKdDVtt0nw8R5nHyyW6hUAzV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1846,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5EpeEgWRO3okBKEYMQadsBJ2fCU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7rPUQeZqxwKNbzPYQHkIklp48S6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 823,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z8hgYFIjC1J7gtcWiPTraPeTg15.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1463
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dj0nrEVWe7KIUTT4ioAfHQyrTwN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jLGHDkPdFAyH0FqZNgq6vTAkpNj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wN5hqyDt4fOL6IXOZLn88DPvAza.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rY1nwqKqSOpxbq1ZQohjwbeskPr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vVWvTfC2NomWaw7FEyLhWTqnIpn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fKTbwlRZ7rzOvsUq8WtYGsHAtRx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fG06LYp1yKHHOzzBt7hCqtlRcS3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.326,
+          "height": 780,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aenHDWwRK2d1b5LLtAP8ANKfsma.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2594
+        },
+        {
+          "aspect_ratio": 3.326,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2IWoFSHK77SedaqSWgws0YFYmdW.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1297
+        },
+        {
+          "aspect_ratio": 3.272,
+          "height": 206,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zBaAxkdlFix1xcvEln6CuTdV64U.png",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 674
+        },
+        {
+          "aspect_ratio": 2.201,
+          "height": 467,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6aItWX3a0IMtaetikcpXZA9N2vF.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1028
+        },
+        {
+          "aspect_ratio": 3.272,
+          "height": 206,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/haIZwTxgIGJmCeDhWJfALTRpxD6.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 674
+        },
+        {
+          "aspect_ratio": 3.762,
+          "height": 505,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yh6tPOKfMVtnoXwXb1vXaZuwnCf.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1900
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tw3tzfXaSpmUZIB8ZNqNEGzMBCy.jpg",
+          "vote_average": 5.732,
+          "vote_count": 69,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2l0gBLpjcWo4ivmbHUhFIw3KGDn.jpg",
+          "vote_average": 5.53,
+          "vote_count": 34,
+          "width": 1020
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8sQ0oDunlRpesa5vIO6UPhbJNxC.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4yPgQ3RXtgUcw2rTUQAmbskjjbT.jpg",
+          "vote_average": 4.722,
+          "vote_count": 18,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e5hw7bThIs8u6WBHjYHhwTIRsL2.jpg",
+          "vote_average": 4.692,
+          "vote_count": 34,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1260,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z3JRz5ad27V62UJuvDfHo8ueOhZ.jpg",
+          "vote_average": 4.218,
+          "vote_count": 23,
+          "width": 840
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eI9JBOFaJAiK3m90ebGQyyWMdqA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1778,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3ljA9p8mFu1AKWD1x4YUgEuHKiK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1778,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dsPjQHmqKnaETGlhGTvXJVIiezb.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/skiH7nzWDkNLlH1599SwO3UgCR4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dPireOT9TGScSOCu1DepFyMQDjs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1778,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/frgS4vggcF6oJaEk5LPbgcXv9fP.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1778,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fpMlJb014ezhxhiTP1Ilt2aiQ21.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9EC6lN4cr4NQTIurf4OS7ciLXvx.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uFD7IsgZL95hBrWAtJZemQS5kxH.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9TxewNDFTZEFdj41I8BWOyddYKa.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aZ4J1PEa9Le5kYR7ozupsq45Zho.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iOQUkgHNmJMmPfOyM6zqSYT1KBz.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9HXYum6j5lktV6GSZ1tGx9fFVXL.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yj0yK67313jvkREezv5MxT7plTF.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vUYqQFlQx9Tg4jjaWoiW99dk62F.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1260,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c2aO764YSDdHlWi4ix7xJoJ419C.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 840
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1rJImEUyKO8PBNTrj0nz8oDTBnm.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2731,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2VV9Kh5FDrePHZP0WRDFmG3SxTL.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1821
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1778,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fGBPDAe2cyjomyYeEg1waiCkEKP.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1778,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1uQhmZOpApvym3wBKSD7JK3x5L6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iFoOqKCfTZ8SryL44QR90HZnczP.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3UvykSUMc1PWYukeOhjrsgZsD8e.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o79sjpL7oa1eSzR931TgZ3BojJP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 845,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3nnwl5N0qn0UB8YG4SKvBi5xWqH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 563
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bXlYOBfkIsNVoZZsCEjK2SqDTpC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s06gtSKkvSTbvZy9yKF1erGzof7.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lvBlkX8IczAM21H4r3bazrqqtY6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qOHLb8KOcFxAD2xpCvEvs69AK8R.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oTeXAourivwve1UbaACbcsowdA2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/roo9Sb6dHQEZukIDL2964AMsWXP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oeZaFEkNncWa21FfVNNvXPmwgaq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

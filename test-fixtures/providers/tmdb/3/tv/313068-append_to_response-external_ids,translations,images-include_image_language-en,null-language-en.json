@@ -1,0 +1,479 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=11674",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f3a6dc379cc5a04a67d83a8ad5f0e6b6\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/hEE9n9tZAjoT3eE5lL4MhZZ2DbB.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-10-05",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://horemajo-anime.com",
+    "id": 313068,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-02",
+    "last_episode_to_air": {
+      "id": 7895674,
+      "name": "To Be a Witch",
+      "overview": "As time passes, Rose begins to realize the impact Harij is having on her life. However, to live as a witch...",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-02",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 313068,
+      "still_path": "/dOhwiMk8Mb0xrN6UuswpwjRAsH0.jpg"
+    },
+    "name": "Hello, I Am a Witch and My Crush Wants Me to Make a Love Potion!",
+    "next_episode_to_air": {
+      "id": 7895677,
+      "name": "Episode 6",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-09",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 313068,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 173,
+        "logo_path": "/fERjndErEpveJmQZccJbJDi93rj.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "どうも、好きな人に惚れ薬を依頼された魔女です。",
+    "overview": "Rose, a lone witch who lives quietly by the lake, is asked by the knight she secretly loves to brew a love potion—for someone else. Though heartbroken, she cannot refuse him, choosing instead to treasure the fleeting time they spend together gathering ingredients. And as the days quietly slip by, Rose finds herself clinging to each shared moment, dreading the day the potion is finally complete.",
+    "popularity": 9.6972,
+    "poster_path": "/jBb1VBvfCdM6HXeMANGDkzu99Kx.jpg",
+    "production_companies": [
+      {
+        "id": 35970,
+        "logo_path": "/wsDZfj69ISXuw5iytdZjSV8tRGa.png",
+        "name": "diomedéa",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 62866,
+        "logo_path": "/uYawQ0Lb8smRXNNCoq8gTHG92Pz.png",
+        "name": "Futabasha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3363,
+        "logo_path": "/sj3vD7n63bTCih7bcf6GnWvRf1Q.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 17981,
+        "logo_path": "/8UABNMysukRi4udTHYxcNUMbPR1.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      },
+      {
+        "id": 192573,
+        "logo_path": "/naTpOY8AjRtgBw0JXafrhAD8ZBT.png",
+        "name": "BS Nippon Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 313255,
+        "logo_path": "/voNSuFIwWoB4aJiySGXpDe2HLdJ.png",
+        "name": "SAND B",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-05",
+        "episode_count": 12,
+        "id": 498494,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/96ywNgKOgciVt33MFTaRLBg8Xnd.jpg",
+        "season_number": 1,
+        "vote_average": 10
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 9.2,
+    "vote_count": 6,
+    "external_ids": {
+      "imdb_id": "tt43650300",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 473460,
+      "tvrage_id": null,
+      "wikidata_id": "Q137993799",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "horemajo_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Hello, I am a Witch and my Crush Wants me to Make a Love Potion!",
+            "overview": "“Hazme una poción de amor”.\n\nY con esa sola frase, el amor secreto de la Bruja Buena del Lago por el apuesto Sir Harij termina en un corazón roto. Aun así, cuando él promete ayudarla a reunir los ingredientes, Rose se siente emocionada por la oportunidad de contemplar a un hombre con el que normalmente nunca tendría la oportunidad de interactuar. Ella aprende a preparar su acelerado corazón para sus habituales y forzadas conversaciones... pero, ¿qué debe hacer cuando él se presenta inexplicablemente en su puerta con pan y un frasco de mantequilla de manzana?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Hello, I am a Witch and my Crush Wants me to Make a Love Potion!",
+            "overview": "\"Eu quero que você faça uma poção do amor\". É assim que, depois de alimentar um amor por quatro anos, a Bruxa Bondosa do Lago acaba com seu coração partido. Para aumentar o pouco tempo que resta para seu crush partir pra outra, Rose envia Harij, o apaixonante cavaleiro real, em uma jornada em busca dos ingredientes da poção. Isso faz com que ela ganhe ainda mais atenção do que imaginava, já que ele a visita todos os dias para... alimentá-la?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Hello, I Am a Witch and My Crush Wants Me to Make a Love Potion!",
+            "overview": "Rose, a lone witch who lives quietly by the lake, is asked by the knight she secretly loves to brew a love potion—for someone else. Though heartbroken, she cannot refuse him, choosing instead to treasure the fleeting time they spend together gathering ingredients. And as the days quietly slip by, Rose finds herself clinging to each shared moment, dreading the day the potion is finally complete.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "「惚れ薬を作ってほしい」湖に住む魔女ロゼは、密かに想いを寄せていた騎士ハリージュから、その一言を告げられる。彼が想っているのは、自分ではない誰か――その現実に、ロゼは失恋する。それでも彼の依頼を断れず、惚れ薬が完成するまでの間だけでも一緒にいられたらと、切ない想いを胸に日々を重ねていくロゼ。叶わぬ恋だとわかっていても、想いは消せない。これは、不器用な引きこもり魔女×世話焼きな生真面目騎士。惚れ薬をきっかけに紡がれる、切ない恋物語。",
+            "homepage": "",
+            "tagline": "“失恋”から始まる、少し不器用で切ない恋物語。"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Hello, I am a Witch and my Crush Wants me to Make a Love Potion!",
+            "overview": "Die Hexe Rose, die einsam auf einem See lebt, wird von einem Ritter, in den sie insgeheim verliebt ist, beauftragt, einen Liebestrank zu brauen. Trotz gebrochenen Herzens lehnt sie seine Bitte nicht ab und schickt ihn auf eine endlose Zutatensuche, um möglichst viel Zeit mit ihm zu verbringen. Rose klammert sich an diese gemeinsamen Momente, während der Tag der Fertigstellung des Tranks naht.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Я ведьма, которую возлюбленный попросил создать любовное зелье",
+            "overview": "Глубоко в лесу, на берегу озера, стоит уютный и довольно захламленный домик, в котором живет таинственная ведьма, внушающая страх. На самом деле это прекрасная молодая женщина по имени Роуз, которая научилась искусству приготовления зелий у своей мудрой бабушки. Роуз дорожит своей уединенной жизнью, но в ее сердце живет тоска по красивому рыцарю, которого она однажды видела, сэру Хариджу Азму.\n\nВ течение четырех лет чувства Роуз к Хариджу не угасали, но она может никогда не действуйте в соответствии с ними; ведьмы живут вне человеческих дел и не принадлежат ни стране, ни человеку. Поэтому, когда Харидж внезапно появляется на пороге ее дома в поисках приворотного зелья, Роуз удивлена и убита горем. Хотя сердце благородного рыцаря покорила другая женщина, Роуз решает помочь ему. Но прежде чем приготовить зелье, Роуз отправляет Хариджа на серию нелепых заданий по каждому ингредиенту, надеясь отсрочить неизбежное и насладиться их мимолетным времяпрепровождением вместе.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "你好，我是受心上人所托来做恋爱药的魔女。",
+            "overview": "“希望你能帮我制作迷情药”隐居在湖畔的魔女萝赛，从她暗恋的骑士哈利玖口中听到了这句话。他心里挂念着别人，而非自己——面对这一现实，萝赛失恋了。即便如此，她依然无法拒绝他的委托。心想哪怕只在迷情药完成前的这段时间里能和他待在一起也好，萝赛将这份苦涩的爱恋深藏心底，度过着每一天。哪怕明知这是一场无望的单恋，这份心意也无法抹去。这是一位笨拙的家里蹲魔女×一位爱照顾人又一本正经的骑士。以迷情药为契机交织而成的，令人揪心的恋爱物语。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "안녕하세요. 반한 사람에게 사랑의 묘약을 의뢰받은 마녀입니다.",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "你好,身為魔女的我,被心上人委託製作迷情藥",
+            "overview": "住在森林湖畔小屋、以製藥為生的「湖畔『善良』魔女」羅賽。某天，她暗戀已久的騎士海利朱·亞茲前來委託製作迷情藥。得知這個訊息的羅賽便知道她失戀了。雖然不想面對事實，但這個請求無論如何都無法拒絕。為了哪怕多一點和他的相處，羅賽便以製藥需要繁瑣材料為由，拜託海利朱代為收集。起初，海利朱對魔女心存戒備，但在一次次相處之後，他逐漸意識到她並不是魔女，而是一名普通的女性。此後便不管風吹日曬都會主動拜訪羅賽的住所。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Love Potion, la sorcière mal-aimée",
+            "overview": "Rose, une sorcière solitaire vivant recluse au bord d'un lac, est sollicitée par le chevalier qu’elle aime en secret. Mais ce dernier lui demande de concocter un philtre d’amour ! Le cœur brisé, elle ne peut pourtant lui refuser cette faveur. En attendant le jour fatidique où le philtre sera prêt, elle profite de passer du temps avec lui en l'envoyant chercher toutes sortes d'ingrédients.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Hello, I am a Witch and my Crush Wants me to Make a Love Potion",
+            "overview": "Rose, una bruja solitaria que vive tranquilamente junto al lago, recibe la petición del caballero al que ama en secreto de preparar una poción de amor... para otra persona. Aunque con el corazón roto, no puede negarse y prefiere atesorar el fugaz tiempo que pasan juntos reuniendo los ingredientes. Y mientras los días transcurren silenciosamente, Rose se aferra a cada momento compartido, temiendo el día en que la poción esté finalmente lista.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Rose, een eenzame heks die rustig aan het meer woont, wordt door de ridder van wie ze heimelijk houdt gevraagd een liefdesdrankje te brouwen – voor iemand anders. Hoewel diepbedroefd, kan ze hem niet weigeren, maar kiest ze ervoor om de vluchtige tijd die ze samen doorbrengen met het verzamelen van ingrediënten te koesteren. En terwijl de dagen stilletjes voorbij glijden, merkt Rose dat ze zich vastklampt aan elk gedeeld moment, uit angst voor de dag dat het drankje eindelijk compleet is.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Xin Chào, Tôi Là Phù Thủy Và Người Tôi Thầm Thương Muốn Tôi Chế Thuốc Tình Yêu!",
+            "overview": "Rose, một phù thủy sống một mình lặng lẽ bên hồ, được chàng hiệp sĩ mà cô thầm yêu nhờ chế một lọ thuốc tình yêu — nhưng là cho người khác. Dù tan nát cõi lòng, cô không thể từ chối anh, thay vào đó trân trọng khoảng thời gian ngắn ngủi hai người bên nhau thu thập nguyên liệu. Và khi những ngày tháng lặng lẽ trôi qua, Rose thấy mình bám víu vào từng khoảnh khắc chung, sợ hãi ngày lọ thuốc cuối cùng cũng hoàn thành.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "你好, 身為魔女的我, 被心上人委託製作迷情藥",
+            "overview": "住在森林湖畔小屋、以製藥為生的「湖畔『善良』魔女」羅賽。某天，她暗戀已久的騎士海利朱·亞茲前來委託製作迷情藥。得知這個訊息的羅賽便知道她失戀了。雖然不想面對事實，但這個請求無論如何都無法拒絕。為了哪怕多一點和他的相處，羅賽便以製藥需要繁瑣材料為由，拜託海利朱代為收集。起初，海利朱對魔女心存戒備，但在一次次相處之後，他逐漸意識到她並不是魔女，而是一名普通的女性。此後便不管風吹日曬都會主動拜訪羅賽的住所。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Rose, una strega solitaria che conduce una vita tranquilla in riva al lago, riceve dal cavaliere che ama in segreto la richiesta di preparare un filtro d'amore... per un'altra. Pur con il cuore a pezzi, non trova la forza di rifiutare e sceglie invece di custodire gelosamente quel poco tempo che trascorreranno insieme a cercare gli ingredienti. Così, mentre i giorni scorrono via silenziosi, Rose si aggrappa a ogni attimo vissuto al suo fianco, angosciata all'idea che la pozione sia finalmente pronta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hEE9n9tZAjoT3eE5lL4MhZZ2DbB.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2iIgfdcKWbuZxeBSpoQLYNyvvqr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2mRFYYyMPI62nhZRGWmmN4eTC6I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/LyHz9iquhOQqd5b5dIZNHEstxm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4eBD2HzXMMFOrlPJRU0WZOevoLC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1919
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.241,
+          "height": 531,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5D9kwwmONWYhWiAAL0jMZ83Skgz.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1190
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jBb1VBvfCdM6HXeMANGDkzu99Kx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/96ywNgKOgciVt33MFTaRLBg8Xnd.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cm6pe7uXKJie0LxVlmbFy5qEVtO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4uEmg13gXfA9wz8DYeYHMLpIXaf.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2tPH9wbPdX0q2QAvH5zsjlxQHW6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

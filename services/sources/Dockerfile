@@ -15,6 +15,7 @@ COPY packages/contract/package.json packages/contract/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
 COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
+COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
 COPY services/list-service/package.json services/list-service/package.json
 COPY services/sources/package.json services/sources/package.json
 COPY services/media-load/package.json services/media-load/package.json
@@ -27,11 +28,13 @@ COPY packages/contract packages/contract
 COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
 COPY packages/vpn-guard packages/vpn-guard
+COPY packages/anime-mapping packages/anime-mapping
 COPY services/sources services/sources
 RUN npm run build --workspace @miauflix/source-metadata-extractor && \
     npm run build --workspace @miauflix/contract && \
     npm run build --workspace @miauflix/service-contracts && \
     npm run build --workspace @miauflix/service-configuration && \
+    npm run build --workspace @miauflix/anime-mapping && \
     npm run build --workspace @miauflix/vpn-guard
 
 FROM runtime AS development

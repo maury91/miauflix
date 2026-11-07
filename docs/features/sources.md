@@ -18,6 +18,12 @@ A provider is a website or service that helps find releases. Miauflix can search
 
 For TV shows, it can look for individual episodes or a whole-season download. A season pack contains separate episode files; support for two episodes combined into one video is a different, unfinished feature described under [Watching](watching.md).
 
+## Anime
+
+Anime is recognised from a public list that links TMDB titles to AniList and AniDB entries; no setting is needed. TMDB often lists several anime seasons (cours) as one long season, while release groups number each cour from 1 ("2nd Season - 07") or count from the first episode ("- 31"). Miauflix works out which cour and episode a TMDB episode is from the air dates, searches with the AniDB episode id where a provider supports it, and with the anime's romaji and English titles otherwise. It accepts a release only when its season and number fit, and finds the episode's file inside batch downloads.
+
+The AnimeTosho provider is on by default and is only used for anime; it marks the releases SeaDex recommends. Nyaa can be turned on as well. Specials and OVAs, a preference for recommended releases or particular groups, and Japanese audio by default are not implemented yet.
+
 ## Checking sources before playback
 
 An indexer's search result is only a candidate. Miauflix also inspects torrent information and verifies whether the source contains usable video. Playback considers quality and device compatibility, and can try another source when one is unusable.
@@ -55,6 +61,7 @@ Source searching runs in a separate service that can be deployed in Docker. Deve
 ## Implementation references
 
 - [Search planning and request budgets](../../services/sources/src/planner/planner.ts)
+- [Anime identity and release matching](../../services/sources/src/anime/)
 - [Implemented provider types](../../services/sources/src/providers/registry.ts)
 - [Provider management](../../services/sources/src/providers/admin.ts)
 - [Torznab integration](../../services/sources/src/providers/torznab/torznab.ts)

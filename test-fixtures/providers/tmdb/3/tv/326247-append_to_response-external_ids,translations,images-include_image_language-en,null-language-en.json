@@ -1,0 +1,460 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"70495c8c5f93a94e228c692dbd31285c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/etpkY4qjoAGaTm1RbvvEIXDvfhT.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-11-26",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://www.foolnight.com",
+    "id": 326247,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": null,
+    "last_episode_to_air": null,
+    "name": "Fool Night",
+    "next_episode_to_air": {
+      "id": 7417080,
+      "name": "Episode 1",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-26",
+      "episode_number": 1,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 326247,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Netflix",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP",
+      "US"
+    ],
+    "original_language": "ja",
+    "original_name": "フールナイト",
+    "overview": "In a dark world full of despair, he chooses the path of transforming into a Spirit Flower — a plant into which humans transform. Should he continue living as a person, or discard his pain and start a new life as a plant? Which path would you choose in his situation?",
+    "popularity": 3.8132,
+    "poster_path": "/7kHLQwQZKbQOZJGx1mIDYIKeBYv.jpg",
+    "production_companies": [
+      {
+        "id": 3153,
+        "logo_path": "/yKZ9UarLSu9Y4Gpw33nKRQOPM7z.png",
+        "name": "SUNRISE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6689,
+        "logo_path": "/l96PFbGQ8kUs030SrkYdK4LQklE.png",
+        "name": "SHAFT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173132,
+        "logo_path": "/yV9EORK2ZwdMg45K10PuVh6LlM3.png",
+        "name": "Bandai Namco Filmworks",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9149,
+        "logo_path": "/isLUpud9N56ifftJZ4XvzwBBpoG.png",
+        "name": "Shogakukan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 178464,
+        "logo_path": "/tyHnxjQJLH6h4iDQKhN5iqebWmX.png",
+        "name": "Netflix",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-11-26",
+        "episode_count": 12,
+        "id": 524075,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/id15rr4VKQOrxBBBgMe7MfITzTT.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "In Production",
+    "tagline": "Living... there isn’t a single thing fun about it.",
+    "type": "Scripted",
+    "vote_average": 0,
+    "vote_count": 0,
+    "external_ids": {
+      "imdb_id": "tt43613803",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 479566,
+      "tvrage_id": null,
+      "wikidata_id": "Q140324706",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "foolnight_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Fool Night",
+            "overview": "Em um mundo sombrio e sem esperança, um homem resolve virar uma flor, assim como outros humanos que decidiram se transformar em plantas. Será que ele deve continuar vivendo como humano ou é melhor se libertar da dor e começar uma vida nova como planta? O que você faria no lugar dele?",
+            "homepage": "",
+            "tagline": "Viver... não tem graça nenhuma."
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Fool Night",
+            "overview": "In a dark world full of despair, he chooses the path of transforming into a Spirit Flower — a plant into which humans transform. Should he continue living as a person, or discard his pain and start a new life as a plant? Which path would you choose in his situation?",
+            "homepage": "",
+            "tagline": "Living... there isn’t a single thing fun about it."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Fool night",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "愚者之夜",
+            "overview": "　　一项将种子植入命不久矣之人的肉体、使其转化为植物的技术 ——“转花”。\n\n　　这，是人类为了存续下去而选择的手段。\n\n　　厚重的云层遮蔽天空，在永远被寒冬与黑夜笼罩的遥远未来地球 ——绝大多数植物早已枯萎殆尽，陷入缺氧危机的人类，构建起了一个依赖 “转花” 所产生的微薄氧气而生存的社会。\n\n　　在贫困中苦苦挣扎的青年神谷十四郎，为了税金、生活费，以及患有精神疾病的母亲的药费，始终拼命工作，可残酷无情的现实，却一点点夺走了他心中的希望。\n\n　　—— 活着…… 根本没有半分快乐可言 ——\n\n　　在这片没有光明的世界里，他所选择的道路，是化作由人类蜕变而成的植物 ——“灵花”。\n\n　　是继续以人类的身份活下去，还是舍弃痛苦，以植物的形态迈向新生？\n\n　　如果是你，会做出怎样的选择？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "愚者之夜",
+            "overview": "故事描述，在遙遠的未來，地球被厚重的雲層籠罩，陽光照不進來。世界上的植物枯萎，氧氣也變稀薄。但人類開發出把人變成植物「靈花」的技術，用來製造少許氧氣以活下去。接受「轉花手術」的人會獲得政府補助金 1000 萬圓，並在大約 2 年後完全變成植物，這 2 年的餘生他們可以隨心所欲地過。\n\n　　\n\n　　在看不到未來的世界，要作為人類存活，還是要告別痛苦，化為植物邁向新的一生？人類被迫做出選擇──",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een duistere wereld vol wanhoop kiest hij ervoor om te veranderen in een 'Geestbloem' – een plant waarin mensen kunnen transformeren. Moet hij als mens verder leven, of zijn pijn achter zich laten en een nieuw leven als plant beginnen? Welk pad zou jij kiezen in zijn situatie?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een duistere wereld vol wanhoop kiest hij ervoor om te veranderen in een 'Geestbloem' – een plant waarin mensen kunnen transformeren. Moet hij als mens verder leven, of zijn pijn achter zich laten en een nieuw leven als plant beginnen? Welk pad zou jij kiezen in zijn situatie?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "풀 나이트",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Ночь дурака",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "愚者之夜",
+            "overview": "故事描述，在遙遠的未來，地球被厚重的雲層籠罩，陽光照不進來。世界上的植物枯萎，氧氣也變稀薄。但人類開發出把人變成植物「靈花」的技術，用來製造少許氧氣以活下去。接受「轉花手術」的人會獲得政府補助金 1000 萬圓，並在大約 2 年後完全變成植物，這 2 年的餘生他們可以隨心所欲地過。\n\n在看不到未來的世界，要作為人類存活，還是要告別痛苦，化為植物邁向新的一生？人類被迫做出選擇──",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Fool Night",
+            "overview": "Trong một thế giới tăm tối đầy tuyệt vọng, anh chọn con đường biến thành Hoa Linh — loài thực vật mà con người hóa thân thành. Nên tiếp tục sống như một con người, hay vứt bỏ nỗi đau và bắt đầu cuộc sống mới như một cái cây? Bạn sẽ chọn con đường nào nếu ở vào hoàn cảnh của anh?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Fool Night",
+            "overview": "İnsanların oksijen üretmek için bitkiye dönüştüğü güneşsiz bir gelecekte çaresiz bir genç adam, bu dönüşüme başlarken kökleri çok derinlere dayanan bir komployu açığa çıkarır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Fool Night",
+            "overview": "In un futuro senza sole in cui gli esseri umani diventano piante per produrre ossigeno, un giovane disperato inizia a trasformarsi e scopre un profondo complotto.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ніч дурнів",
+            "overview": "У безсонячному майбутньому люди стають рослинами, щоб виробляти кисень. Зневірений юнак починає трансформацію та викриває глибоко вкорінену змову.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/etpkY4qjoAGaTm1RbvvEIXDvfhT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dNCbgjjgq7rDkRbvsDglOlf0fNO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h9y4meM2lrFE0HNrsboLEwCPxif.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8oexmMks3eI4y1lLByIhbii5wFb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rumSTVTcuZj0khFXxXgwXouIMgg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3839
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.752,
+          "height": 165,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xHrVsKIm6s2fnE3Vl7j0763D3yY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 619
+        },
+        {
+          "aspect_ratio": 4.793,
+          "height": 516,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i0TVUh2IR2wNuN16ujmlU99Wn6I.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2473
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7kHLQwQZKbQOZJGx1mIDYIKeBYv.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.669,
+          "height": 1427,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hz7j1uED17n9DFgWMBMai3TVYrD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 955
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 1860,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1FykcZrDyw4wZFvHndtu53tDnZ6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1242
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7uqEQOpce4SdNntuM1WDD6ewFNu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

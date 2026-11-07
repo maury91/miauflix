@@ -12,7 +12,9 @@ A title appearing in the catalog does not guarantee that a playable source is av
 
 ## Browse lists
 
-The home screen organizes titles into rows. It loads more rows and titles as you browse, rather than loading the entire catalog at once. Connected list services can supply popular, trending, personal, and community lists.
+The home screen organizes titles into rows. It loads more rows and titles as you browse, rather than loading the entire catalog at once. Connected list services can supply popular, trending, personal, and community lists. Anime rows come from AniList: the most popular anime airing this season, trending anime and all-time popular anime. They need no account; AniList counts each season of a show separately, so its seasons appear as one show, and titles TMDB does not list are left out.
+
+Anime that TMDB keeps in fewer seasons than it really has (Tokyo Revengers is a single 63-episode season on TMDB) is shown with one season per AniList entry, in airing order, each named after its entry and with episodes starting again at 1. Specials stay in season 0. Long-running shows without separate entries, such as One Piece, keep TMDB's seasons. Progress, notifications and Trakt sync follow this numbering.
 
 ## Search by title or genre
 

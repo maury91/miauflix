@@ -1,0 +1,788 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16696",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3d5b0d517fd7f398ed713a3d87a86224\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yoTP91XZZjSvE2gZgGvwNxVW96w.jpg",
+    "created_by": [
+      {
+        "id": 57194,
+        "credit_id": "6883fb0c730882225255e939",
+        "name": "Dan Harmon",
+        "original_name": "Dan Harmon",
+        "gender": 2,
+        "profile_path": "/gDwFosoyPTd0pmnKParzGj3kaMg.jpg"
+      },
+      {
+        "id": 2484730,
+        "credit_id": "6883fb14920ecaf29f2461ce",
+        "name": "James Siciliano",
+        "original_name": "James Siciliano",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-07-26",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://www.adultswim.com/videos/president-curtis",
+    "id": 296756,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-27",
+    "last_episode_to_air": {
+      "id": 7510585,
+      "name": "Timber",
+      "overview": "When a murderous American legend resurfaces, Curtis rises to the challenge -- but doing so proves to be the ultimate test of his public image.",
+      "vote_average": 6,
+      "vote_count": 7,
+      "air_date": "2026-09-27",
+      "episode_number": 10,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 1,
+      "show_id": 296756,
+      "still_path": "/aUGKzVgRx54M0bD89Y04jouC2L6.jpg"
+    },
+    "name": "President Curtis",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 80,
+        "logo_path": "/tHZPHOLc6iF27G34cAZGPsMtMSy.png",
+        "name": "Adult Swim",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "President Curtis",
+    "overview": "Follow the Commander-in-Chief and his eccentric staff as they tackle the kind of crises that Rick Sanchez could never be bothered with - from interdimensional diplomacy to paranormal investigations and unexplained phenomena.",
+    "popularity": 11.7533,
+    "poster_path": "/lc9riW73Oee2pBxi1UrDPgyQjEr.jpg",
+    "production_companies": [
+      {
+        "id": 6760,
+        "logo_path": "/h3syDHowNmk61FzlW2GPY0vJCFh.png",
+        "name": "Williams Street",
+        "origin_country": "US"
+      },
+      {
+        "id": 8300,
+        "logo_path": null,
+        "name": "Harmonious Claptrap",
+        "origin_country": "US"
+      },
+      {
+        "id": 305722,
+        "logo_path": null,
+        "name": "Pug Party",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-07-26",
+        "episode_count": 10,
+        "id": 466899,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/lc9riW73Oee2pBxi1UrDPgyQjEr.jpg",
+        "season_number": 1,
+        "vote_average": 5.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 6.841,
+    "vote_count": 82,
+    "external_ids": {
+      "imdb_id": "tt37692332",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 466198,
+      "tvrage_id": null,
+      "wikidata_id": "Q135742014",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Follow the Commander-in-Chief and his eccentric staff as they tackle the kind of crises that Rick Sanchez could never be bothered with - from interdimensional diplomacy to paranormal investigations and unexplained phenomena.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Volg de opperbevelhebber en zijn excentrieke staf terwijl ze de soort crises aanpakken waar Rick Sanchez zich niet mee zou bemoeien - van interdimensionale diplomatie tot paranormale onderzoeken en onverklaarbare verschijnselen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Volg de opperbevelhebber en zijn excentrieke staf terwijl ze de soort crises aanpakken waar Rick Sanchez zich niet mee zou bemoeien - van interdimensionale diplomatie tot paranormale onderzoeken en onverklaarbare verschijnselen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "President Curtis",
+            "overview": "O Comandante-Chefe e a sua excêntrica equipa enfrentam crises bizarras com as quais nem mesmo Rick Sanchez se daria ao trabalho de lidar, desde a diplomacia interdimensional até investigações paranormais e fenómenos inexplicáveis.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Il Presidente Curtis e il suo eccentrico staff affrontano crisi bizzarre di cui nemmeno Rick Sanchez si preoccuperebbe, dalla diplomazia interdimensionale alle indagini sul paranormale e ai fenomeni inspiegabili.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Президентът Къртис",
+            "overview": "Президентът Къртис проследява главнокомандващия и неговия ексцентричен екип, докато се справят с кризи, с които Рик Санчес никога не би се занимавал…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Curtis elnök",
+            "overview": "Curtis elnök és különc stábja olyan kríziseket próbálnak megoldani, amelyekkel Rick Sancheznek soha eszébe nem jutna foglalkozni.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Prezydent Curtis",
+            "overview": "Serial śledzi prezydenta i jego ekscentryczny zespół, mierzących się z niezwykłymi kryzysami – od dyplomacji po zjawiska paranormalne.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Președintele Curtis",
+            "overview": "Președintele și angajații lui excentrici se confruntă cu tot felul de crize, de la diplomație interdimensională la investigații paranormale.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "El Presidente Curtis",
+            "overview": "El presidente Curtis y su equipo enfrentan crisis extraordinarias que nadie más puede resolver.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ปธน.เคอร์ติส",
+            "overview": "\"ปธน.เคอร์ติส\" ถ่ายทอดเรื่องราวของประธานาธิบดีและทีมสุดเพี้ยนขณะที่พวกเขาเผชิญกับการสืบสวนเหตุเหนือธรรมชาติและปรากฏการณ์ลี้ลับไร้คำอธิบาย",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Presidente Curtis",
+            "overview": "O presidente Curtis e sua equipe enfrentam crises que Rick Sanchez ignoraria, da diplomacia interdimensional a fenômenos paranormais.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Президент Кертіс",
+            "overview": "Слідкуйте за президентом Сполучених Штатів та його ексцентричною командою, які розв'язують проблеми, за які Рік Санчез ніколи б не взявся, — від міжвимірної дипломатії до паранормальних розслідувань і незбагненних явищ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "President Curtis seuraa ylipäällikköä ja hänen erikoista henkilökuntaansa, kun he hoitavat yliluonnollisia tutkimuksia ja selittämättömiä ilmiöitä.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "柯蒂斯总统",
+            "overview": "柯蒂斯总统及其古怪的幕僚团队将共同应对那些瑞克根本不会理会的一系列危机，从跨维度外交到超自然现象调查，再到无法解释的异常事件。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "הנשיא קרטיס",
+            "overview": "הנשיא קרטיס, מפקדו העליון של הצבא, וצוות עובדיו התמהוני מתמודדים עם סוגי המשברים שריק סאנצ'ז מעולם לא טרח להתעסק איתם - מדיפלומטיה בין ממדית ועד חקירות על טבעיות ותופעות בלתי מוסברות.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "總統柯提斯",
+            "overview": "本劇描述身為三軍總司令的柯提斯總統，與他那群古靈精怪的幕僚團隊，攜手調查超自然事件和各種難以解釋的神秘現象。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "克提斯總統",
+            "overview": "本劇描述身為三軍統帥的克提斯總統，與他那群古靈精怪的幕僚團隊，攜手調查超自然事件和各種難以解釋的神秘現象。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Προεδρος Κερτις",
+            "overview": "Ο Πρόεδρος Κέρτις ακολουθεί τον Αρχηγό Γενικού Επιτελείου και το εκκεντρικό του προσωπικό ενώ αναλαμβάνουν να εξιχνιάσουν ανεξήγητα φαινόμενα.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Prezident Curtis",
+            "overview": "Prezident Curtis a jeho výstřední tým řeší paranormální jevy, mezidimenzionální krize i nevysvětlitelné záhady.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Prezident Curtis",
+            "overview": "Prezident Curtis a jeho excentrický tím riešia krízy, do ktorých by sa Rick Sanchez nikdy nepustil.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Presidente Curtis",
+            "overview": "El presidente Curtis sigue al Comandante en Jefe y su excéntrico equipo en investigaciones paranormales y fenómenos inexplicables.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Президент Кёртис",
+            "overview": "Спин-офф «Рика и Морти» о президенте США Андре Кёртисе и его эксцентричной команде советников. Вместе они расследуют паранормальные явления, устраняют межпространственные угрозы и решают другие кризисы, которые Рик Санчес счёл бы слишком скучными для себя.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Prezidents Kērtiss",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Prezidentas Kurtis",
+            "overview": "Stebėkite vyriausiąjį vadą ir jo ekscentriškus darbuotojus, kai jie sprendžia tokias krizes, su kuriomis Rickas Sanchezas niekada negalėjo susijaudinti – nuo ​​tarpdimensinės diplomatijos iki paranormalių tyrimų ir nepaaiškinamų reiškinių.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MK",
+          "iso_639_1": "mk",
+          "name": "",
+          "english_name": "Macedonian",
+          "data": {
+            "name": "Претседателот Кертис",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Председник Кертис",
+            "overview": "Председник Кертис прати врховног команданта и његову ексцентричну екипу док се носе са кризама које би и Рика Санчеса оставиле равнодушним.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Predsednik Curtis",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Tổng Thống Curtis",
+            "overview": "Tổng Thống Curtis theo chân Tổng tư lệnh và các nhân viên lập dị của ông điều tra những hiện tượng siêu nhiên chưa được giải thích.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Suivez le commandant en chef et son équipe excentrique alors qu'ils s'attaquent à des crises dont Rick Sanchez ne se soucierait jamais : de la diplomatie interdimensionnelle aux enquêtes sur le paranormal en passant par les phénomènes inexpliqués.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Predsjednik Curtis",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Der US-Präsident und sein exzentrischer Stab: Sie widmen sich Krisen, für die Rick Sanchez sich niemals die Mühe machen würde – von interdimensionaler Diplomatie bis hin zu paranormalen Untersuchungen und unerklärlichen Phänomenen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "President Curtis",
+            "overview": "Başkomutan ve tuhaf ekibinin, Rick Sanchez'in hiç uğraşamayacağı türden krizlerle başa çıkmalarını takip ediyor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "مسلسل يتابع الرئيس وفريقه المعجزة وهم يتعاملون مع مشاكل غريبة ما يعبرها \"ريك سانشيز\" أساساً، مثل السياسة بين الأبعاد والكائنات الخارقة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Vi följer president Curtis och hans excentriska stab genom utredningar av paranormala och oförklarade fenomen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "رئیس جمهور کرتیس",
+            "overview": "فرمانده کل قوا و کارکنان عجیب و غریبش را دنبال کنید، در حالی که آنها با بحران‌هایی دست و پنجه نرم می‌کنند که ریک سانچز هرگز نمی‌توانست با آنها سر و کله بزند - از دیپلماسی بین ابعادی گرفته تا تحقیقات ماوراءالطبیعه و پدیده‌های غیرقابل توضیح.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yoTP91XZZjSvE2gZgGvwNxVW96w.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lwM4zSdpgKtR1RzIWhQJC2cuzlK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xBG5M8tflHMUEKbmO8T4M8RTT8q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sEuk1uC3biehG4bQPkbiGhD8VNz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eEAGLztwo1z2fe2pi0SEYSgVU3u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fPxexhTkphy3Uxpxaj5jdant06O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.74,
+          "height": 1034,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oA1orEp9XUfZRfhX4d5bWjJGuAk.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2833
+        },
+        {
+          "aspect_ratio": 2.74,
+          "height": 1034,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/emmIZQmZvXqus3eamSy2lHbfWjG.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2833
+        },
+        {
+          "aspect_ratio": 2.194,
+          "height": 1291,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jOuXuVCAhDmYTU1VNBEs4zWbiK5.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2833
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lc9riW73Oee2pBxi1UrDPgyQjEr.jpg",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pbnopXJrJfhMhlLMhMQUaCeqGic.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ip2nqTgrC2o6Hfa50phxX2cmFEI.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 718
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2520,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/714hRzxizAdHiP55kjF1SSxMFvd.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ua0CfKmm19EqbVqCNrpCmjnTrsg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fm8S9itBC4ddoCAMRCqOtku8EMO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hbjkZ7U3YEYp7ciptFL7Ny7K4xk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lzByVf9p7oT9QjsYijLpPUMTxUM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8n8PX32tbZ4QFxDHN2KberZt25l.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wrZ5vdg2UPLBYkjMFooYyNVG8C5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        }
+      ]
+    }
+  }
+}

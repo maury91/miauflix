@@ -1,0 +1,650 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17466",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"1125c485b06e0a12ff45d871b45d6a30\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/d63e5W3rWWuMIDcrUgmZTauMbna.jpg",
+    "created_by": [
+      {
+        "id": 5547649,
+        "credit_id": "6acf004bef61e73bbd8f2c1d",
+        "name": "Nabana Naba",
+        "original_name": "那波なばな",
+        "gender": 0,
+        "profile_path": null
+      },
+      {
+        "id": 5547652,
+        "credit_id": "6acf0054a02872145b70f36d",
+        "name": "Dr.Poro",
+        "original_name": "Dr.Poro",
+        "gender": 0,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-10-10",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://the-vermilion-mask.com",
+    "id": 295420,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-31",
+    "last_episode_to_air": {
+      "id": 7932443,
+      "name": "Truth and Lies",
+      "overview": "Peru and his companions visit the Strega Museum, where several people are rumored to have gone missing.",
+      "vote_average": 6,
+      "vote_count": 1,
+      "air_date": "2026-10-31",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 295420,
+      "still_path": "/oKvn2tpV1KWwbAeXOwjKD9Dsd3u.jpg"
+    },
+    "name": "The Vermilion Mask",
+    "next_episode_to_air": {
+      "id": 7932445,
+      "name": "The Mask of Telepathy",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-07",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 295420,
+      "still_path": "/xnArGy1LR68mPPLqTCcfdDoeNSK.jpg"
+    },
+    "networks": [
+      {
+        "id": 57,
+        "logo_path": "/uxaXSoT8K0S2NE5PWsBpHUl3GGU.png",
+        "name": "Nippon TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 569,
+        "logo_path": "/cIMyE9cw1W4kMFGxmC17HKTnVz9.png",
+        "name": "YTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1896,
+        "logo_path": "/suqJy99xiGr8PV7eQovUFRgquYT.png",
+        "name": "FBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2727,
+        "logo_path": "/85U2onICiQV9fMHORxw8EWSQ6MZ.png",
+        "name": "Chukyo TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2728,
+        "logo_path": "/kwC7bfbGknKuL7uxKahk6paamlp.png",
+        "name": "RNB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3201,
+        "logo_path": "/4OpeDJ8jzPeaSiOlzGCnHjm6tpt.png",
+        "name": "HTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3644,
+        "logo_path": "/8Cue5NzJ6cucpA5k73GVrCqn2JI.png",
+        "name": "FCT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3698,
+        "logo_path": "/rrw1HbmPpR9GQ3K19taPCYYf5jY.png",
+        "name": "STV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3741,
+        "logo_path": "/hiI8H4WLDlCtRZQboq4BTdM2KAg.png",
+        "name": "KNB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4790,
+        "logo_path": "/5aEqvKUgffp6zehXyCUhJyzeZPg.png",
+        "name": "YBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4791,
+        "logo_path": "/e9WRfzkc8HNsZ1qEF26ENHlBMvn.png",
+        "name": "KTK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4797,
+        "logo_path": "/9UjM4C7kvRlgg5QF4sXpJD6cM5P.png",
+        "name": "NKT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4815,
+        "logo_path": "/3eAF85UnfbyA3BBuCelMd9LMwyf.png",
+        "name": "RAB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4816,
+        "logo_path": "/9qQIAEYEw1ZyPPK3tqE18Z00AwW.png",
+        "name": "TVI",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4817,
+        "logo_path": "/oxuY8YFFO6Iv1IicYRGFcLizERc.png",
+        "name": "MMT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4818,
+        "logo_path": "/doRgDFcuYSKr3NhkfKNVaj2iyjv.png",
+        "name": "ABS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4822,
+        "logo_path": "/xX0I9Sc0AxSoKoVtwwmz0DWOWcr.png",
+        "name": "JRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6155,
+        "logo_path": "/cvePJ33fR2SeirKZWD8rCV7rAaF.png",
+        "name": "YBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6286,
+        "logo_path": "/mcA2WrzDxg1MuZ2TnewjVZaTvM2.png",
+        "name": "TSB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6668,
+        "logo_path": "/atlFO76SPaLGIt9Wmxzg23M0IoA.png",
+        "name": "TeNY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6669,
+        "logo_path": "/xGOaJcQi5TfSsE11q9MEehfoMPP.png",
+        "name": "RNC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6670,
+        "logo_path": "/7OAJi6aS9zQWwP64jqxRllBvYKR.png",
+        "name": "NIB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6671,
+        "logo_path": "/38NuOxf0pLdIMIHzFLwVndlvFRe.png",
+        "name": "KKT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7076,
+        "logo_path": "/tFePbc4dqJzcUaHeKAQkhRgT5zJ.png",
+        "name": "Daiichi-TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7077,
+        "logo_path": "/r1vdmMUpIGnGvLE3UMqkuEtWlG4.png",
+        "name": "FBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7078,
+        "logo_path": "/dFl2trJMZYvksBWzQJCa4aH2zkb.png",
+        "name": "RKC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7079,
+        "logo_path": "/kNnpQFSLQb5vqB56XPmIlcn8Wer.png",
+        "name": "KYT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7092,
+        "logo_path": "/5IzL2Fq2yErfy4LH96KX5PKOAbv.png",
+        "name": "KRY",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "朱色の仮面",
+    "overview": "Apprentice mask maker Peru should have known the perils of The Masks. Possessed by the Mask of the Warrior God, he unintentionally kills his friends and his master, the legendary Gaston Roux. Wracked with guilt, Peru vows to destroy every mask his master created before tragedy strikes again. As his mission takes him around the world, Peru makes friends, battles enemies, and reckons with his sins.",
+    "popularity": 16.6364,
+    "poster_path": "/jIQ8cnTs7sCMzEfBviyyD4eXMiY.jpg",
+    "production_companies": [
+      {
+        "id": 196413,
+        "logo_path": "/sxdXistRNnlsLPchBYWMBk7KxRo.png",
+        "name": "100studio",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11727,
+        "logo_path": "/cIMyE9cw1W4kMFGxmC17HKTnVz9.png",
+        "name": "Yomiuri Telecasting Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "dentsu",
+        "origin_country": "JP"
+      },
+      {
+        "id": 193095,
+        "logo_path": "/xhOXB3eXGnadZWouVZ1X4NbiGkN.png",
+        "name": "HIKE",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-10",
+        "episode_count": 12,
+        "id": 464098,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/q81xketqbqrxOrpBm7OzZrcopPf.jpg",
+        "season_number": 1,
+        "vote_average": 6.4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8,
+    "vote_count": 9,
+    "external_ids": {
+      "imdb_id": "tt41153966",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 465542,
+      "tvrage_id": null,
+      "wikidata_id": "Q135218705",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "vermilion_PR"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Vermilion Mask",
+            "overview": "A \"Máscara\" confere poder a quem a usa. Às vezes, isso significa possibilidades infinitas; outras, uma tragédia inimaginável. Pelle, discípulo do lendário fabricante de máscaras Gaston Roux, passa a ser controlado pela “Máscara do Deus Guerreiro” e, sem querer, mata seus amigos e até mesmo seu próprio mestre. Para impedir que esse tipo de tragédia se repita, Pelle jura destruir todas as máscaras de Gaston espalhadas pelo mundo. Enfrentando os pecados que cometeu, ele embarca em sua jornada. Conhecendo novos amigos e enfrentando inimigos poderosos, o menino segue em frente. Até o dia em que puder se redimir pelos pecados cometidos contra seu mestre.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Vermilion Mask",
+            "overview": "Apprentice mask maker Peru should have known the perils of The Masks. Possessed by the Mask of the Warrior God, he unintentionally kills his friends and his master, the legendary Gaston Roux. Wracked with guilt, Peru vows to destroy every mask his master created before tragedy strikes again. As his mission takes him around the world, Peru makes friends, battles enemies, and reckons with his sins.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Vermilion Mask",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Vermilion Mask",
+            "overview": "Peru es un aprendiz de artesano de máscaras que puede crear máscaras que otorgan poderosas habilidades a quien las usa. Un día, Peru se pone una de las máscaras más poderosas de su maestro, lo que provoca que pierda el control y mate accidentalmente a sus amigos y a su maestro. Una vez que se calma, se arrepiente de sus acciones y decide destruir todas las máscaras que su maestro creó para expiar su culpa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "朱色假面",
+            "overview": "挺身迎战。面对强大的敌人。以及自己的命运。「面具」会赋予佩戴者力量。有时能无限拓展可能性，有时却会带来难以想象的灾祸。传说中的面具职人的弟子佩尔，被偶然拿起的「武神面具」所操纵而失去理智暴走，无意间亲手杀害了同伴与师父。在绝望中，佩尔立志要销毁世界上全部由师父打造的面具。他直面自己犯下的错误，踏上了赎罪的旅程。与新友人的相遇，以及与强敌的对峙。围绕「面具」的战斗幻想曲，正式开幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "주홍색 가면",
+            "overview": "맞서 싸워라.\n\n강대한 적에!\n\n자신의 운명에!\n\n얼굴에 쓴 자에게 힘을 부여하는 ‘가면’\n\n그것은 때로는 가능성을 무한히 넓히고, 때로는 상상을 뛰어넘는 재앙을 초래한다.\n\n전설의 가면 장인 가스톤 루의 제자인 페르는 무심코 손에 든 ‘무신의 가면’에 조종당해 의도치 않게 동료와 스승을 해치고 만다.\n\n두 번 다시 그런 비극이 생기지 않도록, 페르는 전 세계에 흩어져 있는 가스톤의 가면을 부수기로 결심하고, 자신이 저지른 죄를 짊어지고 여행을 떠난다.\n\n친구와의 만남, 그리고 강대한 적과의 대치.\n\n소년은 계속 걷는다. 스승에게 보답할 그날까지!\n\n가면 능력 배틀 판타지, 개막!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Vermilion Mask",
+            "overview": "Apprenti fabricant de masques, Peru aurait dû connaître les dangers liés à ces artefacts. Possédé par le Masque du Dieu Guerrier, il tue involontairement ses amis et son maître, le légendaire Gaston Roux. Rongé par la culpabilité, Peru jure de détruire tous les masques créés par son maître avant qu’une nouvelle tragédie ne se produise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Vermilion Mask",
+            "overview": "Peru è un giovane apprendista nella creazione di maschere che un giorno perde il controllo a causa dell'influsso di una maschera maledetta, finendo per uccidere sia il suo maestro che i suoi compagni durante un tragico momento di furia. Consumato dal senso di colpa, Peru inizia un viaggio con l'obiettivo di distruggere tutte le maschere leggendarie che erano state create dal suo maestro, finendo per incrociare il proprio cammino con alleati improbabili e nemici mortali. Ciò che ne scaturisce è un'avvincente lotta per la redenzione, dove il destino dell'anima di Peru e quello del mondo stesso sono appesi a un filo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Vermilion Mask",
+            "overview": "Peru es un joven aprendiz de fabricante de máscaras que pierde el control bajo la influencia de una máscara maldita, matando a su maestro y compañeros en un trágico arrebato. Consumido por la culpa, Peru emprende un viaje para destruir las legendarias máscaras que su maestro una vez creó, cruzándose con aliados inesperados y enemigos mortales. Lo que se desarrolla es una intensa lucha por la redención, donde están en juego tanto el destino del alma de Peru como el del mundo entero.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Маска вермильона",
+            "overview": "Маска приносит несчастье. Маска наслаждается резней. Маска обладает собственной волей... Пелле, странствующий торговец масками, обладает способностью создавать таинственные маски, которые наделяют их обладателей уникальными способностями. В городе, окутанном зловещей атмосферой, он встречает Сону, таинственную молодую девушку. По мере того, как раскрываются тайны и возникают внутренние конфликты, молодой парень делает свои первые шаги вперед! Погрузитесь в захватывающую фантазию о битве масок!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "硃色假面",
+            "overview": "「面具」會賦予佩戴者力量。有時能無限拓展可能性，有時卻會帶來難以想像的災禍。傳說中的面具職人的弟子佩爾，被偶然拿起的「武神面具」所操縱而失去理智暴走，無意間親手殺害了同伴與師父。在絕望中，佩爾立志要銷毀世界上全部由師父打造的面具。\n\n他直面自己犯下的錯誤，踏上了贖罪的旅程。與新友人的相遇，以及與強敵的對峙。\n\n圍繞「面具」的戰鬥幻想曲，正式開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "朱色假面",
+            "overview": "「面具」會賦予佩戴者力量。有時能無限拓展可能性，有時卻會帶來難以想像的災禍。傳說中的面具職人的弟子佩爾，被偶然拿起的「武神面具」所操縱而失去理智暴走，無意間親手殺害了同伴與師父。在絕望中，佩爾立志要銷毀世界上全部由師父打造的面具。\n\n他直面自己犯下的錯誤，踏上了贖罪的旅程。與新友人的相遇，以及與強敵的對峙。\n\n圍繞「面具」的戰鬥幻想曲，正式開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chiếc mặt nạ đỏ son",
+            "overview": "Người học việc làm mặt nạ Peru lẽ ra phải biết những hiểm nguy của The Masks. Bị Mặt nạ của Chiến thần nhập vào, cậu vô tình giết chết bạn bè và sư phụ của mình — Gaston Roux huyền thoại. Day dứt vì tội lỗi, Peru thề sẽ hủy diệt mọi chiếc mặt nạ mà sư phụ đã tạo ra trước khi bi kịch lặp lại. Khi sứ mệnh đưa cậu đi khắp thế giới, Peru kết bạn, chiến đấu với kẻ thù và đối mặt với tội lỗi của chính mình.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "หน้ากากสีชาด",
+            "overview": "หน้ากากนำพาหายนะมาสู่โลก และหลงใหลในการสังหารหมู่ ราวกับว่ามันมีเจตจำนงเป็นของตัวเอง เปรู พ่อค้าหน้ากากพเนจรผู้มีความสามารถในการสร้างหน้ากากลึกลับที่มอบพลังเหนือธรรมชาติให้แก่ผู้สวมใส่ ได้เดินทางมายังเมืองแห่งหนึ่งที่อบอวลไปด้วยบรรยากาศอันน่าขนลุก ที่นั่นเขาได้พบกับโซนาห์ เด็กสาวปริศนาผู้กุมความลับบางอย่างเอาไว้ เมื่อความจริงค่อย ๆ ถูกเปิดเผย ความขัดแย้งภายในก็เริ่มก่อตัวขึ้น และเด็กหนุ่มผู้ไม่เคยก้าวเดินอย่างแท้จริงมาก่อน ก็กำลังจะเริ่มต้นเส้นทางของตนเองเป็นครั้งแรก",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d63e5W3rWWuMIDcrUgmZTauMbna.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1D501rl5PwXNyL0hPrZMajnbpu1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/veXqFj4DuspDYbpwLt18g6FIo8x.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.027,
+          "height": 985,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mzzv48m0o3nvgMyNpbi8J4Ri6IC.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1997
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.707,
+          "height": 2669,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jIQ8cnTs7sCMzEfBviyyD4eXMiY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1886
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5oBnxSOixpHYWpKBIGwFpejouZ0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1125,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4J5rcz6KV5BEHwBQx4VnE2nZEpG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1582,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bq1g9SUBiwlkk3nKGNoQ0PUiABc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1055
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1582,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1wjiq3ILaKDYnSx5yRDPGG9Zsql.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1055
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l0SXaZu2MNZBuWGAOxVNFPaQRyM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vr5DTZXNljvZDEz5NcgXKpWdUNb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cevRZaV9RIuaIHgncSIK6fb4pnz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

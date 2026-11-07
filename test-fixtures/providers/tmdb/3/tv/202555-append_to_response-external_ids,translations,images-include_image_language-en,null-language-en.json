@@ -1,0 +1,2172 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13230",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"6de61ebce944814a13b4dd77c8f861c4\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qrTAc0ZtQ859Qu5O8cixJzNJpQs.jpg",
+    "created_by": [
+      {
+        "id": 1246914,
+        "credit_id": "672544cec1c7433ebbc43b6f",
+        "name": "Dario Scardapane",
+        "original_name": "Dario Scardapane",
+        "gender": 2,
+        "profile_path": "/tA4ZCP3sB8HOfnA4N2t8LxlTz5d.jpg"
+      },
+      {
+        "id": 61173,
+        "credit_id": "672544dc2a4deb99bd9dd2cf",
+        "name": "Chris Ord",
+        "original_name": "Chris Ord",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 61174,
+        "credit_id": "672544e471a545e933358e48",
+        "name": "Matt Corman",
+        "original_name": "Matt Corman",
+        "gender": 2,
+        "profile_path": "/Atlzide3s5DYjBSyz2UrOfpFuVc.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2025-03-04",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://www.disneyplus.com/series/daredevil-born-again/6Eu8fmI0MaUk",
+    "id": 202555,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-05-05",
+    "last_episode_to_air": {
+      "id": 6825664,
+      "name": "The Southern Cross",
+      "overview": "The city and its heroes enter an unprecedented era.",
+      "vote_average": 8.1,
+      "vote_count": 46,
+      "air_date": "2026-05-05",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 54,
+      "season_number": 2,
+      "show_id": 202555,
+      "still_path": "/dpwUQPQFWmQU2Ym3tgCKGExVCWV.jpg"
+    },
+    "name": "Daredevil: Born Again",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2739,
+        "logo_path": "/1edZOYAfoyZyZ3rklNSiUpXX30Q.png",
+        "name": "Disney+",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 17,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Daredevil: Born Again",
+    "overview": "Matt Murdock, a blind lawyer with heightened abilities, is fighting for justice through his bustling law firm, while former mob boss Wilson Fisk pursues his own political endeavors in New York. When their past identities begin to emerge, both men find themselves on an inevitable collision course.",
+    "popularity": 37.1242,
+    "poster_path": "/xDUoAsU8lQHOOoRkFiBuarmACDN.jpg",
+    "production_companies": [
+      {
+        "id": 420,
+        "logo_path": "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
+        "name": "Marvel Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 176762,
+        "logo_path": null,
+        "name": "Kevin Feige Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-03-04",
+        "episode_count": 9,
+        "id": 294647,
+        "name": "Season 1",
+        "overview": "It has been a year since Matt Murdock retired from crime fighting as Daredevil. Wilson Fisk has been elected mayor of New York City after running on an anti-vigilante platform. The Kingpin may force Daredevil to come out of retirement.",
+        "poster_path": "/9lLuhV703HGCbnz6FxnqCwIwzAZ.jpg",
+        "season_number": 1,
+        "vote_average": 8.1
+      },
+      {
+        "air_date": "2026-03-24",
+        "episode_count": 8,
+        "id": 484164,
+        "name": "Season 2",
+        "overview": "Mayor Wilson Fisk crushes New York City underfoot as he hunts down public enemy number one, the Hell's Kitchen vigilante known as Daredevil. But beneath the horned mask, Matt Murdock will try to fight back from the shadows to tear down the Kingpin's corrupt empire and redeem his home. Resist. Rebel. Rebuild.",
+        "poster_path": "/timvsedxh5ce795tsv6EDTZmmXW.jpg",
+        "season_number": 2,
+        "vote_average": 8.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "All hell breaks loose.",
+    "type": "Scripted",
+    "vote_average": 8.156,
+    "vote_count": 1173,
+    "external_ids": {
+      "imdb_id": "tt18923754",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 422712,
+      "tvrage_id": null,
+      "wikidata_id": "Q113244844",
+      "facebook_id": "Daredevil",
+      "instagram_id": "daredevil",
+      "twitter_id": "Daredevil"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock, a blind lawyer with heightened abilities, is fighting for justice through his bustling law firm, while former mob boss Wilson Fisk pursues his own political endeavors in New York. When their past identities begin to emerge, both men find themselves on an inevitable collision course.",
+            "homepage": "",
+            "tagline": "All hell breaks loose."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "데어데블: 본 어게인",
+            "overview": "시력을 잃었지만, 다른 감각이 뛰어난 변호사 맷 머독이 성장해가는 자신의 로펌을 이끌며 정의 구현에 힘쓰는 이야기다. 한편 전직 범죄 조직 보스 윌슨 피스크는 뉴욕 정계에서 새로운 야망을 펼치려 한다. 두 사람의 과거가 수면 위로 떠오르면서 피할 수 없는 대결의 순간이 다가온다.",
+            "homepage": "",
+            "tagline": "어둠의 도시, 돌아온 심판자"
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ml",
+          "name": "",
+          "english_name": "Malayalam",
+          "data": {
+            "name": "ഡെയർഡെവിൾ: ബോർണ് എഗൈൻ",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Daredevil: Újjászületés",
+            "overview": "Matt Murdock, a különleges képességekkel rendelkező vak ügyvéd folyton az igazság oldalán harcol az ügyvédi irodájában, miközben Wilson Fisk, a volt maffiafőnök politikai karrierbe kezd New Yorkban. Amikor újra a felszínre tör a korábbi énjük, rá kell jönniük, hogy muszáj lesz megküzdeniük egymással.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Demolidor: Renascido",
+            "overview": "Matt Murdock, um advogado cego com habilidades fantásticas, luta por justiça através de seu agitado escritório de advocacia, enquanto o ex-chefe do crime Wilson Fisk busca seus próprios empreendimentos políticos em Nova Iorque. Quando suas identidades passadas começam a emergir, seus caminhos se cruzam perigosamente.",
+            "homepage": "",
+            "tagline": "O trabalho do diabo nunca termina."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Сорвиголова: Рождённый заново",
+            "overview": "Слепому адвокату Мэтту Мёрдоку снова приходится облачиться в костюм Сорвиголовы, чтобы противостоять криминальному авторитету Уилсону Фиску, который решил занять пост мэра Нью-Йорка.",
+            "homepage": "",
+            "tagline": "«Работа дьявола никогда не заканчивается»"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "",
+            "overview": "მეთ მერდოკი, გაზრდილი შესაძლებლობების მქონე უსინათლო ადვოკატი, იბრძვის სამართლიანობისთვის თავისი იურიდიული ფირმის მეშვეობით...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Daredevil : Born Again",
+            "overview": "Matt Murdock, un avocat aveugle aux capacités accrues, se bat pour la justice dans son dynamique cabinet d'avocats, tandis que l'ancien chef de la mafia Wilson Fisk poursuit ses propres projets politiques à New York. Lorsque leurs anciennes identités se révèlent, les deux hommes se retrouvent sur une inévitable trajectoire de collision.",
+            "homepage": "",
+            "tagline": "Le diable ne s'arrête jamais"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "夜魔俠：重生",
+            "overview": "擁有獨特能力的盲眼律師麥特梅鐸透過忙碌的律師事務所伸張正義，而前黑幫老大威爾遜費斯克則在紐約追求政治生涯。當他們過去的身分開始揭露，兩人捲入了不可避免的衝突。",
+            "homepage": "",
+            "tagline": "惡魔的影響不會間斷"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "デアデビル：ボーン・アゲイン",
+            "overview": "昼は弁護士、夜は法では裁ききれない悪へと立ち向かう盲目のヒーロー、マット・マードックことデアデビルが主人公の新たなドラマシリーズ。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Gelişmiş yeteneklere sahip kör bir avukat olan Matt Murdock, hareketli bir hukuk bürosunda adalet için mücadele ederken, eski mafya babası Wilson Fisk New York'ta kendi siyasi çabalarını sürdürmektedir. Geçmişteki kimlikleri ortaya çıkmaya başlayınca her iki adam da kendilerini kaçınılmaz bir ihtilaf halinde bulur.",
+            "homepage": "",
+            "tagline": "Şeytanın işi asla bitmez."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "夜魔侠：重生",
+            "overview": "拥有某些独特能力的盲人律师马修·默多克透过他忙碌的律师事务所伸张正义，而前黑帮老大威尔逊·菲斯克则在纽约追求自己的政治生涯。当他们过去的身份开始揭露，两人都发觉自己卷入了不可避免的冲突。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock, un abogado ciego con habilidades especiales, lucha por la justicia a través de su ajetreado bufete, mientras que el ex jefe de la mafia Wilson Fisk persigue sus propios objetivos políticos en Nueva York. Cuando sus identidades pasadas empiezan a salir a la luz, ambos hombres se encuentran en una inevitable colisión.",
+            "homepage": "",
+            "tagline": "El trabajo del diablo nunca termina."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "דרדוויל: נולד מחדש",
+            "overview": "מאט מורדוק הוא עורך דין עיוור בעל חושים מחודדים במיוחד, אשר נאבק למען הצדק בעזרת משרד עריכת הדין המצליח שלו, בעוד ראש המאפיה לשעבר, ווילסון פיסק, מקדם את היוזמות הפוליטיות שלו בניו יורק. כשהזהויות הקודמות שלהם מתחילות להיחשף, הם מוצאים את עצמם במסלול התנגשות בלתי נמנעת.",
+            "homepage": "",
+            "tagline": "עבודתו של השטן לא נגמרת לעולם."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Daredevil: Znovuzrození",
+            "overview": "Matt Murdock, slepý právník se zvýšenými schopnostmi, bojuje za spravedlnost prostřednictvím své rušné advokátní kanceláře, zatímco bývalý mafiánský boss Wilson Fisk sleduje své vlastní politické snahy v New Yorku. Když se začnou objevovat jejich minulé identity, oba muži se ocitnou v nevyhnutelném střetu.",
+            "homepage": "",
+            "tagline": "Ďábel se opět pustí do díla"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Daredevil: Rinascita",
+            "overview": "Matt Murdock, un avvocato cieco con abilità potenziate, lotta per la giustizia con il suo movimentato studio legale. Intanto, il boss criminale Wilson Fisk porta avanti i suoi impegni politici a New York. Quando le loro identità passate emergono, entrambi si ritrovano in un’inevitabile rotta di collisione.",
+            "homepage": "",
+            "tagline": "La missione di Daredevil non ha mai fine"
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Daredevil: Odrodzenie",
+            "overview": "Matt Murdock, niewidomy prawnik o szczególnych zdolnościach, walczy o sprawiedliwość w swojej ruchliwej kancelarii prawnej, podczas gdy były szef mafii Wilson Fisk realizuje własne polityczne przedsięwzięcia w Nowym Jorku. Kiedy ich dawne tożsamości zaczynają się ujawniać, obaj mężczyźni znajdują się na nieuniknionym kursie kolizyjnym.",
+            "homepage": "",
+            "tagline": "Tam diabeł nie mówi dobranoc."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock, un abogado ciego con habilidades super desarrolladas lucha por la justicia desde su ajetreado bufete mientras el antiguo jefe mafioso Wilson Fisk emprende una carrera política en Nueva York. Cuando sus identidades pasadas empiezan a salir a la luz, ambos se ven abocados a un enfrentamiento inevitable.",
+            "homepage": "",
+            "tagline": "Al diablo con todo."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "دردویل:  دوباره متولد می شود",
+            "overview": "مت مرداک، یک وکیل نابینا با توانایی‌های فراانسانی، در حال مبارزه برای عدالت از طریق دفتر حقوقی شلوغش است، در حالی که ویلسون فیسک، رئیس سابق مافیا، به دنبال تلاش‌های سیاسی خود در نیویورک است. زمانی که هویت‌های گذشته هر دو نفر شروع به ظهور می‌کند، هر دو مرد خود را در یک مسیر برخورد اجتناب‌ناپذیر می‌یابند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Дявол на доброто: Роден отново",
+            "overview": "Слепият адвокат Мат Мърдок отново ще бъде запратен по траектория към сблъсък с гангстера Уилсън Фиск, познат като Кингпин, а залогът този път не е само кварталът Адската кухня, а целият Ню Йорк.",
+            "homepage": "",
+            "tagline": "Работата на дявола никога не приключва."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Daredevil: Znovuzrodenie",
+            "overview": "V pôvodnom seriáli Marvelu Daredevil: Znovuzrodenie bojuje nevidomý advokát so zostrenými zmyslami Matt Murdock za spravodlivosť pomocou svojej právnickej firmy, zatiaľ čo bývalý mafiánsky boss Wilson Fisk sleduje svoje vlastné politické ciele v New Yorku. Identity oboch mužov sa začínajú odhaľovať, čo vedie k nevyhnutnému stretu oboch hlavných postáv.",
+            "homepage": "",
+            "tagline": "Diabol sa znova pustí do práce"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock, ein blinder Anwalt mit besonderen Fähigkeiten, kämpft in seiner geschäftigen Anwaltskanzlei für Gerechtigkeit, während der ehemalige Mafiaboss Wilson Fisk seine eigenen politischen Ziele in New York verfolgt. Als ihre früheren Identitäten sich ihren Weg an die Oberfläche bahnen, befinden sich beide Männer unausweichlich auf Kollisionskurs.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "夜魔俠：重生",
+            "overview": "失明律師馬修梅鐸的力量得到提升，繼續以經營律師樓來主持正義。前犯罪集團首腦威爾遜菲斯克在紐約染指政壇，當他們過去的身份開始浮現時，兩人發現彼此注定對立。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "I Marvel Televisions Daredevil: Born Again kæmper Matt Murdock, en blind advokat med særlige evner, for retfærdighed gennem sit travle advokatbureau, mens den forhenværende forbryderkonge Wilson Fisk gør politisk karriere i New York. Da deres gamle identiteter begynder at vise sig, kommer de to uundgåeligt på kollisionskurs.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock, een blinde advocaat met extra sterke zintuigen, strijdt voor gerechtigheid via zijn bruisende advocatenkantoor, terwijl de voormalige maffiabaas Wilson Fisk zijn eigen politieke doelen nastreeft in New York. Wanneer hun identiteiten uit het verleden aan het licht komen, komen beide mannen op een onvermijdelijke ramkoers terecht.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdoch, yliluonnollisilla kyvyillä varustettu sokea lakimies puolustaa oikeudenmukaisuutta vireässä lakifirmassaan. Entinen mafiapomo Wilson Fisk edistää poliittista uraansa New Yorkissa. Kun molempien edelliset identiteetit alkavat tulla näkyviin, miehet huomaavat olevansa törmäyskurssilla.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock, en blind advokat med forsterkede evner, kjemper for rettferdighet gjennom sitt travle advokatfirma, mens den tidligere mafialederen Wilson Fisk arbeider med sine egne politiske prosjekter i New York. Når deres gamle identiteter kommer til syne, havner begge menn på en uunngåelig kollisjonskurs.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Demolidor: Nascer de Novo",
+            "overview": "Matt Murdock, um advogado cego com capacidades melhoradas, luta pela justiça através da sua popular firma de advogados, enquanto o antigo líder da máfia Wilson Fisk persegue os seus próprios objetivos políticos em Nova Iorque. Quando as identidades passadas de ambos começam a emergir, os dois homens acabam numa inevitável rota de colisão.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Daredevil: Renașterea",
+            "overview": "Matt Murdock, un avocat orb cu abilități extraordinare, luptă pentru dreptate sub egida cabinetului său de avocatură, în timp ce fostul șef al mafiei, Wilson Fisk își dezvoltă o carieră politică în New York. Când identitățile lor din trecut se intersectează, ambii bărbați se trezesc în fața unui impact iminent.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock, en blind advokat med förhöjda sinnen, kämpar för rättvisa på sin jäktiga advokatbyrå, medan den tidigare maffiabossen Wilson Fisk eftersträvar sina egna politiska mål i New York. När deras forna identiteter börjar framträda hamnar de två männen snart på en oundviklig kollisionskurs.",
+            "homepage": "",
+            "tagline": "Djävulens verk är aldrig slutfört."
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Drąsiaširdis: Atgimimas",
+            "overview": "Matas Mardokas, aklas teisininkas, turintis spec. gebėjimų, kovoja už teisingumą savo advokatų kontoroje, o buvęs mafijos bosas Vilsonas Fiskas siekia savo politinių tikslų Niujorke. Kai ima aiškėti jų praeities tapatybės, abu vyrai neišvengiamai susiduria.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "ديرديفل: يولد من جديد",
+            "overview": "يتجه المحامي الأعمى \"مات ميردوك\" وزعيم المافيا الأسبق \"ويلسون فيسك\" نحو صدام حتمي.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "แดร์เดวิล: บอร์นอะเกน",
+            "overview": "แมตต์ เมอร์ด็อกกำลังสู้เพื่อความยุติธรรม ในขณะที่วิลสัน ฟิสก์ไขว่คว้าความทะเยอทะยานด้านการเมืองของตัวเอง เส้นทางของทั้งคู่ต้องปะทะกันอย่างเลี่ยงไม่ได้",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Daredevil: Tái Xuất",
+            "overview": "Bộ phim xoay quanh Matt Murdock (do Charlie Cox thủ vai), một luật sư mù ở Hell’s Kitchen, New York, người sống hai cuộc đời: ban ngày là một luật sư đấu tranh cho công lý, ban đêm là Daredevil – một siêu anh hùng đeo mặt nạ bảo vệ thành phố. Phim lấy bối cảnh vài năm sau các sự kiện của loạt phim Netflix, khi Matt cùng hai người bạn thân là Foggy Nelson (Elden Henson) và Karen Page (Deborah Ann Woll) đã tìm thấy sự ổn định trong cuộc sống với văn phòng luật của họ.Tuy nhiên, sự yên bình này không kéo dài khi Wilson Fisk (Vincent D’Onofrio), tức Kingpin – kẻ thù truyền kiếp của Daredevil, tái xuất với một kế hoạch đầy tham vọng. Không còn hoạt động trong thế giới ngầm như trước, Fisk giờ đây hướng đến chính trường và trở thành một nhân vật quyền lực tại New York, thậm chí có thể là thị trưởng. Mâu thuẫn giữa Matt và Fisk leo thang khi cả hai đối đầu trong một cuộc chiến vừa mang tính cá nhân vừa ảnh hưởng đến cả thành phố.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Шибайголова: Народжений заново",
+            "overview": "Сліпий адвокат Метт Мердок процвітає, але його альтер его не забуто. Вілсон Фіск обійняв посаду мера і лише Шибайголова знає, хто ховається за маскою добродушного та чесного політика. Давні вороги, здається, забули про минуле і намагаються не повертатися до супергеройської діяльності. Та чи довго триватиме їх мир чи вони повернуться до ворогів?",
+            "homepage": "",
+            "tagline": "Робота диявола ніколи не закінчується"
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock, slepi odvetnik z izostrenimi čuti, se bori za pravico skozi svojo živahno odvetniško pisarno, medtem ko nekdanji mafijski šef Wilson Fisk v New Yorku sledi svojim političnim ciljem. Ko njuni pretekli identiteti začneta prihajati na dan, se njuni poti neizogibno križajo.",
+            "homepage": "",
+            "tagline": "Hudič nikoli ne počiva."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Matt Murdock berjuang memperjuangkan keadilan, sementara Wilson Fisk mengejar ambisi politiknya. Keduanya berada dalam konflik yang tak terhindarkan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "ديرديفل: يولد من جديد",
+            "overview": "يتجه المحامي الأعمى \"مات ميردوك\" وزعيم المافيا الأسبق \"ويلسون فيسك\" نحو صدام حتمي.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "En Matt Murdock, un advocat cec amb habilitats superdesenvolupades lluita per la justícia des del seu atrafegat bufet mentre l'antic cap mafiós Wilson Fisk emprèn una carrera política a Nova York. Quan les seves identitats passades comencen a sortir a la llum, tots dos es veuen abocats a un enfrontament inevitable.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "डेरडेविल: बॉर्न अगेन",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qrTAc0ZtQ859Qu5O8cixJzNJpQs.jpg",
+          "vote_average": 6.546,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/m291MEBjhuRqb0nh9ojnm9gzScq.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v2cTiLNlviotwugnDKqY21xGmSv.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1280,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qHCpG49qxs4owLgmhh0T62ErUZv.jpg",
+          "vote_average": 5.074,
+          "vote_count": 27,
+          "width": 2276
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sluu3iq8EdlRfwCwxtF7WUyuy0b.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7bNw4yfFQOWXZKKMFxFWIbFmsys.jpg",
+          "vote_average": 4.12,
+          "vote_count": 21,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hrsRczdsAHBLTDzlIqt82bxY0Tt.jpg",
+          "vote_average": 3.666,
+          "vote_count": 19,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/byU0V9NpdIkPdGn27rPYAeMSwHS.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fRRBao2Ek1SE4cMOZBS5RjJ28Nn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bmSrYSzrdVtZxh81hHptNHGsPe.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1Fsu4SQPQloCSdb3rETMPe8BMXs.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4yVvg1BoFZAyru7LwDjA7iXPLdL.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h6JF8zcQRui8bt1As1q4orfxsHc.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oRbyCL4LrFMWBJRHJ3utB5H2ctc.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jnj1KqxMZMQ0p8n8wVPKsYiAZYA.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fywRMxZt8eNiD8Gk3ueZVbm1mrT.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l7MNffGNazD14rV33NCSSkkeHVy.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eTQfwanRyI5HrWyUsyh3Ip8nVd3.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zuqjhHp97lJ3XrfAS8g6CGcRvBi.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hxLeyUVVDd9BNvU9jz7CYwOehOD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1675,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kbaJEtMI2wUbRhBMfkUZD0EsB8u.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2978
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dO7KZrbo7k9XTZ6oodwk7CmdP2x.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/saGrvQwsMXswz3e4GjU91KpOt5V.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h1PGmI9yEeyXZRlYvJPshslt725.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lncbawGddYUoKWMZikIRboJjTDP.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lSrQZFIc30Sjk51CuwBV3gyZtRV.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lYxkHJFBtkKmTB8UQhjo3r7YDZi.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4Jg28LIYyGo7yIeMuDKk4nQjmna.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3c8CiKLBYVOObQuThydS5rJHS1R.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hcIq4SamH16OwT4TnFSlUCXLJ2v.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k2ld2fLESgrRsMvQ3x2T30XVwzb.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vgpPVM4YUFxE3HdzlBB42sMza3S.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hyWmmSbW253svXHSimS5mmBHEk7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zDSImX4X47JNGGy7Uy3lt2824xK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fGw2P3T8goqEvYLatSPg6wZqv9s.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pEqgPNbJbMDKPQ2ymjnRpBVwfKt.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rOe15qgJNd3O6jj4IcGc3USRvOT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wHeGmkIwnxctf9psjHriOXIfngW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/28EzERL80QXwpxjwCGAH75r0mqB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yaXOKQCuFzwgZW7QONnG4ZzMQ52.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oyM1K3GscnyqDbmePlewDxChFBU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/joildkXHvLZ2BQ3h9FHZ636vLVY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qaMsRpSMeSIGvo9m2zsCCNLqB7b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hXl7dU7ZKU6ciY1kFWA4w2pfIwj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 886,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/izmCiWKNHOVY4mzjaEQNLeIbavY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1574
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kaKtdkx5uG8L0RRFwYCwntgqVHj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7hxhM2pgCmJWtHya2pvgBDVUMSi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/LMwa26mFjfaRoynAjlDj3dnLJm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s77GuIV5N0qocnyiXDInnpxpldL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/42J9qjijG66kGDD9whie3atA7zo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.4,
+          "height": 2006,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/23zbPU6u5TUdyrYXWs8Jxhqhiy9.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4815
+        },
+        {
+          "aspect_ratio": 2.056,
+          "height": 932,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zvX53m1UyTEJ2Vn6bTkJEqvs08t.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1916
+        },
+        {
+          "aspect_ratio": 2.206,
+          "height": 2183,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gWnUzX1xKZD6DuhTMEzGQVYy2hn.png",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 4815
+        },
+        {
+          "aspect_ratio": 2.399,
+          "height": 1601,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lbEFxoej0HfCIorpkKNn1ogJbvU.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.703,
+          "height": 249,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aBhQlyXeORXtUIA4IqVieyZ2eCX.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 424
+        },
+        {
+          "aspect_ratio": 2.206,
+          "height": 2183,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aV9TmKZ5KHxaQg2Ynb2uACsb17J.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4815
+        },
+        {
+          "aspect_ratio": 2.067,
+          "height": 550,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gorRpx22gjCuYNMyuZ3O9Px7kjn.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1137
+        },
+        {
+          "aspect_ratio": 2.048,
+          "height": 330,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1emeUUplZL2ONAFq45In2zEoHuE.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 676
+        },
+        {
+          "aspect_ratio": 2.055,
+          "height": 1296,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/61UVPNHsge7Oxemp7UWfIsYIiru.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2663
+        },
+        {
+          "aspect_ratio": 2.058,
+          "height": 892,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qzgFP6G5wVpxIJOvUsm0paOniqm.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1836
+        },
+        {
+          "aspect_ratio": 2.042,
+          "height": 570,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5IIYCVj7LYnC77bUv73wB5grL6v.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1164
+        },
+        {
+          "aspect_ratio": 2.416,
+          "height": 3330,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gfpza5ag74XzUij7tcpfFmxGFcH.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 8044
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A46i2ECLE1bVrl9YTWVnfBEWuzh.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xDUoAsU8lQHOOoRkFiBuarmACDN.jpg",
+          "vote_average": 1.066,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c1SkU7s1mzmX1jj96geXA7WlSmO.jpg",
+          "vote_average": 6.042,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qXxqIIr3ip12MTOtRw9XWEHvfj6.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wApHuUuM4QXoLwsawLTbnfqq9eM.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7NhWlXqmUHARvhVPX7kdLkaXRLx.jpg",
+          "vote_average": 4.3,
+          "vote_count": 30,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rl7zYeA66W8KqwkqoFy6gpldtH5.jpg",
+          "vote_average": 3.448,
+          "vote_count": 29,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nyAgpa26J20KNwut1BFGlcoAJdg.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y4nNdvQl56NIVA6OkYeO5z0ZjHU.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vpvBvXk9ny481GOajxejsbbRsVN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dlRKr4rJlGFXQ9TUEAJhUbjckn0.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/53tkMgbGl8lhjI3QzzVro7o9CUP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1050,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hX0QeuQI9mu6RBZZ6m4O9vTTam8.jpg",
+          "vote_average": 3.138,
+          "vote_count": 18,
+          "width": 700
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iVi0LrpzG6gcHSxeXZvc4uJA3wt.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cAtF8OkZN9MxcXNY0EtYQ7XSZTa.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Z4VoPAjYmu5CpRVmUPHqmyxVZo.jpg",
+          "vote_average": 2.278,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cxgGwPaJsvNnWr7rfOsNZ7X1N5U.jpg",
+          "vote_average": 2.278,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i5Y7jyq62v7dw2v0srEM2skqhWK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xL7Z4eTROWO1Jju0ssp7T6SBfMu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yMBgOW8ll2ptvIqVN8UqKjRA4vy.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yqgVMFtpobM5BDrkjF7ONblqIpZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gjum4yfMeZOu3upPstJHBPgTLFD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7JbaQsOr3oQehBNf81fHi0N7fax.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jYCM6K2cD4RtOCU9icPzlP1YS7u.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jgGbKX9JfWgbdsDzpqsiBZ9luAo.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rc6iW009FypFD1FGgHiacNn4cVv.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lWrKNDTNSfkk02kxv7AXxCQqbiL.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nrPQ2FnMQA5frNFNFhGRYbLt3vt.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eDcNcDZWmqgi2N7aXPsdFrfC0qT.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6xcVTKFE29ka3WJQ5RUE7llntPM.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1348,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/idQunrCpM6Pmtbgy9a2H46KMA8N.jpg",
+          "vote_average": 1.31,
+          "vote_count": 6,
+          "width": 899
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2790,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vzecRcSpZcOclMSeg0tqaCBuPNb.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1860
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hKWcy5RgJPt4ZF8TfaHVWaeohTg.jpg",
+          "vote_average": 1.222,
+          "vote_count": 4,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rY1AJ1WGstSaIOba5j96cdKU0dF.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kYq2uh9uAFTXKMbgktSMydVTdog.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1012
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Q7NJjBk38dFe8WDzciQH79zpqN.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1233,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s1gODGcQcR4ZMK6CAOSLnc4kVon.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 822
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/50U9cfwjG3NaGpMoCvE0ZzSyCbw.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z2QMtAP6T0CbhM2z4sRJH0Ljg9c.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qRimM5WYO4ZAkM3OudhGTqzZXJW.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1667
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v8KYHavOsfQ8WdhYjprpYuCux62.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1666
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2yXdX2YNmRnQ2NjKDfY7aOCbDt4.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9lLuhV703HGCbnz6FxnqCwIwzAZ.jpg",
+          "vote_average": 0.886,
+          "vote_count": 22,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4q498iyej6SNLsYZAeInnrmfRn0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1332
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bUdkAzleXva5m3BlHjLl5noyClf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1666
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dX9kZCwXm9oItU8nQJ3l3JGgxoT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wwesLjwBVYRzWN6v09DfsWabtL8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.665,
+          "height": 2000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2xi5n0eRwmEVT7gz4b9j0n13itm.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1330
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tmKSh8VhHbFW50uQrMXrZZnHJW6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sR3zNQZwE1SZ543oPH30W5cZHhA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hTIYTnp74RXedENt8jayZZHeiN5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.669,
+          "height": 1170,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oe6eG5PBdnUoQUPq1Zood2NF3da.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 783
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4tGqRXHpZdWAbgYPSn79bLnKpZT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tflk5hN25kiSdseUdUOScRFo1Ha.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zvdw9Xt1LsMh2QHR41HzGqRLS8V.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cmOPTYZJ1HQd747h8pbsnsYgaot.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.724,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1UKmYioxaZTtezmbnq66M9iw1ET.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1158
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/666ABvDA8q4ioDUGSsVfhtoGV0j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bAjHxFeCJ3ySxBc1FGMpp9taaCJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wLRkMebCC95yKq8eGFJrvJWE5H6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/asre6vy6JRxsJUplBc7GBKMY02a.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bL2DnTrXAcOrQlQFb5BwKNMSQko.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3pVEHVo0kbDkl44RdIFGOqvcmg2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/joKhX3xa3cFPnUJJobxbVKnppfY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dTFeULXN1AIEinHLBNenk5ZSy7I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zUmT7tqewsfbqYZ1fO9U12kRMA5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2487,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9QkS2wGx8fOjBsMwsrmXe3l4VyZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1658
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6qKgdYxw5wwmGJpCZ0Mr3KEiudA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1382
+        },
+        {
+          "aspect_ratio": 0.663,
+          "height": 829,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3MbwKRC2AJ3SN3a9VjEWMQVjGdr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 550
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yOV9EhCZ4UL20wyd2gve6UOcyqw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pN0Enh8huhKGbntbuZnce3s0jso.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1382
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lDqJOChH1MGH2QzAF16l5bBBWyE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/94xnYiyzjZe1S13OGQWJWZUMq9P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tFPUbKBtWf09BVbtWToX2kqpgGa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1382
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qwfJ8eqQACjzJAifD3ouxc60rdU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iRFxmx3kMPuEtTBNNBVeSiufuxO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/raT4KDRVf7EQY570Bt7DArGjdAg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1293,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dPeohUsiUqGAdOfAHaF0w7SIJn0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 862
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zEop3ShV2qBUO3iHfvsDkaYqpef.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kBzIH1KfcxzkKnT6xrTXlY7jrlt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2441,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bUnXykZjQz0AZGl2E1bBLmDB0cK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1627
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1608,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9vu0SklvnmMIvB72PrhUqi9A63u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1086
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1608,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mkOw3f1rEPQzfMnRgWvZO74YE9F.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1086
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mkQPCAUCXzQbqfpQlYUhw1lz4Gm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t6lTEQm5mWGnnURHPkhCWd5grZf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xfDykPKcUgcQQ7wskxzVqBdrQIP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7oIWjtR9wf6cZnI6OU6MfzUNJEb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

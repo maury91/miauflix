@@ -1,3 +1,5 @@
+export type { AnimeEpisodeRecord, AnimeLayoutRecord, AnimeSeasonRecord } from './anime';
+export { animeEpisodes, animeLayouts, animeSeasons } from './anime';
 export { artworkBackdropCache, artworkLogoAssets, artworkLogoCache, mediaArtwork } from './artwork';
 export { backdropFocus } from './backdrop-focus';
 export { movies } from './movies';
