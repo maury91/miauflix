@@ -18,11 +18,16 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - What you're watching gets peers and bandwidth before background downloads, so playback starts sooner while other titles download
 - Torrent downloading, streaming, seeder counts and download storage now run in a new internal service, media-load, in the services container (port 3004). The downloads folder is now mounted on the services container instead of the main one, and downloads you already have are handed to it automatically the first time it starts. It is also published on its own as the `miauflix-media-load` image
 - The player's progress bar shows which parts of the video are already downloaded, updated every second
+- Subtitles sit lower on the screen, as outlined text without a black box, and move up out of the way while the player controls are open
+- Anime subtitles are drawn in the font the release ships for them, when the video carries it
+- **Skip intro**: a "Skip intro" button appears while a video's opening plays, when the file marks it with a chapter ("Intro", "Opening", "OP"); it never skips on its own. On a TV, press Down from the video to select it (it turns white), then OK. "Skip credits" and "Play next episode" are reached the same way
+- When a scene follows the credits ("Post-Credits", an epilogue after the anime ending), the player offers to skip the credits and jumps to the scene after 5 seconds; "Watch credits" keeps them. The next-episode countdown waits until that scene
 - media-load records each download's speed, peers and total bytes received and sent (not shown in the app yet)
 - Services can be laid out freely: catalog, source search and media load each have their own image (`miauflix-catalog-services`, `miauflix-sources`, `miauflix-media-load`), and `miauflix-services` still runs them all in one container (`docker-compose.all-in-one.yml`). With the VPN only source search, media load and FlareSolverr go through it now; the backend and the catalog no longer do. Source search and media load each check their own VPN connection, so they can run on other servers, and the status page shows each one's check. Without a VPN, media load disconnects from peers and trackers and only plays what is already downloaded. Update your compose files with `./update.sh --files`; `MIAUFLIX_UPSTREAM=vpn:3000` is no longer needed
 
 ### Fixes
 
+- Anime releases that carry their own fonts (most fansubs) could not be inspected, so the next-episode countdown, audio conversion and track choice never kicked in; their "Ending" chapter now also starts the next-episode countdown
 - Playback could fail to start with a server error ("could not load any of its sources"); it plays again
 - An episode's first play waits for at most one slow download lookup instead of one per candidate, so it starts sooner
 - When playback switches away from a source that stopped working, that source stops downloading instead of competing with the new one for bandwidth

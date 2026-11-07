@@ -44,6 +44,25 @@ export const createSubtitleRoutes = ({
         }
       }
     )
+    .get('/tracks/:candidateId/font', rateLimitGuard(1), async context => {
+      const { candidateId } = context.req.param();
+      const streamingKey = context.req.query('streamingKey');
+      if (!/^[A-Za-z0-9_-]{8,128}$/.test(candidateId) || !streamingKey)
+        return context.text('Font is unavailable', 404);
+      try {
+        const font = await subtitlesService.getFont(candidateId, streamingKey);
+        if (!font) return context.text('Font is unavailable', 404);
+        return context.body(new Uint8Array(font.data), 200, {
+          'content-type': font.format === 'otf' ? 'font/otf' : 'font/ttf',
+          'cache-control': 'private, no-store',
+          'referrer-policy': 'no-referrer',
+          'x-content-type-options': 'nosniff',
+        });
+      } catch (error) {
+        if (error instanceof SubtitleAccessError) return context.text('Font is unavailable', 404);
+        return context.text('Font could not be loaded', 502);
+      }
+    })
     .get('/tracks/:candidateId', rateLimitGuard(5), async context => {
       const { candidateId } = context.req.param();
       if (!/^[A-Za-z0-9_-]{8,128}$/.test(candidateId)) {

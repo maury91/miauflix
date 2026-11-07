@@ -11,10 +11,21 @@ import { withFile } from '@services/playback/playback-target';
 import { collectStderr } from '@services/playback/stderr-tail';
 import { openTorrentInput, PROBE_SIZE_BYTES } from '@services/playback/torrent-input';
 
+import type { FontAttachment } from './subtitle-fonts';
+import {
+  dialogueStyle,
+  fontMatch,
+  isFontAttachment,
+  MAX_FONT_ATTEMPTS,
+  MAX_FONT_BYTES,
+  orderFontAttachments,
+  readFontNames,
+} from './subtitle-fonts';
 import { toWebVtt, webVttWindow } from './subtitles.util';
 
 const MAX_BYTES = 2 * 1024 * 1024;
 const TEXT_CODECS = new Set(['subrip', 'ass', 'ssa', 'webvtt', 'mov_text', 'text']);
+const STYLED_CODECS = new Set(['ass', 'ssa']);
 const EXTENSIONS = new Set(['.srt', '.vtt', '.ass', '.ssa']);
 
 export interface TorrentSubtitle {
@@ -26,6 +37,13 @@ export interface TorrentSubtitle {
   path?: string;
   videoFilePath?: string;
   streamIndex?: number;
+  /** Fonts attached to the video, for a styled (ASS/SSA) embedded track. */
+  fonts?: FontAttachment[];
+}
+
+export interface SubtitleFont {
+  data: Buffer;
+  format: 'otf' | 'ttf';
 }
 
 const languageNames = new Map<string, string>();
@@ -112,6 +130,17 @@ export function matchingSubtitleFiles(
   });
 }
 
+interface RunOptions {
+  sidecar?: boolean;
+  startSeconds?: number;
+  speculative?: boolean;
+  signal?: AbortSignal;
+  /** Options placed before the input. */
+  inputArgs?: string[];
+  maxBytes?: number;
+  binary?: boolean;
+}
+
 /** Text subtitle discovery/extraction through decrypted, verified torrent ranges. */
 /** Wait before probing a video again after a failed probe. */
 const PROBE_RETRY_DELAY_MS = 3_000;
@@ -190,10 +219,9 @@ export class TorrentSubtitlesService {
         target,
         'ffprobe',
         [
-          '-select_streams',
-          's',
+          // Attachments are listed too, without their data: they are the release's fonts.
           '-show_entries',
-          'stream=index,codec_name:stream_tags=language,title:stream_disposition=hearing_impaired',
+          'stream=index,codec_type,codec_name:stream_tags=language,title,filename,mimetype:stream_disposition=hearing_impaired',
           '-of',
           'json',
         ],
@@ -212,20 +240,32 @@ export class TorrentSubtitlesService {
     const probe = JSON.parse(body) as {
       streams?: Array<{
         index: number;
+        codec_type?: string;
         codec_name: string;
-        tags?: { language?: string; title?: string };
+        tags?: { language?: string; title?: string; filename?: string; mimetype?: string };
         disposition?: { hearing_impaired?: number };
       }>;
     };
-    return (probe.streams ?? [])
+    const streams = (probe.streams ?? []).filter(
+      stream => Number.isSafeInteger(stream.index) && stream.index >= 0
+    );
+    const fonts = streams
       .filter(
         stream =>
-          Number.isSafeInteger(stream.index) &&
-          stream.index >= 0 &&
+          stream.codec_type === 'attachment' &&
+          isFontAttachment(stream.tags?.filename, stream.tags?.mimetype)
+      )
+      .slice(0, 200)
+      .map(stream => ({ streamIndex: stream.index, filename: stream.tags?.filename ?? '' }));
+    return streams
+      .filter(
+        stream =>
+          (stream.codec_type === undefined || stream.codec_type === 'subtitle') &&
           TEXT_CODECS.has(stream.codec_name)
       )
       .slice(0, 30)
       .map(stream => ({
+        ...(fonts.length > 0 && STYLED_CODECS.has(stream.codec_name) ? { fonts } : {}),
         fileId: `embedded:${stream.index}`,
         provider: 'embedded',
         streamIndex: stream.index,
@@ -270,7 +310,75 @@ export class TorrentSubtitlesService {
       : toWebVtt(body);
   }
 
+  /**
+   * The attached font the track's dialogue style names, closest in weight and slant.
+   * Null when the track has no styled header or the release does not carry that font.
+   */
+  async getFont(target: PlaybackTarget, track: TorrentSubtitle): Promise<SubtitleFont | null> {
+    if (track.videoFilePath !== undefined && track.videoFilePath !== target.filePath)
+      throw new Error('Subtitle track belongs to another video');
+    if (track.provider !== 'embedded' || !track.fonts?.length) return null;
+    const header = await this.run(target, 'ffmpeg', [
+      '-map',
+      `0:${track.streamIndex}`,
+      '-vn',
+      '-an',
+      '-c:s',
+      'copy',
+      // The header only: no events are read.
+      '-t',
+      '0',
+      '-f',
+      'ass',
+      'pipe:1',
+    ]);
+    const style = dialogueStyle(header);
+    if (!style) return null;
+    let best: { font: SubtitleFont; score: number } | null = null;
+    for (const attachment of orderFontAttachments(track.fonts, style.fontName).slice(
+      0,
+      MAX_FONT_ATTEMPTS
+    )) {
+      let data: Buffer;
+      try {
+        data = await this.run(target, 'ffmpeg', ['-t', '0', '-f', 'null', '-'], {
+          inputArgs: [`-dump_attachment:${attachment.streamIndex}`, 'pipe:1'],
+          maxBytes: MAX_FONT_BYTES,
+          binary: true,
+        });
+      } catch (error) {
+        logger.debug('TorrentSubtitlesService', 'Font attachment could not be read', {
+          filename: attachment.filename,
+          error: error instanceof Error ? error.message : error,
+        });
+        continue;
+      }
+      const names = readFontNames(data);
+      const score = names ? fontMatch(names, style) : null;
+      if (names && score !== null && (!best || score > best.score)) {
+        best = {
+          font: { data, format: names.format },
+          score,
+        };
+        if (score === 2) break;
+      }
+    }
+    return best?.font ?? null;
+  }
+
   /** Run FFmpeg/FFprobe over one decrypted file; sidecars are read whole instead of windowed. */
+  private run(
+    input: PlaybackTarget,
+    program: 'ffmpeg' | 'ffprobe',
+    args: string[],
+    options: RunOptions & { binary: true }
+  ): Promise<Buffer>;
+  private run(
+    input: PlaybackTarget,
+    program: 'ffmpeg' | 'ffprobe',
+    args: string[],
+    options?: RunOptions
+  ): Promise<string>;
   private async run(
     input: PlaybackTarget,
     program: 'ffmpeg' | 'ffprobe',
@@ -280,13 +388,11 @@ export class TorrentSubtitlesService {
       startSeconds = 0,
       speculative = false,
       signal,
-    }: {
-      sidecar?: boolean;
-      startSeconds?: number;
-      speculative?: boolean;
-      signal?: AbortSignal;
-    } = {}
-  ): Promise<string> {
+      inputArgs = [],
+      maxBytes = MAX_BYTES,
+      binary = false,
+    }: RunOptions = {}
+  ): Promise<Buffer | string> {
     signal?.throwIfAborted();
     if (this.closed || this.active >= 2) throw new Error('Subtitle preparation is busy');
     this.active++;
@@ -328,6 +434,7 @@ export class TorrentSubtitlesService {
               '-nostdin',
               ...common,
               ...(sidecar ? [] : ['-ss', String(Math.max(0, startSeconds - 10)), '-copyts']),
+              ...inputArgs,
               '-i',
               opened.url,
               ...(sidecar ? [] : ['-to', String(startSeconds + 120)]),
@@ -343,7 +450,7 @@ export class TorrentSubtitlesService {
       let failure: Error | undefined;
       process.stdout!.on('data', (chunk: Buffer) => {
         bytes += chunk.length;
-        if (bytes > MAX_BYTES) {
+        if (bytes > maxBytes) {
           failure = new Error('Subtitle output is too large');
           process.kill('SIGKILL');
         } else chunks.push(chunk);
@@ -368,7 +475,8 @@ export class TorrentSubtitlesService {
               )
         );
       });
-      return Buffer.concat(chunks).toString('utf8');
+      const output = Buffer.concat(chunks);
+      return binary ? output : output.toString('utf8');
     } finally {
       if (timeout) clearTimeout(timeout);
       if (child) this.processes.delete(child);

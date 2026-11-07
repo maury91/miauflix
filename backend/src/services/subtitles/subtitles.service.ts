@@ -13,13 +13,18 @@ import type { StreamService } from '@services/stream/stream.service';
 
 import { filenameSimilarity } from './subtitle-matching';
 import { toWebVtt } from './subtitles.util';
-import type { TorrentSubtitle, TorrentSubtitlesService } from './torrent-subtitles.service';
+import type {
+  SubtitleFont,
+  TorrentSubtitle,
+  TorrentSubtitlesService,
+} from './torrent-subtitles.service';
 
 const API_BASE = 'https://api.opensubtitles.com/api/v1';
 const MAX_CANDIDATES = 500;
 const MAX_CACHED_TRACK_BYTES = 32 * 1024 * 1024;
 const MAX_CACHED_TRACKS = 256;
 const MAX_TRACK_BYTES = 2 * 1024 * 1024;
+const MAX_CACHED_FONTS = 4;
 
 export interface SubtitleCandidate {
   id: string;
@@ -32,6 +37,8 @@ export interface SubtitleCandidate {
   trusted: boolean;
   match: 'file' | 'release' | 'title';
   filenameSimilarity: number | null;
+  /** The release carries fonts for this track; its dialogue font may be fetched. */
+  embeddedFonts?: boolean;
 }
 
 export interface SubtitleSearchResult {
@@ -107,6 +114,9 @@ export class SubtitlesService {
   private readonly tracks = new Map<string, { body: string; bytes: number }>();
   private cachedTrackBytes = 0;
   private readonly pendingTracks = new Map<string, Promise<string>>();
+  /** Fonts by track, null when the release has no font for it; a few playbacks' worth. */
+  private readonly fonts = new Map<string, SubtitleFont | null>();
+  private readonly pendingFonts = new Map<string, Promise<SubtitleFont | null>>();
 
   constructor(
     private readonly config: ConfigService,
@@ -158,6 +168,7 @@ export class SubtitlesService {
           trusted: false,
           match: 'file',
           filenameSimilarity: track.provider === 'torrent' ? 100 : null,
+          embeddedFonts: !!track.fonts?.length,
         };
         this.candidates.set(candidate.id, {
           candidate,
@@ -359,7 +370,8 @@ export class SubtitlesService {
     }
   }
 
-  async getTrack(candidateId: string, streamingKey: string, startSeconds = 0): Promise<string> {
+  /** The candidate, revalidated against a live grant for the same source, user and title. */
+  private async authorizedCandidate(candidateId: string, streamingKey: string) {
     let record = this.candidates.get(candidateId);
     if (record && record.streamingKey !== streamingKey) {
       this.removeCandidate(candidateId);
@@ -413,6 +425,7 @@ export class SubtitlesService {
                   trusted: false,
                   match: 'file',
                   filenameSimilarity: track.provider === 'torrent' ? 100 : null,
+                  embeddedFonts: !!track.fonts?.length,
                 },
                 fileId: track.fileId,
                 local: track,
@@ -444,6 +457,11 @@ export class SubtitlesService {
       if (record) this.removeCandidate(candidateId);
       throw new SubtitleAccessError('Subtitle is unavailable');
     }
+    return { record, resolved };
+  }
+
+  async getTrack(candidateId: string, streamingKey: string, startSeconds = 0): Promise<string> {
+    const { record, resolved } = await this.authorizedCandidate(candidateId, streamingKey);
 
     if (!Number.isSafeInteger(startSeconds) || startSeconds < 0 || startSeconds > 7 * 24 * 3600)
       throw new SubtitleAccessError('Invalid subtitle position');
@@ -480,6 +498,35 @@ export class SubtitlesService {
         this.pendingTracks.delete(key);
       });
     this.pendingTracks.set(key, loading);
+    return loading;
+  }
+
+  /** The attached font the track's dialogue style uses, or null when the release has none. */
+  async getFont(candidateId: string, streamingKey: string): Promise<SubtitleFont | null> {
+    const { record, resolved } = await this.authorizedCandidate(candidateId, streamingKey);
+    const local = record.local;
+    if (!local?.fonts?.length) return null;
+    if (resolved.target.source.id !== record.sourceId)
+      throw new SubtitleAccessError('Playback source is unavailable');
+    const key = `${record.sourceId}:${record.playableKey}:${record.fileId}`;
+    const cached = this.fonts.get(key);
+    if (cached) {
+      this.fonts.delete(key);
+      this.fonts.set(key, cached);
+      return cached;
+    }
+    const pending = this.pendingFonts.get(key);
+    if (pending) return pending;
+    const loading = this.torrentSubtitles
+      .getFont(resolved.target, local)
+      .then(font => {
+        this.fonts.set(key, font);
+        while (this.fonts.size > MAX_CACHED_FONTS)
+          this.fonts.delete(this.fonts.keys().next().value!);
+        return font;
+      })
+      .finally(() => this.pendingFonts.delete(key));
+    this.pendingFonts.set(key, loading);
     return loading;
   }
 

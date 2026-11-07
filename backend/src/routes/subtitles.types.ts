@@ -24,6 +24,8 @@ export interface SubtitleCandidateDto {
   match: 'file' | 'release' | 'title';
   /** Filename similarity from 0 to 100, or null when the video filename is unavailable. */
   filenameSimilarity: number | null;
+  /** The release carries fonts for this track; its dialogue font may be fetched. */
+  embeddedFonts?: boolean;
 }
 
 export interface SubtitleSearchResponse {
