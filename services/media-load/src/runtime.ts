@@ -3,7 +3,9 @@ import { join } from 'node:path';
 import type {
   EncryptedStorageLayout,
   ImportedSource,
+  PiecesUpdate,
   SourceDescriptor,
+  StorageBitfield,
   StorageInventory,
   StorageState,
   TargetRef,
@@ -18,9 +20,11 @@ import {
   InvalidSettingsError,
   parseEngineSettings,
 } from './engine/engine-config';
+import { TransferStats } from './engine/transfer-stats';
 import { Encryption } from './lib/encryption';
 import { ErrorWithStatus } from './lib/errors';
 import { logger } from './lib/logger';
+import { encodeBitfield, PieceUpdates } from './storage/piece-updates';
 import { StorageService } from './storage/storage.service';
 import { StorageImporter } from './storage/storage-import';
 import type { ContentSource, PlaybackTarget } from './storage/types';
@@ -39,6 +43,8 @@ export interface Engine {
   database: MediaLoadDatabase;
   storage: StorageService;
   downloads: DownloadService;
+  transfers: TransferStats;
+  pieces: PieceUpdates;
 }
 
 /**
@@ -134,8 +140,11 @@ export class MediaLoadRuntime {
       const database = new MediaLoadDatabase(db, encryption);
       const { imported } = new StorageImporter(database).status();
       const storage = new StorageService(database, config);
+      const pieces = new PieceUpdates(database.getStorageRepository());
       const downloads = new DownloadService(storage, config, dhtBootstrap);
-      this.engine = { database, storage, downloads };
+      const transfers = new TransferStats(downloads.client, database.getTransferRepository());
+      transfers.start();
+      this.engine = { database, storage, downloads, transfers, pieces };
       this.imported = imported;
     } catch (error) {
       db.close();
@@ -209,9 +218,36 @@ export class MediaLoadRuntime {
     return states;
   }
 
+  async storageBitfields(sourceIds: number[]): Promise<StorageBitfield[]> {
+    const { storage } = this.running;
+    const bitfields: StorageBitfield[] = [];
+    for (const sourceId of new Set(sourceIds)) {
+      const stored = await storage.getStorageBySource(sourceId);
+      if (!stored) continue;
+      bitfields.push({
+        sourceId,
+        totalPieces: stored.totalPieces,
+        bitfield: encodeBitfield({
+          totalPieces: stored.totalPieces,
+          bitfield: stored.downloadedPieces,
+        }),
+      });
+    }
+    return bitfields;
+  }
+
+  /** Hear verified-piece changes, of `sourceIds` only when given; returns the unsubscribe function. */
+  onPieces(listener: (update: PiecesUpdate) => void, sourceIds?: number[]): () => void {
+    const wanted = sourceIds?.length ? new Set(sourceIds) : null;
+    return this.running.pieces.subscribe(update => {
+      if (!wanted || wanted.has(update.sourceId)) listener(update);
+    });
+  }
+
   async inventory(): Promise<StorageInventory> {
-    const { storage, downloads } = this.running;
+    const { storage, downloads, transfers } = this.running;
     const inventory = await storage.getInventory();
+    const transfer = transfers.states();
     return {
       ...inventory,
       items: inventory.items.map(item => {
@@ -227,6 +263,11 @@ export class MediaLoadRuntime {
           videoComplete: activity.videoComplete,
           torrentLoaded: activity.torrentLoaded,
           seedEndsAt: activity.seedEndsAt?.toISOString() ?? null,
+          transfer: transfer.get(item.sourceId) ?? {
+            ...transfers.liveFor(item.sourceId),
+            totalDownloaded: 0,
+            totalUploaded: 0,
+          },
         };
       }),
     };
@@ -271,6 +312,8 @@ export class MediaLoadRuntime {
     this.engine = null;
     if (!engine) return;
     await this.importCompletion?.catch(() => undefined);
+    engine.transfers.stop();
+    engine.pieces.close();
     await engine.downloads.close().catch(error => logger.warn('MediaLoad', 'Close failed', error));
     engine.database.close();
   }

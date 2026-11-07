@@ -197,6 +197,10 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
     storageStates: ({ sourceIds }) => runtime.storageStates(sourceIds),
     storageInventory: () => runtime.inventory(),
     removeStorage: ({ sourceId }) => engine().storage.removeStorageWithResult(sourceId),
+    storageBitfields: ({ sourceIds }) => runtime.storageBitfields(sourceIds),
+    piecesChanged: (emit, filter) => runtime.onPieces(emit, filter?.sourceIds),
+    transferHistory: ({ sourceId, since }) =>
+      engine().database.getTransferRepository().history(sourceId, since),
 
     importStatus: () => runtime.importStatus(),
     importStorage: ({ items }, ctx) => engineCall(ctx, () => runtime.importStorage(items)),

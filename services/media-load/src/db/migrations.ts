@@ -61,4 +61,16 @@ export const migrations: string[] = [
   CREATE INDEX idx_claim_storage ON storage_file_claim (storageId);
   CREATE INDEX idx_claim_expires ON storage_file_claim (expiresAt);
   CREATE TABLE meta (key TEXT PRIMARY KEY, value TEXT NOT NULL);`,
+  // Transfer statistics: lifetime totals per source, and 5-second samples (kept for a day).
+  `ALTER TABLE storage ADD COLUMN totalDownloaded INTEGER NOT NULL DEFAULT 0;
+  ALTER TABLE storage ADD COLUMN totalUploaded INTEGER NOT NULL DEFAULT 0;
+  CREATE TABLE transfer_sample (
+    storageId INTEGER NOT NULL REFERENCES storage (id) ON DELETE CASCADE,
+    at INTEGER NOT NULL,
+    downloadSpeed INTEGER NOT NULL,
+    uploadSpeed INTEGER NOT NULL,
+    peers REAL NOT NULL,
+    PRIMARY KEY (storageId, at)
+  ) WITHOUT ROWID;
+  CREATE INDEX idx_transfer_sample_at ON transfer_sample (at);`,
 ];

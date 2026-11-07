@@ -100,6 +100,9 @@ const startMediaLoad = async () => {
       })),
     storageInventory: unused,
     removeStorage: unused,
+    storageBitfields: unused,
+    piecesChanged: () => () => undefined,
+    transferHistory: unused,
     importStatus: () => {
       calls.push('importStatus');
       return { imported: importState.imported };

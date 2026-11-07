@@ -6,6 +6,7 @@ import type { Encryption } from '../lib/encryption';
 import { SourceRepository } from '../storage/source.repository';
 import { StorageRepository } from '../storage/storage.repository';
 import { StorageFileRepository } from '../storage/storage-file.repository';
+import { TransferRepository } from '../storage/transfer.repository';
 import { migrations } from './migrations';
 
 /** Open (creating or upgrading) the service database at `path`; `:memory:` for tests. */
@@ -34,6 +35,7 @@ export class MediaLoadDatabase {
   private readonly sources: SourceRepository;
   private readonly storage: StorageRepository;
   private readonly storageFiles: StorageFileRepository;
+  private readonly transfers: TransferRepository;
 
   constructor(
     readonly db: Database,
@@ -43,6 +45,7 @@ export class MediaLoadDatabase {
     this.sources = new SourceRepository(db, encryption);
     this.storage = new StorageRepository(db, encryption, this.sources);
     this.storageFiles = new StorageFileRepository(db, encryption);
+    this.transfers = new TransferRepository(db);
   }
 
   /**
@@ -78,6 +81,10 @@ export class MediaLoadDatabase {
 
   getStorageFileRepository(): StorageFileRepository {
     return this.storageFiles;
+  }
+
+  getTransferRepository(): TransferRepository {
+    return this.transfers;
   }
 
   close(): void {

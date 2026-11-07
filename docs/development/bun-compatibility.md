@@ -57,6 +57,21 @@ Node 26 gave the same results, except for the DHT before the fix.
 
 **uTP on x64 is a real loss.** `@thaunknown/utp-native` has prebuilds for linux-x64, darwin and win32, so an x64 VPS running the old Node backend had uTP. Under Bun it would panic, so it stays off and only TCP and WebRTC peers remain.
 
+### Cost under Bun and Node (2026-11-07)
+
+`services/media-load/scripts/runtime-bench.ts` (`bun run …` / `node --expose-gc --import tsx …`), macOS arm64, Bun 1.4.0 against Node 22.22, two rounds each, with the engine's encrypted chunk store:
+
+|                                              | Bun, uTP off                   | Node, uTP off                  | Node, uTP on                                            |
+| -------------------------------------------- | ------------------------------ | ------------------------------ | ------------------------------------------------------- |
+| Local seed → leech 512 MB (TCP, one process) | 103–109 MB/s, 5.4–5.6 CPU s/GB | 107–109 MB/s, 7.7–7.8 CPU s/GB | 59–60 MB/s (the transfer went over uTP), 17–18 CPU s/GB |
+| Debian swarm, 60 s (757 MB)                  | 15.6–18.3 MB/s, 21–22 CPU s/GB | 18.7–18.9 MB/s, 28–31 CPU s/GB | 10.9–12.4 MB/s, 48–55 CPU s/GB                          |
+| RSS peak / after the run                     | 888–1003 MB / 708–847 MB       | 1081–1108 MB / 275–596 MB      | 759–816 MB / 234–334 MB                                 |
+
+- **Speed** is the same: Bun's one slower swarm run was swarm variance (its second run matched Node).
+- **CPU** per GB is about 25–30% lower under Bun.
+- **Memory:** peaks are similar (both hold the 512 MB transfer's buffers), but Bun keeps its RSS after the work is done where Node returns it. In the service's soak (the load test, 5 torrents, 12 min) RSS stayed between 217 and 325 MB with no trend, so it is retention, not a leak.
+- uTP costs about twice the CPU per GB and is slower, under Node too.
+
 ## The blocker: `utp-native`
 
 With default options, Bun panics right after `new WebTorrent()`:

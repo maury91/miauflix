@@ -51,15 +51,48 @@ const COLUMNS = [
   'lastWriteAt',
 ] as const satisfies ReadonlyArray<keyof StorageValues>;
 
+/** A storage's verified pieces after a write; `totalPieces` 0 and no bits once it is removed. */
+export interface BitfieldChange {
+  sourceId: number;
+  totalPieces: number;
+  bitfield: Uint8Array;
+}
+
 const date = (value: number | null): Date | null => (value === null ? null : new Date(value));
 
 /** Storage records, as the backend's TypeORM repository returned them. */
 export class StorageRepository {
+  private readonly bitfieldListeners = new Set<(change: BitfieldChange) => void>();
+
   constructor(
     private readonly db: Database,
     private readonly encryption: Encryption,
     private readonly sources: SourceRepository
   ) {}
+
+  /** Hear every write of a storage's bitfield or piece count; returns the unsubscribe function. */
+  onBitfield(listener: (change: BitfieldChange) => void): () => void {
+    this.bitfieldListeners.add(listener);
+    return () => this.bitfieldListeners.delete(listener);
+  }
+
+  private notifyBitfield(change: BitfieldChange): void {
+    for (const listener of this.bitfieldListeners) listener(change);
+  }
+
+  private notifyStored(storage: Storage | null, values: StorageValues): void {
+    if (!storage || (!('downloadedPieces' in values) && !('totalPieces' in values))) return;
+    this.notifyBitfield({
+      sourceId: storage.sourceId,
+      totalPieces: storage.totalPieces,
+      bitfield: storage.downloadedPieces,
+    });
+  }
+
+  private notifyRemoved(sourceId: number | undefined): void {
+    if (sourceId !== undefined)
+      this.notifyBitfield({ sourceId, totalPieces: 0, bitfield: new Uint8Array(0) });
+  }
 
   private toStorage(row: StorageRow, withSource = false): Storage {
     const storage: Storage = {
@@ -148,7 +181,9 @@ export class StorageRepository {
         `INSERT INTO storage (${columns.join(', ')}) VALUES (${columns.map(() => '?').join(', ')})`
       )
       .run(...(Object.values(values) as never[]));
-    return (await this.findById(Number(lastInsertRowid)))!;
+    const created = (await this.findById(Number(lastInsertRowid)))!;
+    this.notifyStored(created, storage);
+    return created;
   }
 
   async update(id: number, storage: StorageValues): Promise<Storage | null> {
@@ -160,15 +195,23 @@ export class StorageRepository {
           .join(', ')} WHERE id = ?`
       )
       .run(...(Object.values(values) as never[]), id);
-    return this.findById(id);
+    const updated = await this.findById(id);
+    this.notifyStored(updated, storage);
+    return updated;
   }
 
   async delete(id: number): Promise<boolean> {
-    return this.db.query('DELETE FROM storage WHERE id = ?').run(id).changes > 0;
+    const sourceId = this.one('id = ?', id)?.sourceId;
+    const deleted = this.db.query('DELETE FROM storage WHERE id = ?').run(id).changes > 0;
+    if (deleted) this.notifyRemoved(sourceId);
+    return deleted;
   }
 
   async deleteBySourceId(sourceId: number): Promise<boolean> {
-    return this.db.query('DELETE FROM storage WHERE sourceId = ?').run(sourceId).changes > 0;
+    const deleted =
+      this.db.query('DELETE FROM storage WHERE sourceId = ?').run(sourceId).changes > 0;
+    if (deleted) this.notifyRemoved(sourceId);
+    return deleted;
   }
 
   async updateLastAccess(id: number): Promise<void> {

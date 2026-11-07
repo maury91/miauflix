@@ -87,6 +87,14 @@ for (const [index, source] of sources.entries()) {
 }
 const [play, ...background] = targets;
 
+// Verified-piece updates over the WebSocket: how many, and how many sent only the added pieces.
+const pieceMessages = { added: 0, whole: 0, bytes: 0 };
+client.piecesChanged.on(update => {
+  if (update.added) pieceMessages.added++;
+  else pieceMessages.whole++;
+  pieceMessages.bytes += JSON.stringify(update).length;
+});
+
 const started = Date.now();
 for (const target of background)
   await client.predownload({ target, claim: { kind: 'prefetch', ownerKey: 'load-test' } });
@@ -153,6 +161,23 @@ for (const [index, sourceId] of sourceIds.entries()) {
     `  ${label}: ${mb.toFixed(1)} MB during the reads (${(mb / readSeconds).toFixed(1)} MB/s)`
   );
 }
+
+const mbps = (bytesPerSecond: number) => (bytesPerSecond / 2 ** 20).toFixed(1);
+for (const item of (await client.storageInventory()).items) {
+  const t = item.transfer;
+  if (t)
+    console.log(
+      `  source ${item.sourceId} transfer: ↓ ${mbps(t.downloadSpeed)} MB/s, ↑ ${mbps(t.uploadSpeed)} MB/s, ${t.peers} peers, totals ↓ ${(t.totalDownloaded / 2 ** 20).toFixed(0)} MB ↑ ${(t.totalUploaded / 2 ** 20).toFixed(0)} MB`
+    );
+}
+const history = await client.transferHistory({ sourceId: play.sourceId });
+console.log(
+  `  playback history: ${history.length} samples, peak ↓ ${mbps(Math.max(0, ...history.map(sample => sample.downloadSpeed)))} MB/s`
+);
+const [bitfield] = await client.storageBitfields({ sourceIds: [play.sourceId] });
+console.log(
+  `  piece updates: ${pieceMessages.added} with added pieces, ${pieceMessages.whole} whole bitfields, ${(pieceMessages.bytes / 1024).toFixed(0)} KB in all; playback bitfield ${bitfield?.totalPieces} pieces, ${bitfield?.bitfield.length} base64 chars`
+);
 
 const SOAK_MINUTES = Number(process.env.LOAD_SOAK_MINUTES ?? 0);
 if (SOAK_MINUTES > 0) {

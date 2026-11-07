@@ -114,6 +114,49 @@ export interface StorageState {
   localOnly: boolean;
 }
 
+/** Transfer of one stored source: the last 5-second averages and the lifetime totals. */
+export interface TransferState {
+  /** Bytes per second received, averaged over the last 5 seconds (0 when not loaded). */
+  downloadSpeed: number;
+  /** Bytes per second sent, averaged over the last 5 seconds (0 when not loaded). */
+  uploadSpeed: number;
+  /** Connected peers, averaged over the last 5 seconds (0 when not loaded). */
+  peers: number;
+  /** Bytes received from peers over the source's lifetime (wasted and duplicate included). */
+  totalDownloaded: number;
+  /** Bytes sent to peers over the source's lifetime. */
+  totalUploaded: number;
+}
+
+/** One 5-second transfer sample of a source. Samples where nothing moved and no peer was connected are not stored. */
+export interface TransferSample {
+  /** End of the 5-second window, epoch milliseconds. */
+  at: number;
+  downloadSpeed: number;
+  uploadSpeed: number;
+  peers: number;
+}
+
+/**
+ * Which pieces of a source are verified. Either `added` (pieces verified since the previous
+ * update, when that is the smaller message) or `bitfield` (the whole bitfield, base64, most
+ * significant bit first, as BitTorrent's). A whole bitfield also follows pieces being lost
+ * (reclaims) and the storage being removed (`totalPieces` 0, empty bitfield).
+ */
+export interface PiecesUpdate {
+  sourceId: number;
+  totalPieces: number;
+  added?: number[];
+  bitfield?: string;
+}
+
+export interface StorageBitfield {
+  sourceId: number;
+  totalPieces: number;
+  /** Base64, most significant bit first. */
+  bitfield: string;
+}
+
 export type StorageActivity = 'active' | 'available_offline' | 'inactive' | 'local_only';
 
 export interface StorageItem {
@@ -127,6 +170,8 @@ export interface StorageItem {
   videoComplete: boolean;
   torrentLoaded: boolean;
   seedEndsAt: string | null;
+  /** Since 1.1. */
+  transfer?: TransferState;
 }
 
 export interface StorageInventory {
@@ -199,7 +244,7 @@ export interface ImportedSource {
 /** A sealed import or a location outside the service's downloads directories. */
 export type StorageImportError = 'import_closed' | 'invalid_storage_location';
 
-export const mediaLoad = contract('media-load', '1.0', {
+export const mediaLoad = contract('media-load', '1.1', {
   /**
    * The key that encrypts media and the service's records (the backend's `SOURCE_SECURITY_KEY`).
    * The host sends it on every connection, before the configuration; engine calls wait for it.
@@ -252,6 +297,13 @@ export const mediaLoad = contract('media-load', '1.0', {
   storageStates: call<{ sourceIds: number[] }, StorageState[]>(),
   storageInventory: call<void, StorageInventory>(),
   removeStorage: call<SourceInput, StorageRemovalResult>(),
+
+  /** The verified pieces of stored sources; `piecesChanged` reports every change after this. */
+  storageBitfields: call<{ sourceIds: number[] }, StorageBitfield[]>({ since: 1 }),
+  /** Verified pieces changed (batched, at most once a second per source); filter by `sourceIds`. */
+  piecesChanged: event<PiecesUpdate, { sourceIds?: number[] }>({ since: 1 }),
+  /** A source's 5-second transfer samples of the last day, oldest first, after `since` (epoch ms). */
+  transferHistory: call<SourceInput & { since?: number }, TransferSample[]>({ since: 1 }),
 
   /**
    * The one-time handoff of the storage the backend recorded before media-load ran the engine.
