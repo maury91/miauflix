@@ -10,6 +10,7 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 - Use an on-screen keyboard with a TV remote.
 - Browse popular, trending, community, and personal lists through Trakt.
 - Browse anime rows from AniList: popular this season, trending, and all-time popular.
+- Anime that TMDB keeps in one long season is shown with one season per AniList entry, each named after it.
 - Load more titles as you browse, with artwork sized for your screen.
 
 ## [Watching movies and episodes](features/watching.md)

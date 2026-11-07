@@ -9,6 +9,17 @@ export interface Variant {
 const pad = (n: number) => String(n).padStart(2, '0');
 const ANIME_IDS: readonly Param[] = ['anidbEid', 'anidbAid', 'anilistId'];
 
+/**
+ * Providers built for anime: anime ids in their anime search, or nothing but anime. A general
+ * indexer that also has an anime category is not one.
+ */
+export function builtForAnime(provider: Provider, regular: 'movie' | 'tv'): boolean {
+  return (
+    provider.caps.anime.length > 0 &&
+    (provider.caps.anime.some(p => ANIME_IDS.includes(p)) || !provider.caps[regular].length)
+  );
+}
+
 export function variantsFor(
   provider: Provider,
   request: SourceSearchRequest,
@@ -16,13 +27,10 @@ export function variantsFor(
 ): Variant[] {
   const isAnime = !!(request.media.isAnime || anime);
   const regular = request.media.kind === 'movie' ? 'movie' : 'tv';
-  // Anime search is for providers built for it (anime ids, or nothing but anime). A general
-  // indexer that also has an anime category keeps its movie/TV search and its id queries; the
-  // anime-style title queries below are added to it.
-  const animeSearch =
-    isAnime &&
-    provider.caps.anime.length > 0 &&
-    (provider.caps.anime.some(p => ANIME_IDS.includes(p)) || !provider.caps[regular].length);
+  // Anime search is for providers built for it. A general indexer that also has an anime
+  // category keeps its movie/TV search and its id queries; the anime-style title queries below
+  // are added to it.
+  const animeSearch = isAnime && builtForAnime(provider, regular);
   const kind = animeSearch ? 'anime' : regular;
   const caps = provider.caps[kind];
   if (!caps.length) return [];

@@ -6,8 +6,9 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### New
 
-- **Anime sources**: anime is recognised automatically and searched the way anime is released, by AniDB episode and with the names fansub groups use ("2nd Season - 07", episode numbers counted from the first episode, batches). Later seasons that TMDB lists as one long season are matched to the right episode, and the episode is found inside batch downloads. A new AnimeTosho source is on by default and only used for anime; it marks SeaDex's recommended releases
+- **Anime sources**: anime is recognised automatically and searched the way anime is released, by AniDB episode and with the names fansub groups use ("2nd Season - 07", episode numbers counted from the first episode, batches). Later seasons that TMDB lists as one long season are matched to the right episode, and the episode is found inside batch downloads. A new AnimeTosho source is on by default and only used for anime; it marks SeaDex's recommended releases. Anime sources are always searched for anime, even when another source already found the episode
 - **Anime rows**: Home can show the anime lists, from AniList: popular this season, trending and all-time popular. No account needed
+- **Anime seasons**: anime that TMDB keeps in one long season is split into its real seasons, one per AniList entry, each named after it (Tokyo Revengers shows 4 seasons instead of one with 63 episodes). Progress, notifications and Trakt sync follow the new numbering, and what you already watched moves with it
 
 ### Improvements
 
@@ -20,6 +21,8 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### Fixes
 
+- Playback could fail to start with a server error ("could not load any of its sources"); it plays again
+- An episode's first play waits for at most one slow download lookup instead of one per candidate, so it starts sooner
 - When playback switches away from a source that stopped working, that source stops downloading instead of competing with the new one for bandwidth
 - Starting a large download no longer deletes finished downloads to make room: downloads you only previewed or stopped no longer hold on to their full size
 - Audio and embedded subtitles are checked again shortly after a check fails, for example right after playback switches source, instead of staying unavailable for the rest of the session

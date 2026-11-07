@@ -31,7 +31,6 @@ const webTorrentMetadataTimeoutMs = 15_000;
 export class SourceMetadataFileService {
   private readonly services: Record<string, ServiceData> = {};
   private readonly playbackMetadataResolutions = new Map<string, Promise<Buffer | null>>();
-  private playbackMetadataQueue: Promise<void> = Promise.resolve();
   private readonly concurrency: number;
   private readonly queue: Array<{
     sourceLink: string;
@@ -129,19 +128,14 @@ export class SourceMetadataFileService {
     const normalizedHash = hash.toLowerCase();
     const existing = this.playbackMetadataResolutions.get(normalizedHash);
     if (existing) return existing;
-    // Keep interactive work bounded when multiple uncached TV packs are requested together.
+    // Keep interactive work bounded: at most two lookups at once, side by side, so a slow swarm
+    // costs one timeout rather than one per candidate.
     if (this.playbackMetadataResolutions.size >= 2) return Promise.resolve(null);
 
-    const resolution = this.playbackMetadataQueue.then(() =>
-      this.metadataFiles.getSourceMetadataFile(
-        sourceLink,
-        normalizedHash,
-        webTorrentMetadataTimeoutMs
-      )
-    );
-    this.playbackMetadataQueue = resolution.then(
-      () => undefined,
-      () => undefined
+    const resolution = this.metadataFiles.getSourceMetadataFile(
+      sourceLink,
+      normalizedHash,
+      webTorrentMetadataTimeoutMs
     );
     this.playbackMetadataResolutions.set(normalizedHash, resolution);
     void resolution.then(

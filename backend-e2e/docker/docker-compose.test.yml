@@ -114,6 +114,8 @@ services:
       - SOURCES_PRELOAD_PROVIDERS=imdb-title@http://indexer-mock/definitions movies-api@http://indexer-mock/definitions
       - SOURCES_ANIME_LISTS_URL=http://anime-lists-mock/Fribb/anime-lists/master/anime-list-full.json
       - SOURCES_ANI_ZIP_URL=http://anizip-mock/mappings
+      - CATALOG_ANIME_LISTS_URL=http://anime-lists-mock/Fribb/anime-lists/master/anime-list-full.json
+      - CATALOG_ANI_ZIP_URL=http://anizip-mock/mappings
       - BACKDROP_FOCUS_MODEL_DIR=/app/models
       - BACKDROP_FOCUS_WASM_DIR=/app/wasm
       - DEBUG=*

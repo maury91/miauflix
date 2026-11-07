@@ -192,6 +192,8 @@ services:
       target: development
     environment:
       - CATALOG_DATA_DIR=/app/data
+      - CATALOG_ANIME_LISTS_URL=http://anime-lists-mock/Fribb/anime-lists/master/anime-list-full.json
+      - CATALOG_ANI_ZIP_URL=http://anizip-mock/mappings
       - CATALOG_DISABLE_BACKGROUND_TASKS=true
       - DEBUG=*,-require-in-the-middle
     volumes:
@@ -213,6 +215,10 @@ services:
       start_period: 5s
     depends_on:
       tmdb-mock:
+        condition: service_healthy
+      anizip-mock:
+        condition: service_healthy
+      anime-lists-mock:
         condition: service_healthy
 
   # TMDB Image Mock Service

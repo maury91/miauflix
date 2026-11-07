@@ -402,12 +402,26 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
    * Verified bytes of a target, honouring `Range`, straight from the service. Playback reads
    * claim the file and count as an open stream; speculative reads (probes) do neither.
    */
-  streamFile(target: PlaybackTarget, rangeHeader?: string, speculative = false): Promise<Response> {
-    return this.withSource(target.source, () =>
+  /**
+   * The file's bytes as a response the backend may return as-is. A fetched response's headers
+   * are read-only, and Hono copies the context's headers (CORS) onto a returned response, so
+   * the body is handed over in a response with its own headers.
+   */
+  async streamFile(
+    target: PlaybackTarget,
+    rangeHeader?: string,
+    speculative = false
+  ): Promise<Response> {
+    const response = await this.withSource(target.source, () =>
       this.client.read.open(
         { target: targetRef(target), ...(speculative ? { speculative } : {}) },
         { headers: rangeHeader ? { range: rangeHeader } : {} }
       )
     );
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers: new Headers(response.headers),
+    });
   }
 }

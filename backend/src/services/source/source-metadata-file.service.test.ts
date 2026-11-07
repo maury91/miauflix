@@ -105,4 +105,26 @@ describe('SourceMetadataFileService', () => {
     expect(download.getSourceMetadataFile).toHaveBeenCalledWith(magnet, hash, 15_000);
     expect(remote.torrentFile).not.toHaveBeenCalled();
   });
+
+  it('looks up two playback torrents side by side and refuses a third', async () => {
+    const { service, download } = setupTest(false);
+    let release!: () => void;
+    const gate = new Promise<void>(resolve => (release = resolve));
+    download.getSourceMetadataFile.mockImplementation(async () => {
+      await gate;
+      return Buffer.from('metadata');
+    });
+
+    const first = service.getPlaybackTorrentMetadataFile(magnet, 'a'.repeat(40));
+    const second = service.getPlaybackTorrentMetadataFile(magnet, 'b'.repeat(40));
+    const third = service.getPlaybackTorrentMetadataFile(magnet, 'c'.repeat(40));
+    await Promise.resolve();
+    expect(download.getSourceMetadataFile).toHaveBeenCalledTimes(2);
+    await expect(third).resolves.toBeNull();
+    release();
+    await expect(Promise.all([first, second])).resolves.toEqual([
+      Buffer.from('metadata'),
+      Buffer.from('metadata'),
+    ]);
+  });
 });

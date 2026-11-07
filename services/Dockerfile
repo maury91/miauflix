@@ -16,6 +16,7 @@ COPY packages/contract/package.json packages/contract/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
 COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
+COPY packages/anime-mapping/package.json packages/anime-mapping/package.json
 COPY services/media-catalog/package.json services/media-catalog/package.json
 COPY services/list-service/package.json services/list-service/package.json
 COPY services/sources/package.json services/sources/package.json
@@ -33,6 +34,7 @@ COPY packages/contract packages/contract
 COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
 COPY packages/vpn-guard packages/vpn-guard
+COPY packages/anime-mapping packages/anime-mapping
 COPY services/media-catalog services/media-catalog
 COPY services/list-service services/list-service
 COPY services/sources services/sources
@@ -41,6 +43,7 @@ RUN npm run build --workspace @miauflix/source-metadata-extractor && \
     npm run build --workspace @miauflix/contract && \
     npm run build --workspace @miauflix/service-contracts && \
     npm run build --workspace @miauflix/service-configuration && \
+    npm run build --workspace @miauflix/anime-mapping && \
     npm run build --workspace @miauflix/vpn-guard && \
     npm prune --omit=dev --ignore-scripts
 
@@ -61,6 +64,7 @@ COPY --from=builder --chown=1001:1001 /workspace/packages/contract ./packages/co
 COPY --from=builder --chown=1001:1001 /workspace/packages/service-contracts ./packages/service-contracts
 COPY --from=builder --chown=1001:1001 /workspace/packages/service-configuration ./packages/service-configuration
 COPY --from=builder --chown=1001:1001 /workspace/packages/vpn-guard ./packages/vpn-guard
+COPY --from=builder --chown=1001:1001 /workspace/packages/anime-mapping ./packages/anime-mapping
 
 COPY --chown=1001:1001 services/entrypoint.sh /app/miauflix-services-entrypoint.sh
 COPY --chown=1001:1001 services/healthcheck.ts /app/healthcheck.ts

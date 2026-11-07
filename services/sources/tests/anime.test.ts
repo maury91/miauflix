@@ -474,3 +474,107 @@ it('searches an anime episode end to end and reports it in TMDB numbering', asyn
     await created.stop();
   }
 });
+
+/** A general TV indexer, searched by title. */
+const GENERAL_YAML = `id: generaltv
+name: General TV
+description: Invented general indexer
+language: en-US
+type: public
+links:
+  - https://generaltv.invalid/
+caps:
+  categorymappings:
+    - { id: TV, cat: TV, desc: TV }
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+search:
+  paths:
+    - path: 'json?q={{ .Keywords }}'
+      response:
+        type: json
+  rows:
+    selector: $
+  fields:
+    category:
+      text: TV
+    title:
+      selector: title
+    infohash:
+      selector: info_hash
+    size:
+      selector: total_size
+    seeders:
+      selector: seeders
+    date:
+      selector: timestamp
+`;
+
+it.each(['interactive', 'background'] as const)(
+  'searches the anime providers even when a general indexer already has the episode (%s)',
+  async purpose => {
+    const dir = mkdtempSync(join(tmpdir(), 'anime-first-'));
+    dirs.push(dir);
+    const searched: string[] = [];
+    const created = createSourcesService({
+      dataDir: dir,
+      keyFile: join(dir, '.key'),
+      encryptionKey: 'test',
+      resolveHost: fixtureResolver,
+      animeListsUrl: LISTS,
+      aniZipUrl: ANI_ZIP,
+      fetch: fixtureFetch(url => {
+        if (url.href === LISTS) return Response.json(fribb);
+        if (url.href.startsWith(ANI_ZIP))
+          return Response.json(aniZip(Number(url.searchParams.get('anilist_id'))));
+        const release = (title: string, hash: string) => ({
+          title,
+          info_hash: hash.repeat(40),
+          total_size: 1_000_000_000,
+          seeders: 40,
+          timestamp: 1_780_000_000,
+        });
+        if (url.host === 'generaltv.invalid') {
+          searched.push('general');
+          return Response.json([release('Sorcery Academy S01E19 1080p WEB-DL', 'E')]);
+        }
+        if (url.host === 'animeids.invalid') {
+          searched.push('anime');
+          return Response.json(
+            url.searchParams.get('eid') === '100207'
+              ? [release('[Group] Majutsu Gakuen S2 - 07 [1080p]', 'C')]
+              : []
+          );
+        }
+        return new Response('unexpected', { status: 500 });
+      }),
+    });
+    try {
+      const transport = localTransport(created.service);
+      const db = new Database(join(dir, 'sources.sqlite'));
+      useProviders(db, [
+        { id: 'generaltv', yaml: GENERAL_YAML, priority: 10 },
+        {
+          id: 'animeids',
+          yaml: readFileSync(join(import.meta.dir, 'fixtures/cardigann/anime-ids.yml'), 'utf8'),
+          priority: 50,
+        },
+      ]);
+      db.close();
+      await createClient(management, transport).applyConfig({
+        values: { SOURCES_DISABLE_VPN_CHECK: 'true', SOURCES_MIN_SEEDERS: '5' },
+      });
+      const hashes: string[] = [];
+      for await (const item of createClient(sources, transport).search({
+        ...show(19, iso(day(182))),
+        purpose,
+      }))
+        if (item.type === 'candidate') hashes.push(item.candidate.hash);
+      expect(searched).toContain('anime');
+      expect(hashes).toContain('c'.repeat(40));
+    } finally {
+      await created.stop();
+    }
+  }
+);

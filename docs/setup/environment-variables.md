@@ -235,9 +235,13 @@ ANIME_LISTS_URL=https://raw.githubusercontent.com/Fribb/anime-lists/master/anime
 # Anime (sources service): the same id list and ani.zip's episode mappings
 SOURCES_ANIME_LISTS_URL=https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json
 SOURCES_ANI_ZIP_URL=https://api.ani.zip/mappings
+
+# Anime (catalog): seasons numbered by AniList entry
+CATALOG_ANIME_LISTS_URL=https://raw.githubusercontent.com/Fribb/anime-lists/master/anime-list-full.json
+CATALOG_ANI_ZIP_URL=https://api.ani.zip/mappings
 ```
 
-- **Description**: Base URLs for external APIs. The anime ones are environment variables of the list and sources services; AniList and ani.zip need no account or key. Setting `SOURCES_ANIME_LISTS_URL` or `SOURCES_ANI_ZIP_URL` to an empty value turns that lookup off (an empty `SOURCES_ANIME_LISTS_URL` turns anime recognition off)
+- **Description**: Base URLs for external APIs. The anime ones are environment variables of the list, sources and catalog services; AniList and ani.zip need no account or key. Setting `SOURCES_ANIME_LISTS_URL` or `SOURCES_ANI_ZIP_URL` to an empty value turns that lookup off (an empty `SOURCES_ANIME_LISTS_URL` turns anime recognition off); an empty `CATALOG_ANIME_LISTS_URL` or `CATALOG_ANI_ZIP_URL` keeps TMDB's seasons for anime
 - **Default**: Standard API endpoints
 - **When to change**: Custom proxy or testing environments only
 

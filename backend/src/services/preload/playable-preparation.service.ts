@@ -270,6 +270,8 @@ export class PlayablePreparationService {
       showImdbId: show.local.imdbId ?? null,
       seasonNumber: playable.seasonNumber,
       episodeNumber: playable.episodeNumber,
+      providerSeasonNumber: episode.providerSeasonNumber,
+      providerEpisodeNumber: episode.providerEpisodeNumber,
       airDate: episode.airDate,
     });
     this.throwIfAborted(options.signal);

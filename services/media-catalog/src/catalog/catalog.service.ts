@@ -1,3 +1,6 @@
+import type { AnimeIndex } from '../anime/anime-index';
+import { AnimeLayoutService } from '../anime/anime-layout.service';
+import { AnimeLayoutRepository } from '../db/anime-layout.repo';
 import { ArtworkRepository } from '../db/artwork.repo';
 import { BackdropFocusRepository } from '../db/backdrop-focus.repo';
 import { LocalizationRepository } from '../db/localization.repo';
@@ -12,7 +15,16 @@ import {
   BackdropFocusService,
   DEFAULT_BACKDROP_FOCUS_CONCURRENCY,
 } from '../services/backdrop-focus.service';
-import type { BatchResponse, MediaRef, MovieDetail, SeasonDetail, TVShowDetail } from '../types';
+import type {
+  BatchResponse,
+  EpisodeDetail,
+  EpisodeLayout,
+  MediaRef,
+  MovieDetail,
+  SeasonDetail,
+  SeasonSummary,
+  TVShowDetail,
+} from '../types';
 import type { BackdropFocus, MediaType, SearchGenre, SearchGenreKey } from '../types';
 import { CatalogHydrator } from './catalog.hydrator';
 import { CatalogLocalizer } from './catalog.localizer';
@@ -53,6 +65,8 @@ export class CatalogService {
   private tvArtworkScanOffset = 0;
   private readonly artworkMetadataRetry = new Map<string, number>();
   private readonly artworkService?: ArtworkSelectionService;
+  private readonly animeLayout?: AnimeLayoutService;
+  private readonly animeLayouts?: AnimeLayoutRepository;
 
   constructor(
     private readonly movies: MovieRepository,
@@ -62,7 +76,8 @@ export class CatalogService {
     private readonly provider: CatalogProvider,
     private readonly values: CatalogValues,
     backdropFocusRepository: BackdropFocusRepository,
-    artworkRepository?: ArtworkRepository
+    artworkRepository?: ArtworkRepository,
+    anime?: { index: AnimeIndex; layouts: AnimeLayoutRepository }
   ) {
     this.hydrator = new CatalogHydrator(
       this.movies,
@@ -70,6 +85,16 @@ export class CatalogService {
       this.provider,
       this.values.hydrationTtlMs
     );
+    if (anime) {
+      this.animeLayouts = anime.layouts;
+      this.animeLayout = new AnimeLayoutService(
+        anime.index,
+        anime.layouts,
+        this.tvShows,
+        this.hydrator,
+        this.values.hydrationTtlMs
+      );
+    }
     this.localizer = new CatalogLocalizer(
       this.localization,
       this.tvShows,
@@ -114,10 +139,15 @@ export class CatalogService {
 
   /* ------------------------------------------------------------------ tv shows */
 
+  /**
+   * A show's details. `buildLayout` builds (or refreshes) an anime's AniList seasons first;
+   * without it a stored layout is used as it is, so list pages never read every season.
+   */
   async getTVShow(
     mediaId: number,
     language: string,
-    artworkPriority = 60_000
+    artworkPriority = 60_000,
+    buildLayout = true
   ): Promise<TVShowDetail> {
     await this.hydrator.ensureTVShowFresh(mediaId);
     const row = this.tvShows.getTVShow(mediaId);
@@ -127,7 +157,53 @@ export class CatalogService {
       row,
       priority: artworkPriority,
     });
-    return this.localizer.localizeTVShow(row, language);
+    if (buildLayout) await this.animeLayout?.ensure(mediaId);
+    return this.withAnimeSeasons(await this.localizer.localizeTVShow(row, language));
+  }
+
+  /** A show numbered by AniList entry gets those seasons (season 0 stays TMDB's). */
+  private withAnimeSeasons(detail: TVShowDetail): TVShowDetail {
+    const layout = this.animeLayouts?.getLayout(detail.mediaId);
+    if (layout?.layout !== 'anilist')
+      return { ...detail, seasonLayout: 'tmdb', seasonLayoutVersion: null };
+    const seasons: SeasonSummary[] = [
+      ...detail.seasons.filter(season => season.seasonNumber === 0),
+      ...this.animeLayouts!.getSeasons(detail.mediaId).map(season => ({
+        mediaId: animeSeasonId(detail.mediaId, season.seasonNumber, season.anilistId),
+        seasonNumber: season.seasonNumber,
+        name: season.name,
+        overview: '',
+        airDate: season.airDate,
+        poster: season.poster,
+        episodeCount: season.episodeCount,
+        synced: true,
+        anilistId: season.anilistId,
+      })),
+    ];
+    return { ...detail, seasons, seasonLayout: 'anilist', seasonLayoutVersion: layout.version };
+  }
+
+  /** Both numberings of a show's episodes; empty while it keeps TMDB's seasons. */
+  async episodeLayout(tvMediaId: number): Promise<EpisodeLayout> {
+    await this.hydrator.ensureTVShowFresh(tvMediaId);
+    if (!this.tvShows.getTVShow(tvMediaId))
+      throw new HttpError(404, `TV show ${tvMediaId} not found`);
+    await this.animeLayout?.ensure(tvMediaId);
+    const layout = this.animeLayouts?.getLayout(tvMediaId);
+    if (layout?.layout !== 'anilist')
+      return { tvMediaId, layout: 'tmdb', version: null, episodes: [] };
+    return {
+      tvMediaId,
+      layout: 'anilist',
+      version: layout.version,
+      episodes: this.animeLayouts!.getEpisodes(tvMediaId).map(row => ({
+        mediaId: row.episode.media_id,
+        seasonNumber: row.seasonNumber,
+        episodeNumber: row.episodeNumber,
+        providerSeasonNumber: row.providerSeasonNumber,
+        providerEpisodeNumber: row.providerEpisodeNumber,
+      })),
+    };
   }
 
   /* ------------------------------------------------------------------- seasons */
@@ -138,8 +214,42 @@ export class CatalogService {
     language: string
   ): Promise<SeasonDetail> {
     await this.hydrator.ensureTVShowFresh(tvMediaId);
+    if (seasonNumber > 0 && this.animeLayout) {
+      await this.animeLayout.ensure(tvMediaId);
+      if (this.animeLayouts!.getLayout(tvMediaId)?.layout === 'anilist')
+        return this.animeSeason(tvMediaId, seasonNumber);
+    }
     const entry = await this.hydrator.ensureSeasonFresh(tvMediaId, seasonNumber);
     return this.localizer.localizeSeason(entry.season, entry.episodes, language);
+  }
+
+  /** A season of a show numbered by AniList entry: its TMDB episodes, renumbered. */
+  private animeSeason(tvMediaId: number, seasonNumber: number): SeasonDetail {
+    const season = this.animeLayouts!.getSeason(tvMediaId, seasonNumber);
+    if (!season) throw new HttpError(404, `Season ${seasonNumber} of show ${tvMediaId} not found`);
+    return {
+      tvMediaId,
+      seasonMediaId: animeSeasonId(tvMediaId, seasonNumber, season.anilistId),
+      seasonNumber,
+      name: season.name,
+      overview: '',
+      airDate: season.airDate,
+      poster: season.poster,
+      synced: true,
+      anilistId: season.anilistId,
+      episodes: this.animeLayouts!.getEpisodes(tvMediaId, seasonNumber).map(
+        (row): EpisodeDetail => ({
+          mediaId: row.episode.media_id,
+          episodeNumber: row.episodeNumber,
+          providerSeasonNumber: row.providerSeasonNumber,
+          providerEpisodeNumber: row.providerEpisodeNumber,
+          name: row.episode.name,
+          overview: row.episode.overview,
+          airDate: row.episode.air_date,
+          still: row.episode.still,
+        })
+      ),
+    };
   }
 
   /* --------------------------------------------------------------------- batch */
@@ -157,7 +267,7 @@ export class CatalogService {
           const detail =
             ref.mediaType === 'movie'
               ? await this.getMovie(ref.mediaId, language, priority + items.length - index)
-              : await this.getTVShow(ref.mediaId, language, priority + items.length - index);
+              : await this.getTVShow(ref.mediaId, language, priority + items.length - index, false);
           return { detail };
         } catch (error) {
           if (error instanceof HttpError && error.status === 404) return { ref };
@@ -443,4 +553,12 @@ export class CatalogService {
   async syncIncompleteSeasons(tvMediaId?: number): Promise<void> {
     await this.synchronizer.syncIncompleteSeasons(tvMediaId);
   }
+}
+
+/**
+ * Season ids for seasons numbered by AniList entry. TMDB ids are positive, so these are negative:
+ * the AniList id, or the show and season number for a season no entry holds yet.
+ */
+function animeSeasonId(tvMediaId: number, seasonNumber: number, anilistId: number | null): number {
+  return anilistId ? -anilistId : -(tvMediaId * 1000 + seasonNumber);
 }
