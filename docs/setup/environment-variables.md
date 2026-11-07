@@ -43,10 +43,10 @@ CATALOG_SERVICE_URL=http://miauflix-catalog-services:3001
 
 #### Media load service
 
-The torrent engine runs as its own Bun service (port 3004, in the `miauflix-video-services` container). It downloads, stores and streams sources and answers tracker scrapes. The default Compose files set the address:
+The torrent engine runs as its own Bun service (port 3004, the `miauflix-media-load` container). It downloads, stores and streams sources and answers tracker scrapes. The default Compose files set the address:
 
 ```bash
-MEDIA_LOAD_SERVICE_URL=http://miauflix-video-services:3004 # http://vpn:3004 with docker-compose.vpn.yml
+MEDIA_LOAD_SERVICE_URL=http://miauflix-media-load:3004 # http://vpn:3004 with docker-compose.vpn.yml
 # Host-run development only
 # MEDIA_LOAD_SERVICE_URL=http://localhost:3004
 ```
@@ -183,7 +183,7 @@ DISABLE_VPN_CHECK=false
 - **REVERSE_PROXY_SECRET**: Shared secret between reverse proxy and backend
 - **MAXIMUM_CACHE_EMPTY_SPACE**: Maximum SQLite empty space before cleanup
 - **DISABLE_BACKGROUND_TASKS**: Disable background processing for testing
-- **DISABLE_VPN_CHECK**: Skip VPN detection. When `false` (the default), Miauflix refuses to search for sources unless NordVPN reports its traffic as protected. Setting it to `true` lets torrents go out from your real IP; don't do this on a server reachable from the internet
+- **DISABLE_VPN_CHECK**: Skip VPN detection. When `false` (the default), source search and media load each refuse to work (searches, tracker scrapes, downloads) unless NordVPN reports their own connection as protected. It is the default of their own settings, `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK` (with `SOURCES_KNOWN_VPN_IPS` / `MEDIA_LOAD_KNOWN_VPN_IPS` for a VPN NordVPN does not recognise), which take over once set. Setting it to `true` lets torrents go out from your real IP; don't do this on a server reachable from the internet
 - **ALLOW_CREATE_ADMIN_ON_FIRST_RUN**: When `true`, skips automatic admin creation at startup and exposes an unauthenticated `POST /api/auth/setup` endpoint to create the first admin user. The endpoint accepts `{ email, password }` and is permanently disabled once any admin account exists. See [Initial User](#initial-user) for details.
 
 ### Content & Streaming

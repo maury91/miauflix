@@ -26,13 +26,29 @@ services:
       target: catalog-services
     image: miauflix-catalog-services
 
-  # Source search (port 3003) and media load (port 3004)
-  miauflix-video-services:
+  # Source search (port 3003)
+  miauflix-sources:
     build:
       context: .
       dockerfile: services/Dockerfile
-      target: video-services
-    image: miauflix-video-services
+      target: sources
+    image: miauflix-sources
+
+  # Media load (port 3004)
+  miauflix-media-load:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+      target: media-load
+    image: miauflix-media-load
+
+  # Only with docker-compose.all-in-one.yml
+  miauflix-services:
+    build:
+      context: .
+      dockerfile: services/Dockerfile
+      target: services
+    image: miauflix-services
 
   # Locally built images have nothing to pull: keep Watchtower off
   watchtower:

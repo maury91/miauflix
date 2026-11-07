@@ -122,11 +122,6 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
     return this.status.status === 'ready';
   }
 
-  /** Asks the service for its current status, `details` included. */
-  remoteStatus(): Promise<ServiceStatus> {
-    return this.admin.status();
-  }
-
   subscribeStatus(listener: (status: ServiceInstanceStatus) => void): () => void {
     this.statusListeners.add(listener);
     return () => this.statusListeners.delete(listener);
@@ -369,6 +364,14 @@ export class RemoteService<C extends Contract> implements ConfigurableService {
   }
 
   private toLocalStatus(remote: ServiceStatus): ServiceInstanceStatus {
+    const vpn = remote.details?.vpn;
+    const status = this.toLocalState(remote);
+    return vpn === 'disabled' || vpn === 'protected' || vpn === 'unprotected'
+      ? { ...status, vpn }
+      : status;
+  }
+
+  private toLocalState(remote: ServiceStatus): ServiceInstanceStatus {
     if (remote.state === 'ready') return { status: 'ready' };
     if (remote.state === 'degraded')
       return {

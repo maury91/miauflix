@@ -11,7 +11,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 - Torrent downloading, streaming, seeder counts and download storage now run in a new internal service, media-load, in the services container (port 3004). The downloads folder is now mounted on the services container instead of the main one, and downloads you already have are handed to it automatically the first time it starts. It is also published on its own as the `miauflix-media-load` image
 - The player's progress bar shows which parts of the video are already downloaded, updated every second
 - media-load records each download's speed, peers and total bytes received and sent (not shown in the app yet)
-- The services container is split in two: `miauflix-catalog-services` (catalog, lists, job queue) and `miauflix-video-services` (source search and downloads). With the VPN, only the video services and FlareSolverr go through it now; the backend and the catalog no longer do. Update your compose files with `./update.sh --files`; `MIAUFLIX_UPSTREAM=vpn:3000` is no longer needed
+- Services can be laid out freely: catalog, source search and media load each have their own image (`miauflix-catalog-services`, `miauflix-sources`, `miauflix-media-load`), and `miauflix-services` still runs them all in one container (`docker-compose.all-in-one.yml`). With the VPN only source search, media load and FlareSolverr go through it now; the backend and the catalog no longer do. Source search and media load each check their own VPN connection, so they can run on other servers, and the status page shows each one's check. Update your compose files with `./update.sh --files`; `MIAUFLIX_UPSTREAM=vpn:3000` is no longer needed
 
 ### Fixes
 

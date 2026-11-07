@@ -2,6 +2,7 @@ import { join } from 'node:path';
 
 import { defineService, type Service } from '@miauflix/contract';
 import { sources } from '@miauflix/service-contracts';
+import { VpnGuard, vpnSettingsFrom } from '@miauflix/vpn-guard';
 import { z } from 'zod';
 
 import { SourcesConfigService } from './config/config.service';
@@ -19,7 +20,6 @@ import { Registry } from './providers/registry';
 import { RepositoryService } from './repositories/repository.service';
 import { TorrentFileService } from './torrent-file/torrent-file.service';
 import { createSeal } from './util/seal';
-import { VpnGuard } from './vpn/vpn-guard';
 const searchSchema = z
   .object({
     media: z.object({
@@ -83,7 +83,13 @@ export function createSourcesService(options: SourcesServiceOptions): {
     options.now,
     options.resolveHost
   );
-  const vpn = new VpnGuard(config, http, options.now),
+  const vpnSettings = (values?: Record<string, string>) =>
+    vpnSettingsFrom('SOURCES', key => values?.[key] ?? config.value(key));
+  const vpn = new VpnGuard({
+      settings: () => vpnSettings(),
+      fetchJson: (url, init) => http.json(url, init),
+      now: options.now,
+    }),
     definitions = new DefinitionStore(
       store,
       http,
@@ -111,7 +117,7 @@ export function createSourcesService(options: SourcesServiceOptions): {
   config.registerProber({
     test: async values => ({
       success: true,
-      message: (await vpn.isProtected(undefined, values))
+      message: (await vpn.isProtected(undefined, vpnSettings(values)))
         ? 'VPN protected or check disabled'
         : 'VPN unprotected; searches will be blocked',
     }),
@@ -157,8 +163,7 @@ export function createSourcesService(options: SourcesServiceOptions): {
       version: '0.1.0',
     },
     configuration: config,
-    // The backend reads `details.vpn` as the VPN state of the network sources and media-load share,
-    // so refresh it (cached: five minutes when protected, 30 seconds when not) before reporting.
+    // `details.vpn` is this service's own connection; refreshed (cached) before reporting.
     status: async () => {
       await vpn.isProtected().catch(() => false);
       return {
@@ -169,6 +174,7 @@ export function createSourcesService(options: SourcesServiceOptions): {
     },
     onStop: async () => {
       stopping.abort();
+      stopVpnWatch();
       clearInterval(timer);
       clearInterval(syncTimer);
       await Promise.allSettled(pending);
@@ -258,5 +264,6 @@ export function createSourcesService(options: SourcesServiceOptions): {
       });
     },
   });
+  const stopVpnWatch = vpn.watch(() => service.notifyStatus());
   return { service, stop: () => service.stop() };
 }

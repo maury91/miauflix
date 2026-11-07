@@ -16,7 +16,6 @@ import type { ProfileService } from '@services/profile/profile.service';
 import type { ProgressService } from '@services/progress/progress.service';
 import type { RequestService } from '@services/request/request.service';
 import type { AuditLogService } from '@services/security/audit-log.service';
-import type { VpnDetectionService } from '@services/security/vpn.service';
 import type { SourceMetadataFileService, SourceService } from '@services/source';
 import type { SourceAvailabilityService } from '@services/source/source-availability.service';
 import type { SourcesClientService } from '@services/sources/sources-client.service';
@@ -46,7 +45,6 @@ export interface Deps {
   statsService: StatsService;
   streamService: StreamService;
   qrLoginService: QrLoginService;
-  vpnDetectionService: VpnDetectionService;
   preloadIntentService: PreloadIntentService;
   playbackSessionService: PlaybackSessionService;
   audioPlaybackService: AudioPlaybackService;

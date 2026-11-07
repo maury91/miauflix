@@ -1190,4 +1190,30 @@ describe('sources service configuration extraction', () => {
       'false'
     );
   });
+
+  it("gives media-load's VPN check the same default", async () => {
+    const configuration = setupTest();
+    await configuration.setValue('DISABLE_VPN_CHECK', 'true');
+    configuration.registerRemoteConfiguration('MEDIA_LOAD', {
+      groups: [
+        {
+          id: 'MEDIA_LOAD',
+          name: 'Media load',
+          description: 'Torrent engine: downloads, encrypted storage and tracker scrapes.',
+          variables: [
+            {
+              key: 'MEDIA_LOAD_DISABLE_VPN_CHECK',
+              description: 'VPN check',
+              required: false,
+              inputType: 'boolean',
+              defaultValue: 'false',
+            },
+          ],
+        },
+      ],
+    });
+    expect(configuration.getServiceConfigSnapshot('MEDIA_LOAD')).toEqual({
+      MEDIA_LOAD_DISABLE_VPN_CHECK: 'true',
+    });
+  });
 });

@@ -41,7 +41,6 @@ import { RealtimeSearchChannel } from '@services/realtime/realtime.search';
 import { RequestService } from '@services/request/request.service';
 import { SearchService } from '@services/search/search.service';
 import { AuditLogService } from '@services/security/audit-log.service';
-import { VpnDetectionService } from '@services/security/vpn.service';
 import { SourceMetadataFileService, SourceService } from '@services/source';
 import { SourceAvailabilityService } from '@services/source/source-availability.service';
 import { SourceHealthService } from '@services/source/source-health.service';
@@ -101,7 +100,6 @@ try {
   const cacheService = new CacheService(configurationService);
   const statsService = new StatsService();
   const requestService = new RequestService(statsService, configurationService);
-  const vpnDetectionService = new VpnDetectionService(configurationService, sourcesClientService);
   const tvPairingService = new TvPairingService(configurationService);
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
@@ -133,7 +131,7 @@ try {
   );
   const sourceService = new SourceService(
     db,
-    vpnDetectionService,
+    mediaLoadClient,
     sourcesClientService,
     magnetService,
     requestService,
@@ -249,14 +247,6 @@ try {
   // Create initial admin ( if it does not exist, also we do not create if the server runs in the mode that allows creating it from the frontend )
   await authService.configureUsers();
 
-  // FixMe: Just log the status of the VPN, we will do something more serious later
-  vpnDetectionService.on('connect', () => {
-    logger.debug('App', 'VPN connected');
-  });
-  vpnDetectionService.on('disconnect', () => {
-    logger.debug('App', 'VPN disconnected');
-  });
-
   const disableBackgroundTasks = configurationService.get('DISABLE_BACKGROUND_TASKS');
   const scheduleCoordinator = new ServiceScheduleCoordinator(
     backgroundJobs,
@@ -310,7 +300,6 @@ try {
       catalogClient.stop();
       listClient.stop();
       sourceService.stop();
-      vpnDetectionService.stop();
       sourcesClientService.stop();
       await backgroundWorker.stop();
       preloadIntentService.close();
@@ -344,7 +333,6 @@ try {
     sourceAvailabilityService,
     listService,
     listClient,
-    vpnDetectionService,
     sourcesClientService,
     magnetService,
     qrLoginService,

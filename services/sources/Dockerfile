@@ -1,3 +1,5 @@
+# Development image (docker-compose.dev.yml). The published miauflix-sources image is the
+# `sources` target of services/Dockerfile.
 FROM oven/bun:1.4.0 AS bun-runtime
 
 FROM node:22-slim AS runtime
@@ -12,6 +14,7 @@ COPY packages/source-metadata-extractor/package.json packages/source-metadata-ex
 COPY packages/contract/package.json packages/contract/package.json
 COPY packages/service-contracts/package.json packages/service-contracts/package.json
 COPY packages/service-configuration/package.json packages/service-configuration/package.json
+COPY packages/vpn-guard/package.json packages/vpn-guard/package.json
 COPY services/list-service/package.json services/list-service/package.json
 COPY services/sources/package.json services/sources/package.json
 COPY services/media-load/package.json services/media-load/package.json
@@ -23,11 +26,13 @@ COPY packages/source-metadata-extractor packages/source-metadata-extractor
 COPY packages/contract packages/contract
 COPY packages/service-contracts packages/service-contracts
 COPY packages/service-configuration packages/service-configuration
+COPY packages/vpn-guard packages/vpn-guard
 COPY services/sources services/sources
 RUN npm run build --workspace @miauflix/source-metadata-extractor && \
     npm run build --workspace @miauflix/contract && \
     npm run build --workspace @miauflix/service-contracts && \
-    npm run build --workspace @miauflix/service-configuration
+    npm run build --workspace @miauflix/service-configuration && \
+    npm run build --workspace @miauflix/vpn-guard
 
 FROM runtime AS development
 RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
@@ -35,25 +40,3 @@ RUN apt-get update && apt-get install -y --no-install-recommends git ca-certific
 COPY --from=runtime /workspace /workspace
 WORKDIR /workspace/services/sources
 CMD ["bun", "--watch", "src/index.ts"]
-
-FROM runtime AS production-dependencies
-RUN npm prune --omit=dev --ignore-scripts
-
-FROM bun-runtime AS production
-WORKDIR /app
-# git downloads Jackett's definitions in one request instead of one per file
-RUN apt-get update && apt-get install -y --no-install-recommends git ca-certificates && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-COPY --from=production-dependencies /workspace/node_modules /app/node_modules
-COPY --from=runtime /workspace/packages/source-metadata-extractor /app/packages/source-metadata-extractor
-COPY --from=runtime /workspace/packages/contract /app/packages/contract
-COPY --from=runtime /workspace/packages/service-contracts /app/packages/service-contracts
-COPY --from=runtime /workspace/packages/service-configuration /app/packages/service-configuration
-COPY --from=runtime /workspace/services/sources /app/services/sources
-ENV SOURCES_PORT=3003 SOURCES_DATA_DIR=/app/data
-RUN mkdir -p /app/data && chown bun:bun /app/data
-VOLUME /app/data
-EXPOSE 3003
-USER bun
-HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=5 CMD bun -e "fetch('http://127.0.0.1:' + (process.env.SOURCES_PORT || 3003) + '/health').then(r => { if (!r.ok) process.exit(1) })"
-CMD ["bun", "run", "/app/services/sources/src/index.ts"]

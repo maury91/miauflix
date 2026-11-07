@@ -6,19 +6,12 @@ services:
       cache_to:
         - type=gha,mode=max,scope=miauflix-e2e-backend
 
-  miauflix-catalog-services:
+  miauflix-services:
     build:
       cache_from:
-        - type=gha,scope=miauflix-e2e-miauflix-catalog-services
+        - type=gha,scope=miauflix-e2e-miauflix-services
       cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-miauflix-catalog-services
-
-  miauflix-video-services:
-    build:
-      cache_from:
-        - type=gha,scope=miauflix-e2e-miauflix-video-services
-      cache_to:
-        - type=gha,mode=max,scope=miauflix-e2e-miauflix-video-services
+        - type=gha,mode=max,scope=miauflix-e2e-miauflix-services
 
   tmdb-images:
     build:

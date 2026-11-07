@@ -2,8 +2,11 @@
 set -Eeuo pipefail
 
 # Runs the services named in the arguments (the image's CMD) side by side, as the bunqueue user:
-#   bunqueue media-catalog list-service   miauflix-catalog-services
-#   sources media-load                    miauflix-video-services
+#   bunqueue media-catalog list-service sources media-load   miauflix-services
+#   bunqueue media-catalog list-service                      miauflix-catalog-services
+#   sources                                                  miauflix-sources
+#   media-load                                               miauflix-media-load
+# Any subset works, in any image that contains those services.
 if (($# == 0)); then
   echo 'Name the services to run: bunqueue, media-catalog, list-service, sources, media-load' >&2
   exit 64
@@ -18,6 +21,17 @@ for name in "$@"; do
   esac
 done
 
+# Each service's data directory, as the service itself reads it.
+data_dir() {
+  case $1 in
+  bunqueue) dirname "${DATA_PATH:-/app/data/bunqueue/bunqueue.db}" ;;
+  media-catalog) echo "${CATALOG_DATA_DIR:-/app/data/catalog}" ;;
+  list-service) echo "${LIST_SERVICE_DATA_DIR:-/app/data/list-service}" ;;
+  sources) echo "${SOURCES_DATA_DIR:-/app/data/sources}" ;;
+  media-load) echo "${MEDIA_LOAD_DATA_DIR:-/app/data/media-load}" ;;
+  esac
+}
+
 runs() {
   local name
   for name in "${@:2}"; do
@@ -31,13 +45,10 @@ runs() {
 # by the backend's user (PUID) change owner once.
 if [[ $(id -u) -eq 0 ]]; then
   for name in "$@"; do
-    case $name in
-    bunqueue) dir=/app/data/bunqueue ;;
-    media-catalog) dir=/app/data/catalog ;;
-    *) dir=/app/data/$name ;;
-    esac
+    dir=$(data_dir "$name")
     mkdir -p "$dir"
-    # Only this container's own directories: the data volume may be shared with the other one.
+    # Only this container's own directories: the data volume may be shared with other containers.
+    # Files of an earlier image's user (the standalone images ran as bun) change owner once.
     if [[ -n $(find "$dir" ! -user bunqueue -print -quit) ]]; then
       chown -R bunqueue:bunqueue "$dir"
     fi
@@ -67,6 +78,9 @@ if [[ $(id -u) -eq 0 ]]; then
   fi
   exec su-exec bunqueue:bunqueue /bin/bash "$0" "$@"
 fi
+
+# For the image's healthcheck: the services to check.
+printf '%s\n' "$@" >/tmp/miauflix-services
 
 children=()
 loggers=()

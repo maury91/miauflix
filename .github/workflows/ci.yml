@@ -237,9 +237,8 @@ jobs:
         image:
           [
             miauflix,
-            miauflix-catalog-services,
-            miauflix-video-services,
             miauflix-services,
+            miauflix-catalog-services,
             miauflix-media-catalog,
             miauflix-list-service,
             miauflix-sources,
@@ -251,15 +250,12 @@ jobs:
           - image: miauflix
             file: Dockerfile
             target: ''
-          - image: miauflix-catalog-services
-            file: services/Dockerfile
-            target: catalog-services
-          - image: miauflix-video-services
-            file: services/Dockerfile
-            target: video-services
           - image: miauflix-services
             file: services/Dockerfile
             target: services
+          - image: miauflix-catalog-services
+            file: services/Dockerfile
+            target: catalog-services
           - image: miauflix-media-catalog
             file: services/media-catalog/Dockerfile
             target: production
@@ -267,11 +263,11 @@ jobs:
             file: services/list-service/Dockerfile
             target: production
           - image: miauflix-sources
-            file: services/sources/Dockerfile
-            target: production
+            file: services/Dockerfile
+            target: sources
           - image: miauflix-media-load
-            file: services/media-load/Dockerfile
-            target: production
+            file: services/Dockerfile
+            target: media-load
           - image: miauflix-tv-pairing
             file: tv-pairing/Dockerfile
             target: production
@@ -339,12 +335,10 @@ jobs:
         include:
           - image: miauflix
             description: Miauflix backend, serves the web frontend
+          - image: miauflix-services
+            description: Miauflix bunqueue, media catalog, lists, source search and torrent engine in one container
           - image: miauflix-catalog-services
             description: Miauflix bunqueue, media catalog and lists (no VPN needed)
-          - image: miauflix-video-services
-            description: Miauflix source search and torrent engine (run it behind the VPN)
-          - image: miauflix-services
-            description: Deprecated, for compose files from before the split. Miauflix catalog and video services in one container
           - image: miauflix-media-catalog
             description: Miauflix media catalog service
           - image: miauflix-list-service

@@ -66,6 +66,10 @@ type ConfigurationReadView = {
   value is written to the JSON file on first boot so it survives restarts.
  */
 
+/** A remote service's own VPN opt-out, which defaults to the deployment-wide DISABLE_VPN_CHECK. */
+const isServiceVpnCheckKey = (key: string): boolean =>
+  key !== 'DISABLE_VPN_CHECK' && key.endsWith('_DISABLE_VPN_CHECK');
+
 export class ConfigurationService {
   /** Post-transform computed values — what get() returns. Populated by precomputeValues(). */
   private _computedValues: Partial<EnvironmentVariableTypes> = {};
@@ -199,16 +203,13 @@ export class ConfigurationService {
       });
       this._variableGroups.set(key, group.id);
     }
-    // The source service inherits the existing VPN opt-out on its first configuration.
-    // Seed its default before normal resolution so an explicit service value still wins.
-    const sourcesVpnKey = 'SOURCES_DISABLE_VPN_CHECK' as VariableName;
-    if (
-      serviceName === 'SOURCES' &&
-      keys.has(sourcesVpnKey) &&
-      !this._rawValues.has(sourcesVpnKey)
-    ) {
-      const info = this._variablesInfo.get(sourcesVpnKey)!;
-      this._variablesInfo.set(sourcesVpnKey, {
+    // Each service's VPN check (SOURCES_DISABLE_VPN_CHECK, MEDIA_LOAD_DISABLE_VPN_CHECK) inherits
+    // the deployment-wide DISABLE_VPN_CHECK on its first configuration. Seed its default before
+    // normal resolution so an explicit service value still wins.
+    for (const key of keys) {
+      if (!isServiceVpnCheckKey(key) || this._rawValues.has(key)) continue;
+      const info = this._variablesInfo.get(key)!;
+      this._variablesInfo.set(key, {
         ...info,
         password: false,
         defaultValue: this._rawValues.get('DISABLE_VPN_CHECK') ?? 'false',
@@ -273,9 +274,7 @@ export class ConfigurationService {
         item.key,
         overrides[item.key] ??
           rawValues.get(item.key as VariableName) ??
-          (serviceName === 'SOURCES' && item.key === 'SOURCES_DISABLE_VPN_CHECK'
-            ? rawValues.get('DISABLE_VPN_CHECK')
-            : undefined) ??
+          (isServiceVpnCheckKey(item.key) ? rawValues.get('DISABLE_VPN_CHECK') : undefined) ??
           item.defaultValue ??
           '',
       ])
@@ -770,7 +769,7 @@ export class ConfigurationService {
       const status = instance.getStatus();
       switch (status.status) {
         case 'ready':
-          result[key] = { status: 'ready' };
+          result[key] = status.vpn ? { status: 'ready', vpn: status.vpn } : { status: 'ready' };
           break;
         case 'degraded': {
           const missingVars = status.missingVars;

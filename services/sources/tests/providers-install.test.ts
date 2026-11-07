@@ -706,7 +706,7 @@ it('discovers fixture sources for movies 550 and 120 through the E2E provider co
       })
     );
   const backend = environment('backend');
-  const service = environment('miauflix-video-services');
+  const service = environment('miauflix-services');
   const definitionsHost = new URL(backend.CARDIGANN_DEFINITION_SOURCES).host;
   const moviesDefinition = parse(
     readFileSync(join(e2e, 'indexer/definitions/movies-api.yml'), 'utf8')

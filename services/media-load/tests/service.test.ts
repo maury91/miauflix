@@ -60,6 +60,7 @@ const ENGINE_VALUES = {
   DOWNLOAD_PATH: downloads,
   DOWNLOAD_SALT: TEST_SETTINGS.DOWNLOAD_SALT,
   DISABLE_DISCOVERY: 'true',
+  MEDIA_LOAD_DISABLE_VPN_CHECK: 'true',
 };
 const KEY = TEST_SETTINGS.SOURCE_SECURITY_KEY;
 
@@ -68,17 +69,21 @@ const setup = async ({
   dataDir = ':memory:',
   defaultDownloadPath = downloads,
   legacyDownloadPath,
+  vpnProtected = false,
 }: {
   attach?: boolean;
   dataDir?: string;
   defaultDownloadPath?: string;
   legacyDownloadPath?: string;
+  /** What the (fake) NordVPN check answers; tests never ask the real one. */
+  vpnProtected?: boolean;
 } = {}) => {
   const { service, runtime, stop } = createMediaLoadService({
     dataDir,
     defaultDownloadPath,
     legacyDownloadPath,
     scrape: { windowMs: 1 },
+    vpnFetchJson: async () => ({ protected: vpnProtected }),
   });
   stops.push(stop);
   const transport = localTransport(service);
@@ -208,6 +213,33 @@ describe('media-load service', () => {
       incomplete: 2,
     });
     expect(FakeClient.instances.map(instance => instance.opts.announce)).toEqual([[tracker]]);
+  });
+
+  it('refuses peer work and reports unprotected without a VPN', async () => {
+    const { client, admin, apply } = await setup();
+    await apply({ MEDIA_LOAD_DISABLE_VPN_CHECK: 'false' });
+
+    const error = await client.swarmStats({ hash: 'a'.repeat(40) }).catch(e => e);
+    expect(isContractError(error, 'vpn_required')).toBe(true);
+    expect(FakeClient.instances).toHaveLength(0);
+    expect((await admin.status()).details?.vpn).toBe('unprotected');
+  });
+
+  it('does peer work behind a protected connection', async () => {
+    const { client, admin, apply } = await setup({ vpnProtected: true });
+    await apply({ MEDIA_LOAD_DISABLE_VPN_CHECK: 'false' });
+
+    await expect(client.swarmStats({ hash: 'a'.repeat(40) })).resolves.toEqual({
+      complete: 4,
+      incomplete: 2,
+    });
+    expect((await admin.status()).details?.vpn).toBe('protected');
+  });
+
+  it('reports the check as disabled', async () => {
+    const { admin, apply } = await setup();
+    await apply({});
+    expect((await admin.status()).details?.vpn).toBe('disabled');
   });
 
   it('keeps an explicitly empty tracker list instead of the defaults', async () => {
