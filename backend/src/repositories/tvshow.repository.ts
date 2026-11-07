@@ -301,6 +301,8 @@ export class TVShowRepository {
           airDate: episode.airDate,
           stillPath: episode.still ?? '',
           imdbId: '',
+          providerSeasonNumber: episode.providerSeasonNumber ?? null,
+          providerEpisodeNumber: episode.providerEpisodeNumber ?? null,
         };
         if (existing) {
           await episodeRepo.update(existing.id, episodePayload);

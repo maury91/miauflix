@@ -1,0 +1,475 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8414",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0326964acbe8621e44a334550b16fb82\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ew8rknzuC55Qai4roLSz69qdtPy.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      12
+    ],
+    "first_air_date": "2026-10-05",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://darksummoner.deregula.com/",
+    "id": 335790,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-02",
+    "last_episode_to_air": {
+      "id": 7905976,
+      "name": "The Dark Summoner and the Elf's Past",
+      "overview": "Adventuring and relationships don't mix, at least in Eury's experience. Unfortunately for her, keeping Roni and Amona in line falls to her by default.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-02",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 12,
+      "season_number": 1,
+      "show_id": 335790,
+      "still_path": "/xxj2fhNoStmpHRVa1c1dG1H7ntD.jpg"
+    },
+    "name": "I'm Dating a Dark Summoner",
+    "next_episode_to_air": {
+      "id": 7905977,
+      "name": "Episode 6",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-09",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 335790,
+      "still_path": "/3oPHklB04rHgv6S62KxrrKp9ciO.jpg"
+    },
+    "networks": [
+      {
+        "id": 173,
+        "logo_path": "/fERjndErEpveJmQZccJbJDi93rj.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ダークサモナーとデキている",
+    "overview": "Amona, a dark summoner and demi-human girl who's too weak to resist her desires, and Roni, an overly serious priest! Roni welcomes Amona as a new member to his adventuring party. Everyone expected the two would clash and become sworn enemies. But, to their surprise and on their first day together, they have a one-night stand...!",
+    "popularity": 22.1426,
+    "poster_path": "/xD8bCXGlwC98mFq8mDyB15grUts.jpg",
+    "production_companies": [
+      {
+        "id": 238639,
+        "logo_path": "/9ppANNPsmICiGDGjWO53gIA6SwT.png",
+        "name": "WWWave",
+        "origin_country": "JP"
+      },
+      {
+        "id": 247905,
+        "logo_path": "/d88Js4lDi0ddRfYiRcRqhMCirEx.png",
+        "name": "Deregula",
+        "origin_country": "JP"
+      },
+      {
+        "id": 309699,
+        "logo_path": null,
+        "name": "AtoriE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 285766,
+        "logo_path": null,
+        "name": "Nyan Pollution-ω-",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-05",
+        "episode_count": 6,
+        "id": 555897,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2026-10-05",
+        "episode_count": 12,
+        "id": 544930,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/xD8bCXGlwC98mFq8mDyB15grUts.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 9.4,
+    "vote_count": 11,
+    "external_ids": {
+      "imdb_id": "tt43650323",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 474294,
+      "tvrage_id": null,
+      "wikidata_id": "Q138356392",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "dksummon_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "I'm Dating a Dark Summoner",
+            "overview": "Amona, a dark summoner and demi-human girl who's too weak to resist her desires, and Roni, an overly serious priest! Roni welcomes Amona as a new member to his adventuring party. Everyone expected the two would clash and become sworn enemies. But, to their surprise and on their first day together, they have a one-night stand...!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ダークサモナーとデキている",
+            "overview": "クソ真面目な神官・ロニのパーティーに新しく加入してきたのは、悪魔の力を使う美しきダークサモナーのアモナ。\n\n聖と邪、人間と亜人。\n\n反発しあい犬猿の仲にあると思われた2人だったが、パーティー加入初日に朝チュンしてしまい…！？\n\n秘密の関係を抱えたまま、クセの強いパーティーメンバーと、召喚悪魔インプたちと共に旅は続く！\n\n背徳とときめきが交錯する。\n\n亜人女子×神官男子のファンタジー・ケンカップルラブコメ、開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "黑暗召唤师在地下恋爱中",
+            "overview": "死脑筋又一本正经的神官·罗尼所在的队伍里，新加入了一名成员——驱使恶魔之力的美丽暗黑召唤师·阿莫娜。圣洁与邪恶，人类与亚人。本以为这两人会水火不容、势同水火，却在入队的第一天早晨，就发生了关系……！？揣着这个不可告人的秘密，他们与性格各异的队友们，以及召唤出来的恶魔小恶魔（Imp）们一同踏上了旅途！背德与心动相互交织。亚人少女×神官少年，奇幻欢喜冤家恋爱喜剧，正式开幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Я встречаюсь с тёмным призывателем",
+            "overview": "Амона, темный призыватель и получеловек, использующий демонические силы, - новое пополнение в группе встревоженного священника Рони. Все ожидали, что эти двое не будут любить друг друга и не будут иметь ничего общего друг с другом. Но, к их удивлению, в первый же день, проведенный вместе в качестве группы искателей приключений, у них был роман на одну ночь!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "다크서머너와 썸을 탔다",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Dark Summoner to Dekiteiru",
+            "overview": "En el mundo de fantasía de Parastia, donde humanos y demi-humanos conviven entre peligros y magia, el rígido sacerdote Roni ve cómo se une a su grupo de aventureros Amona, una invocadora oscura que emplea poderes demoníacos. Todos esperaban un choque inmediato entre lo sagrado y lo prohibido.\n\nSin embargo, en su primer día juntos, ambos acaban compartiendo una noche apasionada. A partir de entonces deben continuar sus misiones ocultando su relación secreta, entre discusiones constantes, la mirada atenta de sus compañeros y la presencia del imp que Amona invoca, en una comedia romántica de tensión, atracción y negación mutua.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "I'm Dating a Dark Summoner",
+            "overview": "Amona, una hermosa invocadora oscura y semihumana capaz de utilizar poderes demoníacos, se une al grupo de aventureros liderado por Roni, un sacerdote extremadamente serio y estricto. Aunque sus personalidades y creencias hacen que ambos se lleven como el perro y el gato, algo inesperado sucede entre ellos durante su primer día juntos.\n\nAhora, mientras recorren el mundo junto a los peculiares miembros de su grupo y los pequeños demonios que acompañan a Amona, ambos deberán mantener en secreto la relación que mantienen entre ellos. Entre discusiones, atracción y situaciones cada vez más comprometidas, Amona y Roni tendrán que intentar compaginar su vida como aventureros con una relación que ninguno de los dos parece dispuesto a reconocer abiertamente.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "與暗黑召喚師秘密戀愛中",
+            "overview": "身為暗黑召喚師的阿莫娜，與女劍士哈魯、精靈弓箭手艾烏莉及祭司羅尼組成了一支冒險者小隊。然而，身為擁有惡魔血統的亞人，阿莫娜始終不受羅尼信任，兩人更是經常爭吵不休。沒想到，一場意外竟讓原本水火不容的兩人發展出超乎預期的親密關係。\n\n礙於害羞與尷尬，兩人只能對同伴隱瞞彼此的關係，一邊繼續展開冒險，一邊努力掩飾逐漸失控的戀情。在充滿奇幻冒險、成人玩笑與各種意想不到展開的旅途中，這對秘密戀人究竟能隱瞞到什麼時候？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "與暗黑召喚師秘密戀愛中",
+            "overview": "身為暗黑召喚師的阿莫娜，與女劍士哈魯、精靈弓箭手艾烏莉及祭司羅尼組成了一支冒險者小隊。然而，身為擁有惡魔血統的亞人，阿莫娜始終不受羅尼信任，兩人更是經常爭吵不休。沒想到，一場意外竟讓原本水火不容的兩人發展出超乎預期的親密關係。\n\n礙於害羞與尷尬，兩人只能對同伴隱瞞彼此的關係，一邊繼續展開冒險，一邊努力掩飾逐漸失控的戀情。在充滿奇幻冒險、成人玩笑與各種意想不到展開的旅途中，這對秘密戀人究竟能隱瞞到什麼時候？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "I'm Dating a Dark Summoner",
+            "overview": "La nouvelle venue dans le groupe du prêtre coincé Ronnie est Amona, une invocatrice sombre et une semi-démone utilisant la magie et les pouvoirs infernaux. On pensait que les deux allaient s’entendre comme chiens et chats et rester en mauvais termes… À la grande surprise du reste du groupe, lors de la première soirée, ils se sont retrouvés à coucher ensemble !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "I'm Dating a Dark Summoner",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Tôi Đang Hẹn Hò Với Một Triệu Hồi Sư Hắc Ám",
+            "overview": "Amona, một triệu hồi sư hắc ám và là cô gái á nhân quá yếu đuối trước dục vọng của mình, cùng Roni, một linh mục quá nghiêm túc! Roni chào đón Aruni với tư cách thành viên mới của đội phiêu lưu. Mọi người đều nghĩ hai người sẽ xung khắc và trở thành kẻ thù không đội trời chung. Nhưng bất ngờ thay, ngay ngày đầu tiên bên nhau, họ đã… qua đêm với nhau!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Amona, een duistere oproeper en halfmenselijk meisje dat te zwak is om haar verlangens te weerstaan, en Roni, een overdreven serieuze priester! Roni verwelkomt Amona als nieuw lid van zijn avonturengezelschap. Iedereen verwachtte dat de twee zouden botsen en gezworen vijanden zouden worden. Maar tot hun verbazing hebben ze op hun eerste dag samen een one night stand...!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1553,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ew8rknzuC55Qai4roLSz69qdtPy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2761
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1501,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ebHRayCAmU2Ger4aucsdD0u7hDT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2668
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1271,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2ttq37rGGk9pVIsqqndbcXLXIRi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2260
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1501,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4ypEDcExZTXRqTQoJxhKdRafe1C.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2668
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1788,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jQH34zH8CYenyeJmlXfdwXLRaJc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3178
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1548,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gj4JJ4uVMwJ7TyGAntZ2jZ0SbWX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2752
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.147,
+          "height": 442,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1lW0lhq7v53uqPDXRhY5R0NY1Uc.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1833
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.678,
+          "height": 2831,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dbVHRLIJx8YiE28Xc8qoHeMfQaW.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xD8bCXGlwC98mFq8mDyB15grUts.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1788,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rCJ5bpzD1PHJU0pOI0ZPrM7Yhwt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1192
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oSkKZHGmwbq8ZUnyut754LTHn4T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lTClxPrhV9WqW8R6LVuzT9l68ad.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 667
+        }
+      ]
+    }
+  }
+}

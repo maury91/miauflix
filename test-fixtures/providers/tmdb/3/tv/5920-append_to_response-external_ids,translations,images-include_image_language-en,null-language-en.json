@@ -1,0 +1,2048 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1943",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"4ba542925084bc7411448328c1bada61\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/rJFqKcmMSttdNP58l0dVzY2NcTA.jpg",
+    "created_by": [
+      {
+        "id": 1211883,
+        "credit_id": "525783be760ee36aaa612f2a",
+        "name": "Bruno Heller",
+        "original_name": "Bruno Heller",
+        "gender": 2,
+        "profile_path": "/k33JqtocSqI13tf8QKTLbGQKrL4.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2008-09-23",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://www.warnerbros.com/tv/mentalist",
+    "id": 5920,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2015-02-18",
+    "last_episode_to_air": {
+      "id": 1021664,
+      "name": "White Orchids",
+      "overview": "Lisbon accepts Jane's surprise marriage proposal, but a killer's quest for revenge may cost them the happy ending they've worked so hard to achieve.",
+      "vote_average": 8.6,
+      "vote_count": 29,
+      "air_date": "2015-02-18",
+      "episode_number": 13,
+      "episode_type": "finale",
+      "production_code": "4X5963",
+      "runtime": 42,
+      "season_number": 7,
+      "show_id": 5920,
+      "still_path": "/wWYSMww1HqcjTVopUWpR2ohdy7Q.jpg"
+    },
+    "name": "The Mentalist",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "CBS",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 151,
+    "number_of_seasons": 7,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "The Mentalist",
+    "overview": "Patrick Jane, a former celebrity psychic medium, uses his razor sharp skills of observation and expertise at \"reading\" people to solve serious crimes with the California Bureau of Investigation.",
+    "popularity": 2589.8735,
+    "poster_path": "/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg",
+    "production_companies": [
+      {
+        "id": 1957,
+        "logo_path": "/pJJw98MtNFC9cHn3o15G7vaUnnX.png",
+        "name": "Warner Bros. Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 22938,
+        "logo_path": null,
+        "name": "Primrose Hill Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2009-08-20",
+        "episode_count": 2,
+        "id": 15976,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/n777EHyaK4yKiErzbvMGxKfdcV3.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2008-09-23",
+        "episode_count": 23,
+        "id": 15977,
+        "name": "Season 1",
+        "overview": "Patrick Jane is a celebrity psychic whose wife and child are viciously murdered by an elusive serial killer called Red John. Devastated, Patrick admits his paranormal act is fake, renounces his earlier life and uses his astonishing skills of observation and analysis - talents that made him appear psychically gifted - to bring killers to justice. At crime scenes across California, Patrick now helps an elite team of detectives break their toughest cases. But no matter how many criminals he catches, Patrick never forgets his central goal: Find Red John. And bring him down.",
+        "poster_path": "/gs7BTjvDXFwASiN9XGzFihGPWx0.jpg",
+        "season_number": 1,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2009-09-24",
+        "episode_count": 23,
+        "id": 15978,
+        "name": "Season 2",
+        "overview": "California Bureau of Investigation consultant Patrick Jane has a blatant lack of protocol but is self-assured and driven. The former \"psychic\" uses his talent for seeing the clues everyone else misses to solve the most baffling crimes. But there's more than crime: Lisbon and Cho reveal hints about their troubled pasts. Violence fells one CBI boss, and the new boss seems more interested in authority than teamwork. And as the Van Pelt-Rigsby relationship heats up, it threatens to cool down their careers.",
+        "poster_path": "/7bAwr7PAW0ynlnHfni5HaSzl7ci.jpg",
+        "season_number": 2,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2010-09-23",
+        "episode_count": 24,
+        "id": 15979,
+        "name": "Season 3",
+        "overview": "Red John strikes into the heart of the CBI. Ever since the serial killer murdered Patrick Jane's family, the California Bureau of Investigation consultant and former faux-psychic has become obsessed with finding the man who destroyed his life. But after a homocide suspect is set ablaze in his jail cell and a CBI agent is later framed as Red John, Patrick realizes his adversary is closer than he imagined.",
+        "poster_path": "/AprjB0BcIpIC2la4eRMGDWIrfMU.jpg",
+        "season_number": 3,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2011-09-22",
+        "episode_count": 24,
+        "id": 15980,
+        "name": "Season 4",
+        "overview": "Patrick Jane was arrested for the public murder of the man he believes is the notorious serial killer Red John, who murdered his wife and daughter. Unless, of course, the man Patrick shot is someone else. With an upstart new boss, puzzling new cases, and Red John never far from his mind, the unconventional Patrick will need all his razor-sharp skills of observation, manipulative theatrics and smooth charm to sidestep the system that stands in the way of the truth.",
+        "poster_path": "/w5AZMD6f6zQ9JVOBEUWWcdhfFML.jpg",
+        "season_number": 4,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2012-09-30",
+        "episode_count": 22,
+        "id": 15981,
+        "name": "Season 5",
+        "overview": "The assault, narcotics and fraud charges against Patrick Jane have been dropped and it's back to business as usual. Or business as unusual for Jane, who uses mind games, tricks and his super sharp skills of observation to solve the state's most puzzling homocides.\n\nJane's obsession with finding Red John consumes him every waking moment, drawing him outside the law and closer than ever to the serial killer's true identity. But when Homeland Security and the FBI team up with the CBI on the case, Jane's unorthodox methods antagonize even his most loyal allies. Can Jane's skill and charm continue to see him through? How far is too far?",
+        "poster_path": "/3LsyuIXcNDV1mnyZIiBN64GbNzr.jpg",
+        "season_number": 5,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2013-09-29",
+        "episode_count": 22,
+        "id": 15982,
+        "name": "Season 6",
+        "overview": "Armed with a list of seven suspects, confirmed by the killer himself, Patrick Jane and the CBI team are closing in on the elusive serial killer while continuing to solve California's most puzzling crimes. Could Red John be a cult leader? A ghoulish forensic analyst? A super-suspicious Homeland Security Agent? Or one of four law officials, including the director of the CBI himself? The identity of the man who killed Patrick Jane's family is finally revealed in a climactic showdown - but that's not the end of the story! When the CBI shuttered, Jane, Lisbon and the team partner with the FBI to tackle a whole new slew of mysteries... including vicious attack on former CBI members.",
+        "poster_path": "/3wbMbYqry3ZLSuvFFy4lhbBQq34.jpg",
+        "season_number": 6,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2014-11-30",
+        "episode_count": 13,
+        "id": 62058,
+        "name": "Season 7",
+        "overview": "With serial killer Red John laid to rest, Patrick Jane is finally free to close the door on his past and plan for the future. A fresh start with the FBI has him solving top-security cases alongside former CBI agents Teresa Lisbon and Kimball Cho, new colleagues Jason Wylie and Michelle Vega, and boss Agent Dennis Abbott. And Jane's blossoming connection with Lisbon brings a deeper bond to the partners' already intimate and intense professional relationship. But when femme fatale Erica Flynn resurfaces from Jane's past and another sadistic serial killer appears on the scene, affairs of the heart take a backseat to survival.",
+        "poster_path": "/xroML8XHuaB6MP9VKmHg3429037.jpg",
+        "season_number": 7,
+        "vote_average": 7.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Let the mind games begin.",
+    "type": "Scripted",
+    "vote_average": 8.4,
+    "vote_count": 4950,
+    "external_ids": {
+      "imdb_id": "tt1196946",
+      "freebase_mid": "/m/04csmqp",
+      "freebase_id": "/en/the_mentalist",
+      "tvdb_id": 82459,
+      "tvrage_id": 18967,
+      "wikidata_id": "Q204228",
+      "facebook_id": "TheMentalist",
+      "instagram_id": "mentalist_cbs",
+      "twitter_id": ""
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Patrick Jane, a former celebrity psychic medium, uses his razor sharp skills of observation and expertise at \"reading\" people to solve serious crimes with the California Bureau of Investigation.",
+            "homepage": "",
+            "tagline": "Let the mind games begin."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Mentalista",
+            "overview": "Patrick Jane, nezávislý konzultant CBI, ma pozoruhodnú schopnosť riešiť zločiny, k čomu mu dopomáhajú jeho vynikajúce pozorovacie schopnosti. Jane je notoricky známy tým, že sa nespráva podľa protokolu, no napriek tomu je jeho rola v riešení prípadov vysoko oceňovaná jeho kolegami. Avšak agentka Teresa Lisbon odoláva zobrať Janea do svojho tímu; na jednej strane neochotne priznáva, že je užitočný, no na druhej strane jej nevyhovuje jeho teatrálnosť, narcizmus a pracovné prešľapy. Do tímu Lisbonovej patria aj agenti Kimball Cho, Wayne Rigsby a nováčik Grace Van Pelt, ktorí obdivujú jeho šarm a talent riešiť prípady napriek tomu, že ho považujú za stratený prípad.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Na de moord op zijn vrouw en kind, gebruikt Patrick zijn speciale observatievermogen om misdaden op te lossen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "A mentalista",
+            "overview": "A sorozat főszereplője Patrick Jane (Simon Baker), mentalista. Korábban természetfeletti képességei népszerűsítésével járta az országot és érte el sikereit. Ennek köszönhetően egy alkalommal a rendőrségnek is segített egy gyilkossági ügy felderítésében és ezért vált egy sorozatgyilkos bosszújának áldozatává a családja. Patrick azóta felhagyott a népszerűség hajhászással és különleges képességeit megtanulta hasznosan alkalmazni. A Los Angeles-i rendőrség szolgálatába állt, hogy különleges szellemi érzékenységével segítsen a bűnügyek feltárásában és nyomára akadjon családja gyilkosának is.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "O Mentalista",
+            "overview": "Patrick Jane é um consultor independente para o California Bureau of Investigation (CBI). Ex-golpista, antes disso ele fingia ser um psíquico e médium. Cinco anos antes dos eventos do episódio piloto, Jane foi à televisão e disse que suas habilidades ajudaram a polícia a fazer o perfil de um serial killer chamado Red John. Este, então, furioso com a mentira, vingou-se matando a mulher e a filha de Patrick. Ele, então, juntou-se à equipe da Agente Teresa Lisbon (Robin Tunney) e utiliza sua alta capacidade de observação para ajudar a encontrar o assassino de sua família. ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Der Job des charismatischen Ex-TV-Show-Stars Patrick Jane innerhalb des California Bureau of Investigation ist es, die Ermittlungen einer Spezialeinheit zu unterstützen. Jane, der seine Karriere als \"Mentalist\" mit vermeintlich übersinnlichen Fähigkeiten nach einer familiären Tragödie beendete, besitzt eine unvergleichliche Beobachtungsgabe und verblüffende Kombinationsfähigkeiten.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Mentalist",
+            "overview": "Un mentalist è in grado di manipolare il pensiero e il comportamento degli altri. The Mentalist è Patrick Jane, un famoso sensitivo, la cui moglie e il cui figlio vengono brutalmente assassinati da un inafferrabile serial killer chiamato John il Rosso. Sconvolto, Patrick ammette che le sue facoltà paranormali sono un imbroglio, decide di cambiare vita e di utilizzare le sue straordinarie capacità di osservazione e di analisi - qualità che gli avevano permesso di far credere di possedere doti paranormali - per assicurare i criminali alla giustizia.",
+            "homepage": "",
+            "tagline": "Lui legge tra le bugie"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "המנטליסט",
+            "overview": "פטריק ג'יין עשה הרבה כסף ממופע ראיית הנסתר שלו, עד שאשתו ובתו נרצחים על ידי רוצח סדרתי בשם רד ג'ון. שבור וגמור, פטריק מסכים להעניק מכישורי האבחנה שלו למשטרה. לאורכה ולרוחבה של קליפורניה, מצליח פטריק לעזור למצות את הדין עם פושעים, אבל בתוך תוכו הוא זוכר שיש אחד שהוא מוכרח להביא לדין בכל מחיר. כעת, הוא עובד עם לשכת החקירות של קליפורניה ומביא את כישורי התצפית שלו לרמה כמעט מושלמת כדי לסייע לסי-בי-איי בפתירת פשעים.",
+            "homepage": "",
+            "tagline": "הבה נתחיל במשחקי המוחות."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Mentalista",
+            "overview": "Tytułowym bohaterem serialu jest Patrick Jane, który pracuje jako niezależny prywatny detektyw  i konsultant w Kalifornijskim Biurze Śledczym. Wcześniej, dzięki niezwykłemu talentowi obserwacji i dedukcji, udawał on medium wykorzystując naiwność innych ludzi. Jednak gdy seryjny morderca Red John zabił jego żonę i córkę postanowił porzucić dotychczasowy zawód i pomagać policji. Stosując swoje zdolności oraz wykorzystując takie metody jak sugestia, hipnoza czy manipulacja potrafi rozwiązać najróżniejsze sprawy kryminalne.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Mentalist",
+            "overview": "Un mentaliste utilise ses extraordinaires dons d'observation pour résoudre des crimes en tant que consultant du CBI. Une façon pour lui de contribuer à la justice et de démasquer le mystérieux tueur en série qui a assassiné son épouse et sa fille…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "El mentalista",
+            "overview": "El mentalista es una serie policiaca americana sobre Patrick Jane, ex médium, que trabaja de asesor para la Oficina de Investigación de California (California Bureau of Investigation), usando su altamente desarrollada capacidad de observación, que anteriormente usaba para \"leer\" mentes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ο Πάτρικ Τζέιν είναι ντετέκτιβ και σύμβουλος στο Γραφείο Ερευνών της Καλιφόρνια (CBI) και κατέχει το ρεκόρ εξιχνίασης σοβαρών εγκλημάτων χρησιμοποιώντας την οξυμένη του παρατηρητικότητα. Στο Γραφείο ο Jane είναι γνωστός για την έλλειψη τήρησης του πρωτοκόλλου και για το ήμι-διάσημο παρελθόν του ως ψυχικό μέντιουμ, ικανότητες που τώρα παραδέχεται πως ήταν ψεύτικες. Οι συνάδελφοί του εκτιμούν πολύ τις ικανότητές του αλλά η προϊσταμένη του Τερέσα Λίσμπον αντιδρά στην παρουσία του στην ομάδα της, διστακτικά αναγνωρίζει την βοήθεια που της προσφέρει και τον κατηγορεί για θεατρινισμό, ναρκισσισμό και πολλά άλλα.",
+            "homepage": "",
+            "tagline": "Ας αρχίσουν τα παιχνίδια του μυαλού."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "超感神探",
+            "overview": "《超感神探》英文片名为《The Mentalist》，由美国 CBS 发行，金球奖提名者西蒙·贝克 (Simon Baker) 主演，饰演一位过去曾长期在媒体上发表各类关于精神疾病和超自然感觉的文章，并且一直担任电视谈话节目的嘉宾。他俨然是一个心理专家，但这位“半名人”自己也承认，他所谓的“超自然能力”纯粹是糊弄人的骗局－－只不过他的观察力和感知力远比别人强而已。如今，从“名人圈”里“卸甲归田”的简 (Jane) 当上了加利福尼亚调查局 (CBI) 专案调查组的独立顾问。他利用自己的“超感”特长连续破获了多起公众关注度高的疑难悬案，惊人的破案效率和成功记录让很多人连呼“神人” 。但是在调查局内，大家都知道简的底细－－他是个缺乏纪律感、不愿意按规矩办事的家伙。\n\n古板严肃、一切只知道照本宣科的高级特工里斯本（Teresa Lisbon，罗宾·唐尼 Robin Tunney 饰，代表作《越狱 Prison Break》）拿简非常头疼。她不喜欢简公私不明、轻重不分的性格。但另一方面，她也不得不承认：简的作用无人可替代，他的判断力对同事们来说非常有价值。\n\n里斯本手下的得力乾将包括聪明的金博尔·乔（Kimball Cho，蒂姆·康 Tim Kang 饰， 代表作《第一滴血 Rambo》）和韦恩·瑞斯比（Wayne Rigsby，欧文·约曼 Owain Yeoman 饰，代表作《The Nine》），还有一名毫无经验的新手格蕾丝·范·佩尔特（Grace Van Pelt，阿曼达·莱赫提 Amanda Righetti 饰）。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Patrick Jane jobbar som detektiv för California Bureau of Investigation. Hans observationsförmåga är näst intill perfekt och han använder sig av sina egenskaper för att hjälpa till att lösa brott.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "În mintea criminalului",
+            "overview": "După ce un ucigaș în serie îi ucide familia, Patrick Jane renunță să mai facă pe șarlatanul ca medium și își folosește talentul de bun observator pentru a ajuta poliția.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Mentalista",
+            "overview": "Mentalista. Někdo, kdo používá bystrost mysli, hypnózu a/nebo sugesci. Mistr manipulace s myslí a chováním. Patrick Jane je detektiv a nezávislý konzultant spolupracující s Kalifornským úřadem pro vyšetřování (CBI). Patrick měl dříve vlastní televizní show, kde diváky přesvědčoval o svých paranormálních schopnostech. Pak ho ale policie vyzvala, aby těchto schopností využil při hledání masového vraha, který po sobě zanechává krvavého smajlíka a říká si Rudý John. Patrick souhlasí a k policejnímu týmu se přidává. Všimne si ho ovšem sám Rudý John a zavraždí jeho ženu a dítě. Patrick se vzdává svého dosavadního života a přidává se k vyšetřovacímu týmu na trvalo. Doufá, že během vyšetřování ostatních vražd se mu podaří najít i Rudého Johna...",
+            "homepage": "",
+            "tagline": "Hrátky s myslí mohou začít."
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": " The Mentalist",
+            "overview": "Pomoću jedinstvenog dara moderni Sherlock Holmes uvijek je korak ispred forenzičkih analiza, napredne kriminalističke tehnologije i svih kolega. Uočavajući najsitnije detalje, igrajući umne igrice i \"čitajući\" emocije drugih, Jane kriminalcima kompleksnih profila i poremećenih umova postavlja sofisticirane umne zamke te može navesti svjedoke i osumnjičene da mu razotkriju činjenice kojih ni sami nisu svjesni. Šarmantni i karizmatični Jane ima neslavnu prošlost televizijskog vidovnjaka te je stekao negativni publicitet nakon što je razotkriven kao varalica. Iako je priznao kako nema paranormalne, već samo mentalne sposobnosti, jedina koja i dalje sumnja u njega je narednica CBI-a Teresa Lisbon (Robin Tunney).  Iako je nepredvidljiv i poznat po zaobilaženju protokola, njegovi kolege, agenti Kendall Cho (Tim Kang) i Wayne Rigsby (Owain Yeoman) te novakinja Grace Van Pelt (Amanda Righetti), dive se njegovom šarmu i učinkovitosti u rješavanju slučajeva. No Jane skriva još jednu mračnu tajnu iz svoje prošlosti. Naime, nekoliko godina prije početka same radnje Jane je izgubio suprugu i kćer koje je ubio okrutni serijski ubojica poznat kao \"Crveni John\" a koji će se na njegovom putu naći i u budućnosti.\n\nNova američka kriminalistička serija o sofisticiranom umu koji bez naprednih znanstvenih metoda rješava najsloženije zločine zanimljivo liči na modernu verziju Sherlocka Holmesa te je veliko osvježenje u bujici kriminalističkih serija čija je istraga temeljena na razvijenim forenzičkim metodama. \"Mentalist\" se vraća klasičnoj detektivskoj istrazi koju usmjerava predosjećaj, a svaki novi slučaj riješen je kompleksno i uvijek uvjerljivo. Američka premijera pilota u rujnu 2008. postigla je rekordnu gledanost od 23 milijuna ljudi, a u siječnju 2009. serija je primila nagradu američke publike za najbolju televizijsku dramsku seriju.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Менталист",
+            "overview": "После того как серийный убийца убил его семью, Патрик Джейн отказался от карьеры экстрасенса и использует свои способности, чтобы помогать правоохранительным органам.",
+            "homepage": "",
+            "tagline": "«Да начнутся игры разума»"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Patrick Jane arbejdede som clairvoyant blandt andet på tv, men stoppede da seriemorderen Red John dræbte hans kone og datter. Han holdt derefter op med at påstå, at han havde overnaturlige evner og er nu meget skeptisk overfor alle, der siger, at de har disse evner. Dog er han noget af en menneskekender. Han kender meget til psykologi, er meget observant, han kan bruge hypnose og har en meget god hukommelse. Derfor er han for eksempel i stand til at se om folk lyver ved at kigge på deres kropssprog. Han bruger mange forskellige teknikker til at se om folk lyver, fx om deres puls er uregelmæssig eller de rødmer. Disse evner har han valgt bruge til at hjælpe California Bureau of Investigation (CBI) med at fange Red John. Men der er også mange andre sager, hvor bureauet kan bruge hans hjælp.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Mentalistas",
+            "overview": "Serialas apie Patriką Džeiną, nepriklausomą Kalifornijos Tyrimų biuro konsultantą, dėl ypatingo pastabumo sėkmingai atskleidžiantį sunkiausius nusikaltimus. Tarp darbuotojų Džeinas garsėja atsainiu požiūriu į darbo taisykles ir garsenybės praeitimi – kadaise jis buvo žinomas TV aiškiaregys. Patrikas yra šiuolaikinis Šerlokas Holmsas, žmogžudystes tiriantis su polėkiu ir šelmiška dvasia. Protu, įžvalgumu ir pastabumu pranokstantis visus aplinkui, iškart pastebintis klastą ir įtariantis visus be išimties, Patrikas Džeinas kolegas stulbina smagiu cinizmu ir nuoširdžiu pasipūtimu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Менталіст",
+            "overview": "В центрі сюжету – історія детектива і незалежного консультанта з Каліфорнійського Бюро Розслідувань Патріка Джейна, який використовує свої відточені навички спостереження для розкриття тяжких злочинів. Мета життя Патріка – розшукати серійного вбивцю на прізвисько Кривавий Джон, який колись буквально зруйнував життя талановитого психолога, вбивши його дружину та дитину…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Le Mentaliste",
+            "overview": "Un mentaliste utilise ses extraordinaires dons d'observation pour résoudre des crimes en tant que consultant du CBI. Une façon pour lui de contribuer à la justice et de démasquer le mystérieux tueur en série qui a assassiné son épouse et sa fille...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "El mentalista",
+            "overview": "Patrick Jane es un hombre que trabaja como médium televisivo hasta que sufre un duro golpe cuando su mujer e hija son asesinadas. A partir de entonces, decide usar sus habilidades para ayudar a resolver casos de asesinato, trabajando como detective en el Departamento de Investigación de Crímenes de California. El agente Jane será capaz de ver aquello que los demás no pueden y sus poderes de observación y deducción le darán excelentes resultados.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "O Mentalista",
+            "overview": "Patrick Jane é famoso por sua habilidade de alta percepção de tudo que está ao seu redor. Ele já quase foi uma celebridade, alegando ser médium vidente, mas agora admite que fingia ter poderes paranormais. Com sua grande habilidade de observação, Patrick trabalha como consultor independente para as autoridades da Califórnia, resolvendo um número considerável de crimes complicados.",
+            "homepage": "",
+            "tagline": "Que comecem os jogos mentais."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "멘탈리스트",
+            "overview": "2008년 9월 CBS에서 방영을 시작한 범죄심리수사물. 예리한 관찰력과 날카로운 추리력을 가진 패트릭 제인은 사람들의 행동을 관찰해서 그 마음을 읽는 능력을 이용하여 돈벌이를 하며 살아가고 있었다. 그러다가 한 방송에서 연쇄살인범 레드존에 대한 언급을 하게 되고, 그로 인해 아내와 딸이 레드존에게 죽임을 당한다. 그 후 제인은 레드존에 대한 정보를 얻기 위해 CBI(캘리포니아 연방수사대)를 찾아가게 되고, 우연히 그들의 수사를 돕게 되면서 수사대의 자문위원이 되고 각종 범죄를 해결하며 레드존을 잡기 위한 정보도 취합해 간다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "超感應神探",
+            "overview": "派崔克簡本來是有名的靈媒，神祕的連環殺手紅約翰卻殺害他的妻小。悲傷驚愕之餘，派崔克承認他的通靈都是騙術，徹底否認以前的生活方式。之後，派崔克協助加州調查局偵破無數艱難的犯罪案件，他運用驚人的觀察與分析技巧，充分展現心靈感應的天賦將殺人兇手繩之於法。無論他捉到多少個罪犯，派崔克從未忘記自己的目標：找到紅約翰。要讓這個殺害妻小的殺人魔鋃鐺入獄。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Mentalist",
+            "overview": "Patric Jane on tavallinen freelance-etsivä, jolla on epätavallisia kykyjä ja menneisyyden taakka harteillaan. Hän tietää salaisuutesi ja lukee ajatuksesi. Hän on entinen selvännäkijänä ja nyt hän työskentelee neuvonantajana Kalifornian poliisissa. Patricin roolissa nähdään Simon Baker, joka kuvailee roolihahmoaan taitavaksi päättelijäksi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Patrick Jane isimli bir medyum, sirkte çalışan ve gözlem güçlerini kullanarak insanlar hakkında birtakım fikirler edinip bu fikirleri onlara medyum gibi satan biridir. Bir gün bu özelliği sebebiyle televizyona çıkar ve kendine Red John isimli bir düşman edinir. Red John Jane’in kızını ve eşini öldürünce ortada kalan ve bu ölümlerin sebebinin kendisi olduğunu düşünen Jane, en sonunda FBI’a başvurarak Red John’ın peşine düşmek ister. Her ne kadar ilk başlarda bu isteği geri çevrilse de FBI’ın çözemediği birtakım davaları çözen Jane, bu özel ekibe danışman olarak işe alınır.",
+            "homepage": "",
+            "tagline": "Akıl oyunları başlasın."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Менталистът: Крадецът на мисли",
+            "overview": "Сериалът разказва за независим консултант към Калифорнийското бюро за разследване (КБР) Патрик Джейн, който има забележително досие при разрешаването на сериозни престъпления чрез изключително острите си наблюдателски умения. Въпреки способностите си, Джейн е известен сред колегите си с неспазването на протокола, както и с лошата си слава на известна телевизионна личност, бивш медиум с паранормални възможности, които сега той признава, че е симулирал.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "THE MENTALIST メンタリストの捜査ファイル",
+            "overview": "カリフォルニア州捜査局（通称・CBI）の犯罪コンサルタント、パトリック・ジェーン。元詐欺師で以前は自身を霊能者(サイキック)と偽り活躍していた。妻と娘を殺した宿敵レッド・ジョンを追うため、CBIのコンサルタントとなり、人間心理を巧みに操る観察眼と推理力を持つ「メンタリスト」として型破りな捜査で犯人を追う。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "منتالیست",
+            "overview": "داستان این سریال در مورد مردی است به نام پاتریک جین که در مورد ماجراهای جنایی تحقیق می‌کند و دارای استعدادهای فوق‌العاده مانند شرلوک هلمز و همچنین از قدرت‌هایی مانند خواندن مغز نیز بهره می‌برد و از اسرار نهفته در جرم‌ها و قتل‌ها پرده بر می‌دارد . اوگذشته خود را با پشیمانی کنار گذاشته او در گذشته تظاهر می‌کرده که با ارواح ارتباط دارد که همین قضیه موجب کشته شدن خانواده‌اش توسط یک قاتل زنجیره‌ای شده است...",
+            "homepage": "",
+            "tagline": "اجازه دهید بازی‌های ذهنی شروع شود."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الوسيط الروحي",
+            "overview": "يعمل باتريك جين مستشارًا لدى مكتب التحقيقات في كاليفورنيا، بعد أن كان يدّعي امتلاك قدرات روحانية، قبل أن تقلب مأساة على يد قاتل متسلسل يُعرف باسم ريد جون حياته رأسًا على عقب. يسخّر جين قدرته الفذة على الملاحظة وقراءة الناس لمساعدة فريق العميلة تيريزا ليزبون في حل الجرائم المعقدة بأساليب غير مألوفة، بينما يبقى هدفه الأكبر الوصول إلى القاتل الذي دمّر عائلته.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เดอะ เมนทัลลิสต์ เจาะจิตผ่าปริศนา",
+            "overview": "เรื่องราวของแพทริค เจน (ไซม่อน เบเกอร์) จิตแพทย์ชื่อดังที่เสียลูกและเมียไปด้วยน้ำมือของฆาตกรฆ่าต่อเนื่องนาม เรด จอห์น ซึ่งแพทริคจะใช้ความสามารถในอ่านใจ วิเคราะห์จิต สังเกตุพฤติกรรมต่างๆเพื่อช่วยตำรวจในการนำคนร้ายมาลงโทษด้วยกฏหมายในแต่ละตอน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "მენტალისტი",
+            "overview": "პატრიკ ჯეინი პროფესიით დეტექტივია, იგი ასევე ეხმარება კალიფორნიის საგამოძიებო ბიუროს ჩახლართული საქმეების გამოძიებაში, როგორც დამოუკიდებელი კონსულტანტი. ბიუროს თანამშრომლები ჯეინს იცნობენ, როგორც პროცესუალური ნორმების დამრღვევს და შარლატანს-წარსულში მედიუმს, მაგრამ გამოძიებებში მის მიერ შეტანილი უდიდესი როლის გამო, მას აფასებენ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thám Tử Đại Tài",
+            "overview": "Chuyện phim xoay quanh cuộc hành trình tìm kiếm hung thủ đã sát hại vợ và con gái mình của Patrick Jane. Trước khi thảm kịch xảy đến với gia đình mình, Jane có một sự nghiệp thành công. Nhờ khả năng thôi miên, nắm bắt tâm lý và nhất là khả năng quan sát kỳ tài, anh đã trở nên nổi tiếng bằng việc giả làm một nhà tâm linh. Để khẳng định tài năng của mình, Jane đã xuất hiện trên truyền hình và tuyên bố mình đã giúp cảnh sát phác họa tiểu sử của tên giết người hàng loạt Red John. Tức giận vì bị xem thường, Red John đã giết vợ và con gái Jane để trả thù. Ngay sau thảm kịch, Jane bỏ nghề, trở thành là một cố vấn viên độc lập của phòng điều tra tội phạm bang California (CBI) với hy vọng tìm ra kẻ thủ ác.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "心計",
+            "overview": "在這部艾美獎提名影集中，一名騙子改行當私家偵探，運用獨到的犯罪心理洞察，破解了無數複雜案件。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Golden Globe-nominerte Simon Baker er tilbake for en tredje sesong som Patrick Jane, den uavhengige CBI-konsulenten med helt spesielle egenskaper. (S3, Ep13)",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Mentālists",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Patrick Jane, mantan peramal dan medium terkenal, menggunakan kemampuan pengamatannya yang sangat tajam dan keahliannya dalam \"membaca\" orang untuk memecahkan kejahatan serius bersama Biro Investigasi California.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Менталиста",
+            "overview": "Патрик Џејн, бивши познати видовњак, користи своје оштре вештине посматрања и стручност у „читању“ људи како би решавао озбиљне злочине са Калифорнијским истражним бироом.",
+            "homepage": "",
+            "tagline": "Нека игре ума почну."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الوسيط الروحي",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Mentalist",
+            "overview": "Nakon što serijski ubojica ubije njegovu obitelj, Patrick Jane odustane od svojeg života vidovnjaka i upotrijebi svoje moći primjećivanja da pomogne policiji s istragama.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SD",
+          "iso_639_1": "sd",
+          "name": "",
+          "english_name": "Sindhi",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rJFqKcmMSttdNP58l0dVzY2NcTA.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q3pCsNvJ7CmdJUz2sJEEUY3pOPC.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eUg803qy6luwe8Rys1PkDTw629C.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ov0WjAg0CclTDLBPy36nBiJ1fN5.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jh9YpYaG1be7FOtBUxkLTIkhQHI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1mOt9QtVJAAeFD4mF33Bpr2Msv7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kAgork03BAj6Q1NBrsWh4ppK0yi.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7PHEBeFn1FrtaBQilYHakBRe4XW.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/smUA2TTRRonO53Nwi6xDvpyaCmp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wWFOMZx6FLcgLCqnx81veKS0tOd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9ln4NNAE3iIpjxU84AF8ED1mnyv.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xFzmU1h2aKPKobNGIgzZSRxCkwE.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aG0jws8AJpmsRiyUQadCdWziyMw.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pfnHfrMU9nugGfKxvXVy5HBrMRD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jj4efLlnCSwzmTp80h0Z8ZdPRMt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nFljbcf6fVnPH46JXGlxGzVdsyk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7n8JTVyb6Azo07eFlLbNhuX9tX2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aau8veWZhISFUscqg4n6hNCdpYa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jgFicKweeoUP96ugEAdQIfp4Fcw.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dwMZ8BW1tUp69baogSrcTAumKuR.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jUJ9scccGyd2SwatR3NA6w9QohI.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9vB6xEaZsYq2gTW1PI2zltHuDRH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yrmNt3AG0OX5eKUBvvlqeAMHnvp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t0hxr0AYaUIT93KjXraeAzu9sQ4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ed32jLYlW2sj5LF0X2NN6KYQwjr.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1FfdUl2ByhRrYHTwp6KVg8KDpWf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sgzkyIJtRnXyMiXXZBji58VUCsI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zgmMRcKsr83xz7WNeyWRVZl08f1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kxzclshEWDPX7UIw4fdRs1itIte.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jZDYpNwh8KL7n2Io5bECBm5giz3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bBSOvVgo8FiuXAPRy0CNn8ohzuu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yYlKGZVcI6Rm5faw1KVyjfMLdrA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1N0sugtZ7SDFmLUxeTMqki3k6FC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oQWQjVlIV9RzWa1GvpDYk7SuNhc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qah6kF3D7mYkGhhgb9Ozou6cCvd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l33rXuCIQnrupXC4YneYaLpgLvt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qQzWGad3xQDk31jpZ5xUR1ATEPQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bbRpuBapzr2pPzIHS6Z9W58fOPp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 823,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mv3LyBPc8KLEDnEMacfCqLUIfmj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1463
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fHs8uKaBUDliSEryrQigGSDOA5h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cOgNxfoUdfHv9pYZ74vVgTkq4zN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1439,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m8173pOyQU9UJ8ncRjpRPm0Xd7m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1b2KxEuFmUj9xJsQskfZNP8KBDk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iCwAts9xSzbdBpSt78d69NYOGFy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1439,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nZFHSlwquOJX5iQoCMqENjr8OYO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vMcpRevCDhVnOpy1SHGBvZq6gYh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zGcd5whMkwclpmfWR0nyAeHDJOB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1144,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xaaRf97NQ6wShgG6ZnWcBmsCSYD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2034
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 7.956,
+          "height": 114,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sHF6y7btA03TqE1tVQJq3JJzQA3.svg",
+          "vote_average": 10,
+          "vote_count": 6,
+          "width": 907
+        },
+        {
+          "aspect_ratio": 7.956,
+          "height": 114,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aB5jf4O14dykrksrPgtOlvVk0pi.svg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 907
+        },
+        {
+          "aspect_ratio": 7.529,
+          "height": 104,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dhIKKkMbccJ8AhKvI8ERnESvOAi.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 783
+        },
+        {
+          "aspect_ratio": 7.956,
+          "height": 114,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AqGoFMLpHjEvwgq6tPUIdGW6EvZ.svg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 907
+        },
+        {
+          "aspect_ratio": 2.435,
+          "height": 777,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6lh1w1Cu67tzA3xwPvg93yqWMG0.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1892
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eTYWcYIFyyuG5nqM1IcCv5TpW5I.jpg",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/acYXu4KaDj1NIkMgObnhe4C4a0T.jpg",
+          "vote_average": 7.814,
+          "vote_count": 9,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k0kMdO52LpC5JWgd0uWEH7gqcCe.jpg",
+          "vote_average": 6.546,
+          "vote_count": 12,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/urxqh567dD5Va8sTAS6r8nH4OMo.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uw5MSuMFkAd98HI4fU8mEEBjghg.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ofrGX3Z32EfT7DgOpYLFUtZ9We0.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s7XCZdUn58AkWgIJArLvOxcYx59.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eq5jxQND6IlzrKI3l0r0zEpPGIR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wHBpu72EW1oUYwDSaJMD46sC4nG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oOuDnahbtMhF9vLwE9LiOS0oiJj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yfSmvoC4zPTAPr9pFdrqVtMWBfF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/atDLfmpldVHzSrBNA4y4Y4G2L5u.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 810
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hbRwFlj7aztdOmgEip8SoyNYyCz.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eT0D3GkAnq0AjA9ok0KE1GfGQhA.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nNHYFrn1MyE41nAAzoMkRz9zx0b.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ueIfKmp5cxv20xbSPqfWIBnhMIp.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pIqZDcC6QbQcB20VdmVu6WxCrG7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/odo1oXkcAPcjYJya8rV26bElkVV.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1575,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7ed0v16eQyRLwVnVi1tCFSlMc9J.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1050
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fZ9Hgh6P4UA7dWrEKgUUgfez6zA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/txXFRPGlR0mvkyriigN6kfPxD53.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e64Oj3weB6qzdKPaZQmPBtsjcSF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pn1Nrot8E8FwArYLzXJKru9DBCw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9VAJig4BXzjqxvlqZ6nOxcGCPpO.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vK9gfJwqaIZIoUlUn1BsNXXT3f5.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fH4pVzufrOE4ITuXhCQUw8CR9wj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vpTdbCIJVaW53uEC7ugD5s8TGzL.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2KbxZ5ut5edXRknxjYIZzq9OcW1.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.749,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hGAyS6RbANHDurPBgeHbntameG6.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1124
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xpYXZAyfLKt3yL89vMf3nGcWIOu.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dTZEmlKIO8fPPYNbP8CuXvRjcBd.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b8VbpBJbVie2IwOlygu8PkTu2w.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g5Tl1C1KwFpH9AL9q79VYjW6Cwv.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4YRPGC4eyyrZmYsV9JARgZSMxDX.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kZKDlTk1DgGYj8S4RcBUzF6yXHD.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oGNk1xkljum6LG1nL53Efcl9a6w.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a8fYSbNjtbnkf1r9tMEqF4Ox71C.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4kWj5PbIT39fgn66EJ53JbNJ58c.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nyCpGK9PjakfO6NZ6LA7OiNk68x.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n95x17smJK28x9odVvoRVkN6UDH.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/42OBZeNZjeJ8sfo5d0wRzdpMM7K.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7sCtTfPfqeEtA90iCrRaleTTc8b.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 501
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e4y1NffN78NaZb20mDzt1C8Ir8r.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zV31cxRApDdgmeO2S7TQzAoDlie.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wzAjBHSgZgSYeKnecXyxdk5p1AG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s1FVjVlwsqvvkAPcVwJCfGdYZE2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cERTqfBTDTVDoKN6ePgwJE2s12g.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qxZ6aeMIpxIFsZFn9dSekrIN2uo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l6Tns1pF7vEy7q18m6Jh50rwyZP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/keZVUteEtDlcAsXIbs63IBDmVS7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wWd3kDeDkEMdXWBGd7LoVAhZsTR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4kN18ksMApftblkh9MKYONa4gvd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 675
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k00ZMfDBZhijaQuZLTwOudJaaHK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9EWZV5sBIdtKdoiq7jAkL7KTl65.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4368gTeLnsERJ9J6FLUuXYGT2M7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1017,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kvJLRElGxSf0esyTJ0mwF6OjosG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 678
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bqChLoqLooPpzp4JFhbBOIBfzru.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 679
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kqeaCNRtQ6eAnjlpy4tJnfffYbS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hR1HTJ45bHOcSSN9QhKOiu9kOKu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2DfzArDhyCa6k3NvJJTDzYimtVn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1235,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f1eW2bjM4mwQdc7keGD6dlDWE7i.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 823
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1755,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7TRSxoE7uZmMUAlCqFwPuwGxkOT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1755,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ukp6auoC9VFEgaZzlQuHyzsxngc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1755,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ySt5WkCDxVZ6VGd1GeDLoZjI2Ya.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1755,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9DIXQIr66NHpVvAvhe5O1jZEOSN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1499,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5ZtXxkT2TpodPtIaUGKNol7S2m6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 999
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1499,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1tttUpD7sWq9Ioz1oosMhK0l8M.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 999
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1041,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5CVMelPsjCu0HCTSs9w5ASduFtj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.679,
+          "height": 1522,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zReJjUWtfTjQUgAc6cYEC02fbLh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1033
+        },
+        {
+          "aspect_ratio": 0.678,
+          "height": 1523,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8bieu7WDKe5ZlXB1Hug6pQVEpGz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1033
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/60877Z2qkpF9iiOJftFl11GVTDN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lR9n3b3bwaXjNMa5dn3BdaESmc5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cM4AF1myUhhAiwzbMkff9XODvT4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1775,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iTzwttmetWWMZMZeRmSG7gRjQUD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1182
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 914,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ceWa280YgN19tf4oprAMFZnRIAW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 609
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sVNwImJthwJ20b0L6AnUbNFMRMN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.67,
+          "height": 1704,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4YTlK9DKKH68j7Bo2oxSlXECZ8Y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1141
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1536,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4nfUge7T1edtdpQvIUkU8WsDKrk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1024
+        }
+      ]
+    }
+  }
+}

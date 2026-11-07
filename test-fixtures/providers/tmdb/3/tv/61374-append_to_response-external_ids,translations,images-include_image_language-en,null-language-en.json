@@ -1,0 +1,1221 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21533",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d96af89209c2543bd37c7db6d3d0a1f6\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/jnwRlthXIgJB75Mt9GEl93Dczki.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2014-07-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "http://www.marv.jp/special/tokyoghoul",
+    "id": 61374,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2018-12-25",
+    "last_episode_to_air": {
+      "id": 1605677,
+      "name": "The Final Episode",
+      "overview": "Kaneki and Furuta continue their duel below the streets of Tokyo, as CCG and Goat jointly continue fighting the members of V aboveground. Kaneki comes to terms with the events of the last several years.",
+      "vote_average": 8.1,
+      "vote_count": 7,
+      "air_date": "2018-12-25",
+      "episode_number": 12,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 4,
+      "show_id": 61374,
+      "still_path": "/qoPahstXHBh2tNiewk46SA7JJFJ.jpg"
+    },
+    "name": "Tokyo Ghoul",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 48,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "東京喰種トーキョーグール",
+    "overview": "Ken Kaneki, a bookworm college student, meets Rize, a girl his own age with whom he shares many interests.",
+    "popularity": 46.9574,
+    "poster_path": "/1m4RlC9BTCbyY549TOdVQ5NRPcR.jpg",
+    "production_companies": [
+      {
+        "id": 3234,
+        "logo_path": "/wTPPnz05ZCQgEQVeSOxTkUCyhr5.png",
+        "name": "Pierrot",
+        "origin_country": "JP"
+      },
+      {
+        "id": 169858,
+        "logo_path": "/1IjKiiE3uuh7PheIdX1ogmayPHG.png",
+        "name": "Marvelous",
+        "origin_country": "JP"
+      },
+      {
+        "id": 127264,
+        "logo_path": "/8K9U5yxdQqWa79z85DXxZ2TgDmb.png",
+        "name": "TC Entertainment",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2015-09-30",
+        "episode_count": 2,
+        "id": 72981,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/gO1jluYtCnhyPT10uJZOTv4MuhZ.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2014-07-04",
+        "episode_count": 12,
+        "id": 62764,
+        "name": "Tokyo Ghoul",
+        "overview": "The suspense horror/dark fantasy story is set in Tokyo, which is haunted by mysterious \"ghouls\" who are devouring humans. People are gripped by the fear of these ghouls whose identities are masked in mystery. An ordinary college student named Kaneki encounters Rize, a girl who is an avid reader like him, at the café he frequents. Little does he realize that his fate will change overnight.",
+        "poster_path": "/aLxFcCflyF7zPDZ65gZvkTfYjw0.jpg",
+        "season_number": 1,
+        "vote_average": 7.1
+      },
+      {
+        "air_date": "2015-01-09",
+        "episode_count": 12,
+        "id": 64167,
+        "name": "Tokyo Ghoul √A",
+        "overview": "The ghouls from Anteiku invaded Aogiri’s hideout in order to rescue Ken Kaneki, who was being tortured. Provoked beyond his limits, Kaneki unleashed a greater power and managed to defeat Yamori. Determined to become stronger, he decided to join Aogiri and leave Anteiku behind. Meanwhile, ghoul investigators also began making their moves, gathering information about the Eyepatch Ghoul — Ken Kaneki.",
+        "poster_path": "/80zmR7KT5KpIy5MnWBzUyEXKzwk.jpg",
+        "season_number": 2,
+        "vote_average": 7.2
+      },
+      {
+        "air_date": "2018-04-03",
+        "episode_count": 12,
+        "id": 99777,
+        "name": "Tokyo Ghoul:re",
+        "overview": "An exciting new episode unfolds in Tokyo, just two years after the attack on Anteiku. Countering a resurgence of ghouls, the CCG selects young officer Haise Sasaki to lead an unruly team of humans infused with ghoul powers. Known as the Quinx Squad, they cross the line between humans and ghouls to rid the world of its scariest threat. But no one said it would be easy. The hunt is on!",
+        "poster_path": "/4V0e43ntmqdNyJSuTvRhbwXAv7.jpg",
+        "season_number": 3,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2018-10-09",
+        "episode_count": 12,
+        "id": 106990,
+        "name": "Tokyo Ghoul:re  2nd Season",
+        "overview": "Following the Tsukiyama Extermination Operation, the conflict between the CCG and ghouls escalates as long-buried secrets begin to surface. With Ken Kaneki's memories returning and hidden forces manipulating events from the shadows, former allies and enemies alike are drawn into a final struggle that will determine the fate of both humans and ghouls.",
+        "poster_path": "/wCn96kKQBRQhImMorf3napmCjfM.jpg",
+        "season_number": 4,
+        "vote_average": 8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "He is what he eats and that's the problem.",
+    "type": "Scripted",
+    "vote_average": 8.2,
+    "vote_count": 2631,
+    "external_ids": {
+      "imdb_id": "tt3741634",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 281249,
+      "tvrage_id": 43315,
+      "wikidata_id": "Q40239998",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "tkg_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Alors que Tokyo est envahie par des créatures amatrices de chair fraîche à l'apparence humaine, Ken, mi-homme mi-goule se retrouve coincé entre deux mondes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Ken Kaneki, a bookworm college student, meets Rize, a girl his own age with whom he shares many interests.",
+            "homepage": "",
+            "tagline": "He is what he eats and that's the problem."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "En Tokyo ocurren asesinatos misteriosos cometidos por Ghouls, seres desconocidos que comen carne humana, un día Kaneki Ken un joven de 18 años que cursa la Universidad conoce a una chica en un restaurante y la invita a salir, pero luego se da cuenta que ella es un Ghoul y sufre un ataque de parte de ella, pero afortunadamente sobrevive y la muchacha muere; debido a sus heridas los médicos le hacen un transplante de riñon sin saber que la muchacha era una Ghoul y Kaneki termina convirtiéndose en un ser híbrido humano-ghoul y de ahora en adelante deberá vivir escondiéndose de los humanos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Kaneki, studente universitario, incontra un giorno in un bar una ragazza di nome Rize. I due si avvicinano in breve tempo, ma in realtà Rize nasconde un mistero: è un ghoul, un mostro che vive solo per divorare carne umana! Quando una parte di lei verrà trapiantata in Kaneki, anche lui diverrà un ghoul, intrappolato in un mondo in cui gli esseri umani non sono in cima alla catena alimentare!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Mitten in Japans Hauptstadt Tokyo leben sie: Ghule, die sich von Menschen ernähren. Das muss auch der 18-jährige Bücherwurm Ken am eigenen Leib erfahren, als ihm sein Schwarm Liz bei einem Date die köstlichen Innereien aus dem Leib reißen will. Der Schwerverletzte erwacht kurz darauf im Krankenhaus – und erfährt, dass ihm die Organe seiner Angreiferin transplantiert wurden. Schnell stellt er fest, dass mit ihm irgendetwas nicht stimmt: Normales Essen riecht und schmeckt verdorben, nichts, was er zu sich nimmt, kann er verdauen. Dafür bekommt er bei Hunger ein rotes Auge und entwickelt, sehr zu seinem Verdruss, Appetit auf Menschenfleisch – selbst auf seinen besten Freund Hide. Ob Ken will oder nicht, seine Entwicklung zum Ghul schreitet unaufhaltsam voran …",
+            "homepage": "",
+            "tagline": "Der Tag an dem ich starb"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "东京喰种",
+            "overview": "在东京街头，一群成谜的吃人怪人“喰种”正悄悄在人类世界扩张他们的势力──平凡的大学生金木研因为遭到喰种猎食而性命垂危。医生为他进行了器官移植手术，然而器官提供者其实是喰种…在病床上醒来的金木很快就感觉到身体不对劲，原本记忆中美味的食物全都走味到难以下咽。一开始，即使好几天不吃东西他也不会饿，但不久，激烈的空腹感开始折磨他。当他意识到，能引起他食欲的对象只剩下街上错身而过的男男女女。在群众中潜伏着，狩猎着人类，这个吞食着死尸的怪人，人们称其为食尸鬼，在青年和怪人相遇之时，充满波折的命运的齿轮开始转动了！",
+            "homepage": "",
+            "tagline": "要诅咒，就诅咒弱小的自己好了。这个世界上所有不利条件都是因为当事人能力不足所致。"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Em Tóquio, criaturas conhecidas como \"Ghouls\" vivem entre os humanos e os devoram para sobreviver. Alheio a eles, o jovem universitário Ken Kaneki leva uma vida pacata entre livros, até que um trágico encontro o coloca diante desses seres e o obriga a lutar por sua humanidade.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Το Τόκιο στοιχειώνεται από γκουλ με τη μορφή ανθρώπων που τρώνε τη σάρκα τους. Ως υβρίδιο γκουλ και ανθρώπου, ο Κεν Κανέκι είναι παγιδευμένος μεταξύ των δύο κόσμων.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Токійський людожер",
+            "overview": "Студент університету Канекі Кен після нещасного випадку потряпляє до лікарні, де йому помилково пересаджують органи одного з людожерів - чудовиськ, які харчуються людською плоттю. Тепер він сам стає одним із них, а для людей стає вигнанцем, якого треба знищити. Чи зможе він стати своїм серед людожерів, чи йому взагалі більше немає місця в цьому світі?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Tokyo este bântuit de strigoi care seamănă cu oamenii și se hrănesc cu carnea acestora. Ken Kaneki, un hibrid dintre strigoi și om, se află prins între două lumi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Tóquio é assombrada por misteriosos \"ghouls\". Ghouls são demónios que consomem carne humana, cuja identidade ninguém conhece. Um estudante universitário chamado Kaneki encontra Rize, uma rapariga com quem partilha os mesmos interesses literários, num café. Contudo, Kaneki não imagina que o seu destino está prestes a mudar drasticamente.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Ken Kaneki es un estudiante universitario del ratón de biblioteca que resuelve a una muchacha nombra a Rize en un café que él frecuenta. Tienen la misma edad y tienen los mismos intereses, por lo que rápidamente se acercan. Poco sabe Kaneki que Rize es un ghoul - una especie de monstruo que vive cazando y devorando carne humana. Cuando parte de su órgano especial - \"el niño rojo\" - es trasplantado a Kaneki, se convierte en un ghoul mismo, atrapado en un mundo deformado donde los seres humanos no son la parte superior de la cadena alimentaria.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "도쿄 구울",
+            "overview": "인간의 살을 먹어야만 살아갈 수 있는 괴물 '구울'이 평범한 사람들 사이에 숨어 사는 도쿄. 책을 좋아하는 내성적인 대학생 카네키 켄은 마음에 두던 여성 리제와 첫 데이트를 하던 중 그녀가 구울이었다는 사실을 알게 되고, 목숨을 잃을 뻔한 위기에서 가까스로 살아남는다. 그러나 사고 뒤 리제의 장기를 이식받은 카네키는 반은 인간, 반은 구울인 존재가 되어 버린다. 더 이상 사람의 음식을 먹을 수 없게 된 그는 구울들이 운영하는 카페 '안테이크'에 몸을 맡긴 채 새로운 삶의 방식을 익혀 가고, 단짝 친구 히데에게 자신의 정체를 숨기며 인간과 구울 사이에서 끝없이 갈등한다.",
+            "homepage": "",
+            "tagline": "인간도 구울도 아닌, 그 경계에서 살아남아라"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Токийский Гуль",
+            "overview": "Япония, альтернативная реальность. В этом мире параллельно с людьми существует раса гулей - созданий, стоящих выше людей в пищевой цепи, то есть людоедов. Тем не менее, людям удаётся сосуществовать с ними в относительном мире, однако стычки время от времени случаются. Под такую раздачу попадает обычный школьник Канеки, который становится жертвой могущественной женщины-гуля. Чудом пережив нападение, Канеки узнаёт, что взамен утраченных человеческих органов ему пересадили органы гуля. Кто же он теперь - человек или гуль? Ему предстоит пройти долгий путь самоопределения и найти своё место в мире.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "שדי טוקיו",
+            "overview": "בטוקיו משוטטים שדים טורפי אדם מסתוריים, המסווים את זהותם האמתית ונטמעים בין בני האדם. הם צורכים בשר אדם כדי להתקיים, ואינם יכולים לשרוד זמן רב ללא הזנה. קן קאנקי הוא סטודנט מופנם ותולעת ספרים, המוצא את עצמו עמוק בתוך עולמם של השדים לאחר שכמעט נהרג בתאונה. קאנקי פוגש את ריזה ויוצא איתה לדייט גורלי. לאחר שהוא מגלה שהיא בעצם שדה אכזרית, תאונה קטלנית הורגת את ריזה ומותירה את קאנקי בסכנת חיים. בגופו של קאנקי מושתלים איברים מגופה של ריזה וכשקאנקי מנסה לחזור לחייו הרגילים, הוא מגלה שכעת הוא הופך לשד בעצמו. נקרע בין שני העולמות וללא תחושת שייכות, קאנקי נאלץ לשרוד וללמוד את עולמם הנסתר של השדים.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "東京に潜む怪人「喰種（グール）」。彼らは人間に紛れ、人間を捕食し肉を喰らう。そんな食物連鎖の頂点に君臨する喰種に怯えながら人間たちは生活している。ある日、読書好きの大学生・金木研（カネキケン）は、行きつけの喫茶店「あんていく」でリゼという名の女性に出会う。年齢や境遇、読書の趣味も同じという事で、急接近する二人だったが悲惨な事件が起こり、その後、金木は壮絶な人生を歩むことになる。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "غول طوكيو",
+            "overview": "تدور احداث القصة في مدينة ” طوكيو ” حيث انتشرت في الأونة الاخيرة جرائم قتل بشعة يتم تنفيذه من قبل كائنات متوحشة تعرف بـ ( الغيلان ) وفي وسط تلك الكارثة يعيش فتى جامعي يمارس أعماله اليومية بشكل طبيعي الى ان يقابل فتاة تدرس معه في نفس الجامعة وتشاركه نفس هواياته لتتغير حياته من بعدها جذرياً ومن دون سابق إنذار فكيف سيكون حاله .",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Ngạ Quỷ Tokyo",
+            "overview": "Tokyo Ghoul là một câu chuyện mang bầu sắc u tối của thành phố Tokyo, nơi xảy ra hàng loạt các vụ án mạng được gây ra bởi các con quỷ đội lốt con người. Main chính nhà ta là sinh viên đại học tên Kaneki gặp gỡ được em Rize, do 2 người có cùng sở thích nên đã phải lòng nhau. Vào buổi tối hôm hẹn hò, em và ảnh cùng nhau đi vào một con phố hẻo rồi cuộc đời anh main thay đổi ngay trong đêm hôm đó.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "東京喰種",
+            "overview": "在東京街頭，一切成謎的吃人怪人「喰種」正悄悄在人類世界擴張他們的勢力。\n\n平凡的大學生金木研因為遭到喰種獵食而性命垂危，醫生為他進行了器官移植手術，但是器官提供者其實是獵食他的喰種。在病床上醒來的金木很快就感覺到身體不對勁，原本記憶中美味的食物全都走味到難以下嚥。\n\n一開始，即使好幾天不吃東西他也不會餓，但不久，激烈的空腹感開始折磨他。當他意識到，能引起他食慾的對象只剩下街上擦身而過的男男女女，他絕望的日子也就此開始──",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Tokyo'da insanları yiyen gizemli hortlakların neden olduğu gerilim dolu bir korku hikayesi başlar. Bu gizemli hortlakların verdiği korku tüm insanları etkisi altına almıştır. Sıradan bir üniversite öğrencisi olan Kaneki, tıpkı kendisi gibi bir kitap kurdu olan Rize'yle Café Anteiku'da karşılaşır. Kaneki, kaderinin bir gecede değişeceğinin farkında değildir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Tokijský Ghúl",
+            "overview": "Vášnivý čtenář Ken Kaneko žije v Tokyu, kde se mezi lidmi potulují i \"Ghoulové\", kteří na první pohled vypadají jako lidé, což využívají k získání potravy. Kaneko na to doplatí, když se zamiluje do dívky, která je ghoul, ačkoli on její skutečnou identitu nezná. Odhalí ji až v momentě, kdy ho dívka napadne a pokusí se ho sníst, protože Ghoul se živí lidmi a potrava, kterou se živí lidé, jim přijde nechutná. Shodou okolností se stane to, že ona v důsledku nepozornosti nepřežije a lékaři se pokusí Kanekimu zachránit život. Aby Kaneko přežil, musí mu voperovat orgány té dívky. Operace Kanekiho navždy změní a vyvolá v něm neobvyklé reakce, jako například nechuť k lidskému jídlu ... (Chinese Ashi)",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Tokio zostaje nawiedzone przez żądne krwi ghule, które wyglądem przypominają ludzi. Jeden z nich próbuje łączyć życie zwykłego śmiertelnika ze swoją drugą naturą.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ผีปอบโตเกียว",
+            "overview": "ชาวโตเกียวต้องอยู่อย่างหวาดผวาเมื่อพวกกูลแฝงตัวอยู่กับคนปกติและกินเนื้อสดจากซากศพเป็นอาหาร เคน คาเนกิจะทำอย่างไรเมื่อพบว่าตนคือครึ่งคนครึ่งกูลที่ติดอยู่ระหว่างสองโลก",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "A Tokyo Ghoul egy olyan anime, melyben a szörnyeteg ghoulok felfalják a tokiói polgárokat. A főiskolás Kaneki egy kávézóban találkozik egy csinos lánnyal, aki hasonló szenvedéllyel viseltetik az irodalom iránt, mint ő. Egy baleset következtében a fiú különös hibriddé változott, s a félig ghoul, félig ember Kaneki mások megmentésének szentelte életét, ám a lánnyal való találkozása felborította ezen elhatározásában.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "東京喰種",
+            "overview": "在東京街頭，一切成謎的吃人怪人「喰種」正悄悄在人類世界擴張他們的勢力。\n\n平凡的大學生金木研因為遭到喰種獵食而性命垂危，醫生為他進行了器官移植手術，但是器官提供者其實是獵食他的喰種。在病床上醒來的金木很快就感覺到身體不對勁，原本記憶中美味的食物全都走味到難以下嚥。\n\n一開始，即使好幾天不吃東西他也不會餓，但不久，激烈的空腹感開始折磨他。當他意識到，能引起他食慾的對象只剩下街上擦身而過的男男女女，他絕望的日子也就此開始──",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Tokyo Ghoul",
+            "overview": "Tokiota piinaavat ghoulit, jotka muistuttavat ihmisiä, mutta syövät näiden lihaa. Ken Kaneki on kahden maailman välissä oleva ghoulin ja ihmisen risteymä.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Ken Kaneki is een boekenwurmstudent die een meisje genaamd Rize ontmoet in een café dat hij vaak bezoekt. Ze zijn even oud en hebben dezelfde interesses, dus ze worden snel hecht. Kaneki weet niet dat Rize een ghoul is – een soort monster dat leeft door te jagen en menselijk vlees te verslinden. Wanneer een deel van haar speciale orgaan – 'het rode kind' – in Kaneki wordt getransplanteerd, wordt hij zelf een griezel, gevangen in een verwrongen wereld waar mensen niet de top van de voedselketen zijn.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jnwRlthXIgJB75Mt9GEl93Dczki.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yOarY3Yo0NMkuTuft87M5oAZa3C.jpg",
+          "vote_average": 6.346,
+          "vote_count": 13,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6llzd3LLcMqfNSsi5W1HAGlPdeS.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yu9Vidfz9d1EWfV1rlKPzihHnHs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.781,
+          "height": 744,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/isWmJWAmBItRTvhk6IJqbAFM3Ht.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1325
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s2wvDMtTRagGFQYcmAxIyrQ2dVi.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3838
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uQNMXlsim9jrsY9MdU6dqTlQbZD.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pBV6kXHnG5zJq5Q5bi7FRlsFdif.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hzryhiYlPRYm6Ramce0iTdKdj4T.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4GNyXs0OxCeLNCpKftR8p573v6Q.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 768,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A5BHb1ZsF43Dvgf6fKlg8zCTjwv.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fh07cJQXEUomQle9KBNrhYfu2uV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kCj9byv6RnSPxv60JhmT88VDmt3.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yW2ReLvyv8BPCtX4ZrId71waGhT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wJgmHXMOd6uItqqGSf8zpRSxFm2.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.775,
+          "height": 1442,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bxf4sMJad6pleDZS0R1IifLxIFF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.775,
+          "height": 721,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s7uKaBQcmYJEtzIud9ft3EH1PB0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.775,
+          "height": 1442,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yaqxsQnigtYs0d1SLv8a5RxqgAO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b9JLwU8KPshCD5OhY2stwWl8c7c.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9ZZfWdF4vCNZPRYZHqgDbX2SyTw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x4ddjWnrNUFzCCEefBQM8Xc3mHY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aWmhZIZa28uLogXW8ybcFbClb6c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c3mkWBnAYjaWPBU4J8ogBGo53tf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vuyFm1Qv4wNQZUq4YCRcF5jRKvl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.504,
+          "height": 123,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9u3baMv9AZ9znK9ecPjQQVoyEl8.png",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 2.455,
+          "height": 244,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2o2mF0TZGTGrSsLv9kRKcUmLdmB.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 599
+        },
+        {
+          "aspect_ratio": 5.085,
+          "height": 118,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yKEsz2HEq8Iogqvor40Ms1szFA4.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 4.377,
+          "height": 292,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pcIQ5S2CZFkq00cuJ87PARKPnkK.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1278
+        },
+        {
+          "aspect_ratio": 1.466,
+          "height": 524,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kmjW5G5oybin8XHlXv8QtpHIZDn.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 768
+        },
+        {
+          "aspect_ratio": 4.611,
+          "height": 162,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3tMCapy3E3mkASRkzaGKqZm1tTT.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 747
+        },
+        {
+          "aspect_ratio": 1.688,
+          "height": 800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/psWcg7d6m9lMqZAKc1eGORb9N6s.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1350
+        },
+        {
+          "aspect_ratio": 3.646,
+          "height": 212,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/os6le61fLOpNl3geC8eRgIfeF9y.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 773
+        },
+        {
+          "aspect_ratio": 4.491,
+          "height": 114,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xVGoQUv28avV6QGlmLTWSTxMVzU.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 512
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1m4RlC9BTCbyY549TOdVQ5NRPcR.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4MMOJZfdE9ZpCanuYdLje6v99Aj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4pBlCrKTZmL0kMKry6IK90gDkZ5.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3bio8GB2qxcTWshon1iggDXeLWJ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y2roOFsew9nJKKVwwJCHSyzgpK9.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j840h0jmvGyiiI4NMAoQ1sAVv7x.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/54V1d4tNExpg7FlP8UcdMMTO2eD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tSMFxHTWl0ajUddauq2PvoA2a3c.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mt6ForyKh4JS0v5ho8xhauISidF.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1499,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nzeAClk7gFTw7FN0ubJNKw7JydI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/87KdlNVvYN5cSoWNfOHzHedALPu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4bL7QDkJBK56h9Lcql4F8VOOksw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/32nuIQgFsu1SVcVJX7AFnZnw21u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1512
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 1360,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6F3TYF7bUDnFDYFrx9kb8O9VHcg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 958
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ftYTZm4cbzC2yHPUH5xq44cPuBg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vLkX4qaU0mb4NaS3qBbhgywl0Bj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.697,
+          "height": 1434,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x3qEJIcFQqCNwv2TyBsds5qeYlS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 925,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7GigYjxiSzOX87LmA7qMQYE0ysW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 616
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2ztyqpjYQhq0Qtoas6Yc6uasGQN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 895,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kzAH9oQVdRmjYFOXP1kPBWt8qsr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 596
+        },
+        {
+          "aspect_ratio": 0.67,
+          "height": 895,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/laoPyRWVMFcPbxwEGPx7Bnqfrgx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ftDXMHbgCJoymiaq9cSKAv28Y3r.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vyjh8gMcKaaFFMHGb6NLiQREprC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7mRSPN1ApxUmIceuNiSTM2g2n2A.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jOvuHUnmnVMSLQRTfXltwOhAoBv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qknKFskuWpyOiPKIPiobLnW93Yt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bLJgJ2xFTePsnynLNKU9elOGp8w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qgZ6CTfLnB60aDNFNQvokKA4lYj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/x4ty3ld8ggSLaLaSY43gYSvCxRw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xaGfwGudzvGJjlrq84ZobnxigdK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kYe9HDOuHY1uDQs8Q7Un2PFIPMI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qhMNrbOSCZyH08AkpnL0UYOZgQM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1Ux0qbXqjk5WSknXA1mUr8QXs8O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3waeLFcJzU9173kKFq9GUeQTwlL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        }
+      ]
+    }
+  }
+}

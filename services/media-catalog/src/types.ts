@@ -9,6 +9,7 @@ export type {
   BackdropFocus,
   BatchResponse,
   EpisodeDetail,
+  EpisodeLayout,
   LocalizedGenre,
   MediaRef,
   MediaSummary,

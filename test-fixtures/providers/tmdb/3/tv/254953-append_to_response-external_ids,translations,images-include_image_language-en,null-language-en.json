@@ -1,0 +1,760 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15550",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c93b638c6f31881690bf2aac67a78e87\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/mhZAT8ktiNi7YwuL50kmumsau69.jpg",
+    "created_by": [
+      {
+        "id": 1216859,
+        "credit_id": "694078f90b1c5f333154870b",
+        "name": "Bill Lawrence",
+        "original_name": "Bill Lawrence",
+        "gender": 2,
+        "profile_path": "/75mV8qLqPA9oMy23lTxmcoEGWAe.jpg"
+      },
+      {
+        "id": 58061,
+        "credit_id": "694079088763bf146b0ef04e",
+        "name": "Matt Tarses",
+        "original_name": "Matt Tarses",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-03-08",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://www.hbo.com/content/rooster",
+    "id": 254953,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-05-10",
+    "last_episode_to_air": {
+      "id": 6919260,
+      "name": "Songs for Raisa",
+      "overview": "After setting boundaries with her parents, Katie makes a decision about her marriage to Archie – who has his own talk with Sunny about the future. Then, as he grapples with Katie's independence, Greg prepares to say goodbye to his semester at Ludlow.",
+      "vote_average": 6.9,
+      "vote_count": 10,
+      "air_date": "2026-05-10",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 31,
+      "season_number": 1,
+      "show_id": 254953,
+      "still_path": "/t7mVImlbs6cVBiuePZg6V4TIhwE.jpg"
+    },
+    "name": "Rooster",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "HBO",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Rooster",
+    "overview": "On a college campus, an author navigates a complicated relationship with his daughter.",
+    "popularity": 9.9944,
+    "poster_path": "/aikvD4Nu7N6ekbrXNua8vJlO8JU.jpg",
+    "production_companies": [
+      {
+        "id": 1957,
+        "logo_path": "/pJJw98MtNFC9cHn3o15G7vaUnnX.png",
+        "name": "Warner Bros. Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 23672,
+        "logo_path": "/a0sVfKvMT1d55p2XJXPpRfm7rRh.png",
+        "name": "Doozer",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-03-08",
+        "episode_count": 10,
+        "id": 394796,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/5O9t2xxzBnPdBRmD3vzZKRVhMKB.jpg",
+        "season_number": 1,
+        "vote_average": 7.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "He's here to learn.",
+    "type": "Scripted",
+    "vote_average": 7.41,
+    "vote_count": 145,
+    "external_ids": {
+      "imdb_id": "tt32420734",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 457770,
+      "tvrage_id": null,
+      "wikidata_id": "Q137369186",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "On a college campus, an author navigates a complicated relationship with his daughter.",
+            "homepage": "",
+            "tagline": "He's here to learn."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Ein Autor  muss feststellen, dass sein Verhältnis zu seiner erwachsenen Tochter vollkommen aus dem Gleichgewicht geraten ist. Auf einem College-Campus tragen sie ihre familiären Spannungen aus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Steve Carell protagoniza esta série de comédia como o bem‑sucedido escritor Greg Russo, que chega ao Ludlow College para apoiar sua filha Katie (Charly Clive), uma professora de história da arte em meio a uma crise conjugal.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "루스터",
+            "overview": "성공한 작가 그레그 루소가 사위 아치의 불륜으로 힘들어하는 딸 케이티를 돕기 위해 러들로 칼리지에 도착한다. 그레그는 자신의 개인적 불안과 싸우는 한편 영문학과장 딜런, 엉뚱한 성격의 총장 월터와 어울리며 뉴잉글랜드 인문 대학 특유의 분위기에 적응한다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Рустер",
+            "overview": "Писатель Грег Руссо приезжает на кампус колледжа Ладлоу, чтобы наладить отношения с дочерью Кейти, профессором, и помочь ей пережить расставание с мужем, который ушёл от неё к аспирантке. Также Грег проводит семинары со студентами о своих произведениях и обнаруживает, что главный герой его романов, брутальный и мужественный Рустер, не только пользуется популярностью среди студентов, но и плотно ассоциируется с ним самим. Оказавшись среди беззаботной молодёжи, писатель начинает поддаваться её призывам, веселиться с ними и всё чаще вести себя как Рустер.",
+            "homepage": "",
+            "tagline": "«Он здесь, чтобы учиться»"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Sur un campus universitaire, un auteur gère une relation complexe avec sa fille.",
+            "homepage": "",
+            "tagline": "Il est ici pour apprendre."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "Greg Russo (Steve Carell) to autor popularnych, choć niezbyt ambitnych thrillerów sprzedawanych głównie na lotniskach. Bohaterem jego książek jest tajemniczy agent o pseudonimie Rooster, który zapewnił mu komercyjny sukces. Greg przyjeżdża na spotkanie autorskie do Ludlow College w Nowej Anglii, gdzie jego córka Katie pracuje jako profesor historii sztuki. Wizyta szybko przybiera niezręczny obrót, gdy podczas wystąpienia Greg zaczyna publicznie mówić o prywatnych problemach córki, wprawiając ją w zakłopotanie.\n\nPo nieudanym spotkaniu Greg niespodziewanie przyjmuje na uczelni posadę pisarza-rezydenta. Oznacza to, że ojciec i córka trafiają do tej samej kadry akademickiej. Nowa sytuacja prowadzi do serii napięć, niezręcznych spotkań i rodzinnych konfliktów, gdy Greg próbuje odnaleźć się w środowisku akademickim, a Katie musi radzić sobie z obecnością ekscentrycznego ojca w swoim miejscu pracy.",
+            "homepage": "",
+            "tagline": "Jest tu dla nauki."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Un aclamado escritor llamado Greg Russo se ve arrastrado al mundo académico por su hija adulta Katie, profesora en una universidad de élite cuyo marido la engaña. Él intenta apoyarla sin sobrepasarse, tratando de lidiar con esta complicada y cambiante relación, al tiempo que transita un nuevo entorno que siente fuera de su alcance.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Un aclamado escritor llamado Greg Russo se ve arrastrado al mundo académico por su hija adulta Katie, profesora en una universidad de élite cuyo marido la engaña. Él intenta apoyarla sin sobrepasarse, tratando de lidiar con esta complicada y cambiante relación, al tiempo que transita un nuevo entorno que siente fuera de su alcance.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "רוסטר",
+            "overview": "גרג רוסו הוא סופר מפורסם המגיע לקמפוס אוניברסיטאי לקריאה ספרותית ומוצא את עצמו נשאב לעולם האקדמי. שם הוא נאלץ להתמודד עם מערכת יחסים מסובכת עם בתו, מרצה באוניברסיטה שמתמודדת עם בעיות משלה.",
+            "homepage": "",
+            "tagline": "הוא כאן כדי ללמוד."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Yliopistokampukselle sijoittuva komedia, joka seuraa kirjailijan monimutkaista suhdetta hänen tyttäreensä.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Kohout",
+            "overview": "Stárnoucí spisovatel Gregg Russo přijíždí na univerzitní kampus kvůli literárnímu vystoupení a nečekaně se zaplete do života akademické komunity i své dospělé dcery, která zde působí jako profesorka.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Півень",
+            "overview": "Письменник Ґреґ Руссо приїздить до коледжу Ладлоу, щоб налагодити стосунки з донькою Кейті та підтримати її після розриву з чоловіком. Проводячи семінари, він дізнається, що студенти сприймають його як утілення героя його романів — брутального Рустера. Опинившись серед безтурботної молоді, Ґреґ дедалі більше починає поводитися як власний персонаж.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Петела",
+            "overview": "Историята ни потапя в живота в колежански кампус, докато проследява сложната връзка между автор (Стив Карел) и неговата дъщеря (Чарли Клайв).",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "雄鸡生活",
+            "overview": "一部以大学校园为背景的喜剧，聚焦于一位作家与其女儿之间错综复杂的关系。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "รูสเตอร์",
+            "overview": "เรื่องราวคอมเมดี้ในมหาวิทยาลัยที่เจาะลึกความสัมพันธ์ชวนปวดหัว ระหว่างคุณพ่อนักเขียน (รับบทโดย สตีฟ คาเรลล์) กับลูกสาว (รับบทโดย ชาร์ลี ไคลฟ์)",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "公雞",
+            "overview": "本喜劇以大學校園為背景，講述一位作家與他女兒之間複雜的關係。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Rooster",
+            "overview": "Una commedia ambientata in un campus universitario incentrata sul complicato rapporto di un autore (Steve Carell) con sua figlia (Charly Clive).",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "En komedie, der foregår på et universitet og handler om en forfatters komplicerede forhold til sin datter.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een bestsellerauteur besluit naar de universiteit te verhuizen waar zijn dochter lesgeeft. Hun relatie is gecompliceerd en gespannen maar hij probeert haar te steunen nadat haar echtgenoot haar heeft verlaten voor een studente. Ondanks zijn eigen persoonlijke chaos, wordt hij door de decaan overgehaald om een rol op de campus op zich te nemen. Hierbij raakt hij bevriend met studenten, bezoekt hij studentenfeesten en worstelt hij met zijn imago als \"Rooster\" — het stoere, seksueel actieve hoofdpersonage uit zijn eigen boeken.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Gaidys",
+            "overview": "Šios komedijos veiksmas vyksta universiteto miestelyje, o dėmesio centre – sudėtingi rašytojo santykiai su dukra.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "O comedie plasată în campusul unui colegiu, despre relația complicată a unui autor cu fiica sa.",
+            "homepage": "",
+            "tagline": "A venit aici ca să învețe."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "Egy egyetemi kampuszon játszódó vígjáték, melynek középpontjában egy író és lánya bonyolult kapcsolata áll.\n\nA sikeres író, Greg Russo megérkezik a Ludlow College-ba lányához, akinek a házassága a széthullás szélén áll férje, Archie hűtlensége miatt. Míg Katie próbálja védeni magát az egyetemi pletykáktól, Greg megismerkedik az angol tanszék vezetőjével.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Com o Steve Carell no papel principal, esta nova série de comédia foca-se na relação complicada entre um autor de sucesso e a sua filha.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "En komedi i collegemiljö om en författares komplicerade relation till sin dotter.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الديك",
+            "overview": "داخل حرم جامعي، يخوض مؤلفٌ في علاقة معقدة مع ابنته.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "روستر",
+            "overview": "در یک دانشگاه، نویسنده‌ای رابطه‌ی پیچیده‌ای را با دخترش دنبال می‌کند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t4ZoVsFgIT67vfbmMKPjWjdIDMj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mhZAT8ktiNi7YwuL50kmumsau69.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ttdnevcePqoH99fWzhwxVF3SBkV.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s6k2O3nID7OLHTNaN2jk5kfNu5g.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/UwbqpK7jMiIEu8WoDDQ5Jtctnm.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sIc3UsFaeiyUwUQVzTBIxk0k5G0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1081,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g6ibUnGut2HFq8XAtH5mZ72npG9.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qYH6eHMu709wjMeQYOzkY2P81y1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9Tr6Y17UsugxFd3i9n0gxhBXAz4.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cShZeJjTIHt3led3y37wNBmVj6H.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y7yQlRcQXwzcWv3FFgFT5sEcI30.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y9tawa6CNqILVrBrLdV3oHCSx70.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.616,
+          "height": 430,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dErGhfP2NfoovaQwfOc8PlhhSGV.png",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 1985
+        },
+        {
+          "aspect_ratio": 3.322,
+          "height": 602,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l6CNWh8ertotkLIPoIYJVe9fU6O.png",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 4.621,
+          "height": 277,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5NOY0fpNobIKDsWINvC64Txkv2Y.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aikvD4Nu7N6ekbrXNua8vJlO8JU.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bJ1IfDyDCLLTVxcp59T3rVTsp8H.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gzH7ZI7U0DipQeHyzIUeqJSuZ0b.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ph9TKHFp3gXznjg3t0f4kb0hatq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rDZASyGvnwaFWIunksWOjRK0hwE.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gRVT7Aona8pgzVSQFdxsFgTQcN4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/idOvjU2TqHNBteXqdT9nq7C7lah.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z5LMCJZlexetXENm4I9NtZc8DXE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lQvZ56yjv7ofYmoCB8B0IFgxtOy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8kLM8gE76FDZ1k2L2jIPMi88pyB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pmgWsZl4xlbbfE2uRJGypjLUZFd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

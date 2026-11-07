@@ -1,0 +1,997 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6449",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"337c2d15feff0310d9483620ca6e23c7\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/x6jWDL4H9TaBLGEvyej0qKiirBU.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      23
+    ],
+    "first_air_date": "2014-10-10",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "http://www.kimiuso.jp/",
+    "id": 61663,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2015-03-20",
+    "last_episode_to_air": {
+      "id": 1029354,
+      "name": "Spring Wind",
+      "overview": "Knowing her time is limited, Kaori undergoes a risky operation, hoping to have the chance to play with Kousei on stage one more time.",
+      "vote_average": 8.2,
+      "vote_count": 15,
+      "air_date": "2015-03-20",
+      "episode_number": 22,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 1,
+      "show_id": 61663,
+      "still_path": "/8sYxI1SDkpAIwUpw89hVCG4EENs.jpg"
+    },
+    "name": "Your Lie in April",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1,
+        "logo_path": "/4x4GsmRmSLLL0RVNKsoqAVH43tz.png",
+        "name": "Fuji TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 22,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "四月は君の嘘",
+    "overview": "Kousei Arima was a genius pianist until his mother's sudden death took away his ability to play. Each day was dull for Kousei. But, then he meets a violinist named Kaori Miyazono who has an eccentric playing style. Can the heartfelt sounds of the girl's violin lead the boy to play the piano again?",
+    "popularity": 29.1532,
+    "poster_path": "/92P9cD5uOzLVgx0QDTnwkXffjEG.jpg",
+    "production_companies": [
+      {
+        "id": 13113,
+        "logo_path": "/xV5tPYKZhP2Ko9dOh5A3FahuKsx.png",
+        "name": "A-1 Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "dentsu",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3341,
+        "logo_path": "/dTG5dXE1kU2mpmL9BNnraffckLU.png",
+        "name": "Fuji Television Network",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 221091,
+        "logo_path": "/pu0DoV6xEqYOt5mFw2r3P2mlWSV.png",
+        "name": "Kyoraku Industrial Holdings",
+        "origin_country": "JP"
+      },
+      {
+        "id": 104184,
+        "logo_path": "/reEBh8dBl2y1DbXe2EdgxtMtaim.png",
+        "name": "Lawson Entertainment",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2015-05-15",
+        "episode_count": 1,
+        "id": 76813,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/IGbeFv5Ji4W0x530JcSHiQpamY.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2014-10-10",
+        "episode_count": 22,
+        "id": 63597,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/7hDUNtU0oQTylEAjVX9936hWkiw.jpg",
+        "season_number": 1,
+        "vote_average": 6.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "I met the girl under full-bloomed cherry blossoms, and my fate has begun to change.",
+    "type": "Scripted",
+    "vote_average": 8.566,
+    "vote_count": 1206,
+    "external_ids": {
+      "imdb_id": "tt3895150",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 279830,
+      "tvrage_id": 45262,
+      "wikidata_id": "Q91333870",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "shigatsuhakimi"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Your Lie in April",
+            "overview": "Kousei Arima was a genius pianist until his mother's sudden death took away his ability to play. Each day was dull for Kousei. But, then he meets a violinist named Kaori Miyazono who has an eccentric playing style. Can the heartfelt sounds of the girl's violin lead the boy to play the piano again?",
+            "homepage": "",
+            "tagline": "I met the girl under full-bloomed cherry blossoms, and my fate has begun to change."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Your Lie in April",
+            "overview": "Kôsei Arima était un pianiste de génie jusqu’à ce que la mort subite de sa mère le prive de sa capacité à jouer. Chaque jour est alors une peine pour le jeune homme. Mais un jour, il rencontre une violoniste prénommée Kaori Miyazono. Il est immédiatement fasciné par son jeu excentrique et son côté insouciant, indépendant, et parfois colérique. Sa vie monotone s’apprête à changer pour toujours. Cette série a gagné le 37e Kodansha Manga Award ! Venez vivre une histoire empreinte de jeunesse, de musique et de romance !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Твоя квітнева брехня",
+            "overview": "Аріма Коусей - геніальний піаніст, якого мати хотіла зробити всесвітньовідомим. В одинадцять років через смерть матері він втрачає здатніть грати на фортепіано. Але інстинкт дається в знаки і він продовжує чіплятися за музику. Доки нарешті одного дня не зустрічає ту, хто перетворює його чорно-білий світ на прекрасне різнобарв'я. ",
+            "homepage": "",
+            "tagline": "\"Істинні почуття сховані в кожній ноті.\""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "四月是你的谎言",
+            "overview": "男主角有马公生自小接受母亲严格的钢琴训练，以按照乐谱精准弹奏的能力在各项音乐比赛中获胜，被人称作“神童”（动画作品内，亦被人嘲讽为“妈妈的傀儡”、“人体节拍器”、“演奏机”、“钢琴比赛机器”）。然而11岁时母亲病逝，加上自身对弹奏的迷惘，陷入听不见钢琴声音的心境障碍，选择放弃钢琴弹奏。国中三年级时，某一天在青梅竹马椿的介绍下，认识同年级的小提琴手——宫园薰，并于一场合奏的音乐比赛中被薰自由奔放的演奏风格所吸引，自此心境与日常生活开始转变。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "4월은 너의 거짓말",
+            "overview": "신동 피아니스트라 불리던 아리마 코세이는 어머니의 죽음을 계기로 몇 년 전부터 피아노를 칠 수 없게 되었다. 그리고 이런 코세이의 눈에 비치는 세상은 모노톤의 단조로운 풍경이었는데.그런데 어느 날, 친구의 소개팅 자리에 인원수 맞추기로 나가게 된 코세이는 개성 넘치는 소녀 바이올리니스트 미야조노 카오리를 만나게 된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Твоя апрельская ложь",
+            "overview": "Пианист-вундеркинд Косэй Арима, выиграв множество детских конкурсов, после смерти матери теряет к чему-либо интерес и перестает играть. Все меняется, когда Косэй встречает скрипачку Каори. Она хочет помочь Косэю вернуться в музыкальный мир и вновь обрести смысл жизни.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Sekunden in Moll",
+            "overview": "Arima Kosei war eine weithin bekannte Koryphäe auf dem Piano, doch endete seine Karriere abrupt als seine Mutter starb, die auch seine Pianolehrerin war, und für Kosei die Welt zusammenbrach. Aufgrund des Schocks war es ihm seitdem unmöglich Töne oder den Klang seines Pianos wahrzunehmen und seine ehemals von Musik geprägte Welt versank in Stille und Dunkelheit. Auch zwei Jahre später ist Kosei weiterhin entschlossen ein Leben ohne Musik zu führen und stattdessen seine Freizeit mit seinen Freunden Watari und Tsubaki zu verbringen. Doch ein Mädchen wirft schließlich seine Vorsätze über den Haufen: Miyazono Kaori, die nicht nur wunderschön ist und eine offenherzige Persönlichkeit besitzt, sondern deren Stil Violine zu Spielen einem Abbild dieser positiven Eigenschaften gleicht. Mit ihrer gefühlsbetonten Vortragsweise führt Kaori Kosei wieder hin zur Welt der Musik und zeigt ihm abermals deren Freuden",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Your Lie in April",
+            "overview": "Kōsei Arima, un pianista que perdió la capacidad de oír la música tras la muerte de su madre, lleva una vida aburrida hasta que conoce a Kaori Miyazono, una violinista que lo inspira a regresar a la música.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Shigatsu wa Kimi no Uso",
+            "overview": "A história gira em torno de Kousei Arima, um ex-prodígio que perdeu sua habilidade de tocar piano quando sua mãe morreu. Desde então, a sua vida tornou-se monótona, porém, um encontro inesperado com uma rapariga altera tudo. Kaori Miyazono é uma audaciosa empreendedora e sobretudo uma violoncelista que transborda personalidade. Encantado com a rapariga e com a ajuda dela, Kousei retorna ao mundo da música mais livre, desinibido e animado que nunca.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Your lie in April",
+            "overview": "Kousei Arima era um pianista genial, até que a morte repentina de sua mãe fez com que ele não conseguisse mais tocar. Com isso, os dias passaram a ser monótonos e sem brilho.. Mas, ao conhecer Kaori Miyazono, uma violonista com um estilo peculiar, sua vida muda para sempre.",
+            "homepage": "",
+            "tagline": "Conheci a garota sob as cerejeiras em plena floração, e meu destino começou a mudar."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "「14歳の春――僕は、君と走りはじめる」　　からっぽになった少年が一人の少女と出逢う。少女の、自由で情熱的な音楽の調べが、少年の止まっていた時間を突き動かす。11歳の冬――早熟の天才ピアニスト・有馬公生は母親を失ったショックから演奏をするとピアノの音が聴こえなくなるというトラウマを背負ってしまう。以来、少年は次第にピアノから遠ざかっていく。ピアノと母親を失った彼の日常はモノトーンのように色をなくしてしまっていた。そんなある日、公生を子供の頃から見てきた幼なじみ澤部椿は、あるクラスメイトを紹介する。クラスメイトの名前は宮園かをり。彼女はコンクールに出場するヴァイオリニストだった。楽譜を超え、自分なりのスタイルで課題曲を演奏するかをり。その奔放な演奏を見て、モノトーンだった公生の世界がカラフルに色づきはじめる。「暴力上等、性格最低、印象最悪・・・・・・でも、彼女は・・・・・・・・・美しい」。音楽が導くボーイ・ミーツ・ガール。情熱的なヴァイオリンの響きが、凍りついたピアノを融かしたとき、2人は豊かなハーモニーを奏でるのだ。",
+            "homepage": "",
+            "tagline": "第37回講談社漫画賞を受賞した 「青春×音楽×ラブストーリー」！"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "השקר שלך באפריל",
+            "overview": "ארימה קוסאי, הילד הגאון. אבל לאחר שאמו, שהייתה גם המורה שלו, הלכה לעולמה והייתה לו התמוטטות נפשית וכתוצאה מכך הוא לא יכול לשמוע את הצליל של הפסנתר. שנתיים לאחר מכן, קוסאי לא נגע בפסנתר ורואה את העולם במונוטוני, בלי שום ברק או צבע. הוא היה עם חבריו, ווטארי וטסובאקי עד שיום אחד, ילדה שינתה את הכל. מיאזונו קאורי היא כנרית יפה, חופשית ונמרצת. הנגינה שלה משקפת את אישיותה. קאורי עוזרת לקוסאי לחזור לעולם המוזיקה ומראה לו שעולם המוזיקה הוא חופשי בניגוד לסגנון המובנה והנוקשה שקוסאי היה רגיל אליו.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Bugie d'aprile",
+            "overview": "Kousei Arima è un prodigio del pianoforte noto per la sua precisione millimetrica. Dopo la scomparsa della madre, il ragazzo subisce un trauma psicologico che gli impedisce di sentire il suono dei propri tasti. La sua vita grigia cambia improvvisamente quando incontra Kaori Miyazono, una violinista solare e dallo stile spregiudicato. Con la sua energia travolgente, Kaori spingerà Kousei a riavvicinarsi alla musica.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Your Lie in April",
+            "overview": "Ο 15χρονος Arima Kousei, ζει σε έναν κόσμο όπου όλα του φαίνονται γκρίζα και χωρίς νόημα. Έχοντας χάσει τη μητέρα του εδώ και 2 χρόνια και ταυτόχρονα σταματώντας να παίζει πιάνο, το οποίο αποτελούσε τη μεγάλη του αγάπη, νιώθει πιο χαμένος από ποτέ. Η ζωή του Kousei όμως αλλάζει εντελώς ξαφνικά, όταν γνωρίζει την Kaori, μια νεαρή βιολιστή, την οποία ερωτεύεται με την πρώτη ματιά.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Twoje kwietniowe kłamstwo",
+            "overview": "Historia opowiada o Kousei Arimie \"cudownym dziecku\", niezwykle uzdolnionym pianiście, który po śmierci matki stracił swoje umiejętności (czy raczej chęć grania). Jego bezbarwna codzienność zaczyna nabierać barw, gdy pewnego dnia spotyka skrzypaczkę Kaori Miyazono. Dziewczyna jest przebojowa i śmiała a jej osobowość zdaje się z niej wylewać. Zauroczony dziewczyną Kousei wraca do świata muzyki.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "四月是你的謊言",
+            "overview": "有馬公生自小接受母親嚴格的鋼琴訓練，以按照樂譜精準彈奏的能力贏得許多鋼琴比賽的大獎，被人稱作「神童」。11歲的秋天，公生的母親過世，加上自身對彈奏的迷惘，從此他再也聽不見自己彈奏的鋼琴聲，沮喪的他只好放棄演奏鋼琴。\n\n國中三年級時，某一天在青梅竹馬椿的介紹下，公生認識了同年級的小提琴手 ─ 宮園薰，並被薰的自由奔放吸引，沒想到薰竟開口邀請公生在比賽時擔任她的伴奏，自此公生的心境與日常生活開始轉變。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Tháng Tư Là Lời Nói Dối Của Em",
+            "overview": "Câu chuyện xoay quanh một thần đồng piano, cậu ta tên là Arima Kōsei, với tài năng thiên bẩm của mình, cậu đã thống trị tất cả các giải đấu mà cậu tham gia và trở nên nổi tiếng trong giới âm nhạc. Tuy nhiên cuộc đời của Arima Kōsei lại là một chuỗi đầy bất hạnh, mẹ cậu qua đời vì bệnh tật không thể cứu được, người thầy mà luôn sát cánh với cậu trong mọi cuộc thi cũng bị suy nhược cơ thể không thể bên cậu để dạy dỗ nữa. Khủng hoảng tâm lí trầm trọng, cậu còn không thể nghe tiếng đàn do chính mình đánh dù cậu không có vấn đề khác về thính giác.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "كذبتك في أبريل",
+            "overview": "كان كوسي أريما عازف بيانو عبقري حتى حسم موت والدته المفاجئ قدرته على العزف. كان كل يوم مملًا بالنسبة لكوزي. لكنه بعد ذلك يلتقي بعازف كمان يُدعى كاوري ميازونو الذي يتميز بأسلوب عزف غريب الأطوار. هل يمكن للأصوات القلبية للفتاة أن تقود الفتى إلى العزف على البيانو مرة أخرى؟",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Your Lie in April",
+            "overview": "Kousei Arima, un talentoso pianista, pierde su habilidad para tocar después de una tragedia. Su vida se vuelve solitaria y gris hasta que conoce a Kaori Miyazono, una apasionada violinista que lo obliga a enfrentar su pasado y le devuelve el color a su mundo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Your Lie in April",
+            "overview": "Piano dahisi Arima Kousei, çocuk müzisyenler yarışmasını kazandıktan sonra herkes onun adını öğrenmiştir. Fakat; ona en çok destek veren annesinin ölümünden sonra zihinsel ve duygusal bir çöküş yaşayan Kousei, artık kendi piyanosunun sesini bile duyamaz olmuştur. Bu olayın üstünden iki sene geçtikten sonra bile, piyanoya dokunamayan Kousei, bütün yaşamını böyle gideceğini düşünürken tanıştığı bir kız her şeyi değiştirecektir.\n\nBaşına buyruk bir kemancı olan Miyazono Kaori, Kousei’nin müzik hayatına geri dönmesine yardım eder ve onu alışık olmadığı bir stilin içine sürükleyerek yeni şeyler keşfetmesini sağlar.\n\nHikâyemiz, ikilinin ve arkadaşlarının müzik ile yaşadıkları maceraları konu alıyor.\n\nAynı adlı mangasından uyarlanmıştır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เพลงรักสองหัวใจ",
+            "overview": "ชีวิตประจำวันของอาริมะ โคเซย์ อดีตเด็กหนุ่มอัจฉริยะที่ไม่สามารถเล่นเปียโนได้อีกเนื่องจากการตายของแม่เริ่มมีสีสันขึ้นหลังจากได้พบกับนักไวโอลินคนหนึ่ง โคเซย์ซึ่งถูกดึงดูดโดยมิยาโซโนะ คาโอริ นักดนตรีผู้เย่อหยิ่ง ทะเลาะเก่ง แต่ก็เปี่ยมล้นไปด้วยเอกลักษณ์เฉพาะตัว ได้เริ่มออกวิ่งด้วยขาของตัวเองในวัย 14 ปี",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Shigatsu wa Kimi no Uso",
+            "overview": "Po smrti matky ztratí její zázračný malý pianista vůli hrát. Ale setkání se svobodně smýšlející mladou houslistkou převrátí jeho život naruby.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Shigatsu wa Kimi no Uso",
+            "overview": "Po smrti matky stráca malý klavírny zázrak chuť hrať. Stretnutie s mladou huslistkou s voľným duchom však prevráti jeho život naruby.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "四月是你的謊言",
+            "overview": "男主角有馬公生自小接受母親嚴格的鋼琴訓練，以按照樂譜精準彈奏的能力在各項音樂比賽中獲勝，被人稱作「神童」（動畫作品內，亦被人嘲諷為「媽媽的傀儡」、「人體節拍器」、「演奏機」、「鋼琴比賽機器」）。然而 11 歲時母親病逝，加上自身對彈奏的迷惘，陷入聽不見鋼琴聲音的心境障礙，選擇拋棄鋼琴彈奏。\n\n國中三年級時，某一天在青梅竹馬椿的介紹下，認識同年級的小提琴手——宮園薰，並於一場合奏的音樂比賽中被薰自由奔放的演奏風格所吸引，自此心境與日常生活開始轉變。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "La teva mentida a l'abril",
+            "overview": "En Kosei Arima va veure truncada la seva carrera com a pianista quan tenia onze anys a causa de la mort de la seva mare. Va patir un xoc emocional durant un recital i, des de llavors, és incapaç de sentir el so de les tecles del piano. Incapacitat del tot per continuar tocant, va abandonar la música i la seva vida es va tornar monòtona i avorrida. Dos anys més tard, en Kosei és un estudiant de secundària que comparteix institut amb els seus amics, la Tsubaki i en Ryota. El que no sap és que la seva vida canviarà quan conegui la Kaori Miyazono, una violinista extraordinària que aconseguirà fer-lo tornar al món de la música i li ensenyarà a tocar d'una manera més lliure i menys rígida.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Kousei Arima was een geniale pianist totdat de plotselinge dood van zijn moeder hem zijn vermogen om te spelen ontnam. Elke dag was saai voor Kousei. Maar dan ontmoet hij een violist genaamd Kaori Miyazono die een excentrieke speelstijl heeft. Kunnen de oprechte klanken van de viool van het meisje de jongen ertoe brengen weer piano te spelen?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Your Lie in April",
+            "overview": "După moartea mamei sale, un virtuos al pianului își pierde dorința de a cânta. Dar viața i se schimbă când cunoaște o fată nonconformistă care cântă la vioară.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "Isang henyong piyanista si Kousei Arima hanggang sa biglaang pagpanaw ng kanyang ina ang nagbawas sa kanyang kakayahang tumugtog. Bawat araw ay naging nakakabagot para kay Kousei. Ngunit, nakilala niya ang isang biyolinista na nagngangalang Kaori Miyazono na may kakaibang istilo ng pagtugtog. Kaya kaya ng taos-pusong tunog ng biyolin ng babae na magtulak sa lalaki na tumugtog muli ng piano?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "अप्रैल में तुम्हारा झूठ",
+            "overview": "पियानो के टैलेंटेड खिलाड़ी कोसेई अरिमा की माँ की मौत के बाद वह मेंटल ब्रेकडाउन हो गया था, और अब वह अपना पियानो नहीं सुन पाता और दुनिया को मोनोक्रोम में देखता है। अपने दोस्तों की मदद से वह अपने मेंटल ब्लॉक को दूर करने लगता है, और फिर से बजाना शुरू कर देता है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "四月是你的谎言",
+            "overview": "有马公生的母亲一心想把有马培育成举世闻名的钢琴家，而有马也不负母亲的期望，在唸小学时就贏得许多钢琴比赛的大奖。11岁的秋天，有马的母亲过世，从此他再也听不见自己弹奏的钢琴声，沮丧的他只好放弃演奏钢琴，但在14岁那年，经由儿时玩伴 椿的介绍，有马认识了小提琴手宫园薰，並被薰的自由奔放吸引，没想到薰竟开口邀请公生在比赛时担任她的伴奏…",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/x6jWDL4H9TaBLGEvyej0qKiirBU.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/997gv2WU74VYRDiKu2EImJ7K2x.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/Q8srz0tn0O9Q1lUARoFJU6GAWM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pjKCdJxb67TALiUfqOoIY7M5qwX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w89wTwK0xWiHJBbfNbTilxGBxYu.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4f0Qs6MUFnUKmjRrVRZY3BJh1Za.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xzV9va74SZlW0qGXFgp5ujO6gS7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/EKbvSqL3XsMVyBYdM6HHLzCTIi.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/akW29QF7VHm0bemhT6Gh3bJuVWa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wEaHjTczJaJfDdCwkuaueI70ggx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1853,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oYmPFfkzBnorVFGF7YYlmGpL9HV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3295
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 864,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2OMHoAkDHb1Vwe91spzuzAguj6p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1536
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uXDvIlNLIK1OuepEgd42Fs2XSAO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4WSt4MMsbFuJX8ifkrLInk3bChR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l6dCzJTt05hNHPHsEGeI1OUxXWM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ehUiad2Z3y3Zi7LxxqIrU01iw7q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1922
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/65hsXZ83bvB3wOKUaNMYrDWx538.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1922
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fsAgjOUIXrLGIeoh56sZKiMb9tG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1922
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dYwIbiQRBYWrXtGnxHK3RfxgFLz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1922
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eLIUzj8v6A826u5iC849oCjnUoE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1922
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/de4YMTN7ZKqTf2Fmuq50SDUfRLu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6XARq3AAPeSNtwLGplAAH6LovGN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wcUb4j1kgoCM1DXlFRukEjETjLY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zJ7indHvwehiT7C8IyAuHiuzc4Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 984,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ePU8zz6R9FSpT1tO6Lx0NMZ9Hr8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1749
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 844,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8K4N26TRXEuJrANk1GdkiJOVzzO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 724,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fQN3DKvBRrOkZWSB1AqNhjAo0fk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1288
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.062,
+          "height": 130,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7bdP8GAH2chEw15K32YZD45cx80.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 788
+        },
+        {
+          "aspect_ratio": 6.062,
+          "height": 130,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2JcNiRYPU5diFuLZyRQDAu6aZyL.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 788
+        },
+        {
+          "aspect_ratio": 4.305,
+          "height": 979,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eLddWxFE6B7t4DuHXkvXHK2oAOE.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4215
+        },
+        {
+          "aspect_ratio": 4.305,
+          "height": 979,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9WfeSgo7YaTTY5gJfzkdPwyS6j7.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4215
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1443,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wYLdADLPpNdAlHE5K0BWaHPUkGb.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 962
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w0QzYWmy2v9osukJohyGL5RgcvY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2451,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sLidQRf7YtPdoWabDgrBm2NcQWF.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1634
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/92P9cD5uOzLVgx0QDTnwkXffjEG.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1093,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cQHnxUxzaPWlvsVT0hbQezhUSUp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 728
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1443,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nksFLYTydth9OYVpMuMbtOBkvMO.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 962
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/IGbeFv5Ji4W0x530JcSHiQpamY.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 2113,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lmKLwP3izZwDkAJ6drsy48QoBHT.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rRjfH3ckTYz8z8aSkJshFL4VyK9.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 1529,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wGKEdx9DHX6D97Sp5le7eal4Yjw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1086
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/varJEHmk2ekFe5HrmqbyL6V31Ne.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7hDUNtU0oQTylEAjVX9936hWkiw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bVc2cMIgWYO7XRYrE2syT4y0jGx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        }
+      ]
+    }
+  }
+}

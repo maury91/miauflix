@@ -6,11 +6,18 @@
  * precedence chain (push > env > file > default) — see src/config/config.service.ts.
  */
 
+import { ANI_ZIP_URL, ANIME_LISTS_URL } from '@miauflix/anime-mapping';
+
 export interface ServiceEnv {
   host: string;
   port: number;
   dataDir: string;
   disableBackgroundTasks: boolean;
+  /**
+   * Where anime ids come from (test environments point these at mocks). Unset uses the public
+   * URLs; an empty value turns anime season numbering off.
+   */
+  anime: { animeLists: string; aniZip: string };
   bunqueue: { host: string; port: number; token?: string };
 }
 
@@ -31,6 +38,10 @@ export function loadEnv(env: Record<string, string | undefined> = process.env): 
     disableBackgroundTasks: bool(
       env.CATALOG_DISABLE_BACKGROUND_TASKS ?? env.DISABLE_BACKGROUND_TASKS
     ),
+    anime: {
+      animeLists: env.CATALOG_ANIME_LISTS_URL ?? ANIME_LISTS_URL,
+      aniZip: env.CATALOG_ANI_ZIP_URL ?? ANI_ZIP_URL,
+    },
     bunqueue: {
       host: env.BUNQUEUE_HOST ?? '127.0.0.1',
       port: int(env.BUNQUEUE_PORT, 6789),

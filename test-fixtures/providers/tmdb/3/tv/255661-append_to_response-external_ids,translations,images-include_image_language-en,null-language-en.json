@@ -1,0 +1,1109 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23574",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c7e4bc2050ed28221a9f66fcc5396905\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8mmDLb108DoFZlE8sfc64TRqLvm.jpg",
+    "created_by": [
+      {
+        "id": 307791,
+        "credit_id": "670594fa000000000058575e",
+        "name": "Matthew Parkhill",
+        "original_name": "Matthew Parkhill",
+        "gender": 2,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-03-04",
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://www.amazon.co.uk/dp/B0G2BVD2YT",
+    "id": 255661,
+    "in_production": true,
+    "languages": [
+      "zh",
+      "en",
+      "fr",
+      "tr"
+    ],
+    "last_air_date": "2026-03-04",
+    "last_episode_to_air": {
+      "id": 5657759,
+      "name": "The Case of Beatrice Holmes",
+      "overview": "Family ties and friendships are tested in the Holmes family reunion from hell.",
+      "vote_average": 8.2,
+      "vote_count": 21,
+      "air_date": "2026-03-04",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "YGSK108",
+      "runtime": 55,
+      "season_number": 1,
+      "show_id": 255661,
+      "still_path": "/7NsxUybDsGlRRca73LEmmvUeP2.jpg"
+    },
+    "name": "Young Sherlock",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1024,
+        "logo_path": "/w7HfLNm9CWwRmAMU58udl2L7We7.png",
+        "name": "Prime Video",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 11,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "GB",
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Young Sherlock",
+    "overview": "Sherlock Holmes is a disgraced young man, raw and unfiltered, when he finds himself wrapped up in a murder case that threatens his liberty. His first ever case unravels a globe-trotting conspiracy that changes his life forever.",
+    "popularity": 17.8053,
+    "poster_path": "/h3s0Cd2JppeWA4UjTuSRauL52P7.jpg",
+    "production_companies": [
+      {
+        "id": 175075,
+        "logo_path": "/ccWLhsoJHwBGjBni6fHrWOz4voA.png",
+        "name": "Motive Pictures",
+        "origin_country": "GB"
+      },
+      {
+        "id": 210099,
+        "logo_path": "/g5oRCNCi8kNVb8gEoSoIcqkhjmR.png",
+        "name": "Amazon MGM Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 291128,
+        "logo_path": null,
+        "name": "Inspirational Entertainment",
+        "origin_country": "GB"
+      },
+      {
+        "id": 242562,
+        "logo_path": null,
+        "name": "Jack Tar Pictures",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "GB",
+        "name": "United Kingdom"
+      },
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-03-04",
+        "episode_count": 8,
+        "id": 396168,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/BMBWTgvL41sOYtfkmXen6nm9mG.jpg",
+        "season_number": 1,
+        "vote_average": 8.1
+      },
+      {
+        "air_date": null,
+        "episode_count": 3,
+        "id": 533236,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Mandarin",
+        "iso_639_1": "zh",
+        "name": "普通话"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      },
+      {
+        "english_name": "Turkish",
+        "iso_639_1": "tr",
+        "name": "Türkçe"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Think fast. Fight faster.",
+    "type": "Scripted",
+    "vote_average": 7.748,
+    "vote_count": 332,
+    "external_ids": {
+      "imdb_id": "tt8599532",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 450633,
+      "tvrage_id": null,
+      "wikidata_id": "Q126194054",
+      "facebook_id": null,
+      "instagram_id": "youngsherlockprime",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Sherlock Holmes is a disgraced young man, raw and unfiltered, when he finds himself wrapped up in a murder case that threatens his liberty. His first ever case unravels a globe-trotting conspiracy that changes his life forever.",
+            "homepage": "",
+            "tagline": "Think fast. Fight faster."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Von Guy Ritchie: Erleben Sie die legendäre Entstehungsgeschichte von Sherlock Holmes in diesem respektlosen, actiongeladenen Krimi, der die frühen Abenteuer des ikonischen Detektivs nachzeichnet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "영 셜록",
+            "overview": "스릴 넘치고 액션으로 가득한 가이 리치 감독의 이 미스터리 시리즈에서는, 셜록 홈즈라는 상징적인 인물의 초창기를 조소적으로 재해석해 그의 탄생 비화를 그린다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Молодой Шерлок",
+            "overview": "События разворачиваются в Лондоне и Оксфорде, около 1870-х годов. 19-летний Шерлок Холмс освобождён из тюрьмы по протекции старшего брата Майкрофта и становится уборщиком в кампусе Оксфорда. Здесь он знакомится со студентом Джеймсом Мориарти и между молодыми людьми возникает дружба. Мама Шерлока и Майкрофта Корделия Холмс помещена мужем в психиатрическую клинику из-за отклонений в поведении. Много лет назад она потеряла в результате несчастного случая дочь Беатрис и с тех пор не может прийти в себя. Шерлок тоже считает себя виновным в смерти сестры.",
+            "homepage": "",
+            "tagline": "Думай быстро. Действуй ещё быстрее."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Jovem Sherlock",
+            "overview": "Nesse mistério repleto de ação, testemunhe a história de origem de Sherlock Holmes em uma releitura irreverente dos primórdios do icônico personagem.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Młody Sherlock",
+            "overview": "Guy Ritchie przedstawia legendarne pierwsze przygody Sherlocka Holmesa w niekonwencjonalnym i pełnym akcji wydaniu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "À 19 ans, Sherlock Holmes est sans expérience, quand il se retrouve embarqué par le mystère autour d'un meurtre survenu à l’Université d’Oxford. Plongeant dans sa toute première affaire avec un manque certain de discipline, le jeune homme tente de démêler une conspiration qui pourrait changer sa vie à jamais.",
+            "homepage": "",
+            "tagline": "Réfléchissez vite. Combattez encore plus vite."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青年夏洛克",
+            "overview": "这部玩世不恭、动作场面精彩的推理影集由盖瑞奇执导，讲述夏洛克福尔摩斯的传奇起源，描绘这位著名侦探最早期的冒险故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الشاب شيرلوك",
+            "overview": "شاهدوا من غاي ريتشي قصة الأصل الأسطورية لشرلوك هولمز في هذا الفيلم الغامض المليء بالإثارة والتشويق والذي يتتبع مغامرات المحقق الشهير في بداياته.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الشاب شيرلوك",
+            "overview": "شاهدوا من غاي ريتشي قصة الأصل الأسطورية لشرلوك هولمز في هذا الفيلم الغامض المليء بالإثارة والتشويق والذي يتتبع مغامرات المحقق الشهير في بداياته.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "El jove Sherlock",
+            "overview": "Creat per Guy Ritchie, aquest relat policíac irreverent narra la història original de Sherlock Holmes i ens mostra les primeres aventures d'aquest inspector icònic.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Mladý Sherlock",
+            "overview": "Guy Ritchie přináší legendární příběh o počátcích Sherlocka Holmese v tomto nekonvenčním, akcí nabitém mysteriózním filmu, který sleduje raná dobrodružství tohoto ikonického detektiva.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Guy Ritchie står bag denne respektløse og actionfyldte oprindelseshistorie om en ung Sherlock Holmes, der følger den ikoniske detektivs tidlige eventyr.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Ο Νεαρός Σέρλοκ",
+            "overview": "Οι νεανικές περιπέτειες και το θρυλικό ξεκίνημα του εμβληματικού ντετέκτιβ Σέρλοκ Χολμς, σε μια τολμηρή, γεμάτη δράση σειρά μυστηρίου του Γκάι Ρίτσι.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "El joven Sherlock",
+            "overview": "Un Sherlock Holmes de 19 años se ve enredado en un asesinato en Oxford que pone en peligro su libertad. Su primer caso, abordado imprudentemente, le lleva a descubrir una conspiración de gran alcance que altera su camino para siempre.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "El joven Sherlock",
+            "overview": "Un Sherlock Holmes de 19 años se ve enredado en un asesinato en Oxford que pone en peligro su libertad. Su primer caso, abordado imprudentemente, le lleva a descubrir una conspiración de gran alcance que altera su camino para siempre.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Jeune Sherlock",
+            "overview": "De Guy Ritchie, découvrez cette série irrévérencieuse pleine de mystère et d'action, découvrez la genèse du légendaire Sherlock Holmes en suivant ses premières aventures.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "eu",
+          "name": "euskera",
+          "english_name": "Basque",
+          "data": {
+            "name": "Sherlock Gaztea",
+            "overview": "Guy Ritchieren eskutik, akzioz beteriko misterio zirraragarri honek Sherlock Holmesen jatorria erakusten digu detektibe ikonikoaren gaztetako abenturen bidez.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Guy Ritchien luoma sarja seuraa Sherlock Holmesin legendaarista syntytarinaa. Tämä nenäkäs ja toiminnantäyteinen jännäri kuvaa ikonisen yksityisetsivän alkuvaiheen seikkailuja.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "gl",
+          "name": "Galego",
+          "english_name": "Galician",
+          "data": {
+            "name": "O xove Sherlock",
+            "overview": "Descubre da man de Guy Ritchie a lendaria historia da orixe de Sherlock Holmes neste irreverente e trepidante misterio que narra as primeiras aventuras do emblemático detective.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Sherlock Holmes is een in ongenade gevallen jongeman – ruw en ongefilterd – wanneer hij verwikkeld raakt in een moordzaak die zijn vrijheid bedreigt. Zijn allereerste zaak ontrafelt een wereldwijde samenzwering die zijn leven voorgoed verandert.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Sherlock Holmes is een in ongenade gevallen jongeman – ruw en ongefilterd – wanneer hij verwikkeld raakt in een moordzaak die zijn vrijheid bedreigt. Zijn allereerste zaak ontrafelt een wereldwijde samenzwering die zijn leven voorgoed verandert.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "यंग शेरलॉक",
+            "overview": "गाय रिची की ओर से, शरलॉक होम्स की लेजेंडरी ओरिजिन स्टोरी देखें, यह एक बेफ़िक्र, एक्शन से भरी मिस्ट्री है जो इस मशहूर जासूस के शुरुआती एडवेंचर्स को दिखाती है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青年夏洛克",
+            "overview": "這部玩世不恭、動作場面精彩的推理影集由蓋瑞奇執導，講述夏洛克福爾摩斯的傳奇起源，描繪這位著名偵探最早期的冒險故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青年夏洛克",
+            "overview": "本剧由盖里奇执导，以著名侦探夏洛克福尔摩斯传奇的起源故事为题材，呈现了一部充满动作元素的悬疑剧，刻画了福尔摩斯的早期冒险。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青年夏洛克",
+            "overview": "這部玩世不恭、動作場面精彩的推理影集由蓋瑞奇執導，講述夏洛克福爾摩斯的傳奇起源，描繪這位著名偵探最早期的冒險故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Genç Sherlock",
+            "overview": "Guy Ritchie imzalı bu hiciv ve aksiyon dolu gizemde, ikonik dedektif Sherlock Holmes'un ilk maceralarını izleyerek efsanevi çıkış hikâyesine tanıklık edin.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "กำเนิดนักสืบ เชอร์ล็อก โฮล์มส์",
+            "overview": "จากฝีมือของ กาย ริตชี่ ร่วมเป็นสักขีพยานต้นกำเนิดตำนานของเชอร์ล็อก โฮล์มส์ ในเรื่องราวปริศนาเต็มไปด้วยแอ็กชันสุดฮาที่ติดตามการผจญภัยในช่วงแรกๆ ของนักสืบผู้โด่งดังคนนี้",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "te",
+          "name": "తెలుగు",
+          "english_name": "Telugu",
+          "data": {
+            "name": "యంగ్ షెర్లాక్",
+            "overview": "గయ్ రిచీ తెరకెక్కించిన షెర్లాక్ హోమ్స్‌కు చెందిన ప్రతిష్ఠాత్మక చిననాటి కథ చూడండి, చిరస్థాయిగా నిలిచే ఈ డిటెక్టివ్ తొలి సాహసాలను అనుసరించే మర్యాదలు పాటించని, యాక్షన్ నిండిన మిస్టరీలో.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "name": "யங் ஷர்லாக்",
+            "overview": "கை ரிச்சியிடமிருந்து புகழ்பெற்ற துப்பறியும் நிபுணர் ஷர்லாக் ஹோம்ஸின் ஆரம்பகால சாகசங்களைப் பின்தொடரும் இப்பண்படா அதிரடி மர்மக் கதையில் அவரது புகழ்பெற்ற தோற்றக்கதையைக் காண்க.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Young Sherlock",
+            "overview": "Bevittna Sherlock Holmes ursprungshistoria i denna respektlösa, actionfyllda deckare som följer den ikoniske detektivens tidiga äventyr.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "שרלוק הצעיר",
+            "overview": "אוקספורד, שנות השבעים של המאה ה-19. שרלוק הולמס הוא סטודנט בן 19 שימיו כבלש גדול עוד הרחק לפניו. כשרצח מסתורי באוניברסיטה מאיים על חירותו, הוא נאלץ לפענח את התיק הראשון שלו ומתגלגל אל נבכי קונספירציה גלובלית שתשנה את חייו לנצח.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Jovem Sherlock",
+            "overview": "Da autoria de Guy Ritchie. Assista à história lendária da origem de Sherlock Holmes neste mistério irreverente e pleno de ação, que segue as primeiras aventuras do detetive icónico.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Tânărul Sherlock",
+            "overview": "În regia lui Guy Ritchie, descoperiți originile legendare ale lui Sherlock Holmes într-o poveste ireverentă și plină de acțiune și mister, centrată pe aventurile lui timpurii.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Молодий Шерлок",
+            "overview": "Молодий Шерлок Голмс опиняється втягнутим у справу про вбивство, яка загрожує його свободі. Розслідування розкриває міжнародну змову й завершується вибуховим протистоянням, що назавжди змінює його життя.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Az ifjú Sherlock",
+            "overview": "Ismerje meg a legendás Sherlock Holmes első kalandjait Guy Ritchie könnyed, mégis akciódús sorozatában, amely az ikonikus nyomozó korai éveit mutatja be!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Saksikan kisah asal-usul Sherlock Holmes yang legendaris dalam misteri penuh aksi yang menggelikan sajian Guy Ritchie pada masa awal petualangan sang detektif yang ikonis ini.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Scopri le leggendarie origini di Sherlock Holmes in questa serie irriverente e ricca d'azione, che segue le prime avventure dell'iconico detective.",
+            "homepage": "",
+            "tagline": "Pensa in fretta. Combatti più in fretta."
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Daripada Guy Ritchie, saksikan kisah asal-usul legenda Sherlock Holmes dalam sebuah misteri bersahaja sarat aksi yang mengikuti pengembaraan awal detektif ikonik ini.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "kn",
+          "name": "?????",
+          "english_name": "Kannada",
+          "data": {
+            "name": "ಯಂಗ್ ಶರ್ಲಾಕ್",
+            "overview": "ಗೈ ರಿಚಿ ಅವರಿಂದ, ಶರ್ಲಾಕ್ ಹೋಮ್ಸ್‌ನ ಆರಂಭಿಕ ಸಾಹಸಗಳನ್ನು ತೋರುವ ಈ ರೋಮಾಂಚಕ, ಆಕ್ಷನ್-ಭರಿತ ರಹಸ್ಯ ಸರಣಿಯಲ್ಲಿ ಈ ಅಪ್ರತಿಮ ಪತ್ತೇದಾರನ ಮೂಲ ಕಥೆಗೆ ಸಾಕ್ಷಿಯಾಗಿರಿ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ヤング・シャーロック ～オックスフォード事件簿～",
+            "overview": "ガイ・リッチー監督が贈る、伝説の名探偵シャーロック・ホームズの誕生秘話。大胆でアクション満載のミステリーが、あまりに有名な探偵の若き日の冒険を描く。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ml",
+          "name": "",
+          "english_name": "Malayalam",
+          "data": {
+            "name": "യങ് ഷെർലോക്",
+            "overview": "ഗൈ റിച്ചി അവതരിപ്പിക്കുന്ന, ഷെർലോക് ഹോംസ് എന്ന ഇതിഹാസ കഥാപാത്രത്തിൻ്റെ ആദ്യകാലങ്ങൾ വ്യത്യസ്തതയോടെ പുനരാവിഷ്കരിക്കുന്ന, ആക്ഷൻ രംഗങ്ങളും ദുരൂഹതയും നിറഞ്ഞ ആവേശകരമായ ഈ പരമ്പരയ്ക്ക് സാക്ഷിയാവുക.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Fra Guy Ritchie, vær vitne til bakgrunnshistorien til Sherlock Holmes i et respektløst, actionfylt mysterium som fokuserer på den ikoniske detektivens tidlige eventyr.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Младият Шерлок",
+            "overview": "Шерлок Холмс е опозорен млад мъж, суров и нефилтриран, когато се оказва замесен в убийство, което застрашава свободата му. Първият му случай разкрива световна конспирация, която променя живота му завинаги.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Sherlock Holmes je osramočen mladenič, surov in neizbrušen, ko se na univerzi v Oxfordu zaplete v preiskavo umora, ki ogroža njegovo prostost. Njegov sploh prvi primer razkrinka svetovno zaroto in vodi do eksplozivnega obračuna, ki mu za vedno spremeni življenje.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Sherlock Trẻ Tuổi",
+            "overview": "Lấy bối cảnh nước Anh những năm 1870 tại Đại học Oxford, phim xoay quanh Sherlock Holmes khi mới 19 tuổi – một chàng trai bốc đồng, chưa được mài giũa và thường xuyên gặp rắc rối. Khi vô tình vướng vào một vụ án giết người đe dọa đến sự tự do của bản thân, Sherlock bắt đầu dấn thân vào cuộc điều tra đầu tiên, từ đó khám phá ra một âm mưu toàn cầu nguy hiểm. Trong hành trình này, anh gặp gỡ James Moriarty và bắt đầu quá trình phát triển các kỹ năng thám tử huyền thoại của mình trước khi trở thành biểu tượng tại Baker Street.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Jaunasis Šerlokas",
+            "overview": "Žlugęs ir paniekintas jaunas detektyvas atsiduria painioje žmogžudystės byloje, kuri grasina jo laisvei. Pirmoji jo byla atskleidžia pasaulinį sąmokslą, vedantį į sprogstamąją kulminaciją, kuri visam laikui pakeičia jo gyvenimą. Intrigos, paslaptys ir netikėti posūkiai lydi kiekvieną žingsnį, kai jis bando įrodyti savo nekaltumą ir atskleisti tiesą, slypinčią už galingų jėgų pinklių.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Sherlock Holmes je mladić čiji je ugled potpuno uništen, sirov i bez dlake na jeziku, kada se nađe upleten u slučaj ubojstva koji ugrožava njegovu slobodu. Njegov prvi slučaj otkriva zavjeru koja se proteže diljem svijeta i zauvijek mu mijenja život.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8mmDLb108DoFZlE8sfc64TRqLvm.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/33wak17FN0mGRop4g2RWuiwVBVa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xiXtrgMZxwRPWTS3AvVChg3pDt2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aWcPzZbFa9bQbuCjCYFViotxmYM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4DnHXevFQRpBOOdM6uuhfs4lmmq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hLsKXbFbD4epVLvPlweQ68YTQcc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5oVwB7IFNWJToRd6Qqgw8QOt966.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iPisqJL6ZDL3Z44YYtDDD8CBRjf.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uBzhKVLPqtkqKq8yvKr9jsc9RLd.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qBwPDNoOXmvQJ9AAFsdiygoy6fG.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5jtztRxN7x8QrMfBQ0uLdRgfXHc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aM50aIMSAOM7vwzXme22aycyInL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/Aqii7TTnwTNEirIsvSsF1GgQoPE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rGqYDLQzCT9tai58MjzGU0zs3ML.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oROgXWeahvyPeHQrClA0ig9KvBY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7aIFom4g67eCcEcrEuQwDBlpgVH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kPTqjQc9WyJLYPC11ZS1A6ylZ7t.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vdqr5hoMD7gKuXRTgWW1CeEd8KW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qunxGuSzN2IKeLqitevAjSWsvkP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.836,
+          "height": 501,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fWBgJxuHXRDBrUq0RFuG6DG22rt.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1922
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h3s0Cd2JppeWA4UjTuSRauL52P7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2532,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jS7tSFwem9gw9z9LjfQQMiD1BFo.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1688
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gbImVkaUrc0HzGFDAnVUHs5Rd7O.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/22bb8mg0wo8BlL84xXjIuMPwWyP.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/BMBWTgvL41sOYtfkmXen6nm9mG.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bb3XIgEUKSboZzDVYbfAi1w381A.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e3rggcNZeCvtJf4dNSqdiEbJ57x.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vK5osSMlLzhsaS54pOQ40BnuZ8K.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s2Vez8okpv3jhkL3rT0duKQggrS.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1342,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jBM5Le7OiKJDVbJx2fBtQ9QxA72.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 895
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fKh5OzpsieNUjlLeIy6iVtsUFI3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2310,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6oyrrJBfewbuI2G0v3k2hYF18iN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1540
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w1LXZ7jJ0bVIS6IVs8kECJGymRk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nSpNJaVrSiIRm8xGHXW88zelo2j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        }
+      ]
+    }
+  }
+}

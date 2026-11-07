@@ -4,6 +4,7 @@ import type {
   SourceSearchRequest,
 } from '@miauflix/service-contracts';
 
+import type { AnimeResolver } from '../anime/resolver';
 import type { SourcesConfigService } from '../config/config.service';
 import { BudgetExceeded, type Store } from '../db/store';
 import { HttpClient, RateLimitError } from '../http/http-client';
@@ -11,7 +12,7 @@ import { mergeCandidate, toCandidate } from '../normalize/candidate';
 import type { Registry } from '../providers/registry';
 import type { Provider } from '../providers/types';
 import { SingleFlight } from '../util/single-flight';
-import { variantsFor } from './query-variants';
+import { builtForAnime, variantsFor } from './query-variants';
 import { isSufficient } from './sufficiency';
 export class Planner {
   private flights = new SingleFlight();
@@ -20,17 +21,20 @@ export class Planner {
     private registry: Registry,
     private config: SourcesConfigService,
     private http: HttpClient,
-    private now = Date.now
+    private now = Date.now,
+    private anime?: AnimeResolver
   ) {}
   async *search(
     request: SourceSearchRequest,
     signal: AbortSignal
   ): AsyncGenerator<SourceSearchItem> {
-    const all = await this.registry.providers();
+    const [all, anime] = await Promise.all([
+      this.registry.providers(),
+      this.anime?.resolve(request, signal) ?? null,
+    ]);
+    const isAnime = !!(request.media.isAnime || anime);
     const kind = request.media.kind === 'movie' ? 'movie' : 'tv';
-    const providers = all.filter(
-      p => p.caps[kind].length || (request.media.isAnime && p.caps.anime.length)
-    );
+    const providers = all.filter(p => p.caps[kind].length || (isAnime && p.caps.anime.length));
     const seen = new Map<string, SourceCandidate>();
     const searched = new Set<string>(),
       failed = new Set<string>(),
@@ -79,7 +83,7 @@ export class Planner {
       }
       let count = 0;
       try {
-        for (const variant of variantsFor(provider, request)) {
+        for (const variant of variantsFor(provider, request, anime)) {
           for (
             let page = 1;
             page <= (provider.caps[variant.query.kind].includes('page') ? provider.maxPages : 1);
@@ -127,7 +131,15 @@ export class Planner {
               ));
             const candidates = result.results
               .map(raw =>
-                toCandidate(raw, provider, variant.matchedBy, query, request, this.store.seal)
+                toCandidate(
+                  raw,
+                  provider,
+                  variant.matchedBy,
+                  query,
+                  request,
+                  this.store.seal,
+                  anime
+                )
               )
               .filter((c): c is SourceCandidate => c !== null);
             const hasMore = result.hasMore;
@@ -158,16 +170,30 @@ export class Planner {
       }
     };
     const tiers = new Map<number, Provider[]>();
-    for (const p of providers) {
-      const priority = this.store.providers().find(r => r.id === p.id)!.priority;
-      const key = Math.floor(priority / 10);
+    // Anime: providers with an anime category (Nyaa) or built for anime (AnimeTosho) join the
+    // first tier. A general indexer's release can look healthy enough to stop the search, while
+    // the anime providers have the fansub releases. Within a tier, built-for-anime ones go first.
+    const animeRank = (p: Provider) =>
+      !isAnime || !p.caps.anime.length ? 0 : builtForAnime(p, kind) ? 2 : 1;
+    const animeFirst = (p: Provider) => animeRank(p) > 0;
+    const ordered = providers.map(p => ({
+      p,
+      priority: this.store.providers().find(r => r.id === p.id)!.priority,
+    }));
+    const firstTier = Math.min(
+      ...ordered.filter(({ p }) => !animeFirst(p)).map(({ priority }) => Math.floor(priority / 10))
+    );
+    for (const { p, priority } of ordered.sort((a, b) => a.priority - b.priority)) {
+      const key =
+        animeFirst(p) && Number.isFinite(firstTier) ? firstTier : Math.floor(priority / 10);
       tiers.set(key, [...(tiers.get(key) ?? []), p]);
     }
     for (const tier of tiers.values())
       tier.sort(
         (a, b) =>
+          animeRank(b) - animeRank(a) ||
           Number(b.caps[kind].some(p => ['imdbid', 'tmdbid', 'tvdbid'].includes(p))) -
-          Number(a.caps[kind].some(p => ['imdbid', 'tmdbid', 'tvdbid'].includes(p)))
+            Number(a.caps[kind].some(p => ['imdbid', 'tmdbid', 'tvdbid'].includes(p)))
       );
     if (request.purpose === 'background') {
       for (const tier of tiers.values()) {
@@ -175,6 +201,7 @@ export class Planner {
           const ratio = (p: Provider) =>
             p.rate.dailyBudget === null ? 1 : 1 - this.store.usage(p.id) / p.rate.dailyBudget;
           return (
+            animeRank(b) - animeRank(a) ||
             ratio(b) - ratio(a) ||
             (this.store.providers().find(r => r.id === a.id)!.last_used_at ?? 0) -
               (this.store.providers().find(r => r.id === b.id)!.last_used_at ?? 0)

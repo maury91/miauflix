@@ -1,0 +1,887 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21527",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"d1e94c60a7a8ae80b7aebabe5bb98d53\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qc30hdrxHQgN5wiopU4bkRZow5L.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-04-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://yominotsugai.com",
+    "id": 260463,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-09-19",
+    "last_episode_to_air": {
+      "id": 7110860,
+      "name": "Higashi Village and Nishino Village",
+      "overview": "Yuru dreams about the day bandits tried to kill him as a kid, and Asa blames herself for the gardener's death.",
+      "vote_average": 7.7,
+      "vote_count": 3,
+      "air_date": "2026-09-19",
+      "episode_number": 24,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 260463,
+      "still_path": "/3BtE9tMJM9iThpIKwjsg3gY38c1.jpg"
+    },
+    "name": "Daemons of the Shadow Realm",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 343,
+        "logo_path": "/9rNqtDYAnD6yTOutvHI3synSEs2.png",
+        "name": "Gunma TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2478,
+        "logo_path": "/2v82HpzoKRveJEJcGHkeTcktMRM.png",
+        "name": "Tochigi TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "黄泉のツガイ",
+    "overview": "Yuru, a young hunter, lives in a small village deep in the mountains, hunting wild game and leading a humble life with Asa, his younger twin sister. Their peaceful lives are torn apart when a dragon’s roar echoes across the sky. What secrets lurk within their village? What fate awaits them?",
+    "popularity": 13.0792,
+    "poster_path": "/vIE1llfr1lcmzlsV4xn8vhgtlQN.jpg",
+    "production_companies": [
+      {
+        "id": 244314,
+        "logo_path": "/4nqqgGYwWy65LNVqlcTrvUY1WR2.png",
+        "name": "BONES Film",
+        "origin_country": "JP"
+      },
+      {
+        "id": 10038,
+        "logo_path": "/nCueXKwYIEXrZ5ofqSJBO1YcmRr.png",
+        "name": "Square Enix",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2849,
+        "logo_path": "/cN3JNIKawjOMtfk0GBVIbsx69bg.png",
+        "name": "BONES",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-04-04",
+        "episode_count": 24,
+        "id": 404568,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/vIE1llfr1lcmzlsV4xn8vhgtlQN.jpg",
+        "season_number": 1,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": null,
+        "episode_count": 0,
+        "id": 544912,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/yENL6ewxUKurHNNCY2MN1N1DgH.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.242,
+    "vote_count": 95,
+    "external_ids": {
+      "imdb_id": "tt37532356",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 452711,
+      "tvrage_id": null,
+      "wikidata_id": "Q135221317",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "tsugai_official"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Tsugai - Daemons of the Shadow Realm",
+            "overview": "Yuru, le chasseur, vit séparé de sa sœur jumelle Asa, enfermée dans une prison pour satisfaire un rituel. Tous deux ignorent la vérité sur leur naissance et lorsque leur paisible village est attaqué par de mystérieux ennemis, Yuru découvre qu’il peut commander un puissant duo de créatures appelé « Tsugai ».",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Daemons of the Shadow Realm",
+            "overview": "Yuru, a young hunter, lives in a small village deep in the mountains, hunting wild game and leading a humble life with Asa, his younger twin sister. Their peaceful lives are torn apart when a dragon’s roar echoes across the sky. What secrets lurk within their village? What fate awaits them?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "特定の人間がデーモンと呼ばれる強力な超自然的な二人組を指揮している世界では、これらの強力な存在を支配するのは「昼と夜を分ける子供たち」である双子のユルとアサの生得権です。幼い頃に離れ離れになり、出生の真実を知らない兄妹は、お互いの元へ戻り、生得権を主張し、世界を救うために戦わなければなりません...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Daemons do Reino das Sombras",
+            "overview": "Yuru, um jovem caçador de uma vila isolada nas montanhas, vive tranquilamente ao lado de sua irmã gêmea, Asa. Tudo muda quando o rugido de um dragão rompe os céus e abala seu mundo. Segredos ocultos vêm à tona, revelando mistérios, forças sobrenaturais e um destino inesperado.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Das Band der Unterwelt",
+            "overview": "In einem abgelegenen Bergdorf bricht plötzlich Chaos aus, als die Siedlung von Unbekannten überfallen wird und der junge Jäger Yuru erfahren muss, dass die Welt außerhalb ganz anders ist als gedacht. Gemeinsam mit mystischen Schutzgeistern macht er sich auf die Suche nach seiner totgeglaubten Zwillingsschwester Asa, um das Geheimnis hinter ihrer Herkunft und den mächtigen Wesen zu lüften. Angetrieben von seinem treuen Beschützer Dera gerät das Geschwisterpaar mitten in einen gefährlichen Konflikt rivalisierender Fraktionen, die es auf ihre verborgenen Kräfte abgesehen haben.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JV",
+          "iso_639_1": "jv",
+          "name": "",
+          "english_name": "Javanese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Yomi no Tsugai: Dúo del Inframundo",
+            "overview": "En un mundo donde ciertos humanos controlan poderosos dúos sobrenaturales llamados tsugai, gobernar sobre estas entidades es el derecho de nacimiento de \"los hijos que separan el día y la noche\": los gemelos Yoru y Asa. Separados desde pequeños y ajenos a la verdad sobre su origen, hermano y hermana deberán luchar para reencontrarse, reclamar lo que les pertenece y salvar el mundo…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Espíritus del Inframundo",
+            "overview": "En un mundo donde ciertos humanos controlan poderosos dúos sobrenaturales llamados tsugai, gobernar sobre estas entidades es el derecho de nacimiento de \"los hijos que separan el día y la noche\": los gemelos Yoru y Asa. Separados desde pequeños y ajenos a la verdad sobre su origen, hermano y hermana deberán luchar para reencontrarse, reclamar lo que les pertenece y salvar el mundo…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een afgelegen bergdorp, onder het toeziende oog van twee stenen bewakers, leeft de jonge Yuru tevreden van het land en blijft hij dicht bij zijn enige overgebleven familie: Asa, zijn geliefde tweelingzus. Asa voert ondertussen een mysterieuze 'taak' uit in opdracht van het dorp, opgesloten in een kooi. Waarom is Asa een gevangene? En welke andere geheimen verbergt Yuru's verder zo idyllische thuis?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een afgelegen bergdorp, onder het toeziende oog van twee stenen bewakers, leeft de jonge Yuru tevreden van het land en blijft hij dicht bij zijn enige overgebleven familie: Asa, zijn geliefde tweelingzus. Asa voert ondertussen een mysterieuze 'taak' uit in opdracht van het dorp, opgesloten in een kooi. Waarom is Asa een gevangene? En welke andere geheimen verbergt Yuru's verder zo idyllische thuis?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "黃泉雙使",
+            "overview": "月落是一名住在山中小村莊的獵人少年，靠著狩獵野鳥維生，與雙胞胎妹妹亞晨及村民們過著樸實的生活。然而，這樣平穩的日常卻被空中響起的「龍的叫聲」給撕裂了──\n\n安逸的村莊裡潛藏著傳承與謎團，這個村裡究竟藏著甚麼秘密呢？月落的命運又會如何？謎團與不可思議縱橫交錯的嶄新使者戰鬥──緊張刺激的幻怪奇幻譚，現在揭開序幕。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "黄泉的使者",
+            "overview": "少年尤尔出生在一个清净的深山村庄里。 从小到大都一直没有离开这个村庄。 而他的双胞胎妹妹阿萨，则是一直被关在村子深处的牢狱里工作，而且不知道为什么，只有一部分的村民能够见到阿萨。  某一天，这个村庄突然遭到神秘人士的入侵，村民一一遭到杀害，带头的其中一个女性，居然自称为阿萨，而且称呼尤尔为兄长，甚至还说牢里的阿萨是假的，前来攻击村庄的目的，就是要把尤尔带走。  在情急之下，尤尔唤醒了大家一直视为村庄守护神的左右大人应战，而左右大人却称呼尤尔为「主人」...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "黃泉使者",
+            "overview": "尤爾是一名住在山中小村莊的獵人少年，靠著狩獵野鳥維生，與雙胞胎妹妹阿薩及村民們過著樸實的生活。然而，這樣平穩的日常卻被空中響起的\"\"龍的叫聲\"\"給撕裂了──\n\n安逸的村莊裡潛藏著傳承與謎團，這個村裡究竟藏著什麼祕密呢？尤爾的命運又會如何？謎團與不可思議縱橫交錯的嶄新使者戰鬥──緊張刺激的幻怪奇幻譚，現在揭開序幕。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "te",
+          "name": "తెలుగు",
+          "english_name": "Telugu",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AM",
+          "iso_639_1": "hy",
+          "name": "",
+          "english_name": "Armenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "شياطين عالم الظلال",
+            "overview": "يعيش يورو، وهو صياد شاب، في قرية صغيرة في أعماق الجبال، يصطاد الطرائد البرية ويعيش حياة متواضعة مع آسا، شقيقته التوأم الصغرى. تنقلب حياتهم الهادئة رأسًا على عقب عندما يهاجمهم تنين.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ml",
+          "name": "",
+          "english_name": "Malayalam",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Цугаи загробного мира",
+            "overview": "Каждые четыре века рождаются близнецы, разделённые днём и ночью, которым самой судьбой уготовано стать повелителями цугаев. Цугаи — существа-противоположности, невидимые для обычных людей: \"божества\" и \"ёкаи\".\n\nИх сила находится за гранью человеческого понимания, и именно поэтому вновь родившиеся близнецы — Аса и Юру — становятся целью для множества преступных группировок. Но даже лишившись спокойного детства из-за своего проклятия, герои не думают сдаваться. И пусть впереди их ждут бесконечные сражения, убийства и предательства, вместе со своими цугаями они обязательно бросят вызов своей несправедливой судьбе.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Cặp Đôi Âm Phủ",
+            "overview": "Yuru, thợ săn trẻ, sống trong ngôi làng nhỏ sâu trong núi, săn thú rừng và sống đạm bạc cùng Asa — cô em gái song sinh. Cuộc sống yên bình của họ tan vỡ khi tiếng gầm của rồng vang vọng bầu trời. Bí mật nào ẩn trong ngôi làng? Số phận nào đang chờ họ?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "황천의 츠가이",
+            "overview": "산 속 작은 마을에서 짐승을 사냥하며\n\n대자연 속에서 조용히 살아가는 소년, 유르.\n\n그러나 유르의 쌍둥이 여동생 아사는\n\n어째서인지 마을 깊숙이 자리 잡은 감옥 안에서\n\n어떠한 '책무'를 수행하고 있다.\n\n흡사 그곳에 유폐 당한 것처럼....\n\n평화로운 마을에 떠오르는 부자연스러운 수수께끼.\n\n이 마을에 숨겨진 비밀이란...?!",
+            "homepage": "",
+            "tagline": "미증유의 츠가이 배틀, 개막!!"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Daemons of the Shadow Realm",
+            "overview": "Il giovane Yuru vive cacciando in un remoto villaggio di montagna, mentre sua sorella gemella Asa è rinchiusa da tempo in una sorta di prigione. Un giorno, un gruppo di uomini armati a bordo di elicotteri, definiti \"draghi\" dai cittadini, assalta il villaggio alla ricerca di Yuru, uccidendo tutti gli altri. Il ragazzo cerca sua sorella, trovando un cadavere, mentre la persona che l'ha uccisa afferma di essere la vera sorella gemella di Yuru. Fuggito grazie all'aiuto di Dera, un estraneo spesso in visita al villaggio, Yuru scoprirà lentamente la verità nascosta dietro a quanto accaduto.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ยมลแห่งยมโลก",
+            "overview": "ยูรุและอาซะ น้องสาวฝาแฝด ต้องเผชิญหน้ากับชะตากรรมในโลกแห่งยมลที่เต็มไปด้วยปริศนาและพลังเหนือธรรมชาติ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Цуґаї потойбіччя",
+            "overview": "Мирне життя Юру в гірському селі раптово руйнується через жорстокий напад загадкових ворогів. У хаосі він відкриває в собі силу керувати могутніми парними духами – цуґаями. Та чи вистачить їх допомоги для того, щоб перемогти нападників й розкрити їхню таємницю? Адже одна з нападниць представилася, як його сестра.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Yomi no Tsugai",
+            "overview": "Dağların derinliklerinde küçük bir köyde yaşayan genç bir avcı olan Yuru, yabani hayvanları avlıyor ve ikiz kız kardeşi Asa ile mütevazı bir hayat sürüyor. Huzurlu hayatları, bir ejderhanın kükremesinin gökyüzünde yankılanmasıyla paramparça olur. Köylerinde hangi sırlar gizleniyor? Onları nasıl bir kader bekliyor? Heyecan verici Daemon savaşları gizemli ve doğaüstü olayları iç içe geçirirken nefes kesici mistik bir fantaziye girin.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Daemons of the Shadow Realm",
+            "overview": "Yuru, un tânăr vânător, trăiește într-un sat mic din adâncul munților, vânând vânat sălbatic și ducând o viață modestă alături de Asa, sora sa geamănă mai mică.\n\nViețile lor pașnice sunt spulberate atunci când răgetul unui dragon răsună pe cer. Ce secrete se ascund în satul lor? Ce soartă îi așteaptă?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "La parella de l'inframon",
+            "overview": "En un poble aïllat de la resta del món, van néixer dos bessons, separats pel dia i la nit. Anys més tard, mentre el germà gran, en Yuru, s'ha convertit en caçador d'animals, la seva germana petita Asa ha estat tancada en una gàbia, amb l'ordre d'acomplir una tasca especial que nomes li permet contactar amb uns quants elegits.\n\nPerò, un dia, l'arribada d' una dona misteriosa farà capgirar el món de tranquil·litat, on en Yuru havia viscut fins llavors.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "دیمون‌های قلمرو سایه‌ها",
+            "overview": "یورو، یک شکارچی جوان، در روستایی کوچک در اعماق کوهستان زندگی می‌کند، به شکار حیوانات وحشی می‌رود و زندگی ساده‌ای را با آسا، خواهر دوقلوی کوچکترش، می‌گذراند. زندگی آرام آنها زمانی از هم می‌پاشد که غرش اژدهایی در آسمان می‌پیچد. چه اسراری در روستای آنها نهفته است؟ چه سرنوشتی در انتظار آنهاست؟",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Kontraduety z zaświatów",
+            "overview": "Młody myśliwy Yuru i jego siostra bliźniaczka Asa prowadzą spokojne życie w górskiej wiosce. Aż pewnego dnia ich spokój burzy „smoczy ryk”.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qc30hdrxHQgN5wiopU4bkRZow5L.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6bgpCe46hXWN8hloDTQA6BhsSSU.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1081,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aSnG7CDiVUkxhngsq6cL6baLuHH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nUZECCEQUCtu1WKW1Gll9Ba8V2J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kHaCs4DYQF8UN579JDZrZorl7Hr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1396,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4FKERTNQ28ksSKHa1Eirh7mNzAQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2480
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6wayoEXulzXLMshXzkZtsg8SS03.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vDsJE62o4kwkDbx5We56bS2WhdB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2MMszt2vkW8RqsYtxgG6QWhfb31.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tQcyZLsF99KbovxvC4cG8eJoQCm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.131,
+          "height": 563,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8L02fXPbArpZWXWlRtnhfaZOufy.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 6.152,
+          "height": 702,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4mKM3eSTRNdz5ySFtSGkclJdHHE.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vIE1llfr1lcmzlsV4xn8vhgtlQN.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/83po91QTmpuQIsMOFvh5uGa8oHY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nEdHDUhaC80lIFh1WWvi1KYtcfL.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i4t9z7QDNPJjg59vJunCHdh0mj2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x9tqZfZLzu6T6q7wuySI8k7Qytf.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e00Wytzi2eezxrNUIW1NHYkbwAu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yZHDcislW37kwploZ6EFi80ytHG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1xFmN7Svkve5cBDwd0TLVMXPXiz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pQkVkfDVr4Cg4HNKODaMbZN4Hhx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1024
+        }
+      ]
+    }
+  }
+}

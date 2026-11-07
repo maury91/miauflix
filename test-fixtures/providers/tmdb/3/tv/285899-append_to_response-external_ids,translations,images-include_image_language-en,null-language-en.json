@@ -1,0 +1,487 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15150",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"726c68cb91f5913b7d47232944cfec38\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/wpNi39uaat5A1VhaVpdcQlKuMB5.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-03",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://daiseijo-anime.com",
+    "id": 285899,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-31",
+    "last_episode_to_air": {
+      "id": 7904340,
+      "name": "Calamitous Monsters",
+      "overview": "Fia meets Charlotte, a saint who needs a little boost to reach her potential.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-10-31",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 285899,
+      "still_path": "/an713lUWXoZCMg3LMAX34yF07Az.jpg"
+    },
+    "name": "A Tale of the Secret Saint",
+    "next_episode_to_air": {
+      "id": 7904341,
+      "name": "A Plan to Capture the Black King",
+      "overview": "Fia attends a meeting of captains. Meanwhile, Zavilia is hatching plans of his own.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-07",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 285899,
+      "still_path": "/ge04YFTDskpJPe09sJ4ZisjKXhM.jpg"
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 13,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "転生した大聖女は、聖女であることをひた隠す",
+    "overview": "Fia always dreamed of being a great knight, despite her lack of talent as a swordswoman. Then, a brush with death in battle awakens memories of her past life as the legendary Saint who defeated the Demon King. Her powers return, but so do the enemies who killed her once before. Fia vows to conceal her true identity to survive. But how can a knight resist using her powers to help those in need?",
+    "popularity": 8.226,
+    "poster_path": "/1ETsQwBbwtaPN9SeczbQzg2mo0n.jpg",
+    "production_companies": [
+      {
+        "id": 142186,
+        "logo_path": "/bdXTOuU7PdsDtQngyM7vb47zePs.png",
+        "name": "Hakuhodo DY Music & Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 189817,
+        "logo_path": "/6tWMDo6hsbmvO5sorsXRw0qQQRO.png",
+        "name": "Earth Star Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 97940,
+        "logo_path": "/kOF6C4l0WZNqRjUjfgKKegx3sA3.png",
+        "name": "BBB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 181285,
+        "logo_path": "/xHaPH1Yp50iEH7HOEwhxKTYRC6w.png",
+        "name": "Bushiroad Move",
+        "origin_country": "JP"
+      },
+      {
+        "id": 294680,
+        "logo_path": "/a8L9J5Fu8vYx790FRifrg1b3c20.png",
+        "name": "Sanyo Bussan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3466,
+        "logo_path": "/lmCg0zarmM52wrmsZRUY0QlPKLh.png",
+        "name": "movic",
+        "origin_country": "JP"
+      },
+      {
+        "id": 91520,
+        "logo_path": "/wdcFLdFVOPEm3uEp6Hb9OXgi5Zd.png",
+        "name": "STUDIO MAUSU",
+        "origin_country": "JP"
+      },
+      {
+        "id": 210007,
+        "logo_path": null,
+        "name": "JIN",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6681,
+        "logo_path": "/s4RElEnQyM2VrHZCQ3jYemPdxML.png",
+        "name": "THE KLOCKWORX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 106076,
+        "logo_path": "/5FHxgxvhqNC6aOVce3X9T2Wz426.png",
+        "name": "FelixFilm",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-03",
+        "episode_count": 13,
+        "id": 445389,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/1ETsQwBbwtaPN9SeczbQzg2mo0n.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7,
+    "vote_count": 4,
+    "external_ids": {
+      "imdb_id": "tt38939893",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 461059,
+      "tvrage_id": null,
+      "wikidata_id": "Q133075860",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "daiseijo_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tensei shita Daiseijo wa, Seijo de Aru Koto wo Hitakakusu",
+            "overview": "Fia, nacida en una familia de caballeros, sueña con seguir su legado. Sin embargo, tras un encuentro con la muerte, recuerda su vida pasada como una Santa con magia curativa y protectora. Aunque sabe que revelar sus poderes podría ponerla en peligro, le resulta difícil ocultarlos cuando pueden ser de gran ayuda.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "A Tale of the Secret Saint",
+            "overview": "Nascida em uma longa linhagem de cavaleiros, Fia está determinada a também se tornar uma cavaleira, assim como todos os seus irmãos. Mas um encontro com a morte desperta memórias de sua vida passada como uma Santa, uma mulher que exerce magia rara e poderosa de cura e proteção, junto com a habilidade de ela mesma usar essa magia! O lado ruim é que Fia também se lembra da morte prematura de sua vida passada e do perigo que ela correrá se alguém descobrir quem ela realmente é. Ela jura permanecer em seu caminho de cavalaria e manter seus poderes em segredo para sempre! Mas como ela pode resistir a usar seus novos poderes quando eles são tão úteis?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "転生した大聖女は、聖女であることをひた隠す",
+            "overview": "「剣の才能がない」と言われながらも騎士を目指す少女・フィーア。死にかけた彼女が思い出したのは、なんと規格外のチート能力を持つ「大聖女」としての前世で!?大聖女として騎士とともに戦い、最後に魔王の右腕によって無残に殺された300年前の過去だった――記憶を思い出したことで、「大聖女」の力も蘇ったフィーアだったが、前世で魔王の右腕から「聖女として生まれ変わったら殺す」と脅されたことを思い出し、その力を隠しながら騎士として生きていくことを決意する。しかし傷ついている人を見たら放っておけないフィーアは、度々遭遇する事件で頻繁に力を使ってしまう。果たして聖女であることをひた隠し続けることができるのか…!?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "A Tale of the Secret Saint",
+            "overview": "Obwohl Fia kein Talent mit dem Schwert besitzt, träumt sie davon, eine große Ritterin zu werden. Als sie nur knapp dem Tod entrinnt, kehren ihre Erinnerungen an ihr früheres Leben als Heilige, welche den Dämonenkönig tötete, zurück. Doch zusammen mit ihrer Macht erwachen auch ihre einstigen Feinde zu neuem Leben. Um zu überleben, verbigt sie ihre Kräfte. Aber erlaubt das ihre Ritterehre?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "A Tale of the Secret Saint",
+            "overview": "Fia always dreamed of being a great knight, despite her lack of talent as a swordswoman. Then, a brush with death in battle awakens memories of her past life as the legendary Saint who defeated the Demon King. Her powers return, but so do the enemies who killed her once before. Fia vows to conceal her true identity to survive. But how can a knight resist using her powers to help those in need?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "轉生後的大聖女，極力隱瞞聖女的身分",
+            "overview": "儘管被人說「沒有劍術的才華」，少女菲亞依然立志成為騎士。就在瀕死之際，她突然回想起了前世的記憶。而她的前世，竟是擁有超乎常人力量的「大聖女」！？\n\n那是距今300年前的過往──身為大聖女的她曾與騎士們並肩作戰，最後卻慘遭魔王的左右手殘忍殺害。\n\n隨著前世記憶甦醒，菲亞身為「大聖女」的力量也隨之復甦。然而，她同時想起前世曾遭魔王的左右手威脅：「要是轉世後又成為聖女，我就殺了妳。」\n\n因此，菲亞下定決心隱藏自己的力量，以一名騎士的身分活下去。\n\n然而，只要看見有人受傷，菲亞就無法坐視不管，更在接連遭遇的各種事件中，一次又一次使出聖女的力量。\n\n她究竟能否一直隱瞞自己身為聖女的祕密呢……！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "A Tale of the Secret Saint",
+            "overview": "Fia a toujours rêvé de devenir une grande chevalière, même si elle ne manie pas très bien l'épée. Mais tandis qu'elle est à l'article de la mort, un combat réveille en elle des souvenirs de sa vie antérieure : celle de la sainte légendaire qui avait vaincu le roi des démons. Ses pouvoirs lui reviennent, mais ses anciens ennemis refont également surface.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "转生后的大圣女，极力隐瞒圣女的身份",
+            "overview": "被认为「没有使剑的才能」的骑士家的少女·菲亚。她在濒死之际，回想起自己前世是拥有规格外能力的「大圣女」，并且使最强的魔物·黑龙成为她的从魔。但是回想起在前世魔王的右腕曾威胁她说「若是依旧作为圣女转生那我依旧会继续杀你」，菲亚决定一边隐藏大圣女的力量一边以骑士为目标，可是却引发了众多骚动！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "전생한 대성녀는 성녀임을 숨긴다",
+            "overview": "검에 재능이 없다는 말을 들으면서도 기사를 꿈꾸는 소녀, 피아. 죽음의 문턱에서 그녀가 떠올린 것은 놀랍게도 전생에 상상을 초월하는 능력을 지닌 ‘대성녀’였다는 기억이었다! 300년 전, 피아는 대성녀로서 기사들과 함께 싸웠지만 마왕의 오른팔에게 처참하게 살해당한다. 피아는 기억을 되찾으면서 대성녀의 힘도 되살아나지만 전생에 마왕의 오른팔에게 “성녀로 다시 태어나면 죽이겠다”는 협박을 받았던 기억을 떠올리고는 힘을 숨기고 기사로 살아가기로 결심한다. 하지만 다친 사람을 보면 그냥 지나치지 못하는 피아는 사건에 휘말릴 때마다 자꾸만 성녀의 힘을 쓰고 만다. 과연 피아는 성녀라는 정체를 끝까지 숨길 수 있을 것인가",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Переродившаяся великая святая скрывает, что она святая",
+            "overview": "Фиа выросла в семье рыцарей и с детства мечтала пойти по их стопам. К сожалению, среди родных она оказалась самой неумелой.\n\nВ день решающего испытания вместо того, чтобы сразиться с мелким демоном, она столкнулась с драконом. Получив тяжёлое ранение, Фиа внезапно вспомнила свою прошлую жизнь. В той жизни она была великой Святой, которая одолела самого Короля демонов, но её сила принесла ей страдания и гибель.\n\nТеперь, когда магия из прошлой жизни пробудилась в ней снова, Фиа оказалась перед выбором. Она поклялась скрывать свою сущность и жить как обычный рыцарь. Но как удержаться от того, чтобы помогать другим, когда у тебя в руках такая сила?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tensei shita Daiseijo wa, Seijo de Aru Koto wo Hitakakusu",
+            "overview": "Fia siempre soñó con ser una gran caballero, a pesar de su falta de talento como espadachina. Un encuentro cercano con la muerte en batalla despierta recuerdos de su pasado como la legendaria Santa que derrotó al Rey Demonio. Sus poderes regresan, pero también los enemigos que la mataron una vez. Fia jura ocultar su verdadera identidad para sobrevivir. Pero, ¿cómo puede una caballero resistirse a usar sus poderes para ayudar a los necesitados?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สตรีศักดิ์สิทธิ์เกิดใหม่ แต่ไม่ขอบอกใครนะคะ",
+            "overview": "เฟีย บุตรสาวตระกูลนักรบผู้ใฝ่ฝันจะเป็นอัศวิน เธอได้รับความทรงจำในชาติก่อนกลับมาตอนกำลังจะเสียชีวิต แท้จริงแล้วเธอคือ “มหาสตรีศักดิ์สิทธิ์” ผู้กลับมาเกิดใหม่!\n\nเอ๊ะ นี่มัน “เวทมนตร์ที่สาบสูญ” ที่ตอนนี้กลายเป็นนิทานปรัมปราไปแล้วไม่ใช่เหรอ!?\n\nแถมยังได้มังกรดำ สัตว์อสูรสุดแกร่งมาเป็นบริวารอีกต่างหาก!?\n\nแต่มือขวาของจอมมารในชาติก่อนขู่เอาไว้ว่า “ถ้าชาติหน้าเกิดใหม่เป็นสตรีศักดิ์สิทธิ์อีก ข้าจะมาฆ่าเจ้า”\n\nแปลว่าถ้าใช้พลังนี้ ทุกคนก็จะรู้ว่าฉันเป็นสตรีศักดิ์สิทธิ์แล้วมีคนตามมาฆ่างั้นเหรอ\n\n...ถ้าอย่างนั้น ฉันก็ขอปกปิดตัวจริงและตั้งหน้าตั้งตาเป็นอัศวินอย่างที่ตั้งใจค่ะ!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chuyện Về Thánh Nữ Bí Mật",
+            "overview": "Fia luôn mơ trở thành một hiệp sĩ vĩ đại, dù chẳng có tài năng kiếm thuật. Rồi một lần cận kề cái chết trên chiến trường đã đánh thức ký ức kiếp trước của cô — vị Thánh huyền thoại đã đánh bại Ma Vương. Sức mạnh của cô trở lại, nhưng những kẻ thù từng giết cô cũng quay lại. Fia thề che giấu thân phận thật để sống sót. Nhưng làm sao một hiệp sĩ có thể cưỡng lại việc dùng sức mạnh để giúp người gặp nạn?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Fia droomde er altijd van een machtige ridder te worden, ondanks haar gebrek aan talent als zwaardvechter. Een bijna-doodervaring in de strijd wekt herinneringen op aan haar vorige leven als de legendarische heilige die de Demonenkoning versloeg. Haar krachten keren terug, maar ook de vijanden die haar ooit hebben gedood. Fia zweert haar ware identiteit geheim te houden om te overleven. Maar hoe kan een ridder de verleiding weerstaan ​​om haar krachten te gebruiken om mensen in nood te helpen?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "轉生後的大聖女，極力隱瞞聖女的身分",
+            "overview": "儘管被人說「沒有劍術的才華」，少女菲亞依然立志成為騎士。就在瀕死之際，她突然回想起了前世的記憶。而她的前世，竟是擁有超乎常人力量的「大聖女」！？\n\n那是距今 300 年前的過往──身為大聖女的她曾與騎士們並肩作戰，最後卻慘遭魔王的左右手殘忍殺害。\n\n隨著前世記憶甦醒，菲亞身為「大聖女」的力量也隨之復甦。然而，她同時想起前世曾遭魔王的左右手威脅：「要是轉世後又成為聖女，我就殺了妳。」\n\n因此，菲亞下定決心隱藏自己的力量，以一名騎士的身分活下去。\n\n然而，只要看見有人受傷，菲亞就無法坐視不管，更在接連遭遇的各種事件中，一次又一次使出聖女的力量。\n\n她究竟能否一直隱瞞自己身為聖女的祕密呢……！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iix0Kmg8OckKQesmu8z7piYNeMS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wpNi39uaat5A1VhaVpdcQlKuMB5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1918
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rHfhnBNOZZItOasjfbXhUaDrWPS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.963,
+          "height": 405,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uAhOxnSEwued04UICWHncQW1DcZ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2705,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5qCJ5DkcrqmPetSuP2zjqvzhMmh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1803
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2705,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nwDfjDTFwdg9QFHwBJSUZLKEIfy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1803
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2705,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fRBvpWOI827BF4dTzSBpU2NIJmw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1803
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1ETsQwBbwtaPN9SeczbQzg2mo0n.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1GVr3SPCgOveV2ay1CcFtSphf4m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

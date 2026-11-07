@@ -1,0 +1,1392 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16300",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"575844d3c5b325384a969bcbf591bce3\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ulm1ex4JFYJByyaPyqTr47MFyEQ.jpg",
+    "created_by": [
+      {
+        "id": 66633,
+        "credit_id": "64466dc8b3f6f515559fb439",
+        "name": "Vince Gilligan",
+        "original_name": "Vince Gilligan",
+        "gender": 2,
+        "profile_path": "/wJIxATESjzsjSgvRhVavOmdamXc.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2025-11-06",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://tv.apple.com/show/umc.cmc.37axgovs2yozlyh3c2cmwzlza",
+    "id": 225171,
+    "in_production": true,
+    "languages": [
+      "en",
+      "fr",
+      "qu",
+      "es"
+    ],
+    "last_air_date": "2025-12-23",
+    "last_episode_to_air": {
+      "id": 5964855,
+      "name": "La Chica o El Mundo",
+      "overview": "Manousos arrives in Albuquerque and complications ensue. Carol visits the last best place on Earth.",
+      "vote_average": 7.733,
+      "vote_count": 101,
+      "air_date": "2025-12-23",
+      "episode_number": 9,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 58,
+      "season_number": 1,
+      "show_id": 225171,
+      "still_path": "/gykreh1ZKPlQDucTvrNOYf7Ccxp.jpg"
+    },
+    "name": "Pluribus",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2552,
+        "logo_path": "/bngHRFi794mnMq34gfVcm9nDxN1.png",
+        "name": "Apple TV",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 9,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Pluribus",
+    "overview": "The most miserable person on Earth must save the world from happiness.",
+    "popularity": 18.4249,
+    "poster_path": "/z7Nga7Q9IGFWs5OEduY2gGFxnX3.jpg",
+    "production_companies": [
+      {
+        "id": 11073,
+        "logo_path": "/wHs44fktdoj6c378ZbSWfzKsM2Z.png",
+        "name": "Sony Pictures Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 33742,
+        "logo_path": "/2jdh2sEa0R6y6uT0F7g0IgA2WO8.png",
+        "name": "High Bridge Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 269286,
+        "logo_path": "/64CH0gzLH0KltueKDHiW00Y2BCR.png",
+        "name": "Bristol Circle Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-11-06",
+        "episode_count": 9,
+        "id": 338336,
+        "name": "Season 1",
+        "overview": "Albuquerque author Carol Sturka is one of only 13 people in the world immune to the effects of the \"Joining\", an event in which an extraterrestrial virus transformed the rest of humanity into a peaceful and content hive mind known as the \"Others\". The hive mind happily accommodates the wishes of those who remain unaffected, but admits that it will ultimately seek to assimilate them when it learns how to do so. Carol is adamantly against their efforts as she searches for a way to reverse the Joining.",
+        "poster_path": "/7RcyNQG2qBD5BqPfcpRYKP2ElYH.jpg",
+        "season_number": 1,
+        "vote_average": 7.7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "French",
+        "iso_639_1": "fr",
+        "name": "Français"
+      },
+      {
+        "english_name": "Quechua",
+        "iso_639_1": "qu",
+        "name": ""
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Happiness is a state of mind.",
+    "type": "Scripted",
+    "vote_average": 7.921,
+    "vote_count": 1191,
+    "external_ids": {
+      "imdb_id": "tt22202452",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 436457,
+      "tvrage_id": null,
+      "wikidata_id": "Q122155720",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": ""
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "The most miserable person on Earth must save the world from happiness.",
+            "homepage": "",
+            "tagline": "Happiness is a state of mind."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Alors que le bonheur menace la Terre, tous les espoirs reposent sur le plus malheureux des humains.",
+            "homepage": "",
+            "tagline": "Le bonheur est un état d’esprit."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "天文学家发现神秘信号后，一种外星病毒迅速感染人类，将绝大多数人连接成共享意识的“联合体”。小说家卡萝尔·斯图尔卡却对病毒免疫，成为少数保持独立意识的人，并试图阻止全人类被“幸福”彻底同化。",
+            "homepage": "",
+            "tagline": "幸福，存乎一心。"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Ausgerechnet der unglücklichste Mensch auf Erden soll die Welt vor dem Glück retten.",
+            "homepage": "",
+            "tagline": "Glücklichsein ist eine Frage der Einstellung."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Одна из многих",
+            "overview": "Самый несчастный человек на Земле должен спасти мир от счастья.",
+            "homepage": "",
+            "tagline": "Счастье — это состояние души."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "",
+            "overview": "האדם האומלל בעולם חייב להציל את העולם מאושר.",
+            "homepage": "",
+            "tagline": "אושר הוא הלך רוח."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Pluribus draait om de meest ellendige persoon op Aarde die op een bizarre manier de wereld moet redden van geluk. De serie wordt beschreven als origineel, een tikje donker en vol onverwachte wendingen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De ongelukkigste persoon op aarde moet de wereld beschermen tegen geluk.",
+            "homepage": "",
+            "tagline": "Geluk is een gemoedstoestand."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Jordens mest miserabla person måste rädda världen från lycka.",
+            "homepage": "",
+            "tagline": "Lycka är ett sinnestillstånd."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "A pessoa mais triste da Terra deve salvar o mundo da felicidade.",
+            "homepage": "",
+            "tagline": "Felicidade é um estado de espírito."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "眾生為一",
+            "overview": "地球上最悲慘的人要拯救世界免於快樂。",
+            "homepage": "",
+            "tagline": "快樂，講求的是心境。"
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "يلزم أتعس شخص على وجه \"الأرض\" إنقاذ العالم من السعادة.",
+            "homepage": "",
+            "tagline": "السعادة تنبع من العقل."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "يلزم أتعس شخص على وجه \"الأرض\" إنقاذ العالم من السعادة.",
+            "homepage": "",
+            "tagline": "السعادة تنبع من العقل."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Ten nejzkroušenější člověk pod sluncem musí zachránit svět před štěstím.",
+            "homepage": "",
+            "tagline": "Štěstí je stav mysli."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "萬中選一",
+            "overview": "地球上最痛苦的人必須拯救世界杜絕快樂。",
+            "homepage": "",
+            "tagline": "快樂，只是種心境。"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Den mest ulykkelige person på jorden må redde verden fra lykke.",
+            "homepage": "",
+            "tagline": "Lykke er en sindstilstand."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "地球上最悲惨的人必须拯救世界免于幸福。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Alors que le bonheur menace la Terre, tous les espoirs reposent sur le plus malheureux des humains.",
+            "homepage": "",
+            "tagline": "Le bonheur est un état d’esprit."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Maapallon kurjimman ihmisen pitää pelastaa maailma ilolta.",
+            "homepage": "",
+            "tagline": "Onnellisuus on mielentila."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ο πιο δυστυχισμένος άνθρωπος στη Γη πρέπει να σώσει τον κόσμο από την ευτυχία.",
+            "homepage": "",
+            "tagline": "Η ευτυχία είναι μια κατάσταση του μυαλού."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "A Föld legboldogtalanabb emberének meg kell mentenie a világot a boldogságtól.",
+            "homepage": "",
+            "tagline": "A boldogság egy lelkiállapot."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "प्लूरिबस",
+            "overview": "पृथ्वी के सबसे दुखी इंसान को दुनिया को ख़ुशी से बचाना होगा।",
+            "homepage": "",
+            "tagline": "ख़ुशी मन की एक अवस्था है।"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "La persona più disperata del pianeta deve salvare il mondo dalla felicità.",
+            "homepage": "",
+            "tagline": "La felicità è uno stato d’animo."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Orang paling menyedihkan di Bumi harus menyelamatkan dunia dari kebahagiaan.",
+            "homepage": "",
+            "tagline": "Kebahagiaan adalah sebuah kondisi pikiran."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "プルリブス",
+            "overview": "地球上で最も惨めな人物が、幸福から世界を救わなくてはならない。",
+            "homepage": "",
+            "tagline": "幸せは、心の状態。"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "'플루리부스: 행복의 시대' - Pluribus",
+            "overview": "세상에서 가장 불행한 사람이 세상을 '행복'으로부터 구해야 한다.",
+            "homepage": "",
+            "tagline": "행복은 마음먹기 나름."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Den mest ulykkelige personen på jorden må redde verden fra lykke.",
+            "homepage": "",
+            "tagline": "Lykke er en sinnstilstand."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Jedyna",
+            "overview": "Najbardziej nieszczęśliwa osoba na Ziemi musi uratować świat przed szczęściem.",
+            "homepage": "",
+            "tagline": "Szczęście to stan umysłu."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "Najutrápenejší človek na Zemi musí zachrániť svet pred šťastím.",
+            "homepage": "",
+            "tagline": "Šťastie je stav mysle."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "A pessoa mais triste do mundo tem de salvar o mundo da felicidade.",
+            "homepage": "",
+            "tagline": "A felicidade é um estado de espírito."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "La persona más desgraciada de la Tierra tiene que salvar al mundo de la felicidad.",
+            "homepage": "",
+            "tagline": "La felicidad es un estado mental."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "มนุษย์ที่ทุกข์ที่สุดในปฐพีต้องกอบกู้โลกให้พ้นจากความสุข",
+            "homepage": "",
+            "tagline": "เมื่อความสุขคือสภาวะเดียวของจิตใจ"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "La persona más infeliz del planeta debe salvar al mundo de la felicidad.",
+            "homepage": "",
+            "tagline": "La felicidad es un estado mental."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Kẻ Lạc Loài - Pluribus",
+            "overview": "Người bất hạnh nhất trên đời phải cứu thế giới khỏi ác mộng hạnh phúc.",
+            "homepage": "",
+            "tagline": "Hạnh phúc chỉ là một trạng thái của tâm trí."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Dünyanın en perişan insanının dünyayı mutluluktan kurtarması gerekir.",
+            "homepage": "",
+            "tagline": "Mutluluk bir ruh hâlidir."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Єдина",
+            "overview": "Найнещасніша людина на Землі мусить уберегти світ від щастя.",
+            "homepage": "",
+            "tagline": "Щастя — це стан душі."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Плурибус",
+            "overview": "Главната героиня Рей Сийхорн (в ролята на „Керъл“), която в един свят на масово изкуствено щастие остава имунизирана — тя изпитва болка, тъга, неудовлетворение, докато всички други изглежда влизат в някакъв вид „маска­радно щастие“.\n\nТя бива въвлечена в мисия да разбере защо е различна, какво означава тази масова зараза на щастието и каква е нейната роля в целия този глобален феномен.\n\nСериалът поставя следния въпрос: Какво става, когато щастието не е свобода, а капан?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "پلوریبوس",
+            "overview": "ویروسی پخش می‌‌شود که تمام مردم دنیا به یک خوش‌بینی احمقانه دچار می‌شوند. جز یک نفر، زنی که بدبخت‌ترین فرد در جهان محسوب میشود چون واقعیت را میبیند حالا بدبخت‌ترین انسان روی زمین باید دنیا را از خوشبختی نجات دهد!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Najnesrečnejši človek na Zemlji mora rešiti svet pred srečo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "Cea mai nefericită persoană de pe Pământ trebuie să salveze lumea de fericire.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "მრავალი",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Pluribus",
+            "overview": "Sekite istoriją apie nelaimingiausią žmogų Žemėje, kuriam tenka gelbėti pasaulį nuo pernelyg didelės laimės. Ši intriguojanti serija atskleidžia tamsiąją žmogaus prigimties pusę ir netikėtas kovas, kylančias siekiant išlaikyti pusiausvyrą tarp liūdesio ir džiaugsmo. Kas slypi už laimės kaukės ir kokias aukas tenka atnešti vardan didesnio tikslo? Giliai sukrečiantis pasakojimas, pilnas paradoksų ir moralinių dilemų, nepaliks abejingų.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Плурибус",
+            "overview": "Најнесрећнија особа на Земљи мора да спасе свет од среће.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "",
+            "overview": "Pärast salapärast maavälist sündmust liitub peaaegu kogu inimkond ühtseks kollektiivseks ühismõistuseks, kaotades oma individuaalsuse. Rhea Seehorn kehastab naist, kes on selle nähtuse suhtes immuunne ja peab üksi navigeerima uues, hirmutavalt rahulikus maailmas. Sari uurib vaba tahte olemust ja seda, kas sunnitud ühtsus on utoopia või düstoopia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "پلیوریبس",
+            "overview": "زمین پر موجود سب سے زیادہ ناخوش انسان کو خوشی کے ذریعے دنیا کو بچانا ہوگا۔",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ulm1ex4JFYJByyaPyqTr47MFyEQ.jpg",
+          "vote_average": 5.36,
+          "vote_count": 43,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vNCNUxNHHgP0WsA19hxztUsG3yG.jpg",
+          "vote_average": 5.148,
+          "vote_count": 47,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ieZJod5N5HgOT2JdJBnpJ0zyByT.jpg",
+          "vote_average": 4.3,
+          "vote_count": 25,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2138,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6mdFEIQRzk55wUyM32x3sUTLHek.jpg",
+          "vote_average": 3.954,
+          "vote_count": 11,
+          "width": 3800
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8Y6A0bjCi1ZVAYQzf0LlEmckv5O.jpg",
+          "vote_average": 3.666,
+          "vote_count": 24,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/shlUty2yifMIZhWix90h7kh7qEX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6jrPYmqByh5Dz3xN1I6wxcFEIl3.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vTJQOQKGWiiEewKazqaeuDw1fSI.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vgATOPHffSaXUqNjtMOHI7CrhV5.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/glQnYSwgRdvjtpkQ1u34VaPLxmZ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dfqcuKhJWrqpAyt8BySKyt91upK.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u4ZosxsoaCgGTax0wIffYt5iQ8K.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7L1nKYc5RjMWQGDiOwnEjxOLO9.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h0mGPd4RJbcl1rtlMh6aBzvWwSY.jpg",
+          "vote_average": 1.272,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aamhCFlfdrCSU4stSBdqa5wqW1V.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uOdLX4JNJtWHEGtOGz37K7HBrTb.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qZNZUVqN4jQlO4MqGVoWNdPSxfy.jpg",
+          "vote_average": 1.154,
+          "vote_count": 13,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jZ0JgN8tW68WYge1LMvzFa4i869.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b4ZzYXqZoWAg0jsuf7eq2tMsZCh.jpg",
+          "vote_average": 0.904,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rp70TnupyAnlB8xgzFWsZaxVnQt.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mhGKvDWVoPkaaubsVkvG4o4nRF5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8bMLNezOQpszC9k0r30KyvxMB0u.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tZI5rFvk5r0jJRAwEaRCQ5yz2hs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cOO9QThvf5nWRczWfN7Ym1Ft1wL.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kj0KrqHMlQdUXyUeDszjCmrmJNW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v54jhUNuUWTocixzfIWLpDDHT4K.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2025,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sigfoE4hErBnTQZa2FKo1OV4ogO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oK9dSdjpl2fYoUTUbYmYxEvw8GT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1728,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5Z7lpxyvQ5eMO7Q1opNc5SpwzzC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3072
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.826,
+          "height": 1257,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qUMaG3ZB32GXtXMMjz7pkxehz26.png",
+          "vote_average": 6.482,
+          "vote_count": 27,
+          "width": 7323
+        },
+        {
+          "aspect_ratio": 5.826,
+          "height": 1257,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/reZsBkM7ox8GCTslDVXwZTuNBEs.png",
+          "vote_average": 5.5,
+          "vote_count": 20,
+          "width": 7323
+        },
+        {
+          "aspect_ratio": 5.826,
+          "height": 1257,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/84Q60GwI2BihgtiYXnoRorSU4ez.png",
+          "vote_average": 5.456,
+          "vote_count": 23,
+          "width": 7323
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z7Nga7Q9IGFWs5OEduY2gGFxnX3.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/os1oQkTMZXiFP7KdEv3o03eshGC.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/56fFUYEUE184n3Fa3Q2roFExJto.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gfbOrfW5VRqBJGvsSZNpGRwYC7i.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nrM2xFUfKJJEmZzd5d7kohT2G0C.jpg",
+          "vote_average": 5.25,
+          "vote_count": 18,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5TEwh75PYCDQaOXngknP62rpVrg.jpg",
+          "vote_average": 4.412,
+          "vote_count": 17,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/df1zaW3CtByK8vdG6A69VlkD7Dq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m3t5wNsctbPRejOn5vskdOoyKKP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/FyGssOc29BK4GgJ83DadWnVcrk.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tG7HFLaP3bNiBkgJIbGdg87VhEw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/18KCahMRBm9O780IXd89MMAP1jX.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2cBVeJZBQq5hggP2xaRR0OE51GS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fVEl5tTMpIAa0wTpSf4a6HhteD3.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g6y5N9aTnvgrI092oflyoK82IGj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/neI2aWJHDbALOBLXM0QjaVJSBN2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/VUUe9OT2yEMUFSIULCLXNQcOhy.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uQga8GiPT3qLxHPxfVvj9gb8WdY.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5uXEP28uEY4cbXfk69VbQ0jMhNh.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cNqolorVU7yvJUBH41FiYgzwtAD.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hcNVPDV02aYHgp7OUSIxpQ9m7k1.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rBonU94hgKhEKgJggGLFe1KKwKt.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9glLfb5s0ZSxvioHvXsQVgBwmu7.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rfILqO261qnYUEIrqWY4P9KpMjz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z2Badb3ykpO41VHtmxcChh80yWn.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2qpliomuQnzmY1fqUQAoLzXOhrQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7P1WfIJmUEOtvLy2PM7N6LHYzBF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iE3QlHHXt0I0LiCr0vnOoAWEVwS.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1785,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/DrY8abbwHpbPbHhTPLX6NeKeld.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1190
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kKVTq23J9TL9lhydU89PkxHVzd5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7gjWVglueBuvfeMSdY2tXhLZRCW.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wiYaoyxzvYpDPJPjGwH5ziHWxpS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1RXCI1Q08qTOZV0qV6GHN1igQh5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hqksmZSc0bAoHltI6oQCBGLRRL1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/okPY7by75vX14cMGFvYW9do6Pov.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.665,
+          "height": 851,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/knyTsp40M0ltSXRzsPSncoGLA8P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 566
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d2bzbEuA7Rius0cp3TMWRosMZ9M.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

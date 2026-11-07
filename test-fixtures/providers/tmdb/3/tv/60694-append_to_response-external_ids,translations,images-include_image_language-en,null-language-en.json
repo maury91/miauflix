@@ -1,0 +1,1770 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7771",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"2ddbc576c8f1d8721d7ca3cf8083c334\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/q31EEBycbOyX7GGJP4GTPI5WJRO.jpg",
+    "created_by": [
+      {
+        "id": 84292,
+        "credit_id": "58372b3892514131a4014a25",
+        "name": "John Oliver",
+        "original_name": "John Oliver",
+        "gender": 2,
+        "profile_path": "/wI7LRInWUT3RgCByYx69wRMqgsy.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2014-04-27",
+    "genres": [
+      {
+        "id": 10767,
+        "name": "Talk"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10763,
+        "name": "News"
+      }
+    ],
+    "homepage": "https://www.hbo.com/content/last-week-tonight-with-john-oliver",
+    "id": 60694,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7876765,
+      "name": "November 1, 2026: Midterm Elections",
+      "overview": "Ahead of this week's midterm elections, John Oliver discusses why things aren't looking great for Republicans, how they’re desperately trying to get ahead, and why Hamilton was a mistake. You heard us, Lin-Manuel. You've done more harm than good.",
+      "vote_average": 6.2,
+      "vote_count": 10,
+      "air_date": "2026-11-01",
+      "episode_number": 28,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 40,
+      "season_number": 13,
+      "show_id": 60694,
+      "still_path": "/ifcF8wgFC4qQxGINjyiD3pKEWBT.jpg"
+    },
+    "name": "Last Week Tonight with John Oliver",
+    "next_episode_to_air": {
+      "id": 7876798,
+      "name": "November 8, 2026",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 29,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 13,
+      "show_id": 60694,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "HBO",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 380,
+    "number_of_seasons": 13,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Last Week Tonight with John Oliver",
+    "overview": "A half-hour satirical look at the week in news, politics and current events.",
+    "popularity": 72.2386,
+    "poster_path": "/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg",
+    "production_companies": [
+      {
+        "id": 86642,
+        "logo_path": null,
+        "name": "Sixteen String Jack Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 57685,
+        "logo_path": "/7B9nsj17Yux1t2H8DrdH8W4wXhm.png",
+        "name": "Avalon Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 118313,
+        "logo_path": null,
+        "name": "Partially Important Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 250968,
+        "logo_path": null,
+        "name": "Borchard Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 288377,
+        "logo_path": null,
+        "name": "Peyance Productions",
+        "origin_country": ""
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2014-04-27",
+        "episode_count": 65,
+        "id": 60628,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/qnhAjgrOEmUAEbV8wrzNyhGmv6k.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2014-04-27",
+        "episode_count": 24,
+        "id": 60357,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/vj4PLHMCxg9CE6rTARyg1mhaN6p.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2015-02-08",
+        "episode_count": 35,
+        "id": 64916,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/dfwrnvWvZdpAfijyqwH5A5b2VDK.jpg",
+        "season_number": 2,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "2016-02-14",
+        "episode_count": 30,
+        "id": 74585,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/yxK7XLtklKDnaXPBS1dgU0AZUAm.jpg",
+        "season_number": 3,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2017-02-12",
+        "episode_count": 30,
+        "id": 84980,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/w4qWtExs3QNACqxbdpKRBlG2OrO.jpg",
+        "season_number": 4,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2018-02-18",
+        "episode_count": 30,
+        "id": 98305,
+        "name": "Season 5",
+        "overview": "",
+        "poster_path": "/b8Ue9zNjnf9ve6Fh9RZj5K9V6pF.jpg",
+        "season_number": 5,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2019-02-17",
+        "episode_count": 30,
+        "id": 117561,
+        "name": "Season 6",
+        "overview": "",
+        "poster_path": "/9Of6LmkozQl06sVmG3m9uAevwDD.jpg",
+        "season_number": 6,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2020-02-16",
+        "episode_count": 30,
+        "id": 143179,
+        "name": "Season 7",
+        "overview": "",
+        "poster_path": "/hUpW9ZakeKpgIzvkck2T59RCHcH.jpg",
+        "season_number": 7,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2021-02-14",
+        "episode_count": 30,
+        "id": 176651,
+        "name": "Season 8",
+        "overview": "",
+        "poster_path": "/hT9ST8ZDZTi94QWfTuYL78Ud8w8.jpg",
+        "season_number": 8,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2022-02-20",
+        "episode_count": 30,
+        "id": 239432,
+        "name": "Season 9",
+        "overview": "",
+        "poster_path": "/ytLwqUBKsaBbf13rwMEeK4n5IxA.jpg",
+        "season_number": 9,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2023-02-19",
+        "episode_count": 21,
+        "id": 325146,
+        "name": "Season 10",
+        "overview": "",
+        "poster_path": "/ndgxQgxMFkQe6WDXqK3ATUz51vn.jpg",
+        "season_number": 10,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2024-02-18",
+        "episode_count": 30,
+        "id": 375206,
+        "name": "Season 11",
+        "overview": "",
+        "poster_path": "/AlMjWcbG2aOU8KoLpKkE94IcCbG.jpg",
+        "season_number": 11,
+        "vote_average": 7.2
+      },
+      {
+        "air_date": "2025-02-16",
+        "episode_count": 30,
+        "id": 439145,
+        "name": "Season 12",
+        "overview": "",
+        "poster_path": "/3S98f6J4T8wPOrpuefJrllv7PqK.jpg",
+        "season_number": 12,
+        "vote_average": 6
+      },
+      {
+        "air_date": "2026-02-15",
+        "episode_count": 30,
+        "id": 494774,
+        "name": "Season 13",
+        "overview": "",
+        "poster_path": "/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg",
+        "season_number": 13,
+        "vote_average": 4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Please hold.",
+    "type": "News",
+    "vote_average": 7.7,
+    "vote_count": 866,
+    "external_ids": {
+      "imdb_id": "tt3530232",
+      "freebase_mid": "/m/0_qfnqm",
+      "freebase_id": null,
+      "tvdb_id": 278518,
+      "tvrage_id": 40882,
+      "wikidata_id": "Q16735585",
+      "facebook_id": "LastWeekTonight",
+      "instagram_id": "lastweektonight",
+      "twitter_id": "LastWeekTonight"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "A half-hour satirical look at the week in news, politics and current events.",
+            "homepage": "",
+            "tagline": "Please hold."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "John Oliver tar sig en satirisk titt på den gångna veckans nyheter, politiska händelser och rubriker.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Шоуто на Джон Оливър",
+            "overview": "Един от най-забавните и свежи телевизионни лица в последните години, човекът, който спечели овациите на критиците и феновете по време на гостуването си в The Daily Show с Джон Стюарт, се появява по НВО с изцяло ново ток шоу. Той хвърля забавен поглед върху новините на седмицата, политическите и актуалните събития. За половин час Оливър предоставя собствения си поглед върху редица социални, политически и екзистенциални въпроси, които вълнуват Америка и света.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "События прошедшей недели с Джоном Оливером",
+            "overview": "Джон Оливер не только телеведущий, но и отличный комик, поэтому его еженедельное ток-шоу наполнено сатирой и звонким юмором. Последние новости, общественные и политические события — ничто не ускользает от его зоркого взгляда. Серьезные темы здесь соседствуют с юмористическими скетчами, а в гости частенько заходят звезды кино и телевидения.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "John Oliver-show az elmúlt hét híreiről",
+            "overview": "Az egyik legviccesebb és legüdítőbb személyiségek egyike John Oliver, már éppen ideje, hogy önálló műsort kapjon a képernyőn. A The Daily Show with Jon Stewart írója és vendégházigazdája zajos tetszésnyilvánítást kapott a kritikusoktól a rajongóktól és magától Stewarttól egyaránt. A népszerű angol komikus, színész és író most egy új talkshow-val jelentkezik az HBO mozicsatornán. Ebben az elmúlt hét legérdekesebb politikai, gazdasági, társadalmi stb. híreit kommentálja tabuk nélkül a maga sajátos stílusában.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Et aktuelt blik på ugens nyheder, politik og begivenheder. John Oliver giver sit unikke perspektiv og særlige syn på en række sociale, politiske eller eksistentielle problemer, USA står overfor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "John Oliver é o apresentador deste noticiário bem-humorado sobre os acontecimentos relevantes nos Estados Unidos e no mundo. Nada escapa dos comentários ácidos do comediante, que aborda questões políticas e fatos atuais de forma dinâmica e direta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Con su repaso semanal de las noticias, la política y los acontecimientos actuales, John Oliver ofrece su perspectiva única y distintiva voz a una serie de cuestiones sociales, políticas o existenciales a las que enfrentan Estados Unidos y el mundo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Last Week Tonight mit John Oliver",
+            "overview": "Halbstündiger satirischer Blick in die Politik der Woche und Einführung in komplexe politische Systeme.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Події минулого тижня з Джоном Олівером",
+            "overview": "Американське вечірнє ток-шоу і телепрограма новинної сатири, яку веде комік Джон Олівер.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "约翰·奥利弗上周今夜秀",
+            "overview": "约翰·奥利弗主持的时政讽刺脱口秀节目，以幽默犀利的视角审视美国及全球新闻、政治和社会议题，并通过深度专题揭示时事背后的复杂问题。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "השבוע שעבר עם ג'ון אוליבר",
+            "overview": "השבוע שעבר עם ג'ון אוליבר היא תוכנית לייט-נייט וסאטירה חדשותית אמריקאית, המשודרת בימי ראשון ברשת HBO מאז אפריל 2014 ומנחה אותה הקומיקאי הבריטי ג'ון אוליבר. היא מצולמת מול קהל חי בניו יורק.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "John Oliver: Čo týždeň dal a vzal",
+            "overview": "Polhodinový satirický pohľad na svet správ, politiky a aktuálnych udalostí v podaní Johna Olivera.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "L'ancien animateur et correspondant du Daily Show, John Oliver, apporte sa personnalité à cette émission hebdomadaire de satire sur l'actualité.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "上周今夜",
+            "overview": "美國晚間娛樂節目。主持人為約翰·奧利佛，自2014年4月27日起，在美國HBO頻道播出。每集長度為30分鐘，探討各項新聞主題，並加以嘲諷。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "John Oliver",
+            "overview": "Um olhar sobre as notícias, política e assuntos da atualidade. John Oliver oferece-nos a sua perspetiva singular e dá voz a uma série de questões sociais, políticas ou existenciais presentes na América e no mundo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "John Oliver: Co týden dal a vzal",
+            "overview": "Půlhodinový satirický pohled na události uplynulého týdne ve světě zpráv, politiky a aktuálního dění.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Dans cette émission de fin de soirée, l'humoriste britannique John Oliver revient sur ce qui s'est passé la semaine précédente dans les nouvelles, en politique et dans l'actualité, le tout avec une forte dose de satire.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Przegląd tygodnia: Wieczór z Johnem Oliverem",
+            "overview": "John Oliver, jedna z najzabawniejszych osobowości sceny telewizyjnej, trafia do HBO z zupełnie nowym show, by zaprezentować swój własny punkt widzenia na wiele społecznych, politycznych i egzystencjalnych kwestii.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Pregled proteklog tjedna s Johnom Oliverom",
+            "overview": "Jedna od najduhovitijih i najsvježijih osobnosti koja se zadnjih godina pojavila na TV-u – čovjek čiji je suvoditeljski rad u emisiji „The Daily Show with Jon Stewart“ 2013. g. dobio pohvale kritičara, obožavatelja i samog Stewarta – John Oliver stiže na HBO s posve novim talk showom. Kroz aktualni pogled na tjedne vijesti, politiku i tekuće događaje polusatna emisija dat će Oliveru jedinstvenu platformu odakle može nuditi svoje specifično gledište i poseban glas o brojnim društvenim, političkim ili egzistencijalnim pitanjima s kojima se suočavaju Amerika i svijet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Μια μισή ώρα σατιρική ματιά στην εβδομάδα στις ειδήσεις, την πολιτική και την επικαιρότητα.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Nedēļas jaunumu apskats ar Džonu Oliveru",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Amerikaans satirisch nieuwsprogramma, gepresenteerd door de Britse komiek John Oliver.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "I sitt usedvanlig underholdende talkshow kaster John Oliver et satirisk tilbakeblikk på den siste ukens nyheter, aktualiteter og politiske begivenheter. Gjennom en særegen tilnærming til nyhetsbildet tilbyr han nye perspektiver på politiske, sosiale og eksistensielle spørsmål som er av betydning for både USA og resten av verden.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Știrile săptămânii cu John Oliver",
+            "overview": "John Oliver vine la HBO cu un show nou în care ne va oferi o perspectivă originală asupra problemelor sociale, politice sau existențiale cu care se confruntă America și lumea întreagă.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Una mirada ácida y satírica de media hora a la semana en noticias, política y acontecimientos actuales por el anfitrión John Oliver.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Yhdysvalloissa suosittu sunnuntain myöhäisillan talk show –ohjelma, jonka isäntänä toimii englantilainen koomikko John Oliver. Ohjelmassa tarkastellaan menneen viikon tapahtumia satiirisella ja omaleimaisella otteella. Ohjelman aiheina ovat pääasiassa poliittiset, yhteiskunnalliset ja eksistentiaaliset kysymykset.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "لأسبوع الماضي مع جون أوليفر",
+            "overview": "نظرة ساخرة لمدة نصف ساعة على الأحداث الأسبوعية في الأخبار والسياسة والأحداث الحالية.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "上週今夜",
+            "overview": "美國晚間娛樂節目。主持人為約翰·奧利佛，自 2014 年 4 月 27 日起，在美國 HBO 頻道播出。每集長度為 30 分鐘，探討各項新聞主題，並加以嘲諷。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "გასული კვირა დღეს ჯონ ოლივერთან ერთად",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Johno Oliverio pokalbių laida",
+            "overview": "Johnas Oliveris, viena šmaikščiausių TV pasaulio asmenybių, kartu su HBO pristato satyrinę pokalbių laidą, kurioje reiškia savotišką nuomonę apie socialines, politines ir egzistencines Amerikos bei viso pasaulio bėdas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q31EEBycbOyX7GGJP4GTPI5WJRO.jpg",
+          "vote_average": 10,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7ZgTIEbvm72a7nkNy2eWnkFNmdj.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/786DMCjWHfFUtYIon9StGfGYu4P.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ahJSYK0K1OppcOcFoM2I0VJgGE7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/26TgQvq9mZ85KKKKmeRnsOfJVUL.jpg",
+          "vote_average": 3.294,
+          "vote_count": 17,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w0GA9tmKfRgxXj2zPUp0qzDuYjC.jpg",
+          "vote_average": 3.294,
+          "vote_count": 17,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yWdMvxPg8CcaX2KgWnNEqa2lxmZ.jpg",
+          "vote_average": 3.034,
+          "vote_count": 15,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xUaFWFbyl9cYTifiIBGX7CWwGkI.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vWKS6sV4OV8KWuzZOPqnNJeDhfP.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/f3fIfgzL4u3SULvF9WPqbJ8ikKL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/indMMZsiEmN36m3e39G53ysf8Rn.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d3y4DfD0pAmgkXjpKdU6p6uIALi.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6u2VT6HPypRdOOyej6R14K0ZvlZ.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xpPtGhH8xsFZcbRjitxIcsrPRV7.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iSNJlEYP8gNEyp7e9NpJfU13I6r.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8RmG1tZJwAOC45A9waK19v5xjbe.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/za62mESbQj5pW1hTBvFVqXLp5tg.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lO5fXOLGs63R1u0xOLYZZOCFifl.jpg",
+          "vote_average": 1.208,
+          "vote_count": 12,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sIGbZQhRB1EuNlY3UXSMBFAGa6N.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/p6keWehWmlM94nPqbvwgJlKtENU.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A16NYCyoGWt71klgfV133h4yPID.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vsIB4vyJnPspsS1h6p7GrfhUbuu.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sonU3ZjRNE1DOb9IAjLLP7SUVCf.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fFGlRrCSjCMOEEzdSpGhADVDkXB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e5nzi3z3rNa8kJPbbExKX0bDCL8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xFJDbkSW5eqfNouWdBMQSwrCQrJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/duE9q3tQTsIPJkuK50Jro7sBryM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wUscJZVaTNVSjPMBy3cN3PBTj65.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ruDMkCAH8dz69bDuWT5Xs19GK3N.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hqCiwjQeu79TE4WYOFALAGLlxZ9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y2hRh9E6imM41kdLtpSjI8oOO7Z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xuTUrkH7pSEKdfpaj2s9cmflvHt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kG7O7sE77zjqfmfJp4xKucMICtC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1969,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4IkeqdJqZPK4jzHbqqgmN2ycD7k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3500
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ienRbgQ5aOCTZwRWsVhTaW9N4XE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/da3YyzBZF8FsTlFJPK43AfGvL4I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o3qApaJf7IqaNMPRwHJTnB6SLGw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/skRE0uADMc3sEHncy0UwaAOWNFW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Wt6qgFCZXwaJmIit7a0EEf3EEa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cNw4fDWRQbFcBoS5U0y9oshotPs.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jWscHm7LlP81R8jVNPajOFPD7VU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/enRhhVVV0eHtlVvH8w8us9eiDwv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lpyQPLoOajIASKNqq8peBz2xDXW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e2oUHoLgzkGBr6yGr677RWQKRCJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gMWmOSzizLD7cH4Ft2iAiOkMELL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xa48qLH3GSMpuRhofLWAHSf0WDt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6NKkVOEEko19X5tyjBQR8jYvkmg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xSIAj5S7Z7y7tVDRENd8IqGKSZo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7w96qCKqRKizQsZ0TjxdIYGtiWC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ajWdXqUSEj0Iz2TETDXq8UxfYPu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xWpJlkwQuCE8uPxczEu61eYBVvI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/13xa4LBsC1Gv7HCJwJpRtvdd7Tp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r27NwF1lhQhC1yRfxfggjJLvxkk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qHYf1fquLqfVhu8I4W7zq3O79fF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cV3JMAeEXFpjoKA11dGfpzioj9j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.832,
+          "height": 614,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zocidNB8qOAloS7fVVqD26ilMh5.png",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 4195
+        },
+        {
+          "aspect_ratio": 6.827,
+          "height": 630,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a0DJ0bE5Kdk4gfNe1qTGJi0uHUz.png",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 4301
+        },
+        {
+          "aspect_ratio": 6.832,
+          "height": 614,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c7h8dRIHiTuIujpQehbmHRa94Ga.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 4195
+        },
+        {
+          "aspect_ratio": 7.183,
+          "height": 109,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7mO8y7sDipxvNQvlqwDTXWliczv.png",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 783
+        },
+        {
+          "aspect_ratio": 1.362,
+          "height": 1298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7s78EsdON4I9MvStWpuZubknr90.png",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 1768
+        },
+        {
+          "aspect_ratio": 1.362,
+          "height": 1298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pNEJQKjuo2jtIPvciWZZsLK0bJV.png",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 1768
+        },
+        {
+          "aspect_ratio": 6.832,
+          "height": 614,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/721A3BsOuiveV6Lf3QPQvGAvO2G.png",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 4195
+        },
+        {
+          "aspect_ratio": 2.456,
+          "height": 983,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/61gaNqprfHSkNj0RiQPsytm3I6P.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2414
+        },
+        {
+          "aspect_ratio": 1.378,
+          "height": 294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7xyxi05dR9nbJcciQv6pM4NtUif.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 405
+        },
+        {
+          "aspect_ratio": 7.211,
+          "height": 109,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/V1Hv3R5c5DHhfIuHw23puBdSoB.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 786
+        },
+        {
+          "aspect_ratio": 1.378,
+          "height": 294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bRSnhwQcfn9OjBSiCAZNyGW2ZS.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 405
+        },
+        {
+          "aspect_ratio": 1.38,
+          "height": 171,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3n856fHQqEj3nUxZ0eRKBHhlYQi.svg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 236
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fuuEjEr69uvRtGaQw70JfvdrUwb.jpg",
+          "vote_average": 9.106,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3S98f6J4T8wPOrpuefJrllv7PqK.jpg",
+          "vote_average": 6.608,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lnOh6oKCEA1QhSz3pC8jPl7a8z9.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1138,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1S30rCH9gwTE7LdlzBtCuw1nO1n.jpg",
+          "vote_average": 4.818,
+          "vote_count": 11,
+          "width": 759
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2820,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AlMjWcbG2aOU8KoLpKkE94IcCbG.jpg",
+          "vote_average": 4,
+          "vote_count": 19,
+          "width": 1880
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fTsRyRw91wosrLgWuWpU5Omyw5Y.jpg",
+          "vote_average": 3.666,
+          "vote_count": 24,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6fEt9s9Ha4JDi2hT1uC1jJoh57J.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gttByq45hktujdaOfG8eVMekIIt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1725,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oyDSQz4tGMrDoBC5Q8wzFTdMo27.jpg",
+          "vote_average": 3.214,
+          "vote_count": 21,
+          "width": 1150
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b12eM3FXNjN7yM7XYTIdmeQRud9.jpg",
+          "vote_average": 2.762,
+          "vote_count": 21,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hT9ST8ZDZTi94QWfTuYL78Ud8w8.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eu3n68a2k9SF85RbbWrUIocBNqu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yz8g7Y85hyTPXwd7DfRjEWgYLUr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/llm9bOSiGS8HLDVv48Y7vqQ5SA2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qLArokEVGGx7fq6aSB0LKeDZjmA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2370,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hUpW9ZakeKpgIzvkck2T59RCHcH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1580
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xEExJLgVkIeptLFNctkrLSZNRWN.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hvBq7oYs0Nwk4Zi07TPDqko8ki6.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gEoi7ucDMuURtZ2mLkczEJfP2A4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pTebnNyJBq835ap4NwMPlD9GFRw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dT011tKCiIGk5EXSqPWSRayZycx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pJEMXgyI0iKAgHwGq8lPXVu2NeT.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hQVFODOTR3EiNPHnMtEHSJdXCrp.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/erRJI4ngknXwDAi7AL8iHRjfBo0.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4CNnEwbGt5mzBja3obfPuHhTEFh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ukyVSu7bydPsRvnTu3fWJTnIuCj.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bpCVqO9jHw4C3z2vGK3FhCUdJGM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bcaEoMjvts0cUKf5JtH7QP29SDM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lA9R0Mx5OoiheYfx3DYjbWwUsYe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ArymAtm04nmnu47LLb5ckutUxii.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5yihfNvDqll4TQn2Np9o788gEkp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7WH6999nfezp0LCLebbzVBalyy6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bKPGYuDWPAvnUKFaXfo1AKO9yqJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1P5qE5HC39IutcgMpkaMQZVJBOP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e0z4PUAbpivQ2dvCTZbdFvwtzWj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/61sjOLbKeDKHaVjpTIecNOat3DL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jkpl5iigzU53ZQHFkVRcRxuFEP0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sULxfmF1gklrXLL1AgpXYbHfKRx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fbZZqd3aALjchESWVqhuCLxbpfX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

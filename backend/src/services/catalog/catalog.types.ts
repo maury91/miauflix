@@ -8,6 +8,8 @@ export type {
 export type {
   BatchResponse,
   EpisodeDetail,
+  EpisodeLayout,
+  EpisodeLayoutEntry,
   ExternalMediaLookup,
   LocalizedGenre,
   MediaRef,

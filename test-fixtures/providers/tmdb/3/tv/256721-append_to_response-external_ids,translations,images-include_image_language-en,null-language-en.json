@@ -1,0 +1,1355 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13149",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c902cf815820922d175745376d658c23\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/vlFoUig0nHKH0cH0OY1tk2uxGRL.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2025-07-06",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://gachiakuta-anime.com",
+    "id": 256721,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2025-12-21",
+    "last_episode_to_air": {
+      "id": 6363233,
+      "name": "Field Trip",
+      "overview": "Rudo and the other child Cleaners take a trip to Canvas Town while Corvus entertains some unwanted guests.",
+      "vote_average": 8.3,
+      "vote_count": 15,
+      "air_date": "2025-12-21",
+      "episode_number": 24,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 1,
+      "show_id": 256721,
+      "still_path": "/fQeMJrYCrT4qMzgysELkLruxhdt.jpg"
+    },
+    "name": "Gachiakuta",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 94,
+        "logo_path": "/7RNXnyiMbjgqtPAjja13wchcrGI.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 160,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 201,
+        "logo_path": "/qNooLje0YQh1y3y9LUM2Y5QCtiF.png",
+        "name": "CBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 247,
+        "logo_path": "/i9YpTodhXMOAYo0TZrP0UrHeunc.png",
+        "name": "YouTube",
+        "origin_country": ""
+      },
+      {
+        "id": 896,
+        "logo_path": "/qfUzYnpnN5bnd2bqGUH0OlAMell.png",
+        "name": "Tulip Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1559,
+        "logo_path": "/ihcrBmZYwCmT3YZ7ykNmFgtj2oA.png",
+        "name": "SBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2460,
+        "logo_path": "/34sNEcsgcTAuDidRMrgxdfNyVjL.png",
+        "name": "BSN",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2461,
+        "logo_path": "/b4Ivxqz6UY0EogjYc09Y22ctC6F.png",
+        "name": "tys",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2462,
+        "logo_path": "/7zXfwh5ZhFqvdOWgWX80weU6Sqb.png",
+        "name": "NBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3658,
+        "logo_path": "/sJwRsE1lfMwAwYZi1OtRfn7V03t.png",
+        "name": "HBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3705,
+        "logo_path": "/6vOG1oEihq6eStEzPnOGal2AIV9.png",
+        "name": "RKK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3969,
+        "logo_path": "/nhCsLIGjzIIp6jIFCdHN0cQEzjP.png",
+        "name": "i-Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3970,
+        "logo_path": "/9coKtCf4jSNCdSqGveVFyzvjrZt.png",
+        "name": "SBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3971,
+        "logo_path": "/zoFgqDe0v8svSA01yExlhcG1Bss.png",
+        "name": "IBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3972,
+        "logo_path": "/rL2IlndcEiQnIbym5EoSEM7rGlx.png",
+        "name": "BSS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3973,
+        "logo_path": "/dh4E8hGvqD9Xqu51kbqUU06UKbt.png",
+        "name": "MRO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3974,
+        "logo_path": "/yMQxsmGs88q54bslmcSeXlmpObC.png",
+        "name": "OBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3975,
+        "logo_path": "/6ACZlk44MWsIIwYHxjRGXGKlpRb.png",
+        "name": "TUF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3977,
+        "logo_path": "/sGMMrdCmptaLLwJX7CsXTDaduLO.png",
+        "name": "RSK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3978,
+        "logo_path": "/zOz9LK6WWLUWGuG0fthzDzCIXlA.png",
+        "name": "TUY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3979,
+        "logo_path": "/6oIE2LmtONObnw5wtFO4IIXwgkb.png",
+        "name": "tbc",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4748,
+        "logo_path": "/o5Hlt7ZXJPEm4Qrx2Pl2rtc9A5y.png",
+        "name": "RKB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4792,
+        "logo_path": "/8kzeHaKeW3gZubs3cqlGWFvfJI7.png",
+        "name": "KUTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4859,
+        "logo_path": "/fhQU8sGOoV877wDfHmPZftKldvE.png",
+        "name": "RBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6171,
+        "logo_path": "/vxemHAgdzVCbvAFcO84MWg2wnXC.png",
+        "name": "UTY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6172,
+        "logo_path": "/mKslL0MTHHt9ukugWOv3Vh8Tn0E.png",
+        "name": "RCC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6173,
+        "logo_path": "/92bKXaygjtTwAbX4AH2UnLJN2Xe.png",
+        "name": "MRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6174,
+        "logo_path": "/aawphEBuBGT9RVP6xG3BZV8NOCw.png",
+        "name": "ATV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6175,
+        "logo_path": "/fVUs2F2qTjOzJ9oP0jeqtpZEAai.png",
+        "name": "MBC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ガチアクタ",
+    "overview": "Accused of murder and thrown into the Pit, a young orphan joins a group of monster fighters with special powers to uncover the truth and seek vengeance.",
+    "popularity": 26.5966,
+    "poster_path": "/jH78nLFrTU6aP7hY7KO6DZHFLoX.jpg",
+    "production_companies": [
+      {
+        "id": 244314,
+        "logo_path": "/4nqqgGYwWy65LNVqlcTrvUY1WR2.png",
+        "name": "BONES Film",
+        "origin_country": "JP"
+      },
+      {
+        "id": 55938,
+        "logo_path": "/ku5PUEwBjUx8XaYikgaXRVLIMbb.png",
+        "name": "avex pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2849,
+        "logo_path": "/cN3JNIKawjOMtfk0GBVIbsx69bg.png",
+        "name": "BONES",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 87211,
+        "logo_path": "/lzBP1lTYoqqfvGriMMdlvFWDRH7.png",
+        "name": "DMM.com",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12384,
+        "logo_path": "/qNooLje0YQh1y3y9LUM2Y5QCtiF.png",
+        "name": "CBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "dentsu",
+        "origin_country": "JP"
+      },
+      {
+        "id": 267226,
+        "logo_path": "/2LA2pKIPJghEvfF90HxAokeAjWY.png",
+        "name": "Com2uS",
+        "origin_country": "KR"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      },
+      {
+        "iso_3166_1": "KR",
+        "name": "South Korea"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-07-06",
+        "episode_count": 24,
+        "id": 398115,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/roRQOpLyHeuoZANfbsRae045o6.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "My goal has worth!",
+    "type": "Scripted",
+    "vote_average": 8.5,
+    "vote_count": 346,
+    "external_ids": {
+      "imdb_id": "tt32612521",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 450537,
+      "tvrage_id": null,
+      "wikidata_id": "Q126580883",
+      "facebook_id": null,
+      "instagram_id": "gachiakuta_PR",
+      "twitter_id": "gachiakuta_PR"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Em uma cidade flutuante onde os ricos descartam seu lixo (e pessoas), Rudo é acusado falsamente de homicídio e jogado no Abismo, um lugar infernal onde vivem monstros de lixo mutantes. Para sobreviver, ele precisa conquistar um novo poder e se unir aos errantes Zeladores. Rudo não quer apenas lutar com os monstros, mas também contra os corruptos que o jogaram no Inferno.",
+            "homepage": "",
+            "tagline": "Rasteje de volta do abismo do Inferno para mudar este mundo deplorável!"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Accused of murder and thrown into the Pit, a young orphan joins a group of monster fighters with special powers to uncover the truth and seek vengeance.",
+            "homepage": "",
+            "tagline": "My goal has worth!"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "スラム街で生きる人間たちは、境界線の向こうの人々から“族民”とさげすまれ差別を受けながら生活している。そんな世界でルドは、育ての親であるレグトとともに、“ゴミ場荒らし”と呼ばれながらも常人離れした身体能力を武器に生計を立てていた。だがある日、身に覚えのない罪を着せられ、誰もが恐れる「奈落」へと落とされてしまう。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "En una ciudad flotante donde los ricos se deshacen de su basura y de las personas, a Ludo lo acusan de asesinato y lo arrojan al Abismo, un infierno habitado por las bestias de la basura. Para sobrevivir, deberá hacer uso de un nuevo poder y unirse a los Limpiadores. El objetivo de Ludo no es solo acabar con los monstruos, sino también con aquellos que lo arrojaron al Infierno.",
+            "homepage": "",
+            "tagline": "¡Regresa del abismo del Infierno para cambiar este mundo miserable!"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "En una ciudad flotante donde los ricos se deshacen de su basura y de las personas, a Ludo lo acusan de asesinato y lo arrojan al Abismo, un infierno habitado por las bestias de la basura. Para sobrevivir, deberá hacer uso de un nuevo poder y unirse a los Limpiadores. El objetivo de Ludo no es solo acabar con los monstruos, sino también con aquellos que lo arrojaron al Infierno.",
+            "homepage": "",
+            "tagline": "¡Regresa del abismo del Infierno para cambiar este mundo miserable!"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Dans une ville flottante où les riches se débarrassent de leurs déchets, comme de leurs habitants indésirables, Rudo est accusé de meurtre et jeté dans la Fosse où vivent des créatures mutantes. Pour survivre, il doit révéler un nouveau pouvoir et rejoindre les Nettoyeurs. Rudo ne cherche pas seulement à combattre les monstres, mais aussi les personnes corrompues qui l'ont jeté dans cet enfer.",
+            "homepage": "",
+            "tagline": "Sortir des profondeurs de l'enfer pour changer un monde de rebuts !"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Rudo vive nei bassifondi di una città fluttuante, in cui i poveri mendicano all'ombra dei ricchi che al contrario vivono un vita sontuosa, semplicemente gettando i rifiuti nell'abisso. Ma un giorno, viene falsamente accusato di omicidio e l'ingiusta condanna lo porta a una punizione inimmaginabile, l'esilio fuori dai confini, insieme al resto della spazzatura. Giù in superficie, i rifiuti dell'umanità hanno nutrito schiere di mostri feroci e se Rudo vuole avere qualche possibilità di scoprire la verità e avere la sua vendetta, su coloro che lo hanno scaraventato all'inferno, dovrà padroneggiare il suo nuovo potere e affrontare torreggianti mostri di spazzatura nel Pozzo.",
+            "homepage": "",
+            "tagline": "Si torna strisciando dall'abisso dell'inferno, per cambiare questo miserabile mondo!"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "In einer schwebenden Stadt im Himmel, in der Reiche Müll wie auch Menschen entsorgen, wird Rudo für einen Mord verurteilt und in die „Hölle“ geworfen. In dieser Unterwelt lauern Müllmonster und Gefahren, denen sich Rudo mit seinen neuen Kräften entgegenstellen muss. Er tritt dem Putztrupp bei, um sich durchzuschlagen. Sein oberstes Ziel: Rache an denen, die ihm unrecht taten.",
+            "homepage": "",
+            "tagline": "Krieche aus dem Abgrund der Hölle zurück, um diese lausige Welt zu verändern!"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Гачиакута",
+            "overview": "Там, где живёт Рудо, мусор скидывают в бездну, которая начинается сразу за пределами города. Туда же сбрасывают и преступников, а тех, кто был с ними связан, отселяют в трущобы. Именно там обитал Рудо, заклеймённый как сын убийцы, пока его самого не обвинили в том, что он убил своего приёмного отца Регто. Рудо не успел и слова вставить в свою защиту, как его уже вышвырнули в мусорную бездну. Очутившись внизу, Рудо обнаружил, что находится на огромной свалке, которая тянется так далеко, насколько хватает взгляда. Так Рудо выяснил, что всё это время жил на острове, находящемся в небе, а бездна и есть настоящая поверхность. Наверняка он вскоре погиб бы от ядовитых испарений, но тут его атаковала ожившая мусорная куча. Всё идёт к тому, что Рудо предстоит узнать правду о самом себе и окружающем мире. Если он выживет, конечно. А уж если всё-таки выживет, то постараться выполнить последнюю волю умирающего Регто, который завещал ему изменить этот прогнивший мир.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "تدور القصة حول رودو، شاب يعيش مع والده بالتبني ريغتو في الأحياء الفقيرة لمدينة غنية. رودو يشعر بالغضب من ترف الطبقة العليا واستهتارهم، ويقضي وقته في التنقيب عن أشياء مفيدة بين نفاياتهم، رغم تحذيرات من حوله. تلك النفايات تُرمى في الهاوية—حفرة ضخمة يُلقى فيها كل ما يُعتبر \"قمامة\"، بما في ذلك البشر. والده الحقيقي كان من بين من أُلقي بهم هناك بعد اتهامه بجريمة قتل. ذات يوم، يلتقي رودو بشخص غامض، ثم يعود ليجد ريغتو يحتضر. يتم القبض عليه فورًا ويتهم بقتله، ويُلقى به هو الآخر في الهاوية. لكن بدلاً من الموت، يجد نفسه في عالم غريب تفوح منه رائحة كريهة، مليء بوحوش مصنوعة من القمامة. وبينما هو يواجه هذه الكائنات، يُنقذ على يد رجل يُدعى إنجين، وهو \"منظف\" يستخدم أسلحة خاصة تُعرف باسم \"الأدوات الحيوية\" لمواجهة هذه الوحوش. من أجل الانتقام لموت ريغتو، يقرر رودو أن يصبح \"منظفًا\"، ويبدأ رحلته في أعماق الهاوية للبحث عن القاتل والعودة إلى السطح.",
+            "homepage": "",
+            "tagline": "انهض من قاع الجحيم وغيّر هذا العالم البائس!"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ґачіакута",
+            "overview": "Рудо живе в нетрях літаючого міста, де бідні ледве зводять кінці з кінцями під тінню багатіїв, які просто скидають своє сміття з краю, в безодню. Але одного дня його несправедливо звинувачують у вбивстві, і його неправомірний вирок призводить до вигнання за межі міста разом з рештою сміття. На поверхні, серед викинутого людства, народилися жорстокі монстри, і якщо хлопцю доводиться оволодіти новою силою та приєднатися до групи, відомої як «Прибиральники», які ведуть боротьбу з величезними сміттєвими звірами Ями!",
+            "homepage": "",
+            "tagline": "Виповзи з безодні пекла, щоб змінити цей огидний світ!"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Rudo lever i slummen i en flytande stad, där de fattiga klarar sig i skuggan av de rika som lever ett överdådigt liv och bara kastar sina sopor från sidan, ner i avgrunden. En dag blir han falskt anklagad för mord, och den felaktiga domen leder till ett ofattbart straff - förvisning från kanten, tillsammans med resten av soporna. Nere på ytan har mänsklighetens avfall fött ondskefulla monster, och om Rudo vill ha något hopp om att upptäcka sanningen och hämnas på dem som kastade honom i helvetet måste han bemästra en ny kraft och gå med i en grupp som kallas Cleaners som kämpar mot de stora skräpdjuren i Pit!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Wrobiony w morderstwo Rudo trafia do Otchłani. Aby przetrwać, dołącza do Sprzątaczy i szuka zemsty.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "從「奈落」爬回來！一切都是為了改變這個「糞土般的世界」！\n\n路德生活在在天界的貧民窟中，窮人們在富人的陰影下艱難度日，而富人則過著奢華的生活，隨手將垃圾丟進深淵。一天，路德被誣陷為殺人犯，與其他垃圾一起被丟棄到「奈落」——人類廢棄物所滋生的可怕怪物領域。為了生存，尋求真相並復仇，他必須掌握新的力量，並加入「清道夫」組織，對抗「奈落」中的巨大「斑獸」。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "從「奈落」爬回來！一切都是為了改變這個「糞土般的世界」！  路德生活在在天界的貧民窟中，窮人們在富人的陰影下艱難度日，而富人則過著奢華的生活，隨手將垃圾丟進深淵。一天，路德被誣陷為殺人犯，與其他垃圾一起被丟棄到「奈落」——人類廢棄物所滋生的可怕怪物領域。為了生存，尋求真相並復仇，他必須掌握新的力量，並加入「清道夫」組織，對抗「奈落」中的巨大「斑獸」。",
+            "homepage": "",
+            "tagline": "一切都是為了改變這個「糞土般的世界」！"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "咔嗒咔嗒",
+            "overview": "犯罪者的子孙们居住的贫民窟。边界另一边的人将这边的人蔑称为“族民”，并歧视着。孤儿少年路德，和养父雷格特一同居住在贫民窟里，依靠超乎常人的身体素质为武器谋生。可是在某天，被扣上了莫名其妙的罪名，被打落至贫民窟的人们所畏惧的“奈落”里。在奈落里，和“清洁工”恩琴相遇的路德窥见了这个世界的真实，并发现了自己那能够赋予物品生命的力量。不管世界强成什么样唯有自己的价值不可为他人所左右。敌人是“常识”“权力”“偏见歧视”的超绝怒涛战斗动作剧开幕！一切都是为了改变这“狗屎一般的世界”——！！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "가치아쿠타",
+            "overview": "범죄자 후손들이 모인 슬럼가에서 차별을 받으면서도 쓰레기를 주워 사는 루도.\n\n하지만 어느 날 몸에 익지 못한 죄를 뒤집어쓰고 누구나 두려워하는 '나락'으로 떨어지고 만다.\n\n나락에서 '청소부' 엔진과 만난 루도는 세계의 진실을 엿보고 사물에 목숨을 주고 힘을 끌어내는 능력을 발현시킨다.\n\n모든것은 똥같은 세상을 바꾸기 위해서--!!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Em uma cidade flutuante onde os ricos descartam seus resíduos — e pessoas — Rudo é acusado de assassinato e jogado no Poço, onde habita um inferno de bestas mutantes do lixo. Para sobreviver, ele precisa usar um novo poder e se juntar aos Limpadores desonestos. Rudo não busca apenas lutar contra monstros, mas também contra os corruptos que o lançaram no Inferno.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "กาจิอาคุตะ",
+            "overview": "เด็กกำพร้าที่ถูกกล่าวหาว่าฆ่าคน และถูกโยนลงไปใน \"ห้วงเหว\" เข้าร่วมกับกลุ่มนักล่าสัตว์ประหลาดผู้มีพลังพิเศษ เพื่อเปิดโปงความจริง และชำระบัญชีแค้น",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "te",
+          "name": "తెలుగు",
+          "english_name": "Telugu",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Rudo, görkemli hayatlarıyla sefa süren varsıl kesimin çöplerini bir kenara, Boşluk'a, attığı uçan bir şehrin çingen mahallelerinde yaşar. Günlerden bir gün, üzerine, katil zanlısı olduğu iftirası atılmasıyla hayatı başına yıkılarak cezaların en büyüğüne çarptırılır. Rudo, insanların çöpleriyle birlikte Boşluk'un dibini boylayacaktır. Düştüğü yeryüzündeyse yukarıdan atılan çöplerin pisliği, sapkın yaratıkların doğmasına vesile olur. Rudo'nun gerçeği öğrenip onu, bu cehenneme mahkum bırakanlardan öcünü almak istemesiyle de beraber yeni bir güç edinerek etrafta kol gezen Sapkın Yaratıklar'ı avlayan bir örgüt olan Hademeler'e katılmasıyla Rudo, tekrar geldiği yere geri dönmeye çalışır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thế Giới Rác",
+            "overview": "Rudo sống cùng cha nuôi Regto tại khu ổ chuột, căm ghét sự xa hoa và phung phí của tầng lớp thượng lưu. Một ngày nọ, anh phát hiện Regto bị sát hại và ngay lập tức bị buộc tội giết người, rồi bị ném xuống Địa Ngục - nơi chôn vùi tất cả những gì mà xã hội coi là rác rưởi. Tưởng chừng phải bỏ mạng, Rudo sống sót và tỉnh dậy giữa một thế giới kỳ dị đầy quái vật được tạo nên từ rác. Được một chiến binh bí ẩn mang tên Enjin cứu giúp, Rudo phát hiện ra sức mạnh mới cùng trách nhiệm tiêu diệt quái vật của mình. Mang theo nỗi căm phẫn và khát khao phục thù, cậu bắt đầu hành trình lội ngược dòng từ đáy vực tối tăm để giành lại công lý và sự thật.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "گاچیاکوتا",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AM",
+          "iso_639_1": "hy",
+          "name": "",
+          "english_name": "Armenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een drijvende stad waar de rijken zich ontdoen van hun afval, evenals hun ongewenste inwoners, wordt Rudo beschuldigd van moord en in de put gegooid waar gemuteerde wezens leven. Om te overleven moet hij een nieuwe kracht onthullen en zich bij de Cleaners voegen. Rudo wil niet alleen tegen de monsters vechten, maar ook tegen de corrupte mensen die hem in deze hel hebben gegooid.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Mladý sirotek, obviněný z vraždy a uvržený do Jámy, se připojí ke skupině bojovníků proti monstrům se zvláštními schopnostmi, aby odhalil pravdu a pomstil se.",
+            "homepage": "",
+            "tagline": "Můj cíl má smysl!"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "גאצ'יאקוטה",
+            "overview": "רודו, נער מהשוליים, מואשם לשווא ברצח ומושלך לעולם מלא פסולת ומפלצות. כדי לשרוד ולנקות את שמו, הוא מצטרף ללוחמים מיוחדים ומשתמש בכוח להחיות חפצים בקרבות על צדק ונקמה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Gachiakuta",
+            "overview": "Într-un oraș plutitor în care bogații își aruncă deșeurile și oamenii, Rudo este acuzat de crimă și aruncat în Groapă, unde locuiește un peisaj infernal de bestii de gunoi mutante. Pentru a supraviețui, el trebuie să exercite o nouă putere și să se alăture curățătorilor necinstiți. Rudo nu urmărește doar să lupte cu monștrii, ci și cu corupții care l-au aruncat în iad.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "kn",
+          "name": "?????",
+          "english_name": "Kannada",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qjPSJeXyg6QXf27mcmxGW1HEsF8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vlFoUig0nHKH0cH0OY1tk2uxGRL.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sSA8AFJitrS6z3fd6D1avHSgXak.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.781,
+          "height": 1124,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kUYCWZKjJHgvv5ZvC30x5wcbyj8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2002
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1524,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mrapJp0qb6Fvo3IW9IrjCK9IgSo.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2709
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jLUDukNSDvaRjMprqMDCq8PLq6X.jpg",
+          "vote_average": 1.222,
+          "vote_count": 4,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1524,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/WUQNBzTAln6iANDoMWWtf5m4i1.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2709
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hMRzd3cbx3p2Hi85ZA8vL9bxJaa.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5ZrFARWn44S9MxxRYeuHmdqs3DQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bl5mDpg8aPLGKRtNqoBm6eWoHo.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1687,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oXNwslIlc5kZUv33dz5WplZS97m.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/parc8jl3PAl6BV2y2oc5zR3Xks5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pI98N8rnKu2yoOU2GQX2HexX3S0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A56ROwqf3Zu6mJXRicAojPYT6TL.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mCU3aZDTPVTZBMzLyM46YP0f95v.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4jTVnCNbT2foPhFlzrTUdcV2C0s.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kt4q8GSR5wiEkxE3IABSvD6ivWf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d4JIhD85MIJJZh3zWjdaFTwNWi2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ktl2SefNd2FOpFrRok1DT98LH8d.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oXmvMGBCFpHU7BYuZl0wxdtb7wG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uynw9TObTSWEsyR0xAY9qQTrwr6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.345,
+          "height": 336,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ccEM7BBPoBky3bvtJuxkDYNVPae.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1460
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jH78nLFrTU6aP7hY7KO6DZHFLoX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lXAyZHGAh0YrAi8x7ekCnoquace.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/84LdrRRvpWk8g0EaaW7z3eKdfum.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fVU3iWF75CIRb6bssiA0Na2zIaH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1983,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zWIVWCINeMe3D7Yc00nU0DhWYUz.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1322
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1983,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kBdlgQQte0qaXdw9NsMvjwHXV0k.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oU2SBv5VQCdOHfw3Aw8B0UeAsim.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jluHYjFsyWGtsW7VGt2dSyy2MuH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 849
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jd8s4IflV9WxYzAnzx3mNYpkc3P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1983,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hgsgXKPER9Axi5wzOEBidIVqU2H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1950,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hz3Aasix8d5rTXk6nMIJyFzOOoP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4slziGQb6IHcOaAtcDUkQHnkGOp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cv84L2rselvj8pW5nfCZWqAiTaT.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vjMiDjbvsASQQXqy4gjtt3ylniA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sBLRgBF1xgj17uuGYkIpIWyUIJQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dLzlRmgSu9TAOBJMPBImLFa1Fiz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1039,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gJHu1XTcCUr2oeF1dpZZMvDY2SV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 693
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1040,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kvd8Yujfxi859g0VEPoT29khe7g.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.736,
+          "height": 908,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5u5PVK6Mm5juVwtvw15NozpDkda.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 668
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,978 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12902",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"80fe6ec2ee0c234f338c3c8e7fe3ba60\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/uCndE341njionskk1pK9SbHqwZh.jpg",
+    "created_by": [
+      {
+        "id": 157125,
+        "credit_id": "67ec868d35f5b70e3ace43f6",
+        "name": "Bruce Miller",
+        "original_name": "Bruce Miller",
+        "gender": 2,
+        "profile_path": "/h66XSPXnWfkJVMGJRXHc4RoJXLH.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-04-08",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.hulu.com/series/the-testaments-9e859f3c-4ba0-48ed-8421-37b34ceffa04",
+    "id": 287527,
+    "in_production": true,
+    "languages": [
+      "es",
+      "en"
+    ],
+    "last_air_date": "2026-05-27",
+    "last_episode_to_air": {
+      "id": 6888144,
+      "name": "Secateurs",
+      "overview": "While Becka faces the consequences of her actions, Agnes and Daisy must decide how far they're willing to go to protect her.",
+      "vote_average": 5.9,
+      "vote_count": 23,
+      "air_date": "2026-05-27",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 60,
+      "season_number": 1,
+      "show_id": 287527,
+      "still_path": "/zM8G8o5ObaZ0zvvgbTl2muHMRab.jpg"
+    },
+    "name": "The Testaments",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 453,
+        "logo_path": "/pqUTCleNUiTLAVlelGxUgWn1ELh.png",
+        "name": "Hulu",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "The Testaments",
+    "overview": "Growing up in Gilead is all they have ever known. As a new generation of young women grapple with the bleak future that awaits them, they will be forced to search for allies, new and old, to help in their fight for freedom.",
+    "popularity": 11.7999,
+    "poster_path": "/xVsFopLisBoiKdXXecaNTN4pJ9A.jpg",
+    "production_companies": [
+      {
+        "id": 2230,
+        "logo_path": "/igOjospzsKQIbpuFCGhoN5F9icS.png",
+        "name": "MGM Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 20815,
+        "logo_path": null,
+        "name": "The Littlefield Company",
+        "origin_country": "US"
+      },
+      {
+        "id": 91405,
+        "logo_path": null,
+        "name": "White Oak Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 186866,
+        "logo_path": "/crmJkiAcLftaxF3GoQvRHPs7gyv.png",
+        "name": "Toluca Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 137619,
+        "logo_path": null,
+        "name": "Love & Squalor Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 236166,
+        "logo_path": "/8rFlu5iytnjsciYXZDw90ktllCI.png",
+        "name": "20th Television",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-04-08",
+        "episode_count": 10,
+        "id": 448600,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/xVsFopLisBoiKdXXecaNTN4pJ9A.jpg",
+        "season_number": 1,
+        "vote_average": 5.3
+      },
+      {
+        "air_date": null,
+        "episode_count": 0,
+        "id": 520063,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      },
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Witness a defiant coming of age story.",
+    "type": "Scripted",
+    "vote_average": 8.286,
+    "vote_count": 241,
+    "external_ids": {
+      "imdb_id": "tt10970762",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 460241,
+      "tvrage_id": null,
+      "wikidata_id": "Q137357617",
+      "facebook_id": null,
+      "instagram_id": "testamentsonhulu",
+      "twitter_id": "testamentshulu"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Growing up in Gilead is all they have ever known. As a new generation of young women grapple with the bleak future that awaits them, they will be forced to search for allies, new and old, to help in their fight for freedom.",
+            "homepage": "",
+            "tagline": "Witness a defiant coming of age story."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Els testaments",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Une nouvelle génération de jeunes femmes à Gilead est aux prises avec l’avenir sombre qui les attend. Pour ces jeunes femmes, grandir à Gilead est tout ce qu’elles ont jamais connu, n’ayant aucun souvenir tangible du monde extérieur avant leur endoctrinement dans cette vie. Confrontés à la perspective d’être mariées et de vivre une vie de servitude, elles seront forcées de chercher des alliés, nouveaux et anciens, pour les aider dans leur lutte pour la liberté et la vie qu’elles méritent.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "증언들",
+            "overview": "성실하고 신앙심 깊은 아그네스와 길리어드 외부 출신이자 개종자인 데이지, 두 십대 소녀의 이야기",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Quattro anni dopo gli eventi de \"The Handmaid's Tale\", una nuova generazione di giovani donne a Gilead si confronta con il futuro tetro che le attende. Per queste giovani donne, crescere a Gilead è tutto ciò che hanno sempre conosciuto, senza alcun ricordo tangibile del mondo esterno prima del loro indottrinamento a questa vita. Di fronte alla prospettiva di essere date in sposa e di vivere una vita di servitù, saranno costrette a cercare alleati, nuovi e vecchi, che le aiutino nella loro lotta per la libertà e la vita che meritano.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "העדויות",
+            "overview": "הסדרה מתרחשת בתאוקרטיה הדיסטופית של גלעד, שנים לאחר אירועי \"סיפורה של שפחה\", והיא מביאה את סיפור ההתבגרות של דור חדש של נשים צעירות המתמודדות עם העתיד הקודר שמחכה להן בגלעד.\n\nעבור נשים צעירות אלה, החיים בגלעד הם כל מה שהן אי פעם הכירו, מפני שבניגוד לדור הקודם, להן אין שום זיכרונות מהעולם החיצון שקדמו לחיים האלה.\n\nבעוד מצפה להן עתיד של נישואין וחיי עבדות, הן יאלצו למצוא בנות ברית, חדשות וותיקות, שיסייעו להן במאבקן למען החופש ולחיים שמגיעים להן.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Заветы",
+            "overview": "Государство Гилеад, занимающее бывшую территорию США, спустя 15 лет после восстания стало ещё более закрытым, а его законы стали ещё более жёсткими. Агнес Маккензи, ученице элитной подготовительной школы Тёти Лидии для дочерей высокопоставленных военных и чиновников, поручено помочь освоиться новой воспитаннице Дейзи, приехавшей в Гилеад из Канады. Вскоре между девушками завязывается дружба, которая меняет их жизни, и взгляд извне помогает Агнес понять, насколько жестоко и несправедливо окружающее общество.",
+            "homepage": "",
+            "tagline": "«Дерзкая история взросления»"
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Opgegroeid in Gilead, dat is alles wat ze ooit gekend hebben. Terwijl een nieuwe generatie jonge vrouwen worstelt met de sombere toekomst die hen te wachten staat, zullen ze gedwongen worden om bondgenoten te zoeken, zowel oude als nieuwe, die hen zullen helpen in hun strijd voor vrijheid.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Opgegroeid in Gilead, dat is alles wat ze ooit gekend hebben. Terwijl een nieuwe generatie jonge vrouwen worstelt met de sombere toekomst die hen te wachten staat, zullen ze gedwongen worden om bondgenoten te zoeken, zowel oude als nieuwe, die hen zullen helpen in hun strijd voor vrijheid.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Los testamentos: De las hijas de Gilead",
+            "overview": "\"Los testamentos\", la continuación de \"El cuento de la criada\", es un drama sobre el paso a la adultez ambientado en Gilead. La historia sigue a dos adolescentes: la devota y obediente Agnes Mackenzie y Daisy, una conversa recién llegada de fuera de las fronteras de Gilead.",
+            "homepage": "",
+            "tagline": "Sé testigo de una conmovedora historia de iniciación a la vida adulta."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Los testamentos",
+            "overview": "\"Los testamentos\", la continuación de \"El cuento de la criada\", es un drama sobre el paso a la adultez ambientado en Gilead. La historia sigue a dos adolescentes: la devota y obediente Agnes Mackenzie y Daisy, una conversa recién llegada de fuera de las fronteras de Gilead.",
+            "homepage": "",
+            "tagline": "Descubre una historia de madurez llena de rebeldía."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Os Testamentos: Das Filhas de Gilead",
+            "overview": "Uma evolução de \"O Conto da Aia\", \"Os Testamentos\" é uma dramática história de amadurecimento ambientada em Gilead. A série acompanha duas jovens: a obediente e devota Agnes Mackenzie e Daisy, uma convertida recém-chegada de fora das fronteiras de Gilead.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Os Testamentos",
+            "overview": "Crescer em Gilead é tudo o que sempre conheceram. Enquanto uma nova geração de jovens mulheres luta contra o futuro sombrio que as espera, serão forçadas a procurar aliados, novos e antigos, para as ajudar na sua luta pela liberdade.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Svědectví",
+            "overview": "Seriál Svědectví navazuje na Příběh služebnice. Osudy mladých dívek: poslušné a zbožné Agnes Mackenzieové a Daisy, která do Gileádu přichází z vnějšího světa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Заповіти",
+            "overview": "Виростаючи в Гілеаді, вони не знали іншого життя. Коли нове покоління молодих жінок стикається з похмурим майбутнім, що на них чекає, їм доведеться шукати союзників — як нових, так і давніх — щоб допомогти у боротьбі за свободу.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "ซีรีส์ภาคขยายของจักรวาลเดอะแฮนด์เมดส์เทล เดอะเทสแทเมนต์สพาไปติดตามแอ็กเนสและเดซี่เด็กใหม่หัวขบถ โดยเด็กสาวทั้งสองต้องฝ่าฟันผ่านเงามืดของกิเลียดให้ได้..TF",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "证言",
+            "overview": "《使女的故事》续章。吉利德建立多年后，少女艾格尼丝在贵族家庭长大，并进入专门培养未来妻子的学校。来自吉利德之外的黛西出现后，两人的命运交织，也让艾格尼丝逐渐看清这个制度的真相。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Testamenty",
+            "overview": "Serial Testament to oficjalna kontynuacja i spin-off hitu „Opowieść podręcznej”,  Akcja toczy się 15 lat po wydarzeniach z finału „Opowieści podręcznej”. Serial skupia się na nowym pokoleniu kobiet dorastających w teokratycznym Gileadzie, które nie znają świata sprzed reżimu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "證詞",
+            "overview": "《證詞》是《使女的故事》續章，一部以基列國為背景，扣人心弦的成長故事。影集聚焦在兩位少女身上：恪守本分、虔誠至極的艾格妮絲麥肯齊，以及從外地加入基列國的黛西。她們進入莉迪亞嬤嬤為培養未來妻子而成立的婚前預備學院，在這座金碧輝煌的殿堂，嬤嬤們透過殘忍的手段以及以神聖為理由，灌輸服從的觀念。艾格妮絲與黛西兩人之間的情誼將成為一股催化劑，徹底顛覆她們的過去、現在與未來。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Testamentele",
+            "overview": "Au crescut în Gilead și nu cunosc altceva. Pe măsură ce o nouă generație de tinere se confruntă cu viitorul sumbru care le așteaptă, vor fi nevoite să caute aliați, vechi și noi, care să le ajute în lupta lor pentru libertate.",
+            "homepage": "",
+            "tagline": "Descoperă o poveste emoționantă despre maturizare."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Заветите",
+            "overview": "Израстването в Гилеад е всичко, което са познавали досега. Докато новото поколение млади жени се изправя срещу мрачното бъдеще, което ги очаква, те ще трябва да търсят съюзници – стари и нови – за да им помогнат в битката за свобода.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Testaments - Die Zeuginnen",
+            "overview": "In Gilead aufzuwachsen ist alles, was sie jemals gekannt haben. Während eine neue Generation junger Frauen mit der düsteren Zukunft ringt, die sie erwartet, werden sie gezwungen sein, nach Verbündeten zu suchen – alten wie neuen –, die ihnen in ihrem Kampf um Freiheit helfen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "At vokse op i Gilead er alt, hvad de nogensinde har kendt. I takt med at en ny generation af unge kvinder kæmper med den dystre fremtid, der venter dem, vil de blive tvunget til at søge efter allierede, nye som gamle, som kan hjælpe dem i deres kamp for frihed.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Testamentumok",
+            "overview": "A szolgálólány meséje folytatása Margaret Atwood regénye alapján készült, és két fiatal lány, Agnes és Daisy szemén keresztül mutatja be Gileád további sorsát, Ann Dowd (Lydia néni) főszereplésével. A cselekmény 15 évvel June története után játszódik. A középpontban a Gileadban nevelkedő Agnes és a Kanadában élő Daisy (Nicole) áll, akiknek sorsa összefonódik.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "The Testaments, som tar vid 15 år efter händelserna i The Handmaid’s Tale, utspelar sig i den kristna diktaturen Gilead och här får man följa en grupp privilegierade tonårsflickor som går på en elitisk skola för att förbereda sig till att bli fruar åt statens mäktigaste män. En av dessa flickor är Agnes som växer upp i till synes idylliska förhållanden, men när den utomstående Daisy dyker på skolan förändras hennes världsbild.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Những Bản Di Chúc",
+            "overview": "Phần tiếp theo của \"The Handmaid's Tale\" kể về Agnes và Daisy, hai thiếu nữ ở Gilead phải thích nghi với cuộc sống tại một trường dự bị ưu tú, nơi sự phục tùng được thực thi một cách tàn bạo. Tình bạn của họ trở thành chất xúc tác làm thay đổi cuộc đời cả hai.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "وصیت‌ها",
+            "overview": "بزرگ شدن در گیلیاد تنها چیزی است که آنها تا به حال شناخته‌اند. در حالی که نسل جدیدی از زنان جوان با آینده‌ی تاریکی که در انتظارشان است دست و پنجه نرم می‌کنند، مجبور خواهند شد به دنبال متحدانی، چه جدید و چه قدیمی، باشند تا در مبارزه‌شان برای آزادی به آنها کمک کنند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "The Handmaid's Tale -sarjan tarina jatkuu The Testaments -sarjassa, joka on Gileadiin sijoittuva dramaattinen kasvutarina. Sarjan keskiössä on kaksi nuorta, tunnollinen ja hurskas Gileadin kasvatti Agnes ja Gileadin ulkopuolelta saapunut tulokas Daisy. Heidän tiensä kohtaavat Lydia-tädin eliittikoulussa, jossa tulevia vaimoja koulitaan tottelevaisuuteen ankarasti Jumalan nimessä. Versova ystävyys sytyttää kipinän, joka mullistaa nuorten elämän.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Agnes görevine bağlı ve son derece dindar biridir, Daisy ise Gilead dışından gelen bir mühtedi olarak sisteme katılır. Teyze Lydia'nın seçkin okulunda, genç kadınlar sıkı bir disiplinle gelecekteki eşler olarak rollerine hazırlanırlar. Eğitimleri ilerledikçe, aralarında yakın bir bağ gelişir ve bu da kökenleri, şimdiki zamanları ve olası gelecekleri hakkındaki bakış açılarını derinden etkiler.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Testamentai",
+            "overview": "Ši istorija pasakoja apie dvi paaugles, gyvenančias griežtoje ir repressyvioje visuomenėje, kur jos priverstos lankyti elitinę parengiamąją mokyklą, kurioje paklusnumas užtikrinamas žiauriomis priemonėmis. Jų draugystė tampa lemiamu veiksniu, iš pagrindų keičiančiu jų gyvenimus ir atveriančiu kelią pasipriešinimui bei laisvės siekiui. Tamsi ir įtempta aplinka atskleidžia žmogiškosios stiprybės ir vilties temas, kurios persipina su kasdienėmis kovomis už išlikimą ir orumą.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "აღთქმები",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Testaments: Die Zeuginnen",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uCndE341njionskk1pK9SbHqwZh.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n8fffwUPi9DMxtwDIR6xoGx9ItP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vyq8fQ6tm9DJCckJWqwPYZ8GThZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9g97jR3577Sd2gYM61BKVK9UEqm.jpg",
+          "vote_average": 3.334,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rrDpx2CFKx1QzIB9heIG5NndXO5.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iycssaGALhk1AzJI7zjOqUv80j6.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yV6WRohpUKge6m3zS1xlrDkOBv0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/65ATvobopXiIs7xgQGwCwBc6g.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b10FzOiZEe84v1PiAdUoLEZxHGb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yxXdYz0nxrzSwvOrzCCsBOzAJwj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gGa5RKgYBqpqLy1efgsmnfmgwBV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3ztSVgk4566kWvIV8WFiHY0eW3u.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1373,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tqWeGFa7ibHLXOq8TATSNoVGPH3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2442
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1490,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nrrWOha3ZDXkhZMwM33BYv8Qu4B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2648
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4Vjh4Jzb5OGF9ILMqYpLDIYqmyd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1895,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/itx1WXsUPO6npIVaxfPbPpzUjar.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3370
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1615,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5HdVdAohkYmA4oysTbq0wTtWDcA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2875
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hdWoFQG3Kl6yweywfsesbXOfvtY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3YDt0aUaBeWrZJB6tD9o0PCQnut.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cDCgpJq1tLpUVTgLt8FCW1xp2XG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.386,
+          "height": 801,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kZaVaIQPDkVbYclbZgI2Rlys2gT.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4314
+        },
+        {
+          "aspect_ratio": 5.4,
+          "height": 800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fOqFsR3Qr1YgsYdgFjxbg8ALFtG.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4320
+        },
+        {
+          "aspect_ratio": 3.85,
+          "height": 1091,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eb9j6HtdhIq8GEUuXxSWw11r9hx.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4200
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xVsFopLisBoiKdXXecaNTN4pJ9A.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nyf9QDf0Ls8kFfxwWGyYXGv1Akc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4L2RMgWa6j4il41vKKyrNzpGy5F.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6KbDKKjCntM6ytJnTcbPYIuJAkQ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s06a55e5744Ium1nwvCIgmfYxWk.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7UXptsUokAJBzPLupODdLVtYMQ7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/QrRGl8dXm06lWHMuh26f5veWvB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xI1wz2quDd0UXAoJmHINP80det4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 791,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8IgXpIw0rdOfRCl01DBn1i0rDCp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 528
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qEDH3rhbyhHJPaNps63wnph99FO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/13ErkMyxc4i6SIsktpwRVwmhqcU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qIPd8czFANu6fhOtbrBNcHnC36N.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vAw3UtUW0mBilNGY3FGHqEpA3j4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1519
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/slyACcGp7AiFtqq8OuiJzoAyxA6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1519
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rX0Ax5giv4baTfnGZIiI3xYD7Hz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1519
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zrp5YU0WmgTwlTjXDsSbu00604B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1519
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AwqrZ75Khsnrc3BE3CQdIvo4nt4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1264,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/KDqosJJV0dMvqyuetD4MJ2fxR8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 843
+        }
+      ]
+    }
+  }
+}

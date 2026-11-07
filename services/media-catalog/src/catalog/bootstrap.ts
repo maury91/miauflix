@@ -1,6 +1,8 @@
 import type { ConfigurationProbe } from '@miauflix/service-configuration';
 
+import { AnimeIndex } from '../anime/anime-index';
 import type { CatalogConfigService } from '../config/config.service';
+import { AnimeLayoutRepository } from '../db/anime-layout.repo';
 import { ArtworkRepository } from '../db/artwork.repo';
 import { BackdropFocusRepository } from '../db/backdrop-focus.repo';
 import { LocalizationRepository } from '../db/localization.repo';
@@ -32,6 +34,8 @@ export class CatalogRuntime {
   private readonly apiCache: ApiCache;
   private readonly backdropFocus: BackdropFocusRepository;
   private readonly artwork: ArtworkRepository;
+  private readonly animeIndex: AnimeIndex;
+  private readonly animeLayouts: AnimeLayoutRepository;
   private workerManager: CatalogWorkerManager;
   private stopped = false;
 
@@ -46,6 +50,14 @@ export class CatalogRuntime {
     this.apiCache = new ApiCache(ctx.db);
     this.backdropFocus = new BackdropFocusRepository(ctx.db);
     this.artwork = new ArtworkRepository(ctx.db);
+    this.animeLayouts = new AnimeLayoutRepository(ctx.db);
+    this.animeIndex = new AnimeIndex(
+      ctx.env.dataDir,
+      this.apiCache,
+      fetch,
+      Date.now,
+      ctx.env.anime
+    );
     this.workerManager = new CatalogWorkerManager(ctx.env, () => ctx.catalog);
     config.registerProber(this.prober);
   }
@@ -117,7 +129,8 @@ export class CatalogRuntime {
         provider,
         this.catalogValues(values),
         this.backdropFocus,
-        this.artwork
+        this.artwork,
+        { index: this.animeIndex, layouts: this.animeLayouts }
       );
       this.ctx.catalog = catalog;
       if (!this.ctx.env.disableBackgroundTasks) catalog.startBackdropFocusBackground();

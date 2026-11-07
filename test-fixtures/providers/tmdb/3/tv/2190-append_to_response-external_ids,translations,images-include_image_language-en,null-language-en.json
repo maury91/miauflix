@@ -1,0 +1,2170 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17173",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"af4ce356f1fdd63bd54f8a5b33157ddd\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3UviYOlhn8EgXMBuiT6MnUuo1w9.jpg",
+    "created_by": [
+      {
+        "id": 34517,
+        "credit_id": "5257270e760ee3776a2786e5",
+        "name": "Trey Parker",
+        "original_name": "Trey Parker",
+        "gender": 2,
+        "profile_path": "/3tJe8t90lrcQzXj9cRcpW9wmj2c.jpg"
+      },
+      {
+        "id": 34518,
+        "credit_id": "5257270e760ee3776a2786eb",
+        "name": "Matt Stone",
+        "original_name": "Matt Stone",
+        "gender": 2,
+        "profile_path": "/nS3BOaF0EHd7vyATV7WBnFEvTLr.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "1997-08-13",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      }
+    ],
+    "homepage": "http://southpark.cc.com/",
+    "id": 2190,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-10-28",
+    "last_episode_to_air": {
+      "id": 7292378,
+      "name": "Guinea Pig on a Stick",
+      "overview": "When South America’s beef becomes highly prized and sought after, the four boys fight to keep it in local hands.",
+      "vote_average": 4.5,
+      "vote_count": 14,
+      "air_date": "2026-10-28",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 22,
+      "season_number": 29,
+      "show_id": 2190,
+      "still_path": "/n3xEMWKPrQTF0psRiFEAxW999FX.jpg"
+    },
+    "name": "South Park",
+    "next_episode_to_air": {
+      "id": 7292379,
+      "name": "Episode 5",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-11",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 29,
+      "show_id": 2190,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 47,
+        "logo_path": "/6ooPjtXufjsoskdJqj6pxuvHEno.png",
+        "name": "Comedy Central",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 337,
+    "number_of_seasons": 29,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "South Park",
+    "overview": "Follow the misadventures of four irreverent grade-schoolers in the quiet, dysfunctional town of South Park, Colorado.",
+    "popularity": 168.2171,
+    "poster_path": "/k7n2EVge7G77eMr3brztRGG1fFU.jpg",
+    "production_companies": [
+      {
+        "id": 45850,
+        "logo_path": "/73sPBDOuehu9IBVM9UpNCdjilJU.png",
+        "name": "South Park Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 1538,
+        "logo_path": "/1y7qNFwczl2zZS62Hrlw6dsAwgR.png",
+        "name": "Comedy Central",
+        "origin_country": "US"
+      },
+      {
+        "id": 45851,
+        "logo_path": null,
+        "name": "Braniff Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 6329,
+        "logo_path": "/4lZJiVHPClma8YB9hXodraFXSwi.png",
+        "name": "MTV Entertainment Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 270175,
+        "logo_path": null,
+        "name": "Parker-Stone Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "1992-12-08",
+        "episode_count": 33,
+        "id": 6718,
+        "name": "Specials",
+        "overview": "The specials cover a wide range of extras as well as one-off episodes released outside of the normal season.",
+        "poster_path": "/zDWaLg5X7mVfqsa5L4YmFmkDDqT.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "1997-08-13",
+        "episode_count": 13,
+        "id": 6705,
+        "name": "Season 1",
+        "overview": "This is the season that started it all! Join Stan, Kyle Cartman and Kenny as these four animated tykes take on the supernatural, the extraordinary and the insane. For them, it’s all part of growing up in South Park.",
+        "poster_path": "/sxCj0Iun46sUUsF5I2NQY6rml4c.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "1998-04-01",
+        "episode_count": 18,
+        "id": 6706,
+        "name": "Season 2",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they discover the identity of Cartman's father, learn about Conjoined Twin-Myslexia and thaw a prehistoric ice man. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/fSlMHxDB6Ln9V1wwuI9M1ylcE68.jpg",
+        "season_number": 2,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "1999-04-07",
+        "episode_count": 17,
+        "id": 6707,
+        "name": "Season 3",
+        "overview": "Return to everyone’s favorite mountain town for seventeen outrageously bizarre episodes of South Park. Along the way, you’ll meet the Succubus, get caught up in the Chinpokomon frenzy and find out why citizens are spontaneously combusting.",
+        "poster_path": "/996EYWRu4zksbNodgs1Omri02Yi.jpg",
+        "season_number": 3,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2000-04-05",
+        "episode_count": 17,
+        "id": 6708,
+        "name": "Season 4",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they graduate to 4th grade, join in the 2000 election recount, the controversy over Saddam Hussein, and the introduction of Timmy!!! For them, it’s all part of growing up in South Park!",
+        "poster_path": "/kqJ3yofZa2bVQNC3wl0CQV5EUmr.jpg",
+        "season_number": 4,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2001-06-20",
+        "episode_count": 14,
+        "id": 6709,
+        "name": "Season 5",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they welcome Jimmy the new handi-capable kid in town & Towelie, Radiohead guest stars, Big Gay Al returns, and Terrance and Phillip break up. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/mbNzB0ji7QpHAMNnf0xpAJYoQWJ.jpg",
+        "season_number": 5,
+        "vote_average": 8.1
+      },
+      {
+        "air_date": "2002-03-06",
+        "episode_count": 17,
+        "id": 6710,
+        "name": "Season 6",
+        "overview": "In this series Stan convinces the boys to kidnap all the calves from a local farm after a look at how veal is made turns him vegetarian; Professor Chaos struggles to find an evil scheme that hasn't already been done on 'The Simpsons'; and when Bebe's breasts begin to take shape, the boys can't understand why they're suddenly interested in her.",
+        "poster_path": "/7nKjCuBH0tGkLwBwxDgxbBrNj5F.jpg",
+        "season_number": 6,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2003-03-19",
+        "episode_count": 15,
+        "id": 6711,
+        "name": "Season 7",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they go gaga for “Queer Eye,” start their own Christian Rock Band, and discover that Earth is an intergalactic reality show that's about to be cancelled. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/zYHoEtNxkdAa4g8wPdBdGq8VOzC.jpg",
+        "season_number": 7,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2004-03-17",
+        "episode_count": 14,
+        "id": 6712,
+        "name": "Season 8",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they witness the girls’ celebrity-worship of ditzy, rich, sex-tape-making socialites and take part in an awesome anime battle with Professor Chaos. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/aTTmEQqmlVGNHNKJ8K4rFAnZrPo.jpg",
+        "season_number": 8,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2005-03-09",
+        "episode_count": 14,
+        "id": 6713,
+        "name": "Season 9",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they deal with the perceived dangers of global warming, a certain actor's sexuality is questioned, and the Pope arrives to witness a religious miracle. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/5cCxlgStfCVaaZtBuxmIVlHeoli.jpg",
+        "season_number": 9,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2006-03-22",
+        "episode_count": 14,
+        "id": 6714,
+        "name": "Season 10",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they witness the death of Chef, defeat a virtual villain out to destroy the world, and suffer the consequences of Cartman’s video game console obsession. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/brFCz0wW2bRyOyK81OqwDiJDmFA.jpg",
+        "season_number": 10,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2007-03-07",
+        "episode_count": 14,
+        "id": 6722,
+        "name": "Season 11",
+        "overview": "It’s a season of diabolical secrets as Cartman covers up a salacious photo and the boys reveal a bizarre Easter society. An explosive visit from Hillary Clinton, a world-record crap and the Imaginationland trilogy only add to the awesomeness of Season 11.",
+        "poster_path": "/cVfhCT2wZq3hHCp8i2II8hHjOOg.jpg",
+        "season_number": 11,
+        "vote_average": 8.1
+      },
+      {
+        "air_date": "2008-03-12",
+        "episode_count": 14,
+        "id": 6715,
+        "name": "Season 12",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they help a pop-princess down on her luck, negotiate a truce for striking Canadians, fight the addiction of \"cheesing\" and battle startling rodents. For them, it's all part of growing up in South Park",
+        "poster_path": "/wVDJyjekgMXqkVAmvplwkVfL9qX.jpg",
+        "season_number": 12,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2009-03-11",
+        "episode_count": 14,
+        "id": 6716,
+        "name": "Season 13",
+        "overview": "Join Cartman, Kenny, Stan and Kyle as they save the economy, the whales, and a bunch of dead celebrities all while discovering the joys of Fish Sticks. For them, it's all part of growing up in South Park",
+        "poster_path": "/15Lszg1L3w6vGGqFFoTN0asxj5C.jpg",
+        "season_number": 13,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2010-03-17",
+        "episode_count": 14,
+        "id": 6717,
+        "name": "Season 14",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they dive into social networking, defend against annoying Jersey \"muff cabbage\" and finally reveal the secret identity of Mysterion in an epic three-part saga.",
+        "poster_path": "/6Xik83L9tCmLqh0cdxoopOsQm69.jpg",
+        "season_number": 14,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2011-04-27",
+        "episode_count": 14,
+        "id": 6719,
+        "name": "Season 15",
+        "overview": "Join Stan, Kyle, Cartman and Kenny in the fifteenth season as they confront modern mad scientists, fundamentalist agnostics, and face their greatest challenge yet -- Stan growing a year older. For them, it's all part of growing up in South Park.",
+        "poster_path": "/6T31LPecW0wIB05VOExvaAssd4f.jpg",
+        "season_number": 15,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2012-03-14",
+        "episode_count": 14,
+        "id": 6720,
+        "name": "Season 16",
+        "overview": "Join Cartman, Kenny, Stan and Kyle as they hunt down the mythical Jewpacabra, ‘sketti wrestle with reality stars, and go jackin’ it in San Diego. For them, it's all part of growing up in South Park.",
+        "poster_path": "/rYIXqHRPDKMhyx6fPi5DosDGniq.jpg",
+        "season_number": 16,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2013-09-25",
+        "episode_count": 10,
+        "id": 6721,
+        "name": "Season 17",
+        "overview": "Join Stan, Kyle, Cartman and Princess Kenny as they infiltrate the NSA, thwart patient zero, tame some strange and fight in the greatest battle of their young, hot lives.",
+        "poster_path": "/spuqYJjCgZZyk0d9OTIRHAyeDaF.jpg",
+        "season_number": 17,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2014-09-24",
+        "episode_count": 10,
+        "id": 62784,
+        "name": "Season 18",
+        "overview": "Join Cartman, Kenny, Stan and Kyle as they get lost in virtual reality, go underground with Cock Magic, and uncover the shocking truth about a music superstar. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/5IMCLoCtNOyHHYS4dZqMNkwELhU.jpg",
+        "season_number": 18,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2015-09-16",
+        "episode_count": 10,
+        "id": 70512,
+        "name": "Season 19",
+        "overview": "Join Cartman, Kenny, Stan and Kyle as Mr. Garrison makes a bid for the White House, Randy takes the lead in gentrifying the town, and everyone is looking for their safe space. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/7iMBDcRWcCLjeDiZa6Dd3MGgSIm.jpg",
+        "season_number": 19,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2016-09-14",
+        "episode_count": 10,
+        "id": 78669,
+        "name": "Season 20",
+        "overview": "Join Cartman, Kenny, Stan and Kyle as they confront online trolling, face the member berry epidemic, and come to terms with Cartman having a girlfriend. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/tQvfdzJFMV70grQBB9ylv35ChGW.jpg",
+        "season_number": 20,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2017-09-13",
+        "episode_count": 10,
+        "id": 92690,
+        "name": "Season 21",
+        "overview": "Join Cartman, Kenny, Stan, and Kyle as they take on the opioid epidemic, experiment with water bears, dig into the underbelly of social media and go to war with Canada. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/jeNkiDr0f1RIBylZ27qHppqAAIW.jpg",
+        "season_number": 21,
+        "vote_average": 7.2
+      },
+      {
+        "air_date": "2018-09-26",
+        "episode_count": 10,
+        "id": 109933,
+        "name": "Season 22",
+        "overview": "Join Stan, Kyle, Cartman, Kenny as they deal the vaping epidemic, Cartman’s anxiety disorder, and the fact that they didn't take the threat of ManBearPig \"cereal\" enough the first time around. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/4pRzNSVOnORKXdSrXk76SQi4Ghm.jpg",
+        "season_number": 22,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2019-09-25",
+        "episode_count": 10,
+        "id": 131142,
+        "name": "Season 23",
+        "overview": "Join Stan, Kyle, Cartman, Kenny, and Randy as they explore the wonders of the human biome, tackle the consequences of immigration, and get banned in China. For them, it’s all part of growing up in South Park!",
+        "poster_path": "/to2dtGxOcgpbkjZNSXizDZbrihn.jpg",
+        "season_number": 23,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2020-09-30",
+        "episode_count": 2,
+        "id": 164444,
+        "name": "Season 24",
+        "overview": "Join Stan, Kyle, Cartman, and Kenny as they navigate the COVID-19 pandemic. Will the broship survive as vaccines become available? For them, it’s all part of growing up in South Park!",
+        "poster_path": "/cNvCPsrRifVGbvk55umABfEpcwW.jpg",
+        "season_number": 24,
+        "vote_average": 7.2
+      },
+      {
+        "air_date": "2022-02-02",
+        "episode_count": 6,
+        "id": 240087,
+        "name": "Season 25",
+        "overview": "Join Stan, Kyle, Cartman, and Kenny as they correct a long-held misconception about one of their classmates, deal with moody teenagers, and celebrate Pajama Day at South Park Elementary. For them, it's all part of growing up in South Park!",
+        "poster_path": "/msrUAxoLgwnmFaPn5c1wtquvaje.jpg",
+        "season_number": 25,
+        "vote_average": 7
+      },
+      {
+        "air_date": "2023-02-08",
+        "episode_count": 6,
+        "id": 324837,
+        "name": "Season 26",
+        "overview": "Join Stan, Kyle, Cartman and Kenny as they learn the wonders of Japanese toilets, grapple with latest developments in A.l. technology, reopen an iconic Colorado restaurant, and meet a couple who feel the need to share the importance of their privacy with the world. For them, it's all part of growing up in South Park!",
+        "poster_path": "/eeMrOKmOm2V3VJW98P0b4cogDA5.jpg",
+        "season_number": 26,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2025-07-23",
+        "episode_count": 5,
+        "id": 449460,
+        "name": "Season 27",
+        "overview": "Join Stan, Kyle, Cartman, and Kenny, plus the surprise return of Jesus, our savior as everyone prepares for Satan and the President to welcome their love child, the Antichrist. If that's not enough, they must also contend with the end of woke culture, combat the scourge of Al slop, learn disturbing lessons about crypto and face the threat of South Park's imminent cancellation. For them, it's all part of growing up in South Park!",
+        "poster_path": "/9JYi3mM4Vd9YpvKPr13VmOb8aZ4.jpg",
+        "season_number": 27,
+        "vote_average": 6.7
+      },
+      {
+        "air_date": "2025-10-15",
+        "episode_count": 5,
+        "id": 480193,
+        "name": "Season 28",
+        "overview": "Join Stan, Kyle, Cartman, and Kenny, plus the surprise return of Jesus, our savior as everyone prepares for Satan and the President to welcome their love child, the Antichrist. If that's not enough, they must also contend with the end of woke culture, combat the scourge of Al slop, learn disturbing lessons about crypto and face the threat of South Park's imminent cancellation. For them, it's all part of growing up in South Park!",
+        "poster_path": "/hSTQkvdWcCSx4xpaELUR44VbAX0.jpg",
+        "season_number": 28,
+        "vote_average": 5.7
+      },
+      {
+        "air_date": "2026-09-16",
+        "episode_count": 6,
+        "id": 517335,
+        "name": "Season 29",
+        "overview": "Join Stan, Kyle, Cartman and Kenny for the historic 29th season of South America.",
+        "poster_path": "/8tIvWw8SFbF1xEQID0VOE9Yx92m.jpg",
+        "season_number": 29,
+        "vote_average": 5.7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Four boys. One f**ked-up town.",
+    "type": "Scripted",
+    "vote_average": 8.333,
+    "vote_count": 5254,
+    "external_ids": {
+      "imdb_id": "tt0121955",
+      "freebase_mid": "/m/06y_n",
+      "freebase_id": "/en/south_park",
+      "tvdb_id": 75897,
+      "tvrage_id": 5266,
+      "wikidata_id": "Q16538",
+      "facebook_id": "southpark",
+      "instagram_id": "southpark",
+      "twitter_id": "SouthPark"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Follow the misadventures of four irreverent grade-schoolers in the quiet, dysfunctional town of South Park, Colorado.",
+            "homepage": "",
+            "tagline": "Four boys. One f**ked-up town."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "South Park is een Emmy Award-winnende animatieserie. De serie gaat over de surrealistische avonturen van vier boezemvrienden Stan, Kyle, Kenny en Cartman uit South Park, een fictief bergdorpje in de staat Colorado, waar niets normaal blijkt te zijn, en waarin de verhaallijnen bizarre wendingen nemen. South Park staat bekend om zijn simpele animatiestijl, donkere humor en de taboedoorbrekende onderwerpen. De meeste afleveringen zijn een satire op de (Amerikaanse) samenleving, beroemdheden en/of onderwerpen die het nieuws beheersen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Die Serie konzentriert sich hauptsächlich auf die Abenteuer der vier Kinder Stan Marsh, Kyle Broflovski, Eric Cartman und Kenny McCormick in der fiktionalen Kleinstadt South Park in den Rocky Mountains in den USA der Gegenwart. Neben den vier Hauptcharakteren wird die Stadt von einer Reihe von zusätzlichen Charakteren bevölkert.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "South Park es una serie de televisión estadounidense de animación, creada por Trey Parker y Matt Stone para el canal Comedy Central. Está dirigida al público adulto y se caracteriza por satirizar con humor negro la sociedad, actualidad y cultura estadounidense a través de las historias y situaciones surrealistas que les suceden a sus protagonistas, cuatro niños (Stan, Kyle, Cartman y Kenny) residentes en un pueblo ficticio de Colorado que se llama South Park.",
+            "homepage": "",
+            "tagline": "Cuatro chicos. Una ciudad j****da"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Stanley \"Stan\" Marsh, Eric Cartman e Kyle Broflosky e Kenneth \"Kenny\" McCormick, quattro ragazzi che frequentano la scuola elementare e vivono nella cittadina di South Park, in Colorado. Pestiferi, osceni e sfacciatamente intelligenti i ragazzacci affrontano temi di attualità con immediatezza e sana cattiveria sfatando tabù e demonizzando la società americana. Le loro \"armi\" sono la parodia, la commedia nera e il linguaggio scurrile.",
+            "homepage": "",
+            "tagline": "Quattro ragazzi. Una fo***ta città."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "South Park é um desenho animado cuja essência é a crítica à sociedade norte-americana. A série decorre na pequena e gelada cidade fictícia de South Park, Colorado (onde ocorre apenas um dia de Sol por ano) e é protagonizada por quatro crianças, através das quais são feitas duras e politicamente incorrectas críticas sociais e políticas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Южный Парк",
+            "overview": "В этом сатирическом сериале, который бесцеремонно высмеивает тенденции, знаменитостей и политиков, показан мир глазами детишек, весьма острых на язык.",
+            "homepage": "",
+            "tagline": "Четыре мальчика. Один странный город"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Serien var tilsigtet et voksent publikum, hvilket også har gjort at serien er blevet berømt for sin brug af bramfrie sprog, satirisk og sorte humor, der gør grin med en bred vifte af emner. Den løbende fortælling omhandler fire drenge – Stan Marsh, Kyle Broflovski, Eric Cartman og Kenny McCormick – og deres bizarre eventyr i og omkring South Park, Colorado.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "La petite ville de South Park dans le Colorado est le théâtre des aventures de Cartman, Stan, Kyle et Kenny, quatre enfants au langage quelque peu... décalé !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Městečko South Park",
+            "overview": "Městečko South Park je netradiční animovaný seriál o čtyřech klucích z malého coloradského městečka, kteří vidí \"dospělácký\" svět ze své (dalo by se říct přimočaré až naivní) perspektivy. Už první díly si získaly pozornost diváků, protože byly na svou dobu netradičně vulgární a politicky nekorektní. Autoři poukazují na společenské problémy, na absurditu současného světa, reagují na aktuální události a často si utahují z celebrit. Téměř žádné téma pro tvůrce South Parku není tabu, občas si dělají legraci i sami ze sebe.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Το Σάουθ Παρκ είναι μια κωμική τηλεοπτική σειρά κινουμένων σχεδίων που ακολουθεί τις σουρρεαλιστικές περιπέτειες τεσσάρων μικρών αγοριών που ζουν στην κωμόπολη Σάουθ Παρκ του Κολοράντο. Το Σάουθ Παρκ σατιρίζει πολλές όψεις του Αμερικανικού πολιτισμού και των τρεχόντων γεγονότων προκαλώντας τις βαθιά ριζωμένες πεποιθήσεις και ταμπού, χρησιμοποιώντας συχνά βίαιη παρωδία και μαύρο χιούμορ!",
+            "homepage": "",
+            "tagline": "4 αγόρια. Μια γαμ**ενη πόλη"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "Három évvel amerikai bemutatása után hazánkba is eljut a televíziózás történetének legfelforgatóbb rajzfilmje. Már az elején érdemes használati utasításként leszögezni a figyelemre méltó lényeget, amit a rajzfilm egyik alkotója megfogalmazott: \"A South Park világa annyira nyakatekert és szürreális, amennyire egy kilencéves iskolás gondolatvilága.\" A sorozat a felnőttek körében aratta legnagyobb sikereit. A történet szerint a coloradói sziklás hegységekben, a flúgos South Parkban élnek az első látásra ártatlan lurkók: Kyle, Kenny, Stan és Cartman. Stan a csapat vezére, őt ritkán merik megtréfálni társaik. A South Park vitákat generált a világon mindenütt, ahol bemutatták. Pedig csak egy rajzfilm. Igaz, kicsit másmilyen, mint amit megszoktunk.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "南方公园",
+            "overview": "讲述科罗拉多州南方公园小镇上，斯坦、凯尔、卡特曼和肯尼四个孩子的生活。他们不断卷入超自然事件、社会冲突和各种荒诞危机，并以孩子的视角面对成年人世界中的政治、宗教、文化和社会问题。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "",
+            "overview": "South Park је američka animirana serija која sе emituje оd 1997. godine. Autori su Trey Parker i Мatt Stone.\n\nSerija se bavi doživljajima četvorice dečaka i njihovih poznanika u gradiću South Park, u američkoj saveznoj državi Kolorado. Karakteristična je po nadrealizmu, parodiranju, satiri i crnom humoru koji kao temu imaju američku kulturu, tabue te razna aktuelna društvena i politička zbivanja. Humor i poruke serije često su predmet kritika raznih društvenih grupa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "סאות' פארק",
+            "overview": "סדרת אנימציה לנערים ולמבוגרים אשר הפכה לסדרת קאלט בארה\"ב, המתארת את עלילותיהם של ארבעה ילדים יוצאי דופן, בסאות' פארק, עיירה לא לגמרי נורמלית בקולורדו. הסדרה נוצרה על-ידי שני גאוני הקומיקס טריי פארקר ומאט סטון. סאות' פארק היא גם ביתם של שף, טבח הקפיטריה הבית-ספרית, מר האנקי הלא הוא קקי חג-המולד, טימי הילד הנכה האהוב על כולם, ישו הצלוב, באטרס התמים וסלבריטיז שמגיעים לבקר בעיירה. הסדרה באה כדי לבקר את מה שקורה באמריקה ובכל העולם, בדרך ההומוריסטית של העניין.",
+            "homepage": "",
+            "tagline": "ארבעה בנים. עיר אחת דפוקה."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Miasteczko South Park",
+            "overview": "South Park jest jednym z najpopularniejszych i zarazem kontrowersyjnych seriali animowanych na świecie. Opowiada o czterech 8-letnich chłopcach. Eric Cartman, Stan Marsh, Kyle Broflovski i Kenny McCormick mieszkają w zaśnieżonym miasteczku w stanie Colorado, USA. Nie jest to takie całkiem zwykłe miasteczko, bo często jest nawiedzane przez kosmitów. Nieopodal stoi czynny wulkan. W niektórych odcinkach znajdują się nawiązania do znanych osób showbiznesu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Colorado’nun dağlık bir bölgesinde, hayali bir kasabada Stan, Kyle, Cartman ve Kenny isimli dört arkadaş yaşar. Bazen günlük bazen olağanüstü olaylar etrafında şekillenen hikâyelerde çocukların sorgulayıcı ve mantıklı, büyüklerin ise çoğunlukla abartılı ve anlamsız tepkileri konu alınır. Stan ve Kyle aralarındaki sarsılmaz dostlukla öne çıkarken, Cartman, bencil ve zaman zaman kötücül niyetleriyle bilinir. Kenny ise yoksul bir aileden gelen ve sürekli ölen gizemli bir karakterdir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "South Park este un serial de animație al cărui personaje principale sunt Stan, Kyle, Kenny și Cartman, patru copii de clasa a treia, care au o pasiune pentru limbajul obscen. Acțiunea se petrece în South Park, orășelul care dă numele serialului, din statul american Colorado, unde personajele principale, însoțite de multitudinea de personaje secundare au de depășit tot felul de situații bizare și hilare.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "South Park on talvinen pikkukaupunki Coloradossa. Siellä asuvat 8-vuotiaat kaverukset Eric Cartman, Kyle Broflovski, Stan Marsh ja Kenny McCormick. Pojat kiroilevat, viljelevät alatyylistä huumoria ja joutuvat outoihin tilanteisiin. Sarjan ideana on kritisoida amerikkalaista yhteiskuntaa ja puhua vaietuista tabuista. Sarja sai alkunsa Trey Parkerin ja Matt Stonen lyhytelokuvasta. Sarjasta on myös tehty elokuva South Park: Isompi, pidempi ja leikkaamaton.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Південний Парк",
+            "overview": "Основу сюжету складають пригоди чотирьох хлопчиків і їхніх друзів, що живуть у маленькому містечку Південний Парк, штат Колорадо. Серіал висміює проблеми американської культури і поточних світових подій, а також критикує безліч глибоких переконань і табу завдяки пародії і чорному гумору. Позиціонується як мультфільм для дорослих.  Шоу відоме своїм висвітленням поточних подій, що відбуваються в реальному світі. Робота над кожною серією ведеться в два етапи: на першому автори вигадують загальну концепцію і сюжет, а на другому — менш ніж за тиждень до прем'єрного показу — доопрацьовують деталі. Тому кожен новий випуск мультфільму залишається злободенним і наближеним до реальних подій.",
+            "homepage": "",
+            "tagline": "Четверо хлопців. Одне кляте містечко."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Série animada que satiriza com muito humor negro a sociedade estadounidense ao apresentar situações bizarras e surreais protagonizadas por Stan, Kyle, Eric e Kenny, as crianças mais travessas de South Park.",
+            "homepage": "",
+            "tagline": "Quatro meninos. Uma cidade f*dida."
+          }
+        },
+        {
+          "iso_3166_1": "LB",
+          "iso_639_1": "lb",
+          "name": "",
+          "english_name": "Letzeburgesch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "南方四賤客",
+            "overview": "該劇主要講述發生在四個住在科羅拉多州中一個虛擬小鎮南方公園的男孩屎蛋、凱子、阿ㄆㄧㄚˇ和阿尼身邊的故事。四位孩童滿嘴髒話，這部諷刺情境喜劇透過他們的視角看世界，以歡樂的方式，惡搞時下潮流、名人和政治人物。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Саут Парк",
+            "overview": "Историите се въртят около четиримата 8-годишни главни герои, които живеят в малкото планинско градче Саут Парк в щата Колорадо. Сериалът пародира и осмива американския народ и политика, както и много пороци, привички, предразсъдъци, расизъм, религия.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "En av de mest provoserende og morsomme seriene som i en årrekke har servert sitt kyniske og nådeløse skråblikk på samfunnet vi lever i. En serie som elsker å balansere på grensen for så å tråkke over den.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Саут Парк",
+            "overview": "Саут Парк (енгл. South Park) је амерички анимирани ситком аутора Треја Паркера и Мета Стоуна за телевизијску мрежу Комеди сентрал. Намењена одраслој публици, серија је постала препознатљива по грубом језику и надреалном, сатиричном и црном хумору који исмева широк спектар тема. Радња се врти око доживљаја четири дечака: Стена Марша, Кајла Брофловског, Ерика Картмана и Кенија Макормика. Њихове бизарне авантуре смештене су у градићу Саут Парк у Колораду. У документарном филму Сто највећих цртаних филмова (The 100 Greatest Cartoons) из 2004. Саут Парк је пласиран на трећем месту, иза серија Симпсонови и Том и Џери.\n\nПаркер и Стоун, који су се упознали на колеџу, засновали су серију на два кратка анимирана филма која су њих двојица снимили 1992. и 1995. Филм из 1995. је један од првих анимираних филмова који је постао популаран преко Интернета, што је послужило као добар почетак за дужи цртану серију. Прва епизода Саут Парка емитована је у августу 1997. и имала је велику гледаност. Квалитет каснијих епизода је варирао, али је серија постала комерцијално најуспешнији и најдуговечнији продукт куће Комеди сентрал. Цртежи су у почетку рађени ручно, али се данас праве уз помоћ рачунара. Епизоде се углавном пишу и продуцирају једну недељу пре приказивања. Већину епизода су писали и режирали Паркер и Стоун, а такође су позајмили највећи број гласова у серији. Након првих неколико сезона, као редитељ и сценариста се почео потписивати само Паркер. До краја двадесете сезоне је снимњено и приказано укупно 277 епизода. Саут Парк је обновљен до 2019, довођењем у серију 23 сезоне. Прва епизода двадесетпрве сезоне је емитована 2017.\n\nНа основу успеха серије снимљен је и дугометражни мјузикл South Park: Bigger, Longer & Uncut чија је премијера била у јуну 1999. Серија је добила многе награде, од којих су најзначајнија четири Емија за најбољу серију у ударном термину те награда Пибоди.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Prati zgode četiri dječaka u mirnom gradiću u Coloradu zvanom South Park.",
+            "homepage": "",
+            "tagline": "Četiri dječaka. Jedan s**bani grad."
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Dienvidparks",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "사우스 파크",
+            "overview": "사우스 파크 마을에 사는 꼬맹이 4인방. 생김새는 평범하지만 입은 거칠고 생각은 험하다. 정치, 연예, 문화, 시사까지 성역 없이 던져지는 녀석들의 돌직구. 사우스 파크만의 사이다 멘트와 블랙 유머가 살아있는 어른용 애니메이션.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Arga kändisar, talande handdukar och Saddam Hussein – ingen slipper undan i denna prisbelönade satirserie för vuxna. Allt ses genom ögonen på fyra grundskoleelever i den dysfunktionella staden South Park.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Pietų parkas",
+            "overview": "JAV televizijos animacinis serialas, kurį kuria Matt Stone ir Trey Parker. Autoriai taip pat ir įgarsina pagrindinius veikėjus. Serialas platininamas ir transliuojamas Comedy Central televizijos nuo 1997 metų. Jis pasakoja apie pradinės mokyklos mokinių nuotykius Pietų Parko miestelyje, Kolorado valstijoje JAV. Piešiamas specialiai primityvokai, tačiau sulaukė žiūrovų dėmesio dėl juodojo humoro, parodijų ir nusitovėjusių vertybių laužymo. Pietų parkas yra trečiasis ilgiausiai transliuojamas suaugusiųjų animacinis serialas po Simpsonų (The Simpsons) ir Karaliaus Hilo (King of the Hill).",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Cuatro niños (Stan, Kyle, Cartman y Kenny) irreverentes de primaria viven grandes y surrealistas desventuras en la tranquila y disfuncional pueblo South Park, Colorado.",
+            "homepage": "",
+            "tagline": "Ven a South Park y conoce a algunos amigos míos."
+          }
+        },
+        {
+          "iso_3166_1": "UZ",
+          "iso_639_1": "uz",
+          "name": "ozbek",
+          "english_name": "Uzbek",
+          "data": {
+            "name": "Janubiy Park",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Mestečko South Park",
+            "overview": "Príbehy popisujú život štyroch osemročných chlapcov, žiakov základnej školy v typickom americkom zapadlom mestečku South Park v štáte Colorado.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Mengikuti kesalahan dari empat siswa sekolah dasar yang tidak sopan di kota South Park yang tenang dan tidak berfungsi, Colorado.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "サウスパーク",
+            "overview": "コロラド州の小さな町サウスパークを舞台に主人公の少年4人が騒動を起こしたり、巻き込まれるコメディ・アニメであり、過激な描写や痛烈な社会風刺、ブラックジョーク、有名映画・ドラマのパロディが特徴。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เซาท์พาร์ก",
+            "overview": "กระแสความนิยม เซเลบคนดัง และนักการเมืองกับการจิกกัดสุดบันเทิง ซิตคอมเสียดสีนี้สะท้อนโลกผ่านมุมมองของเด็กปากร้ายสี่คน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Cette série d'animation met en vedette quatre élèves grossiers de 4e année : Stan, Kyle, Kenny et Cartman. Dans la ville de South Park, au Colorado, des choses étranges se produisent, qu'il s'agisse d'être enlevé par des extraterrestres ou d'éviter Ike, le petit frère de Kyle.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "ساوث بارك",
+            "overview": "يتبع مغامرات أربعة طلاب أشقياء في بلدة ساوث بارك الهادئة المختلة وظيفيا، في ولاية كولورادو الأمريكية.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "المجانين الأربعة ‏",
+            "overview": "تنتقد هذه الكوميديا الساخرة اتجاهات سائدة ومشاهير وشخصيات سياسية نقدًا لاذعًا يتّسم بالمرح، فتعكس العالم من منظور أربعة أطفال سليطي اللسان.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "In dieser satirischen Sitcom ziehen vier obszöne Kids Trends, Stars und Politiker rückhaltlos durch den Dreck. Im Leben ist alles eine Frage der Sichtweise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CH",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "In dieser satirischen Sitcom ziehen vier obszöne Kids Trends, Stars und Politiker rückhaltlos durch den Dreck. Im Leben ist alles eine Frage der Sichtweise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "衰仔樂園",
+            "overview": "四位孩童滿嘴髒話，這部諷刺情境喜劇透過他們的視角看世界，以歡樂的方式，惡搞時下潮流、名人和政治人物。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "南方公园",
+            "overview": "这部讽刺情景喜剧透过四名满嘴脏话的小孩之眼看世界，欢乐地嘲讽了流行时尚、名人和政客。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "साउथ पार्क",
+            "overview": "मस्ती भरे अटपटे ट्रेंड्स, सिलेब्रेटीज़ और राजनैतिक हस्तियों के साथ, व्यंग्य से भरा यह सिटकॉम दुनिया को चार बदतमीज़ बच्चों की नज़रों से देखता है.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Komedi suasana satira ini mengejek gaya terkini, selebriti dan tokoh politik melalui pandangan empat orang kanak-kanak yang bermulut cabul tentang dunia ini.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Komedi suasana satira ini mengejek gaya terkini, selebriti dan tokoh politik melalui pandangan empat orang kanak-kanak yang bermulut cabul tentang dunia ini.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Công Viên Phía Nam",
+            "overview": "Hân hoan nhạo báng các xu hướng, người nổi tiếng và nhân vật chính trị, bộ phim hài kịch tình huống châm biếm này nhìn thế giới qua đôi mắt của bốn đứa trẻ nói tục tĩu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Deze satirische sitcom waarin trends, celebrity's en politici met de grond gelijk worden gemaakt, bekijkt de wereld door de ogen van vier grofgebekte kinderen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NN",
+          "iso_639_1": "nn",
+          "name": "",
+          "english_name": "Norwegian Nynorsk",
+          "data": {
+            "name": "",
+            "overview": "En av de mest provoserende og morsomme seriene som i en årrekke har servert sitt kyniske og nådeløse skråblikk på samfunnet vi lever i. En serie som elsker å balansere på grensen for så å tråkke over den.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "",
+            "overview": "En av de mest provoserende og morsomme seriene som i en årrekke har servert sitt kyniske og nådeløse skråblikk på samfunnet vi lever i. En serie som elsker å balansere på grensen for så å tråkke over den.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "სამხრეთის პარკი",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "ساوت پارک",
+            "overview": "ماجراهای ناگوار چهار دانش‌آموز ابتدایی بی‌ادب را در شهر آرام و درب و داغون ساوت پارک، کلرادو دنبال می‌کند.",
+            "homepage": "",
+            "tagline": "چهار پسر. یک شهر به فنا رفته."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "South Park",
+            "overview": "South Park on täiskasvanutele mõeldud animaseriaal, mis räägib nelja South Pargis elava sõbra igapäeva elust ja tegemistest. Seriaal saavutas USA-s suure populaarsuse ja sellest on tehtud täispikk film.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "South Park",
+            "overview": "South Park és una sèrie d'animació orientada al públic adult creada per Matt Stone i Trey Parker. Segueix les aventures quotidianes d'una colla de quatre nens (Stan Marsh, Kyle Broflovski, Eric Cartman, i Kenny McCormick) que viuen a la petita ciutat de South Park, a Colorado. South Park satiritza molts dels aspectes de l'American Way of Life, la cultura i l'actualitat estatunidenca, aprofundint en els valors i tabús més arrelats, parodiant-los amb fortes dosis d'humor negre i molts renecs. South Park és una de les sèries d'animació amb més història a la televisió estatunidenca, juntament amb Els Simpsons.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BY",
+          "iso_639_1": "be",
+          "name": "беларуская мова",
+          "english_name": "Belarusian",
+          "data": {
+            "name": "Паўднёвы парк",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3UviYOlhn8EgXMBuiT6MnUuo1w9.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7uihCghJiyYFTXSh1BOPdHQN8xK.jpg",
+          "vote_average": 5.616,
+          "vote_count": 13,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/41neXsH222hV2zrsTyw8h7javon.jpg",
+          "vote_average": 5.25,
+          "vote_count": 20,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pjdOSa7Qh3cfs5Od7s7h4yaiRqD.jpg",
+          "vote_average": 3.954,
+          "vote_count": 11,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6WAinokBmZU9Jt8l74TKI8JNUG7.jpg",
+          "vote_average": 3.852,
+          "vote_count": 17,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wGYz5ZrpYvvo92qCaV2CabMQXvp.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wMbyBgyzhn2eAAt8z9SUcRZVKTJ.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dgwWEM3EuKoDIh0PLHJbMd2PFgS.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zdsOOY2Blbvf7ZZvmykQzZ8Hl1f.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/trSvi66jJNIwpeB69t21C7pWW94.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ijVaxnB1sZDoKe701aedwxiDcOh.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8BzcYcoi0i8JKWFvDYtjFUYx1cR.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5i6KfFPKjylznxprIKbUNNdneCW.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1RnTRQEi1LHWulyd1O1ji4QHKhn.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/56HL5PFh6Wy9UPhEUIE55T4mdUe.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nziv9y6RBL3LC6gyl4dJ4QsdPYG.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8bchfi9x638KSyEGQUj02vc4o23.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b5FeRM31nCugRjzGJEiK6qWBrhI.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1beIbAr3Slf6021fu95sjN7PhG1.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bOJk5yeT1KUuDf36iv0wkyoGpVI.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6yJ2S0FQXSfpeNKhTMzjSdbuxoH.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n4tftiiquF2WnRV7NufWm2j447S.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1102,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cnWsfuFQ3U8tto1o7qi7TX5Tq2f.jpg",
+          "vote_average": 1.222,
+          "vote_count": 4,
+          "width": 1960
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5rZ9PiWtFDXM5a0qmKTfXEYg766.jpg",
+          "vote_average": 0.5,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iwiF92bsJ4bAIjWeQaTZrEbrcp6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8cb2gk0S4vIvpQYImYzV1RnJC4p.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1820
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sCWTIxz41uH6WWiJD1he4NEnbfa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mBFfrHCcwiqoohjrG4j1gqoTpnV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/69Mxuyt5xz4I8ofCoHqiwxBKhAa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kca4eCnoGrEi004S4Bf3WiaPCCT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pmzbpom7TFFFTjdZaeLa9eN5yvF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eKD8uRMNV6QBa4n76Exvhj93oun.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 2157,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tU5gb2IIJyt0enkpPKe9RoCx6Da.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3831
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9yYl0UvcsSDOo8uOLONroGRZ2OK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8px4PhBMB2sSLalu8JQk0bJi3gs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c6GuaxqjObdqISSXwTdHAj80Etv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lBTReNrjALaVBQ28p9mbAwta0Ew.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/owbayofeRTo4LrRkdx3DDgZEQW6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qsiFM19LbXUMcMCvbQS4rYl2ZBk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.784,
+          "height": 1648,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5ITRlOzKVeCGeS0w4DAMm7fQQWz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2940
+        },
+        {
+          "aspect_ratio": 1.784,
+          "height": 1648,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tJ5A76N6gNd31zfJ9iOToZWVAxs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2940
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u3x95JCFH2VS7jOVHG70YW590jy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8HvvrDiw7ZHXMldek0JAqRRoKjz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sc8kKNJXJ5sicVesIpRVCYEGlCr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aPRYMnZsaIevbcLH67HUSJSRyVK.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eMXCjJGhKH6mCSVak4fXqvyQOvt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 8.349,
+          "height": 513,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4GZbeusQkSnYqH40W5ls67sYq5t.png",
+          "vote_average": 8.77,
+          "vote_count": 8,
+          "width": 4283
+        },
+        {
+          "aspect_ratio": 8.348,
+          "height": 515,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/13yS7ws7ZxiMWZZCHnby7qBgbeV.png",
+          "vote_average": 8.596,
+          "vote_count": 7,
+          "width": 4299
+        },
+        {
+          "aspect_ratio": 1.991,
+          "height": 1294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iEC3QymFLyttC3RUBtkKOR84gR1.png",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2577
+        },
+        {
+          "aspect_ratio": 1.991,
+          "height": 1294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AdYnCCwvhB9Uk2ld6qBsy57C1d5.png",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2577
+        },
+        {
+          "aspect_ratio": 8.475,
+          "height": 505,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5ACEQERJdX15rXv8rKN8oY1S6fe.png",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 4280
+        },
+        {
+          "aspect_ratio": 8.418,
+          "height": 361,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ZXjeilONRLO7Fasm8yyo4wWZXQ.png",
+          "vote_average": 5.778,
+          "vote_count": 9,
+          "width": 3039
+        },
+        {
+          "aspect_ratio": 1.95,
+          "height": 779,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/noo6LD55PXzwEb557RqJORijFPR.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1519
+        },
+        {
+          "aspect_ratio": 1.701,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w3bIQSoMUXtsSvXJxIHntFgr7rg.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2209
+        },
+        {
+          "aspect_ratio": 0.857,
+          "height": 540,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4QeM7cl0qiQGnGgAmty6BNcPica.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 463
+        },
+        {
+          "aspect_ratio": 5.142,
+          "height": 825,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tFiGFobSJbJno3kXFZSZdnme3Ed.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 4242
+        },
+        {
+          "aspect_ratio": 1.264,
+          "height": 2025,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/46qnc0Jz6qP4PFUQhXVRpBvrEwd.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 5.399,
+          "height": 652,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oT5aK0X6EyFVA55Kgfa2Ahg2VAj.png",
+          "vote_average": 0.166,
+          "vote_count": 0,
+          "width": 3520
+        },
+        {
+          "aspect_ratio": 8,
+          "height": 98,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/75fiMis59w44c7tULbGfavxE2Bv.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 784
+        },
+        {
+          "aspect_ratio": 2.986,
+          "height": 631,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hXVJHSjKTtakPBumXZGuj2ZX0Gt.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1884
+        },
+        {
+          "aspect_ratio": 5.682,
+          "height": 88,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sD6GuRzLUjh0NRv9IZ2gBAxr4rr.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 5.887,
+          "height": 186,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t7JAWa6rIRsH6Wqpi7ixlBBTi21.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1095
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k7n2EVge7G77eMr3brztRGG1fFU.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qmBJg5V9UoI2UQ0794ra6rLYcq7.jpg",
+          "vote_average": 10,
+          "vote_count": 8,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dqAKFEjPEu7vWkVBkMdhGu9ifxU.jpg",
+          "vote_average": 6.608,
+          "vote_count": 14,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ka1ilKJLUkNvirukSAASEcufNFK.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6yrrTLsPeBXWZTJkc2vInwRturt.jpg",
+          "vote_average": 4.3,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eeMrOKmOm2V3VJW98P0b4cogDA5.jpg",
+          "vote_average": 4.154,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uEebJYPmUXzgrL3G5NDSayQy1Iv.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fqoPlnpwRBbTWDNFgGQvp9AsBOQ.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qB4aR48OWxV3a2znyzEx7A4QW35.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8tnN33tayAoyt56J5bbljeuGeaE.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w4IZhTgaErCkufCTq2G2ZEBFbx6.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8tIvWw8SFbF1xEQID0VOE9Yx92m.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hsNB7WwsdxoX9rz6URKd9HHZof8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u2fNDmiqaoZCx0sCW4W3d2w6Tsm.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2SVYuHfZOX9af3EHNULbVlhaktE.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lMuMzMx8lWlt1BeR7XCsidyFfkc.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ac85LyytG45fFLiL2paobAbNwp9.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mnYQeZjEyhFm2w1BfKfZEUp7Pf.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1980,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Yr4HhBNfRt1Vpeo9AIYFbedORE.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1320
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7ShS7eaoIPTVAy3DjtzC856BZxG.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1650,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5LrNhD2OjBhXIkAqUkfGTJjOk4P.jpg",
+          "vote_average": 1.222,
+          "vote_count": 4,
+          "width": 1100
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aeISQiUD2spMUE0jkNsAQTLzc1t.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/la1aQtFQOXwOiyjo9yuTyIDucj7.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kU0boERwKJsq0RuJv74FjaYe8k1.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1CGwZCFX2qerXaXQJJUB3qUvxq7.jpg",
+          "vote_average": 1.13,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pCUExRrhCjelv7AJzqJ8AP83UqR.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1650,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uOkZlS0AImOJGLBoX0B3nabwxl1.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1100
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/whtcp4PECLu0YIv2NME8kbhVDA1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k4wBPI4efBEIhlcVWu4zBbCHG63.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1414,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m33wF0b6AYuucjtQUDjmQAoyyY5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e6BbU4fkTVU1WZmLdlX3BGBiylD.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1754
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/imr00SeU4xnq9RT2eMbEixEgihG.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1754
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iGU0Y5HAgJ7sEgdQlJv6DuhyFRY.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1754
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2lgnO409pUP7wTQy60s259soOQq.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1kTu4qXL8wtf38D4ltqmbBdRxMg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1120,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2PzoiWFm3WymmOPOkWe5DKv7xD8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 747
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xvibclpGiDB8wKa38VdVZSTmNk9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uBZKliydiD92AjEoCukc93uoufT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1105,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/owj63y2SWfr6lua0UdgxeEnHx32.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1728,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Nl0NAgV4aHhv5HFik5YLMenM5U.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1152
+        }
+      ]
+    }
+  }
+}

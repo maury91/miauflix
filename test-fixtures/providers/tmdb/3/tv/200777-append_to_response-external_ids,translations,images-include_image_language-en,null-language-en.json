@@ -1,0 +1,665 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10950",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a19e8a7e7fccde04167a9a33723f2b5d\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oL459mgvcnc3jL90K7zkfvXQu0.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2023-01-06",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://hyouken-anime.com",
+    "id": 200777,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-06",
+    "last_episode_to_air": {
+      "id": 7895659,
+      "name": "The Boy Who Is the World's Strongest Sorcerer Goes on a Date With That Girl in a Foreign Land",
+      "overview": "Elisa is the 4th crown princess of Alpheria, and Ray has to assume the role of her boyfriend?!",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-06",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 25,
+      "season_number": 2,
+      "show_id": 200777,
+      "still_path": "/sJ2FqHQ6dC6B2OXtYanqxrduOO6.jpg"
+    },
+    "name": "The Iceblade Sorcerer Shall Rule the World",
+    "next_episode_to_air": {
+      "id": 7895660,
+      "name": "The Boy Who Is the World's Strongest Sorcerer Faces the Incoming Trials",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-13",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 2,
+      "show_id": 200777,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 160,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "冰剣の魔術師が世界を統べる",
+    "overview": "The Arnold Academy of Magic is a school for the elite...and Ray White is just your ordinary guy. In fact, he doesn't seem particularly skilled with magic at all, and is a bit of a klutz. Which is why he has nothing to do with the rumor that one of the great magicians, the Iceblade Sorcerer, is a member of the incoming class...right?",
+    "popularity": 12.6142,
+    "poster_path": "/u2KOdIKAr7XsZjbi6Ku8POnAcIu.jpg",
+    "production_companies": [
+      {
+        "id": 182805,
+        "logo_path": "/7jFe8V8KF0DxUVSX3GDkSUZxDnB.png",
+        "name": "CLOUDHEARTS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157471,
+        "logo_path": "/sWoNzrlMtRH8p3zKayLfOaTNmiG.png",
+        "name": "Nichion",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1393,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 87211,
+        "logo_path": "/lzBP1lTYoqqfvGriMMdlvFWDRH7.png",
+        "name": "DMM.com",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 98553,
+        "logo_path": "/qqyXcZlJQKlRmAD1TCKV7mGLQlt.png",
+        "name": "Crunchyroll",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Pony Canyon",
+        "origin_country": "JP"
+      },
+      {
+        "id": 170527,
+        "logo_path": null,
+        "name": "Japan Narration Actor Institute",
+        "origin_country": "JP"
+      },
+      {
+        "id": 313255,
+        "logo_path": "/voNSuFIwWoB4aJiySGXpDe2HLdJ.png",
+        "name": "SAND B",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-01-06",
+        "episode_count": 12,
+        "id": 291619,
+        "name": "The Iceblade Sorcerer Shall Rule the World",
+        "overview": "",
+        "poster_path": "/xBlJYF8ROyYppm6RbZ1Ga8nERWs.jpg",
+        "season_number": 1,
+        "vote_average": 6.6
+      },
+      {
+        "air_date": "2026-10-09",
+        "episode_count": 12,
+        "id": 542197,
+        "name": "The Iceblade Sorcerer Shall Rule the World II",
+        "overview": "",
+        "poster_path": "/efgmNqFfVRLsP1T9QG9cdddOaIr.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.1,
+    "vote_count": 63,
+    "external_ids": {
+      "imdb_id": "tt25531288",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 419502,
+      "tvrage_id": null,
+      "wikidata_id": "Q111744485",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "hyouken_pr"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Hyouken no Majutsushi ga Sekai wo Suberu",
+            "overview": "La Academia de Magia Arnold es una escuela para la élite... y Ray White es simplemente un tipo común y corriente. De hecho, no parece particularmente hábil con la magia y es un poco torpe. Por eso no tiene nada que ver con el rumor de que uno de los grandes magos, el Hechicero Iceblade, es miembro de la clase entrante... ¿verdad? .....",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Iceblade Sorcerer Shall Rule the World",
+            "overview": "The Arnold Academy of Magic is a school for the elite...and Ray White is just your ordinary guy. In fact, he doesn't seem particularly skilled with magic at all, and is a bit of a klutz. Which is why he has nothing to do with the rumor that one of the great magicians, the Iceblade Sorcerer, is a member of the incoming class...right?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "世界最強と謳われる”冰剣（ひょうけん）の魔術師”その称号を受け継いだ少年・レイ＝ホワイトは強大すぎる自身の力に苦悩し、極東戦役を収めたのを最後に、深い心の傷と共に戦場から姿を消した……。時は流れ、 3年後。世界中からエリート魔術師が集まるアーノルド魔術学院に入学したレイ。学院始まって以来、初めての一般家庭 (オーディナリー) 出身である彼を待っていたのは、貴族出身の魔術師からの侮辱と軽蔑の眼差し。そして、学院で出会ったかけがのない仲間をも巻き込む数々の陰謀だった。今、最強魔術師の友情と波乱に満ちた学園生活が幕を開ける。",
+            "homepage": "",
+            "tagline": "世界最強と謳われる”冰剣（ひょうけん）の魔術師”"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Iceblade Sorcerer Shall Rule the World",
+            "overview": "Die Arnold-Akademie für Magie ist eine Schule für die Elite … und Ray White ist ein stinknormaler Typ. In der Tat scheint er nicht besonders geschickt im Umgang mit der Magie zu sein und zudem ist er ein kleiner Tollpatsch. Deshalb hat er auch nichts mit dem Gerücht zu tun, dass einer der Großen Magier, der Iceblade Sorcerer, ein Mitglied seiner neuen Klasse ist … oder?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Iceblade Sorcerer Shall Rule the World",
+            "overview": "L'accademia di magia Arnold è una prestigiosa scuola in cui vengono formati molti grandi maghi. Ray White, un ragazzo proveniente da una normale famiglia, ha deciso di frequentare l'accademia. A scuola Ray è circondato da studenti provenienti da famiglie aristocratiche e maghi che prendono le distanze da lui. Ma nessuno sa che il giovane ha avuto in passato diverse esperienze in estremo oriente che lo hanno portato a eguagliare, o addirittura superare, in abilità i sette grandi maghi del mondo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冰剑的魔术师将要统一世界",
+            "overview": "　　魔术师「雷·怀特」，被誉为世界最强的「冰剑魔法师」，他因惧怕自己过于强大的力量，所以从战场上消失。从此隐藏自己的身分进入魔术世界中的菁英至上学校——「亚诺尔德魔术学院」。他是学院有史以来唯一一个从普通家庭出身的魔术师，得时时刻刻忍受从周遭贵族魔术师投来的蔑视。然而其他人并不知道，他们所歧视的人，正是在许多战役中得到胜利的、被现世所讴歌为世界七大魔术师之中最强的「冰剑的魔术师」！他在那与无可取代的伙伴们一一化解了无数阴谋与危机，这就是冰封许久的规格外的天才将坚冰融化的故事......",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Iceblade Sorcerer Shall Rule the World",
+            "overview": "O Feiticeiro da Lâmina de Gelo é tido como o mais poderoso feiticeiro do mundo, e o herdeiro deste título, Ray White, tem dificuldades em lidar com seu imenso poder. Após lutar na Guerra do Extremo Oriente, sua mais recente vitória, ele desaparece dos campos de batalha, sofrendo de profundos traumas. Três anos se passaram desde então, e Ray se matriculou na Academia Mágica de Arnold, um colégio frequentado pelos maiores feiticeiros do mundo. Como primeiro estudante não-nobre da instituição, Ray sofre da rejeição de seus pares, mas consegue forjar novas amizades e embarcar em novas aventuras.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Iceblade Sorcerer Shall Rule the World",
+            "overview": "Ray White est un jeune homme venant d'entrer dans la populaire académie de magie Arnold. En tant que premier élève inscrit n'étant pas d'origine noble, il est rejeté par un certain nombre de ses camarades. Néanmoins, il se lie rapidement d'amitié avec Amelia Rose, la représentante des élèves de première année et la fille ainée d'une des 3 grandes familles aristocratiques, ainsi que d'autres élèves.\n\nToutefois, Ray White cache un énorme secret à ses amis : il est le magicien des lames de glace et l'un des sept grands magiciens de ce monde.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Arnoldova akademie magie je škola pro elitu... a Ray White je obyčejný kluk. Vlastně se zdá, že vůbec není v magii nijak zvlášť zběhlý a je tak trochu nemehlo. Proto nemá nic společného s pověstí, že členem nastupujícího ročníku je jeden z velkých kouzelníků, Ledový čaroděj... že?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "빙검의 마술사가 세계를 다스린다",
+            "overview": "아놀드 마술학원. 그곳은 전 세계에서 모든 마술사들이 모이는 세계 최고의 미술학원. 마술의 뜻을 끝까지 가기 위해 수많은 마술사들이 그 세계에 발을 들어놓는다.\n\n그러나 그 학원에 레이 화이트도 역시 입학하려고 했었다. 그러나 그는 학원을 시작한 이래 일반 가정 출신의 마술사. 마술사 집안도 아니고 귀족도 아니다. 그런 그를 주위 사람들은 모두 앝봤다.\n\n하지만 모두는 몰랐다. 그는 세계 7대 마술사 중에서도 최강으로 칭송되고 있는 [빙검의 마술사]인 것을.\n\n규격 외의 천재로 인한 왕도학원 판타지 개막.",
+            "homepage": "",
+            "tagline": "빙검의 마술사가 세계를 다스린다"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Iceblade Sorcerer Shall Rule the World",
+            "overview": "El Hechicero de la Espada de Hielo es el hechicero más poderoso del mundo. Quien hereda su título, Ray White, vive en una lucha constante para controlar su inmenso poder. Tras combatir en la guerra del Lejano Oriente, su última hazaña, desaparece del campo de batalla lastrado por una gran carga psicológica. Pasan tres años y Ray se inscribe en la Academia de Magia Arnold, una escuela repleta de hechiceros de élite de todo el mundo. Ray es el primer “Ordinario” en asistir a la academia desde que esta se fundó, así que sus compañeros, todos de noble cuna, no tardan en despreciarlo y mirarlo con desdén. Ahora, tanto él como los nuevos amigos que ha hecho en la academia, se verán involucrados en multitud de intrigas. Este es el inicio de la historia de la vida escolar del hechicero más poderoso, sus amistades y sus dificultades.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冰劍的魔術師將要統一世界",
+            "overview": "魔術師「雷．懷特」，被譽為世界最強的「冰劍魔法師」，他因懼怕自己過於強大的力量，所以從戰場上消失。從此隱藏自己的身分進入魔術世界中的菁英至上學校——「亞諾爾德魔術學院」。他是學院有史以來唯一一個從普通家庭出身的魔術師，得時時刻刻忍受從周遭貴族魔術師投來的蔑視。然而其他人並不知道，他們所歧視的人，正是在許多戰役中得到勝利的、被現世所謳歌為世界七大魔術師之中最強的「冰劍的魔術師」！他在那與無可取代的夥伴們一一化解了無數陰謀與危機，這就是冰封許久的規格外的天才將堅冰融化的故事......",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Pháp Sư Băng Kiếm",
+            "overview": "Mọi người đều biết về người lính mạnh nhất, Magician Iceblade, Ray White. Sau khi vượt qua một cuộc chiến đẫm máu, Ray đăng ký vào Học viện Arnold, sẵn sàng trải nghiệm một cuộc sống bình thường—một điều xa xỉ mà anh chưa từng có. Để đạt được mục tiêu này, anh ta giữ bí mật danh tính của mình là Pháp sư Băng kiếm.\n\nMặc dù bị tẩy chay vì là thường dân, Ray kết bạn với Amelia Rose kiêu hãnh nhưng tốt bụng, Evy Armstrong cơ bắp và Elisa nhút nhát và mọt sách. Tuy nhiên, Ray được giao nhiệm vụ săn lùng một điệp viên có động cơ vẫn chưa rõ ràng...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เรย์ไวท์ จอมเวทดาบเหมันต์",
+            "overview": "โรงเรียนเวทมนตร์อาโนลด์ เป็นแหล่งรวมตัวของจอมเวทระดับหัวกะทิจากทั่วโลก เรย์ ไวท์ จอมเวทจากตระกูลสามัญชนคนแรกที่ได้เข้าเรียนนับแต่ก่อตั้งโรงเรียนแห่งนี้มา จอมเวทจากตระกูลขุนนางที่อยู่รอบข้างต่างก็ดูถูกเหยียดหยามเขา แต่ไม่มีใครเลยที่รู้ว่าเขานั้นคือ จอมเวทดาบเหมันต์ ผู้ได้รับการกล่าวขานว่าแข็งแกร่งที่สุดในเจ็ดจอมเวทผู้ยิ่งใหญ่ของโลก",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Волшебник ледяного клинка правит миром",
+            "overview": "Все знают о самом могущественном солдате, маге Ледяного Клинка, что привел страну к победе три года назад, но мало кому известно его истинное имя: Рэй Уайт. Пережив кровопролитную войну, Рэй решил поступить в Академию Арнольда, чтобы прожить спокойную жизнь — роскошь, которой у него никогда не было. Для достижения этой цели он держит свою личность мага Ледяного Клинка в секрете, ведь шрамы прошлого преследуют его и по сей день.\n\nНесмотря на то, что Рэй подвергается насмешкам за то, что он простолюдин, ему удалось завести дружбу с тремя девушками — гордой, но доброй Амелией Роуз, мускулистой Эви Армстронг и застенчивой Элизой. Однако в стенах академии скрывается заговор, и Рэю поручено выследить шпиона, мотивы которого остаются неясными. Чтобы защитить своих новообретенных друзей и людей, которые ему дороги, Рэй сделает все, что потребуется, даже если для этого придется столкнуться лицом к лицу со своим прошлым.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "The Iceblade Sorcerer Shall Rule the World",
+            "overview": "Herkes ülkeye zafer getiren en güçlü asker olan Buzbıçaklı Büyücüyü bilir ancak çok azı onu gerçek ismi olan Ray White ile tanır. Kanlı bir savaş atlattıktan sonra Ray, Arnold Akademisine kayıt olup daha önce hiç sahip olmadığı bir lüks olan normal bir hayat yaşama şansını elde etmeye hazırdır. Bu şansını kaybetmemek için Buzbıçaklı Büyücü namını bir sır olarak saklar ancak geçmişin izleri onun peşini henüz bırakmamıştır.Halktan gelen biri olduğu için dışlansa da Ray, gururlu ama nazik bir kişi olan Amelia Rose ile, kas kafalı biri olan Evy Armstrong ile ve utangaç bir kitap kurdu olan Elisa ile arkadaş olur. Ancak, akademi duvarlarında bir komplo baş kaldırmaya başlamıştır ve Ray de bu amaçları belirsiz olan casusu yakalamak ile görevlendirilmiştir. Yeni edindiği arkadaşlarını ve değer verdiği kişileri korumak için Ray, geçmişiyle yüzleşmesi bile de gerekse, elinden geleni yapacaktır.",
+            "homepage": "",
+            "tagline": "The Iceblade Sorcerer Shall Rule the World"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Чарівник крижаного клинка правитиме світом",
+            "overview": "Усі знають наймогутнішого солдата, Чарівника Крижаного Клинка, який привів країну до перемоги три роки тому, але мало хто знає його справжнє ім’я: Рей Вайт. Після кривавої війни Рей вступає до Академії Арнольда, готовий жити нормальним життям — розкішшю, якої він ніколи не мав. Щоб досягти цієї мети, він тримає в таємниці свою особу Чарівника Крижаного Клинка, шрами минулого все ще переслідують його донині.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Hyouken no Majutsushi ga Sekai wo Suberu",
+            "overview": "Wszyscy znają najpotężniejszego żołnierza, Maga Lodowego Ostrza, który trzy lata temu poprowadził kraj do zwycięstwa, ale niewielu zna jego prawdziwe imię: Ray White. Po przetrwaniu krwawej wojny Ray zapisuje się do Akademii Arnolda, gotów doświadczyć normalnego życia — luksusu, którego nigdy nie miał. Aby osiągnąć ten cel, utrzymuje w tajemnicy swoją tożsamość Maga Lodowego Ostrza, ale blizny przeszłości wciąż go prześladują.\n\nRay zaprzyjaźnia się z dumną, ale miłą Amelią Rose, inteligentnym Evy Armstrong oraz nieśmiałą Elisą uwielbiającą książki. Jednak w murach akademii czai się spisek, a Ray ma za zadanie polować na szpiega, którego motywy pozostają niejasne. Aby chronić swoich nowo poznanych przyjaciół i bliskich mu ludzi, Ray zrobi wszystko, co trzeba, nawet jeśli oznacza to konfrontację z przeszłością.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Penyihir Pedang Es Akan Kuasai Dunia",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "冰劍的魔術師將要統一世界",
+            "overview": "魔術師「雷．懷特」，被譽為世界最強的「冰劍魔法師」，他因懼怕自己過於強大的力量，所以從戰場上消失。從此隱藏自己的身分進入魔術世界中的菁英至上學校——「亞諾爾德魔術學院」。他是學院有史以來唯一一個從普通家庭出身的魔術師，得時時刻刻忍受從周遭貴族魔術師投來的蔑視。然而其他人並不知道，他們所歧視的人，正是在許多戰役中得到勝利的、被現世所謳歌為世界七大魔術師之中最強的「冰劍的魔術師」！他在那與無可取代的夥伴們一一化解了無數陰謀與危機，這就是冰封許久的規格外的天才將堅冰融化的故事. . . . . .",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De Arnold Academy of Magic is een school voor de elite... en Ray White is maar een gewone jongen. Sterker nog, hij lijkt helemaal niet bijzonder bedreven in magie, en is een beetje een kluns. Daarom heeft hij niets te maken met het gerucht dat een van de grote magiërs, de Iceblade Sorcerer, tot de nieuwe klasse behoort... toch?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Hyouken no Majutsushi ga Sekai o Suberu",
+            "overview": "Como o primeiro plebeu a frequentar a prestigiada Academia Arnold de Feitiçaria, Ray White é imediatamente recebido com desprezo por alguns dos alunos vindos da nobreza. Sem que eles saibam, a verdadeira identidade de Ray é a do famoso Feiticeiro da Lâmina de Gelo, um herói que levou o país à vitória em uma guerra passada e é um dos sete feiticeiros mais poderosos vivos. Apesar de seu status lendário, Ray deseja nada mais do que viver a vida escolar comum que nunca teve. Ray rapidamente faz amizade com alguns dos alunos mais influentes graças à sua natureza bondosa e amável. Infelizmente, à medida que aqueles com intenções nefastas começam a agir, Ray pode em breve não ter escolha a não ser usar seu verdadeiro poder para preservar os laços que tornam sua nova vida digna de ser vivida.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De Arnold Academy of Magic is een school voor de elite... en Ray White is maar een gewone jongen. Sterker nog, hij lijkt helemaal niet bijzonder bedreven in magie, en is een beetje een kluns. Daarom heeft hij niets te maken met het gerucht dat een van de grote magiërs, de Iceblade Sorcerer, tot de nieuwe klasse behoort... toch?",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.777,
+          "height": 1087,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oL459mgvcnc3jL90K7zkfvXQu0.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1932
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qKKKfTqcFrUv11az5XAfG9yzIJN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 2136,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gfoLXdldcq7fJf49nd1qxCXJIz.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3800
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zt1tPWvkF3cG5vOKwBE6cOpTTcf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bnlqbB1fs5Bf9rWEqKyD911Gbyo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/us7FZ3WN2Yq8U9ZT9SAGXw8qDlV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v2Oc5QTKxnOtacIvOpfQPLvgFeu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rKU3WllOS9IkiMmSWBdibIHb49H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.509,
+          "height": 228,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8OsfCGXIj6dc65ln2Cr567zh2sj.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 3.358,
+          "height": 595,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bo81AarVuJLBF2RhQo7DXNy0atN.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1998
+        },
+        {
+          "aspect_ratio": 2.392,
+          "height": 1627,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dAvdDsnOD3uS32LAUVbLvbOZWZC.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3892
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u2KOdIKAr7XsZjbi6Ku8POnAcIu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2340,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xBlJYF8ROyYppm6RbZ1Ga8nERWs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1560
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fJYN291aYb3XNGlIUBNPUSPjgre.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1876,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yez8OAWcaJH8FQmGddwhHvBpU5L.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1251
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/otyg7CUZLAV1bAkmudajhMIbz2v.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

@@ -22,6 +22,7 @@ const setup = (
   const dir = mkdtempSync(join(tmpdir(), 'sources-install-'));
   dirs.push(dir);
   const created = createSourcesService({
+    animeListsUrl: '',
     dataDir: dir,
     keyFile: join(dir, '.key'),
     encryptionKey: 'test',
@@ -448,6 +449,7 @@ gitIt('syncs from a git clone: one fetch for the changes, no request per file', 
   const dir = mkdtempSync(join(tmpdir(), 'sources-git-'));
   dirs.push(dir);
   const created = createSourcesService({
+    animeListsUrl: '',
     dataDir: dir,
     keyFile: join(dir, '.key'),
     encryptionKey: 'test',
@@ -601,6 +603,7 @@ it('follows changes to the list of sources', async () => {
   const dir = mkdtempSync(join(tmpdir(), 'sources-list-'));
   dirs.push(dir);
   const created = createSourcesService({
+    animeListsUrl: '',
     dataDir: dir,
     keyFile: join(dir, '.key'),
     encryptionKey: 'test',
@@ -721,6 +724,7 @@ it('discovers fixture sources for movies 550 and 120 through the E2E provider co
   dirs.push(dir);
   const calls: string[] = [];
   const created = createSourcesService({
+    animeListsUrl: '',
     dataDir: dir,
     keyFile: join(dir, '.key'),
     encryptionKey: 'test',
@@ -785,6 +789,7 @@ it.each([{ invalid: [] }, { invalid: ['missing-at', `UPPER@${DEFS}`, 'bad@not-a-
       const dir = mkdtempSync(join(tmpdir(), 'sources-preload-warning-'));
       dirs.push(dir);
       const created = createSourcesService({
+        animeListsUrl: '',
         dataDir: dir,
         keyFile: join(dir, '.key'),
         encryptionKey: 'test',

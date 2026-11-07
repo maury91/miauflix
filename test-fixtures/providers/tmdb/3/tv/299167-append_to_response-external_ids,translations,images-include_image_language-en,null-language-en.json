@@ -1,0 +1,1114 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12810",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8323091ec3131ad1558a6fd5f02c5b49\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ewlmL0nxo2lLqBj69upgp2gjHpV.jpg",
+    "created_by": [
+      {
+        "id": 56665,
+        "credit_id": "69b657aa482d00725c3b9286",
+        "name": "Chad Feehan",
+        "original_name": "Chad Feehan",
+        "gender": 2,
+        "profile_path": "/kO7cUR8nd6Fn01OYkgpEuYKYfUb.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-05-15",
+    "genres": [
+      {
+        "id": 37,
+        "name": "Western"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.paramountplus.com/shows/dutton-ranch",
+    "id": 299167,
+    "in_production": true,
+    "languages": [
+      "en",
+      "de",
+      "es"
+    ],
+    "last_air_date": "2026-07-03",
+    "last_episode_to_air": {
+      "id": 7041322,
+      "name": "El Padrino",
+      "overview": "Rip and Beth confront a danger that threatens everything",
+      "vote_average": 8.3,
+      "vote_count": 21,
+      "air_date": "2026-07-03",
+      "episode_number": 9,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 60,
+      "season_number": 1,
+      "show_id": 299167,
+      "still_path": "/yR9CRcKrGM85omkkHAy35o5vSIz.jpg"
+    },
+    "name": "Dutton Ranch",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2076,
+        "logo_path": "/4knr4ozp2IQrA3SMQlLSYKcM3ML.png",
+        "name": "Paramount Network",
+        "origin_country": "US"
+      },
+      {
+        "id": 4330,
+        "logo_path": "/fi83B1oztoS47xxcemFdPMhIzK.png",
+        "name": "Paramount+",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 9,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Dutton Ranch",
+    "overview": "Rip Wheeler and Beth Dutton gamble everything on a new life in South Texas, but the promise of building a future far from the ghosts of Yellowstone quickly collides with brutal new realities and a rival ranch that will stop at nothing to protect its empire.",
+    "popularity": 32.4776,
+    "poster_path": "/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
+    "production_companies": [
+      {
+        "id": 270146,
+        "logo_path": "/4r6rIxegOrrVeJwqRxpzNrCRQMD.png",
+        "name": "Paramount Television Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 124254,
+        "logo_path": "/Aq2pCS1mXg4AiVwLTkh4bhcejmt.png",
+        "name": "101 Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 106789,
+        "logo_path": "/oEgUdRh5YWF6Il705WnpwauirIj.png",
+        "name": "Bosque Ranch Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 4700,
+        "logo_path": "/A32wmjrs9Psf4zw0uaixF0GXfxq.png",
+        "name": "Linson Entertainment",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-05-15",
+        "episode_count": 9,
+        "id": 471596,
+        "name": "Season 1",
+        "overview": "Beth Dutton and Rip Wheeler are striking out on their own, and relocating for a new adventure. Their ward, Carter, is along for the ride, and – despite serious distractions – Beth and Rip work hard to ensure he becomes the man he’s meant to be. Just after the events of the Yellowstone series finale, follow Beth and Rip as they take on a 7,000-acre ranch in South Texas. Even with all of its beautiful landscapes and peaceful lifestyle, the pair run into hiccups trying to survive in the area, including a ruthless rival ranch run by a wealthy owner.",
+        "poster_path": "/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "Spanish",
+        "iso_639_1": "es",
+        "name": "Español"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 9.134,
+    "vote_count": 651,
+    "external_ids": {
+      "imdb_id": "tt34991493",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 463308,
+      "tvrage_id": null,
+      "wikidata_id": "Q136524178",
+      "facebook_id": "duttonranchpplus",
+      "instagram_id": "duttonranch",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Rip Wheeler and Beth Dutton gamble everything on a new life in South Texas, but the promise of building a future far from the ghosts of Yellowstone quickly collides with brutal new realities and a rival ranch that will stop at nothing to protect its empire.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Ранчо Даттонов",
+            "overview": "Ранчо Даттонов - дом Бет и Рипа, стало символом той жизни, о которой они мечтали, за которую отчаянно боролись и ради которой едва не пожертвовали всем. Они всей душой привязались к своей земле площадью 7000 акров, превратив её в место, которое готовы защищать любой ценой. Даже в самые тяжёлые времена Бет и Рип делают всё возможное, чтобы выстоять, сохранить своё ранчо и обеспечить достойное будущее себе и своему приёмному сыну Картеру.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Rancho Dutton",
+            "overview": "Rip y Beth Dutton están construyendo una nueva vida en el sur de Texas junto al joven Carter, pero la promesa de un futuro lejos de Yellowstone choca con duras realidades y con un rancho rival que no se detendrá ante nada para proteger su imperio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Rip Wheeler en Beth Dutton zetten alles op het spel voor een nieuw leven in Zuid-Texas, maar de belofte van een toekomst ver weg van de spoken van Yellowstone botst al snel op een brute nieuwe realiteit en een rivaliserende ranch die nergens voor terugdeinst om haar imperium te beschermen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Rip Wheeler en Beth Dutton zetten alles op het spel voor een nieuw leven in Zuid-Texas, maar de belofte van een toekomst ver weg van de spoken van Yellowstone botst al snel op een brute nieuwe realiteit en een rivaliserende ranch die nergens voor terugdeinst om haar imperium te beschermen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Dutton birtok",
+            "overview": "A Yellowstone eseményei után Beth Dutton és Rip Wheeler új életet próbál kezdeni Carterrel Dél-Texasban, távol a montanai birtok kísérteteitől és mindattól a vértől, árulástól és veszteségtől, amely a Dutton névhez tapadt. A saját, hatalmas ranchükön végre a jövőjüket szeretnék felépíteni: Rip a birtokot felügyeli, Beth pedig ugyanazzal a könyörtelen elszántsággal védi a családját, amellyel korábban a Yellowstone-t. A béke azonban hamar illúziónak bizonyul, mert az új vidéknek is megvannak a maga törvényei, ellenségei és kimondatlan háborúi: egy befolyásos, kegyetlen rivális ranch fenyegeti mindazt, amit Beth és Rip felépíteni próbál. Miközben Carterből azt a férfit igyekeznek nevelni, akivé szerintük válnia kell, a Duttonok ismét szembekerülnek a túlélés árnyoldalával, és rá kell jönniük, hogy Texasban a földért, a hatalomért és a családért vívott harc éppolyan könyörtelen, mint amit maguk mögött hagytak.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Ferma Dutton",
+            "overview": "Beth și Rip încearcă să-și construiască un viitor împreună în Texas. Departe de trecutul Yellowstone, aceștia se confruntă cu noi realități dure și cu un ranch rival nemilos, gata să facă orice pentru a-și proteja imperiul. În sudul Texasului, legăturile de sânge sunt mai puternice, iertarea e trecătoare, iar prețul supraviețuirii poate fi chiar sufletul tău.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Ranč Duttonových",
+            "overview": "Poté, co jejich ranč v Montaně srovnal se zemí lesní požár, sázejí Rip a Beth Duttonovi vše na nový život v texaské Rio Palomě, kde s každým novým východem slunce přichází i nová naděje – a kde se za každým stínem skrývá zúčtování. Naděje na společnou budoucnost daleko od yellowstonských přízraků ale rychle naráží na brutální novou realitu a bezcitný konkurenční ranč, který se při ochraně svého impéria nezastaví před ničím. V jižním Texasu je krevní pouto silnější a odpuštění pomíjivější – a za přežití můžete zaplatit svou duší.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Ранчото на Дътън",
+            "overview": "Рип Уилър и Бет Дътън залагат всичко на нов живот в Южен Тексас, но обещанието за изграждане на бъдеще далеч от призраците на Йелоустоун бързо се сблъсква с брутални нови реалности и конкурентно ранчо, което няма да се спре пред нищо, за да защити империята си.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Rancho Dutton",
+            "overview": "Rip Wheeler e Beth Dutton apostam tudo em uma nova vida no sul do Texas, mas a promessa de construir um futuro longe dos fantasmas de Yellowstone rapidamente se choca com novas e brutais realidades e com um rancho rival que não medirá esforços para proteger seu império.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ранчо Даттонів",
+            "overview": "Бет Даттон і Ріп Вілер борються за виживання на своєму улюбленому ранчо площею 7000 акрів в умовах важких часів і жорсткої конкуренції, водночас намагаючись допомогти юному Картеру стати тим чоловіком, яким він має бути.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Rancho Dutton",
+            "overview": "Rip y Beth Dutton arriesgan todo por una nueva vida en el Sur de Texas, pero la promesa de un futuro lejos de los fantasmas de Yellowstone choca con nuevas y brutales realidades y un rancho rival que a toda costa protege su imperio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Rip Wheeler et Beth Dutton misent tout sur une nouvelle vie dans le sud du Texas, mais leur rêve de se construire un avenir loin des fantômes de Yellowstone se heurte à de nouvelles réalités et à un ranch rival prêt à tout pour protéger son empire.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Dutton Ranch",
+            "overview": "Die titelgebende Dutton-Ranch, das Zuhause von Beth Dutton (Kelly Reilly) und ihrem Ehemann Rip Wheeler (Cole Hauser), steht für den Frieden, den sie gesucht, für den sie gekämpft haben und für den sie beinahe gestorben wären. Nun wissen sie ihr ruhiges Leben auf ihrem gewaltigen Anwesen voll und ganz zu schätzen. In harten Zeiten und unter schwierigen Konkurrenzbedingungen tun die beiden ihr Möglichstes, um zu überleben – und achten dabei auch darauf, dass Ziehsohn Carter (Finn Little) zu dem Mann wird, der er sein soll",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "达顿牧场",
+            "overview": "《黄石》衍生剧。大火摧毁蒙大拿牧场后，贝丝、里普和卡特来到得州重建生活，却与当地牧场主贝拉·杰克逊发生冲突。随着牧场生意、家族矛盾和毒品交易交织，里奥帕洛玛最终陷入暴力危机。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Dutton Ranch",
+            "overview": "Rip e Beth Dutton scommettono tutto su una nuova vita nel Texas meridionale, ma la promessa di costruire un futuro insieme lontano dai fantasmi di Yellowstone si scontra con una nuova brutale realtà e un ranch rivale privo di scrupoli.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "مزرعة دوتون",
+            "overview": "يُقامر (ريب ويلر) و(بيث داتون) بكل شيء لبدء حياة جديدة في جنوب تكساس، لكن الوعد ببناء مستقبل بعيداً عن أشباح (يلوستون) سرعان ما يصطدم بوقائع جديدة مريرة، ومزرعة منافسة لن تتوقف عند أي شيء لحماية إمبراطوريتها",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Ranczo Duttonów",
+            "overview": "Rip Wheeler i Beth Dutton stawiają wszystko na jedną kartę i zaczynają nowe życie w południowym Teksasie, jednak obietnica budowania przyszłości z dala od duchów Yellowstone szybko zderza się z brutalną rzeczywistością i właścicielami konkurencyjnego rancza, którzy nie cofną się przed niczym, by chronić swoje imperium.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Ranč Duttonovcov",
+            "overview": "Po tom, ako im ranč v Montane zničil požiar, stavili Rip a Beth Duttonovci všetko na jednu kartu a začínajú nový život v Rio Paloma v Texase, kde je každý úsvit zábleskom nádeje a v každom tieni sa skrýva odplata. No prísľub novej budúcnosti ďaleko od duchov Yellowstone sa rýchlo rozplýva, keď narazí na drsnú novú realitu a nemilosrdný konkurenčný ranč, ktorý sa nezastaví pred ničím, aby ochránil svoje impérium. V južnom Texase sú rodinné putá silnejšie, odpustenie je prchavé a cenou za prežitie môže byť duša.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Rancho Dutton",
+            "overview": "Beth Dutton e Rip Wheeler lutam para sobreviver na sua querida fazenda de 7 000 acres, em tempos difíceis e perante uma concorrência acirrada, ao mesmo tempo que se certificam de que o jovem Carter se torne o homem que está destinado a ser.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "مزرعه داتون",
+            "overview": "ریپ ویلر و بث داتون همه چیز را روی یک زندگی جدید در جنوب تگزاس قمار می‌کنند، اما وعده ساختن آینده‌ای دور از ارواح یلوستون به سرعت با واقعیت‌های جدید و بی‌رحمانه‌ای روبرو می‌شود و یک مزرعه رقیب که برای محافظت از امپراتوری خود از هیچ کاری دریغ نمی‌کند، با آن مواجه می‌شود.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "ริปและเบธ ดัตตันทุ่มหมดหน้าตักเพื่อเริ่มต้นชีวิตใหม่ทางตอนใต้ของเท็กซัส",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "חוות דאטון",
+            "overview": "ריפ וילר ובת' דאטון מהמרים על הכל למען חיים חדשים בדרום טקסס, אך ההבטחה לבנות עתיד הרחק מרוחות הרפאים של ילוסטון מתנגשת במהרה עם מציאות חדשה ואכזרית ועם חווה יריבה שתעשה הכל כדי להגן על האימפריה שלה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "達頓牧場",
+            "overview": "抛開《黃石》時期經歷的陰影，Beth和Rip努力共築未來，但他們遭遇了殘酷的新現實，以及一家不擇手段、只為保住自己帝國的無情敵對牧場。在南得克薩斯州，血脈之深遠勝于一切，寬恕轉瞬即逝，而生存的代價，或許正是你的靈魂。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Датон Ранч",
+            "overview": "Рип Вилер и Бет Датон ризикују све на нови живот у Јужном Тексасу, али обећање о изградњи будућности далеко од духова Јелоустона брзо се судара са бруталним новим реалностима и ривалским ранчем који неће стати ни пред чим да заштити своје царство.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Efter en skovbrand udsletter deres ranch i Montana, satser Rip og Beth Dutton alt på et nyt liv i Rio Paloma, Texas. Hver solopgang lover håb, men drømmen om en fremtid langt væk fra spøgelserne i Yellowstone støder på en brutal virkelighed og en hensynsløs rivaliserende ranch.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Ranč Dutton",
+            "overview": "Po požaru, ki je uničil njihov ranč v Montani, Rip in Beth Dutton tvegata vse za novo življenje v Rio Palomi, Teksas, kjer vsak sončni vzhod prinaša upanje - vsaka senca pa skriva maščevanje. Obljuba, da bosta skupaj gradila prihodnost daleč od duhov Yellowstona, se kmalu tragično spopade z brutalno resničnostjo in neusmiljenim rivalskim rančem, ki je pripravljen storiti vse, da zaščiti svoje cesarstvo. V južnem Teksasu teče kri globlje, odpuščanje je redko - in cena preživetja je lahko lastna duša.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Ranč Dutton",
+            "overview": "Rip i Beth Dutton grade novi život u južnom Teksasu s mladim Carterom, ali obećanje budućnosti daleko od Yellowstonea kosi se s brutalnom realnošću i suparničkim rančem čiji vlasnici ne prezaju ni od čeka kako bi zaštitili svoje carstvo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Beth Dutton ve Rip Wheeler, zorlu zamanlar ve sert rekabet ortamında, çok sevdikleri 7.000 dönümlük çiftliklerinde hayatta kalmak için mücadele ederken, genç Carter'ın olması gereken adam olmasını sağlamaya çalışırlar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Rip Wheeler og Beth Dutton satser alt på et nytt liv i Sør-Texas, men løftet om å bygge en fremtid langt fra spøkelsene i Yellowstone kolliderer raskt med brutale nye realiteter og en rivaliserende ranch som ikke vil stoppe for noe for å beskytte imperiet sitt.\n\nEtter at en skogbrann ødelegger ranchen deres i Montana, satser Rip og Beth Dutton alt på et nytt liv i Rio Paloma i Texas, der hver soloppgang gir håp – og hver skygge skjuler en fare. Men håpet om å bygge en fremtid sammen langt fra problemene i Yellowstone, kolliderer raskt med brutale nye realiteter og en nådeløs rivaliserende ranch som ikke skyr noen midler for å beskytte imperiet sitt. Sør-Texas er blodig og nådeløst – og prisen for å overleve kan bli høy.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Dutonų ranča",
+            "overview": "Pietų Teksase pora ryžtasi viską statyti ant kortos, siekdami naujos pradžios, toli nuo praeities šešėlių. Tačiau svajonė apie ramią ateitį greitai susiduria su žiauria tikrove ir negailestingu konkuruojančiu ūkiu, pasiryžusiu bet kokia kaina ginti savo imperiją. Įtampa auga, o kiekvienas sprendimas gali kainuoti viską – nuo žemės iki gyvybių. Ši istorija alsuoja aistra, išdavystėmis ir kovomis už tai, kas brangiausia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Maastopalon tuhottua Duttonien tilan Montanassa Rip ja Beth Dutton panevat kaiken peliin ja aloittavat uuden elämän Texasin Rio Palomassa, missä jokainen auringonnousu lupaa toivoa ja jokainen varjo enteilee tilintekoa. Haave paremmasta tulevaisuudesta kaukana Yellowstonen kipeistä muistoista törmää kuitenkin pian julmaan todellisuuteen, sillä häikäilemätön paikallinen tila on valmis puolustamaan reviiriään keinoja kaihtamatta. Etelä-Texasissa veri on vettä sakeampaa ja anteeksianto lyhytikäistä – hengissä selviytymisestä voi joutua maksamaan sielullaan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Rip och Beth Dutton skapar ett nytt liv i södra Texas tillsammans med Carter, men löftet om en framtid långt från Yellowstone kolliderar med en ny, brutal verklighet och en rivaliserande ranch som inte skyr några medel för att skydda sitt imperium.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "더턴 랜치",
+            "overview": "립과 베스 더튼은 옐로스톤의 과거를 벗어나 텍사스에서 새로운 삶을 시작하기 위해 모든 것을 건다. 그러나 곧 잔혹한 현실에 부딪히고, 두 사람은 제국을 지키려는 경쟁 목장과 맞서게 된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "مزرعة دوتون",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ο Ριπ Γουίλερ και η Μπεθ Ντάτον ποντάρουν τα πάντα σε μια νέα ζωή στο Νότιο Τέξας, αλλά η υπόσχεση για ένα μέλλον μακριά από τα φαντάσματα του Γέλοουστοουν συγκρούεται γρήγορα με νέες σκληρές πραγματικότητες και ένα αντίπαλο ράντσο που θα κάνει τα πάντα για να προστατεύσει την αυτοκρατορία του.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "name": "Ferma Dutton",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "Rip Wheeler i Beth Dutton s'ho juguen tot per una nova vida al sud de Texas, però la promesa de construir un futur lluny dels fantasmes de Yellowstone xoca ràpidament amb noves realitats brutals i un ranxo rival que no s'aturarà davant res per protegir el seu imperi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ewlmL0nxo2lLqBj69upgp2gjHpV.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3ep9KMoFFMLr0eA1KGat0svAXaR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gw5bYkJsF4JiJMKpn8Ggyo2bL7W.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wh5agdl3b7fqC7mSjsCkHx4fMAs.jpg",
+          "vote_average": 2.542,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1zt4J90w4CKQy7ree1RqvaS64Yw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hLMxWLPR1ia63aiV6WNyxxXqcan.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uBEsb8MBw28VTbe2DFcaja8KsfK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ldzy57VF2svzcH6fI9OvpWyhuD3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wFkvIUVmnNSBZiVAmFqTNb7ykvU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tGLVZBlMrOlyBpsbxhymoBdQHTI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/huW4GYC4GANHPiK2AKcPlQ0oh8j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sUXWwf1p0ugPlBjzkapfpRxhtFR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qFPjfif1Z9oVf6Nhmy1Nuy13yV0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2QtVpJ9yMd6X2a9O0DxZErZSVJq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bXNQHxUwBuawt5DnOZ0zg5MUTOC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wowtdtDM980GjuxCXJY4seeqP2O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cfyF9CxseNiWvf4Vq7WfOmJdLF8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qQjhKt8B0iBvticU1JB43uzWwf3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lJcMZ9E8VnFseAHWKVPXwZaKDsQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1V5OuTddcwrPoKknZlfbfsypNnC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/p2MKfEE86DlV6qzIyA071GeTgib.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xdATtiL5A543i83ViGH4u3hJwBH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.853,
+          "height": 544,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w6rTydgams5hQ6T4d7ieYkg2PsQ.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1552
+        },
+        {
+          "aspect_ratio": 2.853,
+          "height": 272,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xQSywYIyiO98sUuPcoFOwXjKQ0G.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 776
+        },
+        {
+          "aspect_ratio": 2.853,
+          "height": 272,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7szvKhSUDeaT16xoeb0CxALOcTx.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 776
+        },
+        {
+          "aspect_ratio": 3.774,
+          "height": 212,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qz1OxNfHqlk8Y71ulRCdm0ndIIA.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 3.789,
+          "height": 489,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nCvum6ZaWVRFz2PEPeUmXDydKMQ.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1853
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xsiecCxd8lkcAluw0wWwbW5CwSv.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rY4a4w7AURaUMhT6AnxjbciX3Lt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/59xQvmMLGNXmLQo44OjD9xabZ2o.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/91a2gwK9g61pubHzShTVjMEkJEM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sLHPhcAtOzH1BdMpRouhemtKYD6.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dfFx1bPBf2FvpxZ6FWYkFF4hWJx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eIdmZMtgVfZwmWI5zT0r9yJgY5w.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wElFRupYWGQHAJLN9GN8O9ABVO4.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jSHkAbeXup5elPkzGJhs60GKrEj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9f16bMld711Kzj8nTABM2XzXckC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/79632wc4twKvjstEbg5XWx051v8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/VGShKYpRZmSvvDBO30lbIPlJ17.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fhxNPbIc3NQMuRcN3iMGmP9hEcV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mUPZFXuw2AzTAI5XglBRoduUN2h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vIA1CcOLSf5BCfryezGW9AXiKr4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g9SqLUGxPnB47mYwsaq41NiLw7k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1333
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mUrh4ZAwrCFNMQiu9xzlBj0fmnR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9Fralq6WMSY8eKATNIGqiromnHR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2AJrQqapkzCP1oTBNhVNTotDJUz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1024
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1b3hOia5sqr19kWazoAiislAFEB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1023
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dNoVJQrf26AQlt0HF56WM3IiAH7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1023
+        }
+      ]
+    }
+  }
+}

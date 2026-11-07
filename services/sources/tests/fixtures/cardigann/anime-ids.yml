@@ -1,0 +1,38 @@
+id: animeids
+name: Anime IDs
+description: Invented anime feed searched by AniDB ids
+language: en-US
+type: public
+links:
+  - https://animeids.invalid/
+caps:
+  categorymappings:
+    - { id: Anime, cat: TV/Anime, desc: Anime }
+  modes:
+    search: [q]
+    anime-search: [q, anidbeid, anidbaid]
+search:
+  paths:
+    - path: 'json?{{ if .Query.AniDBEID }}eid={{ .Query.AniDBEID }}{{ else if .Query.AniDBAID }}aid={{ .Query.AniDBAID }}{{ else }}q={{ .Keywords }}{{ end }}'
+      response:
+        type: json
+  rows:
+    selector: $
+  fields:
+    category:
+      text: Anime
+    title:
+      selector: title
+    infohash:
+      selector: info_hash
+    size:
+      selector: total_size
+    seeders:
+      selector: seeders
+    date:
+      selector: timestamp
+    curated:
+      selector: is_curated
+      optional: true
+    release:
+      text: '{{ if eq .Result.curated "true" }}best{{ end }}'

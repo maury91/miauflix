@@ -381,6 +381,8 @@ describe('PlayerView', () => {
     const play = vi.fn(() => Promise.resolve());
     const pause = vi.fn();
     Object.assign(video, { play, pause });
+    // The video can be in the DOM before the controls' effects register the media keys
+    await act(async () => {});
 
     fireEvent.keyDown(document.body, { key: 'MediaPlayPause' });
     expect(play).toHaveBeenCalledTimes(1);

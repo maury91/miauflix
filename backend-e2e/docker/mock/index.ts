@@ -21,6 +21,11 @@ const API_AUTH_HEADER = process.env.API_AUTH_HEADER || 'Authorization';
 const API_AUTH_HEADER_IS_BEARER = process.env.API_AUTH_HEADER_IS_BEARER === 'true';
 const RECORD_PROVIDER_FIXTURES = process.env.RECORD_PROVIDER_FIXTURES === 'true';
 const IMAGE_BASE_URL = process.env.IMAGE_BASE_URL;
+/**
+ * GraphQL APIs (AniList) answer every query on one path: recordings of POST requests are told
+ * apart by a hash of their body, and the body is forwarded upstream.
+ */
+const KEY_POST_BY_BODY = process.env.KEY_POST_BY_BODY === 'true';
 /** When set, `/definitions/` serves the indexer definitions found in this folder. */
 const DEFINITIONS_DIR = process.env.DEFINITIONS_DIR;
 // Recording mode is the explicit original-data path; ordinary generated writes are faker-backed.
@@ -32,6 +37,25 @@ const paramOverrides: Record<string, string> = {
   end_date: 'YYYY-MM-DD',
   start_date: 'YYYY-MM-DD',
 };
+
+// GraphQL variables replaced in a body's recording key, like paramOverrides: the current anime
+// season changes every quarter, and a recording stays valid across it.
+const variableOverrides: Record<string, string> = { season: 'SEASON', seasonYear: 'YEAR' };
+
+/** A short, stable key for a request body (JSON is compared with its variables normalized). */
+function bodyKey(body: string): string {
+  let normalized = body;
+  try {
+    const parsed = JSON.parse(body) as { variables?: Record<string, unknown> };
+    if (parsed.variables)
+      for (const [key, value] of Object.entries(variableOverrides))
+        if (key in parsed.variables) parsed.variables[key] = value;
+    normalized = JSON.stringify(parsed);
+  } catch {
+    // Not JSON: the raw body is the key.
+  }
+  return new Bun.CryptoHasher('sha1').update(normalized).digest('hex').slice(0, 16);
+}
 
 // This header will be omitted from the response because they are known to cause problems
 const headersToOmit = [
@@ -151,8 +175,9 @@ async function defaultHandleRequest({
   queryParams,
   method,
   filePath,
+  body,
 }: HandleRequestParams): Promise<HandleRequestResponse> {
-  if (method !== 'GET') {
+  if (method !== 'GET' && body === undefined) {
     return {
       data: null,
       store: false,
@@ -222,6 +247,8 @@ async function defaultHandleRequest({
     delete incomingHeaders[header];
   }
   const apiResponse = await fetch(apiUrl.toString(), {
+    method,
+    body,
     headers: {
       ...incomingHeaders,
       ...API_HEADERS,
@@ -289,7 +316,12 @@ Bun.serve({
       return new Response('Not found', { status: 404 });
     }
 
-    let filePath = getFilePath(path, queryParams, method);
+    const body = KEY_POST_BY_BODY && method === 'POST' ? await req.clone().text() : undefined;
+    let filePath = getFilePath(
+      path,
+      body === undefined ? queryParams : { ...queryParams, body: bodyKey(body) },
+      method
+    );
     let filterImageLanguages: string | undefined;
 
     try {
@@ -335,6 +367,7 @@ Bun.serve({
         API_AUTH_HEADER,
         API_AUTH_HEADER_IS_BEARER,
         RECORD_PROVIDER_FIXTURES,
+        body,
       };
 
       const { data, store, response } =

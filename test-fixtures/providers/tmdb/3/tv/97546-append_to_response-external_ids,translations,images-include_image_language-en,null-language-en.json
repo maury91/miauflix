@@ -1,0 +1,2068 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20509",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7f69536bd54d2b7035a2f6edd0ba43a7\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/4bG49jVR7NrCNQjahDUsDqvIwle.jpg",
+    "created_by": [
+      {
+        "id": 1216859,
+        "credit_id": "5e174dac0cb335001505b3d0",
+        "name": "Bill Lawrence",
+        "original_name": "Bill Lawrence",
+        "gender": 2,
+        "profile_path": "/75mV8qLqPA9oMy23lTxmcoEGWAe.jpg"
+      },
+      {
+        "id": 58224,
+        "credit_id": "5e174da4c2f44b0017bf0e91",
+        "name": "Jason Sudeikis",
+        "original_name": "Jason Sudeikis",
+        "gender": 2,
+        "profile_path": "/uuacnP9DOHMsmj8FhBi0cWWDgrn.jpg"
+      },
+      {
+        "id": 1222180,
+        "credit_id": "5f0dc58d13a3200033783397",
+        "name": "Joe Kelly",
+        "original_name": "Joe Kelly",
+        "gender": 2,
+        "profile_path": null
+      },
+      {
+        "id": 1113365,
+        "credit_id": "5f0dc58013a320003378338f",
+        "name": "Brendan Hunt",
+        "original_name": "Brendan Hunt",
+        "gender": 2,
+        "profile_path": "/7Z8q2WUop3q5BdyaBD6YvweGWrZ.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2020-08-14",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://tv.apple.com/show/umc.cmc.vtoh0mn0xn7t3c643xqonfzy",
+    "id": 97546,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-10-06",
+    "last_episode_to_air": {
+      "id": 7203315,
+      "name": "Being Alive",
+      "overview": "Big changes in bunches.",
+      "vote_average": 7.9,
+      "vote_count": 24,
+      "air_date": "2026-10-06",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 56,
+      "season_number": 4,
+      "show_id": 97546,
+      "still_path": "/5xHtC62mNKDRnNA7aMXeM1zwhzc.jpg"
+    },
+    "name": "Ted Lasso",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2552,
+        "logo_path": "/bngHRFi794mnMq34gfVcm9nDxN1.png",
+        "name": "Apple TV",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 44,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Ted Lasso",
+    "overview": "Ted Lasso, an American football coach, moves to England when he's hired to manage a soccer team—despite having no experience. With cynical players and a doubtful town, will he get them to see the Ted Lasso Way?",
+    "popularity": 117.8395,
+    "poster_path": "/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg",
+    "production_companies": [
+      {
+        "id": 23672,
+        "logo_path": "/a0sVfKvMT1d55p2XJXPpRfm7rRh.png",
+        "name": "Doozer",
+        "origin_country": "US"
+      },
+      {
+        "id": 1957,
+        "logo_path": "/pJJw98MtNFC9cHn3o15G7vaUnnX.png",
+        "name": "Warner Bros. Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 26727,
+        "logo_path": "/jeTxdjXhzgKZyLr3l9MllkTn3fy.png",
+        "name": "Universal Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 152855,
+        "logo_path": null,
+        "name": "Ruby's Tuna",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2021-12-15",
+        "episode_count": 1,
+        "id": 236137,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/n0hVO6rYbH3HtCLroKLQ19uzWRp.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2020-08-14",
+        "episode_count": 10,
+        "id": 140381,
+        "name": "Season 1",
+        "overview": "Slowly but surely, Ted makes England his new home. Throughout the season, the down-on-their-luck players cannot help but be charmed and inspired by Ted. Even team owner Rebecca Welton who initially hired Ted to tank the team’s chances and to annoy her cheating ex-husband, was moved by Ted’s boyish innocence, determination, and outrageous tea biscuits.",
+        "poster_path": "/oX7QdfiQEbyvIvpKgJHRCgbrLdK.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2021-07-23",
+        "episode_count": 12,
+        "id": 191511,
+        "name": "Season 2",
+        "overview": "Season 2 will no doubt be a redemption story. While the team will face struggles, Ted’s illuminating, yet often frustrating kindness will encourage the team to move forward. As Ted believes, everything will work out the way it’s supposed to. Struggling to adjust to their lower league status, Ted focuses the team’s attention toward leaving behind their losing streak. Ted adjusts to his life without his now ex-wife Michelle and his young son, Henry, who have returned to the US. A psychologist named Sharon joins the team. The lovable Keeley Jones and newly retired Roy Kent continue dating. Roy is adjusting to his new life on the sidelines. As for Rebecca Welton starts dating again.",
+        "poster_path": "/a3tL7vRFN63zE8IrpjLHtheAcBM.jpg",
+        "season_number": 2,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2023-03-14",
+        "episode_count": 12,
+        "id": 328941,
+        "name": "Season 3",
+        "overview": "In this third season, the newly-promoted AFC Richmond faces ridicule as media predictions widely peg them as last in the Premier League and Nate, now hailed as the \"wonder kid,\" has gone to work for Rupert at West Ham United. In the wake of Nate's contentious departure from Richmond, Roy Kent steps up as assistant coach, alongside Beard. Meanwhile, while Ted deals with pressures at work, he continues to wrestle with his own personal issues back home, Rebecca is focused on defeating Rupert and Keeley navigates being the boss of her own PR agency. Things seem to be falling apart both on and off the pitch, but Team Lasso is set to give it their best shot anyway.",
+        "poster_path": "/7NS4VYNTm2J1XQk5OVUwImbV4vZ.jpg",
+        "season_number": 3,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2026-08-04",
+        "episode_count": 10,
+        "id": 466392,
+        "name": "Season 4",
+        "overview": "In season four, Ted returns to Richmond, taking on his biggest challenge yet: coaching a second division women's football team. Throughout the course of the season, Ted and the team learn to leap before they look, taking chances they never thought they would.",
+        "poster_path": "/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg",
+        "season_number": 4,
+        "vote_average": 7.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Ted's back.",
+    "type": "Scripted",
+    "vote_average": 8.363,
+    "vote_count": 2834,
+    "external_ids": {
+      "imdb_id": "tt10986410",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 383203,
+      "tvrage_id": null,
+      "wikidata_id": "Q96407897",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "TedLasso"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, an American football coach, moves to England when he's hired to manage a soccer team—despite having no experience. With cynical players and a doubtful town, will he get them to see the Ted Lasso Way?",
+            "homepage": "",
+            "tagline": "Ted's back."
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "乜都得教練",
+            "overview": "美式足球教練泰德拉素，受聘前往英格蘭擔任英超足球隊教練。由於毫無相關執教經驗，他未能獲得球員及當地球迷的信任，但他誓要向大家證明：我是乜都得！",
+            "homepage": "",
+            "tagline": "好人將可扭轉乾坤。"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "テッド・ラッソ：破天荒コーチがゆく",
+            "overview": "アメフトのコーチだったテッド・ラッソは、経験もないのにイギリスに渡ってサッカーチームを監督することに。小バカにする選手たちや不満だらけの地元ファンを前に、果たしてテッド・ラッソの流儀を見せることができるのか？",
+            "homepage": "",
+            "tagline": "史上最高にテッドな、あのヒット作が帰ってきた。"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, entraîneur de football américain, débarque à Londres pour coacher une équipe de football... pas américain. Face à une équipe et une ville dubitatives, arrivera-t-il à leur faire adopter la méthode Ted Lasso ?",
+            "homepage": "",
+            "tagline": "La comédie revient, plus Ted que jamais."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, entraîneur de football américain, déménage à Londres avec pour mission de mener une équipe de soccer à la victoire, sans aucune expérience de ce sport. Saura-t-il convaincre ses détracteurs que sa méthode est un gage de succès?",
+            "homepage": "",
+            "tagline": "La série à succès est de retour, plus Ted que jamais!"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Der amerikanische Football-Coach Ted Lasso soll trotz fehlender Erfahrung ein Fußball-Team in England trainieren. Wird er die zynischen Spieler und die skeptische Stadt trotzdem von sich überzeugen können?",
+            "homepage": "",
+            "tagline": "Ted ist zurück – und herzlicher denn je."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ακολουθεί τον προπονητή του αμερικανικού ποδοσφαίρου των ΗΠΑ, Τεντ Λάσο, που πηγαίνει στο Ηνωμένο Βασίλειο για να διαχειριστεί μια ποδοσφαιρική ομάδα του Λονδίνου που αγωνίζεται στην κορυφαία κατηγορία του αγγλικού ποδοσφαίρου.",
+            "homepage": "",
+            "tagline": "Η επιτυχημένη κωμωδία επιστρέφει, με τον Τεντ στα καλύτερά του."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, un ingenuo entrenador de fútbol americano que decide probar suerte en un club de fútbol inglés aunque no tiene idea de ese deporte. Su inexperiencia despierta recelo y desdén entre jugadores y aficionados. Con un equipo y una ciudad que lo mira con sospecha, ¿Logrará tener éxito?",
+            "homepage": "",
+            "tagline": "¡Más Ted que nunca! La exitosa comedia regresa."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Тед Лассо",
+            "overview": "Тренер по американскому футболу Тед Лассо неожиданно переезжает в Англию, чтобы возглавить профессиональный футбольный клуб, хотя почти ничего не знает о европейском футболе. Несмотря на скептицизм игроков, болельщиков и руководства, он покоряет окружающих своим оптимизмом, добротой и необычным подходом к работе. Постепенно Тед помогает команде стать сильнее не только на поле, но и за его пределами, пока каждый из её участников проходит собственный путь, сталкиваясь с трудностями, победами и важными жизненными переменами.",
+            "homepage": "",
+            "tagline": "Тед снова в игре: продолжение комедийного сериала."
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, en amerikansk fodbold collegetræner fra Kansas, ansættes til at træne et professionelt fodboldhold i England, på trods af at han ikke har nogen erfaring med at være træner for den slags fodbold.",
+            "homepage": "",
+            "tagline": "Hver ting til sin Ted – hitkomedien er tilbage nu."
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, tréner amerického futbalu, ktorého zavolali do Anglicka, aby manažoval futbalový tím, napriek tomu, že s týmto športom nemá absolútne žiadne skúsenosti. Dokáže Ted Lasso predviesť svoje schopnosti aj napriek cynickým hráčom a mestu plnom skeptických fanúšikov?",
+            "homepage": "",
+            "tagline": "Obľúbená komédia je späť a s ňou aj Ted v plnej sile."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "",
+            "overview": "טד לאסו הוא מאמן פוטבול מכללות אמריקאי אלמוני למדי שמקבל הצעת עבודה מהחלומות: לאמן קבוצת כדורגל מקצועית באנגליה. שם אמנם שני המשחקים נקראים באותו שם, אבל ללאסו אין שום ניסיון עם הגרסה שאינה אמריקאית.",
+            "homepage": "",
+            "tagline": "טד חוזר למגרש בעונה חדשה בקומדיה המצליחה."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Un ingenuo entrenador de fútbol americano decide probar suerte en un club de fútbol inglés, pero su inexperiencia despierta recelo y desdén entre jugadores y aficionados. ¿Logrará conquistarlos con sus peculiares métodos?",
+            "homepage": "",
+            "tagline": "La popular serie vuelve, más Ted que nunca."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, um técnico de futebol americano que se muda para a Inglaterra para treinar um time de futebol, apesar da falta de experiência. Com jogadores e cidade desconfiados, será que ele vai conseguir conquistá-los?",
+            "homepage": "",
+            "tagline": "A comédia está de volta, mais Ted do que nunca."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Тед Лассо",
+            "overview": "Тед Лассо, американський тренер з футболу, переїжджає до Англії, коли його найняли керувати футбольною командою — незважаючи на відсутність досвіду. З цинічними гравцями та сумнівним містечком, чи змусить він їх побачити Шлях Теда Лассо?",
+            "homepage": "",
+            "tagline": "Тед знову у грі. Хітовий серіал повертається."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Idealistický a bezradný trenér amerického fotbalu Ted Lasso je najat, aby kaučoval fotbalový klub v Británii, i když s trénováním klasického fotbalu nemá žádné zkušenosti.",
+            "homepage": "",
+            "tagline": "Ted se vrací v parádní formě."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "泰德拉索：錯棚教練趣事多",
+            "overview": "美式足球教練泰德拉索，獲得了前往英超執教的機會。完全沒有相關經驗的他，面對不信任他的球員和嘲笑他的球迷，他要讓大家知道他的厲害！",
+            "homepage": "",
+            "tagline": "人氣喜劇回歸，真的「泰德」意啦！"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso egy idealista és fogalmatlan amerikai fociedző,aki leszerződik egy angol focicsapat mellé - annak ellenére, hogy nincs semmilyen európai focis tapasztalata...",
+            "homepage": "",
+            "tagline": "A sikervígjáték visszatért, és tedesebb, mint valaha."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso is in de Verenigde Staten coach van een American Footballteam op het College-niveau. In plaats van dat de beste man binnen zijn eigen land carrière probeert te maken, neemt hij een opmerkelijke stap richting het Verenigd Koninkrijk. Daar wordt hij aangesteld als trainer van een voetbalteam. En daar sta je dan als onnozele Amerikaan midden in de Britse cultuurmet een sport waar je eigenlijk totaal geen kaas van hebt gegeten.",
+            "homepage": "",
+            "tagline": "De hitkomedie is terug en Ted is beter dan ooit."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "一位美国橄榄球教练受聘执教一支英国足球队；他虽然缺乏足球知识，但他乐观、坚定，而且带了很多饼干。",
+            "homepage": "",
+            "tagline": "相信，本身即是力量。"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "'테드 래소' - Ted Lasso",
+            "overview": "미국 미식축구 코치 테드 래소. 축구에 대해 아무것도 모르는 그는 영국 축구팀 코치로 발탁되며 런던으로 떠난다. 하지만 모든 것이 낯설기만 한데… 그는 긍정적인 에너지와 투지, 그리고 비스킷으로 자신을 부족함을 채워보려 한다. 골든 글로브 수상에 빛나는 제이슨 서디키스 주연의 코미디 시리즈.",
+            "homepage": "",
+            "tagline": "대세 코미디의 귀환! 한층 강력해진 긍정의 힘."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "تد لاسو",
+            "overview": "تد لاسو، مربی فوتبال آمریکایی، برای مدیریت تیم فوتبال تیم فوتبال لندن در لیگ برتر فوتبال انگلستان راهی انگلستان شد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, futbol takımını yönetmek için işe alınan bir amerikan futbolu koçunun hikayesini konu ediyor. Ted Lasso, futbol takımına teknik direktörlük yapmak için işe alınır; ancak Lasso’nun teknik direktörlük deneyimi yoktur. Ted Lasso, teknik direktörlük deneyimi olmamasına rağmen takımın başarılı olması için elinden geleni yapar.",
+            "homepage": "",
+            "tagline": "Koç Lasso, yeni bir takımın başına geçmek için geri dönüyor: Leydi Tazılar."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Komičar Jason Sudeikis glumi Teda Lassoa, trenera srednjoškolskog američkog nogometa iz Kansasa čiji je novi posao u profesionalnoj nogometnoj ekipi u Engleskoj – oboje su nogomet, ali dva vrlo različita sporta čega Ted u početku nije svjestan! Tedu ne pomaže ni mlaka dobrodošlica u Engleskoj, niti neprestano ruganje i ponavljanje koliko je njegov izbor za trenera velika pogreška, ali on neće odustati. Iako nikada nije igrao ovakav nogomet, on će dati sve od sebe.",
+            "homepage": "",
+            "tagline": "Ljubaznost se vraća."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "\"جيسون سوديكس\" يؤدي دور \"تيد لاسو\"، مدرب كرة القدم الأمريكية الذي عُيّن مديراً فنياً لفريق كرة قدم إنكليزي رغم افتقاره إلى الخبرة. لكنه يعوّض المعرفة التي تنقصه بتفاؤله وعزيمته القوية… والبسكويت.",
+            "homepage": "",
+            "tagline": "عاد العمل الكوميدي الشهير، بروح Ted أكثر من أي وقت."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso è un allenatore di football, che allena una squadra di calcio inglese. Quello che gli manca in conoscenza, lo compensa con ottimismo e… biscotti.",
+            "homepage": "",
+            "tagline": "L’attesa serie commedia torna più Ted che mai."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Тед Ласо",
+            "overview": "Треньорът по американски колежански футбол Тед Ласо заминава за Лондон, за да ръководи АФК Ричмънд - борещ се за оцеляване отбор от английската Висша лига.",
+            "homepage": "",
+            "tagline": "Повярвай във вярването."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "ซีรีส์ที่คว้ารางวัลเอ็มมี่มาได้ถึง 11 สาขา และได้รางวัลซีรีส์ตลกยอดเยี่ยมเป็นเวลาสองปีติดต่อกัน (ปี 2021 - 2022) เจสัน ซูเดคิสเป็นโค้ชทีมฟุตบอลอังกฤษที่ถึงแม้จะไม่มีความรู้ แต่ก็ชนะใจทุกคนได้ด้วยความอารมณ์ดี… และบิสกิต",
+            "homepage": "",
+            "tagline": "คอมเมดี้สุดฮิตกลับมาทั้งที Ted กว่านี้ไม่มีอีกแล้ว"
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Tedas Lasso",
+            "overview": "Pasakojama apie amerikietį trenerį Tedą Lasso, kuris išvyko į UK, treniruoti Londono futbolo komandą, kuriai nelabai sekasi aikštėje.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, trener futbolu amerykańskiego, przeprowadza się do Anglii, by, pomimo braku doświadczenia, prowadzić drużynę piłkarską. Czy cyniczni zawodnicy i zwątpieni kibice docenią metody Teda?",
+            "homepage": "",
+            "tagline": "Komediowy hit powraca. Jeszcze więcej Teda."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso, um treinador de futebol americano, muda-se para a Inglaterra quando é contratado para comandar uma equipa de futebol – apesarde não ter experiência. Com jogadores cínicos e uma cidade duvidosa, ele vai levá-los a ver o Ted Lasso Way?",
+            "homepage": "",
+            "tagline": "O êxito da comédia voltou e está ainda mais Ted."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "本剧荣获11项艾美奖，包括连续赢得2021、2022两届最佳喜剧类剧集奖。杰森苏戴奇斯饰演一位执教英国足球队的橄榄球教练。但他所缺乏的知识却被他用乐观精神...和饼干所弥补。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Jason Sudeikis je Ted Lasso, trener ameriškega nogometa, ki ga zaposli britanski nogometni klub, čeprav nima izkušenj. Toda Ted neznanje nadoknadi z optimizmom, odločnostjo šibkejšega in piškotki.",
+            "homepage": "",
+            "tagline": "Prijaznost se povrne."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso lämnar en framgångsrik coachkarriär inom amerikansk fotboll för att träna ett engelskt fotbollslag. Sin totala brist på erfarenhet och kunskap tar han igen i optimism, beslutsamhet... och kakor.",
+            "homepage": "",
+            "tagline": "Succékomedin är tillbaka, och Ted har aldrig varit mer Ted."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso er fotballtrener for et britisk fotballag. Det han mangler av kunnskap, gjør han opp for med optimisme… og kjeks.",
+            "homepage": "",
+            "tagline": "Hitserien er tilbake og Tedre enn noensinne."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso on brittiläistä jalkapallojoukkuetta johtava jalkapallovalmentaja. Hän korvaa tiedonpuutteensa optimismilla ja kekseillä.",
+            "homepage": "",
+            "tagline": "Hittikomedia on palannut, ja Ted on entistä ehompi."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "\"جيسون سوديكس\" يؤدي دور \"تيد لاسو\"، مدرب كرة القدم الأمريكية الذي عُيّن مديراً فنياً لفريق كرة قدم إنكليزي رغم افتقاره إلى الخبرة. لكنه يعوّض المعرفة التي تنقصه بتفاؤله وعزيمته القوية… والبسكويت.",
+            "homepage": "",
+            "tagline": "عاد العمل الكوميدي الشهير، بروح Ted أكثر من أي وقت."
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "टेड लास्सो",
+            "overview": "लगातार दो साल आउटस्टैंडिंग कॉमेडी सीरीज़ (२०२१, २०२२) सहित ११ एमी® अवार्ड्स की विजेता। जेसन सुडेकिस एक फुटबॉल कोच हैं जो एक ब्रिटिश फुटबॉल टीम का नेतृत्व करते हैं। वह फुटबॉल के ज्ञान की कमी की भरपाई आशावाद... और बिस्कुट से करते हैं।",
+            "homepage": "",
+            "tagline": "हिट कॉमेडी की वापसी और भी जोश के साथ।"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "Un ingenu entrenador de futbol americà decideix provar sort en un club de futbol anglès, però la seva inexperiència desperta recel i desdeny entre jugadors i aficionats. Aconseguirà conquerir-los amb els seus peculiars mètodes?",
+            "homepage": "",
+            "tagline": "La popular sèrie torna, més Ted que mai."
+          }
+        },
+        {
+          "iso_3166_1": "CH",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso ist ein US-Football-Coach, der plötzlich ohne jede Erfahrung einen englischen Fussballverein trainieren soll. Doch fehlendes Wissen gleicht er aus mit Optimismus, Entschlossenheit – und Keksen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso là một huấn luyện viên bóng bầu dục đang dẫn dắt một đội bóng đá của Anh. Lỗ hổng kiến thức của anh được bù đắp bằng sự lạc quan... và bánh quy.",
+            "homepage": "",
+            "tagline": "Ted trở lại với series hài ăn khách và lợi hại hơn bao giờ hết."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso adalah seorang pelatih kepala tim sepakbola di Inggris. Kurangnya pengetahuan dia diatasi dengan optimisme...dan biskuit.",
+            "homepage": "",
+            "tagline": "Ted Lasso kembali dengan makin banyak komedi seru."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso este un antrenor de fotbal american angajat să conducă o echipă britanică de fotbal, deși nu are deloc experiență. Ce-i lipsește în materie de cunoștințe compensează prin optimism, perseverență și... fursecuri.",
+            "homepage": "",
+            "tagline": "Ted Lasso se întoarce pentru a antrena o nouă echipă de outsideri: Ogărițele."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "ტედ ლასო",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Ted Lasso is in de Verenigde Staten coach van een American Footballteam op het College-niveau. In plaats van dat de beste man binnen zijn eigen land carrière probeert te maken, neemt hij een opmerkelijke stap richting het Verenigd Koninkrijk. Daar wordt hij aangesteld als trainer van een voetbalteam. En daar sta je dan als onnozele Amerikaan midden in de Britse cultuurmet een sport waar je eigenlijk totaal geen kaas van hebt gegeten.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LK",
+          "iso_639_1": "si",
+          "name": "සිංහල",
+          "english_name": "Sinhalese",
+          "data": {
+            "name": "ටෙඩ් ලාසෝ",
+            "overview": "ඇමෙරිකානු පාපන්දු පුහුණුකරුවෙකු වන ටෙඩ් ලැසෝ, කිසිදු අත්දැකීමක් නැතත් එංගලන්තයේ පාපන්දු කණ්ඩායමක කළමනාකරු ලෙස තේරී පත්වෙයි. සැකයෙන් පිරි ක්‍රීඩකයන් සහ සැකයෙන් බලන නගරවාසීන් මධ්‍යයේ, තම අනන්‍ය 'ටෙඩ් ලැසෝ මග' ඔවුන් ලවා දැකගැනීමට ඔහුට හැකි වේවිද?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "ٹیڈ لاسو",
+            "overview": "یہ سیریز ١١ ایمی® ایوارڈز کی فاتح ہے، جن میں مسلسل دو سال (٢٠٢١ اور ٢٠٢٢) 'بہترین کامیڈی سیریز' کا ایوارڈ بھی شامل ہے۔ جیسن سوڈیکس اس میں ایک ایسے فٹ بال کوچ کا کردار ادا کر رہے ہیں جو برطانوی فٹ بال ٹیم کی قیادت کرتے ہیں۔ وہ فٹ بال کے بارے میں اپنی معلومات کی کمی کو پرامید رویے... اور بسکٹوں کے ذریعے پورا کرتے ہیں۔",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4bG49jVR7NrCNQjahDUsDqvIwle.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1800,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gEQkOMmnJcoh9Hh1vk7fpVYnksR.jpg",
+          "vote_average": 5.566,
+          "vote_count": 15,
+          "width": 3200
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8rDij8tYynUfu2hMVXynAp2pSjY.jpg",
+          "vote_average": 5.53,
+          "vote_count": 17,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1490,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wImNeqxKsqmJ5OBw8j3I37GNFN3.jpg",
+          "vote_average": 5.53,
+          "vote_count": 17,
+          "width": 2650
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3KLmx6nLaiYe07kSwuWdpTEHJgE.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ppKr7H0UyAcNY1fvQppx4e1yhMX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rzxIrPYoykAfmFelQ23L6ouKOfe.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1V75DgImFylI3Abn5WaoH92nfxg.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xyXtW9Dgg7SPvrOufXtgkv2ipb9.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dxr5O0Obw7mjdvGwP8iaIeKyX58.jpg",
+          "vote_average": 2.542,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hk08loOnMZEEVRT84ksBfdlwgZX.jpg",
+          "vote_average": 2.542,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qG60jgIUnE0HfEORPFtIRe9EGw3.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1102,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bH6cP0vh8tkxSj2fMiafePqBLHM.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1960
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AoEZgysCi6mvUHh6ebrfLBs4Rbu.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dwjCP7iSsSTko3SecZo55kZcFt1.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/akh1Z9oCJuYt5vMZpeYeAWfZF2F.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/voU3clRhTsyjvSTfUX5kVMRCSvF.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bZetRpjaXfZL7TUGcJxFkbIou39.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hKioaLy5PHm4M0aLTXzi7hWy53D.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pWsaYXj0xARPr3zTMFmTJVAaItY.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6PpO1PvfFTV2IHMu38rafti7is6.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q7hKFDZB26SJwtvrI07KUYvDBa8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o6yxVn6NNI3JF7yLzOaTGkgrnHU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wDihPx2ILax8HNEjYx8SI1yBcyI.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t1e0wbSmIzhKoQ586kdbp7oGl2e.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v8w9LEje62ThZzIXYOFylemqFUN.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ayUMWKe6Wow5ixLlKxxlp7IqTiI.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qe31ihM8r7eqbhdb18YyYfarfrV.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 899,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kgBRCnl8GPpsG5W7Taer9uDEstz.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/walTOY4UVC4HFLa7sDza5SgPUaW.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oeZFPQeH6VWHcneskTJh9QKAHyX.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1800,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/siva4ccafIcPVxdCvFoVb3PePMr.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3200
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nOKfQGvvqDJbPUcU8jQaELI4BUb.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tnvv472ddvWlQnOc8k3MCPzB4c1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/77jKs4tmgtyi4vS6p9mSwYJtkmM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/LCudKW55ggLQqQMuWuScSsxdYI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7vo6ZcQ9wRyqOtrcfPsk6dse0Ua.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uaKijXR0rq2FFw3H0OqqFiKotCq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h9iQd30dOJFh3sFUils3JICTmXL.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1820
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wQfBOqkXpNSJB83mMP2VAG94XPl.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kcKkj6c8DoWfMYDJoh20gWzLgKN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nFKI4XIX0fUMFMnwytffw0vASuq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/msQjsF343GgBE4yPKiumOcWm94d.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4YKSbGevhHiMbOM5XtWifz6h7Ch.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xTQpU2HxSOSuwdGaqHHKBaDrDXR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1800,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vkbaalH7O2hmOD2Jf6QvTggOmzh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3200
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hZerYGe2EPMwj4MhoGvFDiBn5ZT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mybfQvxuz6pyzHcgTgckxsGajFP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bugJr2nqaefZuDQUnA2WQx9TPa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ojMY9HDXU9EjDTir5cA83cYGDfS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kM2CxOSwvZNHKfxC8INxsdhMp9Y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sEmMqk1pNjB8vQ99KSNpfF1LzYk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3rBuep14rDxvcpxaVOjMRZAdFv4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2V7dvNWuyoBDjCJouczMDRezqT4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1xHOGC2Qp9FWZqVdwkLrPMnGSHf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vE6Epn3CIKB5UsYuiAAd2CBLqTB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oGrmyJ01Nd7DiySBCAeRKhOU6xc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uFjSS9gvEa6WemCbCffhVNb7k27.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rqsBqpusipiHy5H6SMfmSZBdjdq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rL079vhXB1lHcCfb6CSxxPwpVPr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/esgXVoFHpAQMm7XBxT0rrrPy2Sa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1BMshAnhLhySCw2oDmJAtRdD0Nu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qnYaDWVBcrU8bnZMauOC3fz8bRk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kcJpzyawN7tHP3wbOWmmwsl4NXQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5n4huJBqNj3XfRSwVf5ii6qQi8z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/traOsvu0OYjpMpkObrz83VkveXr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.921,
+          "height": 852,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iNudegFbTBAGBB529k7wGVivqE4.png",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 5897
+        },
+        {
+          "aspect_ratio": 6.897,
+          "height": 261,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iYTc96rNiAPm1Q2AwsHX79KfWvG.svg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 2.073,
+          "height": 1750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7BAGQtVtsTt1ji2R1vjhbLXzYbB.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3627
+        },
+        {
+          "aspect_ratio": 2.031,
+          "height": 622,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1ORthoF7CxOMAd15mwY7MLMNk6m.svg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1263
+        },
+        {
+          "aspect_ratio": 6.921,
+          "height": 852,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j6flrZqnSMyO6mhd4iXuRYf9v7s.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 5897
+        },
+        {
+          "aspect_ratio": 6.914,
+          "height": 853,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8jnHMOi8TUgr6pxlZpyyqAoX3qA.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 5898
+        },
+        {
+          "aspect_ratio": 2.073,
+          "height": 1750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/weCxTKfjQArSvqzJJQbmbP6oA7g.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3627
+        },
+        {
+          "aspect_ratio": 2.073,
+          "height": 1750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/smuhdvOapBYJFd7oluDDycFC4Gb.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3627
+        },
+        {
+          "aspect_ratio": 6.919,
+          "height": 1008,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xmqSTOWHJ5Rr5x2PsF8tQ32QDk9.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 6974
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uRHsiw1wLxPHFXkkv4Ix1s0O6f4.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9uT4dT2k5lTd41kZEVmFCSIFQw7.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lKSNsuonUq57p7BkJAzoGpz5tl2.jpg",
+          "vote_average": 5.75,
+          "vote_count": 38,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7NS4VYNTm2J1XQk5OVUwImbV4vZ.jpg",
+          "vote_average": 5.566,
+          "vote_count": 45,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2820,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iTcH4ebAyoHfYbSbwypAweDkOn1.jpg",
+          "vote_average": 5.386,
+          "vote_count": 35,
+          "width": 1880
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2610,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a3tL7vRFN63zE8IrpjLHtheAcBM.jpg",
+          "vote_average": 5.134,
+          "vote_count": 41,
+          "width": 1740
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oX7QdfiQEbyvIvpKgJHRCgbrLdK.jpg",
+          "vote_average": 5.096,
+          "vote_count": 31,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rYzaLiSs6BzFusP2dhsxRW3oJIB.jpg",
+          "vote_average": 5.096,
+          "vote_count": 31,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2820,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/exNvBsQ0TuQn3w30u2wefu8lM8X.jpg",
+          "vote_average": 5.074,
+          "vote_count": 27,
+          "width": 1880
+        },
+        {
+          "aspect_ratio": 0.663,
+          "height": 1131,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/edoRUW7GSabsNawJdZN7rkpFbVX.jpg",
+          "vote_average": 4.91,
+          "vote_count": 28,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lQk9CQREV78Vj8Jn5B8Ts7Vs1y8.jpg",
+          "vote_average": 4.79,
+          "vote_count": 31,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/39rtdG2QoPIOISmS6KNdJDes8vy.jpg",
+          "vote_average": 4.722,
+          "vote_count": 36,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2520,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d6dnY5epjDoOtCSzcZ97qmLhkP7.jpg",
+          "vote_average": 4.63,
+          "vote_count": 23,
+          "width": 1680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nUQfWdGesIKSF6b0onQcmCPJ9jD.jpg",
+          "vote_average": 4.63,
+          "vote_count": 23,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mNm7pHOJRRqRBucp8wn4F0D67NU.jpg",
+          "vote_average": 4.616,
+          "vote_count": 30,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 1574,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hJzVUg52O7WIsclSmblxxrKPezB.jpg",
+          "vote_average": 4.52,
+          "vote_count": 26,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oLD27sNIG3QoqG9G9oOldu1VjcZ.jpg",
+          "vote_average": 4,
+          "vote_count": 19,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yaL2uLTaYhMB2LFNmqh3Qg0c4dZ.jpg",
+          "vote_average": 3.852,
+          "vote_count": 17,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5fhZdwP1DVJ0FyVH6vrFdHwpXIn.jpg",
+          "vote_average": 3.582,
+          "vote_count": 37,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1sBebcT6H3csp1CiaIZUCjCcXPh.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d4aGeGz0X8rHiluUowopoI3oRkt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rRffHqDdgvENI6GJzVDH5avTyzQ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/shOpUrHkQN04l9p5E4r6okmUWLJ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kcMA01YaRpgLmygNh66eOEvQBdM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zjQH7jVygFLjKQDyJoo5l40TjyR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qtKZVeABuHogDZU70sft3R1i8gW.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iqmLbzLfECQ89YNsSPkHCoOXoqs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aDaPJDRo5DVZDiiqPdwdQJaen3g.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/83V8P58yWopTaJxfHJmQDs0geFy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1JfPQdYMfmLznSmtTH0MmWssNGR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bzrc7m045cIBHoDhMojgTcea8Kd.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j7AAiAWx4blPd5hIOSr7sJKutMI.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kP3v1eZIrL0xAA1BdmBKStapzIQ.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b47TCEglJugccTjBWifjocynZ5T.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 675
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jmJ8SiY8AgtuXKiit0bnGxOpYvL.jpg",
+          "vote_average": 0.5,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ormV9lGj95r17kx4o89kjQERjyM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oAEJcJyYHoNV6UzK1c3y5R9h9DR.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mY563aOoKNg3EHD0EhZBaI88vVK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z3KUKz4z3ZZgXRi8ivTqMywCrvJ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oOydcWEAZ6CtNNECOJsld1EpE4y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2520,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/EhySR9sCeGXdvBK2JPf8qwAEC9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Ok2VzGBv8iUoDkcEDMmwbRCGZD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z3sIf89N3MP6qibsIc4kVCtIIry.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ygNAgctT7gOpHqsq6owjZS1IdbV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cfkgPnTRKBlGTetfZbXcFSxyT2g.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 950
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1224,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uqZjoWvpGMdQ6K9L8MsxngHBKy6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 816
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7vUwPZ176xvuFqFv6FXBUqqH1s0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oXNMVEtcrK4MqcYWiNPOJ2BnGPS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1521,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w5YikicOqToOJldqpJb3OhmadF5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1034
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 939,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3GpCV7o9e4LeyQZ7AYkrS2YOLVy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 625
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 993,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ArEsgozGX9dptda0sLyXRrz2WqD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 661
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mIjpwrXAP64YJkPthHY9IJpQNbc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eyCEacj3B9CG1UkuDAoJ02ARYgM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 721
+        }
+      ]
+    }
+  }
+}

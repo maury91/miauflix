@@ -1,0 +1,2427 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6624",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"bfc7b3e6fe2971bde66e5d49393b2290\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/l2gc2dPRUPe3bAfYCRTjc6uAMmB.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2012-10-06",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://jojo-portal.com/anime/",
+    "id": 45790,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-30",
+    "last_episode_to_air": {
+      "id": 7459379,
+      "name": "Tusk (2)",
+      "overview": "Johnny awakens a new power and reaches a shocking revelation about the race. Finding hope in the Corpse, he counterattacks to rescue Gyro and protect it.",
+      "vote_average": 10,
+      "vote_count": 1,
+      "air_date": "2026-11-06",
+      "episode_number": 8,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 25,
+      "season_number": 6,
+      "show_id": 45790,
+      "still_path": "/vsfbUWytYJzg1aE439TnSWaommD.jpg"
+    },
+    "name": "JoJo's Bizarre Adventure",
+    "next_episode_to_air": {
+      "id": 7459380,
+      "name": "Episode 9",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-13",
+      "episode_number": 9,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 6,
+      "show_id": 45790,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Netflix",
+        "origin_country": ""
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 202,
+    "number_of_seasons": 6,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ジョジョの奇妙な冒険",
+    "overview": "Follow the intergenerational feud between the Joestar Family and various forces of evil, the most prominent of which is Dio Brando and his followers.",
+    "popularity": 102.8757,
+    "poster_path": "/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg",
+    "production_companies": [
+      {
+        "id": 45188,
+        "logo_path": "/aPH68PzQDtz7QorAU369IlxwgnU.png",
+        "name": "David Production",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3627,
+        "logo_path": "/pBfPYpzg5o3EoBPfrFKzTRi8MGr.png",
+        "name": "Warner Bros. Japan",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2017-09-20",
+        "episode_count": 7,
+        "id": 62290,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/jGmCwKTvYrCIGjYxEKNMHzf0TtK.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2012-10-06",
+        "episode_count": 26,
+        "id": 54261,
+        "name": "Phantom Blood & Battle Tendency",
+        "overview": "Jonathan Joestar's antagonistic relationship with his adopted brother Dio begins a truly bizarre lineage, which is continued by his grandson Joseph.",
+        "poster_path": "/co0K9FS9rQPxPoKADs4nuGckk3A.jpg",
+        "season_number": 1,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2014-04-05",
+        "episode_count": 48,
+        "id": 62288,
+        "name": "Stardust Crusaders",
+        "overview": "Joseph Joestar's grandson Jotaro Kujo has a strange new superpower, which turns out to be connected to the reemergence of old foe Dio Brando.",
+        "poster_path": "/kX9noqY0YpOPKwXpRXYg1hEIqmM.jpg",
+        "season_number": 2,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2016-04-02",
+        "episode_count": 39,
+        "id": 64407,
+        "name": "Diamond Is Unbreakable",
+        "overview": "It's the year 1999, 11 years after Jotaro Kujo's desperate fight against DIO in Egypt. Jotaro meets with Josuke Higashikata, the illegitimate son of his grandfather Joseph Joestar. He discovers that Josuke also has the same \"Stand\" power and that a new threat is surfacing in Morioh City.",
+        "poster_path": "/9X4iCnCBZ7Y1AXi4nm4RfMwLW4I.jpg",
+        "season_number": 3,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2018-10-06",
+        "episode_count": 39,
+        "id": 105428,
+        "name": "Golden Wind",
+        "overview": "In Naples, Italy, the suspected son of Joestar family arch nemesis Dio dreams of becoming a Gang Star so he can bring down the local mafia from within.",
+        "poster_path": "/cMFg7X0gSJjWajuj9DNL4UaUmcP.jpg",
+        "season_number": 4,
+        "vote_average": 8.6
+      },
+      {
+        "air_date": "2022-01-08",
+        "episode_count": 38,
+        "id": 189107,
+        "name": "STONE OCEAN",
+        "overview": "The legacy of the Joestar family continues with Jolyne as she and her companions take on new Stand users behind the bars of Green Dolphin Street Prison.",
+        "poster_path": "/pgfHO4mnozfDLYKjhgtaOZDq9Kc.jpg",
+        "season_number": 5,
+        "vote_average": 8.4
+      },
+      {
+        "air_date": "2026-03-19",
+        "episode_count": 12,
+        "id": 451151,
+        "name": "STEEL BALL RUN",
+        "overview": "America, 1890. Johnny Joestar, a genius jockey now paralyzed from the waist down, chases after outlaw Gyro Zeppeli in a tough cross-continent horse race.",
+        "poster_path": "/yB2cUOuT3OMGtU3CTLQjuFUL8Ox.jpg",
+        "season_number": 6,
+        "vote_average": 8.7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.55,
+    "vote_count": 1701,
+    "external_ids": {
+      "imdb_id": "tt2359704",
+      "freebase_mid": "/m/0nddm15",
+      "freebase_id": null,
+      "tvdb_id": 262954,
+      "tvrage_id": null,
+      "wikidata_id": "Q28930028",
+      "facebook_id": null,
+      "instagram_id": "jojotheanimation",
+      "twitter_id": "anime_jojo"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Follow the intergenerational feud between the Joestar Family and various forces of evil, the most prominent of which is Dio Brando and his followers.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Angleterre, 1881. Afin d'honorer ancienne dette, Lord George Joestar adopte Dio Brando, le fils de son sauveur Dario. Mais sous l'apparence du fils modèle, Dio souhaite s'emparer de la fortune des Joestar et humilier le fils du lord, Jonathan Joestar surnommé Jojo. Une rivalité nait entre eux et explose à cause d'un masque aztèque aux capacités mystérieuses. Dio s'en empare et devient un vampire, que seul la maîtrise du hamon permettra à Jonathan d'espérer le vaincre. Voici le point de départ du destin entremêlé de la famille Joestar et de Dio. Chaque illustre membre l'affrontera, lui ou des adversaires qui lui sont liés grâce au hamon, puis aux stands, la matérialisation de leur esprit combatif doté de force et de capacités insoupçonnées. Parmi eux, Joseph l'aventurier arrogant, Jotaro et son stand invincible Star Platinium, Josuke l'ami au grand cœur, Giorno le fils de Dio et gangster à la chevelure dorée et Jolyne, la fille à la volonté de fer.",
+            "homepage": "",
+            "tagline": "\"Deux hommes regardent au travers des mêmes barreaux; l'un voit de la boue, et l'autre, les étoiles.\"  Frédérick Langbridge"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Невероятные приключения ДжоДжо",
+            "overview": "В каждом поколении славной семьи Джостаров находится прямой или побочный отпрыск, чьё имя начинается с того же слога и, соответственно, потомок получает традиционное прозвище ДжоДжо. Начиная с бурного XIX века, удел каждого героя с таким прозвищем — борьба за выживание человечества против вампиров, зомби и прочих Джеков Потрошителей. А началось всё с того, что викторианский джентльмен Джордж Джостар по доброте душевной перепутал грабителя со спасителем, а потом ещё принял в семью сына этого достойного рыцаря большой дороги. Что ж, теперь его потомки избавлены от скуки минимум на сто лет!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Im England des Jahres 1880 nimmt der Adlige George Joestar seinen neuen Adoptivsohn bei sich auf: den jungen Dio Brando, dessen Vater Georges Leben vor 12 Jahren gerettet hat. Doch statt friedlich in seinem neuen Heim einzuziehen, möchte der in Armut großgewordene Dio die Joestar-Familie zerstören und ihren Status für sich gewinnen. Was als simple Fehde mit Georges Sohn Jonathan beginnt, entwickelt sich bald zu einem Konflikt, welcher weit über 100 Jahre andauert und sämtliche Generationen der Joestars in den Kampf gegen Vampire, aztekische Gottheiten, Nazis und gewitzte Serienmörder schickt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "O ano é 1868; o nobre inglês George Joestar e o seu filho Jonathan ficam endividados para com Dario Brando após serem resgatados de um incidente com uma carruagem. O que os Joestar não percebem, no entanto, é que Dario não tinha intenção de ajudá-los; ele acreditava que estavam mortos e estava tentando saquear os seus pertences. Depois da morte de Dario, 12 anos depois, George, na esperança de saldar a sua dívida, adota o seu filho, Dio. Enquanto ele adula publicamente o seu novo pai, Dio planeia secretamente roubar a fortuna Joestar. O seu primeiro passo é criar uma divisão entre George e Jonathan. Ao superá-lo constantemente, Dio firma o seu lugar na família Joestar. Mas quando Dio empurra Jonathan longe demais, Jonathan derrota-o numa luta. Anos depois, os dois parecem ser amigos próximos para o mundo exterior. Mas os problemas ressurgem quando George adoece, pois Jonathan suspeita que Dio está, de alguma forma, por trás do incidente, e parece que ele tem mais truques na manga.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "A saga que se inicia na Inglaterra do século XIX, contando a rivalidade entre Jonathan Joestar, um jovem aristocrata, e Dio Brando, um garoto plebeu que foi acolhido pelo pai de Jonathan quando tornou-se órfão. Insatisfeito com sua posição social, a ambição insaciável e o desejo de dominação de Dio o levam a estudar os poderes sobrenaturais de uma antiga máscara asteca de pedra presente na mansão dos Joestar - um artefato que mudará para sempre o destino de Dio e das futuras gerações dos Joestar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "La trama se desarrolla en torno a la historia del linaje Joestar, una poderosa familia de origen británico destinada a combatir fuerzas sobrenaturales malvadas usando poderes adquiridos; la obra abarca varias generaciones de dicho linaje, las cuales son adaptadas en cada parte poniendo un descendiente como protagonista, empezando con Jonathan en el año 1880.  El nombre «JoJo», presente en el título de la obra, consiste en un juego de palabras compuesto por el nombre de los protagonistas de cada parte, los cuales pueden abreviarse como «Jojo» y usarse a forma de apodo; sin embargo, en las últimas partes de la obra se hacen juegos de palabras más complejos: por ejemplo, Josuke es un juego de palabras en japonés en que la sílaba «suke» (助) se puede leer también como «jo», y el diminutivo de Giorno Giovana (Gio. Gio.) tiene una pronunciación bastante similar a «Jojo». Todos los Joestar se identifican porque tienen una marca de nacimiento en forma de estrella de cinco puntas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "مغامرات جوجو العجيبة",
+            "overview": "تواجه أجيال عديدة من عائلة \"جوستار\"، يحمل جميع أفرادها اللقب نفسه، أشرارًا قواهم خارقة للطبيعة على فترات من الزمن.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "JOJO的奇妙冒險",
+            "overview": "在一次意外中，喬納森（興津和幸配音）的父親喬斯達爵士（菅原正志配音）被陌生少年迪奧布蘭度（子安武人配音）所救，善良的爵士收留了自稱無依無靠的迪奧，後者則以養子的身份正式進入了喬斯達家族的大門。在他人的眼中，迪奧是一個優秀正直的少年，可是，只有經歷過迪奧殘酷欺辱的喬納森才知道，在迪奧光鮮的面具後面，隱藏著一顆邪惡的心。果不其然，隨著年齡的增長，迪奧開始覬覦起了喬斯達家族的龐大家產。無意間，迪奧發現了能夠使人變得強大的石鬼面具，為了獲得更多的財富和權力，迪奧毫不猶豫的帶上了面具。在成為了恐怖的吸血鬼后，迪奧開始了對喬斯達家族的瘋狂報復。為了替父親和整個家族報仇，喬納森開始修煉唯一能夠打敗吸血鬼的波紋氣功，面對著強大的敵人極其黨羽，喬納森能夠獲得最終的勝利嗎？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "JOJO的奇妙冒险",
+            "overview": "乔斯达家族的数代人都有一个相同的绰号“JOJO”，他们在不同的时代与各种拥有超自然力量的反派战斗不休。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "ההרפתקה המוזרה של ג'וג'ו",
+            "overview": "באנגליה של מאה ה-19, אציל בשם ג'ונתן ג'וסטאר מוצא את עצמו ביריבות מרה עם דיו בראנדו, אדם שאביו לקח תחת חסותו. תשוקתו האין סופית של דיו להשיג שליטה מובילה אותו אל מסכת אבן אצטקית הנמצאת ברשותו של ג'ונתן – מה שישנה לעד את חיי השניים וצאציהם. 50 שנה לאחר מכן, בניו-יורק של שנת 1938, נכדו של ג'ונתן, ג'וזף ג'וסטאר, מתחייב לסיים את משימת סבו ולהתמחות ביכולות הדרושות להשמדת מסכת האבן ואת יוצריה רבי העוצמה שמאיימים על קיום האנושות.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "En la Gran Bretaña de finales del siglo XIX, el joven Jonathan Joestar conoce a su nuevo hermano adoptivo, Dio Brando, quien únicamente quiere usurparle el puesto de heredero de la familia Joestar a Jonathan. No obstante, su plan fracasa y decide usar una máscara de piedra de origen mesoamericano que lo convierte en un vampiro, obteniendo la inmortalidad y poderes sobrenaturales. Jonathan, junto a su maestro del Hamon Will A. Zeppeli y a un matón callejero llamado Robert E.O. Speedwagon, deberá detener y destruir a Dio ahora que su objetivo es dominar a todo el mundo. Serie basada en el famoso manga de mismo nombre. La primera temporada abarca dos arcos argumentales diferentes \"Phantom Blood\" y \"Battle Tendency\".",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "죠죠의 기묘한 모험",
+            "overview": "유서 깊은 죠스타 가문에 얽힌 기묘한 이야기를 아는가. 각기 다른 세상에서 애칭 '죠죠'를 공유하며 살아가는 주인공들. 시간적 공간적 배경은 달라도, 추구하는 가치는 다르지 않다. 악의 세력을 물리치고 정의가 이기는 세상을 만들라.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "ジョースター一族と、邪悪な吸血鬼と化したディオやその後継者たちが、1世紀以上に亘って繰り広げる戦いを描く大河群像劇である。単独の人物を主人公としておらず、主人公が変わるごとに「第○部（○部分に数字）」と部数が進み、作品のサブタイトルも変わる形式を採用している。主人公が変わるだけでなく、作品の舞台やジャンルも各部ごとに変化している。現在までにPart1からPart8までの8部が発表されている。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Le bizzarre avventure di JoJo",
+            "overview": "La secolare ed epica saga della famiglia Joestar si snoda attraverso generazioni e diverse epoche storiche, seguendo i discendenti del casato contrassegnati dal soprannome \"JoJo\". Dagli scontri contro minacce vampiresche condotti tramite l'energia dell'Onde Magnetica fino alle battaglie tra manifestazioni spirituali note come Stand, ogni membro della stirpe affronterà forze oscure per proteggere il destino del mondo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Kolejne pokolenia rodziny Joestarów, w której wszyscy noszą ten sam przydomek, mierzą się z nadnaturalnymi przeciwnikami w różnych okresach historycznych. Ta wielotomowa seria otrzymała wiele wyróżnień, w tym główną nagrodę dla mangi na Japan Media Arts Festival.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Неймовірні пригоди ДжоДжо",
+            "overview": "Крізь покоління спадкоємці родини Джостар з однаковим прізвиськом протистоять лиходіям з надприродними силами.",
+            "homepage": "",
+            "tagline": "Приготуйся до найхимернішої пригоди в житті!"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Jonathan Joestar zengin, asil, herkesin arzu edeceği hayata sahip bir çocuktur. Dio Brando ise babasının ölmesiyle JoJo ailesine evlatlık gelmiş hırslı ve yetenekli bir çocuktur. Hikaye, Jonathan Joestar ve Dio Brando'dan başlayarak iki ailenin birkaç nesil boyunca birbiri ile olan mücadelesini konu almaktadır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Η παράξενη περιπέτεια του ΤζόΤζο",
+            "overview": "Γενιές και γενιές της οικογένειας Τζόσταρ -όλες με το ίδιο ψευδώνυμο- αντιμετωπίζουν κακούς με υπερφυσικές δυνάμεις σε διάφορες χρονικές περιόδους.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Cuộc phiêu lưu kì lạ của JoJo",
+            "overview": "Nhiều thế hệ của gia tộc Joestar – tất cả đều có chung một biệt danh – đối đầu với các thế lực thù địch siêu nhiên suốt bao thời kỳ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "โจโจ้ ล่าข้ามศตวรรษ",
+            "overview": "ครอบครัวโจสตาร์รุ่นแล้วรุ่นเล่าต่างมีชื่อเล่นเดียวกัน และพวกเขาทุกคนต้องต่อสู้กับเหล่าวายร้ายที่มีพลังเหนือธรรมชาติผ่านกาลเวลาหลายยุคหลายสมัย",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "JoJo bizarr kalandja",
+            "overview": "A Joestar család több generációja – mind ugyanazzal a becenévvel – természetfeletti gazfickókkal csap össze különböző korokban.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "JoJova prazvláštní dobrodružství",
+            "overview": "Příslušníci několika generací rodiny Joestarů, kteří mají všichni stejnou přezdívku, bojují v několika časových rovinách proti zlým nadpřirozeným sílám.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Meerderde generaties van de familie Joestar, allen met dezelfde bijnaam, gaan doorheen een reeks tijdsperioden de strijd aan met bovennatuurlijke vijanden.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "JoJo 奇妙冒險",
+            "overview": "喬斯達家族的好幾代子孫不僅擁有一模一樣的綽號，也都得在各個不同時期，對付超自然的壞蛋。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Joestarin suvun jälkeläiset – jotka kaikki käyttävät samaa lempinimeä – ovat jo monessa polvessa taistelleet superkonnia vastaan eri aikakausina.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "مغامرات جوجو العجيبة",
+            "overview": "تواجه أجيال عديدة من عائلة \"جوستار\"، يحمل جميع أفرادها اللقب نفسه، أشرارًا قواهم خارقة للطبيعة على فترات من الزمن.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "JOJO 的奇妙冒险",
+            "overview": "乔斯达家族的数代人都有一个相同的绰号，他们在不同的时代与各种拥有超自然力量的反派战斗不休。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Više generacija obitelji Joestar, svaka s istim nadimkom, bore se s natprirodnim zlikovcima kroz niz vremenskih razdoblja.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Adskillige generationer af familien Joestar – som alle har det samme kælenavn – konfronterer overnaturlige skurke i en række forskellige tidsperioder.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Les aventures bizarres des JoJo",
+            "overview": "Plusieurs générations de la famille Joestar – portant toutes le même surnom – affrontent des ennemis surnaturels à travers les époques.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "जोजोज़ बिज़ार एडवेंचर",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Berbilang generasi keluarga Joestar — semuanya dengan nama panggilan sama — bersemuka dengan penjahat berkuasa ghaib melalui satu siri tempoh masa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "Flere generasjoner av familien Joestar – alle med samme kallenavn – kjemper mot overnaturlige superhelter i løpet av flere tidsepoker.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "JoJo's Bizarre Adventure",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "ДжоДжо: Чудноватото приключение",
+            "overview": "Проследете междупоколенческата вражда между семейство Джостар и различни сили на злото, най-известната от които е Дио Брандо и неговите последователи.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "ماجراجویی عجیب و غریب جوجو",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BY",
+          "iso_639_1": "be",
+          "name": "беларуская мова",
+          "english_name": "Belarusian",
+          "data": {
+            "name": "Дзіўныя прыгоды Джоджо",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KZ",
+          "iso_639_1": "kk",
+          "name": "қазақ",
+          "english_name": "Kazakh",
+          "data": {
+            "name": "Жожоның таңғажайып хикаясы",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KG",
+          "iso_639_1": "ky",
+          "name": "??????",
+          "english_name": "Kirghiz",
+          "data": {
+            "name": "ДжоДжо укмуштуу окуясы",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "Periculum Prodigiosum IoIonis",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MK",
+          "iso_639_1": "mk",
+          "name": "",
+          "english_name": "Macedonian",
+          "data": {
+            "name": "Неверојатните авантури на Џоџо",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MN",
+          "iso_639_1": "mn",
+          "name": "",
+          "english_name": "Mongolian",
+          "data": {
+            "name": "ЖоЖогийн хачирхалтай адал явдал",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "name": "JoJo no Kimyo na Boken",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TT",
+          "iso_639_1": "tt",
+          "name": "",
+          "english_name": "Tatar",
+          "data": {
+            "name": "Джоджо",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Volg de intergenerationele vete tussen de familie Joestar en verschillende krachten van het kwaad, waarvan Dio Brando en zijn volgelingen de meest prominente zijn.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UZ",
+          "iso_639_1": "uz",
+          "name": "ozbek",
+          "english_name": "Uzbek",
+          "data": {
+            "name": "JoJoning Gʻaroyib Sarguzashtlari",
+            "overview": "Joestarlar oilasining avlodlar osha davom etuvchi taqdiri, g‘ayritabiiy kuchlar va telba sarguzashtlar! Har bir avlod o‘z davrining xavfli dushmanlariga qarshi turib, taqdir, do‘stlik va iroda sinovlaridan o‘tadi. Kutilmagan burilishlar, noodatiy qobiliyatlar va unutilmas to‘qnashuvlarga boy bu hikoyada bir narsa aniq: bu oddiy sarguzasht emas, bu — JoJoning G‘aroyib Sarguzashtlari!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l2gc2dPRUPe3bAfYCRTjc6uAMmB.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5mUYDoFjDlPmDvnUWSknhYjGBBh.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1395,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mLKN1dsimKPiXCZ48KED0X8a02t.jpg",
+          "vote_average": 5.25,
+          "vote_count": 16,
+          "width": 2480
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tZVSRbtOBNmULvBbPvcDnSIQNGA.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 783,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3fU68HROXn03dj8mBQyYSwiefq2.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1392
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fVT4PCzKbh9UgYNVHLilWnUTjJH.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nLD0n1yD80oy9as4zhJRPppWCNU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1232,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/loLPI1lmL0TMk7aItDhY62Qz8iZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2190
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8JD3zY1nWHPEpvfjE1MXokpM6ig.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pvCV6EokXk0iqJ3UfoZTCBWTvKD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1794,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ciDRS9Q8ErVxYzOpmYG40Wqbpc2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3194
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wZ2hh2l9F4YYYnCaYAe5HsY90bY.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 837,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6JrxtDqb03TqholMcaNzXnkwLJs.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1488
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gvFYoxhz9gifXjeofLbuTOe5ml0.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3FYkR2L4aTauQ7bbRFsxKGt8uj6.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kOhLfgiQ5HbEyWXe30V41cIzgL5.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q2M6Sv2pZm5gFtTG2LwSkHfw8jh.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1570,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i6zOMoDpAlrgs31ZdvMRsgQSTv4.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2795
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mNkfSsvwv4Fm7JO1ojWEReGUaoh.jpg",
+          "vote_average": 1.208,
+          "vote_count": 8,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6Y6bhE1UCizUesAFz9To91Z1Lbh.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fezzQlEeqU0QHb0HDeBy6YilmYA.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1124,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iZwAxspYlszZBBBGHu05EvUZNem.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1102,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lpTlx17gJn8BNnipq72NfvYWe1T.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1960
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AmReNLtKY2mzdyAqr1FYgfSm4F7.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/YNA0PHuN2PQAp8MlOVDBabEHVc.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ztMQt6C710Yh2v3O8XjEO5V77im.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q7eB8jWRFXuDBCV2ifhdycuGqzu.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 999,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7JyW5HW4MENE86goRywlQovVu8B.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1776
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u3oO1rujeIN3EuqzQob9MCjzGeJ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tegosl8Awdv3d2hsRjD2dchmycf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q5ZirKXhPSAxMw8mHoxayGdzgu0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/14AsxKEIP4VYB7mkBsafPCazmC7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c74NEeqAy8b8g9okvoMdxxJB3A8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lQhpD41FdyBzPGovnbBEBVEnx3C.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Reh3obUjb7Bvf6YfJREcXwR869.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eHV3UonP6VvTv088OCOVRLyf85j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aVFMtxL4dyCqYSn7xJcFhb9VO72.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 722,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3IRnGnA5GZLz4QRto15KSeZ9esK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1284
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 722,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9jX4jR8fA7H64ZfAOzp2u5z93cE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1284
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mcJY72UD9Ff7W64BIbl0Sm1TPEQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t1XJW38mDDqggEFsCUbZoVwXF2W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fgKbLrl6Sy5Mk5rhOOXtKk3rsEn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h8SNCDuTWwlobBF2jL6oeQbSvZW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 844,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g5COjO3QOymoyzHSDi0mlb7O0bX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/waLJJ11rWSln6Nul8MoLuqF3Lmi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dLy8MURPyLJPYpexMBSnIAWXSZu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1174,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oMSbHE7Mez4iusCCFvIaa6V4MUe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2085
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1165,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rqvpUXUte7BK6ERD6rPGmHSMMSP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2072
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1174,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3vUjaqNprtUjPMAmN4sJI6zVrF4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2085
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1161,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sulYEa2TvjEhYkfwrHn3Yyg4R93.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2065
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1169,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lkyiB1vX03qxjI8DPFDUDFJ2ZnP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2076
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1169,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j7Dp6aL6XU0aKxF6000Xa9hOFhy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2078
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1165,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lhHRvhD6yrr1h5E6JI0CAnQMEZa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2072
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1179,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aNS97Mc3G93doITLj4Yl0PmZRWl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2095
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u3dmu4pHOMleMuHKsilXMuVLeoZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 809,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/m90kWh00dmQNlT6bWfHW0lUqccq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1440
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.871,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bfcHax3WxaoqiRXzCkKjmd2myR8.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2430
+        },
+        {
+          "aspect_ratio": 1.785,
+          "height": 540,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kNtCppfedimcdRw5sGUK8eFjhsi.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 964
+        },
+        {
+          "aspect_ratio": 1.736,
+          "height": 212,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kj9TGuStYOEGvacD79b7VD9vDA4.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 368
+        },
+        {
+          "aspect_ratio": 1.721,
+          "height": 290,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mUs1vT63cSqDXsxv3fUeXNK7CC3.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 499
+        },
+        {
+          "aspect_ratio": 2.157,
+          "height": 1739,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jJ65Lqv4dLe9jcxbmpZkuUy7wly.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3751
+        },
+        {
+          "aspect_ratio": 1.575,
+          "height": 294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mtQclVQ0hmpI0ufCoV53x4dvSCM.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 463
+        },
+        {
+          "aspect_ratio": 1.61,
+          "height": 544,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cN4S1vCwrW1bo7QZJ3x22lLV2WY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 876
+        },
+        {
+          "aspect_ratio": 1.989,
+          "height": 718,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rj61sjaWly7JO5rQDiVkeQIN5FD.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1428
+        },
+        {
+          "aspect_ratio": 2.136,
+          "height": 369,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8CEcSjxYA4RE6TNtUYaxYmCbUO9.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 788
+        },
+        {
+          "aspect_ratio": 2.48,
+          "height": 448,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vKiyMPOxhJI5jQNeSaZ18kd2qsz.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1111
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ogAWwbh3frWtiTyyXrZaVFtqCgp.jpg",
+          "vote_average": 4.97,
+          "vote_count": 17,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dLS0fKWWc0pGwf68DPxu7hY7tMR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kUr55OqkYlrRibGXgyJCBvV7L3O.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1xOdLQt1lWPB67ipa2i4CCnI3Ry.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 1029,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dos4RGpQlenQ3u2NeflZZ77ybJf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1041,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d5A8nR4uejelDAFv0MIMsTzJkiy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3lbH1nPcF0Ey8DRkNDf6qBStQVX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 881,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w8ck66Zi8lwojWmdQyPUDjHNMNU.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 588
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r2ClJGTSEt0fn8994gTtwaPx2uD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1416,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nK1UZyighf3OeC8nHrcGfAoxjlD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 944
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 999,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7r7rzGdD0r6KmHJ8q283tzRH2C4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 666
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wGiz5W6cdmHgS0gqZUcQ2yLsnyx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1416,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ofb2LmCBiAv1HMIKlsjtKqyOCyI.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5scPVhF58v56cKDsPrQAoRzpVpS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vHQlxLHT3bY9QKyQLTCHqXUli1n.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7wq94UKxeJPoEtbKAGCO7zSzAre.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2046,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iP17LLR2okmDSVfuOHiq7CuH3om.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1364
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nkXBvtYR9eXCZCIWW1aeR1ISYXr.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gVPpqdRoSqNufixVpzZi7GpS3EV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1088
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 971,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rVkoGf5Y9BVnAakygpWyEFCT6L2.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 648
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1039,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cpAA9VD65L98z1VgVCSHxNRzCha.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nRfhgnDmmoJrTuUZBeDAo5OKUYU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9RhoCNjWutc3s2fe4725nNHdKx0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5KxfZTkwiuNRg5mpUOhXdiUB17E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cg2x9hQMiCJdWLBQfeNmpbrsLrb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1692,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3l1KlMNkk2YDLivkyjB2tgRSeVr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1198
+        },
+        {
+          "aspect_ratio": 0.723,
+          "height": 1360,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dZzxdiNTtAZ9g3BIFIeq64FCsCp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 983
+        },
+        {
+          "aspect_ratio": 0.765,
+          "height": 1285,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b5d4OdB7klK5PvzTLpNwuwTz5ZF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 983
+        },
+        {
+          "aspect_ratio": 0.758,
+          "height": 1296,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rDwOLdnusdOnSdbXSvAmqNSyL9y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 983
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hkkVAf0SOgqUkwxpkWDuUrbu72M.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vlC7Ej6CnYuOmFvw51kTOdFab6J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qYtz0qbZ9ULnsP8EpwMwfOWFflX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xWUAHVQsYzIM8B8oqSnijwTtfF4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kQHnZA1bskqiEQQ0uuXOQUftnUV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2NlRBnAe2DAVle8Sbvvliw2zEA2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wha5GNPWSEjsaclsIqZyUVeAO8M.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Zm8P78rDUxhfz7XTOLHef7OQi3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.739,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tCOux7THm6F2MFDqj1YSgGL7edW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1108
+        },
+        {
+          "aspect_ratio": 0.745,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fH4RQpvEaDEl3NncoDhEp3238ue.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1118
+        },
+        {
+          "aspect_ratio": 0.743,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hPkyVpD8kI4SSTqbD5k4NB0Y6Gd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1114
+        },
+        {
+          "aspect_ratio": 0.743,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4TclnJZI7bba90pVYXd4Yz2KpUL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1114
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6l9kULP2b4jU7NBtyzhzrqsOnet.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aeKqiATc9eM7iJtiMZpidinw1FC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.736,
+          "height": 1498,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dxt6vr2griB2Yo2j0fsYdhXfCwM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1103
+        },
+        {
+          "aspect_ratio": 0.741,
+          "height": 1142,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fHe2I7OzqCDBX5U5fMyXlxuNhsp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 846
+        },
+        {
+          "aspect_ratio": 0.745,
+          "height": 1524,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zf6EyCzUICujlVsfNZvb9ri67Zl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1135
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/TWdH5rZIsGpecC7nbiNHMNDfG1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/scY09hV5OQnGz7lZF6C4mhpYC2v.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o2y6dUFrSnalz2ls4CM7rSvAKGx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 865,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fdw8j0jvfmMc2RhsUQaV52RjHmc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 610
+        },
+        {
+          "aspect_ratio": 0.683,
+          "height": 893,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9rt8PwZBoIuiVI50BBSxiv8Paa8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 610
+        },
+        {
+          "aspect_ratio": 0.697,
+          "height": 933,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/568cHsvwHLYQ0tdy4Mx6fWqUw5y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 650
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tUIZIShXDcm1u5vOKrByecWRhrj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iEGixIPerprC6VdnXAaKihTEyE6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.699,
+          "height": 800,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jL0kg1plHrqtDpgoxxgNWzU5y01.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 559
+        },
+        {
+          "aspect_ratio": 0.741,
+          "height": 1535,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iyCkBeaanXyHTVelVlepA4JC0a4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1138
+        },
+        {
+          "aspect_ratio": 0.742,
+          "height": 1530,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h5dnJGWrOOhhAgDKNiFVgi4XNpH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1135
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h92ZjtbcY7cW6X5MOupj969zLNE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1066
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tFkJcVgUsF5A14iC9lVv6Qr2QZL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jel24p03p33sv16P6vwhE11SLQw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tpyxBK6yRbUU3KhhPyCKAMpnxxP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uoAiYFq0dmergcEEChQe7oAZcMw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4tN1nlwFOt7T7O5sXY2aj6PFxYK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1414,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vwZt2ZdSDLGUiGImlUAILYZxqlS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1062,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2zXHA1uySbliqutZZ95C9lvf2MY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/auc6lyfk68yf9xYqiOZH8KHoOOJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.698,
+          "height": 815,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/er6D6HiEwr7Ocol33OmCgdLY0uo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 569
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8tyjmfAWUrpxvjR7Q8cH7tqFTTd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 1030,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hXptQGvsIQ85VxScRVn4r2xY5Xd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cxVSyLhElNiCtYr79jd6Dnwwiuw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 1030,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c9PwS0s6RPg3m55C4uHuNsMRUFK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.696,
+          "height": 2601,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8DHx7xK1dNmLjYbrIYxPGfGCyVZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1810
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 2813,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AvVp9XXR5aEZqBQylWEOF1XRAFV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.658,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/38byCnQvYbJT2oVRL6HN19vVmvc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1974
+        },
+        {
+          "aspect_ratio": 0.748,
+          "height": 1070,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lmbmOGsXJkVHQ21DVM9A8qj8uqJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1984,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hjcwEG1u11YIIjLDi2ArbMqWA2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1323
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1GDTy0NT0KSLBTdhpdMmN2477ID.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 715
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2245,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ikOhniP8YQvODMEd6P5ugB2h2vG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1587
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8eTiecXUyBiqMRhy9N004gHoylO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 723
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1HXdeK67pYSAukeZDhS3GJU8nIC.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1383
+        },
+        {
+          "aspect_ratio": 0.659,
+          "height": 1117,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uU9RtXDfXqbryQYSeCWwNg5NCt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1696,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b5gWZK0hgYep74C7Pq6IKMxl9nZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 934,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tU2mnAt6gqqqdDPr5BZ1mQjqgTr.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 623
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1176,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AqgoIWwywUjpxYyWMNlPaumoEPh.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 784
+        },
+        {
+          "aspect_ratio": 0.658,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cGbUgEBM73apCd6eQpppcqtkPNC.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 842
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fji1izGfCx0OxcloFnZPEE0julg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1696,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v3M2QqIMHG3FQp664xar3LzHBOK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cTecy1affli7GPTdVtCsYQbxeaE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/un7pl78pyYUKBHanRCo90H0pwrD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 801
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lORFpxxnml1Ng2exL57fi8sFkj8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 801
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1105,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fHUdpGKU1scYNrdDavgTaFMAtjk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1105,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2pYKqg9jt9MFtuNsjeC0TJ4DmU2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1105,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zFY4ouGpFD0hzfoFlsuRqsvDy87.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        }
+      ]
+    }
+  }
+}

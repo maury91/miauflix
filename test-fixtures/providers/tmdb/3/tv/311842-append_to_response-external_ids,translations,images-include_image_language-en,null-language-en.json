@@ -1,0 +1,489 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17537",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b6d3ea9a3b671885b605def785872edc\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qFELvRyy0C0vxYcKBQEX7BDe4vO.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-01",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://fxkurumi-info.com",
+    "id": 311842,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-29",
+    "last_episode_to_air": {
+      "id": 7895702,
+      "name": "Pay Attention to Economic Indicators!",
+      "overview": "Mebuki attempts to trade forex without Kurumi's help, but does she know enough about how the markets work?",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-05",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 311842,
+      "still_path": "/xC2anGa65mQ6C6K8pw0DGU92w2i.jpg"
+    },
+    "name": "FX Fighter Kurumi-chan",
+    "next_episode_to_air": {
+      "id": 7895704,
+      "name": "I Don't Wanna Have a Forced Liquidation...",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-12",
+      "episode_number": 7,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 311842,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 173,
+        "logo_path": "/fERjndErEpveJmQZccJbJDi93rj.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "FX戦士くるみちゃん",
+    "overview": "Buy! Sell! Profit...or lose it all! University student Kurumi Fukuga jumps into the fast-moving world of foreign exchange trading to recover the 20 million yen her late mother lost. Together with fellow FX enthusiasts Mochiko, Mebuki, and Yasuko, she’ll battle volatile markets where every decision can lead to fortune—or disaster!",
+    "popularity": 10.5916,
+    "poster_path": "/deXU3vulNCrUHp4EGPbI91hWBDF.jpg",
+    "production_companies": [
+      {
+        "id": 58035,
+        "logo_path": "/rtFGLtHkjVqq042Ky5gbOEnXFlN.png",
+        "name": "Passione",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 60195,
+        "logo_path": "/wR7YDBvNzdJRkmxOTgJobOpUG8X.png",
+        "name": "Docomo Anime Store",
+        "origin_country": "JP"
+      },
+      {
+        "id": 17981,
+        "logo_path": "/8UABNMysukRi4udTHYxcNUMbPR1.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      },
+      {
+        "id": 255571,
+        "logo_path": null,
+        "name": "D-techno",
+        "origin_country": "JP"
+      },
+      {
+        "id": 98553,
+        "logo_path": "/qqyXcZlJQKlRmAD1TCKV7mGLQlt.png",
+        "name": "Crunchyroll",
+        "origin_country": "JP"
+      },
+      {
+        "id": 187932,
+        "logo_path": "/5qlRgi2XlCSyKdN8wMSiLrA5uKO.png",
+        "name": "armabianca",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7549,
+        "logo_path": "/bXc1vp0lER6PDHtsVe12pSPwNkv.png",
+        "name": "Kansai Television",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-01",
+        "episode_count": 12,
+        "id": 496142,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/fHEkrlHF9MXtbumo23C4mrAlDgs.jpg",
+        "season_number": 1,
+        "vote_average": 9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.8,
+    "vote_count": 6,
+    "external_ids": {
+      "imdb_id": "tt43119470",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 472962,
+      "tvrage_id": null,
+      "wikidata_id": "Q137821917",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "fxkurumi_info"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "FX Fighter Kurumi-chan",
+            "overview": "Buy! Sell! Profit...or lose it all! University student Kurumi Fukuga jumps into the fast-moving world of foreign exchange trading to recover the 20 million yen her late mother lost. Together with fellow FX enthusiasts Mochiko, Mebuki, and Yasuko, she’ll battle volatile markets where every decision can lead to fortune—or disaster!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "ゆるふわJDたちの、ちょっとキケン(!?)なお金稼ぎのおはなしですっ!\n\n　　チャートが1mmうごくたび、涙があふれてとまらない――!! 楽してお金儲けをしたいすべての人へ送る、心臓ゆさぶる女子大生・FX・コミックス!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "FX Fighter Kurumi-chan",
+            "overview": "A estudante universitária Kurumi Fukuga finalmente realizou seu sonho de longa data de começar a negociar no mercado de câmbio (FX), motivada pela vontade de recuperar os 20 milhões de ienes que sua falecida mãe perdeu nessas negociações. “Vou recuperar esse dinheiro facilmente”, pensou ela, mas o mundo em que entra pode se tornar o paraíso ou o inferno em um instante. Perdas irrecuperáveis, prejuízos reduzidos, flutuações incontroláveis… mas ela ainda quer comprar, vender e ganhar dinheiro! Com as colegas viciadas em câmbio Mochiko, Mebuki e Yasuko acompanhando-a nessa jornada, o mercado esquenta! Alegria, desespero, alegria, desespero... este é um jogo financeiro cativante, mas um pouco arriscado. Será que Kurumi e suas amigas conseguirão sobreviver a esse mundo turbulento?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "FX 전사 쿠루미",
+            "overview": "꿈에 그리던 FX(외국환증거금거래) 데뷔를 이루어 낸 대학생, 후쿠가 쿠루미. 그 이유는 세상을 떠난 엄마가 FX로 날려 버린 2000만 엔을 되찾기 위해서. \"2000만 엔 정도쯤, 쉽게 되찾을 수 있게 되고 말겠어!\" 그렇게 다짐한 그녀가 뛰어든 곳은 순식간에 천국과 지옥을 오가는 세계. 미실현 손실, 로스컷, 멈추지 않는 심장 소리……. 그럼에도 사고 싶다, 팔고 싶다, 벌고 싶다! 모치코, 메부키, 야스코―― 개성 강한 FX 전사들까지 합세해 상장은 갈수록 더 뜨겁게 달아오른다! 차트 하나에 웃고 울며, 귀엽고도 조금은(!?) 위험한 머니 게임. 쿠루미와 친구들은 이 거칠게 몰아치는 세계에서 살아남을 수 있을 것인가――!?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "FX战士久留美",
+            "overview": "“这个是，一名美少女开始接触FX的故事……”大学生福贺久留美终于迎来了梦寐以求的FX（外汇保证金交易）出道，她的目标是夺回过世母亲因为FX赔掉的2000万日圆。“区区2000万，看我轻松把它赚回来！”发下豪语的她，一头栽进了这个随时从天堂跌入地狱的世界。未实现亏损、强制平仓、不能平复的心情……即便如此，她还是想要买进、想要卖出、想要赚钱！萌智子、芽吹、安子——加上这群性格超独特的FX战士们，市场行情变得愈发白热化！ 随着图表起伏一喜一忧、可爱又有点危险（！？）的金钱游戏就此踏入，无法回头！久留美等人究竟能不能在这疯狂的世界中存活下来呢！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "FX Fighter Kurumi-chan",
+            "overview": "Kaufen! Verkaufen! Profit schlagen… oder alles verlieren! Die Studentin Fukuga Kurumi stürzt sich in die schnelllebige Welt des Devisenhandels, um die 20 Millionen Yen zurückzugewinnen, die ihre Mutter einst verlor. Gemeinsam mit ihren Trader-Freundinnen Mochiko, Mebuki und Yasuko kämpft sie gegen volatile Märkte, in denen jede Entscheidung zu Reichtum oder Ruin führen kann!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Kurumi si Pejuang Forex",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "FX Воин Куруми",
+            "overview": "Когда мать ученицы средней школы Фукуги Куруми совершает самоубийство, потеряв 20 миллионов иен на торговле валютой, она клянется вернуть деньги, которые потеряла ее мать: \"Я легко верну эту сумму!\"\n\nТеперь, будучи студенткой университета, она совершает свой долгожданный дебют в сфере торговли на рынке Форекс, не подозревая, что мир, в который она только что вошла, может в мгновение ока превратиться из рая в ад.Это забавная и немного опасная история, поскольку она объясняет технические термины захватывающими колебаниями рынка по мере того, как график движется вверх и вниз, что становится еще более напряженным с появлением изворотливых воинов рынка Форекс: Ясуко Такане, Мочико Когане и Мебуки Ямаси. Смогут ли Куруми и ее друзья выжить в этом мире, в котором невозможно остановить сердцебиение и пережить нереализованные потери!?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "FX戰士久留美",
+            "overview": "大學生．福賀久留美終於如願踏出了FX（外匯保證金交易）的第一步。一切都是為了賺回已故母親當年在 FX 中賠掉的 2000 萬。「總有一天，我一定要變得能輕鬆賺回 2000 萬！」立下如此誓言的她，一頭栽進這個能在轉瞬之間，從天堂跌落地獄的世界。未實現虧損、強制平倉、停不下來的心跳。即便如此，還是想買、想賣、想賺錢！萌智子、芽吹、安子，個性十足的 FX 戰士們也陸續加入，市場行情更是越炒越熱！隨著走勢圖時喜時憂，既可愛又有那麼一點（？）危險的金錢遊戲。久留美她們能否在這個波濤洶湧的世界裡存活下來呢！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "FX Fighter Kurumi-chan",
+            "overview": "¡Comprar! ¡Vender! ¡Ganar dinero… o perderlo todo! Kurumi Fukuga, una estudiante universitaria, se lanza al mundo del mercado cambiario para recuperar los 20 millones de yenes que perdió su difunta madre. Junto a sus compañeras de batallas y apasionadas del Forex (Mochiko, Mebuki y Yasuko), lidiará con mercados impredecibles donde cada decisión puede volverte millonaria… ¡o arruinarte!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "المحاربة كُرومي-تشان في تداول العملات",
+            "overview": "عندما كانت كورومي فوكوغا في المرحلة الإعدادية، انتحرت والدتها بعد خسارتها عشرين مليون ين في تداول العملات الأجنبية، فتعهدت كورومي باستعادة المال مهما كلفها الأمر. وبعد سنوات، تلتحق بالجامعة وتبدأ أخيرًا رحلتها في عالم تداول الفوركس، دون أن تدرك أن الأرباح والخسائر قد تتغير في لحظة. سرعان ما تجد نفسها وسط تقلبات السوق برفقة مقاتلات فوركس غريبات الأطوار مثل ياسوكو تاكانه وموشيكو كوغانه وميبوكي ياماشي. وبين الطموح والخوف والخسائر غير المحققة، تحاول كورومي وصديقاتها فهم أسرار هذا العالم الخطير. فهل ستتمكن كورومي من استعادة ثروة والدتها والنجاة من سوق يمكن أن يحول أحلامها إلى كابوس في غمضة عين؟",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "FX Fighter Kurumi-chan",
+            "overview": "De jeunes étudiantes insouciantes se lancent dans le trading de devises dans l’espoir de gagner facilement de l’argent. Mais à mesure que les graphiques fluctuent, elles découvrent que la spéculation peut devenir une aventure aussi grisante que dangereuse.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Kopen! Verkopen! Winst...of verlies alles! Universiteitsstudente Kurumi Fukuga duikt in de snel veranderende wereld van de valutahandel om de 20 miljoen yen terug te krijgen die haar overleden moeder heeft verloren. Samen met mede-FX-enthousiastelingen Mochiko, Mebuki en Yasuko vecht ze tegen volatiele markten waar elke beslissing tot fortuin of ramp kan leiden!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chiến Binh FX Kurumi-chan",
+            "overview": "Mua! Bán! Lãi... hoặc mất trắng! Nữ sinh đại học Kurumi Fukuga lao vào thế giới giao dịch ngoại hối đầy biến động để gỡ lại 20 triệu yên mà người mẹ quá cố đã thua lỗ. Cùng với các đồng đội đam mê FX là Mochiko, Mebuki và Yasuko, cô sẽ chiến đấu trên những thị trường khó lường, nơi mỗi quyết định đều có thể dẫn đến giàu sang — hoặc thảm họa!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "FX Fighter Kurumi-chan",
+            "overview": "ช่วงปี 2008 แม่ของคุรุมิหมดเงินไปกับการลงทุนจากวิกฤตการณ์การเงินโลกในช่วงนั้น สูญเงินครอบครัวไปกว่า 20 ล้านเยนจนแม่จบชีวิตตัวเอง คุรุมิตั้งใจศึกษาการลงทุน ในปี 2014 เมื่อเธอโตขึ้นมีอายุมากพอ จึงเริ่มเทรดฟอเร็กซ์เพื่อนำเงินก้อนนั้นกลับคืนมา แม้จะเริ่มต้นได้ดีแต่ในไม่ช้าเธอต้องเผชิญหน้ากับความโหดร้ายในวงการลงทุนด้วยตัวเอง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "FX Fighter Kurumi-chan",
+            "overview": "Kurumi Fukuka es una estudiante universitaria que decide debutar en el mercado de divisas (FX) para recuperar los 20 millones de yenes (unos 126.000 dólares) que su difunta madre perdió en ese mismo mercado. Convencida de que será fácil recuperar el dinero, se lanza de lleno a un mundo donde todo puede pasar del cielo al infierno en un instante. Pérdidas no realizadas, ventas para cortar pérdidas, un corazón que no deja de latir acelerado… y aun así, Kurumi quiere comprar, vender y ganar. A su alrededor se reúnen otros “luchadores del FX”, y el mercado se vuelve cada vez más frenético. Mientras los gráficos suben y bajan sin parar, Kurumi continúa jugando a este juego del dinero, tan adorable como ligeramente peligroso.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "FX 戰士久留美",
+            "overview": "大學生．福賀久留美終於如願踏出了 FX（外匯保證金交易）的第一步。一切都是為了賺回已故母親當年在 FX 中賠掉的 2000 萬。「總有一天，我一定要變得能輕鬆賺回 2000 萬！」立下如此誓言的她，一頭栽進這個能在轉瞬之間，從天堂跌落地獄的世界。未實現虧損、強制平倉、停不下來的心跳。即便如此，還是想買、想賣、想賺錢！萌智子、芽吹、安子，個性十足的 FX 戰士們也陸續加入，市場行情更是越炒越熱！隨著走勢圖時喜時憂，既可愛又有那麼一點（？）危險的金錢遊戲。久留美她們能否在這個波濤洶湧的世界裏存活下來呢！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nqvn22IXcOvHHmNShCX4iqmQE7R.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qFELvRyy0C0vxYcKBQEX7BDe4vO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1918
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ky35UcS1YLA3qP9b5XUE2bVr2eM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jnPx2OneS5m1tASooNxv6GN6mSi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.97,
+          "height": 404,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Obg1bImnamzDmhSaUATI4eKN80.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/deXU3vulNCrUHp4EGPbI91hWBDF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bNLqJ7RjWcsV1XgfqM2W51eAEmV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aibDsj0MblTfIRD4KXBeJwzP4Yc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yNSCzctwBWX4yRcV2YZXfd80gfN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1368 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19237",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"34f925f341de545659608500054543a0\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5C5cMYUlmX6BU5YxBqhp7ZpSd3Q.jpg",
+    "created_by": [
+      {
+        "id": 2347594,
+        "credit_id": "65528a51ea84c7109225eb3c",
+        "name": "Ben H. Winters",
+        "original_name": "Ben H. Winters",
+        "gender": 2,
+        "profile_path": "/7pBijhGrFjrZev1LesqKQ4a9TcK.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2024-02-11",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://www.cbs.com/shows/tracker/",
+    "id": 211288,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7858418,
+      "name": "Need to Know",
+      "overview": "After a military contractor's wife and daughter are kidnapped, Colter discovers Russell is investigating a related lead. The Shaw brothers join forces to uncover a high-stakes cover-up.",
+      "vote_average": 8.5,
+      "vote_count": 3,
+      "air_date": "2026-11-01",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "4NHU05",
+      "runtime": 42,
+      "season_number": 4,
+      "show_id": 211288,
+      "still_path": "/1NF6CXOvmVsnq5u2BCaffM9ZkiA.jpg"
+    },
+    "name": "Tracker",
+    "next_episode_to_air": {
+      "id": 7947276,
+      "name": "Blind Spot",
+      "overview": "When Reenie enlists Colter's help to locate her mentor's estranged daughter, the search uncovers a dangerous conspiracy.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-15",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "4NHU06",
+      "runtime": null,
+      "season_number": 4,
+      "show_id": 211288,
+      "still_path": "/y7CDKU4Fp911nX65qGNXbT5VART.jpg"
+    },
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "CBS",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 62,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Tracker",
+    "overview": "Lone-wolf survivalist Colter Shaw roams the country as a “reward seeker,” using his expert tracking skills to help private citizens and law enforcement solve all manner of mysteries while contending with his own fractured family.",
+    "popularity": 65.8816,
+    "poster_path": "/otula4h1ITZ0eV84eg7Lb8u614C.jpg",
+    "production_companies": [
+      {
+        "id": 176830,
+        "logo_path": null,
+        "name": "ChangeUp Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 60436,
+        "logo_path": null,
+        "name": "AfterPortsmouth Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 220689,
+        "logo_path": null,
+        "name": "Beekeeper Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 236166,
+        "logo_path": "/8rFlu5iytnjsciYXZDw90ktllCI.png",
+        "name": "20th Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 256996,
+        "logo_path": null,
+        "name": "Elwood Reid",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2024-02-11",
+        "episode_count": 13,
+        "id": 310691,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/ivhqGQa4ndqDatKiASIfSMJIJuh.jpg",
+        "season_number": 1,
+        "vote_average": 6.9
+      },
+      {
+        "air_date": "2024-10-13",
+        "episode_count": 20,
+        "id": 402123,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/1Lx3dyCnviihTJDbN1k6g79RZLA.jpg",
+        "season_number": 2,
+        "vote_average": 7.2
+      },
+      {
+        "air_date": "2025-10-19",
+        "episode_count": 22,
+        "id": 466011,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/vpsodoLj7b6A4qqfBlUBStatvmN.jpg",
+        "season_number": 3,
+        "vote_average": 9.3
+      },
+      {
+        "air_date": "2026-10-04",
+        "episode_count": 8,
+        "id": 532134,
+        "name": "Season 4",
+        "overview": "",
+        "poster_path": "/piRdX66Y0KAxQuPAhAhj8JSlqPj.jpg",
+        "season_number": 4,
+        "vote_average": 9.1
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "We're all looking for something.",
+    "type": "Scripted",
+    "vote_average": 7.6,
+    "vote_count": 350,
+    "external_ids": {
+      "imdb_id": "tt13875494",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 428433,
+      "tvrage_id": null,
+      "wikidata_id": "Q123422614",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Lone-wolf survivalist Colter Shaw roams the country as a “reward seeker,” using his expert tracking skills to help private citizens and law enforcement solve all manner of mysteries while contending with his own fractured family.",
+            "homepage": "",
+            "tagline": "We're all looking for something."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Stopař",
+            "overview": "Drsný samotář a lovec odměn Colter Shaw se toulá po Spojených státech, zatímco se potýká s rozvrácenou rodinou.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "O Rastreador",
+            "overview": "Colter Shaw, um lobo solitário sobrevivente que percorre o país em busca de recompensas, usando suas habilidades de rastreamento especializado para ajudar cidadãos e autoridades a resolver todo tipo de mistério enquanto lida com sua família fragmentada.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "寻踪者",
+            "overview": "改编自杰弗里·迪弗的畅销小说《The Never Game》。科尔特·肖是一名独行生存专家，游走各地寻找失踪者并领取悬赏。他凭借敏锐直觉、特殊技能和团队协助，调查危险案件、揭开隐藏真相，为陷入困境的人带来答案。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De eenzame survivalspecialist Colter Shaw zwerft met zijn oude caravan door het land als een 'beloningszoeker'. Hij gebruikt zijn deskundige opsporingsvaardigheden om burgers en wetshandhavers te helpen bij het oplossen van allerlei mysteries. Ondertussen heeft hij ook te kampen met zijn eigen gebroken familie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Следопыт",
+            "overview": "Колтер Шоу путешествует по стране на своем старом фургоне, чтобы помочь полиции и частным лицам раскрывать преступления и находить пропавших без вести людей, пока его последнее дело не меняет все.",
+            "homepage": "",
+            "tagline": "«Мы все чего‑то ищем»"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Слідопит",
+            "overview": "Вовк-одинак Колтер Шоу блукає країною як \"мисливець за винагородою\", використовуючи свої професійні навички слідопита, щоб допомогти приватним особам і правоохоронним органам розкрити всілякі таємниці, водночас борючись із власною сім'єю, що розпалася.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tracker",
+            "overview": "Colter Shaw recorre el país en su vieja autocaravana para ayudar a la policía y a ciudadanos particulares a resolver crímenes y localizar a personas desaparecidas, hasta que su último caso lo cambia todo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Sledilec",
+            "overview": "Samotar Colter Shaw se v svojem starodobnem avtodomu potika po državi kot »lovec na glave« in uporablja svoje strokovne veščine sledenja, da pomaga posameznikom in policiji razrešiti zločine in najrazličnejše skrivnosti, dokler njegov zadnji primer ne spremeni vsega.",
+            "homepage": "",
+            "tagline": "Vsi nekaj iščemo."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Colter Shaw est un loup solitaire, qui parcourt le pays à bord de son camping-car, utilisant ses talents de pisteur pour aider les particuliers et les forces de l'ordre à résoudre toutes sortes de crimes ou à retrouver les personnes disparues.",
+            "homepage": "",
+            "tagline": "Nous sommes tous à la recherche de quelque chose."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Tracker: Em Perseguição",
+            "overview": "Um sobrevivente vagueia pelo país como caçador de recompensas, enquanto se debate com a sua família.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "כללי המשחק",
+            "overview": "קולטר שו, זאב בודד שפיתח יכולות הישרדות יוצאות דופן בעקבות חוויות טראומטיות מעברו, הפך לאחד האנשים המוכשרים ביותר באיתור והצלת נעדרים. הוא נכס קריטי עבור כוחות ההצלה והביטחון, המסתמכים עליו כשהם מגיעים למבוי סתום. הוא לא כפוף לחוקים, לא מהסס לקחת סיכונים ונכנס עמוק אל תוך קווי האש על מנת להשיב את הנעדרים לביתם בעודו ניצב בפני תעלומות חדשות ומסוכנות.",
+            "homepage": "",
+            "tagline": "כולנו מחפשים אחר משהו."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Colter Shaw reist in seinem Old-School-Wohnmobil durch das Land, um der Polizei und Privatleuten bei der Aufklärung von Verbrechen und der Suche nach vermissten Personen zu helfen, bis sein neuester Fall alles verändert.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Colter Shaw, un survivalista solitario, si aggira per il paese come \"cercatore di ricompense\", usando le sue abilità di localizzatore per aiutare i cittadini privati e le forze dell'ordine a risolvere ogni sorta di mistero, mentre è alle prese con la sua famiglia in crisi.",
+            "homepage": "",
+            "tagline": "Siamo tutti alla ricerca di qualcosa."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "En överlevnadsman strövar runt som belöningsjägare medan han kämpar med sin egen splittrade familj.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "A nyomozó",
+            "overview": "A világvégére készülő magányos farkas, Colter Shaw jutalomvadászként járja az országot, és kiváló nyomkövetőként segít magánembereknek és bűnüldöző szerveknek különböző rejtélyek megoldásában, miközben saját szétszakadt családjával is meg kell birkóznia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Tropiciel",
+            "overview": "Colter Shaw podróżuje po kraju swoim oldschoolowym kamperem, pomagając policji i prywatnym obywatelom w rozwiązywaniu przestępstw.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Seklys",
+            "overview": "Kolteris Šo keliauja po šalį savo senoviniu kemperiu ir padeda policijai bei privatiems asmenims išaiškinti nusikaltimus ir surasti dingusius asmenis, kol paskutinė jo byla viską pakeičia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "트래커",
+            "overview": "외톨이 생존 전문가 콜터 쇼(저스틴 하틀리). 현상금 사냥꾼으로 전국을 돌아다니는 콜터는 뛰어난 추적 기술로 일반 시민과 법 집행 기관을 도와 온갖 미스터리를 해결하며, 동시에 가족 간의 깊은 갈등으로 고군분투한다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Vaeltava survivalisti jahtaa palkkioita pyrkien samalla pärjäämään pirstoutuneen perheensä kanssa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "尋蹤者",
+            "overview": "一位生存主義者以尋求賞金的方式在全國各地遊蕩，同時與自己破碎的家庭抗爭。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "トラッカー",
+            "overview": "サバイバリストが懸賞金を求めて放浪しながら、自身の家庭崩壊の危機にも立ち向かう。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "尋蹤者",
+            "overview": "《尋蹤者》由賈斯汀哈特雷飾演哥特肖。他是一位孤狼式的生存主義者，以尋求賞金的方式在全國各地遊蕩，利用自己出色的追蹤技能幫助普通人和執法部門破解各種謎團，同時與自己破碎的家庭抗爭。該劇集改編自傑佛瑞迪佛的暢銷小説《The Never Game》。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "En overlevelsesekspert strejfer om som dusørjæger, mens han kæmper med sin egen splittede familie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Le traqueur",
+            "overview": "Colter Shaw est un loup solitaire, qui parcourt le pays à bord de son camping-car, utilisant ses talents de pisteur pour aider les particuliers et les forces de l'ordre à résoudre toutes sortes de crimes ou à retrouver les personnes disparues.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ένας επιβιωτιστής περιπλανιέται στη χώρα για χρήματα ενώ διαχειρίζεται τη διαλυμένη οικογένειά του.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "En overlevelsesstrateg streifer rundt som belønningssøker mens han takler sin splittede familie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Urmăritorul",
+            "overview": "„Urmăritorul” îl are ca actor principal pe Justin Hartley în rolul lui Colter Shaw, un expert în supraviețuire singuratic care cutreieră țara ca vânător de recompense, folosindu-și abilitățile de a citi urme pentru a ajuta persoane private și agenți ai forțelor de ordine să rezolve tot soiul de mistere, toate acestea în vreme ce se ceartă cu familia sa dezbinată. Serialul este bazat pe bestsellerul „The Never Game” al lui Jeffery Deaver.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Stopár",
+            "overview": "Lovec odmien sa potuluje po krajine, hľadá naplnenie a vyrovnáva sa s vlastnou rozbitou rodinou.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tracker: Buscador de recompensas",
+            "overview": "Colter Shaw es un lobo solitario dedicado a la supervivencia que recorre el país en busca de recompensas, usando sus expertas habilidades de rastreo para ayudar a ciudadanos particulares y a las fuerzas del orden a resolver todo tipo de misterios, al tiempo que lidia con su propia familia dividida.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Bir hayatta kalma uzmanı, ödül avcısı olarak ülkeyi dolaşırken bir yanda dağılmış ailesiyle uğraşır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "ردیاب",
+            "overview": "کولتر شاو، یک بقاگرای تنهارو، به عنوان یک «جستجوگرِ پاداش» در سراسر کشور پرسه می‌زند و با استفاده از مهارت‌های ردیابی حرفه‌ای خود، به شهروندان و نیروهای قانون در حل انواع معماها کمک می‌کند، در حالی که همزمان با خانواده از هم پاشیده‌ خود نیز دست‌و‌پنجه نرم می‌کند.",
+            "homepage": "",
+            "tagline": "ما همه به‌دنبال چیزی هستیم."
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Pēddzinis",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "โคลเตอร์ ชอว์เป็นนักเอาตัวรอดและนักล่ารางวัลผู้เปรียบเสมือนหมาป่าเดียวดาย เขาใช้ทักษะการแกะรอยเพื่อไขปริศนา ขณะต้องรับมือกับครอบครัวที่ร้าวฉานของตนเอง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Следотърсачът",
+            "overview": "Самотният оцелял Колтър Шоу обикаля страната като „търсач на награди“, използвайки експертните си умения за проследяване, за да помага на частни граждани и правоохранителни органи да решават всякакви мистерии, докато се бори с разпадналото се си семейство.",
+            "homepage": "",
+            "tagline": "Всички ние търсим нещо."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "المتعقّب",
+            "overview": "يستخدم المتعقّب المنعزل كولتر شو مهاراته الاستثنائية في البحث والتتبع لمساعدة العائلات والشرطة في العثور على المفقودين وحل القضايا الغامضة مقابل مكافآت، مستعينًا بفريقه الموثوق في أنحاء البلاد، بينما يقوده عمله تدريجيًا إلى كشف أسرار عائلته، بما في ذلك الحقيقة الغامضة وراء وفاة والده ودور والدته فيها",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Tragač",
+            "overview": "Colter Shaw putuje zemljom u svom starinskom kamperu kako bi pomogao policiji i privatnim građanima riješiti zločine i pronaći nestale osobe, sve dok mu najnoviji slučaj ne promijeni sve.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5C5cMYUlmX6BU5YxBqhp7ZpSd3Q.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uVnGusAwehV4WdxgKwFg0UJql1R.jpg",
+          "vote_average": 6.2,
+          "vote_count": 10,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Q0t7Aj81V4DbisNgwBNQoYaJTB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8n7gxv185LcKTtJZsv3ltSohByH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cPBBdLurQv0nzmJaoNWGhOsfHf8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/77SlMx5DijZDmcMCh2AeKntSymo.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iyoRYhT0HrFVp3vdBOWaF4LTmqG.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5a7IleMZGoyaPDNnMIIwoZmWy73.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4a4Fc3oErGWvjudtBng4FXvUSzh.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/97zboVX86HrlaOGEtI2fYtAYj6g.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b6blsP6Umh7B5Q3kGxhKRQvCMR8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xdAE4A8Uad23dav8tEjY1WTDFu9.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c18YQ7Rg9ck5mjkTS3luPamhFO3.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cg3Cz9L5Bi4RyJIX9o7Pr5JEc4n.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/70JMsAAlcWR4akktJBMwMZyAJgB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dBEldMwKsFPZYHVvJeECegUmUM7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wJZyejfageZXAi5pnljBkdKXSVt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/glmOotvhhMYDHecXABHW7UiIpr8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6QqfyffmYuaaSGYu0yUIM3sdAgV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1889,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rIO4qhgTbCsTFJUp3UZP2ZbwPZF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3358
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1889,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ncDRaoQJbkExbNEhXSe9BEZTWzB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3358
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vmTSzcZ1G3SK7W9migyAw3idZPb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wtL5va9QEK6bGTx6G6FXpsqrfk4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5fqRtE37NW3PTIILM865n5R3QgZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ktcd6gkEguCc3UwkqdVl4o4RDwf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jBadhpmDyz9dvi0tur4b74ryd6J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zRbE2ghBT7vHWbULAdxUb3FsUo4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1343,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7DkrJFxD0Jzv4luaUpZNW796Hy7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2388
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rgY6uc0quHGLWSkIQM2duPFPVeH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.359,
+          "height": 1284,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1ZU9F3eS7bWlxcvu4I3YMVqV8z0.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4313
+        },
+        {
+          "aspect_ratio": 3.36,
+          "height": 1284,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/RgoTGiL5ElOWDLuXEiD1Qph5Io.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4314
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/otula4h1ITZ0eV84eg7Lb8u614C.jpg",
+          "vote_average": 0.5,
+          "vote_count": 7,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wwTEIudim2QR2LnYyUTVTKxD4Mn.jpg",
+          "vote_average": 8.264,
+          "vote_count": 17,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ivhqGQa4ndqDatKiASIfSMJIJuh.jpg",
+          "vote_average": 6.834,
+          "vote_count": 18,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/puyLvZrOBnG1Nxrc1hkHNzah90H.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nU9zGHC1GRHVoTSTaKiRy1RljNd.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qkVHRj26gY0GvcrHBoFDepoxISI.jpg",
+          "vote_average": 4.934,
+          "vote_count": 15,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/piRdX66Y0KAxQuPAhAhj8JSlqPj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ac4r6lBZaSviJ2vMK9MyMC1baRa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oHYbZsMpCTOcw6rikVlp3x0RCp3.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ja0WCRMhYudw6uOgXWSDdN7F0ek.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zWH1976rikjqjbfYztsIiPyQ8wN.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wCuX1Ogi2PqPq9mH9FQCJuibTOa.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pPNOYG9pHnuD2hFFvIt5LOVrzTV.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eX2YmZb8eIUCehkldRgqKaPPDPS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wmWjaMggJOpfZEVIiGhobIorrmr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jHYWW33yXk3rNolQbqKx6dZPoCg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mnFnpQXee6rwsI3KK6pXM4OYUG3.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rKKDZvUuEpMbF2L6dgMFUFxL2ZJ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iXjQ0ekrhV8GMc1jL9ZVgqqBMC7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dCnts8LWNrcr7V4bdqjwJX0B3gr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mQ6idnhbkCsn4jf2SC2Ur16dM9Z.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/93Pi8zUTiBOgJ2YuoxanTkF4Den.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iu4TIs8HFDv3qDBuINQPZjPGIPE.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2sH79cRw8B8W4Zfe7tOBm5jIGA4.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1763,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cHKjFeO1Cpe2gYu79CU96kqF5V7.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1175
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/teOl7d2SeFFG6CsDjp1qPK96lxR.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fst5jRn30sGfoyS9YbRoyT3x8Rv.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g1sDTUB3d0P586H4rBlxqYWdm70.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qnfjJA7L3ZdCbJkGFoTjCpuWhJz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/52C8HgRoKqSchukikyqkdo7iaGo.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/grT3KEzZI9JV2RlSA1BAb98Z2cw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6XlQiNIUZ9UUP081yPzkLd4P6ia.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rOIP9CiMgaReFsQlpy1yXHX1AdS.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u9ZLaJo6x9cp0woI1eUYjGGDBLP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8Of9OXWCBfzkj30cm7JGW9ktI5D.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2592,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xp5jLL7ZrjSEdFEYdrTFpllPi1C.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1728
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2360,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5zkPe1pGXcOmWerSyRzqCK1ymHd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1572
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tNfPoIOrQBMVfpUYcHWYqP6Ik3o.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

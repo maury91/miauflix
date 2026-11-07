@@ -1,3 +1,5 @@
+import { parseAnimeRelease } from '@miauflix/source-metadata-extractor';
+
 import { isVideoFile } from '@services/download/download.utils';
 import type { SourceMetadata } from '@services/sources/source-candidate';
 
@@ -14,10 +16,15 @@ export function matchEpisodeFile(
   allowCombined = false
 ): EpisodeFileMatch | null {
   const videoFiles = (source.files ?? []).filter(isVideoFile);
-  const exact = videoFiles.filter(path => {
+  let exact = videoFiles.filter(path => {
     const identity = episodeIdentity(path, seasonNumber);
     return identity.episodes.length === 1 && identity.episodes[0] === episodeNumber;
   });
+  // Anime packs number their files by cour ("S2 - 07") or from the first episode ("- 31").
+  if (!exact.length && source.episodeAliases?.length)
+    exact = videoFiles.filter(path =>
+      namesAnimeEpisode(path, source, { season: seasonNumber, episode: episodeNumber })
+    );
   if (exact.length === 1) return { videoFilePath: exact[0], matchKind: 'single' };
   if (exact.length > 1) return null;
 
@@ -46,6 +53,32 @@ export function matchEpisodeFile(
     return named ? { videoFilePath: named, matchKind: 'combined' } : null;
   }
   return null;
+}
+
+/**
+ * Whether an anime file names the episode in one of the numberings the sources service gave
+ * (`episodeAliases`). A file without a season marker inherits the pack's; a number counted from
+ * the first episode (an alias without a season) only matches files that name no season.
+ */
+function namesAnimeEpisode(
+  path: string,
+  source: SourceMetadata,
+  requested: { season: number; episode: number }
+): boolean {
+  const file = parseAnimeRelease(path);
+  if (file.extra) return false;
+  const aliases = [requested, ...(source.episodeAliases ?? [])];
+  if (file.pairs.length)
+    return file.pairs.some(pair =>
+      aliases.some(alias => alias.season === pair.season && alias.episode === pair.episode)
+    );
+  if (file.episode === undefined) return false;
+  const season = file.season ?? parseAnimeRelease(source.releaseName ?? '').season ?? 1;
+  return aliases.some(
+    alias =>
+      alias.episode === file.episode &&
+      (alias.season === undefined ? file.season === undefined : alias.season === season)
+  );
 }
 
 const EPISODE_EXPRESSIONS = [

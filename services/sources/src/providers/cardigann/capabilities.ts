@@ -7,6 +7,10 @@ const PARAMS: Record<string, Param> = {
   tvdbid: 'tvdbid',
   season: 'season',
   ep: 'ep',
+  // Miauflix extensions for anime definitions (`anime-search` mode).
+  anidbaid: 'anidbAid',
+  anidbeid: 'anidbEid',
+  anilistid: 'anilistId',
 };
 
 export interface CapsInput {
@@ -57,7 +61,13 @@ export function deriveCaps(
     caps: {
       movie: capsFor('movie-search', unrestricted || categories.movie.length > 0),
       tv: capsFor('tv-search', unrestricted || categories.tv.length > 0),
-      anime: categories.anime.length && params('search').includes('q') ? ['q'] : [],
+      // An `anime-search` mode (a Miauflix extension) lists the anime ids a site takes; otherwise
+      // an anime category with text search is searched by title.
+      anime: modes['anime-search']
+        ? capsFor('anime-search', unrestricted || categories.anime.length > 0)
+        : categories.anime.length && params('search').includes('q')
+          ? ['q']
+          : [],
     },
   };
 }

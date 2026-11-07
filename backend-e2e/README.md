@@ -20,6 +20,7 @@ The test environment consists of:
 - **TMDB Mock**: Mock service for The Movie Database API
 - **Indexer Mock**: Fictional release data, plus the Cardigann definitions that query it (the sources service loads them through `CARDIGANN_DEFINITION_SOURCES` and `SOURCES_PRELOAD_PROVIDERS`)
 - **Trakt Mock**: Mock service for Trakt API
+- **AniList, ani.zip and anime-lists mocks**: Replay AniList's GraphQL rankings, ani.zip's episode mappings and Fribb's AniList → TMDB id list (fixtures in `test-fixtures/providers/{anilist,anizip,anime-lists}`). The AniList mock keys POST requests by a hash of the GraphQL body, with the season variables replaced so the fixtures do not go stale when the season changes
 - **Test Runner**: Jest-based tests that interact with the backend
 
 ## Test Flow
@@ -228,6 +229,11 @@ This file is automatically created in the `backend-e2e` directory and consumed b
 - Handles user authentication flows
 - Provides watchlist and rating functionality
 - Simulates OAuth device flow
+
+### Anime mocks
+
+- Built from the same generic mock image as the others; recorded with `RECORD_PROVIDER_FIXTURES=true ./scripts/env.sh test`
+- `KEY_POST_BY_BODY=true` adds a `body` hash to each POST fixture's name, so the different AniList queries sent to one URL get their own fixtures
 
 ## Environment Variables
 

@@ -1,0 +1,1416 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=26035",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"7e5937dd225cb4f2e1316305a6f5e8c8\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/ldz9THIHaV4orMsUrPT1nlQF51T.jpg",
+    "created_by": [
+      {
+        "id": 1237529,
+        "credit_id": "65554490d4fe04011b914422",
+        "name": "Andrew Guest",
+        "original_name": "Andrew Guest",
+        "gender": 2,
+        "profile_path": "/s4844Z9kRkNlw9yCth1tKkpzAhC.jpg"
+      },
+      {
+        "id": 1144604,
+        "credit_id": "6555448dac416100ad280e66",
+        "name": "Destin Daniel Cretton",
+        "original_name": "Destin Daniel Cretton",
+        "gender": 2,
+        "profile_path": "/wtA2EtkvCyxu4oWECzqAF7G8IZH.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-01-27",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.disneyplus.com/browse/entity-555c5896-02e4-4873-8fa9-ce090dcd874b",
+    "id": 198178,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-01-27",
+    "last_episode_to_air": {
+      "id": 6594790,
+      "name": "Yucca Valley",
+      "overview": "Don't let your babies grow up to be cowboys.",
+      "vote_average": 6.5,
+      "vote_count": 55,
+      "air_date": "2026-01-27",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 35,
+      "season_number": 1,
+      "show_id": 198178,
+      "still_path": "/4Xa7j3I4LQjkDdTEi3fmR23HKQ5.jpg"
+    },
+    "name": "Wonder Man",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 2739,
+        "logo_path": "/1edZOYAfoyZyZ3rklNSiUpXX30Q.png",
+        "name": "Disney+",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Wonder Man",
+    "overview": "Simon and Trevor, two actors at opposite ends of their careers, chase life-changing roles.",
+    "popularity": 13.1769,
+    "poster_path": "/6yy9nQlFt2l6UVWzrfhszFCaZ5C.jpg",
+    "production_companies": [
+      {
+        "id": 176762,
+        "logo_path": null,
+        "name": "Kevin Feige Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 420,
+        "logo_path": "/hUzeosd33nzE5MCNsZxCGEKTXaQ.png",
+        "name": "Marvel Studios",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-01-26",
+        "episode_count": 8,
+        "id": 288697,
+        "name": "Season 1",
+        "overview": "Aspiring Hollywood actor Simon Williams is struggling to get his career off the ground. During a chance meeting with Trevor Slattery, an actor whose biggest roles may be well behind him, Simon learns that legendary director Von Kovak is remaking the superhero film \"Wonder Man.\" These two actors at opposite ends of their careers doggedly pursue life-changing roles in this film as audiences get a peek behind the curtain of the entertainment industry.",
+        "poster_path": "/z5xlxga7oc2eGVpS9vw38ULA9nr.jpg",
+        "season_number": 1,
+        "vote_average": 6.2
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Canceled",
+    "tagline": "He was born to play this role, but the spotlight reveals everything.",
+    "type": "Scripted",
+    "vote_average": 7.102,
+    "vote_count": 401,
+    "external_ids": {
+      "imdb_id": "tt21066182",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 428629,
+      "tvrage_id": null,
+      "wikidata_id": "Q114779504",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Simon and Trevor, two actors at opposite ends of their careers, chase life-changing roles.",
+            "homepage": "",
+            "tagline": "He was born to play this role, but the spotlight reveals everything."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De ambitieuze Hollywood-acteur Simon Williams probeert wanhopig zijn carrière van de grond te krijgen. Tijdens een toevallige ontmoeting met Trevor Slattery, een acteur wiens gloriejaren waarschijnlijk al achter hem liggen, hoort Simon dat de legendarische regisseur Von Kovak bezig is met een remake van de superheldenfilm Wonder Man. De twee acteurs, elk aan een andere kant van hun loopbaan, zetten alles op alles om een levensveranderende rol in deze film te bemachtigen, terwijl het publiek een blik achter de schermen van de entertainmentindustrie krijgt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "원더맨",
+            "overview": "할리우드 스타를 꿈꾸는 배우 사이먼 윌리엄스는 제대로 된 기회조차 얻지 못하다가, 우연히 한물간 배우 트레보 슬래터리를 만나, 전설적인 감독 폰 코백이 슈퍼히어로 영화 '원더맨'을 리메이크한다는 사실을 알게 된다. 이렇게 서로 다른 커리어의 두 배우는 이 영화에서 인생을 바꿔줄 역할을 얻으려 끈질기게 도전하고, 시청자들은 그 과정을 통해 연예계의 이면을 엿보게 된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ο επίδοξος ηθοποιός του Χόλιγουντ, Σάιμον Γουίλιαμς, κάνει ό,τι μπορεί για να ανελιχθεί επαγγελματικά. Σε μια τυχαία συνάντηση με τον Τρέβορ Σλάτερι, έναν ηθοποιό στη δύση της καριέρας του, μαθαίνει ότι ο θρυλικός σκηνοθέτης Βον Κόβακ σκοπεύει να επανεκδώσει την ταινία ηπερηρώων \"Wonder Man\". Οι δυο ηθοποιοί, σε διαμετρικά αντίθετη φάση ζωής, πασχίζουν να πάρουν κάποιον ρόλο σ' αυτήν την ταινία που θα τους αλλάξει τη ζωή, ενώ οι θεατές ρίχνουν μια κρυφή ματιά στα παρασκήνια της βιομηχανίας θεάματος.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Magnum",
+            "overview": "O aspirante a ator de Hollywood Simon Williams está lutando para decolar. Durante um encontro casual com Trevor Slattery, um ator cujos maiores papéis podem já ter ficado no passado, Simon descobre que o lendário diretor Von Kovak está fazendo um remake do filme do super-herói \"Magnum\". Esses dois atores, em extremos opostos de suas carreiras, buscam obstinadamente papéis transformadores nesse filme, enquanto o público dá uma espiadinha nos bastidores da indústria do entretenimento.",
+            "homepage": "",
+            "tagline": "Ele nasceu para interpretar esse papel, mas os holofotes revelam tudo."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Чудо-человек",
+            "overview": "Начинающий голливудский актёр Саймон Уильямс переживает непростой период в своей жизни: он только что потерял роль в популярном сериале и расстался с любимой девушкой. Однажды познакомившись со скандально известным актёром-неудачником Тревором Слэттери, мужчина узнаёт, что знаменитый режиссер планирует снять ремейк классического супергеройского фильма «Чудо-человек», на котором он вырос. Саймон стремится во что бы то ни стало пройти прослушивание и заполучить роль, при этом стараясь сохранить в секрете свои настоящие сверхспособности, которые могут стоить ему актёрской карьеры.",
+            "homepage": "",
+            "tagline": "«Он был рождён для этой роли»"
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Omul Minune",
+            "overview": "Simon Williams, un actor Hollywoodian în devenire, se chinuie să-și înceapă cariera. În timpul unei întâlniri neprevăzute cu Trevor Slattery, un actor al cărui succes pare a fi demult apus, Simon află că legendarul regizor de film Von Kovak face un remake după filmul \"Omul Minune\". Cei doi actori, care sunt în puncte diferite ale carierelor lor, vor cu ardoare să obțină roluri mărețe în acest film, în timp ce publicul are șansa de a intra în culisele industriei divertismentului.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ワンダーマン",
+            "overview": "ハリウッド俳優の卵、サイモン・ウィリアムズは下積みから抜け出そうと奮闘中。全盛期は過ぎたかもしれない俳優トレヴァー・スラッタリーと偶然出会い、伝説的な監督フォン・コヴァクが、スーパーヒーロー映画『ワンダーマン』のリメイク作品を撮影することを知る。キャリアの対極にいるこの２人の俳優がそれぞれ、この映画で人生の転機となるような大役を粘り強く追い求める中で、エンタメ業界の舞台裏が浮かび上がってくる。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "L'aspirante attore di Hollywood Simon Williams fatica a far decollare la propria carriera. Durante un incontro casuale con Trevor Slattery, un attore il cui periodo d'oro sembra ormai essere alle spalle, Simon scopre che il leggendario regista Von Kovak sta preparando un remake del film di supereroi \"Wonder Man\". I due interpreti, agli estremi opposti delle loro carriere, si lanciano con determinazione nella corsa per ottenere un ruolo che potrebbe cambiargli la vita, mentre il pubblico accede al dietro le quinte del mondo dello spettacolo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Диво-чоловік",
+            "overview": "Голлівудський актор Саймон Вільямс поринає у світ супергероїв, знаходячи власні сили та стаючи новим супергероєм Диво-чоловіком.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Hayalindeki oyunculuk kariyerini başlatmakta zorlanan Hollywood oyuncusu Simon Williams, tesadüfen, en parlak dönemini geride bırakmış oyuncu Trevor Slattery ile tanışır. Bu karşılaşma sırasında, efsanevi yönetmen Von Kovak’ın “Wonder Man” adlı süper kahraman filmini yeniden çektiğini öğrenir. Kariyerlerinin zıt uçlarında yer alan bu iki oyuncu, hayatlarını değiştirecek rolleri elde edebilmek için rekabete girişir. Hikâye, izleyicilere eğlence dünyasının perde arkasına dair bir bakış sunar.",
+            "homepage": "",
+            "tagline": "Simon Williams. Wonder Man için hazırlanıyor."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Simon en Trevor, twee acteurs aan het tegenovergestelde eind van hun carrière, jagen op levensveranderende rollen. Hollywoodacteur Simon Williams belandt in de wereld van superhelden wanneer hij zijn eigen krachten krijgt en de nieuwe superheld Wonder Man wordt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Der aufstrebende Hollywood-Schauspieler Simon Williams kämpft darum, seine Karriere in Gang zu bringen. Bei einer zufälligen Begegnung mit Trevor Slattery, einem Schauspieler, dessen größte Rollen wohl schon hinter ihm liegen, erfährt Simon, dass der legendäre Regisseur Von Kovak eine Neuverfilmung des Superheldenfilms „Wonder Man“ plant. Die beiden Schauspieler, die sich an entgegengesetzten Enden ihrer Karriere befinden, streben verbissen nach Rollen in diesem Film, die ihr Leben verändern könnten, während das Publikum einen Blick hinter die Kulissen der Unterhaltungsindustrie werfen kann.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "El actor de Hollywood Simon Williams se sumerge en el mundo de los superhéroes a medida que obtiene sus propios poderes y se convierte en el nuevo superhéroe Wonder Man.",
+            "homepage": "",
+            "tagline": "Nació para interpretar este papel, pero bajo los focos, nada puede ocultarse."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "神力人",
+            "overview": "好萊塢新人演員賽門威廉斯努力想在業界闖出名堂。他有一次偶遇資深演員崔佛史萊特利，後者職業生涯在走下坡。賽門得知傳奇導演馮科瓦克要重拍超級英雄電影《神力人》。這兩位身處事業不同階段的演員，激烈角逐能改變人生的角色，觀眾則得以一窺娛樂圈幕後的辛酸血淚。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Jeune acteur ambitieux, Simon Williams peine à faire décoller sa carrière à Hollywood. En croisant par hasard Trevor Slattery, un autre acteur dont les heures de gloire sont bien loin, Simon découvre que le légendaire réalisateur Von Kovak va tourner le remake du film de superhéros “Wonder Man”. Ces deux acteurs, chacun à un tournant différent de sa carrière, vont tout faire pour décrocher des rôles dans ce film qui pourrait changer leur vie, tout en faisant découvrir aux téléspectateurs les coulisses de l’industrie du spectacle.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "El aspirante a actor, Simon Williams, lucha por hacer despegar su carrera. Durante un encuentro por casualidad con el actor veterano, Trevor Slattery, Simon se entera de que el legendario director Von Kovak está por hacer la remake de la película de súper héroes “Wonder Man”. Estos actores en los extremos opuestos de sus carreras persiguen roles en esta película que cambiarían sus vidas, mientras la audiencia puede espiar detrás del telón de la industria del entretenimiento.",
+            "homepage": "",
+            "tagline": "Él nació para interpretar este papel, pero los reflectores lo revelan todo."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Jeune acteur ambitieux, Simon Williams peine à faire décoller sa carrière à Hollywood. En croisant par hasard Trevor Slattery, un autre acteur dont les heures de gloire sont bien loin, Simon découvre que le légendaire réalisateur Von Kovak va tourner le remake du film de superhéros “Wonder Man”. Ces deux acteurs, chacun à un tournant différent de sa carrière, vont tout faire pour décrocher des rôles dans ce film qui pourrait changer leur vie, tout en faisant découvrir aux téléspectateurs les coulisses de l’industrie du spectacle.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "וונדר מן",
+            "overview": "סיימון ויליאמס הוא שחקן שמתקשה לפרוץ, שמוצא את עצמו בתוך עולם הוליוודי שמערב תעשיית בידור, אגו ומבט לא שגרתי על סרטי גיבורי על. הוא פוגש במקרה את שחקן העבר טרוור סלאטרי ומגלה שהבמאי האגדי וון קובאק עושה רימייק לסרט גיבורי העל \"וונדר מן\". השניים יוצאים למרוץ אחר תפקיד שיכול לשנות את חייהם.  בין ניסיונות נואשים, אגו מתנפח, ותעשייה נוצצת אך אכזרית, הקהל מקבל הצצה חדה ומשעשעת לצד הפחות מוכר של הוליווד.",
+            "homepage": "",
+            "tagline": "הוא נולד לשחק את התפקיד הזה, אבל אור הזרקורים חושף הכול."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "奇迹人",
+            "overview": "该剧改编自漫威漫画，主要讲述了好莱坞演员西蒙·威廉姆斯进入超级英雄世界，获得超能力，成为新超级英雄“奇迹人”的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Kunnianhimoinen Hollywood-näyttelijä Simon Williams yrittää saada uransa nousuun. Kohdatessaan sattumalta näyttelijä Trevor Slatteryn, jonka suurimmat roolit ovat jo takanapäin, Simon kuulee, että ohjaaja Von Kovak tekee uutta versiota supersankarielokuvasta \"Ihmemies\". Kaksi uransa vastakkaisissa päissä olevaa näyttelijää yrittää sinnikkäästi saada elämänsä mullistavan roolin kyseiseen elokuvaan. Katsojat pääsevät kurkistamaan viihdeteollisuuden verhon taakse.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Уондър Мен",
+            "overview": "Саймън и Тревър, двама актьори в напълно различни етапи от кариерите си, гонят роли, които могат да променят живота им.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Ctižádostivý hollywoodský herec Simon Williams se zoufale snaží nastartovat svou kariéru. Při setkání s hercem Trevorem Slatterym, který má své nejslavnější role zřejmě už za sebou, se Simon dozví, že legendární režisér Von Kovak chystá remake superhrdinského filmu „Wonder Man“. Nesourodá dvojice herců se rozhodne v očekávaném snímku získat hlavní role a diváci dostanou příležitost nahlédnout do zákulisí zábavního průmyslu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "A hollywoodi munkákban reménykedő Simon Williamsnek nem akar beindulni a karrierje. Amikor a sors véletlenül összesodorja Trevor Slatteryvel, aki minden jel szerint túl van már élete legnagyobb szerepein, Simon megtudja, hogy Von Kovak, a legendás rendező elkészíti az „Energikon” című szuperhősös film remake-jét. A karrierjük két ellentétes pontján álló színészek mindent elkövetnek, hogy sorsfordító szerepeket kapjanak a filmben, a nézők pedig betekinthetnek a szórakoztatóipar kulisszái mögé.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Den hoppfulla Hollywood-skådisen Simon Williams kämpar med att få fart på karriären. Av en händelse möter han Trevor Slattery, en skådespelare vars glansdagar ligger bakom honom, och får reda på att legendariska regissören Von Kovak ska göra en nyinspelning av superhjältefilmen Wonder Man. De två skådespelarna, på sina motsatta ändor av karriären, gör allt för att få livsavgörande roller i filmen, och publiken får en skymt bakom kulisserna på nöjesindustrin.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "وندر مان",
+            "overview": "يسعى \"سايمون\" و\"تريفور\" اللذان يعيشان مراحل مختلفة في مسيرتهما المهنية وراء أدور قد تغيّر حياتهما.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "وندر مان",
+            "overview": "يسعى \"سايمون\" و\"تريفور\" اللذان يعيشان مراحل مختلفة في مسيرتهما المهنية وراء أدور قد تغيّر حياتهما.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "Ambitny aktor Simon Williams od lat nie może przebić się w Hollywood. Przypadkiem spotyka Trevora Slattery’ego, kolegę po fachu, który największe role ma już za sobą, i dowiaduje się, że legendarny reżyser Von Kovak kręci remake superbohaterskiego filmu „Wonder Man”. Dwaj aktorzy na przeciwległych krańcach drogi życiowej będą zażarcie walczyć o występ w produkcji, która może odmienić ich losy, a widzowie dostaną szansę, by zajrzeć za kulisy przemysłu rozrywkowego.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "O aspirante a ator Simon Williams está a lutar para lançar a sua carreira. Durante um encontro casual com Trevor Slattery, um ator cujos maiores êxitos são coisa do passado, Simon descobre que o lendário realizador Von Kovak está a gravar um remake do filme de super-heróis \"Wonder Man\". Estes dois atores em extremos opostos das carreiras perseguem neste filme papéis que lhes mudarão as vidas, enquanto o público tem um vislumbre dos bastidores da indústria do entretenimento.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "วันเดอร์แมน",
+            "overview": "​นักแสดงตกอับไซมอน วิลเลียมส์ และนักแสดงรุ่นเก๋าเทรเวอร์ แสลตเทอรี ไล่ล่าบทเปลี่ยนชีวิตในหนังซูเปอร์ฮีโร่รีเมค พร้อมตีแผ่ความจริงอันโหดร้ายของฮอลลีวูด",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Simon Williams, en skuespillerspire i Hollywood, sliter med å få fart på karrieren. Under et tilfeldig møte med Trevor Slattery, en skuespiller med karrieren på hell, hører Simon at den legendariske regissøren Von Kovak skal lage en nyinnspilling av superheltfilmen \"Wonder Man\". Disse to skuespillerne i motsatte ender av karrieren jakter frenetisk på livsendrende roller i denne filmen mens publikum får en kikk bak kulissene i underholdningsbransjen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Den håbefulde Hollywood-skuespiller Simon Williams kæmper for at få gang i karrieren. Da han tilfældigt møder Trevor Slattery, en skuespiller, hvis største roller for længst er bag ham, erfarer Simon, at den legendariske instruktør Von Kovak vil genindspille superheltefilmen Wonder Man. De to skuespillere i hver sin ende af deres karrierer kæmper ihærdigt for at få roller i filmen, og publikum får et kig ind bag kulisserne i underholdningsbranchen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "奇跡俠",
+            "overview": "新進荷里活演員西蒙威廉斯努力讓事業起步。一次偶遇曾經演過大角色的過氣演員崔佛史萊特利，西蒙得知傳奇導演馮高域將會翻拍超級英雄電影《奇跡俠》。這兩位事業生涯處於兩極的演員頑強地追求能改變他們人生的電影角色，讓觀眾得以一窺娛樂圈的背後。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "Ctižiadostivý hollywoodsky herec Simon Williams sa zúfalo snaží naštartovať svoju kariéru. Pri stretnutí s hercom Trevorom Slatterym, ktorý má svoje najslávnejšie úlohy zrejme už za sebou, sa Simon dozvie, že legendárny režisér Von Kovak pripravuje remake superhrdinského filmu Wonder Man. Nesúrodá dvojica hercov sa rozhodne získať hlavné úlohy v očakávanom snímku a diváci tak dostanú príležitosť nahliadnuť do zákulisia zábavného priemyslu.",
+            "homepage": "",
+            "tagline": "Narodil sa, aby stvárnil túto úlohu, no svetlo reflektorov odhalí všetko."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Simon in Trevor, dva igralca na nasprotnih koncih njunih karier, lovita vloge, ki spreminjajo življenje.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "",
+            "overview": "Simon và Trevor, hai diễn viên ở hai thái cực khác nhau trong nghề, cả hai đều đang theo đuổi những vai diễn có thể thay đổi hoàn toàn vận mệnh của mình.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Чудотворац",
+            "overview": "Сајмон и Тревор, два глумца на супротним крајевима каријера, јуре за улогама које мењају живот.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "مرد شگفت انگیز",
+            "overview": "بازیگر هالیوودی، سایمون ویلیامز، با به دست آوردن قدرت‌های فوق‌العاده، به دنیای ابرقهرمانان وارد می‌شود و به واندرمن جدید تبدیل می‌شود.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Stebuklų vyras",
+            "overview": "Holivudo aktorius įtraukiamas į superherojų pasaulį, kai netikėtai įgyja ypatingų galių ir tampa naujuoju kovotoju už teisybę. Ši istorija pasakoja apie jo kelionę nuo paprasto aktoriaus gyvenimo iki kovos su blogiu, ieškant savo vietos tarp galingiausių žemės gynėjų.\n\nNuotykiai, pavojai ir vidiniai konfliktai lydi kiekvieną žingsnį, kai jis mokosi valdyti savo naujas galias ir susiduria su iššūkiais, kurių niekuomet nebūtų įsivaizdavęs savo ankstesniame gyvenime.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "L'actor de Hollywood Simon Williams se submergeix al món dels superherois a mesura que obté els seus propis poders i es converteix en el nou superheroi Wonder Man.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6hOdQXmTXCuukXSmKnj9FVZMPPf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wXE2gkEPN9ROuiTqRyuKyfJNx4x.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ldz9THIHaV4orMsUrPT1nlQF51T.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mVkooVZJft3qd1uaevhjsDzX1xQ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/los8S8iCRn5Q7irl0LNAp6C6Gmz.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jT7Ha1jetJsDJbk4NgUWQPkXFVW.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/52vXqTamLBw2VhaNRoyT6SamwfX.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3xdtP9D78ZFFBwIBXf3XWWQiqMB.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xnpNc186AnWmz7TGlWHyfHL6iKs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ixVOhknBa9a5lwpHA3TidLtwAEx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3sOvs3IyldFfbvelpytJq7j5Bun.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1280,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AhXZ7rf0yhEYrzCcWe0ZsYqW0bg.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2276
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vqPfhEIRMVnlxFDs5cpzO9DQHQl.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uTY0S0orL4mBtvaGEUmhO14eWWf.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4sDBNrMrADqXwm6kADUmmbIWLEO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lFaC6j9TS5q8gKW6PdnMlS18QDs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bbcBUpWxXpuTBB5palhPihECE6L.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rNNBanPBe3unbJOAVtWvAHmORr5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vHgFLsxfwpFGuOvozwDcd8YUdmK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 840,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oP2kNQWkwCvpnOyf7UsgDwdD65N.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1493
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 836,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gLIh6tszivnfWbLrcgFmEDnjJmH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1486
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 840,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aTIDqcMNwG5qMMXShBdJJrDoo22.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1493
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/anGL4Y52HodqrEPUzrIgEeUpIPA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2lFPJF0Y9LPNiJEkaq6TmZ58Q27.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kxK1xsTlB9bOxKrrlfxTYpNj0u5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tDNcQx1j2gE145YYczgDQ1wPi8V.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3bgMSul7ligTLt0aFfbfW8hiWY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1635
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 799,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j1IU4q0hCi4MeOkZNzoxeejGMyr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1420
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qcg0bvWTxFPQnYu6HUwaeOu5JhN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.328,
+          "height": 682,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sFy84s6ipq5Fh9RrzKsCfgasHNd.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4316
+        },
+        {
+          "aspect_ratio": 6.328,
+          "height": 682,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pVjRPS9N0RG8EP12wnWBcNOOMIr.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4316
+        },
+        {
+          "aspect_ratio": 6.328,
+          "height": 682,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rkCIi8NNe8a6sn4dEgJc2NP2dGi.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4316
+        },
+        {
+          "aspect_ratio": 4.638,
+          "height": 414,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a6WHYzTfkneFuCTSJdYTychXkQr.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 4.636,
+          "height": 931,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lxxvw3Mq1Jmc5bks2leiZqijlSB.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4316
+        },
+        {
+          "aspect_ratio": 4.636,
+          "height": 931,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1sHGktEruwfg7mEug1HRpVQVg8C.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4316
+        },
+        {
+          "aspect_ratio": 4.151,
+          "height": 126,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aurdWf2x0K3nBrLztdmsXIT6FL4.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 523
+        },
+        {
+          "aspect_ratio": 4.158,
+          "height": 120,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q8GRJnpmuZON7Kn00w7bCJf184M.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 499
+        },
+        {
+          "aspect_ratio": 4.151,
+          "height": 126,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eAY3yJtrq5ZDCxX02JGG4ppEwi3.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 523
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.666,
+          "height": 1609,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6yy9nQlFt2l6UVWzrfhszFCaZ5C.jpg",
+          "vote_average": 6.546,
+          "vote_count": 11,
+          "width": 1072
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qwSmwCEMzlUn9Y3XbBIx3CLMIAK.jpg",
+          "vote_average": 5.778,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AmaL7llqGzDYiX5ZrvPe2FlGDWb.jpg",
+          "vote_average": 4.884,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gNk4kuXQdK7vGOVYtwTirekLqV1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/EwAa97mv109h70mDq5yz4pWTwT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6MHugkkyTyjR4nsfLRAwF5coEfy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1482,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rA5TABYYyllc7KObOGWxcz7ev3i.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o2obeixL5uePdveNyv3oYVaoAC3.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2XSHwBHIvIDPpbcH4ntQIItlThG.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xHWjZZ6FgmHxDd7HSxGVjpdb6Rh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/divrr8rHzsx6lE2oxWJEs5h3flA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uRPQVQbY6YL9l64STsUId9XTN7F.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3hvfshJCoa5UOiuoUq2STbgV6dD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1610,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8uKd9lJ1JaPFRt9x6bRvaesf7a9.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 1086
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1610,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kboHD8dkHvkAuszYxq89BYJhq9t.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1074
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1609,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oCogg5aE2EVn5NGEcphTvJEWvEy.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1073
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dTgD5nms0LjOcmpMHAI7A6KNPXA.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8uQZNewJkIsa5Yx1cWFgqBOTkQD.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/d777BLRS2QMTq3eg4YyYnxL4Xjf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2652,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2wrm8j1EU1sVCQhfhKKu3PtEL2F.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1768
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yH15IiePcJQIrLi8CDhr3kOXPPc.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bs7nYkcZr4zex6hVpjdfrWMQUqw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hUkKvuJgSTrF4cx6JDxWXXeVMwE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hKnXzINC0InSvyFJcn0o8SNF9iz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9JAwxO6px7dH9esVCvpfDvwqYJn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p84WYpdPS0az6RQslpI6Icrqbhf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j6FeZB99ScIGt2X8LxhPpEgqDhh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9GDlUCumwmiP4lDKnl0qTYaQqs6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s5YVnbFXYI2C7idTLsAeuXilzM1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hhhShwAVNmHaYwxCZtsKnXDVHMY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rpcEYt2phVESgjVIjC0iVmJV5q1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1743,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8V9WzX3wOMsBYw5m4FAm8tKeaus.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1162
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2520,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z4dJIzSuE6T83dkKqENzPZLa6Ns.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nQGF0CFtpGg4LWbpq1pdchw0C3x.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jMFw7bhbDOLjtZcw9pHszgTVDHF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e7GrhrMVRo9pxYVzJU9fNvCbCqq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k5wp94DPqdpbZp86l1EMeQS8tVc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j7w6tL6bXQLDvkoaUoKY29Dc3rF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p2sGReVmI8fQp3HV8xerYeZA565.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zpmRKorEOnv4yA1YOQ9edORlSUo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

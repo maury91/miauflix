@@ -1,0 +1,2594 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21520",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"dbf0ba7a0d8d65a1c637d803719c9746\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fZJs6xgU9dqIg9phIXjZAZOInzy.jpg",
+    "created_by": [
+      {
+        "id": 938831,
+        "credit_id": "62746bdcc56d2d5b66d2110d",
+        "name": "Jenny Lumet",
+        "original_name": "Jenny Lumet",
+        "gender": 1,
+        "profile_path": "/y3Hf3wFiA1Jo7Zj9N0x7eciCLcM.jpg"
+      },
+      {
+        "id": 15345,
+        "credit_id": "62746bd48c3159006890b279",
+        "name": "Alex Kurtzman",
+        "original_name": "Alex Kurtzman",
+        "gender": 2,
+        "profile_path": "/uDZxuaV19OYMhN7vuuVg1bSlqUM.jpg"
+      },
+      {
+        "id": 5575,
+        "credit_id": "62746bcd967cc70068e2a744",
+        "name": "Akiva Goldsman",
+        "original_name": "Akiva Goldsman",
+        "gender": 2,
+        "profile_path": "/7dWsuEUrC7AmAzZAeNstZ2zg1M8.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2022-05-05",
+    "genres": [
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.paramountplus.com/shows/star-trek-strange-new-worlds",
+    "id": 103516,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-24",
+    "last_episode_to_air": {
+      "id": 7193804,
+      "name": "Tomorrow's Enterprise",
+      "overview": "A time ripple damages the Enterprise, forcing young and old Uhura to cooperate and fix the timeline.",
+      "vote_average": 7.364,
+      "vote_count": 22,
+      "air_date": "2026-09-24",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 62,
+      "season_number": 4,
+      "show_id": 103516,
+      "still_path": "/vpqU4iWHOoPj98Y7BUlv46UNtjQ.jpg"
+    },
+    "name": "Star Trek: Strange New Worlds",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 4330,
+        "logo_path": "/fi83B1oztoS47xxcemFdPMhIzK.png",
+        "name": "Paramount+",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 40,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Star Trek: Strange New Worlds",
+    "overview": "Follow Captain Christopher Pike, Science Officer Spock and Number One in the years before Captain Kirk boarded the U.S.S. Enterprise, as they explore new worlds around the galaxy.",
+    "popularity": 45.9851,
+    "poster_path": "/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
+    "production_companies": [
+      {
+        "id": 90517,
+        "logo_path": "/uq7itRpnnb1LX1VDDaJg64pKFmT.png",
+        "name": "Secret Hideout",
+        "origin_country": "US"
+      },
+      {
+        "id": 51670,
+        "logo_path": "/sFDn8bWLh9sE2dPxaa0xUUYL6zS.png",
+        "name": "Roddenberry Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 1081,
+        "logo_path": "/19kn4jVvpc3sAL3YpZNb3elhSMl.png",
+        "name": "CBS Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 433,
+        "logo_path": "/iafkKMpcRfEXq9a4sQf0h6tg2E2.png",
+        "name": "Weed Road Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 174838,
+        "logo_path": null,
+        "name": "H M R X Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2020-09-08",
+        "episode_count": 31,
+        "id": 165857,
+        "name": "Specials",
+        "overview": "Special installments of the series.",
+        "poster_path": "/9Onpd1x7y0M9W13H4XrvsrV5pOG.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2022-05-05",
+        "episode_count": 10,
+        "id": 151012,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/iwIdajr5Y4zq2ibvq75VnDAJBr.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2023-06-15",
+        "episode_count": 10,
+        "id": 307894,
+        "name": "Season 2",
+        "overview": "In season two, the crew of the U.S.S. Enterprise, under the command of Captain Christopher Pike, confronts increasingly dangerous stakes, explores uncharted territories and encounters new life and civilizations. The crew will also embark on personal journeys that will continue to test their resolve and redefine their destinies. Facing friends and enemies both new and familiar, their adventures will unfold in surprising ways never seen before.",
+        "poster_path": "/7Cp5w4X8xH2x4xDk67C5kMC5ePA.jpg",
+        "season_number": 2,
+        "vote_average": 7.5
+      },
+      {
+        "air_date": "2025-07-17",
+        "episode_count": 10,
+        "id": 404255,
+        "name": "Season 3",
+        "overview": "In season three, when we reconnect with the crew of the U.S.S. Enterprise, still under the command of Captain Pike, they face the conclusion of season two's harrowing encounter with the Gorn. But new life and civilizations await, including a villain that will test our characters' grit and resolve. An exciting twist on classic Star Trek, season three takes characters both new and beloved to new heights, and dives into thrilling adventures of faith, duty, romance, comedy and mystery, with varying genres never before seen on any other Star Trek.",
+        "poster_path": "/w6KapI2JvrCkOPmQhkwYPJNjqeo.jpg",
+        "season_number": 3,
+        "vote_average": 6.5
+      },
+      {
+        "air_date": "2026-07-23",
+        "episode_count": 10,
+        "id": 472809,
+        "name": "Season 4",
+        "overview": "In the fourth season, the crew of the U.S.S. Enterprise—led by Captain Christopher Pike—embarks on a series of thrilling and emotional adventures across the stars. As they journey to strange new worlds, they battle inner demons and external threats, encounter colorful new characters, reunite with familiar faces and confront terrifying aliens. Through it all, they strive to embrace a bright, hopeful future.",
+        "poster_path": "/fW8uT1hiZPpd5k8tryEyOclkW1p.jpg",
+        "season_number": 4,
+        "vote_average": 6.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Boldly go one step closer to where it all began.",
+    "type": "Scripted",
+    "vote_average": 7.86,
+    "vote_count": 881,
+    "external_ids": {
+      "imdb_id": "tt12327578",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 382389,
+      "tvrage_id": null,
+      "wikidata_id": "Q94527193",
+      "facebook_id": "StarTrekOnPPlus",
+      "instagram_id": "startrekonpplus",
+      "twitter_id": "StarTrekOnPPlus"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Follow Captain Christopher Pike, Science Officer Spock and Number One in the years before Captain Kirk boarded the U.S.S. Enterprise, as they explore new worlds around the galaxy.",
+            "homepage": "",
+            "tagline": "Boldly go one step closer to where it all began."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "„Star Trek: Strange New Worlds“ folgt Captain Christopher Pike und seiner Crew auf der USS Enterprise NCC-1701, die neue Welten erkunden und Kontakt zu fremden Spezies aufnehmen. Dabei stehen Abenteuer, diplomatische Missionen und die Sicherung der Föderation im Mittelpunkt. Unterstützt wird Pike von seiner Ersten Offizierin Una Chin-Riley und dem Wissenschafts-Offizier Spock, die gemeinsam zahlreiche Herausforderungen meistern.\n\nDie Serie erzählt klassische, episodische Geschichten im Geist der ursprünglichen Star-Trek-Reihe.",
+            "homepage": "",
+            "tagline": "Die Grenze erwartet uns."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Star Trek: Strange New Worlds",
+            "overview": "Suivez Christopher Pike, Spock et le numéro un dans la décennie qui a précédé l'arrivée du capitaine Kirk à bord de l'Enterprise alors qu'ils explorent de nouveaux mondes autour de la galaxie.",
+            "homepage": "",
+            "tagline": "La Frontière attend."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "스타 트렉: 스트레인지 뉴 월드",
+            "overview": "새로운 우주, 새로운 모험. 엔터프라이즈호의 새로운 항해가 시작된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Zvjezdane staze: Čudni novi svjetovi",
+            "overview": "Pratite kapetana Christophera Pikea, Spocka i Broj jedan dok istražuju nove svjetove širom galaksije, jedno desetljeće prije nego što se kapetan Kirk ukrcao na Enterprise.",
+            "homepage": "",
+            "tagline": "Granica čeka."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Звёздный путь: Странные новые миры",
+            "overview": "Первый экипаж знаменитого корабля Звездного флота «Энтерпрайз» отправляется в опасное путешествие по галактике в поисках новых неизведанных миров.",
+            "homepage": "",
+            "tagline": "«Неизведанное ждёт»"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Star Trek: Strange New Worlds",
+            "overview": "Em Star Trek: Strange New Worlds, o capitão Christopher Pike (Anson Mount) lidera a equipe do USS Enterprise pelos confins do universo em aventuras perigosas e intensas. Passando-se antes da trama da série original, Strange New Worlds explora mais profundamente o universo Star Trek antes da chegada do icônico Capitão Kirk (William Shatner). Pike, ainda inexperiente em liderar toda a Enterprise por conta própria, se apoia na ajuda de seus companheiros da nave, em especial Una Chin-Riley (Rebecca Romjin), segunda em comando depois dele. Além disso, ele conta a inteligência ímpar do popular personagem Spock (Ethan Peck), um alienígena meio humano meio vulcano. Os passageiros da USS Enterprise irão se aventurar por lugares inimagináveis e viverão uma jornada intensa pela galáxica, encontrando aliados fiéis, mas também fazendo inúmeros inimigos perigosos pelo caminho. Mas com o apoio de cada um, poderão completar suas missões com sucesso.",
+            "homepage": "",
+            "tagline": "A fronteira aguarda."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "星际迷航：奇异新世界",
+            "overview": "克里斯托弗·派克舰长率领企业号船员探索未知星系，寻找新世界与新生命，在一次次星际冒险中面对外星威胁、个人命运与联邦理想的考验。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Star Trek: Nieznane nowe światy",
+            "overview": "Prequel dziejący się lata przed oryginalnym \"Star Trekiem\". Śledź losy Christophera Pike'a, Spocka i numer 1 w latach przed wejściem kapitana Kirka na pokład U.S.S. Enterprise, gdy odkrywają nowe światy w całej galaktyce.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Star Trek: Furcsa új világok",
+            "overview": "Az eredeti Star Trek előzményeként szolgáló sorozat, amiben a USS Enterprise legénységének kalandjait ismerhetjük meg Christopher Pike kapitány vezetése alatt.",
+            "homepage": "",
+            "tagline": "Az űr... a legvégső határ."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "El capitán Pike, el oficial científico Spock y Number One exploran nuevos mundos alrededor de la galaxia a bordo de la USS Enterprise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Стар Трек: Странни нови светове",
+            "overview": "Капитан Кристофър Пайк се завръща в Звездната флотилия, за да помогне за спасяването на офицер, изчезнал по време на тайна мисия. Така той отново оглавява емблематичния космически кораб Ентърпрайз и, заедно със Спок, Ухура и Номер 1, поема на приключения из галактиката. „Стар Трек: Странни нови светове“ е предистория на оригиналния „Стар Трек“ сериал от 60-те години.",
+            "homepage": "",
+            "tagline": "Границата очаква"
+          }
+        },
+        {
+          "iso_3166_1": "LA",
+          "iso_639_1": "la",
+          "name": "Latin",
+          "english_name": "Latin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Star Trek: Podivné nové světy",
+            "overview": "Sledujte Christophera Pikea, Spocka a Číslo Jedna v letech před nástupem kapitána Kirka na palubu U.S.S. Enterprise, kteří objevují nové světy v celé galaxii.",
+            "homepage": "",
+            "tagline": "Hranice čeká."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Зоряний шлях: Дивні нові світи",
+            "overview": "Приквел до «Зоряного шляху: Оригінальний серіал» розповість про екіпаж корабля «Ентерпрайз» під командуванням капітана Крістофера Пайка.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "星際爭霸戰：奇異新世界",
+            "overview": "《星際爭霸戰：奇異新世界》為《星際爭霸戰：發現號》衍生劇，以在第二季登場的「企業號」艦長派克（Christopher Pike）為主角，背景設定在原初系列的十年前，看艦長派克如何在大副、史巴克等經典人物的輔佐下，探索銀河系的新世界。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Star Trek: Thế Giới Mới Lạ",
+            "overview": "Là phần tiền truyện của bộ phim gốc của Star Trek, bộ phim Star Trek: Strange New Worlds này sẽ theo chân phi hành đoàn của tàu USS Enterprise dưới sự chỉ huy của Thuyền trưởng Christopher Pike.",
+            "homepage": "",
+            "tagline": "Ranh giới vũ trụ đang chờ bạn."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "מסע בין כוכבים: עולמות חדשים ומשונים",
+            "overview": "הצטרפו לקפטן כריסטופר פייק, ספוק ו\"מספר אחת\" בשנים שלפני עלייתו של קפטן קירק על גבי חללית האנטרפרייז, במסעותיהם לחקור עולמות חדשים ברחבי הגלקסיה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Η σειρά ακολουθεί το πλήρωμα του  USS Enterprise και επικεντρώνει στον καπετάνιο  Christopher Pike, Spock και Number One, καθώς εξερευνούν νέους κόσμους σε όλο τον γαλαξία. Το Strange New Worlds είναι τεχνικά και spinoff και prequel, spinoff μιας και δείχνει το πλήρωμα του USS Enterprise μετά την εμφάνισή τους στη δεύτερη σεζόν του Star Trek: Discovery, και prequel του Star Trek: The Original Series (δεδομένου ότι η σειρά είναι διαδραματίζεται περίπου μια δεκαετία πριν ο Κερκ αναλάβει τη θέση του καπετάνιου).",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Star Trek: The Original Series’in öncesince geçecek olan bir Star Trek prequel’i. Federasyon Gemisi Enterprise (Atılgan)’ın Kaptan Kirk’ten önceki kaptanı olan Kaptan Christopher Pike ve ekibinin hikayelerini konu ediniyor",
+            "homepage": "",
+            "tagline": "Sınır bekliyor."
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Star Trek : Strange New Worlds",
+            "overview": "Suivez Christopher Pike, Spock et le numéro un dans la décennie qui a précédé l'arrivée du capitaine Kirk à bord de l'Enterprise alors qu'ils explorent de nouveaux mondes autour de la galaxie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Star Trek: Nuevos y Extraños Mundos",
+            "overview": "Siga a Christopher Pike, Spock y Number One en los años antes de que el Capitán Kirk abordara el U.S.S. Enterprise, mientras exploran nuevos mundos alrededor de la galaxia.",
+            "homepage": "",
+            "tagline": "La frontera espera"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Seneste skud i stammen af 'Star Trek'-serier, som er forhistorien til den originale 'Star Trek'-historie. Vi følger Kaptajn Pike, Spock og Number One fra før, Kaptajn Kirk gik ombord på U.S.S. Enterprise - på vej til at udforske nye verdener i galaksen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Volg Christopher Pike, Spock en Number One in de jaren voordat Captain Kirk aan boord ging van de U.S.S. Enterprise, terwijl ze nieuwe werelden rond de melkweg verkennen. Deze serie is een prequel op de originele serie en Star Trek: Discovery.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "ستار تريك: عوالم جديدة غريبة",
+            "overview": "تابع قصة Christopher Pike و Spock و Number One قبل سنوات من وصول الكابتن Kirk إلى U.S.S. Enterprise ، وهم يستكشفون عوالم جديدة حول المجرة.  تقع أحداث القصة قبل مسلسل Star Trek: The Original Series و Star Trek: Discovery.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "La serie segue i viaggi dell'astronave della Flotta Stellare USS Enterprise (NCC-1701), capitanata da Christopher Pike, durante la sua seconda missione quinquennale (2259-2264), ovvero quella che precede la missione quinquennale del capitano James T. Kirk narrata nella serie televisiva Star Trek. La serie prende il via dalla data stellare 1738.12 (2259), un paio d'anni dopo i fatti accaduti nella seconda stagione della serie televisiva Star Trek: Discovery, quando Pike ha capitanato temporaneamente la USS Discovery.",
+            "homepage": "",
+            "tagline": "Avvicinati coraggiosamente a dove tutto è iniziato."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Звездане стазе: Чудни нови светови",
+            "overview": "Прати Кристофера Пајка, Спока и броја 1 у годинама пре него што се капетан Кирк укрцао на УСС Ентерпрајз, док истражују нове светове по галаксији. Ова емисија је увод у оригиналну серију и Звездане стазе: Дискавери.",
+            "homepage": "",
+            "tagline": "Граница чека."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Kapteeni Pike, tiedeupseeri Spock ja Numero yksi tutustuvat uusiin maailmoihin ympäri galaksia USS Enterprisella.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Žvaigždžių kelias: Keisti nauji pasauliai",
+            "overview": "„Star Trek: The Original Series“ serialo priešistorė. Veiksmo sūkuryje „Enterprise“ erdvėlaivio įgula, vadovaujama kapitono Kristoferio Paiko.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "",
+            "overview": "ယခု Strange New Worlds ဟာ Prime Timeline မှာရှိနေတဲ့ Captain Kirk ရဲ့ ဖခင် Samuel Kirk ရဲ့ အချိန်ကို ရိုက်ပြထားတာ ဖြစ်ပါတယ်။ Star Trek: Discovery ရဲ့ Spin-off ဆိုလည်း ဟုတ်ပါတယ်။ ဒီအချိန်မှာ အင်တာပရိုက်စ်ယာဉ်ကို ဦးစီးနေသူဟာ ကပ္ပတိန် ခရစ်စတိုဖာပိုက်ခ်ပါ။ Star Trek ရဲ့ နာမည်ကျော် ဇာတ်ကောင် မစ္စတာ Spock ဟာလည်း အင်တာပရိုက်စ်ရဲ့ အကြီးတန်းအရာရှိ (နံပါတ်တစ်) တောင် မဖြစ်သေးဘဲ သိပ္ပံဌာနမှူးအနေနဲ့သာ ရှိနေတဲ့ အချိန်ဖြစ်ပါတယ်။ Original series မစခင် အချိန်ပေါ့။ USS Discovery ယာဉ်ဟာ သူ့ကိစ္စနဲ့သူ အနာဂတ် နှစ် ၉၀၀ ကို ခုန်ကျော်ရောက်သွားချိန်မှာ သူ ခုန်သွားခဲ့တဲ့ နေရာအနီးက ဂြိုဟ်တစ်လုံးပေါ်က Civilization ဟာ လှမ်းမြင်လိုက်ရပါတယ်။ အဲဒီမှာ ဒီဇာတ်လမ်းကို စတင်ထားပါတယ်။ အင်တာပရိုက်စ်ရဲ့ အထူးတာဝန်က သက်ရှိအသစ်တွေ Civilization အသစ်တွေကို ရှာဖွေဖို့ ဖြစ်တာကြောင့် အဲဒီဂြိုဟ်ကို လာရဖို့ အကြောင်းဖန်လာပါတယ်။ အင်တာပရိုက်စ်ဟာ သူ့ရဲ့ငါးနှစ်တာ အထူးတာဝန်မှာ ဘယ်လို ထူးခြားဆန်းပြားတဲ့ ကမ္ဘာအသစ်တွေ၊ သက်ရှိအသစ်တွေကို ရှာဖွေတွေ့ရှိရမလဲ၊ ဘယ်လို အန္တာရာယ်တွေကနေ ရုန်းထွက်ကြမလဲဆိုတာကို",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "星空奇遇記：奇異新時空",
+            "overview": "《星空奇遇記：奇異新時空》為《星空奇遇記：發現號》衍生劇，以在第二季登場的「企業號」艦長派克（Christopher Pike）為主角，背景設定在最初系列的十年前，看艦長派克如何在大副、史巴克等經典人物的輔佐下，探索銀河系的新世界。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Star Trek: Estranhos Mundos Novos",
+            "overview": "Star Trek: Estranhos Mundos Novos acompanha o Capitão Pike, Spock e Number One a bordo da U.S.S. Enterprise em uma viagem otimista pelo espaço inexplorado. Encontros estranhos, pressão moral e um espírito caloroso de equipa moldam uma missão em que cada novo mundo pode pôr à prova os ideais da tripulação.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Strange New Worlds",
+            "overview": "Serija se navezuje na serijo Discovery. Tisti, ki ste jo gledali veste, da se je takrat marsikaj vrtalo okoli kapitana vesoljske ladje Enteprise Christopherja Pika. Natanko tiste ladje, ki jo bo nekaj zavednih let kasneje prevzel James T. Kirk v originalni seriji Zvezdnih stez in jo popeljal med legende. Kompletna posadka Discoveryja in del Enterpriseve najprej išče izginulega Spoka, da bi se proti koncu sezone spopadli z odpadniško umetno inteligenco. Epilog je znan: ena ladja odsurfa v daljno prihodnost, medtem ko se druga odpravi novim dogodivščinam naproti. A ne za prav dolgo, saj v prvem delu nove serije izvemo, da je Enterprise na popravilu in Pike razdvojen, ali naj se vrne v službo.",
+            "homepage": "",
+            "tagline": "Meja čaka."
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "ვარსკვლავური გზა: უცნაური ახალი სამყაროები",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "",
+            "overview": "ภาคต่อของ Star Trek: The Original Series ซีรีส์ติดตามลูกเรือของ USS Enterprise ภายใต้การนำของกัปตันคริสโตเฟอร์ ไพค์",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "スター・トレック:ストレンジ・ニュー・ワールド",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Kapten Pike, vetenskapsofficer Spock och Number One utforskar nya världar runt galaxen ombord på USS Enterprise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Star Trek: Noi lumi stranii",
+            "overview": "Căpitanul Pike, ofițerul-cercetător Spock și Number One explorează noi lumi prin galaxie la bordul USS Enterprise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Star Trek: Neznáme svety",
+            "overview": "Kapitán Pike, vedecký dôstojník Spock a Číslo 1 objavujú nové svety vo vesmíre na palube USS Enterprise.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "پیشتازان فضا: دنیاهای جدید عجیب",
+            "overview": "کاپیتان کریستوفر پایک، افسر علمی اسپاک و شماره یک را در سال‌های قبل از سوار شدن کاپیتان کرک به ناو یو اس اس انترپرایز دنبال کنید، چرا که آنها در حال کشف دنیاهای جدید در سراسر کهکشان هستند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fZJs6xgU9dqIg9phIXjZAZOInzy.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/627K48naKH2Y3Rz47Ydra4qktdI.jpg",
+          "vote_average": 6.2,
+          "vote_count": 16,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rzAzvWJoZSwVSswvWsKx1lqT63m.jpg",
+          "vote_average": 5.53,
+          "vote_count": 17,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3CnjUHHgTlGYyjHDsBGVCZTBurd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qvd4dJuHEQz5TPwUGh7G3TQWWSZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aLnnZkZXkOSIxeBKzVH1z0lxT86.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dgL8B0mqBqghnODi80E616RzlFV.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/16BlPR8Qd1GGTLrr6y3Jd9MN8Dg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bbu1NuhpsAMvjmC0C31DCGd2jTS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yQ4eboUY4UBCJqSJEDjbO1vTxxg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1JNTLNT7mxFwZRPy4EzPr0rd1jr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AeUgVnlwbDNAYmBklenDPKBHXjt.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dIVwjTqJLsTn9nUQ8JK1wYS9ofF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7CR1iCF2bqZ7Xjzmsr2vQH9WZz5.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bmIo45GLaJJZ9W0cJUXLHl4cUw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1518,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8sXvPyNVziwfmozYsI5N6bwybBk.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2700
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uhO9Khc0rEhQNntaTLhgeyBAfDP.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mlfVotkCcrpWPtkbJv5VKwklNDl.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/foUdv33CvFljO7xEQzoJ7Tw3WrZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ihXBeM0PRpuJFWLW8miaPAGRyEf.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n3b09pZizG5Ay7YDSR5ziTNOCZg.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fEQbvO2gtPY2JFuFPZDp1qlGsCt.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/coKf777D52xQkCZHlrcJOdJF9kF.jpg",
+          "vote_average": 1.154,
+          "vote_count": 13,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/x5x4yGuMjvUynefXsytYiJoeKgy.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w5eqLNpuHZTVwe76rCz48TYIObs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1948,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z4DUZ3PTMU28Yi1FQ8Fy7ocuQ3v.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3468
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aiF4jIsLBgW98Baaq9GLuF9n7HP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iyOSeracEyOBjxGu3RQhvvsuApi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2UEcJaEkL4VPAJSwO5FoYog2ctC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ecN0384eMY3uOYi79N6yLRIu21H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ynznMcopevD7itntHpZkIeWA2MM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AmQEsZFXStbtmxWnhk1xJMgMv3Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lUlT1JCJZMHkNkO8fcBW3HH4Raj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5MrRVZ1zJT20Kxx4vZFfCe4K23N.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bFKbChpoeCPKmTnQc8VMfTobQ0P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9Im7qaipAOaovofqDI0iDTefTeg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jteu4MPbTXs87SsQyc0mHk5CNiP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/roPnwcXegP33HYNaTtyaYkwgfSM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gCnVpH7sN5Q5U3qyb3LFNZZ35hw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oTJsg674CvGZaeT45mVxggN9KZn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/WRE9KkeM8kFi94v9711gbr2A8h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mkknVgkxGkr76OiMl9uk6S8QIHB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zoqti7p8IGQP3EyJjyCP5tAV0I0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pZH4LWeDw6WoXZVYzEPmNPUe2Po.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ej0uA5Tcje5K1eQKTe4DXWRCYn9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5l7HnVEb0PDtOZyGY5eTzN0d5WB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fZOF0sy36BjFL48aXiEyY89SI8I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5Q97vhpeJoeGWitMQGIPP3j7bCf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nWhCbIMPCWjS21m3fKNHRFg7ZtD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6m4wdMzWIekQtU9TnEdgu8yTESf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cbW2nOrShae304fvj3ZsnE1B46b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a9tEDIS4y5Qz09qX7EGXKbqVi0R.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cGMj0XmWREqznU2EuwtoxILNyV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/EfH9eX2PRKDT6LNGhUAqzRbTew.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eNhbmzdXKsoW5hsHsgNJ6qnbJmo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lqq6M34mkdgBIy62yDZa6niVkHA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/je8mpYiQWtZFW4aBQdInCN7Pg4W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sme2yTzBuZVKfOnnDfOOjcDMexg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/Ai5r0VM63xZHXWecdTcYGPCZTVe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j9ZwAEgwrlDYnI37pDNkvI3vslf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2SJDEtE4WGm3Dq8eUkdBum5HxUK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ps8nzMTtRXjrJI3Ork3qnm0ns6k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g9IepO8ihEYyI6E0emAe4YDZVvl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/drxaZTynin2XppWf5Wm2WB0h7vo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/laOezatQ3Yv85QXJnZWEN4mHoUg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ywpZtkfjiScH89YOl7Ev5h5p9au.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u0BDggs80FG9tyZwxWTzVTDQls0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lD8t76pCEBvcd9nLf6zVBIAH6NE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1215,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zoFGwHDB0dMFgW9lZIE5DUkH0Zy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2160
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wtzCnF2VbInhrbPsYezPEcYQaAT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iJxo8Ggy0nk6BYWbRmL467MFwvK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pWX4qC6csxzkndyhCUfaJstyqs9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2025,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nsDwRyZE8jfFfxiwiXYUnbC4okU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2025,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wpgRjZu1nIIdaaVva4YLfhB2Sq7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2025,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mY5nIF1UELxhp3V32aRcvCcfqiW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nVclsa5yPrshRe6XUSGmqy0BZvV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/opWRt8D3DEGqZn1sChC6g7qmIxp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6jo4g7xZeYnMVWKFivEl65Pm8HD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nN9mlcoASWD1skp19odgn1LIdS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9fPoALBjFxSL7JTHhGnLN5cRY36.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dV33cuNyGGCQKsZJrNOg8imomnL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u9V16l0RyHGnfZZLra6zIpWNkgY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3gYAfH3eNrakbi3Ox1PmfXbDDYg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2yljhfJOz2MyFJRzGlN2kis88so.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zyXKDG6QZXNIcTMQX7sIR2FUbrz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A76L9rADSjZM0cHf4a7JkI3clbM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cvjvR57Gx8gYWIFkrtNsXAmZD5g.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/poQBVfAffizdgsxtFplUYtBwJDv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A5swGXDWMmv2f1pEfKyqx4vbuWl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A9p4LyLV5yEc0iJMHsEBD9AiDok.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c510vd60huG1PHkgGti1RB3Svv4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v6KBGr0x1sgWcc99NSy2UtWomKV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2vVjNuXbd5i5YbXNWb5WVzBfDmU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/huGOm1Ei7xpkA4nyirgwwIA9Q5M.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6WnH8Rm26WSUx4Qc1IrgRbaOvmW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/95CHz4SwfIMsUEld0D7OkHB7E3e.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4d9QNJVSSHrwUqN5axJuJ4zniod.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wR5jG38NYlGYMB12PaWHppzSVJs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xNkGBR1D5IhhMTd51rtJaY3oO7W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.376,
+          "height": 394,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oTwnbowXtY08Ck9XnmaYoG7V5tI.png",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 1724
+        },
+        {
+          "aspect_ratio": 1.717,
+          "height": 841,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yUsyAJsFix7fjgxKUynLFTINmLN.png",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1444
+        },
+        {
+          "aspect_ratio": 5.067,
+          "height": 847,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/339vIur97yHq85WjhS05DewVssz.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4292
+        },
+        {
+          "aspect_ratio": 5.067,
+          "height": 847,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qlh5DW0dLuxxRS0NHT7IbOvb0c0.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4292
+        },
+        {
+          "aspect_ratio": 1.728,
+          "height": 1299,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qvzUmRjpFdxe66hbAJWUx50pOBQ.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2245
+        },
+        {
+          "aspect_ratio": 1.725,
+          "height": 1292,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sT0ikF9JUeMyxphEmKAx6Kvnixv.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2229
+        },
+        {
+          "aspect_ratio": 1.726,
+          "height": 869,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m0pVJwAkqPhwoE9dlS5XBe4fRVP.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 5.067,
+          "height": 847,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8C5VPDuOyTROLXfxUGBSmGtETXK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4292
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/97TTJuqiSMfU0DuXx1B4NG5QNP7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tf6gkXJR5DyQI62tMetqZx4OwI2.jpg",
+          "vote_average": 7.19,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7Cp5w4X8xH2x4xDk67C5kMC5ePA.jpg",
+          "vote_average": 7.05,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kX5lnfUgOVtzRJqhXeZJKc7Rji7.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iwIdajr5Y4zq2ibvq75VnDAJBr.jpg",
+          "vote_average": 5.778,
+          "vote_count": 18,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aGZuwbSB2EW7yzAe8I9ef4zKkQ5.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jcUvbZ03e6GseWJUZcn0Uv7CYah.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9tRuTwL3CUQ8A3a4wO33VnhydwC.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hWq84vZ6Pt0ndzld2DzFlSJbZ1n.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w6KapI2JvrCkOPmQhkwYPJNjqeo.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fmK0l0Itbgf9AmdrYVgJrZqVv87.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/btRhawHOy9wgrsf7jZaDildqFBg.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1869,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lGF4ay4T8CU23ifYHTawjsUB6Bg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1271
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zVKYXRE6ltvmvZ34lEv6ogd3YeG.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dz2wk3Rlfrl7TP7XFOH3gbCbIVC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 2823,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/is7c5nVczYQYoW7cERelq663cA0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ifoQDayTR9AaxD4s09i8SeipbW.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r6TjmfQLRyQ4ZhqhiEqgunQ5jez.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n39vQiyK3jjQOUe14c8mo93EooB.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zzkjhXUMkVXvarwiqEn77ty5Mb0.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fuQftdSl8HqUw2Mi7tnTjth7NOD.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z0u122GjlrKOYBflTkSbSZKUjFm.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/secsBioOEBGD6y9mMn01BR1xURK.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7hN9GZngVlfKoMSlbGwSNx5UhSc.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8FxqHDczuj83pns6oyRGTjlx7jG.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1067
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bqFOiSOFig6lexqQxXeRS2ufvvp.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lBqtQ4cpX3UE4Hzb7fNVHVPsefG.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sLVNzs2OjfCC0AnP8XkCURek1a9.jpg",
+          "vote_average": 0.5,
+          "vote_count": 5,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5F4OnjOOAPjHVi8PY3dkTihjYhg.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2595,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pRLCEC5idkMbzU9nk4kGd09AUUw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1728
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2595,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zELaAenKzla3PwGhABtihD7trEh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1728
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2595,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pCcPgmkPU72gowzoH46b4H6LNmY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1728
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2595,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fPswxgGHSHKO8dKbaDPGCaLNx0e.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1728
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1096,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fLTh7soDnXSIBfRMzMpd03lDRWB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 740
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lBI2gCRpJOO7o2ryclhnFgA2uL8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vNJ6DjhtlI0QyOqMxoQWXzJfCp3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ix2nI2Fk9WxL8Nm48sdxjMMP5sb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8jF8J4Uchwprz4Iqe5jKKYZUj18.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zoX98GfP7ULxTy7Iv7JJHOapYzE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/knDhpJ0DDYAlVkf74U6ab8hfLbB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vMFxmogUUe5lhhzNnS59o51C77i.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8eJJEXe2El8cofk1G6r7ROtt4ew.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4Blp8yjZz45wOr4HRea4YMIW2ol.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cO4AdK6VHye9ldv6uhaV2SWtA5q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g4QtQHbHRguifm3JpIujzBeGP1J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pyNp7NbspBHrAQMbTShOO5ZJ5Cp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vTmKhuuQpirD8DORxxlpzZVPCDx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tIUbKE9Q1IjlLQ0BWykIIr8cXSX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1777,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7A7j6OwVceH630v2kEH4WAGxp5o.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2963,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c9ocMgqBLohWranuiFnvKzQPCA6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/smDtSYZx8zDFsPT8IQ6Xv4OgnyG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1296
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1777,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/shmhHA0GwBZyy9dRTiVrdqKxhWe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2963,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uwZwoRhUglB0fLTJvi0e33HrWGd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/94auf5Gk9EcwtuImTlQ4QhNMb54.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pq4js2DcnUswMeY5V0msxi448bI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aKFNgqfwQdHiqBcGYNOLxdWXF0n.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xYelDZV8boye2LB4rDIOJKETGTn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wSEKv6868tHastu38zBLiYx5kyt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/adestY0ptZzoPlsZVo8IHaMsaRn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hY3dowhGK82kVWzktvNrJFA4a2W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wqoPBOHPpiCkSQE2BdtjgEYy5zN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lhoGt5B9QIZoPf1I93mdHDcP5ZU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ogtpT9fsblecmftOAxDb19N3xhc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/otjeyv7HQnMtTJ7kLeETgMI6QQE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/83V4SM8mghWJZBUyiLpxR0GMB47.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7iEO7AFNjTguWjM41mOjUDzaQfj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 853
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a5dlAqQGHSz8znmEkGdPicT9ro1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2DlzBxFLZMIp0PLwRiHd3hBoCuP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zNAR78D5EAU7XkjVyYo1ak3aTYx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u1fgAp6vjX3szm8r7awabs1cTqC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aBVh1LdDaqdYC5zLhE0Nd1P3eSB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qfvOsiuKwvyQBYGf3GJo5WSo9oj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1615,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yVn89QRA409HQr1q0mipVT7Q5JD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1077
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 877,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vJwMmx2z4oXohnX4eV27J7tuRN5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 585
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 874,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wmDwuIthz5BOTGcfzn63JFzBtja.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 583
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1919,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lYJAWtvig1yWSMOODXaJ5l7JP8q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1279
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1919,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4cuNhdSSkOM4pRcAgwIQ5ot0mnO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1279
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1919,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jVV7UJvarGItC0AF8Kn1FyVRG4l.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1279
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/neHp7MX1KR4CI3Dip38iXzea01A.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mLmrCZsFW13OYrM0NBD9IDphVOe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r5XS32ZPnFWPj5DnwJ32p1MY1Jq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

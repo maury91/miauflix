@@ -1,0 +1,469 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4474",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"81fd090ca4c27403a439868fe0bc241a\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3knNVqZlEdwYPwYBWQechjvRzx0.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-05",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://tengobu-anime.com",
+    "id": 316694,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-02",
+    "last_episode_to_air": {
+      "id": 7904420,
+      "name": "So What's Wrong with Being Disliked by an Adolescent Elf?",
+      "overview": "When Eunomia gets jealous of her sister Diké giving Akira attention, will anything persuade her otherwise?",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-02",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 316694,
+      "still_path": "/2QzgR4RmFIJ8mVmxk7PiMZUhLJg.jpg"
+    },
+    "name": "So What's Wrong with Getting Reborn as a Goblin?",
+    "next_episode_to_air": {
+      "id": 7904421,
+      "name": "So What's Wrong with Waging Wardrobe Warfare?",
+      "overview": "Echigoya is attacked by a human with a goblin vendetta, and Akira responds by using drastic measures.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-09",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 316694,
+      "still_path": "/HW5bBtvWQO3cpKyjYLqVSOL8N5.jpg"
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "転生ゴブリンだけど質問ある？",
+    "overview": "When office worker Akira Yagami gives his life saving a child, he awakens in another world as a weak goblin. But luckily, he’s granted a unique skill that extends his lifespan decades beyond their species limit and allows him to inherit the abilities of fallen goblins. In a realm of powerful races like demons and elves, Akira’s rise to becoming the strongest goblin begins.",
+    "popularity": 9.5711,
+    "poster_path": "/3EMDTHdIMRRKbNCjTkAGg1hMiCG.jpg",
+    "production_companies": [
+      {
+        "id": 292287,
+        "logo_path": null,
+        "name": "BAKKKA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 142186,
+        "logo_path": "/bdXTOuU7PdsDtQngyM7vb47zePs.png",
+        "name": "Hakuhodo DY Music & Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162088,
+        "logo_path": "/7w22w5EOw8MsJ3uhWdOuWAfp2HS.png",
+        "name": "INCS toenter",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 134892,
+        "logo_path": "/euHs3v7wg48dr580eeilS1gZStQ.png",
+        "name": "ABEMA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 43682,
+        "logo_path": "/3OTFn2ZFNtfPdPCamfmdyrUy1fI.png",
+        "name": "SANKYO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 181285,
+        "logo_path": "/xHaPH1Yp50iEH7HOEwhxKTYRC6w.png",
+        "name": "Bushiroad Move",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-05",
+        "episode_count": 12,
+        "id": 505389,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/3EMDTHdIMRRKbNCjTkAGg1hMiCG.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 9.4,
+    "vote_count": 5,
+    "external_ids": {
+      "imdb_id": "tt43691383",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 475306,
+      "tvrage_id": null,
+      "wikidata_id": "Q138643972",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "tengobu_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "So What's Wrong with Getting Reborn as a Goblin?",
+            "overview": "A vida de Akira é cheia de reviravoltas: de assalariado japonês a duende reencarnado e, finalmente, a duende aristocrata reconhecido! Ele fez um grande progresso na aceitação dos duendes na sociedade, mas nem todos são seduzidos pelo seu charme. Quatro famílias aristocráticas se recusaram a aceitar que um monstro humilde se juntasse a elas e se uniram para derrubá-lo. Akira demonstrou força e liderança incríveis, mas será que ele conseguirá acompanhar as maquinações políticas dessa nova “aliança anti-goblins”?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "So What's Wrong with Getting Reborn as a Goblin?",
+            "overview": "When office worker Akira Yagami gives his life saving a child, he awakens in another world as a weak goblin. But luckily, he’s granted a unique skill that extends his lifespan decades beyond their species limit and allows him to inherit the abilities of fallen goblins. In a realm of powerful races like demons and elves, Akira’s rise to becoming the strongest goblin begins.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tensei Goblin dakedo Shitsumon Aru?",
+            "overview": "La naturaleza altruista de Akira Yagami, un empleado de oficina, suele hacer que salga perdiendo. Cuando muere tras salvar a un niño de un coche que se acercaba... ¡¿reencarna en otro mundo como un duende?! Normalmente, los duendes solo viven siete días, pero los nuevos poderes de Akira le permiten desafiar la esperanza de vida habitual de su especie... ¡y son la clave para que se convierta en el duende más fuerte de la historia!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "So What's Wrong with Getting Reborn as a Goblin?",
+            "overview": "Nachdem der Angestellte Akira Yagami sein Leben für ein Kind opfert, erwacht er als Goblin in einer anderen Welt. Er erhält einen einzigartigen Skill, durch den er Jahrzehnte länger leben wird, als für seine Spezies üblich. Er erlaubt es ihm zudem, das Können gefallener Goblins zu erben. In einem Reich mächtiger Völker wie Dämonen oder Elfen beginnt so Akiras Aufstieg zum stärksten aller Goblins.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "部下からの信頼が厚いサラリーマン・八神彰は車道に飛び出した子供を庇って絶命した… はずだったが、異種族 “ゴブリン”に転生していた。ゴブリンの寿命はわずか7日。しかし、転生時に与えられたスキル【人間80年】によって、先立っていくゴブリンから数々のスキルを受け継いでいく。そんなアキラのもとへ魔族やエルフ、更にはドラゴンなども集まってきて…\n\n“ゴブリン”が巻き起こす最強無双ファンタジー、ここに開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "转生哥布林有问题吗？",
+            "overview": "深受部下信赖的上班族八神彰，为保护冲上车道的小孩而丧命……本应如此，却转生成了异种族“哥布林”。哥布林的寿命仅有7天。然而，凭借转生时被赋予的技能【人类80年】，他不断从先逝的哥布林那里继承各种技能。魔族、精灵，甚至龙等也纷纷聚集到这样的彰身边……由“哥布林”掀起的最强无双奇幻故事，就此开幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Reborn Goblin",
+            "overview": "Les gentils finissent toujours derniers : personne ne le sait mieux qu'Akira Yagami, un employé de bureau qui perd la vie après avoir sauvé un enfant. Mais il se réincarne dans un autre monde en tant que gobelin ! Normalement, ces créatures ne vivent que sept jours, mais Akira possède un pouvoir lui offrant quatre-vingts ans pour laisser son empreinte sur ce monde !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "전생 고블린인데 질문 있어?",
+            "overview": "부하들의 두터운 신뢰를 받는 회사원 야가미 아키라는  차도로 뛰어든 아이를 감싸다 목숨을 잃었다…  그런 줄 알았는데, 이종족 '고블린'으로 전생해 있었다.  고블린의 수명은 고작 7일.  하지만 전생할 때 부여받은 스킬 【인간 80년】 덕분에  먼저 떠나가는 고블린들로부터 수많은 스킬을 물려받게 된다.  그런 아키라 곁으로 마족과 엘프, 나아가 드래곤까지 모여드는데…  '고블린'이 일으키는 최강 무쌍 판타지, 여기에 개막!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Я перевоплотился в гоблина, вопросы есть?",
+            "overview": "Альтруистическая натура офисного работника Акиры Ягами обычно приводит к тому, что он попадает впросак. Когда он умирает, спасая ребенка от встречного движения... он перевоплощается в другом мире в гоблина?! Обычно гоблины живут всего семь дней, но новообретенные способности Акиры позволяют ему бросить вызов обычной продолжительности жизни этого вида ... и являются ключом к тому, чтобы стать самым сильным гоблином в истории!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "So What's Wrong with Getting Reborn as a Goblin?",
+            "overview": "¡La vida de Akira está llena de giros y vueltas: de asalariado japonés a goblin reencarnado y a reconocido aristócrata goblin! Ha logrado grandes avances para el lugar de los goblins en la sociedad, pero no todos se dejan cautivar por su encanto. Cuatro familias aristocráticas se han negado a aceptar que un monstruo de baja categoría se haya unido a sus filas y se han unido para darle una lección. Akira ha demostrado una fuerza y un liderazgo increíbles, pero ¿podrá seguir el ritmo de las maquinaciones políticas de esta nueva \"alianza anti-goblins\"?!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "轉生哥布林有問題嗎？",
+            "overview": "深受部下信賴的上班族八神彰，某天卻為了保護突然衝到馬路上的孩子而喪命，本應如此的他，卻轉生為異種族「哥布林」。這個世界哥布林的壽命僅有短短 7 天。不過他憑藉轉生時獲得的技能【人類 80 年】，讓他得以從離世的哥布林身上，繼承各項技能。最終魔族、精靈，甚至連龍族都漸漸聚集到彰身邊。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "轉生哥布林有問題嗎？",
+            "overview": "備受下屬信賴的上班族八神彰, 為保護衝向車道的孩子而喪 命. . . 本該是這樣的, 不料他竟轉生成了異種族「哥布林」。\n\n哥布林的壽命本該僅有短短 7 天, 但憑藉轉生時獲得的技能 【人類 80 年】, 他陸續繼承了先行離世的哥布林們留下的技 能。隨後, 魔族、精靈甚至巨龍等強者紛紛聚集到八神身邊. . . . .\n\n由「哥布林」掀起的最強無雙幻想故事, 在此揭開序幕!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Mau Tahu Lika-liku Reinkarnasi Goblin?",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "То що поганого в тому, щоб переродитися гобліном?",
+            "overview": "Коли офісний працівник Акіра Ягамі віддає своє життя, рятуючи дитину, він прокидається в іншому світі слабким гобліном. Але, на щастя, йому дарують унікальну навичку, яка продовжує його життя на десятиліття вище меж виду та дозволяє йому успадкувати здібності загиблих гоблінів. У царстві могутніх рас, таких як демони та ельфи, починається сходження Акіри до найсильнішого гобліна.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "So What's Wrong with Getting Reborn as a Goblin?",
+            "overview": "Akira Yagami, un impiegato di 29 anni, muore dopo aver salvato un bambino da un incidente. Al suo risveglio scopre di essersi reincarnato in un altro mondo… come un goblin, una delle creature più deboli e destinate a una vita brevissima. A differenza degli altri goblin, che vivono solo pochi giorni, Akira ottiene però un'abilità unica che gli permette di vivere molto più a lungo e di ereditare le capacità dei suoi simili. Grazie alla sua esperienza da umano e a questa rara opportunità, inizia così un percorso di crescita in un mondo fantasy pieno di pericoli, cercando di sopravvivere e di dimostrare che anche un goblin può cambiare il proprio destino.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เกิดใหม่เป็นก็อบลินแล้วไง มีคำถามอะไรไหม?",
+            "overview": "อากิระ ยางามิ มนุษย์เงินเดือนผู้ได้รับความไว้วางใจจากผู้คนรอบตัว ต้องจบชีวิตลงขณะช่วยเด็กจากอุบัติเหตุ\n\nแต่แล้วเขากลับได้เกิดใหม่ในต่างโลก…ในร่างของ “ก็อบลิน” สิ่งมีชีวิตที่มีอายุขัยเพียง 7 วัน\n\nด้วยสกิลพิเศษ “ชีวิตมนุษย์ 80 ปี” ที่ได้รับมา อากิระสามารถสืบทอดความสามารถต่าง ๆ จากเหล่าก็อบลินที่กำลังจะจากไป และค่อย ๆ เติบโตขึ้นจนกลายเป็นตัวตนที่ไม่ธรรมดา",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chuyển sinh thành Goblin đấy, có sao không?",
+            "overview": "Một người đàn ông bất ngờ chuyển sinh thành một Goblin trong một thế giới hoàn toàn xa lạ. Từ một sinh vật nhỏ bé tưởng chừng yếu ớt, anh bắt đầu khám phá thế giới mới và tìm cách sinh tồn theo cách của riêng mình.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3pEV4KDJEKd2WM5U7sWeROnsJru.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3knNVqZlEdwYPwYBWQechjvRzx0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vT3CLNTRmjba0Hdg5efeYQ2eSKO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.888,
+          "height": 634,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rrfcUelVro1vO4vR9ZjE2vrUKNe.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1197
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.708,
+          "height": 2711,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3gHPd50EwLAhtzyOlZv47JafE6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 2700,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vREdnlUUI71QTeh1TsaMpedWe2Z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3EMDTHdIMRRKbNCjTkAGg1hMiCG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

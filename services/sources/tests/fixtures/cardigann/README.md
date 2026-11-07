@@ -9,4 +9,6 @@ Hosts use the reserved `.invalid` TLD; all data is invented.
 - `nested-json.yml`: nested rows (`attribute` + `multiple`) with `..` parent access, shaped like yts.
 - `html-table.yml`: an HTML table with a magnet link per row, shaped like eztv/nyaasi.
 - `html-details.yml`: rows with only a details page; the download link comes from `download.selectors`.
+- `anime-ids.yml`: an anime feed searched by AniDB episode or anime id (the Miauflix `anime-search`
+  mode), shaped like the animetosho definition, with a curated release flag.
 - `private-tracker.yml`, `unsupported-filter.yml`: definitions that must be flagged unsupported.
