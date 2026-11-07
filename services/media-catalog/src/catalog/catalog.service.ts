@@ -164,6 +164,9 @@ export class CatalogService {
   /** A show numbered by AniList entry gets those seasons (season 0 stays TMDB's). */
   private withAnimeSeasons(detail: TVShowDetail): TVShowDetail {
     const layout = this.animeLayouts?.getLayout(detail.mediaId);
+    // Not built yet (list still downloading, an ani.zip read failed): the numbering is unknown.
+    // Without a version, consumers keep the numbering they have instead of renumbering to TMDB's.
+    if (!layout && this.animeLayout?.enabled) return { ...detail, seasonLayout: 'tmdb' };
     if (layout?.layout !== 'anilist')
       return { ...detail, seasonLayout: 'tmdb', seasonLayoutVersion: null };
     const seasons: SeasonSummary[] = [

@@ -400,12 +400,10 @@ export class MediaLoadClientService extends RemoteService<typeof mediaLoad> {
 
   /**
    * Verified bytes of a target, honouring `Range`, straight from the service. Playback reads
-   * claim the file and count as an open stream; speculative reads (probes) do neither.
-   */
-  /**
-   * The file's bytes as a response the backend may return as-is. A fetched response's headers
-   * are read-only, and Hono copies the context's headers (CORS) onto a returned response, so
-   * the body is handed over in a response with its own headers.
+   * claim the file and count as an open stream; speculative reads (probes) do neither. The
+   * response may be returned as-is: a fetched response's headers are read-only, and Hono copies
+   * the context's headers (CORS) onto a returned response, so the body is handed over in a
+   * response with its own headers.
    */
   async streamFile(
     target: PlaybackTarget,

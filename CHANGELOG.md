@@ -13,7 +13,7 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 ### Improvements
 
 - Episodes whose saved sources have few seeders are searched again (at most every 6 hours), so sources enabled later can offer a better copy
-- Releases made for another language (a French dub, VOSTFR, an Italian release…) are played only when nothing in your language or English is available, whatever their quality. Your browser's languages decide what counts as yours. Release names are now read for more language tags: Italian ("SubITA", "iTALiAN"), English ("EngSub"), Japanese ("JP", "JAP") and Lithuanian ("LT", "Lietuvių")
+- Releases made for another language (a French dub, VOSTFR, an Italian release…) are played only when nothing in your language or English is available, whatever their quality. Your browser's languages decide what counts as yours. Release names are now read for more language tags: Italian ("SubITA", "iTALiAN"), English ("EngSub"), Japanese ("JP", "JAP") and Lithuanian ("LT subs", "Lietuvių")
 - Seeder and leecher counts are checked for many sources at once and combine every tracker's answer, so they are more accurate and use less tracker traffic
 - What you're watching gets peers and bandwidth before background downloads, so playback starts sooner while other titles download
 - Torrent downloading, streaming, seeder counts and download storage now run in a new internal service, media-load, in the services container (port 3004). The downloads folder is now mounted on the services container instead of the main one, and downloads you already have are handed to it automatically the first time it starts. It is also published on its own as the `miauflix-media-load` image

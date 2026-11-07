@@ -165,8 +165,9 @@ export const LANGUAGE_PATTERNS: PatternConfig<Language>[] = [
   { regex: /(\bchi\b|\bchinese\b|\bmandarin\b)/gi, value: Language.CHINESE, specificity: 85 },
   { regex: /(\bjpn?\b|\bjap\b|\bjapanese\b)/gi, value: Language.JAPANESE, specificity: 90 },
   {
-    // "LT" is how Lithuanian trackers tag dubs and subtitles ("LT subs", "LT.Dub").
-    regex: /(\bltu?\b|\blithuanian\b|\bliet\b|\blietuvi\p{L}*)/giu,
+    // Lithuanian dubs and subtitles ("LT subs", "LT.Dub"). A bare "LT" is too common to count.
+    regex:
+      /(\bltu\b|\blt[ ._-]?(?:subs?|dub(?:bed)?)\b|\blithuanian\b|\bliet\b|\blietuvi\p{L}*)/giu,
     value: Language.LITHUANIAN,
     specificity: 90,
   },

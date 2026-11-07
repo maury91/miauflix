@@ -200,7 +200,10 @@ describe('anime seasons by AniList entry', () => {
 
     // The list is still downloading: TMDB's seasons, without waiting for it.
     const started = Date.now();
-    expect((await service.getTVShow(SHOW, 'en')).seasonLayout).toBe('tmdb');
+    const waiting = await service.getTVShow(SHOW, 'en');
+    expect(waiting.seasonLayout).toBe('tmdb');
+    // Unknown, not TMDB's: consumers keep the numbering they have.
+    expect('seasonLayoutVersion' in waiting).toBe(false);
     expect(Date.now() - started).toBeLessThan(1_000);
 
     // The download finished in the background; the next request builds the layout.
@@ -208,6 +211,23 @@ describe('anime seasons by AniList entry', () => {
     await new Promise(resolve => setTimeout(resolve, 10));
     expect((await service.getTVShow(SHOW, 'en')).seasonLayout).toBe('anilist');
     db.close();
+  });
+
+  it('reports an unknown numbering after a failed ani.zip read, and does not retry it per request', async () => {
+    const { db, service, requests } = setup();
+    const second = mappings['2'];
+    delete mappings['2'];
+    try {
+      const detail = await service.getTVShow(SHOW, 'en');
+      expect('seasonLayoutVersion' in detail).toBe(false);
+      const reads = requests.filter(url => url.startsWith(URLS.aniZip)).length;
+
+      await service.getTVShow(SHOW, 'en');
+      expect(requests.filter(url => url.startsWith(URLS.aniZip))).toHaveLength(reads);
+    } finally {
+      mappings['2'] = second!;
+      db.close();
+    }
   });
 
   it('lists use a stored layout without building one', async () => {

@@ -106,7 +106,7 @@ describe('SourceMetadataFileService', () => {
     expect(remote.torrentFile).not.toHaveBeenCalled();
   });
 
-  it('looks up two playback torrents side by side and refuses a third', async () => {
+  it('looks up two playback torrents side by side; a third waits for a free slot', async () => {
     const { service, download } = setupTest(false);
     let release!: () => void;
     const gate = new Promise<void>(resolve => (release = resolve));
@@ -120,11 +120,12 @@ describe('SourceMetadataFileService', () => {
     const third = service.getPlaybackTorrentMetadataFile(magnet, 'c'.repeat(40));
     await Promise.resolve();
     expect(download.getSourceMetadataFile).toHaveBeenCalledTimes(2);
-    await expect(third).resolves.toBeNull();
     release();
-    await expect(Promise.all([first, second])).resolves.toEqual([
+    await expect(Promise.all([first, second, third])).resolves.toEqual([
+      Buffer.from('metadata'),
       Buffer.from('metadata'),
       Buffer.from('metadata'),
     ]);
+    expect(download.getSourceMetadataFile).toHaveBeenCalledTimes(3);
   });
 });

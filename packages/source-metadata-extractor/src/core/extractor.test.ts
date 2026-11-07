@@ -33,6 +33,8 @@ describe('extractSourceMetadata', () => {
     ['Some Movie 2024 1080p WEB-DL LT subs', [Language.LITHUANIAN]],
     ['Some Movie 2024 1080p Lietuvių kalba', [Language.LITHUANIAN]],
     ['Some Movie 2024 LTU 1080p WEB-DL', [Language.LITHUANIAN]],
+    ['Some Movie 2024 1080p LT.Dub WEB-DL', [Language.LITHUANIAN]],
+    ['Forrest Gump 1994 Lt Dan Edition 1080p BluRay', []],
   ])('recognizes the languages of %s', (name, languages) => {
     expect([...extractSourceMetadata({ name, size: 1_000_000_000 }).language].sort()).toEqual(
       [...languages].sort()

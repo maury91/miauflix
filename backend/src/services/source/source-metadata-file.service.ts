@@ -124,13 +124,29 @@ export class SourceMetadataFileService {
   }
 
   /** Resolve one explicitly requested playback torrent without enabling background resolution. */
-  public getPlaybackTorrentMetadataFile(sourceLink: string, hash: string): Promise<Buffer | null> {
+  public getPlaybackTorrentMetadataFile(
+    sourceLink: string,
+    hash: string,
+    retry = true
+  ): Promise<Buffer | null> {
     const normalizedHash = hash.toLowerCase();
     const existing = this.playbackMetadataResolutions.get(normalizedHash);
     if (existing) return existing;
     // Keep interactive work bounded: at most two lookups at once, side by side, so a slow swarm
-    // costs one timeout rather than one per candidate.
-    if (this.playbackMetadataResolutions.size >= 2) return Promise.resolve(null);
+    // costs one timeout rather than one per candidate. A lookup refused because another caller
+    // holds the slots waits for one to free and tries once more, instead of resolving nothing.
+    if (this.playbackMetadataResolutions.size >= 2) {
+      if (!retry) {
+        logger.warn(
+          'SourceMetadataFileService',
+          `Metadata lookup for ${normalizedHash} skipped: both lookup slots are busy`
+        );
+        return Promise.resolve(null);
+      }
+      return Promise.race(
+        [...this.playbackMetadataResolutions.values()].map(lookup => lookup.catch(() => null))
+      ).then(() => this.getPlaybackTorrentMetadataFile(sourceLink, hash, false));
+    }
 
     const resolution = this.metadataFiles.getSourceMetadataFile(
       sourceLink,

@@ -1,4 +1,5 @@
-import { existsSync, readFileSync, renameSync, statSync, writeFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+import { existsSync, readFileSync, renameSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import {
@@ -131,9 +132,14 @@ export class AnimeIndex {
     const rows = (await response.json()) as FribbRow[];
     if (!Array.isArray(rows)) throw new Error('Unexpected anime list');
     const compact = rows.flatMap(toCompact);
-    const temporary = `${this.file}.tmp`;
-    writeFileSync(temporary, JSON.stringify(compact));
-    renameSync(temporary, this.file);
+    // A name of its own: another process may be writing the same list into a shared folder.
+    const temporary = `${this.file}.${randomUUID()}.tmp`;
+    try {
+      writeFileSync(temporary, JSON.stringify(compact));
+      renameSync(temporary, this.file);
+    } finally {
+      rmSync(temporary, { force: true });
+    }
     this.index(compact, this.now());
   }
 

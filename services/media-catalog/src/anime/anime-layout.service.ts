@@ -19,6 +19,8 @@ import type { AnimeIndex } from './anime-index';
 const SCOPE = 'AnimeLayout';
 /** More entries than this for one show are not read (long franchises keep TMDB's seasons). */
 const MAX_ENTRIES = 40;
+/** After an incomplete build (an ani.zip read failed), how long requests skip rebuilding. */
+const FAILED_BUILD_RETRY_MS = 10 * 60_000;
 
 /**
  * Numbers an anime show's seasons by AniList entry when TMDB keeps it in fewer seasons
@@ -27,6 +29,8 @@ const MAX_ENTRIES = 40;
  */
 export class AnimeLayoutService {
   private readonly flights = new SingleFlight();
+  /** Shows whose last build was incomplete, and when to try again. */
+  private readonly retryAt = new Map<number, number>();
 
   constructor(
     private readonly index: AnimeIndex,
@@ -37,9 +41,16 @@ export class AnimeLayoutService {
     private readonly now: () => number = Date.now
   ) {}
 
+  /** False when the anime lists are turned off: no layouts are built. */
+  get enabled(): boolean {
+    return this.index.enabled;
+  }
+
   /** Builds the show's layout when missing or older than its details. Never throws. */
   async ensure(tvMediaId: number): Promise<void> {
     if (!this.index.enabled) return;
+    // A failed build is not retried on every request: each retry waits on ani.zip again.
+    if ((this.retryAt.get(tvMediaId) ?? 0) > this.now()) return;
     const show = this.tvShows.getTVShow(tvMediaId);
     if (!show) return;
     const current = this.layouts.getLayout(tvMediaId);
@@ -93,8 +104,13 @@ export class AnimeLayoutService {
         return data ? toEntry(entry, data) : null;
       })
     );
-    // Without every entry's episodes the split would be guesswork.
-    if (read.some(entry => entry === null)) return;
+    // Without every entry's episodes the split would be guesswork: keep what is stored.
+    if (read.some(entry => entry === null)) {
+      if (this.retryAt.size >= 1000) this.retryAt.delete(this.retryAt.keys().next().value!);
+      this.retryAt.set(tvMediaId, this.now() + FAILED_BUILD_RETRY_MS);
+      return;
+    }
+    this.retryAt.delete(tvMediaId);
     const layout = layoutSeasons(providerEpisodes, read as Entry[]);
     // Numbered exactly like TMDB (an announced entry with nothing aired yet): nothing to change.
     const sameAsTmdb = layout?.every(season =>
