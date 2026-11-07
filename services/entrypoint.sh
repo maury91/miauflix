@@ -1,6 +1,35 @@
 #!/bin/bash
 set -Eeuo pipefail
 
+# Started as root: give the service user what it writes, then run everything as that user. The
+# downloads volume was the backend's before media-load ran the torrent engine, so files written
+# by the backend's user (PUID) change owner once.
+if [[ $(id -u) -eq 0 ]]; then
+  mkdir -p /app/data/media-load
+  chown -R bunqueue:bunqueue /app/data/media-load
+  downloads=/usr/src/app/downloads
+  if [[ -d "$downloads" ]]; then
+    if { ! other_owner=$(find "$downloads" ! -user bunqueue -print -quit) ||
+      [[ -n "$other_owner" ]]; } &&
+      ! chown -R bunqueue:bunqueue "$downloads"; then
+      echo "Could not change ownership of $downloads; checking access as bunqueue" >&2
+      su-exec bunqueue:bunqueue /bin/bash -o pipefail -c '
+        find "$1" -type f -print0 | while IFS= read -r -d "" file; do
+          if [[ ! -r "$file" ]]; then
+            printf "bunqueue cannot read download: %q\n" "$file" >&2
+            exit 1
+          fi
+        done
+      ' bash "$downloads"
+    fi
+    if ! su-exec bunqueue:bunqueue /bin/bash -c '[[ -r "$1" && -w "$1" && -x "$1" ]]' bash "$downloads"; then
+      echo "bunqueue needs read, write, and search access to $downloads" >&2
+      exit 1
+    fi
+  fi
+  exec su-exec bunqueue:bunqueue /bin/bash "$0" "$@"
+fi
+
 children=()
 loggers=()
 log_pipes=()

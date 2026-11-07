@@ -4,7 +4,7 @@ import { logger } from '@logger';
 
 import type { ConfigService } from '@mytypes/configuration';
 import type { MediaProbeRepository } from '@repositories/media-probe.repository';
-import type { DownloadService } from '@services/download/download.service';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 
 import { FragmentedMp4Timeline } from './fragmented-mp4';
 import type { PlaybackTarget } from './playback-target';
@@ -334,7 +334,7 @@ export class AudioPlaybackService {
   private closed = false;
 
   constructor(
-    private readonly downloadService: DownloadService,
+    private readonly mediaLoad: MediaLoadClientService,
     private readonly config?: ConfigService,
     private readonly store?: Pick<MediaProbeRepository, 'find' | 'save'>
   ) {}
@@ -423,7 +423,7 @@ export class AudioPlaybackService {
       sourceId: target.source.id,
       speculative,
     });
-    const input = await openTorrentInput(this.downloadService, target, speculative);
+    const input = await openTorrentInput(this.mediaLoad, target, speculative);
     try {
       signal?.throwIfAborted();
       if (this.closed || this.processes.size >= 4)
@@ -578,7 +578,7 @@ export class AudioPlaybackService {
       if (this.closed || this.jobs.size > 2 || this.processes.size >= 4) {
         throw new AudioPlaybackError('Audio conversion is busy. Retry shortly.');
       }
-      input = await openTorrentInput(this.downloadService, {
+      input = await openTorrentInput(this.mediaLoad, {
         ...target,
         durationSeconds: delivery.durationSeconds,
       });

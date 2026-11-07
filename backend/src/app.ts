@@ -21,11 +21,11 @@ import { ServiceScheduleCoordinator } from '@services/background-job/service-sch
 import { CacheService } from '@services/cache/cache.service';
 import { CatalogClientService } from '@services/catalog/catalog-client.service';
 import { ConfigurationService } from '@services/configuration/configuration.service';
-import { DownloadService } from '@services/download/download.service';
 import { ListClientService } from '@services/list/list-client.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
 import { MediaLoadClientService } from '@services/media-load/media-load-client.service';
+import { createStorageHandoff } from '@services/media-load/storage-handoff';
 import { NotificationService } from '@services/notifications/notification.service';
 import { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import { PlaybackSessionService } from '@services/playback/playback-session.service';
@@ -46,7 +46,6 @@ import { SourceAvailabilityService } from '@services/source/source-availability.
 import { SourceHealthService } from '@services/source/source-health.service';
 import { SourcesClientService } from '@services/sources/sources-client.service';
 import { StatsService } from '@services/stats/stats.service';
-import { StorageService } from '@services/storage/storage.service';
 import { StreamService } from '@services/stream/stream.service';
 import { SubtitlesService } from '@services/subtitles/subtitles.service';
 import { TorrentSubtitlesService } from '@services/subtitles/torrent-subtitles.service';
@@ -94,6 +93,8 @@ try {
   await db.initialize();
   // Data migrations finish before any service reads the data; a failure stops startup.
   await new MigrationService(db).run();
+  // media-load reports ready once it holds the storage recorded here before it ran the engine.
+  mediaLoadClient.setStorageHandoff(createStorageHandoff(db));
 
   // Create ( and initialize ) all the services
   const cacheService = new CacheService(configurationService);
@@ -111,18 +112,16 @@ try {
   const backgroundJobs = new BackgroundJobService(configurationService);
   const backgroundWorker = new BackgroundJobWorker(backgroundJobs);
   const listService = new ListService(db, catalogClient, listClient, backgroundJobs);
-  const storageService = new StorageService(db, configurationService);
   const sourceHealthService = new SourceHealthService();
-  const downloadService = new DownloadService(storageService, requestService, configurationService);
   const sourceAvailabilityService = new SourceAvailabilityService(db, notificationService);
   // Every file list that becomes known decides whether its source is real.
-  storageService.onLayout((sourceId, layout) => {
+  mediaLoadClient.onLayout((sourceId, layout) => {
     sourceAvailabilityService.recordFiles(sourceId, layout.files).catch(error => {
       logger.warn('App', `Unable to record the file list of source ${sourceId}`, error);
     });
   });
   const magnetService = new SourceMetadataFileService(
-    downloadService,
+    mediaLoadClient,
     requestService,
     statsService,
     configurationService,
@@ -144,25 +143,19 @@ try {
   );
   const playbackTargetService = new PlaybackTargetService(
     db,
-    downloadService,
+    mediaLoadClient,
     sourceHealthService,
     sourceAvailabilityService
   );
-  const streamService = new StreamService(
-    db,
-    sourceService,
-    downloadService,
-    mediaService,
-    playbackTargetService
-  );
+  const streamService = new StreamService(db, sourceService, mediaService, playbackTargetService);
   const audioPlaybackService = new AudioPlaybackService(
-    downloadService,
+    mediaLoadClient,
     configurationService,
     db.getMediaProbeRepository()
   );
-  const torrentSubtitlesService = new TorrentSubtitlesService(downloadService);
+  const torrentSubtitlesService = new TorrentSubtitlesService(mediaLoadClient);
   const torrentWarmupController = new TorrentWarmupController(
-    downloadService,
+    mediaLoadClient,
     async (target, playableKey, subtitleLanguage, signal) => {
       await Promise.allSettled([
         audioPlaybackService.inspect(target, {}, true, signal),
@@ -180,7 +173,7 @@ try {
     mediaService,
     sourceService,
     torrentWarmupController,
-    storageService,
+    mediaLoadClient,
     playbackTargetService,
     sourceHealthService
   );
@@ -194,10 +187,10 @@ try {
     playablePreparationService,
     configurationService,
     torrentWarmupController,
-    storageService,
+    mediaLoadClient,
     audioPlaybackService,
     sourceHealthService,
-    downloadService,
+    mediaLoadClient,
     db.getProgressRepository(),
     db.getContentSourceRepository()
   );
@@ -279,7 +272,7 @@ try {
       mediaService,
       notificationService,
       sourceService,
-      downloadService,
+      mediaLoadClient,
       progressService,
       playbackTargets: playbackTargetService,
       worker: backgroundWorker,
@@ -310,7 +303,6 @@ try {
       listClient.stop();
       sourceService.stop();
       sourcesClientService.stop();
-      mediaLoadClient.stop();
       await backgroundWorker.stop();
       preloadIntentService.close();
       backgroundJobs.close();
@@ -320,7 +312,8 @@ try {
 
       torrentSubtitlesService.close();
       await audioPlaybackService.close();
-      await downloadService.close();
+      // After the drain: open streams read through it.
+      mediaLoadClient.stop();
       await db.close();
       process.exit(0);
     })();
@@ -332,6 +325,7 @@ try {
 
   const app = createRoutes({
     mediaRatingRepository: new MediaRatingRepository(db),
+    contentSourceRepository: db.getContentSourceRepository(),
     authService,
     auditLogService,
     catalogClient,
@@ -346,7 +340,7 @@ try {
     magnetService,
     qrLoginService,
     profileService,
-    downloadService,
+    mediaLoadClient,
     streamService,
     requestService,
     statsService,
@@ -356,7 +350,6 @@ try {
     progressService,
     notificationService,
     subtitlesService,
-    storageService,
     tvPairingService,
   });
 

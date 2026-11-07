@@ -9,7 +9,6 @@ import { mediaLoadConfigurationDefinition } from '@services/media-load/media-loa
 import { vpnConfigurationDefinition } from '@services/security/vpn.configuration';
 import { sourceConfigurationDefinition } from '@services/source/source.configuration';
 import { sourcesConfigurationDefinition } from '@services/sources/sources.configuration';
-import { storageConfigurationDefinition } from '@services/storage/storage.configuration';
 import { subtitlesConfigurationDefinition } from '@services/subtitles/subtitles.configuration';
 import { objectKeys } from '@utils/object.util';
 
@@ -24,7 +23,6 @@ export const services = {
   MEDIA_LOAD: mediaLoadConfigurationDefinition,
   VPN: vpnConfigurationDefinition,
   DOWNLOAD: downloadConfigurationDefinition,
-  STORAGE: storageConfigurationDefinition,
   SUBTITLES: subtitlesConfigurationDefinition,
 };
 

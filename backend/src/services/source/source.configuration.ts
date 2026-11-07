@@ -13,23 +13,6 @@ export const sourceConfigurationDefinition = serviceConfiguration({
       skipUserInteraction: true,
       required: true,
     }),
-    CONTENT_CONNECTION_LIMIT: variable({
-      description: 'Maximum number of connections for peer-to-peer client',
-      example: '100',
-      defaultValue: '100',
-      skipUserInteraction: true,
-      required: true,
-      transform: transforms.number({ min: 1, integer: true }),
-    }),
-    CONTENT_CONNECTION_BUDGET: variable({
-      description:
-        'Total peer connections shared by all torrents. Each torrent gets a share by priority (a stream before background downloads); torrents stop taking new peers beyond their share once the budget is used up.',
-      example: '200',
-      defaultValue: '200',
-      skipUserInteraction: true,
-      required: true,
-      transform: transforms.number({ min: 1, integer: true }),
-    }),
     DOWNLOAD_ALL_SOURCE_FILES: variable({
       description:
         'Reserved for future source metadata processing: download files for all sources instead of only the top 2 per media. This setting currently has no effect.',

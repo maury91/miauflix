@@ -1,12 +1,13 @@
+import type { ContentSourceRepository } from '@repositories/content-source.repository';
 import type { MediaRatingRepository } from '@repositories/media-rating.repository';
 import type { AuthService } from '@services/auth/auth.service';
 import type { QrLoginService } from '@services/auth/qr-login.service';
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import type { ConfigurationService } from '@services/configuration/configuration.service';
-import type { DownloadService } from '@services/download/download.service';
 import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { AudioPlaybackService } from '@services/playback/audio-playback.service';
 import type { PlaybackSessionService } from '@services/playback/playback-session.service';
@@ -20,7 +21,6 @@ import type { SourceMetadataFileService, SourceService } from '@services/source'
 import type { SourceAvailabilityService } from '@services/source/source-availability.service';
 import type { SourcesClientService } from '@services/sources/sources-client.service';
 import type { StatsService } from '@services/stats/stats.service';
-import type { StorageService } from '@services/storage/storage.service';
 import type { StreamService } from '@services/stream/stream.service';
 import type { SubtitlesService } from '@services/subtitles/subtitles.service';
 import type { TvPairingService } from '@services/tv-pairing/tv-pairing.service';
@@ -29,13 +29,13 @@ export interface Deps {
   /** Learns the addresses the server is reached at, for TV apps; absent in tests. */
   tvPairingService?: TvPairingService;
   mediaRatingRepository: MediaRatingRepository;
+  contentSourceRepository: ContentSourceRepository;
   notificationService: NotificationService;
   auditLogService: AuditLogService;
   authService: AuthService;
   catalogClient: CatalogClientService;
   configurationService: ConfigurationService;
   sourcesClientService: SourcesClientService;
-  downloadService: DownloadService;
   listService: ListService;
   listClient: ListClientService;
   magnetService: SourceMetadataFileService;
@@ -53,7 +53,7 @@ export interface Deps {
   profileService: ProfileService;
   progressService: ProgressService;
   subtitlesService: SubtitlesService;
-  storageService: StorageService;
+  mediaLoadClient: MediaLoadClientService;
 }
 
 export interface ErrorResponse {

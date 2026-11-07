@@ -46,9 +46,9 @@ A country can already be configured in the Docker VPN setup; the planned feature
 
 ## Implementation references
 
-- [Encrypted torrent storage](../../backend/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts)
-- [Storage budgeting and cleanup](../../backend/src/services/storage/storage.service.ts)
-- [Download retention and seeding](../../backend/src/services/download/download.service.ts)
+- [Encrypted torrent storage](../../services/media-load/src/chunk-stores/encrypted-chunk-store/encrypted-chunk-store.ts)
+- [Storage budgeting and cleanup](../../services/media-load/src/storage/storage.service.ts)
+- [Download retention and seeding](../../services/media-load/src/engine/download.service.ts)
 - [Storage dashboard](../../frontend/src/pages/settings/StoragePage.tsx)
 - [VPN detection](../../backend/src/services/security/vpn.service.ts)
 - [Docker VPN setup](../../docker-compose.vpn.yml)

@@ -86,7 +86,7 @@ const setupTest = () => {
     magnetService: { getAvailableConcurrency: () => 1 } as never,
     mediaService: mediaService as never,
     sourceService: sourceService as never,
-    downloadService: downloadService as never,
+    mediaLoadClient: downloadService as never,
     progressService: progressService as never,
     playbackTargets,
     notificationService,

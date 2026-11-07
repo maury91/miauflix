@@ -748,21 +748,21 @@ describe('ConfigurationService web configuration actions', () => {
 
   it('reports validation-only success for services without a live test', async () => {
     const configuration = new ConfigurationService();
-    const storage: ConfigurableService = {
+    const download: ConfigurableService = {
       testable: false,
       getStatus: () => ({ status: 'ready' }),
       reload: jest.fn().mockResolvedValue(undefined),
     };
-    configuration.registerService('STORAGE', storage);
+    configuration.registerService('DOWNLOAD', download);
 
-    const result = await configuration.saveServiceConfigs('STORAGE', [
-      { key: 'STORAGE_THRESHOLD', value: '80GB' },
+    const result = await configuration.saveServiceConfigs('DOWNLOAD', [
+      { key: 'PRELOAD_WARM_TARGET', value: '80MB' },
     ]);
 
     expect(result.services[0]).toEqual(
       expect.objectContaining({ success: true, testMode: 'validation' })
     );
-    expect(storage.reload).toHaveBeenCalledTimes(1);
+    expect(download.reload).toHaveBeenCalledTimes(1);
   });
 
   it('rolls back every service when one global validation fails', async () => {
@@ -770,13 +770,13 @@ describe('ConfigurationService web configuration actions', () => {
 
     const result = await configuration.testAndSaveConfigs([
       ...catalogEntries('http://catalog:3001'),
-      { key: 'STORAGE_THRESHOLD', value: 'not-a-size' },
+      { key: 'PRELOAD_WARM_TARGET', value: 'not-a-size' },
     ]);
 
     expect(result.success).toBe(false);
     expect(result.changed).toEqual([]);
     expect(configuration.get('CATALOG_SERVICE_URL')).toBeUndefined();
-    expect(configuration.get('STORAGE_THRESHOLD')).toBeUndefined();
+    expect(configuration.get('PRELOAD_WARM_TARGET')).toBeUndefined();
   });
 
   it('tests all groups before persisting or applying a multi-group save', async () => {
