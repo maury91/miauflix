@@ -1532,6 +1532,29 @@ describe('DownloadService', () => {
       expect(mockStorageService.releaseReservation).toHaveBeenCalledWith(7);
     });
 
+    it('releases remaining shared reservations and logs detachment when one release fails', async () => {
+      const { service, mockStorageService, torrent } = setupSelection();
+      mockStorageService.deleteClaims.mockResolvedValue([7]);
+      (
+        service as unknown as { bitfieldTrackedTorrents: WeakMap<object, Set<number>> }
+      ).bitfieldTrackedTorrents.set(torrent, new Set([7, 8]));
+      const error = new Error('reservation release failed');
+      mockStorageService.releaseReservation.mockRejectedValueOnce(error);
+
+      await service.sweepExpiredClaims();
+
+      expect(mockStorageService.releaseReservation).toHaveBeenCalledWith(8);
+      expect(logger.warn).toHaveBeenCalledWith(
+        'DownloadService',
+        'Failed to release reservation for source 7',
+        error
+      );
+      expect(logger.info).toHaveBeenCalledWith(
+        'DownloadService',
+        'Detached unclaimed torrent for source 7'
+      );
+    });
+
     it('still detaches the other sources when one fails during a sweep', async () => {
       const { service, mockStorageService, torrent } = setupSelection();
       mockStorageService.deleteClaims.mockResolvedValue([3, 7]);

@@ -810,11 +810,14 @@ export class StorageService extends (EventEmitter as new () => TypedEmitter<{
    * again before it downloads.
    */
   async releaseReservation(sourceId: number): Promise<void> {
-    const storage = await this.storageRepository.findBySourceId(sourceId);
-    if (!storage || !storage.reservedBytes) return;
-    const allocatedBytes =
-      (await this.measureAllocatedBytes(storage.location)) ?? storage.allocatedBytes ?? 0;
-    await this.storageRepository.releaseReservation(storage.id, allocatedBytes);
+    await this.withAdmission(async () => {
+      const storage = await this.storageRepository.findBySourceId(sourceId);
+      if (!storage || !storage.reservedBytes) return;
+      if ((await this.storageFiles.findLiveClaims(storage.id)).length) return;
+      const allocatedBytes =
+        (await this.measureAllocatedBytes(storage.location)) ?? storage.allocatedBytes ?? 0;
+      await this.storageRepository.releaseReservation(storage.id, allocatedBytes);
+    });
   }
 
   async setPlaybackActive(sourceId: number, active: boolean): Promise<boolean> {
