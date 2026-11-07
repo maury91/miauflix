@@ -15,6 +15,10 @@ const { service } = createSourcesService({
   encryptionKey: process.env.SOURCES_ENCRYPTION_KEY || undefined,
   useGit: process.env.SOURCES_USE_GIT !== 'false',
   preloadProviders: process.env.SOURCES_PRELOAD_PROVIDERS || undefined,
+  // Anime ids come from public lists online (test environments point at mocks). Unset uses the
+  // public URLs; an empty value turns that lookup off.
+  animeListsUrl: process.env.SOURCES_ANIME_LISTS_URL,
+  aniZipUrl: process.env.SOURCES_ANI_ZIP_URL,
 });
 
 const server = await serve(service, { hostname: HOST, port: PORT });

@@ -234,6 +234,8 @@ describe('MediaLoadClientService', () => {
     const { client } = await setupTest();
     const response = await client.streamFile(target(), 'bytes=10-');
     expect(response.status).toBe(206);
+    // Routes return it after CORS headers were set: Hono must be able to copy them on.
+    expect(() => response.headers.set('access-control-allow-origin', '*')).not.toThrow();
     await expect(response.text()).resolves.toBe('range=bytes=10-');
   });
 

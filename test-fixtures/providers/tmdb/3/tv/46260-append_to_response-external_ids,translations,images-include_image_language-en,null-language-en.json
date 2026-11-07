@@ -1,0 +1,1595 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7350",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"10c667d37cf19787e8844e9ce77c1b17\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5F0HVEgkgP99fEWDjPyikGt9jQi.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2002-10-03",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "http://www.tv-tokyo.co.jp/anime/naruto2002/",
+    "id": 46260,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2007-02-08",
+    "last_episode_to_air": {
+      "id": 1161638,
+      "name": "Departure",
+      "overview": "The exciting conclusion to Naruto. What will become of Gaara, and now that Jiraiya has returned, will Naruto finally leave Konoha to begin his training?",
+      "vote_average": 7.2,
+      "vote_count": 4,
+      "air_date": "2007-02-08",
+      "episode_number": 220,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 4,
+      "show_id": 46260,
+      "still_path": "/kErbglX2IHAESEWHqEDdAmMcELU.jpg"
+    },
+    "name": "Naruto",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 98,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "TV Tokyo",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 220,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ナルト",
+    "overview": "Naruto Uzumaki, a mischievous adolescent ninja, struggles as he searches for recognition and dreams of becoming the Hokage, the village's leader and strongest ninja.",
+    "popularity": 84.497,
+    "poster_path": "/xppeysfvDKVx775MFuH8Z9BlpMk.jpg",
+    "production_companies": [
+      {
+        "id": 3234,
+        "logo_path": "/wTPPnz05ZCQgEQVeSOxTkUCyhr5.png",
+        "name": "Pierrot",
+        "origin_country": "JP"
+      },
+      {
+        "id": 244119,
+        "logo_path": null,
+        "name": "Rakuonsha",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2002-12-21",
+        "episode_count": 2,
+        "id": 54574,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/eihbdO1GLufXWuRH96wLGC3enHC.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2002-10-02",
+        "episode_count": 52,
+        "id": 54573,
+        "name": "Season 1",
+        "overview": "Deep within the Hidden Leaf Village, young ninja Naruto Uzumaki carries sealed inside him the Nine-Tailed Fox Spirit, which once almost destroyed the village. Always an outcast because of his secret, now Naruto battles alongside his teammates Sasuke and Sakura to prove to himself and everyone else that he's the greatest ninja ever. But he's got a long list of challenges to face before he gets there!",
+        "poster_path": "/rZN89Puog5PgKBLnJIyl7vyEReG.jpg",
+        "season_number": 1,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": null,
+        "episode_count": 52,
+        "id": 54567,
+        "name": "Season 2",
+        "overview": "Before the final round of the Chunin Exam, Naruto receives some special training from the legendary Toad Sage, Jiraiya. When the battles resume, Naruto is ready, but what about Sasuke? He's about to face the one ninja no one, not even Naruto thinks he can beat. But in the midst of everything, a sinister plot is set in motion, and the Village Hidden in the Leaves finds itself under attack!",
+        "poster_path": "/yBHXns4g7gWcWuQfOzL4Jekj74e.jpg",
+        "season_number": 2,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": null,
+        "episode_count": 54,
+        "id": 54568,
+        "name": "Season 3",
+        "overview": "Naruto returns from his training journey eager to see his friend Sasuke. But Sasuke has only one thing on his mind: his quest for revenge against his older brother. His unquenchable thirst for power knows no bounds, and soon he is lured from the Leaf Village by Orochimaru's minions, the Sound Four. Determined to get him back, Shikamaru and Naruto put together a team of the top genin in the village to go after him, and the chase begins!",
+        "poster_path": "/tZxX4fgjhAeC4by6wRLXXh8KnJR.jpg",
+        "season_number": 3,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": null,
+        "episode_count": 62,
+        "id": 54564,
+        "name": "Season 4",
+        "overview": "In the Village Hidden in the Leaves, there are few things Naruto and Choji love more than a steaming bowl of Ichiraku ramen, and when the daughter of the owner is kidnapped, they're on the case. Then, missions for the Leaf ninja lead them to the Land of Bears after a fallen meteorite and the Land of Greens to protect a princess. When an evil ninja who's after the princess gets in their way, it's Naruto's life on the line!",
+        "poster_path": "/jN77xxkOJG0dWMQZPu7KHzPFQoZ.jpg",
+        "season_number": 4,
+        "vote_average": 7.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.362,
+    "vote_count": 6182,
+    "external_ids": {
+      "imdb_id": "tt0409591",
+      "freebase_mid": "/m/0n_y9hg",
+      "freebase_id": null,
+      "tvdb_id": 78857,
+      "tvrage_id": 4620,
+      "wikidata_id": "Q25929253",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "NARUTOtoBORUTO"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Naruto",
+            "overview": "Naruto Uzumaki, a mischievous adolescent ninja, struggles as he searches for recognition and dreams of becoming the Hokage, the village's leader and strongest ninja.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Naruto",
+            "overview": "Ein riesiges neunschwänziges Fuchsmonster greift das Dorf Konohagakure an und zerstört alles in seiner Umgebung. Viele tapfere Ninjas sterben bei dem Versuch ihre Familien zu beschützen und das Dorf zu verteidigen. Schließlich schafft es ein einzigartiger Ninja den Dämon zu bändigen und schließt ihn in den Körper eines Neugeborenen ein. Jedoch muss dieser Held, der Hokage der vierten Generation, einen hohen Preis zahlen. Er verliert sein Leben bei der Rettung des Dorfes.\n\n12 Jahre sind nach diesem Unglück vergangen, der Junge Naruto Uzumaki, ein etwas tollpatschiger Ninja, hat gerade seine erste Abschlussprüfung an der Ninja-Akademie bestanden. Nachdem er nun die erste Hürde auf dem Weg ein großer Ninja zu werden bestanden hat, macht er sich mit seinen beiden Freunden auf, um viele Missionen für das Dorf zu erledigen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Naruto",
+            "overview": "Dans le village de Konoha vit Naruto, un jeune garçon détesté et craint des villageois du fait qu'il détienne en lui Kyuubi (démon renard à neuf queues) d'une incroyable force, qui a tué un grand nombre de personnes. Le ninja le plus puissant de Konoha à l'époque, le quatrième Hokage, Minato Namikaze, réussit à sceller ce démon dans le corps de Naruto. Malheureusement il y laissa la vie.\n\nC'est ainsi que douze ans plus tard, Naruto rêve de devenir le plus grand Hokage de Konoha afin que tous le reconnaissent à sa juste valeur. Mais la route pour devenir Hokage est très longue et Naruto sera confronté à un bon nombre d'épreuves et devra affronter de nombreux ennemis pour atteindre son but !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "נארוטו",
+            "overview": "לפני 12 שנים, תקף את כפר העלה הנסתר קיובי; שד שועל אימתני בעל תשעה זנבות. על מנת לעצור את התקפת הקיובי, מחליט ראש הכפר, יונדאימה הוקאגה, להקריב את עצמו ולחתום את הקיובי בילד שזה עתה נולד- אוזומאקי נארוטו. מעשה זה, גרם לתושבי הכפר לפחד ולהתרחק ממנו עד כמה שניתן. על מנת שתושבי הכפר יכירו בו, נארוטו מחליט להיות ההוקאגה. כך, מתחילה דרכו כשינובי ומכאן, הוא ינסה להגשים את חלומותיו ולהפוך להוקאגה של הכפר.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Naruto",
+            "overview": "Naruto es un joven aprendiz de ninja marginado y temido en la Villa Oculta de la Hoja tanto por su carácter hiperactivo y gamberro como por el terrible poder sellado en su interior. Acompañado por el intenso Sasuke y la ingeniosa Sakura, Naruto comienza su aprendizaje decidido a convertirse en maestro Hokage, la más alta distinción entre los ninjas, para ganarse el reconocimiento de los suyos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "ناروتو",
+            "overview": "القرية المخفيّة في الورق هي موطن لأكثر النينجا خفّة وسريّة. لكن قبل اثنتي عشرة سنة، ظهر الثعلب الشيطان ذو التسعة ذيول وبعث الرعب في ساكنيها قبل أن يتمّ كبته وختم روحه في داخل جسد طفلٍ رضيع.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Naruto",
+            "overview": "Naruto è un giovane ninja ribelle ed emarginato a causa di un demone sigillato nel suo corpo. Nonostante sia sempre lasciato ai margini dagli abitanti del Villaggio della Foglia, lui sogna di diventare Hokage per difendere tutti.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Наруто",
+            "overview": "В сериале «Наруто» рассказ ведётся о начинающих ниндзя, только-только окончивших академию и получивших «удостоверения» в виде повязок. Сразу же после окончания герои попадают во множество переделок и опасных ситуаций, находят друзей, встречают врагов.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Naruto",
+            "overview": "Naruto, zdánlivě obyčejný chlapec, který však disponuje několika výjimečnými a nezvyklými schopnostmi. Za prvé je neskutečně zbrklý a také mnohdy velice otravný, za druhé v sobě třímá moc devítiocasé lišky, která v době jeho zrození ohrožovala jeho vesnici.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Naruto",
+            "overview": "Naruto Uzumaki, um ninja órfão e teimoso, vive na Aldeia Oculta da Folha. Momentos antes do seu nascimento, um enorme demónio conhecido como Kyuubi, a Raposa de Nove Caudas, atacou a aldeia e causou o caos. Para pôr fim à fúria da Kyuubi, o líder da aldeia, o 4º Hokage, sacrificou a sua vida e selou a monstruosa besta dentro do recém-nascido Naruto. Rejeitado pela presença da Kyuubi dentro dele, Naruto procura constantemente a aprovação e o reconhecimento para se transformar num Hokage, que é reconhecido como o líder e o mais forte dos ninjas de toda a aldeia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "나루토",
+            "overview": "<주간 소년 점프>에 연재되면서 폭발적인 인기를 모았던 '나루토'를 애니메이션으로 만들었다. 한국에서도 단행본이 나와 많은 인기를 얻고 있다. 나루토와 동료들이 닌자가 되기 위한 모험을 떠나는 흥미진진한 작품. \n\n닌자 마을 중 하나인 나뭇잎 마을. 매일같이 장난만 치며 공부도 뒤쳐져서 졸업조차 불안하기만 한 문제아 나루토. 그런 그이지만 마을에서 제일 가는 닌자, '호카게'가 되고 싶다는 커다란 꿈을 지니고 있다. 하지만, 자신의 출생의 비밀을 안 나루토는 결의를 새롭게 다지고 같은 학교 학생인 사스케, 사쿠라와 함께 닌자로서의 첫 발을 내딛게 된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "『絶対、火影になってやるんだってばよ！！』  木ノ葉の里の落ちこぼれ忍者、うずまきナルトの夢はいつか里一番の忍者「火影」の名を受け継ぐ事。その身に封印された尾獣「九尾の妖狐」ゆえに孤独な過去を背負ったナルトだが、サスケとサクラという仲間を得、上忍カカシ率いる第七班の一員として任務をスタートさせた!!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "火影忍者",
+            "overview": "十多年前一只拥有巨大威力的妖兽“九尾妖狐”袭击了木叶忍者村，当时的第四代火影拼尽全力，以自己的生命为代价将“九尾妖狐”封印在了刚出生的鸣人身上。木叶村终于恢复了平静，但村民们却把鸣人当成像“九尾妖狐”那样的怪物看待，所有人都疏远他。鸣人自小就孤苦无依，一晃十多年过去了，少年鸣人考入了木叶村的忍者学校，结识了好朋友佐助和小樱。佐助是宇智波家族的传人之一，当他还是小孩的时候他的哥哥——一个已经拥有高超忍术的忍者将他们家族的人都杀死了，然后投靠了一直想将木叶村毁灭的大蛇丸，佐助自小就发誓要超越哥哥，为家族报仇。鸣人他们在忍者学校得到了教官卡卡西的精心指点，在他的帮助下去迎接成长中的一次又一次挑战！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Naruto",
+            "overview": "De verhalen van drie jonge ninja's, Naruto Uzumaki, Sasuke Uchiha en Sakura Haruno, terwijl ze getraind worden tot echte ninja's.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Naruto",
+            "overview": "În altă lume, ninja sunt puterea supremă, iar în Satul Ascuns în Frunze trăiesc cel mai furtunat ninja din țară. Cu doisprezece ani mai devreme, înfricoșătorul Vulpe cu coadă nouă a terorizat satul și a luat multe vieți înainte ca acesta să fie supus și spiritul său sigilat în corpul unui băiețel. Băiatul acela, Naruto Uzumaki, a crescut până a devenit un ninja-în-antrenament care este mai interesat de farse decât de studierea ninjutsu .. dar Naruto este hotărât să devină cel mai mare ninja din toată lumea!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Naruto",
+            "overview": "Σε έναν άλλο κόσμο, η νίντζα είναι η απόλυτη δύναμη, και στο Χωριό Κρυμμένο στα Φύλλα ζει ο πιο απότομος νίντζα στη χώρα. Δώδεκα χρόνια νωρίτερα, η τρομακτική Fox-Nine Tailed τρομοκρατούσε το χωριό και σκότωσε πολλές ζωές προτού υποταχθεί και το πνεύμα της σφραγίστηκε μέσα στο σώμα ενός μωρού. Αυτό το αγόρι, ο Naruto Uzumaki, μεγάλωσε για να γίνει ninja-in-training που ενδιαφέρεται περισσότερο για φάρσες παρά για τη μελέτη του ninjutsu .. αλλά ο Naruto είναι αποφασισμένος να γίνει ο μεγαλύτερος ninja ποτέ!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Naruto",
+            "overview": "Momentos antes do nascimento de Naruto Uzumaki, um enorme demônio conhecido como o Kyuubi, a Raposa de Nove Caudas, atacou o vilarejo da folha oculta Konoha, causando destruição. Para pôr fim à devastação de Kyuubi, o líder da aldeia, o quarto Hokage, sacrificou sua vida e selou o monstruoso animal dentro do recém-nascido Naruto. Agora, Naruto é um ninja hiperativo e cabeça dura que ainda vivem em Konoha. Evitado pelos demais habitantes por causa da Kyuubi dentro dele, Naruto se esforça para encontrar seu lugar na aldeia, enquanto o seu ardente desejo de se tornar o Hokage de Konoha o leva a conhecer alguns grandes novos amigos, e também alguns inimigos mortais.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Наруто",
+            "overview": "Дія аніме відбувається у світі, що дуже схожий на середньовічну феодальну Японію. На території великої країни у потаємних місцях сховано кілька селищ, що воюють одне з одним. У цих селищах у ролі військових виступають спеціально навчені люди - ніндзя-шинобі. Вони являють собою окрему верству населення і дуже схожі на самураїв. Головний герой аніме - Наруто Узумакі - веселої вдачі хлопець з Селища, Прихованого у Листі. Коли він щойно народився, на це селище напав могутній девятихвостий демон-лис. Ціною страшних втрат демона вдалося перемогти, але його силу прийшлося запечатати всередині немовляти - Наруто. Наруто живе, навіть не підозрюючи про це. Але деякі люди, хто пережив ті страшні часи, знають цю таємницю і стороняться Наруто, вважаючи його уособленням демона, і побоюючись, що прийде час і жахливий девятихвостий лис звільниться на свободу. Не розуміючи причини, Наруто відчуває, що до нього ставляться не так, як до інших дітей. Це його, звичайно ж, не влаштовує. І він вирішує шляхом наполегливих тренувань стати найкращим з усіх ніндзя селища - хокаге, щоб усім довести, що він заслуговую на пошану. Тим часом Наруто і його друзі-однолітки щойно закінчили академію і одержали «посвідчення» у вигляді пов'язок. Зразу ж після закінчення герої потрапляють в безліч небезпечних ситуацій, знаходять друзів, зустрічають ворогів...",
+            "homepage": "",
+            "tagline": "Шлях ніндзя починається зараз!"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Naruto",
+            "overview": "Naruto, je na prvý pohľad obyčajný chlapec, avšak disponuje niekoľkými výnimočnými a nezvyklými schopnosťami. Za prvé je neskutočne zbrklý a tiež často velice otravný, za druhé v sebe nosí moc Deväťchvostej líšky, ktorá v dobe jeho narodenia ohrozovala jeho dedinu. Obe tieto vlastnosti z neho robia hrdinu rovnomenného seriálu, z ktorého sa stala mánia s jedenástimi sezónami, tromi filmami a daľším seriálom NARUTO: SHIPPÛDEN.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Наруто",
+            "overview": "Наруто е млад нинджа, който мечтае да стане Хокаге. Въпреки че носи в себе си могъщ демон, той се бори да защитава селото си и да става все по-силен с всяко изпитание.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Naruto",
+            "overview": "Naruto Uzumaki jest dwunastoletnim wojownikiem ninja z wioski Konohagakure. Kiedy był niemowlęciem, Hokage Yondaime - przywódca Ukrytej Wioski Liścia - stoczył walkę z potężnym demonem. Aby uratować swój klan przed zagładą, Yondaime uwięził demona w ciele małego Naruto. Odkąd młody ninja dowiedział się, jak straszny sekret ukrywali przed nim mieszkańcy wioski, dąży uparcie do jednego celu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Naruto",
+            "overview": "Bộ phim kể về cậu về quá trình lớn lên và cuộc đời của cậu bé những nguy hiểm mà cậu đã gặp phải kèm theo đó là một động lực và niềm tin phi thường , một tâm hồn trong sáng chứa đựng những trò nghịch ngợm bướng bỉnh nhưng đầy hồn nhiên . Cùng với việc xoay quanh những người đã bỏ mạng do tranh giành quyền lực cộng với sự đau thương , mất mát mà Naruto đã trải qua.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Naruto",
+            "overview": "Narra la historia de un ninja adolescente hiperactivo, impredecible y ruidoso llamado Naruto Uzumaki, quien aspira a convertirse afanosamente en Hokage, el máximo grado ninja en su aldea, con el propósito de ser reconocido como alguien importante dentro de la misma.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Naruto",
+            "overview": "Naruto, içine hapsedilmiş kyubii (9 kuyruklu efsanevi tilki) yüzünden Konoha halkı tarafından yaratık olarak görülüp kenara itilmiş bir çocuktur. Naruto'nun bütün hedefi Ninja akademisini bitirip Hokage olmaktır. Akademi'nin ilk bölümünü bitirip genin olarak mezun olan Naruto, arkadaşları Sakura ve Sasuke ile chunin olabilmek için yeni eğitimlerine başlarlar. Yaramaz ve bir o kadar heyecanlı bir kişiliğe sahip olan Naruto, içindeki kyuubinin gücünü yavaş yavaş öğrenecektir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Naruto",
+            "overview": "12 évvel ezelőtt egy kilenc farkú rókadémon(Kyuubi) tartotta rettegésben a Hidden Leaf falut (Konohagakure). A démon olyan erős volt, hogy egyetlen farkának egyetlen suhintásával hegyeket tudod eltüntetni vagy szökőárokat tudott előidézni. A szörny rengeteg ember mészárolt le, azonban a negyedik Hokagenak, saját életét feláldozva, sikerült elzárnia őt egy újszülött fiú testébe. Ez a fiú Uzumaki Naruto volt. Származása jelenleg még nem ismert.\n\nA negyedik Hokaget (Yondaime Hokage) hősként ünnepelték a Kyubi elzárásáért. Ő azt szerette volna, hogy Naruto is ebben a megtiszteltetésben nőjön fel mint a kilenc farkú \"tárolója\". Azonban a falú lakói magát a démont látták a fiúban, ezért féltek tőle és kiközösítették.\n\nBár a harmadik Hokage megtiltotta a falu lakóinak, hogy beszéljenek arról, amit tudnak. Még a saját gyerekeiknek sem mondhatták el a 12 évvel ezelőtt történteket. Azonban szüleik Naruto felé tanusított viselkedésükből a gyerekek is elkezdtek ellenségesen viselkedni a fiúval. Naruto így barátok, család és elismerés nélkül nőtt fel. Nem erőltethette azt, hogy az emberek barátkozannak vele, így máskép kellett magát észrevetettni. Ezt csínytevésekkel próbálta elérni. Ez azonban megváltozott, amikor hivatalosan is nindzsa lett. Ezt a Többszörös Árnyék Klón technika (Multiple Shadow Clone Technique (Kage Bunshin no Jutsu)) alkalmazásával érte el, amikor megmentette mesterét Umuino Irukat az áruló nindzsa Mizuki karmaiből. Ez a kaland két dologra ébresztette rá Narutot, az egyik, hogy benne lakozik a kilenc farkú rókadémon, a másik pedig, hogy volt aki törödött vele (Iruka és a harmadik Hokage). Naruto nindzsává válása indítja el az események folyamát.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "火影忍者",
+            "overview": "一隻名為九尾妖狐的強大魔獸襲擊了忍者五大國之一的火之國木葉忍者村。為了解決這場災難，木葉忍者村的首領「第四代火影」將九尾妖狐封印在剛出生的兒子漩渦鳴人體內，讓鳴人成為九尾妖狐的祭品之力；鳴人的父親在戰鬥中殉職身亡，而原本已經退休的第三代火影則再次成為木葉忍者村的領導者。鳴人從小就被木葉忍者村的村民們視為破壞村子奪走無數人命的九尾妖狐的化身而無視並排擠他。由於第三代火影禁止任何人提及這起事件，鳴人對於九尾妖狐一無所知，因此鳴人為了得到大家的認同而以成為歷代最強的火影為目標。直到12年後，背叛村子的忍者水木向鳴人透露了真相。隨後鳴人在戰鬥中擊敗了水木，得到他的老師伊魯卡的認同。\n\n不久之後，鳴人終於成為一名忍者，與他視為競爭對手的宇智波佐助以及暗戀的春野櫻一起組成了由上忍旗木卡卡西帶領的第七班。佐助是宇智波一族的倖存者，在小時候，他的哥哥宇智波鼬將除了自己以外的族人全部殺死，自從那時候起佐助就以殺死哥哥為目標；小櫻是喜歡佐助的少女；卡卡西是木葉忍者村第一的高手，人稱「寫輪眼的卡卡西」。鳴人在第七班開始忍者的生涯並執行各式各樣的任務。\n\n第七班在經過數次任務，包括在波之國進行的重大任務之後，卡卡西認同第七班能參加可以晉升到中忍級別並執行困難任務的中忍考試。在考試期間，被通緝的逃亡忍者大蛇丸入侵了木葉忍者村並殺死了第三代火影。傳說的三忍之一的自來也拒絕擔任「第五代火影」的職位，並與鳴人一同尋找了他所推薦適合擔任「第五代火影」的綱手。中間與尋求鋼手治療自己的大蛇丸發生衝突並得知大蛇丸之所以想得到佐助是因為佐助所擁有的寫輪眼的力量。\n\n在尋找綱手的過程中，遇到目的是九尾妖狐的「曉」的成員宇智波鼬與干柿鬼鮫，而鼬是屠殺宇智波一族的兇手，佐助遇到鼬想要為一族復仇不成反被打成重傷。對此感到無力的佐助離開村子而前去找大蛇丸尋求能殺死鼬的力量。在佐助離開村子時小櫻前去處阻止卻被打暈，鋼手從小櫻得知事情經過後派出包含鳴人在內的五名忍者找回佐助，但是鳴人最後還是無法奪回佐助。鳴人與小櫻還是不放棄佐助。為了三年後能將佐助帶回木葉忍者村，鳴人成為自來也的徒弟並離開木葉忍者村進行修行之旅，而小櫻則成為綱手的徒弟。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "นารูโตะ นินจาจอมคาถา",
+            "overview": "ในอีกโลกหนึ่งนินจาเป็นผู้มีพลังสูงสุดและในหมู่บ้านที่ซ่อนอยู่ในใบไม้จะมีนินจาที่ซ่อนตัวอยู่ในดินแดน เมื่อสิบสองปีก่อนสุนัขจิ้งจอกเก้าหางที่น่ากลัวได้เข้ามาคุกคามหมู่บ้านและอ้างว่ามีหลายชีวิตก่อนที่มันจะถูกปราบและวิญญาณของมันถูกผนึกไว้ในร่างของเด็กทารก เด็กชายคนนั้นนารูโตะอุซึมากิเติบโตขึ้นจนกลายเป็นนินจาฝึกหัดที่สนใจการเล่นแผลง ๆ มากกว่าการเรียนวิชานินจา .. แต่นารูโตะมุ่งมั่นที่จะเป็นนินจาที่ยิ่งใหญ่ที่สุดตลอดกาล!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "火影忍者",
+            "overview": "一隻名為九尾妖狐的強大魔獸襲擊了忍者五大國之一的火之國木之葉忍村。為瞭解決這場災難，木之葉忍村的首領「第四代火影」將九尾妖狐封印在剛出生的兒子渦卷鳴門體內，讓鳴門成為九尾妖狐的人柱力；鳴門的父親在戰鬥中殉職身亡，而原本已經退休的第三代火影則再次成為木之葉忍村的領導者。鳴門從小就被木之葉忍村的村民們視為破壞村子奪走無數人命的九尾妖狐的化身而無視並排擠他。由於第三代火影禁止任何人提及這起事件，鳴門對於九尾妖狐一無所知，因此鳴門為了得到大家的認同而以成為歷代最強的火影為目標。直到 12 年後，背叛村子的忍者瑞木向鳴門透露了真相。隨後鳴門在戰鬥中擊敗了瑞木，得到他的老師伊留加的認同。\n\n不久之後，鳴門終於成為一名忍者，與他視為競爭對手的內輪佐助以及暗戀的春野櫻一起組成了由上忍畑鹿驚帶領的第七班。佐助是內輪一族的倖存者，在小時候，他的哥哥內輪鼬太知將除了自己以外的族人全部殺死，自從那時候起佐助就以殺死哥哥為目標；阿櫻是喜歡佐助的少女；鹿驚是木之葉忍村第一的高手，人稱「寫輪眼的鹿驚」。鳴門在第七班開始忍者的生涯並執行各式各樣的任務。\n\n第七班在經過數次任務，包括在波之國進行的重大任務之後，鹿驚認同第七班能參加可以晉升到中忍級別並執行困難任務的中忍考試。在考試期間，被通緝的逃亡忍者大蛇丸入侵了木之葉忍村並殺死了第三代火影。傳説的三忍之一的自來也拒絕擔任「第五代火影」的職位，並與鳴門一同尋找了他所推薦適合擔任「第五代火影」的綱手。中間與尋求鋼手治療自己的大蛇丸發生衝突並得知大蛇丸之所以想得到佐助是因為佐助所擁有的寫輪眼的力量。\n\n在尋找綱手的過程中，遇到目的是九尾妖狐的「曉」的成員內輪鼬太知與幹柿鬼鮫，而鼬太知是屠殺內輪一族的兇手，佐助遇到鼬太知想要為一族復仇不成反被打成重傷。對此感到無力的佐助離開村子而前去找大蛇丸尋求能殺死鼬太知的力量。在佐助離開村子時阿櫻前去處阻止卻被打暈，鋼手從阿櫻得知事情經過後派出包含鳴門在內的五名忍者找回佐助，但是鳴門最後還是無法奪回佐助。從此第七班名存實亡，鳴門與阿櫻只能被迫與其他班合作完成任務。但鳴門與阿櫻還是不拋棄佐助。為了能將佐助帶回木之葉忍村，鳴門成為自來也的徒弟，而阿櫻則成為綱手的徒弟。\n\n在經歷一聯串的任務後，自來也終於同意訓練鳴門。最後鳴門與自來也一起離開木之葉忍村，踏上修行之路。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Naruto",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Naruto",
+            "overview": "Di dunia lain, ninja adalah kekuatan tertinggi, dan di Desa Tersembunyi di Daun hiduplah ninja paling sembunyi-sembunyi di negeri itu. Dua belas tahun sebelumnya, Rubah Ekor Sembilan yang menakutkan meneror desa dan merenggut banyak nyawa sebelum ditundukkan dan rohnya disegel di dalam tubuh bayi laki-laki. Anak laki-laki itu, Naruto Uzumaki, telah tumbuh menjadi seorang ninja-in-training yang lebih tertarik pada lelucon daripada mempelajari ninjutsu .. tapi Naruto bertekad untuk menjadi ninja terhebat yang pernah ada!",
+            "homepage": "",
+            "tagline": "Karna itulah jalan ninjaku!!"
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Naruto",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "ناروتو",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Naruto",
+            "overview": "En companyia de l'intens Sasuke i de l'enginyosa Sakura, en Naruto comença el seu aprenentatge decidit a convertir-se en mestre Hokage, la més alta distinció entre els ninges. Des de l'examen d'accés a Chunin fins al pelegrinatge amb l'ermità pervertit Jiraiya, passant pels enfrontaments amb les forces del shinobi renegat Orochimaru, acompanya en Naruto a perseguir el seu somni en un camí ple d'aventures trepidants, aliats valerosos i enemics mortals amb habilitats extraordinàries, combats explosius, traïció i pèrdua...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "ნარუტო",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Nekoliko trenutaka pre Narutovog rođenja Uzumakija, ogromni demon poznat kao Kiuubi, Devetorepa lisica, napao je Konohagakure, selo Skriveni list i napravio pustoš. Da bi zaustavio divljanje Kiuubija, vođa sela, Četvrti Hokage, žrtvovao je svoj život i zapečatio čudovišnu zver u novorođenom Narutu. Sada je Naruto hiperaktivni i zglavkast nindža koji još uvek živi u Konohagakureu. Izbegavan zbog Kiuubi-ja u sebi, Naruto se bori da pronađe svoje mesto u selu, dok ga goruća želja da postane Hokage Konohagakure-a vodi ne samo do nekih sjajnih novih prijatelja, već i do nekih smrtonosnih neprijatelja.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5F0HVEgkgP99fEWDjPyikGt9jQi.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mpsYIytXhDXjI9yYC1Fp1S3PxsS.jpg",
+          "vote_average": 7.542,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6sHC954QPhrrLsT6WPkSie9hVmI.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xuJ0F9RfKvVSJNDg2usurQ9WvY5.jpg",
+          "vote_average": 4.884,
+          "vote_count": 13,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/koY8N9Y8IcLlb2eJXz50X1hFUL5.jpg",
+          "vote_average": 3.954,
+          "vote_count": 11,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e7NQewvh3E4vB96ebsbCSE4TKx9.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6U9hdsCKDcnbYyObDCu6dvYvIxF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9fwJ5ZOF14XjxDsIPDvEvnIo9r0.jpg",
+          "vote_average": 2.066,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c0tA3OONvFiWP3R0d0TMR4k90XE.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vFMXmS8uS83bINXJp2ct3F2iRZM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dW9FQRgTDBdH36FtDbC2qCEKjtQ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fHzEhl6YUfZ9UPVB8rLU8Ed0ws0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iWc6rzyWeUgW61JZNgIxBLD3nsG.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 768,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qSkN8iour1QcbAoyHOoypBfkX5C.jpg",
+          "vote_average": 1.222,
+          "vote_count": 4,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wsiIC64XQGNyoVkFnaKeIXqo6L6.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a53AqsSeEZtNJvrgw1oDEQC3a51.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oycArCLGgtWyUz5aho7ojFZkgjN.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vIlgB85n3ACnovXTVMZu9bOwEy2.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eYa5Uzo4qNsh9b1Es3R0wTT0b3e.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/asfRfZ54XB17aQVkw1bPxXLUOSt.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ct6ESwz9SucvaEsWl7qomxU5ulm.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7cSwHTssdr6OtIQfcGhy6Aks4u2.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rEknxXD9DhqirmNnfFCELgW9Z1w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wEfXyIwfz2lzK3GUfWzxfK2LBtB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wMiwMh9cBrktmjK6ZzZbbGnLI8c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rEvXodeiJjHvabCFRuA3fjNqaK5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mAynhY8v5er11DIITEEZd6qNhvl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rskgTNJp7rRQVf2m32YVY9lBaVZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ksNU2e8IHZbCT6BHPVT9ttE39C2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kwgontMZJNlnGags6aY6ah5xYg8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kb3569xmuhNLvvnZAzSojVK5U4e.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4f3uYjpIkjDQOZDqgj9D3frfTE9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5eQcLNJSuHPEpw0zTFKk8Sn8DMp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iezCLPpH0SaRO5WTgRcWWX96hPY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mJOKhcqhhK2IeheFMx0DBepw6nm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/suul3CDKkp0uzMwpqpVXz84yCwo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2IjeHal5hXgUq65aln1jTmHwgZV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cyGRw3rNFmtmEoeWYr6RaEiItTr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7AcRoXpgerkDqVQdcmSad93GWmH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.194,
+          "height": 540,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kaZ99sfclCKWnUgmW7AYrok03Am.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1185
+        },
+        {
+          "aspect_ratio": 2.348,
+          "height": 420,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v7fljsac2l3ofOAccr7cleFQpuU.svg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 986
+        },
+        {
+          "aspect_ratio": 0.753,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xjYyOebufVEsmE3THNzKX8zpVPZ.png",
+          "vote_average": 0.166,
+          "vote_count": 0,
+          "width": 1627
+        },
+        {
+          "aspect_ratio": 2.207,
+          "height": 888,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ukMQmLf4I2Hjp8fmCVLMHe7MAhn.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1960
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xppeysfvDKVx775MFuH8Z9BlpMk.jpg",
+          "vote_average": 5.476,
+          "vote_count": 21,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ekkT8myO7RcmcR7odMAXOC3b5IZ.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1GVfX7kqIbQBp38Riiy1QLQkhJQ.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v2Djp0QUEEgeJ5AJUdmqxnA067p.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.66,
+          "height": 1559,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7gvdcNRLXyZexj8X50LEXn04ka8.jpg",
+          "vote_average": 3.468,
+          "vote_count": 16,
+          "width": 1029
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cHrpI0GcFWti4y39Sfjs61pv3Kk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gkCghQ2MyUIAMzXEB2D7POwpbnm.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uHx9NvFe9oSvHsXPZxksU6Vn0Lk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4rc2wRkeP3kiah5yCZaaXCGSG1l.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vvKktHcT4cZZSicM4vA1H5GlRot.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.702,
+          "height": 1047,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4S3oYxhXZennGsmBuD1c6sVbWRS.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1039,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e0UTdIvmIOGw3BzeJkWCyCb5Xy.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/74bfqYi5q5Ji4hxXFb9jYpWwlco.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jXB7wlKtCuzeRRemYLK8hQrGIHw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dttGEdOUpNetPXHWnsv5uETsnEh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xk7Iaqav1Wxmc5ZElLrqvm8EE6W.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3MIrM7yU1YL1pknJsLsCuBoVZZw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hKhuT00SKH0ocDUOPJSw6ewr4d0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Asv6ornwVeMxKUdA5ySLMrgENwy.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5YW0RIlVAhyp3pGtugyNuvk2TWT.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2NLyAAM2mcupCaC5giCMr83LfAq.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oJnJL6Ex0snDMq8OLdBpdodmeuy.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2562,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/92sMvJ9DmQfpNz3cJlRxp0NVKLD.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1920,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ui1EEUJcqo7aWCMXthSPjGGIind.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1357
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8MjGoDDAiXOBb9jYixZQJBClDr.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zwoKbQ21Sg5vBAOjvgTUMz6rD8n.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cwyTTZSMkEQcSvoYUNC4235Ut3c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1448
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1920,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/txqpxk7TgmtgygZcGFgMMq6wAaY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1357
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cOs1ysa7NoPngLRpsb4VqjvoG8O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nv5ePYDt77JS7UwbI27JksvLx6P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sVnJYLYeZSwe5vPXAgH5C57ikr3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d4csyPaPwt8XJYRYtkcxwvJZvYY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yBzz1lzK00dCMLyvuWLmmgPWtsX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hxkX75I9qcrPNrXxPVZ7LaWNUVy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ssfU50DGe38fun9IpT3Jt8TKIZa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pxpMJyaVe4p0mKlMgJlHeHtybtz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/P3aunyTJBKaFbJQDcNWnZYtxk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1jhcdHuP0nRApl0mXqnDdDtunmU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/luNVwJxF9sK7OpmdOrmkRLv4sCs.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wOefJXI2O4TyJ70hNMcEpmqtACB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jGhtkUUYaluNh0kbpRxh6AIATXB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y1rxkSuRagwvEgQeHMYOEuJJtZW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5kctcuogKlREHeuGMdya6RbpURu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AfxrAVwyOL56bHg8WTftFVRk6De.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8cPCA7QGwfTkER4xWUCFsDhx71h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2999,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lVeT4JvioFZI80Q5PjNUMFM0NGx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yUAi6TohRjVwKwwsAV0FXH18mMa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mPjjzB28eGyB1xhZtLpeATQyKFJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/22ZtMA0ErvnnjX7qj2H3xBS5Pi3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tfvy5JzBa5cWBCIZ8asu9dkFSoN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uuNqmfUsVVqb9STcw454LhlLuV4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1999
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6naG1RpBTTlOUyF1SdECFJO91SX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3xAXmnmbPeXg4ln29WMQo0KMKNk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.682,
+          "height": 2506,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9PHyB8kZRe8dhhXaTTQy907ig4U.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1708
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uvK01hG3vPJOVCJu83qRP0XUQ8B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.665,
+          "height": 1106,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xWI3JzZkUfWGpCgwFKpox8H966o.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        }
+      ]
+    }
+  }
+}

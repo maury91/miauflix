@@ -1,0 +1,539 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=20610",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"14ce8fa109c9869bfb2e687d46d6e501\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5obfnImCRn0LzQnRb4jxuCJRlxd.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-06",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://kyoranreijo-pr.com",
+    "id": 312850,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-03",
+    "last_episode_to_air": {
+      "id": 7894938,
+      "name": "Project Magivision Kickoff Meeting",
+      "overview": "Nia settles into her new life at the academy.",
+      "vote_average": 7,
+      "vote_count": 3,
+      "air_date": "2026-11-03",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 312850,
+      "still_path": "/7GrOPHa0MIeRKllIxmlYoI9LdMT.jpg"
+    },
+    "name": "Nia Liston: The Merciless Maiden",
+    "next_episode_to_air": {
+      "id": 7894939,
+      "name": "The Academy Martial Arts Tournament Is On!",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-10",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 312850,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 25,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "凶乱令嬢ニア‧リストン 病弱令嬢に転生した神殺しの武人の華麗なる無双録",
+    "overview": "A dying girl is saved when a fallen warrior’s soul is placed in her body, giving her new life, healing powers, and an unstoppable thirst for battle that brings chaos in its wake.",
+    "popularity": 9.2162,
+    "poster_path": "/vsEJaex0keh3dmBC9sVymiKfSwA.jpg",
+    "production_companies": [
+      {
+        "id": 220408,
+        "logo_path": "/qFsAtRzNrwj6aIvf2oGjz8zC7yE.png",
+        "name": "KONAMI animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3363,
+        "logo_path": "/sj3vD7n63bTCih7bcf6GnWvRf1Q.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 43682,
+        "logo_path": "/3OTFn2ZFNtfPdPCamfmdyrUy1fI.png",
+        "name": "SANKYO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 8157,
+        "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
+        "name": "jeki",
+        "origin_country": "JP"
+      },
+      {
+        "id": 313067,
+        "logo_path": null,
+        "name": "Konami Digital Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11725,
+        "logo_path": "/3OZxd70DZ1LbVelmZK8mR5FIXxO.png",
+        "name": "VAP",
+        "origin_country": "JP"
+      },
+      {
+        "id": 192573,
+        "logo_path": "/naTpOY8AjRtgBw0JXafrhAD8ZBT.png",
+        "name": "BS Nippon Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 14981,
+        "logo_path": "/fIi2iU63SyDSIx6u61vERxlmsET.png",
+        "name": "PIA Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 210353,
+        "logo_path": "/sG6AWiwUB3J7IU6iXzTI7ezXKu9.png",
+        "name": "Hobby Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3466,
+        "logo_path": "/lmCg0zarmM52wrmsZRUY0QlPKLh.png",
+        "name": "movic",
+        "origin_country": "JP"
+      },
+      {
+        "id": 196955,
+        "logo_path": "/w1X5OkrhSyjMXs6vprJa27DRFk6.png",
+        "name": "TO BOOKS",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-07",
+        "episode_count": 7,
+        "id": 555175,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2026-10-06",
+        "episode_count": 25,
+        "id": 498034,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/qcD7qC8i69yIwHmxv2FO185kd8k.jpg",
+        "season_number": 1,
+        "vote_average": 6.5
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.9,
+    "vote_count": 8,
+    "external_ids": {
+      "imdb_id": "tt41296544",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 473266,
+      "tvrage_id": null,
+      "wikidata_id": "Q137917221",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "kyoranreijo_pr"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Kyouran Reijou Nia Liston: Byoujaku Reijou ni Tensei shita Kamigoroshi no Bujin no Karei Naru Musouroku",
+            "overview": "Una gran heroína yace invicta en su lecho de muerte, lamentando no haber encontrado nunca a un enemigo capaz de derrotarla. Nunca tuvo la intención de encontrar su destino en otro lugar que no fuera el campo de batalla, y su pacífico fallecimiento la hace desear desesperadamente que las cosas hubieran sido diferentes... Pero cuando de repente recobra el conocimiento en el cuerpo de la joven y frágil Nia Liston, tiene una lucha totalmente nueva por delante. Nia es una niña enfermiza, lo que significa que tiene un largo camino por recorrer antes de estar en forma para pelear. Sin embargo, ahora que se le ha dado una segunda oportunidad en la vida, está decidida a conseguir lo que quiere. ¡Esta vez va a vivir —y morir— por la batalla! ¡Abran paso a la Doncella Despiadada!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Nia Liston: The Merciless Maiden",
+            "overview": "A dying girl is saved when a fallen warrior’s soul is placed in her body, giving her new life, healing powers, and an unstoppable thirst for battle that brings chaos in its wake.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Nia Liston: The Merciless Maiden",
+            "overview": "Uma grande heroína jaz invicta em seu leito de morte, lamentando nunca ter encontrado um oponente capaz de derrotá-la. Ela jamais imaginou encontrar seu fim em outro lugar que não fosse o campo de batalha, e essa morte tranquila a faz desejar desesperadamente que tudo pudesse ter sido diferente… Mas, quando desperta subitamente no corpo da jovem e frágil Nia Liston, uma nova luta surge à sua frente. Nia é uma criança doente, o que significa que ainda tem um longo caminho a percorrer até alcançar a forma ideal de combate. Agora que recebeu uma segunda chance na vida, ela está determinada a conseguir o que deseja. Desta vez, ela vai viver (e morrer) pela batalha!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "亂世千金倪亞·利斯頓 轉生為嬌弱千金的弒神武人華麗無雙錄",
+            "overview": "擁有最強前世的轉生千金，第二人生也要大鬧天下!!\n\n「既然人難免一死，我寧可死在戰鬥中。」過去曾有個達成弒神偉業的大英雄。\n\n強大過頭的她在臨死之際，仍夢想著能遇見殺得了自己的強大對手──想不到在死亡的另一端等待著她的，竟是轉生成為嬌弱貴族千金的嶄新人生!?\n\n她在未來的世界成為有著美麗容貌，身體卻過於孱弱的千金小姐倪亞‧利斯頓，獲得第二人生後，仍追求與強者的邂逅，愉悅地投身於接連不斷的戰場之中！\n\n「──啊哈哈！還愣什麼呢！再不快點擺好架式，可就只能任我蹂躪了唷！」\n\n由美如天使的亂世千金主演的最強無雙傳說，在此揭開序幕!!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "乱世千金倪亚·利斯顿转生为娇弱千金的弑神武人华丽无双录",
+            "overview": "拥有最强前世的转生千金，第二人生也要大闹天下！！“既然人难免一死，我宁可死在战斗中。”过去曾有个达成弑神伟业的大英雄。强大过头的她在临死之际，仍梦想着能遇见杀得了自己的强大对手──想不到在死亡的另一端等待着她的，竟是转生成为娇弱贵族千金的崭新人生！？她在未来的世界成为有着美丽容貌，身体却过于孱弱的千金小姐倪亚·利斯顿，获得第二人生后，仍追求与强者的邂逅，愉悦地投身于接连不断的战场之中!“啊哈哈！还愣着干什么呢！再不快点摆好架式，可就只能任我蹂躏了！”由美如天使的乱世千金主演的最强无双传说，在此揭开序幕！！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "흉란영애 니아 리스톤 병약한 영애로 전생한 살신 무인의 화려한 무쌍담",
+            "overview": "'이왕이면, 싸우다가 죽고 싶었다' 한때 신살을 달성해 낸 대영웅은, 죽음 직전에 자신을 죽일 수 있을 정도로 강한 상대와 만나는 것을 꿈꿨다. 하지만 대영웅을 기다리고 있었던 병약한 귀족 영애로 전생하는 것이었다?! 아름다우며 병약한 영애 니아 리스톤이 된 그녀는, 제2의 인생에서도 강자를 찾아 즐겁게 싸움에 몸을 던져 나간다! 거기에다 매직비전의 탤런트 활동에서도 학원에서도 크게 날뛰었는데?! 이것은 언젠가 '흉란영애'라고 불리는 최강 아가씨의 화려한 싸움의 기록.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Безжалостная леди Ния Листон: Единственная в своём роде история воительницы-богоубийцы, перевоплотившейся в болезненную аристократку",
+            "overview": "Лежащая на смертном одре, казалось бы, без единого шанса на выздоровление, молодая Ния Листон вскоре умирает от своей болезни. Не в силах потерять надежду, ее родители отчаянно ищут лекарство даже в самых отдаленных местах, что приводит к появлению человека в капюшоне, утверждающего, что он может помочь Ниа избавиться от ее болезни. Но вместо того, чтобы вылечить ее, человек в капюшоне пересаживает душу погибшего героя, который был непобедим в битве, в хрупкое тело девушки.Получив второй шанс на жизнь в образе Нии, героиня полна решимости восстановить силы своего нового тела, используя технику, известную как ци, чтобы выявить и устранить болезнь в корне. Поскольку ее энтузиазм и жажда сражений также передались ей, Ниа горит желанием вернуться к исследованию мира. Однако беспокойная душа героини жаждет найти достойного противника, который сможет победить ее на поле боя, сея хаос везде, где Ниа может появиться.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Nia Liston: The Merciless Maiden",
+            "overview": "U progu śmierci nieustraszona i niepokonana wojowniczka ulega odniesionym ranom i odradza się w słabym, chorowitym ciele Nii Liston. Pragnąc znaleźć przeciwnika, który dorówna jej umiejętnościom, dziewczyna postanawia odzyskać dawną siłę. Będzie jednak musiała najpierw odkryć tajemnice swojego nowego ciała, jeśli chce ponownie osiągnąć szczyt swoich możliwości.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Nia Liston: The Merciless Maiden",
+            "overview": "Am Rande des Todes erliegt eine unerschrockene und unbesiegte Kriegerin ihren Verletzungen und wird im zerbrechlichen, kränklichen Körper von Nia Liston wiedergeboren. Auf der Suche nach einem Gegner, der ihr ebenbürtig ist, macht sich das junge Mädchen auf, um ihre Kraft zurückzugewinnen. Doch zuvor muss sie die Geheimnisse ihres neuen Körpers entschlüsseln, wenn sie ihre einstige Pracht zurückerlangen will.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "かつて神殺しをも成し遂げた大英雄は、死の間際、自分を殺せるほど強い相手と出会うことを夢に見る。だが、待ち受けていたのは病弱な貴族令嬢への転生だった！？美しくも病弱な令嬢ニア・リストンとなった彼女は、第二の人生でも強者を求めて楽しく戦いに身を投じてゆく！さらに、魔法映像マジックビジョンのタレント活動でも学院生活でも大暴れ！？これは、いずれ「凶乱令嬢」と呼ばれる最強お嬢様の華麗なる戦いの記録。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Nia Liston: The Merciless Maiden",
+            "overview": "Aux portes de la mort, une guerrière intrépide et invaincue, succombe à ses blessures et se réincarne dans le corps frêle et maladif de Nia Liston. À la recherche d’un adversaire capable de se hisser à sa hauteur, la jeune fille entreprend de recouvrer sa force, en dépit de ce nouveau corps dont elle va devoir percer les secrets si elle souhaite retrouver sa splendeur d’antan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Kyouran Reijou Nia Liston",
+            "overview": "Una gran heroína yace invicta en su lecho de muerte, lamentando no haber encontrado jamás un enemigo capaz de derrotarla. Nunca imaginó que su destino sería otro que el campo de batalla, y su apacible final la hace desear desesperadamente que las cosas hubieran sido diferentes... Pero cuando de repente despierta en el cuerpo de la joven y frágil Nia Liston, le espera una nueva batalla. Nia es una niña enfermiza, lo que significa que le queda un largo camino por recorrer antes de estar en plena forma. Sin embargo, ahora que ha recibido una segunda oportunidad en la vida, está decidida a conseguir lo que quiere. ¡Esta vez vivirá y morirá por la batalla! ¡Abran paso a la Doncella Despiadada!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "คุณหนูจอมคลั่ง เนีย ลิสตัน",
+            "overview": "นีอา ลิสตัน วีรสตรีที่เคยสังหารได้แม้แต่เทพเจ้า ป่วยด้วยโรคที่รักษาไม่หาย มีชายลึกลับที่ช่วยเธอได้แต่กลับย้ายวิญญาณเธอไปในร่างเด็กผู้หญิงลูกขุนนางที่อ่อนแอในโลกอนาคต เธอควบคุมพลังลมปราณเพื่อเสริมความแข็งแกร่ง และยังกระหายในการต่อสู้ที่แข็งแกร่งในยุคสมัยใหม่",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "亂世千金倪亞‧利斯頓轉生為嬌弱千金的弒神武人華麗無雙錄",
+            "overview": "「既然人難免一死，我寧可死在戰鬥中。」\n\n過去曾有個達成弒神偉業的大英雄，在臨死之際，仍夢想著能遇見殺得了自己的強大對手。然而，等待她的，卻是轉生成為嬌弱貴族千金的嶄新人生！？\n\n轉生成美麗卻孱弱的千金倪亞·利斯頓的她，在第二輪人生中仍投身於尋求與強者打一場愉快的戰鬥！此外，無論是魔法影像的演藝活動，還是學院生活，她也掀起了一陣轟動！？\n\n這是將在日後被稱為「亂世千金」的最強大小姐的華麗戰鬥紀錄。\n\n在「成為小說家吧」累計 8000 萬點閱、系列累計突破 240 萬部！如天使般的亂世千金所展開的最強無雙故事就此開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Nia Liston: Thiếu Nữ Tàn Nhẫn",
+            "overview": "Một cô gái sắp chết được cứu sống khi linh hồn của một chiến binh sa ngã được đặt vào cơ thể cô, mang lại cho cô sự sống mới, sức mạnh hồi phục và cơn khát chiến đấu không thể ngăn cản, để lại hỗn loạn trong bước đường đi của nó.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Nia Liston, la spietata nobildonna - Cronache delle grandiose gesta dell'impareggiabile guerriera ammazzadèi reincarnatasi in una giovane nobildonna cagionevole di salute",
+            "overview": "Una grande eroina del passato, capace di uccidere gli dèi, sogna di morire in combattimento per mano di un degno avversario. Tuttavia, muore prima che il suo desiderio si realizzi e la sua anima viene reincarnata nel corpo della giovane Nia Liston, una gracile nobildonna coinvolta nelle attività della magivisione.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.777,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5obfnImCRn0LzQnRb4jxuCJRlxd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1919
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1o0WfBIMn8zCcuAYlg2MJJDBUff.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 743,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aNqi7yWUU1blc8kvtfzrkrrYWEE.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1320
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.486,
+          "height": 253,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/riCiNoSEkHZzHtMg1RUXPxgGcgc.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 629
+        },
+        {
+          "aspect_ratio": 3.886,
+          "height": 490,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8DP1vKw7gOdjgiSwSkPTubZlah9.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1904
+        },
+        {
+          "aspect_ratio": 3.88,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9wDZQwpm2qd4THRz9CRtvBEpp8p.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3725
+        },
+        {
+          "aspect_ratio": 4.324,
+          "height": 398,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rOqrplgINFfugqgXzsTmXzP0Pye.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1721
+        },
+        {
+          "aspect_ratio": 3.886,
+          "height": 490,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/94Qfdts1hHjL0e1EYZCIQ3yvpWT.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1904
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2106,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ek1sAxgcuJHuYvqaK0dmon1XUkf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1404
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2032,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dI2Hw5WZwylKh62kSIy1tPKtQty.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1355
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vsEJaex0keh3dmBC9sVymiKfSwA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2PWBQjOHNFe71OClTxwEgxDdJrf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2xZIY3rxJJzoNLvBvOsAQgMkCBT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1512
+        }
+      ]
+    }
+  }
+}

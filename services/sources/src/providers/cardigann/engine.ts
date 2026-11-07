@@ -3,7 +3,14 @@ import type { ProviderSetting } from '@miauflix/service-contracts';
 import { type HttpClient, HttpError } from '../../http/http-client';
 import { normalizeHash } from '../../normalize/magnet';
 import { resolveHashes } from '../torrent-hash';
-import type { Provider, ProviderCaps, ProviderPage, ProviderQuery, RawResult } from '../types';
+import type {
+  Param,
+  Provider,
+  ProviderCaps,
+  ProviderPage,
+  ProviderQuery,
+  RawResult,
+} from '../types';
 import { deriveCaps } from './capabilities';
 import type { CardigannDefinition, CardigannField } from './definition';
 import {
@@ -129,6 +136,9 @@ export class CardigannProvider implements Provider {
         TVDBID: query.tvdbid ?? '',
         Season: query.season ?? '',
         Ep: query.ep ?? '',
+        AniDBAID: query.anidbAid ?? '',
+        AniDBEID: query.anidbEid ?? '',
+        AniListID: query.anilistId ?? '',
         Type: query.kind === 'movie' ? 'movie' : query.kind === 'tv' ? 'tvsearch' : 'search',
         Page: query.page ?? 1,
       },
@@ -251,6 +261,8 @@ export class CardigannProvider implements Provider {
         date: date?.toISOString(),
         imdbid: (result.imdbid ?? result.imdb)?.match(/tt\d+/)?.[0],
         category: result.category ? this.categoryName(result.category) : undefined,
+        // Miauflix extension: a curated pick (SeaDex) as `best` or `alt`.
+        release: result.release === 'best' || result.release === 'alt' ? result.release : undefined,
       });
     }
     return results;
@@ -401,10 +413,17 @@ export class CardigannProvider implements Provider {
   }
 
   async test(ctx: { signal: AbortSignal; http: HttpClient }) {
-    const kind = this.caps.movie.length ? 'movie' : this.caps.tv.length ? 'tv' : null;
-    if (!kind) return { success: false, message: 'This definition does not support movies or TV' };
+    const kind = this.caps.movie.length
+      ? 'movie'
+      : this.caps.tv.length
+        ? 'tv'
+        : this.caps.anime.length
+          ? 'anime'
+          : null;
+    if (!kind)
+      return { success: false, message: 'This definition does not support movies, TV or anime' };
     try {
-      const page = await this.search({ kind, q: 'test' }, ctx);
+      const page = await this.search(sampleQuery(kind, this.caps[kind]), ctx);
       return {
         success: true,
         message: `Reachable; ${page.results.length} results for a sample search`,
@@ -416,4 +435,21 @@ export class CardigannProvider implements Provider {
       };
     }
   }
+}
+
+/** A search the provider supports, for its connection test: text when it can, else a known id. */
+function sampleQuery(kind: ProviderQuery['kind'], caps: readonly Param[]): ProviderQuery {
+  if (caps.includes('q')) return { kind, q: 'test' };
+  // Fight Club, and Cowboy Bebop (AniDB anime 23, AniList 1).
+  const samples: ProviderQuery[] = [
+    { kind, imdbid: 'tt0137523' },
+    { kind, tmdbid: 550 },
+    { kind, anidbAid: 23 },
+    { kind, anilistId: 1 },
+  ];
+  return (
+    samples.find(sample =>
+      Object.keys(sample).some(key => key !== 'kind' && caps.includes(key as Param))
+    ) ?? { kind, q: 'test' }
+  );
 }

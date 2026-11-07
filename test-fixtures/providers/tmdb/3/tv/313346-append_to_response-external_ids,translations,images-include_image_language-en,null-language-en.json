@@ -1,0 +1,607 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12693",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c41fc00d645aa6afdc4ecc5d79342ccf\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/j7KrALvuZgBdwVZkOIRc9Xaeyt4.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-10-07",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://sh-anime.shochiku.co.jp/chiifuyo-anime",
+    "id": 313346,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-04",
+    "last_episode_to_air": {
+      "id": 7916309,
+      "name": "A Girl Who Wants You to Know She Really Can Cook Despite the Lack of Cooking Scenes Draws and Wreathes Her Sword in Flames.",
+      "overview": "Margaret loses her mind after reading a note that reads, \"Lily Flambert killed us.\"",
+      "vote_average": 10,
+      "vote_count": 1,
+      "air_date": "2026-11-04",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 313346,
+      "still_path": "/rLYIMKTuBdSC4bwzoPuCkAD8lVG.jpg"
+    },
+    "name": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+    "next_episode_to_air": {
+      "id": 7916312,
+      "name": "Episode 6",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-11",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 313346,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 98,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "TV Tokyo",
+        "origin_country": "JP"
+      },
+      {
+        "id": 252,
+        "logo_path": "/zFZ5KCuvx7K0vP9XgGcidfXjuUd.png",
+        "name": "TV Aichi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 822,
+        "logo_path": "/gOlBe3BMo5WJHeUlWBBfKawgdiO.png",
+        "name": "TVQ",
+        "origin_country": "JP"
+      },
+      {
+        "id": 824,
+        "logo_path": "/6foQmoPac7WCDnDuDbuCZklmDuA.png",
+        "name": "TV Osaka",
+        "origin_country": "JP"
+      },
+      {
+        "id": 938,
+        "logo_path": "/f12LLqBVFnDVIY8HidhWEitI77c.png",
+        "name": "TVh",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2064,
+        "logo_path": "/qi4L1ffRabF5LJqVimCaaUYpeSj.png",
+        "name": "TSC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "追放されたチート付与魔術師は気ままなセカンドライフを謳歌する。 ～俺は武器だけじゃなく、あらゆるものに『強化ポイント』を付与できるし、俺の意思でいつでも効果を解除できるけど、残った人たち大丈夫？～",
+    "overview": "Rein spent years enhancing his guildmates’ gear with magic, only to be expelled the moment he enchanted everything. Unfazed, Rein steals back his magic, pours it into his own sword, and makes the best of his newfound freedom as he sets off as an adventurer. Along the way, Rein gathers a band of fellow outcasts and together they fight monsters and carve out their place in an enchanted world.",
+    "popularity": 16.9042,
+    "poster_path": "/rncb111IIBmIIO9I9ENW0Xc8mca.jpg",
+    "production_companies": [
+      {
+        "id": 20867,
+        "logo_path": "/8xKcaZSIRdsR616LQ7nMptjkUvg.png",
+        "name": "P.A.WORKS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 192,
+        "logo_path": "/93eAKlnQecDdMtucfOprzcjMw9V.png",
+        "name": "Shochiku",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3034,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "TV Tokyo",
+        "origin_country": "JP"
+      },
+      {
+        "id": 98553,
+        "logo_path": "/qqyXcZlJQKlRmAD1TCKV7mGLQlt.png",
+        "name": "Crunchyroll",
+        "origin_country": "JP"
+      },
+      {
+        "id": 60197,
+        "logo_path": "/D5B8l99tlFJGoMpYJk1kqxYdey.png",
+        "name": "Good Smile Company",
+        "origin_country": "JP"
+      },
+      {
+        "id": 246644,
+        "logo_path": "/3Eyvj6OBmcRM9kKNfJRy4qSVPhA.png",
+        "name": "JR Tokai Agency",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-07",
+        "episode_count": 12,
+        "id": 498972,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/rncb111IIBmIIO9I9ENW0Xc8mca.jpg",
+        "season_number": 1,
+        "vote_average": 10
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 9.7,
+    "vote_count": 6,
+    "external_ids": {
+      "imdb_id": "tt43691412",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 473642,
+      "tvrage_id": null,
+      "wikidata_id": "Q138023781",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "chi_fuyo"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "強化付与魔術師のレインは、ある日突然ギルドを追放される。だが彼は絶望するどころか、「今なら何でもできる！な」と、これまでギルドメンバーの装備に付与した大量の強化ポイントを回収し、冒険者として新たな道を歩き始める。彼のもとに集まるのは、仲間を皆殺しにされ心を閉ざした天才冒険者、家族を奪われた戦士、人殺しとして育てられた暗殺者――誰もが、簡単には消えない傷を抱えた者ばかり。それでもレインは、過去も傷も否定せず、まっすぐに明るく受け入れていく。舞台となるのは、ウージー短機関銃やパチンコ、ヤクザまで存在する異色のファンタジー世界。しかしこの世界では、便利な科学技術に頼るほど魔力が落ち、冒険者は弱くなってしまう。知性を持つ凶悪なモンスターが跋扈し、裏社会ではアウトローたちが欲望と野心を剥き出しにしながら、謀略と策略を張り巡らせる。理想も正義も簡単に踏み潰される世界で、冒険者たちは己の魔力と信念だけを武器に戦い抜く。これは、居場所を失った者たちが、自分の生き方を掴み取っていく物語。レインとその仲間たちの、破天荒で気ままなセカンドライフが、今始まる――!!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+            "overview": "Rein, o Encantador, é um mago de suporte capaz de aprimorar armas e armaduras. Mas quando é demitido de sua guilda pelo simples motivo de já ter encantado tudo o que eles possuíam, ele decide retomar o poder para si mesmo... literalmente! Rein reverte todos os encantamentos que já aplicou nos equipamentos de seus companheiros de guilda, recuperando os pontos de bônus para si mesmo. Mas será que ele realmente não tem nada melhor para encantar com eles do que algumas roupas simples e uma espada de cobre?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Exiled Cheat Enchanter Enjoys a Leisurely Second Life: I Can Imbue \"Enhancement Points\" on Everything, Not Just Weapons, and I Can Cancel the Effects Anytime I Want, But Are the People Who Remained Really Okay?",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+            "overview": "Rein spent years enhancing his guildmates’ gear with magic, only to be expelled the moment he enchanted everything. Unfazed, Rein steals back his magic, pours it into his own sword, and makes the best of his newfound freedom as he sets off as an adventurer. Along the way, Rein gathers a band of fellow outcasts and together they fight monsters and carve out their place in an enchanted world.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+            "overview": "Rein hat die Ausrüstung seiner Gildenmitglieder jahrelang verzaubert, nur um verstoßen zu werden, als er damit fertig ist. Rein stiehlt seine Magie zurück, leitet sie in sein Schwert und versucht stattdessen sein Glück als Abenteurer. Unterwegs schart er eine Gruppe anderer Verstoßener um sich. Gemeinsam kämpfen sie gegen Monster und suchen ihren Platz in einer Welt voller Zauber.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "被放逐的作弊赋予魔术师享受随心所欲的第二人生。",
+            "overview": "强化赋予魔术师雷恩，某天突然被公会流放。但他非但没有绝望，反而觉得“现在我什么都能做了”，于是收回了之前赋予在公会成员装备上的大量强化点数，作为冒险者踏上了新的人生道路。聚集在他身边的，有同伴被杀尽而封闭内心的天才冒险者、被夺走家人的战士、被作为杀人机器培养长大的暗杀者——全都是些背负着无法轻易抹去创伤的人。即便如此，雷恩也毫不否定她们的过去和伤痛，坦率而开朗地接纳了她们。故事的舞台，是一个连乌兹冲锋枪、弹珠机甚至黑道都存在的另类奇幻世界。然而在这个世界里，越是依赖便利的科学技术，魔力就会越低，冒险者也会变得越弱。拥有智慧的凶恶怪物横行霸道，在地下社会，法外狂徒们赤裸裸地展现出欲望与野心，各种阴谋与策略交织。在这个理想与正义被轻易践踏的世界中，冒险者们仅以自己的魔力和信念为武器奋战到底。这是一个失去归宿的人们，自己去抓住生存方式的故事。雷恩和同伴们破天荒且随心所欲的第二人生，现在开始了！！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+            "overview": "Rein l'Enchanteur est un mage capable d'améliorer les armes et les armures. Mais lorsqu'il se fait renvoyer de sa guilde pour la simple raison qu'il a déjà enchanté tout ce qu'elle possède, il décide de reprendre tous les sorts qu’il a transmis à ses ex-compagnons et les affecte à son propre équipement. En chemin, Rein rassemble une bande de parias comme lui et, ensemble, ils explorent le monde.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "추방된 치트 부여 마술사는 제멋대로 세컨드 라이프를 구가한다.",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "被放逐的作弊賦予魔術師享受隨心所欲的第二人生。",
+            "overview": "賦予魔術師雷恩突然被公會逐出。他非但沒有絕望，反而收回以往施加在同伴裝備上的大量強化點數，以冒險者身份開啟新生活。聚集在他身邊的，盡是身負重創的異類：心靈封閉的天才、失去親人的戰士，自幼被培育成殺手的暗殺者。雷恩都溫柔地接納了他們的過去與傷痕。在這個存在烏茲衝鋒槍與黑道，過度依賴科技還會削弱魔力的幻想世界中。面對凶惡魔物與黑幫的陰謀，失意者們憑魔力與信念戰鬥，正式展開破天荒的第二人生！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "被放逐的作弊賦予魔術師享受隨心所欲的第二人生。",
+            "overview": "賦予魔術師雷恩突然被公會逐出。他非但沒有絕望，反而收回以往施加在同伴裝備上的大量強化點數，以冒險者身份開啟新生活。「現在的話什麼都能辦到！」\n\n聚集在他身邊的，盡是身負重創的異類：心靈封閉的天才、失去親人的戰士，自幼被培育成殺手的暗殺者——無論是誰，都抱著難以治癒的傷痛。即使如此，雷恩都溫柔地接納了他們的過去與傷痕。\n\n在這個存在烏茲衝鋒槍與黑道，過度依賴科技還會削弱魔力的幻想世界中。面對凶惡魔物與黑幫的陰謀，失意者們憑魔力與信念戰鬥，正式展開破天荒的第二人生！\n\n這是一群失去歸宿的人們，重新掌握屬於自己生存方式的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Rein bracht jaren door met het verbeteren van de uitrusting van zijn gildegenoten met magie, maar werd van school gestuurd op het moment dat hij alles betoverde. Onaangedaan steelt Rein zijn magie terug, giet die in zijn eigen zwaard en maakt het beste van zijn hervonden vrijheid terwijl hij op pad gaat als avonturier. Onderweg verzamelt Rein een groep mede-outcasts en samen vechten ze tegen monsters en vinden ze hun plek in een betoverde wereld.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+            "overview": "Rein, o Encantador, é um mago de suporte capaz de aprimorar armas e armaduras. Mas quando é demitido de sua guilda pelo simples motivo de já ter encantado tudo o que eles possuíam, ele decide retomar o poder para si mesmo... literalmente! Rein reverte todos os encantamentos que já aplicou nos equipamentos de seus companheiros de guilda, recuperando os pontos de bónus para si mesmo. Mas será que ele realmente não tem nada melhor para encantar com eles do que algumas roupas simples e uma espada de cobre? Venha embarcar nessa jornada de nível \"trapaça\" a partir da origem mais comum!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Laid-Off Cheat-Granting Mage Enjoys a Second Lease on Life",
+            "overview": "Rein el Encantador es un mago de apoyo con la habilidad de mejorar armas y armaduras. Pero cuando lo expulsan de su gremio por la simple razón de que ya ha encantado todo lo que poseen, decide recuperar el poder, ¡literalmente! Rein recuerda todos los encantamientos que alguna vez aplicó al equipo de sus compañeros, recuperando los puntos extra para sí mismo. Pero, ¿acaso no tiene nada mejor que encantar con ellos que un simple traje y una espada de cobre...?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Изгнанный читер-чародей наслаждается беззаботной второй жизнью: Я могу накладывать «очки усиления» не только на оружие, но и на что угодно, в любой момент отменяя эффект по собственной воле, а с теми, кто остался, всё нормально?",
+            "overview": "Рейн владеет магией зачарования, позволяющей усиливать снаряжение. Когда вся экипировка его гильдии получает достаточно улучшений, бывшие соратники исключают мага из своих рядов. Возмущённый таким решением, Рейн забирает ману, которую прежде вложил в их предметы.\n\nВозвращённую силу зачарователь направляет в случайный медный меч, наделяя его десятью тысячами очков усиления и превращая в чрезвычайно мощное оружие. Хотя у Рейна совсем нет боевого опыта, он способен создавать чрезмерно сильное снаряжение из самых разных вещей. После изгнания маг начинает свободную жизнь искателя приключений.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Chi Fuyo: La segona vida del mag de suport",
+            "overview": "En Rain és un mag de suport capaç de posar \"punts de reforç\" a qualsevol arma, armadura o objecte.\n\nPer un caprici del mestre del seu gremi, \"L'Ullal del Rei Bèstia\", el fan fora. Com a venjança, en Rain retira tots els reforços que havia posat als seus antics companys i amb aquest poder comença una segona vida com a aventurer al gremi \"Cristall Blau\", on coneix la recepcionista Nina, la mestra Elsie i l'aventurera de rang S, la Lily.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "จอมเวทผู้ถูกปลดกับชีวิตใหม่แสนอิสระ",
+            "overview": "เรนหาเลี้ยงชีพด้วยการเสริมพลังอุปกรณ์ให้มีแต้มโบนัส ณ กิลด์นักผจญภัย จนกระทั่งวันหนึ่ง หัวหน้ากิลด์ไล่เขาออกโดยไม่มีปี่มีขลุ่ย",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Rein bracht jaren door met het verbeteren van de uitrusting van zijn gildegenoten met magie, maar werd van school gestuurd op het moment dat hij alles betoverde. Onaangedaan steelt Rein zijn magie terug, giet die in zijn eigen zwaard en maakt het beste van zijn hervonden vrijheid terwijl hij op pad gaat als avonturier. Onderweg verzamelt Rein een groep mede-outcasts en samen vechten ze tegen monsters en vinden ze hun plaats in een betoverde wereld.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Pháp Sư Ban Cheat Bị Sa Thải Tận Hưởng Cuộc Đời Thứ Hai",
+            "overview": "Rein đã dành nhiều năm cường hóa trang bị cho đồng đội bằng phép thuật, chỉ để bị đuổi khỏi bang hội ngay khi anh phù phép xong mọi thứ. Không nao núng, Rein lấy lại phép thuật của mình, đổ nó vào thanh kiếm của bản thân và tận dụng tối đa sự tự do mới khi lên đường làm mạo hiểm giả. Trên đường đi, Rein tập hợp một nhóm những kẻ bị ruồng bỏ như mình và cùng nhau họ chiến đấu với quái vật, khẳng định vị trí của mình trong một thế giới đầy phép thuật.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j7KrALvuZgBdwVZkOIRc9Xaeyt4.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/msusxF6ZPGnQmTGXU9iC4UJOohs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l1ypuYOFqNMNRm802JBP3hxozhc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1078,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u2jxboENc1aT5zFYbN4M0BO6M3U.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1918
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ncR2YaeC0eDjZSYErYAOWFyacFh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.464,
+          "height": 483,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/icq6GuO0cxICLRiL6RYlen7h3UW.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1190
+        },
+        {
+          "aspect_ratio": 2.32,
+          "height": 513,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3UXqEDcf2LRe5EOohSUyCC9Kq3E.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1190
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.706,
+          "height": 1814,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xcPmuJPyO3epOKmS9upthFSWetq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rncb111IIBmIIO9I9ENW0Xc8mca.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1814,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iRkFny4BWIw5nNkAbfph5UMxw18.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1814,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ixZkxGsVKQO1nRnCQwkG4i4nAwe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jFGqk1PzNzDarkoMDkKYJUtJY0f.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6ns3vUJEA52MN4kB14gJQTflB0B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ouZb4Yd6D9Lc5xjXKJhItYMn9CK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lmtGpIlx5Li56CK0X9MkGVWWkSc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7l9XrbES3OtlVFGuiGa7m5Cbq7h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/q7sAo06hiVTH4uCWRsDM7PBN0XN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

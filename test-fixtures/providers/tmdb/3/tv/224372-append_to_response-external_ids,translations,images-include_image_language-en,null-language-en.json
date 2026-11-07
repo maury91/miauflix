@@ -1,0 +1,1642 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=3608",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b9ec565c3bd5c48a93b05f5ba79bf086\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/7mkUu1F2hVUNgz24xO8HPx0D6mK.jpg",
+    "created_by": [
+      {
+        "id": 237053,
+        "credit_id": "696e40d53f6de5a4fff9528a",
+        "name": "George R.R. Martin",
+        "original_name": "George R.R. Martin",
+        "gender": 2,
+        "profile_path": "/1A7W0L9dZz0rCN1oj6h8YUvusdN.jpg"
+      },
+      {
+        "id": 1652516,
+        "credit_id": "696e40d643e339ddfdf95239",
+        "name": "Ira Parker",
+        "original_name": "Ira Parker",
+        "gender": 2,
+        "profile_path": "/nT54vjithriZtxaTCKXv8vQgTLw.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-01-18",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://www.hbo.com/content/a-knight-of-the-seven-kingdoms",
+    "id": 224372,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-02-22",
+    "last_episode_to_air": {
+      "id": 6613706,
+      "name": "The Morrow",
+      "overview": "As Ashford mourns a great loss, Dunk considers his next move...and whether to keep Egg as his squire.",
+      "vote_average": 8.339,
+      "vote_count": 84,
+      "air_date": "2026-02-22",
+      "episode_number": 6,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 31,
+      "season_number": 1,
+      "show_id": 224372,
+      "still_path": "/9VixNtswlKTzjSD0oFmT6eTcC9e.jpg"
+    },
+    "name": "A Knight of the Seven Kingdoms",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "HBO",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 6,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "A Knight of the Seven Kingdoms",
+    "overview": "A century before the events of Game of Thrones, two unlikely heroes wandered Westeros: a young, naive but courageous knight, Ser Duncan the Tall, and his diminutive squire, Egg. Set in an age when the Targaryen line still holds the Iron Throne and the last dragon has not yet passed from living memory, great destinies, powerful foes, and dangerous exploits await these improbable and incomparable friends.",
+    "popularity": 24.4229,
+    "poster_path": "/k8yARbD9iYn2nRX2HvsopfKDN2r.jpg",
+    "production_companies": [
+      {
+        "id": 286657,
+        "logo_path": null,
+        "name": "Friendly Wolf Pictures",
+        "origin_country": "US"
+      },
+      {
+        "id": 180958,
+        "logo_path": null,
+        "name": "GRRM",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-01-18",
+        "episode_count": 6,
+        "id": 336816,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/2Zfw5Pe8Ztgzs0vFxy7LeC1wARE.jpg",
+        "season_number": 1,
+        "vote_average": 8.4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "A tall tale that became legend.",
+    "type": "Scripted",
+    "vote_average": 8.424,
+    "vote_count": 1270,
+    "external_ids": {
+      "imdb_id": "tt27497448",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 433631,
+      "tvrage_id": null,
+      "wikidata_id": "Q120277524",
+      "facebook_id": "100044315715123",
+      "instagram_id": "gameofthrones",
+      "twitter_id": "GameOfThrones"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "A century before the events of Game of Thrones, two unlikely heroes wandered Westeros: a young, naive but courageous knight, Ser Duncan the Tall, and his diminutive squire, Egg. Set in an age when the Targaryen line still holds the Iron Throne and the last dragon has not yet passed from living memory, great destinies, powerful foes, and dangerous exploits await these improbable and incomparable friends.",
+            "homepage": "",
+            "tagline": "A tall tale that became legend."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "El caballero de los Siete Reinos",
+            "overview": "Un siglo antes de los acontecimientos de \"Juego de Tronos\", dos héroes improbables vagaban por Poniente: un joven e ingenuo, pero valiente caballero, Ser Duncan el Alto, y su pequeño escudero, Egg. Ambientada en una época en la que el linaje Targaryen aún ostenta el Trono de Hierro y el recuerdo del último dragón aún no ha desaparecido de la memoria viva, grandes destinos, poderosos enemigos y peligrosas hazañas aguardan a estos improbables e incomparables amigos.",
+            "homepage": "",
+            "tagline": "Un gran relato que se convirtió en leyenda"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "El caballero de los Siete Reinos",
+            "overview": "Ambientada en una época en la que el linaje Targaryen todavía ostenta el Trono de Hierro y el recuerdo del último dragón aún no ha desaparecido de la memoria viva, grandes destinos, enemigos poderosos y hazañas peligrosas esperan a estos improbables e incomparables amigos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Рыцарь Семи Королевств",
+            "overview": "Вестерос за 100 лет до борьбы Дейенерис Таргариен за Железный Трон. Наивный, но отважный рыцарь сир Дункан Высокий знакомится с мальчиком по имени Эгг, который скрывает тайну своего происхождения. Сделав мальчишку своим оруженосцем, Дункан вместе с ним отправляется в путешествие по континенту, периодически попадая в различные передряги.",
+            "homepage": "",
+            "tagline": "«Путешествие вдали от трона»"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "세븐킹덤의 기사",
+            "overview": "왕좌의 게임이 일어나기 백여 년 전, 타르가르옌 가문이 철왕좌를 지키고, 최후의 드래곤에 대한 기억이 살아 있던 시절. 웨스테로스를 떠돌던 영웅이 있었다. 젊고 순진하지만 용맹한 기사 던칸 경과 그의 작은 종자 에그. 이 둘의 앞엔 운명과 강적, 그리고 모험이 기다리고 있는데.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Έναν αιώνα πριν τα γεγονότα του Game of Thrones, ήταν ο Σερ Ντάνκαν και ο ακόλουθός του, ο Εγκ.",
+            "homepage": "",
+            "tagline": "Ένα παραμύθι που έγινε θρύλος."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een eeuw vóór de gebeurtenissen van 'Game of Thrones' dwaalden twee onwaarschijnlijke helden door Westeros... een jonge, naïeve maar moedige ridder, Ser Duncan  the Tall,, en zijn kleine schildknaap, Egg. Het speelt zich af in een tijdperk waarin de Targaryen-linie nog steeds de ijzeren troon in handen heeft en de herinnering aan de laatste draak nog niet uit de levende herinnering is verdwenen. Grote lotsbestemmingen, krachtige vijanden en gevaarlijke heldendaden wachten allemaal op deze onwaarschijnlijke en onvergelijkbare vrienden.",
+            "homepage": "",
+            "tagline": "Een fantastisch verhaal dat een legende werd."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Du monde de Westeros nous vient une histoire improbable centrée sur les aventures d'un duo inattendu : le chevalier Ser Duncan et son écuyer l'Œuf.",
+            "homepage": "",
+            "tagline": "D'une grande histoire est née une légende"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "O Cavaleiro dos Sete Reinos",
+            "overview": "Ambientado em uma época em que a linhagem Targaryen ainda detém o Trono de Ferro e a memória do último dragão ainda não desapareceu da memória dos vivos, grandes destinos, inimigos poderosos e façanhas perigosas aguardam esses amigos improváveis ​​e incomparáveis.",
+            "homepage": "",
+            "tagline": "Um conto à altura de uma lenda."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "七王国的骑士",
+            "overview": "在疯王被推翻的一百年前，两位不太可能成为英雄的人物闯入了维斯特洛：高个骑士邓肯和他的侍从伊戈。在这个时代，坦格利安家族仍然掌握着铁王座，人们对最后一条龙的记忆也还尚未消失，伟大的命运、强劲的敌人和充满危险的英勇行为都在等待着这对意料之外又不可比拟的朋友。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Рицарят на Седемте кралства",
+            "overview": "Действието се развива един век преди събитията от „Игра на тронове\" проследява двама герои, които скитат из Вестерос - младият, наивен, но и смел рицар, сър Дънкан Високия, и неговият дребен оръженосец Ег. По това време на Железния трон седи родът Таргариен и споменът за последния дракон все още не е изчезнал от паметта на живите. А героите дори не подозират, че ги очакват велики съдби, мощни врагове и смели подвизи.",
+            "homepage": "",
+            "tagline": "Приказка, която се превърна в легенда"
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "A hét királyság lovagja",
+            "overview": "A Trónok harca eseményei előtt egy évszázaddal két botcsinálta hős kóborolt Westerosban... Egy fiatal, naiv, de bátor lovag, Ser Duncan, a Magas és kis termetű fegyverhordozója, Egg. Ebben a korban, amelyben a Vastrón még a Targaryeneké és az utolsó sárkány emléke még élénken él az emberek emlékezetében, nagy célok, hatalmas ellenségek és veszélyes kalandok várnak erre a két különös és összetartó barátra.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "فارس من الممالك السبع",
+            "overview": "يبدأ الفارس المتجول سير دنكان الطويل، المعروف باسم دنك، رحلته في أرجاء ويستروس بحثًا عن المجد والفرص، وبرفقته صديقه الصغير إيغ، الذي يطمح إلى أن يصبح فارسًا رغم صغر سنه. يواجه الاثنان خلال رحلاتهما تحديات ومواقف تكشف لهما عالم النبلاء والفروسية بكل ما فيه من صراعات ومؤامرات. وبينما يحاول دنك الالتزام بمبادئ الشرف وحماية من يحتاج إليه، يخفي إيغ سرًا مهمًا يجعل رحلتهما أكثر خطورة، لتتطور علاقتهما وسط عالم مليء بالطموح والصراع على السلطة.",
+            "homepage": "",
+            "tagline": "قصة خيالية تحولت إلى أسطورة."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Vitez sedam kraljevstava",
+            "overview": "Smješteno u doba kada Targaryeni još uvijek vladaju Željeznim prijestoljem, a sjećanje na posljednjeg zmaja još nije izblijedjelo. Velike sudbine, moćni neprijatelji i opasne pustolovine čekaju ove neobične i neusporedive prijatelje.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "七王國的騎士",
+            "overview": "在《權力遊戲》故事發生的一百年前，兩位不太可能成為英雄的人物闖入了維斯特洛：高個騎士鄧肯和他的侍從伊戈。",
+            "homepage": "",
+            "tagline": "一段奇談，已成傳奇"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ナイト・オブ・ザ・セブン・キングダムズ",
+            "overview": "『ゲーム・オブ・スローンズ』の物語より約100年前。ターガリエン王朝が続くウェスタロスで、各地を放浪する“草臥しの騎士”ダンクは、馬上槍試合に出場することを決意する。しかし不思議な少年・エッグと出会い、凸凹コンビによる波瀾万丈の物語が始まる。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Лицар Сімох Королівств",
+            "overview": "За століття до подій «Гри престолів» Вестеросом блукали два несподівані герої... молодий, наївний, але сміливий лицар, сер Дункан Високий, та його мініатюрний зброєновець, Егг. Події відбуваються в епоху, коли рід Таргарієнів все ще володів Залізним Троном, а пам'ять про останнього дракона ще не зникла з пам'яті живих, великі долі, могутні вороги та небезпечні подвиги чекають на цих неймовірних та незрівнянних друзів.",
+            "homepage": "",
+            "tagline": "Неймовірна історія, яка стала легендою."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "El cavaller dels set regnes",
+            "overview": "Un segle abans dels esdeveniments de \"Joc de Trons\", dos herois improbables vagaven per Ponent: un jove i ingenu, però valent cavaller, Ser Duncan l'Alt (Claffey), i el seu petit escuder, Egg (Ansell). Ambientada en una època en què el llinatge Targaryen encara ostenta el Tron de Ferro i el record de l'últim drac encara no ha desaparegut de la memòria viva, grans destinacions, poderosos enemics i perilloses gestes esperen aquests improbables i incomparables amics.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Westeros dünyasından, beklenmedik ikili şövalye Sör Duncan ve onun yaveri Egg'in maceralarına odaklanan olasılık dışı bir hikâye.",
+            "homepage": "",
+            "tagline": "Tahttan çok uzakta bir yolculuk."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Rycerz Siedmiu Królestw",
+            "overview": "Sto lat przed wydarzeniami z Gry o Tron, dwaj nieprawdopodobni bohaterowie przemierzali Westeros: młody, naiwny, ale odważny rycerz, ser Duncan Wysoki, i jego drobny giermek, Jajo. W epoce, gdy ród Targaryenów wciąż dzierży Żelazny Tron, a ostatni smok jeszcze nie odszedł z pamięci, na tych nieprawdopodobnych i niezrównanych przyjaciół czekają wielkie losy, potężni wrogowie i niebezpieczne czyny.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "شوالیه هفت پادشاهی",
+            "overview": "داستان “شوالیه هفت پادشاهی” یک قرن قبل از وقایع “بازی تاج و تخت” اتفاق می‌افتد و روایت‌گر ماجراهای سر دانکن قد بلند و اگ در وستروس است. در این دوره، سلسله تارگرین بر تخت آهنین حکومت می‌کرد و اژدهایان هنوز به یادگار مانده بودند. سرنوشت‌های بزرگ و دشمنان خطرناکی در انتظار این دو دوست هستند. سر دانکن قد بلند، یک شوالیه ساده و اگ، شاهزاده جوانی از دودمان تارگرین، در جستجوی عدالت و حقیقت در این دنیای پر از پیچیدگی‌ها و خیانت‌ها، به ماجراجویی می‌پردازند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "האביר משבע הממלכות",
+            "overview": "סר דנקן הוא אביר לא-משוח שאיבד את המנטור שלו, ויוצא במסע להוכיח את עצמו. אליו מצטרף \"אג\", ילד צעיר שהופך להיות נושא כליו שמסתיר את זהותו האמיתית כבן למשפחת המלוכה, בזמן מסעם המשותף.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Un secolo prima degli eventi narrati in Game of Thrones, due improbabili eroi vagavano per Westeros: un giovane cavaliere ingenuo ma coraggioso, Ser Duncan l'Alto (alias Dunk) e il suo piccolo scudiero, Egg. Ambientato in un'epoca in cui la dinastia dei Targaryen detiene ancora il Trono di Spade e il ricordo dell'ultimo drago non è ancora svanito dalla memoria collettiva, grandi destini, nemici potenti e imprese pericolose attendono questi amici improbabili e incomparabili.",
+            "homepage": "",
+            "tagline": "Un viaggio lontano dal trono."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "อัศวินแห่งเจ็ดราชอาณาจักร",
+            "overview": "หนึ่งศตวรรษก่อน \"มหาศึกชิงบัลลังก์\" สองวีรบุรุษต่างขั้ว เซอร์ดันแคน เดอะทอลล์ และเอ็ก เด็กรับใช้เดินทางเข้าสู่เวสเทอรอส",
+            "homepage": "",
+            "tagline": "จากชายร่างสูง สู่อัศวินในตำนาน"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Hiệp Sĩ Của Bảy Vương Quốc",
+            "overview": "Câu chuyện kể về Ser Duncan the Tall (Dunk) – một hiệp sĩ khiêm nhường nhưng dũng cảm – và người hầu cận trẻ tuổi Egg, người sau này trở thành Vua Aegon V Targaryen. Cùng họ du hành khắp Westeros, đối mặt với thử thách, danh dự và số phận của những kẻ thấp cổ bé họng trong bóng dáng ngai sắt Targaryen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Rytíř Sedmi království",
+            "overview": "Příběh mladého a naivního, ale odvážného rytíře ser Duncana Vysokého přezdívaného Dunk a jeho panoše Egga, kteří společně putují Západozemím. Tito dva nepravděpodobní čelí během nebezpečných výprav mocným protivníkům v době, kdy rod Targaryenů stále drží Železný trůn a vzpomínka na posledního draka ještě nevymizela z paměti tamních obyvatel.",
+            "homepage": "",
+            "tagline": "Příběh, který se stal legendou."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Ein Jahrhundert vor den Ereignissen von „Game of Thrones“ durchstreifen zwei unwahrscheinliche Helden durch Westeros, ein junger, naiver, aber mutiger Ritter, Ser Duncan der Große, und sein kleiner Knappe Egg. Die Handlung spielt in einer Zeit, in der die Targaryen immer noch auf dem Eisernen Thron sitzen und die Erinnerung an die letzten lebenden Drachen noch nicht verblasst ist. Ein großes Schicksal, machtvolle Gegner und gefährliche Erlebnisse erwarten diese unwahrscheinlichen und unvergleichlichen Freunde.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Um século antes dos acontecimentos de Game of Thrones, havia Sor Duncan, o Alto, e o seu escudeiro, Egg.",
+            "homepage": "",
+            "tagline": "Uma grande lenda que ficou para a história"
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Et århundrede før begivenhederne i ”Game of Thrones” fandt sted, følger vi Ser Duncan den Høje og hans væbner, Egg.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Vitez iz sedmih kraljestev",
+            "overview": "Stoletje pred dogodki v »Igri prestolov« po Westerosu tavata dva junaka: mlad, naiven, a pogumen vitez sir Duncan Visoki in njegov oproda Egg. V času, ko Targaryeni še vedno sedijo na Železnem prestolu, in zadnji zmaj še ni potonil v pozabo, se ta nenavadni par znajde na poti velikih usod, mogočnih sovražnikov in nevarnih pustolovščin.",
+            "homepage": "",
+            "tagline": "Velika zgodba, ki je postala legenda."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "A Knight of the Seven Kingdoms\n\n: Hundre år før hendelsene i \"Game of Thrones\", hadde vi Ser Duncan the Tall og hans riddersvenn Egg",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Från Westerosvärlden kommer en osannolik berättelse om en oväntad duos äventyr – riddaren ser Duncan den långe och hans vapendragare Egg.",
+            "homepage": "",
+            "tagline": "En skröna som blev en legend."
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "",
+            "overview": "Sajand enne \"Troonide mängu\" sündmusi elasid Ser Duncan Pikk ja ta kannupoiss Muna.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "七王國的騎士",
+            "overview": "在《權力遊戲》故事發生的一百年前，兩位不太可能成為英雄的人物闖入了維斯特洛：高個騎士鄧肯和他的侍從伊戈。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "七王国的骑士",
+            "overview": "在《权力游戏》故事发生的一百年前，两位不太可能成为英雄的人物闯入了维斯特洛：高个骑士邓肯和他的侍从伊戈。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Ser Duncan Pitkä ja hänen aseenkantajansa Egg elivät sata vuotta ennen Game of Thronesin tapahtumia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "",
+            "overview": "Prieš šimtmetį iki įvykių, kurie sukrėtė Vesterosą, dvi neįtikėtinos asmenybės klaidžiojo po šią žemę: jaunas, naivus, tačiau drąsus riteris, aukštas ir tvirtas kaip bokštas, bei jo mažasis, tačiau išradingas ginklanešys. Tai laikai, kai Targarienų giminė dar valdė Geležinį sostą, o paskutinio drakono atminimas dar nebuvo išblėsęs iš gyvųjų atminties. Dideli likimai, galingi priešai ir pavojingi nuotykiai laukia šių netikėtų ir nepakartojamų draugų, keliaujančių per karalystes, pilnas intrigų bei pavojų. Ši istorija alsuoja senovės dvasia, kupina garbės, išdavysčių ir neišsakytų paslapčių, kurios formuoja ateities kartų likimus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "",
+            "overview": "Gadsimtu pirms \"Troņu spēļu\" notikumiem dzīvoja Garais Sers Dankans un viņa skvairs.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Seabad sebelum peristiwa Game of Thrones, dua pahlawan yang tak diduga mengembara ke Westeros, Ser Duncan si Tinggi, dan pelayannya, Egg.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MK",
+          "iso_639_1": "mk",
+          "name": "",
+          "english_name": "Macedonian",
+          "data": {
+            "name": "Витезот од Седумте кралства",
+            "overview": "Еден век пред настаните од Игра на тронови, постоеле Сер Данкан Високиот и неговиот штитоносец, Ег.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Seratus tahun sebelum peristiwa Game of Thrones, dua wira yang tidak disangka muncul di Westeros, Ser Duncan si Tinggi dan pembantunya, Egg.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Cavalerul celor Șapte Regate",
+            "overview": "Cu un secol înainte de evenimentele din „Urzeala tronurilor\", au existat Ser Duncan cel Înalt și scutierul său, Egg.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Rytier siedmich kráľovstiev",
+            "overview": "Storočie pred udalosťami Hry o tróny sa Westerosom potulovali dvaja nepravdepodobní hrdinovia: mladý, naivný, ale odvážny rytier Sir Duncan Vysoký a jeho drobný panoš Egg. Dej sa odohráva v dobe, keď rod Targaryenov stále drží Železný trón a posledný drak ešte nevymizol z pamäti živých, takže na týchto neuveriteľných a neporovnateľných priateľov čakajú veľké osudy, mocní nepriatelia a nebezpečné činy.",
+            "homepage": "",
+            "tagline": "Vysoký príbeh, ktorý sa stal legendou."
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Витез седам краљевства",
+            "overview": "Сто година пре догађаја из „Игре престола“, постојали су сер Данкан Високи и његов штитоноша Ег.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Chroniques du chevalier errant",
+            "overview": "Un siècle avant les événements de « Game of Thrones », deux héros  improbables erraient dans Westeros... un jeune chevalier naïf mais  courageux, Ser Duncan le Grand, et son petit écuyer, Egg. À une époque où la lignée Targaryen détient encore le Trône de fer et où le souvenir  du dernier dragon n'a pas encore disparu de la mémoire collective, de grands destins, de puissants ennemis et de dangereuses aventures attendent ces amis improbables et incomparables.",
+            "homepage": "",
+            "tagline": "D'une grande histoire est née une légende"
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "შვიდი სამეფოს რაინდი",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Ein Jahrhundert vor den Ereignissen von „Game of Thrones“ durchstreifen zwei unwahrscheinliche Helden durch Westeros, ein junger, naiver, aber mutiger Ritter, Ser Duncan der Große, und sein kleiner Knappe Ei. Die Handlung spielt in einer Zeit, in der die Targaryen immer noch auf dem Eisernen Thron sitzen und die Erinnerung an die letzten lebenden Drachen noch nicht verblasst ist. Ein großes Schicksal, machtvolle Gegner und gefährliche Erlebnisse erwarten diese unwahrscheinlichen und unvergleichlichen Freunde.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CH",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Ein Jahrhundert vor den Ereignissen von „Game of Thrones“ durchstreifen zwei unwahrscheinliche Helden durch Westeros, ein junger, naiver, aber mutiger Ritter, Ser Duncan der Große, und sein kleiner Knappe Ei. Die Handlung spielt in einer Zeit, in der die Targaryen immer noch auf dem Eisernen Thron sitzen und die Erinnerung an die letzten lebenden Drachen noch nicht verblasst ist. Ein großes Schicksal, machtvolle Gegner und gefährliche Erlebnisse erwarten diese unwahrscheinlichen und unvergleichlichen Freunde.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BY",
+          "iso_639_1": "be",
+          "name": "беларуская мова",
+          "english_name": "Belarusian",
+          "data": {
+            "name": "Рыцар Сямі Каралеўстваў",
+            "overview": "Вестэрос за 100 гадоў да барацьбы Дэйенерыс Таргарыен за Жалезны Трон. Наіўны, але адважны рыцар сір Дункан Высокі знаёміцца ​​з хлопчыкам па імі Эг, які хавае таямніцу свайго паходжання. Зрабіўшы хлапчука сваім збраяносцам, Дункан разам з ім адпраўляецца ў падарожжа па кантыненце, перыядычна трапляючы ў розныя пераплёты.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7mkUu1F2hVUNgz24xO8HPx0D6mK.jpg",
+          "vote_average": 6.2,
+          "vote_count": 10,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d5ohMxewL3L8CSt1AR897StlAe5.jpg",
+          "vote_average": 5.25,
+          "vote_count": 11,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uKnlXLgurOU1lFLQIroWiWdozxG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s3DX5BDYaXMIFkibBlhKPfXx3UT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/erfgq5HoNyJM5cvnUwqyXeumiQX.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oPH3P6Av8JN2hWqklHEQjA7CgCj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t45rq4pRlUiolTaM6CViUigflGH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4EvcI8r2DAGIrTClb2fKNgPwXMf.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9QjLgLDwxhm5Afkr9FTV4mvJ18h.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kyIuHJs85RDdUO9lfU2USFfOpXk.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rDYaWzUNv78wY8SaWWPEJGQPssU.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 810,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oGXuxNzrZ9QNuYYd7N4Zb9V6YKl.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/umsmSvU8XX10uvEinwDs8BsNEGO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m3dSnJfCxc3Ce9ygyP88hxQt6g7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 780,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AhKeGhOQcNsta2xCW02n6eqwRHU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1387
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dIphc7WJqHzlT8uPkUMA8ZEdPl2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yTGfDm43FEMNQsq3PIxjqK9Qfdz.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9QFLpimeYCVv4FmCZ7BAzFjHBl2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vUhnxjgi9HSDlcpwxC4cXTSyrxE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/Nws0DDGb31fSMxJrDZo3oP3ixm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 966,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pkIpN2e6mjU22OXtfTw2y10XtIw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1717
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lhcqT1cz8vhbhp3VRaGXVXDDxE3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/en0b7HgNWf5xAfTBEEhCYZu4XeY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1027,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xBl0MQKEB3Hyac1L6RHkpaiSAA6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1827
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kp0wzoPegjoSqPhSddZR9US3J47.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/myo5xxTb28qGneZFuN9VkOtHsXu.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vVvkNlnkyED8mKyq1rWG4dgakp9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n6ysynpXkY4nJ8Ksj0kDiYYXpKo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/54DvwYcLoqTFCEVt3g45sEQEBes.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1348,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iOUCoVU22XHWPGCaaNOwMwNx7hj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2397
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 898,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6Yao8ahpNfuzVNu2WCtV1Zxyz8Y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1597
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sMv7OrZT5gFAmnGssx0veupxORY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c8Bi0IK8UeEljor0ywQXeSslaav.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 947,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5m8fjHSOZZKYYYdTY6woR5DURcD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1684
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u8bKFl4xljdPkCizY6rYPUiAf7d.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1r90b1jcTwYmCzbompUwKIe0qHT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sP4qcaZsW7azg8it4thyL37CLcI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hx4tz8sLqWZtDn2nnO7oVZPm9qD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5QfnLi4b7m3se1ptb9p96fC7m0a.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/42jzQ3YxIgNX29oFL2388l5u1VY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8O4elmbuzfcZ7KJHheOzWidtBeO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hImWb9jMyXeMiwkxkoOQYTMdmFG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nskTbvGSE6plPVyUlrJv56Hrb5Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5ivZCEXWg5tD5polEocWNMvp6Bf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qULizG6IqFyrPxs7MCBIOF6QzII.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vqx71OfI43rNBHHb9db2GV4ofsl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rzGA0sf3LjIqdVrNMyRDMckuo7C.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u6ICVBs0h3A3YsQp4jMkIVsRN0J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kp78835gRE5GTBwg5VfKsMxQNit.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yixwlQvDkjwJZDEa8nCbVYXd3S7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1920,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a8YMdpWHegGokb7b2ftdwPtQBUa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3413
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1920,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j0QsULT3Gl0F9JE4PY5WDwwE7rO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3413
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1022,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qoEbkiWS9YybYKznhU7RAKDsnGJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1817
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 810,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8ul9Bw5CNDBd4Ru3WW2279wzwWZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wkgquh0YY4PABdTz3b2o4OQM5sF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.395,
+          "height": 798,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qA8Bfa21AMM3FedamyiB4lSzz6Z.png",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 4305
+        },
+        {
+          "aspect_ratio": 5.388,
+          "height": 799,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rF0yV5u8l0pmRgQloZok8VDxAcM.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4305
+        },
+        {
+          "aspect_ratio": 4.043,
+          "height": 1068,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hXr0Hlh0BxlAMXUCIvlMzgzCm4z.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4318
+        },
+        {
+          "aspect_ratio": 4.046,
+          "height": 1064,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/seI4QiBc0zY3vHZW3ZAGlYaOshw.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4305
+        },
+        {
+          "aspect_ratio": 4.071,
+          "height": 1055,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/keWWYGbNmGiojJMDSautOx6Rbu9.png",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 4295
+        },
+        {
+          "aspect_ratio": 3.323,
+          "height": 1300,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vrKArAThyg5lFSBKxtSzuujh0Ox.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 4320
+        },
+        {
+          "aspect_ratio": 5.388,
+          "height": 799,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/huKFOUlB0q9p6j6VGybgBuxtXld.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4305
+        },
+        {
+          "aspect_ratio": 5.458,
+          "height": 789,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1iqQeoDhu1r2RG4smPj1uhpna13.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 4306
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k8yARbD9iYn2nRX2HvsopfKDN2r.jpg",
+          "vote_average": 7.814,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6igvNs5VJB4ryBLgjjXksDVs0Fm.jpg",
+          "vote_average": 6.042,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fcaxNzoOvagrRNHMBuZbXp84rkk.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2483,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lMDqItxQA6e34ntk02E23RtHWyL.jpg",
+          "vote_average": 4.572,
+          "vote_count": 14,
+          "width": 1655
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/olmiqSMfi4KwtxrLcFNjsjMlwzl.jpg",
+          "vote_average": 3.424,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2sddK6rP3VaoETfa7ADE2KCkfpj.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uGk2u222WZo0jJihenQrngx9dBd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mBDO4PLEiFaBrj4RO0mWdW6tSUs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4lJUQeOSCBSUyop7kPDlaU96OaP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7aTcogQYXS1rdAGqc8uZTrtqUpZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ceoqYgL4XW85Z9usgWcvTLuH0vR.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 2483,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/641qwBw3nCetXI1WndoqDmDldNx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1688
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kiG3Eh1BZvOJ3hk6olBFUYS6A6q.jpg",
+          "vote_average": 1.13,
+          "vote_count": 9,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.763,
+          "height": 2620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cJxYEz5jrV108iqm6oBY0ZWj8LE.jpg",
+          "vote_average": 1.066,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x12k9XniMGl0RgJth6jppaNe4JO.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 2409,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dcpLHGC1YWsj3VkAOWPuZQV8qis.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1638
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2249,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/glku6heerAHCwg5RcCbLwEbZid5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xf3bOit89x7MccXMpoqFOPYxKUz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/BAaU4Mzu0hpHcxqI4Wuw0wntcI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3546eHk3PgvE6THgMMYBq9XVVs4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qq87vtYBXM71aGYxjV08XFKsVQo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oHlOLi6nbSCRQxLMzixdLLGE13f.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1KA1oiZeqrIiyvENk6vKRvXWmG3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1001
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1803,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/siJTADzVuQqkmeAgXknHK9paEQn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        }
+      ]
+    }
+  }
+}

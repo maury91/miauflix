@@ -36,6 +36,7 @@ const setup = (
   const dir = mkdtempSync(join(tmpdir(), 'sources-test-'));
   dirs.push(dir);
   const created = createSourcesService({
+    animeListsUrl: '',
     dataDir: dir,
     resolveHost: fixtureResolver,
     keyFile: join(dir, '.key'),

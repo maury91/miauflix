@@ -10,6 +10,8 @@ import type { MovieDetail, TVShowDetail } from '@services/catalog/catalog.types'
 import type { CatalogClientService } from '@services/catalog/catalog-client.service';
 import { traced } from '@utils/tracing.util';
 
+import { EpisodeRenumberService } from './episode-renumber.service';
+
 /**
  * Ensures the local media index holds fresh data for the media the backend works
  * with, mirroring it from the media-catalog service over HTTP. The catalog
@@ -19,6 +21,7 @@ import { traced } from '@utils/tracing.util';
 export class MediaService {
   private readonly movieRepository: MovieRepository;
   private readonly tvShowRepository: TVShowRepository;
+  private readonly renumber: EpisodeRenumberService;
 
   constructor(
     db: Database,
@@ -26,6 +29,7 @@ export class MediaService {
   ) {
     this.movieRepository = db.getMovieRepository();
     this.tvShowRepository = db.getTVShowRepository();
+    this.renumber = new EpisodeRenumberService(db, catalogClient);
   }
 
   @traced('MediaService')
@@ -51,7 +55,11 @@ export class MediaService {
     return { local, detail };
   }
 
-  /** Ensures the catalog has fresh details for the show, then mirrors it locally. */
+  /**
+   * Ensures the catalog has fresh details for the show, then mirrors it locally. When the
+   * catalog renumbered the show's seasons (anime numbered by AniList entry), the local episodes
+   * and everything stored by episode number move first, so season reads never mix numberings.
+   */
   @traced('MediaService')
   public async getTVShowByMediaId(
     mediaId: number,
@@ -60,6 +68,7 @@ export class MediaService {
     const detail = await this.catalogClient.getTVShow(mediaId, language);
     if (!detail) return null;
     const local = await this.tvShowRepository.upsertTVShowDetail(detail);
+    local.seasonLayoutVersion = await this.renumber.reconcile(local, detail);
     return { local, detail };
   }
 

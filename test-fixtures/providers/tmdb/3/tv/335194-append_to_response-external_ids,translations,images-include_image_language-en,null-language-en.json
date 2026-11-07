@@ -1,0 +1,483 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10952",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"556c18bd093f7a81878f5b19673e338c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/oxS6i62MRfIeXFKN2F3uEipKwt7.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-10-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://majieku.com/",
+    "id": 335194,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7903842,
+      "name": "Greetings, Tsukuyomi Magic Academy",
+      "overview": "Kousuke and Iori are late on their first day at Tsukuyomi Magic Academy and Kousuke ends up in a mock battle?!",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-01",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 335194,
+      "still_path": "/qfZ1dMjjBYcuDNMg9U6Pdnm5dFc.jpg"
+    },
+    "name": "Magical Explorer",
+    "next_episode_to_air": {
+      "id": 7903843,
+      "name": "Stormy Skies! Carplin Castle",
+      "overview": "Kousuke's team is so strong that they have to go for a special dungeons called the Carplin Castle.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 335194,
+      "still_path": "/uhSvHLjcnEcKEEqIvZfXV3bJbpS.jpg"
+    },
+    "networks": [
+      {
+        "id": 343,
+        "logo_path": "/9rNqtDYAnD6yTOutvHI3synSEs2.png",
+        "name": "Gunma TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2478,
+        "logo_path": "/2v82HpzoKRveJEJcGHkeTcktMRM.png",
+        "name": "Tochigi TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 13,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "マジカル★エクスプローラー",
+    "overview": "Reborn in his favorite bishojo game, Kousuke gets the worst role possible: the forgettable sidekick. But armed with his knowledge of the game and this world’s largest mana pool, he might even surpass the hero! Now Kousuke must rewrite his fate and battle his way toward the heroines’ happy endings!",
+    "popularity": 9.3097,
+    "poster_path": "/1mcErCeGi77UmV50E81fwvftdp2.jpg",
+    "production_companies": [
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12569,
+        "logo_path": "/pROt6mT15AC5aTadf7NRBRiTVo3.png",
+        "name": "White Fox",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 8157,
+        "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
+        "name": "jeki",
+        "origin_country": "JP"
+      },
+      {
+        "id": 156696,
+        "logo_path": "/97X15xFW8Tl4VDkNByYrt5UKR4K.png",
+        "name": "Contents Seed",
+        "origin_country": "JP"
+      },
+      {
+        "id": 285572,
+        "logo_path": null,
+        "name": "SYSTEM SERVICE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157002,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Tokyo MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11727,
+        "logo_path": "/cIMyE9cw1W4kMFGxmC17HKTnVz9.png",
+        "name": "Yomiuri Telecasting Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 43682,
+        "logo_path": "/3OTFn2ZFNtfPdPCamfmdyrUy1fI.png",
+        "name": "SANKYO",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-04",
+        "episode_count": 13,
+        "id": 543696,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/1mcErCeGi77UmV50E81fwvftdp2.jpg",
+        "season_number": 1,
+        "vote_average": 7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 10,
+    "vote_count": 5,
+    "external_ids": {
+      "imdb_id": "tt41296506",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 440056,
+      "tvrage_id": null,
+      "wikidata_id": "Q122794848",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "Majieku_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Magical★Explorer",
+            "overview": "Pocos títulos gozan de tanta devoción entre los aficionados a los videojuegos eróticos japoneses como Magical Explorer. ¡Un buen día, nuestro héroe amante del contenido subido de tono despierta reencarnado en el mundo del juego! Aunque no en el cuerpo del apuesto protagonista, sino en el de su desventurado mejor amigo y alivio cómico, Kosuke Takioto. Pero, con su inigualable conocimiento de Magical Explorer y las peculiares habilidades de Kosuke (¿una estola que también sirve de puño?), nuestro héroe se propone convertir al pringado con menos suerte del juego en su galán más poderoso. En este mundo, ¡nada queda fuera de tu alcance cuando tienes los conocimientos!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Magical Explorer",
+            "overview": "Reborn in his favorite bishojo game, Kousuke gets the worst role possible: the forgettable sidekick. But armed with his knowledge of the game and this world’s largest mana pool, he might even surpass the hero! Now Kousuke must rewrite his fate and battle his way toward the heroines’ happy endings!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "魔法★探险家",
+            "overview": "传说级美少女游戏《魔法★探险家》。我转生成为凭借作弊能力被众多女角簇拥的主角——身边负责陪笑的不幸好友角色泷音幸助……！在原作游戏中毫不起眼，得不到回报，一直到最后都只是个配角。但我可是拥有将这款游戏彻底玩透的前世的知识！！而且，这个好友角色还有着“世界顶尖的魔力量”这个隐藏设定，甚至具备超越主角的潜力……？为了让在这个世界邂逅的憧憬女角们迎来幸福结局，身为好友角色的幸助将在这个世界展开奋斗！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Magical Explorer",
+            "overview": "Kousuke wird in seinem Lieblings-Bishojo-Spiel wiedergeboren und bekommt dabei die schlechteste Rolle, die man sich vorstellen kann: die des unscheinbaren Sidekicks. Doch dank seines Wissens über das Spiel und des größten Mana-Vorrats dieser Welt könnte er den Helden sogar übertrumpfen! Nun muss Kousuke sein Schicksal neu schreiben und sich den Weg zu den Happy Ends der Heldinnen erkämpfen!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Magical Explorer",
+            "overview": "Um jogador apaixonado por conteúdo erótico decide se tornar o galã mais poderoso do jogo ao renascer em seu eroge favorito.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Magical Explorer",
+            "overview": "Tái sinh trong game bishojo yêu thích, Kousuke nhận vai tệ nhất có thể: anh chàng phụ mờ nhạt. Nhưng với kiến thức về game và bể mana lớn nhất thế giới này, cậu thậm chí có thể vượt qua cả nhân vật chính! Giờ Kousuke phải viết lại số phận và chiến đấu để hướng tới những cái kết hạnh phúc của các nữ chính!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "伝説の美少女ゲーム『マジカル★エクスプローラー』俺が転生したのは、チート能力でヒロインに囲まれる主人公――ではなく、その横で愛想笑いを浮かべる不遇な友人キャラ・瀧音幸助だった…！原作ゲーム内では目立たず、報われず、最後まで脇役。だが俺には、このゲームを隅々までやり込んだ前世の知識がある！！さらに、この友人キャラには隠れ設定“世界最高峰の魔力量”があり、主人公すら凌駕できるポテンシャルも…？この世界で出会った憧れのヒロイン達をハッピーエンドに導くため、友人キャラの幸助がこの世界で奮闘する―――！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "매지컬★익스플로러",
+            "overview": "전설의 미소녀 게임 '매지컬★익스플로러'\n\n내가 전생한 인물은 치트 능력으로 히로인에게 둘러싸인 주인공이 아니라\n\n그 옆에서 억지웃음을 짓는 불우한 친구 캐릭터, 타키오토 코스케였다...!\n\n원작 게임에서는 눈에 띄지도, 빛을 보지 못한 채 끝까지 조연 신세.\n\n하지만 나에게는 이 게임의 구석구석까지 파고들었던  전생의 지식이 있다!!\n\n게다가, 이 친구 캐릭터에게는 숨겨진 설정인 '세계 최고의 마력량'이 있고, 주인공마처 능가하는 잠재력이...?\n\n이 세계에서 만난 히로인들을 해피엔딩으로 이끌기 위해 친구 캐릭터인 코스케가 분투한다!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Magical Explorer",
+            "overview": "Réincarné dans son jeu « bishojo » préféré, Kousuke se retrouve affublé du pire rôle qui soit : celui d’un acolyte insignifiant. Mais fort de sa connaissance du jeu et de la plus grande réserve de mana de ce monde, il pourrait bien finir par surpasser le héros ! Kousuke doit désormais réécrire son destin et se frayer un chemin à coups d’épée vers les fins heureuses des héroïnes !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Магический исследователь",
+            "overview": "Немногие игры пользуются таким почитанием похотливых ценителей горячего контента, как «Магический Исследователь».\n\nОднажды наш герой виртуальных любовных похождений просыпается в теле персонажа своей обожаемой игры! Единственное но - он стал не главным героем, а его несчастного лучшим другом, который введён в сюжет исключительно ради комического эффекта. Вооружившись беспрецедентными знаниями о «Магическом Исследователе» и неординарными способностями своего нового тела, наш герой клянётся превратить самого невезучего парня в обаятельного сердцееда.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "魔法★探險家",
+            "overview": "歡迎大家一同進入傳說級美少女遊戲：《魔法★探險家》！\n\n身為男主角的我轉生成為憑藉作弊能力被眾多女角簇擁的主角——身邊負責陪笑的不幸好友角色瀧音幸助……！\n\n在原作遊戲中毫不起眼，得不到回報，一直到最後都只是個配角，但我可是擁有將這款遊戲徹底玩透的前世的知識！！而且，這個好友角色還有著「世界頂尖的魔力量」這個隱藏設定，甚至具備超越主角的潛力……？\n\n為了讓在這個世界邂逅的憧憬女角們迎來幸福結局，身為好友角色的幸助將在這個世界展開奮鬥——！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "魔法★探險家",
+            "overview": "歡迎大家一同進入傳說級美少女遊戲：《魔法★探險家》！\n\n身為男主角的我轉生成為憑藉作弊能力被眾多女角簇擁的主角——身邊負責陪笑的不幸好友角色瀧音幸助……！\n\n在原作遊戲中毫不起眼，得不到回報，一直到最後都只是個配角，但我可是擁有將這款遊戲徹底玩透的前世的知識！！而且，這個好友角色還有著「世界頂尖的魔力量」這個隱藏設定，甚至具備超越主角的潛力……？\n\n為了讓在這個世界邂逅的憧憬女角們迎來幸福結局，身為好友角色的幸助將在這個世界展開奮鬥——！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Magical Explorer",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Magical★Explorer",
+            "overview": "El legendario y popular juego llamado Magical★Explorer, o Magiero, cuenta con una trama que permite al protagonista ligar con doce chicas, además de otras doce adicionales... ¡y parece que nuestro héroe se ha convertido en el protagonista de ese juego! Bueno... más bien en el amigo de éste, un personaje secundario que siempre está riéndose como un tonto a su lado. Pero resulta que, un día, descubre la magia y decide cambiar su destino. Dejando a un lado su papel de amigo, se entrena en secreto la mitad del tiempo para demostrar a los demás quién es realmente el más fuerte. Sin embargo, el hecho de acercarse cada vez más a las heroínas del juego le perturba, y llega a darse cuenta de que, poco a poco, se está volviendo más importante que su «amigo».",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Kousuke wordt herboren in zijn favoriete bishojo-spel en krijgt de slechtst mogelijke rol: de vergeetbare sidekick. Maar gewapend met zijn kennis van het spel en de grootste manapool ter wereld, zou hij de held misschien wel kunnen overtreffen! Nu moet Kousuke zijn lot herschrijven en zich een weg banen naar het gelukkige einde van de heldinnen!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Magical Explorer",
+            "overview": "Il protagonista di turno si ritrova un giorno catapultato all'interno del suo Harem Game preferito, Magical★Explorer” o anche Magiero, ma non nei panni dell'eroe che è oggetto delle attenzione delle 12 eroine principali più altrettante contenute nei DLC, bensì in quelli di un personaggio di supporto. Grazie però a un'inaspettata abilità magica egli punterà a scalzare l'eroe designato dal vertice dell'harem...",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oxS6i62MRfIeXFKN2F3uEipKwt7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gXWc04Nk4czAbjV2EGdFElM2yr8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/juaMuLMylV2hnv0IEhARUxUNNYG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3839
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hJ2gS4vRyB9yn0I9nzUWwiptMnC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3839
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.942,
+          "height": 618,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yjtn1dgaIsIQmLFo1Jm0fvocbBL.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1mcErCeGi77UmV50E81fwvftdp2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

@@ -27,6 +27,7 @@ export interface RepositoryRow {
   last_error: string | null;
 }
 export class BudgetExceeded extends Error {}
+const ANIME_CACHE = 'anime:mappings';
 export class Store {
   constructor(
     readonly db: Database,
@@ -219,6 +220,13 @@ export class Store {
         'INSERT INTO query_cache VALUES (?,?,?,?) ON CONFLICT(provider_id,query_key) DO UPDATE SET payload=excluded.payload,expires_at=excluded.expires_at'
       )
       .run(id, key, this.seal(JSON.stringify(rows)), this.now() + ttl);
+  }
+  /** Public anime mapping data, kept in the query cache under its own key space. */
+  animeCache<T>(key: string): T | null {
+    return this.cache(ANIME_CACHE, key) as T | null;
+  }
+  putAnimeCache(key: string, value: unknown, ttl: number): void {
+    this.putCache(ANIME_CACHE, key, value as ProviderPage, ttl);
   }
   memory(key: string, id: string): { searched_at: number; result_count: number } | null {
     return this.db

@@ -1,0 +1,469 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=1380",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3c94438260f1ac21b930c37844c42d0e\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/YZQGBP5nXPG3JjLoccdA13Oeea.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2026-07-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://uchioto-anime.com",
+    "id": 307585,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-31",
+    "last_episode_to_air": {
+      "id": 7820721,
+      "name": "Clashing Thoughts",
+      "overview": "Syu figures out how Gen really feels about Ito. To settle things, he challenges Gen to a fight.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-10-31",
+      "episode_number": 17,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 307585,
+      "still_path": "/45GV8N1pUHcm1NMzCftjdmpRIY5.jpg"
+    },
+    "name": "Please Excuse My Younger Brothers",
+    "next_episode_to_air": {
+      "id": 7820722,
+      "name": "Piggy-Back Fight! Brother vs Brother",
+      "overview": "Gen and Syu are to face off in a piggy-back fight at the sports festival. What's the result of their fight?!",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-07",
+      "episode_number": 18,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 307585,
+      "still_path": "/yXWkWuHSfX7BD78gg7O5qZzYfUZ.jpg"
+    },
+    "networks": [
+      {
+        "id": 343,
+        "logo_path": "/9rNqtDYAnD6yTOutvHI3synSEs2.png",
+        "name": "Gunma TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2478,
+        "logo_path": "/2v82HpzoKRveJEJcGHkeTcktMRM.png",
+        "name": "Tochigi TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "うちの弟どもがすみません",
+    "overview": "High school sophomore Ito was excited for a new dad when her mom remarried, but she may have gained more than she bargained for when she found four younger stepbrothers waiting at home. There’s blunt but secretly caring Gen, calm Raku, reclusive Syu, and cheerful little Rui. Now, Ito must go from the quiet of being an only child to learning how to be the eldest sister of a lively household.",
+    "popularity": 9.7221,
+    "poster_path": "/x280gtjgwPxsVFqYmMEKXPjFgBr.jpg",
+    "production_companies": [
+      {
+        "id": 59988,
+        "logo_path": "/zptKwzxQ68yaipUqT6NlEUEblAw.png",
+        "name": "Lay-duce",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 86839,
+        "logo_path": "/cnOJAkVVmKZLIzmgw4fRRZ2dctT.png",
+        "name": "ABC Animation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157002,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Tokyo MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 198350,
+        "logo_path": "/tLXVEotMczSn2a6A5vDgqJqpMDM.png",
+        "name": "flag",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3466,
+        "logo_path": "/lmCg0zarmM52wrmsZRUY0QlPKLh.png",
+        "name": "movic",
+        "origin_country": "JP"
+      },
+      {
+        "id": 193095,
+        "logo_path": "/xhOXB3eXGnadZWouVZ1X4NbiGkN.png",
+        "name": "HIKE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 303311,
+        "logo_path": "/zMndxmeplykmRDuptmHAHsmjTnn.png",
+        "name": "WHOMOR",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-09-25",
+        "episode_count": 1,
+        "id": 546327,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2026-07-04",
+        "episode_count": 24,
+        "id": 488172,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/x280gtjgwPxsVFqYmMEKXPjFgBr.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.4,
+    "vote_count": 16,
+    "external_ids": {
+      "imdb_id": "tt41293320",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 471296,
+      "tvrage_id": null,
+      "wikidata_id": "Q137225115",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "uchioto_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Please Excuse My Younger Brothers",
+            "overview": "High school sophomore Ito was excited for a new dad when her mom remarried, but she may have gained more than she bargained for when she found four younger stepbrothers waiting at home. There’s blunt but secretly caring Gen, calm Raku, reclusive Syu, and cheerful little Rui. Now, Ito must go from the quiet of being an only child to learning how to be the eldest sister of a lively household.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "はじまりは、ひとつ屋根の下──高校1年生も終わる春休み、母の再婚によって引っ越すことになった女子高生の糸は、新しい父と3人での生活に胸を膨らませていた。しかし新居で待っていたのは、父と──4人の弟だった！無愛想だけど家族想いの長男・源。冷静沈着で爽やかな次男・洛。引きこもりでなかなか姿を見せない三男・柊。いつも元気で甘え上手な末っ子・類。新米長女と個性豊かな弟4人とのにぎやかな毎日が織りなす、スイートホームラブコメ開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Please Excuse My Younger Brothers",
+            "overview": "Nas férias de primavera, após o novo casamento da mãe, Ito se muda para a nova casa, animada com a ideia de viver com o padrasto. Mas, ao chegar à nova casa, descobre que também ganhou quatro irmãos mais novos. Entre confusões, carinho e muita convivência, a nova irmã mais velha embarca em uma divertida comédia romântica sobre família e laços inesperados.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "我家的弟弟們真是讓您費心了",
+            "overview": "這個故事，從同住一個屋簷下開始——\n\n高一結束的春假，糸因為母親再婚而搬家。身為女高中生的她，對於即將和新爸爸三人展開的全新生活，心中滿是雀躍與期待。但讓她沒想到的是，新家竟多了四個弟弟，令她大為震驚！\n\n不擅表達、卻最重視家人的長男：成田源。\n\n冷靜沉著、總是爽朗可靠的次男：成田洛。\n\n足不出戶、很少露面交流的三男：成田柊。\n\n活力滿滿、又是撒嬌一流的么弟：成田類。\n\n新手長女，與個性鮮明的四個弟弟，交織出熱鬧繽紛的每一天——\n\n甜蜜家庭戀愛喜劇，就此開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Please Excuse My Younger Brothers",
+            "overview": "Die Oberschulzweitklässlerin Ito freut sich auf ein trautes Familienglück zu dritt, als ihre Mutter nochmal heiratet. Doch stattdessen bekommt sie gleich vier neue Stiefbrüder! Den schroffen, aber doch fürsorglichen Gen, den ruhigen Raku, den eigenbrötlerischen Shū und Rui, das stets fröhliche Nesthäkchen. Ito muss nun lernen, sich in einem turbulenten Haushalt als älteste Schwester zu behaupten.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Quatre frères pour moi !",
+            "overview": "Ito Narita découvre une nouvelle famille lorsque sa mère se remarie. En effet, son beau-père a quatre fils : Gen, l'aîné, mais aussi Raku, Shu et enfin Rui, plus jeune. Du jour au lendemain, elle devient leur grande sœur mais elle a du mal à se faire accepter en tant que tel.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "우리 남동생들이 죄송합니다",
+            "overview": "시작은 한 지붕 아래.\n\n고등학교 1학년이 끝나는 봄방학, 엄마의 재혼으로 이사하게 됐다.\n\n여고생인 이토는 새아빠와 셋이 함께할 생각으로 기대에 부풀어 있었다.\n\n하지만 새집에서 기다리고 있던 건 아빠와 4명의 남동생이었다!\n\n무뚝뚝하지만 가족을 생각하는 첫째 겐.\n\n냉정하고 침착하며 산뜻한 둘째 라쿠.\n\n은둔형 생활을 하며 좀처럼 모습을 드러내지 않는 셋째 슈.\n\n항상 활기차고 애교가 넘치는 막내 루이.\n\n신참 장녀와 개성 강한 남동생 4명과의 시끌벅적한 일상이 만들어 내는  스위트 홈 러브 코미디 개막!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "我家的弟弟们真是让您费心了",
+            "overview": "这个故事，从同住一个屋檐下开始——高一结束的春假，糸因为母亲再婚而搬家。身为女高中生的她，对于即将和新爸爸三人展开的全新生活，心中满是雀跃与期待。但让她没想到的是，新家竟多了四个弟弟，令她大为震惊！不擅表达、却最重视家人的长男：成田源。冷静沉着、总是爽朗可靠的次男：成田洛。足不出户、很少露面交流的三男：成田柊。活力满满、又是撒娇一流的幺弟：成田类。新手长女，与个性鲜明的四个弟弟，交织出热闹缤纷的每一天——甜蜜家庭恋爱喜剧，就此开幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Please Excuse My Younger Brothers",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Пожалуйста, простите моих младших братьев",
+            "overview": "Старшеклассница И́то жила свою обычную жизнь, была единственным ребёнком в семье, и, казалось бы, ничего не предвещало беды. Но вот однажды мама Ито не решила выйти замуж во второй раз и переехать в другой город, следуя зову сердца.\n\nЗвучит вполне себе обычно, бедобидно и даже романтично, если бы не то обстоятельство, что в новой семье у Ито появляется аж четыре сводных младших брата! Ну что ж, будет интересно понаблюдать за семейной жизнью новоиспечённой старшей сестры.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Please Excuse My Younger Brothers",
+            "overview": "อิโตะ นักเรียนมัธยมปลายปีสอง รู้สึกตื่นเต้นที่จะได้คุณพ่อคนใหม่เมื่อคุณแม่แต่งงานใหม่ แต่เธออาจได้มากกว่าที่คาดคิดเมื่อพบว่ามีน้องชายต่างพ่อสี่คนรออยู่ที่บ้าน มีเก็นที่พูดตรงไปตรงมาแต่แอบห่วงใย ราคุที่ใจเย็น ชูที่เก็บตัว และรุยตัวน้อยที่ร่าเริง ตอนนี้ อิโตะต้องเปลี่ยนจากความเงียบสงบของการเป็นลูกคนเดียวไปสู่การเรียนรู้ที่จะเป็นพี่สาวคนโตของบ้านที่เต็มไปด้วยชีวิตชีวา",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Please Excuse My Younger Brothers",
+            "overview": "Ito Narita, estudiante de primero de bachillerato, se muda con una nueva familia tras las segundas nupcias de su madre. Al llegar a su nuevo hogar, descubre que su padrastro tiene cuatro hijos: Gen, Raku, Shu y Rui. De la noche a la mañana, Ito se convierte en la hermana mayor de todos y tendrá que esforzarse al máximo para encajar en su nueva vida y llevarse bien con sus nuevos hermanos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "我家的弟弟們真是讓您費心了",
+            "overview": "這個故事，從同住一個屋簷下開始——\n\n高一結束的春假，絲因為母親再婚而搬家。身為女高中生的她，對於即將和新爸爸三人展開的全新生活，心中滿是雀躍與期待。但讓她沒想到的是，新家竟多了四個弟弟，令她大為震驚！\n\n不擅表達、卻最重視家人的長男：成田源。\n\n冷靜沉著、總是爽朗可靠的次男：成田洛。\n\n足不出戶、很少露面交流的三男：成田柊。\n\n活力滿滿、又是撒嬌一流的么弟：成田類。\n\n新手長女，與個性鮮明的四個弟弟，交織出熱鬧繽紛的每一天——\n\n甜蜜家庭戀愛喜劇，就此開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Lise birinci sınıfının bahar tatilinde İto, annesinin yeniden evleneceğini ve taşınmaları gerektiğini öğrenir. Beklemediği şey ise aynı çatı altında birden dört üvey erkek kardeşe sahip olmaktı. Yeni ailesiyle iyi geçinmeye kararlı olan İto elinden geleni yapar, ama en büyük ağabey Gen mesafeli ve ne düşündüğü belli olmayan biridir. Ancak birlikte zaman geçirdikçe, onun soğuk görünüşünün ardında saklı naifliğin izlerini görmeye başlar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Xin thứ lỗi cho các em trai của tôi",
+            "overview": "Ito, học sinh năm hai cấp ba, từng háo hức chờ đón một người cha mới khi mẹ tái hôn, nhưng có lẽ cô đã nhận được nhiều hơn mong đợi khi thấy bốn đứa em trai kế đang chờ ở nhà. Có Gen thẳng thắn nhưng thầm quan tâm, Raku điềm tĩnh, Syu sống khép kín và cậu út Rui vui vẻ. Giờ đây, Ito phải từ sự yên tĩnh của cuộc sống con một học cách làm chị cả của một gia đình náo nhiệt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1350,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/YZQGBP5nXPG3JjLoccdA13Oeea.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2400
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mJULLLfuSxN9Sq9o6rZ4XSHtBla.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.017,
+          "height": 298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oyuJyrVM7HGf2MGy7rRC7gJqBQw.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1197
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x280gtjgwPxsVFqYmMEKXPjFgBr.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1300,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/chPtYpP1WwPqqvjYtDHxxLbpPCT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4MQITioqQGH6iwfDh9jjqQhmzZn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

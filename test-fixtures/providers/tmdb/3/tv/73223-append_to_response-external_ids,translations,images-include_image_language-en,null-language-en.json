@@ -1,0 +1,1713 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17658",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"709d533a678bfad85bccef245036995e\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/qu9epTZh29fGUkY7ZYc9PVsv0Ig.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2017-10-03",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "http://bclover.jp",
+    "id": 73223,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-31",
+    "last_episode_to_air": {
+      "id": 7903815,
+      "name": "The Highest vs. The Lowest",
+      "overview": "Two unexpected Magic Knights show up to face off with Dante of the Dark Triad.",
+      "vote_average": 9.8,
+      "vote_count": 6,
+      "air_date": "2026-10-31",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 73223,
+      "still_path": "/vWcMBqXCkFfGc2ZDUJC6HRTvzY.jpg"
+    },
+    "name": "Black Clover",
+    "next_episode_to_air": {
+      "id": 7903816,
+      "name": "Episode 6",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-07",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 73223,
+      "still_path": "/hthF0pFCPH2podGOpPc9390INvc.jpg"
+    },
+    "networks": [
+      {
+        "id": 98,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "TV Tokyo",
+        "origin_country": "JP"
+      },
+      {
+        "id": 252,
+        "logo_path": "/zFZ5KCuvx7K0vP9XgGcidfXjuUd.png",
+        "name": "TV Aichi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 822,
+        "logo_path": "/gOlBe3BMo5WJHeUlWBBfKawgdiO.png",
+        "name": "TVQ",
+        "origin_country": "JP"
+      },
+      {
+        "id": 824,
+        "logo_path": "/6foQmoPac7WCDnDuDbuCZklmDuA.png",
+        "name": "TV Osaka",
+        "origin_country": "JP"
+      },
+      {
+        "id": 938,
+        "logo_path": "/f12LLqBVFnDVIY8HidhWEitI77c.png",
+        "name": "TVh",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2064,
+        "logo_path": "/qi4L1ffRabF5LJqVimCaaUYpeSj.png",
+        "name": "TSC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 196,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ブラッククローバー",
+    "overview": "Asta and Yuno are two orphans who want the same thing: to become the Wizard King. Locked in a friendly rivalry, they work hard towards their goal. While Yuno excels at magic, Asta has a problem uncommon in this world: he has no powers! But, on the day they receive their grimoires, they surprise everyone. To reach their goal, they’ll each find their own path to greatness—with or without magic.",
+    "popularity": 45.7643,
+    "poster_path": "/uZUtoVChBGhNj9OfrM2LYpwBm8E.jpg",
+    "production_companies": [
+      {
+        "id": 3234,
+        "logo_path": "/wTPPnz05ZCQgEQVeSOxTkUCyhr5.png",
+        "name": "Pierrot",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3034,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "TV Tokyo",
+        "origin_country": "JP"
+      },
+      {
+        "id": 55938,
+        "logo_path": "/ku5PUEwBjUx8XaYikgaXRVLIMbb.png",
+        "name": "avex pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12502,
+        "logo_path": "/tlBbCuZditAuvzDdIDjjnGLJUpc.png",
+        "name": "Bandai Namco Entertainment",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2016-11-27",
+        "episode_count": 2,
+        "id": 113662,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/8fCia8ZH3j7ap2VfVhfVWoKe8CD.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2017-10-03",
+        "episode_count": 170,
+        "id": 91272,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/f77D5BapCT4n5mce7bFR8du09Hf.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      },
+      {
+        "air_date": "2026-10-03",
+        "episode_count": 26,
+        "id": 547848,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/k7XtJOiflFofEOP8l5i75y4p5po.jpg",
+        "season_number": 2,
+        "vote_average": 9.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.535,
+    "vote_count": 2294,
+    "external_ids": {
+      "imdb_id": "tt7441658",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 331753,
+      "tvrage_id": null,
+      "wikidata_id": "Q70331950",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "bclover_PR"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Asta and Yuno are two orphans who want the same thing: to become the Wizard King. Locked in a friendly rivalry, they work hard towards their goal. While Yuno excels at magic, Asta has a problem uncommon in this world: he has no powers! But, on the day they receive their grimoires, they surprise everyone. To reach their goal, they’ll each find their own path to greatness—with or without magic.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Dans un monde régi par la magie, Yuno et Asta ont grandi ensemble avec un seul but en tête : devenir le prochain Empereur-Mage du royaume de Clover. Mais si le premier est naturellement doué, le deuxième, quant à lui, ne sait pas manipuler la magie. C'est ainsi que lors de la cérémonie d'attribution de leur grimoire, Yuno reçoit le légendaire grimoire au trèfle à quatre feuilles tandis qu'Asta, lui, repart bredouille. Or, plus tard, un ancien et mystérieux ouvrage noir décoré d'un trèfle à cinq feuilles surgit devant lui ! Un grimoire d’anti-magie…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Black Clover",
+            "overview": "La historia de Black Clover nos pone en la piel de un joven llamado Asta, el cual quiere convertirse en el mago más grande del reino. Sin embargo, hay un inconveniente: ¡no puede usar magia! Por suerte, Asta recibe el grimorio trébol de cinco hojas, que le otorga el poder de la anti-magia. ¿Puede alguien carente de magia convertirse en el Rey Hechicero? Una cosa está clara, Asta nunca se rendirá.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Num mundo onde magia é tudo, Asta e Yuno são abandonados em uma igreja no mesmo dia. Enquanto Yuno possui poderes mágicos excepcionais, Asta é a única pessoa do mundo todo desprovida desse dom. Aos quinze anos, ambos recebem grimórios - livros mágicos que amplificam os poderes do detentor. Asta recebe um raro grimório de anti-magia, capaz de negar e repelir os feitiços do oponente. Dois opostos que nutrem uma rivalidade amigável, Yuno e Asta estão prontos para encarar os mais difíceis desafios para conquistar seu sonho em comum: tornar-se o Rei dos Feiticeiros. Desistir não é opção!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Чорна конюшина",
+            "overview": "Астер і Юно ще немовлятами були залишені під дверима однієї церкви, і відтоді стали нерозлучні. Ще в дитинстві вони дали один одному обіцянку побачити, хто з них стане Королем Магів. Вони дорослішали та відмінності між ними ставали все більшими: Юно був генієм у магії, з потужною силою та відмінним контролем над нею, а Астер взагалі не користувався магією і розвивав фізичну складову. У 15 років вони мали отримати свої гримуари — тоді Юно отримав книгу з чотирилистою конюшиною з легенди, а Астер натомість не отримав нічого. Тим часом, як і передбачав Юно, правда щодо сили Астера відкрилася і він тримав гримуар із п’ятилистою «чорною конюшиною». Відтак двоє друзів прямують власними шляхами, намагаючись досягти однієї мети.",
+            "homepage": "",
+            "tagline": "У світі магії Астер, хлопець із антимагічними здібностями, зробить усе можливе, щоб стати Королем Магів!"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Black Clover",
+            "overview": "In dem kleinen Dorf Hage werden zwei Babys vor der Kirche abgelegt, die verschiedener nicht sein könnten. Der dunkelhaarige Yuno wächst zu einem besonnenen, klugen und gut aussehenden Jungen heran, während Blondschopf Asta ein lauter, kraftstrotzender, aber herzensguter Wildfang ist. Obwohl er wahrscheinlich der Einzige im ganzen Königreich Clover ist, der keine Magie besitzt, ist es Astas großer Traum, zum König der Magier aufzusteigen. Dabei stört es ihn kein bisschen, dass Yuno umso begabter ist und ihn jedes Mal gnadenlos besiegt. Schon als Kinder schworen sie sich, ewige Rivalen auf ihrem Weg zum Thron der Magier zu sein. Doch zunächst gilt es, die Aufnahmeprüfung in einen der magischen Ritterorden zu meistern. Zu zweit brechen sie auf in die Hauptstadt des Königreichs und in eine ungewisse Zukunft.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "البرسيم الأسود",
+            "overview": "تدور القصة في عالم السحرة وبطلها هو فتى يطمح أن يكون الأفضل في هذا المجال ولكنه يفتقر للقدرة. يحصل في يوم من الأيام على كتاب تعويذات ليحصنه من التعاويذ السحرية.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Black Clover",
+            "overview": "تم التخلي عن استر و جونو معًا في نفس الكنيسة، ولم يفترقا منذ ذلك الحين. مذ كانا اطفالًا، والاثنان وعدا بعضهما البعض أن يتنافسا لمعرفة من منهم الذي سيصبح الإمبراطور المشعوذ المقبل، وعلى ذلك كبرا، وأصبح بينهم بعض الخلافات. كان جونو عبقري السحر، ولديه قدرة مذهلة في السطيرة عليه. بينما استر لا يمكنة استخدام السحر، وحاول أن يعوض عن ذلك من خلال التدريب الجسدي. عندما حان وقت البطولة “جريمويري” كانا في سن الـ 15، حصل جونو على كتاب مذهل مع أربعة اوراق برسيم (معظم الناس يحصلون على ثلاثة اوراق برسيم ) في حين أن استر لم يحصل على أي شئ على الاطلاق. ومع ذلك، عندما كان جونو مهددًا، ذهب استر لمساعدته وأثناء قتاله لحماية جونو، حصل على جريمويري خمس أوراق برسيم، وهو “البرسيم الأسود” كتاب مكافحة السحر، وهو لا يعرف أنه استخدم هذا. ((و الان كلا الصديقيْن يسعون نحو نفس الهدف",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Daun Semanggi Hitam",
+            "overview": "Asta dan Yuno ditinggalkan di gereja yang sama pada hari yang sama. Mereka tumbuh bersama dan mengetahui tentang \"Raja Penyihir\"—gelar bagi penyihir terkuat di kerajaan—serta berjanji untuk bersaing demi posisi itu. Namun, perbedaan mereka jelas saat dewasa. Yuno memiliki sihir luar biasa, sedangkan Asta tidak bisa menggunakan sihir sama sekali dan berlatih keras untuk membangkitkan kekuatannya.  Di usia 15, Yuno mendapat Grimoire semanggi berdaun empat, sedangkan Asta tidak mendapat apa pun. Tak lama, Yuno diserang oleh Lebuty, yang ingin merebut Grimoinenya. Asta berusaha melawan tetapi kalah. Dalam keputusasaan, ia mendengar suara Yuno dan membangkitkan Grimoire semanggi berdaun lima, \"Black Clover,\" yang memberinya kekuatan untuk menang. Beberapa hari kemudian, mereka berdua memulai perjalanan dengan tujuan yang sama—menjadi Raja Penyihir!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Чёрный клевер",
+            "overview": "В мире, где всё решает магия, однажды у порога церкви находят двух брошенных детей, Аста и Юно. И если Юно оказался одарён исключительной магической силой, то Аста был урождён единственным человеком в мире, у которого эта сила полностью отсутствует. Когда мальчикам исполнилось пятнадцать лет, для них пришло время получить гримуары, раскрывающие истинную силу магов. Аста стал обладателем Антимагического Гримуара, обладающего уникальной способностью - отменять или отражать магию. Способности Юно и Аста прекрасно дополняют друг друга, и теперь ребята готовы вместе начать нелёгкий путь к своей общей мечте: стать \"Королём магов\". И они не остановятся ни перед чем!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "黑色五叶草",
+            "overview": "两个孤儿一起长大，情同手足，却为争夺这个世界最高的魔法等级“魔法帝”的称号成为了对手。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "תלתן שחור",
+            "overview": "אסטה ויונו ננטשו יחדיו באותה הכנסייה ובאותו היום, ולא נפרדו אף לרגע מאז. כילדים הם הבטיחו שהם יתחרו אחד בשני כדי לראות מי יהיה קיסר הקסם הבא. עם זאת, ככל שהם גדלו, כך גם גדלו ההבדלים בניהם. יונו הוא גאון עם שליטה ומיומנות אדירה בקסם שלו, בעוד שאסטה לא יכל להשתמש בקסם כלל וניסה לפצות על כך עם אימונים פיזיים מפרכים. ​כשהם קיבלו את גרימווארים שלהם בגיל 15, יונו קיבל ספר מרהיב עם תלתן בעל ארבעה עלים, בעוד שאסטה לא קיבל כלום. עם זאת, כאשר נבל איים על חיו של יונו, אסטה קיבל גרימוואר עם תלתן בעל חמישה עלים, תלתן שחור! עכשיו שני החברים יוצאים לעולם הגדול, כששניהם הולכים לעבר אותה המטרה!​​",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Asta y Yuno son dos huérfanos que fueron criados juntos desde su nacimiento en una iglesia en las afueras del Reino de Clover. En un mundo donde todos tienen poder mágico, Asta nació sin ningún tipo de poder. A diferencia de él, Yuno nació como un prodigio con inmenso poder mágico y gran talento para controlarlo. La historia sigue a los dos hermanos adoptivos mientras compiten para ver cuál de ellos se convertirá en el Rey Mago, el Caballero Mágico más fuerte del Reino de Clover.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thế Giới Phép Thuật",
+            "overview": "Hai đứa trẻ mồ côi được nuôi dạy như anh em trở thành đối thủ trong cuộc chiến tranh giành ngôi vị Ma pháp Vương – thứ hạng phép thuật cao nhất nơi đây.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Asta şi Yuno au fost abandonaţi împreună la aceeaşi biserică, iar încă de atunci au fost de neseparat. Ei şi-au promis că vor concura între ei pentru a stabili cine va ajunge următorul Magician Împărat. Totuşi, pe parcursul timpului, s-au evidenţiat nişte diferenţe între cei doi. Yuno era un geniu al magiei, cu un control şi o putere uimitoare, în timp ce Asta nu putea folosi magie deloc, încercând să compenseze asta prin antrenamentul fizic. Când aceştia au împlinit vârsta de 15 ani, Yuno a primit o carte de vrăji specială cu trifoi cu patru foi (majoritatea primeau una cu trifoi cu trei foi), în timp ce Asta n-a primit nimic. Totuşi, când Yuno a fost ameninţat, adevăratele puteri ale lui Asta au ieşit la iveală, primind astfel o carte de vrăji cu trifoi cu cinci foi, un „trifoi negru”! Acum cei doi prieteni călătoresc prin lume, amândoi având acelaşi scop!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Black Clover",
+            "overview": "In un mondo dove la magia è al centro della vita quotidiana sono nati Asta, un ragazzo completamente privo di ogni abilità magica, e il suo amico Yuno, che al contrario è dotato di grande forza magica legata al vento. I due sono fin da piccoli rivali e hanno deciso di competere per il titolo di Imperatore Magico, la più alta carica magica del loro regno. Yuno ottiene un leggendario grimorio a quattro foglie dello stesso tipo ottenuto dal primo imperatore magico, mentre Asta, nonostante la sua mancanza di magia, ottiene un misterioso grimorio di cinque foglie (che non può essere chiaramente identificato da altri poiché è usurato), che contiene una misteriosa spada in grado di annullare la magia. Successivamente, lui e Yuno si uniscono ai Cavalieri Magici come primo passo per realizzare le loro ambizioni.",
+            "homepage": "",
+            "tagline": "\"La mia magia non si arrende mai!\" - Asta"
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Черната детелина",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "블랙 클로버",
+            "overview": "어린 시절 부모에게 버림을 받고 빈민 지역 교회에서 자란 아스타와 라이벌 유노. 두 사람은 마법 세계의 정점인 마법제가 되겠다는 목표를 가지고 있다. 그러나 아스타는 전혀 마력을 가지고 있지 않아 마법 기술을 쓰지 못하는 반면, 유노는 어린 나이에도 불구하고 엄청난 마법의 소유자로 촉망 받는다. 시간이 흘러 두 사람은 15세가 되고, 마력을 가진 15세 아이들에게 마법기사단에 들어갈 수 있는 기회가 찾아온다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Asta a Yuno boli v detstve zanechaný v tom istom kostole, a od tej doby sa stali takmer nerozlučnými kamarátmi. Keď sa prvýkrát začali zoznamovať s mágiou, sľúbili si, že budú proti sebe bojovať, aby zistili, ktoz nich bude budúci Kráľ čarodejov. Postupom času sa začnú prejavovať prvé rozdiely medzi nimi. Zatiaľ  čo Yuno patrí medzi najväčšie čarodejnícke talenty svojho veku, Asta naopak nikdy nebol schopný čokoľvek vyčarovať, a celú dobu sa venuje zdokonalovaniu po fyzickej a silovej stránke. Keď obaja dosiahli vek 15 rokov, Yuno dostal výnimočný grimoár so štvorlístkom, lenže Asta nedostal vôbec nič. V tom čase nikto, ani samotný Asta, netuší, akú moc v sebe skrýva, a že sa neskôr stane majiteľom čierneho grimoáru s vyrytým päťlistkom.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Num mundo onde magia é tudo, Asta e Yuno são abandonados em uma igreja no mesmo dia. Enquanto Yuno possui poderes mágicos excepcionais, Asta é a única pessoa do mundo todo desprovida desse dom. Aos quinze anos, ambos recebem grimórios, livros mágicos que amplificam os poderes do detentor. Asta recebe um raro grimório de anti magia, capaz de negar e repelir os feitiços do oponente. Dois opostos que nutrem uma rivalidade amigável, Yuno e Asta estão prontos para encarar os mais difíceis desafios para conquistar seu sonho em comum: tornar-se o Rei dos Feiticeiros. Desistir não é opção!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "შავი სამყურა",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Black Clover",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "แบล็คโคลเวอร์",
+            "overview": "อัสตาและยูโนะถูกทิ้งที่โบสถ์ในบ้านนอกตั้งแต่ยังจำความไม่ได้ ด้วยเหตุนี้ทั้งคู่จึงเติบโตมาด้วยกันและแข่งกันว่าใครจะได้เป็น \"จักรพรรดิเวทมนตร์\" ทั้งที่เป็นเช่นนั้น ยูโนะกลับมีพลังเวทที่แกร่งกล้า ในขณะที่อัสตาไม่สามารถใช้เวทมนตร์ได้เลย เมื่อทั้งคู่อายุครบ 15 ปีบริบูรณ์ก็เข้าร่วมพิธีรับกริมัวร์ (หนังสือเวท) ยูโนะได้รับกริมัวร์ที่มีโคลเวอร์ 4 แฉกที่ว่ากันว่ามี \"โชค\" สถิตอยู่ (ในขณะที่กริมัวร์ของคนทั่วไปมีโคลเวอร์แค่ 3 แฉก) แต่อัสตากลับไม่ได้รับกริมัวร์ ต่อมายูโนะโดนเล่นงาน อัสตาที่เข้ามาช่วยจึงได้รับกริมัวร์ในภายหลัง แต่กริมัวร์ของเขากลับมีโคลเวอร์ 5 แฉกที่ว่ากันว่าในแฉกที่ 5 มี \"ปีศาจ\" สถิตอยู่",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Asta ve Yuno aynı gün yetimhaneye terk edilmiş iki yetimdir. Çocukken birbirlerine meydan okuyup kimin Büyü İmparatoru olacağını görmeye söz verirler. Ne var ki yıllar geçtikçe ikisinin arasındaki fark uçurumlara dönüşür. Yuno'nun büyü konusunda 10 parmağında 10 marifet varken Asta büyü bile kullanamaz ve bu sebeple fiziksel antrenmanlara yönelir. Pes etmek nedir bilmeyen Asta bir gün inanılmaz bir güç elde eder ve iki arkadaş aynı amacın peşinde yola koyulur.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "魔法がすべての、とある世界――。\n\n「クローバー王国」最果てにある村の教会に、同じ日に捨てられていたアスタとユノは、お互いに魔道士の頂点「魔法帝」になることを夢見て「魔法騎士団」に入団。アスタは「黒の暴牛」団、ユノは「金色の夜明け」団で、それぞれ仲間たちとともに数々の任務をこなし、着実に実績を積み重ねていた。\n\nそんな中、「リヒト」と名乗る者を頭首とし、「反クローバー王国」を掲げる謎のテロ組織「白夜の魔眼」が現れる。彼らはクローバー王国に強い憎しみを抱き、「魔石」と呼ばれる石を集め、”真の姿”に生まれ変わろうとしていた。果たして、”真の姿”とは？　そして、その本当の狙いとは？\n\n敵対する隣国・ダイヤモンド王国との緊張感も高まる中、驚異的な魔力を持つ頭首リヒトと最高戦力の3人「三魔眼（サードアイ）」を中心とする「白夜の魔眼」の脅威にさらされたクローバー王国。\n\n国と人々を護る魔法騎士団員として、アスタとユノが、さらなる実績を積み上げ、魔法帝への道を突き進む！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Asta to młody chłopak, który marzy o zostaniu największym magiem w królestwie. Jest tylko jeden problem – nie potrafi używać żadnej magii. Na szczęście Aster otrzymuje niesamowicie rzadką księgę czarów „Pięciolistną Koniczynę”, dzięki której ma niesamowitą moc antymagiczną. Czy ktoś, kto nie używa magii, może zostać Królem Magów?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "黑色五葉草",
+            "overview": "描述在一個魔法等於一切的世界裡，身為孤兒的亞斯塔雖然天生就沒有魔力，但仍毫不怠懈地努力鍛鍊自己。他和同為孤兒的好友尤諾立志要一起競爭魔法帝的寶座。在魔法書授與儀式中，尤諾得到了傳說中的四葉魔導書，而亞斯塔則得到了反魔法的五葉魔導書。之後兩人還一起去參加魔法騎士團的入團考試，亞斯塔在歷經一番波折後，總算是成為「黑色暴牛騎士團」的一員……",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Asta a Yuno byli v dětství zanecháni ve stejném kostele a od té doby se stali téměř nerozlučnými kamarády. Když se poprvé začali seznamovat s magií, slíbili si, že budou proti sobě bojovat, aby zjistili, kdo z nich bude příští Král čarodějů. Postupem času se začnou projevovat první rozdíly mezi nimi: Zatímco nadaný Yuno patří mezi největší kouzelnické talenty svého věku, Asta naopak nikdy nebyl schopný cokoliv vykouzlit, a celou dobu věnuje zdokonalování po fyzické a silové stránce. Když oba dosáhli 15 let, Yuno obdržel výjimečný grimoár se čtyřlístkem, jenže Asta nedostal vůbec nic. Tou dobou nikdo, natož samotný Asta, netuší, jakou moc v sobě skrývá, a že se později stane majitelem černého grimoáru s vyrytým pětilístkem.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Black Clover",
+            "overview": "Asta egy árvaházban nevelkedett fiatal fiú, aki arról álmodozik, hogy egy napon a legelismertebb varázsló lesz az egész királyságban. Az egyetlen bökkenő, hogy hősünknek egyáltalán nincs tehetsége a mágiához. Szerencséjére a birtokába kerül egy rendkívül ritka, az ötlevelű lóhere varázskönyve, ami lehetővé teszi számára az anti-mágia használatát. De vajon ennyi elegendő lesz a töretlen lelkesedéssel rendelkező srácnak, hogy lépést tartson gyermekkori barátjával, a nagy varázserővel rendelkező Junóval, és a varázslók királyává váljon?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Black Clover",
+            "overview": "La sèrie relata la història de l'Asta i en Yuno, dos nens que van ser abandonats a l'església de Hage, un llogaret situat als confins del regne del Trèvol, quan eren només uns nadons. En un món en què el més important és la màgia i on tothom té poders, l'Asta és l'únic que no aconsegueix tenir-ne, mentre que en Yuno té un poder màgic immens. Per un jurament d'infància, els dos nens comencen a competir per arribar a ser el rei dels mags. Al llarg de la sèrie, tots dos obtindran un grimori, entraran a formar part d'ordes diferents de cavallers mags, s'aniran fent forts i viuran infinitat d'aventures a mesura que avancen en el seu camí per arribar a ser el mag més poderós de tots. Aconseguirà algun dels dos fer realitat el somni d'arribar a ser rei dels mags?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "黑色五葉草",
+            "overview": "兩名孤兒一起被撫養長大，卻在爭奪「魔法帝」頭銜時成為對手；此頭銜乃是該地最高的魔法等級。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Asta en Yuno zijn twee weeskinderen die hetzelfde willen: om de Wizard King te worden. Opgesloten in een vriendelijke rivaliteit, werken ze hard in de richting van hun doel. Terwijl Yuno uitblinkt in magie, heeft Asta een probleem ongewoon in deze wereld: hij heeft geen krachten! Maar op de dag dat ze hun grimoires ontvangen, verrassen ze iedereen. Om hun doel te bereiken, zullen ze elk hun eigen weg naar grootheid vinden - met of zonder magie.",
+            "homepage": "",
+            "tagline": "In een wereld van magie zal Asta, een jongen met anti-magische krachten, er alles aan doen om de Tovenaarskoning te worden!"
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Црна детелина",
+            "overview": "Аста и Јуно су два сирочад која желе исту ствар: да постану Краљ Чаробњак. Заробљени у пријатељском ривалству, они вредно раде на остваривању свог циља. Док Јуно бриљира у магији, Аста има проблем неуобичајен у овом свету: нема моћи! Али, на дан када добију своје гримоаре, изненађују све. Да би достигли свој циљ, свако од њих ће пронаћи свој пут до величине - са или без магије.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qu9epTZh29fGUkY7ZYc9PVsv0Ig.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mNadS5wd6Co7rUsWWY7jXUkYoP1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/54Gq08KM7C8fh88KvePHdHUiWPo.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7bGvtyA2m16jcCTCdhoiiFF7ibe.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hwdk9mUmltygcFJEKYrlkLvuv2s.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dDyTi3b2rBvVl9DqamlgTd2X2x9.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bR3oGSl9q37Rr4HjITA5va5VzS6.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9Y6EYzooPULbJ0zve65e62fFAYU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7VXfABmKGMGWQGyo4XjInuIfTDB.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2OOpYu4YADXPnidO4iftX9ezRgq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xAf0vC9uRQCFWBHTlr3ruueXjlW.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AgdCexenwV8pVNkw9zuDffgJKFp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jHH4jmWWmYWpoxpGwMYM5RqJnvo.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vYZOdDafJ7pmF8ZondtT3jtQ47P.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8Qt7tNYVa8lZvBHotEXM2pqSJe6.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ejdyIbmNm4013WdG7Nn6zAKk1pp.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hlo3rxakENRz35A0msxGMqtLqR8.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1294,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4RzRtLMlTeJvpvvdXDe854VLEG8.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2300
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qQDHh7FhSlbRqI0ujFd8Ht2YPoS.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wFhqoEWGyFvM38TKIwbrLR1gs4S.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8lPKigAPp4wNp64ym8OdsbO604g.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/okPoLAGtpGhyn9WHlzuNqCYrr9u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pA4iDXdD79mnwjoo4AkWYwpWKsq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bqGjzfDGAcxssy1aujLTBqnr64T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z456J1yroCEUNUuXUqCUwCverkP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fB3lrpMi13dAne20pd8uIgdBykv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bAAQE0zRwsffHw1RJFbY34Orh5y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pD7XrU0eVm9jSUNsjMTFSxnW1rw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jnLi7a9ovBz3qGfIUqr4yQxm2Ox.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AoO4WtKZ2iKqGWR23z1rcuEzXQx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gR8qKjbFrHkzXsYejJJopxBRzHT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qFGTab0qXLWhxRWdWiKd7mXMdpa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/goI5pfpUuGF28UZECq635aM4HNV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yIEtCjWFJupLPnk8RAVPyLwoUYa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gRo5I7cMJ8lWHoI0w1IYKpyJxi7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6K2q9GgHPwYUPrwdG0j6HmyEEpO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6hZfHtqVunbXsbqR50uNoeV1w9a.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gOInYH82xMxx4yz0uD8WWbm2Uoi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9FKvhxNECbFmOYtiB6oiKFX54Qx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1LlL9SGEcfYXk918J7Og0Tr3RTj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kKjtUTsSKxzpH7dCSzI8vxGqtX2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ufJajvfhu5w5TeNly9rxId7CD78.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ojD3ueXmQT7ybS201zjBUXyjBq0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mc4fSseFRF2UESzxa9zYAMuiGsW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dNCyaHEP32WsYQDIbz5evdHDWlV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yQ2SSC4d92Iuf5D80M12SqUthyM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cHi0Mu455Jess9xbNLUhKEwVfiN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7BBiuiTMSkvQavN9KcvqBpeppsc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zGm2sRydoIkcDzAti4m1T7nneNH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2KjlVwukQqy5wbbDhR0pHxC2AOP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jWyAOOMdUZaoB6eURiLeIEE50e2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t61luQLjKbV39HgjAtZ8sAhJ8Ua.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8yYHYWFCAskDz8BMUCk8TqdCl0c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3pqSexGu87PgVo7hHDo69HzoxQX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/frL2w8p3J7K8Oh9Y5zR7zQvrPPh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mK6M6Yh2DgT5iA8hWJUt4Fwqdxp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dt9nO7tpxdvPu1tRBlCKN8diZd6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/msXyXd0Scch6ruw1QYPQcC7Qybm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.736,
+          "height": 1848,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j9ZZ7WV5pwLLXbbebyGdMUxbqrc.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 10601
+        },
+        {
+          "aspect_ratio": 5.736,
+          "height": 1848,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cs2UFTRhlinuZoqmI1QDuq6RH7R.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 10601
+        },
+        {
+          "aspect_ratio": 5.737,
+          "height": 480,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kujoFVeajvCrhlpqhW48s9EYIgm.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2754
+        },
+        {
+          "aspect_ratio": 5.203,
+          "height": 153,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9YHDkwkjIZEGPh6088sAvKAgswk.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 796
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uZUtoVChBGhNj9OfrM2LYpwBm8E.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kaMisKeOoTBPxPkbC3OW7Wgt6ON.jpg",
+          "vote_average": 5.682,
+          "vote_count": 11,
+          "width": 1067
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qqFxflPjvS2S8VZONeDffkbs6lr.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1504,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kZ3ZGOGrUvYKA1erts8ckynMduv.jpg",
+          "vote_average": 2.542,
+          "vote_count": 5,
+          "width": 1003
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o24W3huCBpDA3mKxgNhvTpXJ8Ie.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/amtFUpdtRgJiDjIuUHl4nSTq1q9.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3b3OfoVGsFSLjp0qcyrFntVLYFo.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ixM7N62bjtu5PGr1Tq3wuBbELxX.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iP8CMntcSpPG8r7gXsN2JZ8gaVg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 846,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/91z5IHcqGWmh8odTnKcMzWDrsZK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 564
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hPz1086iC2NSPgs8PKtBplddpvs.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Ju6beu17QA4BsJCmGzTr2kbZr8.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A65dW3yZ9AUQ2Uq0BP4j9paMCni.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.722,
+          "height": 1051,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yCk1EaEaH0kfyut1KBodZaReJ5z.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 759
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uJa6l1WdQDBuIPgfamhPXyqgbeP.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1067
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nuJqaBsXdGlLFfpyHtkkCPWAOx7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 780,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gyaKMDNS22N3cKaqzv2qtKtJ9c1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 550
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vvPCfLX8jPURu0M26EcCSFWGDe7.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j51FCiTUnfebYVnzsfHDkQrZRCv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dCLwR1lSsj1FagolGueLGyYAovH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nhvPlS4uxWSViSYDjUh8fZqXO2w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5ivS8o9GOZZJny2cUIb5e2JYKyE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 905,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dxRIhciqIcJOcPVif7tEveREKyl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jbrMpErsaPrzKjf96zpE452Un1o.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eLXIoShK8rEI7fxmcfRexykljd5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1696,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n5IB6Ni4YD9BDfcMuoX2SRPYE3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1131
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 903,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mv8svsVFwj5ZXAx0FJI3zh1HEwg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 602
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/saBOD4n0DuYaf9EHvBE3NRtuye.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nJuX6eauBhxWHDdalooZMNKBXTB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vGWUi7UjqTSOU4WWyDMcnGlOpfa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 789,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kKT2agcLtTCjbQh4oKC0hWlxxrt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 526
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1696,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5wQKwLiP21kRshiohSnvY7uJQ0f.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1131
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3dsYERW7SqdqnSNH0MHBEbCi8He.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mwwqBWkZIPtvsvF6dbYdKu943cr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/io9DOwGzvREyBV6NkgGgxGWr3DJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kMYhDNgYATHfR4En3k6tmelQ3PA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tNBk5tMY0DRGHCHa9ltwc8RzGIT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nKx4hh1EMPDy8TCy6agHFDvfvSv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6c9eRW4MGJNovgAA2Nh3tFjQLEe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eHgB38lVuM6JEuZMsyyr37pt726.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gEuaugQph6EdSRT96NxWNtjDVvp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

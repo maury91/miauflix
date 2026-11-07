@@ -1,0 +1,1447 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4140",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"2cba302cb696a65edfce47aa4fd59dbb\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/eJOy7YWAHgOS3V477sdTsq4v9jp.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2018-10-02",
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://www.ten-sura.com/anime/tensura",
+    "id": 82684,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-09-25",
+    "last_episode_to_air": {
+      "id": 7108053,
+      "name": "The Hero Awakens",
+      "overview": "Rimuru has Raphael interfere in Chronoa's Unlimited Imprisonment skill to save Hinata and Chloe.",
+      "vote_average": 9.3,
+      "vote_count": 3,
+      "air_date": "2026-09-25",
+      "episode_number": 24,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 4,
+      "show_id": 82684,
+      "still_path": "/Ag3tp12uy0nhSJuAe6lI6oNxyK7.jpg"
+    },
+    "name": "That Time I Got Reincarnated as a Slime",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 57,
+        "logo_path": "/uxaXSoT8K0S2NE5PWsBpHUl3GGU.png",
+        "name": "Nippon TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 569,
+        "logo_path": "/cIMyE9cw1W4kMFGxmC17HKTnVz9.png",
+        "name": "YTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1896,
+        "logo_path": "/suqJy99xiGr8PV7eQovUFRgquYT.png",
+        "name": "FBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2727,
+        "logo_path": "/85U2onICiQV9fMHORxw8EWSQ6MZ.png",
+        "name": "Chukyo TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2728,
+        "logo_path": "/kwC7bfbGknKuL7uxKahk6paamlp.png",
+        "name": "RNB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3201,
+        "logo_path": "/4OpeDJ8jzPeaSiOlzGCnHjm6tpt.png",
+        "name": "HTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3644,
+        "logo_path": "/8Cue5NzJ6cucpA5k73GVrCqn2JI.png",
+        "name": "FCT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3698,
+        "logo_path": "/rrw1HbmPpR9GQ3K19taPCYYf5jY.png",
+        "name": "STV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3741,
+        "logo_path": "/hiI8H4WLDlCtRZQboq4BTdM2KAg.png",
+        "name": "KNB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4790,
+        "logo_path": "/5aEqvKUgffp6zehXyCUhJyzeZPg.png",
+        "name": "YBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4791,
+        "logo_path": "/e9WRfzkc8HNsZ1qEF26ENHlBMvn.png",
+        "name": "KTK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4797,
+        "logo_path": "/9UjM4C7kvRlgg5QF4sXpJD6cM5P.png",
+        "name": "NKT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4815,
+        "logo_path": "/3eAF85UnfbyA3BBuCelMd9LMwyf.png",
+        "name": "RAB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4816,
+        "logo_path": "/9qQIAEYEw1ZyPPK3tqE18Z00AwW.png",
+        "name": "TVI",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4817,
+        "logo_path": "/oxuY8YFFO6Iv1IicYRGFcLizERc.png",
+        "name": "MMT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4818,
+        "logo_path": "/doRgDFcuYSKr3NhkfKNVaj2iyjv.png",
+        "name": "ABS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4822,
+        "logo_path": "/xX0I9Sc0AxSoKoVtwwmz0DWOWcr.png",
+        "name": "JRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4825,
+        "logo_path": "/9dD3buakf1nS6XQVBwEtm50izs4.png",
+        "name": "TOS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6155,
+        "logo_path": "/cvePJ33fR2SeirKZWD8rCV7rAaF.png",
+        "name": "YBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6286,
+        "logo_path": "/mcA2WrzDxg1MuZ2TnewjVZaTvM2.png",
+        "name": "TSB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6668,
+        "logo_path": "/atlFO76SPaLGIt9Wmxzg23M0IoA.png",
+        "name": "TeNY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6669,
+        "logo_path": "/xGOaJcQi5TfSsE11q9MEehfoMPP.png",
+        "name": "RNC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6670,
+        "logo_path": "/7OAJi6aS9zQWwP64jqxRllBvYKR.png",
+        "name": "NIB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6671,
+        "logo_path": "/38NuOxf0pLdIMIHzFLwVndlvFRe.png",
+        "name": "KKT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7076,
+        "logo_path": "/tFePbc4dqJzcUaHeKAQkhRgT5zJ.png",
+        "name": "Daiichi-TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7077,
+        "logo_path": "/r1vdmMUpIGnGvLE3UMqkuEtWlG4.png",
+        "name": "FBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7078,
+        "logo_path": "/dFl2trJMZYvksBWzQJCa4aH2zkb.png",
+        "name": "RKC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7079,
+        "logo_path": "/kNnpQFSLQb5vqB56XPmIlcn8Wer.png",
+        "name": "KYT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7092,
+        "logo_path": "/5IzL2Fq2yErfy4LH96KX5PKOAbv.png",
+        "name": "KRY",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 96,
+    "number_of_seasons": 4,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "転生したらスライムだった件",
+    "overview": "Corporate worker Mikami Satoru is stabbed by a random killer, and is reborn to an alternate world. But he turns out to be reborn a slime! Thrown into this new world with the name Rimuru, he begins his quest to create a world that’s welcoming to all races.",
+    "popularity": 36.8673,
+    "poster_path": "/pzujcdPAoH361NObVrtbA7zACE7.jpg",
+    "production_companies": [
+      {
+        "id": 30294,
+        "logo_path": "/k2aOFwsa0NL0MuHA3Oh0kpoQm8D.png",
+        "name": "8bit",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173132,
+        "logo_path": "/yV9EORK2ZwdMg45K10PuVh6LlM3.png",
+        "name": "Bandai Namco Filmworks",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188143,
+        "logo_path": "/cyCV6C5EBG45hsVTQVjzwLVwkg1.png",
+        "name": "MICRO MAGAZINE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173133,
+        "logo_path": "/pB59XO7veWGZjzK4MLGKWxYecD.png",
+        "name": "Bandai Namco Music Live",
+        "origin_country": "JP"
+      },
+      {
+        "id": 152836,
+        "logo_path": "/2Nw5F2Mv4at3Sm6ldwTKK3XYuLK.png",
+        "name": "Bandai Spirits",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162019,
+        "logo_path": "/inMGZK76HIbFhTnCGzVx39BMGzr.png",
+        "name": "ADK Marketing Solutions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 185075,
+        "logo_path": "/bJxpTD3a22ySiC4FhPFgrvoijSA.png",
+        "name": "Sony Music Solutions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Nippon Television Network Corporation",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2019-03-26",
+        "episode_count": 16,
+        "id": 121242,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/z88YuC2De7AuXayfYU6izDORple.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2018-10-02",
+        "episode_count": 24,
+        "id": 110067,
+        "name": "Season 1",
+        "overview": "Corporate worker Mikami Satoru is stabbed by a random killer, and is reborn to an alternate world. But he turns out to be reborn a slime! Thrown into this new world with the name Rimuru, he begins his quest to create a world that’s welcoming to all races.",
+        "poster_path": "/bQlHgqXFpZ1xpiiBEzncSpXYIwF.jpg",
+        "season_number": 1,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2021-01-12",
+        "episode_count": 24,
+        "id": 139158,
+        "name": "Season 2",
+        "overview": "Now that the Jura Tempest Alliance is growing even further, they will now be meeting the animal kingdom of Eurazania, reuniting with King Gazel, rising tensions between monsters and humans, and Rimuru encountering the strongest enemy he’s ever faced.",
+        "poster_path": "/v6tZuRm81zUWGgODfxFvS6sW0Vm.jpg",
+        "season_number": 2,
+        "vote_average": 8.3
+      },
+      {
+        "air_date": "2024-04-05",
+        "episode_count": 24,
+        "id": 370340,
+        "name": "Season 3",
+        "overview": "After Clayman’s defeat, Rimuru returns home and learns that Diablo healed the nobles of Falmuth, securing their alliance with Tempest. Meanwhile, Hinata becomes suspicious of Rimuru’s growing power and confronts him—unaware that a powerful organization is pulling the strings behind the scenes.",
+        "poster_path": "/p1t65WL9w6ZUB3axHmlP5V9t5gA.jpg",
+        "season_number": 3,
+        "vote_average": 7.6
+      },
+      {
+        "air_date": "2026-04-03",
+        "episode_count": 24,
+        "id": 447678,
+        "name": "Season 4",
+        "overview": "Demon Lord Rimuru's dream of creating an alliance between humans and monsters takes a step closer to being realized. As Tempest continues to prosper, Granville Rozzo and his granddaughter, Maribel Rozzo, clash with Demon Lord Rimuru over their plan to protect mankind by ruling over them. Meanwhile, in El Dorado, Demon Lord Leon works toward goals of his own. The awakening of a new Hero draws near!",
+        "poster_path": "/94MjsZUyxubodMPJdWOVkcJ0bdU.jpg",
+        "season_number": 4,
+        "vote_average": 8.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Ascend into your true form.",
+    "type": "Scripted",
+    "vote_average": 8.438,
+    "vote_count": 1013,
+    "external_ids": {
+      "imdb_id": "tt9054364",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 352408,
+      "tvrage_id": null,
+      "wikidata_id": "Q61779950",
+      "facebook_id": null,
+      "instagram_id": "tensura_official",
+      "twitter_id": "ten_sura_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "That Time I Got Reincarnated as a Slime",
+            "overview": "Corporate worker Mikami Satoru is stabbed by a random killer, and is reborn to an alternate world. But he turns out to be reborn a slime! Thrown into this new world with the name Rimuru, he begins his quest to create a world that’s welcoming to all races.",
+            "homepage": "",
+            "tagline": "Ascend into your true form."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "О моём перерождении в слизь",
+            "overview": "Жизнь в одиночестве и стабильное отсутствие подруги привели 37-летнего Сатору Миками к мысли о том, что жизнь его сложилась неудачно. Однажды он шёл по улице со своим другом, как вдруг на них напал грабитель. Сатору защитил товарища ценой своей жизни, после чего переродился в другом мире. Перед смертью мужчина подумал о том, как плохо человеку от потери крови, а после перерождения получил... тело слизня, в котором эта жидкая красная субстанция попросту отсутствует. Но что может сделать в огромном незнакомом мире, пускай и разумная, но слизь?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "That Time I Got Reincarnated as a Slime",
+            "overview": "Mikami Satoru, funcionário de uma megacorporação, é apunhalado por um assassino nas ruas e renasce num mundo paralelo... Mas ele renasce como um slime! Jogado neste novo mundo com o nome Rimuru, ele assume a missão de criar um mundo que seja acolhedor para todas as raças.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Moi, quand je me réincarne en Slime",
+            "overview": "Satoru, employé de bureau lambda, se fait assassiner par un criminel en pleine rue. Son histoire aurait dû s'arrêter là, mais il se retrouve soudain réincarné dans un autre monde sous la forme d'un Slime, le monstre le plus faible du bestiaire fantastique. Le voilà équipé de deux compétences uniques : « Prédateur », lui permettant de récupérer les aptitudes de ses adversaires, et « Grand Sage », grâce à laquelle il acquiert une compréhension aiguë de son environnement. Mais même muni de ces armes, ses chances de survie semblent cependant limitées…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "That Time I Got Reincarnated as a Slime",
+            "overview": "Satoru Mikami es un hombre de 37 años que tiene un trabajo que no le gusta, sin salida y que no es feliz con la vida que lleva, pero cuando muere a manos de un ladrón y piensa que es su fin, se despierta descubriendo que se ha reencarnado en un mundo de magia y espada… ¡pero como un slime! Ahora tendrá que acostumbrarse a su nueva vida, aunque por suerte contará con dos habilidades únicas que le ayudarán a sobrevivir: una que le proporciona una gran comprensión de todo lo que le rodea, y otra que le permite copiar las habilidades de sus oponentes.",
+            "homepage": "",
+            "tagline": "That Time I Got Reincarnated as a Slime"
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Lúc Đó Tôi Đã Chuyển Sinh Thành Slime",
+            "overview": "Chuyển thể từ light novel cùng tên của tác giả Fuse. Anh chàng Satoru Mikami, 37 tuổi, FA nhiều năm với sống cuộc sống chán chường và không mấy vui vẻ gì. Ngày kia vận số đen đủi bám lấy anh chàng, bị cướp tấn công, giết ngay tại chỗ, tưởng chừng tháng ngày chán ngắt ấy đã kết thúc. Nhưng không! Ấy lại chính là sự khởi đầu của một cuộc sống mới, Mikami tỉnh dậy, thấy mình đang ở trong một thế giới kì lạ.\n\nVà điều quái dị là anh ta không còn hình dạng người nữa mà đã trở thành quái vật slime dẻo quẹo và không có mắt. Khi dần quen với hình dáng mới này, anh chàng bắt đầu khám phá thế giới cùng với những quái vật khác. Và thế là, cuộc đời làm Slime ở một thế giới mới bắt đầu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "关于我转生变成史莱姆这档事",
+            "overview": "三上悟过着不起眼的人生，在随机杀人魔肆虐下结束了三十七年生涯，看似如此。当他苏醒时，不仅眼睛看不见，就连耳朵也听不到。面对一连串突发状况，他意识到自己投胎转世成“史莱姆”。尽管变成最弱魔物让他颇有怨言，三上悟还是决定要快乐地过史莱姆生活，没想到却碰上天灾级魔物“暴风龙维尔德拉”，命运就此出现巨大转折。维尔德拉将他命名为“利姆鲁”，正要展开史莱姆式的异世界新生活时，却被卷入哥布林对牙狼族的纷争之中，最后还莫名其妙当上魔物大王。能夺取对手能力的“捕食者”以及精通世界真理的“大贤者”，有这两项特殊技能当武器，最强的史莱姆传说正式展开。",
+            "homepage": "",
+            "tagline": "转生异世界，史莱姆也能称王"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Meine Wiedergeburt als Schleim in einer anderen Welt",
+            "overview": "Nachdem ein 37-jähriger Mann von einem Amokläufer getötet wird, findet er sich in einer anderen Welt als Schleim mit einzigartigen Fähigkeiten wieder. Mit seinem neuen Namen, Rimuru Tempest, den er nach dem Treffen mit seinem neu gefundenen Freund, dem „Katastrophen-Level“-Sturmdrachen Veldora bekam, beginnt er sein neues Leben in einer anderen Welt und mit einer zunehmenden Anzahl von Schergen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "That Time I Got Reincarnated as a Slime",
+            "overview": "Satoru Mikami es un hombre de 37 años que tiene un trabajo que no le gusta, sin salida y que no es feliz con la vida que lleva, pero cuando muere a manos de un ladrón y piensa que es su fin, se despierta descubriendo que se ha reencarnado en un mundo de magia y espada… ¡pero como un slime! Ahora tendrá que acostumbrarse a su nueva vida, aunque por suerte contará con dos habilidades únicas que le ayudarán a sobrevivir: una que le proporciona una gran comprensión de todo lo que le rodea, y otra que le permite copiar las habilidades de sus oponentes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "主人公リムルは、ドラゴンにゴブリン、ドワーフやオーガなど多種多様な種族と出会い、この世界のあり方を知っていく。そして、時にユーモラス、時にシリアスに展開する物語の先に待つのは、魔王の存在。一匹のスライムが身につけたスキルを駆使し、知恵と度胸で仲間を増やしていく。ファンが待ち望んでいた転生エンターテインメント、いよいよアニメで開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "전생했더니 슬라임이었던 건에 대하여",
+            "overview": "어느 날 갑자기 나타난 괴한에게 습격당해 목숨을 잃은 미카미 사토루는 천문학적 확률로 이세계에 전생한다.\n\n그러나 왜인지 전생한 모습은, 최약체 몬스터로 유명한 슬라임이었다!\n\n이런 건 인정 못 해?! 라고 말하면서도 낯선 동굴에서 즐거운 슬라임 라이프를 만끽하지만...\n\n천재급 드래곤 『폭풍룡 베루도라』와 만남으로써, 운명의 수레바퀴는 움직이기 시작했다.\n\n몬스터 전생 판타지, 시작!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "המקרה בו חזרתי לחיים בתור סליים",
+            "overview": "לאחר שסאטו מיקאמי בן ה-37 נרצח בידי שודד, הוא חוזר לחיים בתור \"רימורו טמפסט\" - מפלצת רפש חדשה בעולם פנטזיה. לאחר ששוחרר מחייו הרגילים והמשעממים, כעת הוא מתחיל הרפתקה חדשה בתור מפלצת רפש בעלת יכולות מיוחדות.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Коли я переродився слизом",
+            "overview": "Рімуру Темпест — нове ім’я слизу в фентезійному світі, дане колишньому 37-річному Сатору Мікамі, після того, як його вбив пересічний злодій. Звільнившись від звичайного усталеного ритму минулого життя, він починає свою пригоду в фентезійному світі як слизовий монстр із унікальними навичками.",
+            "homepage": "",
+            "tagline": "Вознесись у свою істинну форму."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "ذلك الوقت الذي تجسدت فيه كوحش هلامي",
+            "overview": "عاش مينامي ساتورو حياة عادية خالية تماماً من أي حدث مهمّ حتّى عام السّابعة والثلاثين وبقي أعزب إلى هذا الحين. في الطريق، تعرّض لطعنة من شخص عابر ليغلق بذلك السّتار على حياته المملّة. كان ينبغي أن يكون الأمر هكذا على الأقل. لكن فجأة... شعر بأنه على قيد الحياة، لكن بلا سمع ولا بصر. سرعان ما أدرك بعد ذلك حقيقة أنّه خُلِق من جديد لكن كحمأة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "وقتی به‌عنوان یک اسلایم تناسخ پیدا کردم",
+            "overview": "میکامی ساتورو، کارمند ۳۷ ساله شرکت توسط یک قاتل تصادفی مورد حمله قرار می‌گیرد و دوباره در دنیایی دیگر متولد می‌شود. اما در می‌یابد که به‌عنوان یک اسلایم حیات دوباره یافته است! او که با نام ریمورو تِمپِست به این دنیای جدید پرتاب شده است، تلاش خود را برای ایجاد دنیایی آغاز می‌کند که پذیرای همه نژادها باشد. رها از زندگی معمولی و قدیمی گذشته، ماجراجویی تازه او در یک دنیای خیالی به‌عنوان یک هیولای اسلایمی با توانایی‌های منحصر به‌فرد آغاز می‌شود.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "That Time I Got Reincarnated as a Slime",
+            "overview": "L'impiegato Satoru Mikami muore accoltellato e si risveglia in un mondo fantasy con le sembianze di uno slime. Ribattezzato Rimuru Tempest dal drago Veldora, il protagonista scopre di possedere un'abilità speciale capace di assorbire e replicare qualsiasi cosa. Unendo goblin, ogre e altre razze, Rimuru fonderà la Federazione Jura Tempest per far convivere mostri e umani.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "關於我轉生變成史萊姆這檔事",
+            "overview": "上班族三上悟遭到隨機殺人魔刺殺身亡。當他醒來時發現自己轉生到了異世界。但是，他的模樣卻變成了史萊姆！在獲得了「利姆路」這個嶄新人生（史萊姆生？），並且來到了這充滿了各式各樣種族的世界後，他決定以「打造出不分種族、讓大家都能夠快樂生活的國家」為目標 ──！",
+            "homepage": "",
+            "tagline": "史萊姆生活，現在開始了"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Jak jsem se reinkarnoval coby sliz",
+            "overview": "Mikami Satoru je při cestě z práce bodnut a umírá. Ale místo toho, aby umřel, tak je znovuzrozen do jiného světa. Ale ne jako člověk, nýbrž jako inteligentní sliz. Získává nové jméno Rimuru, a tak začíná jeho cesta po novém světě.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Odrodzony jako galareta",
+            "overview": "Nudne życie Mikamiego nagle się kończy, gdy zostaje wskrzeszony w innym świecie jako oślizgły potwór. Wkrótce poznaje inne niezwykłe istoty, co zmienia obrót spraw.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เกิดใหม่ทั้งทีก็เป็นสไลม์ไปซะแล้ว",
+            "overview": "เรื่องราวของ มิคามิ ซาโตรุ หนุ่มโสด ไม่เคยมีแฟน วัย 37 ปี ถูกแทงตายเพราะช่วยเพื่อนจากคนร้าย เขาได้เกิดใหม่ในต่างโลกด้วยร่างของสไลม์ ได้พบมังกร เวรุโดร่า ผู้ถูกผนึกมาร่วม 3 ร้อยปีและรู้ว่าเขามาจากต่างโลก ด้วยความเบื่อหน่ายในชีวิตจึงยอมเป็นเพื่อนกับสไลม์ ตั้งชื่อให้เขา “ริมุรุ” และให้เขากลืนตนเข้าไปในร่าง ด้วย2 ความสามารถ “นักล่า” ที่ทำให้เขาสามารถชิงความสามารถของผู้ถูกกลืน และ “ปราชญ์ผู้ยิ่งใหญ่” ทำให้เขาเข้าใจเรื่องราวในโลกใหม่ ส่งผลให้เขาพัฒนาเป็นสไลม์ที่น่าเกรงขามต่อเหล่ามอนสเตอร์ทั่วไป จนกลายเป็นปีศาจที่ยิ่งใหญ่ในภายหลัง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "關於我轉生變成史萊姆這檔事",
+            "overview": "上班族三上悟遭到隨機殺人魔刺殺身亡。當他醒來時發現自己轉生到了異世界。但是，他的模樣卻變成了史萊姆！在獲得了「利姆路」這個嶄新人生（史萊姆生？），並且來到了這充滿了各式各樣種族的世界後，他決定以「打造出不分種族、讓大家都能夠快樂生活的國家」為目標 ──！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Tensei Shitara Slime Datta Ken",
+            "overview": "",
+            "homepage": "",
+            "tagline": "Tensura q"
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Tensei shitara Slime Datta Ken",
+            "overview": "Rimuru Tempest, 37 yaşındaki eski bir insan olan Satou Mikami’nin geçen bir soyguncu tarafından öldürüldükten sonra aldığı fantezi dünyasındaki balçığın yeni adıdır. Sıradan, boş geçmiş yaşamını geride bırakıp, eşsiz yeteneklere sahip balçık canavarı olarak yeni bir hayata başlar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "That Time I Got Reincarnated as a Slime",
+            "overview": "Mikami Satoru, funcionário de uma megacorporação, é apunhalado por um assassino nas ruas e renasce num mundo paralelo... Mas ele renasce como um slime!\n\nJogado neste novo mundo com o nome Rimuru, ele assume a missão de criar um mundo que seja acolhedor para todas as raças.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Nadat een 37-jarige man is vermoord door een schutter, bevindt hij zich in een andere wereld als een slijm met unieke vaardigheden. Met zijn nieuwe naam, Rimuru Tempest, die hem wordt gegeven nadat hij zijn nieuwe vriend, de stormdraak Veldora op rampniveau, heeft ontmoet, begint hij zijn nieuwe leven in een andere wereld en met een toenemend aantal volgelingen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Tensei shitara Slime Datta Ken",
+            "overview": "Després d'haver estat assassinat mentre protegia un company de feina i la seua xicota, Satoru Mikami es reencarna en un bavós en un món desconegut de fantasia. Mentre explora una cova es troba amb Veldora, un antic drac segellat fa segles.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Bedrijfsmedewerker Mikami Satoru wordt neergestoken door een willekeurige moordenaar en wordt herboren in een alternatieve wereld. Maar hij blijkt een herboren slijm te zijn! Hij wordt in deze nieuwe wereld gegooid met de naam Rimuru en begint zijn zoektocht om een ​​wereld te creëren die alle rassen welkom heet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eJOy7YWAHgOS3V477sdTsq4v9jp.jpg",
+          "vote_average": 8.362,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l7SXIt8VEFw9QZjpWHHbnUslTLe.jpg",
+          "vote_average": 8.034,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xzjZDyqUobuJtkBljhgLH4Fdnye.jpg",
+          "vote_average": 4.656,
+          "vote_count": 16,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5rcEQ5AG617uTUpO2oPWPCx68Fk.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mCm7ZesSVxPtUNzXtfbPU37sQ4L.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/x8WY21awXlw2uDAyPGYIw829IlS.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tm5NtcORJ5PkW54lqQPfbBexHev.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nrrCc0yQIYukS5nGBrUHyXU2ET7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zp2GlWAPYiLOcMw7vLdbSYGvyCp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3839
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/KhOcQok4ihb1RGH9ABtaddh1be.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lHvUEHgPpCn6VoTkTty7LWZ32IW.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zkd3d6YC7XjfN3cE8eozNBumYuT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8hnAs02nU3kdoMgN1d9Uk5oyWGF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ay0BBteVzsnyanAFvcaYKWUOhgC.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ik5F2r70NjjyyFI6mKV0KNrFBMG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iKDvFdT2UYRy7Vh45miesLRLmG9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vDnME6bcFXqeXthNlscR65s1PXf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dSVNxJdONqYRd4XR4jBrGLsYY1C.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pUeKPugMQMdcJyuRZcfC2DnMYKf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a4XpHDM0ZgDcED7EzWtbihhbwZH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vbO3fCDuN1WikApp1ts6MLMjFCV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3mqqBEkvcWaY23ZMxXwjvEvEUyG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1530,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8njJS6M1EdciIPUsBBT6n5NuC9t.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2720
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vFGevHH7yOD8SWIvRr4eFrVhSz5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ePaNnBjoCaoGptebACemzeTFdBt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pM6dj2WsLIdePT8sKq1p4WH9YHJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9zBX0DGkV7XLT4Lee5dsHC9RUXy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uzaADAzkIhoLPsnTyq7RIxB6yBV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uzZM0yZJswjG2Jwe0JfKvLfCXXn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vvWK6zC9gEubma9FcLVOQdFy2NN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/LJs2hNdTyLEX3DNa8WLgAozAvt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xWAltVmBPdMTqVe4qZj2KaPm2W8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zq456MVYgqmLdwysCqNe8vPSr2C.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uYIbsKCzsySsDnT7kanECuakkQi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.355,
+          "height": 330,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nBd0dWeSmD08NsoBTkSLlHDZg4l.png",
+          "vote_average": 2.542,
+          "vote_count": 5,
+          "width": 777
+        },
+        {
+          "aspect_ratio": 1,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3mfGINgNMfMdnzaNeweK4JUWtrh.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.97,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vT0gTClOaeP6TSjS8H8GoKXuCnk.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1241
+        },
+        {
+          "aspect_ratio": 0.969,
+          "height": 640,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8QOnI8Xm1wGfbDR3AsM5bcz706.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 620
+        },
+        {
+          "aspect_ratio": 1.078,
+          "height": 1129,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1MAtfbeP6OKZplfPN0kGPT1qvbl.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1217
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pzujcdPAoH361NObVrtbA7zACE7.jpg",
+          "vote_average": 6.312,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jQb1ztdko9qc4aCdnMXShcIHXRG.jpg",
+          "vote_average": 5.566,
+          "vote_count": 15,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/72qHntMP7Sp69LGvheP29h6L9n6.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2826,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fqN8GboG7D6wfW8WFFdesgSnwOA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1999
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wdB16Z4Qup1tgY4Vzmj2UDPAVjU.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oUPEjZz6CNYjt82SKqRxA3xvwLY.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gD7xiNAtup59rg8PYhJ17W1iydg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 848
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8fVV8kFWAmyhn2lDJVLXBRO20Fq.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tWJRkoAMGTLLT8q8IIahJWpvb1n.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w21oeriCocSCuQEkcDGrsUTVhun.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1445
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lq1sdy1if8W8vUhlErjrpHe59IZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 706
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1bMB5t88FJM8qfjks823f3MhCK2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 724
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/f0ijfHsYhVM0zG3Ca4m7hwpA2CA.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1415
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2122,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vopXJElfHYejWoOsBHqACBRaHBU.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/17qyZwxucf8BdEK8mlWZeGwdtKw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 852
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k5a976anPbFvKwm9ExUtJW6Kq1m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6Xxpai7imDwLPbA4vwYKBkcCJny.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 724
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mBsaxGO8tob2h4nDqAv5jGvzogh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 724
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1FUxaRwHaDINgv9foaS7uTidFtE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 724
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rjpbfpeN8VZzvBJpbBdEvUKRY9z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 848
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h4eV627pdywnGkre3WXUBqs6qF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uxNVettSykKx2qeUco6T72ZdI1e.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jehV22tobEHxlwUnS04pkfyizHz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1449
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kcVN1j0bK6ABEatMb9vmSk5Wjd4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1132,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/87D82CqR9gXqrHYwzvW5XZsoQvR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 755
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1527,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4fZYXd6uOGlrWHhsfqsNQr0LlQc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1018
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2829,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uHhHiBuQ2JdONa85pWT8BANPl3T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1886
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1DwBDCLZjmjdMtb5xVAINzuh0UJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

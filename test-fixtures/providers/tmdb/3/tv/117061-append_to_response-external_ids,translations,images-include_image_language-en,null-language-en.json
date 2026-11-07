@@ -1,0 +1,719 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=21773",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c14229aef9f1400094e8862669373754\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/aqETSDXdeYqcD1PPd2WBfeWtoct.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2021-07-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://tanmoshi-anime.jp",
+    "id": 117061,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-28",
+    "last_episode_to_air": {
+      "id": 7895743,
+      "name": "That Was Their Final Answer",
+      "overview": "Kimizuka battles Charlotte and Fuubi to protect Nagisa.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-04",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 117061,
+      "still_path": "/44zoaCKpwS3CcW7YLzuAQWznCPQ.jpg"
+    },
+    "name": "The Detective Is Already Dead",
+    "next_episode_to_air": {
+      "id": 7895744,
+      "name": "Guardian of the World",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-11",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 117061,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 173,
+        "logo_path": "/fERjndErEpveJmQZccJbJDi93rj.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 25,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "探偵はもう、死んでいる。",
+    "overview": "After thwarting a hijacking with beautiful, silver-haired detective Siesta, Kimihiko leads a life of globe-trotting and crime-solving—until Siesta dies. A year later, a new case will open old wounds as it threads murder, conspiracy, and his dead partner!",
+    "popularity": 17.8588,
+    "poster_path": "/8gCOlj0bXa2cQnXSl4wRX5tVIA0.jpg",
+    "production_companies": [
+      {
+        "id": 121246,
+        "logo_path": "/3OHTNLw7i8zHqrGVt5kfLBdtZ6A.png",
+        "name": "ENGI",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 36342,
+        "logo_path": "/3xYrMZn6SrupK4R83EUgNPjzqj4.png",
+        "name": "Sammy",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162088,
+        "logo_path": "/7w22w5EOw8MsJ3uhWdOuWAfp2HS.png",
+        "name": "INCS toenter",
+        "origin_country": "JP"
+      },
+      {
+        "id": 192573,
+        "logo_path": "/naTpOY8AjRtgBw0JXafrhAD8ZBT.png",
+        "name": "BS Nippon Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 17981,
+        "logo_path": "/8UABNMysukRi4udTHYxcNUMbPR1.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2021-05-21",
+        "episode_count": 8,
+        "id": 367522,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/bxCdJdAQeMIVVR0V8bb2PZjLXj7.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2021-07-04",
+        "episode_count": 12,
+        "id": 177393,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/8gCOlj0bXa2cQnXSl4wRX5tVIA0.jpg",
+        "season_number": 1,
+        "vote_average": 6.2
+      },
+      {
+        "air_date": "2026-10-07",
+        "episode_count": 13,
+        "id": 301978,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/gob5oouCFv74rO3MaVAm3hKqc7r.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 5.7,
+    "vote_count": 60,
+    "external_ids": {
+      "imdb_id": "tt13884052",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 397197,
+      "tvrage_id": null,
+      "wikidata_id": "Q105602572",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "tanteiwamou_"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "La detective está muerta (Tantei wa Mou, Shindeiru)",
+            "overview": "Kimizuka pasa 3 años como asistente de la misteriosa detective Siesta. Cuando ella muere, él debe regresar a una vida típica de la escuela secundaria. Pero ¿está realmente muerta?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Detective Is Already Dead",
+            "overview": "After thwarting a hijacking with beautiful, silver-haired detective Siesta, Kimihiko leads a life of globe-trotting and crime-solving—until Siesta dies. A year later, a new case will open old wounds as it threads murder, conspiracy, and his dead partner!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Детектив уже мертв",
+            "overview": "Кимидзука Кимихико, обычный старшеклассник, при самых необычных обстоятельствах становится помощником ангелоподобной девушки-детектива. Они встретились в угнанном самолете, вели кочевую и странную жизнь, а потом она умерла. А парень все еще продолжает выполнять ее желания, хотя и пытается жить обычной жизнью. Но что-то неважно у него получается.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "「君、私の助手になってよ」\n\n巻き込まれ体質の少年・君塚君彦は、上空一万メートルを飛ぶ飛行機の中、探偵を名乗る天使のように美しい少女・シエスタの助手となった。二人は世界の敵と戦うため、三年にもわたって世界中を飛び回り、目も眩むような冒険劇を繰り広げ―やがて死に別れた。\n\n激動の日々から一年。高校三年生になった君塚は日常という名のぬるま湯にとっぷり浸かり、ごく普通の学生生活を送っていた。そんな君塚の元に一人の依頼人が現れる。\n\n「あんたが名探偵？」\n\n同級生の少女、夏凪渚との出会いをきっかけに、過去と現在を繋ぐ壮大な物語が再び始まろうとしていた― 。",
+            "homepage": "",
+            "tagline": "それでもわたしは、わたしの生きる希望を守りたい。"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Детективка вже мертва",
+            "overview": "Чотири роки тому старшокласник Кімідзука Кіміхіко познайомився у викраденому літаку з загадковою детективкою, яка назвала себе Сієстою. Після того випадку він став її помічником, допомагаючи дівчині в розслідуваннях і протистоянні секретній організації — до того часу, поки Сієста не померла. І тепер Кімідзука намагається впоратися з втратою і повернутися до життя звичайного старшокласника, але минуле життя не відпустить його так просто — навіть коли детективка вже мертва.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "侦探已死",
+            "overview": "“你、来当我的助手吧。”有着被卷入事件体质的少年·君冢君彦，在高空一万米的飞机上，成为了自称是侦探的天使般的美丽少女·谢丝塔的助手。二人为了同世界各地的敌人战斗，三年来辗转于世界各地，展开了一系列惊心动魄的冒险。不久之后，侦探就去世了。动荡的日子已经过去了一年。已升入高三的君冢也沉溺在了名为日常的温水中，过着极其普通的学生生活。然而，他的身边却出现了一个委托人。“你就是名侦探？”以和同年级的少女夏凪渚相遇为契机，连接过去和现在的宏大故事再次开始了。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "The Detective is Already Dead",
+            "overview": "\"Deviens mon assistant\". À 10 000 mètres d'altitude, Kimizuka Kimihiko, un collégien, qui a le don de toujours se retrouver au mauvais endroit, rencontre Siesta, une jolie jeune fille aux allures d'ange se disant détective. C'est ainsi que commence une aventure de trois ans où notre duo déjoue des complots à travers le monde entier. Et ce jusqu'à ce que la mort les sépare. Un an plus tard, Kimihiko, maintenant en terminale, ne cherche plus qu'à vivre un quotidien paisible. Mais un jour, un client l'interpelle : \"C'est toi, le détective\" ?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "탐정은 이미 죽었다",
+            "overview": "너, 내 조수가 돼라.\n\n사건에 휘말리는 체질의 소년 키미즈카 키미히코는 상공 1만 미터 위를 나는 비행기 안에서\n\n자신이 탐정이라고 하는 천사같이 아름다운 소녀 시에스타의 조수가 되었다.  두 사람은 세계의 적과 싸우기 위해 3년에 걸쳐 세상 이곳저곳을 돌아다니고 눈앞이 아찔해지는\n\n모험극을 펼친 끝에...죽음으로써 헤어졌다.\n\n격동의 나날들로부터 1년.\n\n고등학교 3학년이 된 키미즈카는 일상이라는 이름의 평화로우면서 안락한 나날들 속에서\n\n극히 평범한 고등학생 생활을 보내고 있었다.\n\n그런 키미즈카에게 한 명의 의뢰인이 찾아왔다.  '네가 그 명탐정이야?'\n\n동급생 소녀인 나츠나기 나기사와의 만남을 계기로,\n\n과거와 현재를 잇는 장대한 이야기가 다시 한번 시작되려 하고 있었다....",
+            "homepage": "",
+            "tagline": "그럼에도 나는 내 삶의 희망을 지키고 싶다."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "The Detective Is Already Dead",
+            "overview": "Kimihiko Kimizuka teve sua vida mudada quando se tornou assistente de um misterioso detetive conhecido como “Siesta”. Após alguns anos de missões e casos alucinantes sendo resolvidos junto a ela como seu assistente, Siesta subitamente morreu, deixando para traz Kimihiko, que voltou a sua vida tediosa de estudante. Agora no ensino médio, Kimihiko precisa aprender a lidar com o seu dia a dia sem as agitações das investigações, mesmo que seu passado com Siesta fique voltando para o provoca-lo, muito graças a irmã mais nova da detetive.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "The Detective Is Already Dead",
+            "overview": "„Sei mein Assistent.“ Kimizuka Kimihiko, der ständig in seltsame Situationen gerät, wird in einem Flugzeug, das zehn Kilometer über der Erde fliegt, zum Assistenten der engelsgleichen Siesta, die sich als Detektivin vorstellt. Damit die beiden gegen die Feinde der Welt kämpfen können, reisen sie drei Jahre lang durch die Welt in einem schwindelerregenden Abenteuer – bis der Tod sie schließlich scheidet. Ein Jahr nach diesem erschütternden Ereignis führt Kimihiko ein stinknormales Leben als Zwölftklässler, bis ein Klient ihn aufsucht. „Bist du der Meisterdetektiv?“ Die Begegnung mit seiner Mitschülerin Natsunagi Nagisa führt ihn zurück in eine Geschichte, in der Vergangenheit und Gegenwart sich verbinden.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "The Detective Is Already Dead",
+            "overview": "Kimizuka pasa 3 años como asistente de la misteriosa detective Siesta. Cuando ella muere, él debe regresar a una vida típica de la escuela secundaria. Pero ¿está realmente muerta?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "The Detective Is Already Dead",
+            "overview": "Kimizuka Kimihiko è un magnete della crisi. Quindi non è una sorpresa quando il suo volo piuttosto banale entra improvvisamente in uno stato di emergenza con un disperato bisogno di un detective a bordo. Sfortunatamente, il suo tentativo di evitare guai viene sventato da una bella ragazza con i capelli d'argento che ha il nome in codice Siesta. Dichiarandosi un detective, trascina Kimizuka nel caso senza tante cerimonie come sua assistente. Quell'incidente segnò l'inizio di un'avventura in giro per il mondo che andò oltre la sua più sfrenata immaginazione. Mettendo in gioco le loro vite, i due hanno abbattuto organizzazioni criminali, prevenuto disastri e salvato migliaia di persone. Ma il sipario si chiuse sul loro epico viaggio con la morte prematura di Siesta tre anni dopo. Decidendo di vivere una normale vita da liceo questa volta, Kimizuka trascorre un anno mantenendo un basso profilo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "偵探已經，死了。",
+            "overview": "「你來當我的助手吧。」君塚君彥是個天生容易捲入麻煩事的少年，有天他在萬米高空的飛機上成為自稱偵探、美若天使的少女希耶絲塔的助手。兩人為了對抗世界之敵，整整三年來往世界各地，經歷目眩神迷的冒險旅程 ── 最後因死亡而分離。自令人衝擊的那一天後已過一年，升上高三的君塚完全沉浸在名為日常的溫吞安逸中，過著極為平凡的學生生活。這時一位委託人出現君塚面前，「你就是名偵探？」與同年級的少女夏凪渚的相遇成為契機，連繫過去與未來的宏偉故事再度展開 ──",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "นักสืบตายแล้ว",
+            "overview": "คิมิซึกะ คิมิฮิโกะ เด็กหนุ่มที่มักถูกลากเข้าไปพัวพันกับเรื่องยุ่งยาก ได้กลายมาเป็นผู้ช่วยของเซียสต้า เด็กสาวรูปงามราวกับนางฟ้าที่อ้างตัวเป็นนักสืบบนเครื่องบินที่บินอยู่ในระดับความสูงหนึ่งหมื่นเมตรเหนือพื้นดิน ทั้งสองเดินทางไปรอบโลกเป็นเวลากว่าสามปีเพื่อต่อสู้กับศัตรู ก่อให้เกิดเป็นเรื่องราวการผจญภัยอันยิ่งใหญ่ และแล้วนักสืบก็ได้ตายจากไป หนึ่งปีหลังจากวันคืนอันบ้าระห่ำ คิมิซึกะที่ได้กลายเป็นนักเรียนมัธยมปลายปีที่สามนั้นได้กลายมาเป็นเพียงนักเรียนมัธยมปลายธรรมดา ๆ ไปเสียแล้ว ทว่าก็ได้มีผู้ว่าจ้างคนหนึ่งมาหาคิมิซึกะที่เป็นแบบนั้น “นายคือยอดนักสืบสินะ” ด้วยการกับพานกับ “นัทสึนางิ นางิสะ” เด็กสาวที่เป็นเพื่อนร่วมชั้น เป็นจุดเปลี่ยนทำให้เรื่องราวมหากาพย์ที่เกี่ยวข้องกับทั้งอดีตและอนาคตกำลังจะเริ่มต้นขึ้น",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Tantei wa Mō, Shindeiru.",
+            "overview": "Kimizuka Kimihiko je magnetem na krize. Není tedy překvapením, když se jeho docela všední let náhle dostane do stavu nouze a na palubě je nutně potřeba detektiv. Bohužel jeho snahu vyhnout se problémům zmaří krásná dívka se stříbrnými vlasy, která vystupuje pod krycím jménem Siesta. Ta se prohlásí za detektiva a bez okolků vtáhne Kimizuku do případu jako svého asistenta. Tento incident znamenal začátek dobrodružství po celém světě, které přesáhlo jeho nejdivočejší představy. S nasazením vlastních životů oba likvidovali zločinecké organizace, zabraňovali katastrofám a zachraňovali tisíce lidí. Opona za jejich epickou cestou se však zavřela po třech letech, kdy Siesta předčasně zemřela. Kimizuka se rozhodl, že tentokrát bude žít obyčejný středoškolský život, a rok se držel v ústraní. Osud tomu však chtěl, že do jeho života vstoupí dívka, která je Siestě neuvěřitelně podobná, a hrozí, že jeho poklidné dny se ocitnou v chaosu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Tantei wa Mō, Shindeiru.",
+            "overview": "Kimizuka Kimihiko je krízový magnet. Preto nie je prekvapením, keď sa jeho pomerne všedný let zrazu dostane do stavu núdze a na palube je naliehavo potrebný detektív. Nanešťastie, jeho pokus vyhnúť sa problémom prekazí krásne dievča so striebornými vlasmi, ktoré vystupuje pod krycím menom Siesta. Vyhlási sa za detektíva a bez okolkov vtiahne Kimizuku do prípadu ako svojho asistenta. Tento incident znamenal začiatok dobrodružstva po celom svete, ktoré prekonalo jeho najdivokejšie predstavy. S nasadením vlastného života obaja zlikvidovali zločinecké organizácie, zabránili katastrofám a zachránili tisíce ľudí. Opona ich epickej cesty sa však zatiahla po troch rokoch, keď Siesta predčasne zomrela. Kimizuka sa tentoraz rozhodne žiť obyčajný stredoškolský život a rok sa drží v ústraní. Osud však chcel, aby mu do života vtrhlo dievča, ktoré sa na Siestu neskutočne podobá, a hrozí, že jeho pokojné dni sa zmenia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "",
+            "overview": "קימיזוקה קימיהיקו הוא מגנט של צרות ומוצא עצמו בשלל סיטואציות נוראיות, החל מלהיקלע לזירת פשע ועד ללהיות עד לעסקת סמים. לכן אין זה מפתיע שבזמן היותו נוכח בטיסה שגרתית למדי, נוצר מצב חירום המצריך את כישוריו של בלש במטוס. לרוע מזלו, נסיונו של קימיזוקה לחמוק מהסיטואציה מסוכל על ידי נערה יפהפיה וכסופת שיער העונה לשם הקוד \"סיסאטה\", זו מכריזה על עצמה כבלשית וגוררת אותו להיות העוזר האישי שלה בחקירה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thám Tử Đã Chết",
+            "overview": "Sau khi cùng nữ thám tử tóc bạc Siesta ngăn chặn vụ không tặc, Kimihiko sống cuộc đời phiêu lưu phá án khắp thế giới — cho đến khi Siesta qua đời; một năm sau, một vụ án mới khơi lại vết thương cũ, đan xen giữa giết người, âm mưu và người cộng sự đã khuất.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "Kimizuka Kimihiko jest magnesem kryzysowym. Nic więc dziwnego, że jego dość przyziemny lot nagle przechodzi w stan wyjątkowy, a na pokładzie pilnie potrzebny jest detektyw. Niestety, jego próba uniknięcia kłopotów zostaje udaremniona przez piękną dziewczynę o srebrnych włosach, która nosi kryptonim Siesta. Ogłaszając się detektywem, bezceremonialnie wciąga Kimizukę do sprawy jako swojego asystenta. Ten incydent zapoczątkował przygodę na całym świecie, która przekroczyła jego najśmielsze wyobrażenia. Narażając swoje życie, obaj zlikwidowali organizacje przestępcze, zapobiegli katastrofom i uratowali tysiące ludzi. Ale kurtyna zamknęła ich epicką podróż wraz z przedwczesną śmiercią Siesty trzy lata później. Postanawiając tym razem wieść zwyczajne życie licealisty, Kimizuka spędza rok na ukrywaniu się. Jednak los chciał, że dziewczyna o niesamowitym podobieństwie do Siesty wkracza w jego życie, grożąc, że jego spokojne dni legną w gruzach.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "偵探已經，死了。",
+            "overview": "「你，來當我的助手吧。」四年前，萬米高空中被劫持的飛機裏，君塚君彥被名偵探希耶絲塔選定為助手，隨後展開了長達三年的跌宕起伏的冒險，然後迎來了生離死別。一年後的現在，偵探已經死了，但故事還在繼續。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Nadat hij samen met de beeldschone, zilverharige detective Siesta een kaping heeft weten te verijdelen, leidt Kimihiko een leven vol reizen en misdaadoplossingen – tot Siesta sterft. Een jaar later haalt een nieuwe zaak oude wonden open, want die verweeft moord, samenzwering en zijn overleden partner!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Nadat hij samen met de mooie, zilverharige rechercheur Siesta een kaping heeft verijdeld, leidt Kimihiko een leven vol reizen over de hele wereld en het oplossen van misdaden – tot Siesta overlijdt. Een jaar later zal een nieuwe zaak oude wonden openrijten, met moord, samenzwering en zijn overleden partner als rode draad.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aqETSDXdeYqcD1PPd2WBfeWtoct.jpg",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 795,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8Hi3sr4DaPPudYHxwu0WbKAFzG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1412
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1822,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hO01gwN6s6bLlyjznAesfHkcFXE.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3240
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/17hvb21lJjOVyL2Xf9qqzSjXYkh.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3839
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3q0DAatDOOrhTqzvULgseVfa3VC.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1607,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hj9ydYZvzoRNyuod8RNumh8sb72.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 2860
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yGMnhCbMnYqCH99Pdhoj3cDm7Sf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kE7m6zemS4PjPeDRX2qcCmdUH27.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wvoQzTF0KamY2W1xu52N4Y1Oa7m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.289,
+          "height": 298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xW9w2SwltKRfMHEfbor60RUQabj.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 384
+        },
+        {
+          "aspect_ratio": 1.504,
+          "height": 2511,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x8K16euvIqw6zq2FCNCAotCzxwS.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3777
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8gCOlj0bXa2cQnXSl4wRX5tVIA0.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jFM4MVXM1dW8z00Tf3wBAdi4TOJ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1442
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kDMbvSghDiL1EwobxMVWR0rlluQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1443
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5qCtBGC323WDpW0bsZd0mccr4k2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1443
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6iKZ3ichLEC7tF5CtUMU9PsfpuL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1442
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 2271,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bh64LdsoaRyrwkdSsB9mEReyceR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 2272,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/16kRXVmtOBNXQOvbPSqdxdxXNkj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 2271,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zwYmxTBjcWh05jwP2UQPAkEatOC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 2272,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8Z6YI5q7UMorVy98M8Waa0BFH8i.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.702,
+          "height": 2398,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xgaM1Cy92r99ESNZQEYs3aWQh4x.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1684
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o0UHDz73Zib4zS0r191ULz6wNo2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1443
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2121,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fBxK8qHQt5JDj48BaMxMBZ8RZQZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2121,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q1P4re8egXke16b0F0UQaQVovjm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

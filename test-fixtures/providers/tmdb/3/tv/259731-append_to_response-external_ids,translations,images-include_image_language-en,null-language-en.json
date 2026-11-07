@@ -1,0 +1,1036 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"b93f85a0b706e8dfb6d9cd7e685f7fbe\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/n4hJLZmBG8kZccNn7bNgBDsVQ6a.jpg",
+    "created_by": [
+      {
+        "id": 1661862,
+        "credit_id": "68f0218497a06ff5c7e2b79b",
+        "name": "William Oldroyd",
+        "original_name": "William Oldroyd",
+        "gender": 2,
+        "profile_path": "/e3cJeIVKozF9tCPfGoJVi066VTO.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-01-08",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      }
+    ],
+    "homepage": "https://www.netflix.com/title/81662954",
+    "id": 259731,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-01-08",
+    "last_episode_to_air": {
+      "id": 6665657,
+      "name": "Episode 6",
+      "overview": "As the case comes to a close, Jack and Anna must reckon with the sins of the past — and the brutal consequences in the present.",
+      "vote_average": 5.607,
+      "vote_count": 42,
+      "air_date": "2026-01-08",
+      "episode_number": 6,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 40,
+      "season_number": 1,
+      "show_id": 259731,
+      "still_path": "/iw6hFVQ8ItYOGS4excmauXnyEI5.jpg"
+    },
+    "name": "HIS & HERS",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Netflix",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 6,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "HIS & HERS",
+    "overview": "Two estranged spouses — one a detective, the other a news reporter — vie to solve a murder in which each believes the other is a prime suspect.",
+    "popularity": 11.2799,
+    "poster_path": "/cDSXLVQLkCSBIpBx3UW04TsfZ5c.jpg",
+    "production_companies": [
+      {
+        "id": 181874,
+        "logo_path": "/crrgXvLhDO9c57HYrbO4H58Vxmb.png",
+        "name": "Fifth Season",
+        "origin_country": "US"
+      },
+      {
+        "id": 83210,
+        "logo_path": "/5aYKTLP4Kw75wOZ9AHIFc1HpkN0.png",
+        "name": "Freckle Films",
+        "origin_country": "US"
+      },
+      {
+        "id": 197821,
+        "logo_path": "/7Di681ml6mBfrWPA8o34cgSdwoe.png",
+        "name": "Viva Maude",
+        "origin_country": "US"
+      },
+      {
+        "id": 286014,
+        "logo_path": null,
+        "name": "Small Wishes",
+        "origin_country": "US"
+      },
+      {
+        "id": 295031,
+        "logo_path": null,
+        "name": "Campout Productions",
+        "origin_country": ""
+      },
+      {
+        "id": 216765,
+        "logo_path": null,
+        "name": "Headhunter Films",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-01-08",
+        "episode_count": 6,
+        "id": 403464,
+        "name": "Limited Series",
+        "overview": "Reclusive former news anchor Anna Andrews becomes obsessed with a murder case in her hometown. Her estranged husband, Detective Jack Harper, suspicious of her involvement, puts Anna in the crosshairs of his investigation.",
+        "poster_path": "/cDSXLVQLkCSBIpBx3UW04TsfZ5c.jpg",
+        "season_number": 1,
+        "vote_average": 5.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Two sides. One killer secret.",
+    "type": "Miniseries",
+    "vote_average": 7.293,
+    "vote_count": 568,
+    "external_ids": {
+      "imdb_id": "tt33035373",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 452521,
+      "tvrage_id": null,
+      "wikidata_id": "Q130484454",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Two estranged spouses — one a detective, the other a news reporter — vie to solve a murder in which each believes the other is a prime suspect.",
+            "homepage": "",
+            "tagline": "Two sides. One killer secret."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Dele & Dela",
+            "overview": "Um detetive e uma repórter, que já foram um casal, disputam para solucionar um assassinato em que os dois são os principais suspeitos.",
+            "homepage": "",
+            "tagline": "Toda história tem dois lados, portanto, há alguém mentindo."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "그의 이야기 & 그녀의 이야기",
+            "overview": "한 사람은 형사, 다른 한 사람은 뉴스 기자. 서로에게 등을 돌린 부부가 살인 사건의 진실을 두고 맞붙는다. 서로를 유력한 용의자로 의심하면서.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "His & Hers",
+            "overview": "Twee van elkaar vervreemde echtgenoten, een politieagent en een nieuwsverslaggever, willen allebei een moordzaak oplossen. En allebei denken ze dat de ander de dader is.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Anna leeft in de zinderende hitte van Atlanta in een spookachtige afzondering, ver weg van haar vrienden en haar carrière als journalist. Maar wanneer ze hoort over een moord in Dahlonega, het slaperige stadje waar ze opgroeide, komt Anna weer tot leven. Ze stort zich op de zaak en zoekt naar antwoorden. Rechercheur Jack Harper is vreemd wantrouwend over haar betrokkenheid en jaagt haar achterna in het vizier van zijn eigen onderzoek.",
+            "homepage": "",
+            "tagline": "\"There are two sides to every story… and someone is always lying.\""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Його і її",
+            "overview": "Досі одружені детектив і журналістка, які давно не спілкувалися, прагнуть розкрити вбивство, у скоєнні якого підозрюють одне одного.",
+            "homepage": "",
+            "tagline": "Дві сторони. Одна смертельна таємниця."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Deux époux séparés, un inspecteur et une journaliste, s'affrontent pour résoudre une affaire de meurtre dans laquelle chacun considère l'autre comme le principal suspect.",
+            "homepage": "",
+            "tagline": "Deux camps. Un secret mortel."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Ne Yaptığını Biliyorum",
+            "overview": "Ayrı yaşayan ve biri muhabir, diğeriyse dedektif olan bir karı koca, birbirlerini baş şüpheli olarak gördükleri bir cinayet davasını çözmek için yarışırlar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Él y ella",
+            "overview": "Un matrimonio formado por un inspector de policía y una periodista compite para resolver un caso de asesinato en el que ambos ven al otro como el principal sospechoso.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Él y ella",
+            "overview": "Un detective y una periodista que están casados ―pero distanciados― compiten para resolver un caso de homicidio en el cual cada uno cree que el otro es el principal sospechoso.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "La sua verità",
+            "overview": "Due coniugi separati da tempo, lui poliziotto, lei giornalista, competono per risolvere un caso di omicidio in cui ciascuno ritiene che l'altro sia il principale sospettato.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Его и ее",
+            "overview": "Двое враждующих супругов — детектив и журналистка — соревнуются в расследовании убийства, в котором каждый считает другого главным подозреваемым.",
+            "homepage": "",
+            "tagline": "«Две стороны. Один смертельный секрет»"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Zabójcza przyjaźń",
+            "overview": "Żyjący w separacji małżonkowie — detektyw i reporterka — próbują rozwiązać zagadkę morderstwa, o którego dokonanie podejrzewają siebie nawzajem.",
+            "homepage": "",
+            "tagline": "Dwie strony. Jeden zabójczy sekret."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Ein entfremdetes Ehepaar – er Ermittler, sie Reporterin – versucht getrennt voneinander, einen Mordfall aufzuklären. Dabei verdächtigen sie sich jeweils gegenseitig.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "彼の真実、彼女の嘘",
+            "overview": "別居している夫と妻。それぞれ刑事とニュースレポーターという立場から1件の殺人事件を追う二人は、互いを犯人だと疑いながら、相手よりも早く事件を解決しようと奔走する。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "",
+            "overview": "एक-दूसरे से दूर हो चुके पति-पत्नी — एक जासूस और एक न्यूज़ रिपोर्टर — एक हत्या की जांच में आमने-सामने हैं, जहां इस हत्या को लेकर दोनों को एक-दूसरे पर ही शक है.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "他和她的，謊",
+            "overview": "這對關係疏遠的夫妻一方是警探，另一方則是新聞記者。他們爭相要搶先對方破解一樁凶案，也都深信對方就是主嫌。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "Detektív a novinárka, ktorí sú manželmi, no postupne sa od seba odcudzili, súperia v snahe vyriešiť prípad vraždy, v ktorom každý považuje toho druhého za hlavného podozrivého.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "ELE & ELA",
+            "overview": "Dois cônjuges separados — ele inspetor da polícia, ela repórter — competem para resolver um homicídio... e cada um considera o outro o principal suspeito.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Njegova priča, njezina priča",
+            "overview": "Razdvojeni supružnici, detektiv i novinarka, natječu se u rješavanju slučaja ubojstva u kojem bi oboje mogli biti osumnjičeni.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Anna je samotarska nekdanja televizijska novinarka, ki postane obsedena z umorom v svojem domačem kraju. Detektiv Jack Harper, sumničav glede Annine vpletenosti, jo postavi v središče svoje preiskave.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "EL & EA",
+            "overview": "Doi soți înstrăinați, el detectiv și ea reporter de știri, se întrec să rezolve o crimă. Fiecare crede că celălalt este principalul suspect.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "他和她的，谎",
+            "overview": "在炎热的亚特兰大，安娜悠然自得地过着隐居生活，与朋友和新闻主播事业渐行渐远。但当她无意中听到达洛尼加（她从小长大的那个僻静小镇）发生一起谋杀案时，安娜又恢复了活力，开始着手调查案件并寻找答案。侦探杰克·哈珀对她的介入感到异常怀疑，并将她作为自己调查的对象。每个故事都有两个视角：HIS & HERS，这意味着总会有人在撒谎。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สองฟากของความจริง",
+            "overview": "เรื่องราวของสามีภรรยาที่ห่างเหิน คนหนึ่งเป็นตำรวจ ขณะที่อีกคนเป็นนักข่าว ทั้งคู่ต้องมาแข่งขันกันไขคดีฆาตกรรม ที่ต่างคนต่างเชื่อว่าอีกฝ่ายเป็นผู้ต้องสงสัยอันดับหนึ่ง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Lời của anh, lời của cô",
+            "overview": "Hai vợ chồng ly thân – một người là thanh tra, người kia là biên tập viên – cạnh tranh phá giải án mạng. Mỗi người đều tin rằng người kia là nghi phạm chính.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "שלו ושלה",
+            "overview": "בלש ועיתונאית שהם גם בני זוג לשעבר מנסים לפתור תעלומת רצח, וכל אחד מהם בטוח שהשני הוא החשוד המרכזי.",
+            "homepage": "",
+            "tagline": "שני צדדים. סוד אחד קטלני."
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "روايته وروايتها",
+            "overview": "يسعى زوجان منفصلان، أحدهما محقق والأخرى مراسلة أخبار، لفك خيوط جريمة قتل يظن كل منهما أن الآخر هو المشتبه به الرئيسي فيها.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "他和她的，謊",
+            "overview": "這對關係疏遠的夫妻一方是警探，另一方則是新聞記者。他們爭相要搶先對方破解一樁凶案，也都深信對方就是主嫌。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "روايته وروايتها",
+            "overview": "يسعى زوجان منفصلان، أحدهما محقق والأخرى مراسلة أخبار، لفك خيوط جريمة قتل يظن كل منهما أن الآخر هو المشتبه به الرئيسي فيها.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "他和她的，谎",
+            "overview": "这是一对关系疏远的夫妻，一个是警察，另一个是新闻记者。两人都想破获一起谋杀案，并且都认为对方是头号嫌疑犯。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "His & Hers",
+            "overview": "Asumuserossa oleva entinen pari – etsivä ja toimittaja – selvittää kilpaa murhaa, jossa he ovat toistensa pääepäillyt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Lui et moi",
+            "overview": "Des conjoints séparés – un policier et une journaliste – rivalisent pour résoudre une affaire de meurtre dans laquelle chacun croit que l'autre est le principal suspect.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Jeho a její",
+            "overview": "Pár, kterému to v manželství neklapalo, vyšetřuje vraždu. On i ona si myslí, že ji nejspíš spáchal ten druhý.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Hans og hendes",
+            "overview": "To separerede ægtefæller – den ene er politiefterforsker, den anden er nyhedsjournalist – konkurrerer om at opklare et mord, hvor begge mener, at den anden er hovedmistænkt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Minden történetnek két oldala van",
+            "overview": "Két egymástól elhidegült házastárs – egy nyomozó és egy riporter – egymással verseng egy gyilkossági ügy kapcsán, amelyben egymást vélik a fő gyanúsítottnak.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Η Δική του και η Δική της",
+            "overview": "Ένα αποξενωμένο αντρόγυνο –ένας ντετέκτιβ και μια ρεπόρτερ– ανταγωνίζονται για να εξιχνιάσουν έναν φόνο, για τον οποίο θεωρεί ο ένας τον άλλον υπεύθυνο.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Mantan suami istri—yang satu detektif dan yang satu reporter berita—bersaing memecahkan kasus pembunuhan. Keduanya yakin salah satu dari mereka adalah tersangka utama.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Pasangan suami isteri yang renggang — juga detektif dan wartawan bersaing untuk menyelesaikan satu kes pembunuhan. Mereka mengesyaki suspek utama adalah sesama mereka.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Ett före detta par – en polis och reporter – tävlar om att lösa ett mord där de båda misstänker varandra.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "To separerte ektefeller – den ene politietterforsker, den andre nyhetsreporter – kniver om å løse en drapssak hvor begge mener at den andre er den hovedmistenkte.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "Dalawang hindi na magkasundong mag-asawa—na detective at news reporter—ang nag-unahang lumutas ng murder case kung saan pinagbibintangan nila ang isa't isa bilang suspek.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "His & Hers",
+            "overview": "Un matrimoni format per un inspector de policia i una periodista competeix per resoldre un cas d'assassinat en què tots dos veuen l'altre com el principal sospitós.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Негов и Нейна",
+            "overview": "Бивши съпрузи се оказват от двете страни на разследване за убийство, където тайните от миналото са също толкова опасни, колкото и убиецът.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Jo ir jos tiesa",
+            "overview": "Veiksmas vyksta karštame Atlantos mieste, kur Ana gyvena užsidariusi savyje, pamažu tolsta nuo draugų ir žurnalistės karjeros. Tačiau viskas pasikeičia, kai ji nugirsta apie žmogžudystę Dahlonegoje – ramiame miestelyje, kuriame užaugo.\n\nŠi žinia pažadina ją iš sąstingio, ir Ana ryžtasi imtis tyrimo, ieškodama atsakymų į kylančius klausimus. Detektyvas, stebėdamas jos įsitraukimą, ima įtarti moters motyvus ir pats pradeda sekti jos pėdomis, įtraukdamas ją į savo tyrimo sūkurį. Kiekviena istorija turi dvi puses, o tai reiškia, kad kažkas visada meluoja. Intriguojantis pasakojimas atskleidžia paslaptis, kurios slypi už paviršiaus, ir kviečia žiūrovą kartu narplioti tiesos ir melo voratinklį.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "دو روایت",
+            "overview": "یک روزنامه نگار برای پیگیری پرونده ی قتلی به شهر زادگاهش بازمی گردد و در این مسیر با کارآگاهی مرموز روبه رو می شود. هر ماجرا دو روایت دارد و یکی از آن ها دروغ است.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1350,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n4hJLZmBG8kZccNn7bNgBDsVQ6a.jpg",
+          "vote_average": 10,
+          "vote_count": 7,
+          "width": 2400
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b31msP8Vqfx2KeXxnjmvdeGlyyH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2400
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xpTYIxRPCxU9752NiEwz28cqa0R.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4Z7MFLJB7ZKSmB0aJBYWJjUSwFA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/inQpnq7WHuHio6vUbM6eRY6eGDv.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3mf1Yn5I7RNw1pzE1lQVe4SsDuB.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rKgi1PBzcnO9HDyDye1MkbXy9NU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/up52unsdC5fRBrAED26SIWML1wl.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1350,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/egpX2mpy4v32yHPM6AGI9evINfR.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 2400
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zP5fvrVB0rsX9xqjWgOSpZ3PlU3.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1006,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rIjlsG0WZVOcSWTBhZcBNoaveni.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1788
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ggDFxOLMWX2bq2PGNAe3vvpKuKc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7ODZOihftG29gf8ZEZ7vYrDgbqL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wcW7V95ghWbnfYAyQ5EV3ZPIgyD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lDTNwh0JqCG8QPksDKCJzfMVC6K.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 2122,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kkxkesPexy8Sye4nSeRm03GL9hT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3774
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9g683wh7ow6uUsW5bIxyR0DxAAl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2tPPWW0AothYHGSDxyHoXbvfLYx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.646,
+          "height": 477,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qOlWfNoCC1G4PQ06oRKP5ph7i.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1262
+        },
+        {
+          "aspect_ratio": 2.711,
+          "height": 467,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mnwSYpu79Yo8qm4Xityhaj45hJW.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1266
+        },
+        {
+          "aspect_ratio": 2.711,
+          "height": 467,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Ixy4YIjanpeNQmL3kgGLLdQPAW.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1266
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cDSXLVQLkCSBIpBx3UW04TsfZ5c.jpg",
+          "vote_average": 8.212,
+          "vote_count": 11,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vRXw6fUD9B4RhMoTvhcJcnHYIMP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2172,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2kiVK8yGQ7C7Yac45cEWt7eezEl.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1448
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rMmZsWdX8kVNJq7Mja9spIvqR2b.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1024
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oJciAo2eYk705wEOBMaDNlLGN4e.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1427,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kjOD47NBx0K07CxpAe53hvv2pYf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 952
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g736d7VcyPcsl97TY388GOji9YT.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1024,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vNFai5Xzwxq4mcrErSaVJ4VDqLx.jpg",
+          "vote_average": 0.904,
+          "vote_count": 7,
+          "width": 718
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i4itQyThtqEn3ezs9ixbaMNViP0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uqduvZRz9NFAtx9ZnhxZAfADeTu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qtpSRmHvZ3vVhEmqLFRw5zO5pos.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

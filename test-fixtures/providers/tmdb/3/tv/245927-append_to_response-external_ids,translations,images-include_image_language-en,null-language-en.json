@@ -1,0 +1,1350 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=14959",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"dac2c47c2ac69b2e6b660e2e3c4be961\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/5QsLvWh8J1mXl1W05wNJknMmhzR.jpg",
+    "created_by": [
+      {
+        "id": 15892,
+        "credit_id": "67369ace48e9d2cf01a89135",
+        "name": "Dan Fogelman",
+        "original_name": "Dan Fogelman",
+        "gender": 2,
+        "profile_path": "/grLBoLU2blYEoT8vjGFOiM8mw1D.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2025-01-26",
+    "genres": [
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.hulu.com/series/2b4b8988-50c9-4097-bf93-bc34a99a5b4f",
+    "id": 245927,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-03-30",
+    "last_episode_to_air": {
+      "id": 6745140,
+      "name": "Exodus",
+      "overview": "Worlds collide. Time is of the essence for Xavier. Link and his team spring into action. Sinatra puts it all on the line.",
+      "vote_average": 7.8,
+      "vote_count": 36,
+      "air_date": "2026-03-30",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "2PTV08",
+      "runtime": 53,
+      "season_number": 2,
+      "show_id": 245927,
+      "still_path": "/6V2EnynbNcRDqJ7X8l7ye9SJYZ6.jpg"
+    },
+    "name": "Paradise",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 453,
+        "logo_path": "/pqUTCleNUiTLAVlelGxUgWn1ELh.png",
+        "name": "Hulu",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 16,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Paradise",
+    "overview": "The tranquility in a serene, wealthy community inhabited by some of the world's most prominent individuals explodes when a shocking murder occurs and a high stakes investigation unfolds.",
+    "popularity": 26.0144,
+    "poster_path": "/l8RqfhqEk04W5sSOjQ9zeWU1DyM.jpg",
+    "production_companies": [
+      {
+        "id": 236166,
+        "logo_path": "/8rFlu5iytnjsciYXZDw90ktllCI.png",
+        "name": "20th Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 41131,
+        "logo_path": null,
+        "name": "Rhode Island Ave. Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-01-26",
+        "episode_count": 8,
+        "id": 378226,
+        "name": "Season 1",
+        "overview": "A Secret Service agent investigates the murder of a former president in a seemingly peaceful community.",
+        "poster_path": "/rkwqy7uE0ORdUxDFNeVq7vpJORN.jpg",
+        "season_number": 1,
+        "vote_average": 5.9
+      },
+      {
+        "air_date": "2026-02-23",
+        "episode_count": 8,
+        "id": 486538,
+        "name": "Season 2",
+        "overview": "Xavier searches for Teri out in the world and learns how people survived the three years since The Day. Back in Paradise, the social fabric frays as the bunker deals with the aftermath of Season 1, and new secrets are uncovered about the city's origins.",
+        "poster_path": "/ho9edfW4VTmxWaNKgBTG43nfymq.jpg",
+        "season_number": 2,
+        "vote_average": 6.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "The truth lies outside.",
+    "type": "Scripted",
+    "vote_average": 7.574,
+    "vote_count": 575,
+    "external_ids": {
+      "imdb_id": "tt27444205",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 454565,
+      "tvrage_id": null,
+      "wikidata_id": "Q126126253",
+      "facebook_id": "ParadiseonHulu",
+      "instagram_id": "paradiseonhulu",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "The tranquility in a serene, wealthy community inhabited by some of the world's most prominent individuals explodes when a shocking murder occurs and a high stakes investigation unfolds.",
+            "homepage": "",
+            "tagline": "The truth lies outside."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "פרדייז",
+            "overview": "ראש צוות האבטחה של נשיא ארה\"ב, אקס, מוצא את הנשיא מת ונחשב לאדם האחרון שנפגש עמו. החקירה מעמתת את קולינס עם הזיכרון ועם יחסיו עם ראש המעצמה החזקה בעולם, כשהרשויות מסמנות אותו כחשוד העיקרי בפשע שאותו הוא לא זוכר שביצע.",
+            "homepage": "",
+            "tagline": "לקרוא בין השקרים."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "パラダイス",
+            "overview": "本作の舞台は、世界有数の著名人が住む穏やかなコミュニティーである。しかし、衝撃的な殺人事件の発生で静寂が破られ、大胆な捜査が展開される。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "파라다이스",
+            "overview": "《파라다이스》는 세계에서 손꼽히는 유명 인사들이 사는 조용한 마을을 배경으로 한다. 하지만 충격적인 살인이 일어나고 위험한 수사가 이어지면서 이 평화는 깨지고 만다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "En una serena comunidad habitada por algunas de las personas más prominentes del mundo, la tranquilidad estalla cuando se produce un espeluznante asesinato y se desencadena una investigación de alto riesgo. Xavier Collins, jefe del Servicio Secreto de la Casa Blanca, es rápidamente investigado por la muerte del presidente, al que descubre junto a su cama.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "En una tranquila comunidad habitada por algunas de las personas más destacadas del mundo, se estalla cuando se produce un impactante asesinato y se desencadena una investigación de alto riesgo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De rust in een serene, rijke gemeenschap, bewoond door enkele van 's werelds meest prominente individuen, explodeert wanneer er een schokkende moord plaatsvindt en er een onderzoek met hoge inzet plaatsvindt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Une communauté paisible est habitée par certaines des personnalités les plus en vue de la planète. Mais leur tranquillité explose lorsqu'un meurtre choquant est commis et qu'une enquête aux enjeux considérables se met en place.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "„Paradise” rozgrywa się w spokojnej społeczności zamieszkałej przez jedne z najbardziej wpływowych osób na świecie. Jednak ten spokój pryska, gdy dochodzi do szokującego morderstwa, po którym rozpoczyna się wysokiej rangi śledztwo.",
+            "homepage": "",
+            "tagline": "Czytaj między kłamstwami."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Рай",
+            "overview": "Команда службы безопасности получает задание защищать бывшего президента.",
+            "homepage": "",
+            "tagline": "«Читай между строк лжи»"
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een rustige gemeenschap waar enkele van 's werelds meest vooraanstaande personen wonen wordt de rust bruut verstoord door een schokkende moord en een grootschalig onderzoek.",
+            "homepage": "",
+            "tagline": "De waarheid ligt buiten."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Se passa em uma comunidade idílica habitada por alguns dos indivíduos mais proeminentes do mundo. Mas um assassinato chocante acaba com essa tranquilidade, desencadeando uma investigação de alto risco.",
+            "homepage": "",
+            "tagline": "A verdade nas entrelinhas"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "\"Paradise\" è ambientato in una tranquilla comunità abitata da alcuni degli individui più prominenti del mondo. Ma questa tranquillità svanisce quando si verifica uno sconvolgente omicidio e ne consegue un'indagine di alto profilo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "พาราไดส์",
+            "overview": "พาราไดส์ เป็นชุมชนอันเงียบสงบที่มีบุคคลที่มีชื่อเสียงระดับโลกอาศัยอยู่ แต่แล้วสันติสุขก็พังทลายลงเมื่อเกิดคดีฆาตกรรมอันน่าตกตะลึง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "极乐凶间",
+            "overview": "《极乐凶间》故事背景设定在一个宁静的社区，这里居住着一些极有威望的大人物。但一起令人震惊的凶案发生后，一场风险极大的调查随之展开，从此不得安宁。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Рай",
+            "overview": "Спокій у затишній багатій громаді, де мешкають одні з найвідоміших людей світу, руйнується, коли відбувається шокуюче вбивство, і розгортається розслідування з високими ставками.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "“Paradise”, dünyanın en önde gelen kişilerinin yaşadığı sakin bir toplulukta geçer. Ancak şok edici bir cinayetin işlenmesinin ardından ciddi sonuçlar doğurabilecek bir soruşturmanın açılmasıyla bu sükûnet son bulur.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Die Idylle in einer Gemeinde, die von einigen der einflussreichsten Menschen der Welt bewohnt wird, zerbricht, als ein entsetzlicher Mord geschieht und eine hochbrisante Ermittlung beginnt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "極樂兇間",
+            "overview": "《極樂兇間》故事背景設定在一個寧靜的社群，這裏居住著一些極有威望的大人物。但一起令人震驚的兇案發生後，一場風險極大的調查隨之展開，從此不得安寧。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "極樂凶間",
+            "overview": "故事背景設定在一個寧靜的社群，這裡居住著一些極有威望的大人物。但一起令人震驚的凶案發生後，一場風險極大的調查隨之展開，從此不得安寧。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Ráj",
+            "overview": "Příběh se odehrává v poklidné komunitě, kterou obývají nejvýznamnější světové osobnosti. Tento klid však vezme za své ve chvíli, kdy dojde k šokující vraždě a rozběhne se riskantní vyšetřování.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "\"Paradise\" foregår i et fredeligt lokalsamfund beboet af nogle af verdens mest prominente individer. Men freden og roen splintres til atomer, da et chokerende mord finder sted, og en farlig efterforskning udfolder sig.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Sarja sijoittuu seesteiseen yhteisöön, jonka asukkaisiin lukeutuu maailman huomattavimpia henkilöitä. Tämä tyyneys kuitenkin pirstoutuu järkyttävän murhan ja sen korkeapanoksisen tutkinnan myötä.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "La série « Paradise » se déroule dans une communauté paisible habitée par les puissants de ce monde. Mais sa tranquillité vole en éclats lorsqu'un meurtre choquant est commis et qu'une enquête des plus délicates ternit son quotidien.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Η σειρά «Paradise» διαδραματίζεται σε μια ήσυχη κοινότητα όπου κατοικούν μερικές από τις πιο επιφανείς προσωπικότητες του κόσμου. Όμως, αυτή η γαλήνη διαταράσσεται όταν σημειώνεται ένας συγκλονιστικός φόνος και μια κρίσιμη έρευνα ξεκινά.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "A Paradise egy nyugodt közösségben játszódik, melynek lakói a világ legjelentősebb személyiségei. A nyugalom azonban elillan, amikor megdöbbentő gyilkosság történik, s nagyszabású nyomozás veszi kezdetét.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "«Paradise» finner sted i et rolig lokalsamfunn bebodd av noen av verdens mest prominente enkeltpersoner. Men denne roen eksploderer når det skjer et sjokkerende mord og en høy innsats-etterforskning utfolder seg.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "\"Paradise\" decorre numa comunidade serena, habitada por alguns dos indivíduos mais importantes do mundo. Mas esta tranquilidade acaba quando ocorre um homicídio chocante e se desenrola uma investigação de alto risco.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "„Paradise” se petrece într-o comunitate senină, locuită de unii dintre cei mai importanți oameni din lume. Dar această liniște se destramă atunci când are loc o crimă șocantă și se desfășoară o investigație cu mize mari.",
+            "homepage": "",
+            "tagline": "Adevărul se află în exterior"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Raj",
+            "overview": "Seriál Raj sa odohráva v pokojnej komunite, v ktorej žijú jedni z najprominentnejších ľudí na svete. Pokojné prostredie naruší šokujúca vražda a nasleduje intenzívne vyšetrovanie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Paradise utspelar sig i ett fridfullt samhälle bebott av några av världens mest framstående individer. Men det lugnet exploderar när ett chockerande mord inträffar och en höginsatsutredning utvecklas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "جريمة في النعيم",
+            "overview": "ينتهي الهدوء عندما تقع جريمة قتل صادمة ويبدأ تحقيق بالغ الخطورة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "بارادايس",
+            "overview": "في مجتمع هادئ يضم نخبة من الشخصيات البارزة، تهزّ جريمة قتل غامضة أركانه، مما يدفع العميل السري زافيير كولينز إلى كشف أسرار خطيرة تهدد استقرار الجميع.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Парадайс",
+            "overview": "Тишината в спокойна, заможна общност, населена с едни от най-влиятелните личности в света, е разтърсена, когато се случва шокиращо убийство и започва разследване с високи залози.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "بهشت",
+            "overview": "یک تیم خدمات امنیتی که وظیفه حفاظت از رئیس جمهور گذشته را بر عهده دارد",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Raj",
+            "overview": "Ko se v mirni in bogati soseski, kjer živijo nekateri najvplivnejši ljudje na svetu zgodi pretresljiv umor nekdanjega predsednika, agent tajne službe sproži napeto preiskavo, pri kateri je veliko na kocki.",
+            "homepage": "",
+            "tagline": "Razberi skrito med lažmi."
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thiên Đường",
+            "overview": "Đặc vụ Xavier Collins phát hiện ra một trong những người quyền lực nhất thế giới đã bị giết hại dã man. Nhưng sau cái chết bí ẩn của tổng thống, anh nhận ra bản thân đang nằm trong một âm mưu đe dọa lớn lao, không chỉ ở sự an toàn của bản thân mà còn là nền tự do của cả thế giới.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "Paradise està ambientada en una localitat tranquil·la entre els habitants de la qual es troben algunes de les persones més prominents del món. Però la calma dóna pas a la tempesta quan es comet un impactant assassinat i comença una delicada investigació.",
+            "homepage": "",
+            "tagline": "Llegeix entre mentides"
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Рај",
+            "overview": "Када се догоди шокантно убиство бившег председника у мирном и богатом крају у којем живе неки од најутицајнијих људи на свету, агент Тајне службе покреће напету истрагу са високим улогом.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Rojus",
+            "overview": "JAV prezidento apsaugai tai buvo tik dar viena diena darbe, kol komandos vadas nesurado nužudyto prezidento. Analizuojant nusikaltimo vietą, pamažu skleidžiasi sudėtingi agento Kolinso santykiai su auka.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "სამოთხე",
+            "overview": "მსოფლიოს ყველაზე გავლენიანი და მდიდარი ადამიანებით დასახლებული, მშვიდი და პრესტიჟული უბნის იდილია ერთ წამში ირღვევა, როდესაც იქ შემზარავი მკვლელობა ხდება. მომხდარს ფართომასშტაბიანი, მაღალი რისკის შემცველი გამოძიება მოჰყვება, რომელიც გავლენიანი საზოგადოების ყველაზე ბნელ საიდუმლოებებს ფარდას ჰხდის.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5QsLvWh8J1mXl1W05wNJknMmhzR.jpg",
+          "vote_average": 7.05,
+          "vote_count": 10,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qV2REPQ7pPlmQT7Mljkca0wi4Bx.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pNNws2iE2BYYGQxCD0vS5ujjuoj.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lYeiSMn7OwBE4ycaVPWIFr3E5Dq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/atuATIqT29zg6Ry2jXrfIyq9oBB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ygtuFIUjJUZLz4aCsgv88yR9TlZ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/os7l95N2ZY4RIR5rHNPxmKHXKBj.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1JbkDfLNZbQQLEqQRosFhrK0eyn.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y7nJbUSrupLd2EgXS2xuucKG1H4.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AbFucBS5YbbEXbQCXIDjw9OVPhZ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s55kA8vMQ0PDvmnnhiMlBLs5gAK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AlQF8DaPdY1CLWgSUTGkcY7D1ex.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gp7bDAgJQ8rWYWMFPX35V3OYBOj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/832mXxSgi2u4Q46wZc1fT8rLFyB.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tgS9QTvR4Y20418hH6WkmpFrFNW.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1YCmkBZO5bpVA1EAw60koNIwIVD.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eZ8PWjZ6vlHALxsohdH9ovvHhDc.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l76wGF705ntSXAt67CWmQ1MgH5F.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q3PGcQvDH7pePhWDl4VEIFkEzi1.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fh9HFy9qfvLUigjD8Gzwse3ZmCd.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fM90m6bz2rdrfSNhugyLkiLErpC.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2DcP6tM1ZCU1WxHyKbhMIIve9Qk.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qeQG3EkFXFSGMk0M56sYmZoa8KK.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1265,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h0GM7X4MpseHOVSmtoc0xpvz0os.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 2250
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 800,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zeARKQ8Vi53KUOBSBV5J2Wucl6R.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1422
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1470,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9UxuJf5WbjwLLDAQVkA78wJuNxa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2612
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o4D1q6IB0VY4hKMbKztfggPAACI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 795,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/91MrgLPcHaeMBlSvR9qTnEJZ1KA.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1413
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i2fkj4wRQkPsmAi5PJlya4zLGEm.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v0GfqC9AIl3OAG4rWvR0FEb59cA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w7kQCCuqNdATEECGDhvApiFnsPF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kfnQCqMdNBIF8zdZUXWPxxzRzeD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oZBo5TiWNYg3pc53eiXN1epgs8A.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z04bhjELCocifcrMQD6vS09zNU6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1dtqLiivnPfLSFSQWvqM6WJr0bz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kcFeHJQ59dNIiIO3oyUDyxiCN7c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 9.53,
+          "height": 100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ybiNhb3KAsgOd0ou272yFEdio86.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 953
+        },
+        {
+          "aspect_ratio": 9.172,
+          "height": 471,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/arhU0k5Kdt229zuZFCY1CgvzZvD.png",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 4320
+        },
+        {
+          "aspect_ratio": 9.191,
+          "height": 470,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wscAMmHlF5jSxcn78Pj5uzt8Yqm.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 4320
+        },
+        {
+          "aspect_ratio": 9.191,
+          "height": 470,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ifIJmQWtwNDQmmWHeRUA3mIuVL6.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4320
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l8RqfhqEk04W5sSOjQ9zeWU1DyM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sJUti0JDtE1IYl7RVJARAGyKHqz.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iaLo04Ig3UsDDPGjbFOuqZTawq9.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ho9edfW4VTmxWaNKgBTG43nfymq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pVEt73YgxSQsZkN1LURHLLxd4xD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zr3nLuT9XV9eVzBhwIdwVTk6yuG.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n6quIwv07YaKDONN1OEdyW6JI9i.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rkwqy7uE0ORdUxDFNeVq7vpJORN.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2963,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m4Rcp33FyrXPyZ2dJ2gmzdsACdw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.676,
+          "height": 1014,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/28wFVsfliAdAn8i9ygIZ2kvrbRt.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 685
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iArZoSkaozOUJGbwUabkohf0gdP.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qEE3EEQO9e6zclcxxxxWPwftpJE.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p9PPGCAE5ZQCHWWHK9kbCc2ea2w.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zjGHThFxo7P4uK66CZYWpDH0NI8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/npLXYAdlVqafczhnjAUVVOSKhH6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sgKBlsELX4g0cHEBcewFdGdiznH.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wZpF154WocWPCYiStdGDJpj3hlf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dhggpULcliuyeHi3nfsxiChqn0F.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bwtWACU4WalIuHD6q6IMs6Vf4EX.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mDHpCNsdHPRLef5AIHtXoXNlpgB.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1AqM2V8XmIzZ1XlBg0ftGt66zgu.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wWoZDnP8eu4bpEnKF0WQ6VNF2j4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1618,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cezV8pvf7F24Na2gJyhSrjIn2wQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1079
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/shLFLMaNYevFPWWvfGT4cStXESG.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fbaLVtal9dlRNPtozukzLlLw6zG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4xPT6lyRFevQijk6ysYgtYSJqsM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1280,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tIPi5aW506IR3cEqEEx2AT4JW6F.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 864
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rgTF1nCFyn5ORQWSfra63pYoxKo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rwFjldixefpsD3lGy1ggJDxUhA1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/w93pjRd3NqJdtz0GLdstQ2sGYO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

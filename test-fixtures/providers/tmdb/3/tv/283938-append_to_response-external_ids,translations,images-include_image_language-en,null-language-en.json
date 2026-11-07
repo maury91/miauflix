@@ -1,0 +1,505 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=25496",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"511fdf20460dcaaf7609ea99a82877c7\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/kuYMjcQ6BeLTBYUR1l1T8W8ZMcf.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-10-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://nama-anaru.com",
+    "id": 283938,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7799397,
+      "name": "The Student Council's Bonding Retreat!! / Operation Ume Tan-Tan! / Ume Shares His Umbrella",
+      "overview": "Ume and Tan sneak around to study Arisu, whose true nature remains a bit of a mystery. When they see an opening and rummage through Arisu's things, she suddenly comes back out of nowhere! What are they going to do now!?",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-01",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 283938,
+      "still_path": "/kNtQyjVYHDIJw9VWcealX0H5Boa.jpg"
+    },
+    "name": "Even the Student Council Has Its Holes!",
+    "next_episode_to_air": {
+      "id": 7799398,
+      "name": "Lost in the Moment / Ume and Sensei / A Day in Komaro’s Life",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 283938,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 343,
+        "logo_path": "/9rNqtDYAnD6yTOutvHI3synSEs2.png",
+        "name": "Gunma TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2478,
+        "logo_path": "/2v82HpzoKRveJEJcGHkeTcktMRM.png",
+        "name": "Tochigi TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "生徒会にも穴はある！",
+    "overview": "In a student council filled with weirdos, one new member is about to have a hell of a school year! Mizunoe Ume just wanted to avoid repeating a grade when he joined the student council. After all, it seemed like an easy fix to his current academic problems. But then, he met his fellow council members. Each of them is eccentric in their own way—one's an airhead, another's scary, one's secretly a pervert, but all in all, they're just really weird! Yet somehow, they're also oddly cute and endearing. Which means Mizunoe is stuck with them and all the chaos they bring to the table. Get ready for a slice-of-life story that's irresistibly charming, quirky, and a little bit naughty!",
+    "popularity": 12.5575,
+    "poster_path": "/lpjQKu1KfceCLeO8ga71gwJMieg.jpg",
+    "production_companies": [
+      {
+        "id": 58035,
+        "logo_path": "/rtFGLtHkjVqq042Ky5gbOEnXFlN.png",
+        "name": "Passione",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2883,
+        "logo_path": "/rDYExnBV61jGQnkhVVrPN4Yl7O1.png",
+        "name": "Aniplex",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 8157,
+        "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
+        "name": "jeki",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3466,
+        "logo_path": "/lmCg0zarmM52wrmsZRUY0QlPKLh.png",
+        "name": "movic",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-04",
+        "episode_count": 12,
+        "id": 441906,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/6QKKFrBvlw8jlBe5QiGte2Te34w.jpg",
+        "season_number": 1,
+        "vote_average": 4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.5,
+    "vote_count": 6,
+    "external_ids": {
+      "imdb_id": "tt43650242",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 463051,
+      "tvrage_id": null,
+      "wikidata_id": "Q134168762",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "nama_anaru"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Seitokai ni mo Ana wa Aru!",
+            "overview": "En la Academia Fujinasu, Ume Mizunoe se une al consejo estudiantil para evitar repetir curso, pero descubre que sus miembros son un grupo bastante peculiar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Even the Student Council Has Its Holes!",
+            "overview": "In a student council filled with weirdos, one new member is about to have a hell of a school year! Mizunoe Ume just wanted to avoid repeating a grade when he joined the student council. After all, it seemed like an easy fix to his current academic problems. But then, he met his fellow council members. Each of them is eccentric in their own way—one's an airhead, another's scary, one's secretly a pervert, but all in all, they're just really weird! Yet somehow, they're also oddly cute and endearing. Which means Mizunoe is stuck with them and all the chaos they bring to the table. Get ready for a slice-of-life story that's irresistibly charming, quirky, and a little bit naughty!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "私立藤成学園高等部１年の水之江梅は国語の成績は抜群な一方、理系科目は進級に響くほど壊滅的。内申点をあげるため生徒会の役員となるもののそこにはカリスマむっつり、怖くて優しい清楚な会計、生意気可愛い男の子、小っちゃな捨て猫庶務など、何やら変わった子たちが勢揃いでドタバタな毎日が待ち受けていた！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Even the Student Council Has Its Holes!",
+            "overview": "Willkommen an der Fujinari-Akademie, einer renommierten Privatschule am Rande der Hauptstadt! Als Ausnahmetalent im Fach Literatur tut sich Ume Mizunoe mit den Naturwissenschaften schwer. Da seine Versetzung gefährdet ist, tritt er dem Schülerrat bei, um sein Zeugnis zu verbessern. Doch unter den Mitgliedern vereinen sich allesamt exzentrische Persönlichkeiten. Zwischen einer charismatischen und tollpatschigen Vorsitzenden, einer einschüchternden, aber fürsorglichen Schatzmeisterin und weiteren schillernden Mitschülern steht Ume ein turbulentes Jahr bevor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Even the Student Council Has Its Holes!",
+            "overview": "Ume Mizunoe, estudante do primeiro ano do ensino médio no Colégio Particular de Fujinari, é excelente em japonês, mas suas notas abaixo da média em disciplinas de exatas podem afetar seu futuro na educação. Ume entra para o conselho estudantil em uma tentativa de melhorar seu saldo acadêmico, mas lá descobre que as integrantes são pra lá de estranhas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "학생회에도 구멍은 있다!",
+            "overview": "이곳은 변두리에 자리한 명문 입시 학교, 사립 후지나스 학원.\n\n고등부 1학년 미즈노에 우메는 각종 문학상을 휩쓸 만큼 국어 실력은 발군이지만, 이과 과목은 진급이 위태로울 만큼 처참했다.\n\n유급을 피하고 내신 점수를 올리기 위해 학생회 임원이 되기로 한 우메.\n\n그가 들어간 학생회에는 카리스마 넘치는 엉큼한 학생회장 코토부키 히사코,\n\n무섭지만 다정하고 청초한 회계 테루이 아리스, 건방지고 귀여운 남자아이 오토리 탄,\n\n조그만 길고양이 같은 서무 미치노쿠 코마로까지 어딘가 별난 사람들이 모여 있었다!\n\n그런 귀엽고 엉뚱한 멤버들이 펼치는 좌충우돌 하트풀 학생회 러브&코미디, 지금 시작합니다!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Даже у студсовета есть косяки!",
+            "overview": "Уме Мидзуноэ, студент первого курса престижной академии Фудзинари, преуспевает в японской литературе, но так плохо справляется с наукой, что его шансы на продвижение по службе находятся под угрозой. Надеясь улучшить свою успеваемость, он вступает в студенческий совет — только для того, чтобы оказаться в окружении необычных персонажей: харизматичного, но втайне застенчивого президента, доброго, но пугающего казначея, очаровательно дерзкого мальчика и крошечной, похожей на бездомную кошку секретарши.\n\nОказавшись в вихре хаотичной повседневной жизни, школьные будни Уме вот—вот станут намного более непредсказуемыми - и намного более оживленными!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Even the Student Council Has Its Holes!",
+            "overview": "Prywatna szkoła Fujinasu przyciąga najzdolniejszych uczniów. Pierwszoklasista Ume Mizunoe też ma się czym pochwalić: świetnie radzi sobie z japońskim i zdobywa liczne nagrody literackie. Jednak fatalne oceny z przedmiotów ścisłych stawiają jego promocję do następnej klasy pod znakiem zapytania. Żeby uniknąć powtarzania roku, dołącza do samorządu uczniowskiego. Tam poznaje charyzmatyczną przewodniczącą Hisako Kotobuki, której po głowie krążą niegrzeczne myśli, oraz Arisu Terui – skarbniczkę o dobrym sercu i nienagannych manierach, która jednak potrafi nieźle nastraszyć. Ekipę dopełniają uroczy, choć bezczelny Tan Otori oraz odpowiedzialna za sprawy organizacyjne Komaro Michinoku, przypominająca małego, zagubionego kotka. Tak zaczyna się ciepła i pełna humoru opowieść o samorządzie, którego członków łączy jedno: z nimi nie sposób się nudzić.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "学生会也有洞！",
+            "overview": "高一生水之江梅有着极其高超的文学造诣，文科成绩无人能及，但与之相反的是数理化等理科却差强人意，有留级甚至影响保送的风险，为此班主任平冢推荐他加入学生会，以提高其在学生之间的评价。但水之江成为学生会书记后，才发现内里都是些怪人，包括遗留内裤在学生会室的会长古都吹寿子、会敲诈男生的“雌小鬼”伪娘宣传委员尾鸟绽、看似温柔却无比腹黑的会计照井有栖、以及因受伤而住院一个月才复学的不幸少女陆奥小麻吕。水之江在这些充满个性的同学围绕之下，为了顺利毕业，正式展开学生会生涯。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Hội Học Sinh Cũng Có Sơ Hở!",
+            "overview": "Trong một hội học sinh toàn những kẻ lập dị, một thành viên mới sắp có một năm học đầy sóng gió! Mizunoe Ume chỉ muốn tránh lưu ban khi gia nhập hội học sinh. Dù sao thì đó cũng có vẻ là cách dễ dàng để sửa điểm số hiện tại của cậu. Nhưng rồi, cậu gặp các thành viên hội. Mỗi người lập dị theo cách riêng — một người đãng trí, một người đáng sợ, một người bí mật biến thái, nhưng tựu chung họ chỉ thực sự kỳ quặc! Thế mà bằng cách nào đó, họ cũng kỳ lạ một cách đáng yêu và dễ mến. Nghĩa là Mizunoe bị kẹt với họ cùng mọi hỗn loạn họ mang lại. Hãy sẵn sàng cho một câu chuyện đời thường quyến rũ khó cưỡng, lập dị và hơi hư một chút!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "學生會也有洞！",
+            "overview": "這裡是位於城鎮邊緣的升學學校——私立藤成學園。\n\n現在，最可愛的「學生會」就在這裡！！\n\n高一的文藝青年水之江梅的文學造詣相當精深，但是物理化學數學等等理科的成績卻完全毀滅性的差，因此面臨了留級的危機。為了避免這個危機，在導師平塚的建議下，他決定加入學生會擔任幹部以藉此挽救成績。沒想到，他所加入的學生會，卻聚集了一群「個性獨特」的成員！\n\n充滿領袖魅力的悶騷學生會長・古都吹壽子；看似可怕卻溫柔清純的會計・照井有栖；囂張又可愛的男孩子・尾鳥糖；以及嬌小得像隻被遺棄小貓的庶務・陸奧小麻呂。\n\n在這些充滿個性的成員之中，梅也開始過起「色」彩繽紛的歡樂校園生活。\n\n熱鬧逗趣又溫馨的學生會青春喜劇，就此揭開序幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Even the Student Council Has Its Holes !",
+            "overview": "Bienvenue à l’Académie Fujinari, un prestigieux établissement privé situé aux abords de la capitale ! Excellant en littérature, Ume Mizunoe peine pourtant à obtenir la moyenne dans les matières scientifiques. Alors que ses notes menacent de le faire redoubler, il rejoint le conseil des élèves, dans l’espoir d’améliorer son dossier scolaire. Cependant, l’adolescent déchante rapidement lorsqu’il prend conscience que l’institution rassemble des membres aux personnalités pour le moins excentriques. Entre une présidente aussi charismatique que maladroite, une trésorière intimidante mais attentionnée, et des camarades hauts en couleur, Ume s’apprête à vivre une année bien plus mouvementée que prévu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Even the Student Council Has Its Holes",
+            "overview": "En la prestigiosa Academia Fujinasu, un instituto privado a las afueras de la ciudad, Ume Mizunoe, una joven entusiasta de la literatura, acepta formar parte del consejo estudiantil para no tener que repetir curso. Sin embargo, los miembros del consejo estudiantil resultan ser un grupo de individuos muy extraños.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Anche il consiglio studentesco cade in fallo!",
+            "overview": "Ume Mizunoe prende sempre il massimo dei voti in letteratura e ha una condotta impeccabile, ma purtroppo i suoi voti terribili nelle materie scientifiche lo mettono a rischio bocciatura. Così, per migliorare la pagella, si unisce al consiglio studentesco dove conoscerà i suoi strampalati membri. Tra mocciosi procaci e prosperose ragazze represse, Ume si godrà infine l'adolescenza.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สภานักเรียนฉบับรั่ว!",
+            "overview": "มิซึโนเอะ อุเมะ นักเรียนชายสายศิลป์ ตัดสินใจเข้าสภานักเรียนเพื่อหลบเลี่ยงการซ้ำชั้น ก่อนจะพบว่าเป็นแหล่งรวมพลคนแปลก",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "學生會也有洞！",
+            "overview": "這裏是位於城鎮邊緣的升學學校——私立藤成學園。\n\n現在，最可愛的「學生會」就在這裏！！\n\n高一的文藝青年水之江梅的文學造詣相當精深，但是物理化學數學等等理科的成績卻完全毀滅性的差，因此面臨了留級的危機。為了避免這個危機，在導師平塚的建議下，他決定加入學生會擔任幹部以藉此挽救成績。沒想到，他所加入的學生會，卻聚集了一群「個性獨特」的成員！\n\n充滿領袖魅力的悶騷學生會長・古都吹壽子；看似可怕卻溫柔清純的會計・照井有栖；囂張又可愛的男孩子・尾鳥糖；以及嬌小得像隻被遺棄小貓的庶務・陸奧小麻呂。\n\n在這些充滿個性的成員之中，梅也開始過起「色」彩繽紛的歡樂校園生活。\n\n熱鬧逗趣又溫馨的學生會青春喜劇，就此揭開序幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een studentenraad vol gekken staat één nieuw lid op het punt een geweldig schooljaar te beleven! Mizunoe Ume wilde gewoon voorkomen dat een cijfer herhaald moest worden toen hij lid werd van de studentenraad. Het leek tenslotte een gemakkelijke oplossing voor zijn huidige academische problemen. Maar toen ontmoette hij zijn mede raadsleden. Ze zijn allemaal excentriek op hun eigen manier: de een is een dwaas, de ander is eng, de ander is stiekem een ​​viezerik, maar al met al zijn ze gewoon heel raar! Maar op de een of andere manier zijn ze ook vreemd schattig en vertederend. Wat betekent dat Mizunoe aan hen vastzit en aan alle chaos die ze met zich meebrengen. Maak je klaar voor een stukje levensverhaal dat onweerstaanbaar charmant, eigenzinnig en een beetje ondeugend is!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.779,
+          "height": 2024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kuYMjcQ6BeLTBYUR1l1T8W8ZMcf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3600
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sUr7ot8TpmQ2mNQYCvTvAd7Zur4.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/resxhSoQ0kJkZWyAKv2Cci4ux6a.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mDlSrssXO7O7AiieZ3YZk2XpFsa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1Rtu9aZpzwC99RpQzApWuR4KHzt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.135,
+          "height": 740,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bKvyj38ZrE7KWWh5iwQfc8jvm3k.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1580
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lpjQKu1KfceCLeO8ga71gwJMieg.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1948,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/muIUEY4BWkIcAZ3flc2IzlO8UGI.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1948,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wSSHazY4iBKJADOpXfwijuVGnTF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2159,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jGj3OTrtaSvm5umJ8nVGyQLF30E.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1438
+        },
+        {
+          "aspect_ratio": 0.713,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/35tzyO0igWsB3uo1uvP8ParMebd.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1460
+        }
+      ]
+    }
+  }
+}

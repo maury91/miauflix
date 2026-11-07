@@ -1,0 +1,958 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19316",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"576905d809b4944b440d2c4f49762a08\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/h927CLfeAjiy0MNKRxWZgEq7bHR.jpg",
+    "created_by": [
+      {
+        "id": 160172,
+        "credit_id": "6601c89c1b1f3c017c9c4c4e",
+        "name": "Chuck Lorre",
+        "original_name": "Chuck Lorre",
+        "gender": 2,
+        "profile_path": "/8OTRD3d6N0GKy1Z0LJaWZ3MVxXr.jpg"
+      },
+      {
+        "id": 1224134,
+        "credit_id": "6601c8c53520e8017ed9f5d7",
+        "name": "Steve Holland",
+        "original_name": "Steve Holland",
+        "gender": 2,
+        "profile_path": "/m7FIFJs5ZP2DOSqg7HtLKG0zLvB.jpg"
+      },
+      {
+        "id": 1224133,
+        "credit_id": "6601c8bc770700013006b5d4",
+        "name": "Steven Molaro",
+        "original_name": "Steven Molaro",
+        "gender": 2,
+        "profile_path": "/2NZtxlNz5IWS1XoC0MdeBdkUZ5l.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2024-10-17",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "https://www.cbs.com/shows/georgie-and-mandys-first-marriage",
+    "id": 243875,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-10-29",
+    "last_episode_to_air": {
+      "id": 7999392,
+      "name": "A Snotty Attitude and a Party on a School Night",
+      "overview": "Georgie and Mandy reach their breaking points when Missy moves in with the McAllisters. Meanwhile, Mary struggles to make things right with Missy.",
+      "vote_average": 10,
+      "vote_count": 1,
+      "air_date": "2026-11-05",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 20,
+      "season_number": 3,
+      "show_id": 243875,
+      "still_path": "/6rlSpLKJ2PHzBxuaePxXYyi7oOt.jpg"
+    },
+    "name": "Georgie & Mandy's First Marriage",
+    "next_episode_to_air": {
+      "id": 8040730,
+      "name": "A Ten-Year Reunion and an Outta-the-Box Thinker",
+      "overview": "Georgie and Ruben butt heads when Georgie crashes Ruben's business class, and Mandy encourages Connor to attend his high school reunion.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-12",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 3,
+      "show_id": 243875,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 16,
+        "logo_path": "/wju8KhOUsR5y4bH9p3Jc50hhaLO.png",
+        "name": "CBS",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 50,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Georgie & Mandy's First Marriage",
+    "overview": "Georgie and Mandy raise their young family in Texas while navigating the challenges of adulthood, parenting, and marriage.",
+    "popularity": 59.3616,
+    "poster_path": "/3z2mYFxUkzanb2eeIcVyfJq0G3q.jpg",
+    "production_companies": [
+      {
+        "id": 35504,
+        "logo_path": "/e70DaugzSRbTbVEhZV3e1nCofcY.png",
+        "name": "Chuck Lorre Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 1957,
+        "logo_path": "/pJJw98MtNFC9cHn3o15G7vaUnnX.png",
+        "name": "Warner Bros. Television",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2024-10-17",
+        "episode_count": 22,
+        "id": 374678,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/8Kp8eWXwdWFroRw3lRB0qetSK8q.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2025-10-16",
+        "episode_count": 22,
+        "id": 464999,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/hX19hL1RYoMZx6OeZzz7UNrHk2K.jpg",
+        "season_number": 2,
+        "vote_average": 7.8
+      },
+      {
+        "air_date": "2026-10-08",
+        "episode_count": 6,
+        "id": 532135,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/cEkJlFQkTGFlV3nh3TRGUuZqU8S.jpg",
+        "season_number": 3,
+        "vote_average": 8.5
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "The first time's always the hardest.",
+    "type": "Scripted",
+    "vote_average": 8.042,
+    "vote_count": 275,
+    "external_ids": {
+      "imdb_id": "tt31589662",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 448023,
+      "tvrage_id": null,
+      "wikidata_id": "Q125755654",
+      "facebook_id": "georgieandmandycbs",
+      "instagram_id": "georgieandmandycbs",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Georgie and Mandy raise their young family in Texas while navigating the challenges of adulthood, parenting, and marriage.",
+            "homepage": "",
+            "tagline": "The first time's always the hardest."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Georgie en Mandy voeden hun jonge gezin op in Texas terwijl ze omgaan met de uitdagingen van volwassenheid, ouderschap en huwelijk.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Cette suite de Young Sheldon suit Georgie et Mandy alors qu'ils élèvent leur jeune famille au Texas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "El primer matrimonio de Georgie y Mandy",
+            "overview": "Georgie y Mandy crían a su joven familia en Texas mientras enfrentan los desafíos de la edad adulta, la crianza de su hija y el matrimonio.",
+            "homepage": "",
+            "tagline": "La primera vez siempre es la más difícil"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Первый брак Джорджи и Мэнди",
+            "overview": "Молодые супруги Джорджи и Мэнди пытаются привыкнуть к взрослой жизни и родительству, а также борются за свои отношения.",
+            "homepage": "",
+            "tagline": "«Первый раз всегда самый сложный»"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "乔治和曼迪的头婚生活",
+            "overview": "《小谢尔顿》的衍生剧集。乔治和曼迪在德克萨斯州抚养他们的年轻家庭，同时应对成年、育儿和婚姻的挑战。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Džordžis ir Mendė: džiaugsme ir varge",
+            "overview": "„Džordžis ir Mendė: džiaugsme ir varge“ toliau pasakoja apie serialo „Jaunasis Šeldonas“ herojų gyvenimus. Komedijiniame seriale pasakojama apie Džordžį  ir Mendę, jauną šeimą, kuri stengiasi puoselėti santuoką ir įveikti iškilusius iššūkius.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Georgie a Mandy: Poprvé svoji",
+            "overview": "Po smrti Georgieho otce se novomanželé Georgie a Mandy přestěhují k Mandyiným rodičům do Texasu, což s sebou přináší nové výzvy, a to zejména pro Georgieho, který se snaží získat přízeň Mandyiny rodiny.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Georgie y Mandy: Primer matrimonio",
+            "overview": "Georgie y Mandy crían a su joven familia en Texas mientras enfrentan los desafíos de la edad adulta, la crianza de los hijos y el matrimonio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Перший шлюб Джорджі та Менді",
+            "overview": "Джорджі та Менді виховують своє молоде подружжя в Техасі, долаючи виклики дорослого життя, батьківства та подружнього життя.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Georgie e Mandy: Seu Primeiro Casamento",
+            "overview": "Esta sequência acompanha Georgie e Mandy conforme eles criam sua jovem família no Texas e navegam da vida adulta, da paternidade e do casamento.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Georgie i Mandy wzięli ślub",
+            "overview": "Georgie i Mandy wiodą swoje młode życie małżeńskie w Teksasie, jednocześnie radząc sobie z wyzwaniami dorosłości, rodzicielstwa i małżeństwa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Prima căsnicie a lui Georgie și Mandy",
+            "overview": "Urmăriți-i pe Georgie și Mandy și familia lor tânără din Texas, în timp ce se confruntă cu provocările vieții de adult, ca părinți și ale mariajului.",
+            "homepage": "",
+            "tagline": "Prima dată e întotdeauna cel mai greu."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Il meraviglioso percorso della famiglia di Sheldon Cooper prosegue con Georgie e Mandy, giovani genitori negli anni '90. Georgie e Mandy affrontano le sfide dell'età adulta, della genitorialità e del matrimonio mentre crescono la loro giovane famiglia in Texas.",
+            "homepage": "",
+            "tagline": "La prima volta è sempre la più difficile."
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "جورجي وماندي: الزواج الأول",
+            "overview": "يروي المسلسل الكوميدي قصة جورجي وماندي، شابين يواجهان تحديات الزواج المبكر وتربية طفلهما الأول. وسط مواقف طريفة ومؤثرة، يستكشف العمل موضوعات الأسرة، الحب، والنمو الشخصي بأسلوب مرح ودافئ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Cuộc Hôn Nhân Đầu Tiên của Georgie và Mandy",
+            "overview": "Đây là một bộ phim hài kể về cuộc sống của Georgie và Mandy khi họ vượt qua những thử thách của tuổi trưởng thành, nuôi dạy con cái và hôn nhân trong khi nuôi dưỡng gia đình nhỏ của họ ở Texas. Bộ phim này là phần phụ của \"Young Sheldon,\" và chính \"Young Sheldon\" là phần phụ của \"The Big Bang Theory.\"",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Първият брак на Джорджи и Манди",
+            "overview": "Джорджи и Манди отглеждат младото си семейство в Тексас, докато се справят с предизвикателствата на зрелостта, родителството и брака.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "הנישואים הראשונים של ג'ורג'י ומנדי",
+            "overview": "הסדרה מתמקדת בזוג הצעיר מנדי וג'ורג'י המתגוררים בטקסס בשנות התשעים ומתמודדים עם אתגרי זוגיות והורות.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Young Sheldonin jatko-osassa seurataan Georgieta ja Mandya, jotka kasvattavat nuorta perhettään Texasissa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "El primer matrimoni d'en George i la Mandy",
+            "overview": "En Georgie i la Mandy crien la seva jove família a Texas mentre enfronten els reptes de l'edat adulta, la criança de la seva filla i el matrimoni.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Georgie és Mandy első házassága",
+            "overview": "Georgie és Mandy családot alapítanak Texasban, és próbálnak megbirkózni a felnőtt élet, a gyermeknevelés és a házasság nyújtotta kihívásokkal.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Georgie & Mandy",
+            "overview": "Georgie und Mandy sind nach ihrer Hochzeit mit ihrer Tochter CeeCee zu Mandys Eltern, Audrey und Jim, gezogen. Dort steht das junge Paar vor den Herausforderungen des Erwachsenseins, der Elternschaft und ihrer Ehe ...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Georgiejev i Mandyn prvi brak",
+            "overview": "Pratite Georgieja i Mandy dok podižu svoju mladu obitelj u Teksasu i suočavaju se s izazovima odrasle dobi, roditeljstva i braka.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "喬治和曼迪的頭婚生活",
+            "overview": "喬治和曼迪在德克薩斯州撫養他們的年輕家庭，同時應對成年、育兒和婚姻的挑戰。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "Džordžija un Mendijas pirmā laulība",
+            "overview": "Džordžijs un Mendija cīnās ar izaicinājumiem laulībā, bērnu audzināšanā un radu būšanā.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "A Georgie e a Mandy criam a sua jovem família no Texas, enquanto enfrentam os desafios da vida adulta, da maternidade e do casamento.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Prvé manželstvo Georgieho a Mandy",
+            "overview": "Georgie a Mandy vychovávajú svoju mladú rodinu v Texase a zároveň sa potýkajú s výzvami dospelosti, rodičovstva a manželstva.",
+            "homepage": "",
+            "tagline": "Prvýkrát je vždy najťažší."
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "I uppföljaren till Young Sheldon får vi följa Georgie, Mandy och deras lilla familj i Texas.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "จอร์จี้กับแมนดี้ มือใหม่หัดแต่ง",
+            "overview": "ติดตามชีวิตของจอร์จี้และแมนดี้กับการเริ่มต้นสร้างครอบครัวและเลี้ยงดูลูกน้อยในรัฐเท็กซัส",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Georgie en Mandy voeden hun jonge gezin op in Texas terwijl ze omgaan met de uitdagingen van volwassenheid, ouderschap en huwelijk.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "喬治與曼蒂的初婚生活",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h927CLfeAjiy0MNKRxWZgEq7bHR.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7N8IOvg0psV4yOGR5yQmBGhmoqE.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mftiCiSsw4DFdlbfjN3cpkmMe0c.jpg",
+          "vote_average": 6.042,
+          "vote_count": 12,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fIhXD6m9LJgC7yDMOHMpYgkYAJ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/93O9FlpHvCO2tFGEJVK4JNw1gIg.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zuP1k0EbiEsRjRHJdrcpZUoYZOK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pCr3YYJkkLt9fdGVD7I2Z1l6lzK.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vgLgLfgUCOoFd3YzcUdi4qmzwvQ.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1687,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iyo9VFqGldJfU6wMiEAcm6toZjv.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aUxTsMubQmJMAXtcoTXuxe98Ypt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gnInF5ZYJOCIsFlbCvXzhXMr6d1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5b9XEAa70JkAHJDGmDcjfHDXpSv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g6n7gSPtLXcydenNk4eJBLH6t3T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.596,
+          "height": 1201,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xGuV6OX9CZgMZ4Qzu9uT3rrd4pK.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 3.369,
+          "height": 385,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xDT7CU7rpgLbF1YhhQgWLmgbr3R.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1297
+        },
+        {
+          "aspect_ratio": 3.596,
+          "height": 1201,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gvU2hdgL9iQFwsPr7RproEDFC4A.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 3.596,
+          "height": 1201,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bDGKJzsbFApF0wZOtHvjv7G4YGS.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4319
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3z2mYFxUkzanb2eeIcVyfJq0G3q.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e1a7Q4muuf0X4504r35krf3X6HO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6Yl0O29P5r3RDbqz4ZzR3gNUrwa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rPwPQSWZ4KUGpYQuxPFfWbD2MWR.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hZxlc60m4wSoZjOcjDG3YEXElda.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1644,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eh5UWhLTi5GegcSg0r6NNa1IIL0.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1096
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j4MQSCLm6eZ41CGUi6GnS5I4Wbj.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b8kqhz0Q8KuYxFNJNju5s5cRRF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8Kp8eWXwdWFroRw3lRB0qetSK8q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vpnWVC60brhUsnZSlRx2Tnhg1JX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cVRj1r6TuRNqUvWgu6O3Jun7bjX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cc8IG29OUDket0ChLW0rpDP95kg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8uQ4xWzHbfx0pfEwHhDRPyEDPZ1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3g5KY6GdeB6JlBqYyP42xqn5noj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1199,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nrXCl82eFAiXZcXXmp7w42wmcwW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wE9akZwt3TZy0BLmQLYeLxeofmn.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u1FLXRRUajhLf7g0hwaukfmf5Tc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/an83K9MVtlGErLrQpZmaFQPoGJG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jjUTqAhVp96LwhMcJglE5BD47fK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h4Hk1xWfIHS2nKzlNNDhCzF0XDv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jNnnQE3IxXkkFd0qxz8afa5aGFK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        }
+      ]
+    }
+  }
+}

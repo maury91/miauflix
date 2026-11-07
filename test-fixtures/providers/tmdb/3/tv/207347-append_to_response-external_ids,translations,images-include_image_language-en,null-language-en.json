@@ -1,0 +1,1295 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=12629",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"f17bda85e6346865be04aecef859a523\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/8p39Ud6ZKMixBQ7R4frg2o3idzc.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      25
+    ],
+    "first_air_date": "2024-10-03",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://aonohako-anime.com",
+    "id": 207347,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-25",
+    "last_episode_to_air": {
+      "id": 7906167,
+      "name": "Love Is the Most Powerful Feeling",
+      "overview": "Chinatsu walks away, leaving Yumeka to confront her true feelings. Middle school memories come flooding back, revealing how her love for basketball faded.",
+      "vote_average": 7.5,
+      "vote_count": 2,
+      "air_date": "2026-10-25",
+      "episode_number": 29,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 207347,
+      "still_path": "/7CjZYtAnNIRfarJhDdnlJB1JJIX.jpg"
+    },
+    "name": "Blue Box",
+    "next_episode_to_air": {
+      "id": 7906173,
+      "name": "Episode 30",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 30,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 207347,
+      "still_path": "/c83QAXrIQ7C3Qs2CoBupoXMGDwM.jpg"
+    },
+    "networks": [
+      {
+        "id": 94,
+        "logo_path": "/7RNXnyiMbjgqtPAjja13wchcrGI.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 160,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 201,
+        "logo_path": "/qNooLje0YQh1y3y9LUM2Y5QCtiF.png",
+        "name": "CBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 896,
+        "logo_path": "/qfUzYnpnN5bnd2bqGUH0OlAMell.png",
+        "name": "Tulip Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1559,
+        "logo_path": "/ihcrBmZYwCmT3YZ7ykNmFgtj2oA.png",
+        "name": "SBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2460,
+        "logo_path": "/34sNEcsgcTAuDidRMrgxdfNyVjL.png",
+        "name": "BSN",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2461,
+        "logo_path": "/b4Ivxqz6UY0EogjYc09Y22ctC6F.png",
+        "name": "tys",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2462,
+        "logo_path": "/7zXfwh5ZhFqvdOWgWX80weU6Sqb.png",
+        "name": "NBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3658,
+        "logo_path": "/sJwRsE1lfMwAwYZi1OtRfn7V03t.png",
+        "name": "HBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3705,
+        "logo_path": "/6vOG1oEihq6eStEzPnOGal2AIV9.png",
+        "name": "RKK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3969,
+        "logo_path": "/nhCsLIGjzIIp6jIFCdHN0cQEzjP.png",
+        "name": "i-Television",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3970,
+        "logo_path": "/9coKtCf4jSNCdSqGveVFyzvjrZt.png",
+        "name": "SBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3971,
+        "logo_path": "/zoFgqDe0v8svSA01yExlhcG1Bss.png",
+        "name": "IBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3972,
+        "logo_path": "/rL2IlndcEiQnIbym5EoSEM7rGlx.png",
+        "name": "BSS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3973,
+        "logo_path": "/dh4E8hGvqD9Xqu51kbqUU06UKbt.png",
+        "name": "MRO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3974,
+        "logo_path": "/yMQxsmGs88q54bslmcSeXlmpObC.png",
+        "name": "OBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3975,
+        "logo_path": "/6ACZlk44MWsIIwYHxjRGXGKlpRb.png",
+        "name": "TUF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3977,
+        "logo_path": "/sGMMrdCmptaLLwJX7CsXTDaduLO.png",
+        "name": "RSK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3978,
+        "logo_path": "/zOz9LK6WWLUWGuG0fthzDzCIXlA.png",
+        "name": "TUY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3979,
+        "logo_path": "/6oIE2LmtONObnw5wtFO4IIXwgkb.png",
+        "name": "tbc",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4748,
+        "logo_path": "/o5Hlt7ZXJPEm4Qrx2Pl2rtc9A5y.png",
+        "name": "RKB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4792,
+        "logo_path": "/8kzeHaKeW3gZubs3cqlGWFvfJI7.png",
+        "name": "KUTV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4859,
+        "logo_path": "/fhQU8sGOoV877wDfHmPZftKldvE.png",
+        "name": "RBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6171,
+        "logo_path": "/vxemHAgdzVCbvAFcO84MWg2wnXC.png",
+        "name": "UTY",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6172,
+        "logo_path": "/mKslL0MTHHt9ukugWOv3Vh8Tn0E.png",
+        "name": "RCC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6173,
+        "logo_path": "/92bKXaygjtTwAbX4AH2UnLJN2Xe.png",
+        "name": "MRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6174,
+        "logo_path": "/aawphEBuBGT9RVP6xG3BZV8NOCw.png",
+        "name": "ATV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6175,
+        "logo_path": "/fVUs2F2qTjOzJ9oP0jeqtpZEAai.png",
+        "name": "MBC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 37,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "アオのハコ",
+    "overview": "Taiki Inomata loves badminton, but he has a long way to go before he can reach nationals. When Taiki sees upperclassman Chinatsu Kano practicing her heart out on the girls’ basketball team, he falls for her hard. After an unexpected turn of events brings the two closer together, sports might not be the first thing on their minds anymore!",
+    "popularity": 27.9745,
+    "poster_path": "/sN3TuYevEPWxZhwcp6I2PJRW1jl.jpg",
+    "production_companies": [
+      {
+        "id": 20868,
+        "logo_path": "/jhJGtYghSVawQJygEnJymQAqAb2.png",
+        "name": "Telecom Animation Film",
+        "origin_country": "JP"
+      },
+      {
+        "id": 172244,
+        "logo_path": "/lz8CdepJJMQiZZ9Cf192IZkGNAG.png",
+        "name": "UNLIMITED PRODUCE by TMS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 293708,
+        "logo_path": "/de78naMtzO6I94cbgfUnG3VFONx.png",
+        "name": "ELECTRIC CIRCUS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1393,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7164,
+        "logo_path": "/vHsaqTkQ2ZTbdqrCA272YahoVlg.png",
+        "name": "TMS Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 882,
+        "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+        "name": "TOHO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2024-10-03",
+        "episode_count": 37,
+        "id": 303235,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/hBwmRpHriNX8wOOTwg8HZg9cRwf.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Do these sports-crossed lovers have a chance?",
+    "type": "Scripted",
+    "vote_average": 7.9,
+    "vote_count": 112,
+    "external_ids": {
+      "imdb_id": "tt32639706",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 429934,
+      "tvrage_id": null,
+      "wikidata_id": "Q123484832",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "aonohako_PR"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "La caja azul",
+            "overview": "Esta serie sigue a Taiki Inomata, un adolescente que asiste a la escuela Eimei y juega en el equipo de bádminton. Todas las mañanas, entrena junto con Chinatsu Kano, una chica que lo tiene enamorado, está en un curso superior y juega en el equipo de baloncesto. Cuando los padres de Chinatsu se mudan al exterior por trabajo, ella va a vivir con la familia de Taiki. Ahora que comparten el mismo techo, él tratará de profundizar el vínculo que los une mientras ambos se esfuerzan por llegar al campeonato nacional con sus respectivos equipos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "La caja azul",
+            "overview": "Taiki, que juega a bádminton, siempre ha admirado a la estrella del baloncesto Chinatsu desde la distancia. Pero un día de primavera, un giro inesperado une sus caminos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Taiki Inomata loves badminton, but he has a long way to go before he can reach nationals. When Taiki sees upperclassman Chinatsu Kano practicing her heart out on the girls’ basketball team, he falls for her hard. After an unexpected turn of events brings the two closer together, sports might not be the first thing on their minds anymore!",
+            "homepage": "",
+            "tagline": "Do these sports-crossed lovers have a chance?"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "中高一貫のスポーツ強豪校・栄明高校に入学する、男子バドミントン部の一年生・猪股大喜。大喜は毎朝、朝練で顔を合わせる一つ上の先輩、鹿野千夏に恋をする。千夏は女子バスケットボール部のエースで、校内外問わず人気の高嶺の花。部活に恋に勉強に、大喜にとって忙しい高校生活がはじまる、そんなある日――",
+            "homepage": "",
+            "tagline": "僕らの青春は、このハコにつまっている。"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Taiki joga badminton, mas sempre admirou de longe a estrela do basquete Chinatsu. Até que um dia, uma reviravolta do destino aproxima os dois.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Der Badmintonspieler Taiki hat die Basketballspielerin Chinatsu seit Langem aus der Ferne bewundert. Doch eines Tages bringt eine überraschende Wendung die beiden einander näher.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "กล่องรักวัยใส",
+            "overview": "ไทกิ หนุ่มนักแบดมินตัน ชื่นชอบจินัตสิ หญิงสาวซึ่งเป็นซูเปอร์สตาร์นักบาสมาตลอด วันหนึ่งในฤดูใบไม้ผลิ เหตุการณ์ที่คาดไม่ถึงก็นำพาให้ทั้งสองมาใกล้ชิดกัน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Niebieskie pudełko",
+            "overview": "Badmintonista Taiki zawsze z daleka podziwiał utalentowaną koszykarkę Chinatsu. Jednak pewnego wiosennego dnia ich drogi nieoczekiwanie się przecinają.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青春之箱",
+            "overview": "豬股大喜是體育名校私立榮明學園高中一年級生，也是男子羽球隊的新人。長久以來，他一直暗戀著籃球隊新星鹿野千夏，每天早上都和學姊在同一個體育館晨練。有一天，兩人的關係突然發生鉅變，這部描繪戀愛、體育與青春的影集就此揭開序幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青之箱",
+            "overview": "进入中高一贯制体育强校──荣明高校男子羽毛球部的一年级生猪股大喜，每天早晨在晨练时都会遇到比他大一岁的的鹿野千夏学姐，并对她产生了爱慕之情。千夏是女子篮球队的王牌，无论在校内还是校外都是备受瞩目的高岭之花。就这样，忙于社团活动、恋爱和学习的高中生活就这样开始了，而在某一天……",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Голубая шкатулка",
+            "overview": "«Каждое утро... есть один человек, которого я всегда очень хочу увидеть»\n\nТайки Иномата учится в школе со спортивным уклоном «Эймэй» и состоит в команде по бадминтону. Каждое утро Тайки стремится первым попасть в спортзал, который всегда открыт для желающих лишний раз потренироваться, но, как бы он ни старался, там всегда есть, кому поприветствовать его. Когда-то Тинацу Кано, раз за разом отрабатывающая баскетбольные броски по утрам, была для Тайки не более чем примером для подражания, но сейчас она главная мотивация для раннего подъёма и дополнительных тренировок. И, хоть Тинацу и кажется недосягаемой звездой, Тайки намерен сделать всё, чтобы однажды дотянуться до неё. Однако... кто мог ожидать, что расстояние между ними сократится в самом прямом смысле?!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Jucătorul de badminton Taiki a admirat-o mereu și de departe pe baschetbalista-vedetă Chinatsu, dar într-o zi de primăvară, o surpriză îi aduce brusc mai aproape.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Блакитна скринька",
+            "overview": "Бадмінтоніст Тайкі завжди захоплювався зіркою баскетболу Чінацу на відстані. Але одного весняного дня несподіваний поворот подій раптово зближує їх.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Le joueur de badminton Taiki a toujours admiré de loin la star du basket Chinatsu. Jusqu'à un beau jour de printemps, où la vie les rapproche de façon inattendue.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "푸른 상자",
+            "overview": "농구부의 스타 치나츠를 멀리서 지켜보며 줄곧 짝사랑해 온 배드민턴부의 타이키. 그러던 어느 봄날, 두 사람의 거리가 갑자기 가까워지는 깜짝 놀랄 사건이 일어난다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Blue Box",
+            "overview": "A tollasozó Taiki mindig messziról csodálta Chinatsut, a kosaras sztárt. Azonban egy tavaszi napon váratlan fordulat hozza őket meglepően közel.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Mládí na hřišti",
+            "overview": "Taiki hraje badminton a skvělou basketbalistku Činacu vždycky zdálky obdivoval. Jednoho jarního dne je ale překvapivá změna svede nečekaně blízko k sobě.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Badmintonspilleren Taiki har altid beundret basketballstjernen Chinatsu på afstand. Men på en forårsdag bliver de bragt tæt på hinanden af en overraskende drejning.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Blue Box",
+            "overview": "De badmintonspeler Taiki heeft altijd een oogje gehad op de basketbalster Chinatsu. Op een lentedag brengt het lot hen op verrassende wijze samen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Sulkapallopelaaja Taiki on aina ihaillut koripallotähti Chinatsua kaukaa, ja sitten eräänä kevätpäivänä yllättävä käänne tuokin heidät lähemmäksi toisiaan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Ο Τάικι παίζει μπάντμιντον και πάντα θαύμαζε από μακριά τη σταρ του μπάσκετ Κινάτσου. Όμως μια ανοιξιάτικη μέρα, μια ανέλπιστη τροπή τους φέρνει απρόσμενα κοντά.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Taiki si pemain badminton selalu mengagumi Chinatsu, si bintang basket, dari jauh. Namun, sebuah peristiwa yang mengejutkan di musim semi membuat mereka mendadak dekat.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Taiki Inamata, atleta del club di badminton, si allena ogni mattina all'alba per fare colpo su Chinatsu Kano, la stella del basket femminile di cui è innamorato. La sua routine viene stravolta quando Chinatsu si trasferisce a vivere a casa della famiglia Inamata. Condividendo lo stesso tetto, i due ragazzi si supporteranno a vicenda per qualificare le rispettive squadre ai campionati nazionali.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Taiki, um jogador de badminton, sempre admirou de longe a estrela de basquetebol Chinatsu. Mas, num dia de primavera, os dois aproximam-se inesperadamente.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Badminton oyuncusu Taiki, basketbol yıldızı Chinatsu'ya uzaktan da olsa hayranlık duymaktadır. Ancak bir bahar günü, şaşırtıcı bir gelişme onları beklenmedik şekilde yakınlaştırır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Plava kutija",
+            "overview": "Igrač badmintona Taiki oduvijek se izdaleka divio košarkaškoj zvijezdi Chinatsu. No jednog proljetnog dana spoji ih iznenađujuća igra sudbine.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chiếc Hộp Xanh",
+            "overview": "Tay vợt cầu lông Taiki luôn ngưỡng mộ ngôi sao bóng rổ Chinatsu từ xa. Nhưng vào một ngày mùa xuân nọ, một bước ngoặt bất ngờ đưa họ đến gần nhau.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "جعبه آبی",
+            "overview": "تایکی بازیکن بدمینتون همیشه ستاره بسکتبال چیناتسو را از دور تحسین کرده است. اما یک روز بهاری، یک چرخش غافلگیرکننده آن‌ها را به‌طور غیرمنتظره‌ای گرد هم می‌آورد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "بلو بوكس",
+            "overview": "لطالما كان لاعب الريشة الطائرة \"تايكي\" معجبًا بنجمة كرة السلة \"تشيناتسو\" من بعيد. ولكن في أحد أيام الربيع، ينشأ تحول مفاجئ يقربهما من بعضهما بصورة غير متوقعة",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青春之箱",
+            "overview": "羽球選手大喜一直遠遠仰慕著籃球明星千夏。在某個春日，出乎意料的變化竟拉近了兩人之間的距離。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De badmintonspeler Taiki heeft altijd een oogje gehad op de basketbalster Chinatsu. Op een lentedag brengt het lot hen op verrassende wijze samen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "Blue Box",
+            "overview": "Si Taiki Inomata ay mahilig sa badminton, ngunit mahaba pa ang kanyang lalakbayin bago niya maabot ang nationals. Nang makita ni Taiki ang kanyang nakatatandang kapwa-mag-aaral na si Chinatsu Kano na nagsasanay sa kanyang puso sa girls' basketball team, nahuhulog siya sa kanya nang husto. Matapos ang isang hindi inaasahang pangyayari ay naglalapit sa dalawa, maaaring hindi na ang sports ang unang nasa isip nila!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "האולם הכחול",
+            "overview": "טאיקי, שחקן בדמינטון צעיר, העריץ את הכדורסלנית הפופולרית צ'ינטסו מאז שהוא זוכר את עצמו. הוא תמיד העריץ אותה מרחוק, אבל ביום בהיר אחד המציאות מזמנת להם מפגש קרוב ומפתיע.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "ब्लू बॉक्स",
+            "overview": "बैडमिंटन खिलाड़ी ताइकी हमेशा से बास्केटबॉल स्टार चिनात्सु को दूर से पसंद करता आया है. पर वसंत के एक दिन, सब कुछ बदल जाता है और वे अचानक करीब आ जाते हैं.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8p39Ud6ZKMixBQ7R4frg2o3idzc.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6n5O2QlR6H87PBCII4QweqaDj8q.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/edb6wIacGgLI1PzPd3ua4mY3Vne.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1991,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nVQ0pYp58BoQGGEbB9hFETpbFFW.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3539
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ydQh1Pv4r9h1i3MjYFcYJnQVacr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/koXm6cLQA2NU9ABtY2gIlfbgf2X.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eJTYiFDV2TQgs7JGHMh4TcSMwbs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1628,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4KJ0EznA9pDpqd6r5cLP98TZzA9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2895
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yLZXf9fghX00SyIfhaoh0x8lUpJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/l65NWhmBHHQbmVrGGOQXBpd7hBI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1337,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xErlYFWaf1Ofkyepw34EUGJAcRX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2376
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A6NTPRctAYKEHyxX4IvbqTANkyW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1433,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xCU8GdpjGxWMkUyerzP35FREBVj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2547
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a7fWwNyeN7NQVEVT90MhbYpj358.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jo73I59qTD6Jv9xn3uhLVY0GQDu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ggj3XD5jBNCQ04IUMOS7YxJWpj6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y4I4CjK7teiojrLmqaMq88KNZrF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.631,
+          "height": 206,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ubw6k78dv5SU9y9JoHRkBW8pGuN.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1160
+        },
+        {
+          "aspect_ratio": 4.066,
+          "height": 519,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m145jiUvKCXuVQo92KWKfkYdMPc.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2110
+        },
+        {
+          "aspect_ratio": 5.233,
+          "height": 386,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eFKYUsGePMFLrwmvnnLfh96Yjdc.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2020
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sN3TuYevEPWxZhwcp6I2PJRW1jl.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aWco9BuJ5sSiQXviYh7JdObOYdA.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1415,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mVAWCCNBxPX3EUf9XhcFff4wW5V.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 943
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5msbE1Wmy27y2FhKDflXveXpCVv.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nzOMrZ1T66FfcAvjqZnBrVxYqg.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1600,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/93YKdmC5m4WZQPd4Wr19IDyQup8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1067
+        },
+        {
+          "aspect_ratio": 0.725,
+          "height": 1035,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dXNgC6OFxLc7p0Stci5o8CjHpLa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.725,
+          "height": 1035,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1tJqsB7GzlhwOlwiL1aRWbCK7LQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.725,
+          "height": 1035,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/thfkShsIpQnKpXsKi0Njr2sYfo0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.725,
+          "height": 1035,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nf6ncUkjBvO0jX57cydcT9xDyLu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hBwmRpHriNX8wOOTwg8HZg9cRwf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ehD4TExgBvJUMXXePgZdZkWWxoM.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1481
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2828,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6BSedpeUInCC9hRKiWjUPjFJMRP.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2828,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rKwbJPuz8yAOTTtmgmP5hf3iB37.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.725,
+          "height": 1035,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wfg1nUWGy3HHwZcX9IHXqY3v0jj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.725,
+          "height": 1035,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xrSEz5NUHqqOhKDFaxsbRm0L22c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 750
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r3BISdv0sAqfzNaBDSjwsRzIgo6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d56PMw5helmNW7YLztaMfeLxNdI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1769,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qptRyj1EVZh0fNn34dWKbLQJx7l.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1179
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v0bZiAgziegFFaC7XDphUJX7zQI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2826,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tDGRwGOmRxaCq20dLngXuk3mMU4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zcTZA9FKSx1BNLfgEJiUA987jas.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2828,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fZ5qYM7GF3qpjiLApJSxwQJkMEr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2826,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yLF1qBS9DEoz7Di8hnijwkzcHMH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2827,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tEqwH3PL4ioaiqWL6zh95Er7FsP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/p6fjD1uzWzPsJDSdbfPMwitkPqf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5PsWHvFxlCdEOWEIEv3M4JcKiRx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1816,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mcvd9yrb7iUxa3lCrhotcO1dRz2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1211
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b63P0CmgqBudCVjaypXzkGGpGdW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9b8PdlCwJLend837a2bs7vhDTSk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4vQ0rflfQrYE46riLDRboF5jfHb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1M4rlRocgzbD19ZPfS55ard9uSf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mc7dKUdBhvxr6wt5NA2QmgNinYx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ijitbghO4K5icEnAnR6DF6PGY3l.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

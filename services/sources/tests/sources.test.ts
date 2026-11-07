@@ -163,6 +163,7 @@ it('drops the untouched Jackett built-ins left by earlier versions, and keeps on
         'maury91-eztv-api',
         'maury91-torrentio',
         'maury91-therarbg',
+        'maury91-animetosho',
         'prowlarr-nyaasi',
         'prowlarr-eztv',
         'prowlarr-thepiratebay',

@@ -1,0 +1,777 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=18613",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"8a32a97ff8bd3c989f8e4a0bca7cd765\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/87IQdOn34p1z2KTdM4IZ1N8bWaH.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2022-04-09",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      }
+    ],
+    "homepage": "https://aoashi-pr.com",
+    "id": 126437,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-25",
+    "last_episode_to_air": {
+      "id": 7424787,
+      "name": "Don't Quit Thinking",
+      "overview": "Kuribayashi's presence overwhelms Ashito, but he notices something unusual about Kuribayashi's play.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-01",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 25,
+      "season_number": 2,
+      "show_id": 126437,
+      "still_path": "/9I4iFACEs8yQnjuCzaMgWFoK0Hv.jpg"
+    },
+    "name": "Aoashi",
+    "next_episode_to_air": {
+      "id": 7424788,
+      "name": "Teach Me",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 2,
+      "show_id": 126437,
+      "still_path": "/we0FD2IpCl8phNHMYbdZJ7wMYz8.jpg"
+    },
+    "networks": [
+      {
+        "id": 622,
+        "logo_path": "/uWDPIxVAZltqyPG4NQZL6D38d1F.png",
+        "name": "NHK Educational TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 48,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "アオアシ",
+    "overview": "Ashito Aoi is a young, aspiring soccer player from a backwater town in Japan. His hopes of getting into a high school with a good soccer club are dashed when he causes an incident during a critical match for his team, which results in their loss and elimination from the tournament. Nevertheless, he catches the eye of someone important who happened to be visiting from Tokyo. How will things turn out for Ashito?",
+    "popularity": 36.2398,
+    "poster_path": "/uvWHFUtgD0V8Xy5lolwijRAN82O.jpg",
+    "production_companies": [
+      {
+        "id": 529,
+        "logo_path": "/rwB6w2aPENQbx756pBWSw44Ouk.png",
+        "name": "Production I.G",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12655,
+        "logo_path": "/dfGqf2NoMVPrDywDL90D5HAhBlW.png",
+        "name": "Shogakukan-Shueisha Productions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11376,
+        "logo_path": "/lrglrxyGOMRl9KCsmcjmzjjpT2H.png",
+        "name": "NHK Enterprises",
+        "origin_country": "JP"
+      },
+      {
+        "id": 152836,
+        "logo_path": "/2Nw5F2Mv4at3Sm6ldwTKK3XYuLK.png",
+        "name": "Bandai Spirits",
+        "origin_country": "JP"
+      },
+      {
+        "id": 169858,
+        "logo_path": "/1IjKiiE3uuh7PheIdX1ogmayPHG.png",
+        "name": "Marvelous",
+        "origin_country": "JP"
+      },
+      {
+        "id": 7164,
+        "logo_path": "/vHsaqTkQ2ZTbdqrCA272YahoVlg.png",
+        "name": "TMS Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9149,
+        "logo_path": "/isLUpud9N56ifftJZ4XvzwBBpoG.png",
+        "name": "Shogakukan",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-04-09",
+        "episode_count": 24,
+        "id": 197006,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/54g8OJGJTbFZje6dLlFybe8tX6u.jpg",
+        "season_number": 1,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": "2026-10-04",
+        "episode_count": 24,
+        "id": 454024,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/uYihSzoSIxRg1xHT0UGlOc8b3EL.jpg",
+        "season_number": 2,
+        "vote_average": 7.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.847,
+    "vote_count": 75,
+    "external_ids": {
+      "imdb_id": "tt15792808",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 407840,
+      "tvrage_id": null,
+      "wikidata_id": "Q112299509",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "aoashi_pr"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Ao Ashi",
+            "overview": "Aoi Ashito es un estudiante de tercer año de secundaria de Ehime. Detrás de su juego rudo se esconde su inmenso talento, pero Ashito sufre un gran revés debido a su personalidad demasiado sencilla. El director del equipo juvenil del club J1 Tokyo City Esperion, Fukuda Tetsuya, aparece frente a Ashito. Fukuda ve el potencial ilimitado de Ashito y lo invita a participar en las pruebas de su equipo en Tokio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Aoashi",
+            "overview": "Ashito Aoi, un estudiante de tercer año de preparatoria de Ehime, conoce a Tatsuya Fukuda, un entrenador de la “Liga Juvenil J”. A pesar de que todavía es brusco, Ashito tiene un potencial tan asombroso que el entrenador Fukuda lo invita a participar en las pruebas de su equipo en Tokio. Así empieza a desarrollarse la historia del chico que revolucionará el fútbol en Japón.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Ao Ashi",
+            "overview": "Ashito Aoi vit dans la préfecture d’Ehime, dans le sud du Japon. Il est le meilleur joueur d'un club de football ordinaire. Le jour où ils perdent le tournoi intercollèges, Ashito croise la route d’un homme qui l’a observé. C’est Tatsuya Fukuda, l'entraîneur des jeunes de la J-League du Tokyo City Esperion FC. À la recherche de talents pour constituer la meilleure équipe du monde, il propose à Ashito de le rejoindre à Tokyo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Aoashi",
+            "overview": "Ashito Aoi is a young, aspiring soccer player from a backwater town in Japan. His hopes of getting into a high school with a good soccer club are dashed when he causes an incident during a critical match for his team, which results in their loss and elimination from the tournament. Nevertheless, he catches the eye of someone important who happened to be visiting from Tokyo. How will things turn out for Ashito?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "愛媛に暮らす中学生・青井葦人(あおいアシト)は弱小サッカー部のエース。中学最後の大会で負けた日、悔しさをぶつけるように海辺で走り込んでいたアシトは、試合を見ていた一人の男と出会う。その男——福田達也は、J リーグ有数のクラブ「東京シティ・エスペリオン FC」で、高校生年代を育成する組織「ユースチーム」の監督だった。荒削りだが、ある特別な才能を持つアシトに無限の可能性を見出した福田は、自らの野望を語り始める。「俺には野望がある。俺の作り上げたクラブで、世界を掌中に収める。世界への踏み台じゃない。我がクラブこそが世界だと。その野望のすべてを担うもの、育成＜ユース＞だ。」福田の誘いを受け、入団試験＜セレクション＞を受けに上京することを決意するアシトだったが──\n\n挫折、成長、友情—青春の全てがここにある！",
+            "homepage": "",
+            "tagline": "世界へ、連れていってやる。"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Aoashi",
+            "overview": "Ashito ist der Starspieler eines unscheinbaren Fußballteams, allerdings verliert er sein letztes Turnier an der Mittelschule. Hinter seinem rauen Spiel verbirgt sich immenses Talent, aber Ashito erleidet wegen seiner allzu geradlinigen Persönlichkeit einen großen Rückschlag. Der Manager eines Jugendteams erkennt jedoch sein noch nicht ausgereiftes Potenzial und lädt ihn zu einem Testtraining nach Tokyo ein. So beginnt die Geschichte eines Jungen, der den Fußball in Japan revolutionieren wird.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Aoashi",
+            "overview": "Ashito Aoi é um adolescente que mora no interior do Japão e é o artilheiro de um time de várzea. Após perder a final do torneio sub-15, ele é recrutado por Tatsuya Fukuda, técnico da categoria de base do Tokyo City Esperion FC, um dos maiores times da J-League, a primeira divisão do campeonato japonês. Tatsuya quer transformar o Esperion em um time de calibre mundial, e encontra em Ashito um talento a ser refinado e desenvolvido. Ao ouvir isso, Ashito aceita a oferta e decide se candidatar para a peneira. Perda, amadurecimento e amizade não faltam nesta obra cheia de espírito juvenil!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青之芦苇",
+            "overview": "“我来带你走向世界。”\n\n生活在爱媛县的中学生青井苇人是弱小足球部的王牌。\n\n在中学最后一场比赛中输了的那一天，青井在海边奔跑发泄他的不满。此时，青井遇到了一名来观看比赛的男人。\n\n那个男人——福田达也，来自J联赛屈指可数的俱乐部「Esperion FC」，是培育高中时期的「青年队」的主教练。\n\n福田在拥有某种特殊才能的青井身上发现了无限的可能性，开始讲述自己的野心。\n\n“我的野心。是我建立的俱乐部，掌握世界。不是走向世界的垫脚石。我认为我的俱乐部才是世界。这就是肩负着所有野心的培养“青年军”。\n\n接受福田的邀请，青井决定去东京参加选拔考试。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "아오아시",
+            "overview": "에히메에 사는 중학교 3학년 아오이 아시토는 어느 날 J리그의 유소년팀 감독 후쿠다 타츠야(후쿠다 타츠야)와 만난다.조잡하지만 무한한 가능성을 내포한 아시트를 후쿠다와 자기 팀의 셀렉션으로 유인해!? 일본 축구를 바꾸게 될 소년의 운명은, 여기서부터, 급속히 돌기 시작한다---!!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青之蘆葦",
+            "overview": "原作漫畫由小林有吾所著的《青之蘆葦》，是以日本青年盃作為主題，描述擁有「俯瞰球場」才能的主角青井葦人在足球領域奮鬥的故事，在球賽中他可以完全掌控場上其他人的動作、預測足球和球員的動向，並看出對方防守重點和漏洞。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Ao Ashi",
+            "overview": "Manga, Ehime bölgesinde yaşayan üçüncü sınıf ortaokul öğrencisi Ashito Aoi’yi konu alıyor. Ashito’nun güçlü bir futbol yeteneği vardır ama, onu gizlemeye çalışır. Çok dürüst kişiliği olmasından dolayı, onun için büyük bir aksilik yaratan felakete sebep olur. Daha sonra, güçlü J-Club takımı Tokyo City Esperion’un emektar futbolcusu ve kulübün genç takımının koçu Tatsuya Fukuya, Ashito’nun karşısına çıkar. Tatsuya, Ashito’yla karşılaşıp ondaki yeteneğini görür ve onu Tokyo’daki genç takımda denemek için davet eder.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "",
+            "overview": "Ashito Aoi là một cầu thủ bóng đá trẻ, đầy khát vọng đến từ một thị trấn vùng nông thôn ở Nhật Bản. Hy vọng vào được một trường trung học với một câu lạc bộ bóng đá giỏi đã tan thành mây khói khi anh gây ra một sự cố trong một trận đấu quan trọng cho đội của mình, dẫn đến việc họ bị loại khỏi giải đấu. Tuy nhiên, anh đã lọt vào mắt xanh của một người quan trọng tình cờ đến thăm từ Tokyo. Mọi chuyện sẽ diễn ra như thế nào đối với Ashito?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Ao Ashi",
+            "overview": "Ashito Aoi, uczeń trzeciego roku gimnazjum z Ehime, spotyka Tatsuyę Fukudę, trenera „J Youth League”. Mimo że wciąż jest szorstki, Ashito ma tak niesamowity potencjał, że zostaje zaproszony przez trenera Fukudę do udziału w testach jego drużyny w Tokio. Rozpoczyna się historia chłopca, który zrewolucjonizuje futbol w Japonii.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "أواشي",
+            "overview": "اوي اشيتو هو لاعب كرة قدم شاب طموح من بلدة منعزلة في اليابان تبددت آماله في الالتحاق بمدرسة ثانوية لديها نادٍ جيد لكرة القدم ذالك عندما تسبب في حادث خلال مباراة حاسمة لفريقه مما أدى إلى خسارتهم وإقصائهم من البطولة ومع ذلك فإنه يلفت انتباه شخص مهم من طوكيو كان في زيارة كيف ستنتهي الأمور بالنسبة لـ اشيتو؟.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Аоаси",
+            "overview": "Мечтавший поступить в старшую школу, в которой будет сильный футбольный клуб, Асито Аой собственными руками разрушил свои надежды, когда во время важного матча устроил переполох, который в итоге привёл команду к проигрышу и выбыванию из турнира. Расстроенный Аой готов похоронить свои амбиции, которым негде найти применение, когда выясняется, что он привлёк внимание какого-то неординарного гостя, прибывшего в родной захолустный городок Аоя из самого Токио. Сможет ли Аой и дальше заниматься любимым футболом?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "แข้งเด็กหัวใจสู้",
+            "overview": "อาโออิ อาชิโตะ เด็กม.ต้นปี 3ที่ใช้ชีวิตอยู่ในเอฮิเมะ นิสัยใจร้อนแต่ก็รักพ่อแม่และมีความรักให้กับฟุตบอลยิ่งกว่าใคร แต่มาวันหนึ่ง เขาก็ได้ประสบกับเรื่อง\n\nที่ทำให้ทดท้อใจอย่างหนักเข้า และในตอนนั้นก็มีชายปริศนาปรากฏตัวขึ้นตรงหน้า!? โชคชะตาของเด็กหนุ่มที่จะเปลี่ยนฟุตบอลของญี่ปุ่นกำลังจะเริ่มต้นขึ้น",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ао Аші. Футбольний шлях Аоя Ашіто",
+            "overview": "Це історія про хлопчину на ім’я Аой Ашіто . Він звичайний школяр із тихенького містечка Ехіме, десь в Японії. І як будь-який \"хлопчина\" - він полюбляє \"гасати\" у футбол, і не просто, а за шкільну команду! Звичайно ж, він мріє стати професійним футболістом, грати на високому рівні, здобувати перемоги... і саме про це наша історія: \"футбольний шлях\" юного хлопчини. Який полюбляє грати тільки у нападі і тільки забивати м’ячі. Так, він егоїст в певній мірі. І так, йому буде ой як нелегко на цьому шляху.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Aoashi",
+            "overview": "Ashito Aoi è un giovane aspirante calciatore proveniente da una cittadina sperduta del Giappone. Le sue speranze di entrare in una scuola superiore con una buona squadra di calcio vengono infrante quando provoca un incidente durante una partita critica per la sua squadra, che si traduce nella sconfitta e nell'eliminazione dal torneo. Tuttavia, cattura l'attenzione di una persona importante che si trovava in visita da Tokyo. Come andranno le cose per Ashito?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "青之蘆葦",
+            "overview": "在這部約會競賽節目中，參賽者必須巧用心計，施展誘惑魅力。成功證明自身能耐的人就有權力撮合或拆散其他情侶。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Ashito Aoi is een jonge, aspirant-voetballer uit een achtergebleven stadje in Japan. Zijn hoop om naar een middelbare school te gaan met een goede voetbalclub wordt de bodem ingeslagen wanneer hij een incident veroorzaakt tijdens een kritieke wedstrijd voor zijn team, wat resulteert in hun verlies en uitschakeling van het toernooi. Toch trekt hij de aandacht van een belangrijk iemand die toevallig op bezoek was vanuit Tokio. Hoe zal het aflopen met Ashito?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Ao Ashi",
+            "overview": "Aoi Ashito é um jovem jogador de futebol aspirante de uma cidade remota no Japão. As suas esperanças de entrar numa escola secundária com um bom clube de futebol são desfeitas quando provoca um incidente durante um jogo crítico para a sua equipa, o que resulta na sua derrota e eliminação do torneio. No entanto, ele chama a atenção de alguém importante que estava a visitar de Tóquio. Como irão as coisas desenrolar-se para Ashito?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Aoashi",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1584,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/87IQdOn34p1z2KTdM4IZ1N8bWaH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2816
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c6zePSJ4PjkFeI7wVRN7Lp451nV.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AOe1O6pO42aXOgSmbjeiUlQ9JL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/G3f013vs7LewjfHrzR8stdJlRM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4ixh7PNNWd1VaohzKD7pcP33SiN.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/q7hvHYbQm4isci83aE5cf8dOKT0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wwTPCYZaDXz9Otcr6D55P7nXTHP.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7TcdSccfl29HREnt14l7RVoOXkw.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aIW2KCh9aBWWmD6SfwFMAVPtFUx.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1q2tEWKcW5vKIV0Q0FPVZHmsliA.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sBARPADzH9Y28xLcwqMpQ991C6H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vxjfa6gCB6xnrn3LXlwhTlcSqNx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xEoVdK8qJkR6VsXLh9D6fglA6rw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cZU4g7QCsqyrsbvSirv2PTWVhEN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 6.202,
+          "height": 689,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ebDfNsW9uCNCfEEZ6E8bWpeI63Q.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4273
+        },
+        {
+          "aspect_ratio": 6.202,
+          "height": 689,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4FaoMGHKccEDIIuQl4oCi10ZA7v.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4273
+        },
+        {
+          "aspect_ratio": 6.202,
+          "height": 689,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rR0GYptHmoHxbRWXNT5wK7pg4IY.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4273
+        },
+        {
+          "aspect_ratio": 5.389,
+          "height": 95,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2aJqqmgBvxZ5oZB90vr76nrIKMR.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 512
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.708,
+          "height": 1491,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uvWHFUtgD0V8Xy5lolwijRAN82O.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1055
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wykCBfq1FPElWxW1FR5FhLrA5JQ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/erwRgEPtUtyv3Vkmxt0MhjKi5kA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/54g8OJGJTbFZje6dLlFybe8tX6u.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9l5M7ZmUJecGhTPs2J3HAhYLeym.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iN1thFI3XFeKAf2pZSd8IkZexE5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zNtTZu5n90Q3izRMvZapiSF1KIC.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 1126,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2hKUQFca16KlJCPFMcRwfdRAaio.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 1789,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dH51usYFHXLyOpCT6HwsAEv08Uh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1272
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2481,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gYSQGA8DD9COVj1Lwh3porWS3Sr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1654
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n6aL2Dj1m2RBXGqifxSrypb3wQy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n4Jrn7YlAgjnQO17vkkY984jxuy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mb19Dr70aHMeOZtSnUlhGaDMWzP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

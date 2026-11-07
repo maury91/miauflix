@@ -1,0 +1,1390 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=10244",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"33abfe58fdd36ef5f71c8544e4ec6beb\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3ANXZWhhcqPAh0q6nRZ979TIwxC.jpg",
+    "created_by": [
+      {
+        "id": 1851620,
+        "credit_id": "6a498f32a60040773eec9ee9",
+        "name": "Louisa Levy",
+        "original_name": "Louisa Levy",
+        "gender": 1,
+        "profile_path": null
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-05-13",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.amazon.com/dp/B0GN8NL4Q1",
+    "id": 273240,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-05-13",
+    "last_episode_to_air": {
+      "id": 7061255,
+      "name": "The Line Change",
+      "overview": "As the semester ends, fallout from the St. Anthony's game rattles the Hawks, and Hannah strives to find her voice.",
+      "vote_average": 8.1,
+      "vote_count": 22,
+      "air_date": "2026-05-13",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "OCPS 108",
+      "runtime": 55,
+      "season_number": 1,
+      "show_id": 273240,
+      "still_path": "/oV8Uxf6VRrV5oAjCmwcGAlfkhno.jpg"
+    },
+    "name": "Off Campus",
+    "next_episode_to_air": {
+      "id": 8079975,
+      "name": "Episode 1",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2027-04-28",
+      "episode_number": 1,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 2,
+      "show_id": 273240,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 1024,
+        "logo_path": "/w7HfLNm9CWwRmAMU58udl2L7We7.png",
+        "name": "Prime Video",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 9,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Off Campus",
+    "overview": "Hannah Wells tutors hockey captain Garrett Graham to win over her crush. Their deal becomes real connection as they face their pasts. Friends Logan, Dean, Tucker, and Allie navigate college life and love.",
+    "popularity": 44.4054,
+    "poster_path": "/tcPc5ZMBO4y2BtCJMe3o2nwZb2B.jpg",
+    "production_companies": [
+      {
+        "id": 210099,
+        "logo_path": "/g5oRCNCi8kNVb8gEoSoIcqkhjmR.png",
+        "name": "Amazon MGM Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 12292,
+        "logo_path": "/5J93SHsuvIV32AE9oSbMi02pqw9.png",
+        "name": "Temple Hill Entertainment",
+        "origin_country": "US"
+      },
+      {
+        "id": 240615,
+        "logo_path": "/wYToqESwhBa5VkmC4OZrZILgeAp.png",
+        "name": "Billings Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 317111,
+        "logo_path": null,
+        "name": "28 In Blue",
+        "origin_country": "US"
+      },
+      {
+        "id": 200915,
+        "logo_path": null,
+        "name": "Drowning Girl Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-05-13",
+        "episode_count": 8,
+        "id": 421523,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/gtoV2udbEnUgkMuCNX8zJrEwm7N.jpg",
+        "season_number": 1,
+        "vote_average": 8
+      },
+      {
+        "air_date": "2027-04-28",
+        "episode_count": 1,
+        "id": 555638,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Love was never part of the deal.",
+    "type": "Scripted",
+    "vote_average": 8.9,
+    "vote_count": 902,
+    "external_ids": {
+      "imdb_id": "tt33546863",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 455086,
+      "tvrage_id": null,
+      "wikidata_id": "Q138862091",
+      "facebook_id": null,
+      "instagram_id": "offcampusonprime",
+      "twitter_id": "offcampusonpv"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells tutors hockey captain Garrett Graham to win over her crush. Their deal becomes real connection as they face their pasts. Friends Logan, Dean, Tucker, and Allie navigate college life and love.",
+            "homepage": "",
+            "tagline": "Love was never part of the deal."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "오프 캠퍼스",
+            "overview": "해나 웰스는 짝사랑하는 남자를 차지하려고 하키 팀 주장 개릿 그레이엄의 과외를 맡는다. 두 사람의 거래는 각자의 과거를 마주하면서 점차 진정한 감정으로 발전한다. 한편, 친구인 로건, 딘, 터커, 앨리는 대학 생활과 사랑 속에서 각자의 길을 찾아 나간다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Off Campus: Amores Improváveis",
+            "overview": "Hannah Wells dá aulas ao capitão do hóquei, Garrett Graham, em troca de dicas para conquistar o paquera. O acordo vira uma conexão quando eles encaram o passado. Os amigos Logan, Dean, Tucker e Allie vivem a vida universitária e o amor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells acepta darle clases particulares a Garrett Graham, el capitán del equipo de hockey, para conquistar al chico que le gusta. Lo que empieza como un simple acuerdo se convierte en una conexión real mientras ambos enfrentan su pasado. Mientras tanto, sus amigos Logan, Dean, Tucker y Allie viven sus propias aventuras entre romances y la vida universitaria.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "خارج الحرم الجامعي",
+            "overview": "تدرّس \"هانا\" قائد فريق الهوكي \"غاريت\" للفوز بمعجب. يتحول الاتفاق إلى رابط حقيقي، بينما يواجهان ماضيهم ويوفّقان بين الحياة والحب.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "خارج الحرم الجامعي",
+            "overview": "تدرّس \"هانا\" قائد فريق الهوكي \"غاريت\" للفوز بمعجب. يتحول الاتفاق إلى رابط حقيقي، بينما يواجهان ماضيهم ويوفّقان بين الحياة والحب.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Na vejšce",
+            "overview": "Hannah Wellsová doučuje hokejistu Garretta Grahama za to, aby jí pomohl s klukem, ale jejich dohoda se nečekaně zvrtne. Kamarádi Logan, Dean, Tucker a Allie se potýkají s životem na vysoké škole.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells gibt Eishockey-Kapitän Garrett Graham Nachhilfe, um ihren Schwarm zu erobern. Doch aus ihrem Deal entsteht eine echte Verbindung, während sich beide ihrer Vergangenheit stellen. Zusammen mit ihren Freunden Logan, Dean, Tucker und Allie navigieren sie durch das Chaos aus College-Leben und Liebe.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells er tutor for hockeykaptajnen Garrett Graham for at erobre sin flirt. Deres aftale udvikler sig, da de konfronterer deres fortid. Vennerne Logan, Dean, Tucker og Allie tackler college og kærlighed.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Η Χάνα Γουέλς κάνει ιδιαίτερα στον αρχηγό του χόκεϊ Γκάρετ Γκράχαμ για να κερδίσει την καψούρα της. Η συμφωνία τους γίνεται σύνδεση ενώ αντιμετωπίζουν το παρελθόν τους. Οι Λόγκαν, Ντιν, Τάκερ και Άλι ζουν τη φοιτητική και αισθηματική ζωή.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "La romance improbable entre Hannah Wells, étudiante en musique ironique qui déteste le hockey, et Garrett Graham, centre vedette et séducteur de l'université Briar, alors qu'ils concluent un accord pour s'entraider. Mais leur accord se déroulera-t-il comme prévu ?",
+            "homepage": "",
+            "tagline": "L'amour n'a jamais fait partie de l'accord."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells tuutoroi jääkiekkokapteeni Garrett Grahamia tehdäkseen vaikutuksen ihastukseensa. Heidän sopimuksensa kehittyy aidoksi yhteydeksi, kun he kohtaavat menneisyytensä. Ystävät Logan, Dean, Tucker ja Allie luovivat yliopisto- ja rakkauselämää.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "מחוץ לקמפוס",
+            "overview": "האנה ולס מלמדת באופן פרטי את קפטן נבחרת ההוקי גארט גרהם כדי לכבוש את הלב של הקראש שלה. העסקה ביניהם הופכת לחיבור אמיתי כשהם מתמודדים עם העבר שלהם. החברים לוגן, דין, טאקר ואלי מנווטים בין חיי הקולג' לאהבה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "ऑफ़ कैम्पस",
+            "overview": "हैना वेल्स हॉकी कैप्टन गैरेट ग्राहम को उसके प्यार को जीतने के लिए ट्यूशन देती है। जब वे अपने अतीत का सामना करते हैं तो उनकी डील एक मज़बूत रिश्ता बन जाती है। दोस्त लोगन, डीन, टकर और एली कॉलेज लाइफ़ और प्यार की उथल-पुथल से आगे बढ़ते हैं।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "gl",
+          "name": "Galego",
+          "english_name": "Galician",
+          "data": {
+            "name": "",
+            "overview": "Unha serie universitaria baseada na exitosa serie de libros de Elle Kennedy, conta a historia do improbable romance entre Hannah Wells, unha irónica estudante de música que odia o hóckey, e Garrett Graham, o mullereiro centro estrela da Universidade Briar cando ambos chegan a un acordo para axudarse mutuamente. Pero sairá todo como esperaban?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "eu",
+          "name": "euskera",
+          "english_name": "Basque",
+          "data": {
+            "name": "",
+            "overview": "Elle Kennedyren liburu saga arrakastatsuan oinarritutako unibertsitate munduan kokatutako telesaila da, OFF CAMPU Seko lehen denboraldian hobkeya gorroto duen Hanna Wells izeneko musika ikasle sarkastikoaren eta Briarreko Unibertsitateko Garret Graham izar gonazalearen arteko amodio istorio ezhoikoa ikusiko dugu, elkar laguntzeko tratu bat egiten dutenean. Baina haiek uste bezala irtengo da tratua?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ml",
+          "name": "",
+          "english_name": "Malayalam",
+          "data": {
+            "name": "ഓഫ് ക്യാമ്പസ്",
+            "overview": "എല്ലി കെന്നഡിയുടെ ജനപ്രിയ പുസ്തകപരമ്പരയെ ആസ്പദമാക്കിയ കോളേജ് പ്രണയകഥ, ഓഫ് ക്യാമ്പസ്-സീസൺ 1, ഹോക്കിയെ പുച്ഛത്തോടെ കാണുന്ന, വെറുക്കുന്ന സംഗീതവിദ്യാർത്ഥിനിയായ ഹന്ന വെൽസും ബ്രയർ യുവിൻ്റെ സ്ത്രീലമ്പടനായ കളിക്കാരൻ ഗാരറ്റ് ഗ്രാഹാമും തമ്മിലുള്ള അവിശ്വസനീയ പ്രണയകഥയാണ്. ഇവർ പരസ്പരം സഹായിക്കാനായി ഒരു കരാറിലെത്തുന്നു. എന്നാൽ അവരുടെ കരാർ പ്രതീക്ഷിച്ചതുപോലെ മുന്നോട്ട് പോകുമോ?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "kn",
+          "name": "?????",
+          "english_name": "Kannada",
+          "data": {
+            "name": "ಆಫ್ ಕ್ಯಾಂಪಸ್",
+            "overview": "ಎಲ್ ಕೆನಡಿಯವರ ಅತಿ ಹೆಚ್ಚು ಮಾರಾಟವಾದ ಪುಸ್ತಕ ಸರಣಿಯನ್ನು ಆಧರಿಸಿದ ಕಾಲೇಜು ಸಂಬಂಧಿತ ಸರಣಿ \\\"ಆಫ್ ಕ್ಯಾಂಪಸ್‌\\\"ನ ಮೊದಲ ಸೀಸನ್ ನೀರಸ, ಹಾಕಿಯನ್ನು ದ್ವೇಷಿಸುವ ಸಂಗೀತ ಮೇಜರ್ ಹಾನಾ ವೆಲ್ಸ್ ಮತ್ತು ಬ್ರಯರ್ ಯೂನಿವರ್ಸಿಟಿಯ ಚಪಲ ಚೆನ್ನಿಗರಾಯನಾದ ತಾರಾ ಪ್ರತಿಭೆ ಗ್ಯಾರೆಟ್ ಗ್ರಾಹಂ ನಡುವಿನ ಪರಸ್ಪರ ಉಪಕಾರದ ಒಪ್ಪಂದ ಮತ್ತು ಅವರ ನಡುವೆ ಬೆಳೆವ ಅಸಂಭವ ಪ್ರಣಯವನ್ನು ತೋರಿಸುತ್ತದೆ. ಆದರೆ ಅವರ ಒಪ್ಪಂದವು ಅವರ ನಿರೀಕ್ಷೆಯಂತೆಯೇ ಅನಾವರಣಗೊಳ್ಳುತ್ತದೆಯೇ?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Kiss Me",
+            "overview": "La primera temporada de Kiss Me, un serial universitari basat en les novel·les d'èxit de l'Elle Kennedy, se centra en la inesperada història romàntica entre la Hannah Wells, una estudiant de música irònica que odia l'hoquei, i en Garrett Graham, un esportista seductor. Tots dos miraran d'ajudar-se mútuament, però el seu pacte no anirà com anticipen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Hannah donne des cours à Garrett, lui l'aide à séduire son crush. Cela les rapproche. Logan, Dean, Tucker et Allie jonglent entre fac et amour.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells geeft hockey-aanvoerder Garrett Graham bijles om haar haar grote liefde voor zich te winnen. Deze deal ontwikkelt zich tot een hechte band wanneer ze hun verleden onder ogen moeten zien. Ook hun vrienden Logan, Dean, Tucker en Allie moeten zien te navigeren door het leven en de liefde op het college.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells geeft hockey-aanvoerder Garrett Graham bijles om haar haar grote liefde voor zich te winnen. Deze deal ontwikkelt zich tot een hechte band wanneer ze hun verleden onder ogen moeten zien. Ook hun vrienden Logan, Dean, Tucker en Allie moeten zien te navigeren door het leven en de liefde op het college.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Off-Campus",
+            "overview": "Hannah Wells a szerelméért korrepetálja a hokicsapat kapitányát, Garrett Grahamet, ám ahogy szembenéznek a múltjukkal, közelebb kerülnek egymáshoz. A barátaik, Logan, Dean, Tucker és Allie szintén próbálnak eligazodni az egyetemi élet és a szerelem ütvesztőiben.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells membantu kapten hoki Garrett Graham mendekati pujaan. Hubungan mereka berubah. Logan, Dean, Tucker, dan Allie menjalani kampus dan cinta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells fa da tutor a Garrett Graham, capitano della squadra di hockey, e lui la aiuta a conquistare il ragazzo che le piace. Il loro accordo si trasforma in un legame reale mentre affrontano il loro passato. Gli amici Logan, Dean, Tucker e Allie affrontano la vita universitaria e l'amore.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "オフキャンパス",
+            "overview": "ハンナ･ウェルズはアイスホッケー部キャプテンのギャレット･グレアムに勉強を教える代わりに、恋愛指南を受けることに。２人の取引はやがて深い絆となり、それぞれの過去と向き合っていく。友人のローガン、ディーン、タッカー、アリーの大学生活や恋模様も描かれる。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Hannah ajar kapten hoki Garrett memikat jejaka idaman. Perjanjian jadi cinta hadapi masa lalu. Rakan Logan, Dean, Tucker dan Allie lalui cinta kampus.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells og hockeykapteinen Garrett Graham inngår en avtale. Hun hjelper ham med skolefag, og han hjelper henne med kjærligheten. Avtalen fører dem sammen mens de tar et oppgjør med fortiden. Vi møter også vennene deres: Logan, Dean, Tucker og Allie, som alle lever sine collegeliv.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells og hockeykapteinen Garrett Graham inngår en avtale. Hun hjelper ham med skolefag, og han hjelper henne med kjærligheten. Avtalen fører dem sammen mens de tar et oppgjør med fortiden. Vi møter også vennene deres: Logan, Dean, Tucker og Allie, som alle lever sine collegeliv.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells udziela korepetycji kapitanowi drużyny hokejowej, Garrettowi Grahamowi, w zamian za pomoc w zdobyciu uwagi chłopaka, w którym się podkochuje. Ich układ przeradza się jednak w prawdziwą więź, gdy oboje mierzą się z wydarzeniami z przeszłości. Tymczasem ich przyjaciele - Logan, Dean, Tucker i Allie - również próbują odnaleźć się w studenckim życiu i miłości.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells îl meditează pe căpitanul echipei de hochei, Garrett Graham, pentru a-și cuceri pasiunea. Înțelegerea lor se transformă într-o conexiune reală pe măsură ce își înfruntă trecutul. Prietenii Logan, Dean, Tucker și Allie jonglează cu viața de campus și iubirea.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells ajuda o capitão de hóquei Garrett Graham a conquistar a sua paixão. O acordo transforma-se numa ligação verdadeira enquanto enfrentam o passado. Os amigos Logan, Dean, Tucker e Allie exploram a vida universitária e o amor.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells hace un trato con el capitán de hockey Garrett Graham: ella le da clase de filosofía y él la ayuda a conquistar al chico que le gusta. Su acuerdo se convierte en una auténtica conexión cuando ambos se enfrentan a su pasado.",
+            "homepage": "",
+            "tagline": "El amor nunca formó parte del trato."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Вне кампуса",
+            "overview": "Отличница и поп-певица Ханна влюблена в местную знаменитость - звезду футбола Джастина Кола, но тот не замечает девушку. Чтобы обратить на себя внимание Джастина и заставить ревновать, она заключает договор с капитаном университетской хоккейной команды. Он должен сыграть роль её жениха, а Ханна поможет ему улучшить успеваемость. Однако надёжный план даёт сбой.",
+            "homepage": "",
+            "tagline": "«Любовь никогда не входила в эти отношения»"
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "För att fånga sin drömkille börjar Hannah Wells plugga med hockeykaptenen Garrett Graham. Men deras deal blir snabbt allvar när de måste möta deras förflutna. Följ gänget - Logan, Dean, Tucker och Allie - genom college, vänskap och kärlek.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "ta",
+          "name": "தமிழ்",
+          "english_name": "Tamil",
+          "data": {
+            "name": "ஆஃப் கேம்பஸ்",
+            "overview": "ஹேன்னா வெல்ஸ், தான் விரும்பும் நபரை கவர, ஹாக்கி கேப்டன் கேரெட் க்ரஹேமுக்கு பாடம் கற்பிக்கிறாள். அவர்களது இந்த ஒப்பந்தம், கடந்த காலங்களை பகிர்ந்து கொள்ளும்போது ஆழமான பிணைப்பாகிறது. அவர்களது நண்பர்களான லோகென், டீன், டக்கர் மற்றும் ஆல்லி கல்லூரி வாழ்க்கையையும் காதலையும் கையாள்கின்றனர்.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "te",
+          "name": "తెలుగు",
+          "english_name": "Telugu",
+          "data": {
+            "name": "ఆఫ్ క్యాంపస్",
+            "overview": "హన్నా వెల్స్ తన క్రష్‌ను ఆకట్టుకోవడానికి హాకీ కెప్టెన్ గారెట్ గ్రాహమ్‌కు ట్యూటర్‌గా ఉంటుంది. వారి ఒప్పందం క్రమంగా నిజమైన అనుబంధంగా మారుతుంది, వారు తమ గతాన్ని ఎదుర్కొంటూ దగ్గరవుతారు. వారి స్నేహితులు లోగన్, డీన్, టక్కర్ మరియు అల్లి కాలేజ్ జీవితం మరియు ప్రేమలో తమ తమ ప్రయాణాలను కొనసాగిస్తారు.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "มหา'ลัยร้อนรัก",
+            "overview": "แฮนนาห์ เวลส์ยอมติวหนังสือให้กัปตันทีมฮอกกี้อย่างแกร์เร็ต แกรห์มเพื่อหวังจะพิชิตใจหนุ่มที่เธอแอบชอบ แต่ข้อตกลงครั้งนี้กลับกลายเป็นความผูกพันที่แท้จริงเมื่อทั้งคู่ต้องเผชิญหน้ากับอดีต ขณะที่แก๊งเพื่อนอย่างโลแกน ดีน ทัคเกอร์ และแอลลี่ก็ต้องร่วมลุ้นไปกับชีวิตการเรียนและชีวิตรักในรั้วมหาวิทยาลัย",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells, hokey kaptanı Garrett Graham'a, hoşlandığı kızı kazanması için ders verir. Anlaşmaları, geçmişleriyle yüzleştikçe yakınlaşmaya dönüşür. Logan, Dean, Tucker ve Allie adlı arkadaşlar, üniversite hayatı ve aşkı keşfederler.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "校園戀曲",
+            "overview": "漢娜威爾斯為了贏得暗戀對象的心，開始擔任曲棍球隊隊長蓋瑞特格雷罕的家教。這場交易在他們面對各自過去的過程中，轉化為真實的情感連結。好友羅根、迪恩、塔克與艾莉也一同在大學生活與愛情中摸索前行。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "校園戀曲",
+            "overview": "漢娜威爾斯為了贏得暗戀對象的心，開始擔任曲棍球隊隊長蓋瑞特格雷罕的家教。這場交易在他們面對各自過去的過程中，轉化為真實的情感連結。好友羅根、迪恩、塔克與艾莉也一同在大學生活與愛情中摸索前行。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "校外",
+            "overview": "为了赢得心上人的心，汉娜·威尔斯主动为冰球队队长加勒特·格雷厄姆辅导功课。随着两人面对各自的过往，这场最初各取所需的交易，渐渐萌生了真情。与此同时，他们的朋友洛根、迪恩、塔克和艾莉也都在大学生活与爱情中摸索前行。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Поза кампусом",
+            "overview": "Ханна Веллс погоджується допомогти капітану хокейної команди Гаррету Ґрему завоювати дівчину, в яку він закоханий. Але їхня домовленість поступово переростає у справжній зв’язок, поки вони намагаються впоратися зі своїм минулим. Тим часом їхні друзі — Лоґан, Дін, Такер і Еллі — переживають студентське життя, дружбу та кохання.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "校外",
+            "overview": "一位毒舌、讨厌冰球的音乐系女孩与布莱尔大学风流的王牌中锋之间意外萌生的爱情故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "خارج از دانشگاه",
+            "overview": "هانا ولز برای جلب توجه معشوقش، به کاپیتان هاکی، گرت گراهام، آموزش خصوصی می‌دهد. این معامله‌ی آنها با روبرو شدن با گذشته‌شان، به ارتباطی واقعی تبدیل می‌شود. دوستانی به نام‌های لوگان، دین، تاکر و آلی، زندگی دانشگاهی و عشق را تجربه می‌کنند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Извън кампуса",
+            "overview": "Хана Уелс помага на капитана на хокейния отбор Гарет Греъм, за да спечели сърцето на своята симпатия. Постепенно тяхната уговорка прераства в истинска връзка, докато двамата се изправят срещу миналото си. Междувременно приятелите им Логан, Дийн, Тъкър и Али се справят с предизвикателствата на студентския живот и любовта.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KW",
+          "iso_639_1": "kw",
+          "name": "",
+          "english_name": "Cornish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Už universiteto ribų",
+            "overview": "Romantiška drama, kurios veiksmas vyksta kolegijoje. Dramoje pasakojama apie netikėtą meilės istoriją tarp muzikos studentės ir kolegijos žvaigždės ledo ritulininko. Dramoje gilinamasi į meilės temas ir suaugusiųjų gyvenimo sudėtingumą per gilią draugystę ir tvirtus ryšius.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Ван кампуса",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thỏa Thuận Học Đường",
+            "overview": "Hannah Wells nhận lời phụ đạo cho đội trưởng đội khúc côn cầu Garrett Graham chỉ nhằm mục đích thu hút sự chú ý của chàng trai cô đang thầm thương trộm nhớ. Thế nhưng, bản hợp đồng trao đổi giữa họ dần biến thành một sợi dây tình cảm chân thực khi cả hai cùng nhau đối diện với những góc khuất trong quá khứ của đối phương. Bên cạnh đó, nhóm bạn thân gồm Logan, Dean, Tucker và Allie cũng phải tự mình chèo lái qua những thăng trầm của cuộc sống đại học và những ngã rẽ của tình yêu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wellsová doučuje hokejového kapitána Garretta Grahama, aby si získala svoju lásku. Ich dohoda sa stane skutočným spojením, keď čelia svojej minulosti. Priatelia Logan, Dean, Tucker a Allie sa prelínajú so životom na vysokej škole a láskou.",
+            "homepage": "",
+            "tagline": "Láska nikdy nebola súčasťou dohody."
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "",
+            "overview": "Hannah Wells pomaže kapetanu hokejaške momčadi Garrettu Grahamu u učenju kako bi osvojio djevojku koja mu se sviđa. Njihov dogovor postupno prerasta u iskrenu povezanost dok se oboje suočavaju sa svojom prošlošću. Njihovi prijatelji Logan, Dean, Tucker i Allie prolaze kroz studentski život, ljubavne veze i sve izazove koje on donosi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cxtfuZMC5FafQ5qjm6lY10M2wCM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3ANXZWhhcqPAh0q6nRZ979TIwxC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cdD0InWMH4e6AxceQs93fQRYsfO.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/52sp0vPhLOWrZ1QoZIWiapronM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iDbYE5ssjkYmjP5cWqRUQou22T7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gJOBhpc86vA4BU5b9gNR2MPFj7x.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iACpkNugZAVnuOa2R7Hu8t1LGsy.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kfIIdwFJVZLlxn3pjuNBrAGPvuJ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fRqAKbvEXHsCdf71EyySAgAEooY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1LAPS45nEo1NWMXAlqZF4Or7ufv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/94WBw0a6uA84gkFSuZvhq6v6xWh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cA3vsrEXtmhX9FGi6JwC3Yh0ICD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gLQvXjaddVNXxj1HT2I0F0ejkql.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/24mvHOhG1skQ4kwiohMFocUUJkC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l150r7CqIJs44tTPxW9Yk9UCiV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vG8TH4WnnFeU9Drrr2wo1OTrj4p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qXloVgC3PczSXFgXwg096Z1NvZT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/osyErXhb8TNC9GtP7DKWry9DjY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/brgd91XhpPy4DNGwpdTPxBZPdiD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eRZEjUDkY9vFAc6lwZBUEGXZdlL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vsd1AgFcLlyNAr5x8p64fu9jN7O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jG9vUlBgBKTilOkgjYXacm3dFPn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.65,
+          "height": 274,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vSCRiiYfTjrIcdyJhb8xyLE3Tdf.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 3.65,
+          "height": 274,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5q53pLFVLQPmGxPymBZUcrnwBOm.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 3.65,
+          "height": 274,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fctWeCyfdIayWDSvPYCkRySNloH.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 3.65,
+          "height": 274,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7WO9LFCCWT0YfHZ5cNOVEJU8CfH.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tcPc5ZMBO4y2BtCJMe3o2nwZb2B.jpg",
+          "vote_average": 7.19,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aNt0iuJ5F9m4d6wLeBRF3CVC8Dr.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lfHPAmbS10197jBAukEqiRcTwun.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cbODFqkcmRgrYH8NkG4Q4Hcg8Z1.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e6AaZwXt5jRzACmxso4pbgAGErt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eSuPcp6rQ7fsz35zj8ObkwZ9iQP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gtoV2udbEnUgkMuCNX8zJrEwm7N.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/QVyjW4MRsZgqUXbTMlcIWMNEXq.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1350,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tKydDIOCKqwGdJq4gyPyGlD22uC.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.755,
+          "height": 1549,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kyDsfNwgl19LsMGUDHYzHACTg1I.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/epTUgWRhR6TrUuhUzjrXe8nzcxh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/os2NdJW8zVlOGldVPGj5IdvArRu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/31LVyFCTD7vJxj5KcPBnBYCXw42.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8hgNss8ePi4JUcbn8aCVd61yhSl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uhJ424rIpQCspZRn5VIWYyy92p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i2EhlcL6GkoKGJaUDSg56OOft9P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1093,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/as0dWy7EFg8xNqrhWDs5R72nP2n.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 729
+        },
+        {
+          "aspect_ratio": 0.679,
+          "height": 1589,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p3Xz1P7tnFgZgzHprk52NO9T7f8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1079
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zI8d7F8ioyakmfvtVeh2F6kRlTJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1woSGyG9crzBoe9zLhQteiiremS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aZA8wUDWDjorkJ2x70Z4HfAlgTO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3kGiLhhHSgXnvXP1ReYrjZRRy32.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7ZnXnskmMg5eHLry5nqQmMZTGeb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4LownyB4C2N4JS5SFrC6oF7wkG9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uTQxBeSlVuGJfXbXMfThFeVIDOn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6gpAsywjZKMAZ40HeL6nXRWrf2B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i3Tz4csYo7oaIMYQ0DFwPUmI0v7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iDjQKJm2uihadLfGHN0huET9Ole.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1501,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6r5i1TPRL2BSxkMqJgZi5BmHMB3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1001
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 981,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1ezNG8uMhvCvSnxzjaVfd1taV46.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1755,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/riPzHsWa93o69Sd3QNxrRyXEk57.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1170
+        },
+        {
+          "aspect_ratio": 0.665,
+          "height": 1105,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n5yLDNkaeT0JF4bxjrpHFJWju8h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        }
+      ]
+    }
+  }
+}

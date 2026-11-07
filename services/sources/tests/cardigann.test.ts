@@ -359,6 +359,24 @@ it('reports test results and request failures', async () => {
   expect(result.message).toContain('500');
 });
 
+it('tests anime-only providers with a search they support', async () => {
+  const urls: string[] = [];
+  const http = client(url => {
+    urls.push(url.pathname + url.search);
+    return Response.json([]);
+  });
+  expect(await provider('anime-ids.yml').test(context(http))).toMatchObject({ success: true });
+  // Without text search, a known AniDB anime id is the sample.
+  const idOnly = parseDefinition(
+    fixture('anime-ids.yml')
+      .replace('search: [q]', 'search: []')
+      .replace('anime-search: [q, anidbeid, anidbaid]', 'anime-search: [anidbaid]')
+  );
+  const idProvider = new CardigannProvider('test-ids', 'Ids', idOnly, {}, () => NOW);
+  expect(await idProvider.test(context(http))).toMatchObject({ success: true });
+  expect(urls).toEqual(['/json?q=test', '/json?aid=23']);
+});
+
 it('reads Unix timestamps in seconds or milliseconds as dates', () => {
   expect(parseAnyDate('1790402106')?.toISOString()).toBe('2026-09-26T05:55:06.000Z');
   expect(parseAnyDate('1790402106000')?.toISOString()).toBe('2026-09-26T05:55:06.000Z');

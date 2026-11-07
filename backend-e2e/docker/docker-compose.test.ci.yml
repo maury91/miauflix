@@ -40,3 +40,24 @@ services:
         - type=gha,scope=miauflix-e2e-indexer-mock
       cache_to:
         - type=gha,mode=max,scope=miauflix-e2e-indexer-mock
+
+  anilist-mock:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-anilist-mock
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-anilist-mock
+
+  anizip-mock:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-anizip-mock
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-anizip-mock
+
+  anime-lists-mock:
+    build:
+      cache_from:
+        - type=gha,scope=miauflix-e2e-anime-lists-mock
+      cache_to:
+        - type=gha,mode=max,scope=miauflix-e2e-anime-lists-mock

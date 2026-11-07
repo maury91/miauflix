@@ -1,0 +1,1185 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16889",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"839474ea68fe626be8181829004378c5\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/kP5duNJEbTfXpBs6CITsaZ88pQi.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2016-07-12",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "http://mobpsycho100.com",
+    "id": 67075,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2022-12-22",
+    "last_episode_to_air": {
+      "id": 3983686,
+      "name": "Confession ~The Future~",
+      "overview": "Mob continues down his path of destruction. Amongst all of the destruction and chaos, Reigen finally reaches Mob with the help of Serizawa, and he desperately tries to talk to him.",
+      "vote_average": 8.9,
+      "vote_count": 19,
+      "air_date": "2022-12-22",
+      "episode_number": 12,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 3,
+      "show_id": 67075,
+      "still_path": "/17lwErm3WHM0mZU2OKXTd7Ne0ZK.jpg"
+    },
+    "name": "Mob Psycho 100",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 37,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "モブサイコ100",
+    "overview": "Shigeo Kageyama, a.k.a. \"Mob,\" is a boy who has trouble expressing himself, but who happens to be a powerful esper. Mob is determined to live a normal life and keeps his ESP suppressed, but when his emotions surge to a level of 100%, something terrible happens to him! As he's surrounded by false espers, evil spirits, and mysterious organizations, what will Mob think? What choices will he make?",
+    "popularity": 495.5685,
+    "poster_path": "/vR7hwaGQ0ySRoq1WobiNRaPs4WO.jpg",
+    "production_companies": [
+      {
+        "id": 2849,
+        "logo_path": "/cN3JNIKawjOMtfk0GBVIbsx69bg.png",
+        "name": "BONES",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3627,
+        "logo_path": "/pBfPYpzg5o3EoBPfrFKzTRi8MGr.png",
+        "name": "Warner Bros. Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6681,
+        "logo_path": "/s4RElEnQyM2VrHZCQ3jYemPdxML.png",
+        "name": "THE KLOCKWORX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 142186,
+        "logo_path": "/bdXTOuU7PdsDtQngyM7vb47zePs.png",
+        "name": "Hakuhodo DY Music & Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59206,
+        "logo_path": "/oMtJVGvqLAyQZvYTvjDIcbVEzwD.png",
+        "name": "BS Fuji",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9149,
+        "logo_path": "/isLUpud9N56ifftJZ4XvzwBBpoG.png",
+        "name": "Shogakukan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12655,
+        "logo_path": "/dfGqf2NoMVPrDywDL90D5HAhBlW.png",
+        "name": "Shogakukan-Shueisha Productions",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2016-09-28",
+        "episode_count": 9,
+        "id": 107371,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/2nYcJWpW7WZZeUAyVDiYJB2fnRD.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2016-07-12",
+        "episode_count": 12,
+        "id": 78421,
+        "name": "Mob Psycho",
+        "overview": "",
+        "poster_path": "/q5UGPv7B4iSBXVK5xaHmZfJUyWD.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      },
+      {
+        "air_date": "2019-01-07",
+        "episode_count": 13,
+        "id": 110805,
+        "name": "Mob Psycho II",
+        "overview": "",
+        "poster_path": "/rPcH4klMU7vQUqmHcs5BY3ytHhm.jpg",
+        "season_number": 2,
+        "vote_average": 8.6
+      },
+      {
+        "air_date": "2022-10-06",
+        "episode_count": 12,
+        "id": 216245,
+        "name": "Mob Psycho III",
+        "overview": "",
+        "poster_path": "/smm17y29l1cvJ42pnlP6fr2nCQC.jpg",
+        "season_number": 3,
+        "vote_average": 8.2
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.485,
+    "vote_count": 1408,
+    "external_ids": {
+      "imdb_id": "tt5897304",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 307375,
+      "tvrage_id": null,
+      "wikidata_id": "Q66313196",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "mobpsycho_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Shigeo Kageyama, surnommé Mob, est un lycéen tout ce qu’il y a de plus ordinaire. Pourtant, il possède de puissants pouvoirs psychiques, mais il préfère rester discret, afin d’avoir une vie la plus normale possible. De plus, il comprend en grandissant que ce pouvoir peut être dangereux et qu’il augmente en même temps que sa charge émotionnelle. Mais pourra-t-il contenir longtemps ses émotions ?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Shigeo Kageyama, a.k.a. \"Mob,\" is a boy who has trouble expressing himself, but who happens to be a powerful esper. Mob is determined to live a normal life and keeps his ESP suppressed, but when his emotions surge to a level of 100%, something terrible happens to him! As he's surrounded by false espers, evil spirits, and mysterious organizations, what will Mob think? What choices will he make?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Kageyama Shigeo, más conocido por el apodo \"Mob\", parece un chico tímido con problemas para relacionarse con los demás, pero en realidad. es un poderoso Esper. Mob quiere ser un niño normal y corriente pero, para mantener su poder psíquico bajo control, tiene que reprimir constantemente sus emociones. Sin embargo, los problemas le persiguen, y vive rodeado por falsos Espers, espíritus malignos y misteriosas organizaciones.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Kageyama Shigeo, o \"Mob\", é um garoto que não leva muito jeito pra se expressar, mas que é um poderoso telepata. Decidido a levar uma vida normal, Mob suprime seus poderes extrasensoriais, mas quando suas emoções atingem um pico de 100%, algo terrível lhe acontece!\n\nRodeado de falsos telepatas, espíritos do mal e misteriosas organizações, como Mob reagirá? Que decisões ele vai tomar?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "موب سايكو ١٠٠",
+            "overview": "القصة تدور حول الفتى “موب” حيث انه يستطيع ثنيَ الملاعق ورفعَ الأشياء بعقله في سنٍ مُبكّرة، ولكنّه امتنع تدريجيًا عن استخدام قدرته في الأماكن العامّة وهو ينفجر إذا وصلت قدرته العاطفية إلى 100%، هذا الفتى ذو القوة النفسية امتلك لقب “موب” و قام بكبت قدرته النفسية حتى يتمكن من العيش بشكل طبيعي و يحظى بصداقة مع زميلته في الصف.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "灵能百分百",
+            "overview": "平凡的中学二年级少年影山茂夫，因其微弱的存在感与名字茂夫的谐音被周遭人称为龙套（モブ），但不起眼的他其实是强大的天生超能力者。历经每一次的成长，龙套开始认为自己的超能力是危险的存在，为了不让超能力失控，龙套无意识的压抑著情感。虽然只想平凡的度过每一天，但各种麻烦却接二连三找上他，随着被压抑的情感在内心一点点膨胀，龙套体内积累的力量似乎也正蠢蠢欲动......",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Моб Психо 100",
+            "overview": "Духи. Злые духи, добрые духи, духи  пацифисты. Они наполнили этот мир и стали обыденным, как воздух. Только  вот люди с воздухом не сражаются, да воздух и вреда не приносит, а в  этом же мире духи ой как любят бедокурить. Специально для их усмирения  среди людей нашлись те, кто назвали себя Экстрасенсами и по велению руки  изгоняли призраков из мест обитания обычных людей. Таким экстрасенсом и  являлся наш главный герой по прозвищу Моб.\n\nМоба на самом деле зовут Кагеяма Сигэо. Он самый обычный восьмиклассник,  несмотря на то что с раннего детства поднимал вещи в воздух силой мысли  и гнул ложки. Сейчас Моб особо не пользуется своей силой в  повседневности, так как не хочет тревожить одноклассников. По большей  части одну девушку, в которую он влюблен. После школы Моб обучается  контролю своей силы у одного такого же экстрасенса. На самом деле его  учитель самый что ни на есть шарлатан и никакими способностями не  обладает. Просто он нашел перспективного бойца с духами и делает на нем  деньги. Кагеяму это особо не напрягает. Он так и живет, борется с духами  и как всякий подросток пытается разобраться в жизни и найти в ней свой  смысл.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Shigeo Kageyama – genannt Mob – hat Probleme damit, sich auszudrücken. Zudem besitzt er übersinnliche Fähigkeiten. Er würde zwar gern ein normales Leben führen, doch wenn seine Emotionen aufkochen und ein Level von 100 % erreichen, geschieht Schreckliches. Zusammen mit einem selbsternannten Exorzisten schlägt er sich nach der Schule mit allerhand Geisterkrams rum … Doch muss er auch lernen, was er eigentlich selbst möchte …",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Моб Психо 100",
+            "overview": "Каґеяма Шіґео (відомий як 'Моб') - восьмикласник із телекінетичними  здібностями. Він з дитинства вмів згинати ложки та пересувати предмети  силою думки. Однак із часом він припиняє користуватися своїми  здібностями через невдоволення оточення, яке лише зростає. Тепер єдине  його бажання - потоваришувати зі своєю однокласницею Цубомі. Зі своїм  наставником, котрий не має жодних здібностей, він намагається знайти та  зрозуміти мету свого життя.",
+            "homepage": "",
+            "tagline": "Юність – це вибух?"
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "路人超能100",
+            "overview": "本作故事描述平凡又對青春抱有憧憬的中二少年──影山茂夫（通稱＝路人），他其實擁有特別的能力──那就是「超能力」。冒牌靈能者、可疑的宗教團體其他等等……想利用他這種超能力的各種怪咖都被他吸引而來，少年‧路人的心中似乎有股「力量」正在蠢蠢欲動。衝擊的超能力，青春的章節，就此開幕。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "모브사이코 100",
+            "overview": "가공할 초능력의 보유자지만 보통의 삶을 고집하고 있는 인기가 많아지고픈 평범한 중학생 카게야마 시게오의 이야기를 그린 애니메이션",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "何かが「100」になったとき、爆発する少年・モブ。外見はいたって普通――というよりむしろ地味。場の空気を読むのが苦手な彼は、じつは強力な超能力の持ち主だった。そんな彼の能力に目をつけ、次々と現れるニセ霊能力者に宗教団体、不良番長、謎の秘密組織…。フツーの青春を願うモブに、平穏な日は訪れるのか？　原作者・ONEとアニメスタジオ・BONESがタッグを組んだ衝撃のサイキック青春グラフィティ",
+            "homepage": "",
+            "tagline": "青春はバクハツ？"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "מוב פסיכו 100",
+            "overview": "קאגיימה שיגאו (ידוע גם כ-\"מוב\") הוא ילד בכיתה ח' שיש לו כוחות על טבעיים. כבר מגיל צעיר הוא יכל לכופף כפיות ולהעיף דברים באוויר בעזרת כוח המחשבה, אך אט אט הוא החל לרסן את הכוחות שלו ולא להראותם בציבור בגלל כל תשומת הלב שהוא קיבל. כרגע כל מה שהוא רוצה זה להיות חבר של ילדה מהכיתה שלו טסובומי. עם המנטור הרוחני שלו (שאין לו כוחות על טבעיים) הוא ממשיך לחיות את החיים הרגילים שלו בתקווה להבין מה המשמעות שלו בחיים.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Cậu Bé Siêu Năng Lực",
+            "overview": "Cậu học sinh cấp 2 Shigeo có vẻ ngoài rất bình thường. Không ai biết cậu sở hữu khả năng ngoại cảm đáng gờm và nếu cậu không kìm nén cảm xúc, năng lực ấy sẽ bùng nổ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Desde cedo que Shigeo Kageyama, também conhecido por \"Mob\", tem conhecimento dos seus poderes psíquicos. Agora no oitavo ano, Mob usa os seus poderes para auxiliar Arataka Reigen, um falso exorcista que se aproveita da ingenuidade do jovem. No entanto, os poderes de Mob escondem uma força terrível.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Shigeo Kageyama, soprannominato \"Mob\" per la sua totale incapacità di farsi notare, è un liceale dotato di devastanti poteri psichici. Per evitare di perdere il controllo e scatenare il suo potenziale al 100%, il ragazzo reprime ogni emozione, lavorando part-time per il sedicente esorcista Reigen Arataka. Tra spiriti maligni e organizzazioni nemiche, Mob cercherà faticosamente di condurre una vita normale.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Kageyama Shigeo, apodado \"Mob\", es un chico con problemas para expresarse pero que en realidad es un poderoso esper. Mob está decidido a llevar una vida normal y mantiene sus poderes especiales reprimidos, pero cuando sus emociones alcancen el nivel del 100%, ¡le ocurrirá algo terrible!\n\nRodeado por falsos espers, espíritus malignos y misteriosas organizaciones, ¿qué hará Mob? ¿Qué elecciones tomará?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Моб Психо",
+            "overview": "Шигео Кагеяма по прякор Моб е в осми клас и е телепат. Още от дете той може да огъва лъжици и да мести предмети с ума си, но бавно започва да се възпира да използва способностите си пред хора заради негативното отношение от тяхна страна. Сега единственото му желание е да се сприятели с неговата съученичка Цубоми.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Kageyama Shigeo, zwany także „mobem”, czyli „tłumem”, bo wtapia się w niego jak mało kto, to 8-klasista o nadprzyrodzonych mocach. Od dziecka potrafił zaginać łyżeczki, czy unosić przedmioty tylko za pomocą siły własnego umysłu, jednak z powodu strachu i krytyki otoczenia, z czasem przestał ich używać.\n\nAktualnie jedyną rzeczą jaką pragnie, to zaprzyjaźnić się z Tsubomi, dziewczyną z jego klasy i z pomocą swojego „mentora” od spraw paranormalnych (który sam żadnych nietypowych umiejętności nie posiada), próbuje je spełnić, wiodąc przy okazji w miarę normalne, codzienne życie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ม็อบไซโค 100 คนพลังจิต",
+            "overview": "ชิเงโอะอาจดูเผินๆ เหมือนเด็กนักเรียนชั้นมัธยมต้นทั่วไป แต่ที่จริงแล้วเขามีพลังจิตที่น่ากลัวซึ่งพร้อมจะระเบิดออกมาได้ทุกเมื่อหากเขาไม่ข่มอารมณ์เอาไว้",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Mob Psycho 100",
+            "overview": "Kageyama Shigeo, kterému všichni říkají \"Mob\", je student s nadpřirozenými schopnostmi - dokáže silou vůle zvedat předměty nebo třeba ohýbat lžičky. Když byl mladší, svoji schopnost rád ukazoval. Ale kvůli negativním ohlasům postupně přestal své schopnosti předvádět. Nyní je jeho jedinou starostí, aby si ho všimla jeho hezká spolužačka a ničit zlé duchy s jeho \"mistrem\"/podvodníkem. (Harroc)",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "路人超能 100",
+            "overview": "本作故事描述平凡又對青春抱有憧憬的中二少年──影山茂夫（通稱＝路人），他其實擁有特別的能力──那就是「超能力」。冒牌靈能者、可疑的宗教團體其他等等……想利用他這種超能力的各種怪咖都被他吸引而來，少年‧路人的心中似乎有股「力量」正在蠢蠢欲動。衝擊的超能力，青春的章節，就此開幕。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Shigeo Kageyama - bijgenaamd Mob - heeft problemen met het uiten van zichzelf. Hij heeft ook bovennatuurlijke vermogens. Hoewel hij graag een normaal leven zou willen leiden, gebeuren er vreselijke dingen als zijn emoties overkoken en een niveau van 100% bereiken. Samen met een zelfbenoemde exorcist krijgt hij na schooltijd te maken met allerlei spookzaken... Maar hij moet ook leren wat hij eigenlijk wil...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Mobas – Psichinė Galia 100",
+            "overview": "Kai esi aštuntokas - tau terūpi, kaip užkalbinti patinkančią mergaitę. O štai Mobas kankinasi ne tik dėl to. Jis sugeba vien minties galia sulenkti šaukštus arba kilnoti objektus dėl turimų telekinezės galių. Negi tai gali būti kankynė ? Tikrai taip, kai dėl neribotų galių nukenčia tavo jaunesnysis brolis... Išgyvenęs skaudžią patirtį Mobas nusprendžia kuo mažiau naudoti savo galias, nebent tai būtų dvasių egzorcizmo seansas kasdieniniame darbe po pamokų. Tik ar taip lengva pabėgti nuo prigimties ? Taip pat vertėtų priminti kad tai yra \"one punch man\" kurėjų darbas , taigi jeigu patiko anas patiks ir šis nuostabus kūrinys .",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kP5duNJEbTfXpBs6CITsaZ88pQi.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/deOIxqHGfAavUhRonk5z24iaXXd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zSjERIOum3Ntwgu5a0kLmRCs70g.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i314aLh8nWdoov0Tk7nEg5zTIhS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1179,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nUfbiDI6kEL8UsPtgdxawFdvdCz.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2096
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/y3CrxZkLvVLsatvW9sd720GKv7U.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3kDn39s4lENS5ziq2l5u1tdoDkE.jpg",
+          "vote_average": 0.5,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fsWldKnTlSfBcUS7i0z33mSPIyu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.781,
+          "height": 2034,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9xAL98tQfbunO1GzMkm53ReBYqB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3622
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jpygmyRuwnjcgnAiUQRGGPkRagB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1179,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pwbmbmdK6ZrMl6KnAAKCNPpqsWt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2096
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h8hfoEpM20BVYFNRaeeYRM7zV1n.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qD1Ms1RGX2B0hd2RtJGKydQm0Fw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fFbYT2hZz5lqOU1HhoI72xiZZnn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1179,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c8Tycp8C3uoHIK8YvPTe3uPM6ma.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2096
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1179,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l7U1SncHHkvZYOr56SpB1It13w2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2096
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1179,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jULuNCeLJRnvxIxrxrm2XonvBRj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2096
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pTKBJMdCV2sQJ2sngvP1eN0aFqZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l1wyPnuAWO8eZxBb6YivAaqakkK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1423,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nz9859p6Cz9KKu9E7wyxhpP1Sdh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2531
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.714,
+          "height": 1262,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nH2KsyLFAj9hB0VZYVhpPkFeKPD.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3425
+        },
+        {
+          "aspect_ratio": 2.71,
+          "height": 290,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o9cBMm3au1g37EHwPcj81JYAPSg.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 786
+        },
+        {
+          "aspect_ratio": 2.105,
+          "height": 817,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r23lGsbqOaazxHuISlADW98zit0.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1720
+        },
+        {
+          "aspect_ratio": 2.094,
+          "height": 955,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ciH2KjCps1DVHG2GsIsniA4SHeK.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.912,
+          "height": 512,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/92cfoow5soeI9KZdBdfyGHCLjk2.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 467
+        },
+        {
+          "aspect_ratio": 1.108,
+          "height": 464,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fUrGLgRWq37jOEMm8HNsSQwLjTB.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 514
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vR7hwaGQ0ySRoq1WobiNRaPs4WO.jpg",
+          "vote_average": 7.05,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dkE2JCm31I9z5mIRlXCcZaWSPYM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1425,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cibVLCWS4f9jw2mOUEachXwQ8ui.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 950
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1425,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/66AXW4B9t5gdKzVq9hgSiO7qmot.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 950
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uPs7RO37n8T4MwqyCTFjkNM2d0X.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1432,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oUh3wIqiJ573vWY1ZpVxEYUdg5g.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 954
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 999,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/thyM7ORYAlhsHd9FT5Vmq6stqML.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 666
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rLe1tNYP1VEjouKNaY0iQOs37AM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1734,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9yvJbbdJ0oobZa3HJkh90LGLJDj.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1156
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tbc35gqERUm4dh8pnLVQE66Nh9e.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cwyzi1NO3sV2mZYm9ElcA09MB9Q.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eFLwQ46X4FintaVdoZ5ekzlj9Ib.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wDn6gGwTsxKC4RQhnPmOsY5mCH3.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aLgLjfJSakNNY7BhdSG97xF192c.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2Ew49cuNHuHKs1CCqpNDJrsacFh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o6LT1Jx2mlY2j4gQhG9OEIvbusi.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mCMHbRKTgyrk7tKCWPYDOGabkPL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7oOlkAWi34oKvbHvlSZtc6QIS69.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2488,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xtsK2vKHEV7GvO5GaliJRWyAjzh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1659
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dgxmdOpsmzNnUfFSBsau22yVG8T.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1766,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jb3j4NpioTpSLvxifEq0Gf4mhB2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1178
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1763,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zkL0htm5fwnYPlTndmvNZpyejTT.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1175
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3IfSa9t4QLLxFJA0Nps07tF2hKF.jpg",
+          "vote_average": 1.13,
+          "vote_count": 9,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qT666kF1moHBkIxA87TK32nQUZ4.jpg",
+          "vote_average": 0.854,
+          "vote_count": 8,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9Z7JcNhVTo7lJd3EOHHI2xACIwQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bXTH9ZVyTdAW6tFSMQgImgN76q6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 900
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/m1FNL2YLmtDfykZGAi6oaZsRqol.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7MmXGQ3LJ3IPWF3VhoBmiQfwy7x.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 990,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7kcrK6bl84EClm7gyXcSF5frrNH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 660
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 990,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sZeyaXDcBLMJ1PcAEaCzHk6sSNS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 660
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4JyyGQrodZnREzLHzoyIwpSyE2E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zCLAgtNDTugHHbf9lXcol1sBpqF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1619,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qKHArp5rGBtgWiWo54e5igPhE4g.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1619,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a0gyJz4qR3jlbwklzpBuUG7gTse.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1023,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pDm3TjXTXtX0S5hRVErtmqWUxek.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 682
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1077,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hzVfYgPhY8qXP5umjLXLeHH5gGC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 718
+        },
+        {
+          "aspect_ratio": 0.668,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wt7YyOYp30RnG3VMGZfE3JfWetq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 751
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 846,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dEtm3oB6olpv2N352rXOfvysJWO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 564
+        }
+      ]
+    }
+  }
+}
