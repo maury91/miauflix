@@ -36,7 +36,7 @@ npm run config-only:docker
 
 The wizard detects missing settings, offers connection tests, and saves application configuration in the persistent data directory. You can skip it and enter settings from the browser after the first start. With the [prebuilt images](docker-setup.md#prebuilt-images), browser setup is the simplest path. Keep the application and services data volumes across container recreation.
 
-The default production Compose topology runs the List Service inside the combined `miauflix-services` container. The development topology uses a separate `list-service` container. Configure Trakt credentials to use its lists and synchronization, or dismiss the optional setup prompt to continue browsing without them. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
+The default production Compose topology runs the List Service inside the `miauflix-catalog-services` container. The development topology uses a separate `list-service` container. Configure Trakt credentials to use its lists and synchronization, or dismiss the optional setup prompt to continue browsing without them. The List Service stores its generated encryption key at `data/list-service/.list-service-key`. You can instead provide `LIST_SERVICE_ENCRYPTION_KEY` through deployment secrets; keep the active key stable across restarts. See the [environment variables guide](environment-variables.md) for details.
 
 #### 2. Set up the VPN
 

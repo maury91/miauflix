@@ -1,113 +1,97 @@
 jest.mock('@services/configuration/configuration.service');
 
+import type { ServiceStatus } from '@miauflix/contract';
+
 import { ConfigurationService } from '@services/configuration/configuration.service';
 
-import { VpnDetectionService } from '../vpn.service';
+import { VpnDetectionService, type VpnStatusSource } from '../vpn.service';
 
-// Mock the fetch function
-global.fetch = jest.fn();
-
-const createMockConfig = (): ConfigurationService => {
-  const mockedConfigService =
-    new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
-  mockedConfigService.get.mockImplementation((key: string) => {
-    if (key === 'DISABLE_VPN_CHECK') return false as never;
-    return undefined as never;
-  });
-  return mockedConfigService;
+const createMockConfig = (disabled = false) => {
+  const config = new ConfigurationService() as unknown as jest.Mocked<ConfigurationService>;
+  config.getOrThrow.mockImplementation(((key: string) =>
+    key === 'DISABLE_VPN_CHECK' ? disabled : undefined) as never);
+  return config;
 };
 
-describe('VpnDetectionService', () => {
-  let vpnService: VpnDetectionService;
-  const mockFetch = global.fetch as jest.MockedFunction<typeof fetch>;
+const setupTest = (disabled = false) => {
+  const config = createMockConfig(disabled);
+  const remoteStatus = jest.fn<Promise<ServiceStatus>, []>();
+  const source: VpnStatusSource = { remoteStatus };
+  const service = new VpnDetectionService(config, source, 1000);
+  return { service, config, remoteStatus };
+};
 
+const reporting = (vpn?: string): ServiceStatus => ({
+  state: 'ready',
+  details: vpn === undefined ? {} : { vpn },
+});
+
+describe('VpnDetectionService', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    vpnService = new VpnDetectionService(createMockConfig(), 1000);
+    jest.useFakeTimers();
   });
 
   afterEach(() => {
-    // Clean up any intervals
-    const interval = vpnService['monitoringInterval'];
-    if (interval) {
-      clearInterval(interval);
-    }
+    jest.useRealTimers();
   });
 
-  describe('IP Provider Fallbacks', () => {
-    it('should try multiple providers when first one fails', async () => {
-      // Mock first provider (ipify) to fail
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: false,
-          status: 500,
-          statusText: 'Internal Server Error',
-          json: jest.fn(),
-        } as unknown as Response)
-        // Mock second provider (ipinfo.io) to succeed
-        .mockResolvedValueOnce({
-          ok: true,
-          json: jest.fn().mockResolvedValue({ ip: '192.168.1.1' }),
-        } as unknown as Response);
+  it('reports the VPN as active when the sources service is protected', async () => {
+    const { service, remoteStatus } = setupTest();
+    remoteStatus.mockResolvedValue(reporting('protected'));
 
-      const ip = await vpnService['getIpAddress']();
+    await expect(service.isVpnActive()).resolves.toBe(true);
+    service.stop();
+  });
 
-      expect(ip).toBe('192.168.1.1');
-      expect(mockFetch).toHaveBeenCalledTimes(2);
-    });
+  it('treats a sources service with its own check disabled as active', async () => {
+    const { service, remoteStatus } = setupTest();
+    remoteStatus.mockResolvedValue(reporting('disabled'));
 
-    it('should cycle through all providers before giving up', async () => {
-      // Mock all providers to fail
-      mockFetch.mockResolvedValue({
-        ok: false,
-        status: 500,
-        statusText: 'Internal Server Error',
-        json: jest.fn(),
-      } as unknown as Response);
+    await expect(service.isVpnActive()).resolves.toBe(true);
+    service.stop();
+  });
 
-      await expect(vpnService['getIpAddress']()).rejects.toThrow('All IP providers failed');
+  it.each([['unprotected'], [undefined]])('reports %s as not active', async vpn => {
+    const { service, remoteStatus } = setupTest();
+    remoteStatus.mockResolvedValue(reporting(vpn));
 
-      // Should have tried all 6 providers
-      expect(mockFetch).toHaveBeenCalledTimes(6);
-    });
+    await expect(service.isVpnActive()).resolves.toBe(false);
+    service.stop();
+  });
 
-    it('should validate IP addresses and reject invalid ones', async () => {
-      // Mock provider to return invalid IP
-      mockFetch
-        .mockResolvedValueOnce({
-          ok: true,
-          json: jest.fn().mockResolvedValue({ ip: 'invalid-ip' }),
-        } as unknown as Response)
-        // Mock second provider to return valid IP
-        .mockResolvedValueOnce({
-          ok: true,
-          json: jest.fn().mockResolvedValue({ ip: '192.168.1.1' }),
-        } as unknown as Response);
+  it('fails closed when the sources service cannot be reached', async () => {
+    const { service, remoteStatus } = setupTest();
+    remoteStatus.mockRejectedValue(new Error('Connection closed'));
 
-      const ip = await vpnService['getIpAddress']();
+    await expect(service.isVpnActive()).resolves.toBe(false);
+    service.stop();
+  });
 
-      expect(ip).toBe('192.168.1.1');
-      expect(mockFetch).toHaveBeenCalledTimes(2);
-    });
+  it('emits connect and disconnect as the reported state changes', async () => {
+    const { service, remoteStatus } = setupTest();
+    const connect = jest.fn();
+    const disconnect = jest.fn();
+    service.on('connect', connect);
+    service.on('disconnect', disconnect);
 
-    it('should handle timeout errors', async () => {
-      jest.useFakeTimers();
-      // Mock provider to timeout
-      mockFetch
-        .mockImplementationOnce(
-          () => new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 100))
-        )
-        // Mock second provider to succeed
-        .mockResolvedValueOnce({
-          ok: true,
-          json: jest.fn().mockResolvedValue({ ip: '192.168.1.1' }),
-        } as unknown as Response);
+    remoteStatus.mockResolvedValue(reporting('protected'));
+    await jest.advanceTimersByTimeAsync(1000);
+    expect(connect).toHaveBeenCalledTimes(1);
+    expect(service.status()).toEqual({ isVpnActive: true, disabled: false });
 
-      const ipPromise = vpnService['getIpAddress']();
-      jest.advanceTimersByTime(200); // Fast-forward time to trigger timeout
-      const ip = await ipPromise;
+    remoteStatus.mockResolvedValue(reporting('unprotected'));
+    await jest.advanceTimersByTimeAsync(1000);
+    expect(disconnect).toHaveBeenCalledTimes(1);
+    expect(service.status()).toEqual({ isVpnActive: false, disabled: false });
+    service.stop();
+  });
 
-      expect(ip).toBe('192.168.1.1');
-    });
+  it('does not ask the sources service when the check is disabled', async () => {
+    const { service, remoteStatus } = setupTest(true);
+
+    await jest.advanceTimersByTimeAsync(5000);
+
+    expect(remoteStatus).not.toHaveBeenCalled();
+    expect(service.status()).toEqual({ isVpnActive: null, disabled: true });
   });
 });

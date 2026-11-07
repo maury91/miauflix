@@ -130,12 +130,13 @@ Implementation: [backend job handlers](../../backend/src/services/background-job
 The default Compose deployment contains:
 
 - **`miauflix`:** Node.js backend and built frontend, published on port 3000 with a localhost-only default binding.
-- **`miauflix-services`:** the Bunqueue broker and catalog, list, and source services, with persistent service data.
+- **`miauflix-catalog-services`:** the Bunqueue broker and the catalog and list services (TMDB, Trakt).
+- **`miauflix-video-services`:** the source and media-load services: everything that reaches indexers, trackers, and peers. Both service containers share the persistent service-data volume.
 - **Supporting containers:** scheduled image updates and unhealthy-application recovery.
 
-Optional Compose files add Caddy HTTPS, Gluetun/NordVPN routing, FlareSolverr, and Jaeger tracing. HTTPS terminates at Caddy in the supplied HTTPS setup. Internal services should remain on the trusted application network rather than being exposed as public browser APIs.
+Optional Compose files add Caddy HTTPS, Gluetun/NordVPN routing, FlareSolverr, and Jaeger tracing. Only `miauflix-video-services` and FlareSolverr run inside the Gluetun network; the backend and catalog services do not need the VPN. HTTPS terminates at Caddy in the supplied HTTPS setup. Internal services should remain on the trusted application network rather than being exposed as public browser APIs.
 
-VPN detection checks whether the outbound connection is recognized as NordVPN-protected. The Gluetun deployment supplies the tunnel and firewall; application status checks and a network kill switch are different mechanisms. VPN checks can be explicitly disabled in configuration.
+VPN detection runs in the source service, which checks whether its outbound connection (shared with media-load) is recognized as NordVPN-protected; the backend reads that state from it. The Gluetun deployment supplies the tunnel and firewall; application status checks and a network kill switch are different mechanisms. VPN checks can be explicitly disabled in configuration.
 
 The backend has process-local playback and torrent state alongside its local SQLite database. The split service design does not by itself provide load-balanced, stateless backend replicas. The supplied deployment runs one application instance.
 

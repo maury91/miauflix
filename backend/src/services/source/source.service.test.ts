@@ -71,7 +71,8 @@ const setupTest = () => {
   mockConfigService.get.mockReturnValue(undefined as never);
   mockConfigService.getOrThrow.mockReturnValue(false as never);
   const mockVpnService = new VpnDetectionService(
-    mockConfigService
+    mockConfigService,
+    {} as never
   ) as jest.Mocked<VpnDetectionService>;
   mockVpnService.isVpnActive.mockResolvedValue(true);
   mockVpnService.on.mockReturnValue(jest.fn());

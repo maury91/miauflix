@@ -35,7 +35,7 @@ The media catalog (TMDB today) runs as its own Bun service. Configure its publis
 
 ```bash
 # Default Docker Compose deployment (internal network)
-CATALOG_SERVICE_URL=http://miauflix-services:3001
+CATALOG_SERVICE_URL=http://miauflix-catalog-services:3001
 
 # Host-run development only
 # CATALOG_SERVICE_URL=http://localhost:3001
@@ -43,10 +43,10 @@ CATALOG_SERVICE_URL=http://miauflix-services:3001
 
 #### Media load service
 
-The torrent engine runs as its own Bun service (port 3004, in the services container). It downloads, stores and streams sources and answers tracker scrapes. The default Compose files set the address:
+The torrent engine runs as its own Bun service (port 3004, in the `miauflix-video-services` container). It downloads, stores and streams sources and answers tracker scrapes. The default Compose files set the address:
 
 ```bash
-MEDIA_LOAD_SERVICE_URL=http://miauflix-services:3004
+MEDIA_LOAD_SERVICE_URL=http://miauflix-video-services:3004 # http://vpn:3004 with docker-compose.vpn.yml
 # Host-run development only
 # MEDIA_LOAD_SERVICE_URL=http://localhost:3004
 ```
@@ -265,7 +265,7 @@ REVERSE_PROXY_SECRET=your-secure-random-string
 MIAUFLIX_VERSION=latest
 ```
 
-With the VPN overlay, include `docker-compose.vpn.yml` and set `MIAUFLIX_UPSTREAM=vpn:3000`. See [HTTPS with a domain](docker-setup.md#https-with-a-domain) for the complete setup and first-account behavior.
+With the VPN overlay, include `docker-compose.vpn.yml` too; the backend stays outside the VPN, so Caddy's upstream does not change. See [HTTPS with a domain](docker-setup.md#https-with-a-domain) for the complete setup and first-account behavior.
 
 ## Configuration by Category
 

@@ -101,7 +101,7 @@ try {
   const cacheService = new CacheService(configurationService);
   const statsService = new StatsService();
   const requestService = new RequestService(statsService, configurationService);
-  const vpnDetectionService = new VpnDetectionService(configurationService);
+  const vpnDetectionService = new VpnDetectionService(configurationService, sourcesClientService);
   const tvPairingService = new TvPairingService(configurationService);
   const auditLogService = new AuditLogService(db, configurationService);
   const authService = new AuthService(db, auditLogService, configurationService);
@@ -310,6 +310,7 @@ try {
       catalogClient.stop();
       listClient.stop();
       sourceService.stop();
+      vpnDetectionService.stop();
       sourcesClientService.stop();
       await backgroundWorker.stop();
       preloadIntentService.close();

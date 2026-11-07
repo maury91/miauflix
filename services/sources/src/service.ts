@@ -157,11 +157,16 @@ export function createSourcesService(options: SourcesServiceOptions): {
       version: '0.1.0',
     },
     configuration: config,
-    status: () => ({
-      state: config.ready ? 'ready' : 'standby',
-      missingConfiguration: config.missingVars(),
-      details: { vpn: vpn.state, providers: store.providers().filter(p => p.enabled).length },
-    }),
+    // The backend reads `details.vpn` as the VPN state of the network sources and media-load share,
+    // so refresh it (cached: five minutes when protected, 30 seconds when not) before reporting.
+    status: async () => {
+      await vpn.isProtected().catch(() => false);
+      return {
+        state: config.ready ? 'ready' : 'standby',
+        missingConfiguration: config.missingVars(),
+        details: { vpn: vpn.state, providers: store.providers().filter(p => p.enabled).length },
+      };
+    },
     onStop: async () => {
       stopping.abort();
       clearInterval(timer);
