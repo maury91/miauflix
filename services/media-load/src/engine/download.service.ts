@@ -1253,10 +1253,7 @@ export class DownloadService {
       );
       return start;
     } catch (error) {
-      if (
-        error instanceof ErrorWithStatus &&
-        (error.status === 'source_file_unavailable' || error.status === 'local_media_unavailable')
-      ) {
+      if (error instanceof ErrorWithStatus) {
         throw error;
       }
       logger.error(
@@ -2113,9 +2110,8 @@ export class DownloadService {
         const range = parseRangeHeader(file.length, rangeHeader || '');
         const firstByte = range?.start ?? 0;
         const lastByte = range?.end ?? file.length - 1;
-        // An inspection read of a source that isn't downloading can't fetch a missing piece, and
-        // once the 206 is sent a failure could only cut the body short (an empty 206): refuse
-        // before responding.
+        // Refuse an inspection read before responding if its first piece cannot be fetched.
+        // Later missing pieces can still cut the body short after the headers are sent.
         if (
           speculative &&
           !torrent &&

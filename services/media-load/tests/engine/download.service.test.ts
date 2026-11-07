@@ -2,6 +2,7 @@ import { EventEmitter } from 'node:events';
 
 import type { Torrent } from 'webtorrent';
 
+import { ErrorWithStatus } from '../../src/lib/errors';
 import { logger } from '../../src/lib/logger';
 import type { StorageService } from '../../src/storage/storage.service';
 import type { EncryptedStorageLayout, PlaybackTarget, Storage } from '../../src/storage/types';
@@ -2657,6 +2658,45 @@ describe('DownloadService', () => {
   });
 
   describe('error handling', () => {
+    it.each([
+      'source_file_unavailable',
+      'local_media_unavailable',
+      'local_media_incomplete',
+      'torrent_closed',
+      'torrent_not_ready',
+      'timeout',
+      'add_torrent_timeout',
+    ] as const)('preserves %s when torrent startup fails during playback', async status => {
+      const { service, mockStorageService } = setupTest();
+      const source = {
+        id: 3,
+        size: 8,
+        hash: 'b'.repeat(40),
+        magnetLink: 'magnet:?xt=urn:btih:test',
+      };
+      const storage = createMockStorage({
+        sourceId: source.id,
+        encryptedLayout: {
+          storeName: 'movie',
+          filenameSalt: 'salt',
+          pieceLength: 4,
+          files: [{ path: 'movie.mkv', offset: 0, length: 8 }],
+        },
+      });
+      mockStorageService.createStorage.mockResolvedValue(storage);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
+      const error = new ErrorWithStatus('Torrent startup failed', status);
+      jest
+        .spyOn(
+          service as unknown as { addTorrent: (...args: never[]) => Promise<Torrent> },
+          'addTorrent'
+        )
+        .mockRejectedValue(error);
+      (service.client as unknown as { ready: boolean }).ready = true;
+
+      await expect(service.streamFile(target(source))).rejects.toBe(error);
+    });
+
     it('should log WebTorrent client errors', () => {
       setupTest();
 

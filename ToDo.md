@@ -13,6 +13,14 @@ See [TV source support plan](docs/architecture/tv-source-support-plan.md).
 - [ ] Add trailers
 - [ ] Change to icon buttons with tooltips
 
+## Player
+
+- [ ] Show downloaded torrent pieces in the progress bar
+
+## Storage page
+
+- [ ] Redesign the page
+
 ## Sources
 
 - [ ] Extend the Watch Now button to have a quality selector for users that want to choose the quality
