@@ -57,7 +57,7 @@ Administrators can manage providers and definition repositories through Settings
 
 ### Media load service
 
-The media-load service is the torrent engine. It runs WebTorrent, keeps the encrypted downloads and their storage records and claims, and serves verified byte ranges that the backend proxies to players and FFmpeg. It also answers tracker scrapes, batching concurrent requests into multi-hash scrapes (`SCRAPE_TRACKERS`). The backend names sources by id and sends each one's descriptor. Playback sessions, FFmpeg and subtitles stay in the backend. In Docker it runs in the services container with the downloads volume, so with the VPN layer its peer and tracker traffic uses the tunnel.
+The media-load service is the torrent engine. It runs WebTorrent, keeps the encrypted downloads and their storage records and claims, and serves verified byte ranges that the backend proxies to players and FFmpeg. It also answers tracker scrapes, batching concurrent requests into multi-hash scrapes (`SCRAPE_TRACKERS`). The backend names sources by id and sends each one's descriptor. Playback sessions, FFmpeg and subtitles stay in the backend. In Docker it runs in its own `miauflix-media-load` container with the downloads volume (or inside `miauflix-services` with the all-in-one layout), so with the VPN layer its peer and tracker traffic uses the tunnel. Its own VPN check also fences the engine while the connection is unprotected: no peers, announces or new torrents, while stored files stay readable.
 
 ### Remote contracts and configuration
 

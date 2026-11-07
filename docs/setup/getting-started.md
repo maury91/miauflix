@@ -40,13 +40,13 @@ The default production Compose topology runs the List Service inside the `miaufl
 
 #### 2. Set up the VPN
 
-The optional VPN Compose file routes the stack through NordVPN with [gluetun](https://github.com/qdm12/gluetun), whose firewall also acts as a kill switch. Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then save your private key to `.env`:
+The optional VPN Compose file routes source search (`miauflix-sources`), the torrent engine (`miauflix-media-load`) and FlareSolverr through NordVPN with [gluetun](https://github.com/qdm12/gluetun), whose firewall also acts as a kill switch. The backend and the catalog services stay on your normal connection. Get an access token from [my.nordaccount.com/dashboard](https://my.nordaccount.com/dashboard) → **NordVPN** in the left sidebar → **Get Access Token** → **Generate New Token**, then save your private key to `.env`:
 
 ```bash
 scripts/nordvpn-key.sh
 ```
 
-Miauflix currently detects only NordVPN and refuses to search for sources when no VPN is detected, because torrents would go out from your real IP. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env`, but only do so if you accept that risk; never on a server reachable from the internet. See [Using a VPN](docker-setup.md#using-a-vpn) for server locations.
+Source search and the torrent engine each run their own VPN check (currently NordVPN only): without a VPN, source search refuses to search and the torrent engine disconnects from peers and trackers, because they would see your real IP. Files already downloaded still play. You can override this by setting `DISABLE_VPN_CHECK=true` in `.env` (the default of both checks; `SOURCES_DISABLE_VPN_CHECK` and `MEDIA_LOAD_DISABLE_VPN_CHECK` set one service), but only do so if you accept that risk; never on a server reachable from the internet. See [Using a VPN](docker-setup.md#using-a-vpn) for server locations.
 
 #### 3. [Optional] Set up HTTPS and domain name
 

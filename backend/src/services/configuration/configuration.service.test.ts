@@ -1216,4 +1216,118 @@ describe('sources service configuration extraction', () => {
       MEDIA_LOAD_DISABLE_VPN_CHECK: 'true',
     });
   });
+
+  it('re-delivers a changed DISABLE_VPN_CHECK to the services that inherit it', async () => {
+    const configuration = setupTest();
+    await configuration.setValue('DISABLE_VPN_CHECK', 'true');
+    await configuration.setValue('SOURCES_DISABLE_VPN_CHECK' as never, 'false');
+    // Group metadata is shared across tests: match the other registrations of these groups.
+    const metadata = {
+      SOURCES: { name: 'Sources', description: 'Source search providers and VPN protection.' },
+      MEDIA_LOAD: {
+        name: 'Media load',
+        description: 'Torrent engine: downloads, encrypted storage and tracker scrapes.',
+      },
+    };
+    const vpnGroup = (id: 'MEDIA_LOAD' | 'SOURCES', key: string): ServiceConfigSchema => ({
+      groups: [
+        {
+          id,
+          ...metadata[id],
+          variables: [
+            {
+              key,
+              description: 'VPN check',
+              required: false,
+              inputType: 'boolean',
+              defaultValue: 'false',
+            },
+          ],
+        },
+      ],
+    });
+    configuration.registerRemoteConfiguration(
+      'SOURCES',
+      vpnGroup('SOURCES', 'SOURCES_DISABLE_VPN_CHECK')
+    );
+    configuration.registerRemoteConfiguration(
+      'MEDIA_LOAD',
+      vpnGroup('MEDIA_LOAD', 'MEDIA_LOAD_DISABLE_VPN_CHECK')
+    );
+    const applied = new Map<string, jest.Mock>();
+    for (const service of ['SOURCES', 'MEDIA_LOAD'] as const) {
+      const apply = jest.fn().mockResolvedValue({ success: true });
+      applied.set(service, apply);
+      configuration.registerService(service, {
+        testable: true,
+        getStatus: () => ({ status: 'ready' }),
+        reload: jest.fn().mockResolvedValue(undefined),
+        testConfiguration: jest.fn().mockResolvedValue({ success: true }),
+        applyConfiguration: apply,
+      });
+    }
+    jest
+      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .mockResolvedValue(undefined);
+
+    const result = await configuration.testAndSaveConfigs([
+      { key: 'DISABLE_VPN_CHECK', value: 'false' },
+    ]);
+
+    expect(result.success).toBe(true);
+    // Media load inherits, so it gets the new value; sources has its own and keeps it.
+    expect(applied.get('MEDIA_LOAD')).toHaveBeenCalledWith([
+      { key: 'MEDIA_LOAD_DISABLE_VPN_CHECK', value: 'false' },
+    ]);
+    expect(applied.get('SOURCES')).not.toHaveBeenCalled();
+    expect(configuration.getServiceConfigSnapshot('MEDIA_LOAD')).toEqual({
+      MEDIA_LOAD_DISABLE_VPN_CHECK: 'false',
+    });
+    expect(configuration.getServiceConfigSnapshot('SOURCES')).toEqual({
+      SOURCES_DISABLE_VPN_CHECK: 'false',
+    });
+
+    await configuration.setValue('DISABLE_VPN_CHECK', 'true');
+    expect(configuration.getServiceConfigSnapshot('MEDIA_LOAD')).toEqual({
+      MEDIA_LOAD_DISABLE_VPN_CHECK: 'true',
+    });
+  });
+
+  it('reloads inheriting services when updateConfigs changes DISABLE_VPN_CHECK', async () => {
+    const configuration = setupTest();
+    configuration.registerRemoteConfiguration('MEDIA_LOAD', {
+      groups: [
+        {
+          id: 'MEDIA_LOAD',
+          name: 'Media load',
+          description: 'Torrent engine: downloads, encrypted storage and tracker scrapes.',
+          variables: [
+            {
+              key: 'MEDIA_LOAD_DISABLE_VPN_CHECK',
+              description: 'VPN check',
+              required: false,
+              inputType: 'boolean',
+              defaultValue: 'false',
+            },
+          ],
+        },
+      ],
+    });
+    const reload = jest.fn().mockResolvedValue(undefined);
+    configuration.registerService('MEDIA_LOAD', {
+      testable: false,
+      getStatus: () => ({ status: 'ready' }),
+      reload,
+    });
+    jest
+      .spyOn(configuration as unknown as { saveConfigFile: () => Promise<void> }, 'saveConfigFile')
+      .mockResolvedValue(undefined);
+
+    await configuration.updateConfigs([{ key: 'DISABLE_VPN_CHECK', value: 'true' }]);
+
+    expect(reload).toHaveBeenCalledTimes(1);
+    expect(configuration.getServiceConfigSnapshot('MEDIA_LOAD')).toEqual({
+      MEDIA_LOAD_DISABLE_VPN_CHECK: 'true',
+    });
+  });
 });

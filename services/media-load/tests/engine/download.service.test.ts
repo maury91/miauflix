@@ -559,6 +559,80 @@ describe('DownloadService', () => {
     });
   });
 
+  describe('network fence', () => {
+    const fakeTorrent = () => {
+      const discovery = { destroy: jest.fn() };
+      const torrent = {
+        infoHash: 'a'.repeat(40),
+        pause: jest.fn(),
+        resume: jest.fn(),
+        removePeer: jest.fn(),
+        _peers: new Map([
+          ['peer-1', {}],
+          ['peer-2', {}],
+        ]),
+        discovery: discovery as typeof discovery | null,
+        _startDiscovery: jest.fn(),
+      };
+      return { torrent, discovery };
+    };
+
+    it('disconnects every torrent while blocked and reconnects them when allowed', async () => {
+      const { service } = setupTest();
+      const { torrent, discovery } = fakeTorrent();
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [torrent];
+
+      await service.setNetworkAllowed(false);
+
+      expect(torrent.pause).toHaveBeenCalled();
+      expect(torrent.removePeer.mock.calls).toEqual([['peer-1'], ['peer-2']]);
+      expect(discovery.destroy).toHaveBeenCalled();
+      expect(torrent.discovery).toBeNull();
+
+      await service.setNetworkAllowed(true);
+
+      expect(torrent.resume).toHaveBeenCalled();
+      expect(torrent._startDiscovery).toHaveBeenCalled();
+    });
+
+    it('refuses new torrents and metadata lookups while blocked', async () => {
+      const { service } = setupTest();
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [];
+      await service.setNetworkAllowed(false);
+      const hash = 'abcdef1234567890abcdef1234567890abcdef12';
+
+      await expect(
+        service.getSourceMetadataFile(`magnet:?xt=urn:btih:${hash}`, hash, 5000)
+      ).rejects.toMatchObject({ status: 'vpn_required' });
+      await expect(
+        (
+          service as unknown as {
+            addTorrent: (source: object, storage: object) => Promise<Torrent>;
+          }
+        ).addTorrent({ hash, magnetLink: `magnet:?xt=urn:btih:${hash}` }, { location: '/x' })
+      ).rejects.toMatchObject({ status: 'vpn_required' });
+      expect(mockedTorrentInstance.add).not.toHaveBeenCalled();
+    });
+
+    it('defers the seeding restore until the network is allowed', async () => {
+      const { service, mockStorageService } = setupTest();
+      await service.setNetworkAllowed(false);
+      mockStorageService.getStoragesWithCompletion.mockClear();
+      mockStorageService.getStoragesWithCompletion.mockResolvedValue([]);
+      const internals = service as unknown as {
+        restoreCompletedDownloads: () => Promise<void>;
+        _initStatus: { status: string };
+      };
+
+      await internals.restoreCompletedDownloads();
+      expect(mockStorageService.getStoragesWithCompletion).not.toHaveBeenCalled();
+
+      internals._initStatus = { status: 'ready' };
+      await service.setNetworkAllowed(true);
+      expect(mockStorageService.getStoragesWithCompletion).toHaveBeenCalledTimes(1);
+    });
+  });
+
   describe('torrent priorities', () => {
     const flush = async () => {
       for (let i = 0; i < 10; i++) await new Promise(resolve => setImmediate(resolve));

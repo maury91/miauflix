@@ -41,6 +41,7 @@ import {
 } from './download.utils';
 import { EncryptedFileReader } from './encrypted-file-reader';
 import type { EngineConfig } from './engine-config';
+import { fenceTorrent, unfenceTorrent } from './network-fence';
 import { TorrentDiagnostics } from './torrent-diagnostics';
 import { claimStartPriority, torrentDownloadCap, torrentPriority } from './torrent-priority';
 
@@ -147,6 +148,7 @@ export const CLAIM_TTL_MS: Record<ClaimKind, number | null> = {
 /** Reads keep their file wanted for a short while; every range request renews it. */
 const PLAYBACK_CLAIM: ClaimRequest = { kind: 'playback', ownerKey: 'stream' };
 const SIDECAR_SUBTITLE = /\.(srt|vtt|ass|ssa)$/i;
+const VPN_REQUIRED_MESSAGE = 'Media load requires a protected connection';
 
 /** WebTorrent's stream selections (what its own file streams use), missing from its typings. */
 type StreamSelectingTorrent = Torrent & {
@@ -207,13 +209,19 @@ export class DownloadService {
   /** Whether the last priority pass capped torrents because a stream was buffering. */
   private bufferingCapsApplied = false;
   private readonly playbackListeners = new Set<(activeSourceIds: number[]) => void>();
+  /** Whether torrents may reach trackers and peers; see `setNetworkAllowed`. */
+  private networkAllowed: boolean;
+  /** Seeding restore waits for the network when it was blocked at startup. */
+  private restorePending = false;
 
   constructor(
     private readonly storageService: StorageService,
     private readonly config: EngineConfig,
     /** DHT bootstrap nodes (`ip:port`); see `resolveDhtBootstrap`. Default: the DHT's own. */
-    dhtBootstrap?: string[]
+    dhtBootstrap?: string[],
+    { networkAllowed = true }: { networkAllowed?: boolean } = {}
   ) {
+    this.networkAllowed = networkAllowed;
     this.staticTrackers = config.getOrThrow('STATIC_TRACKERS');
     this.bestTrackers = [...new Set([...this.staticTrackers])];
     this.bestTrackersDownloadUrl = config.getOrThrow('BEST_TRACKERS_DOWNLOAD_URL');
@@ -241,6 +249,10 @@ export class DownloadService {
     }));
     this.client.on('error', (error: Error) => {
       logger.error('DownloadService', 'Error:', error.message, error);
+    });
+    // A torrent whose add began before the network was blocked is fenced once it is ready.
+    this.client.on('torrent', (torrent: Torrent) => {
+      if (!this.networkAllowed) fenceTorrent(torrent);
     });
     this.claimSweep = setInterval(() => void this.sweepExpiredClaims(), CLAIM_SWEEP_INTERVAL_MS);
     this.claimSweep.unref?.();
@@ -433,6 +445,33 @@ export class DownloadService {
   public async reload(): Promise<void> {
     await this.init();
     await this.rescheduleSeedExpiry();
+  }
+
+  /**
+   * The kill switch for an unprotected connection. Blocked: every torrent stops reaching trackers
+   * and peers, and nothing new is added, so only files already stored can be read. Allowed again:
+   * torrents resume, and a seeding restore that waited for the network runs.
+   */
+  async setNetworkAllowed(allowed: boolean): Promise<void> {
+    if (allowed === this.networkAllowed) return;
+    this.networkAllowed = allowed;
+    if (!allowed) {
+      for (const torrent of this.client.torrents) fenceTorrent(torrent);
+      logger.warn('DownloadService', 'Connection is not protected: torrents are disconnected');
+      return;
+    }
+    for (const torrent of this.client.torrents) unfenceTorrent(torrent);
+    logger.info('DownloadService', 'Connection is protected: torrents are reconnected');
+    if (this.restorePending && this._initStatus.status === 'ready') {
+      this.restorePending = false;
+      await this.restoreCompletedDownloads().catch(error =>
+        logger.warn('DownloadService', 'Could not restore seeding', error)
+      );
+    }
+  }
+
+  private assertNetworkAllowed(): void {
+    if (!this.networkAllowed) throw new ErrorWithStatus(VPN_REQUIRED_MESSAGE, 'vpn_required');
   }
 
   /** Apply the current seed duration to completed downloads without resetting playback claims. */
@@ -820,6 +859,11 @@ export class DownloadService {
   }
 
   private async restoreCompletedDownloads(): Promise<void> {
+    // Seeding reaches peers: wait for a protected connection (`setNetworkAllowed`).
+    if (!this.networkAllowed) {
+      this.restorePending = true;
+      return;
+    }
     const completed = (await this.storageService.getStoragesWithCompletion()) ?? [];
     for (const storage of completed) {
       if (storage.localOnly) continue;
@@ -1025,6 +1069,7 @@ export class DownloadService {
   }
 
   async getSourceMetadataFile(sourceLink: string, hash: string, timeout: number): Promise<Buffer> {
+    this.assertNetworkAllowed();
     return new Promise((resolve, rejectRaw) => {
       let settled = false;
       let temporaryTorrent: Torrent | null = null;
@@ -1668,6 +1713,8 @@ export class DownloadService {
   ): Promise<Torrent> {
     return new Promise((resolve, reject) => {
       try {
+        // Also covers a torrent already in the client: it is fenced, so it would never progress.
+        this.assertNetworkAllowed();
         const torrentOptions: TorrentOptions<EncryptedStorageOptions> = {
           path: location,
           deselect: true,

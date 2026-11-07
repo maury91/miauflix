@@ -40,21 +40,33 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
   stop: () => Promise<void>;
 } {
   const config = new MediaLoadConfigService(options.defaultDownloadPath);
-  const runtime = new MediaLoadRuntime(
-    MediaLoadRuntime.databasePathFor(options.dataDir ?? './data'),
-    options.legacyDownloadPath
-  );
-  let scrapes: { trackers: string; batcher: ScrapeBatcher } | null = null;
+  // Follows the values being applied: the configuration commits them only after `activate`, and
+  // the engine that starts there must already see the right VPN setting.
+  let vpnSettings = vpnSettingsFrom('MEDIA_LOAD', key => config.value(key));
   const vpn = new VpnGuard({
-    settings: () => vpnSettingsFrom('MEDIA_LOAD', key => config.value(key)),
+    settings: () => vpnSettings,
     fetchJson: options.vpnFetchJson,
   });
-  /** Runs `run` only behind a protected connection: anything that reaches trackers or peers. */
+  // The engine itself is fenced while the connection is unprotected (no peers, announces or new
+  // torrents), so every path that would reach the swarm is covered, including startup restores.
+  const runtime = new MediaLoadRuntime(
+    MediaLoadRuntime.databasePathFor(options.dataDir ?? './data'),
+    options.legacyDownloadPath,
+    () => vpn.state !== 'unprotected'
+  );
+  /** Checks the connection (cached) and applies the result to the engine's fence. */
+  const checkVpn = async (signal?: AbortSignal): Promise<boolean> => {
+    const isProtected = await vpn.isProtected(signal);
+    await runtime.refreshNetwork();
+    return isProtected;
+  };
+  let scrapes: { trackers: string; batcher: ScrapeBatcher } | null = null;
+  /** Fails fast with `vpn_required` before anything that reaches trackers or peers. */
   const peerCall = async <T, E extends string>(
     ctx: CallContext<E | 'vpn_required'>,
     run: () => Promise<T> | T
   ): Promise<T> => {
-    if (!(await vpn.isProtected(ctx.signal)))
+    if (!(await checkVpn(ctx.signal)))
       return ctx.fail('vpn_required', 'Media load requires a protected connection');
     return run();
   };
@@ -98,8 +110,12 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
       return { success: true, message: trackerSummary(values) };
     },
     activate: async values => {
+      const previousVpnSettings = vpnSettings;
       try {
-        const { restartKeys } = await runtime.activate({ ...config.defaults(), ...values });
+        const applied = { ...config.defaults(), ...values };
+        vpnSettings = vpnSettingsFrom('MEDIA_LOAD', key => applied[key]);
+        const { restartKeys } = await runtime.activate(applied);
+        void checkVpn().catch(() => undefined);
         return {
           success: true,
           message: restartKeys.length
@@ -107,6 +123,7 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
             : trackerSummary(values),
         };
       } catch (error) {
+        vpnSettings = previousVpnSettings;
         return { success: false, message: error instanceof Error ? error.message : String(error) };
       }
     },
@@ -125,7 +142,7 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
     ready: () => config.ready && runtime.serving,
     // `details.vpn` is this service's own connection; refreshed (cached) before reporting.
     status: async () => {
-      await vpn.isProtected().catch(() => false);
+      await checkVpn().catch(() => false);
       return {
         // `configuring`, not `standby`: the host must not deliver the configuration again.
         state:
@@ -243,9 +260,16 @@ export function createMediaLoadService(options: MediaLoadServiceOptions = {}): {
         )
       ),
   });
-  const stopVpnWatch = vpn.watch(() => service.notifyStatus());
+  const stopVpnWatch = vpn.watch(() => {
+    void runtime.refreshNetwork();
+    service.notifyStatus();
+  });
   // Readiness also depends on the engine, which starts after the configuration is applied, and
   // on the storage import (listeners hear both).
-  runtime.onStart(() => service.notifyStatus());
+  runtime.onStart(() => {
+    // The engine starts fenced until the first check says otherwise.
+    void checkVpn().catch(() => undefined);
+    service.notifyStatus();
+  });
   return { service, runtime, stop: () => service.stop() };
 }

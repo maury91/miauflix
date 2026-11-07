@@ -21,7 +21,7 @@ On first boot the `miauflix` logs show `Starting in degraded mode`: that's expec
 
 > **Security:** `docker-compose.yml` sets `ALLOW_CREATE_ADMIN_ON_FIRST_RUN`, which exposes an unauthenticated setup endpoint until the first admin exists. That's why the file publishes port 3000 on `127.0.0.1` only: nobody else can reach Miauflix until you open it up.
 
-> **VPN:** Miauflix won't search for sources until it detects a VPN, because peers would see your real IP. Set one up as described in [Using a VPN](#using-a-vpn), or [opt out](#running-without-a-vpn) if you accept the risk.
+> **VPN:** Source search and the torrent engine each check for a VPN: until they detect one, source search won't search and the torrent engine stays disconnected from peers, because they would see your real IP. Set one up as described in [Using a VPN](#using-a-vpn), or [opt out](#running-without-a-vpn) if you accept the risk.
 
 ### Combining compose files
 

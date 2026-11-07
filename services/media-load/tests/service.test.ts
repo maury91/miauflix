@@ -225,6 +225,19 @@ describe('media-load service', () => {
     expect((await admin.status()).details?.vpn).toBe('unprotected');
   });
 
+  it('fences the engine without a VPN: no torrent starts, even from an unguarded call', async () => {
+    const { client, apply } = await setup();
+    await apply({ MEDIA_LOAD_DISABLE_VPN_CHECK: 'false' });
+    const hash = 'b'.repeat(40);
+    await client.putSource({
+      source: { id: 7, hash, magnetLink: `magnet:?xt=urn:btih:${hash}`, size: 12 },
+    });
+
+    // Resolving an unknown layout would attach the torrent to fetch its metadata.
+    const error = await client.resolveLayout({ sourceId: 7 }).catch(e => e);
+    expect(isContractError(error, 'vpn_required')).toBe(true);
+  });
+
   it('does peer work behind a protected connection', async () => {
     const { client, admin, apply } = await setup({ vpnProtected: true });
     await apply({ MEDIA_LOAD_DISABLE_VPN_CHECK: 'false' });
