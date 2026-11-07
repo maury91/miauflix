@@ -1,0 +1,507 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=6257",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a350ff9f88f6fb8322ec83401f84298a\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fA6eLsm6xEBK90IK3UNWoVPZBn7.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-11-06",
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      }
+    ],
+    "homepage": "https://demonscrest-anime.com",
+    "id": 328010,
+    "in_production": true,
+    "languages": [
+      "de",
+      "ja"
+    ],
+    "last_air_date": "2026-11-06",
+    "last_episode_to_air": {
+      "id": 8079833,
+      "name": "Transformation",
+      "overview": "Yuma awakes in the real world to see his classmate Watamaki transformed in ways that defy reality. She attacks Yuma, but Konken and Sawa come to his aid. Sawa tells Yuma to launch Actual Magic, and he discovers that their game stats are in effect in the real world. They use magic to subdue Watamaki, but Yuma is determined not to harm a fellow classmate.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-06",
+      "episode_number": 2,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 25,
+      "season_number": 1,
+      "show_id": 328010,
+      "still_path": "/y0MCOYVDN6xbQKts7zmaojKC9W9.jpg"
+    },
+    "name": "Devils' Crest",
+    "next_episode_to_air": {
+      "id": 8079834,
+      "name": "Awakening",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-13",
+      "episode_number": 3,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 328010,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 1024,
+        "logo_path": "/w7HfLNm9CWwRmAMU58udl2L7We7.png",
+        "name": "Prime Video",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 3,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "デモンズ・クレスト",
+    "overview": "Yuma Ashihara was set to enjoy a test session of Actual Magic (AM)—the world's first fulldive VRMMO-RPG—together with his classmates Sawa Ashihara, Kenji Kondo, and Minagi Sano. The plan was simple: defeat the boss as a party of four, log out, and finish the test play safely — or at least, that's how it was supposed to go.",
+    "popularity": 11.1824,
+    "poster_path": "/dRflgHEhzpy12nsYR11hvdoHEoK.jpg",
+    "production_companies": [
+      {
+        "id": 3627,
+        "logo_path": "/pBfPYpzg5o3EoBPfrFKzTRi8MGr.png",
+        "name": "Warner Bros. Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 529,
+        "logo_path": "/rwB6w2aPENQbx756pBWSw44Ouk.png",
+        "name": "Production I.G",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-11-06",
+        "episode_count": 3,
+        "id": 528389,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/oMlzIABuwUuawdXs9DpU36aIz8X.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "German",
+        "iso_639_1": "de",
+        "name": "Deutsch"
+      },
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "This is a game, — and it is real.",
+    "type": "Scripted",
+    "vote_average": 0,
+    "vote_count": 0,
+    "external_ids": {
+      "imdb_id": "tt41054228",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 471128,
+      "tvrage_id": null,
+      "wikidata_id": "Q137184085",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "demonscrestPR"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Devils' Crest",
+            "overview": "Yuma Ashihara was set to enjoy a test session of Actual Magic (AM)—the world's first fulldive VRMMO-RPG—together with his classmates Sawa Ashihara, Kenji Kondo, and Minagi Sano. The plan was simple: defeat the boss as a party of four, log out, and finish the test play safely — or at least, that's how it was supposed to go.",
+            "homepage": "",
+            "tagline": "This is a game, — and it is real."
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Sjetteklassingen Yuuma Ashihara og tvillingsøsteren Sawa spiller *Actual Magic* – et helt nytt MMORPG-spill i virtuell virkelighet – da det plutselig begynner å smelte sammen med den virkelige verden. Midt i kaoset og forvirringen blir det tydelig at døden lurer rundt hvert hjørne; dette gjelder også når Yuuma støter på klassekameraten Sumika. Hun var tidligere en av de søteste jentene i klassen, men har siden gjennomgått en grusom forvandling – til et av spillets skremmende monstre! Fra forfatteren av *Sword Art Online* og *Accel World* kommer en historie som går utover VR og AR, der spill og virkelighet smelter sammen til ett ... og det å overleve bare er begynnelsen!\n\n(Kilde: Yen Press)",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Yuuma Ashihara, een leerling uit de zesde klas, en zijn tweelingzus Sawa spelen *Actual Magic* – een gloednieuwe virtual reality-MMORPG – wanneer de game plotseling begint te versmelten met de echte wereld. Te midden van de chaos en verwarring blijkt dat de dood overal op de loer ligt; dit wordt pijnlijk duidelijk wanneer Yuuma zijn klasgenote Sumika tegenkomt. Voorheen was zij een van de leukste meisjes van de klas, maar ze heeft een afschuwelijke gedaanteverwisseling ondergaan: ze is veranderd in een van de angstaanjagende monsters uit het spel! Van de auteur van *Sword Art Online* en *Accel World* komt een verhaal dat verder gaat dan VR en AR, waarin gaming en werkelijkheid één geheel vormen... en in leven blijven nog maar het begin is!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Yuuma Ashihara, een leerling uit de zesde klas, en zijn tweelingzus Sawa spelen *Actual Magic* – een gloednieuwe virtual reality-MMORPG – wanneer de game plotseling begint te versmelten met de echte wereld. Te midden van de chaos en verwarring blijkt dat de dood overal op de loer ligt; dit wordt pijnlijk duidelijk wanneer Yuuma zijn klasgenote Sumika tegenkomt. Voorheen was zij een van de leukste meisjes van de klas, maar ze heeft een afschuwelijke gedaanteverwisseling ondergaan: ze is veranderd in een van de angstaanjagende monsters uit het spel! Van de auteur van *Sword Art Online* en *Accel World* komt een verhaal dat verder gaat dan VR en AR, waarin gaming en werkelijkheid één geheel vormen... en in leven blijven nog maar het begin is!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Devils' Crest",
+            "overview": "Enquanto \"Sword Art Online\" traz a realidade virtual e \"Sword Art Online the Movie: Ordinal Scale\" explora a realidade aumentada, \"Devils' Crest\" mergulha na realidade mista. Quando Actual Magic, o primeiro VRMMO-RPG de imersão total, se funde com o mundo real, um jogo mortal se inicia. Um jogo que também é real.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "恶魔纹章",
+            "overview": "“哥哥，这里是现实啊！”\n\n　　雪花小学六年级一班的芦原佑马，在游玩世界第一款 VRMMORPG《Actual Magic》时，踏入了游戏与现实融合的“新世界”。正当佑马因无法理解现状而陷入混乱时，班级第一美少女绵卷澄香出现在他面前。但她的容貌已发生近乎悲剧性的异变——那副姿态，简直只能让人联想到游戏里的“怪物”……\n\n　　“这既是游戏，亦是现实。”",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Герб демонов",
+            "overview": "Шестиклассник Юма Асихара и его сестра-близнец Сава играют в совершенно новую MMORPG в виртуальной реальности Actual Magic, когда она внезапно начинает сливаться с реальным миром. Среди всего этого хаоса становится ясно, что смерть подстерегает за каждым углом, в том числе и тогда, когда Юма сталкивается со своей одноклассницей Сумикой. Раньше она была одной из самых симпатичных девочек в его классе, но теперь превратилась в одного из ужасающих монстров игры! Автор книг Мастера Меча Онлайн и Ускоренный Мир рассказывает историю, выходящую за рамки виртуальной реальности, где игры и реальность - одно и то же... и остаться в живых - это только начало!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Demons' Crest",
+            "overview": "Nell'anno 2031, lo studente di scuola elementare Yuma Ashihara partecipa a un beta test del primo VRMMO-RPG al mondo chiamato \"Actual Magic (AM)\", solo per perdere conoscenza mentre gioca e risvegliarsi in un mondo in cui il gioco e la realtà si sono fusi. Un gioco mortale si svolge quindi nella \"realtà mista\".",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Devils' Crest",
+            "overview": "Yuma Ashihara đã sẵn sàng tận hưởng buổi chơi thử Actual Magic (AM) — VRMMO-RPG fulldive đầu tiên trên thế giới — cùng các bạn học Sawa Ashihara, Kenji Kondo và Minagi Sano. Kế hoạch rất đơn giản: đánh bại boss với đội bốn người, đăng xuất và kết thúc buổi chơi thử an toàn — hay ít nhất, mọi chuyện đáng lẽ phải diễn ra như vậy.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "惡魔紋章",
+            "overview": "“哥哥，這裏是現實啊！”\n\n雪花小學六年級一班的蘆原佑馬，在遊玩世界第一款 VRMMORPG《Actual Magic》時，踏入了遊戲與現實融合的“新世界”。正當佑馬因無法理解現狀而陷入混亂時，班級第一美少女綿卷澄香出現在他面前。但她的容貌已發生近乎悲劇性的異變——那副姿態，簡直只能讓人聯想到遊戲裏的“怪物”……\n\n“這既是遊戲，亦是現實。”",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Diabelska pieczęć",
+            "overview": "Nowa seria Rekiego Kawahary, autora „Accel World\" i „Sword Art Online\". „Sword Art Online\" poruszał temat wirtualnej rzeczywistości, „Sword Art Online the Movie: Ordinal Scale\" rzeczywistości rozszerzonej, a „Diabelska Pieczęć\" rzeczywistości mieszanej. Gdy Actual Magic, pierwsza pełnoimmersyjna gra VRMMORPG, przenika do rzeczywistości, zaczyna się nowa, śmiertelna gra. Która jest także realna.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Devils' Crest",
+            "overview": "Une nouvelle série par Reki Kawahara, auteur de \"Accel World\" and \"Sword Art Online\". \"Sword Art Online\" abordait la réalité virtuelle, \"Sword Art Online the Movie: Ordinal Scale\" explorait la réalité augmentée, et \"Devils' Crest\" s'attaque à la réalité mélangée. Quand Actual Magic, le 1er VRMMORPG fusionne avec le monde réel, un nouveau jeu mortel commence. Un jeu aussi ancré dans la réalité.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "סמל השטנים",
+            "overview": "סדרת אנימה. סדרה חדשה מאת רקי קאוואהארה, מחבר Accel World ו-Sword Art Online. ב-Sword Art Online, הוצגה מציאות מדומה, ונושא המציאות הרבודה נחקר ב-Sword Art Online the Movie: Ordinal Scale, וכעת \"סמל השטנים\" צוללת לתוך מציאות מעורבת. כש'קסם אמיתי', משחק תפקידים המוני במציאות מדומה, הראשון בעולם עם צלילה מלאה, מתמזג עם העולם האמיתי, משחק מוות חדש מתחיל. משחק שהוא גם מציאות.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ปริศนาตราปีศาจ",
+            "overview": "ซีรีส์ใหม่ล่าสุดจากคาวาฮาระ เรกิ ผู้แต่ง \"Accel World\" และ \"Sword Art Online\" หาก \"Sword Art Online\" พาไปสัมผัสกับโลกเสมือนจริง และ \"Sword Art Online the Movie: Ordinal Scale\" พาไปสำรวจโลกเสมือนผสานโลกจริง ครั้งนี้ ปริศนาตราปีศาจ จะพาคุณดำดิ่งสู่โลกผสมผสานความจริง เมื่อแอ็กชวลเมจิก เกม VRMMORPG ฟูลไดฟ์เกมแรกของโลก หลอมรวมเข้ากับโลกความจริง เกมมรณะครั้งใหม่จึงอุบัติขึ้น เกมที่กลายมาเป็นความจริง",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "魔之紋章",
+            "overview": "《加速世界》、《刀劍神域》作者川原礫的全新系列作。《刀劍神域》描寫虛擬實境，《刀劍神域劇場版：序列爭戰》探索擴增實境，而《魔之紋章》將深入混合實境的世界。 當世界首款全沉浸式VRMMORPG「Actual Magic」與現實世界融合，一場全新的死亡遊戲就此展開。這是一場遊戲，同時也是現實。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "데블스 크레스트",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Culmea Diavolilor",
+            "overview": "O serie complet nouă semnată de Reki Kawahara, autorul Accel World (despre realitatea virtuală) și Sword Art Online the Movie: Ordinal Scale (despre realitatea augmentată). Acum, seria Culmea Diavolilor pătrunde în universul realității mixte. Când Actual Magic, primul VRMMORPG full-dive din lume, se contopește cu lumea reală, începe un nou joc mortal. Un joc care e, în același timp, realitate.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ο Γιούμα Ασιχάρα ήταν έτοιμος να απολαύσει μια δοκιμαστική συνεδρία του Actual Magic —του πρώτου παγκοσμίως VRMMO-RPG πλήρους εμβύθισης — μαζί με τους συμμαθητές του Σάουα Ασιχάρα, Κέντζι Κόντο και Μινάγκι Σάνο. Το σχέδιο ήταν απλό: να νικήσουν το αφεντικό ως ομάδα των τεσσάρων, να αποσυνδεθούν και να ολοκληρώσουν τη δοκιμαστική πλοήγηση με ασφάλεια — ή τουλάχιστον, έτσι υποτίθετο ότι θα γινόταν.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Devils' Crest",
+            "overview": "Das neuartige VRMMORPG »Actual Magic« ermöglicht es seinen Spielern, vollständig in eine virtuelle Welt einzutauchen. Doch was zunächst wie ein faszinierendes Abenteuer erscheint, entwickelt sich schnell zu einem Albtraum.\n\nAls die Grenzen zwischen der digitalen Umgebung und der realen Welt verschwinden, geraten die Spieler in einen gefährlichen Kampf ums Überleben.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Devils' Crest",
+            "overview": "Una serie nueva de Reki Kawahara, autor de Accel World y Sword Art Online. Sword Art Online presentó la realidad virtual, Sword Art Online the Movie: Ordinal Scale exploró la realidad aumentada. Ahora, Devils' Crest se adentra en la realidad mixta. Actual Magic, el primer videojuego de inmersión total, y el mundo real se fusionan, y comienza un nuevo juego mortal, que también es realidad.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jiAf1Dg88yDyk239SJ7nNnVWGWi.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fA6eLsm6xEBK90IK3UNWoVPZBn7.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fTQCIQ09AXNNGENRAM6mCGhkucm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/toK4gaLEFb5iNVDp3qirIxKEZCw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.643,
+          "height": 566,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/27onkBjyvWdzAXjfaiUaYMYzQqN.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2062
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dRflgHEhzpy12nsYR11hvdoHEoK.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dkcFjG288perpazejnAGx6AmnOG.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 849
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eYrZsjRdBdOrOWumWz2V13W93Xx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kaet4IXAK3n08OIJlJOS2FXYxUb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1415
+        }
+      ]
+    }
+  }
+}

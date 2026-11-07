@@ -1,0 +1,1062 @@
+{
+  "headers": {
+    "access-control-allow-methods": "*",
+    "access-control-allow-origin": "*",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=900, s-maxage=900",
+    "content-type": "application/json; charset=utf-8"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "titles": {
+      "x-jat": "Toman",
+      "ja": "東京リベンジャーズ",
+      "en": "Tokyo Revengers",
+      "ru": "Токийские мстители",
+      "zh-Hans": "东京复仇者"
+    },
+    "episodes": {
+      "1": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8091388,
+        "seasonNumber": 1,
+        "episodeNumber": 1,
+        "absoluteEpisodeNumber": 1,
+        "title": {
+          "ja": "Reborn",
+          "en": "Reborn",
+          "x-jat": "Reborn"
+        },
+        "airDate": "2021-04-11",
+        "airDateUtc": "2021-04-10T16:15:00Z",
+        "runtime": 24,
+        "overview": "Hanagaki Takemichi is a worthless part-time worker who's down in the dumps. One day, he learns that his girlfriend from junior high school, Tachibana Hinata, was killed from being a victim of the conflict between the Tokyo Manji Gang. Takemichi is shocked by the sudden news but goes about his daily life when he is suddenly pushed off the station platform onto the railroad tracks. He is prepared to die as he sees the train coming right for him, but the next thing he knows, he's reliving his life from 12 years ago.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8091388/screencap/606f1ba240221.jpg",
+        "episode": "1",
+        "anidbEid": 238781,
+        "length": 25,
+        "airdate": "2021-04-11",
+        "rating": "5.86",
+        "summary": "Hanagaki Takemichi is a worthless part-time worker who`s down in the dumps. One day, he learns that his girlfriend from junior high school, Tachibana Hinata, was killed from being a victim of the conflict between the Tokyo Manji Gang. Takemichi is shocked by the sudden news but goes about his daily life when he is suddenly pushed off the station platform onto the railroad tracks. He is prepared to die as he sees the train coming right for him, but the next thing he knows, he`s reliving his life from 12 years ago.\nSource: crunchyroll"
+      },
+      "2": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8338781,
+        "seasonNumber": 1,
+        "episodeNumber": 2,
+        "absoluteEpisodeNumber": 2,
+        "title": {
+          "ja": "Resist",
+          "en": "Resist",
+          "x-jat": "Resist"
+        },
+        "airDate": "2021-04-18",
+        "airDateUtc": "2021-04-17T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi returns to the present after shaking hands with Naoto and is reunited with Naoto who is now a police officier. Naoto asks Takemichi to go back in time and prevent the two leaders of the Tokyo Manji Gang, Sano Manjiro and Kisaki Tetta from meeting so that they can save Hinata. But what awaited Takemichi when he went back into the past 12 years were days spent as a slave to Kiyomasa, a member of the Tokyo Manji Gang.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8338781/screencap/607c131485057.jpg",
+        "episode": "2",
+        "anidbEid": 238782,
+        "length": 25,
+        "airdate": "2021-04-18",
+        "rating": "6.29",
+        "summary": "Takemichi returns to the present after shaking hands with Naoto and is reunited with Naoto who is now a police officier. Naoto asks Takemichi to go back in time and prevent the two leaders of the Tokyo Manji Gang, Sano Manjiro and Kisaki Tetta from meeting so that they can save Hinata. But what awaited Takemichi when he went back into the past 12 years were days spent as a slave to Kiyomasa, a member of the Tokyo Manji Gang.\nSource: crunchyroll"
+      },
+      "3": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8338782,
+        "seasonNumber": 1,
+        "episodeNumber": 3,
+        "absoluteEpisodeNumber": 3,
+        "title": {
+          "ja": "Resolve",
+          "en": "Resolve",
+          "x-jat": "Resolve"
+        },
+        "airDate": "2021-04-25",
+        "airDateUtc": "2021-04-24T16:15:00Z",
+        "runtime": 24,
+        "overview": "In order to protect his friend Yamamoto Takuya who's a bit frail, Takemichi challenges Kiyomasa to a fight. Despite being beaten to a pulp, Takemichi doesn't back down, which starts to make Kiyomasa panic. Then, the commander and vice commander of the Tokyo Manji Gang, Sano Manjiro, AKA Mikey, and Ryuguji Ken, AKA Draken show up.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8338782/screencap/60853a039c8fb.jpg",
+        "episode": "3",
+        "anidbEid": 238783,
+        "length": 25,
+        "airdate": "2021-04-25",
+        "rating": "6.58",
+        "summary": "In order to protect his friend Yamamoto Takuya who`s a bit frail, Takemichi challenges Kiyomasa to a fight. Despite being beaten to a pulp, Takemichi doesn`t back down, which starts to make Kiyomasa panic. Then, the commander and vice commander of the Tokyo Manji Gang, Sano Manjiro, AKA Mikey, and Ryuguji Ken, AKA Draken show up.\nSource: crunchyroll"
+      },
+      "4": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373648,
+        "seasonNumber": 1,
+        "episodeNumber": 4,
+        "absoluteEpisodeNumber": 4,
+        "title": {
+          "ja": "Return",
+          "en": "Return",
+          "x-jat": "Return"
+        },
+        "airDate": "2021-05-02",
+        "airDateUtc": "2021-05-01T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi gets to enjoy some happy times with Hinata back during their middle school days but then he is suddenly sent back to the present. After seeing how Mikey was, he tells Naoto that he can't imagine that it was Mikey that turned the Tokyo Manji Gang into the evil organization it is today. He wants to talk to Mikey in the present day but even Naoto doesn't know where he is. While trying to find a connection to get them to Mikey, they find out that Akkun was now in the upper echelon of the Tokyo Manji Gang...",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373648/screencap/608e76ae1eece.jpg",
+        "episode": "4",
+        "anidbEid": 238784,
+        "length": 25,
+        "airdate": "2021-05-02",
+        "rating": "6.02",
+        "summary": "Takemichi gets to enjoy some happy times with Hinata back during their middle school days but then he is suddenly sent back to the present. After seeing how Mikey was, he tells Naoto that he can`t imagine that it was Mikey that turned the Tokyo Manji Gang into the evil organization it is today. He wants to talk to Mikey in the present day but even Naoto doesn`t know where he is. While trying to find a connection to get them to Mikey, they find out that Akkun was now in the upper echelon of the Tokyo Manji Gang...\nSource: crunchyroll"
+      },
+      "5": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373649,
+        "seasonNumber": 1,
+        "episodeNumber": 5,
+        "absoluteEpisodeNumber": 5,
+        "title": {
+          "ja": "Releap",
+          "en": "Releap",
+          "x-jat": "Releap"
+        },
+        "airDate": "2021-05-09",
+        "airDateUtc": "2021-05-08T16:15:00Z",
+        "runtime": 24,
+        "overview": "Naoto finds out that 12 years ago, the Tokyo Manji Gang had split into the Mikey Faction and the Draken Faction and due to one of their disputes, Draken ends up dying. Despite Naoto telling him this, Takemichi refuses to believe that Mikey and Draken would ever fight and goes back into the past to find out what caused the dispute and to save Draken. Takemichi renews his determination as he goes back in time yet again, but when he opens his eyes, he finds a girl he doesn't know wearing just her underwear looking down on him.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373649/screencap/6097a63400f5f.jpg",
+        "episode": "5",
+        "anidbEid": 239661,
+        "length": 25,
+        "airdate": "2021-05-09",
+        "rating": "5.61",
+        "summary": "Naoto finds out that 12 years ago, the Tokyo Manji Gang had split into the Mikey Faction and the Draken Faction and due to one of their disputes, Draken ends up dying. Despite Naoto telling him this, Takemichi refuses to believe that Mikey and Draken would ever fight and goes back into the past to find out what caused the dispute and to save Draken. Takemichi renews his determination as he goes back in time yet again, but when he opens his eyes, he finds a girl he doesn`t know wearing just her underwear looking down on him.\nSource: crunchyroll"
+      },
+      "6": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373650,
+        "seasonNumber": 1,
+        "episodeNumber": 6,
+        "absoluteEpisodeNumber": 6,
+        "title": {
+          "ja": "Regret",
+          "en": "Regret",
+          "x-jat": "Regret"
+        },
+        "airDate": "2021-05-16",
+        "airDateUtc": "2021-05-15T16:15:00Z",
+        "runtime": 24,
+        "overview": "Because Pah-chin's friend was brutally attacked by Moebius, the Tokyo Manji Gang decides they're going to fight Moebius. According to Naoto, Draken doesn't die because of the conflict with Moebius, but rather, an internal conflict between the Tokyo Manji Gang. Takemichi returns to the present to talk to Osanai, the leader of Moebius, to find out what really happened that day.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373650/screencap/609a9cb37e9e2.jpg",
+        "episode": "6",
+        "anidbEid": 239799,
+        "length": 25,
+        "airdate": "2021-05-16",
+        "rating": "5.16",
+        "summary": "Because Pah-chin`s friend was brutally attacked by Moebius, the Tokyo Manji Gang decides they`re going to fight Moebius. According to Naoto, Draken doesn`t die because of the conflict with Moebius, but rather, an internal conflict between the Tokyo Manji Gang. Takemichi returns to the present to talk to Osanai, the leader of Moebius, to find out what really happened that day.\nSource: crunchyroll"
+      },
+      "7": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373651,
+        "seasonNumber": 1,
+        "episodeNumber": 7,
+        "absoluteEpisodeNumber": 7,
+        "title": {
+          "ja": "Revive",
+          "en": "Revive",
+          "x-jat": "Revive"
+        },
+        "airDate": "2021-05-23",
+        "airDateUtc": "2021-05-22T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi goes back to the past and tries to stop the upcoming conflict between the Tokyo Manji Gang and Moebius, but Mikey and Pah-chin refuse to change their minds. Meanwhile, Osanai barges in with members of Moebius to launch a surprise attack. Pah-chin challenges Osanai to a one-on-one, but Osanai is two years older than him and beats him to a pulp. Despite this, Mikey doesn't interfere and just keeps watching it happen...",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373651/screencap/60a2b3e0da990.jpg",
+        "episode": "7",
+        "anidbEid": 239800,
+        "length": 25,
+        "airdate": "2021-05-23",
+        "rating": "6.23",
+        "summary": "Takemichi goes back to the past and tries to stop the upcoming conflict between the Tokyo Manji Gang and Moebius, but Mikey and Pah-chin refuse to change their minds. Meanwhile, Osanai barges in with members of Moebius to launch a surprise attack. Pah-chin challenges Osanai to a one-on-one, but Osanai is two years older than him and beats him to a pulp. Despite this, Mikey doesn`t interfere and just keeps watching it happen...\nSource: crunchyroll"
+      },
+      "8": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373652,
+        "seasonNumber": 1,
+        "episodeNumber": 8,
+        "absoluteEpisodeNumber": 8,
+        "title": {
+          "ja": "Rechange",
+          "en": "Rechange",
+          "x-jat": "Rechange"
+        },
+        "airDate": "2021-05-30",
+        "airDateUtc": "2021-05-29T16:15:00Z",
+        "runtime": 24,
+        "overview": "After the attack initiated by the head of Moebius, Mikey and Draken end up at odds with each other and then go visit Takemichi, who was injured. Takemichi is infuriated when the two of them end up fighting and destroying a bunch of his precious belongings. Akkun and the others try to stop him, but Takemichi ends up in tears, saying how much Toman means to him. His words get to Mikey and Draken and it seems like the mission was a success because of their reconciliation, but...",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373652/screencap/60abb85edf556.jpg",
+        "episode": "8",
+        "anidbEid": 239801,
+        "length": 25,
+        "airdate": "2021-05-30",
+        "rating": "6.80",
+        "summary": "After the attack initiated by the head of Moebius, Mikey and Draken end up at odds with each other and then go visit Takemichi, who was injured.  Takemichi is infuriated when the two of them end up fighting and destroying a bunch of his precious belongings. Akkun and the others try to stop him, but Takemichi ends up in tears, saying how much Toman means to him. His words get to Mikey and Draken and it seems like the mission was a success because of their reconciliation, but...\nSource: crunchyroll"
+      },
+      "9": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373653,
+        "seasonNumber": 1,
+        "episodeNumber": 9,
+        "absoluteEpisodeNumber": 9,
+        "title": {
+          "ja": "Revolt",
+          "en": "Revolt",
+          "x-jat": "Revolt"
+        },
+        "airDate": "2021-06-06",
+        "airDateUtc": "2021-06-05T16:15:00Z",
+        "runtime": 24,
+        "overview": "After receiving some information from Naoto, Takemichi goes to the parking lot where Draken is supposed to die. He finds Draken taking on Moebius all on his own. Takemichi and Mitsuya try to help Draken, but they are overwhelmed by the number of Moebius members. It was then the person behind the \"Draken hunting\" showed himself.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373653/screencap/60bbf979628ac.jpg",
+        "episode": "9",
+        "anidbEid": 240550,
+        "length": 25,
+        "airdate": "2021-06-06",
+        "rating": "5.59",
+        "summary": "After receiving some information from Naoto, Takemichi goes to the parking lot where Draken is supposed to die. He finds Draken taking on Moebius all on his own. Takemichi and Mitsuya try to help Draken, but they are overwhelmed by the number of Moebius members. It was then the person behind the \"Draken hunting\" showed himself.\nSource: crunchyroll"
+      },
+      "10": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373654,
+        "seasonNumber": 1,
+        "episodeNumber": 10,
+        "absoluteEpisodeNumber": 10,
+        "title": {
+          "ja": "Rerise",
+          "en": "Rerise",
+          "x-jat": "Rerise"
+        },
+        "airDate": "2021-06-13",
+        "airDateUtc": "2021-06-12T16:15:00Z",
+        "runtime": 24,
+        "overview": "While the battle between Toman and Moebius led by their current leader, Hanma Shuji, is raging on, Draken ends up being stabbed by Kiyomasa. Mikey tries to get to Draken who is gravely injured, but Hanma keep getting in his way. Mikey then asks Takemichi to take care of him instead. While they're waiting for an ambulance, Kiyomasa and his thugs get in their way. In order to protect Draken, Takemichi challenges Kiyomasa one on one to settle things with him once and for all.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373654/screencap/60be3eb41a0bb.jpg",
+        "episode": "10",
+        "anidbEid": 240551,
+        "length": 25,
+        "airdate": "2021-06-13",
+        "rating": "6.02",
+        "summary": "While the battle between Toman and Moebius led by their current leader, Hanma Shuji, is raging on, Draken ends up being stabbed by Kiyomasa. Mikey tries to get to Draken who is gravely injured, but Hanma keep getting in his way. Mikey then asks Takemichi to take care of him instead. While they`re waiting for an ambulance, Kiyomasa and his thugs get in their way. In order to protect Draken, Takemichi challenges Kiyomasa one on one to settle things with him once and for all.\nSource: crunchyroll"
+      },
+      "11": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373655,
+        "seasonNumber": 1,
+        "episodeNumber": 11,
+        "absoluteEpisodeNumber": 11,
+        "title": {
+          "ja": "Respect",
+          "en": "Respect",
+          "x-jat": "Respect"
+        },
+        "airDate": "2021-06-20",
+        "airDateUtc": "2021-06-19T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi manages to defeat Kiyomasa in their one-on-one by sheer tenacity and with the help of Akkun and the others, they're able to protect Draken until they can get him to the ambulance. However, Draken is still unconscious. Meanwhile, The fight between Toman and Moebius came to an end. As he leaves, Hanma warns Mikey of the creation of Valhalla and the fact that he's the vice commander of this new gang.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373655/screencap/60cd287abd0fa.jpg",
+        "episode": "11",
+        "anidbEid": 240552,
+        "length": 25,
+        "airdate": "2021-06-20",
+        "rating": "6.02",
+        "summary": "Takemichi manages to defeat Kiyomasa in their one-on-one by sheer tenacity and with the help of Akkun and the others, they`re able to protect Draken until they can get him to the ambulance. However, Draken is still unconscious. Meanwhile, The fight between Toman and Moebius came to an end. As he leaves, Hanma warns Mikey of the creation of Valhalla and the fact that he`s the vice commander of this new gang.\nSource: crunchyroll"
+      },
+      "12": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8373656,
+        "seasonNumber": 1,
+        "episodeNumber": 12,
+        "absoluteEpisodeNumber": 12,
+        "title": {
+          "ja": "Revenge",
+          "en": "Revenge",
+          "x-jat": "Revenge"
+        },
+        "airDate": "2021-06-27",
+        "airDateUtc": "2021-06-26T16:15:00Z",
+        "runtime": 24,
+        "overview": "After saving Draken's life, Takemichi returns to the future to find that Akkun made his dreams to become a hairstylist come true and the accident caused by Toman that killed Hina never happened. After reuniting with Naoto, he finds out that Hina is alive, and they go to see her. Right before they're supposed to see her, Takemichi starts having some doubts because he's embarrassed at the fact that he hadn't changed at all and suddenly says he doesn't want to see her.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8373656/screencap/60d0bdccd5a67.jpg",
+        "episode": "12",
+        "anidbEid": 240553,
+        "length": 25,
+        "airdate": "2021-06-27",
+        "rating": "3.70",
+        "summary": "After saving Draken`s life, Takemichi returns to the future to find that Akkun made his dreams to become a hairstylist come true and the accident caused by Toman that killed Hina never happened. After reuniting with Naoto, he finds out that Hina is alive, and they go to see her. Right before they`re supposed to see her, Takemichi starts having some doubts because he`s embarrassed at the fact that he hadn`t changed at all and suddenly says he doesn`t want to see her.\nSource: crunchyroll"
+      },
+      "13": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498495,
+        "seasonNumber": 1,
+        "episodeNumber": 13,
+        "absoluteEpisodeNumber": 13,
+        "title": {
+          "ja": "Odds and Ends",
+          "en": "Odds and Ends",
+          "x-jat": "Odds and Ends"
+        },
+        "airDate": "2021-07-03",
+        "airDateUtc": "2021-07-02T16:15:00Z",
+        "runtime": 24,
+        "overview": "After Hinata's funeral, Takemichi tells a grieving Naoto what he plans to do next. Why did the same future happen even though Draken remained by Mikey's side? Takemichi decides he wants to go see Draken and ask him himself, but they find out that he's no longer in Toman in this world and is on death row.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498495/screencap/60d9f4019a071.jpg",
+        "episode": "13",
+        "anidbEid": 241281,
+        "length": 25,
+        "airdate": "2021-07-04",
+        "rating": "6.02",
+        "summary": "After Hinata`s funeral, Takemichi tells a grieving Naoto what he plans to do next. Why did the same future happen even though Draken remained by Mikey`s side? Takemichi decides he wants to go see Draken and ask him himself, but they find out that he`s no longer in Toman in this world and is on death row.\nSource: crunchyroll"
+      },
+      "14": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498497,
+        "seasonNumber": 1,
+        "episodeNumber": 14,
+        "absoluteEpisodeNumber": 14,
+        "title": {
+          "ja": "Break up",
+          "en": "Break Up",
+          "x-jat": "Break Up"
+        },
+        "airDate": "2021-07-11",
+        "airDateUtc": "2021-07-10T16:15:00Z",
+        "runtime": 24,
+        "overview": "The Tokyo Manji Gang welcomed a new captain for their Third Division and it happened to be the former member of Moebius, Kisaki. Some members raise their doubts, but Mikey explains that they need Kisaki's strength to face their new threat, Valhalla. But Takemichi knew that Kisaki is the reason that Toman slowly turned evil and Hina and Akkun lost their lives, so he just can't hold back, and...",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498497/screencap/60e32acc866d9.jpg",
+        "episode": "14",
+        "anidbEid": 241282,
+        "length": 25,
+        "airdate": "2021-07-11",
+        "rating": "5.38",
+        "summary": "The Tokyo Manji Gang welcomed a new captain for their Third Division and it happened to be the former member of Moebius, Kisaki. Some members raise their doubts, but Mikey explains that they need Kisaki`s strength to face their new threat, Valhalla. But Takemichi knew that Kisaki is the reason that Toman slowly turned evil and Hina and Akkun lost their lives, so he just can`t hold back, and...\nSource: crunchyroll"
+      },
+      "15": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498500,
+        "seasonNumber": 1,
+        "episodeNumber": 15,
+        "absoluteEpisodeNumber": 15,
+        "title": {
+          "ja": "No Pain, No gain",
+          "en": "No Pain, No Gain",
+          "x-jat": "No Pain, No Gain"
+        },
+        "airDate": "2021-07-18",
+        "airDateUtc": "2021-07-17T16:15:00Z",
+        "runtime": 24,
+        "overview": "Mikey asks Takemichi to bring the former First Division Captain Baji Keisuke from Valhalla. Mikey agrees to make Kisaki leave Toman if Takemichi is successful in this mission, but he also threatens to kill him if he fails. As Takemichi receives a lecture about Valhalla from Yamagishi who is knowledgeable about delinquents, Valhalla's No. 3 Hanemiya Kazutora appears before them.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498500/screencap/60ecc24f1b56e.jpg",
+        "episode": "15",
+        "anidbEid": 241283,
+        "length": 25,
+        "airdate": "2021-07-18",
+        "rating": "5.38",
+        "summary": "Mikey asks Takemichi to bring the former First Division Captain Baji Keisuke from Valhalla. Mikey agrees to make Kisaki leave Toman if Takemichi is successful in this mission, but he also threatens to kill him if he fails. As Takemichi receives a lecture about Valhalla from Yamagishi who is knowledgeable about delinquents, Valhalla`s No. 3 Hanemiya Kazutora appears before them.\nSource: crunchyroll"
+      },
+      "16": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498502,
+        "seasonNumber": 1,
+        "episodeNumber": 16,
+        "absoluteEpisodeNumber": 16,
+        "title": {
+          "ja": "Once upon a time",
+          "en": "Once Upon a Time",
+          "x-jat": "Once Upon a Time"
+        },
+        "airDate": "2021-07-25",
+        "airDateUtc": "2021-07-24T16:15:00Z",
+        "runtime": 24,
+        "overview": "2 years ago, Mikey, Draken, Baji, Mitsuya, Pah-chin, and Kazutora had their gang uniforms made and they all took a trip to Kanagawa on their motorcycles. Meanwhile, their commander Mikey rode his moped, Street Hawk. They get surrounded by a local biker gang, but Mikey shows no fear and tells the older gang members that he'll kill them if they lay a finger on his Street Hawk.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498502/screencap/60f6218d6af5e.jpg",
+        "episode": "16",
+        "anidbEid": 241284,
+        "length": 25,
+        "airdate": "2021-07-25",
+        "rating": "5.95",
+        "summary": "2 years ago, Mikey, Draken, Baji, Mitsuya, Pah-chin, and Kazutora had their gang uniforms made and they all took a trip to Kanagawa on their motorcycles. Meanwhile, their commander Mikey rode his moped, Street Hawk. They get surrounded by a local biker gang, but Mikey shows no fear and tells the older gang members that he`ll kill them if they lay a finger on his Street Hawk.\nSource: crunchyroll"
+      },
+      "17": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498503,
+        "seasonNumber": 1,
+        "episodeNumber": 17,
+        "absoluteEpisodeNumber": 17,
+        "title": {
+          "ja": "No way",
+          "en": "No Way",
+          "x-jat": "No Way"
+        },
+        "airDate": "2021-08-01",
+        "airDateUtc": "2021-07-31T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi finds out about Baji and Kazutora's past and realizes how hard it's going to be to bring Baji back to Toman. The next day, Takemichi was trying to figure out what to do about his promise to Mikey when Baji's second in command, Matsuno Chifuyu appears before him. Chifuyu seems to believe that Baji joined Valhalla not to crush Toman, but to infiltrate Valhalla and expose Kirisaki.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498503/screencap/610321d70c790.jpg",
+        "episode": "17",
+        "anidbEid": 242220,
+        "length": 25,
+        "airdate": "2021-08-01",
+        "rating": "5.38",
+        "summary": "Takemichi finds out about Baji and Kazutora`s past and realizes how hard it`s going to be to bring Baji back to Toman. The next day, Takemichi was trying to figure out what to do about his promise to Mikey when Baji`s second in command, Matsuno Chifuyu appears before him. Chifuyu seems to believe that Baji joined Valhalla not to crush Toman, but to infiltrate Valhalla and expose Kirisaki.\nSource: crunchyroll"
+      },
+      "18": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498504,
+        "seasonNumber": 1,
+        "episodeNumber": 18,
+        "absoluteEpisodeNumber": 18,
+        "title": {
+          "ja": "Open Fire",
+          "en": "Open Fire",
+          "x-jat": "Open Fire"
+        },
+        "airDate": "2021-08-08",
+        "airDateUtc": "2021-08-07T16:15:00Z",
+        "runtime": 24,
+        "overview": "Back in present day, Draken tells Takemichi that Kazutora ends up killing Baji at the Bloody Halloween, the fight against Toman and Valhalla, and Mikey ends up killing Kazutora. Because of that, Mikey falls into darkness, and Toman is taken over by Valhalla, which leads to the evil organization that it currently is now, led by Kisaki. Takemichi goes back to the past with a new mission: to protect Baji so that this tragedy doesn't happen.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498504/screencap/61080085dd26e.jpg",
+        "episode": "18",
+        "anidbEid": 242221,
+        "length": 25,
+        "airdate": "2021-08-08",
+        "rating": "5.38",
+        "summary": "Back in present day, Draken tells Takemichi that Kazutora ends up killing Baji at the Bloody Halloween, the fight against Toman and Valhalla, and Mikey ends up killing Kazutora. Because of that, Mikey falls into darkness, and Toman is taken over by Valhalla, which leads to the evil organization that it currently is now, led by Kisaki. Takemichi goes back to the past with a new mission: to protect Baji so that this tragedy doesn`t happen.\nSource: crunchyroll"
+      },
+      "19": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498505,
+        "seasonNumber": 1,
+        "episodeNumber": 19,
+        "absoluteEpisodeNumber": 19,
+        "title": {
+          "ja": "Turn around",
+          "en": "Turn Around",
+          "x-jat": "Turn Around"
+        },
+        "airDate": "2021-08-15",
+        "airDateUtc": "2021-08-14T16:15:00Z",
+        "runtime": 24,
+        "overview": "The Bloody Halloween conflict that results in Toman being taken over by Valhalla has finally begun. Hanma and his army of delinquents overwhelm Toman as Draken does his best to try to protect the other Toman members, putting him at a disadvantage. However, the Toman members see how desperately Takemichi is trying to save Baji and Mikey, lighting their fighting spirits once more.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498505/screencap/6116b3f9b5bbc.jpg",
+        "episode": "19",
+        "anidbEid": 242222,
+        "length": 25,
+        "airdate": "2021-08-15",
+        "rating": "7.22",
+        "summary": "The Bloody Halloween conflict that results in Toman being taken over by Valhalla has finally begun. Hanma and his army of delinquents overwhelm Toman as Draken does his best to try to protect the other Toman members, putting him at a disadvantage. However, the Toman members see how desperately Takemichi is trying to save Baji and Mikey, lighting their fighting spirits once more.\nSource: crunchyroll"
+      },
+      "20": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498506,
+        "seasonNumber": 1,
+        "episodeNumber": 20,
+        "absoluteEpisodeNumber": 20,
+        "title": {
+          "ja": "Dead or Alive",
+          "en": "Dead or Alive",
+          "x-jat": "Dead or Alive"
+        },
+        "airDate": "2021-08-22",
+        "airDateUtc": "2021-08-21T16:15:00Z",
+        "runtime": 24,
+        "overview": "During the Bloody Halloween, Mikey ended up in a 1v3 fight against Kagetora with his limbs bound. After Kazutora hits him in the head with a pipe, Mikey ends up on his knees. The Valhalla members see this as a chance to finish off the Invincible Mikey and try to get to him. Draken and Takemichi try to save Mikey, but they're too far away. But then, a rather surprising person came to Mikey's aid.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498506/screencap/612153961d081.jpg",
+        "episode": "20",
+        "anidbEid": 242223,
+        "length": 25,
+        "airdate": "2021-08-22",
+        "rating": "3.88",
+        "summary": "During the Bloody Halloween, Mikey ended up in a 1v3 fight against Kagetora with his limbs bound. After Kazutora hits him in the head with a pipe, Mikey ends up on his knees. The Valhalla members see this as a chance to finish off the Invincible Mikey and try to get to him. Draken and Takemichi try to save Mikey, but they`re too far away. But then, a rather surprising person came to Mikey`s aid.\nSource: crunchyroll"
+      },
+      "21": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498507,
+        "seasonNumber": 1,
+        "episodeNumber": 21,
+        "absoluteEpisodeNumber": 21,
+        "title": {
+          "ja": "One and only",
+          "en": "One and Only",
+          "x-jat": "One and Only"
+        },
+        "airDate": "2021-08-29",
+        "airDateUtc": "2021-08-28T16:15:00Z",
+        "runtime": 24,
+        "overview": "Baji had infiltrated Valhalla so that he could get to Kisaki. And after a fierce battle, he manages to get to Kisaki, but coughs up blood and falls to the ground. Mikey sees this and takes Hanma out in a second and starts mercilessly punching Kazutora over and over. This was the scene that the future Draken had told Takemichi about. At this rate, Mikey will end up killing Kazutora, Kisaki will take over Toman, and the tragic future will still occur. Takemichi tries to stop him, but Mikey's rage is just too great, and...",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498507/screencap/61292056cafac.jpg",
+        "episode": "21",
+        "anidbEid": 243233,
+        "length": 25,
+        "airdate": "2021-08-29",
+        "rating": "3.64",
+        "summary": "Baji had infiltrated Valhalla so that he could get to Kisaki. And after a fierce battle, he manages to get to Kisaki, but coughs up blood and falls to the ground. Mikey sees this and takes Hanma out in a second and starts mercilessly punching Kazutora over and over. This was the scene that the future Draken had told Takemichi about. At this rate, Mikey will end up killing Kazutora, Kisaki will take over Toman, and the tragic future will still occur. Takemichi tries to stop him, but Mikey`s rage is just too great, and...\nSource: crunchyroll"
+      },
+      "22": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498508,
+        "seasonNumber": 1,
+        "episodeNumber": 22,
+        "absoluteEpisodeNumber": 22,
+        "title": {
+          "ja": "One for all",
+          "en": "One for All",
+          "x-jat": "One for All"
+        },
+        "airDate": "2021-09-05",
+        "airDateUtc": "2021-09-04T16:15:00Z",
+        "runtime": 24,
+        "overview": "Two years ago, Mikey learns that Kazutora is beefing with the motorcycle gang, the Black Dragons, and decides he'd fight them as well. But he wanted a valid sense of purpose to take on a motorcycle gang. Baji then suggests they make their own motorcycle gang. They want to create a gang where they can all put their lives down on the line for each other. Baji had been fighting all alone to protect the promise they made the day they created their gang and put their money together to buy a traffic safety charm.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498508/screencap/6133e3255b3e1.jpg",
+        "episode": "22",
+        "anidbEid": 243234,
+        "length": 25,
+        "airdate": "2021-09-05",
+        "rating": "5.38",
+        "summary": "Two years ago, Mikey learns that Kazutora is beefing with the motorcycle gang, the Black Dragons, and decides he`d fight them as well. But he wanted a valid sense of purpose to take on a motorcycle gang. Baji then suggests they make their own motorcycle gang. They want to create a gang where they can all put their lives down on the line for each other. Baji had been fighting all alone to protect the promise they made the day they created their gang and put their money together to buy a traffic safety charm.\nSource: crunchyroll"
+      },
+      "23": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498509,
+        "seasonNumber": 1,
+        "episodeNumber": 23,
+        "absoluteEpisodeNumber": 23,
+        "title": {
+          "ja": "End of war",
+          "en": "End of War",
+          "x-jat": "End of War"
+        },
+        "airDate": "2021-09-12",
+        "airDateUtc": "2021-09-11T16:15:00Z",
+        "runtime": 24,
+        "overview": "The conflict between Toman and Valhalla dubbed the Bloody Halloween ends in Toman's victory, but Baji is killed and Kazutora is arrested. Takemichi is regretful about the fact that he wasn't able to do much, but they managed to avoid Mikey killing Kazutora. After going with Draken to visit Kazutora, they head over to Draken's home.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498509/screencap/613647b3b36d5.jpg",
+        "episode": "23",
+        "anidbEid": 243235,
+        "length": 25,
+        "airdate": "2021-09-12",
+        "rating": "5.59",
+        "summary": "The conflict between Toman and Valhalla dubbed the Bloody Halloween ends in Toman`s victory, but Baji is killed and Kazutora is arrested. Takemichi is regretful about the fact that he wasn`t able to do much, but they managed to avoid Mikey killing Kazutora. After going with Draken to visit Kazutora, they head over to Draken`s home.\nSource: crunchyroll"
+      },
+      "24": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8498510,
+        "seasonNumber": 1,
+        "episodeNumber": 24,
+        "absoluteEpisodeNumber": 24,
+        "title": {
+          "ja": "A Cry baby",
+          "en": "A Cry Baby",
+          "x-jat": "A Cry Baby"
+        },
+        "airDate": "2021-09-19",
+        "airDateUtc": "2021-09-18T16:15:00Z",
+        "runtime": 24,
+        "finaleType": "season",
+        "overview": "Takemichi heads to his first Toman meeting wearing his jacket and is surprised to see the vice commander of Valhalla, Hanma, and Chifuyu standing next to Mikey. Not only that, but he finds out that it was Kisaki Tetta who arranged all of this. Takemichi falls into despair when he realizes he wasn't able to change the future again despite Baji sacrificing his own life to protect Toman. And then, Chifuyu says...",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8498510/screencap/614133953f550.jpg",
+        "episode": "24",
+        "anidbEid": 243236,
+        "length": 25,
+        "airdate": "2021-09-19",
+        "rating": "6.87",
+        "summary": "Takemichi heads to his first Toman meeting wearing his jacket and is surprised to see the vice commander of Valhalla, Hanma, and Chifuyu standing next to Mikey. Not only that, but he finds out that it was Kisaki Tetta who arranged all of this. Takemichi falls into despair when he realizes he wasn`t able to change the future again despite Baji sacrificing his own life to protect Toman. And then, Chifuyu says...\nSource: crunchyroll"
+      },
+      "S1": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8322598,
+        "seasonNumber": 0,
+        "episodeNumber": 1,
+        "title": {
+          "ja": "放送直前威弁斗 ~今何してンの? 神社に来いよ! 愛仁夢決起集会~",
+          "en": "Episode S1",
+          "x-jat": "Housou Chokuzen Event: Ima Nani Shitenno? Jinja ni Koi yo! Ai Nin Yume Kekkishuukai"
+        },
+        "airDate": "2021-03-30",
+        "airDateUtc": "2021-03-29T16:15:00Z",
+        "runtime": 24,
+        "overview": "Recap of Episodes 1-3 showed online for limited audiences who have purchased tickets for a special event.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8322598/screencap/67e7c2796d57d.jpg",
+        "episode": "S1",
+        "anidbEid": 238889,
+        "length": 30,
+        "airdate": "2021-03-30"
+      },
+      "S2": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556214,
+        "seasonNumber": 0,
+        "episodeNumber": 2,
+        "title": {
+          "en": "Chibi-Revengers 1"
+        },
+        "airDate": "2021-04-12",
+        "airDateUtc": "2021-04-11T16:15:00Z",
+        "runtime": 2,
+        "overview": "Beaten and bloody after a fight, Mizo Middle Five finds a way to lighten up the mood.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556214/screencap/67e7c2b56690c.jpg",
+        "episode": "S2",
+        "anidbEid": 267110,
+        "length": 2,
+        "airdate": ""
+      },
+      "S3": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556215,
+        "seasonNumber": 0,
+        "episodeNumber": 3,
+        "title": {
+          "en": "Chibi-Revengers 2"
+        },
+        "airDate": "2021-04-19",
+        "airDateUtc": "2021-04-18T16:15:00Z",
+        "runtime": 2,
+        "overview": "Mizo Middle Five push the button of a fire alarm at school to get away from meeting Kiyomasa.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556215/screencap/67e7c3df5fd15.jpg",
+        "episode": "S3",
+        "anidbEid": 267111,
+        "length": 2,
+        "airdate": ""
+      },
+      "S4": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556216,
+        "seasonNumber": 0,
+        "episodeNumber": 4,
+        "title": {
+          "en": "Chibi-Revengers 3"
+        },
+        "airDate": "2021-04-26",
+        "airDateUtc": "2021-04-25T16:15:00Z",
+        "runtime": 2,
+        "overview": "Mizo Middle Five praise Takemichi and Mikey.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556216/screencap/67e7c40ea2c79.jpg",
+        "episode": "S4",
+        "anidbEid": 267112,
+        "length": 2,
+        "airdate": ""
+      },
+      "S5": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556217,
+        "seasonNumber": 0,
+        "episodeNumber": 5,
+        "title": {
+          "en": "Chibi-Revengers 4"
+        },
+        "airDate": "2021-05-03",
+        "airDateUtc": "2021-05-02T16:15:00Z",
+        "runtime": 2,
+        "overview": "Mizo Middle Five make fun of Takemichi, who keeps failing to hold Hina's hand.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556217/screencap/67e7c4e4884cb.jpg",
+        "episode": "S5",
+        "anidbEid": 267113,
+        "length": 2,
+        "airdate": ""
+      },
+      "S6": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556218,
+        "seasonNumber": 0,
+        "episodeNumber": 6,
+        "title": {
+          "en": "Chibi-Revengers 5"
+        },
+        "airDate": "2021-05-10",
+        "airDateUtc": "2021-05-09T16:15:00Z",
+        "runtime": 2,
+        "overview": "Takemichi and Draken discuss Mikey's weekday routine.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556218/screencap/67e7c5a42024a.jpg",
+        "episode": "S6",
+        "anidbEid": 267114,
+        "length": 2,
+        "airdate": ""
+      },
+      "S7": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556219,
+        "seasonNumber": 0,
+        "episodeNumber": 7,
+        "title": {
+          "en": "Chibi-Revengers 6"
+        },
+        "airDate": "2021-05-17",
+        "airDateUtc": "2021-05-16T16:15:00Z",
+        "runtime": 2,
+        "overview": "Draken, Peh-yan, and Pah-chin argue over Pah-chin's dog Pochi.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556219/screencap/67e7c5e43abf2.jpg",
+        "episode": "S7",
+        "anidbEid": 267115,
+        "length": 2,
+        "airdate": ""
+      },
+      "S8": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556220,
+        "seasonNumber": 0,
+        "episodeNumber": 8,
+        "title": {
+          "en": "Chibi-Revengers 7"
+        },
+        "airDate": "2021-05-24",
+        "airDateUtc": "2021-05-23T16:15:00Z",
+        "runtime": 2,
+        "overview": "Yamagishi and Makoto give Takemichi gifts to please him as Toman's next hypothetical leader.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556220/screencap/67e7c6161ff01.jpg",
+        "episode": "S8",
+        "anidbEid": 267116,
+        "length": 2,
+        "airdate": ""
+      },
+      "S9": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556221,
+        "seasonNumber": 0,
+        "episodeNumber": 9,
+        "title": {
+          "en": "Chibi-Revengers 8"
+        },
+        "airDate": "2021-05-31",
+        "airDateUtc": "2021-05-30T16:15:00Z",
+        "runtime": 2,
+        "overview": "Mikey and Draken play games to decide who between them is Takemichi's friend.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556221/screencap/67e7c64f22d01.jpg",
+        "episode": "S9",
+        "anidbEid": 267117,
+        "length": 2,
+        "airdate": ""
+      },
+      "S10": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556222,
+        "seasonNumber": 0,
+        "episodeNumber": 10,
+        "title": {
+          "en": "Chibi-Revengers 9"
+        },
+        "airDate": "2021-06-07",
+        "airDateUtc": "2021-06-06T16:15:00Z",
+        "runtime": 2,
+        "overview": "Makoto and Yamagishi make it rain during the Musashi Festival.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556222/screencap/67e7c676c9568.jpg",
+        "episode": "S10",
+        "anidbEid": 267118,
+        "length": 2,
+        "airdate": ""
+      },
+      "S11": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556223,
+        "seasonNumber": 0,
+        "episodeNumber": 11,
+        "title": {
+          "en": "Chibi-Revengers 10"
+        },
+        "airDate": "2021-06-14",
+        "airDateUtc": "2021-06-13T16:15:00Z",
+        "runtime": 2,
+        "overview": "Mizo Middle Five run to rescue Takemichi Hanagaki.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556223/screencap/67e7c6a4546f0.jpg",
+        "episode": "S11",
+        "anidbEid": 267119,
+        "length": 2,
+        "airdate": ""
+      },
+      "S12": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556224,
+        "seasonNumber": 0,
+        "episodeNumber": 12,
+        "title": {
+          "en": "Chibi-Revengers 11"
+        },
+        "airDate": "2021-06-21",
+        "airDateUtc": "2021-06-20T16:15:00Z",
+        "runtime": 2,
+        "overview": "Peh-yan apologizes to Toman for causing them trouble.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556224/screencap/67e7c6cf92931.jpg",
+        "episode": "S12",
+        "anidbEid": 267120,
+        "length": 2,
+        "airdate": ""
+      },
+      "S13": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556226,
+        "seasonNumber": 0,
+        "episodeNumber": 13,
+        "title": {
+          "en": "Chibi-Revengers 12"
+        },
+        "airDate": "2021-06-28",
+        "airDateUtc": "2021-06-27T16:15:00Z",
+        "runtime": 2,
+        "overview": "Mizo Middle Five make fun of Takemichi's sense of fashion.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556226/screencap/67e7c7001c499.jpg",
+        "episode": "S13",
+        "anidbEid": 267121,
+        "length": 2,
+        "airdate": ""
+      },
+      "S14": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556227,
+        "seasonNumber": 0,
+        "episodeNumber": 14,
+        "title": {
+          "en": "Chibi-Revengers 13"
+        },
+        "airDate": "2021-07-05",
+        "airDateUtc": "2021-07-04T16:15:00Z",
+        "runtime": 2,
+        "overview": "Takemichi has a hard time guessing what Mikey wants him to buy.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556227/screencap/67e7c72db3900.jpg",
+        "episode": "S14",
+        "anidbEid": 267122,
+        "length": 2,
+        "airdate": ""
+      },
+      "S15": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556228,
+        "seasonNumber": 0,
+        "episodeNumber": 15,
+        "title": {
+          "en": "Chibi-Revengers 14"
+        },
+        "airDate": "2021-07-12",
+        "airDateUtc": "2021-07-11T16:15:00Z",
+        "runtime": 2,
+        "overview": "Mikey and Draken assign Takemichi to a division.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556228/screencap/67e7c76390705.jpg",
+        "episode": "S15",
+        "anidbEid": 267123,
+        "length": 2,
+        "airdate": ""
+      },
+      "S16": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556229,
+        "seasonNumber": 0,
+        "episodeNumber": 16,
+        "title": {
+          "en": "Chibi-Revengers 15"
+        },
+        "airDate": "2021-07-19",
+        "airDateUtc": "2021-07-18T16:15:00Z",
+        "runtime": 2,
+        "overview": "Yamagishi remembers when he and Takemichi first met.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556229/screencap/67e7c7def02f7.jpg",
+        "episode": "S16",
+        "anidbEid": 267124,
+        "length": 2,
+        "airdate": ""
+      },
+      "S17": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556230,
+        "seasonNumber": 0,
+        "episodeNumber": 17,
+        "title": {
+          "en": "Chibi-Revengers 16"
+        },
+        "airDate": "2021-07-26",
+        "airDateUtc": "2021-07-25T16:15:00Z",
+        "runtime": 2,
+        "overview": "Toman's founding members plan a touring but Mikey insists to drive his moped.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556230/screencap/67e7c86e66c11.jpg",
+        "episode": "S17",
+        "anidbEid": 267125,
+        "length": 2,
+        "airdate": ""
+      },
+      "S18": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556231,
+        "seasonNumber": 0,
+        "episodeNumber": 18,
+        "title": {
+          "en": "Chibi-Revengers 17"
+        },
+        "airDate": "2021-08-02",
+        "airDateUtc": "2021-08-01T16:15:00Z",
+        "runtime": 2,
+        "overview": "Chifuyu gives Takemichi a rundown of how he came up with the nickname \"Partner.\"",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556231/screencap/67e7c89ba9202.jpg",
+        "episode": "S18",
+        "anidbEid": 267126,
+        "length": 2,
+        "airdate": ""
+      },
+      "S19": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556232,
+        "seasonNumber": 0,
+        "episodeNumber": 19,
+        "title": {
+          "en": "Chibi-Revengers 18"
+        },
+        "airDate": "2021-08-09",
+        "airDateUtc": "2021-08-08T16:15:00Z",
+        "runtime": 2,
+        "overview": "An insight on the lives of different Toman members the night before Bloody Halloween.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556232/screencap/67e7c8d857ade.jpg",
+        "episode": "S19",
+        "anidbEid": 267127,
+        "length": 2,
+        "airdate": ""
+      },
+      "S20": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556233,
+        "seasonNumber": 0,
+        "episodeNumber": 20,
+        "title": {
+          "en": "Chibi-Revengers 19"
+        },
+        "airDate": "2021-08-16",
+        "airDateUtc": "2021-08-15T16:15:00Z",
+        "runtime": 2,
+        "overview": "Pah-chin reflects on his actions at the detention center.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556233/screencap/67e7c908d686c.jpg",
+        "episode": "S20",
+        "anidbEid": 267128,
+        "length": 2,
+        "airdate": ""
+      },
+      "S21": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556234,
+        "seasonNumber": 0,
+        "episodeNumber": 21,
+        "title": {
+          "en": "Chibi-Revengers 20"
+        },
+        "airDate": "2021-08-23",
+        "airDateUtc": "2021-08-22T16:15:00Z",
+        "runtime": 2,
+        "overview": "Hina and Emma plan a Halloween party.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556234/screencap/67e7c93b45052.jpg",
+        "episode": "S21",
+        "anidbEid": 267129,
+        "length": 2,
+        "airdate": ""
+      },
+      "S22": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556235,
+        "seasonNumber": 0,
+        "episodeNumber": 22,
+        "title": {
+          "en": "Chibi-Revengers 21"
+        },
+        "airDate": "2021-08-30",
+        "airDateUtc": "2021-08-29T16:15:00Z",
+        "runtime": 2,
+        "overview": "Yamagishi thinks of a name for the Toman-Valhalla fight.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556235/screencap/67e7c964c88df.jpg",
+        "episode": "S22",
+        "anidbEid": 267130,
+        "length": 2,
+        "airdate": ""
+      },
+      "S23": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556236,
+        "seasonNumber": 0,
+        "episodeNumber": 23,
+        "title": {
+          "en": "Chibi-Revengers 22"
+        },
+        "airDate": "2021-09-06",
+        "airDateUtc": "2021-09-05T16:15:00Z",
+        "runtime": 2,
+        "overview": "A series of flashbacks featuring Baji and Chifuyu.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556236/screencap/67e7c990a1ba9.jpg",
+        "episode": "S23",
+        "anidbEid": 267131,
+        "length": 2,
+        "airdate": ""
+      },
+      "S24": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556237,
+        "seasonNumber": 0,
+        "episodeNumber": 24,
+        "title": {
+          "en": "Chibi-Revengers 23"
+        },
+        "airDate": "2021-09-13",
+        "airDateUtc": "2021-09-12T16:15:00Z",
+        "runtime": 2,
+        "overview": "Draken wonders what he should give Emma for her birthday.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556237/screencap/67e7c9becc5bb.jpg",
+        "episode": "S24",
+        "anidbEid": 267132,
+        "length": 2,
+        "airdate": ""
+      },
+      "S25": {
+        "tvdbShowId": 393478,
+        "tvdbId": 8556238,
+        "seasonNumber": 0,
+        "episodeNumber": 25,
+        "title": {
+          "en": "Chibi-Revengers 24"
+        },
+        "airDate": "2021-09-20",
+        "airDateUtc": "2021-09-19T16:15:00Z",
+        "runtime": 2,
+        "finaleType": "season",
+        "overview": "Chifuyu wants to quit Toman but Mikey does not allow him.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/8556238/screencap/67e7ca35cb771.jpg",
+        "episode": "S25",
+        "anidbEid": 267133,
+        "length": 2,
+        "airdate": ""
+      }
+    },
+    "episodeCount": 24,
+    "specialCount": 25,
+    "images": [
+      {
+        "coverType": "Banner",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/banners/63f699395631b.jpg"
+      },
+      {
+        "coverType": "Poster",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/posters/60d20e7c9ca6a.jpg"
+      },
+      {
+        "coverType": "Fanart",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/backgrounds/60f3733aa53e2.jpg"
+      },
+      {
+        "coverType": "Clearlogo",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/clearlogo/611d007ea31b7.png"
+      }
+    ],
+    "mappings": {
+      "animeplanet_id": "tokyo-revengers",
+      "kitsu_id": 43321,
+      "mal_id": 42249,
+      "type": "TV",
+      "anilist_id": 120120,
+      "anisearch_id": 15335,
+      "anidb_id": 15601,
+      "notifymoe_id": null,
+      "livechart_id": 10019,
+      "thetvdb_id": 393478,
+      "imdb_id": "tt13196080",
+      "themoviedb_id": "105009"
+    }
+  }
+}

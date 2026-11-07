@@ -1,0 +1,1775 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=4133",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"824c402ea6b842fde11cf43aa2033fe0\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/pfgndj46RLPVJRWkUSCJBgLJ93w.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2021-01-11",
+    "genres": [
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://mushokutensei.jp",
+    "id": 94664,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-09-28",
+    "last_episode_to_air": {
+      "id": 7478569,
+      "name": "Resolve",
+      "overview": "Having read one possible future, Rudeus takes action to avoid it and protect the people he loves.",
+      "vote_average": 6.5,
+      "vote_count": 4,
+      "air_date": "2026-09-28",
+      "episode_number": 14,
+      "episode_type": "mid_season",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 3,
+      "show_id": 94664,
+      "still_path": "/wr6b0gP5nRqZNnjcRZt1rVQ0IZ8.jpg"
+    },
+    "name": "Mushoku Tensei: Jobless Reincarnation",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 861,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1137,
+        "logo_path": "/j12pSWPsDBxE1mmIpB7M8VRzk78.png",
+        "name": "KBS Kyoto",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 61,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "無職転生 ～異世界行ったら本気だす～",
+    "overview": "When a 34-year-old underachiever gets run over by a truck, his story doesn't end there. Reincarnated in a new world as an infant, Rudy will seize every opportunity to live the life he's always wanted. Armed with new friends, some freshly acquired magical abilities, and the courage to do the things he's always dreamed of, he's embarking on an epic adventure—with all of his past experience intact!",
+    "popularity": 86.4483,
+    "poster_path": "/gLKOYIMyKlUHW0SVdskhgf9C0yy.jpg",
+    "production_companies": [
+      {
+        "id": 124275,
+        "logo_path": "/b3gxPqVIVIeHDMLt1Lr0WvuxYwP.png",
+        "name": "Studio Bind",
+        "origin_country": "JP"
+      },
+      {
+        "id": 95809,
+        "logo_path": "/5ac8LhghlxYKbPSwbXJkgrNfjGF.png",
+        "name": "EGG FIRM",
+        "origin_country": "JP"
+      },
+      {
+        "id": 142186,
+        "logo_path": "/bdXTOuU7PdsDtQngyM7vb47zePs.png",
+        "name": "Hakuhodo DY Music & Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 5809,
+        "logo_path": "/bViN2LqqtONjOTkYmPtnMNaVOtD.png",
+        "name": "Frontier Works",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162011,
+        "logo_path": "/bg6yrVhnmv6eNE8cMWehyE9wAeb.png",
+        "name": "GREE Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 882,
+        "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+        "name": "TOHO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 151191,
+        "logo_path": "/wBA1v3dFtpRARIE7sYxc657x7rQ.png",
+        "name": "GREE",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-03-16",
+        "episode_count": 3,
+        "id": 219489,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/3ntv52qLbdAOmOIRUe3xkq9Xz2p.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2021-01-11",
+        "episode_count": 23,
+        "id": 134338,
+        "name": "Season 1",
+        "overview": "When a 34-year-old underachiever gets run over by a truck, his story doesn't end there. Reincarnated in a new world as an infant, Rudy will seize every opportunity to live the life he's always wanted. Armed with new friends, some freshly acquired magical abilities, and the courage to do the things he's always dreamed of, he's embarking on an epic adventure—with all of his past experience intact!",
+        "poster_path": "/4vEel9ztoC3PtQFOkthVPtdlWQr.jpg",
+        "season_number": 1,
+        "vote_average": 5
+      },
+      {
+        "air_date": "2023-07-10",
+        "episode_count": 24,
+        "id": 334394,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/kVHnRfj5c7rzetzMPlRQXEZRzkH.jpg",
+        "season_number": 2,
+        "vote_average": 4.1
+      },
+      {
+        "air_date": "2026-07-03",
+        "episode_count": 14,
+        "id": 400493,
+        "name": "Season 3",
+        "overview": "",
+        "poster_path": "/tO5Fwg59DZkTB2VrC2UEIS2VrEk.jpg",
+        "season_number": 3,
+        "vote_average": 5.5
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.437,
+    "vote_count": 1806,
+    "external_ids": {
+      "imdb_id": "tt13293588",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 371310,
+      "tvrage_id": null,
+      "wikidata_id": "Q102126892",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "mushokutensei_A"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Mushoku Tensei Jobless Reincarnation",
+            "overview": "Un joven virgen \"nini\" de 34 años es echado de casa cuando se queda sin dinero. Él se arrepiente de su vida cuando muere en un accidente de tráfico. Tras el accidente, se reencarna en un bebé en un mundo fantástico de espada y brujería. Tras la decisión de hacer lo mejor que pueda con el conocimiento adquirido en su anterior mundo, él decide aprovechar la oportunidad y aprender a usar magia desde su nueva juventud.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Mushoku Tensei Jobless Reincarnation",
+            "overview": "Cuando un autobús atropella a un joven de 34 años que no ha logrado mucho en su vida, su historia no termina ahí. Habiendo reencarnado en un niño, Rudy aprovechará cada oportunidad para vivir la vida que siempre quiso. ¡Con la ayuda de sus amigos, unas habilidades mágicas recién adquiridas, y el coraje para hacer las cosas que siempre ha soñado, se embarca en una aventura épica, con su experiencia pasada intacta!",
+            "homepage": "",
+            "tagline": "Aquí, lo daré todo de mí."
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "无职转生～到了异世界就拿出真本事～",
+            "overview": "“我要在这个异世界拿出真本事！”34岁童贞且无职的家里蹲男子，在父母的葬礼当天被赶出家门后，在路上被一辆卡车所撞死。意识清醒后，他发现自己居然作为一个刚出生的婴儿转生到了剑与魔法的异世界！像废物一样活过了前世的男子，发誓要作为少年·鲁迪乌斯在异世界以认真的态度好好活下去！等待着鲁迪乌斯的是，与娇小魔术师、有着精灵长耳又很男孩子气的美少女、凶暴的傲娇大小姐以及其他性格各异的人们之间的邂逅，当然也还有残酷的冒险与战斗。新的人生就要开始了！“人生重来型”幻想冒险谭，在此开幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "When a 34-year-old underachiever gets run over by a truck, his story doesn't end there. Reincarnated in a new world as an infant, Rudy will seize every opportunity to live the life he's always wanted. Armed with new friends, some freshly acquired magical abilities, and the courage to do the things he's always dreamed of, he's embarking on an epic adventure—with all of his past experience intact!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "Kiedy 34-letni nieudacznik zostaje potrącony przez ciężarówkę, jego historia się nie kończy. Reinkarnowany budzi się w ciele niemowlęcia o imieniu Rudeus Greyrat szybko odkrywa, że trafił do świata magii i miecza. Rudeus wykorzysta każdą okazję, aby żyć życiem, o jakim zawsze marzył.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "Ein 34-jähriger Otaku-NEET, der von seiner Familie aus dem Haus vertrieben wurde, bemerkt langsam, dass sein Leben in eine Sackgasse gerät. Er erinnerte sich dann daran, dass sein Leben eigentlich viel besser gewesen wäre, wenn er in der Vergangenheit bessere Entscheidungen getroffen hätte.\n\nGerade als er am Punkt des Bedauerns war, sah er einen Lastwagen mit hoher Geschwindigkeit auf drei Oberschüler zufahren. Mit aller Kraft versuchte er sie zu retten, was damit endete, dass er von dem Truck überfahren wurde.\n\nAls er wieder aufwacht, findet er sich als Rudeus Grayrat in einer Welt mit Schwertern und Magie wieder – allerdings mit den Erinnerungen aus seinem früheren Leben. Geboren in einer neuen Welt, einem neuen Leben, entschied Rudeus: »Diesmal werde ich mein Leben wirklich in vollen Zügen leben, ohne Reue!«. Die Geschichte folgt nun Rudeus vom Säugling bis zum Erwachsenenalter.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "Quando um fracassado de 34 anos é atropelado por um ônibus, sua história não acaba. Reencarnado em um novo mundo como criança, Rudy aproveitará cada oportunidade para viver a vida que sempre quis. Com novos amigos, habilidades mágicas e coragem para fazer tudo o que sempre sonhou, ele embarca em uma aventura épica – com toda a sua experiência do passado intacta!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "무직전생 ~이세계에 갔으면 최선을 다한다~",
+            "overview": "'나는 이 세계에서 최선을 다하겠어!' 34세 총각에 무직인 방구석 폐인이었던 남자. 그는 부모님의 장례식 날에 집에서 쫓겨나 트럭에 치여 목숨을 잃었다. 다시 눈을 떴을 때 그는 검과 마법이 존재하는 이세계에서 아기로 다시 환생해 있었다! 쓰레기처럼 살아온 남자는 소년 루데우스로서 이세계에서 최선을 다해 살아가기로 맹세한다! 루데우스를 기다리는 것은 로리 마술사, 엘프 귀를 가진 소꿉친구, 흉포한 새침데기 아가씨와 그 외 다양한 인간들과의 만남. 그리고 가혹한 모험과 전투. 그의 새로운 인생이 움직이기 시작한다! '인생 재시작' 판타지, 개막!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "「俺は、この異世界で本気だす！」34歳・童貞・無職の引きこもりニート男。両親の葬儀の日に家を追い出された瞬間、トラックに轢かれ命を落としてしまう。目覚めると、なんと剣と魔法の異世界で赤ん坊に生まれ変わっていた！ゴミクズのように生きてきた男は、少年・ルーデウスとして異世界で本気をだして生きていく事を誓うー！ルーデウスを待ち受けるのは、ロリっ子魔術師、エルフ耳のボクっ子美少女、凶暴ツンデレお嬢様、そのほかの様々な人間との出会い。そして過酷な冒険と戦い。新しい人生が動き出す！「人生やり直し」ファンタジー、開幕！",
+            "homepage": "",
+            "tagline": "本気で生きたい"
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Реинкарнация безработного: История о приключениях в другом мире",
+            "overview": "Бывает в жизни невезение. Только тридцатичетырёхлетний безработный отаку-бездельник доходит до точки и решает, что пора взяться за ум и изменить свою в общем-то никчёмную жизнь, как его насмерть сбивает грузовик. Однако на этом история его жизни не заканчивается, ведь он приходит в себя в теле ребёнка, причём в совершенно ином мире, где в ходу магия да и рыцарские бои на мечах вполне в порядке вещей. Отныне нашего героя зовут Рудеус Грейрат, и он начнёт-таки жизнь с нового листа, но теперь уже в новом полном опасностей и чудес мире.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "« Ici, je vais me transcender ! » Un anonyme de 34 ans, célibataire endurci, reclus et au chômage se fait écraser par un camion peu après avoir été chassé de la maison familiale. Quelle ne fut pas sa surprise lorsqu'il se réveilla bébé dans un monde d'épées et de magie ! Rudeus, comme il s'appelait désormais, jura alors de réussir sa deuxième vie et de tirer un trait sur l'immonde déchet qu'il avait été 34 ans durant. Dès son jeune âge, il nouera de nombreux liens dans ce nouveau monde, notamment une solide amitié avec trois fillettes, avant de partir pour une aventure aussi palpitante que périlleuse. Une seconde chance lui a été accordée… et elle ne sera pas de tout repos !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "無職轉生～到了異世界就拿出真本事～",
+            "overview": "34歲、處男、無職的家裡蹲尼特男。他在雙親葬禮當天被趕出家門的瞬間，就因為遭卡車碾過而喪命。等他重新醒來，發現自己在劍與魔法的異世界轉生成了小嬰兒！曾活得跟垃圾一樣的男人，發誓要做為少年魯迪烏斯在異世界認真過活！等待著魯迪烏斯的，是與蘿莉魔術師、有著妖精耳朵卻使用男性化自稱的美少女、兇暴傲嬌大小姐，以及其他各式各樣人物的相遇，以及殘酷的冒險與戰鬥。全新的人生就此展開！「人生重來」奇幻故事現在開幕！",
+            "homepage": "",
+            "tagline": "我要在這個異世界拿出真本事！"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Реінкарнація безробітного: В інший світ на повному серйозі",
+            "overview": "Буває в житті невезіння. Саме таке невезіння спіткало 34-річного неробу, який тільки те й робив, що дивився аніме. Все, що він встиг зробити, — це врятувати групу підлітків від вантажівки, яка збила його на смерть. Та на цьому історія його життя не закінчується, адже він приходить до тями в тілі дитини, причому в зовсім іншому світі, де магія та лицарські бої цілком звичне явище. Відтепер нашого героя звати Рудеус Ґрейрат, і він починає життя з чистого аркуша, але тепер уже в новому, повному небезпек і чудес світі.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "Hänen perheensä potkaisee 34-vuotiaan hikikomorin pois kotoaan vanhempiensa kuoleman jälkeen. Häädön jälkeen hän pelastaa joukon teini-ikäisiä ylinopeutta ajavan kuorma-auton kuolemalta, mutta menettää henkensä prosessissa. Kun hän tulee, hän tajuaa syntyneensä uudelleen Rudeus Greyratina miekkojen ja noituuden maailmassa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Mushoku Tensei: Převtělený povaleč",
+            "overview": "Když umíral jeden 34letý muž poté, co ho srazil kamion, rozhodně netušil, co bude dál. Sice příchodu smrti nijak extra nelitoval, protože jeho život dosáhl bodu, kdy již 20 let nikam nesměřoval, zůstával zavřený doma, protože se na něm podepsala šikana z dob studií a nedávno zemřeli i jediní, na kom mu trochu záleželo, tedy jeho rodiče, ale i tak. Tento nezaměstnaný asociál a panic totiž dostal novou šanci, a to ve světě, kterému vládne meč a magie. Navíc jeho staré já pořád zůstává v tomto novém těle, pamatuje si vše, a tak je muž odhodlaný využít všechny své zkušenosti k tomu, aby byl jeho život tentokrát jiný. (Jeoffrey)",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "Un uomo di trentaquattro anni, recluso in casa da anni e senza lavoro, muore investito da un camion e si risveglia neonato in un mondo di spade e magia. Battezzato Rudeus Greyrat, figlio di uno spadaccino e di una guaritrice, decide che questa seconda vita non la sprecherà: studia magia fin dai primi anni, si costruisce legami veri e affronta il mondo con la consapevolezza di chi ha già fallito una volta. Ma i traumi della vita precedente non spariscono con il corpo, e ogni passo avanti si accompagna alla paura di tornare l'uomo che era. Tra viaggi attraverso continenti ostili, incontri decisivi e conflitti familiari, la storia segue la lenta e accidentata crescita di un ragazzo che cerca di diventare qualcuno di cui non vergognarsi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เกิดชาตินี้พี่ต้องเทพ",
+            "overview": "หนุ่มบริสุทธิ์วัย 34 ปีถูกครอบครัวไล่ออกจากบ้านและตระหนักว่าชีวิตของเขาสิ้นสุดลงแล้ว ขณะที่เขาเสียใจกับการเสียชีวิตรถบรรทุกชนเสียชีวิต เมื่อเขาตื่นขึ้นมา... เขาอยู่ในโลกแห่งดาบและเวทมนตร์! เกิดใหม่เป็นทารกชื่อ Rudeus เขาตัดสินใจว่าคราวนี้เขาจะใช้ชีวิตอย่างที่เขาไม่เสียใจ!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thất nghiệp chuyển sinh",
+            "overview": "Thất Nghiệp Chuyển Sinh kể về một cậu bé được tái sinh vào một thế giới kỳ diệu đầy phiêu lưu, một người đàn ông thất nghiệp và không mục đích trước đây quyết định sống cuộc sống mới của mình một cách trọn vẹn nhất…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "Tanımadığı birini trafik kazasından kurtarırken ölen 34 yaşındaki bir NEET büyülü bir dünyaya Rudeus Greyrat isminde yeni doğmuş bir bebek olarak reenkarne olur. Geçmiş hayatından ona kalan bilgisi, tecrübesi ve pişmanlıklarıyla beraber daha önce yaptığı yanlışları yapmadan dolu dolu bir hayat yaşamaya çalışmaya karar verir. Oldukça yüksek olan büyü güçleri ve yetişkin beyniyle ailesi ve çevresi tarafından bir dahi olarak görülse de içinde hala bir otaku ruhu taşımaktadır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "無職轉生～到了異世界就拿出真本事～",
+            "overview": "一個沒有人生目標也沒有工作的男人轉生到魔法世界，迎向種種冒險，決心用新的生命認真生活。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "موشوكو تينسي",
+            "overview": "عندما تدهس شاحنة شابًا يبلغ من العمر ٣٤ سنة، لا تنتهي قصته هناك. بل يعاد بعثه في عالم جديد كرضيع، ينتهز \"رودي\" كلّ فرصة ليعيش الحياة التي لطالما أرادها. مدعومًا بأصدقاء جُدد، وبعض القدرات السحرية المكتسبة حديثًا، والشجاعة لفعل الأشياء التي كان يحلم بها دائمًا، ينطلق في مغامرة ملحمية، مع تذكره لكل تجربته السابقة.",
+            "homepage": "",
+            "tagline": "أريد أن أعيش بجدّية."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "Quando um falhado de 34 anos é atropelado por um camião, a sua história não termina aí. Reencarnado num novo mundo como um bebé, Rudy vai aproveitar todas as oportunidades para viver a vida que sempre desejou. Com novos amigos, algumas habilidades mágicas recém-adquiridas e a coragem para fazer aquilo com que sempre sonhou, ele embarca numa aventura épica com toda a sua experiência passada intacta!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Mushoku Tensei",
+            "overview": "Meskipun diintimidasi, dicemooh, dan ditindas sepanjang hidupnya, seorang pria berusia 34 tahun yang tertutup masih menemukan tekad untuk mencoba sesuatu yang heroik hanya untuk berakhir dengan kecelakaan tragis.  Namun dalam takdir yang berubah, dia terbangun di dunia lain sebagai Rudeus Greyrat, memulai hidup kembali sebagai bayi yang lahir dari dua orang tua yang penuh kasih.  Mempertahankan ingatan dan pengetahuannya dari kehidupan sebelumnya, Rudeus dengan cepat beradaptasi dengan lingkungan barunya.  Dengan pemikiran orang dewasa yang sudah dewasa, ia mulai menampilkan bakat magis yang melebihi semua ekspektasi, mengasah kemampuannya dengan bantuan seorang mage bernama Roxy Migurdia.  Rudeus belajar permainan pedang dari ayahnya, Paul, dan bertemu dengan Sylphiette, seorang gadis seusianya yang dengan cepat menjadi teman terdekatnya.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "En 34-årig hikikomori sparkas ut ur sitt hem av sin familj efter hans föräldrars död. Efter sin vräkning räddar han en grupp tonåringar från att dödas av en framrusande lastbil, men förlorar sitt liv i processen. När han kommer till inser han att han har återfötts som Rudeus Greyrat, i en värld av svärd och trolldom.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "En 34-årig hikikomori bliver smidt ud af sit hjem af sin familie efter sine forældres død. Efter sin udsættelse redder han en gruppe teenagere fra at blive dræbt af en hurtig lastbil, men mister livet i processen. Da han kommer til, indser han, at han er blevet genfødt som Rudeus Greyrat, i en verden af sværd og trolddom.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FO",
+          "iso_639_1": "fo",
+          "name": "",
+          "english_name": "Faroese",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "Når en 34 år gammel underachiever blir overkjørt av en lastebil, slutter ikke historien hans der. Reinkarnert som spedbarn, vil Rudy bruke nyvunnet mot, venner og magiske evner til å legge ut på et episk eventyr!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IS",
+          "iso_639_1": "is",
+          "name": "Íslenska",
+          "english_name": "Icelandic",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een 34-jarige hikikomori wordt na de dood van zijn ouders door zijn familie uit zijn huis gezet. Na zijn uitzetting redt hij een groep tieners van de dood door een snel rijdende vrachtwagen, maar verliest daarbij zijn leven. Als hij bijkomt, realiseert hij zich dat hij herboren is als Rudeus Greyrat, in een wereld van zwaarden en tovenarij.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "תחייה מובטלת: אם הייתי בעולם אחר הייתי רציני!",
+            "overview": "כאשר בן 34 נדרס על ידי אוטובוס, הסיפור שלו לא נגמר שם. בהתגלמותו מחדש בעולם חדש כתינוק, רודי ינצל כל הזדמנות לחיות את החיים שתמיד רצה. עם חברים חדשים, כמה יכולות קסומות שנרכשו לאחרונה, והאומץ לעשות את הדברים שתמיד חלם עליהם, הוא יוצא להרפתקה – עם כל הידע שלו מהחיים הקודמים!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "მუშოკუ ტესეი: უმუშევრის რეინკარნაცია",
+            "overview": "როდესაც 34 წლის ხელმოცარულ მამაკაცს სატვირთო მანქანა გაიტანს, მისი ისტორია ამით არ სრულდება. ახალ სამყაროში ჩვილის სახით რეინკარნირებული რუდი გადაწყვეტს, ხელიდან არ გაუშვას არცერთი შესაძლებლობა და იცხოვროს ისე, როგორც ყოველთვის ოცნებობდა. ახალი მეგობრებით, ახლად შეძენილი მაგიური შესაძლებლობებითა და დიდი გამბედაობით შეიარაღებული, ის ეპიკურ თავგადასავალში იწყებს მოგზაურობას — თანაც ისე, რომ წარსული ცხოვრების მთელი გამოცდილება შენარჩუნებული აქვს!",
+            "homepage": "",
+            "tagline": "უმუშევრის რეინკარნაცია: ახალი ცხოვრება სხვა სამყაროში."
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "Mushoku Tensei: Jobless Reincarnation",
+            "overview": "وقتی یک مرد ۳۴ ساله که در رسیدن به اهدافش ناموفق بوده، با یک کامیون زیر گرفته می‌شود، داستانش به همین جا ختم نمی‌شود. رودی که در نوزادی در دنیایی جدید دوباره متولد شده، از هر فرصتی برای زندگی‌ای که همیشه آرزویش را داشته، استفاده می‌کند. او با دوستان جدید، توانایی‌های جادویی تازه کسب شده و شجاعت انجام کارهایی که همیشه آرزویش را داشته، در حال آغاز یک ماجراجویی حماسی است - با تمام تجربیات گذشته‌اش که دست نخورده باقی مانده است!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Мущоки Тенсей: Безработно прераждане",
+            "overview": "Когато 34-годишен мъж, който не успява да се справи, е прегазен от камион, историята му не свършва дотук. Прероден в нов свят като бебе, Руди ще се възползва от всяка възможност да живее живота, който винаги е искал. Въоръжен с нови приятели, някои новопридобити магически способности и смелостта да прави нещата, за които винаги е мечтал, той се впуска в епично приключение – запазвайки целия си минал опит!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Mushoku Tensei Jobless Reincarnation",
+            "overview": "Tridesetčetverogodišnjeg neuspješnog mladog čovjeka pregazi autobus, ali njegova priča nije završena. Reinkarniran u dojenče, upušta se u epsku avanturu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Wanneer een 34-jarige onderpresteerder wordt overreden door een vrachtwagen, eindigt zijn verhaal daar niet. Rudy is als baby gereïncarneerd in een nieuwe wereld en zal elke kans aangrijpen om het leven te leiden dat hij altijd al wilde. Gewapend met nieuwe vrienden, enkele vers verworven magische vaardigheden en de moed om de dingen te doen waar hij altijd van heeft gedroomd, begint hij aan een episch avontuur – met al zijn ervaringen uit het verleden intact!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pfgndj46RLPVJRWkUSCJBgLJ93w.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4n254E5RVKprQbJNV86Kr5WuZaI.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5OdAoJBlVmERjKA2CpjSl5zERAA.jpg",
+          "vote_average": 6.546,
+          "vote_count": 11,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/negH2GNeY3KQiUmtJG6pNuBAzdh.jpg",
+          "vote_average": 6.042,
+          "vote_count": 12,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iv4dQuKE0S6snnn7ntkhPvCKZJY.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 2116,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e4UCDy8XAZdRn9iP4xj8MqheWwe.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3764
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dTKQR3ScNj14xiaktZnDQQ0W6vM.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7sMiRA9L89ykzGq4tS8pi7eOKNA.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/joHoVr87VEV2hwe7zQqpdi0tpQP.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ozr3Wfdwgi91ceHJIXuo53CTPAM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/is6zxdDIca13zVxnyKkL6GSQMzF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gHSWabAxCxinFcMjLCKEpUMqY8K.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eVf1YiatnIE17N7qD1s8fobHQL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9NiPXxPN131hQgQvJ1t17waPodA.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/T8J9UFUzKK0ybPyEIoBWgOQHoa.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qbCF9Hrzb3iXR55hiX5h4Pi09PL.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/siByavWO7qqjO9VJ1a6K9852qs2.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ywW6lrNjupzSU9ughybLY2SZxu7.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5bbP4bZjZJoJuuyTq54ISxt9bvy.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yWC06zW4nbnmkajdVshwkPclIeK.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/81j82xSVO8jXHsHVByQLYm2XZ3s.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1594,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r1462L8mHOkNdq1Ur8PaOSZuneM.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2837
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1889,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/digxOTKxSgPW1okFig3DeQMiZN7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3357
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a1EwjzEV3P4ifuV4rVVoU3yClB7.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rsgA4OGPQOpMdEGgIe6OPCmWZYi.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bXCuCP2Ir6eRbkWZO3567gwRND6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wPawksSdpovPI8ku3DDksfdrKku.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uQIFItF11KwnPIFKtFW1eiBsdEz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5PVrehtE1BXnUB2TscppKE59rCd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8WuIg4aOQeT065lQvFhEo2cpc1l.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 757,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dGfEdBelBiBg4f25Ia9wsl0j9nG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1346
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t5zpxjHEKhWTIX7oxI0AR7YWYJt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1919
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gCxlD9I6i7hdDTjC720aPVpfSht.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1919
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 804,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rWMwlQdYeAURGhHOm1SlxaN3ujB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1429
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 810,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iKvlPk7gdDiLSJjSf1KVoXnoX0H.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kgnwlz9kNyRMvqsJBwI9mFypx6I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1919
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qrnpDvWzAjfyfcXUlBgzatn4hOE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1919
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bz6shtk1S1056sW4KB1RbF09r8s.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3RUgZ5O5X6IkM9ALG9ZQsWIAMLg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k3EnY7ivD9J01pYU7sq8A3rmkrW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gG1c7tgM0N5UiSF91jzwLrtzJ2W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.781,
+          "height": 1691,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1nbQu73AA4QuP2DXPdN8RuO0333.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3012
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1628,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4YYciZwrLPuPz3T3Q0nvrStWULg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2892
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 744,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6NcoT2ONJPBhwlTEh8jl6rklRx0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1323
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bqi4wzv1eCSjRtmvO9SQnFC9FSV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2880
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1136,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vsobDZrxR0dB0SO77xf2j0UvBLe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2018
+        },
+        {
+          "aspect_ratio": 1.776,
+          "height": 1153,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yx2lFASL8pNSrieiAjmOuGCCNxk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 822,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/grcRJqSHbcxAMZJrhgHlgTSWrpY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1462
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.86,
+          "height": 537,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8GxsDBWNSH7yMbXMWTq9HtTGORO.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 999
+        },
+        {
+          "aspect_ratio": 1.931,
+          "height": 579,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8hKunCjzL8jfiturHHZfRPfdaLA.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1118
+        },
+        {
+          "aspect_ratio": 1.829,
+          "height": 403,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jJhNy9fEX6I7y4nCOdcMTs6pBDk.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 737
+        },
+        {
+          "aspect_ratio": 1.901,
+          "height": 627,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2CWGOURAkgYuYqCmmwmkobkQjoU.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1192
+        },
+        {
+          "aspect_ratio": 1.931,
+          "height": 579,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/x20IyZ5tgkQxU5iioSsEJBN1lXq.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1118
+        },
+        {
+          "aspect_ratio": 1.856,
+          "height": 1219,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Ab3kV6H7ZZKMxsxtu1bYTM7Qpu.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2263
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6jKuJGfFir8svTfXecPfV6uwBii.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gLKOYIMyKlUHW0SVdskhgf9C0yy.jpg",
+          "vote_average": 6.042,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2776,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1mFnzilCyj9Coa9jbN8vFYLEZdW.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 1851
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 2812,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fHXI3fJN0ZOVw2OmLmY2t9VgV83.jpg",
+          "vote_average": 4.458,
+          "vote_count": 12,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lDS7WuWrq6i1XC1AaKlf9qvJBVi.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1438
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4502U4n9cfgw33v0xTQMZhTDS6p.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/MfjgMCzSp8aMQUYx9RclrKDBgV.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zf0xqJcyqOXhzSpeEaWNdbBPqss.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9FOn4lA6jrXQ14ew9I6CZEvb7uF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a0l1I8VPnJbWwZHCVrrK0K2tzZm.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6bExf47OiO7jpFsln73IVy6j9TL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z4rvmhoqQiGMnwuBHY1QcH3OqUo.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1280,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gSNhZAHd16HIHv4gf27K8PkaFYP.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2829,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fSHa8kwMPhD29grGX3miBq1BWCN.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Ag2WlOyYEgkt1NvC6XrW1sA80mU.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nVm83LRrhjbFNWzRO8IQuuQBfyd.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9gyqFAPs51Yts6OqdWXwjPuepCv.jpg",
+          "vote_average": 0.958,
+          "vote_count": 5,
+          "width": 1457
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h52CxZZEjoEZJCkCNZ3GXiZJh0k.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1448
+        },
+        {
+          "aspect_ratio": 0.709,
+          "height": 2821,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fRJXGD7IP6DmLd2EnaRavFoXDaD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2829,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xrB6qN5cMKmMGsh5whhpJTHyyG0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.713,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5k50YDXKun42iMsvB2rkorgvwis.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1026
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 2818,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9sRyB63BHD7ht2bV61xnAQBOUaP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pAlsYh0zv4vkkD3tjfpCqh3BMXC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wwwJGugzF83LPMC2F2VJh8LChLU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k5LqImYqLSe7tctMZoTdHh7VI8J.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/giOLI7HMYJKBPtmqlAJA0Z4OrOK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1755,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xISqoUSy5k9BP8vnrVWH5ZSV7IB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1241
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6bsVrS5tfi6mDC3LPGXuvA2nbtq.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sBbPXyXxYZ8LwqeZ8eV0884x20r.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 764
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1737,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kCve6cPOWDqaFxOlZ0MYH3pD2sG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1158
+        },
+        {
+          "aspect_ratio": 0.763,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j3NtAi9xY6w817YcvJjLmMAtORU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 823
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 1535,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9WPDLTtwGx4ZC2ZRLfsxejWcoYC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aAo35LjutxVvUafMLVKhtFDDh10.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 719
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1006,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mng7CiBKzOgupZwbFHin41pJGNP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 671
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bGgsTS5Ge6hdHmHd5u16WsVUPQ7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.698,
+          "height": 1547,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qMuOypJFzok6zz2Tdpoxsms3xvG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rla6Ofwa5fPGldIOU53GGgDzzB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 844
+        },
+        {
+          "aspect_ratio": 0.754,
+          "height": 2000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wkUCpDJhhlsLMZlnDllaOhyRz6z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1508
+        },
+        {
+          "aspect_ratio": 0.72,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8RAN5n9UOqCIxbc7xDWZTXx5WSq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 864
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fTUoxfAHCOWkIZHYNPWlV1Nk3vL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.705,
+          "height": 851,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1LaI6wKXRAGlMr8rsVW4n6QODvO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/suRvyUcynKiCW5VsxCrzSOlaiQ8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 700
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2a8UNKS1N6G2LQbhUiEiq5jFVM5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 634
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6O4gnCiG1KE9bPXINrHiZbFQWU3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4OKSWO31R4y9qQiqDjv2O7Hh6vm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.692,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wmFPsO7j2iqlR3fG2kOelNMiSPx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1417
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 837,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a2CCBpoVR1sTDYnvFNaLCuW4Hhj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 558
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2560,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aimA8xGUaX2wuERTojZA5QHjzir.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1707
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1651,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/p2Nhz8mhaqOLtfvefMfghl2XhHh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1101
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 837,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ocFOSczfqEpxsqlLevGbhuzxcuX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 558
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1651,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o8uGhJaeGC5uWPhiFnPqGgTPUVB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1101
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/idYfXFHHxNwMbOW5weACG0wYSEd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 703
+        },
+        {
+          "aspect_ratio": 0.698,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5XDWo8JcP5qWm0EU3uf8XqqonTe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1429
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 1508,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gIHwPkx5AR3YZXGaFHVKCXRXM1c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ePHR146ISmeOme03F9bsLp6cpSr.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 703
+        }
+      ]
+    }
+  }
+}

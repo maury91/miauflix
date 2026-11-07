@@ -1,0 +1,380 @@
+{
+  "headers": {
+    "access-control-allow-methods": "*",
+    "access-control-allow-origin": "*",
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=900, s-maxage=900",
+    "content-type": "application/json; charset=utf-8"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "titles": {
+      "x-jat": "tr s2",
+      "en": "Tokyo Revengers: Christmas Showdown",
+      "ja": "東京リベンジャーズ 聖夜決戦編",
+      "de": "Tokyo Revengers: Christmas Showdown Arc",
+      "zh-Hans": "东京复仇者 圣夜决战篇"
+    },
+    "episodes": {
+      "1": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9384521,
+        "seasonNumber": 2,
+        "episodeNumber": 1,
+        "absoluteEpisodeNumber": 25,
+        "title": {
+          "ja": "It is what it is",
+          "en": "It Is What It Is",
+          "de": "So ist es nun einmal",
+          "x-jat": "It Is What It Is"
+        },
+        "airDate": "2023-01-08",
+        "airDateUtc": "2023-01-07T16:15:00Z",
+        "runtime": 24,
+        "overview": "Back in the present, Takemichi is stunned to learn that he has become officer in Toman. Kisaki seizes an opportunity to dupe him, and Takemichi finds himself staring down the barrel of a gun.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9384521/screencap/63acf9f4b96b9.jpg",
+        "episode": "1",
+        "anidbEid": 262201,
+        "length": 25,
+        "airdate": "2023-01-08",
+        "rating": "4.24",
+        "summary": "Back in the present, Takemichi is stunned to learn that he has become officer in Toman. Kisaki seizes an opportunity to dupe him, and Takemichi finds himself staring down the barrel of a gun.\nSource: Disney+"
+      },
+      "2": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515846,
+        "seasonNumber": 2,
+        "episodeNumber": 2,
+        "absoluteEpisodeNumber": 26,
+        "title": {
+          "ja": "Gotta go",
+          "en": "Gotta Go",
+          "de": "Ich muss los",
+          "x-jat": "Gotta Go"
+        },
+        "airDate": "2023-01-15",
+        "airDateUtc": "2023-01-14T16:15:00Z",
+        "runtime": 24,
+        "overview": "After Takemichi meets a Black Dragon's member in past, he becomes friends with him. The more time passes, the more he realizes why Black Dragon is corrupt",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515846/screencap/63bed269d8e95.jpg",
+        "episode": "2",
+        "anidbEid": 262634,
+        "length": 25,
+        "airdate": "2023-01-15",
+        "rating": "4.38",
+        "summary": "Back in the past, Takemichi meets Hakkai and Yuzuha Shiba and forms a friendly bond. On the way to the Shiba`s home, a chance meeting with Black Dragon turns violent.\nSource: Disney+"
+      },
+      "3": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515848,
+        "seasonNumber": 2,
+        "episodeNumber": 3,
+        "absoluteEpisodeNumber": 27,
+        "title": {
+          "ja": "Stand alone",
+          "en": "Stand Alone",
+          "de": "Auf sich allein gestellt",
+          "x-jat": "Stand Alone"
+        },
+        "airDate": "2023-01-22",
+        "airDateUtc": "2023-01-21T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi is beaten to a pulp by Taiju Shiba. In order to save Takemichi, Hakkai proposes a bargain to Taiju.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515848/screencap/63c8061f86ce6.jpg",
+        "episode": "3",
+        "anidbEid": 262635,
+        "length": 25,
+        "airdate": "2023-01-22",
+        "rating": "6.26",
+        "summary": "Takemichi is beaten to a pulp by Taiju Shiba. In order to save Takemichi, Hakkai proposes a bargain to Taiju.\nSource: Disney+"
+      },
+      "4": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515850,
+        "seasonNumber": 2,
+        "episodeNumber": 4,
+        "absoluteEpisodeNumber": 28,
+        "title": {
+          "ja": "Family bonds",
+          "en": "Family Bonds",
+          "de": "Familienbande",
+          "x-jat": "Family Bonds"
+        },
+        "airDate": "2023-01-29",
+        "airDateUtc": "2023-01-28T16:15:00Z",
+        "runtime": 24,
+        "overview": "Disaster is avoided when Hakkai offers to join Black Dragon. However, Mitsuya will not allow Hakkai to leave Toman, and confronts Taiju.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515850/screencap/63d1513185c30.jpg",
+        "episode": "4",
+        "anidbEid": 262636,
+        "length": 25,
+        "airdate": "2023-01-29",
+        "rating": "6.39",
+        "summary": "Disaster is avoided when Hakkai offers to join Black Dragon. However, Mitsuya will not allow Hakkai to leave Toman, and confronts Taiju.\nSource: Disney+"
+      },
+      "5": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515852,
+        "seasonNumber": 2,
+        "episodeNumber": 5,
+        "absoluteEpisodeNumber": 29,
+        "title": {
+          "ja": "Christmas Eve",
+          "en": "Christmas Eve",
+          "de": "Heiligabend",
+          "x-jat": "Christmas Eve"
+        },
+        "airDate": "2023-02-05",
+        "airDateUtc": "2023-02-04T16:15:00Z",
+        "runtime": 24,
+        "overview": "Kisaki and Hanma offer their help to Takemichi and Chifuyu in the rescue of Hakkai and destroying Black Dragon. Takemichi and Chifuyu come to a decision",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515852/screencap/63dea2c5eb9dd.jpg",
+        "episode": "5",
+        "anidbEid": 263387,
+        "length": 25,
+        "airdate": "2023-02-05",
+        "rating": "6.22",
+        "summary": "Kisaki and Hanma offer their help to Takemichi and Chifuyu in the rescue of Hakkai and destroying Black Dragon. Takemichi and Chifuyu come to a decision.\nSource: Disney+"
+      },
+      "6": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515853,
+        "seasonNumber": 2,
+        "episodeNumber": 6,
+        "absoluteEpisodeNumber": 30,
+        "title": {
+          "ja": "Whip up morale",
+          "en": "Whip Up Morale",
+          "de": "Die Moral steigern",
+          "x-jat": "Whip Up Morale"
+        },
+        "airDate": "2023-02-12",
+        "airDateUtc": "2023-02-11T16:15:00Z",
+        "runtime": 24,
+        "overview": "On a snowy Christmas Eve night, Takemichi said his own goodbye to protect his beloved Hinata. Then, on Christmas Day, Taiju visits the church alone. Takemichi, Chifuyu, Kisaki, and Hanma go to the church to stop Hakkai, who is after Taiju’s life. While Chifuyu and the other three are holding up Taiju outside the church, Takemichi carries out his plan to persuade Hakkai, who should already be inside.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515853/screencap/63e802035db32.jpg",
+        "episode": "6",
+        "anidbEid": 263388,
+        "length": 25,
+        "airdate": "2023-02-12",
+        "rating": "6.37",
+        "summary": "Propelled by each their own motives, the alliance members head to the church on Christmas night.\nSource: Disney+"
+      },
+      "7": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515855,
+        "seasonNumber": 2,
+        "episodeNumber": 7,
+        "absoluteEpisodeNumber": 31,
+        "title": {
+          "ja": "Sibling rivalry",
+          "en": "Sibling Rivalry",
+          "de": "Geschwisterrivalität",
+          "x-jat": "Sibling Rivalry"
+        },
+        "airDate": "2023-02-19",
+        "airDateUtc": "2023-02-18T16:15:00Z",
+        "runtime": 24,
+        "overview": "Yuzuha's surprise attack on Taiju misses its mark. Takemichi realizes Yuzuha is the key to changing the future, so he gets back into the fight.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515855/screencap/63f14f661f6a8.jpg",
+        "episode": "7",
+        "anidbEid": 263389,
+        "length": 25,
+        "airdate": "2023-02-19",
+        "rating": "6.16",
+        "summary": "Yuzuha`s surprise attack on Taiju misses its mark. Takemichi realizes Yuzuha is the key to changing the future, so he gets back into the fight.\nSource: Disney+"
+      },
+      "8": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515857,
+        "seasonNumber": 2,
+        "episodeNumber": 8,
+        "absoluteEpisodeNumber": 32,
+        "title": {
+          "ja": "Strive together",
+          "en": "Strive Together",
+          "de": "Gemeinsamer Kampf",
+          "x-jat": "Strive Together"
+        },
+        "airDate": "2023-02-26",
+        "airDateUtc": "2023-02-25T16:15:00Z",
+        "runtime": 24,
+        "overview": "After making a bold declaration, Takemichi keeps rising up from Taiju's beatdowns.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515857/screencap/63fa7636331d1.jpg",
+        "episode": "8",
+        "anidbEid": 263390,
+        "length": 25,
+        "airdate": "2023-02-26",
+        "rating": "6.18",
+        "summary": "Mitsuya arrives at the church, but is seriously injured in a surprise attack. Finding himself in another pinch, Takemichi gathers himself and makes a bold declaration regarding the future of Black Dragon. Though Taiju continues to beat him down, Takemichi keeps getting back up to face him again.\nSource: Disney+"
+      },
+      "9": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515859,
+        "seasonNumber": 2,
+        "episodeNumber": 9,
+        "absoluteEpisodeNumber": 33,
+        "title": {
+          "ja": "Dawning of a new era",
+          "en": "Dawning of a New Era",
+          "de": "Anbeginn eines neuen Zeitalters",
+          "x-jat": "Dawning of a New Era"
+        },
+        "airDate": "2023-03-05",
+        "airDateUtc": "2023-03-04T16:15:00Z",
+        "runtime": 24,
+        "overview": "After revealing his secret, Hakkai overcomes his fear of his brother and confronts Taiju with Takemichi. As defeat seems imminent, the familiar sound of a motorcycle engine heralds Mikey's arrival at church.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515859/screencap/6403b64b24e5f.jpg",
+        "episode": "9",
+        "anidbEid": 264102,
+        "length": 25,
+        "airdate": "2023-03-05",
+        "rating": "6.60",
+        "summary": "After revealing his secret, Hakkai overcomes his fear of his brother and faces down Taiju with Takemichi. Just when defeat looks imminent, the familiar sound of a bike engine heralds Mikey`s arrival at the church. However, something seems odd about him.\nSource: Disney+"
+      },
+      "10": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515861,
+        "seasonNumber": 2,
+        "episodeNumber": 10,
+        "absoluteEpisodeNumber": 34,
+        "title": {
+          "ja": "The light of my life",
+          "en": "The Light of My Life",
+          "de": "Mein Lebenslicht",
+          "x-jat": "The Light of My Life"
+        },
+        "airDate": "2023-03-12",
+        "airDateUtc": "2023-03-11T16:15:00Z",
+        "runtime": 24,
+        "overview": "After defeating Black Dragon, Takemichi finds himself being taken by Mikey to Hina's place, to face the girl he broke up with just the day before.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515861/screencap/640cb335d8ae4.jpg",
+        "episode": "10",
+        "anidbEid": 264103,
+        "length": 25,
+        "airdate": "2023-03-12",
+        "rating": "6.31",
+        "summary": "After defeating Black Dragon, Takemichi finds himself being taken by Mikey to Hina`s place, to face the girl he broke up with just the day before.\nSource: Disney+"
+      },
+      "11": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515863,
+        "seasonNumber": 2,
+        "episodeNumber": 11,
+        "absoluteEpisodeNumber": 35,
+        "title": {
+          "ja": "On my way home",
+          "en": "On My Way Home",
+          "de": "Auf dem Heimweg",
+          "x-jat": "On My Way Home"
+        },
+        "airDate": "2023-03-19",
+        "airDateUtc": "2023-03-18T16:15:00Z",
+        "runtime": 24,
+        "overview": "After declaring victory over the Black Dragons at the Tokyo Manji gang's first meeting of the year, Mikey makes an unexpected announcement.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515863/screencap/64174d57278c7.jpg",
+        "episode": "11",
+        "anidbEid": 264104,
+        "length": 25,
+        "airdate": "2023-03-19",
+        "rating": "6.26",
+        "summary": "After declaring victory over Black Dragon at Tokyo Manji Gang`s first meeting of the year, Mikey makes an unexpected announcement.\nSource: Disney+"
+      },
+      "12": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9515864,
+        "seasonNumber": 2,
+        "episodeNumber": 12,
+        "absoluteEpisodeNumber": 36,
+        "title": {
+          "ja": "Last order",
+          "en": "Last Order",
+          "de": "Letzter Auftrag",
+          "x-jat": "Last Order"
+        },
+        "airDate": "2023-03-26",
+        "airDateUtc": "2023-03-25T16:15:00Z",
+        "runtime": 24,
+        "overview": "Takemichi returns to the past and realizes what he must do after meeting Chifuyu.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9515864/screencap/641f7524e80d7.jpg",
+        "episode": "12",
+        "anidbEid": 264105,
+        "length": 25,
+        "airdate": "2023-03-26",
+        "rating": "6.22",
+        "summary": "Certain that he has changed the future, Takemichi returns to the present. However, the timeline he returns to is the worst one yet.\nSource: Disney+"
+      },
+      "13": {
+        "tvdbShowId": 393478,
+        "tvdbId": 9688755,
+        "seasonNumber": 2,
+        "episodeNumber": 13,
+        "absoluteEpisodeNumber": 37,
+        "title": {
+          "ja": "When it rains, it pours",
+          "en": "When It Rains, It Pours",
+          "de": "Ein Unglück kommt selten allein",
+          "x-jat": "When It Rains, It Pours"
+        },
+        "airDate": "2023-04-02",
+        "airDateUtc": "2023-04-01T16:15:00Z",
+        "runtime": 24,
+        "finaleType": "season",
+        "overview": "Takemichi returns to the past to prevent the terrible new timeline. After meeting Chifuyu, he realizes what he must do.",
+        "image": "https://artworks.thetvdb.com/banners/v4/episode/9688755/screencap/642897c596ccc.jpg",
+        "episode": "13",
+        "anidbEid": 264624,
+        "length": 25,
+        "airdate": "2023-04-02",
+        "rating": "6.16",
+        "summary": "Takemichi returns to the past to change the horrific new timeline. After meeting Chifuyu, Takemichi realizes what he must do.\nSource: Disney+"
+      },
+      "S1": {
+        "episode": "S1",
+        "anidbEid": 267833,
+        "length": 60,
+        "airdate": "2023-05-24",
+        "title": {
+          "ja": "聖夜決戦編放送直前威弁斗 ~こんな日[クリスマス]に何やってんだよオマエら~",
+          "en": "Event Digest Video",
+          "x-jat": "Seiya Kessen Hen Housou Chokuzen Event: Christmas ni Nani Yattenda yo Omaera"
+        }
+      }
+    },
+    "episodeCount": 13,
+    "specialCount": 1,
+    "images": [
+      {
+        "coverType": "Banner",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/banners/63f699395631b.jpg"
+      },
+      {
+        "coverType": "Poster",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/posters/60d20e7c9ca6a.jpg"
+      },
+      {
+        "coverType": "Fanart",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/backgrounds/60f3733aa53e2.jpg"
+      },
+      {
+        "coverType": "Clearlogo",
+        "url": "https://artworks.thetvdb.com/banners/v4/series/393478/clearlogo/611d007ea31b7.png"
+      }
+    ],
+    "mappings": {
+      "animeplanet_id": "tokyo-revengers-seiya-kessen-hen",
+      "kitsu_id": 45607,
+      "mal_id": 50608,
+      "type": "TV",
+      "anilist_id": 142853,
+      "anisearch_id": 16927,
+      "anidb_id": 17064,
+      "notifymoe_id": null,
+      "livechart_id": 10956,
+      "thetvdb_id": 393478,
+      "imdb_id": "tt13196080",
+      "themoviedb_id": "105009"
+    }
+  }
+}

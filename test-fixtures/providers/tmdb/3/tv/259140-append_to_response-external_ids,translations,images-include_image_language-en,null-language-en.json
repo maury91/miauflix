@@ -1,0 +1,1097 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=18885",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"e1f522afa8b8ce14a41dd94a03c55df3\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/xvD9urN8lUtWw5fm4a87Rl3dCZn.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      23
+    ],
+    "first_air_date": "2024-10-06",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://ranma-pr.com",
+    "id": 259140,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7903916,
+      "name": "The Way the Cookie Crumbles",
+      "overview": "Akane and Kodachi battle over homemade cookies. As Ranma chases after Kodachi and the stolen treats, Gosunkugi secretly snaps a compromising photo.",
+      "vote_average": 7.5,
+      "vote_count": 2,
+      "air_date": "2026-11-01",
+      "episode_number": 29,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 1,
+      "show_id": 259140,
+      "still_path": "/3gmzX8FHcC5RiDN29Cml0n4N2Wl.jpg"
+    },
+    "name": "Ranma1/2",
+    "next_episode_to_air": {
+      "id": 7903917,
+      "name": "Episode 30",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 30,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 1,
+      "show_id": 259140,
+      "still_path": "/xyLLukKi0aMlnKXSVr8PvQclxqu.jpg"
+    },
+    "networks": [
+      {
+        "id": 57,
+        "logo_path": "/uxaXSoT8K0S2NE5PWsBpHUl3GGU.png",
+        "name": "Nippon TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2728,
+        "logo_path": "/kwC7bfbGknKuL7uxKahk6paamlp.png",
+        "name": "RNB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4790,
+        "logo_path": "/5aEqvKUgffp6zehXyCUhJyzeZPg.png",
+        "name": "YBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4815,
+        "logo_path": "/3eAF85UnfbyA3BBuCelMd9LMwyf.png",
+        "name": "RAB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4816,
+        "logo_path": "/9qQIAEYEw1ZyPPK3tqE18Z00AwW.png",
+        "name": "TVI",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6155,
+        "logo_path": "/cvePJ33fR2SeirKZWD8rCV7rAaF.png",
+        "name": "YBC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 36,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "らんま1/2",
+    "overview": "Akane Tendo meets her new fiancé, Ranma Saotome, a martial arts prodigy with a twist: he magically transforms into a girl upon touching cold water.",
+    "popularity": 27.6965,
+    "poster_path": "/cDThx8yRYbdPOSgHbjihS4q7GYc.jpg",
+    "production_companies": [
+      {
+        "id": 21444,
+        "logo_path": "/wSejGn3lAZdQ5muByxvzigwyDY6.png",
+        "name": "MAPPA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 12655,
+        "logo_path": "/dfGqf2NoMVPrDywDL90D5HAhBlW.png",
+        "name": "Shogakukan-Shueisha Productions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9149,
+        "logo_path": "/isLUpud9N56ifftJZ4XvzwBBpoG.png",
+        "name": "Shogakukan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Nippon Television Network Corporation",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2024-10-06",
+        "episode_count": 36,
+        "id": 402144,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/5RUiNJBFufEmpzE5phIjZ3b7c2P.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.1,
+    "vote_count": 195,
+    "external_ids": {
+      "imdb_id": "tt32766897",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 451479,
+      "tvrage_id": null,
+      "wikidata_id": "Q126904533",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "ranma_pr"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo fait la connaissance de son nouveau fiancé, Ranma Saotomé, prodige des arts martiaux qui possède une particularité : il se transforme en fille au contact de l'eau froide.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "早乙女乱馬と、 天道道場三女の天道あかねは親が決めた許婚同士。しかし乱馬にはある悩みが…。中国での修行中、伝説の修行場「呪泉郷」に落ちてしまい、水をかぶると女に、お湯をかぶると男に戻るという、不思議な体質になってしまっていた！？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo meets her new fiancé, Ranma Saotome, a martial arts prodigy with a twist: he magically transforms into a girl upon touching cold water.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo conhece o noivo, Ranma Saotome, um prodígio das artes marciais com um segredo: ele se transforma magicamente em uma garota ao tocar em água fria.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo trifft ihren Verlobten Ranma Saotome, ein ganz besonderes Kampfkunst-Wunderkind: Wenn er kaltes Wasser berührt, verwandelt er sich in ein Mädchen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "乱马½",
+            "overview": "电视动画片《乱马1/2》改编自漫画家高桥留美子创作的同名漫画作品，由MAPPA负责制作，于2024年10月播出。该片以一遇冷水就会变为女生的高中生早乙女乱马和他的未婚妻天道茜为主角，描绘了他们与家人、朋友等人的混乱搞笑的日常生活。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendô conoce a su prometido, Ranma Saotome, un prodigio de las artes marciales con una peculiaridad: se transforma mágicamente en chica al tocar el agua fría.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo conoce a su prometido, Ranma Saotome, un experto en artes marciales con un detallecito menor: por arte de magia, se transforma en chica cuando toca el agua fría.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendō poznaje swojego nowego narzeczonego, Ranmę Saotomego, mistrza sztuk walki z pewną niezwykłą cechą: gdy dotknie zimnej wody, zmienia się w dziewczynę.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "เท็นโด อากาเนะ ได้พบกับคู่หมั้น ซาโอโตเมะ รันม่า อัจฉริยะด้านศิลปะการต่อสู้ผู้มีพลังอันน่าพิศวง หากได้สัมผัสน้ำเย็นเมื่อไหร่ เขาก็จะกลายร่างเป็นผู้หญิงได้อย่างน่าอัศจรรย์",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "란마1/2",
+            "overview": "텐도 아카네 앞에 초면인 약혼남 사오토메 란마가 나타난다. 게다가 천재 무술 소년 란마에겐 대반전의 비밀이 있는데. 바로, 찬물을 뒤집어쓰면 소녀로 변신하는 것.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo își întâlnește noul logodnic, Ranma Saotome, un mare talent al artelor marțiale, cu o calitate aparte: se transformă miraculos în fată când atinge apă rece.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Соун Тендо руководит школой боевых искусств Тендо вместе со своими тремя дочерьми: Аканэ, Набики и Касуми. Однажды жизнь сестер переворачивается с ног на голову, когда их отец объявляет, что пообещал одной из них выйти замуж за сына своего коллеги-мастера боевых искусств в надежде продолжить семейное наследие. В дополнение к их неоднозначной реакции, когда приезжает жених, последнее, чего ожидает семья Тендо, - это Ранма Саотоме и его отец Генма.\n\nРанма тренировался в Китае со своим отцом, пока несчастный случай не изменил их обоих. Теперь, когда их касается вода, Ранма превращается в девочку, а Генма - в гигантскую панду. Ранма ½ следует за Ранмой, который пытается поладить со своей новоиспеченной невестой, младшей из сестер Тендо, Аканэ. Когда они начинают ходить в одну школу, у них появляются друзья-приятели и соперницы, у каждой из которых есть что сказать по поводу их помолвки.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "L'erede del dojo di famiglia Akane Tendo scopre che le è stato organizzato un matrimonio combinato con Ranma Saotome, promettente artista marziale. Tuttavia, a causa di una maledizione contratta alle Sorgenti di Jusenkyo, Ranma si trasforma in ragazza a contatto con l'acqua fredda, mentre suo padre Genma diventa un panda. Tra bizzarri rivali e continui imprevisti, convivere si rivelerà un'impresa caotica.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Ranma ½",
+            "overview": "L'Akane Tendo coneix el seu nou promès, en Ranma Saotome, un prodigi de les arts marcials amb un gir: es transforma màgicament en una noia en tocar aigua freda.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo ontmoet haar nieuwe verloofde, Ranma Saotome, een speciaal martial arts-wonderkind, want hij verandert in een meisje als hij koud water aanraakt. Pure magie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo yeni nişanlısı Ranma Saotome ile tanışır. Dövüş sanatları ustası olan Ranma'nın tuhaf bir özelliği vardır: Soğuk suyla temas ettiğinde sihirli biçimde bir kıza dönüşür.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Акане Тендо зустрічає свого нареченого Ранму Саотоме — майстра бойових мистецтв із таємницею: торкнувшись холодної води, він магічним чином перетворюється на дівчину.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "ראנמה 1/2",
+            "overview": "אקאנה טנדו פוגשת את ארוסהּ הטרי, אשף אומנויות לחימה בשם ראנמה סאוטומה, ומגלה שכשהוא בא במגע עם מים קרים, הוא הופך באורח פלא לאישה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Tendo Akane találkozik a vőlegényével, Saotome Ranmával, aki tehetséges harcművész, de van vele egy kis gond: ha hideg víz éri, rejtélyes módon lánnyá változik.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "تلتقي \"أكاني تيندو\" بخطيبها الجديد \"رانما ساوتومي\"، وهو لاعب فنون قتالية موهوب بمفارقة واحدة... إنه يتحول سحريًّا إلى فتاة عندما يلامس الماء البارد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "تلتقي \"أكاني تيندو\" بخطيبها الجديد \"رانما ساوتومي\"، وهو لاعب فنون قتالية موهوب بمفارقة واحدة... إنه يتحول سحريًّا إلى فتاة عندما يلامس الماء البارد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "亂馬 1/2",
+            "overview": "天道茜遇見新未婚夫早乙女亂馬，他雖是練武奇才，卻有一點和別人不一樣：一碰到冷水就會離奇變成女生。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "乱马 1/2",
+            "overview": "天道茜遇到了未婚夫早乙女乱马 — 一位武学奇才。不过，此人体质特殊：一碰冷水就会变成女孩。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "亂馬 1/2",
+            "overview": "天道茜遇見新未婚夫早乙女亂馬，他雖是練武奇才，卻有一點和別人不一樣：一碰到冷水就會離奇變成女生。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo upozna svoga novog zaručnika Ranmu Saotomea, talentiranog borca s jednom posebnošću: čarobno se pretvori u djevojku kad dotakne hladnu vodu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo se seznámí s Ranmou Saotomem, kterého si má jednou vzít za muže. Ten je sice mistr bojových umění, ale když se dotkne studené vody, promění se v holku.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo møder sin nye forlovede, Ranma Saotome, der er et unikum inden for kampsport med et twist: Han forvandles på magisk vis til en pige, når han rører koldt vand.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo tapaa uuden sulhasensa, Ranma Saotomen. Tämä on kamppailulajien ihmelapsi, joka muuttuu maagisesti tytöksi koskettaessaan kylmää vettä.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akané Tendo fait la rencontre de son fiancé, Ranma Saotomé, un prodige des arts martiaux... qui se transforme en fille lorsqu'il touche de l'eau froide.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Η Άκανε Τέντο γνωρίζει τον νέο αρραβωνιαστικό της, Ράνμα Σαότομε: ένα αστέρι των πολεμικών τεχνών που μεταμορφώνεται δια μαγείας σε κορίτσι όταν αγγίζει κρύο νερό.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "अकाने तेनदो अपने नए मंगेतर रनमा साओटोमे से मिलती है जो मार्शल आर्ट का एक ज़बरदस्त खिलाड़ी है, पर एक ट्विस्ट है: ठंडे पानी को छूते ही वह जादुई रूप से एक लड़की में बदल जाता है.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo bertemu tunangan barunya, Ranma Saotome, seniman bela diri berbakat yang punya keunikan: ia secara ajaib berubah menjadi perempuan kalau terkena air dingin.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo bertemu tunangnya yang baharu, Ranma Saotome, seorang jaguh seni bela diri yang mempunyai rahsia: dia berubah menjadi perempuan apabila menyentuh air sejuk.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo møter den nye forloveden sin, Ranma Saotome, et kampsport-vidunderbarn som er litt annerledes: han blir forvandlet til en jente når han rører kaldt vann.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo conhece o noivo, Ranma Saotome, um prodígio das artes marciais com a caraterística especial de se transformar numa rapariga ao tocar em água fria.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Akane Tendo träffar sin nya fästman, Ranma Saotome, en kampsportstalang med en udda egenskap: han förvandlas till tjej varje gång han rör vid kallt vatten.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Nakilala ni Akane Tendo ang bago niyang fiancé, si Ranma Saotome, martial arts prodigy na may twist: makahimala siyang nagiging babae kapag nakahipo ng malamig na tubig.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Ranma1/2",
+            "overview": "Tendo Akane gặp vị hôn phu mới của mình, Saotome Ranma, một thần đồng võ thuật có một bất ngờ: cậu có thể biến thành con gái một cách kỳ diệu khi chạm vào nước lạnh.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "რანმა 1/2",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Akane Tendo ontmoet haar nieuwe verloofde, Ranma Saotome, een vechtsportwonder met een twist: hij verandert op magische wijze in een meisje als hij koud water aanraakt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xvD9urN8lUtWw5fm4a87Rl3dCZn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z0sftiGQfOALJVCg62n3MaWU72l.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xMgzRUA1RjxLQn05oJ8IFbf06AO.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2155,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qWQVi9ScSAlU14ktjULqzFxSZPP.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3831
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rw7AIFOmo7eejgpFfZm7s00RXUt.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3pfr4oKkJVu3K0wTYfIj1nvRjoI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d3hxovjAbQmvai9sypvW2E40mxI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1960,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lmTJneCn47fRu4lwEUo0OsrTkVh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3484
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2157,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nywRWHTRcLeqLfSZv9H2ZD16CDO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3832
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mDyQKR17pfUIzJ43Z4wkRsWJlDQ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zf2puLq3FjjF7syKJc1uOa3Jy0w.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/droFtfgkO9hBTFpg0CpBZ8NYZr8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xtYC76uB4t3LHjC7bOkVHWpu5bk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1OksFPa92yP0IgvNnOI9CYbItAX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cQ99yoixW7QOq3iMqmyyu24dW5c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pZH9m7YXq3kdlw0zWjhZEC4NpOP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cupkxlKizBXyjIpfVEmfdFFlXEk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/f9jUCGnpq274o3ehOxt6xBWNyjG.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.893,
+          "height": 642,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ajJxeM5CIDV8fMQZU3sHSfTIVKb.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2499
+        },
+        {
+          "aspect_ratio": 3.883,
+          "height": 205,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wDODKGlKxdCT36J4oS1uwtmWQRB.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 796
+        },
+        {
+          "aspect_ratio": 2.809,
+          "height": 283,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9sklXHbjpQ4JL8HOOztl7w1FMPR.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 795
+        },
+        {
+          "aspect_ratio": 3.864,
+          "height": 206,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ubSiqaXgQrR9hJtQ2jPSmsNpfjY.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 796
+        },
+        {
+          "aspect_ratio": 3.003,
+          "height": 2034,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xmZFFDdBpqK96NnjbfXboJMPbvt.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 6109
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cDThx8yRYbdPOSgHbjihS4q7GYc.jpg",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dh4un5SSA1i3yjMeJgH3xhT68hh.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zQhwc27CWHM4zx9lJU9bI5FRQOm.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1333
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6vmdhryL8pOzXpHu293isC7uLwu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1333
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b89RP6Na8EqV7U9ZR1IRFgdMSp0.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y0yUO3gvFfHkwSDYf9VqSMsS4b1.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vUh2wY2ZEBPBmRxX0ukKnLSfkIH.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7RV1D6uMkVi7NAx1iWyGzGaDkmp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 889,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9yJ8Cc91LHeKAYMBOi40sb7HSH5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2993,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sDtNyuelzLQCQTlTd3kppvWg5P6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2993,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/acnkGNxG48SuVlkQTKiH4WqzheN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1997
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jIruxmslQoLlHHqE5ILLy1AcFWl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/acHGzNzqleojh7dTazPR5IhVpQY.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2993,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5AzlOMIkABHxF3e2Xcuw4WDib7h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1997
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1741,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/klNwoOxWnBA2gzu9KW2LZ8VU3rj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1161
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6K1Mg9aV1tq2Cwx00sVs5qTzgSX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1998,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6ZJAOEP5ua4chPO0KEkYu3uU2OX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1414
+        }
+      ]
+    }
+  }
+}

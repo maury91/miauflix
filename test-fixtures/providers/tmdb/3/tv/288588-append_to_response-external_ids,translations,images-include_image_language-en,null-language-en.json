@@ -1,0 +1,404 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=24349",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"5594b698549b892d2fae903c310abcae\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/4hKtdyTXt4O2hy4zqadlENY1qpM.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-10-11",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://zero-believers-anime.com/",
+    "id": 288588,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-01",
+    "last_episode_to_air": {
+      "id": 7936513,
+      "name": "Makoto Takatsuki Synchronizes",
+      "overview": "Attacked by a griffon, Makoto braves immolation to synchronize with Lucy to control her magic and defeat it.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-01",
+      "episode_number": 4,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 288588,
+      "still_path": "/i8E0wFvKtp1fh3U4P3nsaJKLtdi.jpg"
+    },
+    "name": "Full Clearing Another World Under a Goddess with Zero Believers",
+    "next_episode_to_air": {
+      "id": 7936514,
+      "name": "Makoto Takatsuki Explores a Dungeon",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 288588,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 1765,
+        "logo_path": "/e15zGUrj4axKXfbOPoxUUl3FQJI.png",
+        "name": "BS Asahi",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "信者ゼロの女神サマと始める異世界攻略",
+    "overview": "An isekai fantasy where an ordinary gamer reincarnates without special powers, teams up with a minor goddess, and rises from the weakest to the strongest in a new world.",
+    "popularity": 13.6095,
+    "poster_path": "/23ZgHFsaM6O5tx6VuvoWg6vHJPM.jpg",
+    "production_companies": [
+      {
+        "id": 127236,
+        "logo_path": "/ydZLsADcAmenTgsYQsB9UFYLhM1.png",
+        "name": "HORNETS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 69968,
+        "logo_path": "/cN8Qhl29ZrmWYgkYTS6CDhPK0A5.png",
+        "name": "NBCUniversal Entertainment Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 142186,
+        "logo_path": "/bdXTOuU7PdsDtQngyM7vb47zePs.png",
+        "name": "Hakuhodo DY Music & Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188144,
+        "logo_path": "/tft4KzwjS3okGiN6duB3qwHkIX1.png",
+        "name": "BS Asahi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162019,
+        "logo_path": "/inMGZK76HIbFhTnCGzVx39BMGzr.png",
+        "name": "ADK Marketing Solutions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173072,
+        "logo_path": "/yzjCLHAKJaU4TaqoKMRn7DopNnr.png",
+        "name": "OVERLAP",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157002,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Tokyo MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 92437,
+        "logo_path": "/oarjkRxQ0i0mzXkvBerbDaUaYbM.png",
+        "name": "DAX Production",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6681,
+        "logo_path": "/s4RElEnQyM2VrHZCQ3jYemPdxML.png",
+        "name": "THE KLOCKWORX",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-11",
+        "episode_count": 12,
+        "id": 450713,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/6UqQXt63uqEd4CaE3wCaTaVCghZ.jpg",
+        "season_number": 1,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 0,
+    "vote_count": 0,
+    "external_ids": {
+      "imdb_id": "tt43650265",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 472640,
+      "tvrage_id": null,
+      "wikidata_id": "Q137759469",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "zero_believers"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Shinja Zero no Megami-sama to Hajimeru Isekai Kouryaku",
+            "overview": "\"Tus estadísticas son más bajas que las de una persona promedio.\"\n\nTakatsuki Makoto es el estudiante más débil de la clase 1-A, con habilidades casi inútiles y un set de habilidades que caduca en 10 años. El Gran Señor de los Demonios está a punto de regresar, y él ni siquiera sabe si es un Aprendiz de Mago.\n\nEn su desesperación, una Diosa sin seguidores le pide que la salve. Ahora, Makoto tiene que enfrentarse a desafíos imposibles para salvar a la Diosa y cambiar su destino en este Isekai lleno de dificultades.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Full Clearing Another World under a Goddess with Zero Believers",
+            "overview": "\"Tus estadísticas son más bajas que las de una persona promedio.\"\n\nTakatsuki Makoto es el estudiante más débil de la clase 1-A, con habilidades casi inútiles y un set de habilidades que caduca en 10 años. El Gran Señor de los Demonios está a punto de regresar, y él ni siquiera sabe si es un Aprendiz de Mago.\n\nEn su desesperación, una Diosa sin seguidores le pide que la salve. Ahora, Makoto tiene que enfrentarse a desafíos imposibles para salvar a la Diosa y cambiar su destino en este Isekai lleno de dificultades.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Full Clearing Another World Under a Goddess with Zero Believers",
+            "overview": "An isekai fantasy where an ordinary gamer reincarnates without special powers, teams up with a minor goddess, and rises from the weakest to the strongest in a new world.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "신자 0명 여신님과 시작하는 이세계 공략",
+            "overview": "골수 게이머인 고등학생 타카츠키 마코토는, 합숙 귀갓길 사고로 반 친구들과 함께 이세계로 전이되고 만다.\n\n그러나 마코토에게만 치트 능력이 주어지지 않아, 최약의 \"견습 마법사\"로서 이세계를 살아남아야 하는 처지가 된다.\n\n그런 마코토의 앞에, 신자 0명의 마이너 여신 노아가 나타난다.\n\n필사적인 권유를 받아 첫 번째 신자가 되었으나, 여신 노아에게는 비밀이 있는 모양인데…….\n\n공략 난이도는 최상급. 상식을 깨부수는 방법으로 여신과 최강에 이르는 이세계 공략 판타지, 개막!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Full Clearing Another World under a Goddess with Zero Believers",
+            "overview": "Nach einem Busunfall landet die Klasse des Hardcore-Gamers Makoto Takatsuki in einer Welt voller Götter, Magie und Monster. Alle erhalten mächtige Stats und Skills, bis auf Makoto, der ein schwacher Zauberlehrling wird. Kurz darauf bittet eine niedere Göttin ohne Gläubige Makoto, ihr erster Anhänger zu werden. Er stimmt zu und gemeinsam treten sie mit klugen Strategien gegen den Rest der Welt an.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "和没有信徒的女神大人一起攻略异世界",
+            "overview": "游戏成瘾的高中生高月诚人于校外教学回程中遭遇意外事故，与全班同学一同转移到了异世界。异世界的神明们赐予了全班同学特殊能力，然而，只有诚人被赋予的是较为基础的“魔法师学徒”身份。此后，诚人在梦中遇见了一位没有信徒的无名女神诺雅。诺雅请求诚人信仰她，诚人便决定成为其信徒。随后，女神下达神谕，要求诚人前往人迹未至的迷宫进行拯救。诚人以游戏成瘾者的经验应对这项挑战。在得到诺雅的庇护与神器后，他试图通过非常规方法提升自身能力。故事讲述了诚人与女神诺雅在异世界展开的奇幻冒险。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "生粋のゲーマーである高校生・高月マコトは、合宿帰りの事故でクラスメイトと共に異世界へ転移してしまう。しかし、マコトにだけチート能力が与えられず、最弱の\"魔法使い見習い\"として異世界を生き抜くことに。そんなマコトの前に、信者ゼロのマイナー女神・ノアが現れる。必死の勧誘を受け一人目の信者になるも、女神ノアには秘密があるようで……!?攻略難度は最上級。常識破りの方法で女神と最強に至る異世界攻略ファンタジー、開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Full Clearing Another World Under a Goddess with Zero Believers",
+            "overview": "Takatsuki Makoto, un lycéen accro aux jeux vidéo, est transporté dans un autre monde avec ses camarades de classe après une mésaventure sur le chemin du retour d'un camp d'entraînement. Les dieux de l'autre monde leur ont tous donné des capacités de triche, mais pour une raison qui lui échappe, Makoto est le seul qui soit inférieur à la moyenne, un apprenti magicien. Leur objectif est de sauver Noa, une déesse mineure qui est piégée dans un donjon inaccessible à l'humanité. Avec la bénédiction de Noa et les artefacts divins en main, Makoto se met en route pour devenir le plus fort d'une manière peu orthodoxe.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Full Clearing Another World under a Goddess with Zero Believers",
+            "overview": "Quando la sua classe resta sepolta viva sulla via del ritorno da una gita, il diciottenne Makoto Takatsuki viene trasportato in un altro mondo assieme a tutti loro. Tuttavia, se il resto dei suoi compagni ha acquisito potenti abilità, lui a malapena ha qualche potere. Una bellissima divinità che non ha fedeli è stata imprigionata, ed aspetta qualcuno che vada a salvarla. Nel frattempo incombe la minaccia del risveglio del re dei demoni. A Makoto non resta che salvare la dea e farsi strada in questo isekai costellato di avversità!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Full Clearing Another World under a Goddess with Zero Believers",
+            "overview": "Makoto Takatsuki é um estudante comum do ensino médio e um jogador hardcore de RPG. No entanto, sua vida deixa de ser “normal” quando toda a sua turma se envolve em um acidente de ônibus e acaba transportada para outro mundo. Deuses poderosos governam essa estranha terra repleta de magia e monstros, e cada recém-chegado recebe atributos elevados e habilidades únicas. Bem... quase todos. Os atributos de Makoto são patéticos, e suas habilidades são extremamente fracas em comparação às de seus colegas... Ele acaba até mesmo preso à classe de mago aprendiz. Para piorar, descobre que tem apenas dez anos de vida pela frente. Por sorte, Makoto logo conhece Noah, uma deusa menor que aparece em seus sonhos e pede que ele se torne seu primeiro fiel. Com a ajuda das bênçãos de Noah e de uma arma divina, Makoto busca se tornar forte o bastante para resgatar sua deusa da masmorra onde ela está aprisionada.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "和沒有信徒的女神大人一起攻略異世界",
+            "overview": "遊戲成癮的高中生・高月誠人在集訓回程中遭遇意外，與全班同學一同被傳送到了異世界，但是只有誠人沒獲得外掛能力，只能當「最弱魔法師學徒」，想辦法在異世界生存下去。這時出現在誠人面前的，是沒有信徒的無名女神・諾雅。禁不起她拼命拉攏的攻勢，誠人成為了她的第一位信徒。然而諾雅似乎有不為人知的祕密？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chinh phục dị giới cùng nữ thần không tín đồ",
+            "overview": "Một isekai kỳ ảo, nơi một game thủ bình thường tái sinh mà không có năng lực đặc biệt, hợp tác cùng một nữ thần nhỏ bé và vươn lên từ kẻ yếu nhất thành kẻ mạnh nhất ở thế giới mới.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een isekai-fantasie waarin een gewone gamer reïncarneert zonder speciale krachten, samenwerkt met een kleine godin en opstijgt van de zwakste naar de sterkste in een nieuwe wereld.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "和沒有信徒的女神大人一起攻略異世界",
+            "overview": "遊戲成癮的高中生・高月誠人在集訓回程中遭遇意外，與全班同學一同被傳送到了異世界，但是只有誠人沒獲得外掛能力，只能當「最弱魔法師學徒」，想辦法在異世界生存下去。這時出現在誠人面前的，是沒有信徒的無名女神・諾雅。禁不起她拼命拉攏的攻勢，誠人成為了她的第一位信徒。然而諾雅似乎有不為人知的祕密？",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Прохождение параллельного мира вместе с богиней, у которой нет последователей: Слабейший маг среди одноклассников",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4hKtdyTXt4O2hy4zqadlENY1qpM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/23ZgHFsaM6O5tx6VuvoWg6vHJPM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        }
+      ]
+    }
+  }
+}

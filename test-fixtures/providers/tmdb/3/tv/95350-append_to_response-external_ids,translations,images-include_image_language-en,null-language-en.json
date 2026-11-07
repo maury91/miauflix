@@ -1,0 +1,1672 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=17484",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"a31147d2e042c01a5c54c160112cc11c\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/6gqezQJ2mkm4jreWwLyOZy2Vf6i.jpg",
+    "created_by": [
+      {
+        "id": 28974,
+        "credit_id": "667b240b8e91ec743ec27c72",
+        "name": "Damon Lindelof",
+        "original_name": "Damon Lindelof",
+        "gender": 2,
+        "profile_path": "/9V75oRAKiI0chdg1wGh1wPqaXsG.jpg"
+      },
+      {
+        "id": 1258079,
+        "credit_id": "667b69db74da0fb41e7ba4e0",
+        "name": "Chris Mundy",
+        "original_name": "Chris Mundy",
+        "gender": 2,
+        "profile_path": "/aEWK5Qo1U896iMsUMd2oY8yso1I.jpg"
+      },
+      {
+        "id": 2325172,
+        "credit_id": "667b2415af94a9c945f68fcc",
+        "name": "Tom King",
+        "original_name": "Tom King",
+        "gender": 2,
+        "profile_path": "/no73FbFgWdBB5wU6xEc7WKT8EIs.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-08-16",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://www.hbo.com/content/lanterns",
+    "id": 95350,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-10-04",
+    "last_episode_to_air": {
+      "id": 7179889,
+      "name": "Dirt and Stars",
+      "overview": "As John and Hal draw closer to the truth, John comes to an unexpected understanding with Sheriff Kane... just as a chilling new discovery emerges.",
+      "vote_average": 7.5,
+      "vote_count": 56,
+      "air_date": "2026-10-04",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 57,
+      "season_number": 1,
+      "show_id": 95350,
+      "still_path": "/nMYHTMt4YuUT50lUHQDUBYAkvQM.jpg"
+    },
+    "name": "Lanterns",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 49,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "HBO",
+        "origin_country": "US"
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Lanterns",
+    "overview": "Two intergalactic cops, new recruit John Stewart and Lantern legend Hal Jordan, are drawn into a dark, Earth-based mystery as they investigate a murder in the American heartland.",
+    "popularity": 45.4415,
+    "poster_path": "/rb94rKVIzLyfWufIN7WqLvadBDH.jpg",
+    "production_companies": [
+      {
+        "id": 184898,
+        "logo_path": "/uVpjHYq5AbiG2qj82ZRBM4VFL3o.png",
+        "name": "DC Studios",
+        "origin_country": "US"
+      },
+      {
+        "id": 3268,
+        "logo_path": "/tuomPhY2UtuPTqqFnKMVHvSb724.png",
+        "name": "HBO",
+        "origin_country": "US"
+      },
+      {
+        "id": 1957,
+        "logo_path": "/pJJw98MtNFC9cHn3o15G7vaUnnX.png",
+        "name": "Warner Bros. Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 66224,
+        "logo_path": null,
+        "name": "Man, Woman & Child Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-08-16",
+        "episode_count": 8,
+        "id": 165308,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/j9PTWG0Xn0NeIRhGGFJbciNYWvS.jpg",
+        "season_number": 1,
+        "vote_average": 7.4
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Only one can wear the ring.",
+    "type": "Scripted",
+    "vote_average": 8.198,
+    "vote_count": 859,
+    "external_ids": {
+      "imdb_id": "tt26545992",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 376098,
+      "tvrage_id": null,
+      "wikidata_id": "Q110556821",
+      "facebook_id": "greenlantern",
+      "instagram_id": "greenlantern",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Two intergalactic cops, new recruit John Stewart and Lantern legend Hal Jordan, are drawn into a dark, Earth-based mystery as they investigate a murder in the American heartland.",
+            "homepage": "",
+            "tagline": "Only one can wear the ring."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Фонари",
+            "overview": "Начинающий Джон Стюарт и опытный страж Хэл Джордан, межгалактические полицейские из Корпуса Зелёных Фонарей, оказываются втянуты в расследование убийства в американской глубинке.",
+            "homepage": "",
+            "tagline": "«Во тьме ночной. При свете дня»"
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Linternas",
+            "overview": "Sigue al nuevo recluta John Stewart y al legendario Linterna Hal Jordan, dos policías intergalácticos que se ven envueltos en un oscuro misterio terrestre mientras investigan un asesinato en el corazón de Estados Unidos. Esto les lleva a misterios y ajustes de cuentas más oscuros.",
+            "homepage": "",
+            "tagline": "Solo uno puede llevar el anillo"
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Deux flics intergalactiques, la nouvelle recrue John Stewart et le légendaire Hal Jordan, sont confrontés à un sombre mystère sur Terre alors qu’ils enquêtent sur un meurtre au fin fond de l’Amérique.",
+            "homepage": "",
+            "tagline": "En plein jour ou dans la nuit noire."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Lanternas",
+            "overview": "Dois policiais intergalácticos, o recruta novato John Stewart e o lendário Lanterna Verde Hal Jordan, se veem envolvidos em um mistério sombrio que se passa na Terra enquanto investigam um assassinato no coração dos Estados Unidos.",
+            "homepage": "",
+            "tagline": "Só um pode usar o anel."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Linternas",
+            "overview": "El nuevo recluta John Stewart y la leyenda Hal Jordan, dos policías intergalácticos, se ven envueltos en un oscuro misterio terrestre mientras investigan un asesinato en el corazón de Estados Unidos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Due poliziotti intergalattici, la nuova recluta John Stewart e la leggenda delle Lanterne Hal Jordan, vengono coinvolti in un oscuro mistero che ha come sfondo la Terra mentre indagano su un omicidio nel cuore dell'America.",
+            "homepage": "",
+            "tagline": "Solo una persona può portare l'anello."
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "랜턴스",
+            "overview": "은하계를 지키는 경찰인 그린 랜턴의 전설 할 조던과 신입 존 스튜어트가 미국 중심부에서 벌어진 살인 사건을 수사하다가 우주의 비밀과 연결된 어두운 사건에 휘말린다.",
+            "homepage": "",
+            "tagline": "오직 한 사람만이 반지를 낄 수 있다."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "",
+            "overview": "Serialul îi urmărește pe noul recrut John Stewart și legenda Lantern Hal Jordan, doi polițiști intergalactici atrași într-un mister de pe Pământ.",
+            "homepage": "",
+            "tagline": "Niciun rău nu va scăpa privirii lor."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ліхтарі",
+            "overview": "Новобранець Джон Стюарт та легенда корпусу «Ліхтарів» Гел Джордан, двоє міжгалактичних поліцейських, що були втягнуті у темну земну таємницю, взялися розслідувати вбивство в центрі Америки.",
+            "homepage": "",
+            "tagline": "Лише один може носити кільце."
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Фенери",
+            "overview": "Сериалът проследява новобранеца Джон Стюарт и легендарния фенер Хал Джордан – двама междугалактически ченгета, които се оказват въвлечени в мрачна мистерия на Земята, докато разследват убийство в американския Среден запад.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Lámpások",
+            "overview": "Az újonc John Stewart és a Lámpás-legenda Hal Jordan, azaz a két intergalaktikus zsaru egy sötét, a Földhöz kötődő rejtély kellős közepén találja magát, amikor nyomozni kezdenek egy, az amerikai szívvidéken elkövetett gyilkosság ügyében.",
+            "homepage": "",
+            "tagline": "Félsz?"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "לנטרנים",
+            "overview": "הסדרה מתמקדת בג'ון סטיוארט, מגויס חדש, ובהאל ג'ורדן האגדי, שני שוטרים אינטר-גלקטיים המעורבים בפרשייה מסתורית ואפלה ששורשיה נעוצים בכדור הארץ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Nyrekryten John Stewart och Lantern-legenden Hal Jordan är två intergalaktiska poliser som dras in i ett mörkt mysterium på jorden.",
+            "homepage": "",
+            "tagline": "Endast en kan bära ringen."
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Twee intergalactische agenten, de nieuwe rekruut John Stewart en de legendarische Lantern Hal Jordan, raken betrokken bij een duister mysterie op aarde wanneer ze een moord in het Amerikaanse binnenland onderzoeken.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Twee intergalactische agenten, de nieuwe rekruut John Stewart en de legendarische Lantern Hal Jordan, raken betrokken bij een duister mysterie op aarde wanneer ze een moord in het Amerikaanse binnenland onderzoeken.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Kaksi galaksienvälistä poliisia, tulokas John Stewart ja Lantern-legenda Hal Jordan, tutkivat Maasta peräisin olevaa synkkää mysteeriä.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "綠光軍團",
+            "overview": "跟隨約翰史都華與綠光軍團傳奇哈爾喬登的腳步，看這兩位星際警察如何深入美國腹地，調查一起謀殺案。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Nasljednik Green Lanterna",
+            "overview": "Dvojica intergalaktičkih policajaca, novi član John Stewart i legenda Lantern korpusa Hal Jordan, bivaju uvučeni u mračnu misteriju na Zemlji dok istražuju ubojstvo u srcu Amerike.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "لنترن‌ها",
+            "overview": "دو پلیس بین کهکشانی، جان استوارت، نیروی تازه استخدام شده و هال جردن، اسطوره فانوس‌ها، در حین بررسی یک قتل در قلب آمریکا، درگیر یک معمای تاریک و زمینی می‌شوند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Galaksiler arası iki polis olan çaylak John Stewart ve Fener efsanesi Hal Jordan, Amerika'nın kalbinde işlenen bir cinayeti soruştururken kendilerini Dünya'da geçen, karanlık bir gizemin ortasında bulurlar.",
+            "homepage": "",
+            "tagline": "Yüzüğü sadece biri takabilir."
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Dois polícias intergalácticos, o recruta novato John Stewart e o lendário Lanterna Verde Hal Jordan, vêem-se envolvidos num mistério sombrio que se passa na Terra enquanto investigam um assassinato no coração dos Estados Unidos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "ランタンズ",
+            "overview": "宇宙警察グリーン・ランタンの訓練生となったジョン・スチュワートは、ベテランだが奔放すぎるハル・ジョーダンに日々振り回されていた。２人は、アメリカの田舎町で起きた殺人事件を追ううちに、地球を舞台とした巨大な陰謀へと足を踏み入れていく。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Zelene svetilke",
+            "overview": "Medgalaktična policista, novinec John Stewart in legenda Zelenih svetilk Hal Jordan, se znajdeta v temačni zemeljski skrivnosti, ko preiskujeta umor v osrčju Amerike.",
+            "homepage": "",
+            "tagline": "Samo eden lahko nosi prstan."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "แลนเทิร์นส: รวมพลผู้พิทักษ์จักรวาล",
+            "overview": "สองตำรวจอวกาศ จอห์น สจ๊วต และ ฮาล จอร์แดน ตำนานแห่งแลนเทิร์น ระหว่างที่พวกเขาสืบสวนคดีฆาตกรรมในพื้นที่ใจกลางอเมริกา",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "绿灯军团",
+            "overview": "绿灯侠哈尔·乔丹与新晋成员约翰·斯图尔特奉命调查美国小镇的一起神秘命案，却意外发现案件背后隐藏着与外星势力有关的阴谋，两人也在追查真相的过程中面对各自的信念与考验。",
+            "homepage": "",
+            "tagline": "白昼至亮之时，黑夜至暗之际"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "الفوانيس",
+            "overview": "يتبع العمل قصة المجند الجديد (جون ستيوارت) وأسطورة اللانترنز (هال جوردان)، وهما شرطيان يجدان نفسيهما منخرطين في لغز مظلم على كوكب الأرض، أثناء تحقيقهما في جريمة قتل وقعت في قلب الولايات المتحدة.",
+            "homepage": "",
+            "tagline": "واحد فقط يمكنه ارتداء الخاتم."
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "Sledujeme nového rekruta Johna Stewarta a legendu Lanternů Hala Jordana, dva intergalaktické policisty, kteří jsou vtaženi do temné pozemské záhady a vyšetřují vraždu v srdci Ameriky.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Latarnie",
+            "overview": "Stewart i Jordan, kosmiczni strażnicy, zostają wciągnięci w mroczną zagadkę na Ziemi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "ლამპრები",
+            "overview": "სერიალი „ლამპრები“ მოგვითხრობს ახალბედა ჯონ სტიუარტისა და ლამპრების ლეგენდარული წარმომადგენლის, ჰალ ჯორდანის შესახებ. ორი გალაქტიკათშორისი პოლიციელი ამერიკის შუაგულში მომხდარი მკვლელობის გამოძიებას იწყებს, რომელიც მათ დედამიწაზე განვითარებულ ბნელ და იდუმალ მოვლენათა მორევში ჩაითრევს.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Zwei intergalaktische Polizisten, der Neuling John Stewart und die Green-Lantern-Legende Hal Jordan, werden in ein düsteres Geheimnis auf der Erde verwickelt, als sie einen Mordfall im Herzen Amerikas untersuchen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Δύο διαγαλαξιακοί αστυνομικοί, ο νεοσύλλεκτος Τζον Στιούαρτ και ο θρύλος των Λάντερν Χαλ Τζόρνταν, παρασύρονται σε ένα σκοτεινό μυστήριο με βάση τη Γη, καθώς ερευνούν έναν φόνο στην καρδιά της Αμερικής.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Serien følger den nye rekrut John Stewart og Lantern-legenden Hal Jordan, to intergalaktiske betjente, der involveres i et mørkt mysterium på Jorden.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MK",
+          "iso_639_1": "mk",
+          "name": "",
+          "english_name": "Macedonian",
+          "data": {
+            "name": "Фенери",
+            "overview": "Серијата ги следи новиот регрут Џон Стјуарт и легендарниот Зелен фенер, Хал Џордан, двајца меѓугалактички полицајци вовлечени во мрачна мистерија.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Žibintai",
+            "overview": "Serialas pasakoja apie naujoką Džoną Stiuartą ir legendą Halą Džordaną – du tarpgalaktinius policininkus, įtrauktus į tamsią, žemišką paslaptį.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "Nováčik John Stewart a legenda Hal Jordan – dvaja medzigalaktickí policajti – odhaľujú temné tajomstvo na Zemi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "De to intergalaktiske politifolkene John Stewart og Hal Jordan blir innblandet i et mørkt mysterium på jorden.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Фењери",
+            "overview": "Серија прати новог регрута Џона Стјуарта и легенду Зелених фењера, Хала Џордана, међугалактичке полицајце увучене у мрачну мистерију са Земље.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "綠燈軍團",
+            "overview": "本劇講述兩位星際警察，約翰史都華和綠燈軍團的英雄哈爾佐敦，在美國中部調查謀殺案的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Đèn Lồng",
+            "overview": "Xoay quanh tân binh John Stewart và huyền thoại Hal Jordan, hai cảnh sát liên ngân hà bị cuốn vào một bí ẩn đen tối ngay tại Trái Đất khi họ điều tra một vụ án mạng ở vùng trung tâm nước Mỹ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Lanterns",
+            "overview": "Dos policies intergalàctics, el recluta novell John Stewart i la llegenda dels Lanterns Hal Jordan, es veuen arrossegats cap a un fosc misteri a la Terra mentre investiguen un assassinat al cor dels Estats Units.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BY",
+          "iso_639_1": "be",
+          "name": "беларуская мова",
+          "english_name": "Belarusian",
+          "data": {
+            "name": "Ліхтары",
+            "overview": "Двое міжгалактычных паліцэйскіх - навабранец Джон Сцюарт і легендарны Ліхтар Хэл Джордан - аказваюцца ўцягнутымі ў змрочную таямніцу на Зямлі падчас расследавання забойства ў амерыканскай глыбінцы.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6gqezQJ2mkm4jreWwLyOZy2Vf6i.jpg",
+          "vote_average": 5.726,
+          "vote_count": 20,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wJjnJbVUwPz0GADAgpFt9nWtzUu.jpg",
+          "vote_average": 5.616,
+          "vote_count": 26,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mdbWfpbWhvxgG3k5MHpo90UgAUe.jpg",
+          "vote_average": 5.024,
+          "vote_count": 21,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yr1n2RzZHn1UYozrzvPzjcE60cP.jpg",
+          "vote_average": 3.892,
+          "vote_count": 14,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 844,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/urLiSfioTBpnhLtr0z9d6XvwHUb.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1502
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b518lw93iCIlVgCH09eD1uhLEEa.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j2KOxZY4kfnG2tNzrKv2vSMKSPJ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9WY4AgJa0s2EDaruLJi3xoCMVAR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eAFH1RM3AEZ6yOTjsJQT8XyRPZJ.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zbOhjPW9Zs0wrSXJeNxoenxzM26.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ihM1nau5QBbldBet3Cuvn34KemR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ljoQdJOUDNW79maaWzsk6M0fpgW.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zuJQAto2usduM9Kr0cgX1dLkWLZ.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jMCAu91V7fsnHNUvabOPMBLaLaj.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ruwzidqanSyhhMEk6kCVd9BLui1.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sTACyx6TDwMGIBJa9p5ijU58vfL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vY0OTypFZ1Ju55lnSruHtPHd4eL.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/moA5NNpOsSeQ2gNkOBgbMeNOl3d.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2020,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jGbkPfu96s7cfJDN03hGnH2z2iW.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3591
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cMbQdNmBeNCVCAqBN1hvih5uMrz.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rhHaXPUbR706jUloJDbKDdOu4dM.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gK6ihbFPf6iCjK63kLCNjDCy25I.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w5GVI7FvV4zbio4nRUqHTnK5B0G.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2zGGHTVDhi2BEhpMxUJl06IBNe.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/62P9tZ8Gyq64EIRMs4ZW9a9L3AV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 844,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eSu0E9E3haGmLJ1dz8GOeIX0VU6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rBQ17t7NBZyT5q6XWkOyhgUivUt.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gb2A3Iyd80rYvHRCi3gsAhkDU8N.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jnZFLcsFxuarUBElEkwpBasV2sJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qeCobJX4OJlDov9AGyUpIWJOQ22.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AgnakMWhL5SqYbxtFuGTrYmmWhU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3839
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eqAMYsP8JQBGPbOXgeoU785pmYa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fj3N1up4MXH0HIVUR0zT0tTyGo3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oFwKQAWf6oOEP7ap2KqfkphqFoK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vmVphzFRqiSJbOx7o9qUvGjICOn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7H3LoHX1DAhseHp9xHmqOeHUnQZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 927,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hLh1qNufJcnJirRTVXAWuCXYusL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1648
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 942,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/57cE9ad8heZf3afMxjU289ZKBtq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1674
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 858,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wzGm3L9Tj5l1ts0coieMpEwOCU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1526
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cN9uXoOKjb3vDfsW7MjRx4RlbYu.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kA1mJU25aDaJNjsPvWJCLjkWKU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wgDtMiYt7uKtX5CuDhZT78fKQtJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 966,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wFtMWpKN7Q9dE3qh7XlRlZIgCSz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1718
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wCraOCmUgDVxJYOLskmWwP3NovW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/updDcDRUCyk045KaXxtoVn6SdaE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9Aggk0rN3ZHoCrTgAb3aLqdJk6i.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1063,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b9rK6Hl2Sa2DhVWLRhE1afb3jPo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1890
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/b7ru6xpkkYaPMVy9J0krQ3gIGOb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.83,
+          "height": 863,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kANHXGvFKW13UEkZbYwl9nIJeEl.png",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 4168
+        },
+        {
+          "aspect_ratio": 3.235,
+          "height": 1291,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4EKgjKdhuFV2PpRAu7bhEUTukYS.png",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 4177
+        },
+        {
+          "aspect_ratio": 3.227,
+          "height": 1287,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n8K4D8MjwGIfeflMYqeVBVdQvbp.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 4153
+        },
+        {
+          "aspect_ratio": 4.846,
+          "height": 857,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qW23TG5vBLfndlXbGdoROuzwODV.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 4153
+        },
+        {
+          "aspect_ratio": 4.857,
+          "height": 860,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bxAg778W0fV8gs04kSt5OtY1BKV.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 4177
+        },
+        {
+          "aspect_ratio": 3.235,
+          "height": 1291,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ppQ6BXgHEm6fjdg4XHV5s7Z6OSl.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 4176
+        },
+        {
+          "aspect_ratio": 3.362,
+          "height": 563,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ynhvFViEsFQCJZg4efUL6Vss7n7.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1893
+        },
+        {
+          "aspect_ratio": 4.846,
+          "height": 857,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pbG65ftzXu2hHjDJex9mEYw1lgn.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4153
+        },
+        {
+          "aspect_ratio": 3.227,
+          "height": 1287,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iaxAtDTx1ifD8jh3ZUVJ71Bwub3.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4153
+        },
+        {
+          "aspect_ratio": 3.235,
+          "height": 1291,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1ljMXip9mrjDY0yV00kq5QWD7UO.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4177
+        },
+        {
+          "aspect_ratio": 3.234,
+          "height": 475,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2u3fjbv87xgtYG81VRh2fyWfC6h.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1536
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rb94rKVIzLyfWufIN7WqLvadBDH.jpg",
+          "vote_average": 6.088,
+          "vote_count": 17,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gpC7h43xPMEV3goYMQShfJbTtLq.jpg",
+          "vote_average": 5.616,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2880,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sbBehMLO6Ge7Tbk374dIBtUjO6P.jpg",
+          "vote_average": 5.25,
+          "vote_count": 10,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/23JHczmoLS41U760uaBNKZ3mLst.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9WvY1jicpfYLA6KoczwvdMRNGvc.jpg",
+          "vote_average": 4.018,
+          "vote_count": 27,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9i6966Py1jvnGHFFwxf3CGku7GV.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bbQCSajSZhDCJ5mknVTzCGAoml2.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hKPd4nYIKexq9Y7wC7VmvhQyVk6.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1hbe0qjz9Mw7zcHcUCDgofP9Hyr.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qmtgMHD9J0qyHe4gfDAKrAfnTse.jpg",
+          "vote_average": 2.066,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v81LMGwSHUgaieStFKd7gl7KhAR.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.696,
+          "height": 1752,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9mYaaLi76fi5YHj1PnoCR3kGo7r.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1220
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qO3wpX7FuAgASl0JNrwliphSBJL.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nlnIyn5oCE6soLxNoS6xKEniaYy.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uAVR8jRsd0VUBC9lHRdEb38oNSa.jpg",
+          "vote_average": 1.31,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xXuGDimY4JabnAXTKwTturrefw9.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lqlWbt8ZBkNNamOXmaBU6iE41XR.jpg",
+          "vote_average": 1.066,
+          "vote_count": 6,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cZH2b6DDcUOC4qNi2kV6lAM6lxO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1935,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fJoYsWcsM3eiir6rcxtOjZ5Zmhp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1290
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qlcQbALVsiyAXrVgIhIDhpvn9Kh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1AJLJfJwQMGkN79EVN21OGAZt9V.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qq3dEjpfaH8wv3g2A5IHQsR6kX0.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vIqJ7QviNL0LZjEXrGfhRK1ZH8h.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1440
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4VehrOqZjEGozx45sLJITmY0Y1O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1eYnzWG3P8ugb2qZu5ZbTfj2yUn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g3g2HPtvhURupyGajsM9Dosnp9m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9w7b9D0rg4zHu3r7IBkxxuSCn7Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kw45apODmZBhX15yJHNmV4IqxoF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vUgzUuWF4qqFpKdu7KYsEL34kMO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2qMmvGjjY2uRiQUNcjpdDeaNTDa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pZgjZJlZxrzyLFWzSwH8eiYkIxy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Z0mtJB4aDawdUP3VgCerfHQN5Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lM8tAx8jFckIVY0D8XpwK9KeV1K.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p7FXwcKp1ticBl80FDZgoJ5KI8E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2j5Fd1BYRvAgoimfJHKvlGw5UON.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        }
+      ]
+    }
+  }
+}

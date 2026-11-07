@@ -1,0 +1,631 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=7666",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"06332590ed169f06ad473cd9baa63645\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/4BE1aoCu5mCG3ZJ7alNDQkB3oK4.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2025-10-07",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      }
+    ],
+    "homepage": "http://chiramune.com",
+    "id": 261343,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-03",
+    "last_episode_to_air": {
+      "id": 7906012,
+      "name": "The Entrance of Summer",
+      "overview": "As summer rolls in, Saku checks in on Haru and the girls' basketball team.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-03",
+      "episode_number": 17,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 261343,
+      "still_path": "/mbiEQvUiqQiCGOOeVLWRPfm0H2e.jpg"
+    },
+    "name": "Chitose Is in the Ramune Bottle",
+    "next_episode_to_air": {
+      "id": 7906013,
+      "name": "After-School Pool and Barefoot Ponytail",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-10",
+      "episode_number": 18,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 261343,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 173,
+        "logo_path": "/fERjndErEpveJmQZccJbJDi93rj.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 25,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "千歳くんはラムネ瓶のなか",
+    "overview": "Saku Chitose is a student at Fujishi High School, the most prestigious school in Fukui Prefecture. Outstanding in class, on the field, and in his social life, Saku attracts attention, good and bad. Naturally, he is surrounded by a circle of friends anyone would be happy to have. Now in the spring of his second year, with a new class, Saku is asked to help a shut-in classmate return to school life.",
+    "popularity": 10.8099,
+    "poster_path": "/7tpcFkOpLcWkJU6mV5ooJyHA3DR.jpg",
+    "production_companies": [
+      {
+        "id": 17315,
+        "logo_path": "/w8YlPWsdAhQsbIrX0w9H1HRD9rG.png",
+        "name": "feel.",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2073,
+        "logo_path": "/tWxRSaKmRJNTcmtlXsmn5R4KOSU.png",
+        "name": "KADOKAWA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 60197,
+        "logo_path": "/D5B8l99tlFJGoMpYJk1kqxYdey.png",
+        "name": "Good Smile Company",
+        "origin_country": "JP"
+      },
+      {
+        "id": 187769,
+        "logo_path": "/hBhVw60TAa5qAT1pNELq1HjpZQ9.png",
+        "name": "Good Smile Film",
+        "origin_country": "JP"
+      },
+      {
+        "id": 202952,
+        "logo_path": "/1lkaaSq1FCx1KtnFuGcAYV7zHRy.png",
+        "name": "REMOW",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9149,
+        "logo_path": "/isLUpud9N56ifftJZ4XvzwBBpoG.png",
+        "name": "Shogakukan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 200458,
+        "logo_path": null,
+        "name": "NewGin",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157002,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "Tokyo MX",
+        "origin_country": "JP"
+      },
+      {
+        "id": 118502,
+        "logo_path": "/JQ5bx6n7Qmdmyqz6sqjo5Fz2iR.png",
+        "name": "BS11",
+        "origin_country": "JP"
+      },
+      {
+        "id": 17981,
+        "logo_path": "/8UABNMysukRi4udTHYxcNUMbPR1.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      },
+      {
+        "id": 157001,
+        "logo_path": "/vDBycpPRLKBf7T0RQbQtU49BQO6.png",
+        "name": "KADOKAWA Media House",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-10-11",
+        "episode_count": 19,
+        "id": 485233,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": null,
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2025-10-07",
+        "episode_count": 25,
+        "id": 406044,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/7tpcFkOpLcWkJU6mV5ooJyHA3DR.jpg",
+        "season_number": 1,
+        "vote_average": 7.8
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.5,
+    "vote_count": 16,
+    "external_ids": {
+      "imdb_id": "tt35769369",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 453057,
+      "tvrage_id": null,
+      "wikidata_id": "Q128795998",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "anime_chiramune"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Chitose Is in the Ramune Bottle",
+            "overview": "Ser popular não é fácil. É difícil superar Saku Chitose. O garoto mais popular da escola? Confere. Uma reputação inabalável, capaz de resistir até aos ataques mais ferozes online? Confere. Um grupo de amigos incrivelmente bonitos? Confere. Mas quando um professor pede sua ajuda para trazer de volta um estudante que está em seu quarto há meses, o mundo perfeito de Saku nunca mais será o mesmo!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Chitose-kun di Dalam Botol Ramune",
+            "overview": "Hinaan terhadap Saku Chitose sudah jadi hal biasa. Dijuluki \"bajingan playboy Kelas 5,\" ia sering difitnah oleh mereka yang iri dengan popularitasnya. Namun, itu tak menggoyahkan kepercayaan dirinya. Di luar forum internet, ia adalah sosok yang dihormati teman-temannya dan dipercaya para guru.  Memasuki tahun kedua SMA, Saku kembali bertemu teman lama dan menjalin hubungan dengan siswa elite lainnya. Namun, keseruannya terhenti saat wali kelas menugaskannya membujuk Kenta Yamazaki, seorang hikikomori, agar kembali ke sekolah. Ingin cepat selesai, Saku langsung mengunjungi Kenta, tapi ternyata tugas ini lebih sulit dari yang ia kira. Kenta membencinya sepenuh hati. Demi menjaga citra sempurnanya, Saku harus mencari cara untuk mendapatkan kepercayaan Kenta dan membawanya kembali ke sekolah.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Chitose Is in the Ramune Bottle",
+            "overview": "Saku Chitose is a student at Fujishi High School, the most prestigious school in Fukui Prefecture. Outstanding in class, on the field, and in his social life, Saku attracts attention, good and bad. Naturally, he is surrounded by a circle of friends anyone would be happy to have. Now in the spring of his second year, with a new class, Saku is asked to help a shut-in classmate return to school life.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Chitose-kun wa Ramune Bin no Naka",
+            "overview": "Saku Chitose disfruta de su vida rodeado de amigos y admiradoras, pero su reputación como solucionador de problemas lo lleva a una nueva misión: lograr que un marginado regrese a la escuela. ¿Podrá hacerlo con su confianza habitual?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "県内随一の進学校・藤志高校に通う千歳朔。 勉強、運動、コミュ力すべてがハイレベルで、良くも悪くも注目を集める彼の周りには、誰もが羨む華やかな仲間たちが集っていた。 新たなクラスで迎えた2年生の春。 朔は、ひとりの引きこもり生徒の更生を頼まれることに——。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "弹珠汽水瓶里的千岁同学",
+            "overview": "千岁朔就读于县内顶尖的重点学校——藤志高中。他成绩优异、运动全能、社交能力出众，不论好坏总是备受瞩目，身边聚集着光彩照人的伙伴，令人羡慕不已。进入新班级迎来的高二春天，朔被委托帮助一位闭门不出的学生重新融入集体……这是一个以福井为舞台的湛蓝澄澈、耀眼夺目，又能触动人心的青春故事！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "彈珠汽水瓶裏的千歲同學",
+            "overview": "「五班的千歲朔是亂玩女人的渣男」——就算在學校匿名網站備受攻擊，依然君臨藤志高中階級制度頂層的現充，千歲朔。他身邊總是圍繞著外表內在都很優秀的一群朋友，像是公主氣場滿點的正宮位·柊夕湖、努力的後天型現充·內田優空，以及活力十足的籃球社主將·青海陽……朔和朋友們在新班級裏的快樂日子才開始沒多久，便有人拜託朔幫助一位把自己關在家裏的學生。本書是他的現充後宮傳，還是——？\n\n宣告新時代來臨的「現充視角」青春愛情故事，在此堂堂開幕！！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "彈珠汽水瓶裡的千歲同學",
+            "overview": "就讀縣內首屈一指的升學學校 ── 藤志高中的千歲朔。學業、運動、社交能力皆出類拔萃的他總是眾人的焦點，身邊更聚集著令人羨慕的朋友。在升上二年級的春天，朔受託協助一位把自己關在家裡的學生重新融入社會。以福井為舞台，譜寫出一片湛藍、無比眩目且動人的青春故事！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ชีวิตรสโซดาของจิโตเสะคุง",
+            "overview": "จิโตเสะ ซากุ หนุ่มวัยรุ่นที่หน้าตาดี ฉลาด และชีวิตยังดีเกินไปที่มีแต่คนหน้าตาดีห้อมล้อมเขา จนนักเรียนคนอื่นไม่พอใจรุมด่าเขาเสียหายผ่านเว็บไซต์ของโรงเรียน เรื่องราวชีวิตที่เต็มไปด้วยเรื่องดีๆ และปัญหาในรั้วโรงเรียนของเรายังคงดำเนินต่อไป",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chitose Trong Chai Ramune",
+            "overview": "Saku Chitose, được biết đến với biệt danh \"Tên khốn lăng nhăng lớp 5\", vẫn nổi tiếng khắp trường bất chấp những lời chỉ trích trên mạng. Khi năm học thứ hai bắt đầu, giáo viên giao cho cậu nhiệm vụ thuyết phục Kenta Yamazaki, một học sinh tự kỷ luôn khinh miệt Saku, quay trở lại lớp. Giờ đây, Saku phải giành được lòng tin của Kenta để duy trì danh tiếng hoàn hảo của mình.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "치토세 군은 라무네 병 속에",
+            "overview": "현내에서 가장 진학률이 높은 후지 고등학교에 다니는 치토세 사쿠.\n\n공부, 운동, 커뮤니케이션 능력이 전부 뛰어나 좋게도, 나쁘게도 주목을 받는 그의 주변에는,\n\n모두가 부러워하는 화려한 친구들이 모여 있었다.\n\n새로운 반에서 맞이한 2학년의 봄.\n\n사쿠는, 혼자 있는 외톨이 학생 한 명을 챙겨달라는 부탁을 받게 되고...\n\n후쿠이를 무대로 펼쳐지는,\n\n한없이 푸르고, 한없이 눈부신 감성을 건드리는 청춘 스토리!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Chitose Is in the Ramune Bottle",
+            "overview": "Saku Chitose disfruta de su vida rodeado de amigos y admiradoras, pero su reputación como solucionador de problemas lo lleva a una nueva misión: lograr que un marginado regrese a la escuela. ¿Podrá hacerlo con su confianza habitual?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Титосэ в бутылке Рамунэ",
+            "overview": "Старшеклассник Саку Титосэ привык к тому, что в сети его имя стало оскорблением. «Бабник» — одно из самых мягких прозвищ, которым его называют завистники, прячась за экранами своих устройств. Но в реальной жизни всё иначе: Саку — харизматичный лидер, которого уважают одноклассники и которому доверяют учителя. Его уверенность в себе кажется неуязвимой, но за внешним блеском скрывается куда более сложная история. Ведь популярность — не только восхищенные взгляды и внимание, а еще и бремя, которое может оказаться намного тяжелее, чем кажется. Всё резко меняется, когда героя аниме-сериала «Титосэ в бутылке Рамунэ» просят помочь одному замкнутому ученику…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Chitose Is in the Ramune Bottle",
+            "overview": "Il n'est pas facile d'être populaire et dans ce domaine, c'est difficile de battre Saku Chitose, l'élève le plus populaire de son lycée. Ce jeune lycéen a une réputation à toute épreuve qui résiste même aux attaques en ligne les plus virulentes. Il a aussi un groupe d'amis autant séduisants à l'extérieur qu'à l'intérieur. Cependant, lorsqu'un professeur lui demande de l'aider à réhabiliter une élève enfermée dans sa chambre depuis des mois, le monde parfait de Saku ne sera plus jamais le même.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Chitose is in the Ramune Bottle",
+            "overview": "Saku Chitose della sezione 5 è uno studente molto popolare. Nonostante venga insultato online dai ragazzi della sua scuola, è sempre circondato da amici. Yuuko Hiragi, la potenziale fidanzata, con l'aura da principessa; Yua Uchida, la ragazza che dà sempre il massimo ed è popolarissima; Haru Aomi, la stella del club di basket, piena di energie, sono solo alcune delle ragazze che gli ruotano attorno. Ma il tempo per divertirsi al massimo con tutte loro potrebbe finire quando un professore affida a Chitose il compito di riportare a scuola un certo hikikomori...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Chitose Is in the Ramune Bottle",
+            "overview": "Was die Normalos angeht, so ist Saku Chitose kaum zu übertreffen. Der beliebteste Schüler seiner Schule? Check. Ein felsenfester Ruf, der selbst bösartigen Online-Angriffen standhält? Check. Eine Freundesgruppe, die äußerlich so attraktiv ist wie innerlich? Check. Aber als ein Lehrer Saku bittet, einem Schüler zu helfen, der monatelang in seinem Zimmer eingeschlossen war, sich wieder an das Schulleben zu gewöhnen, gerät seine perfekte Welt ins Wanken. Was ist das, eine Normalo-Harem-Story?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "",
+            "overview": "Saku Chitose to uczeń idealny - popularny, utalentowany i otoczony przyjaciółmi. Jednak gdy zostaje poproszony o pomoc w sprowadzeniu do szkoły zamkniętego w sobie kolegi z klasy, jego perfekcyjny świat zaczyna się komplikować. Zmuszony do konfrontacji z innymi perspektywami, Saku musi zdecydować, czy za jego pewnym uśmiechem naprawdę kryje się empatia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Saku Chitose is leerling aan de Fujishi High School, de meest prestigieuze school van de prefectuur Fukui. Hij blinkt uit in de klas, op het veld en in zijn sociale leven, en trekt daarmee zowel positieve als negatieve aandacht. Uiteraard is hij omringd door een vriendenkring waar iedereen jaloers op zou zijn. Nu hij in het voorjaar van zijn tweede jaar in een nieuwe klas zit, wordt Saku gevraagd een klasgenoot die zich heeft teruggetrokken te helpen terugkeren naar het schoolleven.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4BE1aoCu5mCG3ZJ7alNDQkB3oK4.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lAOuTziMPFyst1RTa5KxznogmMq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wJYfB49K5glVs8xUqclqF4ItvZc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lm0Nb9N4KENmHbogK5ZGqfVQt9V.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.739,
+          "height": 1293,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ukWiOIWceHNGiS81CurwkfOSwWc.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3542
+        },
+        {
+          "aspect_ratio": 2.73,
+          "height": 293,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mSqNspMA2xzd2aYTGHfbDDqQNBW.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7tpcFkOpLcWkJU6mV5ooJyHA3DR.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vtfibksdwu4gdzBhZTFeVdMwCFN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 2719,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A71yS8HeMXVWG859UNvpF5Ay1Np.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2717,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nTXNr4jTRIs5UNwAxgHdfJICgoy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 2686,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wtGQw9l6WqRbBuA82oCIXadd86p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o9cB6OcuRfgl3nRJKPhZwFYljXO.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gOEaxrFy25UmXNvrkZyUAcA8fzp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ayB2kWZt9KNdQrSRbVWExtI9uPw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2922,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hiBwk3Es2qD4sroZCLYbAnlkXKD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1950
+        }
+      ]
+    }
+  }
+}

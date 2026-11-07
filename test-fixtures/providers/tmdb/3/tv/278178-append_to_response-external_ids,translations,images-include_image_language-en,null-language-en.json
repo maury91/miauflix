@@ -1,0 +1,924 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=0",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ebbab111347ab8f7ebb905bf97b79516\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/yOna5ZGXrvWO2HdOCKcahx2sCDN.jpg",
+    "created_by": [
+      {
+        "id": 1232167,
+        "credit_id": "6746095bc24765fa2f2e18f8",
+        "name": "Robert Hull",
+        "original_name": "Robert Hull",
+        "gender": 2,
+        "profile_path": "/cW2TkGiYbcz4JdTc9o3z4VAgfp3.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2026-06-18",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      }
+    ],
+    "homepage": "https://www.netflix.com/title/81509368",
+    "id": 278178,
+    "in_production": false,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-06-18",
+    "last_episode_to_air": {
+      "id": 6829102,
+      "name": "Episode 8",
+      "overview": "With an unlikely ally at their side, David and Rachel have one chance to rescue Matthew from his captors — before he slips away for good.",
+      "vote_average": 6.974,
+      "vote_count": 19,
+      "air_date": "2026-06-18",
+      "episode_number": 8,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 37,
+      "season_number": 1,
+      "show_id": 278178,
+      "still_path": "/TOs0PsDUEz8mlo3XKAIBKQ0SOW.jpg"
+    },
+    "name": "I Will Find You",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 213,
+        "logo_path": "/wwemzKWzjKYJFfCeiB57q3r4Bcm.png",
+        "name": "Netflix",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 8,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "I Will Find You",
+    "overview": "Wrongfully imprisoned for murdering his own son, a father sets out on a desperate rescue mission after learning the boy may still be alive.",
+    "popularity": 21.5636,
+    "poster_path": "/pb9oYHHNzauiCQZT03MpDAg46GI.jpg",
+    "production_companies": [
+      {
+        "id": 208514,
+        "logo_path": "/4CiIJO7QTquUWkw2gyLvRyk0ds2.png",
+        "name": "Final Twist Productions",
+        "origin_country": "US"
+      },
+      {
+        "id": 301948,
+        "logo_path": null,
+        "name": "Story Math",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-06-18",
+        "episode_count": 8,
+        "id": 430534,
+        "name": "Limited Series",
+        "overview": "",
+        "poster_path": "/pb9oYHHNzauiCQZT03MpDAg46GI.jpg",
+        "season_number": 1,
+        "vote_average": 7.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "Find the boy. Find the truth.",
+    "type": "Miniseries",
+    "vote_average": 8.197,
+    "vote_count": 557,
+    "external_ids": {
+      "imdb_id": "tt34771210",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 457173,
+      "tvrage_id": null,
+      "wikidata_id": "Q134412018",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Wrongfully imprisoned for murdering his own son, a father sets out on a desperate rescue mission after learning the boy may still be alive.",
+            "homepage": "",
+            "tagline": "Find the boy. Find the truth."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Sur tes traces",
+            "overview": "Un père de famille innocent est condamné à perpétuité pour le meurtre de son propre fils. Lorsqu'il reçoit la preuve que son fils est peut-être encore en vie, celui-ci est plus que jamais déterminé à s'évader de prison pour découvrir la vérité.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een vader die ten onrechte is veroordeeld voor de moord op zijn eigen zoon, begint aan een wanhopige reddingsmissie wanneer hij hoort dat de jongen misschien nog leeft.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Я тебе відшукаю",
+            "overview": "Несправедливо засуджений за вбивство свого сина чоловік дізнається, що хлопчик міг вижити, і вирушає на порятунок.",
+            "homepage": "",
+            "tagline": "Кожна зачіпка наближає до правди."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "אני אמצא אותך",
+            "overview": "אב שנשפט ונכלא על לא עוול בכפו בגין רצח בנו מגלה שהוא כנראה עדיין בחיים, ויוצא למבצע חילוץ נואש.",
+            "homepage": "",
+            "tagline": "תמצא את הילד. תמצא את האמת."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Eu Vou Te Encontrar",
+            "overview": "Preso injustamente por assassinar o próprio filho, um homem parte em uma missão desesperada de resgate ao descobrir que o garoto pode estar vivo.",
+            "homepage": "",
+            "tagline": "Encontre o garoto. Descubra a verdade."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een onschuldige vader die een levenslange gevangenisstraf uitzit voor de moord op zijn eigen zoon, ontvangt bewijs dat zijn kind mogelijk nog leeft. Hij moet uit de gevangenis ontsnappen om de waarheid te achterhalen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Ovunque tu sia",
+            "overview": "Incarcerato ingiustamente per l'omicidio del figlio, un padre intraprende una disperata missione per ritrovarlo dopo aver scoperto che potrebbe essere ancora vivo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "아이 윌 파인드 유",
+            "overview": "친아들을 살해했다는 누명을 쓰고 억울하게 수감된 아버지. 아들이 살아 있을지도 모른다는 사실을 알게 되자, 필사적인 구출 작전에 나선다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Eu Vou Encontrar-te",
+            "overview": "Um pai condenado injustamente pelo homicídio do próprio filho embarca numa desesperada missão para o encontrar após descobrir que o rapaz pode, afinal, estar vivo.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Úgyis megtalállak",
+            "overview": "A fia meggyilkolásáért hamisan elítélt apa kétségbeesett mentőakcióra indul, miután megtudja, hogy a fiú még életben lehet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "Du lever",
+            "overview": "En far, der er blevet uretmæssigt fængslet for mordet på sin søn, drager ud på en desperat redningsmission, da han finder ud af, at drengen stadig er i live.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "我会找到你",
+            "overview": "一名父亲因被误判杀害亲生儿子而入狱，却在得知儿子可能仍然活着后，展开一场绝望的救子行动。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Pronaći ću te",
+            "overview": "Otac pogrešno osuđen za ubojstvo vlastitog sina krene u očajničku misiju spašavanja kad sazna da je dječak možda još živ.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Nur für dein Leben",
+            "overview": "Ein Vater wird fälschlicherweise wegen Mordes an seinem Sohn inhaftiert. Als er erfährt, dass der noch leben könnte, begibt er sich auf eine verzweifelte Rettungsmission.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Seni Bulacağım",
+            "overview": "Kendi oğlunu öldürme suçundan haksız yere hapse atılan bir baba, çocuğun hâlâ hayatta olabileceğini öğrendikten sonra onu kurtarmak için her şeyi göze alır.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "แล้วเราจะพบกัน",
+            "overview": "พ่อที่ได้รับโทษจำคุกในข้อหาฆาตกรรมลูกชายที่ตัวเองไม่ได้เป็นคนก่อ มุ่งมั่นที่จะออกไปทำภารกิจช่วยชีวิต หลังจากรู้ว่าลูกของเขาอาจยังมีชีวิตอยู่",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Я тебя отыщу",
+            "overview": "Отец, несправедливо осужденный за убийство сына, отбывает срок в тюрьме. Узнав, что мальчик еще может быть жив, герой предпринимает отчаянные шаги, стремясь его спасти.",
+            "homepage": "",
+            "tagline": "«Найди мальчика. Найди правду»"
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Etsin sinut",
+            "overview": "Syyttömänä vankilaan joutunut isä kuulee, että murhatuksi luultu poika saattaakin olla elossa, ja lähtee epätoivoiselle pelastusretkelle.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Sur tes traces",
+            "overview": "Emprisonné à tort pour le meurtre de son propre fils, un père entreprend une mission de sauvetage désespérée après avoir appris que le garçon pourrait être en vie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Θα σε Βρω",
+            "overview": "Έχοντας φυλακιστεί άδικα για τη δολοφονία του γιου του, ένας πατέρας ξεκινά μια απεγνωσμένη αποστολή διάσωσης όταν μαθαίνει ότι το αγόρι μπορεί να είναι ακόμα ζωντανό.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "आय विल फ़ाइंड यू",
+            "overview": "अपने ही बेटे की हत्या के झूठे आरोप में गलत तरीके से कैद पिता को जब पता चलता है कि उसका बेटा शायद अभी भी ज़िंदा है, तब वह उसे बचाने की मुहिम छेड़ देता है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Salah divonis membunuh putranya sendiri, seorang ayah memulai misi penyelamatan nekat setelah tahu bahwa putranya itu mungkin masih hidup.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "捜索者の血",
+            "overview": "実の息子を殺した罪を着せられ服役中の父親。しかし息子が生きているかもしれないと知り、何としても救い出すべく危険を冒して捜索に乗り出す。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "En far, uskyldig dømt for drapet på sønnen sin, drar på et desperat redningsoppdrag når han finner ut at sønnen fortsatt kan være i live.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Dipenjara atas tuduhan membunuh anaknya sendiri, seorang bapa yang terdesak memulakan misi penyelamatan selepas mendapati anak lelakinya mungkin masih hidup.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Za wszelką cenę",
+            "overview": "Niesłusznie osadzony w więzieniu za morderstwo syna ojciec wyrusza na desperacką misję ratunkową, gdy dowiaduje się, że chłopiec wciąż żyje.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Te encontraré",
+            "overview": "Estaba en prisión por la falsa acusación de haber matado a su propio hijo, pero cuando se entera de que podría estar vivo, un padre se lanza en una peligrosa misión de rescate.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Te encontraré",
+            "overview": "Un hombre injustamente encarcelado por asesinar a su propio hijo emprende una desesperada misión de rescate tras descubrir que el niño podría estar vivo.",
+            "homepage": "",
+            "tagline": "Encuentra al niño. Descubre la verdad."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Te voi găsi",
+            "overview": "Închis pe nedrept pentru uciderea propriului fiu, un tată pornește într-o misiune disperată de salvare după ce află că băiatul ar putea fi încă în viață.",
+            "homepage": "",
+            "tagline": "Găsește-l pe băiat. Află adevărul."
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "Matapos mapagbintangang pinatay niya ang sariling anak at mabilanggo, sinimulan ng isang ama ang desperadong rescue mission nang malaman niyang baka buhay pa ang bata.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Cha sẽ tìm con",
+            "overview": "Bị ngồi tù oan vì tội giết chính con trai mình, một người cha dấn thân vào sứ mệnh giải cứu tuyệt vọng sau khi biết tin cậu bé có thể vẫn còn sống.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Tills jag hittar dig",
+            "overview": "En pappa som felaktigt dömts till fängelse för mordet på sin son ger sig ut på en desperat jakt efter att ha fått reda på att pojken kan vara vid liv.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "سأعثر عليك",
+            "overview": "بعدما يُسجن أب ظلمًا بتهمة قتل ابنه، ينطلق في مهمة إنقاذ مستميتة إثر اكتشافه أنّ الفتى قد يكون على قيد الحياة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "سأعثر عليك",
+            "overview": "بعدما يُسجن أب ظلمًا بتهمة قتل ابنه، ينطلق في مهمة إنقاذ مستميتة إثر اكتشافه أنّ الفتى قد يكون على قيد الحياة.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "我會找到你",
+            "overview": "一名父親因兒子的死而含冤入獄，在得知愛子可能仍然活著後，展開了孤注一擲的救援行動。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "我会找到你",
+            "overview": "一名父亲因被误判杀害亲生儿子而入狱，却在得知儿子可能仍然活着后，展开一场绝望的救子行动。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "我會找到你",
+            "overview": "一名父親因兒子的死而含冤入獄，在得知愛子可能仍然活著後，展開了孤注一擲的救援行動。",
+            "homepage": "",
+            "tagline": "找到男孩，找出真相"
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Najdu si tě",
+            "overview": "Kvůli falešnému obvinění z vraždy vlastního syna skončí za mřížemi. Pak se ale dozví, že malý Matthew je možná pořád naživu, a rozhodne se ho zachránit.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "По следите ти",
+            "overview": "Минисериал на Netflix, адаптиран по романа I Will Find You на Хърлан Кобън.\n\nНевинен баща излежава доживотна присъда за убийството на собствения си син. Когато получава доказателство, което намеква, че детето може би още е живо, той решава да се измъкне, за да търси истината.\n\nСериалът е плод на сътрудничество между Netflix и Харлан Кобън, от чиито романи са екранизирани вече няколко трилъра. Тук историята се гради върху двойно напрежение: избягването на осъден човек и надеждата да се открие дете, което всички смятат за мъртво.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "پیدات میکنم",
+            "overview": "پدری که به جرم قتل پسرش به ناحق زندانی شده است، پس از فهمیدن اینکه پسرش ممکن است هنوز زنده باشد، راهی یک ماموریت نجات ناامیدانه می‌شود.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "Po krivem zaprt zaradi umora lastnega sina se oče poda na obupano reševalno akcijo, ko izve, da je deček morda še vedno živ.",
+            "homepage": "",
+            "tagline": "Poišči dečka. Odkrij resnico."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "Un home injustament empresonat per assassinar el seu propi fill emprèn una desesperada missió de rescat després de descobrir que el nen podria ser viu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Aš tave surasiu",
+            "overview": "Nekaltas tėvas, nuteistas kalėti iki gyvos galvos už savo sūnaus nužudymą, gauna įrodymų, kad jo vaikas gali būti vis dar gyvas, todėl jis privalo pabėgti iš kalėjimo, kad sužinotų tiesą.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Nájdem si ťa",
+            "overview": "Otec, neprávom uväznený za vraždu vlastného syna, sa vydáva na zúfalú záchrannú misiu po tom, čo zistí, že chlapec je možno stále nažive.",
+            "homepage": "",
+            "tagline": "Nájdi chlapca. Nájdi pravdu."
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "آئی وِل فائنڈ یو",
+            "overview": "ایک باپ، جو اپنے ہی بیٹے کو قتل کرنے کے جرم میں غلط طور پر قید کیا گیا، اسے بچانے کے لیے ایک مہم شروع کرتا ہے جب اسے پتہ چلتا ہے کہ اس کا بیٹا اب بھی زندہ ہے۔",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m2NEydy6ECus2soANNIY9LAipwl.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yOna5ZGXrvWO2HdOCKcahx2sCDN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z0R6ToCsMMkLwuQXjzzdd1QCdJv.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2yDDwP48GqL9Fpb6UEgGHyqM63y.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/adiCGdJsEethgMNIl2uJDkKTX6c.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iHeHYxnPeRz8OChCuZhfs0RUDOD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vDOOODLkoPzagLS7PqRhfPPhDlN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1801,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4vq9lvToiVx2fs7TCVyf0xa8kf6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3200
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 5.171,
+          "height": 246,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mGVDe43J6OaopYxkDnSoBSYnw0v.png",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1272
+        },
+        {
+          "aspect_ratio": 3.902,
+          "height": 326,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jQXefsxsXxUi5MRYmj46pFskDld.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1272
+        },
+        {
+          "aspect_ratio": 1.348,
+          "height": 712,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pq0SQmlXpi3d28I12A9dioUti8I.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 1.348,
+          "height": 712,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kl4rd1vaYZZSb2l8Pr30sHd06Sj.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 3.902,
+          "height": 326,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4lUQK7EwQTgH0FNBRRvo67m4Nj7.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1272
+        },
+        {
+          "aspect_ratio": 5.256,
+          "height": 242,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j9MLEaHayiTsZbS4vsApSN148Fn.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1272
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pb9oYHHNzauiCQZT03MpDAg46GI.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7WJJucDKypqoF27vfvErMPigP3P.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ouSDCnouKdtLpf3lslsFkGarNUr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/soRqPeTPrWcsLyKI5OgLIgF7hc6.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qGv0tGmhkAUrdCxWIOxtC8gZhip.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p5tiDNKD4qRFU4BMMJrBJpHQSeN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cWHfuqB4TNYH65wtmflfoEKnRUy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j5fhMd1UZ0W6JjTJYOvBHSlxSah.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        }
+      ]
+    }
+  }
+}

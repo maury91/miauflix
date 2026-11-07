@@ -22,6 +22,7 @@ import { CacheService } from '@services/cache/cache.service';
 import { CatalogClientService } from '@services/catalog/catalog-client.service';
 import { ConfigurationService } from '@services/configuration/configuration.service';
 import { ListClientService } from '@services/list/list-client.service';
+import { EpisodeNumberingService } from '@services/media/episode-numbering.service';
 import { ListService } from '@services/media/list.service';
 import { MediaService } from '@services/media/media.service';
 import { MediaLoadClientService } from '@services/media-load/media-load-client.service';
@@ -105,7 +106,11 @@ try {
   const authService = new AuthService(db, auditLogService, configurationService);
   const qrLoginService = new QrLoginService(db);
   const profileService = new ProfileService(db, configurationService);
-  const progressService = new ProgressService(db, listClient);
+  const progressService = new ProgressService(
+    db,
+    listClient,
+    new EpisodeNumberingService(db, catalogClient)
+  );
   const notificationService = new NotificationService(db);
   const mediaService = new MediaService(db, catalogClient);
   const backgroundJobs = new BackgroundJobService(configurationService);

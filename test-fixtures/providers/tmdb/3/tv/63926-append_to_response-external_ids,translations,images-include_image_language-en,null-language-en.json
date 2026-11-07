@@ -1,0 +1,1711 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8233",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"944186c4ada00bb1650c674b0b0b07cd\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/s0w8JbuNNxL1YgaHeDWih12C3jG.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2015-10-05",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://onepunchman-anime.net/",
+    "id": 63926,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2025-12-28",
+    "last_episode_to_air": {
+      "id": 6532174,
+      "name": "Ultimate Lifeform",
+      "overview": "The heroes battle monsters while Terrible Tornado faces Gyoro-Gyoro. Orochi appears before Saitama.",
+      "vote_average": 6.4,
+      "vote_count": 16,
+      "air_date": "2025-12-28",
+      "episode_number": 12,
+      "episode_type": "mid_season",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 3,
+      "show_id": 63926,
+      "still_path": "/3CkzWbeQUXTxfIbNghEOZBfOhPY.jpg"
+    },
+    "name": "One-Punch Man",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 98,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "TV Tokyo",
+        "origin_country": "JP"
+      },
+      {
+        "id": 252,
+        "logo_path": "/zFZ5KCuvx7K0vP9XgGcidfXjuUd.png",
+        "name": "TV Aichi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 822,
+        "logo_path": "/gOlBe3BMo5WJHeUlWBBfKawgdiO.png",
+        "name": "TVQ",
+        "origin_country": "JP"
+      },
+      {
+        "id": 824,
+        "logo_path": "/6foQmoPac7WCDnDuDbuCZklmDuA.png",
+        "name": "TV Osaka",
+        "origin_country": "JP"
+      },
+      {
+        "id": 938,
+        "logo_path": "/f12LLqBVFnDVIY8HidhWEitI77c.png",
+        "name": "TVh",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2064,
+        "logo_path": "/qi4L1ffRabF5LJqVimCaaUYpeSj.png",
+        "name": "TSC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 36,
+    "number_of_seasons": 3,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "ワンパンマン",
+    "overview": "Saitama is a hero who only became a hero for fun. After three years of “special” training, though, he’s become so strong that he’s practically invincible. In fact, he’s too strong—even his mightiest opponents are taken out with a single punch, and it turns out that being devastatingly powerful is actually kind of a bore. With his passion for being a hero lost along with his hair, yet still faced with new enemies every day, how much longer can he keep it going?",
+    "popularity": 37.6812,
+    "poster_path": "/dT10AxJIXVvRwFAew4tt2RhzJrD.jpg",
+    "production_companies": [
+      {
+        "id": 3464,
+        "logo_path": "/9k0nr75nwnNeT2MHerf1OXJN0hj.png",
+        "name": "Madhouse",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11884,
+        "logo_path": "/tHzHPSKdmLT5zCdqFbcmHzZvRIc.png",
+        "name": "J.C.STAFF",
+        "origin_country": "JP"
+      },
+      {
+        "id": 528,
+        "logo_path": "/fO3Aof3lXQclYpBByYC8aneTXwA.png",
+        "name": "Bandai Visual",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4720,
+        "logo_path": "/7wQgZTA4FCkFMDedBYVZiVE87c7.png",
+        "name": "ADK",
+        "origin_country": "JP"
+      },
+      {
+        "id": 8157,
+        "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
+        "name": "jeki",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6683,
+        "logo_path": "/reCkuk3GEomdx5gQpsm15Zl1sgX.png",
+        "name": "Lantis",
+        "origin_country": "JP"
+      },
+      {
+        "id": 159157,
+        "logo_path": "/fEW0xl7S5t0DyFlsx6ypdFC9Poa.png",
+        "name": "Banpresto",
+        "origin_country": "JP"
+      },
+      {
+        "id": 60197,
+        "logo_path": "/D5B8l99tlFJGoMpYJk1kqxYdey.png",
+        "name": "Good Smile Company",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3034,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "TV Tokyo",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162019,
+        "logo_path": "/inMGZK76HIbFhTnCGzVx39BMGzr.png",
+        "name": "ADK Marketing Solutions",
+        "origin_country": "JP"
+      },
+      {
+        "id": 152836,
+        "logo_path": "/2Nw5F2Mv4at3Sm6ldwTKK3XYuLK.png",
+        "name": "Bandai Spirits",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173133,
+        "logo_path": "/pB59XO7veWGZjzK4MLGKWxYecD.png",
+        "name": "Bandai Namco Music Live",
+        "origin_country": "JP"
+      },
+      {
+        "id": 173132,
+        "logo_path": "/yV9EORK2ZwdMg45K10PuVh6LlM3.png",
+        "name": "Bandai Namco Filmworks",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2015-12-04",
+        "episode_count": 15,
+        "id": 74239,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/jYUrrLUgZGj1g9VmYa84osrK0zp.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2015-10-05",
+        "episode_count": 12,
+        "id": 70631,
+        "name": "Season 1",
+        "overview": "Saitama is a hero who only became a hero for fun. After three years of “special” training, though, he’s become so strong that he’s practically invincible. In fact, he’s too strong—even his mightiest opponents are taken out with a single punch, and it turns out that being devastatingly powerful is actually kind of a bore. With his passion for being a hero lost along with his hair, yet still faced with new enemies every day, how much longer can he keep it going?",
+        "poster_path": "/ocv8PzwfQUsFHSSdUvK7wZI85Dx.jpg",
+        "season_number": 1,
+        "vote_average": 8.5
+      },
+      {
+        "air_date": "2019-04-10",
+        "episode_count": 12,
+        "id": 116885,
+        "name": "Season 2",
+        "overview": "Saitama, alongside his cyborg disciple Genos, is ready to begin his official duties as a professional hero. But when a new friendship and interest in martial arts prove distracting, the Hero Association is left to deal with a sinister new wave of monster attacks on their own. To make matters worse, their heroes are being hunted! Is Earth doomed, or will Saitama save the day with one punch?",
+        "poster_path": "/kjTzqlxR3bFtdgMuGtytj8MMtv7.jpg",
+        "season_number": 2,
+        "vote_average": 7.7
+      },
+      {
+        "air_date": "2025-10-12",
+        "episode_count": 12,
+        "id": 305144,
+        "name": "Season 3",
+        "overview": "Alongside Genos, his faithful disciple, Saitama performs his official hero duties as a member of the Hero Association. One day, monsters claiming to be from the Monster Association suddenly appeared, taking a child of the Hero Association executive hostage. The S-class heroes gather and plan a raid on the Monster Association hideout to rescue the hostage. Meanwhile, Garou, a “human monster” who was taken by the Monster Association during a battle with the heroes, awakens in the Monster Association hideout.",
+        "poster_path": "/y9M6bjEc1oI7B8RISowo5L8oq19.jpg",
+        "season_number": 3,
+        "vote_average": 4.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "All it takes is one punch.",
+    "type": "Scripted",
+    "vote_average": 8.364,
+    "vote_count": 4291,
+    "external_ids": {
+      "imdb_id": "tt4508902",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 293088,
+      "tvrage_id": null,
+      "wikidata_id": "Q22341674",
+      "facebook_id": null,
+      "instagram_id": "opm_anime",
+      "twitter_id": "opm_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "Saitama is a hero who only became a hero for fun. After three years of “special” training, though, he’s become so strong that he’s practically invincible. In fact, he’s too strong—even his mightiest opponents are taken out with a single punch, and it turns out that being devastatingly powerful is actually kind of a bore. With his passion for being a hero lost along with his hair, yet still faced with new enemies every day, how much longer can he keep it going?",
+            "homepage": "",
+            "tagline": "All it takes is one punch."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Ванпанчмен",
+            "overview": "Сайтама — внешне обычный парень, который на самом деле является сильнейшим героем, способным победить любого врага одним ударом. Однако эта всесокрушающая мощь привела его к глубочайшей скуке и экзистенциальному кризису: достойных соперников просто не существует. В мире, наводненном монстрами и злодеями, он скорее ищет острых ощущений и хоть какого-то вызова, чем целенаправленно спасает человечество. Вместе со своим преданным учеником-киборгом Геносом Сайтама противостоит угрозам, часто оставаясь незамеченным или недооцененным. Это уморительная сатира на супергеройские клише, сочетающая зубодробительный экшен с неожиданным юмором и поиском смысла жизни.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "O mais poderoso super-herói do mundo pode matar qualquer um com um murro apenas. Mas, como não há quem o desafie, tem de lidar com o tédio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "원펀맨",
+            "overview": "취미로 히어로를 하기 시작한 남자 사이타마. 그는 3년간의 특훈으로 무적 파워를 손에 넣었다. 하지만 너무 강해진 나머지 어떤 강적을 상대해도 원펀치로 끝나버렸다. 압도적인 힘이란 재미없는거야... 그런 정열과, 모발을 잃은 평온한 최강 히어로 앞에 새로운 강적이 나타난다. 오늘이야말로 진심을 다해 싸울 수 있을 것인가!?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "One Punch Man",
+            "overview": "La historia tiene lugar en una de las metrópolis ficticias de la Tierra, la Ciudad Z en Japón. El mundo está lleno de extraños monstruos que misteriosamente aparecen y causan muchos desastres. Saitama, el protagonista, es un poderoso superhéroe que derrota fácilmente a los monstruos u otros villanos con un único golpe. Debido a esto, Saitama ha encontrado aburrida su fuerza y siempre está tratando de encontrar rivales más poderosos que le puedan igualar.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "Saitama vient d'essuyer un énième refus d'embauche… Dépité, il voit sa vie basculer lorsqu'un homme-crabe menace sous ses yeux un garçon à tête de cul ! Il le sauve, et c'est la révélation. Il devient super-héros ! Encore un ? Non pas vraiment. Lui, c'est un anti-héros complètement à côté de la plaque. Son super pouvoir est de terrasser n'importe quel ennemi en un seul coup de poing. Quel ennui d'être si puissant… Saitama parviendra-t-il à enfin retrouver l'extase du combat en rencontrant un adversaire à sa mesure ?!",
+            "homepage": "",
+            "tagline": "Un poing c'est tout !"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "一拳超人",
+            "overview": "主人公埼玉原本是一名整日奔波于求职的普通人。3年前的一天偶然遇到了要对淘气少年下杀手的异变螃蟹人后，回忆起年少年时“想要成为英雄”的梦想，最终拼尽全力救下了淘气少年。重拾对于成为英雄的兴趣之后，通过拼命锻炼，埼玉终于脱胎换骨获得了最强的力量，但同时失去了头发变成了光头，似乎还失去了某些感情。在无人知晓的情况下独自做了一段时间英雄后，与弟子杰诺斯一起，正式加入英雄协会，与众多英雄一起开始了对抗各种怪人以及灾难的生活……",
+            "homepage": "",
+            "tagline": "英雄集结对抗怪人拯救人质"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "One Punch Man",
+            "overview": "Was tun, wenn’s mit der Arbeit nicht klappt? Genau, man wird ein Held! Saitama ist ein stinknormaler Typ ohne Job - bis er einen kleinen Jungen vor einem Krabben-Monster retten muss. Er kann die Krabbe besiegen und beschließt daraufhin, die Jobsuche hinzuschmeißen und Hobby-Held zu werden. Nach drei Jahren hartem Training ist auf seinem Kopf zwar kein Haar mehr übrig, aber dafür erledigt er jeden Gegner mit nur einem Schlag! Von seiner eigenen Kraft gelangweilt, sehnt sich Saitama aka One Punch Man nach härteren Gegnern. Zwar zollen ihm die Leute dafür keinen Respekt, doch das geht ihm an seinem Hobby-Helden-Hintern vorbei. Ihm reicht schon der demütige Cyborg Genos, der im gleichgültigen Saitama seinen Meister sieht und ihm nun ständig an den Hacken hängt ...",
+            "homepage": "",
+            "tagline": "Ein Mann, ein Punch!"
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "איש האגרוף הבודד",
+            "overview": "סאיטמה הוא בחור שהכל אצלו נראה \"רגיל\", מההבעות החסרות חיים שלו, אל ראשו הקירח ועד למבנה גופו הלא מרשים. למרות זאת, לבחור הממוצע הזה אין בעיות ממוצעות כמו לכולם. הוא בעצם גיבור על שמחפש מתחרים מאתגרים! הבעיה היא, כל פעם שהוא מוצא מישהו ראוי הוא קורע לו את הצורה באגרוף אחד. האם סאיטמה יכול למצוא אויב רשע מספיק שיוכל לאתגר אותו? עקבו אחר סאיטמה ומסעותיו המפרכים בדרכו למצוא מועמד קשה וראוי לאתגר אותו!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "One Punch Man",
+            "overview": "Příběh se odehrává ve fiktivním městě City Z v Japonsku. Svět je plný podivných monster, které se záhadně objevují a páchají mnoho pohrom. Saitama je supersilným hrdinou, který snadno porazí monstra a padouchy jednou ranou. Avšak poté, co se stal příliš silným, se Saitama začal nudit a stále se snaží najít silnějšího nepřítele, se kterým by mohl bojovat. Při svých dobrodružstvích potkává nové přátele, nepřátele a svého vlastního žáka - kyborga Genose, se kterým se přidá k Hrdinské Asociaci, aby získal slávu za všechny své kroky proti zlu. Přestože porazí mnoho monster, které ani nejsilnější z Hrdinské Asociace nebyli schopni porazit, tak jen těžko usiluje o respekt. Většina lidí ho také diskriminuje pro jeho prostý vzhled a někteří ho obviňují, že je pouze napodobeninou hrdiny. Jen pár osobností začne rozeznávat jeho neuvěřitelný talent a pokoru vůči ostatním.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "Dopo un allenamento durato tre anni, un ragazzo di nome Saitama ha raggiunto il suo obiettivo: diventare la persona più forte del mondo. Passa i giorni scacciando i mostri e i criminali dalle città ma, a causa della poderosa forza acquisita, gli basta sferrare un solo pugno per riuscire a sconfiggere anche i nemici più potenti. Per questo Saitama è sempre annoiato e alla ricerca di un avversario che possa resistere ai suoi colpi...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "วันพันช์แมน",
+            "overview": "เรื่องราวเริ่มต้นในเมือง Z-city โลกนี้มีสัตว์ประหลาดและสิ่งมีชีวิตที่แปลกประหลาดมากมายที่ปรากฏตัวและสร้างความวุ่นวาย ไซตามะฮีโร่ที่แข็งแกร่งที่สุดที่สามารถโค่นเหล่าร้ายได้ภายในหมัดๆเดียว แต่ว่าเมื่อไซตามะแข็งแกร่งเกินไป เขาก็เริ่มเบื่อในพลังของตัวเองและพยายามหาคู่ต่อสู้ที่สูสีกับเขา ในการผจญภัยของเขา ทำให้เขาได้พบทั้งเพื่อนใหม่, ศัตรู, และยังได้ลูกศิษย์มา เขาเป็นไซบอร์คชื่อว่าจีนอส ทั้งคู่ได้ร่วมสมาคมซูเปอร์ฮีโร่เพื่อปกป้องโลก และจัดการเหล่าศัตรูไปได้มากมาย",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "O super-herói mais forte do mundo pode matar qualquer um com um só golpe. Mas, com uma vida sem desafios, ele sofre com o tédio e a depressão.",
+            "homepage": "",
+            "tagline": "Um homem, um soco!"
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "رجل اللكمة الواحدة",
+            "overview": "بدأ \"سايتاما\" كبطل من أجل المتعة فحسب. وبعد ثلاثة سنوات من التّداريب 'الخاصّة'، أصبح قويًّا لدرجة أنّ بإمكانه هزيمة خصومه بلكمة واحدة. والآن، \"سايتاما\" جاهز ليبدأ واجباته الرّسميّة كبطل محترف مع منظمة الأبطال رفقة 'جينوس'، تلميذه السّايبورغ المخلص. ولكن، وتيرة ظهور الوحوش تتصاعد كما جاء في نبوءة العرّافة العظيمة \"شيباباوا\" الّتي تحكي عن دمار الأرض الوشيك. ووسط هذه الأزمة، يظهر 'غارو' الّذي يدعو نفسه بـ'صائد الأبطال'.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Ванпанчмен",
+            "overview": "Історія розповідає про Сайтаму, починаючи з його життєвого досвіду, і закінчуючи лисою головою та вражаючою статурою. Насправді це історія про супергероя, який шукає гідного суперника, але проблема полягає в тому, що кожного суперника він долає з одного удару. Чи зможе Сайтама знайти достатньо сильного злодія, який зможе прийняти його виклик?",
+            "homepage": "",
+            "tagline": "Для мене достатньо одного удару."
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Omul Un-pumn",
+            "overview": "Cel mai puternic supererou din lume poate ucide pe oricine cu o singură lovitură. Dar nu are parte de nicio provocare, așa că se luptă cu plictiseala și cu depresia.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "一拳超人",
+            "overview": "主角埼玉於求職無門時碰到怪人、決定依循兒時成為英雄的夢想而當上「因為興趣使然的英雄」；苦練了三年、以掉光所有頭髮為代價，化身成毫無弱點的超級英雄，只需一拳便能輕鬆地擊敗怪獸。然而，他變得如此強大，甚至從災禍中拯救了多個城市，卻竟然無人知曉，一直在一個破爛小鎮當一個無名英雄，在他意外間收下的徒弟傑諾斯的提議下，埼玉決定申請加入英雄協會，期望獲得更多尊重與認同。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "One Punch Man",
+            "overview": "Världens starkaste superhjälte kan döda vem som helst med ett enda slag, men ett liv utan utmaningar gör honom uttråkad och deprimerad.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "Ponadprzeciętnie silny Saitama potrafi jednym ciosem pokonać każdego wroga. Znudzony obecnym stanem rzeczy wyrusza na poszukiwania godnych siebie przeciwników.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "Saitama is een held die alleen maar voor de lol een held is geworden. Na drie jaar “speciale” training is hij echter zo sterk geworden dat hij praktisch onoverwinnelijk is. Eigenlijk is hij te sterk - zelfs zijn machtigste tegenstanders worden in één stomp uitgeschakeld, en het hebben van een verwoestende kracht blijkt behoorlijk saai te zijn. Hoewel zijn passie om een held te zijn samen met zijn haar verloren is gegaan, wordt hij toch elke dag met nieuwe vijanden geconfronteerd. Hoe lang kan hij dit nog volhouden?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "One Punch Man",
+            "overview": "Saitama se hizo héroe por pura afición y, después de tres años de entrenamiento intenso, alcanzó un nivel de fuerza capaz de derrotar a cualquier enemigo de un solo golpe. Ahora, la vida emocionante que esperaba tener se ha convertido en un completo aburrimiento. Pero, ¿habrá alguien que esté a su nivel entre todos los héroes del mundo? ¿Y algún villano capaz de hacerle frente?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "One Punch Man",
+            "overview": "Bu seri cansız duruşu, kel kafası ve de hiç de etkileyici olmayıp her tarafından sıradanlık fışkıran Saitama adındaki genç hakkında. Ne var ki sıradan görünüşünün altında sıradan problemler yatmamakta. İşin aslında kendine zorlu rakipler arayan süper bir kahraman o! Asıl sorun işte burada ortaya çıkıyor. Ne zaman umut vadedebilecek bir rakip ortaya çıksa tek yumrukla amele sümüğü gibi yere yapıştırıyor. Acaba Saitama sonunda kendisine meydan okuyabilecek kötü birisini bulabilecek midir? Meydan okumak için yeni kötüler ararkenki Saitama'nın kolay ve komik zaferlerini sakın ola kaçırmayın!",
+            "homepage": "",
+            "tagline": "Tek Yumruk Adam"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "物語開始から三年前、就職活動に行き詰る青年・サイタマは、ある日街で暴れていた怪人から顎の割れた少年を救う。その際、「ヒーローになりたい」という幼き日の夢を思い出し、就活をやめてヒーローになることを決意。頭髪全てを失うほど懸命なトレーニングを3年間行った結果、どんな敵でも一撃で倒せる最強の力を手に入れる。\n\nしかし、いつも一撃で決着が付いてしまうことから、次第に戦いに対する緊張感などを喪失し、ヒーローになった現在でも無気力な日々を送っていた。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thánh Phồng Tôm",
+            "overview": "Câu chuyện diễn ra tại thành phố Z của Nhật Bản tại thời điểm thế giới đầy những quái vật bí ẩn với sức mạnh ghê gớm đã xuất hiện và gây ra biết bao nhiêu thảm họa.  Nhưng cũng chính tại đây xuất hiện 1 siêu anh hùng đấm phát chết luôn, có thể dễ dàng đánh bại và tiêu diệt những con quái vật này. Cũng chính vì tài năng hiếm có này mà có rất nhiều nghi ngại về khả năng thực sự của vị siêu anh hùng, thậm chí anh không bao giờ nhận được bất kỳ lòng tin nào từ dân chúng.\n\nSiêu anh hùng mạnh nhất thế giới có thể giết bất cứ ai chỉ với một đòn. Nhưng không có gì có thể thách thức anh ta, nên anh ta phải vật lộn với sự buồn chán và trầm cảm.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "Ο δυνατότερος υπερήρωας του κόσμου μπορεί να σκοτώσει οποιονδήποτε με ένα χτύπημα. Τίποτα όμως δεν αποτελεί πρόκληση για εκείνον και έτσι υποφέρει από ανία και κατάθλιψη.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "One Punch Man",
+            "overview": "Superhrdina One-Punch Man trénoval svoju silu tak dlho, až mu z toho vypadali všetky vlasy. Vďaka tomu ale každého nepriateľa prekoná len jednou ranou. Čo sa môže zdať ako výhoda je v skutočnosti zlá správa, pretože One-Punch Man je taký silný, že ho čoskoro začne flustrovať a nudiť, že všetky súboje vyhráva tak jednoducho.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "One Punch Man",
+            "overview": "Saitama kelihatannya biasa dan tidak mengesankan,tapi memiliki hobi yang unik yaitu: menjadi hero. Untuk mengejar mimpi saat masih kecil, dia berlatih tanpa henti selama tiga tahun — dan kehilangan seluruh rambutnya. Sekarang, Saitama sangat kuat, sehingga tidak ada musuh yang bisa mengalahkannya dalam pertempuran. Faktanya, semua yang diperlukan untuk mengalahkan penjahat hanya dengan satu pukulan dan hal ini menyebabkan masalah bagi Saitama — dia tidak lagi bisa menikmati keseruan dalam bertarung dan jadi sangat membosankan.\n\nIni semua berubah dengan kedatangan Genos, cyborg berusia 19 tahun, yang ingin menjadi murid Saitama setelah melihat apa yang mampu dilakukannya. Genos mengusulkan ke Saitama untuk bergabung dengan Asosiasi Pahlawan, agar menjadi pahlawan bersertifikat yang diakui oleh masyarakat, dan Saitama, terkejut bahwa tidak ada yang tahu siapa dia. Dan dengan demikian dimulailah kisah One Punch Man.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Уанпънчмен",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "A történet főszereplője Saitama, a címadó One-Punch Man, avagy az Egy-Ütés Ember nevű szuperhős, akinek az évek során még a haja is kihullott, olyan keményen edzett azért, hogy hős lehessen. De ezzel végül olyan hatalmas erőre tett szert, hogy a nevének megfelelően képessé vált egyetlen ütéssel legyőzni bármelyik ellenfelét, ami rendkívül rövid és antiklimatikus csatákat eredményezett a számára. Saitama így rövid idő alatt beleunt a hősködésbe, de azért töretlenül keresi méltó ellenfelét, aki képes lehet huzamosabb ideig szembeszállni vele. Eközben szert tesz egy tanítványra és szuperhős barátokra, csatlakozik a Hősök Szövetségéhez, és igyekszik elismertséget szerezni magának a hősök körében.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Ванпанчмен",
+            "overview": "Прича се одвија у Граду З у Јапану, у свету где чудних сподоба има на претек, наравно, све оне праве невоље обичним грађанима. Јунак ове серије је Саитама, младић који је као мали желео да постане супер херој, а кад је порастао добио је прилику да то и спроведе у дело. Много је вежбао, дао све од себе и оћелавио од силног тренинга, али са друге стране сада има невероватну моћ да једним ударцем порази сваког непријатеља. Ма колико то забавно звучало, њега то заправо баца у дубоку депресију јер му је досадно… стога стално трага за јачим непријатељима.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BY",
+          "iso_639_1": "be",
+          "name": "беларуская мова",
+          "english_name": "Belarusian",
+          "data": {
+            "name": "Уанпанчмэн",
+            "overview": "Для чалавецтва прыйшлі нялёгкія часы: на Зямлю абрынуліся разнастайныя монстры з космасу, нетраў зямлі, навуковых лабараторыяў. З сабою яны нясуць смерць і разбурэнне, пужаюць старонніх назіральнікаў. Але баяцца не трэба: іх пакой ахоўвае наш галоўны герой, лысы малады чалавек па імені Сайтама з выразам невыказнага суму на твары. Але не вельмі гераічная знешнасць вас падманвае: Сайтама неверагодна дужы. Тры гады трэніровак не прайшлі дарма: цяпер ён перамагае любога монстра з аднаго ўдару. Але Сайтама вельмі сумны, бо ў яго няма годнага ворага. Герой спадзяецца, што праз некаторы час для яго знойдуцца сапраўдныя ворагі.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "مرد تک مشتی",
+            "overview": "سایتاما قهرمانی است که فقط برای سرگرمی قهرمان شده است. اما پس از سه سال تمرین «ویژه»، او آنقدر قوی شده است که عملاً شکست‌ناپذیر است. در واقع، او بیش از حد قوی است - حتی قدرتمندترین مخالفانش را هم با یک مشت از پا درمی‌آورد، و معلوم می‌شود که قدرت ویرانگر در واقع نوعی کسالت‌بار است. با اشتیاقی که او برای قهرمان بودن به همراه موهایش از دست داده، اما هنوز هر روز با دشمنان جدیدی روبرو می‌شود، چقدر دیگر می‌تواند به این کار ادامه دهد؟",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "一拳超人",
+            "overview": "主角埼玉於求職無門時碰到怪人、決定依循兒時成為英雄的夢想而當上「因為興趣使然的英雄」；苦練了三年、以掉光所有頭髮為代價，化身成毫無弱點的超級英雄，只需一拳便能輕鬆地擊敗怪獸。然而，他變得如此強大，甚至從災禍中拯救了多個城市，卻竟然無人知曉，一直在一個破爛小鎮當一個無名英雄，在他意外間收下的徒弟傑諾斯的提議下，埼玉決定申請加入英雄協會，期望獲得更多尊重與認同。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "Maailman voimakkain supersankari pystyy tappamaan kenet tahansa. Mutta hän ikävystyy ja masentuu, sillä kukaan ei pysty haastamaan häntä.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "One-Punch Man",
+            "overview": "Només cal un cop de puny.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s0w8JbuNNxL1YgaHeDWih12C3jG.jpg",
+          "vote_average": 7.542,
+          "vote_count": 13,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3AXLSxMuqyZt8HyrKKfrcJtkswD.jpg",
+          "vote_average": 7.19,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jp65rFQNd9JEIApJn6uvuE9x3HB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3UsuXbmzXwaEwCMrDlZdBjzBnMn.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7wCa45aZYFoG3c3qR4rEVlnNlDD.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5gkEBJvRbGCD60beZyOxMuCrW3a.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oThcfbr9S5jxWK3NNKit2mslgBF.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xWDYXgbRfquh4s21dGnG0BWKySy.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3x7GZI2QCc0I7I2yGjV2iL1KDAg.jpg",
+          "vote_average": 1.434,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9nGjuhRv0dcsR5Cjl7UWY0mTDvh.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1800,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iiGtoYxmKFq85i0C196veQJtyVB.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3200
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aplXpE6aHBpY5SUO2aP7AnTZuhL.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s1yp9D8Fs1ohbRlL0exZifNmccK.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/w4wyn8BNodO3xI43SGERXryMxA4.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v8pL0EWL4qQisqgvxD8zAvP37K8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1260,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/39IEijIzXCqIZ2lzHlaufUsYlnT.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2240
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2sGHMJqvPY5qgy3bKSzEKfUloGb.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vTtda6BLXNXcOKJzBqSKe6R5kfo.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lXHUqfBYHGBnMI4HPGi4Svr5L3i.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ygjjhKcImW9C67tYSFVjtGkOiIp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/t9futsXE3RhY9ielKHjA6oDAhrL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jwhJR7oMQMKD3M06rF81VOB5VRi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cbi3H9JfgNJzd9FLTg2UVbqWDrv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7zoCKeXUfQXVV1doamZD2J3Ymdc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4VMZTbclxQOjDoiTEm04F5K7NP4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gXiyufikglaRKKZjmuvUjgXOTFy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ny73z0cFtvOd0PJHrI0t01pnOsv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kaXpGXrySMEiwlIpCGSAHNjGvpb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2oMrjnZiVtUzmpHV8WouXjwYu3b.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qb1ci9biKIxJKUGnDwlYeTaNAwe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kRM5BtofxsLNoHB1nP7tuio71h1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2155,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mNAhiIdge2pX7oDXICn0uGdLe31.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3831
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2155,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qQnGxv6Xpq8EgwD9RdgMjos4eHy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3831
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2155,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uGuYEYFyaKgSCv7598YjgZFa6GS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3832
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Ht9ZXeIEB8v9VQeuoT7WxNfz6o.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jotSVZUKtbGQOxYOX4pZ4F4mytx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lOtAdrXpEG7wPbcVvRfn4zpv6AL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bjhBQuGcXZKPCujWU6EgCFh6QBp.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fxTkqWcs1ZgzjbxVhd0nFefdhkP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8c9DsmXolDkjsFEa7XG180lU9Xv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ctbYjd4Ex4nJEX8dk78n3q68Hj4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/c3tg0l0j3bvPF4NBK7eJeKEnUoT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cVwoVMHUIRfLdH1LHxDvUA7m33T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z6mZQDMv3C7qhJdsIKqiOAMdO4k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3HXNItJOqjmBXDlW8PQMfQrWnnJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lnhFhXIPN1G7uRf2lHn5HNNhEYF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 7.83,
+          "height": 153,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s4c20xXgSDjbYAcpKchuWRU3zuR.png",
+          "vote_average": 10,
+          "vote_count": 4,
+          "width": 1198
+        },
+        {
+          "aspect_ratio": 7.83,
+          "height": 153,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fY4KBaX1WL6tORT1sb8xoIErqZ.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1198
+        },
+        {
+          "aspect_ratio": 7.889,
+          "height": 162,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mvufCOgW8F4llxNGYXtdr7EGNUo.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1278
+        },
+        {
+          "aspect_ratio": 7.83,
+          "height": 153,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p6NcO52awhF205BdbTtvjwSJ3Ot.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1198
+        },
+        {
+          "aspect_ratio": 3.323,
+          "height": 1300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gGuticLgobih3ZNMko7cZDipsYW.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 4320
+        },
+        {
+          "aspect_ratio": 3.76,
+          "height": 246,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3frxnj7bvr5ZOKSl1uxH97JJx4n.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 925
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dT10AxJIXVvRwFAew4tt2RhzJrD.jpg",
+          "vote_average": 9.244,
+          "vote_count": 14,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3yvPziuLr2lT6DGP3M0jO7yjBVt.jpg",
+          "vote_average": 8.362,
+          "vote_count": 7,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bS6GeCRInMRl6oQN6czCqPFdcHN.jpg",
+          "vote_average": 8.212,
+          "vote_count": 11,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uT8TZ9U9jsj5druZiHsm3zgVWtW.jpg",
+          "vote_average": 8.034,
+          "vote_count": 6,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sSuFetSIfKFEVm2nZIbZ9nwGh8v.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iE3s0lG5QVdEHOEZnoAxjmMtvne.jpg",
+          "vote_average": 7.964,
+          "vote_count": 28,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wqXMYNDQVUzC4PCx00BrUKscdwB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jbYJuxfZMpYDalkiOnBcCv9TaL.jpg",
+          "vote_average": 2.612,
+          "vote_count": 18,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8CmeBJNUzOFk29diWfJf8de332i.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wCk0ipZn18slcurxrW8uVldP6V1.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cpVnAqdp9GdeSdupwAcklDxWUaS.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8yWUcg4KNmXCkrZIx2CA9O9LCuf.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9vo4DnhsAvOCRa2Xk0isavDp8eu.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sCYBBcI1PQFUsPWYVtW1dR1dhY7.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2L6UK4Ek8SLS34yOUXQa0moiLbc.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i8g8XSBgvUeqEKPNVia6j3Fm0A.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 1510,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ufDWOGUJBWTQN7CFm1y9e7xafWp.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yyRJPcRQ0j7JtXq80aIkUXpv639.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/stRGV9wKE0jOWgmwSiUe0Ob1Kbc.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9uLQ8FPiytn5XDRi3cgpjKVZYx0.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7DaorLyWn7ch5C6AWcnUdOg3K0x.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 708
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jiYAZkeh6M7Slsil6nPtMKNlGlu.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5TeOZU1NMrUlzib0ubm0ekhd9Gk.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9gw8qENoERTHS88BnqIZpjYRc9s.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nJplwm0ZoRS1x0TUaUWrNPooaC1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vwOOQfurdLzIdvXVzxX3DPTJWUG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 960
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jCJ2Yg6nxjTS4qMCVDK7NJdShZ1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1754,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tREAoZ9aFyS1UGxERF1ZCSGueYD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1240
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1754,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wKnuCavDJ6LQo9TxK8iZnnRhfe6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1240
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cRtWgIgfY9BgfWcIODOC9uN7Dzc.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1170,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/89X5vI01Qlsq846Hok2wrsT0ntR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 780
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 981,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2cbHRuYSfmzrBA7xHb6vLbjFvaY.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/h4hQJ6cYwTCNX5AGs8GOm0XQNCm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 1294,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/imYV5u6nNAoJrRAYzBo9cQG5Qn4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 920
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a5BBxNhoMCl0T3GUlAdELwunUkF.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1996
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jKC3UZOVuRXHDc9Da0NOtCsbFyO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pXYyVwmzXlOGP4ZwuxBUTHMi63w.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1996
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aVWF4ekwmEHU4v6AMcNqh1cnnHR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ceCrcGOA6hc88lhSK1WJmAPGYFB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1996
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bcIke3fClZNfbQsAkVAMmQMSgkA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1996
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6FjVFtKYplvPvdL9hy6Nhy2EI5H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2992,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uN4HB3e9MGFifdPDml1vYnsmkQR.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vX4qufFptTCLPSKEW2MlXH7uzNo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

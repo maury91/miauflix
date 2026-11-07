@@ -4,6 +4,7 @@ import type { Database } from '@database/database';
 import type { Progress } from '@entities/progress.entity';
 import type { ProgressUpdateRequest } from '@routes/progress.types';
 import type { ListClientService } from '@services/list/list-client.service';
+import type { EpisodeNumberingService } from '@services/media/episode-numbering.service';
 
 import { ProgressService } from './progress.service';
 
@@ -33,6 +34,43 @@ const setupTest = (withClient = true) => {
 };
 
 describe('ProgressService', () => {
+  it('exports and imports anime episodes in TMDB numbering', async () => {
+    const { repository, listClient } = setupTest();
+    const shift = (by: number) => async (ref: ProgressUpdateRequest['playable']) =>
+      ref.kind === 'episode' ? { ...ref, seasonNumber: ref.seasonNumber + by } : ref;
+    const numbering = {
+      toProvider: jest.fn(shift(-1)),
+      fromProvider: jest.fn(async (ref: ProgressUpdateRequest['playable']) =>
+        ref.kind === 'episode' && ref.episodeNumber === 99 ? null : shift(1)(ref)
+      ),
+    };
+    const service = new ProgressService(
+      { getProgressRepository: () => repository } as unknown as Database,
+      listClient as unknown as ListClientService,
+      numbering as unknown as EpisodeNumberingService
+    );
+    const playable = {
+      kind: 'episode' as const,
+      showMediaId: 5,
+      seasonNumber: 2,
+      episodeNumber: 1,
+    };
+    const entry = { ...update, playable, updatedAt: '2026-10-04T10:00:00.000Z' };
+
+    await service.update('user-1', { ...update, playable });
+    expect(repository.upsert).toHaveBeenCalledWith('user-1', { ...update, playable });
+    expect(listClient.syncPlayback).toHaveBeenCalledWith('user-1', {
+      ...update,
+      playable: { ...playable, seasonNumber: 1 },
+    });
+
+    listClient.getPlayback.mockResolvedValue([
+      { ...entry, playable: { ...playable, seasonNumber: 1 } },
+      { ...entry, playable: { ...playable, episodeNumber: 99 } },
+    ]);
+    await expect(service.findByUser('user-1')).resolves.toEqual([entry]);
+  });
+
   it('saves local progress before exporting for the same user', async () => {
     const { service, repository, listClient } = setupTest();
     listClient.syncPlayback.mockImplementation(async () => {

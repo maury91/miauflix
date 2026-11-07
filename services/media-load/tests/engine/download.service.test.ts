@@ -595,6 +595,67 @@ describe('DownloadService', () => {
       expect(torrent._startDiscovery).toHaveBeenCalled();
     });
 
+    it('drops peers kept in a plain object (older WebTorrent)', async () => {
+      const { service } = setupTest();
+      const { torrent } = fakeTorrent();
+      const legacy = { ...torrent, _peers: { 'peer-1': {}, 'peer-2': {} } };
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [legacy];
+
+      await service.setNetworkAllowed(false);
+
+      expect(legacy.removePeer.mock.calls).toEqual([['peer-1'], ['peer-2']]);
+    });
+
+    it('fences every other torrent when one fails', async () => {
+      const { service } = setupTest();
+      const broken = fakeTorrent().torrent;
+      broken.pause.mockImplementation(() => {
+        throw new Error('boom');
+      });
+      const healthy = fakeTorrent().torrent;
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [broken, healthy];
+      jest.spyOn(logger, 'error').mockImplementation(() => undefined);
+
+      await service.setNetworkAllowed(false);
+
+      expect(healthy.pause).toHaveBeenCalled();
+      expect(healthy.discovery).toBeNull();
+    });
+
+    it('still drops the peers of a torrent whose pause fails, and removes it', async () => {
+      const { service } = setupTest();
+      const { torrent: broken, discovery } = fakeTorrent();
+      broken.pause.mockImplementation(() => {
+        throw new Error('boom');
+      });
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [broken];
+      jest.spyOn(logger, 'error').mockImplementation(() => undefined);
+
+      await service.setNetworkAllowed(false);
+      await new Promise(resolve => setImmediate(resolve));
+
+      expect(broken.removePeer.mock.calls).toEqual([['peer-1'], ['peer-2']]);
+      expect(discovery.destroy).toHaveBeenCalled();
+      expect(mockedTorrentInstance.remove).toHaveBeenCalledWith(broken, { destroyStore: false });
+    });
+
+    it('destroys a torrent it cannot fence when removing it fails too', async () => {
+      const { service } = setupTest();
+      const { torrent } = fakeTorrent();
+      const broken = { ...torrent, destroyed: false, destroy: jest.fn() };
+      broken.pause.mockImplementation(() => {
+        throw new Error('boom');
+      });
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [broken];
+      (mockedTorrentInstance.remove as AnyMock).mockRejectedValueOnce(new Error('busy'));
+      jest.spyOn(logger, 'error').mockImplementation(() => undefined);
+
+      await service.setNetworkAllowed(false);
+      for (let i = 0; i < 5; i++) await new Promise(resolve => setImmediate(resolve));
+
+      expect(broken.destroy).toHaveBeenCalledWith({ destroyStore: false });
+    });
+
     it('refuses new torrents and metadata lookups while blocked', async () => {
       const { service } = setupTest();
       (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [];
@@ -630,6 +691,69 @@ describe('DownloadService', () => {
       internals._initStatus = { status: 'ready' };
       await service.setNetworkAllowed(true);
       expect(mockStorageService.getStoragesWithCompletion).toHaveBeenCalledTimes(1);
+    });
+
+    it('retries the seeding restore when the network is blocked while it runs', async () => {
+      const { service, mockStorageService } = setupTest();
+      const internals = service as unknown as {
+        restoreCompletedDownloads: () => Promise<void>;
+        addTorrentWithLock: () => Promise<Torrent>;
+        _initStatus: { status: string };
+      };
+      internals._initStatus = { status: 'ready' };
+      const storage = createMockStorage({ videoCompletedAt: new Date(), localOnly: false });
+      mockStorageService.getStoragesWithCompletion.mockResolvedValue([storage]);
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
+      // The VPN drops while this source is being restored.
+      jest.spyOn(internals, 'addTorrentWithLock').mockImplementation(async () => {
+        await service.setNetworkAllowed(false);
+        throw new ErrorWithStatus('blocked', 'vpn_required');
+      });
+      jest.spyOn(logger, 'warn').mockImplementation(() => undefined);
+
+      await internals.restoreCompletedDownloads();
+      mockStorageService.getStoragesWithCompletion.mockClear();
+      mockStorageService.getStoragesWithCompletion.mockResolvedValue([]);
+      internals._initStatus = { status: 'ready' };
+      await service.setNetworkAllowed(true);
+
+      expect(mockStorageService.getStoragesWithCompletion).toHaveBeenCalledTimes(1);
+    });
+
+    it('retries the seeding restore when the network returns before the failure is seen', async () => {
+      const { service, mockStorageService } = setupTest();
+      const internals = service as unknown as {
+        restoreCompletedDownloads: () => Promise<void>;
+        addTorrentWithLock: () => Promise<Torrent>;
+        _initStatus: { status: string };
+      };
+      // The constructor's init runs its own restore pass; let it finish first.
+      for (let i = 0; i < 100 && internals._initStatus.status === 'initializing'; i++)
+        await new Promise(resolve => setImmediate(resolve));
+      for (let i = 0; i < 10; i++) await new Promise(resolve => setImmediate(resolve));
+      internals._initStatus = { status: 'ready' };
+      const storage = createMockStorage({ videoCompletedAt: new Date(), localOnly: false });
+      // Only the passes this test starts are counted, whenever init's own pass runs.
+      let counting = false;
+      let passes = 0;
+      mockStorageService.getStoragesWithCompletion.mockImplementation(async () => {
+        if (!counting) return [];
+        passes++;
+        return passes === 1 ? [storage] : [];
+      });
+      mockStorageService.getStorageBySource.mockResolvedValue(storage);
+      // The VPN drops and comes back before the failed add reaches the restore loop.
+      jest.spyOn(internals, 'addTorrentWithLock').mockImplementation(async () => {
+        await service.setNetworkAllowed(false);
+        await service.setNetworkAllowed(true);
+        throw new ErrorWithStatus('blocked', 'vpn_required');
+      });
+      jest.spyOn(logger, 'warn').mockImplementation(() => undefined);
+
+      counting = true;
+      await internals.restoreCompletedDownloads();
+
+      expect(passes).toBe(2);
     });
   });
 

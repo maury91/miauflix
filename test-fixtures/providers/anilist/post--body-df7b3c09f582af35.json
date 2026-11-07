@@ -1,0 +1,227 @@
+{
+  "headers": {
+    "access-control-allow-headers": "Authorization,Accept,DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Content-Range,Range",
+    "access-control-allow-methods": "GET, POST, OPTIONS",
+    "access-control-allow-origin": "*",
+    "access-control-expose-headers": "X-RateLimit-Limit, X-RateLimit-Remaining, X-RateLimit-Reset, Content-Length, Content-Range",
+    "cache-control": "no-cache, private",
+    "content-type": "application/json",
+    "x-ratelimit-limit": "30",
+    "x-ratelimit-remaining": "29",
+    "set-cookie": "laravel_session=3PLiglNefmIe4cnbuwgARmYd2iU3u9SvGaaiF7c1; expires=Sun, 08-Nov-2026 02:06:55 GMT; Max-Age=43200; path=/; httponly"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "data": {
+      "Page": {
+        "pageInfo": {
+          "total": 5000,
+          "lastPage": 100
+        },
+        "media": [
+          {
+            "id": 195516,
+            "format": "TV"
+          },
+          {
+            "id": 21,
+            "format": "TV"
+          },
+          {
+            "id": 210482,
+            "format": "ONA"
+          },
+          {
+            "id": 205909,
+            "format": "TV"
+          },
+          {
+            "id": 187402,
+            "format": "ONA"
+          },
+          {
+            "id": 178083,
+            "format": "TV"
+          },
+          {
+            "id": 180894,
+            "format": "ONA"
+          },
+          {
+            "id": 219679,
+            "format": "TV"
+          },
+          {
+            "id": 97940,
+            "format": "TV"
+          },
+          {
+            "id": 195604,
+            "format": "TV"
+          },
+          {
+            "id": 195571,
+            "format": "TV"
+          },
+          {
+            "id": 195539,
+            "format": "ONA"
+          },
+          {
+            "id": 213805,
+            "format": "TV"
+          },
+          {
+            "id": 269,
+            "format": "TV"
+          },
+          {
+            "id": 180136,
+            "format": "TV"
+          },
+          {
+            "id": 203275,
+            "format": "TV"
+          },
+          {
+            "id": 204650,
+            "format": "TV"
+          },
+          {
+            "id": 207329,
+            "format": "TV"
+          },
+          {
+            "id": 1735,
+            "format": "TV"
+          },
+          {
+            "id": 11061,
+            "format": "TV"
+          },
+          {
+            "id": 186742,
+            "format": "TV"
+          },
+          {
+            "id": 212888,
+            "format": "ONA"
+          },
+          {
+            "id": 204389,
+            "format": "ONA"
+          },
+          {
+            "id": 159042,
+            "format": "ONA"
+          },
+          {
+            "id": 189046,
+            "format": "TV"
+          },
+          {
+            "id": 20,
+            "format": "TV"
+          },
+          {
+            "id": 161645,
+            "format": "TV"
+          },
+          {
+            "id": 185874,
+            "format": "TV"
+          },
+          {
+            "id": 235,
+            "format": "TV"
+          },
+          {
+            "id": 178789,
+            "format": "TV"
+          },
+          {
+            "id": 182205,
+            "format": "TV"
+          },
+          {
+            "id": 203490,
+            "format": "TV"
+          },
+          {
+            "id": 120377,
+            "format": "ONA"
+          },
+          {
+            "id": 207191,
+            "format": "TV"
+          },
+          {
+            "id": 16498,
+            "format": "TV"
+          },
+          {
+            "id": 172192,
+            "format": "TV"
+          },
+          {
+            "id": 206401,
+            "format": "TV"
+          },
+          {
+            "id": 206949,
+            "format": "TV"
+          },
+          {
+            "id": 211778,
+            "format": "TV"
+          },
+          {
+            "id": 191656,
+            "format": "TV"
+          },
+          {
+            "id": 212503,
+            "format": "TV"
+          },
+          {
+            "id": 219548,
+            "format": "TV"
+          },
+          {
+            "id": 1535,
+            "format": "TV"
+          },
+          {
+            "id": 113415,
+            "format": "TV"
+          },
+          {
+            "id": 101922,
+            "format": "TV"
+          },
+          {
+            "id": 176301,
+            "format": "TV"
+          },
+          {
+            "id": 199353,
+            "format": "ONA"
+          },
+          {
+            "id": 5114,
+            "format": "TV"
+          },
+          {
+            "id": 14719,
+            "format": "TV"
+          },
+          {
+            "id": 191788,
+            "format": "TV"
+          }
+        ]
+      }
+    }
+  }
+}

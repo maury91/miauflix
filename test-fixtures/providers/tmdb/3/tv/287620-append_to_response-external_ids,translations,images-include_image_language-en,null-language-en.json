@@ -1,0 +1,1324 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=8730",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"69fdaf11faff4a719d44b922629e152d\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/nW7oUFiJrIWwll4mZ8tYays7XRm.jpg",
+    "created_by": [
+      {
+        "id": 160172,
+        "credit_id": "6a626a4d8e257fed35751700",
+        "name": "Chuck Lorre",
+        "original_name": "Chuck Lorre",
+        "gender": 2,
+        "profile_path": "/8OTRD3d6N0GKy1Z0LJaWZ3MVxXr.jpg"
+      },
+      {
+        "id": 11011,
+        "credit_id": "6a626a5496a3190036d3e6d1",
+        "name": "Zak Penn",
+        "original_name": "Zak Penn",
+        "gender": 2,
+        "profile_path": "/5Zx3o1Fmlu4sIYq4xn5WLyK2GNM.jpg"
+      },
+      {
+        "id": 163528,
+        "credit_id": "6a626a5a973d3b7048e220c2",
+        "name": "Bill Prady",
+        "original_name": "Bill Prady",
+        "gender": 2,
+        "profile_path": "/voM7AngVEko9ZzNFuv0F53AMTzu.jpg"
+      }
+    ],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-07-23",
+    "genres": [
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://www.hbomax.com/shows/1130c5ba-e71f-43e0-8de3-487dfdb49c11",
+    "id": 287620,
+    "in_production": true,
+    "languages": [
+      "en"
+    ],
+    "last_air_date": "2026-09-24",
+    "last_episode_to_air": {
+      "id": 7269524,
+      "name": "Spoiler: Filmed Before a Live Studio Audience",
+      "overview": "The gang suddenly finds themselves back in the comic book store – but where is that laughter coming from?",
+      "vote_average": 8.231,
+      "vote_count": 13,
+      "air_date": "2026-09-24",
+      "episode_number": 10,
+      "episode_type": "finale",
+      "production_code": "T12.19160",
+      "runtime": 18,
+      "season_number": 1,
+      "show_id": 287620,
+      "still_path": "/lpNXivePyzeyh6rjkifq71V6Ul3.jpg"
+    },
+    "name": "Stuart Fails to Save the Universe",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 8304,
+        "logo_path": "/gqWI9y0owo9sxgzZD7TXOeILYI9.png",
+        "name": "HBO Max",
+        "origin_country": ""
+      }
+    ],
+    "number_of_episodes": 10,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "US"
+    ],
+    "original_language": "en",
+    "original_name": "Stuart Fails to Save the Universe",
+    "overview": "After accidentally creating a new multiverse, comic book store owner Stuart Bloom must locate a quantum-interference device to restore reality.",
+    "popularity": 15.9656,
+    "poster_path": "/txj8ujTZwGUjpCdhCsQBnTlh4aS.jpg",
+    "production_companies": [
+      {
+        "id": 1957,
+        "logo_path": "/pJJw98MtNFC9cHn3o15G7vaUnnX.png",
+        "name": "Warner Bros. Television",
+        "origin_country": "US"
+      },
+      {
+        "id": 35504,
+        "logo_path": "/e70DaugzSRbTbVEhZV3e1nCofcY.png",
+        "name": "Chuck Lorre Productions",
+        "origin_country": "US"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "US",
+        "name": "United States of America"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-07-23",
+        "episode_count": 10,
+        "id": 448732,
+        "name": "Season 1",
+        "overview": "Comic book store owner Stuart Bloom is tasked with restoring reality after he breaks a device built by Sheldon and Leonard, accidentally bringing about a multiverse Armageddon. Stuart is aided in this quest by his girlfriend Denise, geologist friend Bert, and quantum physicist/all-around pain in the ass Barry Kripke.",
+        "poster_path": "/4cMBNZI9GE62chK8e7LugSjiUmC.jpg",
+        "season_number": 1,
+        "vote_average": 8.2
+      },
+      {
+        "air_date": null,
+        "episode_count": 0,
+        "id": 537139,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/mwSK54eVHxSJLP5xyOn6ZvsHTTK.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "Every universe needs a hero. We got Stuart.",
+    "type": "Scripted",
+    "vote_average": 8.277,
+    "vote_count": 249,
+    "external_ids": {
+      "imdb_id": "tt27497393",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 465664,
+      "tvrage_id": null,
+      "wikidata_id": "Q138836131",
+      "facebook_id": null,
+      "instagram_id": "stuartfails",
+      "twitter_id": "StuartFails"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "After accidentally creating a new multiverse, comic book store owner Stuart Bloom must locate a quantum-interference device to restore reality.",
+            "homepage": "",
+            "tagline": "Every universe needs a hero. We got Stuart."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Comicladenbesitzer Stuart Bloom steht vor der unmöglichen Aufgabe, die Realität wiederherzustellen, nachdem er ein von Sheldon und Leonard konstruiertes Gerät zerstört und dadurch versehentlich ein Multiversums-Armageddon ausgelöst hat. Bei dieser gefährlichen Mission wird Stuart von seiner Freundin Denise, seinem befreundeten Geologen Bert sowie dem Quantenphysiker Barry Kripke unterstützt.",
+            "homepage": "",
+            "tagline": "Jedes Universum braucht einen Helden. Wir haben Stuart."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Stuart no consigue salvar el universo",
+            "overview": "Stuart Bloom, dueño de una tienda de cómics, recibe la misión de restaurar la realidad tras romper un dispositivo construido por Sheldon y Leonard, provocando accidentalmente un Armagedón multiverso. En esta misión, Stuart cuenta con la ayuda de su novia Denise, su amigo geólogo Bert y el físico cuántico y pesado Barry Kripke. En el camino, se encuentran con versiones en universos alternativos de personajes que conocemos y apreciamos de Big Bang. Como indica el título, las cosas no salen bien.",
+            "homepage": "",
+            "tagline": "Cada universo necesita un héroe. Nosotros tenemos a Stuart."
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Stuart Não Consegue Salvar o Universo",
+            "overview": "O dono da loja de quadrinhos Stuart Bloom é encarregado de restaurar a realidade após quebrar acidentalmente um dispositivo construído por Sheldon e Leonard, desencadeando um Armagedom no multiverso. Nessa missão, Stuart é auxiliado por sua namorada Denise, pelo amigo geólogo Bert e pelo físico quântico e irritante Barry Kripke.",
+            "homepage": "",
+            "tagline": "Todo universo precisa de um herói. Nós temos o Stuart."
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Stuart no logra salvar el Universo",
+            "overview": "A Stuart Bloom se le encomienda la tarea de restaurar la realidad después de provocar un Armagedón multiverso.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Dopo aver accidentalmente creato un nuovo multiverso, il proprietario di un negozio di fumetti Stuart Bloom deve trovare un dispositivo di interferenza quantistica per ripristinare la realtà.",
+            "homepage": "",
+            "tagline": "Ogni universo ha bisogno di un eroe. Noi abbiamo Stuart."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Stuart fails to save the Universe",
+            "overview": "Le propriétaire de la boutique de comics, Stuart Bloom, est chargé de rétablir la réalité après avoir accidentellement brisé un appareil conçu par Sheldon et Leonard, provoquant ainsi une apocalypse du multivers.",
+            "homepage": "",
+            "tagline": "Chaque univers a besoin d'un héros. Nous avons Stuart."
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Stripboekwinkelhouder Stuart Bloom krijgt de taak om de realiteit te herstellen nadat hij een apparaat van Sheldon en Leonard kapotmaakt, waardoor per ongeluk een Armageddon in het multiversum ontstaat. Stuart wordt in deze missie bijgestaan ​​door zijn vriendin Denise, zijn vriend en geoloog Bert, en kwantumfysicus/allround lastpak Barry Kripke.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Stripboekwinkelhouder Stuart Bloom krijgt de taak om de realiteit te herstellen nadat hij een apparaat van Sheldon en Leonard kapotmaakt, waardoor per ongeluk een Armageddon in het multiversum ontstaat. Stuart wordt in deze missie bijgestaan ​​door zijn vriendin Denise, zijn vriend en geoloog Bert, en kwantumfysicus/allround lastpak Barry Kripke.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Стюарт Блум не смог спасти вселенную",
+            "overview": "Владелец магазина комиксов Стюарт Блум случайно ломает квантовое устройство, созданное Шелдоном Купером и Леонардом Хофстедтером, из-за чего нарушается привычный ход реальности и возникает угроза мультивселенской катастрофы. Чтобы исправить свою ошибку и вернуть мир в исходное состояние, Стюарту приходится отправиться в путешествие по альтернативным вселенным. Вместе с ним оказываются его девушка Дениз, друг-геолог Берт Кибблер и квантовый физик Барри Крипке. По пути команда сталкивается с альтернативными версиями знакомых героев, совершенно разными мирами и всё более странными последствиями своего путешествия по мультивселенной.",
+            "homepage": "",
+            "tagline": "«В каждой вселенной нужен герой»"
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Стюарт не зміг врятувати Всесвіт",
+            "overview": "Стюарт Блум - невдаха, який керує своїм магазином Comic Center. Однак коли над світом нависає незрозуміла й масштабна загроза, він щиро переконується, що саме на його плечі покладена місія з порятунку людства",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Jak Stuart nezachránil vesmír",
+            "overview": "Majitel obchodu s komiksy Stuart Bloom se snaží - a zjevně neúspěšně - zachránit vesmír, přičemž zůstává věrný své smolné povaze.",
+            "homepage": "",
+            "tagline": "Každý vesmír potřebuje svého hrdinu. My máme Stuarta."
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Sarjakuvakaupan omistaja Stuart Bloom saa tehtäväkseen palauttaa todellisuuden ennalleen, kun hän vahingossa aiheuttaa multiversumi-maailmanlopun.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "史都華拯救宇宙失敗記",
+            "overview": "史都華布魯肩負起恢復現實世界的任務，因為他引發了一場多重宇宙末日浩劫。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Stuart az univerzum ellen",
+            "overview": "A képregénybolt tulajdonosára, Stuart Bloomra hárul a feladat, hogy helyreállítsa a valóságot, miután összetöri Sheldon és Leonard szerkezetét, és ezzel véletlenül egy multiverzumos Armageddont indít el. Küldetésében barátnője, Denise, geológus barátja, Bert, valamint a kvantumfizikus, és általában véve is idegesítő, Barry Kripke segíti.\n\n(Csillag Lajos)",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Стюарт не успява да спаси Вселената",
+            "overview": "Собственикът на магазин за комикси Стюарт Блум има за задача да възстанови реалността, след като случайно предизвиква мултивселенски Армагедон.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Stuart ne uspijeva spasiti svemir",
+            "overview": "Vlasnik striparnice Stuart Bloom dobiva zadatak vratiti stvarnost na staro nakon što slučajno izazove multiverzalni armagedon.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "斯图尔特未能拯救宇宙",
+            "overview": "故事聚焦《大爆炸》的漫画书老板斯图尔特·布鲁姆，他弄坏了一个谢尔顿和莱纳德制造的设备，意外导致了多元宇宙的世界末日，他必须与女友Denise、地质学家Bert和量子物理学家Barry一起去将现实复原。一路上，他们遇到了平行宇宙版本的各个《大爆炸》角色，事情进展并不顺利。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Stuart nu poate salva universul",
+            "overview": "Stuart Bloom, proprietarul unui magazin de benzi desenate, are sarcina de a reface realitatea după ce provoacă din greșeală un Armagedon în multivers.",
+            "homepage": "",
+            "tagline": "Fiecare univers are nevoie de un erou. Noi îl avem pe Stuart."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สจ๊วตล่มแผนกู้จักรวาล",
+            "overview": "สจ๊วต บลูมได้รับภารกิจฟื้นฟูความจริงให้กลับคืนมา หลังจากที่เขาก่อให้เกิดมหันตภัยครั้งใหญ่ขึ้นในพหุจักรวาล",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Stuart Bloom, dono de uma loja de BD, tem de restaurar a realidade depois de, acidentalmente, ter provocado um Armagedão no multiverso.",
+            "homepage": "",
+            "tagline": "Cada universo precisa de um herói. Calhou-nos o Stuart."
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Αφού δημιουργεί κατά λάθος ένα νέο πολυσύμπαν, ο ιδιοκτήτης ενός καταστήματος κόμικς, Στιούαρτ Μπλουμ, πρέπει να εντοπίσει μια συσκευή κβαντικής παρεμβολής για να αποκαταστήσει την πραγματικότητα.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "סטיוארט נכשל בהצלת היקום",
+            "overview": "על סטיוארט בלום, בעליה של חנות הקומיקס, מוטלת האחריות לשקם את המציאות לאחר שהוא שובר בטעות מכשיר שבנו שלדון ולנארד, וכך מחולל ארמגדון רב יקומי. במסע לתיקון הבלגן מסייעים לו חברתו דניס, חברו הגאולוג ברט והפיזיקאי הקוונטי ומקור התסכול המתמשך בארי קריפקי. בדרך הם פוגשים גרסאות מיקומים מקבילים של דמויות אהובות נוספות. אך כפי שמסגיר השם, הדברים לא מתנהלים כשורה.",
+            "homepage": "",
+            "tagline": "כל יקום צריך גיבור. לנו יש את סטיוארט."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Stuart nie ratuje wszechświata",
+            "overview": "Właściciel sklepu z komiksami Stuart Bloom psuje urządzenie zbudowane przez Sheldona i Leonarda, przypadkowo powodując apokalipsę w multiwersum. Musi naprawić swoje błędy i przywrócić rzeczywistość. Stuartowi w tym zadaniu pomaga jego dziewczyna Denise, przyjaciel geolog Bert oraz fizyk kwantowy, wszechobecny wrzód na tyłku, Barry Kripke. Po drodze spotykają alternatywne wersje postaci, które znamy i kochamy z \"Teorii wielkiego podrywu\". Jak sugeruje tytuł, sprawy nie idą dobrze.",
+            "homepage": "",
+            "tagline": "Każde uniwersum potrzebuje bohatera. My mamy Stuarta."
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "史都华未能拯救宇宙",
+            "overview": "史都华布鲁肩负起恢复现实世界的任务，因为他引发了一场多重宇宙末日浩劫。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "史釗域失救宇宙",
+            "overview": "史釗域魯肩負起恢復現實世界的任務，因為他引發了一場多重宇宙末日浩劫。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "EE",
+          "iso_639_1": "et",
+          "name": "Eesti",
+          "english_name": "Estonian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "Tegneseriebutiksejeren Stuart Bloom har fået til opgave at genoprette virkeligheden, efter han ved et uheld fremkalder et multivers-Armageddon.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LV",
+          "iso_639_1": "lv",
+          "name": "Latviešu",
+          "english_name": "Latvian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "Stuart Bloom diberi tugas memulihkan realitas setelah menyebabkan Kiamat multisemesta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Stiuartui nepavyksta išgelbėti visatos",
+            "overview": "Komiksų parduotuvės savininkas Stiuartas Blumas iš serialo „Didžiojo sprogimo teorija“ (2007 m.) sugrįžta naujame seriale, kuriame bando – ir, regis, nesėkmingai – išgelbėti visatą, taip išlikdamas ištikimas savo nesėkmingai prigimčiai.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MK",
+          "iso_639_1": "mk",
+          "name": "",
+          "english_name": "Macedonian",
+          "data": {
+            "name": "Стјуарт не успева да го спаси универзумот",
+            "overview": "Сопственикот на продавница за стрипови Стјуарт Блум добива задача да ја врати реалноста откако случајно предизвикува Армагедон во мултиверзумот.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "Stuart Bloom ditugaskan untuk memulihkan realiti selepas mencetuskan Armageddon berbilang alam semesta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "",
+            "overview": "Tegneseriebutikkeier Stuart Bloom får i oppgave å gjenopprette virkeligheten etter at han ved et uhell forårsaker et multivers-Armageddon.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Baksuzni Stjuart",
+            "overview": "Vlasnik prodavnice stripova Stjuart Blum dobija zadatak da obnovi stvarnost pošto slučajno izazove multiverzumski Armagedon.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Stuart nezachráni vesmír",
+            "overview": "Stuart Bloom sa pokúša napraviť realitu po tom, čo nechtiac spustí multiverzálnu apokalypsu.",
+            "homepage": "",
+            "tagline": "Každý vesmír potrebuje hrdinu. My máme Stuarta."
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "Stuartu ni uspelo rešiti vesolja",
+            "overview": "Lastnik trgovine s stripi Stuart Bloom dobi nalogo, naj obnovi resničnost, potem ko je po nesreči povzročil uničenje multivesolja.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Serietidningsbutiksägaren Stuart Bloom får i uppdrag att återställa verkligheten när han råkar orsaka ett multiversum-Armageddon.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Çizgi roman dükkânı sahibi Stuart Bloom, yanlışlıkla çoklu evren kıyametini başlatınca gerçekliği eski hâline getirmekle görevlendirilir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "スチュアート★宇宙救出失敗の法則",
+            "overview": "文明が崩壊し、荒廃したパサデナでコミック店を経営するスチュアートの前に“別世界から来たスチュアート”が現れる。その彼から、シェルドンたちが作った装置を使えば荒廃した世界をリセットできると聞き、スチュアートはその装置を探す旅に出るのだが…。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "스튜어트의 우주 폭망 이론",
+            "overview": "셸던, 레너드, 하워드가 개발한 양자 간섭 장치를 실수로 고장 낸 만화책 가게 주인 스튜어트는 현실을 되돌리는 임무를 맡는다. 빅뱅 이론의 평행 우주 버전과 함께, 계획대로 풀리지 않는 상황 속에서 세상을 구하려고 하는 남자의 여정이 펼쳐진다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "استوارت در نجات جهان شکست خورد",
+            "overview": "استوارت بلوم، صاحب فروشگاه کتاب‌های مصور، پس از اینکه به‌طور تصادفی یک چندجهانی جدید ایجاد می‌کند، باید یک دستگاه تداخل کوانتومی پیدا کند تا واقعیت را بازیابی کند.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Stuart Bloom, le propriétaire d’une boutique de bandes dessinées, provoque la fin de l’univers. Avec sa copine Denise, le géologue Bert et le physicien quantique Barry Kripke, il doit rétablir la réalité avant qu’il ne soit trop tard.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "يتم تكليف ستيوارت بلوم، مالك متجر القصص المصورة، بإعادة الأمور إلى نصابها بعد أن يكسر جهازًا بناه شيلدون وليونارد، مما يتسبب عن في حدوث كارثة متعددة الأكوان عن غير قصد.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nW7oUFiJrIWwll4mZ8tYays7XRm.jpg",
+          "vote_average": 10,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aYBOc5UgZ50fjr4spTiqDqAn6yb.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4pIuF2YdMahumBvddLDmzA74nTW.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lMvWtYbm7ljZxYoBFfDZcjKlrJN.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k5ujbFUxNlBQQ6sh3UmApwadVTV.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2ngdvUiEKW8Q37ta8BBdydE2cuq.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qyoidDZSojQpFdEYygJMkE0m8gC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sIiSvtFwmOQKTnUaTNMuRmCpzoq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/n3MDEZe8asXYe7UV0QMPcdjNidS.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fFAKtvFOBcRcgD51WBjY7BBWWIz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yjp2tJ8GQIzVcZNGViaaTB1rk1f.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6MmHhb6ooKI0gKCxgFB7lrk887I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h4EDOZeBWlwHw3agLSdwPfcPS4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9v4eFh5NaLcqtpKjNfa9q8rt2YB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/80u921r8iuSIdgncMcLRTdoK7fh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1GQh1wenuRfKeqclz4T27WUP0Qn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h9Z7QDjO3uzcvtR709vYf2XAj8t.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pdTzIZ8InzqIlItPvAFkyWj3Nx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6bAxWfo5QvRJE4nPYKzp6edHeuv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zVzJwAejsctF372OQvPhBa91GOM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7qfTBFBOKhN1EcPEXFSgRny9zny.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4R0u486F7Ln3uWa0ifNclnC3WXE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wpcVi5FSZU0oNQL7qNUcsFP5lGZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4QGLcQcJL55k9VNVFKxsXo9jZ0Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7Gnsm86n7y1eZGFfqd4dAtuN2UA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lt7rpecsFi4v1UkLRzgAZua13Mk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/opBBg5STWP7j7R6gThlbYm7Bxb.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 1079,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rHOSeUBuVYdkWVdMuyngx3A7KjE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1688,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yWHfgvSFXFBpzzndFrGUN7brdso.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pBYSZZowJ7PRVuQzWqn7ynXCsSJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yE7kmGyaxM1lbrZqb9BWHIRBgKk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 2.752,
+          "height": 1192,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bLnszAIKG4YC6KBgS17aczxryDU.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3280
+        },
+        {
+          "aspect_ratio": 2.752,
+          "height": 1192,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vPi6574kYZYPlCBzv3EA17bpmIk.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3280
+        },
+        {
+          "aspect_ratio": 2.561,
+          "height": 1222,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xW9OE6KMDxModOcrCCTZwFPwJyA.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3130
+        },
+        {
+          "aspect_ratio": 2.774,
+          "height": 1166,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sHUYYn9Pb4GeVOZ1gm3vK9NIp1Q.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3234
+        },
+        {
+          "aspect_ratio": 2.774,
+          "height": 1166,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ch7xqELJII2HbObBpGU0CxBOfv2.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3234
+        },
+        {
+          "aspect_ratio": 2.571,
+          "height": 1276,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/elJv7y8yOHdmtTQfOEkcCbugHLO.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3280
+        },
+        {
+          "aspect_ratio": 2.41,
+          "height": 1298,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A2X3Tl7n2km6Y0ISxBbi8UPAzRG.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3128
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/txj8ujTZwGUjpCdhCsQBnTlh4aS.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rZLmNNoQKfmfedsckkTqMy7F2ti.jpg",
+          "vote_average": 5.786,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/Aj3UOZs321tnpn4k7otkSpKbqxw.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/romapTxfqkvPxQPxhVP8JdyuPGf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1463,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eeSN7QAS1XLWRbNbVDHaULJJN8i.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 975
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aMVFpSYvBdeL1o3rZkN8Qzq1XB8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vM6B0dqOB2YdXEaA7bjq5LuXEo.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xXlQYcKRlbWG3AiEJl4AjOEanH2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1248,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bOhpVQ6BLoKoS5ygtDZayuscP88.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 832
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1536,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wJ210DwrRBu2gHYRs9J88KBnMgM.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1024
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bvH9g6TXhQaTG1WhU7hbfXM8LNP.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iQbTbwmLX5Nh1nlH21YUJPWt3Zo.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5fM1PWx8ncFSVTUMJ4WhvRPLBPp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.675,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v7YdsUihaFu8ZjHsgCNIiSXEX4T.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1382
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sBWAwizCPNeRxt0AfXAjpu9QHOI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1567,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gIcUgbv72D2OK4xMirJT3Po8uzI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1045
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sSCr5AHleZaZla6LPsxuZBL4T7W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/muMiVp8Ptk71wKCCX8Lr6O7oP3H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1ktXb0EGQJsxETWqqF55mXvbeW0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pJqLXigWsah7jwgYMdEDikP2Krl.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1DOLFWnHhfL4jTv2loVDXbdFLTp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1875,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/g5PXFYl4khEToGqZpdlNz0kBsie.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1250
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u9ZceWV312tnwYUbHZo41jd67wI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wjk3Ow3x2bq1Fs7RoyHpwlZHoVK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,1320 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16638",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"3dccc8bd8be841e1479235d9b8fc22f1\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/3vuBfAuAltIR6UdANUQ1lLXOeia.jpg",
+    "created_by": [
+      {
+        "id": 93396,
+        "credit_id": "68d51204ca366752dba2be47",
+        "name": "Jacob Tierney",
+        "original_name": "Jacob Tierney",
+        "gender": 2,
+        "profile_path": "/p7UL0BgzOe6Lqmo8Nf9KRJOBe0M.jpg"
+      }
+    ],
+    "episode_run_time": [],
+    "first_air_date": "2025-11-28",
+    "genres": [
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://www.crave.ca/en/series/heated-rivalry-59137",
+    "id": 301507,
+    "in_production": true,
+    "languages": [
+      "en",
+      "ru"
+    ],
+    "last_air_date": "2025-12-26",
+    "last_episode_to_air": {
+      "id": 6601282,
+      "name": "The Cottage",
+      "overview": "Shane and Ilya escape the spotlight for a rare moment of freedom.",
+      "vote_average": 9.092,
+      "vote_count": 65,
+      "air_date": "2025-12-26",
+      "episode_number": 6,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 52,
+      "season_number": 1,
+      "show_id": 301507,
+      "still_path": "/soarX0wzDItdFhWuQ3MkOiFSYLq.jpg"
+    },
+    "name": "Heated Rivalry",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 1344,
+        "logo_path": "/xlVkcuR2NqruUHh8gPaAw9BvOCT.png",
+        "name": "Crave",
+        "origin_country": "CA"
+      }
+    ],
+    "number_of_episodes": 6,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "CA"
+    ],
+    "original_language": "en",
+    "original_name": "Heated Rivalry",
+    "overview": "Two of the biggest stars in Major League Hockey are bound by ambition, rivalry, and a magnetic pull neither of them fully understands. What begins as a secret fling between two fresh faced rookies evolves into a years-long journey of love, denial, and self-discovery. Over the next eight years, as they chase glory on the ice, they struggle to navigate their feelings for each other. Torn between the sport they live for and the love they can’t ignore, they must decide if there’s room in their fiercely competitive world for something as fragile – and powerful – as real love.",
+    "popularity": 19.1525,
+    "poster_path": "/3YCKbtAkYWCMDLHvkUjGhG7eWoS.jpg",
+    "production_companies": [
+      {
+        "id": 277158,
+        "logo_path": "/g6AoMl1HwNz9ljq3AuNql1SWaYY.png",
+        "name": "Accent Aigu Entertainment",
+        "origin_country": "CA"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "CA",
+        "name": "Canada"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-11-28",
+        "episode_count": 6,
+        "id": 476908,
+        "name": "Season 1",
+        "overview": "Two hockey players must decide if there is room in their fiercely competitive world for real love.",
+        "poster_path": "/8PhvJaXN9baNEJwvQbC6murUc9R.jpg",
+        "season_number": 1,
+        "vote_average": 8.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "English",
+        "iso_639_1": "en",
+        "name": "English"
+      },
+      {
+        "english_name": "Russian",
+        "iso_639_1": "ru",
+        "name": "Pусский"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.7,
+    "vote_count": 646,
+    "external_ids": {
+      "imdb_id": "tt35495073",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 464461,
+      "tvrage_id": null,
+      "wikidata_id": "Q136813219",
+      "facebook_id": null,
+      "instagram_id": "heatedrivalrycrave",
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "",
+            "overview": "Two of the biggest stars in Major League Hockey are bound by ambition, rivalry, and a magnetic pull neither of them fully understands. What begins as a secret fling between two fresh faced rookies evolves into a years-long journey of love, denial, and self-discovery. Over the next eight years, as they chase glory on the ice, they struggle to navigate their feelings for each other. Torn between the sport they live for and the love they can’t ignore, they must decide if there’s room in their fiercely competitive world for something as fragile – and powerful – as real love.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Rivalidade Ardente",
+            "overview": "Duas estrelas do hóquei no gelo vivem um romance secreto que dura anos enquanto perseguem a glória e lutam com seus sentimentos.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Жаркое соперничество",
+            "overview": "Два хоккеиста на пике карьеры, будучи заклятыми соперниками, начинают испытывать друг к другу романтические чувства. Неожиданный поворот идёт вразрез с устоями в мире спорта, поэтому обоим героям придётся столкнуться с предрассудками и пройти сквозь огонь и воду.",
+            "homepage": "",
+            "tagline": "«Разжигай соперничество. Отдайся страсти»"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "",
+            "overview": "Heated Rivalry zeigt die geheime, leidenschaftliche Beziehung zweier Eishockey-Rivalen, die zwischen Konkurrenz, Eifersucht und Karriereambitionen hin- und hergerissen sind.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "Deux stars du hockey vivent une romance secrète qui dure plusieurs années, alors qu'ils poursuivent la gloire et se débattent avec l'amour.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "巅峰对决",
+            "overview": "该剧以职业冰球联赛为背景，改编自Rachel Reid的同名小说，讲述了肖恩·霍兰德与伊利亚·罗扎诺夫长达八年的复杂关系；两人自17岁相识后，在赛场屡次交锋对抗，私下却因隐秘情愫陷入纠结，最终不得不在竞技荣耀与禁忌情感间作出抉择的故事。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "烈愛對決",
+            "overview": "兩名冰球球星展開一段跨越多年的祕密戀情，追逐榮耀的同時，也在愛情裡掙扎。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Ожесточено съперничество",
+            "overview": "Двама от най-големите звезди в Главната лига по хокей са обединени от амбиция, съперничество и магнетично привличане, което и двамата не разбират напълно. Това, което започва като тайна връзка между двама новобранци, прераства в дългогодишно пътешествие на любов, отричане и самооткриване. В следващите осем години, докато преследват слава на леда, те се опитват да разберат чувствата си един към друг. Разкъсвани между спорта, за който живеят, и любовта, която не могат да пренебрегнат, те трябва да решат дали в техния ожесточено конкурентен свят има място за нещо толкова крехко – и силно – като истинската любов.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Запекле суперництво",
+            "overview": "Дві конкуруючі хокейні зірки, що перебувають на піку своєї кар’єри, стикаються з несподіваним випробуванням, коли між ними виникають почуття, і це ускладнює їхню кар’єру та очікування, пов’язані зі спортом.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Twee ijshockeytalenten worden verbonden door ambitie, rivaliteit en een aantrekkingskracht die ze zelf nauwelijks kunnen verklaren. Wat begint als een geheime relatie tussen twee jonge sporters groeit uit tot een jarenlange zoektocht naar liefde, ontkenning en zelfinzicht. Terwijl ze in de acht jaar die volgen jagen op succes op het ijs, worstelen ze met hun gevoelens voor elkaar. Gevangen tussen de sport waar ze voor leven en de liefde die ze niet meer kunnen negeren, moeten ze ontdekken of er in hun keiharde, competitieve wereld ruimte is voor iets zo kwetsbaars en krachtigs als echte liefde.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Rivalité passionnée",
+            "overview": "Deux vedettes rivales du hockey, au sommet de leur carrière, font face à un défi inattendu lorsqu’elles développent des sentiments l’une pour l’autre, bouleversant leur carrière et les attentes du milieu sportif.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "მწვავე დაპირისპირება",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Spalující rivalita",
+            "overview": "Dvě soupeřící hokejové hvězdy na vrcholu své kariéry čelí nečekané výzvě, když k sobě navzájem vyvolají city, což zkomplikuje jejich kariéru a očekávání od tohoto sportu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Más que rivales",
+            "overview": "Dos de las mayores estrellas de la Major League Hockey están unidas por la ambición, la rivalidad y una atracción magnética que ninguna de las dos comprende del todo. Lo que comienza como una aventura secreta entre dos novatos se convierte en un viaje de años de amor, negación y autodescubrimiento. Durante los siguientes ocho años, mientras buscan la gloria sobre el hielo, luchan por comprender sus sentimientos mutuos. Divididos entre el deporte que les apasiona y el amor que no pueden ignorar, deben decidir si hay espacio en su mundo ferozmente competitivo para algo tan frágil —y poderoso— como el amor verdadero.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Més que rivals",
+            "overview": "Dues de les estrelles més importants de la Major League Hockey estan unides per l'ambició, la rivalitat i una atracció magnètica que cap de les dues entén del tot. El que comença com una aventura secreta entre dos novells evoluciona en un viatge d'anys d'amor, negació i autodescobriment. Durant els vuit anys següents, mentre persegueixen la glòria sobre el gel, lluiten per navegar pels seus sentiments mutus. Dividits entre l'esport pel qual viuen i l'amor que no poden ignorar, han de decidir si hi ha lloc en el seu món ferotgement competitiu per a alguna cosa tan fràgil (i poderosa) com l'amor veritable.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "คู่ปรับระอุรัก",
+            "overview": "สองนักฮอกกี้ดาวเด่นตกอยู่ในห้วงความรักลับๆ ที่ดำเนินมานานหลายปี ขณะที่ทั้งคู่ต้องไล่ล่าความสำเร็จและปลุกปล้ำกับความรักในใจ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "",
+            "overview": "Duas das maiores estrelas da Major League Hockey estão ligadas pela ambição, pela rivalidade e por uma atração magnética que nenhum deles compreende totalmente. O que começa como um caso secreto entre dois jovens rookies evolui para uma jornada de vários anos marcada pelo amor, pela negação e pela autodescoberta.\n\nAo longo dos oito anos seguintes, enquanto perseguem a glória no gelo, lutam para compreender e gerir os sentimentos que têm um pelo outro. Divididos entre o desporto pelo qual vivem e o amor que não conseguem ignorar, terão de decidir se existe espaço, no seu mundo ferozmente competitivo, para algo tão frágil — e ao mesmo tempo tão poderoso — como o verdadeiro amor.",
+            "homepage": "",
+            "tagline": "Quando a rivalidade é apenas o começo."
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "",
+            "overview": "Kariyerlerinin zirvesinde olan iki rakip hokey yıldızı, birbirlerine karşı hisler beslemeye başlayınca beklenmedik bir zorlukla karşı karşıya kalırlar. Bu durum kariyerlerini ve sporun beklentilerini karmaşık hale getirir.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Đối Thủ Nồng Cháy",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Gorąca rywalizacja",
+            "overview": "Dwóch czołowych zawodników ligi hokejowej, Shane Hollander i Ilya Rozanov, od lat znajduje się w centrum najbardziej elektryzującej rywalizacji w sporcie. Każdy ich mecz staje się wydarzeniem, a napięcie między nimi napędza uwagę mediów i fanów na całym świecie.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Más que rivales",
+            "overview": "Dos de las mayores estrellas de la Major League Hockey están unidas por la ambición, la rivalidad y una atracción magnética que ninguna de las dos comprende del todo. Lo que comienza como una aventura secreta entre dos novatos se convierte en un viaje de años de amor, negación y autodescubrimiento.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "히티드 라이벌리",
+            "overview": "메이저리그 하키 스타 셰인과 일리야. 빙판 위에서는 서로를 무너뜨려야 하는 라이벌이지만, 링크 밖에서는 서로를 깊이 탐하는 사이다. 들키면 끝나버릴 이 관계, 그럼에도 멈출 수 없는 둘만의 은밀한 연장전이 시작된다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "יריבות לוהטת",
+            "overview": "שני כוכבי הוקי מתאהבים ומנהלים רומן סודי שנמשך שנים, תוך כדי מרדף אחר תהילה ומאבק בהתמודדות עם אהבתם החשאית.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "",
+            "overview": "Due delle più grandi stelle dell'hockey professionistico sono legate da ambizione, rivalità e un'attrazione magnetica che nessuno dei due comprende appieno. Quella che inizia come una scappatella segreta tra due novellini si trasforma in un viaggio lungo anni fatto di amore, negazione e scoperta di sé. Negli otto anni successivi, mentre inseguono la gloria sul ghiaccio, lottano per gestire i sentimenti che provano l'uno per l'altra. Divisi tra lo sport per cui vivono e l'amore che non possono ignorare, devono decidere se nel loro mondo ferocemente competitivo c'è spazio per qualcosa di fragile – e potente – come il vero amore.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "",
+            "overview": "Kahden jääkiekkotähden välille syntyy romanssi, joka kestää vuosikausia. Samaan aikaan he jahtaavat menestystä ja painivat rakkauden kanssa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Įtempta kova",
+            "overview": "Du didžiausi pagrindinės ledo ritulio lygos žvaigždžiai yra susieti ambicijų, konkurencijos ir magnetinės traukos, kurios nė vienas iš jų iki galo nesupranta. Tai, kas prasideda kaip slaptas romanas tarp dviejų jaunų naujokų, per aštuonerius metus virsta ilga meilės, neigimo ir savęs atradimo kelione.\n\nSiekdami šlovės ant ledo, jie stengiasi suvokti savo jausmus vienas kitam. Draskomi tarp sporto, kuriam pašventė gyvenimą, ir meilės, kurios negali ignoruoti, jie turi nuspręsti, ar jų aršiai konkurencingame pasaulyje yra vietos kažkam tokiam trapiam – ir tuo pačiu galingam – kaip tikra meilė. Kiekvienas mačas, kiekviena pergalė ir pralaimėjimas tampa ne tik sportine kova, bet ir vidine kova dėl to, kas iš tiesų svarbu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "Två hockeystjärnors hemliga affär pågår under flera år samtidigt som de jagar ära och brottas med kärlekslivet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Rivalitate arzătoare",
+            "overview": "Doi jucători de hochei au o poveste de dragoste secretă care se întinde pe mai mulți ani, în timp ce visează la glorie și se luptă cu iubirea.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Heated Rivalry - Forró viszály",
+            "overview": "Két jégkorongozó éveken át tartó titkos románcba bonyolódik, miközben a dicsőséget hajszolják a jégen, és egymással – és az érzéseikkel – is küzdenek.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "",
+            "overview": "To hockeystjerner indleder et hemmeligt kærlighedsforhold, der står på flere i år, mens de jagter berømmelse og kæmper med kærligheden.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Vruće suparništvo",
+            "overview": "Dvije hokejaške zvijezde započinju tajnu romansu koja traje godinama dok ganjaju slavu i hrvaju se s ljubavlju.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AZ",
+          "iso_639_1": "az",
+          "name": "Azərbaycan",
+          "english_name": "Azerbaijani",
+          "data": {
+            "name": "Qızğın rəqabət",
+            "overview": "Serial süjetinin mərkəzində MHL-nın iki istedadlı hokkeyçisi dayanır: xarizmatik Şeyn Hollander və impulsiv İlya Rozanov. Onların buz üstündəki qızğın rəqabəti milyonlarla izləyicinin diqqətini cəlb edərək, yarışmanı \"ən yaxşı\" adı uğrunda döyüşə çevirir. Lakin, pərdəarxasında idmançılar gizlincə bir-birinə aşiq olaraq, açıqlamağa cəsarət etməkdikləri bir sevgi yaşayırlar. Səkkiz il ərzində Şeyn və İlya mümkünün sərhədlərinə tarazlıq tapırlar: bir tərəfdən kubok və müqavilələr uğrunda yarışlar, həmçinin yaxınlıq hissi, digər tərəfdən isə liqanın təzyiqindən qorxu, komanda yoldaşlarının gözləntiləri, sərtlik və susqunluöu ilə seçilən idman növündə ifşa edilmək qorxusu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3vuBfAuAltIR6UdANUQ1lLXOeia.jpg",
+          "vote_average": 6.042,
+          "vote_count": 12,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/QbRbCULZVBcrN2uydpmIOQLV5O.jpg",
+          "vote_average": 5.778,
+          "vote_count": 9,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1295,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iS76c29IrS3lKI2X5CFySguiAWU.jpg",
+          "vote_average": 5.778,
+          "vote_count": 9,
+          "width": 2302
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1LQE7WzkgqSJFaKY1zWM6ExPdGm.jpg",
+          "vote_average": 4.154,
+          "vote_count": 13,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1554,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wRbWUp6LileXkgI7DGxgIfEYotK.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2763
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fP7HW6TgMthCuqi8NlXNHQz2bbD.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fKk77esp8Fm6I8Wcy0QXxZWglO9.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4mY36nUIXC1FV5dN5FyrvthdzUr.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nqifkILehKYB42nz2vkah9WKsGJ.jpg",
+          "vote_average": 1.154,
+          "vote_count": 13,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/np8AC06UfzYVVfE6Frd7iiWbv9d.jpg",
+          "vote_average": 0.166,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l49W1J7qYlyFLWR01olOEo3Q3Cu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vqJ60vNYuaNWAuYuJzT3Zp5Yxv9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pFAlTF0FQwGpB3yijhWAK1cJpJm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1125,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/g8xhmdBIQ4YbO7ACPL76rWjBsQk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i54aWSeMTTRaKJyizP24mJmU2P9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tmlIO9avVgxykED7JSUA07A6d2U.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/crdHvor0MVNkV6d6uaSrRMwUf33.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 731,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e5OQzImKTRSAxv0GwjwjpQSwRbq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zOwoMy1tEI8sFfjkRWWBkGRzAxl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9fGF9fw3xueALX0j2es3t1wHr1m.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 959,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qFpcTNndf79LzpGKBYmCuR9kU58.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1704
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ypSA8KRvCnekqZBVzFEVocop71k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pBG8BCunB4TRZrABX5jAVmNeldc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/43Wpxg9CknHZcKvXJXP1REg63v3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hiZtE4lu2YtUobbg6M71RMZzY6Y.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9VLH5ZyQ10GrG74JgXV9nho6AFa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4ApNYIdI4CfTEGcM2UDZfOGmh0R.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tOkqJdCPnBguXAyk1cSSf6t4R0A.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kQYvqFWKbZ6DectoIBt6PjlzTQX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tllnMPrps1FJkoctY7RGYEBgiip.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zIiQvmn9vLTa25Uc83Oq8aUxJ1v.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.42,
+          "height": 1300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/22BT67G9ApS2oDIiQBblS1acCJz.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1846
+        },
+        {
+          "aspect_ratio": 1.426,
+          "height": 305,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yBJgSc4e731hFAj4Oe7y4sMbqnL.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 435
+        },
+        {
+          "aspect_ratio": 1.42,
+          "height": 1300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4hQxMhqykHuSn6ZZpRT9CxF8Nf7.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1846
+        },
+        {
+          "aspect_ratio": 4.562,
+          "height": 758,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6vZhMorwd90lQ84zm1fyqApiyiO.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3458
+        },
+        {
+          "aspect_ratio": 1.42,
+          "height": 1300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/itZcO73dGzrQwJanSvoXfOIEDWF.png",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1846
+        },
+        {
+          "aspect_ratio": 3.882,
+          "height": 644,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hsbOmJt7htI2Jb3rS4l7VhFjeMn.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2500
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3YCKbtAkYWCMDLHvkUjGhG7eWoS.jpg",
+          "vote_average": 8.034,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/epgr7n61vVIniyAghz2GYj22DkC.jpg",
+          "vote_average": 6.306,
+          "vote_count": 18,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1765,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vG2YAAKxCpxXiFcPqZoYWNbUruR.jpg",
+          "vote_average": 5,
+          "vote_count": 19,
+          "width": 1177
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k9Hiws7EA8Q44zNCJoJQdoKRTyl.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wd0rBxXQEQDTEMyhQjwrZ2YfMWb.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jaPrZhC2Gjdx5WYvh5bFMBbyXKR.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rBHPRf3CSb4Lf3UfKvCD3PM5GDf.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4skMSGdvcu4vcmQ9U6TIwhaaUNb.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 916,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8qYhmaKpD737eb5cvCLSwSAhdxs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 611
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1950,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kSJDrFqes7ZKQHDO2zK2ybx3UkS.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 901,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pnxsPaxs82J7vtyqc8mE3BD3MLt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 601
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1527,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fWeuHQKtYPg92UuDNaGigZhcXHd.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1018
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8WWNIS4e1RhAkLaxrXasZuOzJOY.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1527,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n0uuQcRDcyzjLYMYXcfHLfgcZab.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1018
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1746,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b4EPYBtLNUlH0G7vP0jRF2PsVzl.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1164
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zPdK1EbYdi8YQuFgY8YrElZNMVy.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3YQkROc2Mk9XMZWx5C0c8AykVyy.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cP59dhcK0croaIw11ZgRva6aks6.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2130,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bzwrTolq88M5lak41liaADnDdiC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1420
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1634,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tnMq2q1814FmsW8jPg7ovBDhvSt.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1089
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1527,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h4k7EhWI4y450IDj1Z3omoFqgvn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1018
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lLJwm9vHP0ORRH8VS0EjlN6sDLE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rnfu4NBoLDtY9LbaDUdk5ZaesIk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2NxD1ItN4uLHdwcytKxJWw9AknZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gJxAENYEWKRClozVW43xWPsmngU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lirTM4S3B0qo0Dhy7rolTvf7srq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1600,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h9epuRDBxak9JGDvvXk9LhNbOsq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 981,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5Dx2fw7KwQRUkD22yOyxCdDlE7G.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1041,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uPVGFkITh2wfOOxIFP1mpoaiC0F.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1041,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/efGt2O9zYarJtCDeK3lhMC3QjXc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/abUIHxDF68vGZKexJ7ftaI3Rhra.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cN1uYE2PtYw0bKW6jWqjymNKW18.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3BhKvykCWmxLOEn4qSX8mQr8FV8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kGJ6fyxhrFZP5RNXiaoyBccO4qU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cd1UIK37hpsdxKrT9dHkkxZgOeH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o0gpGyBuBEe7ImAg42LVGVmliaT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1992,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/djVUOLxhVsWbaPWUvrqOy0O3WmB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1328
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1696,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nvsIuXRVL6VKUl6gVy2RpZhLYkq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.663,
+          "height": 1477,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r8VJAVJwxVKNUBHxWOMPVOWyvmU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 979
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 884,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dPBsLjuBDME2eALAfdspXatuVJw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 589
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 920,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7IZinBtboDTln9nd2M0qhh4Fh1B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 613
+        }
+      ]
+    }
+  }
+}

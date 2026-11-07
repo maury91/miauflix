@@ -2,6 +2,7 @@ import { createCipheriv, createDecipheriv, createHash, randomBytes } from 'node:
 import { mkdirSync } from 'node:fs';
 
 import { defineService, type Service } from '@miauflix/contract';
+import { ServiceSecretCodec } from '@miauflix/service-configuration';
 import {
   type ConnectionResult,
   lists,
@@ -12,10 +13,10 @@ import {
   type ProviderAssociation,
   type ProviderAuthorization,
 } from '@miauflix/service-contracts';
-import { ServiceSecretCodec } from '@miauflix/service-configuration';
 import { Database } from 'bun:sqlite';
 
 import { ListConfigService } from './config/config.service';
+import { aniListDefinitions, AniListLists } from './anilist';
 import { disconnectAssociation, replaceAssociation } from './association-store';
 import { listPage } from './list-page-cache';
 import { PlaybackSync } from './playback-sync';
@@ -28,6 +29,8 @@ export interface ListServiceOptions {
   keyFile: string;
   /** Overrides the key file as the source of the at-rest encryption key. */
   encryptionKey?: string;
+  /** AniList and anime id sources (tests and the entrypoint pass their URLs). */
+  aniList?: AniListLists;
 }
 
 const publicDefinitions = [
@@ -253,8 +256,19 @@ export const createListService = (
     requiresConnection: false,
   });
 
+  const aniList = options.aniList ?? new AniListLists(dataDir);
   const definitions = (subjectId?: string): ListServiceDefinition[] => {
     const result = publicDefinitions.map(publicDefinition);
+    for (const [id, { name, description }] of Object.entries(aniListDefinitions))
+      result.push({
+        id,
+        slug: id,
+        name,
+        description,
+        provider: 'anilist',
+        scope: 'public',
+        requiresConnection: false,
+      });
     if (subjectId && association(subjectId)) {
       for (const [id, name, description] of personalDefinitions) {
         result.push({
@@ -361,6 +375,7 @@ export const createListService = (
           association,
           accessToken,
           fetchPage: (path, token) => client().page(path, token),
+          aniList,
           seal,
           open,
         });

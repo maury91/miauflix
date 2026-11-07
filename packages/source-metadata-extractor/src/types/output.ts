@@ -96,5 +96,6 @@ export enum Language {
   CHINESE = 'CHINESE',
   JAPANESE = 'JAPANESE',
   KOREAN = 'KOREAN',
+  LITHUANIAN = 'LITHUANIAN',
   MULTI = 'MULTI',
 }

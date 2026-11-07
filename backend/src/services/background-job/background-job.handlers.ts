@@ -188,6 +188,8 @@ export function registerBackgroundJobHandlers({
           showImdbId: show.local.imdbId ?? null,
           seasonNumber: playable.seasonNumber,
           episodeNumber: playable.episodeNumber,
+          providerSeasonNumber: episode.providerSeasonNumber,
+          providerEpisodeNumber: episode.providerEpisodeNumber,
           airDate: episode.airDate,
         });
         sourceService.requestSourceVerification(associations.map(({ source }) => source));
@@ -295,6 +297,8 @@ export function registerBackgroundJobHandlers({
         id: number;
         seasonNumber: number;
         episodeNumber: number;
+        providerSeasonNumber: number | null;
+        providerEpisodeNumber: number | null;
         airDate: string | null;
       }> = [];
       for (const seasonSummary of show.detail.seasons
@@ -306,6 +310,8 @@ export function registerBackgroundJobHandlers({
             id: episode.id,
             seasonNumber: seasonSummary.seasonNumber,
             episodeNumber: episode.episodeNumber,
+            providerSeasonNumber: episode.providerSeasonNumber,
+            providerEpisodeNumber: episode.providerEpisodeNumber,
             airDate: episode.airDate,
           });
         }
@@ -355,6 +361,8 @@ export function registerBackgroundJobHandlers({
           showImdbId: show.local.imdbId ?? null,
           seasonNumber: episode.seasonNumber,
           episodeNumber: episode.episodeNumber,
+          providerSeasonNumber: episode.providerSeasonNumber,
+          providerEpisodeNumber: episode.providerEpisodeNumber,
           airDate: episode.airDate,
         });
         const rank = byPlaybackRank(now);

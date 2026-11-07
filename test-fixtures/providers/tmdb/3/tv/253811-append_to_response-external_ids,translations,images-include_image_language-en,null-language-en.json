@@ -1,0 +1,1117 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13948",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"04dbb946d8bfd185a661b71713a26cd5\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/k7h9p81H6X6TGV70TgOp4TmjXco.jpg",
+    "created_by": [],
+    "episode_run_time": [],
+    "first_air_date": "2025-07-11",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      }
+    ],
+    "homepage": "https://tougenanki-anime.com",
+    "id": 253811,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-30",
+    "last_episode_to_air": {
+      "id": 7901223,
+      "name": "Out of Focus",
+      "overview": "At 2:00 a.m., the Oni Brigade infiltrates the laboratory built on the former site of Kegon Falls. Staying in contact through Otohara's ability, Sharing, the members split up. Yaoroshi heads to the fourth floor with Todoroki and Umitsuki, but finds himself disturbed by Todoroki's willingness to kill noncombatants without hesitation.",
+      "vote_average": 7,
+      "vote_count": 1,
+      "air_date": "2026-11-06",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 253811,
+      "still_path": "/zW7cQroiSSIJ34yB2SnnZH5v8OU.jpg"
+    },
+    "name": "Tougen Anki",
+    "next_episode_to_air": {
+      "id": 7901224,
+      "name": "The General's Back",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-13",
+      "episode_number": 7,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 2,
+      "show_id": 253811,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 57,
+        "logo_path": "/uxaXSoT8K0S2NE5PWsBpHUl3GGU.png",
+        "name": "Nippon TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 48,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "桃源暗鬼",
+    "overview": "After a Momotaro assassin suddenly kills his adoptive father, Shiki vows to avenge him. But first, he must learn to control his newly awakened Oni blood.",
+    "popularity": 25.5656,
+    "poster_path": "/vnasRNhwT5M3OvTAMzYn4i5fQcT.jpg",
+    "production_companies": [
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Pony Canyon",
+        "origin_country": "JP"
+      },
+      {
+        "id": 78802,
+        "logo_path": "/1S4IJs06T5Twxq3qWdt4lAcIGbJ.png",
+        "name": "Studio Hibari",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "dentsu",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Nippon Television Network Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4640,
+        "logo_path": "/9O6sT3CwMuTc43PQ6Km2KFkjgMT.png",
+        "name": "Akita Shoten",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2025-06-21",
+        "episode_count": 27,
+        "id": 465746,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/rJm6TFVkIuedg1nvxhjoSlg66gd.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2025-07-11",
+        "episode_count": 24,
+        "id": 392653,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/A8z6o8RizryOQATyQPWiANwON6L.jpg",
+        "season_number": 1,
+        "vote_average": 6.9
+      },
+      {
+        "air_date": "2026-10-02",
+        "episode_count": 24,
+        "id": 530062,
+        "name": "Nikko Kegon Falls Arc",
+        "overview": "Sequel of Tougen Anki.",
+        "poster_path": "/wkp5nALg2JP8qlseacdmDL8h2BC.jpg",
+        "season_number": 2,
+        "vote_average": 7.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.706,
+    "vote_count": 119,
+    "external_ids": {
+      "imdb_id": "tt32344704",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 449843,
+      "tvrage_id": null,
+      "wikidata_id": "Q125825227",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "tougenanki_anm"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "桃源暗鬼",
+            "overview": "一部の人間に脈々と受け継がれる「鬼」と「桃太郎」の血。はるか昔、自らの凶暴性を自覚するが故にひっそりと暮らしていた「鬼」だったが、そこに「桃太郎」が攻め入った。それぞれが「桃太郎機関」「鬼機関」を組織し、抗争すること何千年。突然の“桃太郎”の襲撃で、自分が“鬼”だと知る主人公・一ノ瀬四季。自らの血に棲む“鬼”と出逢った四季の宿命とは—。—新世代ダークヒーロー鬼譚、ここに開幕！",
+            "homepage": "",
+            "tagline": "「お前は鬼の血を継いでいる…」"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "Depois que um assassino da facção Momotaro mata seu pai adotivo, Shiki jura vingança. Mas, primeiro, ele precisa aprender a controlar seu sangue Oni.",
+            "homepage": "",
+            "tagline": "\"Você herdou o sangue de um Oni (demônio)...\""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "After a Momotaro assassin suddenly kills his adoptive father, Shiki vows to avenge him. But first, he must learn to control his newly awakened Oni blood.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "TOGEN EZBERLEME",
+            "overview": "\"Oni\" ve \"Momotaro\" kan hatları, nesiller boyunca bazı insanlar arasında aktarılmıştır. Uzun zaman önce, Oni'ler kendi vahşiliklerinin farkında olarak, gözlerden uzak yaşarlardı. Ancak, Momotaro tarafından başlatılan bir istilayla bu huzurları bozuldu. Binlerce yıl boyunca, bu iki grup sırasıyla \"Momotaro Ajansı\" ve \"Oni Ajansı\" olarak adlandırılan örgütleri kurdular ve o zamandan beri süregelen bir çatışma içinde oldular. Ana karakter, Shiki Ichinose, beklenmedik bir Momotaro saldırısının ardından bir anda Oni soyundan geldiğini öğrenir. Bu keşif, Shiki'yi kanında yatan kaderi keşfetmeye ve içinde yaşayan Oni ile karşılaşmaya giden bir yola sürükler. Şeytanların bu hikayesinde, karanlık kahramanlıkların yeni nesli burada başlıyor!",
+            "homepage": "",
+            "tagline": "\"Bir Oni'nin (şeytanın) kanını miras aldın...\""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "TOUGEN ANKI",
+            "overview": "Laut einer japanischen Legende hat der Krieger Momotarō, dank seiner unglaublichen Kraft, die Oni in die Flucht geschlagen. Doch es ist keine Legende – die Nachfahren von Momotarō kämpfen bis heute darum, die Oni auszurotten! Als Shiki erfährt, dass in seinen Adern das Blut der Oni fließt, ändert sich alles. Um zu überleben, muss er sich dem Momotarō-Clan stellen …",
+            "homepage": "",
+            "tagline": "„Du erbst das Blut eines Oni (Dämon)…“"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "도원암귀",
+            "overview": "자신에게 깃들어 있던 새로운 능력에 눈을 뜬 십 대 소년. 숙적인 모모타로 일파에게 살해된 아버지의 복수를 하기 위해 오니 기관에 들어간다. 우루시바라 유라의 인기 만화 원작.",
+            "homepage": "",
+            "tagline": "\"당신은 오니(악마)의 피를 물려받았습니다...\""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "Shiki, którego przybrany ojciec ginie z rąk zabójcy z agencji Momotarou, przysięga zemstę. Zanim jednak będzie mógł ją spełnić, musi nauczyć się panować nad niedawno przebudzonym dziedzictwem Oni i opanować potężną, lecz niebezpieczną moc. Wciągnięty w odwieczny konflikt między Oni a Momotarou, Shiki staje przed wyborem, który zadecyduje o jego losie i przyszłości obu światów.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "As linhagens de \"Oni\" e \"Momotaro\" foram transmitidas entre certos humanos durante gerações. Há muito tempo, os Oni, conscientes da sua própria ferocidade, viviam em reclusão. No entanto, a sua paz foi destruída por uma invasão liderada por Momotaro. Ao longo de milhares de anos, estas duas facções formaram a “Agência Momotaro” e a “Agência Oni”, respetivamente, e têm estado em conflito desde então. O protagonista, Shiki Ichinose, descobre subitamente a sua linhagem Oni após um ataque inesperado de Momotaro. Esta revelação coloca Shiki no caminho para descobrir o destino que está no seu sangue – um encontro com o Oni que habita dentro dele. — Uma nova geração de heroísmo sombrio começa aqui nesta história de demónios!",
+            "homepage": "",
+            "tagline": "\"Herdas o sangue de um Oni (demónio)...\""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สงครามเลือดอสูร",
+            "overview": "หลังจากนักฆ่าขององค์กรโมโมทาโร่ ลงมือสังหารพ่อบุญธรรม ชิกิจึงหมายมั่นที่จะล้างแค้นให้พ่อ... แต่ก็ต้องเรียนรู้ที่จะควบคุมสัญชาตญาณโอนิ ที่ถูกปลุกขึ้นมาเสียก่อน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "La sangre de Shiki Ichinose es Oni, y la de su padre es Momotaro. Normalmente, los que tienen sangre Momotaro cazan a los Oni, pero el padre de Shiki se negó a matarlo cuando era un bebé. En cambio, adoptó a Shiki y lo crió a pesar de la actitud rebelde y el temperamento peligroso que viene con la sangre Oni. Cuando un miembro de la Agencia Momotaro mata al padre de Shiki, jura vengarlo.",
+            "homepage": "",
+            "tagline": "\"Heredas la sangre de un Oni (demonio) ...\""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Тёмный демон",
+            "overview": "Сики Итиносэ — подросток из XXI века. В его жилах течёт кровь адских существ, которые раньше терроризировали людей. В наше время потомки смелого мальчика-воина объединились в «Агентство Момотаро», которые охотятся за Сики и ему подобными. После битвы с этими «народными мстителями» Итиносэ узнает тайну смерти своего отца и решает не сдерживать зов своей крови — он поступает в академию для потомков демонов, где можно развить сверхспособности и дать отпор убийцам, которые прикрываются связью с легендарным героем.",
+            "homepage": "",
+            "tagline": "«Ты унаследовал кровь Они (демона)...»"
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "Le linee di sangue di \"Oni\" e \"Momotaro\" sono state tramandate tra alcuni umani per generazioni. Molto tempo fa, gli Oni, consapevoli della loro ferocia, vivevano in isolamento. Tuttavia, la loro pace fu infranta da un'invasione guidata da Momotaro. Nel corso di migliaia di anni, queste due fazioni formarono rispettivamente la \"Momotaro Agency\" e la \"Oni Agency\", e da allora sono rimaste bloccate in conflitto. Il protagonista, Shiki Ichinose, apprende improvvisamente della sua discendenza Oni in seguito a un attacco inaspettato di Momotaro. Questa rivelazione mette Shiki sulla strada per scoprire il destino che giace nel suo sangue: un incontro con l'Oni che dimora in lui. Una nuova generazione di eroismo oscuro inizia qui in questa storia di demoni!",
+            "homepage": "",
+            "tagline": "\"Hai ereditato il sangue di un Oni (demone)...\""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Темний демон",
+            "overview": "Люди з кров'ю Момотаро та Оні ворогують. Шикі Ічіносе, впертий підліток, дізнається, що має демонічну кров, яка пробуджується після смерті його прийомного батька, Цуйоші. Це перетворює його на неконтрольованого монстра. Шикі відправляється до Академії Ракшаса, де має навчитися контролювати свою кров і гнів, перш ніж помститися.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "Los descendientes de Momotarou y Oni han tenido una rivalidad de siglos. Shiki Ichinose, un adolescente rebelde, descubre que su padre adoptivo, Tsuyoshi, ha estado ocultando su origen Oni. Cuando un Momotarou llega buscando a Shiki, Tsuyoshi muere protegiéndolo, revelando la verdad y despertando el poder Oni de Shiki, quien se transforma en un monstruo lleno de furia.  Atraído por este estallido, Naito Mudano, un profesor Oni, lo lleva a la Academia Rakshasa, donde Shiki debe aprender a controlar su naturaleza impulsiva y luchar contra su sangre demoníaca antes de buscar venganza.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Huyết Quỷ Hỗn Chiến",
+            "overview": "Rất lâu sau khi Momotaro huyền thoại chiến đấu với Oni, một thiếu niên nổi loạn phát hiện ra cuộc xung đột vẫn chưa kết thúc — và dòng máu nguy hiểm vẫn chảy trong huyết quản cậu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "桃源暗鬼",
+            "overview": "「你繼承了鬼的血脈。」 有些人世世代代傳承著「鬼」與「桃太郎」的血脈。很久以前，「鬼」因為意識到自己的兇惡本性而隱居生活，卻遭到了「桃太郎」的襲擊。於是，「桃太郎機關」與「鬼機關」各自組織展開了數千年的抗爭。在突如其來的『桃太郎』襲擊中，主角一之瀨四季得知自己是『鬼』的後裔。\n\n當四季遇見自己血脈中的『鬼』後，他的宿命將會如何展開──新世代黑暗英雄打鬼譚，正式開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "桃源暗鬼",
+            "overview": "　　体内流淌着鬼之血……\n\n　　部分人类世代传承着“鬼”与“桃太郎”的血脉。\n\n　　远古时代，自觉凶暴的“鬼”曾隐居生活，却遭到“桃太郎”的讨伐。双方分别组建了“桃太郎机关”与“鬼机关”，展开了数千年的对抗。主角一之濑四季突遭“桃太郎”袭击，才得知自己是“鬼”。当他遇见寄宿在自己血脉中的“鬼”时，其宿命已然展开——\n\n　　新世代暗黑英雄传奇《鬼谭》，就此开幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "桃源暗鬼",
+            "overview": "「你繼承了鬼的血脈。」 有些人世世代代傳承著「鬼」與「桃太郎」的血脈。很久以前，「鬼」因為意識到自己的兇惡本性而隱居生活，卻遭到了「桃太郎」的襲擊。於是，「桃太郎機關」與「鬼機關」各自組織展開了數千年的抗爭。在突如其來的『桃太郎』襲擊中，主角一之瀬四季得知自己是『鬼』的後裔。 當四季遇見自己血脈中的『鬼』後，他的宿命將會如何展開──新世代黑暗英雄打鬼譚，正式開幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PH",
+          "iso_639_1": "tl",
+          "name": "",
+          "english_name": "Tagalog",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "TOUGEN ANKI",
+            "overview": "Les lignées « Oni » et « Momotaro » ont été transmises de génération en génération chez certains humains. Il y a longtemps, les ogres étaient conscients de leur nature féroce et vivaient reclus. Cependant, leur paix a été brisée par des envahisseurs menés par Momotaro. Pendant des milliers d'années, ces deux factions ont formé respectivement l'« Organisation Momotaro » et l'« Organisation Oni », et sont en guerre depuis lors. La protagoniste, Shiki Ichinose, apprend soudain qu'elle est de la lignée des Oni à la suite d'une attaque inattendue de Momotaro. Cette révélation met Shiki sur la voie de la découverte du destin dans son sang - la rencontre avec le démon qui réside en lui. - L'histoire d'une nouvelle génération de héros et de démons sombres commence ici !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "تدور القصة حول صراع قديم بين الـ\"موموتارو\" والـ\"أوني\"، حيث يمثل الموموتارو النظام وحماية البشر، بينما يُعرف الأوني بالفوضى والاندفاع والخروج عن السيطرة. شيكي إيتشينوسي، مراهق متهور وطائش، يعيش حياة مليئة بالعصيان والفوضى، حتى أنه طُرد من المدرسة ويفتخر بذلك. رغم سلوكه، إلا أن والده بالتبني، *تسويوشي، يحبه بصدق ويعتني به. يتضح حجم هذا الحب عندما يهاجم أحد الموموتارو المنزل بحثًا عن شيكي، ليكشف تسويوشي الحقيقة: أنه كان يخفي عن شيكي أصله الأوني كل تلك السنين، وأنه هو نفسه موموتارو. في لحظة بطولية، يضحي تسويوشي بحياته لإنقاذ شيكي، وفي لحظاته الأخيرة، يعترف له بكل شيء. يفقد شيكي السيطرة على نفسه، وتستيقظ داخله دماء الأوني، فيتحول إلى وحش جامح يملؤه الغضب والرغبة في الانتقام. تجذب قوته الجديدة انتباه  نايتو مودانو، معلم أوني في أكاديمية راكشاسا، وهي مؤسسة مخصصة لتدريب الأوني على التحكم في قواهم. قبل أن يثأر شيكي لموت والده، عليه أولاً أن يتعلم السيطرة على نفسه، ومحاربة شياطينه الداخلية. القصة تمزج بين الأكشن، والدراما، والهوية، في صراع داخلي وخارجي بين الخير والشر الكامن في الدم.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SI",
+          "iso_639_1": "sl",
+          "name": "Slovenščina",
+          "english_name": "Slovenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Tougen Anki",
+            "overview": "Cu mult timp în urmă, creaturi asemănătoare demonilor, cunoscute sub numele de Oni, au măcelărit oameni și au adus distrugere doar pentru propria lor plăcere. Un singur om, pe nume Momotarou, s-a opus acestor monștri înfricoșători și aproape invincibili, însă războiul împotriva lor abia începuse.\n\nMii de ani mai târziu, Shiki Ichinose, un pasionat impulsiv de arme de foc, duce o viață lipsită de griji. Totuși, după ce este exmatriculat de la școală, totul se schimbă. Shiki este brusc atacat de un bărbat și este salvat de tatăl său adoptiv, Tsuyoshi. În timp ce cei doi fug, Tsuyoshi îi dezvăluie că Shiki este, de fapt, un descendent al Oni, iar atât el, cât și urmăritorul lor, fac parte din linia Momotarou.\n\nCei doi Momotarou se înfruntă curând într-o luptă aprigă, iar Tsuyoshi se sacrifică pentru a-l proteja pe Shiki. Devastat, Shiki își trezește sângele Oni, care îi oferă o putere imensă, dar cu prețul pierderii controlului.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AL",
+          "iso_639_1": "sq",
+          "name": "shqip",
+          "english_name": "Albanian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AM",
+          "iso_639_1": "hy",
+          "name": "",
+          "english_name": "Armenian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De bloedlijnen van \"Oni\" en \"Momotaro\" worden al generaties lang doorgegeven aan bepaalde mensen. Lang geleden leefden de Oni, zich bewust van hun eigen wreedheid, afgezonderd. Hun vrede werd echter verstoord door een invasie onder leiding van Momotaro. Duizenden jaren lang vormden deze twee facties respectievelijk het \"Momotaro Agentschap\" en het \"Oni Agentschap\", en sindsdien zijn ze in conflict met elkaar. De hoofdpersoon, Shiki Ichinose, ontdekt plotseling zijn Oni-afstamming na een onverwachte aanval van Momotaro. Deze onthulling zet Shiki op het pad om de lotsbestemming te ontdekken die in zijn bloed schuilt: een ontmoeting met de Oni die in hem huist. Een nieuwe generatie duistere heldendaden begint hier in dit demonenverhaal!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "De bloedlijnen van \"Oni\" en \"Momotaro\" worden al generaties lang doorgegeven aan bepaalde mensen. Lang geleden leefden de Oni, zich bewust van hun eigen wreedheid, afgezonderd. Hun vrede werd echter verstoord door een invasie onder leiding van Momotaro. Duizenden jaren lang vormden deze twee facties respectievelijk het \"Momotaro Agentschap\" en het \"Oni Agentschap\", en sindsdien zijn ze in conflict met elkaar. De hoofdpersoon, Shiki Ichinose, ontdekt plotseling zijn Oni-afstamming na een onverwachte aanval van Momotaro. Deze onthulling zet Shiki op het pad om de lotsbestemming te ontdekken die in zijn bloed schuilt: een ontmoeting met de Oni die in hem huist. Een nieuwe generatie duistere heldendaden begint hier in dit demonenverhaal!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "טוגן אנקי",
+            "overview": "איצ'י מגלה שהוא שייך לגזע לוחמים בשם \"אוני\", ונאלץ להילחם בארגון רצחני שרודף את בני עמו, תוך כדי גילוי עברו וכוחותיו האמיתיים.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k7h9p81H6X6TGV70TgOp4TmjXco.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vAuzNUNlp3LkbkUNHxPbKaSiwb8.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ijqiM3rq0e89txr5IkKus81AGhs.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tCgsyKrTCS3w92cJk8F2hKOB9Xr.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/62po7JvwnU4c74X4fUYlihGOMDf.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qBP7QYjgeKeYHRZGOtjk9xFrEVW.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bJDFlfg7DNCwtoQJWcEOO0NRiUr.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tSrr13CyRKztJSRn9DMDNFiGQxe.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qUYVI0eocyf1TxVJ4fr3C2yx22X.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xvUhNuN3nNtvOnhdHpfYS9GmDRx.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c2ajUYS6KsRwBslYXuFfgxWh3Vh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sQhr9GDYiA56zZoaw25qjcGsFuE.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r5JazfEbojuN5WukKlk7Z52guw6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5m81Jghv1lIZVP9zdCFw3mqlUJE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hEMiwcfR1AjqTPGbIFIB1SR71s4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1KH5ZTyq7oOI4sB550ywgAN6Wqj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o8DvQcBegucZyRdqqxBgPKF4lt3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qyPQVyJkgZIwyfiIAgUuRQzwrKO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nSniJMElCGCEWT5WAJeyBGDI6uN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 900,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aqEs5THCjnxpVNTzUR1Tww4epFK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lno0JKJZt7YheNPTnuxLk1Je7k2.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2D67PZomeI7d7w8hFjqMfYGlft.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aRaV9Nozw9dcLjhX81GsmsrIKdj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2Bv76A6bd5wnYsfHgc5wYkCgGA4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 7.186,
+          "height": 167,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5KJjTVvl4ZDFJNHT5NV6etyBHCy.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 7.186,
+          "height": 167,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cFd9IFC8ReD7QgSZNxaJXDUQc6n.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.707,
+          "height": 2546,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vAnz6SHgDXsP1rGWqlrDlMN2ycc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vnasRNhwT5M3OvTAMzYn4i5fQcT.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oDkYJlUVMLXEM4v2s6y4CrkD9Jn.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1414
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rSl8IC1wBSYOXaYna0ICHHHyWd.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 2815,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/r4fHUm0rsi3Jaa7J8HvfvgEy4MW.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gQLCBMQvBtFGOkXWbWgDuj0q7jD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2546,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/A8HCHmANhOSHVksj73YCpsgqLib.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2546,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2VFxUgVklayNsY8Xs5Wiyo9g4y8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 2546,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/AtTFXYWxzoaGSBAx2Ukmks8oLL5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vOLn0GWenvFTxnUSdeawqfe4x9W.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tL6GlfHAw51GD7qHxZk5UFBWwAy.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/e0m7SJoKg9Cj8UtIRQIomWun1Wz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4sBsnQF3FWP7C0DJLUGq1V5t7I5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ApmW3Zrjqr3JJIOA0UAcwm3qkcS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AfcOsr8qdMTOcYPmTbm6qTfDP7M.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mj8viJAtLxcjb7LQWZt64YQClsj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wkp5nALg2JP8qlseacdmDL8h2BC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1365
+        }
+      ]
+    }
+  }
+}

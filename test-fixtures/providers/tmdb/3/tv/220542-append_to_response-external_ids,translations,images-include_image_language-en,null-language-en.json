@@ -1,0 +1,1523 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=16275",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"c249cef70c3713763f8b6b747106e0ab\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/gffVOVZ2Y9cmVIZ26Gt9ByMGCYH.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      23
+    ],
+    "first_air_date": "2023-10-22",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://kusuriyanohitorigoto.jp",
+    "id": 220542,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-30",
+    "last_episode_to_air": {
+      "id": 7810343,
+      "name": "The Paper Village",
+      "overview": "Maomao needs to find someone to cover for her while she goes on a trip with Jinshi. A good candidate turns up.",
+      "vote_average": 6.5,
+      "vote_count": 2,
+      "air_date": "2026-11-06",
+      "episode_number": 54,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 220542,
+      "still_path": "/9mbKCTqtUyN7GtnElVn43hnl1Ac.jpg"
+    },
+    "name": "The Apothecary Diaries",
+    "next_episode_to_air": {
+      "id": 7810345,
+      "name": "The Bet",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-13",
+      "episode_number": 55,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 220542,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 57,
+        "logo_path": "/uxaXSoT8K0S2NE5PWsBpHUl3GGU.png",
+        "name": "Nippon TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4815,
+        "logo_path": "/3eAF85UnfbyA3BBuCelMd9LMwyf.png",
+        "name": "RAB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4816,
+        "logo_path": "/9qQIAEYEw1ZyPPK3tqE18Z00AwW.png",
+        "name": "TVI",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4822,
+        "logo_path": "/xX0I9Sc0AxSoKoVtwwmz0DWOWcr.png",
+        "name": "JRT",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6155,
+        "logo_path": "/cvePJ33fR2SeirKZWD8rCV7rAaF.png",
+        "name": "YBC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 60,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "薬屋のひとりごと",
+    "overview": "Maomao lived a peaceful life with her apothecary father. Until one day, she's sold as a lowly servant to the emperor's palace. But she wasn't meant for a compliant life among royalty. So when imperial heirs fall ill, she decides to step in and find a cure! This catches the eye of Jinshi, a handsome palace official who promotes her. Now, she's making a name for herself solving medical mysteries!",
+    "popularity": 89.3306,
+    "poster_path": "/sJZcy8QsOPuRPiCfoCWVB3r9Ohg.jpg",
+    "production_companies": [
+      {
+        "id": 5372,
+        "logo_path": "/tPtJc2rCOTHEzJQPStT6m3dI0eK.png",
+        "name": "OLM",
+        "origin_country": "JP"
+      },
+      {
+        "id": 193504,
+        "logo_path": "/lDBGXkGe4ZqWnyMfDWHx03KcWlx.png",
+        "name": "TOHO animation STUDIO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 882,
+        "logo_path": "/fRSWWjquvzcHjACbtF53utZFIll.png",
+        "name": "TOHO",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Nippon Television Network Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 211680,
+        "logo_path": "/ydN85bcGpnR2ksgqJQw91683d24.png",
+        "name": "Imagica Infos",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1778,
+        "logo_path": "/b5rT6VbYza3LyfltCmz1OcqzWJM.png",
+        "name": "dentsu",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9149,
+        "logo_path": "/isLUpud9N56ifftJZ4XvzwBBpoG.png",
+        "name": "Shogakukan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 10038,
+        "logo_path": "/nCueXKwYIEXrZ5ofqSJBO1YcmRr.png",
+        "name": "Square Enix",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2023-10-23",
+        "episode_count": 55,
+        "id": 363363,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/7m3Mv8xaIRmoQFdzVHY9e7zqk8q.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2023-10-22",
+        "episode_count": 60,
+        "id": 329141,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/7qx7OwBZcI0dRWc8DrbtxY5IrlV.jpg",
+        "season_number": 1,
+        "vote_average": 7.7
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 8.667,
+    "vote_count": 702,
+    "external_ids": {
+      "imdb_id": "tt26743760",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 431162,
+      "tvrage_id": null,
+      "wikidata_id": "Q116787865",
+      "facebook_id": null,
+      "instagram_id": "kusuriya_pr",
+      "twitter_id": "kusuriya_PR"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao lived a peaceful life with her apothecary father. Until one day, she's sold as a lowly servant to the emperor's palace. But she wasn't meant for a compliant life among royalty. So when imperial heirs fall ill, she decides to step in and find a cure! This catches the eye of Jinshi, a handsome palace official who promotes her. Now, she's making a name for herself solving medical mysteries!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "大陸の中央に位置するとある大国。その国の帝の妃たちが住む後宮に一人の娘がいた。名前は、猫猫(マオマオ)。花街で薬師をやっていたが、現在は後宮で下働き中である。ある日、帝の御子たちが皆短命であることを知る。今現在いる二人の御子もともに病で次第に弱っている話を聞いた猫猫は、興味本位でその原因を調べ始める。呪いなどあるわけないと言わんばかりに。美形の宦官・壬氏(ジンシ)は、猫猫を帝の寵妃の毒見役にする。人間には興味がないが、毒と薬の執着は異常、そんな花街育ちの薬師が巻き込まれる噂や事件。きれいな薔薇にはとげがある、女の園は毒だらけ、噂と陰謀事欠かず。壬氏からどんどん面倒事を押し付けられながらも、仕事をこなしていく猫猫。稀代の毒好き娘が今日も後宮内を駆け回る。",
+            "homepage": "",
+            "tagline": "薬屋の娘が宮中を揺るがすーー"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Die Tagebücher der Apothekerin",
+            "overview": "Maomao führte ein friedliches Leben, bis sie eines Tages entführt und als niedere Dienerin an den Kaiserhof verkauft wird. Die junge Apothekerin ist jedoch keine Persönlichkeit, die für ein willfähriges Leben unter Hoheiten bestimmt ist. Als ein Kronprinz nach dem anderen einer mysteriösen Krankheit zum Opfer fällt, schreitet sie unauffällig ein, um ein potentes Heilmittel für ihre Gesundung herzustellen. Trotz ihrer Vorsicht bemerkt der höhergestellte Hofdiener Jinshi ihre Affinität für Heilkräuter und verlangt fortan bei medizinischen Problemen des Hofes nach ihrer Expertise – dadurch verstrickt sie sich unweigerlich in die Intrigen am Kaiserhof.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Il monologo della Speziale",
+            "overview": "Rapita dal quartiere a luci rosse, la giovane Maomao viene venduta come inserviente al Palazzo Imperiale. Figlia di un esperto farmacista, la ragazza possiede uno sconfinato talento medico e un'ossessione per i veleni che catturano subito l'attenzione dell'affascinante eunuco Jinshi. Nominata assaggiatrice ufficiale della concubina preferita dell'Imperatore, Maomao si ritroverà a risolvere complessi enigmi e intrighi di corte.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Les Carnets de l'apothicaire",
+            "overview": "Formée dès son plus jeune âge par son père apothicaire, Mao Mao est un jour vendue comme servante au palais de l'empereur. Prisonnière dans les arcanes du pouvoir, elle attire l’attention de Jinshi, un séduisant haut fonctionnaire qui la promeut lorsqu’il découvre son talent pour confectionner des potions. Désormais goûteuse, Mao Mao met ses connaissances au service des gens du palais pour les soigner, mais aussi pour déjouer les mystères et les complots qui se trament…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "יומני הרוקח",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Diários de uma Apotecária",
+            "overview": "Maomao levava uma vida tranquila ao lado de seu pai, um boticário renomado. No entanto, sua vida muda da noite pro dia quando ela é vendida como uma simples serva no palácio do imperador. Incapaz de se adaptar à vida na realeza, Maomao decide tomar medidas drásticas quando os herdeiros imperiais adoecem, embarcando numa missão para encontrar a cura. Sua audácia chama a atenção de Jinshi, um belo funcionário do palácio que decide apoiá-la. Agora, Maomao se envolve em intrigas médicas enquanto sua fama se espalha pelos corredores do palácio!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "药屋少女的呢喃",
+            "overview": "花街出身的药师少女猫猫被拐入后宫做下人，凭借对毒药与药物的丰富知识和敏锐的洞察力，卷入宫中接连发生的疑难事件，并与神秘宦官壬氏一同揭开重重谜团。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "약사의 혼잣말",
+            "overview": "독과 약에 관한 지식에 심취한 황궁의 하녀. 유곽에서 약사 노릇을 했던 경험을 살려 의문의 사건들을 하나씩 해결해 나간다.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "no",
+          "name": "Norsk",
+          "english_name": "Norwegian",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao levde et fredelig liv sammen med sin apotekerfar. Inntil hun en dag blir solgt som en ydmyk tjener til keiserens palass. Men hun var ikke ment for et føyelig liv blant kongelige. Så når keiserlige arvinger blir syke, bestemmer hun seg for å gå inn og finne en kur! Dette fanger oppmerksomheten til Jinshi, en kjekk palassfunksjonær som fremmer henne. Nå gjør hun seg bemerket med å løse medisinske mysterier!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DK",
+          "iso_639_1": "da",
+          "name": "Dansk",
+          "english_name": "Danish",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao levede et fredeligt liv med sin apotekerfar. Indtil hun en dag bliver solgt som en ydmyg tjener til kejserens palads. Men hun var ikke beregnet til et føjeligt liv blandt kongelige. Så da kejserlige arvinger bliver syge, beslutter hun sig for at træde til og finde en kur! Dette fanger øjet hos Jinshi, en smuk paladsembedsmand, der promoverer hende. Nu gør hun sig bemærket ved at løse medicinske mysterier!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao eli rauhallista elämää apteekki-isänsä kanssa. Kunnes eräänä päivänä hänet myydään nöyräksi palvelijaksi keisarin palatsiin. Mutta häntä ei ollut tarkoitettu yhteensopivaan elämään kuninkaallisten keskuudessa. Joten kun keisarilliset perilliset sairastuvat, hän päättää puuttua asiaan ja löytää parannuskeinon! Tämä kiinnittää Jinshin, komean palatsin virkamiehen, huomion, joka mainostaa häntä. Nyt hän tekee itselleen nimeä ratkaisemalla lääketieteellisiä mysteerejä!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao levde ett fridfullt liv med sin pappa som var apotekare. Tills hon en dag säljs som en enkel tjänare till kejsarens palats. Men hon var inte ämnad för ett följsamt liv bland kungligheter. Så när de kejserliga arvingarna blir sjuka bestämmer hon sig för att gå in och hitta ett botemedel! Detta fångar uppmärksamheten hos Jinshi, en stilig palatstjänsteman som befordrar henne. Nu gör hon sig ett namn genom att lösa medicinska mysterier!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Diários de uma Apotecária",
+            "overview": "Maomao levava uma vida tranquila ao lado de seu pai, um boticário renomado. No entanto, sua vida muda da noite pro dia quando ela é vendida como uma simples serva no palácio do imperador. Incapaz de se adaptar à vida na realeza, Maomao decide tomar medidas drásticas quando os herdeiros imperiais adoecem, embarcando numa missão para encontrar a cura. Sua audácia chama a atenção de Jinshi, um belo funcionário do palácio que decide apoiá-la. Agora, Maomao se envolve em intrigas médicas enquanto sua fama se espalha pelos corredores do palácio!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Los diarios de la boticaria",
+            "overview": "Maomao llevaba una vida tranquila ayudando a su padre, un boticario. Todo cambia el día que la venden como sirvienta al palacio del emperador, pero la vida entre nobles y realeza no es para ella. Cuando la familia imperial enferma, ella decide intervenir para encontrar una cura, lo que llama la atención de Jinshi, un guapo oficial de palacio que decide ascenderla como dama de compañía de una de las concubinas del emperador. ¡Su habilidad con la medicina la hará conocida en el palacio por ayudar a resolver muchos misterios!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Монолог фармацевта",
+            "overview": "Древний Китай. 17-летнюю девушку Маомао похищают и в качестве служанки продают в императорский дворец. Однажды она узнаёт, что двух младенцев императора поразил серьёзный недуг. Обладая опытом и знаниями в фармацевтике, Маомао решает тайно разузнать детали и попытаться помочь.",
+            "homepage": "",
+            "tagline": "Дочь аптекаря потрясает дворец..."
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "藥師少女的獨語",
+            "overview": "出身煙花巷的貓貓是善於推理和具豐富藥理知識的少女，原本在煙花巷擔任藥師，但由於外出採藥時遭人口販子拐賣至後宮作下級侍女（宮女），意外被管理後宮的宦官壬氏發現其才能。憑藉自身的學識和技能，貓貓在勾心鬥角的宮廷中排憂解難、逐漸建立人脈對宮廷產生影響力，也發掘出宮廷裡不為人知的一面。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Los diarios de la boticaria",
+            "overview": "Maomao llevaba una vida tranquila ayudando a su padre, un boticario. Todo cambia el día que la venden como sirvienta al palacio del emperador, pero la vida entre nobles y realeza no es para ella. Cuando la familia imperial enferma, ella decide intervenir para encontrar una cura, lo que llama la atención de Jinshi, un guapo oficial de palacio que decide ascenderla como dama de compañía de una de las concubinas del emperador. ¡Su habilidad con la medicina la hará conocida en el palacio por ayudar a resolver muchos misterios!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Dược Sư Tự Sự",
+            "overview": "Trong triều đình phong kiến Trung Quốc, một vài tháng đã trôi qua kể từ khi bé gái 17 tuổi có tên Miêu Miêu bị bắt cóc và bị buộc làm người hầu cấp thấp trong cung điện hoàng gia. Tuy nhiên, cô bé vẫn giữ tinh thần tích cực và cứ làm việc cho đến mãn hạn. Một ngày nọ, cô đã nghe tin hai đứa con của hoàng đế bị mắc bệnh nặng. Tại đây, cô đã quyết định hành động bí mật dựa vào những kinh nghiệm có sẵn từ phố đèn đỏ nghèo để cứu chữa.\n\nMặc dù đã cố gắng ở ẩn nhưng Miêu Miêu lại nhanh chóng gây sự chú ý với Jinshi, một người có quyền lực nhận ra tài năng của cô. Từ đây, thân phận thực sự của Miêu Miêu được tiết lộ với những bí ẩn về y học đa dạng.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FO",
+          "iso_639_1": "fo",
+          "name": "",
+          "english_name": "Faroese",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IS",
+          "iso_639_1": "is",
+          "name": "Íslenska",
+          "english_name": "Icelandic",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao lifði friðsælu lífi með apóteksföður sínum. Þar til dag einn að hún var seld sem lítillátur þjónn í höll keisarans. En henni var ekki ætlað að lifa eftirlátu lífi meðal kóngafólks. Svo þegar erfingjar keisarans veikjast, þá ákveður hún að grípa inn í og finna lækningu! Þetta fangar athygli Jinshi, myndarlegs embættismanns hallarinnar sem kynnir hana. Nú skapar hún sér nafn við að leysa læknisfræðilegar ráðgátur!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Zapiski zielarki",
+            "overview": "Sprzedana do pałacu zielarka Maomao rozwiązuje medyczne zagadki, przyciągając uwagę urzędnika Jinshiego.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "خاطرات دختر داروساز",
+            "overview": "مائومائو با پدر داروسازش زندگی آرامی داشت. تا اینکه یک روز او را به‌عنوان یک خدمتکار حقیر به قصر امپراتوری فروختند. اما او برای یک زندگی فرمانبرانه میان خانواده سلطنتی ساخته نشده است. بنابراین وقتی وارثان امپراتوری بیمار می‌شوند، او تصمیم می‌گیرد وارد عمل شود و درمانی پیدا کند! این کار نظر جینشی، یک مقام خوش‌سیمای قصر که او را تشویق می‌کند، جلب می‌کند. حال، او در حل معماهای پزشکی نامی برای خود دست و پا کرده است!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Монолог травниці",
+            "overview": "При імператорському дворі в стародавньому Китаї минуло кілька місяців відтоді, як 17-річну дівчину на ім'я Маомао викрали і змусили працювати найнижчою служницею в імператорському палаці. Та все ж придворні інтриги змушують її нарешті вийти з тіні й заявити, що насправді вона досвідчена травниця, що добре розуміється на ліках та отрутах. Здивовані слуги запрошують Маомао у свиту до фаворитки імператора, де й починаються її справжні пригоди, сповнені інтриг і таємниць.",
+            "homepage": "",
+            "tagline": "Дочка травника розхитує імператорський двір."
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สืบคดีปริศนา หมอยาตำรับโคมแดง",
+            "overview": "นางกำนัลแห่งวังหลวงผู้สนใจเรื่องยารักษาโรคและยาพิษ ต้องงัดเอาความรู้สมัยที่เป็นหมอยาแห่งย่านโคมแดงมาใช้เพื่อหาทางไขคดีปริศนา",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NN",
+          "iso_639_1": "nn",
+          "name": "",
+          "english_name": "Norwegian Nynorsk",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao levde eit fredeleg liv saman med sin apotekerfar. Inntil ho ein dag blir seld som ein audmjuk tener til palasset til keisaren. Men ho var ikkje meint for eit føyeleg liv blant kongelege. Så når keiserlige arvingar blir sjuke, bestemmer ho seg for å gå inn og finna ein kur! Dette fangar merksemda til Jinshi, ein kjekk palassfunksjonær som fremjar henne. No gjer ho seg noterte med å løysa medisinske mysterium!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "藥師少女的獨語",
+            "overview": "「可否為我配製一帖春藥？」貓貓的眼眸瞬間浮現出驚訝與好奇的色彩。位處大陸中央的某個大國，有位姑娘置身於皇帝宮闕之中。這名姑娘名叫貓貓，原本在煙花巷擔任藥師，卻在去森林採藥時碰上綁匪而被賣進後宮擔任侍女。由於相貌、身材平平，她自認不用擔心受到皇帝的寵幸，只等著既定的期限到來就可離宮返家。某天，貓貓聽聞皇子皇女身染重病的消息，出於對「疾病」的瞭解，她開始調查他們的病因 ──。以中世紀東方為舞台，「試毒」少女將一一解決宮中發生的懸疑案件！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GB",
+          "iso_639_1": "cy",
+          "name": "Cymraeg",
+          "english_name": "Welsh",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "药屋少女的呢喃",
+            "overview": "大陆的中央有个大国，在那个国家的后宫之中有一位少女，其名为“猫猫”。她以前在花街做药师，现在在后宫做事。某天，她得知皇子们皆早夭，而现在的两个皇子都因为生病而逐渐衰弱。于是，在好奇心的驱使下，她开始调查事情的真相，就好像在说世上不可能存在诅咒。壬氏是一位外表俊美的宦官，他让猫猫当皇帝宠妃的试毒人。猫猫对人没有兴趣，却异常钟情毒和药，就是这样一位在花街长大的药师，被卷入了宫中的传闻事件。美丽的玫瑰长有刺，女人的庭院里到处都是毒，流言和阴谋更是不缺。虽然不断地被壬氏委托麻烦事，但猫猫还是照常处理。罕见的嗜毒姑娘今天也在后宫里奔走。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao leefde een vredig leven met haar apothekersvader. Tot ze op een dag als nederige dienaar wordt verkocht aan het paleis van de keizer. Maar ze was niet bedoeld voor een meegaand leven onder de koninklijke familie. Dus als keizerlijke erfgenamen ziek worden, besluit ze tussenbeide te komen en een geneesmiddel te vinden! Dit trekt de aandacht van Jinshi, een knappe paleisambtenaar die haar promoot. Nu maakt ze naam met het oplossen van medische mysteries!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "مذكرات الصيدلانية",
+            "overview": "عاشت ماوماو حياةً هانئةً مع والدها الصيدلي. إلى أن بِيعَت ذات يومٍ كخادمةٍ متواضعةٍ لقصر الإمبراطور. لكن لم يكن من المُقدَّر لها أن تعيش حياةً مُطيعةً بين أفراد العائلة المالكة. لذا، عندما مرض ورثة الإمبراطور، قررت التدخل وإيجاد علاج! لفت هذا انتباه جينشي، مسؤول القصر الوسيم الذي رُقّيَتْه. والآن، تُصنِّع لنفسها اسمًا لامعًا في حلِّ الألغاز الطبية!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "se",
+          "name": "",
+          "english_name": "Northern Sami",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NO",
+          "iso_639_1": "nb",
+          "name": "Bokmål",
+          "english_name": "Norwegian Bokmål",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao levde et fredelig liv sammen med sin apotekerfar. Inntil hun en dag blir solgt som en ydmyk tjener til keiserens palass. Men hun var ikke ment for et føyelig liv blant kongelige. Så når keiserlige arvinger blir syke, bestemmer hun seg for å gå inn og finne en kur! Dette fanger oppmerksomheten til Jinshi, en kjekk palassfunksjonær som fremmer henne. Nå gjør hun seg bemerket med å løse medisinske mysterier!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Deníky apatykářky",
+            "overview": "Maomao žila poklidný život se svým otcem lékárníkem. Až jednoho dne je prodána jako podřadná služebná do císařského paláce. Nebyla však předurčena pro poddajný život mezi královskou rodinou. Když tedy císařští dědicové onemocní, rozhodne se zasáhnout a najít lék! To upoutá pozornost Jinshiho, pohledného palácového úředníka, který ji povýší. Nyní se proslaví řešením lékařských záhad!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Kusuriya no Hitorigoto",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao, eczacı olan babasıyla huzurlu bir hayat yaşıyordu. Ta ki bir gün saraya adi bir hizmetçi olarak satılana kadar. Ancak kraliyet ailesinin arasında uyumlu bir hayat yaşamaya uygun değildi. Bu yüzden imparatorluk varisleri hastalandığında, öne atılmaya ve bir tedavi bulmaya karar verir. Bu, onu terfi ettiren yakışıklı hadım ağası Jinşi'nin dikkatini çeker. Şimdiyse tıbbi gizemleri çözerek ismini duyuruyor",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Дневникът на аптекаря",
+            "overview": "Маомао живееше спокоен живот с баща си аптекар. Докато един ден тя не е продадена като нископоставена слугиня в двореца на императора. Но тя не е предназначена за послушен живот сред кралските особи. Затова, когато императорските наследници се разболяват, тя решава да се намеси и да намери лек! Това привлича вниманието на Джинши, красив дворцов служител, който я повишава. Сега тя се прочува с това, че решава медицински загадки!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "The Apothecary Diaries",
+            "overview": "Maomao a dus o viață liniștită alături de tatăl ei farmacist. Totuși, într-o zi, ea este vândută drept simplă servitoare palatului împăratului. Dar ea nu a fost menită pentru o viață maleabilă pe lângă familia regală. Așa că, atunci când moștenitorii imperiali se îmbolnăvesc, ea decide să intervină și să găsească un leac! Acest lucru îi atrage atenția lui Jinshi, un chipeș funcționar al palatului care o promovează. Acum, fata își creează o reputație rezolvând mistere medicale!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Vaistininkės dienoraštis",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RS",
+          "iso_639_1": "sr",
+          "name": "Srpski",
+          "english_name": "Serbian",
+          "data": {
+            "name": "Апотекарски дневници",
+            "overview": "Маомао је живела мирним животом са својим оцем апотекаром. Све док једног дана није продата као скромна слушкиња царској палати. Али није била предодређена за послушан живот међу краљевском породицом. Зато, када се царски наследници разболе, она одлучује да интервенише и пронађе лек! Ово привлачи пажњу Ђиншија, згодног дворског службеника који је унапређује. Сада стиче име решавајући медицинске мистерије!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gffVOVZ2Y9cmVIZ26Gt9ByMGCYH.jpg",
+          "vote_average": 6.722,
+          "vote_count": 7,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4kR7cOsf6r86nrHL9UHzxgoQXAz.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yPmfhkHhjWR5VEg0QcUXVYjaiNn.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lJuQBW4w1x6NgD514xDPqZ2Lbpz.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ASAtJGXmOE99YoAH0ZkF8rBNrF.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dfQtPf0lw9C1MWYFMJseM5RZI6P.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dgu9KPcgm3cGkB1UNrjrjDHFO6t.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gWXOBY0qF5LON44GtpyaDPFsCF0.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yUEEqQrbHioO4ziBkr54Nrr0OtJ.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4peFkmiN54ipCwDhXUraFBoJYTf.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u62B2HccCfQ5lgSHVFM9cJpwsGn.jpg",
+          "vote_average": 0.5,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 899,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/26yESLm78tnCxoooRrYc0w4A3FN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1598
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 899,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jpCGMORISbL9FQyiCgg4owb1gdm.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1598
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 899,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wWequvPS7UKhwKVsYiVDGcn3sqb.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1598
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2157,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/f7bkHYEzdpH9ceGtuOfrQEpcpCA.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3836
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9AGgcHEHGDB1VHqP5qLEAeUrdjh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uDdut2pbpX8NJsHF7MsCu6ipy4F.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/piBnwusl3VrdOPp5jkvfDJqrBsq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nrOYH3a88LAD4ICUJ53bxKcH9cA.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3STp5pdUZVHGpSyoaqlORgj1TTh.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vcTautXCYihWeotkfDFcf3JYOEj.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6707Hsw1MAv7YEeDIGyImje4LZz.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hyew9M2qpjlZDOl5jG1Chin8P54.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/p2jpdQHH9bPXdRwPRC0GCT6Bqmf.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5WCZIIipYyFwG4OiGWUqpY6B6D8.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jNQ8qnbXFySEMuxtJr9oVKqU6lO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1Je2HGIShjc6lhJBvn9KHBLZ2vI.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7OMDPCcS6FeXAzVjTDaoKx2mkk4.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uwGszG4GAoh1HqqXQlGHR7DQSjO.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iQ1lZZaFC9r2ynw3EUFvEUN8Ptw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lgI2UIRCFTq99dpSl8VhWGHqrWV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xYHH5lh7NMuYpqUFWkehewJYfnH.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/x96Pv4dGb9fBZZ5xlWG5UPZs1Hm.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wYFaNA6sUYMTswPzr9DUoRzJ96P.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fFfOsp7yv3Kr7bP0iQMKdSWHM6a.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y9WMUe1c7KPaQOW68pzCjX72MhG.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/uFIskisBJdwdEvt5jucmLfHeQZf.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h1nOYcbcWrCn0xecYXFAPSrisJe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 1.782,
+          "height": 1524,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6JpmIe9cJcbG6hecyN6ml8AG6RC.png",
+          "vote_average": 10,
+          "vote_count": 5,
+          "width": 2716
+        },
+        {
+          "aspect_ratio": 1.942,
+          "height": 310,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ndmNWWdb4cUNQ2ISwsDJXz7wJbD.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 602
+        },
+        {
+          "aspect_ratio": 1.945,
+          "height": 310,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qrwLdx77AJg7n1d3GKBSjrkDgns.png",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 603
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tKZeL5kDZbOo8ao1szJZuZT0kqO.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dCJ0OyPQfRvsgP5IvlgT0zoE6bc.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/94d2rSikpo3sRfkEMDo4RDLj0Wd.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8HJzdLwQ0zxF7292vpETcg7uBox.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4UnEFWpqflXKKVW6Xm023r9pTvB.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sJZcy8QsOPuRPiCfoCWVB3r9Ohg.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/e3ojpANrFnmJCyeBNTinYwyBCIN.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zTEXrA1bCWdIefcIbnvICGqDJvX.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/m8pPKoX1hQMDCtCeTt9HlUNupX8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p6biowIL0kGP3ZlJqDoKvOYcidU.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sDvhBOJoduJYeA9uliyXB3EI66Q.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2273,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1TJxoEcA8hZs3iusx0AKMUY12IX.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1515
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tsotQ8GI0NBLjCWZrnmH0vPOrJl.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1365
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2340,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qGObcxuXKcKhP43BqTeIC7KgRcM.jpg",
+          "vote_average": 0.958,
+          "vote_count": 4,
+          "width": 1560
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6KcSckpQmN2cwpLRnGn7vWP5k74.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oWiZZpg3LwY6WSnaE63Cc453lcw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 2211,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zbzHLOjNisndIpy2NOTTXbjct3i.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1560
+        },
+        {
+          "aspect_ratio": 0.713,
+          "height": 1683,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9P0MEIbWi741enyf8r7KbvbeyUM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1041,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ztWm7mWJGy1hLCilFbxlT4B9RSi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 849,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eO3rhWp4iQ7PJ8JZ8CkmZrDMxN3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1646,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3GXcNZFucwJrkhtDZWW1ue83wwo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1097
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1800,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r8aHKFoZFhBWLwfGoIxT2GQIF3I.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tdjTakJg3jSFKPfZssjnFP8xh3.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z0rjow2v7qkUJr19Aui8OZStHeK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1365,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6JW7oZ9Q1jPH7nZo23cHDh3TRrU.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 910
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yQP93DLARkH5D3KMZ0xeEMkLgqM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 1045,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bqc4eNhYv8Ik0njXIhFHThKXqzc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xHUvixolPJxCf2F0EcHeqlTp26Z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1125
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/79QaAATanN2Wmc9nXLD4uLchvuq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1040,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pQIROEjZYVgTzdnUpKc6OvpYEr5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 912,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y5Gn3Gvk1iDGC1FRpOmFrDf9Jqe.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 608
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 883,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kOSLwPVbft7gvIydF6cMAXdbOWn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 589
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/wgtqNaZpJ9HUTjIBOJs4TXvNpN8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xxLZP6J8PGbNT9NSSDlEz5mfHfK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sUcIJ1Cd4kr22TlKruYWLpSdia6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vVXKjFQqXXSrKQJdYBIInBHZq5j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bWBn1LSU7FNjh7PihiXnMZkvR1d.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.703,
+          "height": 1024,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o0zUgYxClkPM9yCtQBebaWcMLBa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        }
+      ]
+    }
+  }
+}

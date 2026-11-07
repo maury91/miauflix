@@ -88,3 +88,60 @@ describe('matchEpisodeFile', () => {
     expect(matchEpisodeFile(metadata('Show.S02E05.mkv'), 1, 5)).toBeNull();
   });
 });
+
+describe('matchEpisodeFile with anime numbering', () => {
+  const anime = (
+    releaseName: string,
+    files: string[],
+    episodeAliases: SourceMetadata['episodeAliases']
+  ): SourceMetadata => ({ ...release(files), releaseName, episodeAliases });
+
+  it('finds a cour-numbered file in a season pack named in the release', () => {
+    const pack = anime(
+      '[Group] Jujutsu Kaisen S2 [BD 1080p][Batch]',
+      [
+        'Jujutsu Kaisen S2/[Group] Jujutsu Kaisen - 06 [1080p].mkv',
+        'Jujutsu Kaisen S2/[Group] Jujutsu Kaisen - 07 [1080p].mkv',
+        'Jujutsu Kaisen S2/Extras/[Group] Jujutsu Kaisen - NCOP1 [1080p].mkv',
+      ],
+      [{ season: 2, episode: 7 }, { episode: 31 }]
+    );
+    // TMDB files the second season's episodes under season 1, as episodes 25 onwards.
+    expect(matchEpisodeFile(pack, 1, 31)).toEqual({
+      videoFilePath: 'Jujutsu Kaisen S2/[Group] Jujutsu Kaisen - 07 [1080p].mkv',
+      matchKind: 'single',
+    });
+  });
+
+  it('finds a file counted from the first episode', () => {
+    const pack = anime(
+      '[SubsPlease] Jujutsu Kaisen (25-47) (1080p) [Batch]',
+      [
+        '[SubsPlease] Jujutsu Kaisen - 30 (1080p).mkv',
+        '[SubsPlease] Jujutsu Kaisen - 31 (1080p).mkv',
+      ],
+      [{ season: 2, episode: 7 }, { episode: 31 }]
+    );
+    expect(matchEpisodeFile(pack, 1, 31)?.videoFilePath).toBe(
+      '[SubsPlease] Jujutsu Kaisen - 31 (1080p).mkv'
+    );
+  });
+
+  it('keeps seasons apart in a pack of several seasons', () => {
+    const pack = anime(
+      '[Group] Jujutsu Kaisen (Season 1, 2) [BD]',
+      ['Season 1/Jujutsu Kaisen - 07.mkv', 'Season 2/Jujutsu Kaisen - 07.mkv'],
+      [{ season: 2, episode: 7 }, { episode: 31 }]
+    );
+    expect(matchEpisodeFile(pack, 1, 31)?.videoFilePath).toBe('Season 2/Jujutsu Kaisen - 07.mkv');
+  });
+
+  it('reads TVDB SxxEyy names when TMDB numbers the episode differently', () => {
+    const pack = anime(
+      'Jujutsu Kaisen S02 1080p WEB-DL',
+      ['Jujutsu.Kaisen.S02E06.1080p.mkv', 'Jujutsu.Kaisen.S02E07.1080p.mkv'],
+      [{ season: 2, episode: 7 }, { episode: 31 }]
+    );
+    expect(matchEpisodeFile(pack, 1, 31)?.videoFilePath).toBe('Jujutsu.Kaisen.S02E07.1080p.mkv');
+  });
+});

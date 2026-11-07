@@ -3,7 +3,7 @@ jest.mock('parse-torrent', () =>
   jest.fn(async (file: Buffer) => ({ files: JSON.parse(file.toString()) }))
 );
 
-import { Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
+import { Language, Quality, Source, VideoCodec } from '@miauflix/source-metadata-extractor';
 
 import type { PlayableRef } from '@routes/playable.types';
 import { SourceHealthService } from '@services/source/source-health.service';
@@ -575,6 +575,32 @@ describe('PlayablePreparationService', () => {
 
     expect((await prepare('auto')).source).toBe(played);
     expect((await prepare(Quality.FHD)).source).toBe(seeded);
+  });
+
+  it('plays a release made for another language last, whatever its rank or quality', async () => {
+    const french = {
+      ...candidate(1, 9_000),
+      quality: Quality.FHD,
+      languages: [Language.FRENCH, Language.MULTI],
+    };
+    const neutral = { ...candidate(2, 3_000), quality: Quality.HD, languages: [Language.MULTI] };
+    const prepare = (quality: Quality | 'auto', audioLanguages?: string[]) =>
+      new PlayablePreparationService(
+        { getMovieByMediaId: jest.fn().mockResolvedValue({ local: { id: 7 } }) } as never,
+        movieService([french, neutral]) as never
+      ).prepare(
+        { kind: 'movie', mediaId: 42 },
+        {
+          ...warmOptions(),
+          through: 'sources',
+          preferences: { quality, allowHevc: true, ...(audioLanguages ? { audioLanguages } : {}) },
+        }
+      );
+
+    expect((await prepare('auto')).source).toBe(neutral);
+    expect((await prepare(Quality.FHD)).source).toBe(neutral);
+    // A French viewer gets it first.
+    expect((await prepare('auto', ['fr-FR'])).source).toBe(french);
   });
 
   it('is exhausted without trying anything when every source is known fake', async () => {

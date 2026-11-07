@@ -1,0 +1,1855 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=19747",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"654ecb09da96b7311e0c025e9df9fcf2\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/koBa94NxTaGe2FoDzlXMuJptsv0.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      22
+    ],
+    "first_air_date": "2006-10-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 9648,
+        "name": "Mystery"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "http://www.ntv.co.jp/deathnote/",
+    "id": 13916,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2007-06-27",
+    "last_episode_to_air": {
+      "id": 1146047,
+      "name": "New World",
+      "overview": "Though Mikami has written all the investigators' names in the Death Note, a minute passes and everyone is still alive. Near seizes Mikami's Death Note, and all is at last revealed.",
+      "vote_average": 8.358,
+      "vote_count": 53,
+      "air_date": "2007-06-27",
+      "episode_number": 37,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 22,
+      "season_number": 1,
+      "show_id": 13916,
+      "still_path": "/85nG6sUrczzZVATIXP9JJvNMuSo.jpg"
+    },
+    "name": "Death Note",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 57,
+        "logo_path": "/uxaXSoT8K0S2NE5PWsBpHUl3GGU.png",
+        "name": "Nippon TV",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 37,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "DEATH NOTE",
+    "overview": "Light Yagami is an ace student with great prospects—and he’s bored out of his mind. But all that changes when he finds the Death Note, a notebook dropped by a rogue Shinigami death god. Any human whose name is written in the notebook dies, and Light has vowed to use the power of the Death Note to rid the world of evil. But will Light succeed in his noble goal, or will the Death Note turn him into the very thing he fights against?",
+    "popularity": 35.6599,
+    "poster_path": "/tCZFfYTIwrR7n94J6G14Y4hAFU6.jpg",
+    "production_companies": [
+      {
+        "id": 3464,
+        "logo_path": "/9k0nr75nwnNeT2MHerf1OXJN0hj.png",
+        "name": "Madhouse",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6755,
+        "logo_path": "/bWiM2iY82B32NGmPCOFatgfekIR.png",
+        "name": "Nippon Television Network Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 14789,
+        "logo_path": "/dThbJAnUAeQCANrj3kV7RGnLM7R.png",
+        "name": "D.N. Dream Partners",
+        "origin_country": "JP"
+      },
+      {
+        "id": 11725,
+        "logo_path": "/3OZxd70DZ1LbVelmZK8mR5FIXxO.png",
+        "name": "VAP",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2918,
+        "logo_path": "/gyEWUBWwqrm3H5T2hkERD9LxpOq.png",
+        "name": "Shueisha",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2006-10-04",
+        "episode_count": 37,
+        "id": 59776,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/1BloDOEmKxPFzbCIuNCLmCrcx6L.jpg",
+        "season_number": 1,
+        "vote_average": 7.9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "The human whose name is written in this note shall die.",
+    "type": "Scripted",
+    "vote_average": 8.616,
+    "vote_count": 5249,
+    "external_ids": {
+      "imdb_id": "tt0877057",
+      "freebase_mid": "/m/02_2rby",
+      "freebase_id": null,
+      "tvdb_id": 79481,
+      "tvrage_id": null,
+      "wikidata_id": "Q718624",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": null
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Death Note",
+            "overview": "Light Yagami is an ace student with great prospects—and he’s bored out of his mind. But all that changes when he finds the Death Note, a notebook dropped by a rogue Shinigami death god. Any human whose name is written in the notebook dies, and Light has vowed to use the power of the Death Note to rid the world of evil. But will Light succeed in his noble goal, or will the Death Note turn him into the very thing he fights against?",
+            "homepage": "",
+            "tagline": "The human whose name is written in this note shall die."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Death Note",
+            "overview": "Light Yagami, un estudiante japonés, encuentra un cuaderno llamado Death Note que permite matar a cualquier persona cuyo nombre se escriba en él. Usando este poder, decide crear un mundo \"perfecto\" eliminando a los criminales. Sin embargo, su plan empieza a torcerse cuando L, un brillante detective, intenta descifrar el misterio que rodea a todas estas muertes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Death Note",
+            "overview": "Après avoir trouvé un mystérieux carnet, un lycéen japonais découvre qu'il a le pouvoir de tuer les personnes dont il y inscrit le nom.",
+            "homepage": "",
+            "tagline": "Regardez autour de vous, et tout ce que vous verrez, ce sont des gens sans lesquels le monde serait mieux."
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Death Note",
+            "overview": "Uno studente delle scuole superiori che trova un quaderno dai poteri soprannaturali chiamato Death Note, gettato sulla Terra dallo shinigami Ryuk. L'oggetto dona all'utilizzatore il potere di uccidere chiunque, semplicemente scrivendo il suo nome sul quaderno mentre ci si raffigura il volto. Light intende usare il Death Note per eliminare tutti i criminali e creare un mondo dove non ci sia il male, ma i suoi piani saranno contrastati dall'intervento di Elle, un famoso detective privato, chiamato ad indagare sul caso delle misteriose morti dei criminali.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "مذكرة الموت",
+            "overview": "لايت ياغامي هو طالب في المرحلة الثانوية عثر على مذكرة تحمل اسم \"مذكرة الموت\" بعدما قام الشينيغامي (حاصد الأرواح) المعروف باسم \"ريوك\" بإسقاطها علي كوكب الأرض. تمنح لمن يستخدمها القدرة على قتل أي شخص سبق وأن رآه عن طريق كتابة اسمه في المذكرة. وتسرد ألأحداث محاولة \"لايت\" إقامة عالم خالٍ من الشر باستخدام المذكرة، ومن هنا يدور الصراع بين \"لايت\" وبين المحقق \"إل\" الذي يحاول القبض عليه.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Death Note",
+            "overview": "Der überdurchschnittlich intelligente Highschool-Schüler Light Yagami findet eines Tages ein Notizbuch (Death Note), mit dessen Hilfe er jeden beliebigen Menschen umbringen kann. Er braucht nur den Namen seines Opfers in das Buch schreiben. Anfangs benutzt er das Buch, um Kriminelle zur Strecke zu bringen, nach und nach aber immer mehr, um die Welt nach seinen Vorstellungen zu formen. Das ruft den jungen Meisterdetektiv „L“ auf den Plan. Da man, um jemanden zu töten, den realen Namen der Person benötigt, ist „L“ gezwungen, den Verursacher der mysteriösen Morde zu finden, bevor dieser seine Identität aufdeckt und ihn womöglich auslöscht. Ein spannendes Katz-und-Maus-Spiel beginnt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Death Note",
+            "overview": "Light Yagami é um estudante brilhante que se encontra aborrecido. Um dia, encontra um Death Note, um caderno que pertence a um Shinigami (Deus da Morte). Esse caderno mortal tem o poder de matar qualquer um cujo nome seja nele escrito e, usando esse poder, Light decide criar um mundo perfeito, livre de crimes e pessoas maldosas. No entanto, à medida que os mais temidos criminosos aparecem mortos, a Interpol chama o lendário detective L para apanhar Light. Começa aí uma batalha.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Death Note",
+            "overview": "Light Yagami  je jako pametan tinejdžer kojem je većinu vremena dosadno. Svaki dan gleda kako se kriminal u sjvetu povećava ali on nažalost to ne može spjrečiti, sve dok jedan dan ne nađe na podu magičnu bilježnicu, Death Note. U bilježnici piše kako će svako čije se ime upiše u nju, umrijeti. ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Zápisník smrti",
+            "overview": "Nadprůměrný student Light Yagami nalezne černý sešit s nápisem Death Note - Zápisník smrti. V něm je na první stránce podivný návod, který vysvětluje, že stačí napsat jméno osoby a pomyslet na jeho tvář - a dotyčný zemře. Racionální Light nevěří, ale po pár experimentech zjistí, že zápisník opravdu funguje. Light si uvědomí, že by mohl být mnohem víc než dalším géniem, že by mohl být Bohem. Jako první si vezme na mušku zločince všeho druhu a začne je systematicky zabíjet, což vyvolá velkou pozornost. Policie všech států začínají hledat viníka. Na vystopování Lighta je nasazen tajemný L, supermozek, který vyniká nadprůměrnou inteligencí a dedukcí. Začíná souboj intelektů. Do hry se zapojuje i sarkastický majitel Zápisníku smrti, Ryuk, který doprovází Lighta a komentuje jeho pokusy o to stát se bohem spravedlnosti i smrti.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Тетрадь смерти",
+            "overview": "Старшекласснику Лайту Ягами в руки попадает тетрадь синигами Рюка. Каждый человек, чьё имя записать в эту тетрадку, умрёт, поэтому Лайт решает бороться со злом на земле.",
+            "homepage": "",
+            "tagline": "«Уничтожить Ёцубу!»"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "｢そのノートに名前を書かれた人間は死ぬ｣という力を持つ、死神が落とした恐るべき“デスノート”。天才的な頭脳を持ち、退屈を持て余していた高校生･夜神月（ヤガミ･ライト）がそれを拾った時から、すべては始まった。デスノートを使って、世の中に溢れる犯罪者たちに次々と死の制裁を下していく月は、いつしか“キラ”と呼ばれるようになる。果たして月＝キラは、世界を救う救世主なのか。それとも独裁的な殺人者なのか。キラを崇拝する者、その行為を否定する者。世界は大きく揺れ動いていく。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "死亡笔记",
+            "overview": "　　\"名字被写在这个笔记本上的人会死\"——死神流克拥有这样的死亡笔记，却将它遗失在人间。天才高中生夜神月捡到这本笔记本，本以为是恶作剧的他，在笔记本上写下了电视中播放的罪犯的名字，确认了笔记本能力的真实性。厌倦腐朽世界的夜神月使用笔记本的力量，开始杀死犯罪者，以此希望建立一个没有犯罪的美好理想世界，而自己成为“新世界的神”。  　　连续罪犯死亡事件，吸引了全世界警察的目光，更吸引了世界第一名侦探L的注意，L能否将被崇拜者称为“基拉”的夜神月逮捕？  　　一本死神的笔记本，拉开了天才与天才之间卓越巅峰的头脑战争的序幕。本已对人间失去兴趣的流克，在旁观惊心动魄的斗智过程中感叹“人类，真有趣。”",
+            "homepage": "",
+            "tagline": "名字被写在这本笔记上的人将会死去。"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Death Note",
+            "overview": "O jovem estudante Light Yagami acha um caderno com poderes sobrenaturais, chamado Death Note, no qual é possível matar uma pessoa apenas escrevendo seu nome no caderno. Quando o descobre, Light tenta eliminar todos os criminosos do mundo e dar à sociedade um mundo livre do mal. Mas seus planos começam a sair de rumo quando o detetive L resolve contrariar Light.",
+            "homepage": "",
+            "tagline": "Olhe ao seu redor e tudo o que você verá são pessoas que o mundo estaria melhor sem."
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Зошит смерті",
+            "overview": "Через нудьгу бог смерті Рюук нібито випадково упустив свій зошит-записник в людський світ. Зошит потрапляє до найкращого учня Японії Лайта Ягамі. Невдовзі хлопчина дізнається про божественні властивості «Зошита смерті», які дозволяють хлопцю стати Кірою – загадковим і всезнаючим вбивцею, караючим злочинців. Лайт починає вершити правосуддя, не підозрюючи, що сам може стати об’єктом пильної уваги...",
+            "homepage": "",
+            "tagline": "Хто б ще міг це зробити і дістатися так далеко?"
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Notatnik śmierci",
+            "overview": "Młody student Yagami Light znajduje pewnego dnia niezwykły notatnik, który okazuje się własnością boga śmierci. Po wpisaniu do niego czyjegoś nazwiska, następuje prawie natychmiastowa śmierć tej osoby. Główny bohater postanawia ulepszyć przy pomocy notatnika świat, oczyszczając go ze zła.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Ölüm Defteri",
+            "overview": "Yagami Light, üniversiteye hazırlanan bir lise son sınıf öğrencisidir. Light, Japonya'nın belki de en yetenekli ve zeki öğrencisi olmasına rağmen, yaşadığı dünya ona tat vermemektedir. Yolsuzluklar ve suçlar yüzünden onun için her şey anlamını yitirmiştir.\n\nLight, bu hüznünü kendi içinde yaşarken ders sırasında bir defterin gökten düştüğünü görür. Okul çıkışı elinde olmadan defterin düştüğü yere yönelir. Defterin üstünde \"Death Note\" yazmaktadır. Defteri yerden alıp incelediğinde ise inanılmaz bir şey ile karşılaşır.\n\n\"Bu deftere adı yazılan insan ölecektir.\"\n\nEvde haberleri izlerken bir adamın bir anaokulundaki öğrencileri ve öğretmenleri rehin aldığını izler. Defterin gerçekliğini test etmek için rehin alan adamın adını deftere yazar ve 40 saniye sonra adam ölür. Defterin gerçekliği karşısında şaşkına dönen Light, kendi mükemmel dünyasını yaratmak için diğer suçlulara yönelecektir. Ancak peki ya insanlar bu durumdan haberdar olup peşine dünyanın en iyi dedektifi L'yi takarsa?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "Τετράδιο Θανάτου",
+            "overview": "Ο νεαρός και πανέξυπνος μαθητής Light Yagami, βρίσκει ένα τετράδιο που έριξε στον \"ανθρώπινο κόσμο\" ένας shinigami (Θεός Θανάτου), στην αυλή του σχολείου του. Αυτό το τετράδιο έχει την ικανότητα να σκοτώνει οποιουδήποτε το όνομα γραφτεί στις σελίδες του, είτε προκαλώντας του καρδιακή προσβολή είτε με τον τρόπο που θα αποφασίσει ο κάτοχός του. Όμως υπάρχουν διάφοροι κανόνες γραμμένοι στις πρώτες σελίδες του, κανόνες που πρέπει να τηρούνται κατά γράμμα ώστε να επιτελέσει τον σκοπό του.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "死亡筆記本",
+            "overview": "拿到這本由死神路克所掉落的死亡筆記本的人，是日本的高中生夜神月。月將世界上一個個犯罪者的名字寫進筆記本上殺掉，他相信這樣的行為會是正義，誓言要將世界變成一個沒有犯罪者的新世界，而他將是這個新世界的神。發現有人在製裁犯罪者的一般民眾，開始稱呼這位制裁者為奇樂（KIRA）（KIRA為Killer的日文拼音，意思是殺手。）另一方面，察覺到奇樂出現的ICPO（國際刑警組織，Interpol），委託一個名為L的偵探來調查奇樂事件。 L是唯一能動員全世界警察的人，世界上很多陷入膠著的案件都是由他查出。他的本名、長相、居住地等，完全沒有人知道。認為奇樂是罪惡的L，用巧妙而大膽的方式證明出奇樂你就在日本關東地區，在日本設立搜查總部挑戰奇樂。奇樂和L，從此為了揭露彼此的真面目，也為了彼此的正義展開了一連串的鬥智。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Бележник на смъртта",
+            "overview": "Да си Жътвар на Души със сигурност не е интересно... светът на тези същества е пуст и мрачен, а убийството на хора е по-скоро задължение отколкото нещо, с което да се развличат. Отегченият до смърт Бог на Смъртта, Риук, решава да напише правилата за убиване в своята тетрадка „Death Note” и да я изпусне ‘случайно’ на земята... Ако тя попадне в ръцете на човек, той ще може да убива, който и когато си поиска, стига да знае как изглежда и да запише името му в нея.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Death Note",
+            "overview": "Light Yagami es un joven estudiante que un día encuentra un cuaderno llamado Death Note que tiene una macabra propiedad: si el nombre de una persona aparece escrito en él, morirá. Light decide, entonces, embarcarse en una misión para librar al mundo de todos los criminales. Sin embargo, su plan empieza a torcerse cuando L, un brillante detective, intenta descifrar el misterio que rodea a todas estas muertes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "데스노트",
+            "overview": "야가미 라이토는 장래가 유망한 모범생이지만 마음속으로는 따분해하고 있었다. 그러던 어느날 \"데스노트\"를 발견한다. 데쓰노트는 사신의 세계에서 온 공책으로 원하는 방식으로 사람을 죽일 수 있는 힘이 있다. 데스노트를 손에 넣은 라이토는 범죄와 범죄자가 없는 그만의 완전한 세상을 만들기로 결심한다. 범죄자들이 하나씩 죽어가자 당국에서는 전설적 탐정인 L을 보내 범인을 추적한다. 그리하여 재치와 속임수와 논리의 대결이 펼쳐지는데...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "מחברת המוות",
+            "overview": "ריוקו, שיניגאמי משועמם מהמישור העליון, מפיל אחת ממחברות המוות שלו אל העולם האנושי בתקווה לקצת עניין במה שהוא קורא לו \"השגרה הרקובה\". המחברת מתגלגלת לידיו של ראיטו, תיכוניסט בן 17, גאון בעל ראיית עולם דומה, שמגלה כי למחברת כוח אימתני: אדם אשר שמו יכתב בה ימות מהתקף לב או בדרך אחרת שיבחר הכותב. ראיטו ההמום מן הכוח האלוהי שנפל עליו, מחליט להפוך את העולם למה שהוא רואה כעולם האידיאלי; עולם ללא פשע.",
+            "homepage": "",
+            "tagline": "האדם ששמו ייכתב במחברת זו ימות."
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Death Note: A Halállista",
+            "overview": "A kiváló tanuló Light Yagami egy nap talál egy könyvet, melynek címe Death Note - A halál könyve. A használati utasítás szerint elég csak leírni a személy nevét és felidézni képzeletben az arcát és az illető eltűnik a Föld színéről. A fiú nem hiszi, hogy a könyv működik, ám egy alkalommal kipróbálja és a célzott személy valóban eltűnt. Light vérszemet kap és Istennek képzelve magát gyilkolni kezd. Őrült, intellektuális játékba kezd az őt üldöző rendőrökkel. A játékba bekapcsolódik a a könyv tulajdonosa is, Ryuk, aki kommentekkel látja el a fiatal igazságosztó ténykedéseit.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AE",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "مذكرة الموت",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Zápisník smrti",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Cuốn Sổ Tử Thần",
+            "overview": "Yagami Light là một học sinh cấp III rất thông minh nhưng luôn cảm thấy cuộc sống xung quanh thật tẻ nhạt và phẫn nộ với những tội ác và tham nhũng xảy ra trên thế giới. Cuộc sống của Yagami chỉ thay đổi vào năm 2003 sau khi cậu tình cờ nhặt được một cuốn sổ kỳ bí có tên Death Note (Desu Nōto, sách chết). Lời hướng dẫn sử dụng trên cuốn sổ đã ghi rõ rằng những người bị viết tên vào đây sẽ chết. Lúc đầu Yagami nghi ngờ về tính xác thực của cuốn sổ, cứ nghĩ rằng đây là trò đùa tinh quái của ai đó. Tuy nhiên, sau khi dùng nó để giết hai tên tội phạm, cậu đã tin vào sự kỳ diệu của Death Note. Khi gặp được thần chết (shinigami) giữ cuốn sổ tên Ryuk, Light quyết định sẽ trở thành vị Chúa của thế giới mới bằng việc thay thế luật pháp phán xử những kẻ phạm tội chỉ bằng một bản án duy nhất, cái chết...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Caietul morții",
+            "overview": "Un licean ajunge în posesia unui caiet ocult și descoperă că poate să ucidă orice persoană al cărei nume poate fi scris în el.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CA",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Death Note",
+            "overview": "Après avoir mis la main sur un cahier mystérieux, un élève japonais se rend compte qu'il peut éliminer tous ceux dont il écrit le nom dans ce carnet.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "死亡筆記",
+            "overview": "一名日本高中生無意間獲得一本神秘筆記本，還發現只要在上面寫上任何名字，他就能除掉那個人。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "死亡笔记",
+            "overview": "一名日本高中生偶然得到一个神秘的笔记本，发现只要在上面写上任何人的名字，就能杀死那个人。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "Death Note",
+            "overview": "जब एक जापानी हाई स्कूलर लड़के को एक रहस्यमयी नोटबुक मिलती है, तो उसे पता चलता है कि उसके पास हर उस इंसान को जान से मारने की ताकत है जिसका नाम वह उसमें दर्ज करता है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "สมุดโน้ตกระชากวิญญาณ",
+            "overview": "นักเรียนไฮสคูลคนหนึ่งได้ครอบครองสมุดบันทึกลึกลับที่ตกลงมาจากฟ้า และพบว่าเขามีอำนาจที่จะฆ่าใครก็ได้ โดยเพียงแค่เขียนชื่อคนๆ นั้นลงไปในสมุดเล่มนี้",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "Death Note",
+            "overview": "Pelajar SMA Jepang menemukan buku catatan mistis, yang memberinya kekuatan untuk membunuh siapa pun dengan menuliskan namanya di buku tersebut.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Death Note",
+            "overview": "Apabila murid sekolah tinggi Jepun menemui buku nota yang mistik, dia mendapati dirinya kini memiliki kuasa untuk membunuh sesiapa yang namanya ditulis dalam buku itu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "ms",
+          "name": "Bahasa melayu",
+          "english_name": "Malay",
+          "data": {
+            "name": "Death Note",
+            "overview": "Apabila murid sekolah tinggi Jepun menemui buku nota yang mistik, dia mendapati dirinya kini memiliki kuasa untuk membunuh sesiapa yang namanya ditulis dalam buku itu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HR",
+          "iso_639_1": "hr",
+          "name": "Hrvatski",
+          "english_name": "Croatian",
+          "data": {
+            "name": "Bilježnica smrti",
+            "overview": "Japanski srednjoškolac dođe do zagonetne bilježnice i otkrije da ima moć ubiti svakoga čije ime u nju upiše.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Death Note",
+            "overview": "Japanilainen nuori opiskelija saa käsiinsä salaperäisen muistikirjan ja huomaa saaneensa kyvyn tappaa kenet tahansa, jonka nimen hän kirjoittaa kirjaan.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "AT",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Death Note",
+            "overview": "Der überdurchschnittlich intelligente Highschool-Schüler Light Yagami findet eines Tages ein Notizbuch (Death Note), mit dessen Hilfe er jeden beliebigen Menschen umbringen kann. Er braucht nur den Namen seines Opfers in das Buch schreiben. Anfangs benutzt er das Buch, um Kriminelle zur Strecke zu bringen, nach und nach aber immer mehr, um die Welt nach seinen Vorstellungen zu formen. Das ruft den jungen Meisterdetektiv „L“ auf den Plan. Da man, um jemanden zu töten, den realen Namen der Person benötigt, ist „L“ gezwungen, den Verursacher der mysteriösen Morde zu finden, bevor dieser seine Identität aufdeckt und ihn womöglich auslöscht. Ein spannendes Katz-und-Maus-Spiel beginnt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CH",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Death Note",
+            "overview": "Der überdurchschnittlich intelligente Highschool-Schüler Light Yagami findet eines Tages ein Notizbuch (Death Note), mit dessen Hilfe er jeden beliebigen Menschen umbringen kann. Er braucht nur den Namen seines Opfers in das Buch schreiben. Anfangs benutzt er das Buch, um Kriminelle zur Strecke zu bringen, nach und nach aber immer mehr, um die Welt nach seinen Vorstellungen zu formen. Das ruft den jungen Meisterdetektiv „L“ auf den Plan. Da man, um jemanden zu töten, den realen Namen der Person benötigt, ist „L“ gezwungen, den Verursacher der mysteriösen Morde zu finden, bevor dieser seine Identität aufdeckt und ihn womöglich auslöscht. Ein spannendes Katz-und-Maus-Spiel beginnt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "دفترچه مرگ",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Light Yagami is een topstudent met geweldige vooruitzichten, en hij verveelt zich mateloos. Maar dat verandert allemaal wanneer hij de Death Note vindt, een notitieboekje dat is achtergelaten door een malafide Shinigami-doodsgod. Elke mens wiens naam in het notitieboekje staat, sterft, en Light heeft gezworen de kracht van de Death Note te gebruiken om de wereld van het kwaad te verlossen. Maar zal Light slagen in zijn nobele doel, of zal de Death Note hem precies datgene maken waartegen hij vecht?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SE",
+          "iso_639_1": "sv",
+          "name": "svenska",
+          "english_name": "Swedish",
+          "data": {
+            "name": "Death Note",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Death Note",
+            "overview": "El Light Yagami és un bon estudiant però que està tremendament avorrit. Això canvia quan troba el \"Quadern de Mort\", un quadern que havia perdut el Ryuk, un déu de la Mort molt murri. Qualsevol ésser humà amb el nom escrit en aquest quadern morirà. Ara, en Light ha decidit utilitzar aquest poder per lliurar del mal el món, però en el seu camí s'hi interposarà el llegendari detectiu L, que investigarà les morts causades per la llibreta.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GE",
+          "iso_639_1": "ka",
+          "name": "ქართული",
+          "english_name": "Georgian",
+          "data": {
+            "name": "სიკვდილის რვეული",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Mirties užrašai",
+            "overview": "Light Yagami – gabus ir perspektyvus mokinys, tačiau mirtinai nuobodžiaujantis. Viskas pasikeičia, kai jis randa „Death Note“ – užrašų knygelę, kurią paliko klajojantis mirties dievas šinigamis. Bet kuris žmogus, kurio vardas įrašomas į šią knygelę, miršta. Pasiryžęs išnaikinti blogį pasaulyje, Light nusprendžia pasinaudoti šios knygelės galia. Tačiau ar jam pavyks pasiekti savo kilnų tikslą, ar „Death Note“ pavers jį tuo, su kuo jis pats kovoja?",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PK",
+          "iso_639_1": "ur",
+          "name": "اردو",
+          "english_name": "Urdu",
+          "data": {
+            "name": "Death Note",
+            "overview": "جب جاپان کے ہائی اسکول کا ایک لڑکا ایک پراسرار نوٹ بک پاتا ہے، تو اسے معلوم ہوتا ہے کہ اس کے پاس یہ طاقت ہے کہ وہ جس کسی کا بھی نام اس میں لکھے، اسے ہلاک کر سکتا ہے۔",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/koBa94NxTaGe2FoDzlXMuJptsv0.jpg",
+          "vote_average": 5.53,
+          "vote_count": 17,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z8IPicmEKXUO4I2UDdMEqw7RqOE.jpg",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mRwV4W2BAEpte7xlawJP4fsBpmS.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mOlEbXcb6ufRJKogI35KqsSlCfB.jpg",
+          "vote_average": 5.25,
+          "vote_count": 18,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/msyFkFfEMuHpKvq7cf4NnyugbXP.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AsIv5z7IQtK3XpBqYxsdguv1ji.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ohQf29xrgnC0uE5ABzKVsqEETDM.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/cImgYbMpDbvsEdnUSa0tXj4O1wf.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sFXiJuEPMAoHxri1gw1B0JimSKF.jpg",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/2Yfzm5857lprGonYPl30XgEpTry.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ouWGzM6ISz0DlcRG81bvUP6tvhY.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3IqZkiolIli6yEfq3JYsnm3se00.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/htNSFwsSiSr22W74bu4Q4k3CS2.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/sj13rlc9fCVmSXnhNtyXCTfxQEw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jjOgbCgJn08ZjkbluhMHX2WHeWm.jpg",
+          "vote_average": 1.75,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ojAKw4G31MolYOJK0xAOf1e1zCX.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bY17tTK5GOEwxIValL0MBHGt6T6.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/brO0acsI82ikvp7S0yszhbUupiF.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zTeJu4pV7m8bLeEwOb5c3fhq1Wq.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.783,
+          "height": 736,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3oN10EPjgCfLYAHMFiQfPcM1kv8.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1312
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nIJOwFwsflSW35XuVJdaFNJrbKU.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7wmHmzNyBfctKHUqjpJfitCM5P3.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/dZKSoOetPn1Czsj1g5bxsB2jwoL.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9Bis2AOIRzs1BaEEtmWCZlE4gSE.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s3CieCbVnmRJN7GGcT0v2fNFbMw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aqnhlDAQ7vK3a5lwB02NYb8RsU9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xLjN8yeUeQjWLvB0k3yycQthLJd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vvTz487MRMECOcQ91g8gzv7jkzj.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aWDa69gpbOjTnLPMaw31PqGI3nK.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j9GnNGnkZLZXE9VkBajFP5uTstD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nfhqwCTUCu3JTuMxwSj2rC9ih0B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/peWzjbqEa1zO6CDKyvoUPMlEyfO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xNweucf2XwH4sYsD6bh18jr3Pun.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/epMWXJTMTUdUWzVz75Kv9b91yGN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gajhEhu0evotHxBSIplXPGoqLhz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yMWa23wdFcffEIdfY5AwAbWKdHM.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xW9y5YSbhwLBt7vYBSQU5grBDkw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4SBCduhdDy71yjctZQu1I8AGE4H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eUDOlNYnzEzO64NfcnmyVOqmqdD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zfdrgQrxsW1OVkUSUBD8zp9j5WJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/87YP6LI9DFhTwOXhpwEpyPtSO8S.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h890i7w7v9ChKA9aBgkx76PkR7H.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xFLSKEyv2XG0y434n5E6kN9OujT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yOeXd4w637KBn3azd7g25bebSSZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zExedzZZiQIe3aaIc468tuMP7UW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/omYdzUo345O3ygNkdKwAnaNjSGk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/c1JwgbrTOhrypeTjN6FaFLa6IIa.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aKQjgChFvOqc5UPHXv1E2DVOa7Z.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kNZgZFSEeym1mBI1mCtJumDx1R7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t4ZexkG6YDNyd0ynrk4kllVBNdJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/21paCRCawYZp81ttoWtcTTy85Iz.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rXNBziy2jsRC3rHGJMjZ83sejv1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/vPiQMb4zU4wq4IYOzudjl6ELaTC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8OWGAaWfmN9JjrY5l0MutoCgc3E.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lBNZ5hEPPlziH46RdvhYZiYH5V8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cOJtR5pX8SjknPCO1MJcRQSEf5u.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/abjsoZEUrmpMyPuQvcZk91SgXHw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xD5ZPs8AS3dlYmuGUcJ7YRnZ3Sl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/mk8MQtynTX2CSj12d1lbwN74FoP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5IrUeyf8ZR87d1bN6RHH8UZ33ys.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/s6H3p4PQYQLhTc5zt0j8PDtCTzn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9V97RbKHAcgEsrG0K4NU2HjGPyn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uYpU0oA7cXBxKI5OgZ4l1nhf3qE.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/r6pTfOvYuCA8WOS3z2qsqBuEoca.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1LdpTcqwRKJ7Sk37wJ9l5kaDXLA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/brj0EgXBwg60e1YeeVDoCseeXPn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6PPBkzD8e7GlQ1XR6pfP1wFLq5j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qA4q4XXPS7BzdsWurpmbivIudZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/pk5ZVAVrArvluBY4gMDPCwnUiIi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1311,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oR2vEoMG4QNgtzPv5WTkOvLR1B0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2331
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1272,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zvx0sTt8ppbIa5K5Yviup1nzrx8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2262
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.659,
+          "height": 601,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/mbDyY5qEDKVQNvuHk71OvxH8Cjg.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 2199
+        },
+        {
+          "aspect_ratio": 4.061,
+          "height": 197,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tdmqbFnG79NFRoQkI2HrrfAWRQv.png",
+          "vote_average": 1.75,
+          "vote_count": 4,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 3.537,
+          "height": 1196,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1NWy6mi2O5gZanKigYBWGIEQqSh.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 4230
+        },
+        {
+          "aspect_ratio": 3.262,
+          "height": 390,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/4ReVhT5xrjGWfIQfGMKtS6eTeM1.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1272
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tCZFfYTIwrR7n94J6G14Y4hAFU6.jpg",
+          "vote_average": 0.742,
+          "vote_count": 35,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/chnG4pYo89weaBjXHJWvW68E35B.jpg",
+          "vote_average": 10,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nqPFi22qOOi8xnB1mrEasnG02vH.jpg",
+          "vote_average": 7.72,
+          "vote_count": 25,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qdNlRsnpr9yfmIJ76qQBM91E3dn.jpg",
+          "vote_average": 6.696,
+          "vote_count": 23,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/u878Dny3e6ajNGLeJJcYq9c60SP.jpg",
+          "vote_average": 5.616,
+          "vote_count": 13,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pMnxVmzuKBQ3JQIVhpv0QcZB0Ey.jpg",
+          "vote_average": 3.424,
+          "vote_count": 13,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bSBUX1b4uX0CF9QymcaPLfJb32B.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nUTyvfTxR0Br5bT9rq2tcTQkACm.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ma7jqw8PbYKVTbgwgyFs3wdTW9v.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aJ5xcT3t9HS5NoDBejch2AhEeQN.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5wXHfdIraV11ztZouIwbBfrum1D.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 800,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/b1LDp0faskUOoORqg1U6A6F3OkI.jpg",
+          "vote_average": 1.714,
+          "vote_count": 8,
+          "width": 560
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/oGPHcaYlAVFf9VAH6DYtyotyWPP.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2323,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n3Cvm6DYfdYf5p51X03UIkMNCp8.jpg",
+          "vote_average": 1.208,
+          "vote_count": 8,
+          "width": 1549
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6AeoBQhA1kjHjehoKOor0CYgd2e.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kvTZfsVfdl0lpkekeqB23Og6gPT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.751,
+          "height": 1752,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7gK1fEDez5355ahB1bcoVw18Uc7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1316
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z1X8wbjKRWMsIz47g5blzQfv8Ev.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9gcQDYtFuQV4115jkQIdBX54d0g.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bCKIMUHwRTRPbh6o7T3Ud50suWT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2250,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o6rz8BTCl2kjQtyNBH3KddRcu7T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/m7BurswqhwCPbJ4lxk5eMXn26dB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/k1tAoyWnxseV0c3cPRJ55zeNm0k.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 929,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qNFON2SQta3LK5427nVIpRmNytB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 620
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1tIeM4T1jvrrwsNCqTtI7azcmft.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yDYdj8lBt9dczZmuTKdWq1FhJTO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/iIC5h6nfbCPUqaDtkz5qHCD1msC.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qeUV3owzG1qIU4T5U0akj5sh7sq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 720
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1102,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fKvQYY1HKMpr3xjmtPYLEYqLncg.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.664,
+          "height": 1200,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/44YNnwbnD3R3owwm7RFecPu4FOk.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 797
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 999,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/i7sbPidpblSKfQBRYhiOrVxHg1o.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 666
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1105,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uzAvW0sY6TA4dlCfjgF8w0cSefd.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.641,
+          "height": 1149,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hR5s1VDe8MEV0EsMYCIrLJva2Nw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.685,
+          "height": 1075,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/bHln9VqbzdeIh0AX8WonZI0CXl8.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.691,
+          "height": 1064,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xhKPC0uAjocvCs2MQepCZhX1acp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/8cDRZM22GQtATxZf4OUcBAuU5lX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1040,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1Bitx8g8M1KoSSKUpA9XXLZuORv.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.685,
+          "height": 1074,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jF7ZHYz8vuq5MmHAX8M5iwgWlT0.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/h69b43DJam1WgCYReXBFL2x952K.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 640
+        }
+      ]
+    }
+  }
+}

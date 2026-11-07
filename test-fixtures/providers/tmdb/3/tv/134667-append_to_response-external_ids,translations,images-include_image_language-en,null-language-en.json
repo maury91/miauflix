@@ -1,0 +1,769 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=15413",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"6b3d8fcc13a2bc1130b338c29ebfde5a\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fo5qwDAVqY7j2jmL350WKjk6kmi.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      23
+    ],
+    "first_air_date": "2022-10-05",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 35,
+        "name": "Comedy"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://tenken-anime.com",
+    "id": 134667,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-11-05",
+    "last_episode_to_air": {
+      "id": 7894801,
+      "name": "A Smiling Farewell",
+      "overview": "Teacher must unleash his full potential to pull Fran back from the verge of death.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-05",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 134667,
+      "still_path": "/mYlvf64sGGVaNoInXLzt48chCCx.jpg"
+    },
+    "name": "Reincarnated as a Sword",
+    "next_episode_to_air": {
+      "id": 7894802,
+      "name": "The Briny Beach Experience",
+      "overview": "Fran and Teacher's search for an inn is put on hold when they're caught up in a child trafficking ring.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-12",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 2,
+      "show_id": 134667,
+      "still_path": "/y2YDmOnPiV672X1UZDIqcn8UC83.jpg"
+    },
+    "networks": [
+      {
+        "id": 614,
+        "logo_path": "/hSdroyVthq3CynxTIIY7lnS8w1.png",
+        "name": "TOKYO MX",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 24,
+    "number_of_seasons": 2,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "転生したら剣でした",
+    "overview": "Reincarnated as a sentient weapon with memories of his past life, but not his name, a magical sword saves a young beastgirl from a life of slavery. Fran, the cat-eared girl, becomes his wielder, and wants only to grow stronger, while the sword wants to know why he is here. Together, the strange duo's journey has only just begun!",
+    "popularity": 19.208,
+    "poster_path": "/yZ3VZVc7iyF7KtIjERBGEedVXqA.jpg",
+    "production_companies": [
+      {
+        "id": 87536,
+        "logo_path": "/59FqPKWsfCc4e1LmKoVfXeblaRK.png",
+        "name": "C2C",
+        "origin_country": "JP"
+      },
+      {
+        "id": 69968,
+        "logo_path": "/cN8Qhl29ZrmWYgkYTS6CDhPK0A5.png",
+        "name": "NBCUniversal Entertainment Japan",
+        "origin_country": "JP"
+      },
+      {
+        "id": 162011,
+        "logo_path": "/bg6yrVhnmv6eNE8cMWehyE9wAeb.png",
+        "name": "GREE Entertainment",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188143,
+        "logo_path": "/cyCV6C5EBG45hsVTQVjzwLVwkg1.png",
+        "name": "MICRO MAGAZINE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 8157,
+        "logo_path": "/pEqcMX1aG3JvtDgfh2wNZJLCcb4.png",
+        "name": "jeki",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188144,
+        "logo_path": "/tft4KzwjS3okGiN6duB3qwHkIX1.png",
+        "name": "BS Asahi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188145,
+        "logo_path": "/9XfbU3ZcnDzAgIJzAvDAxN3KXe5.png",
+        "name": "Shengqu Games",
+        "origin_country": "CN"
+      },
+      {
+        "id": 955,
+        "logo_path": "/5xnXD3PJI1HqOJceSAKZ3fDqO1V.png",
+        "name": "Nikkatsu Corporation",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188146,
+        "logo_path": null,
+        "name": "MICRO HOUSE",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188147,
+        "logo_path": "/diM3x4QILRVfIZuCPV8A6yacUs8.png",
+        "name": "Gentosha Comics",
+        "origin_country": "JP"
+      },
+      {
+        "id": 258677,
+        "logo_path": null,
+        "name": "NK Animation",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      },
+      {
+        "iso_3166_1": "CN",
+        "name": "China"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-10-05",
+        "episode_count": 12,
+        "id": 212654,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/xP4dXoim0sOPrEDvQfKAwL2UOoO.jpg",
+        "season_number": 1,
+        "vote_average": 7.4
+      },
+      {
+        "air_date": "2026-10-08",
+        "episode_count": 12,
+        "id": 320917,
+        "name": "Season 2",
+        "overview": "",
+        "poster_path": "/hzcmCi1hmLva2qgufNgYveblqcl.jpg",
+        "season_number": 2,
+        "vote_average": 0
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.3,
+    "vote_count": 95,
+    "external_ids": {
+      "imdb_id": "tt15483602",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 410378,
+      "tvrage_id": null,
+      "wikidata_id": "Q110962162",
+      "facebook_id": "",
+      "instagram_id": null,
+      "twitter_id": "tenken_official"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tensei Shitara Ken Deshita",
+            "overview": "Después de morir en un accidente automovilístico, el protagonista se encuentra reencarnado en otro mundo como una espada sin recordar su nombre, aunque recuerda todo lo demás de su vida anterior. Aceptando su destino como una espada, comienza a buscar a alguien que se convierta en su portador. Descubre una caravana de traficantes de esclavos atacada por un oso de dos cabezas. Una joven chica gato esclavo, Fran, descubre la espada, y lo usa para matar al oso. Después de ser liberada de la esclavitud, ella llama a la espada \"Maestro\", y los dos se embarcan en una aventura juntos.",
+            "homepage": "",
+            "tagline": "“Más allá de la fuerza”"
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "转生成为魔剑了",
+            "overview": "转生后，我竟然成为了一把剑！？这个故事的主角，一回神发现自己已经转生至异世界了。但不是作为普通人类，而是一把被称作“智能武器”的剑。当他环顾周围，发现这里是个魔物猖獗，险象环生的草原地带。觉得性命受到威胁的他，怀抱着与装备者相遇的梦想，运用让自己身体飘浮的能力，逐步猎杀魔物。某天，他为了休息一时不慎踏入会吸收魔力的“干涸之森”，结果完全动弹不得。就在束手无策之际，他遇见了长期遭受奴役与虐待的黑猫族少女·芙兰。芙兰遭到巨大魔兽袭击，陷入生死关头之际，拔出了插在眼前的他，并利用他的力量成功脱离危机。之后，她将他命名为“师父”，并正式成为他的装备者。成为冒险者的芙兰与师父，一边彼此磨练技能，一边完成各种委托。芙兰为了追求位于强大尽头的“进化”，而师父则为了实现少女的“愿望”。猫耳少女和爱女心切的魔剑的最初冒险，即将开始！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "気がつくと異世界に転生していた。普通の人間としてではなく、剣として。驚きを感じつつも、剣として生きていく決意を固めた主人公は、自らを浮かせる能力を駆使して魔物を狩りながら、周囲の状況を確認していく。そんな折、休憩として地面に刺さった瞬間、その能力が発動しなくなってしまった。途方に暮れる主人公。そんな彼の前に突如として猫耳少女が現れるのだが……。",
+            "homepage": "",
+            "tagline": "強さの、そ の 先 へーー"
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Reincarnated as a Sword",
+            "overview": "Reincarnated as a sentient weapon with memories of his past life, but not his name, a magical sword saves a young beastgirl from a life of slavery. Fran, the cat-eared girl, becomes his wielder, and wants only to grow stronger, while the sword wants to know why he is here. Together, the strange duo's journey has only just begun!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Tenken - Reincarnato in una spada",
+            "overview": "Un essere umano si reincarna in un mondo fantasy come spada magica senziente. A trovarlo sarà Fran, una giovane appartenente a una stirpe vessata e discriminata. I due stringono un legame, e lo strano duo parte all'avventura per realizzare il sogno che la ragazza ha ereditato dai suoi defunti genitori: diventare più forte ed evolvere, cosa considerata impossibile per la sua stirpe.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "轉生就是劍",
+            "overview": "一個人類轉生成了一把劍，被一位孤苦無依的貓族少女撿到，決定成為她的守護者，和她一起展開尋求「進化」的冒險。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "전생했더니 검이었습니다",
+            "overview": "전생했더니 검이었습니다.\n\n'인텔리전스 웨펀'이라고 불리는 '검'으로서 이세계에 전생한 그는 장비자와의 만남을 꿈꾸며 고독하게 스킬 수집에 힘쓰고 있었다.\n\n어느 날 어리석게도 마력을 흡수하는 '고갈의 숲'에 들어가 한 발짝도 움직일 수 없게 된다.\n\n망연자실하고 있을 때, 노예 신분으로 학대받던 흑묘족 소녀 프란을 만난다.\n\n프란은 거대한 마수에게 습격당해 절체절명의 위기에 처해 있었다.\n\n그녀는 눈앞에 나타난 그를 뽑고 그 힘으로 궁지를 벗어났고 그에게 '스승'이라고 이름 붙이고 정식 장비자가 되었다.\n\n모험가가 된 프란과 스승은 서로 스킬을 갈고닦으면서 퀘스트를 수행한다.\n\n프란은 강함 끝에 있는 '진화'를 이루기 위해, 스승은 소녀의 '소원'을 이뤄주기 위해.\n\n고양이귀 소녀와 팔불출 검의 대모험이 시작된다!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Chuyển Sinh Thành Kiếm",
+            "overview": "Được tái sinh như một vũ khí có tri giác với ký ức về tiền kiếp, nhưng không phải tên của anh ta, một thanh kiếm ma thuật cứu một nữ thú nhân trẻ khỏi cuộc sống nô lệ. Fran, cô gái tai mèo, trở thành chủ nhân của anh ta và chỉ muốn trở nên mạnh mẽ hơn, trong khi thanh kiếm muốn biết tại sao anh ta lại ở đây. Cùng nhau, cuộc hành trình của bộ đôi kỳ lạ chỉ mới bắt đầu!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "轉生就是劍",
+            "overview": "一回神，主角發現自己已經轉生至異世界了。不是作為普通人類，而是一把劍。當他環顧周圍，月發現這裡是個魔物猖獗，險象環生的草原地帶。覺得性命受到威脅的主角，運用讓自己身體飄浮的能力，逐步獵殺魔物。就在這時，主角為了休息而插進地面的瞬間，能力居然破功，動彈不得。然而就無計可施的主角面前，突如其來出現一名奴隸打扮的貓耳少女……",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Moi quand je me réincarne en épée",
+            "overview": "Bien qu’elle soit une jeune fille-chat fougueuse, Fran, orpheline, mène une vie de labeur depuis qu’elle a été réduite en esclavage. Pensant que ses derniers jours sont arrivés à la suite d’une attaque d’un monstre, son chemin croise alors celui d’une mystérieuse épée qui lui permet d’abattre son adversaire. Il s’avère que celle-ci était auparavant un jeune homme qui, à la suite d’un tragique accident de voiture, s’est réincarné dans un nouveau monde. Liés désormais par un pacte, nos deux héros sont fin prêts à se frayer un chemin vers la liberté et à vivre une vie d’aventure !",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Reincarnated as a Sword",
+            "overview": "A história acompanha Fran, uma jovem meio-fera que vivia como escrava. Após ser salva por uma espada mágica, Fran descobre que o objeto na verdade era um homem na vida passada. Por mais que a espada se lembre da sua antiga existência, ela não consegue lembrar de seu nome e nem de quem era. A partir de então, os dois parte em uma jornada juntos, onde Fran busca se tornar mais forte e a espada descobrir quem era.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "ซวยเหลือหลายเกิดใหม่กลายเป็นดาบ",
+            "overview": "หนุ่มธรรมดาๆ ผู้หนึ่งได้เกิดใหม่เป็นดาบที่ต่างโลก และได้พบกับสาวหน้อยที่เป็นทาสหนึ่ง พวกเขาได้ออกเดินทางด้วยกัน",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Reincarnated as a Sword",
+            "overview": "Der Protagonist wurde in einer anderen Welt wiedergeboren – nicht als normaler Mensch, sondern als ein Schwert. Er ist überrascht, aber mehr als entschlossen, sein Leben als Schwert fortzusetzen. Während er Dämonen jagt und dabei auf seine Fähigkeit zu schweben baut, behält er immer seine Umgebung im Auge. Als er sich eine Pause gönnt und das Schwert in den Boden stößt, hört seine Fähigkeit auf zu wirken. Als er nicht mehr weiter weiß, taucht plötzlich ein Mädchen mit Katzenohren namens Fran vor ihm auf …",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Моє переродження в меч",
+            "overview": "Головний герой після смерті переродився в меч, а після появи в новому світі зустрів кішко-дівчинку родом з племені Чорних Котів. В результаті вони стають грізною командою, яка вирушає в подорож для здійснення її мрії.",
+            "homepage": "",
+            "tagline": "За межами сили!"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Reincarnated as a Sword",
+            "overview": "Tras morir en un accidente automovilístico, un hombre despierta en otro mundo reencarnado no como un héroe o un mago, sino como una espada inteligente clavada en un altar. Poseyendo habilidades de absorción de poderes, la espada espera pacientemente a que alguien digno la empuñe.\n\nSu destino cambia cuando conoce a Fran, una niña de la raza de los Gatos Negros que huye de una vida de esclavitud tras un ataque de monstruos. Fran empuña la espada, a la que nombra Maestro, y juntos forman un vínculo inquebrantable. Mientras Fran busca evolucionar a su raza —algo que se cree imposible—, Maestro se compromete a ser su fuerza, protegiéndola en un mundo hostil lleno de aventureros, bestias y prejuicios raciales.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "",
+            "overview": "V jednom kouzelném světě, kde vládne meč a magie, existuje klan Černých Koček. Jsou to bytosti, které se podobají lidem, ale mají jisté kočičí znaky jako třeba ouška a ocásek. Ve zdejším světě jsou však příslušníci tohoto klanu utiskováni, zotročováni a zabíjeni, protože je všichni považují za podřadný druh, který se ani nedokáže řádně vyvinout. Jednou z takových je i Fran, mladá dívenka, která upadla do otroctví a každý den těžce dře pro své kruté pány. Podvědomě však touží po svobodě, síle a možnosti někam rozvíjet své schopnosti.\n\nVe stejném světě se také nachází jeden magický meč s vlastní vůlí, je v něm totiž uvězněná duše jistého muže z Japonska, kterého jednoho večera porazilo auto a když znovu nabyl vědomí, tak byl prostě mečem zapíchnutým v podstavci uprostřed pustiny.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "تينسي شيتارا كين ديشيتا",
+            "overview": "مطاردة واستعباد وقتل - هذا هو المصير الرهيب الذي يصيب أعضاء قبيلة القطط السوداء. تتوق فران البالغة من العمر اثني عشر عاما ، وهي فتاة من العرق المضطهد ، إلى الانتقام من الفظائع التي ارتكبت ضد شعبها. إنها تحلم بمستقبل أكثر إشراقا ، لن تتردد في الحصول على يديها القذرة. لقاء بالسيف الحديث ، رجل متجسد يبحث عن لاعب جميل ، تبين أنه اللحظة الحاسمة التي ستغير مصيرها.\n\nبمساعدة رفيقها الجديد ، تخطط فران الشابة لاستعادة فخر وشرف أقاربها ، وخفض جميع أعدائها على طول الطريق. بعزم لا يتزعزع ، تشرع في رحلة بسيفها المعجزة.\n\n[movil00]",
+            "homepage": "",
+            "tagline": "movil00"
+          }
+        },
+        {
+          "iso_3166_1": "SK",
+          "iso_639_1": "sk",
+          "name": "Slovenčina",
+          "english_name": "Slovak",
+          "data": {
+            "name": "Tensei Shitara Ken Deshita",
+            "overview": "V magickom svete, kde vládne meč a mágia, žije klan Čiernych mačiek. Sú to tvory, ktoré sa podobajú ľuďom, ale majú určité mačacie vlastnosti, ako sú uši a chvost. V tomto svete sú však členovia tohto klanu utláčaní, zotročovaní a zabíjaní, pretože ich všetci považujú za menejcenný druh, ktorý sa ani nemôže správne vyvíjať. Jednou z nich je Fran, mladé dievča, ktoré sa dostalo do otroctva a každý deň tvrdo pracuje pre svojich krutých pánov. Podvedome však túži po slobode, sile a možnosti niekde rozvíjať svoje schopnosti.\n\nV tom istom svete sa nachádza aj magický meč s vlastnou vôľou, pretože v ňom je uväznená duša muža z Japonska, ktorého jedného večera zrazilo auto, a keď sa prebral, bol to jednoducho meč zaseknutý v podstavci uprostred ničoho.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "О моём перерождении в меч",
+            "overview": "Попаданцам вечно не везёт. Как в прошлой жизни, в которой они, как правило, погибли жестокой глупой смертью, так и в нынешней, где они часто оказываются не в самом выгодном положении. Главному герою этой истории не повезло вдвойне: мало того, что коньки отбросил, вместе с коньками он лишился ног, рук, головы и вообще тела, так как переродился в меч! Да ещё с корабля на бал очутился посреди леса, кишащего монстрами.\n\nВот в этом хаосе он и повстречал девушку-кошку, которая сбежала от своих хозяев и их жестокого с ней обращения.\n\nДевушка представляется как Фран, а вот меч никак не может назвать имя и не потому что рта нет, а потому что — забыл. Фран любезно дарует мечу имя Мастер, а меч великодушно обещает девушке дружбу и защиту. Отныне они команда, которая будет мочить злодеев, биться за добро и справедливость, ну и параллельно прокачиваться потихоньку.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Reincarnated as a Sword",
+            "overview": "Ezen anime hősének nem szokványos reinkarnációban van része, ugyanis kardként születik újjá egy fantasy világban, ahol utazását egy vadállatokkal teli erdő közepén kezdi, hol egy sebesült lányba botlik, aki kétségbeesetten menekül az életéért. Miután megmenti őt főszereplőnk, a lány Fran néven mutatkozik be, akinek mint kiderül, fájdalmas múltja van, ugyanis törzsét, a Fekete Macskákat rabszolgasorba taszították és kemény bántalmazásnak volt kitéve. Főszereplőnk valahogy nem bír emlékezni előző életéből a nevére, majd Fran a “Shishou”, azaz Mester nevet adja neki, és ő lesz a használója. Majd Shishou és Fran félelmetes csapattá válván útnak indulnak, hogy igazságot szolgáltassanak az elnyomókkal szemben.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Reincarnated as a Sword",
+            "overview": "Catgirl France jest sierotą. Od czasu, gdy została niewolnicą, całe jej życie jest niezwykle trudne. Kiedy zaatakowały potwory, jest pewna, że czeka ją śmierć, ale znalezionym tajemniczym mieczem pokonuje wrogów. Okazuje się, że miecz to młody mężczyzna, który zmarł w wyniku wypadku samochodowego i odrodził się jako ostrze ze stali. Dwójka zawiera pakt, aby walczyć o wolność i o życie pełne przygód.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een magisch zwaard, gereïncarneerd als een bewust wapen met herinneringen aan zijn vorige leven, maar niet aan zijn naam, redt een jong beestmeisje van een leven vol slavernij. Fran, het meisje met de kat oren, wordt zijn drager en wil alleen maar sterker worden, terwijl het zwaard wil weten waarom hij hier is. Samen is de reis van het vreemde duo nog maar net begonnen!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Reincarnated as a Sword",
+            "overview": "Quando um assalariado de 30 anos e entusiasta de jogos é subitamente morto em um acidente de carro, ele se vê renascido em um mundo de fantasia... mas na forma de uma espada! Agora ele está em busca de uma bela mulher para empunhá-lo, e uma garota gata chamada Fran pode ser a parceira de aventuras perfeita que ele precisa.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "转生成为魔剑了",
+            "overview": "一个人类转生成为一把剑，并在一名黑猫族孤女将其拔出后成了她的守护者，全心全意地帮助她完成进化之旅。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BG",
+          "iso_639_1": "bg",
+          "name": "български език",
+          "english_name": "Bulgarian",
+          "data": {
+            "name": "Прероден като меч",
+            "overview": "След като се преражда като разумен магически меч, мъж без спомени за името си спасява младата котешка девойка Фран от робство. Докато Фран се стреми да стане по-силна, нейният необичаен спътник търси истината за своето съществуване. Заедно те поемат на незабравимо приключение, изпълнено с магия и опасности.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Een magisch zwaard, gereïncarneerd als een bewust wapen met herinneringen aan zijn vorige leven, maar niet aan zijn naam, redt een jong beestmeisje van een leven vol slavernij. Fran, het meisje met de kat oren, wordt zijn drager en wil alleen maar sterker worden, terwijl het zwaard wil weten waarom hij hier is. Samen is de reis van het vreemde duo nog maar net begonnen!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fo5qwDAVqY7j2jmL350WKjk6kmi.jpg",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/zFNwsiUiYiV3AyIT28E5x7fwnzW.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5ULZIfD5CcH3F2QS0IaWPMiVM6i.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/xlWgctM8Ybfyyi2rWhysmqVbmnx.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.779,
+          "height": 818,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tHw8g1EaikMei0he3UOvMH8Xbcl.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1455
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.022,
+          "height": 1354,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/n7zVxzyhaB2vLdyF5XwwynrgcXO.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 4092
+        },
+        {
+          "aspect_ratio": 3.438,
+          "height": 566,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gF1Mj8KSA6N18GMMNNbtpNyqiiS.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1946
+        },
+        {
+          "aspect_ratio": 3,
+          "height": 264,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/a7VfJkAcHVgsbv33swkWZF23IzS.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 792
+        },
+        {
+          "aspect_ratio": 3.13,
+          "height": 407,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/tjkwgXUBwj4YAWB6dfOROIX0v5h.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1274
+        },
+        {
+          "aspect_ratio": 7.326,
+          "height": 46,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ga9LCILjBE5ROlyoBmV6yXSFUDo.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 337
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 1812,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yZ3VZVc7iyF7KtIjERBGEedVXqA.jpg",
+          "vote_average": 2.542,
+          "vote_count": 4,
+          "width": 1208
+        },
+        {
+          "aspect_ratio": 0.711,
+          "height": 2110,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gyWFWI2ks2OFaWYDS5hnZK4iVLG.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.717,
+          "height": 1673,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yCY96sdobsXl6PSvy1ShriHB6KP.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/eDoGfCprHFQpK9lBRiBVjR6VZQ5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.702,
+          "height": 1140,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qqV1ukmjCettTdp3Z5Fq0LXBLzW.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.702,
+          "height": 2138,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/p0efjxffhc09M3A3bvqDVss5aIa.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1500
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/785p37xapzwdrq4qiulBbSjtNaQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 1426,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yLmQCc3xdNjePZIDXyIWTfjnA9Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1379,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/j8oamyDKfvHGemBZXg6E0PXccQW.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 919
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rUxRgqGZUXbvpRFvsm1hSt240H6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/oBftqkuupebTnQqixCwE9nWV8kL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7WyzvrR4rTz9syobMyABa0LAwKc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2159,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/dR2gwcG2gmyiH5PiYh9L3R7UUY1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1438
+        }
+      ]
+    }
+  }
+}

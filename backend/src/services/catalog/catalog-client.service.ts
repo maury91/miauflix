@@ -4,6 +4,7 @@ import {
   type ArtworkUpdate,
   type BatchResponse,
   catalog,
+  type EpisodeLayout,
   type ExternalMediaLookup,
   type MediaRef,
   type MovieDetail,
@@ -50,6 +51,11 @@ export class CatalogClientService extends RemoteService<typeof catalog> {
     language: string
   ): Promise<SeasonDetail | null> {
     return orNull(this.client.getSeason({ tvMediaId, seasonNumber, language }));
+  }
+
+  /** Both numberings of a show's episodes (empty while the show keeps TMDB's seasons). */
+  getEpisodeLayout(tvMediaId: number): Promise<EpisodeLayout | null> {
+    return orNull(this.client.episodeLayout({ tvMediaId }));
   }
 
   search(query: string, page: number, language: string): Promise<SearchResponse> {

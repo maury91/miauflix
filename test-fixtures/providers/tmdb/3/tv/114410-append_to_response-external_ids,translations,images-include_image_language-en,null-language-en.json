@@ -1,0 +1,1463 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=13544",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"270d3d0963c959b9f1c3ac5d0bdc50ae\"",
+    "vary": "accept-encoding, Origin",
+    "x-gateway-cache-status": "MISS"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/fOUKSCbZzaoQKsO39enivHnWDid.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2022-10-12",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://chainsawman.dog/",
+    "id": 114410,
+    "in_production": false,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2022-12-28",
+    "last_episode_to_air": {
+      "id": 3963655,
+      "name": "KATANA VS. CHAINSAW",
+      "overview": "Sawatari sends the \"Ghost Devil\" after Hayakawa, and he's nearly killed before the \"Ghost Devil\" stops and hands him a cigarette with a message from Himeno. The words inside give Hayakawa the strength to kill the “Ghost Devil” and capture Sawatari.\n\nMeanwhile, Denji heads into his rematch with Samurai Sword. With a pull of the starter on his chest, he transforms into Chainsaw Man.\n\nAnd now, the last battle between Chainsaw Man and Samurai Sword has finally begun...",
+      "vote_average": 8.8,
+      "vote_count": 73,
+      "air_date": "2022-12-28",
+      "episode_number": 12,
+      "episode_type": "finale",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 114410,
+      "still_path": "/xqxc5esGMw5alHcju87cmjyAkyy.jpg"
+    },
+    "name": "Chainsaw Man",
+    "next_episode_to_air": null,
+    "networks": [
+      {
+        "id": 98,
+        "logo_path": "/jnuO8pZNEBLEq5YaOP1f5OkmG91.png",
+        "name": "TV Tokyo",
+        "origin_country": "JP"
+      },
+      {
+        "id": 252,
+        "logo_path": "/zFZ5KCuvx7K0vP9XgGcidfXjuUd.png",
+        "name": "TV Aichi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 822,
+        "logo_path": "/gOlBe3BMo5WJHeUlWBBfKawgdiO.png",
+        "name": "TVQ",
+        "origin_country": "JP"
+      },
+      {
+        "id": 824,
+        "logo_path": "/6foQmoPac7WCDnDuDbuCZklmDuA.png",
+        "name": "TV Osaka",
+        "origin_country": "JP"
+      },
+      {
+        "id": 938,
+        "logo_path": "/f12LLqBVFnDVIY8HidhWEitI77c.png",
+        "name": "TVh",
+        "origin_country": "JP"
+      },
+      {
+        "id": 2064,
+        "logo_path": "/qi4L1ffRabF5LJqVimCaaUYpeSj.png",
+        "name": "TSC",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "チェンソーマン",
+    "overview": "Denji has a simple dream—to live a happy and peaceful life, spending time with a girl he likes. This is a far cry from reality, however, as Denji is forced by the yakuza into killing devils in order to pay off his crushing debts. Using his pet devil Pochita as a weapon, he is ready to do anything for a bit of cash.",
+    "popularity": 33.5839,
+    "poster_path": "/npdB6eFzizki0WaZ1OvKcJrWe97.jpg",
+    "production_companies": [
+      {
+        "id": 21444,
+        "logo_path": "/wSejGn3lAZdQ5muByxvzigwyDY6.png",
+        "name": "MAPPA",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2022-10-12",
+        "episode_count": 12,
+        "id": 171559,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/wi059pAZjRN3BbDSB1tMqXgwRDa.jpg",
+        "season_number": 1,
+        "vote_average": 8.6
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Ended",
+    "tagline": "He's a devil, who doesn't deserve human rights.",
+    "type": "Scripted",
+    "vote_average": 8.5,
+    "vote_count": 2366,
+    "external_ids": {
+      "imdb_id": "tt13616990",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 397934,
+      "tvrage_id": null,
+      "wikidata_id": "Q104211858",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "CHAINSAWMAN_PR"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji has a simple dream—to live a happy and peaceful life, spending time with a girl he likes. This is a far cry from reality, however, as Denji is forced by the yakuza into killing devils in order to pay off his crushing debts. Using his pet devil Pochita as a weapon, he is ready to do anything for a bit of cash.",
+            "homepage": "",
+            "tagline": "He's a devil, who doesn't deserve human rights."
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji es un adolescente que vive con un demonio motosierra llamado Pochita. Para pagar la deuda que le dejó su padre tras su muerte, ha tenido que ganarse el pan como puede matando demonios y vendiendo sus cadáverse a la mafia, aunque su vida siempre ha sido miserable.\n\nCuando una traición provoca la muerte de Denji, Pochita hace un contrato con él y Denji revive como \"Chainsaw Man\", un ser humano con el corazón de un demonio.",
+            "homepage": "",
+            "tagline": "“El secreto para tener una vida feliz en este mundo… Es que la ignorancia es felicidad”"
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji es un adolescente que vive con un demonio motosierra llamado Pochita. Para pagar la deuda que le dejó su padre tras su muerte, ha tenido que ganarse el pan como puede matando demonios y vendiendo sus cadáverse a la mafia, aunque su vida siempre ha sido miserable.\n\nCuando una traición provoca la muerte de Denji, Pochita hace un contrato con él y Denji revive como \"Chainsaw Man\", un ser humano con el corazón de un demonio.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Человек-бензопила",
+            "overview": "Дэндзи хотел жить спокойной жизнью со своей девушкой, но, чтобы расплатиться с оставшимися от отца долгами, был вынужден заниматься нелегальной охотой на демонов и однажды погиб. Его не самый обычный домашний питомец Потита каким-то образом слился с его мертвым телом, и теперь парень способен превращать конечности в бензопилы. Такого ценного кадра нанимает Бюро общественной безопасности, чтобы тот снова охотился на демонов — теперь официально.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "",
+            "overview": "电次是一位年轻的恶魔猎人，为了偿还父亲在黑帮处的债务，他与“电锯恶魔”波奇塔一起斩杀低阶恶魔谋生，每天过着贫困的生活。遭遇黑帮债主背叛被杀后，电次在恍惚中与波奇塔缔结契约，拥有了恶魔的心脏，变身成为“电锯人”重生于世。",
+            "homepage": "",
+            "tagline": "他是个不配享有人权的恶魔。"
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "『チェンソーの悪魔』ポチタと共にデビルハンターとして暮らす少年デンジ。親が遺した借金返済のため、ド底辺の日々を送る中、裏切りに遭い殺されてしまう。薄れる意識の中、デンジはポチタと契約し、悪魔の心臓 を持つもの 『 チェンソーマン 』として蘇る ── 。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji é um adolescente que mora com Pochita, o Demônio da Motosserra. Por conta das dívidas que herdou de seu pai, ele vive na miséria, exterminando outros demônios com Pochita para pagar as contas. Até que, um dia, Denji é traído e morre. Em seus últimos momentos de consciência, ele firma um contrato com Pochita e renasce como o Homem-Motosserra - um humano com coração de demônio.",
+            "homepage": "",
+            "tagline": "Ele é um demônio que não merece direitos humanos."
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji lebt in tiefster Armut mit seinem einzigen Freund zusammen: ein Kettensägenteufel namens Pochita. Sein Vater hat ihn auf einem großen Schuldenberg sitzen lassen und seitdem hangelt sich Denji von einem Tiefpunkt zum nächsten. Zusammen mit Pochita macht er Jagd auf Teufel, um seine viel zu hohen Schulden zu tilgen und ein normales Leben zu führen. Das Glück ist ihm nicht hold und so wird Denji eines Tages verraten und hinterrücks erstochen. Als sein Bewusstsein schwindet, schließt er einen Vertrag mit Pochita und wird als „Chainsaw Man“ wiederbelebt – ein Mann mit dem Herzen eines Teufels.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Oppresso dai debiti con la yakuza, il giovane Denji sopravvive cacciando diavoli al fianco del piccolo diavolo motosega Pochita. In seguito a un mortale agguato, Pochita si fonde con il cuore del ragazzo, rianimandolo come ibrido umano-diavolo. Notato dalla misteriosa Makima, Denji viene arruolato nei cacciatori di diavoli della Pubblica Sicurezza, inseguendo il sogno di condurre una vita normale e appagante.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji'nin babası ölünce büyük bir borç üstüne kalır ve bunu ödeyebilmesinin hiçbir yolu yoktur. Ancak kurtardığı Pochita isimli iblis köpek sayesinde iblis avcılığı yaparak borcunu azar azar kapatır. Pochita'nın testere güçleri iblislere karşı işe yarıyordur. Denji öldüğünde Pochita kendini feda edip onu diriltir. Fakat Denji artık eskisi gibi insan değildir. O artık Testere Adam!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji est un adolescent qui vit avec son chien-démon-tronçonneuse, Pochita. À cause d’une énorme dette que son père a laissée derrière lui, le garçon se retrouve dans la misère la plus totale, cherchant avec Pochita à rembourser l’argent en récoltant des cadavres de démons pour le compte d’une organisation.\n\nUn jour, Denji est trahi et tué. Encore conscient, il passe un contrat avec Pochita et renaît sous le nom de Chainsaw Man, un homme au cœur de démon…",
+            "homepage": "",
+            "tagline": "Vous entendez ce vrombissement ?"
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "체인소 맨",
+            "overview": "'체인소의 악마'포치타와 함께 데블 헌터로 사는 소년 덴지. 부모가 남긴 빚을 갚기 위해, 가난한 생활을 하던 중, 배신을 당해 죽임을 당하고 만다. 희미해지는 의식 속에서, 덴지는 '포치타'와 계약을 맺고, 악마의 심장을 가진 자 '체인소 맨'으로 되살아난다~!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thợ Săn Quỷ",
+            "overview": "Denji có một ước mơ đơn giản là sống một cuộc sống hạnh phúc và yên bình, dành thời gian cho một cô gái anh thích. Tuy nhiên, điều này khác xa với thực tế, vì Denji bị yakuza buộc phải giết quỷ để trả những món nợ chồng chất của mình. Sử dụng con quỷ cưng Pochita của mình làm vũ khí, anh ta sẵn sàng làm bất cứ điều gì chỉ vì một ít tiền mặt.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "鏈鋸人",
+            "overview": "澱治是個背負了父親遺留下的龐大債務，因此過著極端負窮生活的少年，他救了惡魔波奇塔，並與牠一起以惡魔獵人的身分斬殺低階惡魔來換取酬勞。有一天，流氓騙了澱治，讓他成為一堆惡魔的祭品，澱治在臨死之際，波奇塔犧牲自己，把心臟給了他，讓他復活並擁有了惡魔的力量，只要一拉位在心臟那邊的鏈子就能發動。之後澱治被警察人員看上，因此成為警察的惡魔獵人…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "鏈鋸人",
+            "overview": "淀治是個背負了父親遺留下的龐大債務，因此過著極端負窮生活的少年，他救了惡魔波奇塔，並與牠一起以惡魔獵人的身分斬殺低階惡魔來換取酬勞。有一天，流氓騙了淀治，讓他成為一堆惡魔的祭品，淀治在臨死之際，波奇塔犧牲自己，把心臟給了他，讓他復活並擁有了惡魔的力量，只要一拉位在心臟那邊的鏈子就能發動。之後淀治被警察人員看上，因此成為警察的惡魔獵人…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Людина-бензопила",
+            "overview": "У світі існують демони. Разом з ними існують і мисливці на демонів. Денжді, один з цих мисливців, разом зі своїм другом – маленьким демоном-бензопилкою Почітою – вбиває демонів на замовлення якудзи та продає їм їхні трупи. Одного дня якудза вирішує позбутися його. Їхній план спрацював і Денджі вбивають – але це лише початок історії. Почіта, його друг-демон, вирішив віддати йому своє життя і свої сили. Так народився новий Денджі – Людина-бензопила.",
+            "homepage": "",
+            "tagline": "Він демон, який не заслуговує на права людини."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji to młody, biedny mężczyzna, który dla pieniędzy gotów jest zrobić wszystko, nawet polować na demony razem ze swoim demonicznym psem, Pochitą. To prosty człowiek z nieskomplikowanymi marzeniami, tonący w morzu długów. Jednak gdy zdradza go zaufana osoba, jego życie zostaje wywrócone do góry nogami. Teraz z drzemiącą w nim demoniczną mocą Denji staje się zupełnie nowym człowiekiem, Chainsaw Manem...",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IR",
+          "iso_639_1": "fa",
+          "name": "فارسی",
+          "english_name": "Persian",
+          "data": {
+            "name": "مرد اره‌ای",
+            "overview": "به‌دنبال یک خیانت، مرد جوانی که رها شده است تا بمیرد، پس از یکی شدن با شیطان بدخلق خود، دوباره به‌عنوان یک دو رگه قدرتمند نیمه‌شیطان-نیمه‌انسان متولد می‌شود و خیلی زود در سازمانی که به شکار شیاطین اختصاص دارد، استخدام می‌شود.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "เชนซอว์แมน",
+            "overview": "เด็นจิ เด็กหนุ่มผู้หาเลี้ยงชีพด้วยการเป็นนักล่าปิศาจ อาศัยอยู่ร่วมกับโปจิตะ\"ปีศาจเลื่อยยนต์\"ตัวหนึ่ง เขาก้มหน้าก้มตาทำงานเยี่ยงทาส เพื่อชดใช้หนี้สินของพ่อแม่ แต่ก็ยังโดนหักหลังและถูกฆ่า ชั่วขณะนั้น เด็นจิทำพันธสัญญากับโปจิตะ ครอบครองหัวใจของปิศาจ คืนชีพกลับมาเป็น“เชนซอว์แมน”",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Japonsko. Lidstvo žije v neustálém ohrožení ďábly/démony, kteří ztělesňují lidský strach. Čím větší je strach, tím silnější je ďábel. Proti tomuto všeobecnému ohrožení bojují „lovci ďáblů“ – jak ti posvěceni vládou, tak i další na volné noze. Denji je teenager, který nesní po ničem jiném, než po normálním životě, ve kterém bude mít dostatek jídla, hezký domov a nakonec snad i přítelkyni. Jeho největšími tužbami je jednou jíst i něco jiného, než suchý chleba, a dívčí objetí. Místo toho musí žít na úplném okraji společnosti v rozpadající se chajdě a splácet obrovský dluh po otci, kvůli němuž mu Yakuza hrozí smrtí. Když jednou náhodou narazí na malého, překvapivě roztomilého a zraněného ďábla Pochitu a pomůže mu k zotavení tím, že mu nabídne svou krev, začnou spolu pro zmíněné gangstery lovit další ďábly, kteří sužují japonský venkov. Yakuza má však s ulovenými monstry vlastní plány a Denji i Pochita se brzy stanou postradatelnými.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "رجل المنشار",
+            "overview": "لدى دينجي حلم بسيط: أن يعيش حياة سعيدة وهادئة، ويقضي وقته مع فتاة يحبها. لكن هذا بعيد كل البعد عن الواقع، حيث يُجبر دينجي من قبل عصابة الياكوزا على قتل الشياطين من أجل سداد ديونه الساحقة. مستخدماً شيطانه الأليف بوتشيتا كسلاح، فهو مستعد لفعل أي شيء مقابل حفنة من المال.",
+            "homepage": "",
+            "tagline": "إذا كنت ستقف في طريقنا...فالموت لك!"
+          }
+        },
+        {
+          "iso_3166_1": "MY",
+          "iso_639_1": "my",
+          "name": "",
+          "english_name": "Burmese",
+          "data": {
+            "name": "",
+            "overview": "Chainsaw Man ဟာ Manga မှာထဲကတော်တော်ကို hype ခဲ့တဲ့ ဇတ်လမ်းပါအခုတော့ Anime ဇတ်လမ်းတွဲ အနေနဲ့ စထွက်လာခဲ့ပါပြီအကြွေးတွေ ပတ်လည်ဝိုင်းပြီး မသေရုံတမယ် စားသောက်ပြီးအသက်ရှင်နေရတဲ့ Denji ဆိုတဲ့ကောင် လေး တစ်ယောက်ရှိပါတယ်သူ့မှာ ဖခင်ချန်ခဲ့တဲ့ အကြွေးတွေ ဆပ်ရင်းတစ်ရက်ကို ပေါင်မုန့်တစ်ချပ်လောက်စားရဖို့ အရေး ရုန်းကန်လှုပ်ရှားနေရသူပါ တစ်ရက်မှာတော့သူ့ဘ၀ ထဲကို Pochita လို့ခေါ်တဲ့ Devil Pet လေးတစ်ကောင်စ ရောက်လာပြီး အတူတူ မကောင်းဆိုးဝါးတွေကိုကြေးစားလိုက်သတ်ရင်း အကြွေးတူတူ ဆပ်ကြတာပေါ့တစ်ရက်မှာ တော့ Denji ရဲ့ အလုပ်ရှင်က အလုပ်တစ်ခုကို ထပ်အပ်ပါတယ်အဲ့ဒီ အလုပ်ကနေ စပြီး Denji ရဲ့ ဘ၀ ပြောင်းလဲသွားဖို့ အကြောင်းဖန်လာခဲ့သောအခါ",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "איש המסור",
+            "overview": "לדנג'י יש חלומות פשוטים - לחיות חיים מאושרים ושלווים, ולבלות עם בחורה שהוא אוהב. עם זאת, זה רחוק מהמציאות, שכן דנג'י נאלץ על ידי היאקוזה להרוג שדים כדי לשלם את חובותיו של אביו. באמצעות שד המחמד שלו, פוצ'יטה, כנשק, הוא מוכן לעשות הכל תמורת מעט כסף. לרוע המזל, הוא נרצח ע\"י שד בחוזה עם היאקוזה. עם זאת, בתפנית בלתי צפויה של אירועים, פוצ'יטה מתמזג עם גופתו של דנג'י ומעניק לו את הכוחות של שד מסור חשמלי. כעת מסוגל דנג'י להפוך חלקים מגופו למסורים חשמליים, ולאחר שעיניהם של ציידי השדים הרשמיים שמגיעים למקום נתקלים בדנג'י, מוצע לו לעבוד בלשכה לביטחון הציבור כאחד מהם. עכשיו עם האמצעים להתמודד אפילו עם האויבים הקשים ביותר, דנג'י לא יעצור כדי להשיג את החלומות הפשוטים שלו.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Egy árulást követően egy halottnak hitt fiatalember hatalmas ördög-ember hibridként születik újjá, miután összeolvad házidémonjával, és hamarosan besorozzák egy ördögvadászattal foglalkozó szervezetbe.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SG",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "电锯人",
+            "overview": "电次是一位年轻的恶魔猎人，为了偿还父亲在黑帮处的债务，他与“电锯恶魔”波奇塔一起斩杀低阶恶魔谋生，每天过着贫困的生活。遭遇黑帮债主背叛被杀后，电次在恍惚中与波奇塔缔结契约，拥有了恶魔的心脏，变身成为“电锯人”重生于世。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Denji heeft een simpele droom: een gelukkig en vredig leven leiden en tijd doorbrengen met een meisje dat hij leuk vindt. Dit staat echter ver af van de realiteit, aangezien Denji door de yakuza wordt gedwongen duivels te doden om zijn verpletterende schulden af te betalen. Met zijn duivel Pochita als wapen is hij bereid alles te doen voor een beetje geld.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "Denji é um jovem pobre que faz qualquer coisa por dinheiro, até caçar demónios com o seu cão demónio Pochita. É um homem simples com sonhos simples, afundando-se sob uma montanha de dívidas. Mas a sua triste vida vira de cabeça para baixo um dia quando é traído por alguém em quem confia. Agora com o poder de um demónio dentro de si, Denji tornou-se um homem completamente novo, Chainsaw Man!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Chainsaw Man",
+            "overview": "En Denji té un somni senzill: viure una vida feliç i pacífica, passant temps amb una noia que li agradi. Això, però, està molt lluny de la realitat, ja que la mafia obliga en Denji a matar dimonis per pagar els seus deutes aclaparadors. Utilitzant la seva mascota dimoni, Pochita com a arma, està disposat a fer qualsevol cosa per una mica de diners.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IN",
+          "iso_639_1": "hi",
+          "name": "हिन्दी",
+          "english_name": "Hindi",
+          "data": {
+            "name": "चेनसॉ मैन",
+            "overview": "विश्वासघात और हत्या का शिकार हुए डेंजी नाम के एक किशोर को चेनसॉ मैन के रूप में पुनर्जीवित किया जाता है, जो एक शैतानी दिल वाली आत्मा है।",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "LT",
+          "iso_639_1": "lt",
+          "name": "Lietuvių",
+          "english_name": "Lithuanian",
+          "data": {
+            "name": "Žmogus pjūklas",
+            "overview": "Denji turi paprastą svajonę – gyventi laimingą ir ramų gyvenimą, leisdamas laiką su mergina, kuri jam patinka. Tačiau realybė yra visai kitokia: jakudza verčia Denji žudyti demonus, kad jis galėtų grąžinti milžiniškas skolas. Naudodamas savo augintinį demoną Pochitą kaip ginklą, jis pasirengęs padaryti bet ką dėl trupučio pinigų.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fOUKSCbZzaoQKsO39enivHnWDid.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5DUMPBSnHOZsbBv81GFXZXvDpo6.jpg",
+          "vote_average": 5.25,
+          "vote_count": 20,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hsEAnOKuESc9HJmIGbmKQk5mxmH.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/onn6JPGNwqcOUkp73ADq0PEpuLv.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gfa4xsUKMlRlSI6LWM9ysPMPihQ.jpg",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/u42WtcEXPCskrX5GKNbulJp8bf8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tJ946hTDv4vwf51dYD6cK8pxC8o.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/femueGbefPrPj9jExGLnPDN61Vq.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1152,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sbvHiKrb86zi2RSeos8MkoURTDi.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2048
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6vE6QrqR6SU03emcnDTO8MOssJc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 720,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/A7Fudd0Q0QHj2U69qZoASB3h3dS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iSEIi0u2X8dZkBpjAm18v5JnEiw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 828,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zRsNtD2VoqpvYwkvKEDUtHdgwJi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1472
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qw5TMroQUpzhpYnA0uyIS7d4j7T.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.78,
+          "height": 1754,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gjw5AxC433kaJUDYnJnMS6AnD1G.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3122
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1716,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/yyN8OtNr6t5EqFkKfdL0y1Kvyu4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3051
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/l8jyeUZQ2FVhnszlqEH51cr0gFh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 8.979,
+          "height": 481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8X3AdUA5q3owusAXOiCOn3FwXUa.png",
+          "vote_average": 5.25,
+          "vote_count": 8,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 8.98,
+          "height": 2004,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/gtQhIaKELg1gL06d6GHFoRZfuXb.png",
+          "vote_average": 3.334,
+          "vote_count": 3,
+          "width": 17996
+        },
+        {
+          "aspect_ratio": 8.979,
+          "height": 481,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/48V1LpRqRv6zzNjmhaVGAFp8xti.png",
+          "vote_average": 2.278,
+          "vote_count": 3,
+          "width": 4319
+        },
+        {
+          "aspect_ratio": 4.099,
+          "height": 192,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iVTcpWBY4ALqJ2m8Agx7YNAV65M.png",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 787
+        },
+        {
+          "aspect_ratio": 8.948,
+          "height": 134,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lJWj48OMSNbs46VEbuAWqPOpJhO.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1199
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/npdB6eFzizki0WaZ1OvKcJrWe97.jpg",
+          "vote_average": 10,
+          "vote_count": 13,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iFM1dyFi0rByvEomEkmm7NpQeeb.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1sJ3FvrSCP3MsToPaXWxhbUfkWa.jpg",
+          "vote_average": 5.786,
+          "vote_count": 7,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 1572,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yVtx7Xn9UxNJqvG2BkvhCcmed9S.jpg",
+          "vote_average": 5.778,
+          "vote_count": 9,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sB2DASpJtfnTs7iK3RqkUMFVDEa.jpg",
+          "vote_average": 4.722,
+          "vote_count": 9,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.707,
+          "height": 1697,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/syfMkaJJkZ6qj0naPK8SYPTA8Ym.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 1200
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ybiqbApsTg0GP4tmio1D6ekDGHq.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2045,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/d5Bq9n1psKGOBjusV40SPm8E4Iw.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1363
+        },
+        {
+          "aspect_ratio": 0.704,
+          "height": 2048,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5TxHJgPEnL2krIjRsqpsLyF9oAh.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1442
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8vtnPZXxCvX8iIbFoglGxwHjapq.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/cuPxZKsReC99c63QCeOq0OUVQcG.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1620,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/9crZj9Gf9X2Xl88rlRfAqvvYwl1.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 960,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vV5UL98vkvMy6ygFLl4lw6vaAs2.jpg",
+          "vote_average": 1.444,
+          "vote_count": 9,
+          "width": 640
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v1U4Ltcu7qHSK2IvpGwpwlTLSnB.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/s0BN0Z75qLmJBzisVjC962PctdZ.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AspHA5pRcCAhYI9wcinj9N0O8qy.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.714,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6Z5Wxl1sFb9iqCAbWDgopGsbEJI.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 857
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 871,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y7YMU1Qrlt9qECSUwvfE2UI1iUO.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 581
+        },
+        {
+          "aspect_ratio": 0.684,
+          "height": 1580,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sv1Gp7GV4ifbfCzk6W4Bg5NIANq.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.677,
+          "height": 1572,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/aPfMRlMwHwpnep8l4sScdBeGRpu.jpg",
+          "vote_average": 1.066,
+          "vote_count": 5,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/z4RtnrIQgJeHYVcA6PD5xYdWxHD.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bD7nq5RpS9T19uwtYuEq0ZSOjiu.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qEMTLTbaaUKk6ygAVRU4TOjPU6b.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.714,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1aXafuHfMIFvsiCb5Y7svlkBQLU.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 857
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jKiLzfSwuneCgm4dv2dkV10R4da.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/rnJWJGGR76fJYGHKyF9nEnuAlHw.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2048,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6V9ljriDXlzW1hBfxf1mMLbE3zp.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1366
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k0Wo2spMTkYF268oftPKpMZlRkc.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1399,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eM7GYp7CrEnDZmZXyMnOr9iXDlo.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 933
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/xR5sEcR74nZ3T5V0CiQPBQxsq2c.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1JTFzCQaWxM5sIYXRCgZ3D17zBX.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ArCqG2lDSzE5mRcwzSxoks8hj4t.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 667
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lTVAU4fbkw1btypJe5h1Ir0wZ38.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kXwC8ImcKlDdFh3ACpKAM0xyXw9.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/8WetRqXhaIBJeAY7jriWjoZs5S1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/waLpVuS4BXWORFBFKYAwVFEdZGW.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/60yWO5R9apSnwVXTcC93ZFGri4l.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1200,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qYN3EG6rOVuv6AfKn8KtZnqMQSk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 800
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 900,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/2AFPphaNAHxMdCZ72dpW5djNvbs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 600
+        },
+        {
+          "aspect_ratio": 0.665,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lin2w3Wjt3oaSe6slTT62gM7LJN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 665
+        },
+        {
+          "aspect_ratio": 0.759,
+          "height": 991,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ebOwBIUmZ54cLSIjSe29xGq21JF.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 752
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1734,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1kDUu7hxAcWTWBneAS9J9IxzByn.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1300
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/5HW4D8iTjT2fdaGmWdyrYLoiICJ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.742,
+          "height": 811,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/88tcgCg031Y6Mgxj5oLGWuo7gMT.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 602
+        },
+        {
+          "aspect_ratio": 0.74,
+          "height": 1114,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/yasGNRJI2teg8LKDvhjppkKcFZQ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 824
+        },
+        {
+          "aspect_ratio": 0.747,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/7WpTfoe1coyxRJCgL78kmVJPml1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 747
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 1478,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/otsAcYGV59CBSM5hDSIBp1GMu6j.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1109
+        },
+        {
+          "aspect_ratio": 0.75,
+          "height": 981,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/npJwmkK0uBvjscUAGGBCQ7cgvYq.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.737,
+          "height": 836,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/3DLADhLbsBRV4j1RF6O9lMCNHCS.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 616
+        },
+        {
+          "aspect_ratio": 0.746,
+          "height": 1122,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/z02LvY2AASpKcWuc4p6EZYsAj5O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 837
+        },
+        {
+          "aspect_ratio": 0.763,
+          "height": 1147,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/agcIgmuPRCHtkx6JDLg6fayIy5x.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 875
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/v9p0Qoh6lFCPZriX5BFU3lERgmV.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.672,
+          "height": 1607,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/AgAih5OMgGNpDZJZVtfqNfkts0n.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3mvTEgFVVMkP7ToYUTtueI0tLnP.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/5iMU3vQw4I1Ri79vzU4zezkmwG5.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2100,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/3QbNmAdqRMjZIftqjyn03PThFFi.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1400
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1103,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/o45G6xEUKPbUFUWvfIlJces2vGc.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 735
+        },
+        {
+          "aspect_ratio": 0.721,
+          "height": 1380,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/hFadyaBdnrr4u34Tl3d2FPjPSd9.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 995
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 750,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jOSoU1t77O0wyntDQfeMJpvyXEi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 500
+        },
+        {
+          "aspect_ratio": 0.74,
+          "height": 1511,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vRWLU3BxCAWt3MRDsJF8s2SgoSZ.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1118
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/sXnEN4CGgYrMHYGuZEvuZ0X2O0p.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/k6T7F65KdlxmBIAdehmz2W2lUGh.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2400,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eEuDhWwSLy2v1omRO62JenWIKjH.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1600
+        },
+        {
+          "aspect_ratio": 0.736,
+          "height": 970,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/j8fwvDEli9tfzTa9roiNE7WzIY6.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 714
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1008,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kIuWTSEFvTSWnXrSCCXrkUiHSdw.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 672
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1104,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/uCrvFt45BEqzjsv0d22b2kA2Xvp.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1003,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/kcWBgZizqWgNGciFQpR21dZa5O1.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 668
+        },
+        {
+          "aspect_ratio": 0.654,
+          "height": 1360,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hPmD2Px2XhWHyZmLkdZVpC7Xj5Q.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 890
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 953,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jUxibu63WPXZ4q6tXU4GwoZ39EA.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 635
+        }
+      ]
+    }
+  }
+}

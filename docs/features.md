@@ -9,6 +9,8 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 - Search by name, explore genres, and revisit recent searches.
 - Use an on-screen keyboard with a TV remote.
 - Browse popular, trending, community, and personal lists through Trakt.
+- Browse anime rows from AniList: popular this season, trending, and all-time popular.
+- Anime that TMDB keeps in one long season is shown with one season per AniList entry, each named after it.
 - Load more titles as you browse, with artwork sized for your screen.
 
 ## [Watching movies and episodes](features/watching.md)
@@ -63,6 +65,7 @@ Miauflix is a streaming app you run on your own computer or server. It brings to
 - Discover sources in the background and search when you open a title.
 - Search multiple providers and remove duplicate results.
 - Find individual episodes and episodes inside season downloads.
+- Search anime by AniDB episode and fansub naming (cour and absolute numbers, batches), with AnimeTosho for anime.
 - Check that a candidate source contains usable video.
 - Add supported Cardigann definitions or connect external Jackett/Prowlarr services through Torznab.
 - Manage providers: add, configure, enable, disable, test, reorder, and remove them where supported.

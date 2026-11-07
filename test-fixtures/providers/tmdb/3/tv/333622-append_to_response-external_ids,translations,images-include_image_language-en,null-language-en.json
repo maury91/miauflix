@@ -1,0 +1,627 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=26693",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"0130e61b2f880bb74d798381b5eaa524\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/4ncuq4Qo0NrSZBnxM3PABeROyVT.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2026-10-04",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 10765,
+        "name": "Sci-Fi & Fantasy"
+      }
+    ],
+    "homepage": "https://revo-anime.com",
+    "id": 333622,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-25",
+    "last_episode_to_air": {
+      "id": 7903855,
+      "name": "Deviate",
+      "overview": "Linka is abandoned by her party, and Lent takes on the powerful Quad Skeleton in order to save her.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-01",
+      "episode_number": 5,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 23,
+      "season_number": 1,
+      "show_id": 333622,
+      "still_path": "/r96csfxvmvWqvUwKramVpbZm0XS.jpg"
+    },
+    "name": "Magic Repo Man: Dumped by My Party, I'll Cash In with a Cute Support Fairy to Become the Strongest!",
+    "next_episode_to_air": {
+      "id": 7903856,
+      "name": "Episode 6",
+      "overview": "",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-08",
+      "episode_number": 6,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": null,
+      "season_number": 1,
+      "show_id": 333622,
+      "still_path": null
+    },
+    "networks": [
+      {
+        "id": 12,
+        "logo_path": "/7wuTb7iMz5yLoJ8hIyBnUxqR3mP.png",
+        "name": "HTB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 103,
+        "logo_path": "/j3xAzk1SYQQwrQOD7acdSz675Wa.png",
+        "name": "tv asahi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 576,
+        "logo_path": "/kW9bMQqnMFtPHvdoyCDpRqh7Gxt.png",
+        "name": "Nagoya TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1278,
+        "logo_path": "/49D825cN3Zb4slobKyGqIaI3Fx9.png",
+        "name": "KBC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 1410,
+        "logo_path": "/ca3Qw7exc3RPSd0CQFOZuSNbGjF.png",
+        "name": "ABC TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3756,
+        "logo_path": "/qEIIHhehdHtTQ4fhuXrA29mbzmo.png",
+        "name": "NCC",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4794,
+        "logo_path": "/zJwB70bgRT6rTDqgAlHiqwRT4y7.png",
+        "name": "OAB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 4798,
+        "logo_path": "/mXNVO8Wok1ClD7IO68PxyqBiGZZ.png",
+        "name": "ABA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6270,
+        "logo_path": "/xnHINTAs2GnfXJ3lalaQ0se8aup.png",
+        "name": "Niigata Television Network 21",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6284,
+        "logo_path": "/wKeS1TYkJVcV9tGPnvb92IugawP.png",
+        "name": "khb",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6285,
+        "logo_path": "/kNRmEa1EtmNOSc8CKMwdGfkXIyV.png",
+        "name": "KFB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6288,
+        "logo_path": "/gm3ksoi7zQMWpHsJJDzotTwF2GM.png",
+        "name": "HOME",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6289,
+        "logo_path": "/u9XEQkReRr35KxxMic1vPjJv3qo.png",
+        "name": "KSB",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6290,
+        "logo_path": "/kgfTkjNRsR0f2QEiaXf2fymKB6V.png",
+        "name": "Kagoshima Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6365,
+        "logo_path": "/zt6uycUeRmG8aiYRw420P5y4Xi0.png",
+        "name": "Iwate Asahi TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6366,
+        "logo_path": "/dmSnk8fI8hpQOyCIrUDhj3TxTT8.png",
+        "name": "Akita Asahi Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6367,
+        "logo_path": "/kAfR2xtRjdVhEoLPPSJJSBqIFLx.png",
+        "name": "Yamagata Television System",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6368,
+        "logo_path": "/34nBfbkqxcjrbpVraEfI6MkCvgY.png",
+        "name": "Shizuoka Asahi TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6369,
+        "logo_path": "/ztA2E1CY6L3aF2roadAOHtLiDCP.png",
+        "name": "Asahi Broadcasting Nagano",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6370,
+        "logo_path": "/onsaMWqPfrINyAfgi2FnP8conv1.png",
+        "name": "Hokuriku Asahi Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6372,
+        "logo_path": "/oF2QyQlm3yurCqIrohMC3UQZbxw.png",
+        "name": "Ehime Asahi TV",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6373,
+        "logo_path": "/6iuVpZdxAE8lgPENUBuwzCspYF7.png",
+        "name": "Yamaguchi Asahi Broadcasting",
+        "origin_country": "JP"
+      },
+      {
+        "id": 6374,
+        "logo_path": "/qBX8z5bj0EISsASQo5IE76BYpu5.png",
+        "name": "Kumamoto Asahi Broadcasting",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 12,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "貸した魔力は【リボ払い】で強制徴収",
+    "overview": "In a world where magical Gifts determine your destiny, Lent’s rare ability lets him lend his magic points to others. He forms an adventuring party called the Skypiercers with his friends, helping them become powerful heroes, only to be later cast aside as dead weight. Furious, Lent awakens the true power of his Gift: Forced Collection, the power to repossess magic. His revenge starts now.",
+    "popularity": 13.9496,
+    "poster_path": "/jPItUZ3PnbkGii2JS0QCeyNgLxt.jpg",
+    "production_companies": [
+      {
+        "id": 109486,
+        "logo_path": "/5sKwEOp3RdoAukp6qHwSE8MoTit.png",
+        "name": "SynergySP",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9300,
+        "logo_path": "/9sSD1XufVCJWAadNiC9Mwu994VD.png",
+        "name": "TV Asahi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 209105,
+        "logo_path": "/9FetaezkNMCYycfLnm5e2l1gedc.png",
+        "name": "TV Asahi Music",
+        "origin_country": "JP"
+      },
+      {
+        "id": 210006,
+        "logo_path": "/rmM9sCsz8j2ctRlm3V9YDvfhFlO.png",
+        "name": "Flex Comix",
+        "origin_country": "JP"
+      },
+      {
+        "id": 313164,
+        "logo_path": null,
+        "name": "Kotobukiya",
+        "origin_country": "JP"
+      },
+      {
+        "id": 188144,
+        "logo_path": "/tft4KzwjS3okGiN6duB3qwHkIX1.png",
+        "name": "BS Asahi",
+        "origin_country": "JP"
+      },
+      {
+        "id": 181285,
+        "logo_path": "/xHaPH1Yp50iEH7HOEwhxKTYRC6w.png",
+        "name": "Bushiroad Move",
+        "origin_country": "JP"
+      },
+      {
+        "id": 134892,
+        "logo_path": "/euHs3v7wg48dr580eeilS1gZStQ.png",
+        "name": "ABEMA",
+        "origin_country": "JP"
+      },
+      {
+        "id": 81209,
+        "logo_path": "/4I2wT82jKeHQ7HzmdNqBFYJK44j.png",
+        "name": "Ray",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2026-10-04",
+        "episode_count": 12,
+        "id": 540544,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/jPItUZ3PnbkGii2JS0QCeyNgLxt.jpg",
+        "season_number": 1,
+        "vote_average": 9
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "",
+    "type": "Scripted",
+    "vote_average": 7.5,
+    "vote_count": 4,
+    "external_ids": {
+      "imdb_id": "tt43650419",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 470347,
+      "tvrage_id": null,
+      "wikidata_id": "Q136766236",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "revo_anime"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Magic Repo Man: Dumped by My Party, I'll Cash In with a Cute Support Fairy to Become the Strongest!",
+            "overview": "In a world where magical Gifts determine your destiny, Lent’s rare ability lets him lend his magic points to others. He forms an adventuring party called the Skypiercers with his friends, helping them become powerful heroes, only to be later cast aside as dead weight. Furious, Lent awakens the true power of his Gift: Forced Collection, the power to repossess magic. His revenge starts now.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Magic Repo Man: Dumped by My Party, I'll Cash In With a Cute Support Fairy to Become the Strongest!",
+            "overview": "Se há algo que nunca é demais em um mundo de espadas e magia no estilo RPG, são pontos de magia! Seja para conjurar feitiços, aprimorar técnicas ou exibir uma habilidade incrível, você precisa gastar esses pontos para causar dano de verdade. Mas e se eles acabarem? Lent faz parte do grupo promissor conhecido como \"Perfuradores do Céu\" e, graças ao seu dom único, ele pode emprestar grandes quantidades de magia para os outros. Sem pontos de magia? Sem problemas com Lent por perto! Exceto que, agora que seus companheiros se tornaram heróis formidáveis ​​(graças à sua habilidade), sua utilidade é questionada. Expulso do grupo, Lent fica furioso... até descobrir um poder oculto em seu dom. Agora, com sua adorável e ardilosa parceira fada, ele vai recuperar cada resquício de magia de seu antigo grupo, e com juros!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "借出去的魔力要用【分期还款】强制收回",
+            "overview": "这是一个被创世神赐予的“天赋”所主宰命运的世界。在边境村庄生活的善良少年伦特，获得了能将自身魔力借给同伴的稀有辅助能力“魔藏库”，与村里的青梅竹马们共同组建了名为“断空之剑”的冒险小队，怀抱着作为支援者的使命踏上了冒险旅程。然而始终弱小的伦特被视作累赘，竟被队伍无情驱逐！在熊熊怒火与复仇之心的浇灌下，伦特的天赋完成蜕变，终将绽放真正的力量——那竟是能将长期外借的庞大魔力【强制回收】的特殊技能。被昔日同伴背叛的伦特，如今开始向那些背信弃义者追讨魔力，以此为养分不断变强的复仇故事，就此拉开序幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Magic Repo Man: Dumped by My Party, I’ll Cash In With a Cute Support Fairy to Become the Strongest!",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "ここは、創世神から授かる「ギフト」によって人生が大きく左右される世界――。辺境の村に暮らす心優しい少年・レントは、自分の魔力を仲間に“貸し与える”ことができる極めて稀有なサポート能力《魔蔵庫》を授かる。村の幼馴染たちと共にパーティー『断空の剣』を結成し、サポート役としての使命を胸に冒険の旅へと踏み出していく。しかし、いつまでも弱いままのレントはお荷物と見なされ、無情にもパーティーから“追放”されてしまう！激しい怒りと復讐心が芽生えたレントのギフトは進化を遂げ、真の能力を開花させる―― それは、貸し続けてきた膨大な魔力を【強制徴収】するスキルだった。裏切った“元仲間”たちから魔力を取り立て、それを糧に成長していくレントの“復讐”の物語が、今、始まる！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "빌려준 마력은 【리볼빙】으로 강제징수",
+            "overview": "창세신에게 받은 ‘기프트’가 인생을 크게 좌우하는 세계.변방의 마을에 사는 마음씨 착한 소년 렌트는 자신의 마력을 동료에게 ‘빌려줄’ 수 있는 지극히 희귀한 지원 능력 《마력 저장고》를 받는다.마을의 소꿉친구들과 함께 파티 ‘단공의 검’을 결성한 렌트는 동료들을 뒷받침하겠다는 사명감을 품고 모험을 떠난다.하지만 좀처럼 강해지지 않는 렌트는 짐짝 취급을 받다가 끝내 매정하게 파티에서 ‘추방’당하고 만다!거센 분노와 복수심에 눈뜬 렌트의 기프트는 진화를 거쳐 진정한 능력을 드러낸다.그것은 지금껏 빌려준 막대한 마력을 【강제 징수】하는 스킬이었다.자신을 배신한 ‘옛 동료들’에게서 마력을 거둬들이고, 그 힘을 밑거름 삼아 성장해 나가는 렌트.그의 복수극이 지금 시작된다!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Kashita Maryoku wa \"Revo Barai\" de Kyousei Choushuu",
+            "overview": "Lent, un joven con la habilidad de prestar grandes cantidades de magia a sus compañeros, es traicionado y expulsado de su grupo de aventureros, los \"Perforacielos\", al ser considerado inútil ahora que son fuertes.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Magic Repo Man: Dumped by My Party, I'll Cash In with a Cute Support Fairy to Become the Strongest!",
+            "overview": "Lent fait partie du groupe « Skypiercers ». Grâce à son don unique, il peut prêter une importante quantité de magie à ses partenaires. Cependant, il est viré du jour au lendemain du groupe par ses compagnons, tous devenus puissants grâce à son talent, ne le jugeant désormais plus utile au groupe.\n\nFurieux, Lent est bien décidé à récupérer jusqu'à la dernière goutte de magie qu'il a prêté à ses anciens compagnons, avec les intérêts, grâce au pouvoir caché de son don.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "用【循環利息】強制收回借出的魔力",
+            "overview": "這是創世神賜予的「天賦」會對一個人的人生帶來巨大變化的世界——。\n\n居住在邊境村莊、心地善良的少年連特，獲得了能將自己的魔力「借給」同伴，極為稀有的輔助能力「魔藏庫」。他與村裡的兒時玩伴們組成了隊伍「斷空之劍」，懷抱著身為輔助者的使命，踏上冒險之旅。然而，始終很弱的連特卻被視為累贅，最後甚至慘遭隊伍無情「放逐」！\n\n連特心中燃起了強烈的憤怒與復仇之火，他的天賦也因此進化，導致真正的能力就此覺醒——那就是，能將自己長年借出的龐大魔力【強制收回】的技能。\n\n向背叛自己的「前夥伴」討回魔力，並以此為養分持續成長。\n\n屬於連特的「復仇」故事，現在正式揭開序幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "用【循環利息】強制收回借出的魔力",
+            "overview": "這是創世神賜予的「天賦」會對一個人的人生帶來巨大變化的世界——。\n\n居住在邊境村莊、心地善良的少年連特，獲得了能將自己的魔力「借給」同伴，極為稀有的輔助能力「魔藏庫」。他與村裡的兒時玩伴們組成了隊伍「斷空之劍」，懷抱著身為輔助者的使命，踏上冒險之旅。然而，始終很弱的連特卻被視為累贅，最後甚至慘遭隊伍無情「放逐」！\n\n連特心中燃起了強烈的憤怒與復仇之火，他的天賦也因此進化，導致真正的能力就此覺醒——那就是，能將自己長年借出的龐大魔力【強制收回】的技能。\n\n向背叛自己的「前夥伴」討回魔力，並以此為養分持續成長。\n\n屬於連特的「復仇」故事，現在正式揭開序幕！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "",
+            "overview": "En un mundo donde los dones mágicos determinan el destino, la singular habilidad de Lent le permite prestar sus puntos de magia a otros. Forma un grupo de aventureros llamado los Perforadores del Cielo con sus amigos, ayudándolos a convertirse en poderosos héroes, solo para ser posteriormente descartado como una carga. Furioso, Lent despierta el verdadero poder de su Don: la Recolección Forzada, el poder de recuperar la magia. Su venganza comienza ahora.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Magic Repo Man: Dumped by My Party, I’ll Cash In with a Cute Support Fairy to Become the Strongest!",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Одолженная мной магия будет принудительно изъята посредством возобновляемого кредита",
+            "overview": "Лэнт - участник многообещающей группы, известной как \"Скайперы\", и благодаря своему уникальному дару он может одалживать огромное количество магии другим. Нет члена парламента? С Лэнтом проблем не возникнет! За исключением того, что теперь, когда его товарищи стали грозными героями (благодаря его мастерству), его полезность ставится под сомнение. Изгнанный из группы, Лэнт в ярости... пока не обнаруживает скрытую силу своего Дара. Теперь, со своей очаровательно хитрой партнершей—феей, он собирается вернуть все, что осталось от его прежней вечеринки, - и с лихвой!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "In een wereld waar magische gaven je lot bepalen, zorgt Lents zeldzame talent ervoor dat hij zijn magische punten aan anderen kan lenen. Hij vormt met zijn vrienden een avonturengezelschap genaamd de Skypiercers en helpt hen krachtige helden te worden, om later als dood gewicht terzijde te worden geschoven. Woedend ontwaakt Lent de ware kracht van zijn geschenk: Forced Collection, de kracht om magie terug te winnen. Zijn wraak begint nu.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "พลังเวทที่ให้ยืมไปจะถูกบังคับเรียกเก็บผ่านการผ่อนชำระ",
+            "overview": "เร็นท์ เด็กหนุ่มจิตใจอ่อนโยนจากหมู่บ้านชายแดน ครอบครองกิฟต์สายซัพพอร์ตระดับหายากอย่าง “คลังพลังเวท” ซึ่งเปิดให้พวกพ้องยืมพลังเวทของตนไปใช้ได้ เขาได้ร่วมก่อตั้งปาร์ตี้ “ดาบผ่านภา” กับเพื่อนสมัยเด็ก และออกเดินทางโดยแบกรับภาระอันหนักอึ้งในฐานะสายสนับสนุน\n\nทว่า แม้เวลาจะผ่านไปเท่าใด เร็นท์ก็ยังคงอ่อนแอเช่นเดิม จนถูกคนในปาร์ตี้มองเป็นเพียง “สัมภาระ” และถูกขับไล่ออกมาอย่างเลือดเย็น ความโกรธและความแค้นที่สั่งสมได้ปลุกให้กิฟต์ของเขาเกิดการ “วิวัฒนาการ” จนสำแดงพลังที่แท้จริงนั่นคือสกิล “บังคับดึงคืน” ที่จะกระชากพลังเวทก้อนโตทั้งหมดที่เคยให้ยืมไป! เมื่อทวงคืนพลังจากอดีตพวกพ้องที่ทรยศมาใช้เป็นต้นทุนในการเติบโต เรื่องราวแห่ง “การแก้แค้น” ของเร็นท์จึงได้เปิดฉากขึ้น!",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Magic Repo Man: Dumped by My Party, I'll Cash In With a Cute Support Fairy to Become the Strongest!",
+            "overview": "In un mondo dove la magia è potere, Lent possiede un dono raro: può prestare i suoi punti magia agli altri. Grazie a lui, il gruppo degli “Skypiercers” è diventato leggendario, finché i suoi compagni, ormai forti abbastanza, non lo scacciano perché lo considerano inutile. Tradito, Lent scopre che il suo dono nasconde un potere segreto: può riprendersi la magia che ha prestato, con gli interessi. Insieme a una fatina tanto carina quanto astuta, decide di vendicarsi e di diventare il più forte di tutti.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Thu Hồi Cưỡng Chế Ma Lực Đã Cho Mượn Bằng Hình Thức Trả Góp",
+            "overview": "Đây là một thế giới nơi cuộc đời bị định đoạt phần lớn bởi \"\"Thiên phú\"\" được Thần Sáng Thế ban tặng.\n\nLent, một thiếu niên tốt bụng sống ở một ngôi làng hẻo lánh, được ban cho năng lực hỗ trợ cực kỳ hiếm có mang tên \"\"Ma Tàng Khố\"\", cho phép cậu có thể cho mượn ma lực của chính mình cho đồng đội.\n\nCậu cùng những người bạn thuở nhỏ trong làng thành lập tổ đội \"\"Đoạn Không Kiếm\"\", và mang trong mình sứ mệnh của một người hỗ trợ dấn bước vào hành trình phiêu lưu.\n\nThế nhưng, vì mãi vẫn yếu ớt, Lent bị coi là một gánh nặng và đã bị trục xuất khỏi tổ đội một cách tuyệt tình!\n\nSự phẫn nộ tột cùng và khát vọng trả thù nảy sinh đã khiến Thiên phú của Lent tiến hóa, bộc lộ năng lực thực sự.\n\nĐó chính là kỹ năng \"\"Cưỡng Chế Thu Hồi\"\" lại lượng ma lực khổng lồ mà cậu đã liên tục cho mượn bấy lâu.\n\nĐòi lại ma lực từ những đồng đội cũ đã phản bội, biến nó thành sức mạnh để thăng tiến, câu chuyện báo thù của Lent nay chính thức bắt đầu!",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4ncuq4Qo0NrSZBnxM3PABeROyVT.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fXCe8Tuh8pJ9BnU13kh1vLfjwIo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/9zo8R2dlftorSAzm1409fy7E76F.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6cuEz4FtVsHalw8U85w2D8nrmWD.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 4.329,
+          "height": 277,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/v8S7tFMqpiAYn65Xfu0kH9rCvYL.png",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1199
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/jPItUZ3PnbkGii2JS0QCeyNgLxt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 2,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 1499,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1V6XkNUZMVOTG6TgKWwq7KPedi4.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.708,
+          "height": 1967,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nsYYD04r7KWWtEeiVLyVJKmWw9O.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1392
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/JQn2OSc3RMY1Q2WreMSWwxM0fi.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1439
+        }
+      ]
+    }
+  }
+}

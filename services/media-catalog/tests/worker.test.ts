@@ -33,6 +33,7 @@ describe('CatalogWorkerManager', () => {
         port: 3001,
         dataDir: '/tmp/catalog',
         disableBackgroundTasks: false,
+        anime: { animeLists: '', aniZip: '' },
         bunqueue: { host: '127.0.0.1', port: 6789 },
       },
       () => (catalogAvailable ? catalog : null) as never

@@ -1,0 +1,1123 @@
+{
+  "headers": {
+    "alt-svc": "h3=\":443\"; ma=86400",
+    "cache-control": "public, max-age=23061",
+    "content-type": "application/json;charset=utf-8",
+    "etag": "W/\"ec69519e937de5574c29f6f3c9172c3b\"",
+    "vary": "Origin",
+    "x-gateway-cache-status": "HIT"
+  },
+  "status": 200,
+  "anonymized": false,
+  "data": {
+    "adult": false,
+    "backdrop_path": "/zYIFOocMfsKAEysBjhZ8akfXFdB.jpg",
+    "created_by": [],
+    "episode_run_time": [
+      24
+    ],
+    "first_air_date": "2021-04-11",
+    "genres": [
+      {
+        "id": 16,
+        "name": "Animation"
+      },
+      {
+        "id": 10759,
+        "name": "Action & Adventure"
+      },
+      {
+        "id": 80,
+        "name": "Crime"
+      },
+      {
+        "id": 18,
+        "name": "Drama"
+      }
+    ],
+    "homepage": "https://tokyo-revengers-anime.com/",
+    "id": 105009,
+    "in_production": true,
+    "languages": [
+      "ja"
+    ],
+    "last_air_date": "2026-10-31",
+    "last_episode_to_air": {
+      "id": 7814452,
+      "name": "Turbulent Period",
+      "overview": "Takemichi desperately reaches out to grab Mikey as he leaps from the rooftop. Thrown ten years into the past, Takemichi lands in a world two years after Tokyo Manji Gang disbanded, where a war for supremacy rages between Rokuhara Tandai, Brahman, and Kanto Manji.",
+      "vote_average": 7,
+      "vote_count": 1,
+      "air_date": "2026-10-31",
+      "episode_number": 55,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 105009,
+      "still_path": "/roazN4ITalFcWJvVgjgK5Gof4Xr.jpg"
+    },
+    "name": "Tokyo Revengers",
+    "next_episode_to_air": {
+      "id": 8038648,
+      "name": "Shows Her Color",
+      "overview": "Takemichi lands in a brutal clash between Rokuhara Tandai and Brahman. Both gangs are desperate to recruit him, but Takemichi has his own agenda. He shocks everyone by declaring that he wants to take down Mikey, leader of Kanto Manji. After the police intervene and Rokuhara Tandai retreats, Takemichi comes face to face with Brahman's leader.",
+      "vote_average": 0,
+      "vote_count": 0,
+      "air_date": "2026-11-07",
+      "episode_number": 56,
+      "episode_type": "standard",
+      "production_code": "",
+      "runtime": 24,
+      "season_number": 1,
+      "show_id": 105009,
+      "still_path": "/pMYG3LEgyWJ0tyfFhCIJjRA1eF8.jpg"
+    },
+    "networks": [
+      {
+        "id": 94,
+        "logo_path": "/7RNXnyiMbjgqtPAjja13wchcrGI.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 160,
+        "logo_path": "/lUACMATs6jcscXIrzNCQzbvNVN5.png",
+        "name": "TBS",
+        "origin_country": "JP"
+      }
+    ],
+    "number_of_episodes": 63,
+    "number_of_seasons": 1,
+    "origin_country": [
+      "JP"
+    ],
+    "original_language": "ja",
+    "original_name": "東京リベンジャーズ",
+    "overview": "Takemichi Hanagaki is a freelancer that’s reached the absolute pits of despair in his life. He finds out that the only girlfriend he ever had, in middle school, Hinata Tachibana, had been killed by the ruthless Tokyo Manji Gang. The day after hearing about her death, he’s standing on the station platform and ends up being pushed over onto the tracks by a herd of people. He closes his eyes thinking he’s about to die, but when he opens his eyes back up, he somehow had gone back in time 12 years. Now that he’s back living the best days of his life, Takemichi decides to get revenge on his life.",
+    "popularity": 47.37,
+    "poster_path": "/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg",
+    "production_companies": [
+      {
+        "id": 42521,
+        "logo_path": "/pQfzDuY4chOVbSmsurvB9MHFsYa.png",
+        "name": "LIDENFILMS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 9148,
+        "logo_path": "/rtW3NadfF4kR5mTW00ahiFxw6k7.png",
+        "name": "Pony Canyon",
+        "origin_country": "JP"
+      },
+      {
+        "id": 59118,
+        "logo_path": "/9nTCEBgGaaI5swkv8gy2vny0Mb5.png",
+        "name": "Kodansha",
+        "origin_country": "JP"
+      },
+      {
+        "id": 36342,
+        "logo_path": "/3xYrMZn6SrupK4R83EUgNPjzqj4.png",
+        "name": "Sammy",
+        "origin_country": "JP"
+      },
+      {
+        "id": 17981,
+        "logo_path": "/8UABNMysukRi4udTHYxcNUMbPR1.png",
+        "name": "AT-X",
+        "origin_country": "JP"
+      },
+      {
+        "id": 3363,
+        "logo_path": "/sj3vD7n63bTCih7bcf6GnWvRf1Q.png",
+        "name": "MBS",
+        "origin_country": "JP"
+      },
+      {
+        "id": 50906,
+        "logo_path": "/b334NexgTgoJiKPaDxxoWPq0kd3.png",
+        "name": "Ultra Super Pictures",
+        "origin_country": "JP"
+      },
+      {
+        "id": 91520,
+        "logo_path": "/wdcFLdFVOPEm3uEp6Hb9OXgi5Zd.png",
+        "name": "STUDIO MAUSU",
+        "origin_country": "JP"
+      },
+      {
+        "id": 313063,
+        "logo_path": null,
+        "name": "HI Production",
+        "origin_country": "JP"
+      }
+    ],
+    "production_countries": [
+      {
+        "iso_3166_1": "JP",
+        "name": "Japan"
+      }
+    ],
+    "seasons": [
+      {
+        "air_date": "2021-03-30",
+        "episode_count": 44,
+        "id": 188962,
+        "name": "Specials",
+        "overview": "",
+        "poster_path": "/7BRtAyw86UXVuUZQOp1LmDPEu8p.jpg",
+        "season_number": 0,
+        "vote_average": 0
+      },
+      {
+        "air_date": "2021-04-11",
+        "episode_count": 63,
+        "id": 153971,
+        "name": "Season 1",
+        "overview": "",
+        "poster_path": "/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg",
+        "season_number": 1,
+        "vote_average": 7.3
+      }
+    ],
+    "softcore": false,
+    "spoken_languages": [
+      {
+        "english_name": "Japanese",
+        "iso_639_1": "ja",
+        "name": "日本語"
+      }
+    ],
+    "status": "Returning Series",
+    "tagline": "I'm not gonna let you die.",
+    "type": "Scripted",
+    "vote_average": 8.405,
+    "vote_count": 1378,
+    "external_ids": {
+      "imdb_id": "tt13196080",
+      "freebase_mid": null,
+      "freebase_id": null,
+      "tvdb_id": 393478,
+      "tvrage_id": null,
+      "wikidata_id": "Q100255568",
+      "facebook_id": null,
+      "instagram_id": null,
+      "twitter_id": "anime_toman"
+    },
+    "translations": {
+      "translations": [
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Takemichi Hanagaki es un trabajador que ha tocado fondo en la vida. Entonces descubre que la única novia que tuvo jamás, en sus años de secundaria, la joven Hinata Tachibana, ha muerto a manos de la pandilla Tokyo Manji. El día que descubre la noticia de su muerte, está en la estación de tren cuando alguien lo empuja a las vías. Cierra los ojos pensando que está a punto de morir, pero cuando los abre, sin saber cómo, ha retrocedido 12 años en el tiempo. Ahora podrá revivir aquellos días que él consideraba los mejores de su vida y Takemichi intentará vengarse de su vida.",
+            "homepage": "",
+            "tagline": "En el cielo y la tierra, solo yo soy honrado."
+          }
+        },
+        {
+          "iso_3166_1": "FR",
+          "iso_639_1": "fr",
+          "name": "Français",
+          "english_name": "French",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Takemichi Hanagaki n'a pas vraiment réussi sa vie. Il fait des petits boulots sans intérêt et lorsqu'il apprend que la seule petite amie qu'il ait jamais eu au collège, Hinata Tachibana, a été tuée par l'impitoyable gang Tokyo Manji-kai, il est anéanti. Le lendemain, toujours sous le choc, il est poussé sur les rails de la gare lors d'un mouvement de foule. Mais Takemichi ne meurt pas et quand il se réveille, il est revenu douze ans en arrière. Il va ainsi retrouver ses meilleures années, mais aussi tenter de sauver celle qui l'aime et prendre sa revanche sur la vie…",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "name": "English",
+          "english_name": "English",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Takemichi Hanagaki is a freelancer that’s reached the absolute pits of despair in his life. He finds out that the only girlfriend he ever had, in middle school, Hinata Tachibana, had been killed by the ruthless Tokyo Manji Gang. The day after hearing about her death, he’s standing on the station platform and ends up being pushed over onto the tracks by a herd of people. He closes his eyes thinking he’s about to die, but when he opens his eyes back up, he somehow had gone back in time 12 years. Now that he’s back living the best days of his life, Takemichi decides to get revenge on his life.",
+            "homepage": "",
+            "tagline": "I'm not gonna let you die."
+          }
+        },
+        {
+          "iso_3166_1": "RU",
+          "iso_639_1": "ru",
+          "name": "Pусский",
+          "english_name": "Russian",
+          "data": {
+            "name": "Токийские мстители",
+            "overview": "26-летний девственник-неудачник Такэмичи узнает, что единственная девушка, которая с ним встречалась, погибла в ходе разборок токийской группировки «Токио Банкай». И после того, как парень падает под поезд, он перемещается на 12 лет в прошлое, во времена, когда еще учился в средней школе. Такэмичи решает изменить свое будущее, чтобы спасти девушку. Заручившись помощью ее младшего брата, парень начинает свой путь к верхушке самой опасной группировки города.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "KR",
+          "iso_639_1": "ko",
+          "name": "한국어/조선말",
+          "english_name": "Korean",
+          "data": {
+            "name": "도쿄 리벤저스",
+            "overview": "변변치 못한 아르바이트로 하루하루를 버티는 26살 하나가키 타케미치는 중학생 시절의 유일한 여자친구였던 타치바나 히나타가 흉악한 불량배 집단 도쿄만지회의 항쟁에 휘말려 목숨을 잃었다는 뉴스를 접한다. 그리고 다음 날, 역 플랫폼에서 떠밀려 선로로 떨어진 순간 그는 12년 전 중학생 시절로 돌아가 있다. 과거를 바꾸면 미래도 바꿀 수 있다는 사실을 알게 된 타케미치는 히나타를 구하기 위해 도쿄만지회의 정점에 서기로 결심한다. 싸움 실력은 형편없지만 결코 물러서지 않는 근성 하나로, 그는 거친 불량배들의 세계 한가운데로 뛰어드는데...",
+            "homepage": "",
+            "tagline": "인생 최고의 여자친구를 구하기 위해, 나는 다시 불량배가 된다"
+          }
+        },
+        {
+          "iso_3166_1": "BR",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Num momento difícil da sua vida, Takemichi fica ainda pior ao saber que a menina que ele amava desde a época da escola foi morta pela gangue Tokyo Manji. No dia seguinte, ao esperar o trem na estação, Takemichi é empurrado nos trilhos. Mas, em vez de morrer, ele percebe que viajou no tempo, voltando para seus anos de escola. É a chance para Takemichi reescrever sua história e tentar evitar a morte da amada.",
+            "homepage": "",
+            "tagline": "Eu não vou deixar você morrer."
+          }
+        },
+        {
+          "iso_3166_1": "JP",
+          "iso_639_1": "ja",
+          "name": "日本語",
+          "english_name": "Japanese",
+          "data": {
+            "name": "",
+            "overview": "人生どん底のダメフリーター花垣武道（タケミチ）。中学時代に付き合っていた人生唯一の恋人・橘日向（ヒナタ）が、最凶最悪の悪党連合”東京卍會”に殺されたことを知る。\n\n事件を知った翌日、駅のホームにいたタケミチは何者かに背中を押され線路に転落し死を覚悟したが、目を開けると何故か12年前にタイムリープしていた。\n\n人生のピークだった12年前の中学時代にタイムリープし、恋人を救うため、逃げ続けた自分を変えるため、人生のリベンジを開始する！",
+            "homepage": "",
+            "tagline": "一番熱くて、一番切ない タイムリープサスペンス"
+          }
+        },
+        {
+          "iso_3166_1": "DE",
+          "iso_639_1": "de",
+          "name": "Deutsch",
+          "english_name": "German",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Takemichi Hanagakis Leben ist an einem Tiefpunkt angelangt. Gerade als er dachte, dass es nicht mehr schlimmer werden kann, findet er heraus, dass Hinata Tachibana, seine Ex-Freundin, von der Tokyo Manji Gang ermordet wurde: eine Gruppe bösartiger Krimineller, die seit geraumer Zeit den Frieden der Gesellschaft stört.\n\nTakemichi fragt sich, ab welchem Zeitpunkt alles so schief laufen konnte. Kurz darauf findet er sich in einer Zeitreise wieder, die ihn 12 Jahre in die Vergangenheit führt – in die Zeit, als er noch mit Hinata zusammen war. Als er erkennt, dass er eine Chance hat, sie zu retten, entscheidet sich Takemichi dazu, die Tokyo Manji Gang zu infiltrieren und die Ränge zu erklimmen, um die Zukunft umzuschreiben und Hinata vor ihrem tragischen Schicksal zu bewahren.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "IT",
+          "iso_639_1": "it",
+          "name": "Italiano",
+          "english_name": "Italian",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "La vita del giovane Takemichi Hanagaki tocca il fondo quando apprende che l'unica ragazza avuta in passato, Hinata Tachibana, è stata uccisa dalla spietata banda della Tokyo Manji Gang. Vittima di un incidente, il ragazzo viaggia improvvisamente indietro nel tempo di dodici anni. Tornato ai tempi delle scuole medie, Takemichi decide di infiltrarsi nella gang per salvarla e cambiare il futuro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CN",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "东京复仇者",
+            "overview": "东京卍复仇者动画全集改编自同名漫画，2021年4月播出。 主角‧武道做什么事情都不顺，又住在破旧老公寓里，从电视上得知国中时期的前女友‧日向无端卷入帮派火拼而身亡。某天他在月台等车，居然跌落铁轨，正他以为自己死定了，回神之后却发现自己回到12年前的国中时期。后来又遇上了日向的弟弟‧直人，告诉他12年后发生的事实，要求他要保护姐姐，双方握手之后他又再次回到现代。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TW",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "東京復仇者",
+            "overview": "主角・武道做什麼事情都不順，又住在破舊老公寓裡，從電視上得知國中時期的前女友・日向無端捲入幫派火拼而身亡。某天他在月台等車，居然跌落鐵軌，正他以為自己死定了，回神之後卻發現自己回到 12 年前的國中時期。後來又遇上了日向的弟弟・直人，告訴他 12 年後發生的事實，要求他要保護姐姐，雙方握手之後他又再次回到現代……。",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "MX",
+          "iso_639_1": "es",
+          "name": "Español",
+          "english_name": "Spanish",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Takemichi es un desempleado de 26 años que descubre que la chica con la que salió en secundaria, la que fue su única novia, ha muerto. Tras eso sufre un accidente del cual, al despertar, descubre que se ha transportado a sus años de secundaria. Con ello Takemichi jura que cambiará el futuro y salvará a la chica, y para hacerlo necesita llegar a ser el líder de la banda de delincuentes más salvaje y brutal de Kanto.",
+            "homepage": "",
+            "tagline": "En el cielo y la tierra, solo yo soy honrado."
+          }
+        },
+        {
+          "iso_3166_1": "IL",
+          "iso_639_1": "he",
+          "name": "עִבְרִית",
+          "english_name": "Hebrew",
+          "data": {
+            "name": "הנוקמים מטוקיו",
+            "overview": "חייו של טאקמיצ'י נמצאים בשפל, אולם כאשר הוא חושב כי גרוע יותר כבר לא יכול להיות – בת זוגו לשעבר הינאטה נרצחת על-ידי ארגון פשע. בדיוק אז מוצא עצמו טאקמיצ'י נוסע בזמן 12 שנים לאחור, לתקופה בה הוא עדיין יוצא עם הינאטה. טאקמיצ'י מנצל את ההזדמנות שניתנה לו כדי להסתנן אל ארגון הפשע ולמנוע את גורלה הטראגי של הינאטה.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "UA",
+          "iso_639_1": "uk",
+          "name": "Український",
+          "english_name": "Ukrainian",
+          "data": {
+            "name": "Токійські месники",
+            "overview": "Головний герой – нехлюй, нероба та невдаха Такемічі Ханаґакі, який вважає, що саме школа стала причиною його життєвих невдач. Коли ж він дізнається, що його подружка зі школи Хіната вбиті токійською бандою. Такемачі дивовижним чином переноситься в минуле, до школи, де вирішує змінити своє життя в майбутньому, ставши лідером однієї з молодіжних банд...",
+            "homepage": "",
+            "tagline": "Минуле — поле битви за майбутнє."
+          }
+        },
+        {
+          "iso_3166_1": "PL",
+          "iso_639_1": "pl",
+          "name": "Polski",
+          "english_name": "Polish",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Po tym, jak gang Tokyo Manji zabija byłą dziewczynę Takemichiego Hanagaki, w mężczyźnie coś pęka i marzy on, aby nigdy nie doszło do tej tragedii. Zdecydowanie może ułatwić mu to niespodziewana podróż w czasie do przeszłości — wtedy, gdy on i jego była dziewczyna byli jeszcze parą. Chcąc uratować ukochaną za wszelką cenę, Takemichi zaczyna piąć się w górę po stopniach w gangu, który za dwanaście lat ma być odpowiedzialny za morderstwo ważnej dla niego osoby.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TR",
+          "iso_639_1": "tr",
+          "name": "Türkçe",
+          "english_name": "Turkish",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Takemichi Hanagaki, hayatındaki umutsuzluğun mutlak çukurlarına ulaşan bir freelancer. Şimdiye kadar yaşadığı tek kız arkadaşı, Hinata Tachibana, Acımasız Tokyo Manji Çetesi tarafından öldürüldüğünü öğrendi. Ölümünü duyduktan sonraki gün, istasyon platformunda duruyor ve bir insan sürüsü tarafından parçalara itiliyor. Ölmek üzere olduğunu düşünen gözlerini kapattı, ama gözlerini geri açtığında, bir şekilde 12 yıl içinde geri döndü. Şimdi hayatının en iyi günlerini yaşadığını, Takemichi hayatından intikam almaya karar verdi.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "TH",
+          "iso_639_1": "th",
+          "name": "ภาษาไทย",
+          "english_name": "Thai",
+          "data": {
+            "name": "โตเกียว รีเวนเจอร์ส",
+            "overview": "ในปี 2017 ทาเคมิจิ หนุ่มที่ใช้ชีวิตวัยทำงานอย่างไร้จุดหมาย จนได้ข่าวว่า ฮินาตะ อดีตแฟนสาวตอนมัธยมต้นถูกแก๊งโตเกียวมันจิไคฆ่าตายพร้อมน้องชายของเธอ เขาจึงเริ่มคิดถึงความผิดพลาดของตน เมื่อเขาประสบอุบัติเหตุถูกรถไฟชน ทำให้เขาพบว่าตนสามารถย้อนเวลากลับไป 12 ปีก่อน ในปี 2005 ในช่วงที่เขาเคยรุ่งเรือง มีชื่อด้านชกต่อย เมื่อกลับมายุคปัจจุบัน เขาพบว่าโลกปัจจุบันถูกเปลี่ยนแปลงตามผลของการเปลี่ยนแปลงอดีต อีกทั้งน้องชายฮินาตะยังไม่ตาย แล้วยังฝากความหวังให้ช่วยพี่สาวตนไว้กับ ทาเคมิจิ ที่ข้ามกาลเวลาได้",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "VN",
+          "iso_639_1": "vi",
+          "name": "Tiếng Việt",
+          "english_name": "Vietnamese",
+          "data": {
+            "name": "Anh Sẽ Làm Giang Hồ Vì Em",
+            "overview": "Anh Sẽ Làm Giang Hồ Vì Em xoay quanh một người thiếu niên thất nghiệp tên là Hanagaki Takemichi đã từng hẹn hò với một cô gái hồi cấp hai, nhưng cô ấy đã qua đời. Sau một vụ tai nạn, Takemichi đã phát hiện ra rằng mình đã quay trở về hồi cấp hai. Để cứu được người thương của mình, hành trình thay đổi tương lai của Takemichi bắt đầu",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BS",
+          "iso_639_1": "bs",
+          "name": "Bosanski",
+          "english_name": "Bosnian",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "CZ",
+          "iso_639_1": "cs",
+          "name": "Český",
+          "english_name": "Czech",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Takemiči Hanagaki je nezávislý pracovník, který se ve svém životě dostal na samé dno zoufalství. Zjistí, že jeho jediná přítelkyně Hinata Tačibana, kterou kdy měl na střední škole, byla zabita nelítostným gangem Tokyo Manji. Den poté, co se o její smrti dozví, stojí na nádražním nástupišti a skončí tak, že ho stádo lidí shodí na koleje. Zavře oči v domnění, že brzy zemře, ale když oči znovu otevře, nějakým způsobem se vrátil v čase o dvanáct let zpět. Teď, když je zpátky a prožívá nejlepší dny svého života, se Takemiči rozhodne, že se mu pomstí.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "RO",
+          "iso_639_1": "ro",
+          "name": "Română",
+          "english_name": "Romanian",
+          "data": {
+            "name": "Razbunatorii din Tokyo",
+            "overview": "Viața lui Takemichi Hanagaki este cât se poate de nașpa. Exact când credea că nimic nu poate fi mai rău, află că Hinata Tachibana, fosta lui iubită, a fost ucisă de Banda Tokyo Manji: un grup de criminali vicioși care perturbă pacea societății de ceva vreme. După ce s-a tot întrebat unde a greșit, Takemichi călătorește dintr-odată în timp, ajungând cu 12 ani în trecut... când încă era într-o relație cu Hinata. După ce și-a dat seama că are șansa de a o salva, Takemichi se hotărăște să se infiltreze în Banda Tokyo Manji și urcă în ierarhia lor pentru a rescrie viitorul și a preveni soarta tragică a Hinatei.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HU",
+          "iso_639_1": "hu",
+          "name": "Magyar",
+          "english_name": "Hungarian",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Egy középkorú lúzer visszautazik az időben, hogy megmentse fiatalkori önmagát a későbbi pusztulástól.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "PT",
+          "iso_639_1": "pt",
+          "name": "Português",
+          "english_name": "Portuguese",
+          "data": {
+            "name": "Os Vingadores de Tóquio",
+            "overview": "Recuando 12 anos no tempo, até aos tempos da secundária (os melhores anos da sua vida), Takemichi reescreve a história fazendo escolhas diferentes que lhe permitam salvar a vida da sua amada no futuro.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "SA",
+          "iso_639_1": "ar",
+          "name": "العربية",
+          "english_name": "Arabic",
+          "data": {
+            "name": "مُنتقمو طوكيو",
+            "overview": "هاناغاكي تاكيميتشي موظف حرّ وصل لأسوأ فترة في حياته. اكتشف أنّ عشيقته الوحيدة التي حظي بها في حياته والتي واعدها في الإعدادية، تاتشيبانا هيناتا قبل قُتلت من طرف عصابة طوكيو مانجي. في اليوم الذي يلي يوم سماعه لخبر موتها، كان يقف على رصيف المحطة ودُفع إلى السكة من طرف حشد من الناس. أغلق عينيه متوقعًا موته، لكن عندما فتحهما، وجد نفسه قد عاد بالزمن 12 سنة. بعد أن عاد ليعيش أفضل أيام حياته، يقرر تاكيميتشي الانتقام من حياته بإنقاذ عشيقته وتغيير نفسه التي كان يهرب منها.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ID",
+          "iso_639_1": "id",
+          "name": "Bahasa indonesia",
+          "english_name": "Indonesian",
+          "data": {
+            "name": "",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "HK",
+          "iso_639_1": "zh",
+          "name": "普通话",
+          "english_name": "Mandarin",
+          "data": {
+            "name": "東京復仇者",
+            "overview": "打工族花垣武道處於人生低潮並且一事無成。他無意中得知中學時曾經交往，人生中唯一一個女朋友——橘日向喪命的消息，而喪命原因就是兇暴且惡劣透頂的壞蛋聯盟「東京卍會」。\n\n聽説此事的隔天，武道在車站月台被某人推下路軌，本以為必死無疑的他再次睜眼時發現自己不知為何穿越了時空，回到 12 年前。\n\n武道穿越時空，回到人生巔峯的中學時期，為了拯救戀人以及改變持續逃避的自己，他將為自己的人生展開復仇！",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "FI",
+          "iso_639_1": "fi",
+          "name": "suomi",
+          "english_name": "Finnish",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "Takemichi Hanagaki, joka on valmiiksi huonossa jamassa ja epäonnekas, järkyttyy kuullessaan, että Tokyo Manji -rikollisjengi on tappanut hänen elämänsä rakkauden yläasteelta. Takemichin odottaessa junaa seuraavana päivänä, hänet työnnetään takaapäin vastaantulevan junan eteen. Hän varautuu kuolemaan, mutta herääkin huomatakseen, että hän on matkustanut kaksitoista vuotta menneisyyteen ja on jälleen yläasteen oppilas. Nyt Takemichi voi kirjoittaa historian uudelleen tekemällä eri valintoja ja toivoo voivansa estää rakkaansa kuoleman.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "NL",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Takemichi Hanagaki is een freelancer die de absolute wanhoop in zijn leven heeft bereikt. Hij komt erachter dat de enige vriendin die hij ooit op de middelbare school had, Hinata Tachibana, was vermoord door de meedogenloze Tokyo Manji Gang. De dag nadat hij over haar dood heeft gehoord, staat hij op het perron van het station en wordt hij door een kudde mensen het spoor op geduwd. Hij sluit zijn ogen en denkt dat hij op het punt staat te sterven, maar toen hij zijn ogen weer open deed, is hij  twaalf jaar terug in de tijd gegaan. Nu hij terug de beste dagen van zijn leven beleeft, besluit Takemichi wraak te nemen.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "ES",
+          "iso_639_1": "ca",
+          "name": "Català",
+          "english_name": "Catalan",
+          "data": {
+            "name": "Tokyo Revengers",
+            "overview": "",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "GR",
+          "iso_639_1": "el",
+          "name": "ελληνικά",
+          "english_name": "Greek",
+          "data": {
+            "name": "",
+            "overview": "Ο Τακεμίτσι Χαναγκάκι είναι ένας ελεύθερος επαγγελματίας που έχει φτάσει στο απόλυτο ναδίρ της ζωής του. Ανακαλύπτει ότι η μοναδική κοπέλα που είχε ποτέ, η Χινάτα Τατσιμπάνα από τα χρόνια του γυμνασίου, δολοφονήθηκε από την αδίστακτη συμμορία Tokyo Manji. Την επόμενη μέρα αφού μαθαίνει για τον θάνατό της, καθώς στέκεται στην αποβάθρα του σταθμού, σπρώχνεται από το πλήθος και πέφτει στις γραμμές του τρένου. Κλείνει τα μάτια του νομίζοντας ότι θα πεθάνει, αλλά όταν τα ξανανοίγει, διαπιστώνει ότι έχει ταξιδέψει στο παρελθόν, 12 χρόνια πίσω. Τώρα που ζει ξανά τις καλύτερες μέρες της ζωής του, ο Τακεμίτσι αποφασίζει να πάρει εκδίκηση για όλα όσα έχασε.",
+            "homepage": "",
+            "tagline": ""
+          }
+        },
+        {
+          "iso_3166_1": "BE",
+          "iso_639_1": "nl",
+          "name": "Nederlands",
+          "english_name": "Dutch",
+          "data": {
+            "name": "",
+            "overview": "Takemichi Hanagaki is een freelancer die de absolute wanhoop in zijn leven heeft bereikt. Hij komt erachter dat de enige vriendin die hij ooit op de middelbare school had, Hinata Tachibana, was vermoord door de meedogenloze Tokyo Manji Gang. De dag nadat hij over haar dood heeft gehoord, staat hij op het perron van het station en wordt hij door een kudde mensen het spoor op geduwd. Hij sluit zijn ogen en denkt dat hij op het punt staat te sterven, maar toen hij zijn ogen weer open deed, was hij op de een of andere manier twaalf jaar terug in de tijd gegaan. Nu hij terug de beste dagen van zijn leven beleeft, besluit Takemichi wraak te nemen op zijn leven.",
+            "homepage": "",
+            "tagline": ""
+          }
+        }
+      ]
+    },
+    "images": {
+      "backdrops": [
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/zYIFOocMfsKAEysBjhZ8akfXFdB.jpg",
+          "vote_average": 6.722,
+          "vote_count": 6,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lXMR8xVSCjzzZuLYKa4Y3CGQjtt.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/a4MW4DzvP2eRizrx4OzOoIHu7Eg.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/naTQ1UmfUCAhe9PWmeVqx8nQ5Zh.jpg",
+          "vote_average": 2.066,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/jnThpphOHQRiTedCtz1yyshfkHw.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 1616,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wjw3wrmkjjApu83Y4SxmQ5gP2mZ.jpg",
+          "vote_average": 1.714,
+          "vote_count": 7,
+          "width": 2872
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1VZ8gN6tPoAd7EdfCzVPmtDczhD.jpg",
+          "vote_average": 1.562,
+          "vote_count": 8,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/ypYVX2NEm0F3HVXlqwvkwMVsW2R.jpg",
+          "vote_average": 1.434,
+          "vote_count": 5,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/tb1GZXpf19t9DmoSDVW16o8GApV.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/rVpXdwvF33q5SEh9eQSVe5PS8yq.jpg",
+          "vote_average": 0.166,
+          "vote_count": 3,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6k12Upe45nnX79puWyVga4lglG5.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/wOxW1OSj6G0GkImL1Wr2nUC8J2o.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/t1uGLKNcOktWuRibMpW70upmYgk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/fP3ql4SLHqyETRDy8nm8DBjAYEs.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/28FxHq7zNuOctUNw1nU3FHDAdxY.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ndUqicsRqRFKSF4qb2HH0eiYiW7.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1440,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/fbNBdikWb7GLmyTH6ljnQOxfZeB.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2560
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/pUBxh12HOE5ChPJROW8nbDMEupO.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 1080,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/hrDbaPBVjTeeG3Kusw90SU7RhNX.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1920
+        },
+        {
+          "aspect_ratio": 1.777,
+          "height": 941,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/4R9nNlt23s66GYrRRy1mcD6NIFI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1672
+        },
+        {
+          "aspect_ratio": 1.778,
+          "height": 2160,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/aJSxHVAvzK3Ez3tjVWEkK5rLfWN.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 3840
+        }
+      ],
+      "logos": [
+        {
+          "aspect_ratio": 3.786,
+          "height": 337,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/eEGzmdEdVEkduO8IYsltQZo5ejO.png",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1276
+        },
+        {
+          "aspect_ratio": 2.472,
+          "height": 1300,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/65tCEJcUZud5Pwixqv6xsKNjqYf.png",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 3214
+        },
+        {
+          "aspect_ratio": 3.825,
+          "height": 502,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/goyLThpuKSBZ5EtFurksppgHqVv.png",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1920
+        }
+      ],
+      "posters": [
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/arB3L9pZZBSzUPSC8BEv8c3X0bF.jpg",
+          "vote_average": 6.2,
+          "vote_count": 10,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y8xaPPyCwB56NmrYlpg8GkPzP6q.jpg",
+          "vote_average": 5.25,
+          "vote_count": 12,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.7,
+          "height": 1000,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/6KkqIwLauqgaiOH3HX9Zf61Hq3E.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 700
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1500,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/6nSOUw8pHCbfigtVeG2SgtSGmrH.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2030,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/y76Q9XQw0UaFjwJlreOA5Pewl8y.jpg",
+          "vote_average": 3.334,
+          "vote_count": 1,
+          "width": 1354
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/kvsFvhZ9DPKm0KV7TY9nOeXYsWC.jpg",
+          "vote_average": 1.75,
+          "vote_count": 6,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1kn7vErfqGQuy4Zik0oHDuTc9k8.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1126
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/te99NW8mK0pDMG7vIuMai7PehHB.jpg",
+          "vote_average": 1.75,
+          "vote_count": 2,
+          "width": 1125
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/vRh0o4eq5kAFDgc95u1HTcJNuAw.jpg",
+          "vote_average": 1.444,
+          "vote_count": 6,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 2818,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/bDNlXl8Ola3vatbq1OiSWV5UXBO.jpg",
+          "vote_average": 1.222,
+          "vote_count": 3,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nf2DFCl0BcOGbOcWJPwaPAo9LNW.jpg",
+          "vote_average": 1.208,
+          "vote_count": 8,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 3000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/nRDR6Z9T9M9W0awnAyusKehLiI4.jpg",
+          "vote_average": 0.972,
+          "vote_count": 6,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 2832,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/45Zwj7l8ZXO39UakyQcq3oSxBnQ.jpg",
+          "vote_average": 0.5,
+          "vote_count": 5,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.701,
+          "height": 2560,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/o4h7RWzaGgbT3wL6niJHZv6EJTU.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1795
+        },
+        {
+          "aspect_ratio": 0.706,
+          "height": 2831,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/1I8o9D2qApYeSlEjquBnsXT0LWV.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1000,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/1cTO9iytDVPu3Tkd9VgAmukm55q.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/34Nx86zqrcx4Hoco3f6pl4NYoEZ.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 825,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/czPCZhlnqZEC2l14nyqPqGK7x1.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 550
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1020,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/67gDQ0W0ksnhsaKF7TRKn9hPMgN.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 680
+        },
+        {
+          "aspect_ratio": 0.741,
+          "height": 1728,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/iYJyXNUDjHp0SY0M215ekkDmZDr.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1961,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/ebS6g7y5o8cRVesNi6PZxrzHiWH.jpg",
+          "vote_average": 0.166,
+          "vote_count": 2,
+          "width": 1307
+        },
+        {
+          "aspect_ratio": 0.68,
+          "height": 1588,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/lXfpb7AHcZIU9m5HiHJTbXfniAk.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1080
+        },
+        {
+          "aspect_ratio": 0.666,
+          "height": 1688,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/i6WHi5TdyUMIcP1khHmJKmPqFh6.jpg",
+          "vote_average": 0.166,
+          "vote_count": 1,
+          "width": 1125
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 1791,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/qZNEjhHvskVt2acQEsNoB0mIaBL.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1280
+        },
+        {
+          "aspect_ratio": 0.715,
+          "height": 2798,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/lTleGpNjl43YrRXnDcn6cy8uLZI.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 2000
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1596,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/7a37s8Wy1CA1a7mqYYcMAmhfHSo.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1064
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 1103,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/gqiAY5yHsBqhS28vQZBQPCCwr0B.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 736
+        },
+        {
+          "aspect_ratio": 0.667,
+          "height": 2030,
+          "iso_3166_1": null,
+          "iso_639_1": null,
+          "file_path": "/nMti438Lk0Sp5aAFkRBk4cnkwz4.jpg",
+          "vote_average": 0,
+          "vote_count": 0,
+          "width": 1354
+        },
+        {
+          "aspect_ratio": 0.71,
+          "height": 2560,
+          "iso_3166_1": "US",
+          "iso_639_1": "en",
+          "file_path": "/qkxXRRKowiKePnBidWokrmfvcbX.jpg",
+          "vote_average": 0,
+          "vote_count": 1,
+          "width": 1817
+        }
+      ]
+    }
+  }
+}
