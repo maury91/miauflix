@@ -2,10 +2,10 @@ import { logger } from '@logger';
 
 import { playableFromKey } from '@routes/playable.types';
 import type { CacheService } from '@services/cache/cache.service';
-import type { DownloadService } from '@services/download/download.service';
 import type { ListClientService } from '@services/list/list-client.service';
 import type { ListService } from '@services/media/list.service';
 import type { MediaService } from '@services/media/media.service';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { NotificationService } from '@services/notifications/notification.service';
 import type { PlaybackTargetService } from '@services/playback/playback-target.service';
 import type { ProgressService } from '@services/progress/progress.service';
@@ -33,7 +33,7 @@ export function registerBackgroundJobHandlers({
   mediaService,
   notificationService,
   sourceService,
-  downloadService,
+  mediaLoadClient,
   progressService,
   playbackTargets,
   worker,
@@ -46,7 +46,7 @@ export function registerBackgroundJobHandlers({
   mediaService: MediaService;
   notificationService: Pick<NotificationService, 'requestedPlayableKeys'>;
   sourceService: SourceService;
-  downloadService: DownloadService;
+  mediaLoadClient: MediaLoadClientService;
   progressService: ProgressService;
   playbackTargets: Pick<PlaybackTargetService, 'forEpisode' | 'forMovie'>;
   worker: BackgroundJobWorker;
@@ -243,7 +243,7 @@ export function registerBackgroundJobHandlers({
       // Re-check after source discovery and after the settling delay. A removal
       // during discovery must never turn into a new background download.
       if (!(await listService.hasAnyMovieWatchlistInterest(movieMediaId))) return;
-      await downloadService.predownload(await playbackTargets.forMovie(media.local.id, source), {
+      await mediaLoadClient.predownload(await playbackTargets.forMovie(media.local.id, source), {
         kind: 'watchlist',
         ownerKey: `watchlist:movie:${movieMediaId}`,
         ttlMs: null,
@@ -365,7 +365,7 @@ export function registerBackgroundJobHandlers({
         const usable = exactMatches.length ? exactMatches : allUsable;
         if (!usable.length) return;
         const completeFlags = await Promise.all(
-          usable.map(match => downloadService.isFileComplete(match.source.id, match.videoFilePath!))
+          usable.map(match => mediaLoadClient.isFileComplete(match.source.id, match.videoFilePath!))
         );
         const completeMatch = usable.find((_, index) => completeFlags[index]);
         if (completeMatch) {
@@ -374,7 +374,7 @@ export function registerBackgroundJobHandlers({
           if (!(await sourceService.canRunPeerJobs())) return;
           const target = (await playbackTargets.forEpisode(completeMatch))!;
           if (!(await sourceService.canRunPeerJobs())) return;
-          await downloadService.predownload(target, {
+          await mediaLoadClient.predownload(target, {
             kind: 'watchlist',
             ownerKey: `watchlist:tv:${showMediaId}`,
           });
@@ -387,7 +387,7 @@ export function registerBackgroundJobHandlers({
           if (!(await sourceService.canRunPeerJobs())) return;
           const target = (await playbackTargets.forEpisode(selected))!;
           if (!(await sourceService.canRunPeerJobs())) return;
-          await downloadService.predownload(target, {
+          await mediaLoadClient.predownload(target, {
             kind: 'watchlist',
             ownerKey: `watchlist:tv:${showMediaId}`,
           });

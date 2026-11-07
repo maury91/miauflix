@@ -6,7 +6,8 @@ export const HTTP_VCR_CONFIG: HttpVcrConfig = {
   mode: (process.env.HTTP_VCR_MODE as HttpVcrConfig['mode']) || 'hybrid',
   fixturesDir: process.env.HTTP_VCR_FIXTURES_DIR || join(__dirname, '../..', 'test-fixtures'),
   includePatterns: [],
-  excludePatterns: [],
+  // Local test servers (contract services served in-process) are never recorded.
+  excludePatterns: ['://127.0.0.1:', '://localhost:'],
   providerMap: [
     { pattern: 'api.themoviedb.org', name: 'tmdb' },
     { pattern: 'api.trakt.tv', name: 'trakt' },

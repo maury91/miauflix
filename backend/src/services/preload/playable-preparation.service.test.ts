@@ -21,6 +21,33 @@ const movieTargets = {
 const movieTarget = (source: unknown) =>
   expect.objectContaining({ source, filePath: 'movie.mkv', matchKind: 'movie' });
 
+interface StoredFields {
+  downloaded?: number;
+  videoCompletedAt?: Date | null;
+  localOnly?: boolean;
+}
+
+/** A media-load client whose stored sources are the records `find` returns. */
+const storageOf = (find: (id: number) => StoredFields | null) => ({
+  getStorageStates: jest.fn(async (ids: number[]) =>
+    ids.flatMap(id => {
+      const stored = find(id);
+      return stored
+        ? [
+            {
+              sourceId: id,
+              verifiedBytes: 0,
+              allocatedBytes: 0,
+              downloaded: stored.downloaded ?? 0,
+              videoComplete: Boolean(stored.videoCompletedAt),
+              localOnly: Boolean(stored.localOnly),
+            },
+          ]
+        : [];
+    })
+  ),
+});
+
 describe('PlayablePreparationService', () => {
   it.each([
     { videoCompletedAt: new Date(), downloaded: 8000 },
@@ -44,9 +71,7 @@ describe('PlayablePreparationService', () => {
       getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([fresh, downloaded]),
       processSourceMetadata: jest.fn(),
     };
-    const storageService = {
-      getStorageBySource: jest.fn(async (id: number) => (id === 1 ? completion : null)),
-    };
+    const storageService = storageOf(id => (id === 1 ? completion : null));
     const warmup = { warm: jest.fn().mockResolvedValue({ state: 'ready' }) };
     const service = new PlayablePreparationService(
       mediaService as never,
@@ -85,7 +110,7 @@ describe('PlayablePreparationService', () => {
         processSourceMetadata: jest.fn(),
       } as never,
       warmup as never,
-      { getStorageBySource: jest.fn().mockResolvedValue({ downloaded: 10000 }) } as never,
+      storageOf(() => ({ downloaded: 10000 })) as never,
       movieTargets as never
     );
 
@@ -128,9 +153,7 @@ describe('PlayablePreparationService', () => {
         getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue([fresh, downloaded]),
       } as never,
       undefined,
-      {
-        getStorageBySource: jest.fn(async (id: number) => (id === 1 ? cached : null)),
-      } as never
+      storageOf(id => (id === 1 ? cached : null)) as never
     );
     const result = await service.prepare(
       { kind: 'movie', mediaId: 42 },
@@ -268,11 +291,9 @@ describe('PlayablePreparationService', () => {
         getSourcesForMovieWithOnDemandSearch: jest.fn().mockResolvedValue(sources),
         processSourceMetadata: jest.fn(),
       };
-      const storageService = {
-        getStorageBySource: jest.fn(async (id: number) =>
-          downloadedIds.includes(id) ? { videoCompletedAt: new Date(), downloaded: 10000 } : null
-        ),
-      };
+      const storageService = storageOf(id =>
+        downloadedIds.includes(id) ? { videoCompletedAt: new Date(), downloaded: 10000 } : null
+      );
       const warmup = { warm: jest.fn().mockResolvedValue({ state: 'ready' }) };
       const service = new PlayablePreparationService(
         mediaService as never,

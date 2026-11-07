@@ -4,6 +4,8 @@ jest.mock('@middleware/rate-limit.middleware', () => ({
       next(),
 }));
 
+import { ErrorWithStatus } from '@services/source/services/error-with-status.util';
+
 import { createStreamRoutes } from './stream.routes';
 
 const token = 'a'.repeat(43);
@@ -22,6 +24,7 @@ const setupTest = () => {
     resolvePlaybackTarget: jest.fn().mockResolvedValue({ target: source, movie: { id: 12 } }),
   };
   const mediaService = { getMovieById: jest.fn().mockResolvedValue({ mediaId: 123 }) };
+  const mediaLoadClient = { streamFile: jest.fn() };
   const audioPlaybackService = {
     stream: jest
       .fn()
@@ -31,6 +34,7 @@ const setupTest = () => {
     playbackSessionService,
     streamService,
     mediaService,
+    mediaLoadClient,
     audioPlaybackService,
   } as never);
   return {
@@ -38,11 +42,27 @@ const setupTest = () => {
     playbackSessionService,
     streamService,
     mediaService,
+    mediaLoadClient,
     audioPlaybackService,
     source,
     grant,
   };
 };
+
+describe('direct streaming errors', () => {
+  it.each([
+    ['source_file_unavailable', 404],
+    ['local_media_unavailable', 410],
+  ])('returns the playback status for %s', async (code, status) => {
+    const { app, mediaLoadClient } = setupTest();
+    mediaLoadClient.streamFile.mockRejectedValue(new ErrorWithStatus('Unavailable', code));
+
+    const response = await app.request(`/${token}`);
+
+    expect(response.status).toBe(status);
+    expect(await response.json()).toEqual({ error: 'Unavailable' });
+  });
+});
 
 describe('next-episode prefetch', () => {
   it('returns 202 without awaiting or surfacing predownload failures', async () => {
@@ -61,7 +81,7 @@ describe('next-episode prefetch', () => {
     const app = createStreamRoutes({
       playbackSessionService,
       streamService,
-      downloadService,
+      mediaLoadClient: downloadService,
     } as never);
     const response = await app.request(`/${token}/prefetch`, { method: 'POST' });
     expect(response.status).toBe(202);

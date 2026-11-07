@@ -1,6 +1,12 @@
+import { setDefaultResultOrder } from 'node:dns';
+
 import { serve } from '@miauflix/contract';
 
 import { createMediaLoadService } from './service';
+
+// Trackers and DHT nodes are reached over IPv4 sockets; under Bun a hostname may otherwise
+// resolve to IPv6 and the send fails with EINVAL.
+setDefaultResultOrder('ipv4first');
 
 const DEFAULT_PORT = 3004;
 /** An empty or invalid MEDIA_LOAD_PORT would bind a random port (or fail): use the default. */
@@ -10,8 +16,13 @@ const PORT =
     ? configuredPort
     : DEFAULT_PORT;
 const HOST = process.env.MEDIA_LOAD_HOST ?? '0.0.0.0';
+const DATA_DIR = process.env.MEDIA_LOAD_DATA_DIR ?? process.env.DATA_DIR ?? './data';
 
-const { service } = createMediaLoadService();
+const { service } = createMediaLoadService({
+  dataDir: DATA_DIR,
+  defaultDownloadPath: process.env.MEDIA_LOAD_DEFAULT_DOWNLOAD_PATH,
+  legacyDownloadPath: process.env.MEDIA_LOAD_LEGACY_DOWNLOAD_PATH,
+});
 
 const server = await serve(service, { hostname: HOST, port: PORT });
 console.info(`Media load listening on http://${HOST}:${server.port}`);

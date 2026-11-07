@@ -4,8 +4,8 @@ import { posix } from 'node:path';
 import { logger } from '@logger';
 
 import type { EncryptedStorageLayout } from '@entities/storage.entity';
-import type { DownloadService } from '@services/download/download.service';
 import { isVideoFile } from '@services/download/download.utils';
+import type { MediaLoadClientService } from '@services/media-load/media-load-client.service';
 import type { PlaybackTarget } from '@services/playback/playback-target';
 import { withFile } from '@services/playback/playback-target';
 import { openTorrentInput, PROBE_SIZE_BYTES } from '@services/playback/torrent-input';
@@ -121,7 +121,7 @@ export class TorrentSubtitlesService {
   private active = 0;
   private closed = false;
 
-  constructor(private readonly downloads: DownloadService) {}
+  constructor(private readonly downloads: MediaLoadClientService) {}
 
   /** Embedded tracks of the target video plus sidecars that match it inside its source. */
   async discover(

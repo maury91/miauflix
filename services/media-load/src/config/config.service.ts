@@ -3,9 +3,9 @@ import { ServiceConfiguration } from '@miauflix/service-configuration';
 import { createMediaLoadConfigSchema } from './schema';
 
 export class MediaLoadConfigService extends ServiceConfiguration {
-  constructor() {
+  constructor(defaultDownloadPath?: string) {
     super({
-      schema: createMediaLoadConfigSchema(),
+      schema: createMediaLoadConfigSchema(defaultDownloadPath),
       notWiredMessage: 'Media load configuration has not been applied',
     });
   }
@@ -18,6 +18,15 @@ export class MediaLoadConfigService extends ServiceConfiguration {
       this.getSchema()
         .groups.flatMap(group => group.variables)
         .find(variable => variable.key === key)?.defaultValue ?? ''
+    );
+  }
+
+  /** Every key's schema default. */
+  defaults(): Record<string, string> {
+    return Object.fromEntries(
+      this.getSchema()
+        .groups.flatMap(group => group.variables)
+        .map(variable => [variable.key, variable.defaultValue ?? ''])
     );
   }
 

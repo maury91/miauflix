@@ -55,7 +55,6 @@ services:
       - ../../backend/tsconfig.json:/usr/src/app/backend/tsconfig.json:ro
       # Fresh database for each development session
       - dev_database:/usr/src/app/data
-      - dev_downloads:/usr/src/app/downloads
       - ../../traces:/tmp:rw
       # Mount built frontend to be served as static assets
       - ../../dist/frontend:/usr/src/app/public:ro
@@ -85,7 +84,8 @@ services:
       tracker-mock:
         condition: service_healthy
 
-  # Tracker scrapes; SCRAPE_TRACKERS above reaches it through the backend's configuration push.
+  # The torrent engine and tracker scrapes; the tracker settings above reach it through the
+  # backend's configuration push.
   media-load:
     build:
       context: ../../
@@ -93,8 +93,11 @@ services:
       target: development
     environment:
       - MEDIA_LOAD_PORT=3004
+      - MEDIA_LOAD_DATA_DIR=/app/data
     volumes:
       - ../../services/media-load/src:/workspace/services/media-load/src
+      - dev_media_load_data:/app/data
+      - dev_downloads:/usr/src/app/downloads
     networks:
       - test-network
     healthcheck:
@@ -330,6 +333,8 @@ volumes:
     name: miauflix_dev_database
   dev_downloads:
     name: miauflix_dev_downloads
+  dev_media_load_data:
+    name: miauflix_dev_media_load_data
   list_service_data:
     name: miauflix_dev_list_service_data
   sources_data:

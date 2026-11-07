@@ -41,6 +41,7 @@ services:
       - CATALOG_SERVICE_URL=http://miauflix-services:3001
       - LIST_SERVICE_URL=http://miauflix-services:3002
       - SOURCES_SERVICE_URL=http://miauflix-services:3003
+      - MEDIA_LOAD_SERVICE_URL=http://miauflix-services:3004
       - SOURCES_DISABLE_VPN_CHECK=true
       - TMDB_API_URL=http://tmdb-mock/3
       # The initial-setup lane overrides E2E_CATALOG_TMDB_TOKEN with an empty
@@ -65,7 +66,6 @@ services:
       - test-network
     volumes:
       - ../.env.test:/usr/src/app/.env
-      - test_downloads:/usr/src/app/downloads
       - ../logs/traces:/tmp:rw
     healthcheck:
       test: ['CMD', 'curl', '-f', '-s', '-o', '/dev/null', 'http://localhost:3000/api/health']
@@ -85,8 +85,8 @@ services:
       tracker-mock:
         condition: service_healthy
 
-  # Bunqueue, media catalog, lists and source search share one runtime image while
-  # retaining their own ports and data directories.
+  # Bunqueue, media catalog, lists, source search and media load (the torrent engine) share one
+  # runtime image while retaining their own ports and data directories.
   miauflix-services:
     image: miauflix-e2e-miauflix-services:${E2E_IMAGE_TAG:-local}
     build:
@@ -105,6 +105,8 @@ services:
       - LIST_SERVICE_DATA_DIR=/app/data/list-service
       - SOURCES_PORT=3003
       - SOURCES_DATA_DIR=/app/data/sources
+      - MEDIA_LOAD_PORT=3004
+      - MEDIA_LOAD_DATA_DIR=/app/data/media-load
       - SOURCES_PRELOAD_PROVIDERS=imdb-title@http://indexer-mock/definitions movies-api@http://indexer-mock/definitions
       - BACKDROP_FOCUS_MODEL_DIR=/app/models
       - BACKDROP_FOCUS_WASM_DIR=/app/wasm
@@ -113,10 +115,12 @@ services:
       - test_bunqueue_data:/app/data/bunqueue
       - list_service_data:/app/data/list-service
       - sources_data:/app/data/sources
+      - test_downloads:/usr/src/app/downloads
     expose:
       - '3001'
       - '3002'
       - '3003'
+      - '3004'
       - '6789'
       - '6790'
     networks:
@@ -127,7 +131,7 @@ services:
           'CMD',
           'bun',
           '-e',
-          "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:3003/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))",
+          "await Promise.all(['http://127.0.0.1:3001/health','http://127.0.0.1:3002/health','http://127.0.0.1:3003/health','http://127.0.0.1:3004/health','http://127.0.0.1:6790/health'].map(async url => { const response = await fetch(url); if (!response.ok) throw new Error(url + ' returned ' + response.status) }))",
         ]
       interval: 2s
       timeout: 5s
@@ -137,6 +141,8 @@ services:
       tmdb-mock:
         condition: service_healthy
       trakt-mock:
+        condition: service_healthy
+      tracker-mock:
         condition: service_healthy
 
   # TMDB Image Mock Service

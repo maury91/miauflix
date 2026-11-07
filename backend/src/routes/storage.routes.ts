@@ -8,7 +8,7 @@ import { createRateLimitMiddlewareFactory } from '@middleware/rate-limit.middlew
 import { isVideoFile } from '@services/download/download.utils';
 
 import type { Deps } from './common.types';
-import type { StorageInventoryResponse } from './storage.types';
+import type { StorageInventoryResponse, StorageItemView } from './storage.types';
 
 const sourceIdSchema = z.object({
   sourceId: z
@@ -21,7 +21,7 @@ const sourceIdSchema = z.object({
 export const createStorageRoutes = (
   deps: Pick<
     Deps,
-    'auditLogService' | 'configurationService' | 'downloadService' | 'storageService'
+    'auditLogService' | 'configurationService' | 'contentSourceRepository' | 'mediaLoadClient'
   >
 ) => {
   const rateLimitGuard = createRateLimitMiddlewareFactory(
@@ -31,7 +31,31 @@ export const createStorageRoutes = (
 
   return new Hono()
     .get('/', rateLimitGuard(10), authGuard(UserRole.ADMIN), async c => {
-      const inventory = await deps.storageService.getInventory();
+      const inventory = await deps.mediaLoadClient.getInventory();
+      const sources = new Map(
+        (
+          await deps.contentSourceRepository.findWithMovies(
+            inventory.items.map(item => item.sourceId)
+          )
+        ).map(source => [source.id, source])
+      );
+      const items = inventory.items.map((storage): StorageItemView => {
+        const source = sources.get(storage.sourceId);
+        return {
+          sourceId: storage.sourceId,
+          title: source?.movies?.[0]?.movie?.title ?? `Download ${storage.sourceId}`,
+          fileName: storage.requestedFiles.find(isVideoFile)?.split('/').pop() ?? null,
+          quality: source?.quality ?? null,
+          physicalBytes: storage.allocatedBytes,
+          reservedBytes: storage.reservedBytes,
+          progressPercent: storage.downloaded / 100,
+          videoComplete: storage.videoComplete,
+          activity: storage.activity,
+          torrentLoaded: storage.torrentLoaded,
+          activeStreams: storage.activeStreams,
+          seedEndsAt: storage.seedEndsAt,
+        };
+      });
       const response: StorageInventoryResponse = {
         summary: {
           physicalBytes: inventory.physicalBytes,
@@ -40,24 +64,13 @@ export const createStorageRoutes = (
           chargedBytes: inventory.chargedBytes,
           filesystem: inventory.filesystem,
         },
-        items: inventory.items.map(storage => {
-          const activity = deps.downloadService.getStorageActivity(storage);
-          return {
-            sourceId: storage.sourceId,
-            title:
-              storage.contentSource?.movies?.[0]?.movie?.title ?? `Download ${storage.sourceId}`,
-            fileName: storage.requestedFiles.find(isVideoFile)?.split('/').pop() ?? null,
-            quality: storage.contentSource?.quality ?? null,
-            physicalBytes: storage.allocatedBytes,
-            reservedBytes: storage.reservedBytes,
-            progressPercent: storage.downloaded / 100,
-            videoComplete: activity.videoComplete,
-            activity: activity.activity,
-            torrentLoaded: activity.torrentLoaded,
-            activeStreams: storage.activeStreams,
-            seedEndsAt: activity.seedEndsAt?.toISOString() ?? null,
-          };
-        }),
+        // Largest charge first (the service's order), then by title.
+        items: items.sort(
+          (a, b) =>
+            (b.physicalBytes ?? 0) - (a.physicalBytes ?? 0) ||
+            b.reservedBytes - a.reservedBytes ||
+            a.title.localeCompare(b.title)
+        ),
       };
       return c.json(response);
     })
@@ -68,7 +81,7 @@ export const createStorageRoutes = (
       zValidator('param', sourceIdSchema),
       async c => {
         const { sourceId } = c.req.valid('param');
-        const result = await deps.storageService.removeStorageWithResult(sourceId);
+        const result = await deps.mediaLoadClient.removeStorageWithResult(sourceId);
         switch (result.status) {
           case 'removed':
             return c.json({ success: true });
