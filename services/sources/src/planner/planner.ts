@@ -170,9 +170,12 @@ export class Planner {
       }
     };
     const tiers = new Map<number, Provider[]>();
-    // Anime: providers built for it join the first tier. A general indexer's release can look
-    // healthy enough to stop the search, while the anime providers have the fansub releases.
-    const animeFirst = (p: Provider) => isAnime && builtForAnime(p, kind);
+    // Anime: providers with an anime category (Nyaa) or built for anime (AnimeTosho) join the
+    // first tier. A general indexer's release can look healthy enough to stop the search, while
+    // the anime providers have the fansub releases. Within a tier, built-for-anime ones go first.
+    const animeRank = (p: Provider) =>
+      !isAnime || !p.caps.anime.length ? 0 : builtForAnime(p, kind) ? 2 : 1;
+    const animeFirst = (p: Provider) => animeRank(p) > 0;
     const ordered = providers.map(p => ({
       p,
       priority: this.store.providers().find(r => r.id === p.id)!.priority,
@@ -188,7 +191,7 @@ export class Planner {
     for (const tier of tiers.values())
       tier.sort(
         (a, b) =>
-          Number(animeFirst(b)) - Number(animeFirst(a)) ||
+          animeRank(b) - animeRank(a) ||
           Number(b.caps[kind].some(p => ['imdbid', 'tmdbid', 'tvdbid'].includes(p))) -
             Number(a.caps[kind].some(p => ['imdbid', 'tmdbid', 'tvdbid'].includes(p)))
       );
@@ -198,7 +201,7 @@ export class Planner {
           const ratio = (p: Provider) =>
             p.rate.dailyBudget === null ? 1 : 1 - this.store.usage(p.id) / p.rate.dailyBudget;
           return (
-            Number(animeFirst(b)) - Number(animeFirst(a)) ||
+            animeRank(b) - animeRank(a) ||
             ratio(b) - ratio(a) ||
             (this.store.providers().find(r => r.id === a.id)!.last_used_at ?? 0) -
               (this.store.providers().find(r => r.id === b.id)!.last_used_at ?? 0)

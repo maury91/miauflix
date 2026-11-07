@@ -6,12 +6,14 @@ What changed, in short. Every detail is in [DETAILED_CHANGELOG.md](DETAILED_CHAN
 
 ### New
 
-- **Anime sources**: anime is recognised automatically and searched the way anime is released, by AniDB episode and with the names fansub groups use ("2nd Season - 07", episode numbers counted from the first episode, batches). Later seasons that TMDB lists as one long season are matched to the right episode, and the episode is found inside batch downloads. A new AnimeTosho source is on by default and only used for anime; it marks SeaDex's recommended releases. Anime sources are always searched for anime, even when another source already found the episode
+- **Anime sources**: anime is recognised automatically and searched the way anime is released, by AniDB episode and with the names fansub groups use ("2nd Season - 07", episode numbers counted from the first episode, batches). Later seasons that TMDB lists as one long season are matched to the right episode, and the episode is found inside batch downloads. A new AnimeTosho source is on by default and only used for anime; it marks SeaDex's recommended releases. Anime sources, including general sites with an anime category such as Nyaa, are always searched for anime, even when another source already found the episode
 - **Anime rows**: Home can show the anime lists, from AniList: popular this season, trending and all-time popular. No account needed
 - **Anime seasons**: anime that TMDB keeps in one long season is split into its real seasons, one per AniList entry, each named after it (Tokyo Revengers shows 4 seasons instead of one with 63 episodes). Progress, notifications and Trakt sync follow the new numbering, and what you already watched moves with it
 
 ### Improvements
 
+- Episodes whose saved sources have few seeders are searched again (at most every 6 hours), so sources enabled later can offer a better copy
+- Releases made for another language (a French dub, VOSTFR, an Italian release…) are played only when nothing in your language or English is available, whatever their quality. Your browser's languages decide what counts as yours. Release names are now read for more language tags: Italian ("SubITA", "iTALiAN"), English ("EngSub"), Japanese ("JP", "JAP") and Lithuanian ("LT", "Lietuvių")
 - Seeder and leecher counts are checked for many sources at once and combine every tracker's answer, so they are more accurate and use less tracker traffic
 - What you're watching gets peers and bandwidth before background downloads, so playback starts sooner while other titles download
 - Torrent downloading, streaming, seeder counts and download storage now run in a new internal service, media-load, in the services container (port 3004). The downloads folder is now mounted on the services container instead of the main one, and downloads you already have are handed to it automatically the first time it starts. It is also published on its own as the `miauflix-media-load` image

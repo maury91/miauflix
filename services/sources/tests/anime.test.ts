@@ -578,3 +578,69 @@ it.each(['interactive', 'background'] as const)(
     }
   }
 );
+
+/** Like Nyaa: anime and live-action TV categories, searched by title only. */
+const ANIME_CATEGORY_YAML = GENERAL_YAML.replace('id: generaltv', 'id: animecat')
+  .replace('name: General TV', 'name: Anime Category')
+  .replace('https://generaltv.invalid/', 'https://animecat.invalid/')
+  .replace(
+    '    - { id: TV, cat: TV, desc: TV }',
+    '    - { id: TV, cat: TV, desc: TV }\n    - { id: Anime, cat: TV/Anime, desc: Anime }'
+  );
+
+it('searches providers with an anime category in the first tier of an anime search', async () => {
+  const dir = mkdtempSync(join(tmpdir(), 'anime-category-'));
+  dirs.push(dir);
+  const searched: string[] = [];
+  const created = createSourcesService({
+    dataDir: dir,
+    keyFile: join(dir, '.key'),
+    encryptionKey: 'test',
+    resolveHost: fixtureResolver,
+    animeListsUrl: LISTS,
+    aniZipUrl: ANI_ZIP,
+    fetch: fixtureFetch(url => {
+      if (url.href === LISTS) return Response.json(fribb);
+      if (url.href.startsWith(ANI_ZIP))
+        return Response.json(aniZip(Number(url.searchParams.get('anilist_id'))));
+      const release = (title: string, hash: string) => ({
+        title,
+        info_hash: hash.repeat(40),
+        total_size: 1_000_000_000,
+        seeders: 40,
+        timestamp: 1_780_000_000,
+      });
+      if (url.host === 'generaltv.invalid') {
+        searched.push('general');
+        return Response.json([release('Sorcery Academy S01E19 1080p WEB-DL', 'E')]);
+      }
+      if (url.host === 'animecat.invalid') {
+        searched.push('animecat');
+        return Response.json([release('[Group] Sorcery Academy S2 - 07 [1080p]', 'D')]);
+      }
+      return new Response('unexpected', { status: 500 });
+    }),
+  });
+  try {
+    const transport = localTransport(created.service);
+    const db = new Database(join(dir, 'sources.sqlite'));
+    useProviders(db, [
+      { id: 'generaltv', yaml: GENERAL_YAML, priority: 10 },
+      { id: 'animecat', yaml: ANIME_CATEGORY_YAML, priority: 130 },
+    ]);
+    db.close();
+    await createClient(management, transport).applyConfig({
+      values: { SOURCES_DISABLE_VPN_CHECK: 'true', SOURCES_MIN_SEEDERS: '5' },
+    });
+    const hashes: string[] = [];
+    for await (const item of createClient(sources, transport).search({
+      ...show(19, iso(day(182))),
+      purpose: 'interactive',
+    }))
+      if (item.type === 'candidate') hashes.push(item.candidate.hash);
+    expect(searched).toContain('animecat');
+    expect(hashes).toContain('d'.repeat(40));
+  } finally {
+    await created.stop();
+  }
+});

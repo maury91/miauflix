@@ -58,6 +58,15 @@ describe('EpisodeNumberingService', () => {
     await expect(service.toProvider(episode(7, 3, 1))).rejects.toThrow('no toProvider numbering');
   });
 
+  it('does not translate with a newer layout than the local episodes follow', async () => {
+    const { service, catalogClient } = setupTest();
+    // The catalog rebuilt the layout; the show is not renumbered locally yet (still v1).
+    catalogClient.getEpisodeLayout.mockResolvedValue({ ...LAYOUT, version: 'v2' });
+
+    await expect(service.toProvider(episode(7, 2, 1))).rejects.toThrow('unavailable');
+    await expect(service.fromProvider(episode(7, 1, 5))).resolves.toBeNull();
+  });
+
   it('passes movies and shows on TMDB seasons through without a catalog call', async () => {
     const { service, catalogClient } = setupTest();
     const movie = { kind: 'movie' as const, mediaId: 7 };

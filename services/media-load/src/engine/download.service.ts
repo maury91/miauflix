@@ -485,12 +485,19 @@ export class DownloadService {
     } catch (error) {
       logger.error('DownloadService', `Could not ${fence ? 'fence' : 'unfence'} torrent`, error);
       if (!fence) return;
+      // Completed downloads come back with the restore pass; others with the next request.
       this.restorePending = true;
       void Promise.resolve()
         .then(() => this.client.remove(torrent, { destroyStore: false }))
-        .catch(removeError =>
-          logger.error('DownloadService', 'Could not remove an unfenced torrent', removeError)
-        );
+        .catch(removeError => {
+          logger.error('DownloadService', 'Could not remove an unfenced torrent', removeError);
+          // Last resort: close its connections directly, keeping its files.
+          try {
+            if (!torrent.destroyed) torrent.destroy({ destroyStore: false });
+          } catch (destroyError) {
+            logger.error('DownloadService', 'Could not destroy an unfenced torrent', destroyError);
+          }
+        });
     }
   }
 

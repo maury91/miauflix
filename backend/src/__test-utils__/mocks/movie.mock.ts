@@ -230,6 +230,7 @@ export function createMockContentSource(overrides: Partial<ContentSource> = {}):
     videoCodec:
       overrides.videoCodec ??
       faker.helpers.arrayElement([VideoCodec.X264, VideoCodec.X265, VideoCodec.XVID]),
+    languages: overrides.languages ?? null,
     broadcasters: overrides.broadcasters ?? sourceMetadata.broadcasters,
     watchers: overrides.watchers ?? sourceMetadata.watchers,
     source: overrides.source ?? faker.helpers.arrayElement(['indexer-a', 'indexer-b', 'indexer-c']),

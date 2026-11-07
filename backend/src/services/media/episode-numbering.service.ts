@@ -67,7 +67,10 @@ export class EpisodeNumberingService {
     const cached = this.cache.get(showMediaId);
     if (cached?.version === version) return cached;
     const layout = await this.catalogClient.getEpisodeLayout(showMediaId);
-    if (!layout?.version) throw new Error(`Episode layout of show ${showMediaId} unavailable`);
+    // The local episodes follow `version`; a newer catalog layout applies only once the show is
+    // renumbered, so until then there is no numbering to translate with.
+    if (!layout?.version || layout.version !== version)
+      throw new Error(`Episode layout ${version} of show ${showMediaId} unavailable`);
     const numbering: Numbering = {
       version: layout.version,
       toProvider: new Map(),

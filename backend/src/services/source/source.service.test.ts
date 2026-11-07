@@ -248,6 +248,56 @@ describe('SourceService', () => {
       return { search, notifications, backgroundJobs, releases, episodeSources, ...mocks };
     };
 
+    it('reuses stored single-file matches that have a live swarm', async () => {
+      const { search, releases, episodeSources } = setupEpisodeTest(true);
+      episodeSources.findByEpisodeId.mockReset().mockResolvedValue([
+        {
+          episodeId: 5,
+          sourceId: 11,
+          matchKind: 'single',
+          source: { id: 11, broadcasters: 40, languages: [] },
+        },
+      ]);
+
+      await search();
+
+      expect(releases).not.toHaveBeenCalled();
+    });
+
+    it('searches again once for matches stored before their languages were recorded', async () => {
+      const { search, releases, episodeSources } = setupEpisodeTest(true);
+      episodeSources.findByEpisodeId.mockReset().mockResolvedValue([
+        {
+          episodeId: 5,
+          sourceId: 11,
+          matchKind: 'single',
+          source: { id: 11, broadcasters: 40, languages: null },
+        },
+      ]);
+
+      await search();
+      await search();
+
+      expect(releases).toHaveBeenCalledTimes(1);
+    });
+
+    it('searches again when every stored match is weak, at most every six hours', async () => {
+      const { search, releases, episodeSources } = setupEpisodeTest(true);
+      episodeSources.findByEpisodeId
+        .mockReset()
+        .mockResolvedValue([
+          { episodeId: 5, sourceId: 11, matchKind: 'single', source: { id: 11, broadcasters: 4 } },
+        ]);
+
+      await search();
+      await search();
+      expect(releases).toHaveBeenCalledTimes(1);
+
+      jest.setSystemTime(Date.now() + 6 * 60 * 60_000 + 1);
+      await search();
+      expect(releases).toHaveBeenCalledTimes(2);
+    });
+
     it('announces an episode once a source matched to it is verified', async () => {
       const { search, notifications, backgroundJobs } = setupEpisodeTest(true);
 

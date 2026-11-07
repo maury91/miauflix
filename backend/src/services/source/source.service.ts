@@ -30,6 +30,13 @@ import type { SourceMetadataFileService } from './source-metadata-file.service';
 
 /** How long a source whose file list could not be fetched waits before another try. */
 const UNRESOLVED_RETRY_MS = 60 * 60_000;
+/**
+ * Below this many seeders (or with unknown release languages), an episode's stored matches don't
+ * stop another search.
+ */
+const WEAK_SWARM_BROADCASTERS = 10;
+/** How long an episode whose matches are all weak waits before another search. */
+const WEAK_RESEARCH_MS = 6 * 60 * 60_000;
 
 interface TVRelease {
   metadata: SourceMetadata;
@@ -94,6 +101,8 @@ export class SourceService {
   private readonly movieRepository: MovieRepository;
   private readonly contentSourceRepository: ContentSourceRepository;
   private readonly episodeSourceRepository: EpisodeSourceRepository;
+  /** When episodes whose stored matches were all weak were last searched again. */
+  private readonly weakEpisodeSearches = new Map<number, number>();
   private readonly tvReleaseSearches = new Map<
     string,
     { expiresAt: number; promise: Promise<TVRelease[]> }
@@ -349,7 +358,25 @@ export class SourceService {
   }): Promise<EpisodeSource[]> {
     if (!this.isEpisodeWithinLeakTolerance(episode.airDate)) return [];
     const existing = await this.episodeSourceRepository.findByEpisodeId(episode.episodeId);
-    if (existing.some(association => association.matchKind === 'single')) return existing;
+    const single = existing.filter(association => association.matchKind === 'single');
+    // Matches with a live swarm are enough. Weak ones are searched again now and then: a provider
+    // enabled since (or newer releases) may have a better copy. So are ones stored before release
+    // languages were recorded: the search records them, and selection needs them.
+    if (
+      single.some(
+        association =>
+          (association.source?.broadcasters ?? 0) >= WEAK_SWARM_BROADCASTERS &&
+          association.source?.languages !== null
+      ) ||
+      (single.length &&
+        Date.now() - (this.weakEpisodeSearches.get(episode.episodeId) ?? 0) < WEAK_RESEARCH_MS)
+    )
+      return existing;
+    if (single.length) {
+      this.weakEpisodeSearches.set(episode.episodeId, Date.now());
+      if (this.weakEpisodeSearches.size > 1000)
+        this.weakEpisodeSearches.delete(this.weakEpisodeSearches.keys().next().value!);
+    }
     const searched = {
       ...episode,
       seasonNumber: episode.providerSeasonNumber ?? episode.seasonNumber,

@@ -20,6 +20,8 @@ const REFRESH_MS = 7 * 86400_000;
 /** A failed download is not retried sooner than this. */
 const RETRY_MS = 3600_000;
 const ANI_ZIP_TTL_MS = 24 * 3600_000;
+/** How long a request waits for the first download before going on with TMDB's seasons. */
+const FIRST_DOWNLOAD_WAIT_MS = 8_000;
 
 export interface AnimeIndexUrls {
   /** Fribb's anime-lists; empty turns anime numbering off. */
@@ -50,7 +52,8 @@ export class AnimeIndex {
     private readonly cache: ApiCache,
     private readonly fetchImpl: typeof fetch = fetch,
     private readonly now: () => number = Date.now,
-    private readonly urls: AnimeIndexUrls = DEFAULT_ANIME_URLS
+    private readonly urls: AnimeIndexUrls = DEFAULT_ANIME_URLS,
+    private readonly firstDownloadWaitMs = FIRST_DOWNLOAD_WAIT_MS
   ) {
     this.file = join(dataDir, 'anime-lists.json');
   }
@@ -102,7 +105,22 @@ export class AnimeIndex {
     // A stale copy keeps serving while it is refreshed.
     if (this.loadedAt) return;
     if (!this.loading) throw new Error('Anime list unavailable');
-    await this.loading;
+    // The first download (no saved copy yet) can take minutes: a request waits a little, then
+    // goes on with TMDB's seasons while the download continues in the background.
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      await Promise.race([
+        this.loading,
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(
+            () => reject(new Error('Anime list is still downloading')),
+            this.firstDownloadWaitMs
+          );
+        }),
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
   }
 
   private async download(): Promise<void> {

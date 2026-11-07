@@ -86,7 +86,12 @@ const usable = (t: string) =>
   /\p{L}{4}/u.test(t) && t !== t.toLowerCase() && !/^\S*\d\S*$/.test(t) && latin(t);
 
 /** Titles without a bracketed year: "Jujutsu Kaisen (2023)" → "Jujutsu Kaisen". */
-const withoutYear = (title: string) => title.replace(/\s*\((?:19|20)\d{2}\)\s*/g, ' ').trim();
+const withoutYear = (title: string) =>
+  // Spaces are collapsed apart: a leading `\s*` would rescan every run of spaces (quadratic).
+  title
+    .replace(/\((?:19|20)\d{2}\)/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
 
 /**
  * Latin-script titles of an entry (romaji, then English), and the show titles they extend:

@@ -639,6 +639,23 @@ describe('DownloadService', () => {
       expect(mockedTorrentInstance.remove).toHaveBeenCalledWith(broken, { destroyStore: false });
     });
 
+    it('destroys a torrent it cannot fence when removing it fails too', async () => {
+      const { service } = setupTest();
+      const { torrent } = fakeTorrent();
+      const broken = { ...torrent, destroyed: false, destroy: jest.fn() };
+      broken.pause.mockImplementation(() => {
+        throw new Error('boom');
+      });
+      (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [broken];
+      (mockedTorrentInstance.remove as AnyMock).mockRejectedValueOnce(new Error('busy'));
+      jest.spyOn(logger, 'error').mockImplementation(() => undefined);
+
+      await service.setNetworkAllowed(false);
+      for (let i = 0; i < 5; i++) await new Promise(resolve => setImmediate(resolve));
+
+      expect(broken.destroy).toHaveBeenCalledWith({ destroyStore: false });
+    });
+
     it('refuses new torrents and metadata lookups while blocked', async () => {
       const { service } = setupTest();
       (mockedTorrentInstance as unknown as { torrents: unknown[] }).torrents = [];

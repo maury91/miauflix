@@ -56,6 +56,8 @@ describe('parseAnimeRelease', () => {
     ['[jaaj] Jujutsu Kaisen S02 (2020) (BD 1080p AV1 AAC)', { season: 2 }],
     ['[Group] Bleach - 13 - 30 [1080p]', { range: [13, 30] }],
     ['[Group] Kaiju No. 8 01-12 [Batch]', { range: [1, 12] }],
+    ['[Group] Show Vol.1-3 [BD]', { range: [1, 3] }],
+    ['[Group] Show Part 1-2 [BD 1080p]', { range: [1, 2] }],
   ])('reads %s as a pack', (name, expected) => {
     const parsed = parseAnimeRelease(name);
     expect(parsed.pack || parsed.range !== undefined).toBe(true);

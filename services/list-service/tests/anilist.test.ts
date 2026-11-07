@@ -167,4 +167,28 @@ describe('AniList lists', () => {
     await aniList.page('anilist-trending', 1);
     expect(listDownloads).toBe(3);
   });
+
+  it('retries a failed first download after seconds, not an hour', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'anilist-'));
+    dirs.push(dir);
+    let now = NOW;
+    let listDownloads = 0;
+    const fetchImpl = (async (input: string | URL | Request) => {
+      if (String(input) === URLS.animeLists) {
+        listDownloads++;
+        return listDownloads === 1 ? new Response('down', { status: 503 }) : Response.json(fribb);
+      }
+      return Response.json({ data: { Page: { media } } });
+    }) as typeof fetch;
+    const aniList = new AniListLists(dir, fetchImpl, () => now, URLS);
+
+    await expect(aniList.page('anilist-trending', 1)).rejects.toThrow();
+    // Within the short cooldown nothing new starts.
+    await expect(aniList.page('anilist-trending', 1)).rejects.toThrow('Anime list unavailable');
+    expect(listDownloads).toBe(1);
+
+    now += 30_000;
+    expect((await aniList.page('anilist-trending', 1)).items).toHaveLength(4);
+    expect(listDownloads).toBe(2);
+  });
 });

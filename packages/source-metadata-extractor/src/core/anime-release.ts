@@ -73,9 +73,11 @@ export function parseAnimeRelease(name: string, titles: readonly string[] = []):
       : []),
   ];
   for (const { from, separator, to, before } of ranges) {
-    // A number ending the title is not the start of a range: "Kaiju No. 8 - 09",
-    // "Part 2 - 10". Batches spaced like episodes pad both ends alike ("13 - 30").
-    if (/\b(?:part|no|cour|vol)\.?\s*$/i.test(before)) continue;
+    // A number ending the title is not the start of a spaced range: "Kaiju No. 8 - 09",
+    // "Part 2 - 10". A compact one is the range itself: "Vol.1-3", "Part 1-2". Batches spaced
+    // like episodes pad both ends alike ("13 - 30").
+    const spaced = separator.startsWith(' ') && separator.endsWith(' ');
+    if (spaced && /\b(?:part|no|cour|vol)\.?\s*$/i.test(before)) continue;
     if (separator === ' - ' && from.length !== to.length) continue;
     // Years ("2019-2021") are not ranges.
     if (Number(from) < Number(to) && !(Number(from) >= 1900 && Number(to) >= 1900)) {

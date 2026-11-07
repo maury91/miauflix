@@ -137,18 +137,39 @@ export const SOURCE_PATTERNS: PatternConfig<Source>[] = [
 // ===== LANGUAGE PATTERNS =====
 
 export const LANGUAGE_PATTERNS: PatternConfig<Language>[] = [
-  { regex: /(\beng\b|\benglish\b)/gi, value: Language.ENGLISH, specificity: 85 },
-  { regex: /(\bfre\b|\bfra\b|\bfrench\b)/gi, value: Language.FRENCH, specificity: 90 },
+  {
+    // Also English subtitles ("EngSub", "Eng-Subs") and dubs ("EngDub").
+    regex: /(\beng\b|\benglish\b|\beng[ -]?(?:sub|dub)s?\b)/gi,
+    value: Language.ENGLISH,
+    specificity: 85,
+  },
+  {
+    // French scene tags: dubs (VF, VFF, VFQ, VFI, TRUEFRENCH) and French subtitles (VOSTFR).
+    regex: /(\bfre\b|\bfra\b|\b(?:true|sub)?french\b|\bvf[fqi]?\b|\bvostfr\b)/gi,
+    value: Language.FRENCH,
+    specificity: 90,
+  },
   { regex: /(\bspa\b|\besp\b|\bspanish\b)/gi, value: Language.SPANISH, specificity: 90 },
   { regex: /(\bger\b|\bdeu\b|\bgerman\b)/gi, value: Language.GERMAN, specificity: 85 },
-  { regex: /(\bita\b|\bitalian\b)/gi, value: Language.ITALIAN, specificity: 85 },
+  {
+    // Also Italian subtitles ("SubITA", "Sub-ITA") and "iTALiAN"/"Italiano".
+    regex: /(\bita\b|\bitalian[oa]?\b|\bsub[ -]?ita\b)/gi,
+    value: Language.ITALIAN,
+    specificity: 85,
+  },
   { regex: /(\bpor\b|\bportuguese\b)/gi, value: Language.PORTUGUESE, specificity: 90 },
   { regex: /(\bnld\b|\bdutch\b)/gi, value: Language.DUTCH, specificity: 90 },
   { regex: /(\bswe\b|\bswedish\b)/gi, value: Language.SWEDISH, specificity: 90 },
   { regex: /(\bcze\b|\bczech\b)/gi, value: Language.CZECH, specificity: 90 },
   { regex: /(\bslo\b|\bslovak\b)/gi, value: Language.SLOVAK, specificity: 90 },
   { regex: /(\bchi\b|\bchinese\b|\bmandarin\b)/gi, value: Language.CHINESE, specificity: 85 },
-  { regex: /(\bjpn\b|\bjapanese\b)/gi, value: Language.JAPANESE, specificity: 90 },
+  { regex: /(\bjpn?\b|\bjap\b|\bjapanese\b)/gi, value: Language.JAPANESE, specificity: 90 },
+  {
+    // "LT" is how Lithuanian trackers tag dubs and subtitles ("LT subs", "LT.Dub").
+    regex: /(\bltu?\b|\blithuanian\b|\bliet\b|\blietuvi\p{L}*)/giu,
+    value: Language.LITHUANIAN,
+    specificity: 90,
+  },
   {
     regex: /(\bmulti\b|\bmultilingual\b|\bmultisubs\b|\bdual\b)/gi,
     value: Language.MULTI,

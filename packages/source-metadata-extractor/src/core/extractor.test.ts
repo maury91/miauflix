@@ -17,6 +17,28 @@ describe('extractSourceMetadata', () => {
     }
   );
 
+  test.each([
+    [
+      'Tokyo Revengers S04E04 UNCENSORED MULTi 1080p DSNP WEB-DL AAC2.0 H.264-Tsundere-Raws (VF, VOSTFR)',
+      [Language.FRENCH, Language.MULTI],
+    ],
+    ['Some Movie 2024 TRUEFRENCH 1080p WEB H264', [Language.FRENCH]],
+    ['Some Show S01E01 VOSTFR 1080p WEB', [Language.FRENCH]],
+    ['[ToonsHub] Tokyo Revengers S04E04 1080p DSNP WEB-DL DUAL AAC2.0 H.264', [Language.MULTI]],
+    ['Some Movie 2024 iTALiAN MD 1080p WEB H264', [Language.ITALIAN]],
+    ['Some Show S01E02 1080p WEB SubITA', [Language.ITALIAN]],
+    ['Some Movie 2024 ITA ENG 1080p BluRay x264', [Language.ENGLISH, Language.ITALIAN]],
+    ['[Group] Some Anime - 05 [1080p] [EngSub]', [Language.ENGLISH]],
+    ['Some Anime S01E05 1080p JPN AAC', [Language.JAPANESE]],
+    ['Some Movie 2024 1080p WEB-DL LT subs', [Language.LITHUANIAN]],
+    ['Some Movie 2024 1080p Lietuvių kalba', [Language.LITHUANIAN]],
+    ['Some Movie 2024 LTU 1080p WEB-DL', [Language.LITHUANIAN]],
+  ])('recognizes the languages of %s', (name, languages) => {
+    expect([...extractSourceMetadata({ name, size: 1_000_000_000 }).language].sort()).toEqual(
+      [...languages].sort()
+    );
+  });
+
   describe('Movie Sources', () => {
     test.each<{
       name: string;

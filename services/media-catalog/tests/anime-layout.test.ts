@@ -118,7 +118,10 @@ afterEach(() => {
   for (const dir of dirs.splice(0)) rmSync(dir, { recursive: true, force: true });
 });
 
-const setup = () => {
+const setup = ({
+  listGate,
+  firstDownloadWaitMs,
+}: { listGate?: Promise<void>; firstDownloadWaitMs?: number } = {}) => {
   const dir = mkdtempSync(join(tmpdir(), 'catalog-anime-'));
   dirs.push(dir);
   const db = new CatalogDatabase(dir);
@@ -126,7 +129,10 @@ const setup = () => {
   const fetchImpl = (async (input: string | URL | Request) => {
     const url = String(input);
     requests.push(url);
-    if (url === URLS.animeLists) return Response.json(fribb);
+    if (url === URLS.animeLists) {
+      await listGate;
+      return Response.json(fribb);
+    }
     const id = new URL(url).searchParams.get('anilist_id') ?? '';
     return mappings[id] ? Response.json(mappings[id]) : new Response('missing', { status: 404 });
   }) as typeof fetch;
@@ -140,7 +146,10 @@ const setup = () => {
     VALUES,
     new BackdropFocusRepository(db),
     new ArtworkRepository(db),
-    { index: new AnimeIndex(dir, new ApiCache(db), fetchImpl, Date.now, URLS), layouts }
+    {
+      index: new AnimeIndex(dir, new ApiCache(db), fetchImpl, Date.now, URLS, firstDownloadWaitMs),
+      layouts,
+    }
   );
   return { db, service, requests };
 };
@@ -181,6 +190,23 @@ describe('anime seasons by AniList entry', () => {
       providerSeasonNumber: 1,
       providerEpisodeNumber: 30,
     });
+    db.close();
+  });
+
+  it('does not hold show requests while the first anime list downloads', async () => {
+    let release!: () => void;
+    const listGate = new Promise<void>(resolve => (release = resolve));
+    const { db, service } = setup({ listGate, firstDownloadWaitMs: 20 });
+
+    // The list is still downloading: TMDB's seasons, without waiting for it.
+    const started = Date.now();
+    expect((await service.getTVShow(SHOW, 'en')).seasonLayout).toBe('tmdb');
+    expect(Date.now() - started).toBeLessThan(1_000);
+
+    // The download finished in the background; the next request builds the layout.
+    release();
+    await new Promise(resolve => setTimeout(resolve, 10));
+    expect((await service.getTVShow(SHOW, 'en')).seasonLayout).toBe('anilist');
     db.close();
   });
 

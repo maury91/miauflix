@@ -11,6 +11,8 @@ export const ANIME_LISTS_URL =
 const REFRESH_MS = 7 * 86400_000;
 /** A failed download is not retried sooner than this. */
 const RETRY_MS = 3600_000;
+/** Without any copy to serve, a failed first download is retried much sooner. */
+const RETRY_EMPTY_MS = 30_000;
 const PER_PAGE = 50;
 
 type Season = 'WINTER' | 'SPRING' | 'SUMMER' | 'FALL';
@@ -137,7 +139,8 @@ export class AniListLists {
   private async ensureIds(): Promise<void> {
     if (!this.loadedAt) this.readFile();
     if (this.loadedAt && this.now() - this.loadedAt < REFRESH_MS) return;
-    if (!this.loading && this.now() - this.attemptedAt >= RETRY_MS) {
+    const cooldown = this.loadedAt ? RETRY_MS : RETRY_EMPTY_MS;
+    if (!this.loading && this.now() - this.attemptedAt >= cooldown) {
       this.attemptedAt = this.now();
       this.loading = this.download().finally(() => {
         this.loading = null;

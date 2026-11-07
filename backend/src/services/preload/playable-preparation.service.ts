@@ -21,12 +21,19 @@ import {
   type PlayedSize,
   preferWithinBitrate,
 } from '@services/stream/stream.util';
+import {
+  madeForOtherLanguage,
+  viewerLanguageFirst,
+  viewerLanguages,
+} from '@utils/release-language.util';
 import { byPlaybackRank } from '@utils/streaming-score.util';
 
 import type { TorrentWarmupController } from './torrent-warmup.controller';
 
 export interface PlaybackPreferences {
   subtitleLanguage?: string;
+  /** The browser's languages ("it-IT"); releases made for other languages rank last. */
+  audioLanguages?: string[];
   quality: Quality | 'auto';
   allowHevc: boolean;
   /** The highest average bitrate the client's connection sustains; leaner sources win. */
@@ -504,7 +511,12 @@ export class PlayablePreparationService {
             fitsBitrate(source, maxBitrateKbps, bitrate.runtimeSeconds, bitrate.sizeOf)
           )
         : [];
-    const pool = withinCap.length ? withinCap : compatible;
+    const capped = withinCap.length ? withinCap : compatible;
+    // The requested quality is looked for among releases in the viewer's language first.
+    const understood = capped.filter(
+      source => !madeForOtherLanguage(source, viewerLanguages(preferences))
+    );
+    const pool = understood.length ? understood : capped;
     return (
       pool.find(source => source.quality?.toLowerCase() === preferences.quality.toLowerCase()) ??
       compatible[0]
@@ -525,14 +537,19 @@ export class PlayablePreparationService {
     const real = compatible.filter(isUsableSource);
     const healthy = real.filter(source => !this.sourceHealth?.hasFailed(source.id));
     const ranked = healthy.length ? healthy : real;
-    return preferences.maxBitrateKbps && bitrate
-      ? preferWithinBitrate(
-          ranked,
-          preferences.maxBitrateKbps,
-          bitrate.runtimeSeconds,
-          bitrate.sizeOf
-        )
-      : ranked;
+    // A release made for another language's market (a French dub) plays last, whatever its
+    // quality or bitrate: the viewer may not understand it.
+    return viewerLanguageFirst(
+      preferences.maxBitrateKbps && bitrate
+        ? preferWithinBitrate(
+            ranked,
+            preferences.maxBitrateKbps,
+            bitrate.runtimeSeconds,
+            bitrate.sizeOf
+          )
+        : ranked,
+      viewerLanguages(preferences)
+    );
   }
 
   /**
